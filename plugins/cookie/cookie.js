@@ -36,6 +36,7 @@
  * @desc Create a session cookie.
  * @example $.cookie('the_cookie', '', {expires: 0});
  * @desc Delete a cookie.
+ * @cat Plugins/Cookie
  */
 jQuery.cookie = function(name, value, options) {
     if (typeof value != 'undefined') { // name and value given, set cookie

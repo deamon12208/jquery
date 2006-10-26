@@ -6,6 +6,7 @@
  * @example $("div img").center();
  * @name center
  * @type jQuery
+ * @cat Plugins/Center
  */
 jQuery.fn.center = function(f) {
 	return this.each(function(){

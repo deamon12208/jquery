@@ -24,6 +24,7 @@
  *                   bState     Initial state of the button? (boolean)
  *                   sType      Type of hover to create (img|css)
  * @return jQuery
+ * @cat Plugins/Button
  * @author Gilles van den Hoven
  * @author John Resig
  */

@@ -86,7 +86,7 @@ jQuery.fn.tableSorter = function(o) {
 			jQuery(this).bind(defaults.bind,doSorting);
 		}
 		
-		/** Store lenght of table rows. */
+		/** Store length of table rows. */
 		var tableRowLength = oTable.tBodies[0].rows.length-1;
 		
 		/** Index column data. */			

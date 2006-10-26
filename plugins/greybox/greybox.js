@@ -4,6 +4,9 @@
  * Reworked by: Benjamin Yu (http://foofiles.com/, http://badpopcorn.com/)
  * Based on code by: 4mir Salihefendic (http://amix.dk)
  * License: LGPL (read more in LGPL.txt)
+ *
+ * @name Greybox
+ * @cat Plugins/Greybox
  */
 
 /*

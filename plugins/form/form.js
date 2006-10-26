@@ -152,6 +152,7 @@ if (!jQuery.expr[':']['input'])
  * @name ajaxSubmit
  * @type jQuery
  * @param options  object literal containing options which control the form submission process
+ * @cat Plugins/Form
  * @return jQuery 
  * @see formToArray
  * @see ajaxForm
@@ -253,6 +254,7 @@ jQuery.fn.ajaxSubmit = function(options) {
  * @name   ajaxForm
  * @param  options  object literal containing options which control the form submission process
  * @return jQuery
+ * @cat    Plugins/Form
  * @type   jQuery
  * @see    ajaxSubmit
  * @author jQuery Community
@@ -304,6 +306,7 @@ jQuery.fn.ajaxForm = function(options) {
  * @name formToArray
  * @param semantic true if serialization must maintain strict semantic ordering of elements (slower)
  * @type Array<Object>
+ * @cat Plugins/Form
  * @see ajaxForm
  * @see ajaxSubmit
  * @author jQuery Community
@@ -341,7 +344,7 @@ jQuery.fn.formToArray = function(semantic) {
 
 /**
  * serializes form data into a 'submittable' string.  This method will return a string 
- * in the format: name1=value1&name2=value2
+ * in the format: name1=value1&amp;name2=value2
  *
  * The semantic argument can be used to force form serialization in semantic order.  
  * If your form must be submitted with name/value pairs in semantic order then pass 
@@ -355,6 +358,7 @@ jQuery.fn.formToArray = function(semantic) {
  * @name serialize
  * @param semantic true if serialization must maintain strict semantic ordering of elements (slower)
  * @type String
+ * @cat Plugins/Form
  * @see formToArray
  * @author jQuery Community
  */
