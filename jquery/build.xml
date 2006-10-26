@@ -1,0 +1,145 @@
+<project name="jQuery" default="all" basedir=".">
+
+	<!-- SETUP -->
+
+    <property name="SRC_DIR" value="src" />
+    <property name="BUILD_DIR" value="build" />
+    <property name="JAR" value="${BUILD_DIR}/js.jar" />
+
+	<property name="PLUGIN_DIR" location="../plugins" />
+	<property name="PLUGINS" value="none" />
+
+    <property name="PREFIX" value="." />
+    <property name="DOCS_DIR" value="${PREFIX}/docs" />
+    <property name="TEST_DIR" value="${PREFIX}/test" />
+    <property name="DIST_DIR" value="${PREFIX}/dist" />
+
+    <property name="JQ" value="${DIST_DIR}/jquery.js" />
+    <property name="JQ_LITE" value="${DIST_DIR}/jquery.lite.js" />
+    <property name="JQ_MIN" value="${DIST_DIR}/jquery.min.js" />
+    <property name="JQ_PACK" value="${DIST_DIR}/jquery.pack.js" />
+
+	<property name="TABS" value="${PLUGIN_DIR}/tabs/tabs.js" />
+	<property name="TABS_PACK" value="${DIST_DIR}/jquery.tabs.pack.js" />
+
+	<!-- MAIN -->
+
+    <target name="jquery">
+        <echo message="Building ${JQ}" />
+        <mkdir dir="${DIST_DIR}" />
+        <concat destfile="${JQ}">
+        	<fileset dir="${SRC_DIR}" includes="intro.js" />
+            <fileset dir="${SRC_DIR}" includes="jquery/*.js" />
+            <fileset dir="${SRC_DIR}" includes="event/*.js" />
+            <fileset dir="${SRC_DIR}" includes="fx/*.js" />
+            <fileset dir="${SRC_DIR}" includes="ajax/*.js" />
+        	<fileset dir="${PLUGIN_DIR}" includes="${PLUGINS}" />
+    		<fileset dir="${SRC_DIR}" includes="outro.js" />
+        </concat>
+        <echo message="${JQ} built." />
+    </target>
+
+    <target name="lite" depends="jquery">
+        <echo message="Building ${JQ_LITE}" />
+        <java jar="${JAR}" fork="true">
+            <arg value="${BUILD_DIR}/build/lite.js" />
+            <arg value="${JQ}" />
+            <arg value="${JQ_LITE}" />
+        </java>
+        <echo message="${JQ_LITE} built." />
+    </target>
+
+    <target name="min" depends="jquery">
+        <echo message="Building ${JQ_MIN}" />
+        <java jar="${JAR}" fork="true">
+            <arg value="${BUILD_DIR}/build/min.js" />
+            <arg value="${JQ}" />
+            <arg value="${JQ_MIN}" />
+        </java>
+        <echo message="${JQ_MIN} built." />
+    </target>
+
+    <target name="pack" depends="jquery">
+        <echo message="Building ${JQ_PACK}" />
+        <java jar="${JAR}" fork="true">
+            <arg value="${BUILD_DIR}/build/pack.js" />
+            <arg value="${JQ}" />
+            <arg value="${JQ_PACK}" />
+        </java>
+        <echo message="${JQ_PACK} built." />
+    </target>
+
+    <target name="test" depends="jquery">
+        <echo message="Building Test Suite" />
+        <delete dir="${TEST_DIR}" />
+    	<mkdir dir="${TEST_DIR}/data" />
+        <copy todir="${TEST_DIR}/data">
+        	<fileset dir="${BUILD_DIR}/test/data/" />
+    	</copy>
+        <java jar="${JAR}" fork="true">
+            <arg value="${BUILD_DIR}/test/test.js" />
+            <arg value="${JQ}" />
+            <arg value="${TEST_DIR}" />
+        </java>
+        <echo message="Test Suite built." />
+    </target>
+
+    <target name="docs" depends="jquery">
+        <echo message="Building Documentation" />
+        <delete dir="${DOCS_DIR}" />
+        <mkdir dir="${DOCS_DIR}/data" />
+    	<copy todir="${DOCS_DIR}" file="${BUILD_DIR}/docs/.htaccess" />
+        <mkdir dir="${DOCS_DIR}/js" />
+        <copy todir="${DOCS_DIR}/js" >
+            <fileset dir="${BUILD_DIR}/docs/js">
+                <include name="**/*.js"/>
+            </fileset>
+        </copy>
+		<copy todir="${DOCS_DIR}/style" >
+            <fileset dir="${BUILD_DIR}/docs/style">
+                <include name="**"/>
+            </fileset>
+        </copy>
+        <java jar="${JAR}" fork="true">
+            <arg value="${BUILD_DIR}/docs/docs.js" />
+            <arg value="${JQ}" />
+            <arg value="${DOCS_DIR}" />
+        </java>
+        <echo message="Documentation built." />
+    </target>
+
+    <target name="clean">
+        <delete dir="${DOCS_DIR}" />
+        <delete dir="${TEST_DIR}" />
+        <delete dir="${DIST_DIR}" />
+    </target>
+
+    <target name="all" depends="clean,jquery,lite,min,pack,docs,test" >
+        <echo message="Build complete." />
+    </target>
+
+	<!-- PLUGINS -->
+
+	<target name="ifx" description="Build jquery with Interface fx plugins">
+		<antcall target="jquery">
+			<param name="PLUGINS" value="interface/ifx*.js" />
+		</antcall>
+	</target>
+
+	<target name="cookieFormPager" description="Build jquery with cookie, form and pager plugins">
+		<antcall target="jquery">
+			<param name="PLUGINS" value="cookie/*.js,form/*.js,pager/*.js" />
+		</antcall>
+	</target>
+
+	<target name="pack_tabs">
+        <echo message="Building ${TABS_PACK}" />
+        <java jar="${JAR}" fork="true">
+            <arg value="${BUILD_DIR}/build/pack.js" />
+            <arg value="${TABS}" />
+            <arg value="${TABS_PACK}" />
+        </java>
+        <echo message="${TABS_PACK} built." />
+    </target>
+
+</project>
