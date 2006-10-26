@@ -1,27 +1,66 @@
 /*
- * Tabs - jQuery plugin for accessible, unobtrusive tabs http://stilbuero.de/tabs/
+ * Tabs 2.0 - jQuery plugin for accessible, unobtrusive tabs http://stilbuero.de/tabs/
  *
  * Copyright (c) 2006 Klaus Hartl (stilbuero.de)
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- * v2.0
  */
 
-// internal helper
-jQuery.tabs = new function() {
-    this.trigger = function(arg, context) {
-        var argType = typeof arg;
-        if (argType == 'string') { // id of associated container has been passed
-            jQuery(hash).parent('div').find('>ul>li>a[@href$=' + hash + ']').click();
-        } else if (argType == 'undefined' || argType == 'number') { // index of tab has been passed
-            var tabIndex = arg && arg > 0 && arg - 1 || 0; // falls back to index 0
-            jQuery('>ul>li>a', context).eq(tabIndex).click();
-        }
-    };
-};
-
+/**
+ * Create a tab interface based on a certain HTML structure.
+ *
+ * This is accessible and totally unobtrusive.
+ *
+ * @example $('#container').tabs();
+ * @desc Create a basic tabbed interface, that is based on this HTML structure: ...
+ *
+ * @name tabs
+ * @type jQuery
+ * @param Integer initial The tab to be be initially activated.
+ * @param Hash settings Object literal containing key/value pairs for optional settings.
+ *
+ * These are all the key/values that can be passed in to 'settings':
+ *
+ * (Boolean) fxFade -
+ *                    Default value: false
+ *
+ * (Boolean) fxSlide -
+ *                     Default value: false
+ *
+ * (Object) fxShow -
+ *                   Default value: null
+ *
+ * (Object) fxHide -
+ *                   Default value: null
+ *
+ * (String|Integer) fxSpeed -
+ *                            Default value: 'normal'
+ *
+ * (String|Integer) fxShowSpeed -
+ *                                Default value: fxSpeed
+ *
+ * (String|Integer) fxHideSpeed -
+ *                                Default value: fxSpeed
+ *
+ * (Boolean) fxAutoheight -
+ *                          Default value: false
+ *
+ * (Function) callback -
+ *                       Default value: null
+ *
+ * (String) selectedTabClass -
+ *                             Default value: 'selected'
+ *
+ * (String) hiddenTabContainerClass -
+ *                                    Default value: 'tabs-hide'
+ *
+ * (String) tabSelector -
+ *                        Default value: '>div'
+ *
+ * @author Klaus Hartl/klaus.hartl@stilbuero.de
+ */
 jQuery.fn.tabs = function(initial, settings) {
 
     // settings
@@ -159,10 +198,41 @@ jQuery.fn.tabs = function(initial, settings) {
 
 };
 
+/**
+ * Activate a tab programmatically with the given position (no zero-based index),
+ * as if the tab itself were clicked.
+ *
+ * @example $('#container').triggerTab(2);
+ * @desc Activate the second tab of the tabs interface contained in <div id="container">.
+ * @example $('#container').triggerTab(1);
+ * @desc Activate the first tab of the tabs interface contained in <div id="container">.
+ * @example $('#container').triggerTab();
+ * @desc Activate the first tab of the tabs interface contained in <div id="container">.
+ *
+ * @name triggerTab
+ * @type jQuery
+ * @param Integer initial The position of the tab to be activated (no zero-based index).
+ *                        If this parameter is omitted, the first tab will be activated.
+ *
+ * @author Klaus Hartl/klaus.hartl@stilbuero.de
+ */
 // TODO: issue with mixing history and triggerTab
 // maybe solved with links that should trigger tab by pointing to corresponding hash
 jQuery.fn.triggerTab = function(tabIndex) {
     return this.each(function() {
         jQuery.tabs.trigger(tabIndex, this);
     });
+};
+
+// internal helper
+jQuery.tabs = new function() {
+    this.trigger = function(arg, context) {
+        var argType = typeof arg;
+        if (argType == 'string') { // id of associated container has been passed
+            jQuery(hash).parent('div').find('>ul>li>a[@href$=' + hash + ']').click();
+        } else if (argType == 'undefined' || argType == 'number') { // index of tab has been passed
+            var tabIndex = arg && arg > 0 && arg - 1 || 0; // falls back to index 0
+            jQuery('>ul>li>a', context).eq(tabIndex).click();
+        }
+    };
 };
