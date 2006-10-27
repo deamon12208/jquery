@@ -11,18 +11,39 @@
  *
  */
 
-jQuery.fn.ScrollTo = function(s, transition) {
-	o = jQuery.speed(s);
-	return this.queue('interfaceFX',function(){
-		new jQuery.fx.ScrollTo(this, o, transition);
-	});
-};
+jQuery.fn.extend (
+	{
+		ScrollTo : function(s, axis, transition) {
+			o = jQuery.speed(s);
+			return this.queue('interfaceFX',function(){
+				new jQuery.fx.ScrollTo(this, o, axis, transition);
+			});
+		},
+		/*inspired by macx.de*/
+		ScrollToAnchors : function(s, axis, transition) {
+			return this.each(
+				function()
+				{
+					jQuery('a[@href^="#"]', this).click(
+						function(e)
+						{
+							parts = this.href.split('#');
+							jQuery('#' + parts[1]).ScrollTo(s, axis, transition);
+							return false;
+						}
+					);
+				}
+			)
+		}
+	}
+);
 
-jQuery.fx.ScrollTo = function (e, o, transition)
+jQuery.fx.ScrollTo = function (e, o, axis, transition)
 {
 	var z = this;
 	z.o = o;
 	z.e = e;
+	z.axis = /vertical|horizontal/.test(axis) ? axis : false;
 	z.transition = transition||'original';
 	p = jQuery.iUtil.getPosition(e);
 	s = jQuery.iUtil.getScroll();
@@ -42,8 +63,8 @@ jQuery.fx.ScrollTo = function (e, o, transition)
 			z.clear();
 			setTimeout(function(){z.scroll(z.endTop, z.endLeft)},13);
 		} else {
-			st = jQuery.fx.transitions(p, n, z.startTop, (z.endTop - z.startTop), z.o.duration, z.transition);
-			sl = jQuery.fx.transitions(p, n, z.startLeft, (z.endLeft - z.startLeft), z.o.duration, z.transition);
+			st = !z.axis || z.axis == 'vertical' ? jQuery.fx.transitions(p, n, z.startTop, (z.endTop - z.startTop), z.o.duration, z.transition) : z.startTop;
+			sl = !z.axis || z.axis == 'horizontal' ? jQuery.fx.transitions(p, n, z.startLeft, (z.endLeft - z.startLeft), z.o.duration, z.transition) : z.startLeft;
 			z.scroll(st, sl);
 		}
 	};
