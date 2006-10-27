@@ -11,6 +11,40 @@
  *
  */
 
+/**
+ * With the Draggables plugin, Droppable allows you to create drop zones for draggable elements.
+ *
+ * @name Droppable
+ * @param Hash options A hash of options
+ * @option String accept The class name for draggables to get accepted by the droppable (mandatory)
+ * @option String activeclass When an acceptable draggable is moved, the droppable gets this class
+ * @option String hoverclass When an acceptable draggable is inside the droppable, the droppable gets
+ *                           this class
+ * @option String tolerance  Choose from 'pointer', 'intersect', or 'fit'. The pointer options means
+ *                           that the pointer must be inside the droppable in order for the draggable
+ *                           to be dropped. The intersect option means that the draggable must intersect
+ *                           the droppable. The fit option means that the entire draggable must be
+ *                           inside the droppable.
+ * @option Function onDrop   When an acceptable draggable is dropped on a droppable, this callback is
+ *                           called. It passes the draggable DOMElement as a parameter.
+ * @option Function onHover  When an acceptable draggable is hovered over a droppable, this callback
+ *                           is called. It passes the draggable DOMElement as a parameter.
+ * @option Function onOut    When an acceptable draggable leaves a droppable, this callback is called.
+ *                           It passes the draggable DOMElement as a parameter.
+ * @example                  $('#dropzone1').Droppable(
+ *                             {
+ *                               accept : 'dropaccept', 
+ *                               activeclass: 'dropzoneactive', 
+ *                               hoverclass:	'dropzonehover',
+ *                               ondrop:	function (drag) {
+ *                                              alert(this); //the droppable
+ *                                              alert(drag); //the draggable
+ *                                        },
+ *                               fit: true
+ *                             }
+ *                           )
+ */
+
 jQuery.iDrop = {
 	fit : function (zonex, zoney, zonew, zoneh)
 	{
@@ -253,10 +287,30 @@ jQuery.iDrop = {
 	}
 };
 
+/**
+ * Destroy an existing droppable on a collection of elements
+ * 
+ * @name DroppableDestroy
+ * @descr Destroy a droppable
+ * @type jQuery
+ * @cat Plugins/Interface
+ * @example $('#drag2').DroppableDestroy();
+ */
+
 jQuery.fn.extend(
 	{
 		DroppableDestroy : jQuery.iDrop.destroy,
 		Droppable : jQuery.iDrop.build
 	}
 );
+
+ 
+/**
+ * Recalculate all Droppables
+ *
+ * @name $.recallDroppables
+ * @type jQuery
+ * @example $.recallDroppable();
+ */
+
 jQuery.recallDroppables = jQuery.iDrop.remeasure;

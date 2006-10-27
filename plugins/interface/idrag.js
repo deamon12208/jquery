@@ -7,10 +7,15 @@
  * Copyright (c) 2006 Stefan Petre
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
- *
+ */
+ 
+/**
+ * Create a draggable element with a number of advanced options including callback, Google Maps type draggables,
+ * reversion, ghosting, and grid dragging.
+ * 
  * @name Draggable
  * @descr Creates draggable elements that can be moved across the page.
- * @param Hash hash A hash of parameters. The rest of the parameters below are hash keys. All parameters are optional.
+ * @param Hash hash A hash of parameters. All parameters are optional.
  * @option String handle The jQuery selector matching the handle that starts the draggable
  * @option DOMElement handle The DOM Element of the handle that starts the draggable
  * @option Boolean revert When true, on stop-drag the element returns to initial position
@@ -25,11 +30,11 @@
  *                           scrolling
  * @option Array containment An 4-element array (topm left, width, height) indicating the containment of the element
  * @option String axis Set an axis: vertical (with 'vertically') or horizontal (with 'horizontally')
- * @option Callback onStart Callback function triggered when the dragging starts
- * @option Callback onStop Callback function triggered when the dragging stops
- * @option Callback onChange Callback function triggered when the dragging stop *and* the element was moved at least
+ * @option Function onStart Callback function triggered when the dragging starts
+ * @option Function onStop Callback function triggered when the dragging stops
+ * @option Function onChange Callback function triggered when the dragging stop *and* the element was moved at least
  *                          one pixel
- * @option Callback onDrag Callback function triggered while the element is dragged. Receives two parameters: x and y
+ * @option Function onDrag Callback function triggered while the element is dragged. Receives two parameters: x and y
  *                        coordinates. You can return an object with new coordinates {x: x, y: y} so this way you can
  *                        interact with the dragging process (for instance, build your containment)
  * @option Boolean insideParent Forces the element to remain inside its parent when being dragged (like Google Maps)
@@ -570,6 +575,7 @@ jQuery.iDrag =	{
  * @descr Destroy a draggable
  * @type jQuery
  * @cat Plugins/Interface
+ * @example $('#drag2').DraggableDestroy();
  */
 
 jQuery.fn.extend(

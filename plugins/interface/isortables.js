@@ -11,6 +11,53 @@
  *
  */
 
+/**
+ * Allows you to resort elements within a container by dragging and dropping. Requires
+ * the Draggables and Droppables plugins. The container and each item inside the container
+ * must have an ID. Sortables are especially useful for lists.
+ * 
+ * @see Plugins/Interface/Draggable
+ * @see Plugins/Interface/Droppable
+ * @author Stefan Petre
+ * @name Sortable
+ * @param Hash options        A hash of options
+ * @option String accept      The class name for items inside the container (mandatory)
+ * @option String activeclass The class for the container when one of its items has started to move
+ * @option String hoverclass  The class for the container when an acceptable item is inside it
+ * @option String helperclass The helper is used to point to the place where the item will be 
+ *                            moved. This is the class for the helper.
+ * @option Float opacity      Opacity (between 0 and 1) of the item while being dragged
+ * @option Boolean ghosting   When true, the sortable is ghosted when dragged
+ * @option String tolerance   Either 'pointer', 'intersect', or 'fit'. See Droppable for more details
+ * @option Boolean fit        When true, sortable must be inside the container in order to drop
+ * @option Integer fx         Duration for the effect applied to the sortable
+ * @option Function onchange  Callback that gets called when the sortable list changed. It takes
+ *                            an array of serialized elements
+ * @option Boolean floats     True if the sorted elements are floated
+ * @option String containment Use 'parent' to constrain the drag to the container
+ * @option String axis        Use 'horizontally' or 'vertically' to constrain dragging to an axis
+ * @option String handle      The jQuery selector that indicates the draggable handle
+ * @option DOMElement handle  The node that indicates the draggable handle
+ * @option Function onHover   Callback that is called when an acceptable item is dragged over the
+ *                            container. Gets the hovering DOMElement as a parameter
+ * @option Function onOut     Callback that is called when an acceptable item leaves the container.
+ *                            Gets the leaving DOMElement as a parameter
+ * @option Object cursorAt    The mouse cursor will be moved to the offset on the dragged item
+ *                            indicated by the object, which takes "top", "bottom", "left", and
+ *                            "right" keys
+ * @option Function onStart   Callback function triggered when the dragging starts
+ * @option Function onStop    Callback function triggered when the dragging stops
+ * @example                   $('ul').Sortable(
+ *                            	{
+ *                            		accept : 'sortableitem',
+ *                            		activeclass : 'sortableactive',
+ *                             		hoverclass : 'sortablehover',
+ *                             		helperclass : 'sorthelper',
+ *                             		opacity: 	0.5,
+ *                             		fit :	false
+ *                             	}
+ *                             )
+ */
 
 jQuery.iSort = {
 	changed : [],
@@ -286,10 +333,33 @@ jQuery.iSort = {
 		}
 	}
 };
+
+/**
+ * A new item can be added to a sortable by adding it to the DOM and then adding it via
+ * SortableAddItem. 
+ *
+ * @name SortableAddItem
+ * @param DOMElement elem A DOM Element to add to the sortable list
+ * @example $('#sortable1').append('<li id="newitem">new item</li>')
+ *                         .SortableAddItem($("#new_item")[0])
+ * @type jQuery
+ */
+
 jQuery.fn.extend(
 	{
 		Sortable : jQuery.iSort.build,
 		SortableAddItem : jQuery.iSort.addItem
 	}
 );
+
+/**
+ * This function returns the hash and an object (can be used as arguments for $.post) for every 
+ * sortable in the page or specific sortables. The hash is based on the 'id' attributes of 
+ * container and items.
+ *
+ * @params String sortable The id of the sortable to serialize
+ * @name $.SortSerialize
+ * @type String
+ */
+
 jQuery.SortSerialize = jQuery.iSort.serialize;
