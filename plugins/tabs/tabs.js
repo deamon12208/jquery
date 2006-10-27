@@ -88,12 +88,13 @@ jQuery.fn.tabs = function(initial, settings) {
     //if (jQuery.history) jQuery.history.observe();
 
     // helper to prevent scroll to fragment
-    function _unFocus() {
+    var _unFocus = function() {
         scrollTo(0, 0);
-    }
+    };
 
     // initialize tabs
     return this.each(function() {
+
         // retrieve active tab from hash in url
         if (location.hash) {
             var hashId = location.hash.replace('#', '');
@@ -106,6 +107,8 @@ jQuery.fn.tabs = function(initial, settings) {
                 }
             });
         }
+
+        // hide tabs other than initial, set autoheight if needed
         if (settings.fxAutoheight) {
             var divs = jQuery(settings.tabSelector, this);
             var heights = [];
@@ -123,29 +126,43 @@ jQuery.fn.tabs = function(initial, settings) {
         } else {
             jQuery(settings.tabSelector, this).not(':eq(' + settings.initial + ')').addClass(settings.hiddenTabContainerClass);
         }
+
+        // highlight tab in navigation
         jQuery('>ul>li:eq(' + settings.initial + ')', this).addClass(settings.selectedTabClass);
+
+        // attach events
         var container = this;
         jQuery('>ul>li>a', this).click(function(e) {
-            // id to be shown
-            var tabToShowHash = '#' + re.exec(this.href)[1];
+
+            // id of tab to be activated
+            var tabToShowId = re.exec(this.href)[1];
+
             // update observer TODO: find another way to add event...
             //if (jQuery.history) jQuery.history.setHash(tabToShowHash, e);
-            // save scrollbar position
-            var scrollX = window.pageXOffset || document.documentElement && document.documentElement.scrollLeft || document.body.scrollLeft || 0;
-            var scrollY = window.pageYOffset || document.documentElement && document.documentElement.scrollTop || document.body.scrollTop || 0;
+
             if (!jQuery(this.parentNode).is('.' + settings.selectedTabClass)) {
-                var tabToShow = jQuery(tabToShowHash);
+                var tabToShow = jQuery('#' + tabToShowId);
+
+                // prevent scrollbar scrolling to 0 and than back in IE7
+                if (jQuery.browser.msie) {
+                    tabToShow.id('');
+                    setTimeout(function() {
+                        tabToShow.id(tabToShowId); // restore id
+                    }, 0);
+                }
+
                 if (tabToShow.size() > 0) {
+                    var _activateTab = function() {
+                        jQuery('>ul>li', container).removeClass(settings.selectedTabClass);
+                        jQuery(self.parentNode).addClass(settings.selectedTabClass);
+                    };
                     var self = this;
                     var tabToHide = jQuery(settings.tabSelector + ':visible', container);
                     var callback;
                     if (settings.callback && typeof settings.callback == 'function') callback = function() {
                         settings.callback.apply(tabToShow[0], [tabToShow[0], tabToHide[0]]);
                     };
-                    function _activateTab() {
-                        jQuery('>ul>li', container).removeClass(settings.selectedTabClass);
-                        jQuery(self.parentNode).addClass(settings.selectedTabClass);
-                    }
+
                     var showAnim = {}, hideAnim = {};
                     var showSpeed, hideSpeed;
                     if (settings.fxSlide || settings.fxFade) {
@@ -185,14 +202,19 @@ jQuery.fn.tabs = function(initial, settings) {
                             if (callback) callback();
                         });
                     });
+
                 } else {
                     alert('There is no such container.');
                 }
             }
-            // Set scrollbar to saved position
+
+            // Set scrollbar to saved position - need to use timeout with 0 to prevent browser scroll to target of hash
+            var scrollX = window.pageXOffset || document.documentElement && document.documentElement.scrollLeft || document.body.scrollLeft || 0;
+            var scrollY = window.pageYOffset || document.documentElement && document.documentElement.scrollTop || document.body.scrollTop || 0;
             setTimeout(function() {
                 window.scrollTo(scrollX, scrollY);
             }, 0);
+
         });
     });
 
