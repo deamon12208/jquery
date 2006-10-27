@@ -196,7 +196,7 @@ jQuery.iUtil = {
 		nodeEl = nodeEl.firstChild;
 		while(nodeEl){
 			jQuery.iUtil.traverseDOM(nodeEl, func);
-			nodeEl = nodelEl.nextSibling;
+			nodeEl = nodeEl.nextSibling;
 		}
 	},
 	purgeEvents : function(nodeEl)
