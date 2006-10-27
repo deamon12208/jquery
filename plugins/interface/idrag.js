@@ -9,7 +9,7 @@
  * and GPL (GPL-LICENSE.txt) licenses.
  *
  * @name Draggable
- * @descr Creates draggable elements that can eb move across the page.
+ * @descr Creates draggable elements that can be moved across the page.
  * @param Hash hash A hash of parameters. The rest of the parameters below are hash keys. All parameters are optional.
  * @option String handle The jQuery selector matching the handle that starts the draggable
  * @option DOMElement handle The DOM Element of the handle that starts the draggable
@@ -562,6 +562,15 @@ jQuery.iDrag =	{
 		)
 	}
 };
+
+/**
+ * Destroy an existing draggable on a collection of elements
+ * 
+ * @name DraggableDestroy
+ * @descr Destroy a draggable
+ * @type jQuery
+ * @cat Plugins/Interface
+ */
 
 jQuery.fn.extend(
 	{
