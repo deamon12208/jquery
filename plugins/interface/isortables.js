@@ -20,6 +20,7 @@
  * @see Plugins/Interface/Droppable
  * @author Stefan Petre
  * @name Sortable
+ * @cat Plugins/Interface
  * @param Hash options        A hash of options
  * @option String accept      The class name for items inside the container (mandatory)
  * @option String activeclass The class for the container when one of its items has started to move
@@ -343,6 +344,7 @@ jQuery.iSort = {
  * @example $('#sortable1').append('<li id="newitem">new item</li>')
  *                         .SortableAddItem($("#new_item")[0])
  * @type jQuery
+ * @cat Plugins/Interface
  */
 
 jQuery.fn.extend(
@@ -360,6 +362,7 @@ jQuery.fn.extend(
  * @params String sortable The id of the sortable to serialize
  * @name $.SortSerialize
  * @type String
+ * @cat Plugins/Interface
  */
 
 jQuery.SortSerialize = jQuery.iSort.serialize;

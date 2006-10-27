@@ -15,6 +15,7 @@
  * With the Draggables plugin, Droppable allows you to create drop zones for draggable elements.
  *
  * @name Droppable
+ * @cat Plugins/Interface
  * @param Hash options A hash of options
  * @option String accept The class name for draggables to get accepted by the droppable (mandatory)
  * @option String activeclass When an acceptable draggable is moved, the droppable gets this class
@@ -310,6 +311,7 @@ jQuery.fn.extend(
  *
  * @name $.recallDroppables
  * @type jQuery
+ * @cat Plugins/Interface
  * @example $.recallDroppable();
  */
 
