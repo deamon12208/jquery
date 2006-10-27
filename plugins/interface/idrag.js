@@ -9,36 +9,37 @@
  * and GPL (GPL-LICENSE.txt) licenses.
  *
  * @name Draggable
+ * @descr Creates draggable elements that can eb move across the page.
  * @param Hash hash A hash of parameters. The rest of the parameters below are hash keys. All parameters are optional.
- * @param String handle The jQuery selector matching the handle that starts the draggable
- * @param DOMElement handle The DOM Element of the handle that starts the draggable
- * @param Boolean revert When true, on stop-drag the element returns to initial position
- * @param Boolean ghosting When true, a copy of the element is moved
- * @param Integer zIndex zIndex depth for the element while it is being dragged
- * @param Float opacity A number between 0 and 1 that indicates the opacity of the element while being dragged
- * @param Integer grid A number of pixels indicating the grid that the element should snap to
- * @param Array grid A number of x-pixels and y-pixels indicating the grid that the element should snap to
- * @param Integer fx Duration for the effect (like ghosting or revert) applied to the draggable
- * @param String containment Define the zone where the draggable can be moved. 'parent' moves it inside parent
+ * @option String handle The jQuery selector matching the handle that starts the draggable
+ * @option DOMElement handle The DOM Element of the handle that starts the draggable
+ * @option Boolean revert When true, on stop-drag the element returns to initial position
+ * @option Boolean ghosting When true, a copy of the element is moved
+ * @option Integer zIndex zIndex depth for the element while it is being dragged
+ * @option Float opacity A number between 0 and 1 that indicates the opacity of the element while being dragged
+ * @option Integer grid A number of pixels indicating the grid that the element should snap to
+ * @option Array grid A number of x-pixels and y-pixels indicating the grid that the element should snap to
+ * @option Integer fx Duration for the effect (like ghosting or revert) applied to the draggable
+ * @option String containment Define the zone where the draggable can be moved. 'parent' moves it inside parent
  *                           element, while 'document' prevents it from leaving the document and forcing additional
  *                           scrolling
- * @param Array containment An 4-element array (topm left, width, height) indicating the containment of the element
- * @param String axis Set an axis: vertical (with 'vertically') or horizontal (with 'horizontally')
- * @param Callback onStart Callback function triggered when the dragging starts
- * @param Callback onStop Callback function triggered when the dragging stops
- * @param Callback onChange Callback function triggered when the dragging stop *and* the element was moved at least
+ * @option Array containment An 4-element array (topm left, width, height) indicating the containment of the element
+ * @option String axis Set an axis: vertical (with 'vertically') or horizontal (with 'horizontally')
+ * @option Callback onStart Callback function triggered when the dragging starts
+ * @option Callback onStop Callback function triggered when the dragging stops
+ * @option Callback onChange Callback function triggered when the dragging stop *and* the element was moved at least
  *                          one pixel
- * @param Callback onDrag Callback function triggered while the element is dragged. Receives two parameters: x and y
+ * @option Callback onDrag Callback function triggered while the element is dragged. Receives two parameters: x and y
  *                        coordinates. You can return an object with new coordinates {x: x, y: y} so this way you can
  *                        interact with the dragging process (for instance, build your containment)
- * @param Boolean insideParent Forces the element to remain inside its parent when being dragged (like Google Maps)
- * @param Integer snapDistance The element is not moved unless it is dragged more than snapDistance. You can prevent
+ * @option Boolean insideParent Forces the element to remain inside its parent when being dragged (like Google Maps)
+ * @option Integer snapDistance The element is not moved unless it is dragged more than snapDistance. You can prevent
  *                             accidental dragging and keep regular clicking enabled (for links or form elements, 
  *                             for instance)
- * @param Object cursorAt The dragged element is moved to the cursor position with the offset specified. Accepts value
+ * @option Object cursorAt The dragged element is moved to the cursor position with the offset specified. Accepts value
  *                        for top, left, right and bottom offset. Basically, this forces the cursor to a particular
  *                        position during the entire drag operation.
- * @param Boolean autoSize When true, the drag helper is resized to its content, instead of the dragged element's sizes
+ * @option Boolean autoSize When true, the drag helper is resized to its content, instead of the dragged element's sizes
  * @type jQuery
  * @cat Plugins/Interface
  * @author Stefan Petre
