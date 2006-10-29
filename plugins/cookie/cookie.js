@@ -1,33 +1,16 @@
-// Cookie Plugin
+/**
+ * Cookie utility plugin
+ *
+ * Copyright (c) 2006 Klaus Hartl (stilbuero.de)
+ * Dual licensed under the MIT and GPL licenses:
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ */
 
 /**
- * Sets/gets a cookie with the given name and value and other optional parameters.
+ * Create a cookie with the given name and value and other optional parameters.
  *
- * @param String Name The name of the cookie.
- * @param String value The value of the cookie.
- * @param Hash options A set of key/value pairs for optional cookie parameters.
- *
- * These are all the key/values that can be passed in to 'options':
- *
- * (Integer|Date) expires - Either an integer specifying the expiration date from now on in days or a Date object.
- *                          If you set this to zero, the cookie will be deleted. If you set it to null, or omit,
- *                          this option, the cookie will be a session cookie and will not be retained when the
- *                          the browser exits. This option is used to set the max-age attribute of the cookie.
- *
- * (String) path - The value of the path atribute of the cookie (default: path of page that created the cookie).
- *
- * (String) domain - The value of the domain attribute of the cookie (default: domain of page that created the cookie).
- *
- * (Boolean) secure - If true, the secure attribute of the cookie will be set and the cookie transmission will
- *                    require a secure protocol (like HTTPS).
- *
- * @return The value of the cookie.
- * @name $.cookie
- * @type jQuery
- * @author Klaus Hartl/klaus.hartl@stilbuero.de
- *
- * @example $.cookie('the_cookie');
- * @desc Get the value of a cookie.
  * @example $.cookie('the_cookie', 'the_value');
  * @desc Set the value of a cookie.
  * @example $.cookie('the_cookie', 'the_value', {expires: 7, path: '/', domain: 'jquery.com', secure: true});
@@ -36,7 +19,38 @@
  * @desc Create a session cookie.
  * @example $.cookie('the_cookie', '', {expires: 0});
  * @desc Delete a cookie.
+ *
+ * @param String Name The name of the cookie.
+ * @param String value The value of the cookie.
+ * @param Hash options A set of key/value pairs for optional cookie parameters.
+ * @option Object expires Either an integer specifying the expiration date from now on in days or a Date object.
+ *                        If you set this to zero, the cookie will be deleted. If you set it to null, or omit,
+ *                        this option, the cookie will be a session cookie and will not be retained when the
+ *                        the browser exits. This option is used to set the max-age attribute of the cookie.
+ * @option String path The value of the path atribute of the cookie (default: path of page that created the cookie).
+ * @option String domain The value of the domain attribute of the cookie (default: domain of page that created the cookie).
+ * @option Boolean secure If true, the secure attribute of the cookie will be set and the cookie transmission will
+ *                        require a secure protocol (like HTTPS).
+ *
+ * @name $.cookie
+ * @type jQuery
  * @cat Plugins/Cookie
+ * @author Klaus Hartl/klaus.hartl@stilbuero.de
+ */
+
+/**
+ * Get the value of a cookie with the given name.
+ *
+ * @example $.cookie('the_cookie');
+ * @desc Get the value of a cookie.
+ *
+ * @param String Name The name of the cookie.
+ * @return The value of the cookie.
+ *
+ * @name $.cookie
+ * @type jQuery
+ * @cat Plugins/Cookie
+ * @author Klaus Hartl/klaus.hartl@stilbuero.de
  */
 jQuery.cookie = function(name, value, options) {
     if (typeof value != 'undefined') { // name and value given, set cookie
