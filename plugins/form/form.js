@@ -11,8 +11,8 @@ if (!jQuery.expr[':']['input'])
  *
  * Options are provided via an options object.  The following options are supported:
  *
- *  target:   Identifies the element(s) in the page to be updated with the server response.  
- *            This value may be specified as a jQuery selection string, a jQuery object, 
+ *  target:   Identifies the element(s) in the page to be updated with the server response.
+ *            This value may be specified as a jQuery selection string, a jQuery object,
  *            or a DOM element.
  *            default value: null
  *
@@ -35,9 +35,9 @@ if (!jQuery.expr[':']['input'])
  *            default value: false
  *
  *
- * The 'before' callback can be provided as a hook for running pre-submit logic or for 
- * validating the form data.  If the 'before' callback returns false then the form will 
- * not be submitted. The 'before' callback is invoked with two arguments: the form data 
+ * The 'before' callback can be provided as a hook for running pre-submit logic or for
+ * validating the form data.  If the 'before' callback returns false then the form will
+ * not be submitted. The 'before' callback is invoked with two arguments: the form data
  * in array format, and the jQuery object.  The form data array takes the following form:
  *
  *     [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ]
@@ -52,7 +52,7 @@ if (!jQuery.expr[':']['input'])
  * jQuery verions 1.0.2:
  *      'xml':    if dataType == 'xml' the server response is treated as XML and the 'after'
  *                   callback method, if specified, will be passed the responseXML value
- *      'json':   if dataType == 'json' the server response will be evaluted and passed to 
+ *      'json':   if dataType == 'json' the server response will be evaluted and passed to
  *                   the 'after' callback, if specified
  *      'script': if dataType == 'script' the server response is evaluated in the global context
  *
@@ -60,9 +60,9 @@ if (!jQuery.expr[':']['input'])
  * Note that it does not make sense to use both the 'target' and 'dataType' options.  If both
  * are provided the target will be ignored.
  *
- * The semantic argument can be used to force form serialization in semantic order.  If your 
- * form must be submitted with name/value pairs in semantic order then pass true for this arg, 
- * otherwise pass false (or nothing) to avoid the overhead for this logic (which can be 
+ * The semantic argument can be used to force form serialization in semantic order.  If your
+ * form must be submitted with name/value pairs in semantic order then pass true for this arg,
+ * otherwise pass false (or nothing) to avoid the overhead for this logic (which can be
  * significant for very large forms).
  *
  * When used on its own, ajaxSubmit() is typically bound to a form's submit event like this:
@@ -77,7 +77,7 @@ if (!jQuery.expr[':']['input'])
  *
  * Notes for using form.js with jQuery versions prior to 1.0.2
  * -----------------------------------------------------------
- * 1. When using jQuery version < 1.0.2 if you do not specify a 'target' option then the 'after' 
+ * 1. When using jQuery version < 1.0.2 if you do not specify a 'target' option then the 'after'
  *    callback method is passed the XMLHttpRequest object instead of the response data.
  *    This quirk was fixed in jQuery 1.0.2.
  *
@@ -85,25 +85,25 @@ if (!jQuery.expr[':']['input'])
  *
  *
  *
- * @example 
+ * @example
  * var options = {
  *     target: '#myTargetDiv'
- * };   
+ * };
  * $('#myForm').ajaxSubmit(options);
  * @desc Submit form and update page element with server response
  *
  *
- * @example 
+ * @example
  * var options = {
  *     after: function(responseText) {
  *         alert(responseText);
  *     }
- * };   
+ * };
  * $('#myForm').ajaxSubmit(options);
  * @desc Submit form and alert the server response
  *
  *
- * @example 
+ * @example
  * var options = {
  *     before: function(formArray, jqForm) {
  *         if (formArray.length == 0) {
@@ -111,24 +111,24 @@ if (!jQuery.expr[':']['input'])
  *             return false;
  *         }
  *     }
- * };   
+ * };
  * $('#myForm').ajaxSubmit(options);
  * @desc Pre-submit validation which aborts the submit operation if form data is empty
  *
  *
- * @example 
+ * @example
  * var options = {
  *     url: myJsonUrl.php,
  *     dataType: 'json',
  *     after: function(data) {
  *        // 'data' is an object representing the the evaluated json data
  *     }
- * };   
+ * };
  * $('#myForm').ajaxSubmit(options);
  * @desc json data returned and evaluated
  *
  *
- * @example 
+ * @example
  * var options = {
  *     url: myXmlUrl.php,
  *     dataType: 'xml',
@@ -136,7 +136,7 @@ if (!jQuery.expr[':']['input'])
  *        // responseXML is XML document object
  *        var data = $('myElement', responseXML).text();
  *     }
- * };   
+ * };
  * $('#myForm').ajaxSubmit(options);
  * @desc XML data returned from server
  *
@@ -153,7 +153,7 @@ if (!jQuery.expr[':']['input'])
  * @type jQuery
  * @param options  object literal containing options which control the form submission process
  * @cat Plugins/Form
- * @return jQuery 
+ * @return jQuery
  * @see formToArray
  * @see ajaxForm
  * @see load
@@ -170,9 +170,9 @@ jQuery.fn.ajaxSubmit = function(options) {
         dataType: null, // 'xml', 'script', or 'json' (@see jQuery.httpData)
         semantic: false
     }, options || {});
-    
+
     var a = this.formToArray(options.semantic);
-    
+
     // give pre-submit callback an opportunity to abort the submit
     if (options.before && options.before(a, this) === false) return;
 
@@ -184,13 +184,13 @@ jQuery.fn.ajaxSubmit = function(options) {
         options.url += (options.url.indexOf('?') >= 0 ? '&' : '?') + q;
 
     // perform a load on the target only if dataType is not provided
-    if (!options.dataType && options.target) 
+    if (!options.dataType && options.target)
         jQuery(options.target).load(options.url, get ? null : a, options.after);
     else
-        jQuery.ajax({ 
-            url:      options.url, 
-            success:  options.after, 
-            type:     options.method, 
+        jQuery.ajax({
+            url:      options.url,
+            success:  options.after,
+            type:     options.method,
             dataType: options.dataType,
             data:     get ? null : q // data is null for 'get' or the query string for 'post'
         });
@@ -203,9 +203,9 @@ jQuery.fn.ajaxSubmit = function(options) {
  *
  * The advantages of using this method instead of ajaxSubmit() are:
  *
- * 1: This method will include coordinates for <input type="image" /> elements (if the element 
- *    is used to submit the form). 
- * 2. This method will include the submit element's name/value data (for the element that was 
+ * 1: This method will include coordinates for <input type="image" /> elements (if the element
+ *    is used to submit the form).
+ * 2. This method will include the submit element's name/value data (for the element that was
  *    used to submit the form).
  * 3. This method binds the submit() method to the form for you.
  *
@@ -218,26 +218,26 @@ jQuery.fn.ajaxSubmit = function(options) {
  * notes on usage with down-rev versions of jQuery.
  *
  *
- * @example 
+ * @example
  * var options = {
  *     target: '#myTargetDiv'
- * };   
+ * };
  * $('#myForm').ajaxSForm(options);
  * @desc Bind form's submit event so that 'myTargetDiv' is updated with the server response
  *       when the form is submitted.
  *
  *
- * @example 
+ * @example
  * var options = {
  *     after: function(responseText) {
  *         alert(responseText);
  *     }
- * };   
+ * };
  * $('#myForm').ajaxSubmit(options);
  * @desc Bind form's submit event so that server response is alerted after the form is submitted.
  *
  *
- * @example 
+ * @example
  * var options = {
  *     before: function(formArray, jqForm) {
  *         if (formArray.length == 0) {
@@ -245,7 +245,7 @@ jQuery.fn.ajaxSubmit = function(options) {
  *             return false;
  *         }
  *     }
- * };   
+ * };
  * $('#myForm').ajaxSubmit(options);
  * @desc Bind form's submit event so that pre-submit callback is invoked before the form
  *       is submitted.
@@ -263,7 +263,7 @@ jQuery.fn.ajaxForm = function(options) {
     return this.each(function() {
         jQuery("input:submit,input:image", this).click(function(ev) {
             this.form.clk = this;
-            
+
             if (ev.offsetX != undefined) {
                 this.form.clk_x = ev.offsetX;
                 this.form.clk_y = ev.offsetY;
@@ -294,9 +294,9 @@ jQuery.fn.ajaxForm = function(options) {
  * It is this array that is passed to pre-submit callback functions provided to the
  * ajaxSubmit() and ajaxForm() methods.
  *
- * The semantic argument can be used to force form serialization in semantic order.  
- * If your form must be submitted with name/value pairs in semantic order then pass 
- * true for this arg, otherwise pass false (or nothing) to avoid the overhead for 
+ * The semantic argument can be used to force form serialization in semantic order.
+ * If your form must be submitted with name/value pairs in semantic order then pass
+ * true for this arg, otherwise pass false (or nothing) to avoid the overhead for
  * this logic (which can be significant for very large forms).
  *
  * @example var data = $("#myForm").formToArray();
@@ -314,7 +314,7 @@ jQuery.fn.ajaxForm = function(options) {
 jQuery.fn.formToArray = function(semantic) {
     var a = [];
     var q = semantic ? ':input' : 'input,textarea,select,button';
-    
+
     jQuery(q, this).each(function() {
         var n = this.name;
         var t = this.type;
@@ -343,26 +343,26 @@ jQuery.fn.formToArray = function(semantic) {
 };
 
 /**
- * serializes form data into a 'submittable' string.  This method will return a string 
- * in the format: name1=value1&amp;name2=value2
+ * Serializes form data into a 'submittable' string. This method will return a string
+ * in the format: name1=value1&name2=value2
  *
- * The semantic argument can be used to force form serialization in semantic order.  
- * If your form must be submitted with name/value pairs in semantic order then pass 
- * true for this arg, otherwise pass false (or nothing) to avoid the overhead for 
+ * The semantic argument can be used to force form serialization in semantic order.
+ * If your form must be submitted with name/value pairs in semantic order then pass
+ * true for this arg, otherwise pass false (or nothing) to avoid the overhead for
  * this logic (which can be significant for very large forms).
  *
- * @example var data = $("#myForm").serialize();
+ * @example var data = $("#myForm").formSerialize();
  * $.ajax('POST', "myscript.cgi", data);
  * @desc Collect all the data from a form into a single string
  *
- * @name serialize
+ * @name formSerialize
  * @param semantic true if serialization must maintain strict semantic ordering of elements (slower)
  * @type String
  * @cat Plugins/Form
  * @see formToArray
  * @author jQuery Community
  */
-jQuery.fn.serialize = function(semantic) {
+jQuery.fn.formSerialize = function(semantic) {
     //hand off to jQuery.param for proper encoding
     return jQuery.param(this.formToArray(semantic));
 };
