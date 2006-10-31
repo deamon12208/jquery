@@ -55,14 +55,14 @@ $(function() { runTest(function() {
 
     // test string serialization
     test("serialize: param count", function() {
-        var s = $("#form1").serialize();
+        var s = $("#form1").formSerialize();
         ok( s.constructor == String, "type check");
         ok( s.split('&').length == 13, "string array length");
     });
     
     // test support for input elements not contained within a form
     test("serialize: pseudo form", function() {
-        var s = $("#pseudo").serialize();
+        var s = $("#pseudo").formSerialize();
         ok( s.constructor == String, "type check");
         ok( s.split('&').length == 3, "string array length");
     });
