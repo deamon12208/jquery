@@ -20,7 +20,7 @@
  * @example $.cookie('the_cookie', '', {expires: 0});
  * @desc Delete a cookie.
  *
- * @param String Name The name of the cookie.
+ * @param String name The name of the cookie.
  * @param String value The value of the cookie.
  * @param Hash options A set of key/value pairs for optional cookie parameters.
  * @option Object expires Either an integer specifying the expiration date from now on in days or a Date object.
@@ -43,7 +43,7 @@
  * @example $.cookie('the_cookie');
  * @desc Get the value of a cookie.
  *
- * @param String Name The name of the cookie.
+ * @param String name The name of the cookie.
  * @return The value of the cookie.
  * @type String
  *
