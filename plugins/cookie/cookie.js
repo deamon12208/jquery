@@ -33,7 +33,6 @@
  *                        require a secure protocol (like HTTPS).
  *
  * @name $.cookie
- * @type jQuery
  * @cat Plugins/Cookie
  * @author Klaus Hartl/klaus.hartl@stilbuero.de
  */
@@ -46,9 +45,9 @@
  *
  * @param String Name The name of the cookie.
  * @return The value of the cookie.
+ * @type String
  *
  * @name $.cookie
- * @type jQuery
  * @cat Plugins/Cookie
  * @author Klaus Hartl/klaus.hartl@stilbuero.de
  */
