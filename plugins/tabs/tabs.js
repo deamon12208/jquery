@@ -1,64 +1,94 @@
-/*
- * Tabs 2.0 - jQuery plugin for accessible, unobtrusive tabs http://stilbuero.de/tabs/
+/**
+ * Tabs 2.0 - jQuery plugin for accessible, unobtrusive tabs
+ *
+ * http://stilbuero.de/tabs/
  *
  * Copyright (c) 2006 Klaus Hartl (stilbuero.de)
  * Dual licensed under the MIT and GPL licenses:
- *   http://www.opensource.org/licenses/mit-license.php
- *   http://www.gnu.org/licenses/gpl.html
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl.html
  *
  */
 
 /**
- * Create a tab interface based on a certain HTML structure.
+ * Create an accessible, unobtrusive tabs interface.
  *
- * This is accessible and totally unobtrusive.
+ * The underlying HTML structure has to look like this:
+ *
+ * <div id="container">
+ *     <ul>
+ *         <li><a href="#section-1">Section 1</a></li>
+ *         <li><a href="#section-2">Section 2</a></li>
+ *         <li><a href="#section-3">Section 3</a></li>
+ *     </ul>
+ *     <div id="section-1">
+ *
+ *     </div>
+ *     <div id="section-2">
+ *
+ *     </div>
+ *     <div id="section-3">
+ *
+ *     </div>
+ * </div>
+ *
+ * Each anchor in the unordered list points directly to a section below represented by one of the divs
+ * (the URI in the anchor's href attribute refers to the fragment with the corresponding id attribute).
+ * Because such HTML structure is fully functional on its own, without JavaScript, the tabs interface
+ * is accessible and unobtrusive.
+ *
+ * A tab is also bookmarkable via hash in the URL. If the Tabs plugin is used together with the
+ * History/Remote plugin, the back and forward buttons are fixed as well.
  *
  * @example $('#container').tabs();
- * @desc Create a basic tabbed interface, that is based on this HTML structure: ...
+ * @desc Create a basic tabbed interface.
+ * @example $('#container').tabs(2);
+ * @desc Create a basic tabbed interface with the second tab initially activated.
+ * @example $('#container').tabs({fxSlide: true});
+ * @desc Create a tabbed interface that uses a sliding animation for switching between two tabs.
+ *
+ * @param Integer initial The tab to be initially activated (no zero-based index). If a hash in the
+ *                        URL of the page refers to one fragment (tab container) of a tabs interface,
+ *                        this parameter will be ignored and instead the tab belonging to that fragment
+ *                        in that specific tabs interface will be activated.
+ * @param Hash settings Object literal containing key/value pairs to provide optional settings.
+ * @option Boolean fxFade Boolean flag indicating whether fade in/out animations are used for tab
+ *                        switching. Can be combined with fxSlide. Will overrule fxShow/fxHide.
+ *                        Default value: false.
+ * @option Boolean fxSlide Boolean flag indicating whether slide down/up animations are used tab
+ *                         switching. Can be combined with fxFade. Will overrule fxShow/fxHide.
+ *                         Default value: false.
+ * @option Object fxSpeed A string representing one of the three predefined speeds ("slow", "normal",
+ *                        or "fast") or the number of milliseconds (e.g. 1000) to run an animation.
+ *                        Default value: "normal".
+ * @option Object fxShow An object literal of the form jQuery's animate function expects for making your
+ *                       own, custom animation to show a tab's content upon tab switch. Unlike fxFade or
+ *                       or fxSlide that animation is independent from a hide animation.
+ *                       Default value: null.
+ * @option Object fxHide An object literal of the form jQuery's animate function expects for making your
+ *                       own, custom animation to hide a tab's content upon tab switch. Unlike fxFade or
+ *                       or fxSlide that animation is independent from a show animation.
+ *                       Default value: null.
+ * @option Object fxShowSpeed A string representing one of the three predefined speeds ("slow", "normal",
+ *                            or "fast") or the number of milliseconds (e.g. 1000) to run the animation,
+ *                            that is specified in fxShow. Default value: fxSpeed.
+ * @option Object fxHideSpeed A string representing one of the three predefined speeds ("slow", "normal",
+ *                            or "fast") or the number of milliseconds (e.g. 1000) to run the animation,
+ *                            that is specified in fxHide. Default value: fxSpeed.
+ * @option Boolean fxAutoheight
+ *                              Default value: false.
+ * @option Function callback
+ *                           Default value: null.
+ * @option String selectedTabClass The class name attached to the li element representing the currently
+ *                                 selected tab. Default value: "selected".
+ * @option String hiddenTabContainerClass
+ *                                        Default value: "tabs-hide".
+ * @option String tabSelector
+ *                            Default value: ">div".
+ * @type jQuery
  *
  * @name tabs
- * @type jQuery
- * @param Integer initial The tab to be be initially activated.
- * @param Hash settings Object literal containing key/value pairs for optional settings.
- *
- * These are all the key/values that can be passed in to 'settings':
- *
- * (Boolean) fxFade -
- *                    Default value: false
- *
- * (Boolean) fxSlide -
- *                     Default value: false
- *
- * (Object) fxShow -
- *                   Default value: null
- *
- * (Object) fxHide -
- *                   Default value: null
- *
- * (String|Integer) fxSpeed -
- *                            Default value: 'normal'
- *
- * (String|Integer) fxShowSpeed -
- *                                Default value: fxSpeed
- *
- * (String|Integer) fxHideSpeed -
- *                                Default value: fxSpeed
- *
- * (Boolean) fxAutoheight -
- *                          Default value: false
- *
- * (Function) callback -
- *                       Default value: null
- *
- * (String) selectedTabClass -
- *                             Default value: 'selected'
- *
- * (String) hiddenTabContainerClass -
- *                                    Default value: 'tabs-hide'
- *
- * (String) tabSelector -
- *                        Default value: '>div'
- *
+ * @cat Plugins/Tabs
  * @author Klaus Hartl/klaus.hartl@stilbuero.de
  */
 jQuery.fn.tabs = function(initial, settings) {
@@ -83,9 +113,6 @@ jQuery.fn.tabs = function(initial, settings) {
 
     // regex to find hash in url
     var re = /([_\-\w]+$)/i;
-
-    // observer to fix back button
-    //if (jQuery.history) jQuery.history.observe();
 
     // helper to prevent scroll to fragment
     var _unFocus = function() {
@@ -130,15 +157,12 @@ jQuery.fn.tabs = function(initial, settings) {
         // highlight tab in navigation
         jQuery('>ul>li:eq(' + settings.initial + ')', this).addClass(settings.selectedTabClass);
 
-        // attach events
+        // attach click event
         var container = this;
         jQuery('>ul>li>a', this).click(function(e) {
 
             // id of tab to be activated
             var tabToShowId = re.exec(this.href)[1];
-
-            // update observer TODO: find another way to add event...
-            //if (jQuery.history) jQuery.history.setHash(tabToShowHash, e);
 
             if (!jQuery(this.parentNode).is('.' + settings.selectedTabClass)) {
                 var tabToShow = jQuery('#' + tabToShowId);
@@ -158,11 +182,14 @@ jQuery.fn.tabs = function(initial, settings) {
                     };
                     var self = this;
                     var tabToHide = jQuery(settings.tabSelector + ':visible', container);
+
+                    // setup callback
                     var callback;
                     if (settings.callback && typeof settings.callback == 'function') callback = function() {
                         settings.callback.apply(tabToShow[0], [tabToShow[0], tabToHide[0]]);
                     };
 
+                    // setup animations
                     var showAnim = {}, hideAnim = {};
                     var showSpeed, hideSpeed;
                     if (settings.fxSlide || settings.fxFade) {
@@ -188,10 +215,12 @@ jQuery.fn.tabs = function(initial, settings) {
                             hideSpeed = settings.fxHideSpeed || settings.fxSpeed;
                         } else {
                             hideAnim['opacity'] = 'hide';
-                            hideSpeed = 1; // as little as this prevents browser scroll to the tab
+                            hideSpeed = 50; // as little as this prevents browser scroll to the tab
                         }
                     }
-                    tabToHide.animate(hideAnim, hideSpeed, function() { // animate in any case, prevents browser scroll to the fragment
+
+                    // switch tab, animation prevents browser scrolling to the fragment
+                    tabToHide.animate(hideAnim, hideSpeed, function() { //
                         _activateTab();
                         tabToShow.removeClass(settings.hiddenTabContainerClass).animate(showAnim, showSpeed, function() {
                             if (jQuery.browser.msie) {
@@ -225,17 +254,18 @@ jQuery.fn.tabs = function(initial, settings) {
  * as if the tab itself were clicked.
  *
  * @example $('#container').triggerTab(2);
- * @desc Activate the second tab of the tabs interface contained in <div id="container">.
+ * @desc Activate the second tab of the tab interface contained in <div id="container">.
  * @example $('#container').triggerTab(1);
- * @desc Activate the first tab of the tabs interface contained in <div id="container">.
+ * @desc Activate the first tab of the tab interface contained in <div id="container">.
  * @example $('#container').triggerTab();
- * @desc Activate the first tab of the tabs interface contained in <div id="container">.
+ * @desc Activate the first tab of the tab interface contained in <div id="container">.
  *
- * @name triggerTab
- * @type jQuery
  * @param Integer initial The position of the tab to be activated (no zero-based index).
  *                        If this parameter is omitted, the first tab will be activated.
+ * @type jQuery
  *
+ * @name triggerTab
+ * @cat Plugins/Tabs
  * @author Klaus Hartl/klaus.hartl@stilbuero.de
  */
 // TODO: issue with mixing history and triggerTab
