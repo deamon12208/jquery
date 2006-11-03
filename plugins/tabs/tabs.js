@@ -91,8 +91,9 @@
  * @option String selectedClass The CSS class attached to the li element representing the
  *                              currently selected tab. Default value: "tabs-selected".
  * @option String hideClass The CSS class used for hiding inactive tabs. A class is used instead
- *                          of "display: none" to maintain control over visibility in other
- *                          media types than screen, most notably print. Default value: "tabs-hide".
+ *                          of "display: none" in the style attribute to maintain control over
+ *                          visibility in other media types than screen, most notably print.
+ *                          Default value: "tabs-hide".
  * @option String tabStruct A CSS selector or basic XPath expression reflecting a nested HTML
  *                          structure that is different from the default single div structure
  *                          (one div with an id inside the overall container holds one tab's
