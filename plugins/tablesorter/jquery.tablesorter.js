@@ -163,7 +163,7 @@ jQuery.fn.tableSorter = function(o) {
 			}
 			
 			if(defaults.rowHighlightClass) {
-				jQuery("tbody/tr",oTable).click(function() {
+				jQuery("tbody:first/tr",oTable).click(function() {
 					if(ROW_LAST_HIGHLIGHT_OBJ) {
 						ROW_LAST_HIGHLIGHT_OBJ.removeClass(defaults.rowHighlightClass);	
 					}
@@ -250,7 +250,7 @@ jQuery.fn.tableSorter = function(o) {
 			/** remove highlighting */
 			if(defaults.highlightClass) {
 				if(COLUMN_LAST_INDEX != COLUMN_INDEX && COLUMN_LAST_INDEX > -1) {
-					jQuery("tbody/tr",o).find("td:eq(" + COLUMN_LAST_INDEX + ")").removeClass(defaults.highlightClass).end();
+					jQuery("tbody:first/tr",o).find("td:eq(" + COLUMN_LAST_INDEX + ")").removeClass(defaults.highlightClass).end();
 				}
 			}	
 			/** if this is fired, with a straight call, sortStart / Stop would never be fired. */
@@ -445,30 +445,32 @@ jQuery.tableSorter = {
 			/** jquery way, need to be benched mark! */
 			if(defaults.stripingRowClass) {
 				/** remove old! */
-				jQuery("tbody/tr",o).removeClass(defaults.stripingRowClass[0]).removeClass(defaults.stripingRowClass[1]);
+				jQuery("tbody:first/tr",o).removeClass(defaults.stripingRowClass[0]).removeClass(defaults.stripingRowClass[1]);
 				/** add new! */
 				jQuery.tableSorter.utils.stripRows(o,defaults);
 			}
 			if(defaults.highlightClass) {
 				/**
 				if(lastIndex != index && lastIndex > -1) {
-					jQuery("tbody/tr",o).find("td:eq(" + lastIndex + ")").removeClass(defaults.highlightClass).end();
+					jQuery("tbody:first/tr",o).find("td:eq(" + lastIndex + ")").removeClass(defaults.highlightClass).end();
 				}
 				*/
-				jQuery("tbody/tr",o).find("td:eq(" + index + ")").addClass(defaults.highlightClass).end();
+				jQuery("tbody:first/tr",o).find("td:eq(" + index + ")").addClass(defaults.highlightClass).end();
 			}
 			/** empty object, good practice! */
 			c=null;
 		},
 		stripRows: function(o,defaults) {
-			jQuery("tbody/tr:even",o).addClass(defaults.stripingRowClass[0]);
-			jQuery("tbody/tr:odd",o).addClass(defaults.stripingRowClass[1]);
+			jQuery("tbody:first/tr:even",o).addClass(defaults.stripingRowClass[0]);
+			jQuery("tbody:first/tr:odd",o).addClass(defaults.stripingRowClass[1]);
 		},
 		isHeaderDisabled: function(o,arg,index) {
 			if(typeof(arg) == "number") {
 				return (arg == index)? true : false;
 			} else if(typeof(arg) == "string") {
 				return (arg.toLowerCase() == jQuery.tableSorter.utils.getElementText(o,'header',index).toLowerCase()) ? true : false;
+			} else if(arg.parentNode) {
+       return (o == arg) ? true : false
 			} else if(typeof(arg) == "object") {
 				var l = arg.length;
 				if(!this.lastFound) { this.lastFound = -1; }
