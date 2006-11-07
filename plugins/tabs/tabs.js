@@ -280,31 +280,21 @@ jQuery.fn.tabs = function(initial, settings) {
  * @example $('#container').triggerTab();
  * @desc Activate the first tab of the tab interface contained in <div id="container">.
  *
- * @param Integer initial The position of the tab to be activated (no zero-based index).
- *                        If this parameter is omitted, the first tab will be activated.
+ * @param Number initial An Integer specifying the position of the tab to be activated
+ *                       (no zero-based index). If this parameter is omitted, the first
+ *                       tab will be activated.
  * @type jQuery
  *
  * @name triggerTab
  * @cat Plugins/Tabs
  * @author Klaus Hartl/klaus.hartl@stilbuero.de
  */
-// TODO: issue with mixing history and triggerTab
-// maybe solved with links that should trigger tab by pointing to corresponding hash
 jQuery.fn.triggerTab = function(tabIndex) {
     return this.each(function() {
-        jQuery.tabs.trigger(tabIndex, this);
+        var i = tabIndex && tabIndex > 0 && tabIndex - 1 || 0; // falls back to 0
+        var tabToTrigger = jQuery('>ul>li>a', this).eq(i);
+        location.hash = tabToTrigger.href().split('#')[1];
+        // this is handled by the history plugin if present
+        if (!jQuery.history) jQuery('>ul>li>a', this).eq(i).click();
     });
-};
-
-// internal helper
-jQuery.tabs = new function() {
-    this.trigger = function(arg, context) {
-        var argType = typeof arg;
-        if (argType == 'string') { // id of associated container has been passed
-            jQuery(hash).parent('div').find('>ul>li>a[@href$=' + hash + ']').click(); // TODO fix for custom tabStruct
-        } else if (argType == 'undefined' || argType == 'number') { // index of tab has been passed
-            var tabIndex = arg && arg > 0 && arg - 1 || 0; // falls back to index 0
-            jQuery('>ul>li>a', context).eq(tabIndex).click();
-        }
-    };
 };
