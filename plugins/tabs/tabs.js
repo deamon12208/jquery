@@ -126,9 +126,6 @@ jQuery.fn.tabs = function(initial, settings) {
         tabStruct: 'div'
     }, settings || {});
 
-    // regex to find hash in url
-    var re = /([_\-\w]+$)/i;
-
     // helper to prevent scroll to fragment
     var _unFocus = function() {
         scrollTo(0, 0);
@@ -139,9 +136,8 @@ jQuery.fn.tabs = function(initial, settings) {
 
         // retrieve active tab from hash in url
         if (location.hash) {
-            var hashId = location.hash.replace('#', '');
             jQuery('>ul:eq(0)>li>a', this).each(function(i) {
-                if (re.exec(this.href)[1] == hashId) {
+                if (this.hash == location.hash) {
                     settings.initial = i;
                     if (jQuery.browser.msie) setTimeout(_unFocus, 150); // be nice to IE
                     _unFocus();
@@ -163,6 +159,7 @@ jQuery.fn.tabs = function(initial, settings) {
             });
             divs.each(function() {
                 jQuery(this).css({minHeight: heights[0] + 'px'});
+                // IE 6 only...
                 if (jQuery.browser.msie && typeof XMLHttpRequest == 'function') jQuery(this).css({height: heights[0] + 'px'});
             });
         } else {
@@ -184,14 +181,12 @@ jQuery.fn.tabs = function(initial, settings) {
         // attach click event
         tabs.click(function(e) {
 
-            // id of tab to be activated
-            var tabToShowId = re.exec(this.href)[1];
-
             if (!jQuery(this.parentNode).is('.' + settings.selectedClass)) {
-                var tabToShow = jQuery('#' + tabToShowId);
+                var tabToShow = jQuery(this.hash);
 
                 // prevent scrollbar scrolling to 0 and than back in IE7
                 if (jQuery.browser.msie) {
+                    var tabToShowId = this.hash.replace('#', '');
                     tabToShow.id('');
                     setTimeout(function() {
                         tabToShow.id(tabToShowId); // restore id
@@ -293,8 +288,29 @@ jQuery.fn.triggerTab = function(tabIndex) {
     return this.each(function() {
         var i = tabIndex && tabIndex > 0 && tabIndex - 1 || 0; // falls back to 0
         var tabToTrigger = jQuery('>ul>li>a', this).eq(i);
-        location.hash = tabToTrigger.href().split('#')[1];
-        // this is handled by the history plugin if present
-        if (!jQuery.history) jQuery('>ul>li>a', this).eq(i).click();
+        var hash = tabToTrigger[0].hash;
+        // trigger only if not visible
+        if (jQuery(hash).is(':hidden')) {
+            // Simply setting location.hash puts Safari into the eternal load state... ugh!
+            // Submit a form instead.
+            if (jQuery.browser.safari) {
+                var f = document.createElement('form');
+                f.innerHTML = '<div><input type="submit" value="h" /></div>';
+                f.action = hash;
+                f.style.display = 'none';
+                document.body.appendChild(f);
+                setTimeout(function() {
+                    f.submit(); // does not trigger the form's submit event...
+                    tabToTrigger.click(); // ...thus do stuff here
+                    if (jQuery.history) jQuery.history.setHash(hash, {clientX: 42}); // fake a click event to get hash into history
+                    f.remove();
+                }, 10);
+            } else {
+                location.hash = hash.replace('#', '');
+            }
+
+            // this is handled by the history plugin if present
+            if (!jQuery.history) tabToTrigger.click();
+        }
     });
 };
