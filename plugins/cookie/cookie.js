@@ -17,16 +17,16 @@
  * @desc Create a cookie with all available options.
  * @example $.cookie('the_cookie', 'the_value');
  * @desc Create a session cookie.
- * @example $.cookie('the_cookie', '', {expires: 0});
- * @desc Delete a cookie.
+ * @example $.cookie('the_cookie', '', {expires: -1});
+ * @desc Delete a cookie by setting a date in the past.
  *
  * @param String name The name of the cookie.
  * @param String value The value of the cookie.
  * @param Hash options A set of key/value pairs for optional cookie parameters.
- * @option Object expires Either an integer specifying the expiration date from now on in days or a Date object.
- *                        If you set this to zero, the cookie will be deleted. If you set it to null, or omit,
- *                        this option, the cookie will be a session cookie and will not be retained when the
- *                        the browser exits. This option is used to set the max-age attribute of the cookie.
+ * @option Number|Date expires Either an integer specifying the expiration date from now on in days or a Date object.
+ *                             If a negative value is specified (e.g. a date in the past), the cookie will be deleted.
+ *                             If set to null or omitted, the cookie will be a session cookie and will not be retained
+ *                             when the the browser exits.
  * @option String path The value of the path atribute of the cookie (default: path of page that created the cookie).
  * @option String domain The value of the domain attribute of the cookie (default: domain of page that created the cookie).
  * @option Boolean secure If true, the secure attribute of the cookie will be set and the cookie transmission will
@@ -56,22 +56,15 @@ jQuery.cookie = function(name, value, options) {
     if (typeof value != 'undefined') { // name and value given, set cookie
         options = options || {};
         var expires = '';
-        if (typeof options.expires == 'number' || (options.expires  && options.expires.getTime)) {
-            var maxAge;
+        if (options.expires && (typeof options.expires == 'number' || options.expires.toGMTString)) {
+            var date;
             if (typeof options.expires == 'number') {
-                maxAge = options.expires * 24 * 60 * 60; // seconds
+                date = new Date();
+                date.setTime(date.getTime() + (options.expires * 24 * 60 * 60 * 1000));
             } else {
-                var now = new Date();
-                maxAge = parseInt((options.expires.getTime() - now.getTime()) / 1000); // seconds
-                if (maxAge > 0 && maxAge < 1) {
-                    maxAge = 1;
-                }
+                date = options.expires;
             }
-            if (maxAge <= 0) {
-                expires = '; expires=' + new Date(0).toGMTString(); // max-age=0 will not immediatly delete cookie in some browsers
-            } else {
-                expires = '; max-age=' + maxAge;
-            }
+            expires = '; expires=' + date.toGMTString(); // use expires attribute, max-age is not supported by IE
         }
         var path = options.path ? '; path=' + options.path : '';
         var domain = options.domain ? '; domain=' + options.domain : '';
