@@ -19,7 +19,7 @@
  * 
  * @name height
  * @type Object
- * @cat Dimensions
+ * @cat Plugins/Dimensions
  */
 jQuery.fn.height = function() {
 	if ( this.get(0) == window )
@@ -49,7 +49,7 @@ jQuery.fn.height = function() {
  * 
  * @name width
  * @type Object
- * @cat Dimensions
+ * @cat Plugins/Dimensions
  */
 jQuery.fn.width = function() {
 	if ( this.get(0) == window )
@@ -73,7 +73,7 @@ jQuery.fn.width = function() {
  * 
  * @name innerHeight
  * @type Number
- * @cat Dimensions
+ * @cat Plugins/Dimensions
  */
 jQuery.fn.innerHeight = function() {
 	return this.get(0) == window || this.get(0) == document ?
@@ -91,7 +91,7 @@ jQuery.fn.innerHeight = function() {
  * 
  * @name innerWidth
  * @type Number
- * @cat Dimensions
+ * @cat Plugins/Dimensions
  */
 jQuery.fn.innerWidth = function() {
 	return this.get(0) == window || this.get(0) == document ?
@@ -108,7 +108,7 @@ jQuery.fn.innerWidth = function() {
  * 
  * @name outerHeight
  * @type Number
- * @cat Dimensions
+ * @cat Plugins/Dimensions
  */
 jQuery.fn.outerHeight = function() {
 	return this.get(0) == window || this.get(0) == document ?
@@ -125,7 +125,7 @@ jQuery.fn.outerHeight = function() {
  * 
  * @name outerWidth
  * @type Number
- * @cat Dimensions
+ * @cat Plugins/Dimensions
  */
 jQuery.fn.outerWidth = function() {
 	return this.get(0) == window || this.get(0) == document ?
@@ -142,7 +142,7 @@ jQuery.fn.outerWidth = function() {
  * 
  * @name scrollLeft
  * @type Number
- * @cat Dimensions
+ * @cat Plugins/Dimensions
  */
 jQuery.fn.scrollLeft = function() {
 	if ( this.get(0) == window || this.get(0) == document )
@@ -162,7 +162,7 @@ jQuery.fn.scrollLeft = function() {
  * 
  * @name scrollTop
  * @type Number
- * @cat Dimensions
+ * @cat Plugins/Dimensions
  */
 jQuery.fn.scrollTop = function() {
 	if ( this.get(0) == window || this.get(0) == document )
@@ -188,7 +188,7 @@ jQuery.fn.scrollTop = function() {
  *
  * @name offset	
  * @type Object
- * @cat Dimensions
+ * @cat Plugins/Dimensions
  * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
  */
 /**
@@ -207,7 +207,7 @@ jQuery.fn.scrollTop = function() {
  * @name offset	
  * @type Object
  * @param String refElement This is an expression. The offset returned will be relative to the first matched element.
- * @cat Dimensions
+ * @cat Plugins/Dimensions
  * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
  */
 /**
@@ -226,7 +226,7 @@ jQuery.fn.scrollTop = function() {
  * @name offset	
  * @type Object
  * @param jQuery refElement The offset returned will be relative to the first matched element.
- * @cat Dimensions
+ * @cat Plugins/Dimensions
  * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
  */
 /**
@@ -245,7 +245,7 @@ jQuery.fn.scrollTop = function() {
  * @name offset	
  * @type Object
  * @param HTMLElement refElement The offset returned will be relative to this element.
- * @cat Dimensions
+ * @cat Plugins/Dimensions
  * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
  */
 jQuery.fn.offset = function(refElem) {
