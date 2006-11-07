@@ -102,8 +102,8 @@ jQuery.iResize = {
 		jQuery(document)
 			.unbind('mousemove', jQuery.iResize.move)
 			.unbind('mouseup', jQuery.iResize.stop);
-		if (jQuery.iResize.resizeElement.resizeOptions.onStart) {
-			jQuery.iResize.resizeElement.resizeOptions.onStart.apply(jQuery.iResize.resizeElement, [jQuery.iResize.resizeDirection])
+		if (jQuery.iResize.resizeElement.resizeOptions.onStop) {
+			jQuery.iResize.resizeElement.resizeOptions.onStop.apply(jQuery.iResize.resizeElement, [jQuery.iResize.resizeDirection])
 		}
 		jQuery.iResize.resizeElement = null;
 		jQuery.iResize.resizeDirection = null;
