@@ -19,8 +19,10 @@
 		$('#list2').Accordion({
 			active: $('#list2 dt.selected')[0], // TODO the expression itself should work, too, but it fails when used with not, seems like a bug in not()
 			onClick:function(){simpleLog($(this).text() + ' clicked')},
-			onShow:function(){simpleLog($(this).text() + ' shown'); $(this).removeClass('off').addClass('on');},
-			onHide:function(){simpleLog($(this).text() + ' hidden'); $(this).removeClass('on').addClass('off');},
+			onClass: "active",
+			offClass: "notActive",
+			onShow:function(){simpleLog($(this).text() + ' shown');},
+			onHide:function(){simpleLog($(this).text() + ' hidden');},
 			showSpeed:250,
 			hideSpeed:550
 		});
@@ -29,7 +31,7 @@
 		});
 		$('#list4').Accordion({
 			active: $('#list4 a.selected')[0],
-			header: 'a.head'
+			header: 'a.head',
 		});
 	});
 	</script>
@@ -39,14 +41,15 @@
 		body { padding-left: 1em; margin-bottom: 8em; }
 		#list1, #list2, #list3 { width:20em; }
 		dt, h3 { cursor:pointer; border:1px solid #CCCCCC; margin-top:0.5em; padding:0.1em; }
-		dt.on { background-color:#C0C0C0; }
-		dt.off { background-color:#E0E0E0; }
+		dt.active { background-color:#C0C0C0; }
+		dt.notActive { background-color:#E0E0E0; }
 		dd, p    { background-color:#F5F5F5; padding:0.1em; border:1px solid #C0C0C0; border-top-width:0; margin: 0 }
 		#log { position:absolute; top:0; right:1em; text-align:right; }
 		h2 { margin-top: 1.5em; }
 		#list3 { border: 2px solid #111; }
 		#list3 div { background-color: #eee; }
 		#list3 div.title { text-decoration: underline; }
+		a.on { background-color: #789 }
 	</style>
 	
 </head>

@@ -83,6 +83,8 @@ jQuery.fn.nextUntil = function(expr) {
  * @option Function onHide Callback when a part is hidden, no default
  * @option String|Number showSpeed Speed for the slideIn, default is 'slow'
  * @option String|Number hideSpeed Speed for the slideOut, default is 'fast'
+ * @option String onClass Class for active header elements, default is 'on'
+ * @option String offClass Class for inactive header elements, default is 'off'
  * @cat Plugin/Accordion
  * @author Jörn Zaefferer (http://bassistance.de)
  */
@@ -96,6 +98,8 @@ $.fn.Accordion = function(conf) {
 		onClick: function(){}, // no default handler
 		onShow: function(){}, // no default handler
 		onHide: function(){}, // no default handler
+		onClass: "on",
+		offClass: "off",
 		showSpeed: 'slow', // slide in slow
 		hideSpeed: 'fast' // slide out fast
 	}, conf || {});
@@ -106,17 +110,21 @@ $.fn.Accordion = function(conf) {
 	
 	$(title, this)
 		.not(active)
+		.addClass(conf.offClass)
 		.nextUntil(title)
 		.hide()
 		.end()
 		.each(conf.onHide);
-	$(active, this).each(conf.onShow);
+	$(active, this).addClass(conf.onClass).each(conf.onShow);
 
 	$(this).click(function(event) {
 		if(running > 0)
 			return;
 		var target = $(event.target);
 		if( target.is(title) ) {
+			$(active).removeClass(conf.onClass).addClass(conf.offClass);
+			target.removeClass(conf.offClass).addClass(conf.onClass);
+			
 			target.each(conf.onClick);
 			var content = $(target).nextUntil(title);
 			
