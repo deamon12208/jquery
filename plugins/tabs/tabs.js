@@ -48,11 +48,12 @@
  * @desc Create a tab interface that uses slide down/up animations for showing/hiding tab containers
  *       upon tab switching.
  *
- * @param Integer initial The tab to be initially activated (no zero-based index). If a hash in the
- *                        URL of the page refers to one fragment (tab container) of a tab interface,
- *                        this parameter will be ignored and instead the tab belonging to that fragment
- *                        in that specific tab interface will be activated. Defaults to 1 if omitted.
- * @param Hash settings Object literal containing key/value pairs to provide optional settings.
+ * @param Number initial An integer specifying the position of the tab (no zero-based index) that
+ *                       gets first activated, e.g. on page load. If a hash in the URL of the page
+ *                       refers to one fragment (tab container) of a tab interface, this parameter
+ *                       will be ignored and instead the tab belonging to that fragment in that
+ *                       specific tab interface will be activated. Defaults to 1 if omitted.
+ * @param Object settings An object literal containing key/value pairs to provide optional settings.
  * @option Boolean fxFade Boolean flag indicating whether fade in/out animations are used for tab
  *                        switching. Can be combined with fxSlide. Will overrule fxShow/fxHide.
  *                        Default value: false.
@@ -275,9 +276,9 @@ jQuery.fn.tabs = function(initial, settings) {
  * @example $('#container').triggerTab();
  * @desc Activate the first tab of the tab interface contained in <div id="container">.
  *
- * @param Number initial An Integer specifying the position of the tab to be activated
- *                       (no zero-based index). If this parameter is omitted, the first
- *                       tab will be activated.
+ * @param Number position An integer specifying the position of the tab (no zero-based
+ *                        index) to be activated. If this parameter is omitted, the first
+ *                        tab will be activated.
  * @type jQuery
  *
  * @name triggerTab
