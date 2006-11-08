@@ -41,7 +41,7 @@
  * @option String event The event on which the tooltip is displayed, default is "mouseover", "click" works fine, too
  * @option Boolean track If true, let the tooltip track the mousemovement, default is false
  * @type jQuery
- * @cat Plugins
+ * @cat Plugins/Tooltip
  * @author Jörn Zaefferer (http://bassistance.de)
  */
 (function($) {
