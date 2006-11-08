@@ -332,9 +332,9 @@ jQuery.fn.formToArray = function(semantic) {
             );
 
         if (t == 'select-multiple') {
-            jQuery('option:selected', this).each( function() {
-                a.push({name: n, value: this.value});
-            });
+            for(var i=0; i < this.options.length; i++)
+                if (this.options[i].selected)
+                    a.push({name: n, value: this.options[i].value})
             return;
         }
         a.push({name: n, value: this.value});
@@ -344,7 +344,7 @@ jQuery.fn.formToArray = function(semantic) {
 
 /**
  * Serializes form data into a 'submittable' string. This method will return a string
- * in the format: name1=value1&amp;name2=value2
+ * in the format: name1=value1&name2=value2
  *
  * The semantic argument can be used to force form serialization in semantic order.
  * If your form must be submitted with name/value pairs in semantic order then pass
