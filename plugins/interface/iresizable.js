@@ -350,6 +350,6 @@ jQuery.iResize = {
 };
 jQuery.fn.extend(
 	{
-		Resizeable : jQuery.iResize.build
+		Resizable : jQuery.iResize.build
 	}
 );
