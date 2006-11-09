@@ -241,9 +241,9 @@ jQuery.fn.tabs = function(initial, settings) {
                         tabToShow.removeClass(settings.hideClass).animate(showAnim, showSpeed, function() {
                             if (jQuery.browser.msie) {
                                 tabToHide[0].style.filter = '';  // @ IE, maintain acccessibility for print
-                                tabToHide.addClass(settings.hideClass).css({display: '', height: 'auto'}); // maintain flexible height and acccessibility for print
+                                tabToHide.addClass(settings.hideClass).css({display: '', height: ''}); // maintain flexible height and acccessibility for print
                             }
-                            tabToShow.css({height: 'auto'}); // maintain flexible height
+                            tabToShow.css({height: ''}); // maintain flexible height
                             if (callback) callback();
                         });
                     });
