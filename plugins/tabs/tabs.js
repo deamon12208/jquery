@@ -295,17 +295,10 @@ jQuery.fn.triggerTab = function(tabIndex) {
             // Simply setting location.hash puts Safari into the eternal load state... ugh!
             // Submit a form instead.
             if (jQuery.browser.safari) {
-                var f = document.createElement('form');
-                f.innerHTML = '<div><input type="submit" value="h" /></div>';
-                f.action = hash;
-                f.style.display = 'none';
-                document.body.appendChild(f);
-                setTimeout(function() {
-                    f.submit(); // does not trigger the form's submit event...
-                    tabToTrigger.click(); // ...thus do stuff here
-                    if (jQuery.history) jQuery.history.setHash(hash, {clientX: 42}); // fake a click event to get hash into history
-                    f.remove();
-                }, 10);
+                var tempForm = jQuery('<form action="' + hash + '"><div><input type="submit" value="h" /></div></form>').get(0); // no need to append it to the body
+                tempForm.submit(); // does not trigger the form's submit event...
+                tabToTrigger.click(); // ...thus do stuff here
+                if (jQuery.history) jQuery.history.setHash(hash, {clientX: 42}); // fake a click event to get hash into history
             } else {
                 location.hash = hash.replace('#', '');
             }
