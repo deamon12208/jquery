@@ -15,23 +15,41 @@
 	}
 
 	$(function(){
+		// simple Accordion
 		$('#list1').Accordion();
+		
+		// highly customized Accordion
 		$('#list2').Accordion({
-			active: $('#list2 dt.selected')[0], // TODO the expression itself should work, too, but it fails when used with not, seems like a bug in not()
-			onClick:function(){simpleLog($(this).text() + ' clicked')},
-			onClass: "active",
-			offClass: "notActive",
-			onShow:function(){simpleLog($(this).text() + ' shown');},
-			onHide:function(){simpleLog($(this).text() + ' hidden');},
-			showSpeed:250,
-			hideSpeed:550
+			active: 'dt.selected',
+			selectedClass: "active",
+			showSpeed: 250,
+			hideSpeed: 550
+		}).change(function(event, newHeader, oldHeader, newContent, oldContent) {
+			simpleLog(oldHeader.text() + ' hidden');
+			simpleLog(newHeader.text() + ' shown');
 		});
+		
+		// set global defaults for all following Accordions, will be valid for #list1, #list2 and #list4, #list3 sets them for itself
+		$.extend($.fn.Accordion.defaults, {
+			showSpeed: 1000,
+			hideSpeed: 150
+		});
+		
+		// first simple Accordion with special markup
 		$('#list3').Accordion({
-			header: 'div.title' 
+			header: 'div.title',
 		});
+		
+		// second simple Accordion with special markup
 		$('#list4').Accordion({
-			active: $('#list4 a.selected')[0],
+			active: 'a.selected',
 			header: 'a.head'
+		});
+		
+		// bind to change event of select to control first and seconds accordion
+		// similar to tab's plugin triggerTab(), without an extra method
+		$('#switch select').change(function() {
+			$('#list1, #list2').activate( this.selectedIndex-1 );
 		});
 	});
 	</script>
@@ -39,17 +57,21 @@
 	<style type="text/css">
 		* { margin: 0; padding: 0; }
 		body { padding-left: 1em; margin-bottom: 8em; }
-		#list1, #list2, #list3 { width:20em; }
-		dt, h3 { cursor:pointer; border:1px solid #CCCCCC; margin-top:0.5em; padding:0.1em; }
+		#list1, #list2, #list3, #list4 { width:20em; }
+		dt, h3, a.head { cursor:pointer; border:1px solid #CCCCCC; margin-top:0.5em; padding:0.1em; }
+		a.head { display:block; }
+		li ul { margin-left: 1em; }
+		li { list-style-type: none; }
 		dt.active { background-color:#C0C0C0; }
 		dt.notActive { background-color:#E0E0E0; }
 		dd, p    { background-color:#F5F5F5; padding:0.1em; border:1px solid #C0C0C0; border-top-width:0; margin: 0 }
 		#log { position:absolute; top:0; right:1em; text-align:right; }
+		#switch { position: absolute; top: 0; right: 15em;
 		h2 { margin-top: 1.5em; }
 		#list3 { border: 2px solid #111; }
 		#list3 div { background-color: #eee; }
 		#list3 div.title { text-decoration: underline; }
-		a.on { background-color: #789 }
+		a.selected { background-color: #789 }
 	</style>
 	
 </head>
@@ -149,33 +171,39 @@
 		<h2>Divitus structure, div container, div header (class title), div content</h2>
 		
 		<div id="list3">
-			<div class="title">Title1</div>
 			<div>
-				bibendum at, eros<br/>
-				Cras at mi et tortor egestas vestibulum<br/>
-				sed Cras at mi vestibulum<br/>
-				Phasellus sed felis sit amet
-			</div>
-			<div class="title">Title2</div>
-			<div>
-				bibendum at, eros<br/>
-				Cras at mi et tortor egestas vestibulum<br/>
-				sed Cras at mi vestibulum<br/>
-				Phasellus sed felis sit amet
-			</div>
-			<div class="title">Title3</div>
-			<div>
-				bibendum at, eros<br/>
-				Cras at mi et tortor egestas vestibulum<br/>
-				sed Cras at mi vestibulum<br/>
-				Phasellus sed felis sit amet
+				<div class="title">Title1</div>
+				<div>
+					bibendum at, eros<br/>
+					Cras at mi et tortor egestas vestibulum<br/>
+					sed Cras at mi vestibulum<br/>
+					Phasellus sed felis sit amet
+				</div>
 			</div>
 			<div>
-				more content<br/>
-				bibendum at, eros<br/>
-				Cras at mi et tortor egestas vestibulum<br/>
-				sed Cras at mi vestibulum<br/>
-				Phasellus sed felis sit amet
+				<div class="title">Title2</div>
+				<div>
+					bibendum at, eros<br/>
+					Cras at mi et tortor egestas vestibulum<br/>
+					sed Cras at mi vestibulum<br/>
+					Phasellus sed felis sit amet
+				</div>
+			</div>
+			<div>
+				<div class="title">Title3</div>
+				<div>
+					bibendum at, eros<br/>
+					Cras at mi et tortor egestas vestibulum<br/>
+					sed Cras at mi vestibulum<br/>
+					Phasellus sed felis sit amet
+				</div>
+				<div>
+					more content<br/>
+					bibendum at, eros<br/>
+					Cras at mi et tortor egestas vestibulum<br/>
+					sed Cras at mi vestibulum<br/>
+					Phasellus sed felis sit amet
+				</div>
 			</div>
 		</div>
 		
@@ -207,6 +235,16 @@
 				</ul>
 			</li>
 		</ul>
+		
+		<div id="switch">
+			Switch first and second accordion:
+			<select>
+				<option>Select...</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+			</select>
+		</div>
 
 		<div id="log"><div><strong>Log of the 2nd accordion</strong></div></div>
 

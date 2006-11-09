@@ -32,22 +32,21 @@ jQuery.fn.nextUntil = function(expr) {
 }; 
 
 /**
- * Create an Accordion from the selected container(s).
- * The structure inside the container must be flat, that
- * is, a header element must be followed by one or more
- * content elements.
- *
- * A definition list (dl, dt, dd) is an obvious, but not
- * necessary choice.
+ * Make the selected elements Accordion widgets.
+ *´
+ * Semantic requirements:
+ * 
+ * If the structure of your container is flat with unique
+ * tags for header and content elements, eg. a definition list
+ * (dl > dt + dd), you don't have to specify any options at
+ * all.
  *
  * If your structure uses the same elements for header and
- * content, you have to specify the header (eg. by class),
- * see the second example.
+ * content or uses some kind of nested structure, you have to 
+ * specify the header elements, eg. via class, see the second example.
  *
- * If you use nested lists, eg. for a navigation, you have to
- * mark the header elements with their own class and specify
- * that via the header option, see third example.
- * 
+ * Use activate(Number) to change the active content programmatically.
+ *
  * @example $('#list1').Accordion();
  * @before <dl id="list1"><dt>Header 1><dd>Content 1</dd>[...]</dl>
  * @desc Creates a Accordion from the given definition list
@@ -55,8 +54,8 @@ jQuery.fn.nextUntil = function(expr) {
  * @example $('#list2').Accordion({
  *   header: 'div.title'
  * });
- * @before <div id="list2"><div class="title">Header 1><div>Content 1</div>[...]</div>
- * @desc Creates a Accordion from the given definition list
+ * @before <div id="nav"><div><div class="title">Header 1><div>Content 1</div></div>[...]</div>
+ * @desc Creates a Accordion from the given div structure
  *
  * @example $('#nav').Accordion({
  *   header: 'a.head'
@@ -73,76 +72,136 @@ jQuery.fn.nextUntil = function(expr) {
  * </ul>
  * @desc Creates a Accordion from the given navigation list
  *
- * @name Accordion
- * @type jQuery
- * @param Object options
- * @option Element active The header element that is active, default is the first child
- * @option String header Selector for the header element, eg. div.title, a.head, default is the first child's tagname
- * @option Function onClick Callback whenever a header is clicked, no default
- * @option Function onShow Callback when a part is shown, no default
- * @option Function onHide Callback when a part is hidden, no default
+ * @example $('#accordion').Accordion().change(function(event, newHeader, oldHeader, newContent, oldContent) {
+ *   $('#status').html(newHeader.text());
+ * });
+ * @desc Updates the #status element with the text of the selected header every time the accordion changes
+ *
+ * @param Object settings key/value pairs of optional settings.
+ * @option String|Element|jQuery active Selector for the active element, default is the first child
+ * @option String|Element|jQuery header Selector for the header element, eg. div.title, a.head, default is the first child's tagname
  * @option String|Number showSpeed Speed for the slideIn, default is 'slow'
  * @option String|Number hideSpeed Speed for the slideOut, default is 'fast'
- * @option String onClass Class for active header elements, default is 'on'
- * @option String offClass Class for inactive header elements, default is 'off'
+ * @option String selectedClass Class for active header elements, default is 'selected'
+ *
+ * @event change Called everytime the accordion changes, params: event, newHeader, oldHeader, newContent, oldContent
+ *
+ * @type jQuery
+ *
+ * @see activate(Number)
+ *
+ * @name Accordion
  * @cat Plugin/Accordion
  * @author Jörn Zaefferer (http://bassistance.de)
  */
  
+/**
+ * Activate a content part of the Accordion programmatically with the position zero-based index.
+ *
+ * If the index is not specified, it defaults to zero, if it is an invalid index, eg. a string,
+ * nothing happens.
+ *
+ * Requires jQuery core revision >= 557.
+ *
+ * @example $('#accordion').activate(1);
+ * @desc Activate the second content of the Accordion contained in <div id="accordion">.
+ * @example $('#nav').activate();
+ * @desc Activate the first content of the Accordion contained in <ul id="nav">.
+ *
+ * @param Number index An Integer specifying the zero-based index of the content to be
+ *				 activated. Defaults to 0.
+ * @type jQuery
+ *
+ * @name activate
+ * @cat Plugins/Accordion
+ * @author Jörn Zaefferer (http://bassistance.de)
+ */
+ 
+// create private scope with $ alias for jQuery
 (function($) {
-$.fn.Accordion = function(conf) {
-
-	conf = jQuery.extend({
-		active: $(this).children(":eq(0)")[0], // first child is active
-		header: $(this).children(':eq(0)')[0].tagName, // first child is header, take it's tagname
-		onClick: function(){}, // no default handler
-		onShow: function(){}, // no default handler
-		onHide: function(){}, // no default handler
-		onClass: "on",
-		offClass: "off",
-		showSpeed: 'slow', // slide in slow
-		hideSpeed: 'fast' // slide out fast
-	}, conf || {});
-	
-	var active = conf.active;
-	var running = 0;
-	var title = conf.header;
-	
-	$(title, this)
-		.not(active)
-		.addClass(conf.offClass)
-		.nextUntil(title)
-		.hide()
-		.end()
-		.each(conf.onHide);
-	$(active, this).addClass(conf.onClass).each(conf.onShow);
-
-	$(this).click(function(event) {
-		if(running > 0)
-			return;
-		var target = $(event.target);
-		if( target.is(title) ) {
-			$(active).removeClass(conf.onClass).addClass(conf.offClass);
-			target.removeClass(conf.offClass).addClass(conf.onClass);
+	// save reference to plugin method
+	var plugin = $.fn.Accordion = function(settings) {
+		
+		// setup configuration
+		// TODO: allow multiple arguments to extend, see bug #344
+		settings = $.extend($.extend({}, arguments.callee.defaults), $.extend({
+			// define context defaults
+			header: $(':first-child', this)[0].tagName, // take first childs tagName as header
+		}, settings || {}));
+		
+		// calculate active if not specified, using the first header
+		var container = this,
+			active = settings.active ? $(settings.active, this) : $(settings.header, this).eq(0),
+			running = 0;
+		
+		$(settings.header, container)
+			.not(active[0])
+			.nextUntil(settings.header)
+			.hide();
+		active.addClass(settings.selectedClass);
+		
+		var clickHandler = function(event) {
+			// get the click target
+			var clicked = $(event.target);
+		
+			// if animations are still active, or the active header is the target, ignore click
+			if(running || clicked[0] == active[0] || !clicked.is(settings.header))
+				return;
 			
-			target.each(conf.onClick);
-			var content = $(target).nextUntil(title);
+			// switch classes
+			active.removeClass(settings.selectedClass);
+			clicked.addClass(settings.selectedClass);
 			
-			if (content.is(":visible")) return;
-			running = 2;
-			var finished = function() { --running };
-			$(active)
-				.nextUntil(title)
-				.not(':hidden')
-				.slideUp(conf.hideSpeed, finished);
-			content.slideDown(conf.showSpeed, finished);
-	
-			$(active).each(conf.onHide);
-			active = target;
-			$(active).each(conf.onShow);
+			// find elements to show and hide
+			var toShow = $(clicked).nextUntil(settings.header),
+				toHide = $(active).nextUntil(settings.header),
+				data = [clicked, active, toShow, toHide];
+			active = clicked;
+			// count elements to animate
+			running = toHide.size() + toShow.size();
+			var finished = function() {
+				if(--running)
+					return;
+				// as seen in the tabs plugin
+				if ($.browser.msie) {
+					// maintain flexible height and acccessibility for print
+				    toHide.css({display: '', filter: ''}); 
+				}
+				// maintain flexible height
+				toHide.css({height: ''});
+				toShow.css({height: ''});
+				
+				// trigger custom change event
+				container.trigger("change", data);
+			};
+			// TODO if hideSpeed is set to zero, animations are crappy
+			// workaround: use hide instead
+			// solution: animate should check for speed of 0 and do something about it
+			toHide.slideUp(settings.hideSpeed, finished);
+			toShow.slideDown(settings.showSpeed, finished);
 			event.preventDefault();
-		}
-	});
-	return this;
-};
+		};
+		var activateHandlder = function(event, index) {
+			// call clickHandler with custom event
+			clickHandler($.event.fix({
+				target: $(settings.header, this)[index]
+			}));
+		};
+	
+		return container
+			.bind("click", clickHandler)
+			.bind("activate", activateHandlder);
+	};
+	// define static defaults
+	plugin.defaults = {
+		selectedClass: "selected",
+		showSpeed: 'slow',
+		hideSpeed: 'fast'
+	};
+	
+	// shortcut for trigger, nicer API and easily to document
+	$.fn.activate = function(index) {
+		return this.trigger('activate', [index || 0]);
+	};
+	
 })(jQuery);
