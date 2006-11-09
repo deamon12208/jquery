@@ -519,6 +519,7 @@ jQuery.tableSorter.sorters.numeric = function(a,b) {
 	return a[1]-b[1];
 };
 */
+
 jQuery.tableSorter.parsers.generic = {
 	id: 'generic',
 	is: function(s) {
@@ -535,7 +536,7 @@ jQuery.tableSorter.parsers.generic = {
 jQuery.tableSorter.parsers.currency = {
 	id: 'currency',
 	is: function(s) {
-		return s.match(new RegExp(/^[£jQuery]/));
+		return s.match(new RegExp(/^[£$]/));
 	},
 	format: function(s) {
 		return parseFloat(s.replace(new RegExp(/[^0-9.]/g),''));
@@ -569,7 +570,7 @@ jQuery.tableSorter.parsers.float = {
 jQuery.tableSorter.parsers.ipAddress = {
 	id: 'ipAddress',
 	is: function(s) {
-		return s.match(new RegExp(/^\d{2,3}[\.]\d{2,3}[\.]\d{2,3}[\.]\d{2,3}jQuery/));
+		return s.match(new RegExp(/^\d{2,3}[\.]\d{2,3}[\.]\d{2,3}[\.]\d{2,3}$/));
 	},
 	format: function(s) {
 		var a = s.split('.');
@@ -600,7 +601,7 @@ jQuery.tableSorter.parsers.url = {
 jQuery.tableSorter.parsers.isoDate = {
 	id: 'isoDate',
 	is: function(s) {
-		return s.match(new RegExp(/^\d{4}[/-]\d{1,2}[/-]\d{1,2}jQuery/));
+		return s.match(new RegExp(/^\d{4}[/-]\d{1,2}[/-]\d{1,2}$/));
 	},
 	format: function(s) {
 		return parseFloat(new Date(s.replace(new RegExp(/-/g),'/')).getTime());
@@ -611,7 +612,7 @@ jQuery.tableSorter.parsers.isoDate = {
 jQuery.tableSorter.parsers.usLongDate = {
 	id: 'usLongDate',
 	is: function(s) {
-		return s.match(new RegExp(/^[A-Za-z]{3,10}\.? [0-9]{1,2}, ([0-9]{4}|'?[0-9]{2}) (([0-2]?[0-9]:[0-5][0-9])|([0-1]?[0-9]:[0-5][0-9]\s(AM|PM)))jQuery/));
+		return s.match(new RegExp(/^[A-Za-z]{3,10}\.? [0-9]{1,2}, ([0-9]{4}|'?[0-9]{2}) (([0-2]?[0-9]:[0-5][0-9])|([0-1]?[0-9]:[0-5][0-9]\s(AM|PM)))$/));
 	},
 	format: function(s) {
 		return parseFloat((new Date(s)).getTime());
@@ -629,10 +630,10 @@ jQuery.tableSorter.parsers.shortDate = {
 		var defaults = jQuery.tableSorter.utils.getParams();
 		if(defaults.dateFormat == "mm/dd/yyyy" || defaults.dateFormat == "mm-dd-yyyy") {
 			/** reformat the string in ISO format */
-			s = s.replace(new RegExp(/(\d{1,2})[/-](\d{1,2})[/-](\d{4})/), 'jQuery3/jQuery1/jQuery2');
+			s = s.replace(new RegExp(/(\d{1,2})[/-](\d{1,2})[/-](\d{4})/), '$3/$1/$2');
 		} else if(defaults.dateFormat == "dd/mm/yyyy" || defaults.dateFormat == "dd-mm-yyyy") {
 			/** reformat the string in ISO format */
-			s = s.replace(new RegExp(/(\d{1,2})[/-](\d{1,2})[/-](\d{4})/), 'jQuery3/jQuery2/jQuery1');
+			s = s.replace(new RegExp(/(\d{1,2})[/-](\d{1,2})[/-](\d{4})/), '$3/$2/$1');
 		}
 		return parseFloat((new Date(s)).getTime());
 	},
@@ -642,7 +643,7 @@ jQuery.tableSorter.parsers.shortDate = {
 jQuery.tableSorter.parsers.time = {
     id: 'time',
     is: function(s) {
-        return s.toUpperCase().match(new RegExp(/^(([0-2]?[0-9]:[0-5][0-9])|([0-1]?[0-9]:[0-5][0-9]\s(AM|PM)))jQuery/));
+        return s.toUpperCase().match(new RegExp(/^(([0-2]?[0-9]:[0-5][0-9])|([0-1]?[0-9]:[0-5][0-9]\s(AM|PM)))$/));
     },
     format: function(s) {
         return parseFloat((new Date("2000/01/01 " + s)).getTime());
