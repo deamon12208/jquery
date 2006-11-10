@@ -23,7 +23,9 @@
  *
  * #tooltip h3 - The tooltip title
  *
- * #tooltip p - The tooltip url, use "display: none !important" to always hide
+ * #tooltip p.body - The tooltip body, shown when using showBody
+ *
+ * #tooltip p.url - The tooltip url, shown when using showURL
  *
  * @example $('a, input, img').Tooltip();
  * @desc Shows tooltips for anchors, inputs and images, if they have a title
@@ -35,36 +37,73 @@
  * });
  * @desc Shows tooltips for labels with no delay, tracking mousemovement, displaying the tooltip when the label is clicked.
  *
- * @name Tooltip
- * @param Hash options (optional) Customize your Tooltips
+ * @example // modify global settings
+ * $.extend($.fn.Tooltip.defaults, {
+ * 	track: true,
+ * 	delay: 0,
+ * 	showURL: false,
+ * 	showBody: " - ",
+ *  fixPNG: true
+ * });
+ * // setup fancy tooltips
+ * $('a.pretty').Tooltip({
+ * 	 extraClass: "fancy"
+ * });
+ $('img.pretty').Tooltip({
+ * 	 extraClass: "fancy-img",
+ * });
+ * @desc This example starts with modifying the global settings, applying them to all following Tooltips; Afterwards, Tooltips for anchors with class pretty are created with an extra class for the Tooltip: "fancy" for anchors, "fancy-img" for images
+ *
+ * @param Object settings (optional) Customize your Tooltips
  * @option Number delay The number of milliseconds before a tooltip is display, default is 250
  * @option String event The event on which the tooltip is displayed, default is "mouseover", "click" works fine, too
  * @option Boolean track If true, let the tooltip track the mousemovement, default is false
+ * @option Boolean showURL If true, shows the href or src attribute within p.url, default is true
+ * @option String showBody If specified, uses the String to split the title, displaying the first part in the h3 tag, all following in the p.body tag, separated with <br/>s, default is null
+ * @option String extraClass If specified, adds the class to the tooltip helper, default is null
+ * @option Boolean fixPNG If true, fixes transparent PNGs in IE, default is false
+ *
+ * @name Tooltip
  * @type jQuery
  * @cat Plugins/Tooltip
  * @author Jörn Zaefferer (http://bassistance.de)
  */
 (function($) {
 	
-	var helper, // the tooltip element
-		tTitle, // it's title part
-		tUrl, // it's url part
-		current, // the current tooltipped element
-		oldTitle, // the title of the current element, used for restoring
-		current; // current selected element, necessary when binding click
-	var tID;
+	// define variables and functions
+	var
 	
-	$.fn.Tooltip = function(options)	{
-		options = $.extend({
-			delay: 250,
-			event: "mouseover",
-			track: false
-		}, options || {});
+	// the tooltip element
+	helper,
+	
+	// it's title part
+	tTitle,
+	
+	// it's body part
+	tBody,
+	
+	// it's url part
+	tUrl,
+	
+	// the current tooltipped element
+	current,
+	
+	// the title of the current element, used for restoring
+	oldTitle,
+	
+	// timeout id for delayed tooltips
+	tID,
+	
+	// the public plugin method
+	plugin = $.fn.Tooltip = function(settings)	{
+		// setup configuration
+		// TODO: allow multiple arguments to extend, see bug #344
+		settings = $.extend($.extend({}, arguments.callee.defaults), settings || {});
 	
 		// there can be only one tooltip helper
 		if( !helper ) {
 			// create the helper, h3 for title, div for url
-			helper = $('<div id="tooltip"><h3></h3><p></p></div>')
+			helper = $('<div id="tooltip"><h3></h3><p class="body"></p><p class="url"></p></div>')
 				// hide it at first
 				.hide()
 				// move to top and position absolute, to let it follow the mouse
@@ -74,44 +113,33 @@
 				
 			// save references to title and url elements
 			tTitle = $('h3', helper);
-			tUrl = $('p', helper);
+			tBody = $('p:eq(0)', helper);
+			tUrl = $('p:eq(1)', helper);
 		}
 		
 		// bind events for every selected element with a title attribute
-		var $this = $(this)
-			// remove elements without a title attribute
-			.filter('[@title]')
-			// save options into each element
-			// TODO: pass options via event system, not yet possible
+		$(this).filter('[@title]')
+			// save settings into each element
+			// TODO: pass settings via event system, not yet possible
 			.each(function() {
-				this.tOptions = options;
+				this.tSettings = settings;
 			})
-			// bind event
-			.bind("mouseover", saveTitle)
-			.bind(options.event, bind);
+			// bind events
+			.bind("mouseover", save)
+			.bind(settings.event, handle);
 		return this;
-	};
+	},
 	
-	function bind(event, options) {
-		var title,
-			href,
-			// save this as current
-			$this = $(current = this),
-			options = this.tOptions;
+	// main event handler to start showing tooltips
+	handle = function(event) {
 		// show helper, either with timeout or on instant
-		if( options.delay )
-			tID = setTimeout(show, options.delay);
+		if( this.tSettings.delay )
+			tID = setTimeout(show, this.tSettings.delay);
 		else
 			show();
 		
-		// if element has a href, add and show it, otherwise hide it
-		if( href = $this.attr('href') )
-			tUrl.html(href.replace('http://', '')).show();
-		else 
-			tUrl.hide();
-			
 		// if selected, update the helper position when the mouse moves
-		if(options.track)
+		if(this.tSettings.track)
 			$('body').bind('mousemove', update);
 			
 		// update at least once
@@ -119,33 +147,76 @@
 		
 		// hide the helper when the mouse moves out of the element
 		$(this).bind('mouseout', hide);
-	}
+	},
 	
-	function saveTitle() {
-		if(this == current)
+	// save elements title before the tooltip is displayed
+	save = function() {
+		// if this is the current source, or it has no title (occurs with click event), stop
+		if(this == current || !this.title)
 			return;
+		// save current
 		current = this;
-		var $this = $(this);
+		
+		var source = $(this),
+			settings = this.tSettings;
+			
 		// save title, remove from element and set to helper
-		oldTitle = title = $this.attr('title');
-		$this.attr('title','');
-		tTitle.html(title);
-	}
+		oldTitle = title = source.attr('title');
+		source.attr('title','');
+		if(settings.showBody) {
+			var parts = title.split(settings.showBody);
+			tTitle.html(parts.shift());
+			tBody.empty();
+			for(var i = 0, part; part = parts[i]; i++) {
+				if(i < 0)
+					tBody.append("<br/>");
+				tBody.append(part);
+			}
+			tBody.show();
+		} else {
+			tTitle.html(title);
+			tBody.hide();
+		}
+		
+		// if element has href or src, add and show it, otherwise hide it
+		href = (source.attr('href') || source.attr('src'));
+		if( settings.showURL && href )
+			tUrl.html(href.replace('http://', '')).show();
+		else 
+			tUrl.hide();
+		
+		// add an optional class for this tip
+		if( settings.extraClass ) {
+			helper.addClass(settings.extraClass);
+		}
+		// fix PNG background for IE
+		if (settings.fixPNG && $.browser.msie ) {
+			helper.each(function () {
+				if (this.currentStyle.backgroundImage != 'none') {
+					var image = this.currentStyle.backgroundImage;
+					image = image.substring(5, image.length - 2);
+					$(this).css({
+						'backgroundImage': 'none',
+						'filter': "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=crop, src='" + image + "')"
+					});
+					tPNGfix = true;
+				}
+			});
+		}
+	},
 	
-	/**
-	 * callback for timeout
-	 */
-	function show() {
+	// delete timeout and show helper
+	show = function() {
 		tID = null;
 		helper.show();
-	}
+	},
 	
 	/**
 	 * callback for mousemove
 	 * updates the helper position
 	 * removes itself when no current element
 	 */
-	function update(event)	{
+	update = function(event)	{
 		// if no current element is available, remove this listener
 		if( current == null ) {
 			$('body').unbind('mousemove', update);
@@ -163,22 +234,43 @@
 			top: pos('Y') + 15 + 'px',
 			left: pos('X') + 15 + 'px'
 		});
-	}
+	},
 	
-	/**
-	 * callback for mouseout
-	 */
-	function hide()	{
+	// hide helper and restore added classes and the title
+	hide = function() {
 		// clear timeout if possible
 		if(tID)
 			clearTimeout(tID);
 		// no more current element
 		current = null;
 		helper.hide();
+		// remove optional class
+		if( this.tSettings.extraClass ) {
+			helper.removeClass( this.tSettings.extraClass);
+		}
+		
 		// restore title and remove this listener
 		$(this)
 			.attr('title', oldTitle)
 			.unbind('mouseout', hide);
-	}
+			
+		// remove PNG background fix for IE
+		if( this.tSettings.fixPNG && $.browser.msie ) {
+			helper.each(function () {
+				$(this).css({'filter': '', backgroundImage: ''});
+			});
+		}
+	};
+	
+	// define global defaults, editable by client
+	plugin.defaults = {
+		delay: 250,
+		event: "mouseover",
+		track: false,
+		showURL: true,
+		showBody: null,
+		extraClass: null,
+		fixPNG: false
+	};
 
 })(jQuery);
