@@ -172,7 +172,10 @@
 					tBody.append("<br/>");
 				tBody.append(part);
 			}
-			tBody.show();
+			if(tBody.html())
+				tBody.show();
+			else
+				tBody.hide();
 		} else {
 			tTitle.html(title);
 			tBody.hide();
