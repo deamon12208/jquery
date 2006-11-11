@@ -126,7 +126,7 @@ jQuery.fn.nextUntil = function(expr) {
 		// TODO: allow multiple arguments to extend, see bug #344
 		settings = $.extend($.extend({}, arguments.callee.defaults), $.extend({
 			// define context defaults
-			header: $(':first-child', this)[0].tagName, // take first childs tagName as header
+			header: $(':first-child', this)[0].tagName // take first childs tagName as header
 		}, settings || {}));
 		
 		// calculate active if not specified, using the first header
