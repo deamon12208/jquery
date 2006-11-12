@@ -162,11 +162,6 @@ jQuery.fn.nextUntil = function(expr) {
 			var finished = function() {
 				if(--running)
 					return;
-				// as seen in the tabs plugin
-				if ($.browser.msie) {
-					// maintain flexible height and acccessibility for print
-				    toHide.css({display: '', filter: ''}); 
-				}
 				// maintain flexible height
 				toHide.css({height: ''});
 				toShow.css({height: ''});
