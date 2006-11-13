@@ -1,5 +1,5 @@
 /**
- * Tabs 2.1 - jQuery plugin for accessible, unobtrusive tabs
+ * Tabs 2.2 - jQuery plugin for accessible, unobtrusive tabs
  *
  * http://stilbuero.de/tabs/
  *
@@ -9,6 +9,8 @@
  * http://www.gnu.org/licenses/gpl.html
  *
  */
+
+(function($) { // simulate block scope
 
 /**
  * Create an accessible, unobtrusive tab interface based on a certain HTML structure.
@@ -79,7 +81,7 @@
  *                                   ("slow", "normal", or "fast") or the number of milliseconds
  *                                   (e.g. 1000) to run the animation specified in fxHide.
  *                                   Default value: fxSpeed.
- * @option Boolean fxAutoheight Boolean flag that if set to true causes all tab heights
+ * @option Boolean fxAutoHeight Boolean flag that if set to true causes all tab heights
  *                              to be constant (being the height of the tallest tab).
  *                              Default value: false.
  * @option Function callback A function to be executed upon tab switch. If animations are used this
@@ -107,11 +109,11 @@
  * @cat Plugins/Tabs
  * @author Klaus Hartl/klaus.hartl@stilbuero.de
  */
-jQuery.fn.tabs = function(initial, settings) {
+$.fn.tabs = function(initial, settings) {
 
     // settings
     if (typeof initial == 'object') settings = initial; // no initial tab given but a settings object
-    settings = jQuery.extend({
+    settings = $.extend({
         initial: (initial && typeof initial == 'number' && initial > 0) ? --initial : 0,
         fxFade: null,
         fxSlide: null,
@@ -120,12 +122,14 @@ jQuery.fn.tabs = function(initial, settings) {
         fxSpeed: 'normal',
         fxShowSpeed: null,
         fxHideSpeed: null,
-        fxAutoheight: false,
+        fxAutoHeight: false,
         callback: null,
         selectedClass: 'tabs-selected',
         hideClass: 'tabs-hide',
         tabStruct: 'div'
     }, settings || {});
+
+    $.browser.msie6 = $.browser.msie && typeof XMLHttpRequest == 'function';
 
     // helper to prevent scroll to fragment
     var _unFocus = function() {
@@ -135,74 +139,127 @@ jQuery.fn.tabs = function(initial, settings) {
     // initialize tabs
     return this.each(function() {
 
+        var container = this;
+
         // retrieve active tab from hash in url
         if (location.hash) {
-            jQuery('>ul:eq(0)>li>a', this).each(function(i) {
+            $('>ul:eq(0)>li>a', this).each(function(i) {
                 if (this.hash == location.hash) {
                     settings.initial = i;
-                    if (jQuery.browser.msie) setTimeout(_unFocus, 150); // be nice to IE
+                    // prevent page scroll to fragment
+                    if ($.browser.msie) {
+                        var toShow = $(location.hash);
+                        var toShowId = location.hash.replace('#', '');
+                        toShow.id('');
+                        setTimeout(function() {
+                            toShow.id(toShowId); // restore id
+                        }, 500);
+                    }
                     _unFocus();
-                    if (jQuery.browser.opera) setTimeout(_unFocus, 100); // be nice to Opera
+                    if ($.browser.opera) setTimeout(_unFocus, 100); // be nice to Opera
+                    return false; // break
                 }
             });
         }
 
-        // hide tabs other than initial, set autoheight if needed
-        if (settings.fxAutoheight) {
-            var divs = jQuery('>' + settings.tabStruct, this);
-            var heights = [];
-            divs.each(function(i) {
-                heights.push( this.offsetHeight );
-                if (settings.initial != i) jQuery(this).addClass(settings.hideClass);
-            });
-            heights.sort(function(a, b) {
-                return b - a;
-            });
-            divs.each(function() {
-                jQuery(this).css({minHeight: heights[0] + 'px'});
-                // IE 6 only...
-                if (jQuery.browser.msie && typeof XMLHttpRequest == 'function') jQuery(this).css({height: heights[0] + 'px'});
-            });
-        } else {
-            jQuery('>' + settings.tabStruct, this).not(':eq(' + settings.initial + ')').addClass(settings.hideClass);
+        var tabs = $('>ul:eq(0)>li>a', this);
+
+        // hide tabs contents other than initial
+        $('>' + settings.tabStruct, this).not(':eq(' + settings.initial + ')').addClass(settings.hideClass);
+
+        // highlight tab accordingly
+        $('>ul:eq(0)>li:eq(' + settings.initial + ')', this).addClass(settings.selectedClass);
+
+        // setup auto height
+        if (settings.fxAutoHeight) {
+            // helper
+            var tabsContents = $('>' + settings.tabStruct, container);
+            var _setAutoHeight = function(reset) {
+                // get tab heights in top to bottom ordered array
+                var heights = $.map(tabsContents.get(), function(el) {
+                    var h, jq = $(el);
+                    if (reset) {
+                        if ($.browser.msie6) {
+                            el.style.removeExpression('behaviour');
+                            el.style.height = '';
+                            el.minHeight = null;
+                        }
+                        /* This does not work reliable
+                        if (jq.is(':visible')) {
+                            // prevent too much flicker
+                            var clone = jq.clone().css({display: 'block', position: 'absolute', visibility: 'hidden', 'min-height': '', height: ''}).appendTo(container);
+                            h = clone.get(0).offsetHeight;
+                            clone.remove();
+                        } else {
+                            h = jq.css({'min-height': ''}).height(); // use jQuery's height() to get hidden element values
+                        }*/
+                        h = jq.css({'min-height': ''}).height(); // use jQuery's height() to get hidden element values
+                    } else {
+                        h = jq.height(); // use jQuery's height() to get hidden element values
+                    }
+                    return h;
+                }).sort(function(a, b) {
+                    return b - a;
+                });
+                if ($.browser.msie6) {
+                    tabsContents.each(function() {
+                        this.minHeight = heights[0] + 'px';
+                        this.style.setExpression('behaviour', 'this.style.height = this.minHeight ? this.minHeight : "1px"'); // using an expression to not make print styles useless
+                    });
+                } else {
+                    tabsContents.css({'min-height': heights[0] + 'px'});
+                }
+            };
+            // call once for initialization
+            _setAutoHeight();
+            // trigger auto height adjustment if needed
+            var cachedWidth = container.offsetWidth;
+            var cachedHeight = container.offsetHeight;
+            var watchFontSize = $('#tabs-watch-font-size').get(0) || $('<span id="tabs-watch-font-size">M</span>').css({display: 'block', position: 'absolute', visibility: 'hidden'}).appendTo(document.body).get(0);
+            var cachedFontSize = watchFontSize.offsetHeight;
+            setInterval(function() {
+                var currentWidth = container.offsetWidth;
+                var currentHeight = container.offsetHeight;
+                var currentFontSize = watchFontSize.offsetHeight;
+                if (currentHeight > cachedHeight || currentWidth != cachedWidth || currentFontSize != cachedFontSize) {
+                    _setAutoHeight((currentWidth > cachedWidth || currentFontSize < cachedFontSize)); // if heights gets smaller reset min-height
+                    cachedWidth = currentWidth;
+                    cachedHeight = currentHeight;
+                    cachedFontSize = currentFontSize;
+                }
+            }, 50);
         }
 
-        // highlight tab in navigation
-        jQuery('>ul>li:eq(' + settings.initial + ')', this).addClass(settings.selectedClass);
-
-        var container = this;
-        var tabs = jQuery('>ul>li>a', this);
-
         // fix back button if history plugin is present
-        if (jQuery.history) {
+        if ($.history) {
             tabs.history();
-            jQuery.history.observe();
+            $.history.observe();
         }
 
         // attach click event
         tabs.click(function(e) {
 
-            if (!jQuery(this.parentNode).is('.' + settings.selectedClass)) {
-                var tabToShow = jQuery(this.hash);
+            if (!$(this.parentNode).is('.' + settings.selectedClass)) {
+                var toShow = $(this.hash);
 
-                // prevent scrollbar scrolling to 0 and than back in IE7
-                if (jQuery.browser.msie) {
-                    var tabToShowId = this.hash.replace('#', '');
-                    tabToShow.id('');
-                    setTimeout(function() {
-                        tabToShow.id(tabToShowId); // restore id
-                    }, 0);
-                }
+                if (toShow.size() > 0) {
 
-                if (tabToShow.size() > 0) {
+                    // prevent scrollbar scrolling to 0 and than back in IE7
+                    if ($.browser.msie) {
+                        var toShowId = this.hash.replace('#', '');
+                        toShow.id('');
+                        setTimeout(function() {
+                            toShow.id(toShowId); // restore id
+                        }, 0);
+                    }
 
                     var clicked = this;
-                    var tabToHide = jQuery('>' + settings.tabStruct + ':visible', container);
+                    var toHide = $('>' + settings.tabStruct + ':visible', container);
 
                     // setup callback
                     var callback;
-                    if (settings.callback && typeof settings.callback == 'function') callback = function() {
-                        settings.callback.apply(tabToShow[0], [tabToShow[0], tabToHide[0]]);
+                    if (typeof settings.callback == 'function') callback = function() {
+                        settings.callback.apply(toShow[0], [toShow[0], toHide[0]]);
                     };
 
                     // setup animations
@@ -220,14 +277,14 @@ jQuery.fn.tabs = function(initial, settings) {
                         showSpeed = hideSpeed = settings.fxSpeed;
                     } else {
                         if (settings.fxShow) {
-                            showAnim = jQuery.extend(showAnim, settings.fxShow); // copy object
+                            showAnim = $.extend(showAnim, settings.fxShow); // copy object
                             showSpeed = settings.fxShowSpeed || settings.fxSpeed;
                         } else {
                             showAnim['opacity'] = 'show';
-                            showSpeed = 1; // as little as this prevents browser scroll to the tab
+                            showSpeed = 50; // as little as this prevents browser scroll to the tab
                         }
                         if (settings.fxHide) {
-                            hideAnim = jQuery.extend(hideAnim, settings.fxHide); // copy object
+                            hideAnim = $.extend(hideAnim, settings.fxHide); // copy object
                             hideSpeed = settings.fxHideSpeed || settings.fxSpeed;
                         } else {
                             hideAnim['opacity'] = 'hide';
@@ -236,14 +293,14 @@ jQuery.fn.tabs = function(initial, settings) {
                     }
 
                     // switch tab, animation prevents browser scrolling to the fragment
-                    tabToHide.animate(hideAnim, hideSpeed, function() { //
-                        jQuery(clicked.parentNode).addClass(settings.selectedClass).siblings().removeClass(settings.selectedClass);
-                        tabToShow.removeClass(settings.hideClass).animate(showAnim, showSpeed, function() {
-                            if (jQuery.browser.msie) {
-                                tabToHide[0].style.filter = '';  // @ IE, maintain acccessibility for print
-                                tabToHide.addClass(settings.hideClass).css({display: '', height: ''}); // maintain flexible height and acccessibility for print
+                    toHide.animate(hideAnim, hideSpeed, function() { //
+                        $(clicked.parentNode).addClass(settings.selectedClass).siblings().removeClass(settings.selectedClass);
+                        toShow.removeClass(settings.hideClass).animate(showAnim, showSpeed, function() {
+                            if ($.browser.msie) {
+                                toHide[0].style.filter = '';  // @ IE, maintain acccessibility for print
+                                toHide.addClass(settings.hideClass).css({display: '', overflow: '', height: ''}); // maintain flexible height and acccessibility for print
                             }
-                            tabToShow.css({height: ''}); // maintain flexible height
+                            toShow.css({height: '', overflow: ''}); // maintain flexible height
                             if (callback) callback();
                         });
                     });
@@ -251,6 +308,7 @@ jQuery.fn.tabs = function(initial, settings) {
                 } else {
                     alert('There is no such container.');
                 }
+
             }
 
             // Set scrollbar to saved position - need to use timeout with 0 to prevent browser scroll to target of hash
@@ -285,26 +343,32 @@ jQuery.fn.tabs = function(initial, settings) {
  * @cat Plugins/Tabs
  * @author Klaus Hartl/klaus.hartl@stilbuero.de
  */
-jQuery.fn.triggerTab = function(tabIndex) {
+$.fn.triggerTab = function(tabIndex) {
     return this.each(function() {
+
         var i = tabIndex && tabIndex > 0 && tabIndex - 1 || 0; // falls back to 0
-        var tabToTrigger = jQuery('>ul>li>a', this).eq(i);
+        var tabToTrigger = $('>ul:eq(0)>li>a', this).eq(i);
         var hash = tabToTrigger[0].hash;
+
         // trigger only if not visible
-        if (jQuery(hash).is(':hidden')) {
-            // Simply setting location.hash puts Safari into the eternal load state... ugh!
-            // Submit a form instead.
-            if (jQuery.browser.safari) {
-                var tempForm = jQuery('<form action="' + hash + '"><div><input type="submit" value="h" /></div></form>').get(0); // no need to append it to the body
+        if ($(hash).is(':hidden')) {
+
+            // Simply setting location.hash puts Safari into the eternal load state... ugh! Submit a form instead.
+            if ($.browser.safari) {
+                var tempForm = $('<form action="' + hash + '"><div><input type="submit" value="h" /></div></form>').get(0); // no need to append it to the body
                 tempForm.submit(); // does not trigger the form's submit event...
                 tabToTrigger.click(); // ...thus do stuff here
-                if (jQuery.history) jQuery.history.setHash(hash, {clientX: 42}); // fake a click event to get hash into history
+                if ($.history) $.history.setHash(hash, {clientX: 42}); // fake a click event to get hash into history
             } else {
                 location.hash = hash.replace('#', '');
             }
 
             // this is handled by the history plugin if present
-            if (!jQuery.history) tabToTrigger.click();
+            if (!$.history) tabToTrigger.click();
+
         }
+
     });
 };
+
+})(jQuery);
