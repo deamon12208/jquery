@@ -143,7 +143,6 @@ jQuery.fn.nextUntil = function(expr) {
 		var clickHandler = function(event) {
 			// get the click target
 			var clicked = $(event.target);
-		
 			// if animations are still active, or the active header is the target, ignore click
 			if(running || clicked[0] == active[0] || !clicked.is(settings.header))
 				return;
@@ -174,13 +173,15 @@ jQuery.fn.nextUntil = function(expr) {
 			// solution: animate should check for speed of 0 and do something about it
 			toHide.slideUp(settings.hideSpeed, finished);
 			toShow.slideDown(settings.showSpeed, finished);
-			event.preventDefault();
+			
+			if(event.preventDefault)
+				event.preventDefault();
 		};
 		var activateHandlder = function(event, index) {
 			// call clickHandler with custom event
-			clickHandler($.event.fix({
+			clickHandler({
 				target: $(settings.header, this)[index]
-			}));
+			});
 		};
 	
 		return container
