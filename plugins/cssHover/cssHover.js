@@ -13,18 +13,19 @@
 /**
  * Helper functions
  *
- * The code becomes easier to read if we put most of the functions in here, this also prevents the functions
- * to be bound to each element which preserves some memory usage (i think)
+ * Because we put the functions in here, this makes the code more readable and prevents them to be
+ * bound to each element, and this also preserves some memory usage (i think)
  */
 jQuery.cssHover = new function() {
 	this.objqCurrent = null;
+	this.blnInitialized = false;
 
 	/**
 	 * Performs an callback(if assigned) with the jQuery version of this button object
 	 */
-	this.doCallback = function(fncToCall, objButton) {
+	this.doCallback = function(fncToCall, objElem) {
 		if (fncToCall && (fncToCall.constructor == Function))
-			fncToCall(jQuery(objButton));
+			fncToCall(jQuery(objElem));
 	};
 
 	//----------------------------------------------------------------------------------------------------
@@ -47,9 +48,9 @@ jQuery.cssHover = new function() {
 	 * Returns the correct jQuery object to work with.
 	 * This is needed because of the IMG replacement, to avoid cirular references
 	 */
-	this.getButtonObject = function(objButton, blnJQuery) {
+	this.getButtonObject = function(domElem, blnJQuery) {
 		blnJQuery = blnJQuery || false;
-		objTemp = (objButton.chDomElem != null) ? objButton.chDomElem : objButton;
+		objTemp = (domElem.chDomElem != null) ? domElem.chDomElem : domElem;
 		return (blnJQuery == true) ? jQuery(objTemp) : objTemp;
 	}
 
@@ -85,7 +86,7 @@ jQuery.cssHover = new function() {
 
 	/**
 	 * Sets the correct class for this element.
-	 * @param	object		DOM element to change
+	 * @param	object		domElement to change
 	 * @param	string		The class to test
 	 * @param	boolean		New setting
 	 */
@@ -139,9 +140,9 @@ jQuery.cssHover = new function() {
 	 * Helper function to set the correct class, based on the mouse state
 	 */
 	this.checkClass = function(objButton) {
-		blnMouseOver = jQuery.cssHover.objqCurrent ? (jQuery.cssHover.objqCurrent[0].className == objButton.className) : false;
-		objButton.chSetClass('active', (objButton.chBlnState && !blnMouseOver));
+		blnMouseOver = jQuery.cssHover.objqCurrent ? (jQuery.cssHover.objqCurrent[0].id == objButton.id) : false;
 		objButton.chSetClass('over', (!objButton.chBlnState && blnMouseOver));
+		objButton.chSetClass('active', (objButton.chBlnState && !blnMouseOver));
 		objButton.chSetClass('active_over', (objButton.chBlnState && blnMouseOver));
 	}
 
@@ -153,7 +154,7 @@ jQuery.cssHover = new function() {
 	 * @param	boolean		New setting
 	 * @param	boolean		Trigger the callback?
 	 */
-	this.setState = function(objButton, blnValue, blnSkipTrigger) {
+	this.setState = function(objButton, blnValue, blnSkipCallback) {
 		// Does the setting change for this element?
 		if (blnValue == objButton.chBlnState)
 			return;
@@ -162,7 +163,7 @@ jQuery.cssHover = new function() {
 			return;
 
 		// Default trigger the callback
-		blnSkipTrigger = blnSkipTrigger || false;
+		blnSkipCallback = (blnSkipCallback === true) ? true : false;
 
 		// Update new value
 		objButton.chBlnState = blnValue;
@@ -211,17 +212,14 @@ jQuery.cssHover = new function() {
 		jQuery.cssHover.checkClass(objButton);
 
 		// Callback function?
-		if (!blnSkipTrigger) {
-			jQuery.cssHover.doCallback(objButton.chArrOptions.onChange, objButton);
-		} else {
-		}
+		jQuery.cssHover.doCallback(objButton.chArrOptions.onChange, objButton);
 	};
 
 	//----------------------------------------------------------------------------------------------------
 
 	/**
 	 * Sets the enabled flag of the cssHover.
-	 * @param	object		DOM element to change
+	 * @param	object		domElement to change
 	 * @param	boolean		New setting
 	 */
 	this.setEnabled = function(objButton, blnValue) {
@@ -243,16 +241,29 @@ jQuery.cssHover = new function() {
 
 	/**
 	 * Builds the cssHover
+	 *
 	 * If we are dealing with a RADIO or a CHECKBOX, then we change the DOM element with an IMG. This is
 	 * because we can't change the layout of those 2 elements just by classes (because of the owner drawn
 	 * layout). This requires extra code, but makes the plugin a lot more usable.
 	 *
-	 * @param	object		DOM element to change
+	 * @param	object		domElement to change
 	 * @param	array		Hash with the options
 	 */
-	this.build = function(objElem, cfgOptions) {
+	this.build = function(domElem, cfgOptions) {
+		// Add code to detect mousedown+drag on elements. If we don't add this code, an element could remain
+		// in the down state if the mouse was dragged after the mouse was pressed down.
+		if (!jQuery.cssHover.blnInitialized) {
+			// Set initialized flag
+			jQuery.cssHover.blnInitialized = true;
+
+			// Add code (Maybe this could be optimized!?)
+			//$('body').mouseup(function() {
+					//jQuery.cssHover.delCurrent();
+			//});
+		}
+
 		// Make sure we don't build twice
-		if (typeof objElem.chClass  == 'string') {
+		if (typeof domElem.chClass  == 'string') {
 			return;
 		}
 
@@ -261,18 +272,18 @@ jQuery.cssHover = new function() {
 		// we use the "type" attribute. This means, that <input type="button" ..> and <button .. /> have
 		// thesame CSS class (button)
 		//----------------------------------------------------------------------------------------------------
-		strClass = ((objElem.nodeName == 'INPUT') ? objElem.type : objElem.nodeName).toLowerCase();
+		strClass = ((domElem.nodeName == 'INPUT') ? domElem.type : domElem.nodeName).toLowerCase();
 
 		// Replace element if needed
 		if (strClass == 'checkbox' || strClass == 'radio') {
 			// Save handle to old dom element
-			objqTemp = jQuery(objElem);
+			objqTemp = jQuery(domElem);
 
 			// Prepend the dom element with an (transparent pixel) image and get a handle to the jQuery object we just created
 			objqButton = (jQuery.cssHover.getNixel()).insertBefore(objqTemp);
 
 			// Save handle to old DOM  element
-			objqButton[0].chDomElem = objElem;
+			objqButton[0].chDomElem = domElem;
 
 			// Set the ID of the newly created image to the ID of the dom element
 			objqButton[0].id = objqTemp[0].id;
@@ -284,7 +295,7 @@ jQuery.cssHover = new function() {
 			objqTemp = null;
 		} else {
 			// Save jQuery object
-			objqButton = jQuery(objElem);
+			objqButton = jQuery(domElem);
 
 			// Set the DOM element to null, so the code knows this element wasn't replaced with an image.
 			objqButton[0].chDomElem = null;
@@ -292,10 +303,10 @@ jQuery.cssHover = new function() {
 
 		// Define default options and override them with the passed configuration, if available
 		objqButton[0].chArrOptions = jQuery.extend({
-				hasMouseOver:	true,
+				hasMouseOver:	false,
 				hasMouseDown:	true,
 				intInitState:	-1,
-				isToggle:		((this.chClass == 'checkbox') || (this.chClass == 'radio')) ? true : false,
+				isToggle:		true,
 				onChange:		null
 			}, cfgOptions || {});
 
@@ -316,9 +327,16 @@ jQuery.cssHover = new function() {
 		// Set if the cssHover is enabled. Only valid for buttons, checkbox and radio (since those are the only ones we support) and the element must be enabled.
 		objqButton[0].chBlnEnabled = objqTemp.is(':enabled');
 
-		// Functions to set the state of this button. Call them from the DOM.
-		objqButton[0].chSetState = function(blnValue, blnSkipTrigger) {
-			jQuery.cssHover.setState(this, blnValue, blnSkipTrigger);
+		/// Functions to set the state of this button. Call them from the DOM.
+		objqButton[0].chSetState = function(blnValue, blnForce) {
+			blnForce = (blnForce === true) ? true : false;
+
+			// If this element is disabled, do nothing
+			if (!blnForce && !this.chBlnEnabled)
+				return;
+
+			// Else, toggle the state
+			jQuery.cssHover.setState(this, blnValue);
 		};
 		objqButton[0].chGetState = function() {
 			return this.chBlnState;
@@ -354,7 +372,7 @@ jQuery.cssHover = new function() {
 		// Assign click handler to the newly created element
 		if (cfgOptions.isToggle) {
 			objqButton.click(function() {
-				this.chSetState((this.chClass == 'radio') ? true : (!this.chBlnState), false);
+				this.chSetState((this.chClass == 'radio') ? true : (!this.chBlnState));
 			});
 		}
 
@@ -446,6 +464,12 @@ jQuery.cssHover = new function() {
 				}
 			}
 
+			// Assign custom handler
+			objqTemp[0].chSetState = function(blnState, blnForce) {
+				blnForce = (blnForce === true) ? true : false;
+				jQuery('#' + this.id.substring(2))[0].chSetState(blnState, blnForce);
+			}
+
 			// Assign event handlers
 			objqTemp
 				/*
@@ -463,7 +487,7 @@ jQuery.cssHover = new function() {
 				 * elements in the (radio)group are set to false. The spacebar toggles the "click" event.
 				 */
 				.click(function() {
-					jQuery('#' + this.id.substring(2))[0].chSetState(jQuery(this).is(':checked'), false);
+					this.chSetState(jQuery(this).is(':checked'));
 				})
 				.focus(function() {
 					// Get a handle to the new DOM elemen
@@ -540,8 +564,8 @@ jQuery.cssHover = new function() {
 };
 
 /**
- * Main function, used to build the cssHover
- * @param	array		Hash with the options
+ * Main function, used to build the buttons on all matched ellements
+* @param	array		Hash with the options
  */
 jQuery.fn.cssHover = function(cfgOptions) {
 	cfgOptions = cfgOptions || {};
