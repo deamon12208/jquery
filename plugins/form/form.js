@@ -334,7 +334,7 @@ jQuery.fn.formToArray = function(semantic) {
         if (t == 'select-multiple') {
             for(var i=0; i < this.options.length; i++)
                 if (this.options[i].selected)
-                    a.push({name: n, value: this.options[i].value})
+                    a.push({name: n, value: this.options[i].value});
             return;
         }
         a.push({name: n, value: this.value});
