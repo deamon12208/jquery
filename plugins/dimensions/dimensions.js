@@ -272,6 +272,12 @@ jQuery.fn.offset = function(refElem) {
 			y += parseInt(jQuery.css(parent, 'borderTopWidth'))  || 0;
 		}
 
+		// Mozilla removes the border if the parent has overflow hidden
+		if (jQuery.browser.mozilla && jQuery.css(parent, 'overflow') == 'hidden') {
+			x += parseInt(jQuery.css(parent, 'borderLeftWidth')) || 0;
+			y += parseInt(jQuery.css(parent, 'borderTopWidth'))  || 0;
+		}
+
 		// Need to get scroll offsets in-between offsetParents
 		var op = parent.offsetParent;
 		do {
