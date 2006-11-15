@@ -12,8 +12,6 @@
  */
 
 jQuery.transferHelper = null;
-jQuery.transferParent = null;
-jQuery.transferOverflow = null;
 jQuery.fn.TransferTo = function(o)
 {
 	return this.queue('interfaceFX', function(){
@@ -62,13 +60,6 @@ jQuery.fx.itransferTo = function(e, o)
 	);
 	z.callback = o.complete;
 
-	// Temporary disable overflow on the parent document
-	jQuery.transferParent = jQuery(jQuery.transferHelper).parent();
-	jQuery.transferOverflow = jQuery.transferParent.css('overflow');
-	jQuery.transferParent.css({
-			overflow: 'hidden'
-		});
-
 	// Execute the transfer
 	jQuery.transferHelper
 		.css('width', z.start.wb + 'px')
@@ -89,15 +80,11 @@ jQuery.fx.itransferTo = function(e, o)
 				if(z.classname)
 					jQuery.transferHelper.removeClass(z.classname);
 				jQuery.transferHelper.css('display', 'none');
+	
 				// Callback
 				if (z.complete && z.complete.constructor == Function) {
 					z.complete.apply(z.el.get(0), [z.to]);
 				}
-				// Restore overflow
-				jQuery.transferParent.css({
-						overflow: jQuery.transferOverflow
-					});
-
 				// Done
 				jQuery.dequeue(z.el.get(0), 'interfaceFX');
 			}
