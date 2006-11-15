@@ -212,7 +212,9 @@ jQuery.cssHover = new function() {
 		jQuery.cssHover.checkClass(objButton);
 
 		// Callback function?
-		jQuery.cssHover.doCallback(objButton.chArrOptions.onChange, objButton);
+		if (!blnSkipCallback) {
+			jQuery.cssHover.doCallback(objButton.chArrOptions.onChange, objButton);
+		}
 	};
 
 	//----------------------------------------------------------------------------------------------------
@@ -328,15 +330,16 @@ jQuery.cssHover = new function() {
 		objqButton[0].chBlnEnabled = objqTemp.is(':enabled');
 
 		/// Functions to set the state of this button. Call them from the DOM.
-		objqButton[0].chSetState = function(blnValue, blnForce) {
+		objqButton[0].chSetState = function(blnValue, blnForce, blnSkipCallback) {
 			blnForce = (blnForce === true) ? true : false;
+			blnSkipCallback = (blnForce === true) ? true : false;
 
 			// If this element is disabled, do nothing
 			if (!blnForce && !this.chBlnEnabled)
 				return;
 
 			// Else, toggle the state
-			jQuery.cssHover.setState(this, blnValue);
+			jQuery.cssHover.setState(this, blnValue, blnSkipCallback);
 		};
 		objqButton[0].chGetState = function() {
 			return this.chBlnState;
@@ -465,9 +468,10 @@ jQuery.cssHover = new function() {
 			}
 
 			// Assign custom handler
-			objqTemp[0].chSetState = function(blnState, blnForce) {
+			objqTemp[0].chSetState = function(blnState, blnForce, blnSkipCallback) {
 				blnForce = (blnForce === true) ? true : false;
-				jQuery('#' + this.id.substring(2))[0].chSetState(blnState, blnForce);
+				blnSkipCallback = (blnSkipCallback === true) ? true : false;
+				jQuery('#' + this.id.substring(2))[0].chSetState(blnState, blnForce, blnSkipCallback);
 			}
 
 			// Assign event handlers
