@@ -17,15 +17,15 @@ $.history = new function() {
     var _currentHash = location.hash;
     var _intervalId = null;
     var _observeHistory; // define outside if/else required by Opera
-    
+
     if ($.browser.msie) {
 
         var _historyIframe; // for IE
-        
+
         if (!location.hash) {
             location.replace('#'); // set an empty hash in IE, otherwise first click gets reeeeeeal slow... TODO find out!
         }
-        
+
         // add hidden iframe
         $(function() {
             _historyIframe = $('<iframe style="display: none;"></iframe>').appendTo(document.body).get(0);
@@ -34,7 +34,7 @@ $.history = new function() {
             iframe.close();
             iframe.location.hash = _currentHash.replace('#', '');
         });
-        
+
         this.setHash = function(hash) {
             _currentHash = hash;
             var iframe = _historyIframe.contentWindow.document;
@@ -42,15 +42,16 @@ $.history = new function() {
             iframe.close();
             iframe.location.hash = hash.replace('#', '');
         };
-        
+
         _observeHistory = function() {
             var iframe = _historyIframe.contentWindow.document;
             var iframeHash = iframe.location.hash;
             if (iframeHash != _currentHash) {
-                location.hash = iframeHash.replace('#', '');
                 _currentHash = iframeHash;
-                if (location.hash != '#') {
-                    $('a[@href$="' + location.hash + '"]').click();
+                if (iframeHash != '#') {
+                    // order does matter, set location.hash after triggering the click...
+                    $('a[@href$="' + iframeHash + '"]').click();
+                    location.hash = iframeHash;
                 } else {
                     var output = $('.remote-output');
                     if (output.children().size() > 0) output.empty();
@@ -94,7 +95,7 @@ $.history = new function() {
             _forwardStack.length = 0; // clear forwardStack (true click occured)
             isFirst = false;
         };
-        
+
         this.setHash = function(hash) {
             _currentHash = hash;
             _addHistory(_currentHash);
