@@ -318,6 +318,8 @@ $.fn.tabs = function(initial, settings) {
                 window.scrollTo(scrollX, scrollY);
             }, 0);
 
+            this.blur(); // prevent IE from keeping other link focussed when using the back button
+
         });
     });
 
