@@ -355,18 +355,32 @@ $.fn.triggerTab = function(tabIndex) {
         // trigger only if not visible
         if ($(hash).is(':hidden')) {
 
-            // Simply setting location.hash puts Safari into the eternal load state... ugh! Submit a form instead.
-            if ($.browser.safari) {
+            if ($.browser.msie) {
+
+                tabToTrigger.click();
+                if ($.history) {
+                    $.history.setHash(hash);
+                }
+                location.hash = hash.replace('#', '');
+
+            } else if ($.browser.safari) {
+
+                // Simply setting location.hash puts Safari into the eternal load state... ugh! Submit a form instead.
                 var tempForm = $('<form action="' + hash + '"><div><input type="submit" value="h" /></div></form>').get(0); // no need to append it to the body
                 tempForm.submit(); // does not trigger the form's submit event...
                 tabToTrigger.click(); // ...thus do stuff here
-                if ($.history) $.history.setHash(hash, {clientX: 42}); // fake a click event to get hash into history
-            } else {
-                location.hash = hash.replace('#', '');
-            }
+                if ($.history) {
+                    $.history.setHash(hash);
+                }
 
-            // this is handled by the history plugin if present
-            if (!$.history) tabToTrigger.click();
+            } else {
+
+                location.hash = hash.replace('#', '');
+                if (!$.history) {
+                    tabToTrigger.click();
+                }
+
+            }
 
         }
 
