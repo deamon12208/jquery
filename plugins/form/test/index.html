@@ -372,6 +372,38 @@ $(function() { runTest(function() {
         $('#submitForm4')[0].click();
     });
 
+    test("'success' callback", function() {
+        $('#targetDiv').empty();
+        stop();
+
+        var opts = {
+            success: function() {
+                ok( true, 'post-callback');
+                start();
+            }
+        };
+
+        $('#form3').ajaxSubmit(opts);
+    });
+
+    test("'error' callback", function() {
+        $('#targetDiv').empty();
+        stop();
+
+        var opts = {
+            url: 'bogus.php',
+            error: function() {
+                ok( true, 'error-callback');
+                start();
+            },
+            after: function() { // post-submit callback
+                ok( false, "should not hit post-submit callback");
+            }
+        };
+
+        $('#form3').ajaxSubmit(opts);
+    });
+
 })});
 
 // helper method   
