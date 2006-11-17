@@ -27,6 +27,7 @@ if (!jQuery.expr[':']['input'])
  *
  *  after:    Callback method to be invoked after the form has been successfully submitted.
  *            default value: null
+ *            (Note: 'success' can be used in place of 'after')
  *
  *  dataType: Expected dataType of the response.  One of: null, 'xml', 'script', or 'json'
  *            default value: null
@@ -34,6 +35,10 @@ if (!jQuery.expr[':']['input'])
  *  semantic: Boolean flag indicating whether data must be submitted in semantic order (slower).
  *            default value: false
  *
+ * Note: When a target is specified and a dataType is not, this call is routed through
+ *       jQuery's 'load' method in order to load content into the target element.  In all
+ *       other cases this call is routed through jQuery's 'ajax' method and the options argument 
+ *       is passed through to the ajax call.
  *
  * The 'before' callback can be provided as a hook for running pre-submit logic or for
  * validating the form data.  If the 'before' callback returns false then the form will
@@ -171,6 +176,9 @@ jQuery.fn.ajaxSubmit = function(options) {
         semantic: false
     }, options || {});
 
+    // remap 'after' to 'success' for the load and ajax methods
+    options.success = options.success || options.after;
+
     var a = this.formToArray(options.semantic);
 
     // give pre-submit callback an opportunity to abort the submit
@@ -185,15 +193,14 @@ jQuery.fn.ajaxSubmit = function(options) {
 
     // perform a load on the target only if dataType is not provided
     if (!options.dataType && options.target)
-        jQuery(options.target).load(options.url, get ? null : a, options.after);
-    else
-        jQuery.ajax({
-            url:      options.url,
-            success:  options.after,
-            type:     options.method,
-            dataType: options.dataType,
-            data:     get ? null : q // data is null for 'get' or the query string for 'post'
-        });
+        jQuery(options.target).load(options.url, get ? null : a, options.success);
+    else {
+        // remap 'method' to 'type' for the ajax method
+        options.type = options.method;
+        options.data = get ? null : q;  // data is null for 'get' or the query string for 'post'
+        // pass options along to ajax method
+        jQuery.ajax(options);
+    }
     return this;
 };
 
