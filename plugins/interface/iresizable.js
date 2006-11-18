@@ -287,6 +287,7 @@ jQuery.iResize = {
 
 		}
 
+		var newDimensions = false;
 		if (jQuery.iResize.resizeElement.resizeOptions.onResize) {
 			newDimensions = jQuery.iResize.resizeElement.resizeOptions.onResize.apply( jQuery.iResize.resizeElement, [ newSizes, newPosition ] );
 			if (newDimensions) {
@@ -298,13 +299,12 @@ jQuery.iResize = {
 					jQuery.extend(newPosition, newDimensions.position);
 				}
 			}
-		} else {
-			elS = jQuery.iResize.resizeElement.style;
-			elS.left = newPosition.left + 'px';
-			elS.top = newPosition.top + 'px';
-			elS.width = newSizes.width + 'px';
-			elS.height = newSizes.height + 'px';
 		}
+		elS = jQuery.iResize.resizeElement.style;
+		elS.left = newPosition.left + 'px';
+		elS.top = newPosition.top + 'px';
+		elS.width = newSizes.width + 'px';
+		elS.height = newSizes.height + 'px';
 
 		return false;
 	},
@@ -337,7 +337,7 @@ jQuery.iResize = {
 				for (i in el.resizeOptions.handlers) {
 					if (i.toLowerCase().match(directions) != null) {
 						if (el.resizeOptions.handlers[i].constructor == String) {
-							handle = jQuery(el.resizeOptions.handlers[i], this);
+							handle = jQuery(el.resizeOptions.handlers[i]);
 							if (handle.size() > 0) {
 								el.resizeOptions.handlers[i] = handle.get(0);
 							}
@@ -353,12 +353,12 @@ jQuery.iResize = {
 
 				if (el.resizeOptions.dragHandle) {
 					if (typeof el.resizeOptions.dragHandle === 'string') {
-						handle = jQuery(el.resizeOptions.dragHandle, this);
-						if (handle.size() > 0) {
-							handle.each(function() {
+						handleEl = jQuery(el.resizeOptions.dragHandle);
+						if (handleEl.size() > 0) {
+							handleEl.each(function() {
 									this.dragEl = el;
 								});
-							handle.bind('mousedown', jQuery.iResize.startDrag);
+							handleEl.bind('mousedown', jQuery.iResize.startDrag);
 						}
 					} else if (el.resizeOptions.dragHandle == true) {
 						jQuery(this).bind('mousedown', jQuery.iResize.startDrag);
