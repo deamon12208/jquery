@@ -16,395 +16,413 @@
 <link rel="Stylesheet" media="screen" href="../../../jquery/test/data/testsuite.css" />
 
 <script>
-// run the tests when the doc is loaded
-$(function() { runTest(function() {
+// test form with inputs named 'action' and 'method'
+test("'action' and 'method' form attributes", function() {
+	expect(2);
+    var f = $("#form1");
+    ok( f.attr('action').match('text.php'), "form 'action'");
+    ok( f.attr('method').match('get'), "form 'method'");
+});
 
-    $('#userAgent').html(navigator.userAgent);
+// test serialization to array
+test("formToArray: multi-select", function() {
+	expect(3);
+    var a = $("#form1").formToArray();
+    ok( a.constructor == Array, "type check");
+    ok( a.length == 13, "array length");
+    ok( arrayCount(a, 'Multiple') == 3, "multi-select");
+});
 
-    // test form with inputs named 'action' and 'method'
-    test("'action' and 'method' form attributes", function() {
-        var f = $("#form1");
-        ok( f.attr('action').match('text.php'), "form 'action'");
-        ok( f.attr('method').match('get'), "form 'method'");
-    });
+// test serialization to array
+test("formToArray: 'action' and 'method' inputs", function() {
+	expect(3);
+    var a = $("#form1").formToArray();
+    ok( a.constructor == Array, "type check");
+    ok( arrayValue(a, 'action') == 1, "input name=action");
+    ok( arrayValue(a, 'method') == 2, "input name=method");
+});
+
+// test formToArray semantic support
+test("formToArray: semantic test", function() {
+	expect(6);
+    var formData = $("#form2").formToArray(true);
+    var testData = ['a','b','c','d','e','f'];
+    for (var i=0; i < 6; i++) {
+        ok(formData[i].name == testData[i], "match value at index="+i);
+    }
+});
+
+// test string serialization
+test("serialize: param count", function() {
+	expect(2);
+    var s = $("#form1").formSerialize();
+    ok( s.constructor == String, "type check");
+    ok( s.split('&').length == 13, "string array length");
+});
+
+// test support for input elements not contained within a form
+test("serialize: pseudo form", function() {
+	expect(2);
+    var s = $("#pseudo").formSerialize();
+    ok( s.constructor == String, "type check");
+    ok( s.split('&').length == 3, "string array length");
+});
+
+// test ajaxSubmit target update
+test("ajaxSubmit: target == String", function() {
+	expect(2);
+    $('#targetDiv').empty();
+    stop();
     
-    // test serialization to array
-    test("formToArray: multi-select", function() {
-        var a = $("#form1").formToArray();
-        ok( a.constructor == Array, "type check");
-        ok( a.length == 13, "array length");
-        ok( arrayCount(a, 'Multiple') == 3, "multi-select");
-    });
-
-    // test serialization to array
-    test("formToArray: 'action' and 'method' inputs", function() {
-        var a = $("#form1").formToArray();
-        ok( a.constructor == Array, "type check");
-        ok( arrayValue(a, 'action') == 1, "input name=action");
-        ok( arrayValue(a, 'method') == 2, "input name=method");
-    });
-
-    // test formToArray semantic support
-    test("formToArray: semantic test", function() {
-        var formData = $("#form2").formToArray(true);
-        var testData = ['a','b','c','d','e','f'];
-        for (var i=0; i < 6; i++) {
-            ok(formData[i].name == testData[i], "match value at index="+i);
+    var opts = {
+        target: '#targetDiv',
+        after: function() { // post-callback
+            ok( true, 'post-callback');
+            ok( $('#targetDiv').text().match("Lorem ipsum"), "targetDiv updated");
+            start();
         }
-    });
+    };
+    $('#form3').ajaxSubmit(opts);
+});
 
-    // test string serialization
-    test("serialize: param count", function() {
-        var s = $("#form1").formSerialize();
-        ok( s.constructor == String, "type check");
-        ok( s.split('&').length == 13, "string array length");
-    });
+// test passing jQuery object as the target
+test("ajaxSubmit: target == jQuery object", function() {
+	expect(2);
+    stop();
+    var target = $('#targetDiv');
+    target.empty();
     
-    // test support for input elements not contained within a form
-    test("serialize: pseudo form", function() {
-        var s = $("#pseudo").formSerialize();
-        ok( s.constructor == String, "type check");
-        ok( s.split('&').length == 3, "string array length");
-    });
+    var opts = {
+        target: target,
+        after: function(responseText) { // post-callback
+            ok( true, 'post-callback');
+            ok( $('#targetDiv').text().match("Lorem ipsum"), "targetDiv updated");
+            start();
+        }
+    };
     
-    // test ajaxSubmit target update
-    test("ajaxSubmit: target == String", function() {
-        $('#targetDiv').empty();
-        stop();
-        
-        var opts = {
-            target: '#targetDiv',
-            after: function() { // post-callback
-                ok( true, 'post-callback');
-                ok( $('#targetDiv').text().match("Lorem ipsum"), "targetDiv updated");
-                start();
-            }
-        };
-        $('#form3').ajaxSubmit(opts);
-    });
+    $("#form2").ajaxSubmit(opts);
+});
 
-    // test passing jQuery object as the target
-    test("ajaxSubmit: target == jQuery object", function() {
-        stop();
-        var target = $('#targetDiv');
-        target.empty();
-        
-        var opts = {
-            target: target,
-            after: function(responseText) { // post-callback
-                ok( true, 'post-callback');
-                ok( $('#targetDiv').text().match("Lorem ipsum"), "targetDiv updated");
-                start();
-            }
-        };
-        
-        $("#form2").ajaxSubmit(opts);
-    });
-
-    // test passing DOM element as the target
-    test("ajaxSubmit: target == DOM element", function() {
-        stop();
-        $('#targetDiv').empty();
-        var target = $('#targetDiv')[0];
-        
-        var opts = {
-            target: target,
-            after: function(responseText) { // post-callback
-                ok( true, 'post-callback');
-                ok( $('#targetDiv').text().match("Lorem ipsum"), "targetDiv updated");
-                start();
-            }
-        };
-        
-        $("#form2").ajaxSubmit(opts);
-    });
-
-
-
-    // test ajaxSubmit pre-submit callback
-    test("ajaxSubmit: pre-submit callback", function() {
-        var opts = {
-            before: function(a, jq) { // pre-submit callback
-                ok( true, 'pre-submit callback');
-                ok( a.constructor == Array, "type check array");
-                ok( jq.jquery, "type check jQuery");
-                ok( jq[0].tagName.toLowerCase() == 'form', "jQuery arg == 'form'");
-            }
-        };
-
-        $('#form3').ajaxSubmit(opts);
-    });
-
-    // test ajaxSubmit post-submit callback for response and status text
-    test("ajaxSubmit: post-submit callback", function() {
-        stop();
-
-        var opts = {
-            after: function(responseText, statusText) { // post-submit callback
-                ok( true, 'post-submit callback');
-                ok( responseText.match("Lorem ipsum"), "responseText");
-                ok( statusText == "success", "statusText");
-                start();
-            }
-        };
-
-        $('#form3').ajaxSubmit(opts);
-    });
-
-    // test semantic support via ajaxSubmit's pre-submit callback
-    test("ajaxSubmit: semantic test", function() {
-        var testData = ['a','b','c','d','e','f'];
-
-        var opts = {
-            semantic: true,
-            before: function(a, jq) { // pre-submit callback
-                ok( true, 'pre-submit callback');
-                ok( a.constructor == Array, "type check");
-                ok( jq.jquery, "type check jQuery");
-                for (var i=0; i < a.length; i++) {
-                    ok(a[i].name == testData[i], "match value at index="+i);
-                }
-            }
-        };
-
-        $('#form2').ajaxSubmit(opts);
-    });
-
-    // test json datatype
-    test("ajaxSubmit: dataType == json", function() {
-        stop();
-
-        var opts = {
-            url: 'json.txt',
-            dataType: 'json',
-            after: function(data, statusText) { // post-submit callback
-                // assert that the json data was evaluated
-                ok( typeof data == 'object', 'json data type');
-                ok( data.name == 'jquery-test', 'json data contents');
-                start();
-            }
-        };
-
-        $('#form2').ajaxSubmit(opts);
-    });
-
-    // test script datatype
-    test("ajaxSubmit: dataType == script", function() {
-        stop();
-
-        var opts = {
-            url: 'script.txt?' + new Date().getTime(), // don't let ie cache it
-            dataType: 'script',
-            after: function(responseText, statusText) { // post-submit callback
-                ok( typeof formScriptTest == 'function', 'script evaluated');
-                ok( responseText.match('formScriptTest'), 'script returned');
-                start();
-            }
-        };
-
-        $('#form2').ajaxSubmit(opts);
-    });
-
-    // test xml datatype
-    test("ajaxSubmit: dataType == xml", function() {
-        stop();
-
-        var opts = {
-            url: 'test.xml',
-            dataType: 'xml',
-            after: function(responseXML, statusText) { // post-submit callback
-                ok( typeof responseXML == 'object', 'data type xml');
-                ok( $('test', responseXML).size() == 3, 'xml data query');
-                start();
-            }
-        };
-
-        $('#form2').ajaxSubmit(opts);
-    });
-
-    // test that args embedded in the action are honored; no real way
-    // to assert this so successful callback is used to signal success
-    test("ajaxSubmit: existing args in action attr", function() {
-        stop();
-
-        var opts = {
-            after: function() { // post-submit callback
-                ok( true, 'post callback');
-                start();
-            }
-        };
-
-        $('#form5').ajaxSubmit(opts);
-    });
-
-    // test ajaxSubmit using pre-submit callback to cancel submit
-    test("ajaxSubmit: cancel submit", function() {
-
-        var opts = {
-            before: function(a, jq) { // pre-submit callback
-                ok( true, 'pre-submit callback');
-                ok( a.constructor == Array, "type check");
-                ok( jq.jquery, "type check jQuery");
-                return false;  // return false to abort submit
-            },
-            after: function() { // post-submit callback
-                ok( false, "should not hit this post-submit callback");
-            }
-        };
-
-        $('#form3').ajaxSubmit(opts);
-    });
-
-    // test submitting a pseudo-form
-    test("ajaxSubmit: pseudo-form", function() {
-        stop();
-
-        var opts = {
-            before: function(a, jq) { // pre-submit callback
-                ok( true, 'pre-submit callback');
-                ok( a.constructor == Array, "type check");
-                ok( jq.jquery, "type check jQuery");
-                ok( jq[0].tagName.toLowerCase() == 'div', "jQuery arg == 'div'");
-            },
-            after: function() { // post-submit callback
-                ok( true, 'post-submit callback');
-                start();
-            },
-            // url and method must be provided for a pseudo form since they can
-            // not be extracted from the markup
-            url: 'text.php',
-            method: 'post'
-        };
-
-        $("#pseudo").ajaxSubmit(opts);
-    });
-
-    // test eval of json response
-    test("ajaxSubmit: evaluate response", function() {
-        stop();
-        
-        var opts = {
-            after: function(responseText) { // post-callback
-                ok( true, 'post-callback');
-                var data = eval.call(window, '('+responseText+')');
-                ok( data.name == 'jquery-test', 'evaled respone');
-                start();
-            },
-            url: 'json.txt'
-        };
-        
-        $("#form2").ajaxSubmit(opts);
-    });
-
-    // test pre and post callbacks for ajaxForm
-    test("ajaxForm: pre and post callbacks", function() {
-        stop();
-
-        var opts = {
-            before: function(a, jq) { // pre-submit callback
-                ok( true, 'pre-submit callback');
-                ok( a.constructor == Array, "type check");
-                ok( jq.jquery, "type check jQuery");
-            },
-            after: function() { // post-submit callback
-                ok( true, 'post-submit callback');
-                start();
-            }
-        };
-
-        $("#form4").ajaxForm(opts);
-        $('#submitForm4')[0].click();  // trigger the submit button
-    });
-
-    // test that the value of the submit button is captured
-    test("ajaxForm: capture submit element", function() {
-
-        var opts = {
-            before: function(a, jq) { // pre-callback
-                ok( true, 'pre-callback');
-                ok( a.constructor == Array, "type check");
-                ok( jq.jquery, "type check jQuery");
-                ok( arrayValue(a, 'form4inputName') != null, "submit button");
-            }
-        };
-
-        $("#form4").ajaxForm(opts);
-        $('#submitForm4withName')[0].click();
-    });
+// test passing DOM element as the target
+test("ajaxSubmit: target == DOM element", function() {
+	expect(2);
+    stop();
+    $('#targetDiv').empty();
+    var target = $('#targetDiv')[0];
     
-    // test image submit support
-    test("ajaxForm: capture submit image coordinates", function() {
+    var opts = {
+        target: target,
+        after: function(responseText) { // post-callback
+            ok( true, 'post-callback');
+            ok( $('#targetDiv').text().match("Lorem ipsum"), "targetDiv updated");
+            start();
+        }
+    };
+    
+    $("#form2").ajaxSubmit(opts);
+});
 
-        var opts = {
-            before: function(a, jq) { // pre-callback
-                ok( true, 'pre-callback');
-                ok( a.constructor == Array, "type check");
-                ok( jq.jquery, "type check jQuery");
-                ok( arrayValue(a, 'myImage_x') != null, "x coord");
-                ok( arrayValue(a, 'myImage_y') != null, "y coord");
+
+
+// test ajaxSubmit pre-submit callback
+test("ajaxSubmit: pre-submit callback", function() {
+	expect(4);
+    var opts = {
+        before: function(a, jq) { // pre-submit callback
+            ok( true, 'pre-submit callback');
+            ok( a.constructor == Array, "type check array");
+            ok( jq.jquery, "type check jQuery");
+            ok( jq[0].tagName.toLowerCase() == 'form', "jQuery arg == 'form'");
+        }
+    };
+
+    $('#form3').ajaxSubmit(opts);
+});
+
+// test ajaxSubmit post-submit callback for response and status text
+test("ajaxSubmit: post-submit callback", function() {
+	expect(3);
+    stop();
+
+    var opts = {
+        after: function(responseText, statusText) { // post-submit callback
+            ok( true, 'post-submit callback');
+            ok( responseText.match("Lorem ipsum"), "responseText");
+            ok( statusText == "success", "statusText");
+            start();
+        }
+    };
+
+    $('#form3').ajaxSubmit(opts);
+});
+
+// test semantic support via ajaxSubmit's pre-submit callback
+test("ajaxSubmit: semantic test", function() {
+	expect(9);
+    var testData = ['a','b','c','d','e','f'];
+
+    var opts = {
+        semantic: true,
+        before: function(a, jq) { // pre-submit callback
+            ok( true, 'pre-submit callback');
+            ok( a.constructor == Array, "type check");
+            ok( jq.jquery, "type check jQuery");
+            for (var i=0; i < a.length; i++) {
+                ok(a[i].name == testData[i], "match value at index="+i);
             }
-        };
+        }
+    };
 
-        $("#form4").ajaxForm(opts);
-        $('#form4imageSubmit')[0].click();
-    });
+    $('#form2').ajaxSubmit(opts);
+});
 
-    // test that the targetDiv gets updated
-    test("ajaxForm: update target div", function() {
-        $('#targetDiv').empty();
-        stop();
+// test json datatype
+test("ajaxSubmit: dataType == json", function() {
+	expect(2);
+    stop();
 
-        var opts = {
-            target: '#targetDiv',
-            before: function(a, jq) { // pre-callback
-                ok( true, 'pre-callback');
-                ok( a.constructor == Array, "type check");
-                ok( jq.jquery, "type check jQuery");
-            },
-            after: function() {
-                ok( true, 'post-callback');
-                ok( $('#targetDiv').text().match("Lorem ipsum"), "targetDiv updated");
-                start();
-            }
-        };
+    var opts = {
+        url: 'json.txt',
+        dataType: 'json',
+        after: function(data, statusText) { // post-submit callback
+            // assert that the json data was evaluated
+            ok( typeof data == 'object', 'json data type');
+            ok( data.name == 'jquery-test', 'json data contents');
+            start();
+        }
+    };
 
-        $("#form4").ajaxForm(opts);
-        $('#submitForm4')[0].click();
-    });
+    $('#form2').ajaxSubmit(opts);
+});
 
-    test("'success' callback", function() {
-        $('#targetDiv').empty();
-        stop();
+// test script datatype
+test("ajaxSubmit: dataType == script", function() {
+	expect(2);
+    stop();
 
-        var opts = {
-            success: function() {
-                ok( true, 'post-callback');
-                start();
-            }
-        };
+    var opts = {
+        url: 'script.txt?' + new Date().getTime(), // don't let ie cache it
+        dataType: 'script',
+        after: function(responseText, statusText) { // post-submit callback
+            ok( typeof formScriptTest == 'function', 'script evaluated');
+            ok( responseText.match('formScriptTest'), 'script returned');
+            start();
+        }
+    };
 
-        $('#form3').ajaxSubmit(opts);
-    });
+    $('#form2').ajaxSubmit(opts);
+});
 
-    test("'error' callback", function() {
-        $('#targetDiv').empty();
-        stop();
+// test xml datatype
+test("ajaxSubmit: dataType == xml", function() {
+	expect(2);
+    stop();
 
-        var opts = {
-            url: 'bogus.php',
-            error: function() {
-                ok( true, 'error-callback');
-                start();
-            },
-            after: function() { // post-submit callback
-                ok( false, "should not hit post-submit callback");
-            }
-        };
+    var opts = {
+        url: 'test.xml',
+        dataType: 'xml',
+        after: function(responseXML, statusText) { // post-submit callback
+            ok( typeof responseXML == 'object', 'data type xml');
+            ok( $('test', responseXML).size() == 3, 'xml data query');
+            start();
+        }
+    };
 
-        $('#form3').ajaxSubmit(opts);
-    });
+    $('#form2').ajaxSubmit(opts);
+});
 
-})});
+// test that args embedded in the action are honored; no real way
+// to assert this so successful callback is used to signal success
+test("ajaxSubmit: existing args in action attr", function() {
+	expect(1);
+    stop();
+
+    var opts = {
+        after: function() { // post-submit callback
+            ok( true, 'post callback');
+            start();
+        }
+    };
+
+    $('#form5').ajaxSubmit(opts);
+});
+
+// test ajaxSubmit using pre-submit callback to cancel submit
+test("ajaxSubmit: cancel submit", function() {
+	expect(3);
+
+    var opts = {
+        before: function(a, jq) { // pre-submit callback
+            ok( true, 'pre-submit callback');
+            ok( a.constructor == Array, "type check");
+            ok( jq.jquery, "type check jQuery");
+            return false;  // return false to abort submit
+        },
+        after: function() { // post-submit callback
+            ok( false, "should not hit this post-submit callback");
+        }
+    };
+
+    $('#form3').ajaxSubmit(opts);
+});
+
+// test submitting a pseudo-form
+test("ajaxSubmit: pseudo-form", function() {
+	expect(5);
+    stop();
+
+    var opts = {
+        before: function(a, jq) { // pre-submit callback
+            ok( true, 'pre-submit callback');
+            ok( a.constructor == Array, "type check");
+            ok( jq.jquery, "type check jQuery");
+            ok( jq[0].tagName.toLowerCase() == 'div', "jQuery arg == 'div'");
+        },
+        after: function() { // post-submit callback
+            ok( true, 'post-submit callback');
+            start();
+        },
+        // url and method must be provided for a pseudo form since they can
+        // not be extracted from the markup
+        url: 'text.php',
+        method: 'post'
+    };
+
+    $("#pseudo").ajaxSubmit(opts);
+});
+
+// test eval of json response
+test("ajaxSubmit: evaluate response", function() {
+	expect(2);
+    stop();
+    
+    var opts = {
+        after: function(responseText) { // post-callback
+            ok( true, 'post-callback');
+            var data = eval.call(window, '('+responseText+')');
+            ok( data.name == 'jquery-test', 'evaled respone');
+            start();
+        },
+        url: 'json.txt'
+    };
+    
+    $("#form2").ajaxSubmit(opts);
+});
+
+// test pre and post callbacks for ajaxForm
+test("ajaxForm: pre and post callbacks", function() {
+	expect(4);
+    stop();
+
+    var opts = {
+        before: function(a, jq) { // pre-submit callback
+            ok( true, 'pre-submit callback');
+            ok( a.constructor == Array, "type check");
+            ok( jq.jquery, "type check jQuery");
+        },
+        after: function() { // post-submit callback
+            ok( true, 'post-submit callback');
+            start();
+        }
+    };
+
+    $("#form4").ajaxForm(opts);
+    $('#submitForm4')[0].click();  // trigger the submit button
+});
+
+// test that the value of the submit button is captured
+test("ajaxForm: capture submit element", function() {
+	expect(4);
+
+    var opts = {
+        before: function(a, jq) { // pre-callback
+            ok( true, 'pre-callback');
+            ok( a.constructor == Array, "type check");
+            ok( jq.jquery, "type check jQuery");
+            ok( arrayValue(a, 'form4inputName') != null, "submit button");
+        }
+    };
+
+    $("#form4").ajaxForm(opts);
+    $('#submitForm4withName')[0].click();
+});
+
+// test image submit support
+test("ajaxForm: capture submit image coordinates", function() {
+	expect(5);
+
+    var opts = {
+        before: function(a, jq) { // pre-callback
+            ok( true, 'pre-callback');
+            ok( a.constructor == Array, "type check");
+            ok( jq.jquery, "type check jQuery");
+            ok( arrayValue(a, 'myImage_x') != null, "x coord");
+            ok( arrayValue(a, 'myImage_y') != null, "y coord");
+        }
+    };
+
+    $("#form4").ajaxForm(opts);
+    $('#form4imageSubmit')[0].click();
+});
+
+// test that the targetDiv gets updated
+test("ajaxForm: update target div", function() {
+	expect(5);
+    $('#targetDiv').empty();
+    stop();
+
+    var opts = {
+        target: '#targetDiv',
+        before: function(a, jq) { // pre-callback
+            ok( true, 'pre-callback');
+            ok( a.constructor == Array, "type check");
+            ok( jq.jquery, "type check jQuery");
+        },
+        after: function() {
+            ok( true, 'post-callback');
+            ok( $('#targetDiv').text().match("Lorem ipsum"), "targetDiv updated");
+            start();
+        }
+    };
+
+    $("#form4").ajaxForm(opts);
+    $('#submitForm4')[0].click();
+});
+
+test("'success' callback", function() {
+	expect(1);
+    $('#targetDiv').empty();
+    stop();
+
+    var opts = {
+        success: function() {
+            ok( true, 'post-callback');
+            start();
+        }
+    };
+
+    $('#form3').ajaxSubmit(opts);
+});
+
+test("'error' callback", function() {
+	expect(1);
+    $('#targetDiv').empty();
+    stop();
+
+    var opts = {
+        url: 'bogus.php',
+        error: function() {
+            ok( true, 'error-callback');
+            start();
+        },
+        after: function() { // post-submit callback
+            ok( false, "should not hit post-submit callback");
+        }
+    };
+
+    $('#form3').ajaxSubmit(opts);
+});
 
 // helper method   
 function arrayCount(arr, key) {
