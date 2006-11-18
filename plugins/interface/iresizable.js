@@ -385,7 +385,7 @@ jQuery.iResize = {
 				// Remove the draghandle
 				if (el.resizeOptions.dragHandle) {
 					if (typeof el.resizeOptions.dragHandle === 'string') {
-						handle = jQuery(el.resizeOptions.dragHandle, this);
+						handle = jQuery(el.resizeOptions.dragHandle);
 						if (handle.size() > 0) {
 							handle.unbind('mousedown', jQuery.iResize.startDrag);
 						}
