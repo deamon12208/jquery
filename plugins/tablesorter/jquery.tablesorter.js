@@ -452,7 +452,7 @@ jQuery.tableSorter = {
 		},
 		appendToTable: function(o,c,defaults,index,lastIndex) {
 			var l = c.length;
-			jQuery("tbody",o).empty().append(c);
+			jQuery("tbody:first",o).empty().append(c);
 			/** jquery way, need to be benched mark! */
 			if(defaults.stripingRowClass) {
 				/** remove old! */
