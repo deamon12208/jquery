@@ -3,7 +3,7 @@
 // Add it automatically here if it doesn't exist
 //
 if (!jQuery.expr[':']['input'])
-    jQuery.extend(jQuery.expr[':'], {input: "a.nodeName.toLowerCase().match(/input|select|textarea|button/)" });
+    jQuery.extend(jQuery.expr[':'], {input: "/input|select|textarea|button/i.test(a.nodeName)" });
 
 
 /**
