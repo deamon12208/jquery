@@ -168,7 +168,7 @@
 			tTitle.html(parts.shift());
 			tBody.empty();
 			for(var i = 0, part; part = parts[i]; i++) {
-				if(i < 0)
+				if(i > 0)
 					tBody.append("<br/>");
 				tBody.append(part);
 			}
