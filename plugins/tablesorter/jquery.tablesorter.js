@@ -51,6 +51,7 @@ jQuery.fn.tableSorter = function(o) {
 		*/
 		textExtractionCustom: false,
 		bind: false,
+		addHeaderLink: false,
 		dateFormat: 'mm/dd/yyyy' /** us default, uk dd/mm/yyyy */
 	};		
 	
@@ -133,24 +134,34 @@ jQuery.fn.tableSorter = function(o) {
 					if(defaults.headerClass) {
 						jQuery(oCell).addClass(defaults.headerClass);
 					}
+					if(defaults.addHeaderLink) {
+						jQuery(oCell).wrapInner({element: '<a href="#">', name: 'a', className: 'sorter'});
+						
+						jQuery(".sorter",oCell).click(function(e) {
+							sortOnColumn( jQuery(this).parent(), (jQuery(this).parent()[0].count++) % 2, jQuery(this).parent()[0].index );
+							return false;
+						});	
+					} else {
+						jQuery(oCell).click(function(e) {
+							sortOnColumn( jQuery(this), (jQuery(this)[0].count++) % 2, jQuery(this)[0].index );
+							return false;
+						});
+					}
 					
-					jQuery(oCell).wrapInner({element: '<a href="#">', name: 'a', className: 'sorter'});
+
 					//jQuery(oCell).append('<div class="filterIcon">&nbsp;</div>');
 				
 					oCell.index = i;
 					oCell.count = defaults.sortDir;
-					/*
+					
+					/**
 					jQuery(".filterIcon",oCell).click(function(e) {
 						filterColumn(jQuery(this).parent(),jQuery(this).parent()[0].index);
 						//e.preventDefault();
 					});
 					*/
 					
-					jQuery(".sorter",oCell).click(function(e) {
-						sortOnColumn( jQuery(this).parent(), (jQuery(this).parent()[0].count++) % 2, jQuery(this).parent()[0].index );
-						return false;
-						//e.stopPropagation();
-					});
+					
 					 
 				}
 			}
@@ -461,8 +472,8 @@ jQuery.tableSorter = {
 			c=null;
 		},
 		stripRows: function(o,defaults) {
-			jQuery("tbody:first/tr:even",o).addClass(defaults.stripingRowClass[0]);
-			jQuery("tbody:first/tr:odd",o).addClass(defaults.stripingRowClass[1]);
+			jQuery("tbody:first/tr:visible:even",o).addClass(defaults.stripingRowClass[0]);
+			jQuery("tbody:first/tr:visible:odd",o).addClass(defaults.stripingRowClass[1]);
 		},
 		isHeaderDisabled: function(o,arg,index) {
 			if(typeof(arg) == "number") {
