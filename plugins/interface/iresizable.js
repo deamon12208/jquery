@@ -299,12 +299,13 @@ jQuery.iResize = {
 					jQuery.extend(newPosition, newDimensions.position);
 				}
 			}
+		} else {
+			elS = jQuery.iResize.resizeElement.style;
+			elS.left = newPosition.left + 'px';
+			elS.top = newPosition.top + 'px';
+			elS.width = newSizes.width + 'px';
+			elS.height = newSizes.height + 'px';
 		}
-		elS = jQuery.iResize.resizeElement.style;
-		elS.left = newPosition.left + 'px';
-		elS.top = newPosition.top + 'px';
-		elS.width = newSizes.width + 'px';
-		elS.height = newSizes.height + 'px';
 
 		return false;
 	},
