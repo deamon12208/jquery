@@ -78,7 +78,7 @@ jQuery.fn.nextUntil = function(expr) {
  * @desc Updates the #status element with the text of the selected header every time the accordion changes
  *
  * @param Object settings key/value pairs of optional settings.
- * @option String|Element|jQuery active Selector for the active element, default is the first child
+ * @option String|Element|jQuery|Boolean active Selector for the active element, default is the first child, set to false to display none at start
  * @option String|Element|jQuery header Selector for the header element, eg. div.title, a.head, default is the first child's tagname
  * @option String|Number showSpeed Speed for the slideIn, default is 'slow'
  * @option String|Number hideSpeed Speed for the slideOut, default is 'fast'
@@ -131,11 +131,11 @@ jQuery.fn.nextUntil = function(expr) {
 		
 		// calculate active if not specified, using the first header
 		var container = this,
-			active = settings.active ? $(settings.active, this) : $(settings.header, this).eq(0),
+			active = settings.active ? $(settings.active, this) : settings.active === false ? $("<div>") : $(settings.header, this).eq(0),
 			running = 0;
 		
 		$(settings.header, container)
-			.not(active[0])
+			.not(active && active[0] || "")
 			.nextUntil(settings.header)
 			.hide();
 		active.addClass(settings.selectedClass);
