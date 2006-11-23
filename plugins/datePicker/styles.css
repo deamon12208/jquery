@@ -72,16 +72,6 @@ div.popup-calendar {
 html>body div.popup-calendar {
 	left: 99px; /* value for decent browsers */
 }
-div.popup-calendar iframe
-{
-	position:absolute;
-	top:0;
-	left:0;
-	z-index:-1;
-	filter:mask();
-	width:3000px;
-	height:3000px;
-}
 div.popup-calendar div.link-close {
 	float: right;
 }

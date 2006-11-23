@@ -7,8 +7,8 @@
 
 <script type="text/javascript" src="/mint/?js"></script>
 <script type="text/javascript" src="jquery.js"></script>
-<!--<script type="text/javascript" src="datePicker.js"></script>-->
-<script type="text/javascript" src="datePicker_source.js"></script>
+<script type="text/javascript" src="datePicker.js"></script>
+<!--<script type="text/javascript" src="datePicker_source.js"></script>-->
 <script type="text/javascript">
 $(document).ready(init);
 function init()
@@ -68,7 +68,7 @@ function init()
 	<p>No validation is performed on the text input when the form is submitted and it is presumed that the server processing the form is expecting dates in the format you specify.</p>
 	
 	<h2>Version</h2>
-	<p>r28 - released 19th November [<a href="#changelog">changelog</a>]</p>
+	<p>r29 - released 23rd November [<a href="#changelog">changelog</a>]</p>
 	
 	<h2>Example</h2>
 	<form action="#" method="post">
@@ -122,6 +122,7 @@ $.datePicker.setLanguageStrings(
 	
 	<h2 id="changelog">Changelog</h2>
 	<ul>
+		<li>23rd November 2006 - removed the styles to make the calendar stay above check boxes from the stylesheet and created them in the JS (to avoid validation problems with the CSS) [r29]</li>
 		<li>19th November 2006 - added the ability to change the first day of the week on the calendar by passing in a firstDayOfWeek parameter [r28]</li>
 		<li>19th November 2006 - moved the "Choose date" string out so that it could be set via setLanguageStrings [r27]</li>
 		<li>19th November 2006 - replaced all references to $ with references to jQuery as per best practices [r26]</li>

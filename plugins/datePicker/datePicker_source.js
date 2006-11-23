@@ -6,8 +6,8 @@
  * Licensed under the MIT License:
  *   http://www.opensource.org/licenses/mit-license.php
  *
- * $LastChangedDate: 2006-11-20 00:04:57 +0000 (Mon, 20 Nov 2006) $
- * $Rev: 28 $
+ * $LastChangedDate: 2006-11-23 01:20:03 +0000 (Thu, 23 Nov 2006) $
+ * $Rev: 29 $
  */
  
 jQuery.datePicker = function()
@@ -15,7 +15,7 @@ jQuery.datePicker = function()
 	// so that firebug console.log statements don't break IE
 	if (window.console == undefined) { window.console = {log:function(){}}; }
 	
-	var months = ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+	var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 	var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 	var navLinks = {p:'Prev', n:'Next', c:'Close', b:'Choose date'};
 	var dateFormat = 'dd/mm/yyyy';
@@ -184,10 +184,14 @@ jQuery.datePicker = function()
 		if (jQuery.browser.msie) { 
 			
 			// we put a styled iframe behind the calendar so HTML SELECT elements don't show through
-			jCalDiv.append('<iframe>');
-			// tried to put the styles inline to save the stylesheet from invalid markup but it doesn't work 
-			// for some reason - also not if you do it with .css(...) :(
-			//jCalDiv.append('<iframe style="display: block; position: absolute; top: 0; left: 0; zIndex: -1; filter: mask(); width: 3000px; height: 3000px;">')
+			var iframe = [	'<iframe class="bgiframe" tabindex="-1" ',
+		 					'style="display:block; position:absolute;',
+							'top: 0;',
+							'left:0;',
+							'z-index:-1; filter:Alpha(Opacity=\'0\');',
+							'width:3000px;',
+							'height:3000px"/>'].join('');
+			jCalDiv.append(document.createElement(iframe));
 		}
 		jCalDiv.css({'display':'block'});
 		return jCalDiv[0];
