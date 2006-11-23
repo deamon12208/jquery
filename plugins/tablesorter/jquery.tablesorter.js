@@ -174,7 +174,7 @@ jQuery.fn.tableSorter = function(o) {
 			}
 			
 			if(defaults.rowHighlightClass) {
-				jQuery("tbody:first/tr",oTable).click(function() {
+				jQuery("> tbody:first/tr",oTable).click(function() {
 					if(ROW_LAST_HIGHLIGHT_OBJ) {
 						ROW_LAST_HIGHLIGHT_OBJ.removeClass(defaults.rowHighlightClass);	
 					}
@@ -261,7 +261,7 @@ jQuery.fn.tableSorter = function(o) {
 			/** remove highlighting */
 			if(defaults.highlightClass) {
 				if(COLUMN_LAST_INDEX != COLUMN_INDEX && COLUMN_LAST_INDEX > -1) {
-					jQuery("tbody:first/tr",o).find("td:eq(" + COLUMN_LAST_INDEX + ")").removeClass(defaults.highlightClass).end();
+					jQuery("> tbody:first/tr",o).find("> td:eq(" + COLUMN_LAST_INDEX + ")").removeClass(defaults.highlightClass).end();
 				}
 			}	
 			/** if this is fired, with a straight call, sortStart / Stop would never be fired. */
@@ -434,7 +434,7 @@ jQuery.tableSorter = {
 					elementText = defaults.textExtractionCustom[index](o);
 				} else {
 					if(defaults.textExtraction == 'simple') {	
-						if(o.childNodes[0].hasChildNodes()) {
+						if(o.childNodes[0] && o.childNodes[0].hasChildNodes()) {
 							elementText = o.childNodes[0].innerHTML;
 						} else {
 							elementText = o.innerHTML;
@@ -452,11 +452,11 @@ jQuery.tableSorter = {
 		},
 		appendToTable: function(o,c,defaults,index,lastIndex) {
 			var l = c.length;
-			jQuery("tbody:first",o).empty().append(c);
+			jQuery("> tbody:first",o).empty().append(c);
 			/** jquery way, need to be benched mark! */
 			if(defaults.stripingRowClass) {
 				/** remove old! */
-				jQuery("tbody:first/tr",o).removeClass(defaults.stripingRowClass[0]).removeClass(defaults.stripingRowClass[1]);
+				jQuery("> tbody:first/tr",o).removeClass(defaults.stripingRowClass[0]).removeClass(defaults.stripingRowClass[1]);
 				/** add new! */
 				jQuery.tableSorter.utils.stripRows(o,defaults);
 			}
@@ -466,14 +466,14 @@ jQuery.tableSorter = {
 					jQuery("tbody:first/tr",o).find("td:eq(" + lastIndex + ")").removeClass(defaults.highlightClass).end();
 				}
 				*/
-				jQuery("tbody:first/tr",o).find("td:eq(" + index + ")").addClass(defaults.highlightClass).end();
+				jQuery("> tbody:first/tr",o).find("> td:eq(" + index + ")").addClass(defaults.highlightClass).end();
 			}
 			/** empty object, good practice! */
 			c=null;
 		},
 		stripRows: function(o,defaults) {
-			jQuery("tbody:first/tr:visible:even",o).addClass(defaults.stripingRowClass[0]);
-			jQuery("tbody:first/tr:visible:odd",o).addClass(defaults.stripingRowClass[1]);
+			jQuery("> tbody:first/tr:visible:even",o).addClass(defaults.stripingRowClass[0]);
+			jQuery("> tbody:first/tr:visible:odd",o).addClass(defaults.stripingRowClass[1]);
 		},
 		isHeaderDisabled: function(o,arg,index) {
 			if(typeof(arg) == "number") {
@@ -634,7 +634,7 @@ jQuery.tableSorter.parsers.usLongDate = {
 jQuery.tableSorter.parsers.shortDate = {
 	id: 'shortDate',
 	is: function(s) {
-		return s.match(new RegExp(/\d{1,2}[/-]\d{1,2}[/-]\d{2,4}/));
+		return s.match(new RegExp(/\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}/));
 	},
 	format: function(s) {
 		s = s.replace(new RegExp(/-/g),'/');
