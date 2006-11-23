@@ -68,7 +68,7 @@ function init()
 	<p>No validation is performed on the text input when the form is submitted and it is presumed that the server processing the form is expecting dates in the format you specify.</p>
 	
 	<h2>Version</h2>
-	<p>r30 - released 23rd November [<a href="#changelog">changelog</a>]</p>
+	<p>r31 - released 23rd November [<a href="#changelog">changelog</a>]</p>
 	
 	<h2>Example</h2>
 	<form action="#" method="post">
@@ -119,13 +119,14 @@ $.datePicker.setLanguageStrings(
 		
 	<h2>Download</h2>
 	<ul>
-		<li><a href="datePicker.js">datePicker.js</a> &ndash; compressed JS for plugin - only 5.55KB</li>
+		<li><a href="datePicker.js">datePicker.js</a> &ndash; compressed JS for plugin - only 5.86KB</li>
 		<li><a href="datePicker_source.js">datePicker_source.js</a> &ndash; the readable version of the sourcecode</li>
 		<li><a href="styles.css">styles.css</a> &ndash; The necessary styles</li>
 	</ul>
 	
 	<h2 id="changelog">Changelog</h2>
 	<ul>
+		<li>23rd November 2006 - change to allow you to click directly on the input field by passing inputClick:true when you create your datePickers (thanks to <a href="http://www.texotela.co.uk/">Sam Collett</a>) [r31]</li>
 		<li>23rd November 2006 - changes to the code to allow different seperators to specify different date formats (many thanks to Stefan Flick) NOTE - if you are setting a date format you will need to change your calling code [r30]</li>
 		<li>23rd November 2006 - removed the styles to make the calendar stay above check boxes from the stylesheet and created them in the JS (to avoid validation problems with the CSS) [r29]</li>
 		<li>19th November 2006 - added the ability to change the first day of the week on the calendar by passing in a firstDayOfWeek parameter [r28]</li>

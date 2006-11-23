@@ -6,8 +6,8 @@
  * Licensed under the MIT License:
  *   http://www.opensource.org/licenses/mit-license.php
  *
- * $LastChangedDate: 2006-11-23 22:31:59 +0000 (Thu, 23 Nov 2006) $
- * $Rev: 30 $
+ * $LastChangedDate: 2006-11-23 23:34:17 +0000 (Thu, 23 Nov 2006) $
+ * $Rev: 31 $
  */
 
 jQuery.datePicker = function()
@@ -383,8 +383,15 @@ jQuery.fn.datePicker = function(a)
 		jQuery.datePicker.setDateWindow(this, a);
 		if (!jQuery.datePicker.isInited(this)) {
 			var chooseDate = jQuery.datePicker.getChooseDateStr();
-			var calBut = jQuery("<a>").attr({'href':'javascript:;', 'class':'date-picker', 'title':chooseDate})
-			.append("<span>" + chooseDate + "</span>").click(jQuery.datePicker.show);
+			var calBut;
+			if(a && a.inputClick){
+				calBut = jQuery(this).attr({'class':'date-picker', 'title':chooseDate})
+			}
+			else {
+				calBut = jQuery("<a>").attr({'href':'javascript:;',
+'class':'date-picker', 'title':chooseDate})
+				.append("<span>" + chooseDate + "</span>");
+			}
 			jQuery(this).wrap(
 				'<div class="date-picker-holder"></div>'
 			).before(
@@ -392,10 +399,11 @@ jQuery.fn.datePicker = function(a)
 			).after(
 				calBut
 			);
+			calBut.click(jQuery.datePicker.show);
 			jQuery.datePicker.setInited(this);
 		}
 	});
-
+	
 };
 /*
 <!-- Generated calendar HTML looks like this - style with CSS -->
