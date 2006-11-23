@@ -15,7 +15,7 @@ function init()
 {
 
 	// OPTIONALLY SET THE DATE FORMAT FOR ALL DATE PICKERS ON THIS PAGE
-	//$.datePicker.setDateFormat('mm/dd/yyyy');
+	//$.datePicker.setDateFormat('ymd', '-');
 	
 	// OPTIONALLY SET THE LANGUAGE DEPENDANT COPY IN THE POPUP CALENDAR
 	/*
@@ -68,7 +68,7 @@ function init()
 	<p>No validation is performed on the text input when the form is submitted and it is presumed that the server processing the form is expecting dates in the format you specify.</p>
 	
 	<h2>Version</h2>
-	<p>r29 - released 23rd November [<a href="#changelog">changelog</a>]</p>
+	<p>r30 - released 23rd November [<a href="#changelog">changelog</a>]</p>
 	
 	<h2>Example</h2>
 	<form action="#" method="post">
@@ -87,8 +87,12 @@ function init()
 	<br style="clear: both;" />
 	
 	<h2>Usage</h2>
-	<p>Optionally set the date format (possible values are 'dd/mm/yyyy', 'mm/dd/yyyy', 'yyyy-mm-dd') [defaults to dd/mm/yyyy]:</p>
-	<code>$.datePicker.setDateFormat('mm/dd/yyyy');</code>
+	<p>Optionally set the date format (possible values are 'dmy' (european), 'mdy' (americian) or 'ymd'
+(unicode)) [defaults to 'dmy'] and seperator (any character) [defaults to '/']:</p>
+	<code>$.datePicker.setDateFormat('dmy','/'); // default - UK style</code><br />
+	<code>$.datePicker.setDateFormat('ymd','-'); // unicode</code><br />
+	<code>$.datePicker.setDateFormat('dmy','.'); // german</code>
+
 	<p>And optionally change the displayed language [default strings are in English]:</p>
 	<code>
 	<pre>
@@ -122,6 +126,7 @@ $.datePicker.setLanguageStrings(
 	
 	<h2 id="changelog">Changelog</h2>
 	<ul>
+		<li>23rd November 2006 - changes to the code to allow different seperators to specify different date formats (many thanks to Stefan Flick) NOTE - if you are setting a date format you will need to change your calling code [r30]</li>
 		<li>23rd November 2006 - removed the styles to make the calendar stay above check boxes from the stylesheet and created them in the JS (to avoid validation problems with the CSS) [r29]</li>
 		<li>19th November 2006 - added the ability to change the first day of the week on the calendar by passing in a firstDayOfWeek parameter [r28]</li>
 		<li>19th November 2006 - moved the "Choose date" string out so that it could be set via setLanguageStrings [r27]</li>

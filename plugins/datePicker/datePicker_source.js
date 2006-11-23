@@ -6,44 +6,45 @@
  * Licensed under the MIT License:
  *   http://www.opensource.org/licenses/mit-license.php
  *
- * $LastChangedDate: 2006-11-23 01:20:03 +0000 (Thu, 23 Nov 2006) $
- * $Rev: 29 $
+ * $LastChangedDate: 2006-11-23 22:31:59 +0000 (Thu, 23 Nov 2006) $
+ * $Rev: 30 $
  */
- 
+
 jQuery.datePicker = function()
 {
 	// so that firebug console.log statements don't break IE
 	if (window.console == undefined) { window.console = {log:function(){}}; }
-	
+
 	var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 	var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 	var navLinks = {p:'Prev', n:'Next', c:'Close', b:'Choose date'};
-	var dateFormat = 'dd/mm/yyyy';
+	var dateFormat = 'dmy';
+	var dateSeparator = "/";
 	var _firstDayOfWeek;
 	var _firstDate;
 	var _lastDate;
-	
+
 	var _selectedDate;
 	var _openCal;
-	
-	var _zeroPad = function(num) { 
+
+	var _zeroPad = function(num) {
 		var s = '0'+num;
-		return s.substring(s.length-2) 
+		return s.substring(s.length-2)
 		//return ('0'+num).substring(-2); // doesn't work on IE :(
 	};
 	var _strToDate = function(dIn)
 	{
-		switch (dateFormat.toLowerCase()) {
-			case 'yyyy-mm-dd':
-				dParts = dIn.split('-');
+		switch (dateFormat) {
+			case 'ymd':
+				dParts = dIn.split(dateSeparator);
 				return new Date(dParts[0], Number(dParts[1])-1, dParts[2]);
-			case 'dd/mm/yyyy':
-				dParts = dIn.split('/');
+			case 'dmy':
+				dParts = dIn.split(dateSeparator);
 				return new Date(dParts[2], Number(dParts[1])-1, Number(dParts[0]));
-			case 'mm/dd/yyyy':
+			case 'mdy':
 			default:
 				var parts = parts ? parts : [2, 1, 0];
-				dParts = dIn.split('/');
+				dParts = dIn.split(dateSeparator);
 				return new Date(dParts[2], Number(dParts[0])-1, Number(dParts[1]));
 		}
 	};
@@ -52,17 +53,17 @@ jQuery.datePicker = function()
 		var dY = d.getFullYear();
 		var dM = _zeroPad(d.getMonth()+1);
 		var dD = _zeroPad(d.getDate());
-		switch (dateFormat.toLowerCase()) {
-			case 'yyyy-mm-dd':
-				return dY + '-' + dM + '-' + dD;
-			case 'dd/mm/yyyy':
-				return dD + '/' + dM + '/' + dY;
-			case 'mm/dd/yyyy':
+		switch (dateFormat) {
+			case 'ymd':
+				return dY + dateSeparator + dM + dateSeparator + dD;
+			case 'dmy':
+				return dD + dateSeparator + dM + dateSeparator + dY;
+			case 'mdy':
 			default:
-				return dM + '/' + dD + '/' + dY;
+				return dM + dateSeparator + dD + dateSeparator + dY;
 		}
 	};
-	
+
 	var _getCalendarDiv = function(dIn)
 	{
 		var today = new Date();
@@ -74,20 +75,20 @@ jQuery.datePicker = function()
 			d = dIn;
 			d.setDate(1);
 		}
-		// check that date is within allowed limits:		
+		// check that date is within allowed limits:
 		if ((d.getMonth() < _firstDate.getMonth() && d.getFullYear() == _firstDate.getFullYear()) || d.getFullYear() < _firstDate.getFullYear()) {
 			d = new Date(_firstDate.getFullYear(), _firstDate.getMonth(), 1);;
 		} else if ((d.getMonth() > _lastDate.getMonth() && d.getFullYear() == _lastDate.getFullYear()) || d.getFullYear() > _lastDate.getFullYear()) {
 			d = new Date(_lastDate.getFullYear(), _lastDate.getMonth(), 1);;
 		}
-		
+
 		var jCalDiv = jQuery("<div>").attr('class','popup-calendar');
 		var firstMonth = true;
 		var firstDate = _firstDate.getDate();
-		
+
 		// create prev and next links
 		var prevLinkDiv = '';
-		if (!(d.getMonth() == _firstDate.getMonth() && d.getFullYear() == _firstDate.getFullYear())) { 
+		if (!(d.getMonth() == _firstDate.getMonth() && d.getFullYear() == _firstDate.getFullYear())) {
 			// not in first display month so show a previous link
 			firstMonth = false;
 			var lastMonth = new Date(d.getFullYear(), d.getMonth()-1, 1);
@@ -98,27 +99,27 @@ jQuery.datePicker = function()
 			});
 			prevLinkDiv = jQuery("<div>").attr('class','link-prev').html('&lt;').append(prevLink);
 		}
-		
+
 		var finalMonth = true;
 		var lastDate = _lastDate.getDate();
 		nextLinkDiv = '';
-		if (!(d.getMonth() == _lastDate.getMonth() && d.getFullYear() == _lastDate.getFullYear())) { 
+		if (!(d.getMonth() == _lastDate.getMonth() && d.getFullYear() == _lastDate.getFullYear())) {
 			// in the last month - no next link
 			finalMonth = false;
 			var nextMonth = new Date(d.getFullYear(), d.getMonth()+1, 1);
-			var nextLink = jQuery("<a>").href('javascript:;').html(navLinks.n).click(function() 
+			var nextLink = jQuery("<a>").href('javascript:;').html(navLinks.n).click(function()
 			{
 				jQuery.datePicker.changeMonth(nextMonth, this);
 				return false;
 			});
 			nextLinkDiv = jQuery("<div>").attr('class','link-next').html('&gt;').prepend(nextLink);
 		}
-		
+
 		var closeLink = jQuery("<a>").attr('href','javascript:;').html(navLinks.c).click(function()
 		{
 			jQuery.datePicker.closeCalendar();
 		});
-		
+
 		jCalDiv.append(
 			jQuery("<div>").attr('class', 'link-close').append(closeLink),
 			jQuery("<h3>").html(months[d.getMonth()] + ' ' + d.getFullYear())
@@ -130,22 +131,22 @@ jQuery.datePicker = function()
 				jQuery("<th>").attr({'scope':'col', 'abbr':day, 'title':day}).html(day.substr(0, 1))
 			);
 		}
-		
+
 		var tBody = jQuery("<tbody>");
-		
+
 		var lastDay = (new Date(d.getFullYear(), d.getMonth()+1, 0)).getDate();
 		var curDay = _firstDayOfWeek - d.getDay();
 		if (curDay > 0) curDay -= 7;
-		
+
 		var todayDate = (new Date()).getDate();
 		var thisMonth = d.getMonth() == today.getMonth() && d.getFullYear() == today.getFullYear();
-		
+
 		var w = 0;
 		while (w++<6) {
 			var thisRow = jQuery("<tr>");
 			for (var i=0; i<7; i++) {
 				var atts = {};
-				
+
 				if (curDay < 0 || curDay >= lastDay) {
 					dayStr = ' ';
 				} else if (firstMonth && curDay < firstDate-1) {
@@ -166,7 +167,7 @@ jQuery.datePicker = function()
 						jQuery(dayStr).attr('class','selected');
 					}
 				}
-				
+
 				if (thisMonth && curDay+1 == todayDate) {
 					atts['class'] = 'today';
 				}
@@ -175,14 +176,14 @@ jQuery.datePicker = function()
 			}
 			tBody.append(thisRow);
 		}
-		
+
 		jCalDiv.append(
 			jQuery("<table>").attr('cellspacing',2).append("<thead>")
 			.find("thead").append(headRow).parent().append(tBody.children())
 		).append(prevLinkDiv).append(nextLinkDiv);
 
-		if (jQuery.browser.msie) { 
-			
+		if (jQuery.browser.msie) {
+
 			// we put a styled iframe behind the calendar so HTML SELECT elements don't show through
 			var iframe = [	'<iframe class="bgiframe" tabindex="-1" ',
 		 					'style="display:block; position:absolute;',
@@ -215,7 +216,7 @@ jQuery.datePicker = function()
 		jQuery('div.popup-calendar a', _openCal).unbind();
 		jQuery('div.popup-calendar', _openCal).empty();
 		jQuery('div.popup-calendar', _openCal).css({'display':'none'});
-		
+
 		/*
 		if (jQuery.browser.msie) {
 			_openCal.unbind('keypress', _handleKeys);
@@ -244,7 +245,7 @@ jQuery.datePicker = function()
 			_closeDatePicker();
 		}
 	};
-	
+
 	return {
 		getChooseDateStr: function()
 		{
@@ -286,7 +287,7 @@ jQuery.datePicker = function()
 		},
 		changeMonth: function(d, e)
 		{
-			
+
 			_draw(_getCalendarDiv(d));
 		},
 		selectDate: function(d, ele)
@@ -309,11 +310,12 @@ jQuery.datePicker = function()
 		{
 			return i._inited != undefined;
 		},
-		setDateFormat: function(format)
+		setDateFormat: function(format,separator)
 		{
 			// set's the format that selected dates are returned in.
-			// options are 'dd/mm/yyyy' (european), 'mm/dd/yyyy' (americian) and 'yyyy-mm-dd' (unicode)
-			dateFormat = format;
+			// options are 'dmy' (european), 'mdy' (americian) and 'ymd' (unicode)
+			dateFormat = format.toLowerCase();
+			dateSeparator = separator?separator:"/";
 		},
 		/**
 		* Function: setLanguageStrings
@@ -340,7 +342,7 @@ jQuery.datePicker = function()
 		* i			-	The id of the INPUT element this date window is for
 		* w			-	The date window - an object containing startDate and endDate properties
 		*				each in the current format as set in a call to setDateFormat (or in the
-		*				default format dd/mm/yyyy if setDateFormat hasn't been called).
+		*				default format dmy if setDateFormat hasn't been called).
 		*				e.g. {startDate:'01/03/2006', endDate:'11/04/2006}
 		**/
 		setDateWindow: function(i, w)
@@ -393,7 +395,7 @@ jQuery.fn.datePicker = function(a)
 			jQuery.datePicker.setInited(this);
 		}
 	});
-	
+
 };
 /*
 <!-- Generated calendar HTML looks like this - style with CSS -->
