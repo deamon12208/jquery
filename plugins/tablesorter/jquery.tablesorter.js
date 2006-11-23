@@ -197,7 +197,8 @@ jQuery.fn.tableSorter = function(o) {
 			var oSampleTableRow = oTable.rows[1];
 			/** adjust header to the sample rows */
 			for(var i=0; i < COLUMN_HEADER_LENGTH; i++) {
-				jQuery(columnsHeader.cells[i]).css("width",oSampleTableRow.cells[i].clientWidth + "px");
+				if(oSampleTableRow.cells[i])
+					jQuery(columnsHeader.cells[i]).css("width",oSampleTableRow.cells[i].clientWidth + "px");
 			}
 		}
 		
@@ -422,7 +423,7 @@ jQuery.tableSorter = {
 			return jQuery.tableSorter.params;
 		},
 		getElementText: function(o,type,index) {
-			
+			if(!o) return "";
 			var defaults = jQuery.tableSorter.utils.getParams();
 			var elementText = "";
 			
@@ -556,7 +557,7 @@ jQuery.tableSorter.parsers.currency = {
 	sorter: jQuery.tableSorter.sorters.numeric
 };
 jQuery.tableSorter.parsers.integer = {
-	id: 'int',
+	id: 'integer',
 	is: function(s) { 
 		return s.match(new RegExp(/^\b\d+\d\bjQuery/));
 	},
@@ -567,7 +568,7 @@ jQuery.tableSorter.parsers.integer = {
 	sorter: jQuery.tableSorter.sorters.numeric
 };
 jQuery.tableSorter.parsers.floating = {
-	id: 'float',
+	id: 'floating',
 	is: function(s) { 
 		return s.match(new RegExp(/(\+|-)?[0-9]+\.[0-9]+((E|e)(\+|-)?[0-9]+)?/));
 	},
