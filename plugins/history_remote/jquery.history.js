@@ -1,5 +1,6 @@
 /**
- * History/Remote 0.1 - jQuery plugin
+ * History/Remote 0.1 - jQuery plugin for enabling history and bookmarking in Ajax driven
+ *                      applications in an unobtrusive and accessible manner ("Hijax").
  *
  * http://stilbuero.de/jquery/history/
  *
@@ -12,7 +13,20 @@
 
 (function($) { // simulate block scope
 
-$.history = new function() {
+/**
+ * Initialize the history event listener. Subsequent calls will not result in additional listeners.
+ * Should be called soonest when the DOM is ready, because it will add an iframe in IE to enable
+ * history support.
+ *
+ * @example $.ajaxHistory.initialize();
+ *
+ * @type undefined
+ *
+ * @name $.ajaxHistory.initialize()
+ * @cat Plugins/Remote
+ * @author Klaus Hartl/klaus.hartl@stilbuero.de
+ */
+$.ajaxHistory = new function() {
 
     var _currentHash = location.hash;
     var _intervalId = null;
@@ -35,7 +49,7 @@ $.history = new function() {
             iframe.location.hash = _currentHash.replace('#', '');
         });
 
-        this.setHash = function(hash) {
+        this.update = function(hash) {
             _currentHash = hash;
             var iframe = _historyIframe.contentWindow.document;
             iframe.open();
@@ -61,7 +75,7 @@ $.history = new function() {
 
     } else if ($.browser.mozilla || $.browser.opera) {
 
-        this.setHash = function(hash) {
+        this.update = function(hash) {
             _currentHash = hash;
         };
 
@@ -96,7 +110,7 @@ $.history = new function() {
             isFirst = false;
         };
 
-        this.setHash = function(hash) {
+        this.update = function(hash) {
             _currentHash = hash;
             _addHistory(_currentHash);
         };
@@ -130,57 +144,40 @@ $.history = new function() {
 
     }
 
-    this.observe = function() {
+    this.initialize = function() {
         // look for hash in current URL (not Safari)
         if (location.hash && typeof _addHistory == 'undefined') {
             $('a.remote[@href$="' + location.hash + '"]').click();
         }
         // start observer
         if (_observeHistory && _intervalId == null) {
-            _intervalId = setInterval(_observeHistory, 200);
+            _intervalId = setInterval(_observeHistory, 200); // Safari needs at least 200 ms
         }
     };
 
 };
 
 /**
- * Register a link that points to a fragment on the same site for history observation.
- * That will fix back and forward button for click events that are attached to that link
- * while maintaining bookmarkability.
+ * Implement Ajax driven links in a completely unobtrusive and accessible manner (also known as "Hijax")
+ * with support for important usability issues like the web browser's back and forward button and bookmarking.
  *
- * @example $('a').history();
- * @desc Register a link to be observed for history.
+ * The link's href attribute is altered to a hash, such as "#remote-1", so that it updates the browser's
+ * current URL with this anchor hash, whereas the former value of the attribute is used to load content via
+ * XmlHttpRequest and update the specified element. If no target element is found, a new div element will be
+ * created and appended to the body to load the content into. The link triggers a history event on click to
+ * maintain the browsers history.
  *
- * @type jQuery
- *
- * @name history
- * @cat Plugins/History
- * @author Klaus Hartl/klaus.hartl@stilbuero.de
- */
-$.fn.history = function() {
-    return this.click(function(e) {
-        var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
-        if (trueClick) { // add to history only if true click occured, not a triggered click
-            $.history.setHash(this.hash);
-        }
-    });
-};
-
-/**
- * Hijax links and register them for history observation. The link's href attribute is altered to an hash
- * and a click event handler is attached to the link. This handler loads content from the URL the
- * link was pointing to before altering the href attribute and displays it in a given element.
- *
- * This solution maintains bookmarkability, fixes back and forward button and is totally
- * unobtrusive, i.e. guarantees accessibility in case of JavaScript disabled.
+ * jQuery's Ajax implementation adds a custom request header of the form "X-Requested-With: XmlHttpRequest"
+ * to any Ajax request so that the called page can distinguish between a standard and a XmlHttpRequest.
  *
  * @example $('a.remote').remote('#output');
- * @before <a href="/foo/bar.html">Bar</a>
- * @result <a href="#remote-1">Bar</a>
- * @desc Hijax all links with the class "remote" and let them load content from the URL of it's initial
- *       href attribute via XHR into an element with the id 'output'.
+ * @before <a class="remote" href="/path/to/content.html">Update</a>
+ * @result <a class="remote" href="#remote-1">Update</a>
+ * @desc Alter a link of the class "remote" to an Ajax-enhanced link and let it load content from "/path/to/content.html" via XmlHttpRequest
+ *       into an element with the id "output".
  *
- * @param String expr This function accepts a string containing a CSS selector or basic XPath.
+ * @param String expr A string containing a CSS selector or basic XPath specifying the element to load
+ *                    content into via XmlHttpRequest.
  * @type jQuery
  *
  * @name remote
@@ -189,20 +186,25 @@ $.fn.history = function() {
  */
 
 /**
- * Hijax links and register them for history observation. The link's href attribute is altered to an hash
- * and a click event handler is attached to the link. This handler loads content from the URL the
- * link was pointing to before altering the href attribute and displays it in a given element.
+ * Implement Ajax driven links in a completely unobtrusive and accessible manner (also known as "Hijax")
+ * with support for important usability issues like the web browser's back and forward button and bookmarking.
  *
- * This solution maintains bookmarkability, fixes back and forward button and is totally
- * unobtrusive, i.e. guarantees accessibility in case of JavaScript disabled.
+ * The link's href attribute is altered to a hash, such as "#remote-1", so that it updates the browser's
+ * current URL with this anchor hash, whereas the former value of the attribute is used to load content via
+ * XmlHttpRequest and update the specified element. If no target element is found, a new div element will be
+ * created and appended to the body to load the content into. The link triggers a history event on click to
+ * maintain the browsers history.
  *
- * @example $('a.remote').remote(  $("#foo")[0] );
- * @before <a href="/foo/bar.html">Bar</a>
- * @result <a href="#remote-1">Bar</a>
- * @desc Hijax all links with the class "remote" and let them load content from the URL of it's initial
- *       href attribute via XHR into the element saved in $("#foo")[0].
+ * jQuery's Ajax implementation adds a custom request header of the form "X-Requested-With: XmlHttpRequest"
+ * to any Ajax request so that the called page can distinguish between a standard and a XmlHttpRequest.
  *
- * @param DOMElement elem A DOM element to load the content into.
+ * @example $('a.remote').remote( $('#output > div')[0] );
+ * @before <a class="remote" href="/path/to/content.html">Update</a>
+ * @result <a class="remote" href="#remote-1">Update</a>
+ * @desc Alter a link of the class "remote" to an Ajax-enhanced link and let it load content from
+ *       "/path/to/content.html" via XmlHttpRequest into an element.
+ *
+ * @param Element elem A DOM element to load content into via XmlHttpRequest.
  * @type jQuery
  *
  * @name remote
@@ -220,10 +222,20 @@ $.fn.remote = function(output) {
             var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
             target.load(remoteURL, function() {
                 if (trueClick) {
-                    $.history.setHash(hash); // setting hash in callback is required to make it work in Safari
+                    $.ajaxHistory.update(hash); // setting hash in callback is required to make it work in Safari
                 }
             });
         });
+    });
+};
+
+// Internal, used to enable history for the Tabs plugin.
+$.fn.history = function() {
+    return this.click(function(e) {
+        var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
+        if (trueClick) { // add to history only if true click occured, not a triggered click
+            $.ajaxHistory.update(this.hash);
+        }
     });
 };
 
