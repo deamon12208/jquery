@@ -555,7 +555,7 @@ jQuery.tableSorter.parsers.currency = {
 	filter: 'numeric',
 	sorter: jQuery.tableSorter.sorters.numeric
 };
-jQuery.tableSorter.parsers.int = {
+jQuery.tableSorter.parsers.integer = {
 	id: 'int',
 	is: function(s) { 
 		return s.match(new RegExp(/^\b\d+\d\bjQuery/));
@@ -566,7 +566,7 @@ jQuery.tableSorter.parsers.int = {
 	filter: 'numeric',
 	sorter: jQuery.tableSorter.sorters.numeric
 };
-jQuery.tableSorter.parsers.float = {
+jQuery.tableSorter.parsers.floating = {
 	id: 'float',
 	is: function(s) { 
 		return s.match(new RegExp(/(\+|-)?[0-9]+\.[0-9]+((E|e)(\+|-)?[0-9]+)?/));
@@ -612,7 +612,7 @@ jQuery.tableSorter.parsers.url = {
 jQuery.tableSorter.parsers.isoDate = {
 	id: 'isoDate',
 	is: function(s) {
-		return s.match(new RegExp(/^\d{4}[/-]\d{1,2}[/-]\d{1,2}$/));
+		return s.match(new RegExp(/^\d{4}[\/-]\d{1,2}[\/-]\d{1,2}$/));
 	},
 	format: function(s) {
 		return parseFloat(new Date(s.replace(new RegExp(/-/g),'/')).getTime());
@@ -641,10 +641,10 @@ jQuery.tableSorter.parsers.shortDate = {
 		var defaults = jQuery.tableSorter.utils.getParams();
 		if(defaults.dateFormat == "mm/dd/yyyy" || defaults.dateFormat == "mm-dd-yyyy") {
 			/** reformat the string in ISO format */
-			s = s.replace(new RegExp(/(\d{1,2})[/-](\d{1,2})[/-](\d{4})/), '$3/$1/$2');
+			s = s.replace(new RegExp(/(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})/), '$3/$1/$2');
 		} else if(defaults.dateFormat == "dd/mm/yyyy" || defaults.dateFormat == "dd-mm-yyyy") {
 			/** reformat the string in ISO format */
-			s = s.replace(new RegExp(/(\d{1,2})[/-](\d{1,2})[/-](\d{4})/), '$3/$2/$1');
+			s = s.replace(new RegExp(/(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})/), '$3/$2/$1');
 		}
 		return parseFloat((new Date(s)).getTime());
 	},
@@ -668,11 +668,11 @@ jQuery.tableSorter.parsers.checkbox = {
         return s.toLowerCase().match(/<input[^>]*checkbox[^>]*/i);;
     },
     format: function(s) {
-        var int = 0;
+        var integer = 0;
         if(s.toLowerCase().match(/<input[^>]*checked*/i)) {
-        	int = 1;
+        	integer = 1;
         }
-        return int;
+        return integer;
     },
     filter: 'checkbox',
     sorter: jQuery.tableSorter.sorters.numeric
@@ -680,8 +680,8 @@ jQuery.tableSorter.parsers.checkbox = {
 
 /** add parsers */
 jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.currency);
-jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.int);
-jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.float);
+jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.integer);
+jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.floating);
 jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.isoDate);
 jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.shortDate);
 jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.usLongDate);
