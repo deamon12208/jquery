@@ -70,32 +70,23 @@
  */
 (function($) {
 	
-	// define variables and functions
-	var
-	
 	// the tooltip element
-	helper,
-	
-	// it's title part
-	tTitle,
-	
-	// it's body part
-	tBody,
-	
-	// it's url part
-	tUrl,
-	
-	// the current tooltipped element
-	current,
-	
-	// the title of the current element, used for restoring
-	oldTitle,
-	
-	// timeout id for delayed tooltips
-	tID,
+	var helper,
+		// it's title part
+		tTitle,
+		// it's body part
+		tBody,
+		// it's url part
+		tUrl,
+		// the current tooltipped element
+		current,
+		// the title of the current element, used for restoring
+		oldTitle,
+		// timeout id for delayed tooltips
+		tID;
 	
 	// the public plugin method
-	plugin = $.fn.Tooltip = function(settings)	{
+	$.fn.Tooltip = function(settings) {
 		// setup configuration
 		// TODO: allow multiple arguments to extend, see bug #344
 		settings = $.extend($.extend({}, arguments.callee.defaults), settings || {});
@@ -128,10 +119,10 @@
 			.bind("mouseover", save)
 			.bind(settings.event, handle);
 		return this;
-	},
+	};
 	
 	// main event handler to start showing tooltips
-	handle = function(event) {
+	function handle(event) {
 		// show helper, either with timeout or on instant
 		if( this.tSettings.delay )
 			tID = setTimeout(show, this.tSettings.delay);
@@ -147,10 +138,10 @@
 		
 		// hide the helper when the mouse moves out of the element
 		$(this).bind('mouseout', hide);
-	},
+	}
 	
 	// save elements title before the tooltip is displayed
-	save = function() {
+	function save() {
 		// if this is the current source, or it has no title (occurs with click event), stop
 		if(this == current || !this.title)
 			return;
@@ -206,20 +197,20 @@
 				}
 			});
 		}
-	},
+	}
 	
 	// delete timeout and show helper
-	show = function() {
+	function show() {
 		tID = null;
 		helper.show();
-	},
+	}
 	
 	/**
 	 * callback for mousemove
 	 * updates the helper position
 	 * removes itself when no current element
 	 */
-	update = function(event)	{
+	function update(event)	{
 		// if no current element is available, remove this listener
 		if( current == null ) {
 			$('body').unbind('mousemove', update);
@@ -237,10 +228,10 @@
 			top: pos('Y') + 15 + 'px',
 			left: pos('X') + 15 + 'px'
 		});
-	},
+	}
 	
 	// hide helper and restore added classes and the title
-	hide = function() {
+	function hide() {
 		// clear timeout if possible
 		if(tID)
 			clearTimeout(tID);
@@ -263,10 +254,10 @@
 				$(this).css({'filter': '', backgroundImage: ''});
 			});
 		}
-	};
+	}
 	
 	// define global defaults, editable by client
-	plugin.defaults = {
+	$.fn.Tooltip.defaults = {
 		delay: 250,
 		event: "mouseover",
 		track: false,
