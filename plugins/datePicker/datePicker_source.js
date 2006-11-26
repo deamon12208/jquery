@@ -6,8 +6,8 @@
  * Licensed under the MIT License:
  *   http://www.opensource.org/licenses/mit-license.php
  *
- * $LastChangedDate: 2006-11-23 23:34:17 +0000 (Thu, 23 Nov 2006) $
- * $Rev: 31 $
+ * $LastChangedDate: 2006-11-26 17:52:59 +0000 (Sun, 26 Nov 2006) $
+ * $Rev: 33 $
  */
 
 jQuery.datePicker = function()
@@ -126,9 +126,10 @@ jQuery.datePicker = function()
 		);
 		var headRow = jQuery("<tr>");
 		for (var i=_firstDayOfWeek; i<_firstDayOfWeek+7; i++) {
-			var day = days[i%7];
+			var weekday = i%7;
+			var day = days[weekday];
 			headRow.append(
-				jQuery("<th>").attr({'scope':'col', 'abbr':day, 'title':day}).html(day.substr(0, 1))
+				jQuery("<th>").attr({'scope':'col', 'abbr':day, 'title':day, 'class':(weekday == 0 || weekday == 6 ? 'weekend' : 'weekday')}).html(day.substr(0, 1))
 			);
 		}
 
@@ -145,16 +146,17 @@ jQuery.datePicker = function()
 		while (w++<6) {
 			var thisRow = jQuery("<tr>");
 			for (var i=0; i<7; i++) {
-				var atts = {};
+				var weekday = (_firstDayOfWeek + i) % 7;
+				var atts = {'class':(weekday == 0 || weekday == 6 ? 'weekend ' : 'weekday ')};
 
 				if (curDay < 0 || curDay >= lastDay) {
 					dayStr = ' ';
 				} else if (firstMonth && curDay < firstDate-1) {
 					dayStr = curDay+1;
-					atts['class'] = 'inactive';
+					atts['class'] += 'inactive';
 				} else if (finalMonth && curDay > lastDate-1) {
 					dayStr = curDay+1;
-					atts['class'] = 'inactive';
+					atts['class'] += 'inactive';
 				} else {
 					d.setDate(curDay+1);
 					var dStr = _dateToStr(d);
@@ -169,7 +171,7 @@ jQuery.datePicker = function()
 				}
 
 				if (thisMonth && curDay+1 == todayDate) {
-					atts['class'] = 'today';
+					atts['class'] += 'today';
 				}
 				thisRow.append(jQuery("<td>").attr(atts).append(dayStr));
 				curDay++;
@@ -413,60 +415,60 @@ jQuery.fn.datePicker = function(a)
 	<table cellspacing="2">
 		<thead>
 			<tr>
-				<th scope="col" abbr="Monday" title="Monday">M</th>
-				<th scope="col" abbr="Tuesday" title="Tuesday">T</th>
-				<th scope="col" abbr="Wednesday" title="Wednesday">W</th>
-				<th scope="col" abbr="Thursday" title="Thursday">T</th>
-				<th scope="col" abbr="Friday" title="Friday">F</th>
-				<th scope="col" abbr="Saturday" title="Saturday">S</th>
-				<th scope="col" abbr="Sunday" title="Sunday">S</th>
+				<th scope="col" abbr="Monday" title="Monday" class="weekday">M</th>
+				<th scope="col" abbr="Tuesday" title="Tuesday" class="weekday">T</th>
+				<th scope="col" abbr="Wednesday" title="Wednesday" class="weekday">W</th>
+				<th scope="col" abbr="Thursday" title="Thursday" class="weekday">T</th>
+				<th scope="col" abbr="Friday" title="Friday" class="weekday">F</th>
+				<th scope="col" abbr="Saturday" title="Saturday" class="weekday">S</th>
+				<th scope="col" abbr="Sunday" title="Sunday" class="weekday">S</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-				<td>&nbsp;</td>
-				<td>&nbsp;</td>
-				<td>&nbsp;</td>
-				<td class="inactive">1</td>
-				<td class="inactive">2</td>
-				<td class="inactive">3</td>
-				<td class="inactive">4</td>
+				<td class="weekday">&nbsp;</td>
+				<td class="weekday">&nbsp;</td>
+				<td class="weekday">&nbsp;</td>
+				<td class="inactive weekday">1</td>
+				<td class="inactive weekday">2</td>
+				<td class="inactive weekend">3</td>
+				<td class="inactive weekend">4</td>
 			</tr>
 			<tr>
-				<td class="inactive">5</td>
-				<td class="inactive">6</td>
-				<td class="inactive">7</td>
-				<td class="today"><a href="#">8</a></td>
-				<td><a href="#">9</a></td>
-				<td><a href="#">10</a></td>
-				<td><a href="#">11</a></td>
+				<td class="inactive weekday">5</td>
+				<td class="inactive weekday">6</td>
+				<td class="inactive weekday">7</td>
+				<td class="today weekday"><a href="#">8</a></td>
+				<td class="weekday"><a href="#">9</a></td>
+				<td class="weekend"><a href="#">10</a></td>
+				<td class="weekend"><a href="#">11</a></td>
 			</tr>
 			<tr>
-				<td><a href="#">12</a></td>
-				<td><a href="#">13</a></td>
-				<td><a href="#">14</a></td>
-				<td><a href="#">15</a></td>
-				<td><a href="#">16</a></td>
-				<td><a href="#">17</a></td>
-				<td><a href="#" class="selected">18</a></td>
+				<td class="weekday"><a href="#">12</a></td>
+				<td class="weekday"><a href="#">13</a></td>
+				<td class="weekday"><a href="#">14</a></td>
+				<td class="weekday"><a href="#">15</a></td>
+				<td class="weekday"><a href="#">16</a></td>
+				<td class="weekend"><a href="#">17</a></td>
+				<td class="weekend"><a href="#" class="selected">18</a></td>
 			</tr>
 			<tr>
-				<td><a href="#">19</a></td>
-				<td><a href="#">20</a></td>
-				<td><a href="#">21</a></td>
-				<td><a href="#">22</a></td>
-				<td><a href="#">23</a></td>
-				<td><a href="#">24</a></td>
-				<td><a href="#">25</a></td>
+				<td class="weekday"><a href="#">19</a></td>
+				<td class="weekday"><a href="#">20</a></td>
+				<td class="weekday"><a href="#">21</a></td>
+				<td class="weekday"><a href="#">22</a></td>
+				<td class="weekday"><a href="#">23</a></td>
+				<td class="weekend"><a href="#">24</a></td>
+				<td class="weekend"><a href="#">25</a></td>
 			</tr>
 			<tr>
-				<td><a href="#">26</a></td>
-				<td><a href="#">27</a></td>
-				<td><a href="#">28</a></td>
-				<td><a href="#">29</a></td>
-				<td><a href="#">30</a></td>
-				<td>&nbsp;</td>
-				<td>&nbsp;</td>
+				<td class="weekday"><a href="#">26</a></td>
+				<td class="weekday"><a href="#">27</a></td>
+				<td class="weekday"><a href="#">28</a></td>
+				<td class="weekday"><a href="#">29</a></td>
+				<td class="weekday"><a href="#">30</a></td>
+				<td class="weekend">&nbsp;</td>
+				<td class="weekend">&nbsp;</td>
 			</tr>
 		</tbody>
 	</table>

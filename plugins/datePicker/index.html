@@ -68,7 +68,7 @@ function init()
 	<p>No validation is performed on the text input when the form is submitted and it is presumed that the server processing the form is expecting dates in the format you specify.</p>
 	
 	<h2>Version</h2>
-	<p>r31 - released 23rd November [<a href="#changelog">changelog</a>]</p>
+	<p>r33 - released 26th November [<a href="#changelog">changelog</a>]</p>
 	
 	<h2>Example</h2>
 	<form action="#" method="post">
@@ -126,6 +126,8 @@ $.datePicker.setLanguageStrings(
 	
 	<h2 id="changelog">Changelog</h2>
 	<ul>
+		<li>26th November 2006 - fix so that the weekend styling works when firstDayOfWeek != 0 (thanks to Nicko Cadell for pointing out the careless error) [r33]</li>
+		<li>25th November 2006 - change to add styles for weekend and weekday to the table [r32]</li>
 		<li>23rd November 2006 - change to allow you to click directly on the input field by passing inputClick:true when you create your datePickers (thanks to <a href="http://www.texotela.co.uk/">Sam Collett</a>) [r31]</li>
 		<li>23rd November 2006 - changes to the code to allow different seperators to specify different date formats (many thanks to Stefan Flick) NOTE - if you are setting a date format you will need to change your calling code [r30]</li>
 		<li>23rd November 2006 - removed the styles to make the calendar stay above check boxes from the stylesheet and created them in the JS (to avoid validation problems with the CSS) [r29]</li>
@@ -163,7 +165,6 @@ $.datePicker.setLanguageStrings(
 	<h2>Credits</h2>
 	<ul style="padding-bottom: 30px;">
 		<li><a href="http://jquery.com">jQuery</a></li>
-		<li><a href="http://mg.to/2006/02/27/easy-dom-creation-for-jquery-and-prototype">DOM element creator</a></li>
 		<li>Dean Edward's <a href="http://dean.edwards.name/packer/">packer</a> for compressing the code</li>
 		<li><a href="http://www.famfamfam.com/lab/icons/silk/preview.php">FamFamFam</a> for the icon</li>
 	</ul>

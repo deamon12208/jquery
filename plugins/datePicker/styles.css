@@ -109,6 +109,9 @@ div.popup-calendar table td.inactive {
 	color: #aaa;
 	padding: 1px 0 0;
 }
+div.popup-calendar table th.weekend, div.popup-calendar table td.weekend {
+	background: #f6f6f6;
+}
 div.popup-calendar table td a {
 	display: block;
 	border: 1px solid #eee;
