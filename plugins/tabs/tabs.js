@@ -329,14 +329,14 @@ $.fn.tabs = function(initial, settings) {
                             showAnim = settings.fxShow;
                             showSpeed = settings.fxShowSpeed || settings.fxSpeed;
                         } else {
-                            showAnim['left'] = 'show';
+                            showAnim['opacity'] = 'show';
                             showSpeed = settings.bookmarkable ? 50 : 1; // as little as 50 prevents browser scroll to the tab
                         }
                         if (settings.fxHide) {
                             hideAnim = settings.fxHide;
                             hideSpeed = settings.fxHideSpeed || settings.fxSpeed;
                         } else {
-                            hideAnim['left'] = 'hide';
+                            hideAnim['opacity'] = 'hide';
                             hideSpeed = settings.bookmarkable ? 50 : 1; // as little as 50 prevents browser scroll to the tab
                         }
                     }
