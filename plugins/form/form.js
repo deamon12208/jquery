@@ -1,3 +1,12 @@
+/*
+ * jQuery form plugin
+ *
+ * Dual licensed under the MIT and GPL licenses:
+ *   http://www.opensource.org/licenses/mit-license.php
+ *   http://www.gnu.org/licenses/gpl.html
+ *
+ */
+
 //
 // The :input selection expression was added in jQuery v1.0.2.
 // Add it automatically here if it doesn't exist
