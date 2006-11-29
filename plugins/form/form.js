@@ -358,6 +358,7 @@ jQuery.fn.formToArray = function(semantic) {
     return a;
 };
 
+
 /**
  * Serializes form data into a 'submittable' string. This method will return a string
  * in the format: name1=value1&name2=value2
@@ -382,3 +383,147 @@ jQuery.fn.formSerialize = function(semantic) {
     //hand off to jQuery.param for proper encoding
     return jQuery.param(this.formToArray(semantic));
 };
+
+
+/**
+ * Serializes all field elements in the jQuery object into a query string. 
+ * This method will return a string in the format: name1=value1&name2=value2
+ *
+ * The successful argument controls whether or not serialization is limited to
+ * 'successful' controls (per http://www.w3.org/TR/html4/interact/forms.html#successful-controls).
+ * The default value of the successful argument is true.
+ *
+ * @example var data = $("input").formSerialize();
+ * @desc Collect the data from all successful input elements into a query string
+ *
+ * @example var data = $(":radio").formSerialize();
+ * @desc Collect the data from all successful radio input elements into a query string
+ *
+ * @example var data = $("#myForm :checkbox").formSerialize();
+ * @desc Collect the data from all successful checkbox input elements in myForm into a query string
+ *
+ * @example var data = $("#myForm :checkbox").formSerialize(false);
+ * @desc Collect the data from all checkbox elements in myForm (even the unchecked ones) into a query string
+ *
+ * @example var data = $(":input").formSerialize();
+ * @desc Collect the data from all successful input, select, textarea and button elements into a query string
+ *
+ * @name fieldSerialize
+ * @param successful true if only successful controls should be serialized (default is true)
+ * @type String
+ * @cat Plugins/Form
+ */
+jQuery.fn.fieldSerialize = function(successful) {
+    var a = [];
+    this.each(function() {
+        if (!this.name) return;
+        var val = jQuery.fieldValue(this, successful);
+        if (val && val.constructor == Array) {
+            for (var i=0; i < val.length; i++)
+                a.push({name: this.name, value: val[i]});
+        }
+        else if (val !== null && typeof val != 'undefined')
+            a.push({name: this.name, value: val});
+    });
+    //hand off to jQuery.param for proper encoding
+    return jQuery.param(a);
+};
+
+
+/**
+ * Returns the value of the field element in the jQuery object.  If there is more than one field element
+ * in the jQuery object the value of the first successful one is returned.
+ *
+ * The successful argument controls whether or not the field element must be 'successful'
+ * (per http://www.w3.org/TR/html4/interact/forms.html#successful-controls).
+ * The default value of the successful argument is true.  If this value is false then
+ * the value of the first field element in the jQuery object is returned.
+ *
+ * Note: The fieldValue returned for a select-multiple element or for a checkbox input will
+ *       always be an array.
+ *
+ * @example var data = $("#myPasswordElement").formValue();
+ * @desc Gets the current value of the myPasswordElement element
+ *
+ * @example var data = $("#myForm :input").formValue();
+ * @desc Get the value of the first successful control in the jQuery object.
+ *
+ * @example var data = $("#myForm :checkbox").formValue();
+ * @desc Get the array of values for the first set of successful checkbox controls in the jQuery object.
+ *
+ * @example var data = $("#mySingleSelect").formValue();
+ * @desc Get the value of the select control
+ *
+ * @example var data = $("#myMultiSelect").formValue();
+ * @desc Get the array of selected values for the select-multiple control
+ *
+ * @name fieldValue
+ * @param successful true if value returned must be for a successful controls (default is true)
+ * @type String
+ * @type Array<String>
+ * @cat Plugins/Form
+ */
+jQuery.fn.fieldValue = function(successful) {
+    var cbVal = [], cbName = null;
+
+    // loop until we find a value
+    for (var i = 0; i < this.length; i++) {
+        var el = this[i];
+        if (el.type == 'checkbox') {
+            if (!cbName) cbName = el.name || 'unnamed';
+            if (cbName != el.name) // return if we hit a checkbox with a different name
+                return cbVal;
+            var val = jQuery.fieldValue(el, successful);
+            if (val !== null && typeof val != 'undefined') 
+                cbVal.push(val);
+        }
+        else {
+            var val = jQuery.fieldValue(el, successful);
+            if (val !== null && typeof val != 'undefined') 
+                return val;
+        }
+    }
+    return cbVal;
+};
+
+/**
+ * Returns the value of the field element.
+ *
+ * The successful argument controls whether or not the field element must be 'successful'
+ * (per http://www.w3.org/TR/html4/interact/forms.html#successful-controls).
+ * The default value of the successful argument is true.  If the given element is not
+ * successful and the successful arg is not false then the returned value will be null.
+ *
+ * Note: The fieldValue returned for a select-multiple element will always be an array.
+ *
+ * @example var data = jQuery.fieldValue($("#myPasswordElement")[0]);
+ * @desc Gets the current value of the myPasswordElement element
+ *
+ * @name fieldValue
+ * @param el the DOM element for which the value will be returned
+ * @param successful true if value returned must be for a successful controls (default is true)
+ * @type String
+ * @type Array<String>
+ * @cat Plugins/Form
+ */
+jQuery.fieldValue = function(el, successful) {
+    var n = el.name;
+    var t = el.type;
+    if (typeof successful == 'undefined') successful = true;
+
+    if (successful && ( !n || el.disabled || t == 'reset' ||
+        (t == 'checkbox' || t == 'radio') && !el.checked ||
+        (t == 'submit' || t == 'image' || t == 'button') && el.form && el.form.clk != el ||
+        el.tagName.toLowerCase() == 'select' && el.selectedIndex == -1))
+            return null;
+    
+    if (t == 'select-multiple') {
+        var a = [];
+        for(var i=0; i < el.options.length; i++)
+            if (el.options[i].selected)
+                a.push(el.options[i].value)
+        return a;
+    }
+    return el.value;
+};
+
