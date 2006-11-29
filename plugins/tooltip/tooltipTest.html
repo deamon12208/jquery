@@ -32,6 +32,8 @@
 
 #yahoo { width: 7em; }
 img { cursor: pointer; }
+#right, #right2 { text-align: right; }
+#tooltip.right { width: 250px; }
 </style>
 
 <script src="../../jquery/dist/jquery.js" type="text/javascript"></script>
@@ -58,6 +60,9 @@ $('#pretty').Tooltip({
 	extraClass: "fancy",
 	fixPNG: true
 });
+
+$('#right a').Tooltip({ extraClass: "right" });
+$('#right2 a').Tooltip();
 
 });
 </script>
@@ -98,5 +103,15 @@ Some worthless text below.
 Some worthless text below.<br/>
 Some worthless text below.<br/>
 Some worthless text below.
+<p id="right">
+	Tooltip with fixed width<br/>
+	<a title="Short title" href="http://goggle">Google me!</a><br/>
+	<a title="Rather a very very long title with no meaning but yet quite long long long" href="http://goggle">Google me!</a>
+</p>
+<p id="right2">
+	Tooltip width auto width<br/>
+	<a title="Short title" href="http://goggle">Google me!</a><br/>
+	<a title="Rather a very very long title with no meaning but yet quite long long long" href="http://goggle">Google me!</a>
+</p>
 </body>
 </html>

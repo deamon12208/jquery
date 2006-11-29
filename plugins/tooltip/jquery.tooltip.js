@@ -193,7 +193,6 @@
 						'backgroundImage': 'none',
 						'filter': "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=crop, src='" + image + "')"
 					});
-					tPNGfix = true;
 				}
 			});
 		}
@@ -222,12 +221,48 @@
 			var p = c == 'X' ? 'Left' : 'Top';
 			return event['page' + c] || (event['client' + c] + (document.documentElement['scroll' + p] || document.body['scroll' + p])) || 0;
 		}
-		
 		// position the helper 15 pixel to bottom right, starting from mouse position
+		var left = pos('X') + 15;
+		var top = pos('Y') + 15;
 		helper.css({
-			top: pos('Y') + 15 + 'px',
-			left: pos('X') + 15 + 'px'
+			left: left + 'px',
+			top: top + 'px'
 		});
+		
+		var v = viewport(),
+			h = helper[0];
+		// check horizontal position
+		if(v.x + v.cx < h.offsetLeft + h.offsetWidth) {
+			left -= h.offsetWidth + 20;
+			helper.css({left: left + 'px'});
+		}
+		// check vertical position
+		if(v.y + v.cy < h.offsetTop + h.offsetHeight) {
+			top -= h.offsetHeight + 20;
+			helper.css({top: top + 'px'});
+		}
+	}
+	
+	function viewport() {
+		var e = document.documentElement || {},
+			b = document.body || {},
+			w = window;
+
+		return {
+			x: w.pageXOffset || e.scrollLeft || b.scrollLeft || 0,
+			y: w.pageYOffset || e.scrollTop || b.scrollTop || 0,
+			cx: min( e.clientWidth, b.clientWidth, w.innerWidth ),
+			cy: min( e.clientHeight, b.clientHeight, w.innerHeight )
+		};
+
+		function min() {
+			var v = Infinity;
+			for( var i = 0;  i < arguments.length;  i++ ) {
+				var n = arguments[i];
+				if( n && n < v ) v = n;
+			}
+			return v;
+		}
 	}
 	
 	// hide helper and restore added classes and the title
