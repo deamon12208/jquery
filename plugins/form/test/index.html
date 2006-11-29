@@ -18,7 +18,6 @@
 <script>
 // test form with inputs named 'action' and 'method'
 test("'action' and 'method' form attributes", function() {
-	expect(2);
     var f = $("#form1");
     ok( f.attr('action').match('text.php'), "form 'action'");
     ok( f.attr('method').match('get'), "form 'method'");
@@ -26,7 +25,6 @@ test("'action' and 'method' form attributes", function() {
 
 // test serialization to array
 test("formToArray: multi-select", function() {
-	expect(3);
     var a = $("#form1").formToArray();
     ok( a.constructor == Array, "type check");
     ok( a.length == 13, "array length");
@@ -35,7 +33,6 @@ test("formToArray: multi-select", function() {
 
 // test serialization to array
 test("formToArray: 'action' and 'method' inputs", function() {
-	expect(3);
     var a = $("#form1").formToArray();
     ok( a.constructor == Array, "type check");
     ok( arrayValue(a, 'action') == 1, "input name=action");
@@ -44,7 +41,6 @@ test("formToArray: 'action' and 'method' inputs", function() {
 
 // test formToArray semantic support
 test("formToArray: semantic test", function() {
-	expect(6);
     var formData = $("#form2").formToArray(true);
     var testData = ['a','b','c','d','e','f'];
     for (var i=0; i < 6; i++) {
@@ -52,9 +48,29 @@ test("formToArray: semantic test", function() {
     }
 });
 
+/*
+// uncomment this if we find a way to get this working
+
+test("formToArray: text promotion for missing value attributes", function() {
+    var expected = [
+        { name: 'A', value: ''},
+        { name: 'B', value: 'MISSING_ATTR'},
+        { name: 'C', value: ''},
+        { name: 'C', value: 'MISSING_ATTR'} 
+    ];
+
+    var a = $('#form6').formToArray(true);
+
+    // verify all the option values
+    for (var i=0; i < a.length; i++) {
+        //ok( a[i].name  == expected[i].name,  'Name: '  + a[i].name  + ' = ' + expected[i].name);
+        ok( a[i].value == expected[i].value, 'Value: ' + a[i].value + ' = ' + expected[i].value);
+    }
+});
+*/
+
 // test string serialization
 test("serialize: param count", function() {
-	expect(2);
     var s = $("#form1").formSerialize();
     ok( s.constructor == String, "type check");
     ok( s.split('&').length == 13, "string array length");
@@ -62,7 +78,6 @@ test("serialize: param count", function() {
 
 // test support for input elements not contained within a form
 test("serialize: pseudo form", function() {
-	expect(2);
     var s = $("#pseudo").formSerialize();
     ok( s.constructor == String, "type check");
     ok( s.split('&').length == 3, "string array length");
@@ -70,7 +85,6 @@ test("serialize: pseudo form", function() {
 
 // test ajaxSubmit target update
 test("ajaxSubmit: target == String", function() {
-	expect(2);
     $('#targetDiv').empty();
     stop();
     
@@ -87,7 +101,6 @@ test("ajaxSubmit: target == String", function() {
 
 // test passing jQuery object as the target
 test("ajaxSubmit: target == jQuery object", function() {
-	expect(2);
     stop();
     var target = $('#targetDiv');
     target.empty();
@@ -106,7 +119,6 @@ test("ajaxSubmit: target == jQuery object", function() {
 
 // test passing DOM element as the target
 test("ajaxSubmit: target == DOM element", function() {
-	expect(2);
     stop();
     $('#targetDiv').empty();
     var target = $('#targetDiv')[0];
@@ -127,7 +139,6 @@ test("ajaxSubmit: target == DOM element", function() {
 
 // test ajaxSubmit pre-submit callback
 test("ajaxSubmit: pre-submit callback", function() {
-	expect(4);
     var opts = {
         before: function(a, jq) { // pre-submit callback
             ok( true, 'pre-submit callback');
@@ -142,7 +153,6 @@ test("ajaxSubmit: pre-submit callback", function() {
 
 // test ajaxSubmit post-submit callback for response and status text
 test("ajaxSubmit: post-submit callback", function() {
-	expect(3);
     stop();
 
     var opts = {
@@ -159,7 +169,6 @@ test("ajaxSubmit: post-submit callback", function() {
 
 // test semantic support via ajaxSubmit's pre-submit callback
 test("ajaxSubmit: semantic test", function() {
-	expect(9);
     var testData = ['a','b','c','d','e','f'];
 
     var opts = {
@@ -179,7 +188,6 @@ test("ajaxSubmit: semantic test", function() {
 
 // test json datatype
 test("ajaxSubmit: dataType == json", function() {
-	expect(2);
     stop();
 
     var opts = {
@@ -198,7 +206,6 @@ test("ajaxSubmit: dataType == json", function() {
 
 // test script datatype
 test("ajaxSubmit: dataType == script", function() {
-	expect(2);
     stop();
 
     var opts = {
@@ -216,7 +223,6 @@ test("ajaxSubmit: dataType == script", function() {
 
 // test xml datatype
 test("ajaxSubmit: dataType == xml", function() {
-	expect(2);
     stop();
 
     var opts = {
@@ -235,7 +241,6 @@ test("ajaxSubmit: dataType == xml", function() {
 // test that args embedded in the action are honored; no real way
 // to assert this so successful callback is used to signal success
 test("ajaxSubmit: existing args in action attr", function() {
-	expect(1);
     stop();
 
     var opts = {
@@ -250,7 +255,6 @@ test("ajaxSubmit: existing args in action attr", function() {
 
 // test ajaxSubmit using pre-submit callback to cancel submit
 test("ajaxSubmit: cancel submit", function() {
-	expect(3);
 
     var opts = {
         before: function(a, jq) { // pre-submit callback
@@ -269,7 +273,6 @@ test("ajaxSubmit: cancel submit", function() {
 
 // test submitting a pseudo-form
 test("ajaxSubmit: pseudo-form", function() {
-	expect(5);
     stop();
 
     var opts = {
@@ -294,7 +297,6 @@ test("ajaxSubmit: pseudo-form", function() {
 
 // test eval of json response
 test("ajaxSubmit: evaluate response", function() {
-	expect(2);
     stop();
     
     var opts = {
@@ -312,7 +314,6 @@ test("ajaxSubmit: evaluate response", function() {
 
 // test pre and post callbacks for ajaxForm
 test("ajaxForm: pre and post callbacks", function() {
-	expect(4);
     stop();
 
     var opts = {
@@ -333,7 +334,6 @@ test("ajaxForm: pre and post callbacks", function() {
 
 // test that the value of the submit button is captured
 test("ajaxForm: capture submit element", function() {
-	expect(4);
 
     var opts = {
         before: function(a, jq) { // pre-callback
@@ -350,7 +350,6 @@ test("ajaxForm: capture submit element", function() {
 
 // test image submit support
 test("ajaxForm: capture submit image coordinates", function() {
-	expect(5);
 
     var opts = {
         before: function(a, jq) { // pre-callback
@@ -368,7 +367,6 @@ test("ajaxForm: capture submit image coordinates", function() {
 
 // test that the targetDiv gets updated
 test("ajaxForm: update target div", function() {
-	expect(5);
     $('#targetDiv').empty();
     stop();
 
@@ -391,7 +389,6 @@ test("ajaxForm: update target div", function() {
 });
 
 test("'success' callback", function() {
-	expect(1);
     $('#targetDiv').empty();
     stop();
 
@@ -406,7 +403,6 @@ test("'success' callback", function() {
 });
 
 test("'error' callback", function() {
-	expect(1);
     $('#targetDiv').empty();
     stop();
 
@@ -422,6 +418,137 @@ test("'error' callback", function() {
     };
 
     $('#form3').ajaxSubmit(opts);
+});
+
+
+test("fieldValue(true)", function() {
+    ok ('5'  == $('#fieldTest input').fieldValue(true), 'input');
+    ok ('1'  == $('#fieldTest :input').fieldValue(true), ':input');
+    ok ('5'  == $('#fieldTest :hidden').fieldValue(true), ':hidden');
+    ok ('14' == $('#fieldTest :password').fieldValue(true), ':password');
+    ok ('12' == $('#fieldTest :radio').fieldValue(true), ':radio');
+    ok ('1'  == $('#fieldTest select').fieldValue(true), 'select');
+    
+    var expected = ['8','10'];
+    var result = $('#fieldTest :checkbox').fieldValue(true);
+    ok (result.length == expected.length, 'result size check (checkbox): ' + result.length + '=' + expected.length);
+    for (var i=0; i < result.length; i++)
+        ok ( result[i] == expected[i], expected[i] );
+
+    expected = ['3','4'];
+    result = $('#fieldTest [@name=B]').fieldValue(true);
+    ok (result.length == expected.length, 'result size check (select-multiple): ' + result.length + '=' + expected.length);
+    for (var i=0; i < result.length; i++)
+        ok ( result[i] == expected[i], expected[i] );
+});
+
+test("fieldValue(false)", function() {
+    ok ('5'  == $('#fieldTest input').fieldValue(false), 'input');
+    ok ('1'  == $('#fieldTest :input').fieldValue(false), ':input');
+    ok ('5'  == $('#fieldTest :hidden').fieldValue(false), ':hidden');
+    ok ('14' == $('#fieldTest :password').fieldValue(false), ':password');
+    ok ('11' == $('#fieldTest :radio').fieldValue(false), ':radio');
+    ok ('1'  == $('#fieldTest select').fieldValue(false), 'select');
+    
+    var expected = ['8','9','10'];
+    var result = $('#fieldTest :checkbox').fieldValue(false);
+    ok (result.length == expected.length, 'result size check (checkbox): ' + result.length + '=' + expected.length);
+    for (var i=0; i < result.length; i++)
+        ok ( result[i] == expected[i], expected[i] );
+
+    expected = ['3','4'];
+    result = $('#fieldTest [@name=B]').fieldValue(false);
+    ok (result.length == expected.length, 'result size check (select-multiple): ' + result.length + '=' + expected.length);
+    for (var i=0; i < result.length; i++)
+        ok ( result[i] == expected[i], expected[i] );
+});
+
+test("fieldSerialize(true) input", function() {
+    var expected = ['C=5', 'D=6', 'F=8', 'F=10', 'G=12', 'H=14'];
+
+    var result = $('#fieldTest input').fieldSerialize(true);
+    result = result.split('&');
+    
+    ok (result.length == expected.length, 'result size check: ' + result.length + '=' + expected.length);
+    for (var i=0; i < result.length; i++)
+        ok( result[i] == expected[i], expected[i] + ' = ' + result[i]);
+});
+
+test("fieldSerialize(true) :input", function() {
+    var expected = ['A=1','B=3','B=4','C=5','D=6','E=7','F=8','F=10','G=12','H=14'];
+
+    var result = $('#fieldTest :input').fieldSerialize(true);
+    result = result.split('&');
+    
+    ok (result.length == expected.length, 'result size check: ' + result.length + '=' + expected.length);
+    for (var i=0; i < result.length; i++)
+        ok( result[i] == expected[i], expected[i] + ' = ' + result[i]);
+});
+
+test("fieldSerialize(false) :input", function() {
+    var expected = ['A=1','B=3','B=4','C=5','D=6','E=7','F=8','F=9','F=10','G=11','G=12','G=13','H=14','I=15','J=16'];
+
+    var result = $('#fieldTest :input').fieldSerialize(false);
+    result = result.split('&');
+    
+    ok (result.length == expected.length, 'result size check: ' + result.length + '=' + expected.length);
+    for (var i=0; i < result.length; i++)
+        ok( result[i] == expected[i], expected[i] + ' = ' + result[i]);
+});
+
+test("fieldSerialize(true) select-mulitple", function() {
+    var expected = ['B=3','B=4'];
+
+    var result = $('#fieldTest [@name=B]').fieldSerialize(true);
+    result = result.split('&');
+    
+    ok (result.length == expected.length, 'result size check: ' + result.length + '=' + expected.length);
+    for (var i=0; i < result.length; i++)
+        ok( result[i] == expected[i], expected[i] + ' = ' + result[i]);
+});
+
+test("fieldSerialize(true) :checkbox", function() {
+    var expected = ['F=8','F=10'];
+
+    var result = $('#fieldTest :checkbox').fieldSerialize(true);
+    result = result.split('&');
+    
+    ok (result.length == expected.length, 'result size check: ' + result.length + '=' + expected.length);
+    for (var i=0; i < result.length; i++)
+        ok( result[i] == expected[i], expected[i] + ' = ' + result[i]);
+});
+
+test("fieldSerialize(false) :checkbox", function() {
+    var expected = ['F=8','F=9','F=10'];
+
+    var result = $('#fieldTest :checkbox').fieldSerialize(false);
+    result = result.split('&');
+    
+    ok (result.length == expected.length, 'result size check: ' + result.length + '=' + expected.length);
+    for (var i=0; i < result.length; i++)
+        ok( result[i] == expected[i], expected[i] + ' = ' + result[i]);
+});
+
+test("fieldSerialize(true) :radio", function() {
+    var expected = ['G=12'];
+
+    var result = $('#fieldTest :radio').fieldSerialize(true);
+    result = result.split('&');
+    
+    ok (result.length == expected.length, 'result size check: ' + result.length + '=' + expected.length);
+    for (var i=0; i < result.length; i++)
+        ok( result[i] == expected[i], expected[i] + ' = ' + result[i]);
+});
+
+test("fieldSerialize(false) :radio", function() {
+    var expected = ['G=11','G=12','G=13'];
+
+    var result = $('#fieldTest :radio').fieldSerialize(false);
+    result = result.split('&');
+    
+    ok (result.length == expected.length, 'result size check: ' + result.length + '=' + expected.length);
+    for (var i=0; i < result.length; i++)
+        ok( result[i] == expected[i], expected[i] + ' = ' + result[i]);
 });
 
 // helper method   
@@ -445,7 +572,6 @@ function arrayValue(arr, key) {
 </head>
 <body id="body">
 	<h1 id="banner">jQuery form.js - Test Suite</h1>
-	<h2 id="banner"></h2>
 	<h2 id="userAgent"></h2>
     
 	<!-- Test HTML -->
@@ -530,7 +656,21 @@ function arrayValue(arr, key) {
             <input name="a" type="text" />
             <input type="submit" />
             <input type="submit" name="form5inputName" />
-            <input type="image"  name="myImage" src="submit.gif" />
+            <input type="image"  id="form5imageSubmit" name="myImage" src="submit.gif" />
+        </div></form>
+
+        <!-- form6, 'option' testing -->
+        <form id="form6" action="text.php" method="get"><div>
+            <select name="A">
+                <option value="" selected="selected">EMPTY_STRING</option>    <!-- TEST A: value === empty string -->
+            </select>
+            <select name="B">
+                <option selected="selected">MISSING_ATTR</option>             <!-- TEST B: no value attr -->
+            </select>
+            <select name="C" multiple="multiple">
+                <option value="" selected="selected">EMPTY_STRING</option>
+                <option selected="selected">MISSING_ATTR</option>
+            </select>
         </div></form>
 
         <!-- pseudo-form -->
@@ -547,6 +687,40 @@ function arrayValue(arr, key) {
 
         <div id="targetDiv"></div>
 	</div>
+
+    <!--
+    ********************************************************************************
+    NOTE: The "fieldTest" form is intentionally placed outside of the "main" div
+          because reseting the test fixture causes the default value of the password
+          input to be lost in IE (which causes many test failures in the fieldValue
+          and fieldSerialize tests)
+    ********************************************************************************
+    -->
+
+    <form style="display:none" id="fieldTest" action="text.php" method="post"><div>
+        <select name="A">
+            <option value="1" selected="selected">ONE</option>
+            <option value="2">TWO</option>
+        </select>
+        <select name="B" multiple="multiple">
+            <option value="3" selected="selected">ONE</option>
+            <option value="4" selected="selected">TWO</option>
+            <option value="4b">THREE</option>
+        </select>
+        <input name="C" type="hidden" value="5" />
+        <input name="D" type="text" value="6" />
+        <textarea name="E">7</textarea>
+        <input name="F" type="checkbox" value="8" checked="checked" />
+        <input name="F" type="checkbox" value="9" />
+        <input name="F" type="checkbox" value="10" checked="checked" />
+        <input name="G" type="radio" value="11" />
+        <input name="G" type="radio" value="12" checked="checked" />
+        <input name="G" type="radio" value="13" />
+        <input name="H" type="password" value="14" />
+        <input name="I" type="submit" value="15" />
+        <input name="J" type="reset" value="16" />
+    </div></form>
+
 	
 	<ol id="tests"></ol>
 </body>
