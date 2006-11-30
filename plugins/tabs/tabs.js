@@ -473,7 +473,7 @@ $.fn.tabs = function(initial, settings) {
  * @desc Enable the second tab of the tab interface contained in <div id="container">.
  *
  * @param Number position An integer specifying the position of the tab (no zero-based
- *                        index) to be disabled. If this parameter is omitted, the first
+ *                        index) to be enabled. If this parameter is omitted, the first
  *                        tab will be enabled.
  * @type jQuery
  *
