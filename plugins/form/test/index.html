@@ -48,9 +48,6 @@ test("formToArray: semantic test", function() {
     }
 });
 
-/*
-// uncomment this if we find a way to get this working
-
 test("formToArray: text promotion for missing value attributes", function() {
     var expected = [
         { name: 'A', value: ''},
@@ -67,7 +64,7 @@ test("formToArray: text promotion for missing value attributes", function() {
         ok( a[i].value == expected[i].value, 'Value: ' + a[i].value + ' = ' + expected[i].value);
     }
 });
-*/
+
 
 // test string serialization
 test("serialize: param count", function() {
