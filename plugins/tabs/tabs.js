@@ -1,5 +1,5 @@
 /**
- * Tabs 2.4 - jQuery plugin for accessible, unobtrusive tabs
+ * Tabs 2.5 - jQuery plugin for accessible, unobtrusive tabs
  *
  * http://stilbuero.de/tabs/
  *
@@ -46,6 +46,8 @@
  * @desc Create a basic tab interface.
  * @example $('#container').tabs(2);
  * @desc Create a basic tab interface with the second tab initially activated.
+ * @example $('#container').tabs({disabled: [3, 4]});
+ * @desc Create a tab interface with the third and fourth tab being disabled.
  * @example $('#container').tabs({fxSlide: true});
  * @desc Create a tab interface that uses slide down/up animations for showing/hiding tab
  *       content upon tab switching.
@@ -56,6 +58,8 @@
  *                       will be ignored and instead the tab belonging to that fragment in that
  *                       specific tab interface will be activated. Defaults to 1 if omitted.
  * @param Object settings An object literal containing key/value pairs to provide optional settings.
+ * @option Array<Number> disabled An array containing the position of the tabs (no zero-based index)
+ *                                that should be disabled on initialization. Default value: null.
  * @option Boolean bookmarkable Boolean flag indicating if support for bookmarking and history (via
  *                              changing hash in the URL of the browser) is enabled. Default value:
  *                              false, unless the History/Remote plugin is included. In that case the
@@ -108,7 +112,9 @@
  *                         containing the content of the clicked tab, (e.g. the div), the third
  *                         argument is the one of the tab that gets hidden. Default value: null.
  * @option String selectedClass The CSS class attached to the li element representing the
- *                              currently selected tab. Default value: "tabs-selected".
+ *                              currently selected (active) tab. Default value: "tabs-selected".
+ * @option String disabledClass The CSS class attached to the li element representing a disabled
+ *                              tab. Default value: "tabs-disabled".
  * @option String hideClass The CSS class used for hiding inactive tabs. A class is used instead
  *                          of "display: none" in the style attribute to maintain control over
  *                          visibility in other media types than screen, most notably print.
@@ -131,6 +137,7 @@ $.fn.tabs = function(initial, settings) {
     if (typeof initial == 'object') settings = initial; // no initial tab given but a settings object
     settings = $.extend({
         initial: (initial && typeof initial == 'number' && initial > 0) ? --initial : 0,
+        disabled: null,
         bookmarkable: $.ajaxHistory ? true : false,
         fxFade: null,
         fxSlide: null,
@@ -144,6 +151,7 @@ $.fn.tabs = function(initial, settings) {
         onHide: null,
         onShow: null,
         selectedClass: 'tabs-selected',
+        disabledClass: 'tabs-disabled',
         hideClass: 'tabs-hide',
         tabStruct: 'div'
     }, settings || {});
@@ -249,16 +257,49 @@ $.fn.tabs = function(initial, settings) {
             }, 50);
         }
 
-        // fix back button if history plugin is present
+        // setup animations
+        var showAnim = {}, hideAnim = {};
+        var showSpeed, hideSpeed;
+        if (settings.fxSlide || settings.fxFade) {
+            if (settings.fxSlide) {
+                showAnim['height'] = 'show';
+                hideAnim['height'] = 'hide';
+            }
+            if (settings.fxFade) {
+                showAnim['opacity'] = 'show';
+                hideAnim['opacity'] = 'hide';
+            }
+            showSpeed = hideSpeed = settings.fxSpeed;
+        } else {
+            if (settings.fxShow) {
+                showAnim = settings.fxShow;
+                showSpeed = settings.fxShowSpeed || settings.fxSpeed;
+            } else {
+                showAnim['opacity'] = 'show';
+                showSpeed = settings.bookmarkable ? 50 : 1; // as little as 50 prevents browser scroll to the tab
+            }
+            if (settings.fxHide) {
+                hideAnim = settings.fxHide;
+                hideSpeed = settings.fxHideSpeed || settings.fxSpeed;
+            } else {
+                hideAnim['opacity'] = 'hide';
+                hideSpeed = settings.bookmarkable ? 50 : 1; // as little as 50 prevents browser scroll to the tab
+            }
+        }
+
+        // callbacks
+        var onClick = settings.onClick, onHide = settings.onHide, onShow = settings.onShow;
+
+        // enable history support if history plugin is present
         if (settings.bookmarkable) {
             tabs.history();
             $.ajaxHistory.initialize();
         }
 
-        // attach activate event, required for activating a tab programmatically
-        tabs.bind('activateTab', function() {
+        // attach activateTab event, required for activating a tab programmatically
+        tabs.bind('triggerTab', function() {
             var hash = this.hash;
-            if ($(hash).is(':hidden')) { // trigger only if not already visible
+            if ($(hash).is(':hidden') && !$(this.parentNode).is('.' + settings.disabledClass)) { // trigger only if not already visible and not if disabled
 
                 if ($.browser.msie) {
 
@@ -291,12 +332,42 @@ $.fn.tabs = function(initial, settings) {
             }
         });
 
+        // attach disable event, required for disabling a tab
+        tabs.bind('disableTab', function() {
+            $(this.parentNode).addClass(settings.disabledClass);
+        });
+
+        // disabled from settings
+        if (settings.disabled && settings.disabled.length) {
+            for (var i = 0, k = settings.disabled.length; i < k; i++) {
+                tabs.eq(--settings.disabled[i]).trigger('disableTab').end();
+            }
+        };
+
+        // attach enable event, required for reenabling a tab
+        tabs.bind('enableTab', function() {
+            var jq = $(this.parentNode);
+            jq.removeClass(settings.disabledClass);
+            if ($.browser.safari) {
+                jq.fadeTo(1, 1.0).css({display: '', opacity: 1}); /* Fix disappearing tab after enabling in Safari... */
+                setTimeout(function() {
+                    jq.css({opacity: ''});
+                }, 30); // ...do not chain and use little timeout, ugh!
+            }
+        });
+
         // attach click event
-        tabs.click(function(e) {
+        tabs.bind('click', function(e) {
 
-            if (!$(this.parentNode).is('.' + settings.selectedClass)) {
+            var jqLi = $(this.parentNode);
+
+            if (jqLi.is('.' + settings.disabledClass)) { // if tab is disabled stop here
+                return false;
+            }
+
+            if (!jqLi.is('.' + settings.selectedClass)) {
+
                 var toShow = $(this.hash);
-
                 if (toShow.size() > 0) {
 
                     // prevent scrollbar scrolling to 0 and than back in IE7, happens only if bookmarking/history is enabled
@@ -311,48 +382,12 @@ $.fn.tabs = function(initial, settings) {
                     var clicked = this;
                     var toHide = $('>' + settings.tabStruct + ':visible', container);
 
-                    // setup animations
-                    var showAnim = {}, hideAnim = {};
-                    var showSpeed, hideSpeed;
-                    if (settings.fxSlide || settings.fxFade) {
-                        if (settings.fxSlide) {
-                            showAnim['height'] = 'show';
-                            hideAnim['height'] = 'hide';
-                        }
-                        if (settings.fxFade) {
-                            showAnim['opacity'] = 'show';
-                            hideAnim['opacity'] = 'hide';
-                        }
-                        showSpeed = hideSpeed = settings.fxSpeed;
-                    } else {
-                        if (settings.fxShow) {
-                            showAnim = settings.fxShow;
-                            showSpeed = settings.fxShowSpeed || settings.fxSpeed;
-                        } else {
-                            showAnim['opacity'] = 'show';
-                            showSpeed = settings.bookmarkable ? 50 : 1; // as little as 50 prevents browser scroll to the tab
-                        }
-                        if (settings.fxHide) {
-                            hideAnim = settings.fxHide;
-                            hideSpeed = settings.fxHideSpeed || settings.fxSpeed;
-                        } else {
-                            hideAnim['opacity'] = 'hide';
-                            hideSpeed = settings.bookmarkable ? 50 : 1; // as little as 50 prevents browser scroll to the tab
-                        }
-                    }
-
-                    var onClick = settings.onClick, onHide = settings.onHide, onShow = settings.onShow;
-
                     if (typeof onClick == 'function') {
                         // without this timeout Firefox gets really confused and calls callbacks twice...
                         setTimeout(function() {
                             onClick(clicked, toShow[0], toHide[0]);
                         }, 0);
                     }
-
-                    /*toHide.addClass(settings.hideClass);
-                    $(clicked.parentNode).addClass(settings.selectedClass).siblings().removeClass(settings.selectedClass);
-                    toShow.removeClass(settings.hideClass);*/
 
                     // switch tab, animation prevents browser scrolling to the fragment
                     toHide.animate(hideAnim, hideSpeed, function() { //
@@ -414,11 +449,49 @@ $.fn.tabs = function(initial, settings) {
  * @cat Plugins/Tabs
  * @author Klaus Hartl/klaus.hartl@stilbuero.de
  */
-$.fn.triggerTab = function(tabIndex) {
-    return this.each(function() {
-        var i = tabIndex && tabIndex > 0 && tabIndex - 1 || 0; // falls back to 0
-        $('>ul:eq(0)>li>a', this).eq(i).trigger('activateTab');
-    });
-};
+
+/**
+ * Disable a tab, so that clicking it has no effect.
+ *
+ * @example $('#container').disableTab(2);
+ * @desc Disable the second tab of the tab interface contained in <div id="container">.
+ *
+ * @param Number position An integer specifying the position of the tab (no zero-based
+ *                        index) to be disabled. If this parameter is omitted, the first
+ *                        tab will be disabled.
+ * @type jQuery
+ *
+ * @name disableTab
+ * @cat Plugins/Tabs
+ * @author Klaus Hartl/klaus.hartl@stilbuero.de
+ */
+
+/**
+ * Enable a tab that has been disabled.
+ *
+ * @example $('#container').enableTab(2);
+ * @desc Enable the second tab of the tab interface contained in <div id="container">.
+ *
+ * @param Number position An integer specifying the position of the tab (no zero-based
+ *                        index) to be disabled. If this parameter is omitted, the first
+ *                        tab will be enabled.
+ * @type jQuery
+ *
+ * @name enableTab
+ * @cat Plugins/Tabs
+ * @author Klaus Hartl/klaus.hartl@stilbuero.de
+ */
+
+var tabEvents = ['triggerTab', 'disableTab', 'enableTab'];
+for (var i = 0; i < tabEvents.length; i++) {
+    $.fn[tabEvents[i]] = (function(tabEvent) {
+        return function(tabIndex) {
+            return this.each(function() {
+                var i = tabIndex && tabIndex > 0 && tabIndex - 1 || 0; // fall back to 0
+                $('>ul:eq(0)>li>a', this).eq(i).trigger(tabEvent);
+            });
+        };
+    })(tabEvents[i]);
+}
 
 })(jQuery);
