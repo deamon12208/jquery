@@ -240,8 +240,14 @@ jQuery.selectstop = function(e)
 		jQuery.selectHelper.removeClass(this.f.hc);
 	jQuery.selectdrug = false;
 	jQuery('body').append(jQuery.selectHelper.get(0));
-	if (jQuery.selectedone == true && this.f.onselect) {
-		this.f.onselect(jQuery.Selectserialize(jQuery.attr(this,'id')));
+	//
+	// In case we have selected some new items..
+	if (jQuery.selectedone == true) {
+		if (this.f.onselect)
+			this.f.onselect(jQuery.Selectserialize(jQuery.attr(this,'id')));
+	} else {
+		if (this.f.onselectstop)
+			this.f.onselectstop(jQuery.Selectserialize(jQuery.attr(this,'id')));
 	}
 	// Reset current selection
 	jQuery.selectCurrent = [];
@@ -300,7 +306,8 @@ jQuery.fn.Selectable = function(o)
 				o : o.opacity ? parseFloat(o.opacity) : false,
 				sc : o.selectedclass ? o.selectedclass : false,
 				hc : o.helperclass ? o.helperclass : false,
-				onselect : o.onselect ? o.onselect : false
+				onselect : o.onselect ? o.onselect : false,
+				onselectstop : o.onselectstop ? o.onselectstop : false
 			};
 			this.f.el = jQuery('.' + o.accept);
 			jQuery(this).bind('mousedown', jQuery.selectstart).bind('mousemove', jQuery.selectcheck).bind('mouseup', jQuery.selectstop).css('position', 'relative');
