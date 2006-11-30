@@ -46,6 +46,7 @@ jQuery.iResize = {
 		if (typeof jQuery.iResize.dragged.resizeOptions.onDragStart === 'function') {
 			jQuery.iResize.dragged.resizeOptions.onDragStart.apply(jQuery.iResize.dragged);
 		}
+		return false;
 	},
 	/**
 	 * internal: Stop function
@@ -329,8 +330,8 @@ jQuery.iResize = {
 				el.resizeOptions.minLeft = options.minLeft || -1000;
 				el.resizeOptions.maxRight = options.maxRight || 3000;
 				el.resizeOptions.maxBottom = options.maxBottom || 3000;
-
-				if (el.style.position != 'relative' && el.style.position != 'absolute') {
+				elPosition = $(el).css('position');
+				if (!(elPosition == 'relative' || elPosition == 'absolute')) {
 					el.style.position = 'relative';
 				}
 
