@@ -334,11 +334,12 @@ jQuery.fn.formToArray = function(semantic) {
     jQuery(q, this).each(function() {
         var n = this.name;
         var t = this.type;
+        var tag = this.tagName.toLowerCase();
 
         if ( !n || this.disabled || t == 'reset' ||
             (t == 'checkbox' || t == 'radio') && !this.checked ||
             (t == 'submit' || t == 'image' || t == 'button') && this.form && this.form.clk != this ||
-            this.tagName.toLowerCase() == 'select' && this.selectedIndex == -1)
+            tag == 'select' && this.selectedIndex == -1)
             return;
 
         if (t == 'image' && this.form.clk_x != undefined)
@@ -347,13 +348,18 @@ jQuery.fn.formToArray = function(semantic) {
                 {name: n+'_y', value: this.form.clk_y}
             );
 
-        if (t == 'select-multiple') {
-            for(var i=0; i < this.options.length; i++)
-                if (this.options[i].selected)
-                    a.push({name: n, value: this.options[i].value});
-            return;
+        if (tag == 'select') {
+            // pass select element off to fieldValue to reuse the IE logic
+            var val = jQuery.fieldValue(this, false); // pass false to optimize fieldValue
+            if (t == 'select-multiple') {
+                for (var i=0; i < val.length; i++)
+                    a.push({name: n, value: val[i]});
+            }
+            else
+                a.push({name: n, value: val});
         }
-        a.push({name: n, value: this.value});
+        else
+            a.push({name: n, value: this.value});
     });
     return a;
 };
@@ -509,21 +515,28 @@ jQuery.fn.fieldValue = function(successful) {
 jQuery.fieldValue = function(el, successful) {
     var n = el.name;
     var t = el.type;
+    var tag = el.tagName.toLowerCase();
     if (typeof successful == 'undefined') successful = true;
 
     if (successful && ( !n || el.disabled || t == 'reset' ||
         (t == 'checkbox' || t == 'radio') && !el.checked ||
         (t == 'submit' || t == 'image' || t == 'button') && el.form && el.form.clk != el ||
-        el.tagName.toLowerCase() == 'select' && el.selectedIndex == -1))
+        tag == 'select' && el.selectedIndex == -1))
             return null;
     
-    if (t == 'select-multiple') {
+    if (tag == 'select') {
         var a = [];
-        for(var i=0; i < el.options.length; i++)
-            if (el.options[i].selected)
-                a.push(el.options[i].value)
+        for(var i=0; i < el.options.length; i++) {
+            var op = el.options[i];
+            if (op.selected) {
+                // extra pain for IE...
+                var v = jQuery.browser.msie && !(op.attributes['value'].specified) ? op.text : op.value;
+                if (t == 'select-one')
+                    return v;
+                a.push(v);
+            }
+        }
         return a;
     }
     return el.value;
 };
-
