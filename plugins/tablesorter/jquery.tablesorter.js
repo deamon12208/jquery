@@ -396,8 +396,10 @@ jQuery.tableSorter = {
 			for(var i=0; i < l; i++) {
 
 				var analyzer = this.analyzers[i];
-
+				
 				if(analyzer.is(s)) {
+					console.log(analyzer.id,s,analyzer.format(s));
+					
 					foundAnalyzer = true;
 					return analyzer;
 					continue;
@@ -550,7 +552,7 @@ jQuery.tableSorter.parsers.generic = {
 jQuery.tableSorter.parsers.currency = {
 	id: 'currency',
 	is: function(s) {
-		return s.match(new RegExp(/^[£$]/));
+		return s.match(/^[£$]/);
 	},
 	format: function(s) {
 		return parseFloat(s.replace(new RegExp(/[^0-9.]/g),''));
@@ -561,14 +563,14 @@ jQuery.tableSorter.parsers.currency = {
 jQuery.tableSorter.parsers.integer = {
 	id: 'integer',
 	is: function(s) {
-		return s.match(new RegExp(/^\b\d+\d\b$/));
+		return s.match(/^\b\d+\b$/);
 	},
 	format: function(s) {
-		return parseInt(s);
+		return parseFloat(s);
 	},
-	filter: 'numeric',
-	sorter: jQuery.tableSorter.sorters.numeric
+	sorter: $.tableSorter.sorters.numeric
 };
+
 jQuery.tableSorter.parsers.floating = {
 	id: 'floating',
 	is: function(s) {
@@ -584,19 +586,19 @@ jQuery.tableSorter.parsers.floating = {
 jQuery.tableSorter.parsers.ipAddress = {
 	id: 'ipAddress',
 	is: function(s) {
-		return s.match(new RegExp(/^\d{2,3}[\.]\d{2,3}[\.]\d{2,3}[\.]\d{2,3}$/));
+		return s.match(/^\d{2,3}[\.]\d{2,3}[\.]\d{2,3}[\.]\d{2,3}$/);
 	},
 	format: function(s) {
 		var a = s.split('.');
 		var r = '';
-		for (var i = 0, item; item = a[i]; i++) {
-		   if(item.length == 2) {
-				r += '0' + item;
+		for (var i = 0; i < a.length; i++) {
+		   if(a[i].length == 2) {
+				r += '0' + a[i];
 		   } else {
-				r += item;
+				r += a[i];
 		   }
 		}
-		return parseFloat(r);
+		return r;
 	},
 	filter: 'numeric',
 	sorter: jQuery.tableSorter.sorters.numeric
@@ -684,11 +686,11 @@ jQuery.tableSorter.parsers.checkbox = {
 /** add parsers */
 jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.currency);
 jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.integer);
-jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.floating);
 jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.isoDate);
 jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.shortDate);
 jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.usLongDate);
 jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.ipAddress);
 jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.url);
 jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.time);
+jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.floating);
 jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.checkbox);
