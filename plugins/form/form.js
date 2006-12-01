@@ -367,7 +367,7 @@ jQuery.fn.formToArray = function(semantic) {
 
 /**
  * Serializes form data into a 'submittable' string. This method will return a string
- * in the format: name1=value1&name2=value2
+ * in the format: name1=value1&amp;name2=value2
  *
  * The semantic argument can be used to force form serialization in semantic order.
  * If your form must be submitted with name/value pairs in semantic order then pass
@@ -393,7 +393,7 @@ jQuery.fn.formSerialize = function(semantic) {
 
 /**
  * Serializes all field elements in the jQuery object into a query string. 
- * This method will return a string in the format: name1=value1&name2=value2
+ * This method will return a string in the format: name1=value1&amp;name2=value2
  *
  * The successful argument controls whether or not serialization is limited to
  * 'successful' controls (per http://www.w3.org/TR/html4/interact/forms.html#successful-controls).
@@ -464,9 +464,8 @@ jQuery.fn.fieldSerialize = function(successful) {
  * @desc Get the array of selected values for the select-multiple control
  *
  * @name fieldValue
- * @param successful true if value returned must be for a successful controls (default is true)
- * @type String
- * @type Array<String>
+ * @param Boolean successful true if value returned must be for a successful controls (default is true)
+ * @type String or Array<String>
  * @cat Plugins/Form
  */
 jQuery.fn.fieldValue = function(successful) {
@@ -506,10 +505,9 @@ jQuery.fn.fieldValue = function(successful) {
  * @desc Gets the current value of the myPasswordElement element
  *
  * @name fieldValue
- * @param el the DOM element for which the value will be returned
- * @param successful true if value returned must be for a successful controls (default is true)
- * @type String
- * @type Array<String>
+ * @param Element el The DOM element for which the value will be returned
+ * @param Boolean successful true if value returned must be for a successful controls (default is true)
+ * @type String or Array<String>
  * @cat Plugins/Form
  */
 jQuery.fieldValue = function(el, successful) {
