@@ -44,7 +44,7 @@
  * 
  * @name corner
  * @type jQuery
- * @param options  string containing options which control the corner style
+ * @param String options Options which control the corner style
  * @cat Plugins/Corner
  * @return jQuery
  * @author Dave Methvin (dave.methvin@gmail.com)
