@@ -202,6 +202,7 @@
 	function show() {
 		tID = null;
 		helper.show();
+		update();
 	}
 	
 	/**
@@ -216,18 +217,22 @@
 			return;	
 		}
 		
-		// get the current mouse position
-		function pos(c) {
-			var p = c == 'X' ? 'Left' : 'Top';
-			return event['page' + c] || (event['client' + c] + (document.documentElement['scroll' + p] || document.body['scroll' + p])) || 0;
+		var left = helper[0].offsetLeft;
+		var top = helper[0].offsetTop;
+		if(event) {
+			// get the current mouse position
+			function pos(c) {
+				var p = c == 'X' ? 'Left' : 'Top';
+				return event['page' + c] || (event['client' + c] + (document.documentElement['scroll' + p] || document.body['scroll' + p])) || 0;
+			}
+			// position the helper 15 pixel to bottom right, starting from mouse position
+			left = pos('X') + 15;
+			top = pos('Y') + 15;
+			helper.css({
+				left: left + 'px',
+				top: top + 'px'
+			});
 		}
-		// position the helper 15 pixel to bottom right, starting from mouse position
-		var left = pos('X') + 15;
-		var top = pos('Y') + 15;
-		helper.css({
-			left: left + 'px',
-			top: top + 'px'
-		});
 		
 		var v = viewport(),
 			h = helper[0];
@@ -236,6 +241,7 @@
 			left -= h.offsetWidth + 20;
 			helper.css({left: left + 'px'});
 		}
+		console.debug(helper.height());
 		// check vertical position
 		if(v.y + v.cy < h.offsetTop + h.offsetHeight) {
 			top -= h.offsetHeight + 20;
