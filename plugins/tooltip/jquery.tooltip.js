@@ -241,7 +241,6 @@
 			left -= h.offsetWidth + 20;
 			helper.css({left: left + 'px'});
 		}
-		console.debug(helper.height());
 		// check vertical position
 		if(v.y + v.cy < h.offsetTop + h.offsetHeight) {
 			top -= h.offsetHeight + 20;
