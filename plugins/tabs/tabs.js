@@ -174,19 +174,21 @@ $.fn.tabs = function(initial, settings) {
                 if (this.hash == location.hash) {
                     settings.initial = i;
                     // prevent page scroll to fragment
-                    if ($.browser.msie) {
+                    if ($.browser.msie || $.browser.opera) {
                         var toShow = $(location.hash);
-                        var toShowId = location.hash.replace('#', '');
+                        var toShowId = toShow.id();
                         toShow.id('');
                         setTimeout(function() {
                             toShow.id(toShowId); // restore id
                         }, 500);
                     }
                     _unFocus();
-                    if ($.browser.opera) setTimeout(_unFocus, 100); // be nice to Opera
                     return false; // break
                 }
             });
+        }
+        if ($.browser.msie) {
+            _unFocus(); // fix IE focussing bottom of the page for some unknown reason
         }
 
         var tabs = $('>ul:eq(0)>li>a', this);
