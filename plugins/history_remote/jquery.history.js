@@ -36,10 +36,6 @@ $.ajaxHistory = new function() {
 
         var _historyIframe; // for IE
 
-        if (!location.hash) {
-            location.replace('#'); // set an empty hash in IE, otherwise first click gets reeeeeeal slow... TODO find out!
-        }
-
         // add hidden iframe
         $(function() {
             _historyIframe = $('<iframe style="display: none;"></iframe>').appendTo(document.body).get(0);
@@ -67,6 +63,7 @@ $.ajaxHistory = new function() {
                     $('a[@href$="' + iframeHash + '"]').click();
                     location.hash = iframeHash;
                 } else {
+                    location.hash = '';
                     var output = $('.remote-output');
                     if (output.children().size() > 0) output.empty();
                 }
