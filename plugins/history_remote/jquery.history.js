@@ -32,6 +32,8 @@ $.ajaxHistory = new function() {
     var _intervalId = null;
     var _observeHistory; // define outside if/else required by Opera
 
+    this.update = function() { }; // empty function body for graceful degradation
+
     if ($.browser.msie) {
 
         var _historyIframe; // for IE
@@ -237,11 +239,3 @@ $.fn.history = function() {
 };
 
 })(jQuery);
-
-// for development...
-/*$.log = function(s) {
-    var LOG_OUTPUT_ID = 'log-output';
-    var LOG_OUTPUT_STYLE = 'position: fixed; _position: absolute; top: 0; right: 0; overflow: hidden; border: 1px solid; width: 300px; height: 800px; background: #fff; color: red; opacity: .95;';
-    var logOutput = $('#' + LOG_OUTPUT_ID)[0] || $('<div style="' + LOG_OUTPUT_STYLE + '" id="' + LOG_OUTPUT_ID + '"></div>').prependTo('body')[0];
-    $(logOutput).prepend('<code>' + s + '</code><br />');
-};*/
