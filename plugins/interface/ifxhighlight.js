@@ -31,7 +31,7 @@ jQuery.fx.Highlight = function (e, duration, color, callback, transition)
 	z.oldStyle = {
 		backgroundColor : z.el.css('backgroundColor'),
 		backgroundImage : z.el.css('backgroundImage')
-	}
+	};
 	
 	if ((typeof color == 'object') && (color.constructor == Array)) {
 		z.endColor = jQuery.fx.parseColor(color[1] || z.oldStyle.backgroundColor);
