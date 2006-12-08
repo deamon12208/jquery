@@ -1,19 +1,11 @@
 /*
  * jQuery form plugin
+ * @requires jQuery v1.0.2
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
- *
  */
-
-//
-// The :input selection expression was added in jQuery v1.0.2.
-// Add it automatically here if it doesn't exist
-//
-if (!jQuery.expr[':']['input'])
-    jQuery.extend(jQuery.expr[':'], {input: "/input|select|textarea|button/i.test(a.nodeName)" });
-
 
 /**
  * ajaxSubmit() provides a mechanism for submitting an HTML form using AJAX.
@@ -62,8 +54,8 @@ if (!jQuery.expr[':']['input'])
  *
  *
  * The dataType option provides a means for specifying how the server response should be handled.
- * This maps directly to the jQuery.httpData method.  The following values are supported as of
- * jQuery verions 1.0.2:
+ * This maps directly to the jQuery.httpData method.  The following values are supported:
+ * 
  *      'xml':    if dataType == 'xml' the server response is treated as XML and the 'after'
  *                   callback method, if specified, will be passed the responseXML value
  *      'json':   if dataType == 'json' the server response will be evaluted and passed to
@@ -87,16 +79,6 @@ if (!jQuery.expr[':']['input'])
  * });
  *
  * When using ajaxForm(), however, this is done for you.
- *
- *
- * Notes for using form.js with jQuery versions prior to 1.0.2
- * -----------------------------------------------------------
- * 1. When using jQuery version < 1.0.2 if you do not specify a 'target' option then the 'after'
- *    callback method is passed the XMLHttpRequest object instead of the response data.
- *    This quirk was fixed in jQuery 1.0.2.
- *
- * 2. When using jQuery version < 1.0.1 the 'json' dataType value is not supported.
- *
  *
  *
  * @example
@@ -191,7 +173,7 @@ jQuery.fn.ajaxSubmit = function(options) {
     var a = this.formToArray(options.semantic);
 
     // give pre-submit callback an opportunity to abort the submit
-    if (options.before && options.before(a, this) === false) return;
+    if (options.before && options.before(a, this, options) === false) return;
 
     var q = jQuery.param(a);
     var get = (options.method && options.method.toUpperCase() == 'GET');
@@ -230,8 +212,7 @@ jQuery.fn.ajaxSubmit = function(options) {
  *
  * The options argument for ajaxForm works exactly as it does for ajaxSubmit.  ajaxForm merely
  * passes the options argument along after properly binding events for submit elements and
- * the form itself.  See ajaxSubmit for a full description of the options argument and for
- * notes on usage with down-rev versions of jQuery.
+ * the form itself.  See ajaxSubmit for a full description of the options argument.
  *
  *
  * @example
