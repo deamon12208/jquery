@@ -51,10 +51,6 @@ div.fun   { margin: 2px; }
 </head>
 <body>
 <h1 id="banner">jQuery Corner Demo</h1>
-<h2>This is a modified version of 
-    <a href="http://methvin.com/jquery/jq-corner.html">Dave Methvin's excellent corner plugin</a>.<br />
-    <a href="jquery.corner.js">Source code</a>
-</h2>
 
 <div id="abs">Absolute Position</div>
 
@@ -140,7 +136,10 @@ div.fun   { margin: 2px; }
     <div class="inner"><h1>Notch/Bite</h1><p>$(this).corner("bite 15px").parent().css('padding', '10px').corner("notch 10px")</p></div>
     <div class="inner"><h1>Bite/Notch</h1><p>$(this).corner("notch 15px").parent().css('padding', '15px').corner("bite 20px")</p></div>
     <div class="inner"><h1>Curl/Long</h1><p>$(this).corner("long 15px").parent().css('padding', '15px').corner("curl 15px")</p></div>
-
+<!--
+    @note: these features are commented out because they are not terribly useful. Still, they're helpful
+           when debugging so the plugin does support them.
+           
     <div class="section">
         <h1>Pick Your Colors (or keep your borders)</h1>
         <h2>By default, corners are created using transparency and the background color of the parent element. When this is
@@ -161,7 +160,7 @@ div.fun   { margin: 2px; }
     <div class="demo" style="border: 8px solid #009"><h1>cc:#009 keep notch</h1> <p>$(this).corner("keep notch cc:#009");</p></div>
     <div class="demo" style="border: 8px solid #009"><h1>cc:#009 keep bite</h1> <p>$(this).corner("bite keep 15px cc:#009");</p></div>
     <div class="demo" style="border: 2px solid #009"><h1>cc:#009 cool keep</h1> <p>$(this).corner("cc:#009 cool keep 20px");</p></div>
-
+-->
     <div class="section">
         <h1>Fun Stuff</h1>
         <h2>Interesting Side Effects</h2>
