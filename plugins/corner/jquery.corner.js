@@ -1,7 +1,7 @@
 /*
  * jQuery corner plugin
  *
- * version 1.3 (12/01/2006)
+ * version 1.4 (12/11/2006)
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -89,6 +89,7 @@ jQuery.fn.corner = function(o) {
         }
     };
     o = (o||"").toLowerCase();
+    var ie6 = jQuery.browser.msie && typeof XMLHttpRequest == 'function';
     var keep = /keep/.test(o);                       // keep borders?
     var cc = ((o.match(/cc:(#[0-9a-f]+)/)||[])[1]);  // corner color
     var sc = ((o.match(/sc:(#[0-9a-f]+)/)||[])[1]);  // strip color
@@ -108,15 +109,18 @@ jQuery.fn.corner = function(o) {
     strip.style.backgroundColor = sc || 'transparent';
     strip.style.borderStyle = 'solid';
     return this.each(function(index){
-        var pad = {
-            T: parseInt(jQuery.css(this,'paddingTop'))||0,     R: parseInt(jQuery.css(this,'paddingRight'))||0,
-            B: parseInt(jQuery.css(this,'paddingBottom'))||0,  L: parseInt(jQuery.css(this,'paddingLeft'))||0
-        };
-
         if (!keep) this.style.border = 'none';
         strip.style.borderColor = cc || gpc(this.parentNode);
-        var cssHeight = jQuery.curCSS(this, 'height');
-
+        if (jQuery.css(this,'position') == 'static')
+            this.style.position = 'relative';
+        if (ie6) {
+            var pad = {
+                T: parseInt(jQuery.css(this,'paddingTop'))||0,     R: parseInt(jQuery.css(this,'paddingRight'))||0,
+                B: parseInt(jQuery.css(this,'paddingBottom'))||0,  L: parseInt(jQuery.css(this,'paddingLeft'))||0
+            };
+            var h = jQuery.curCSS(this, 'height');
+        }        
+        
         for (var j in edges) {
             var bot = edges[j];
             strip.style.borderStyle = 'none '+(opts[j+'R']?'solid':'none')+' none '+(opts[j+'L']?'solid':'none');
@@ -125,19 +129,23 @@ jQuery.fn.corner = function(o) {
 
             bot ? this.appendChild(d) : this.insertBefore(d, this.firstChild);
 
-            if (bot && cssHeight != 'auto') {
-                if (jQuery.css(this,'position') == 'static')
-                    this.style.position = 'relative';
-                ds.position = 'absolute';
-                ds.bottom = ds.left = ds.padding = ds.margin = '0';
-                if (jQuery.browser.msie)
-                    ds.setExpression('width', 'this.parentNode.offsetWidth');
-                else
-                    ds.width = '100%';
+            if (ie6) {
+                ds.setExpression('width', 'this.parentNode.offsetWidth');
+                if (h != 'auto') {
+                    ds.position = 'absolute';
+                    bot ? ds.bottom = ds.left = ds.padding = ds.margin = '0' :
+                             ds.top = ds.left = ds.padding = ds.margin = '0';
+                }
+                else {
+                    ds.margin = !bot ? '-'+pad.T+'px -'+pad.R+'px '+(pad.T-width)+'px -'+pad.L+'px' : 
+                                        (pad.B-width)+'px -'+pad.R+'px -'+pad.B+'px -'+pad.L+'px';                
+                }
             }
             else {
-                ds.margin = !bot ? '-'+pad.T+'px -'+pad.R+'px '+(pad.T-width)+'px -'+pad.L+'px' : 
-                                    (pad.B-width)+'px -'+pad.R+'px -'+pad.B+'px -'+pad.L+'px';                
+                ds.position = 'absolute';
+                ds.width = '100%';
+                bot ? ds.bottom = ds.left = ds.padding = ds.margin = '0' :
+                         ds.top = ds.left = ds.padding = ds.margin = '0';
             }
 
             for (var i=0; i < width; i++) {
