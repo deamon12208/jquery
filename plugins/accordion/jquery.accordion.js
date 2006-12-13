@@ -7,6 +7,8 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
+ * Revision: $Id$
+ *
  */
 
 // nextUntil is necessary, would be nice to have this in jQuery core
