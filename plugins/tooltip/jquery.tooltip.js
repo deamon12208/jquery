@@ -7,6 +7,8 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
+ * Revision: $Id$
+ *
  */
 
 /**
@@ -201,8 +203,12 @@
 	// delete timeout and show helper
 	function show() {
 		tID = null;
+		//var body = $(helper).parent();
+		//var overflow = body.css("overflow");
+		//body.css("overflow", "hidden");
 		helper.show();
 		update();
+		//body.css("overflow", overflow);
 	}
 	
 	/**
