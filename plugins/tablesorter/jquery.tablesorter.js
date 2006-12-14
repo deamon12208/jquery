@@ -398,8 +398,6 @@ jQuery.tableSorter = {
 				var analyzer = this.analyzers[i];
 				
 				if(analyzer.is(s)) {
-					console.log(analyzer.id,s,analyzer.format(s));
-					
 					foundAnalyzer = true;
 					return analyzer;
 					continue;
