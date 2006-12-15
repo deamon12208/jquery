@@ -148,6 +148,18 @@ test("ajaxSubmit: pre-submit callback", function() {
     $('#form3').ajaxSubmit(opts);
 });
 
+
+// test ajaxSubmit with function argument
+test("ajaxSubmit: function arg", function() {
+    stop();
+
+    $('#form3').ajaxSubmit(function() {
+        ok( true, 'callback hit');
+        start();
+    });
+});
+
+
 // test ajaxSubmit post-submit callback for response and status text
 test("ajaxSubmit: post-submit callback", function() {
     stop();
