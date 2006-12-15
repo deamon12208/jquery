@@ -163,9 +163,6 @@ jQuery.fn.nextUntil = function(expr) {
 			var finished = function() {
 				if(--running)
 					return;
-				// maintain flexible height
-				toHide.css({height: ''});
-				toShow.css({height: ''});
 				
 				// trigger custom change event
 				container.trigger("change", data);
