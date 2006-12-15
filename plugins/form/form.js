@@ -7,13 +7,15 @@
  *   http://www.gnu.org/licenses/gpl.html
  *
  * Revision: $Id$
- *
  */
 
 /**
  * ajaxSubmit() provides a mechanism for submitting an HTML form using AJAX.
  *
- * Options are provided via an options object.  The following options are supported:
+ * ajaxSubmit accepts a single argument which can be either a success callback function
+ * or an options Object.  If a function is provided it will be invoked upon successful
+ * completion of the submit and will be passed the response from the server.
+ * If an options Object is provided, the following attributes are supported:
  *
  *  target:   Identifies the element(s) in the page to be updated with the server response.
  *            This value may be specified as a jQuery selection string, a jQuery object,
@@ -26,12 +28,14 @@
  *  method:   The method in which the form data should be submitted, 'GET' or 'POST'.
  *            default value: value of form's 'method' attribute (or 'GET' if none found)
  *
- *  before:   Callback method to be invoked before the form is submitted.
+ *  before:   @deprecated use 'beforeSubmit'
+ *  beforeSubmit:  Callback method to be invoked before the form is submitted.
  *            default value: null
  *
- *  after:    Callback method to be invoked after the form has been successfully submitted.
+ *  after:    @deprecated use 'success'
+ *  success:  Callback method to be invoked after the form has been successfully submitted
+ *            and the response has been returned from the server
  *            default value: null
- *            (Note: 'success' can be used in place of 'after')
  *
  *  dataType: Expected dataType of the response.  One of: null, 'xml', 'script', or 'json'
  *            default value: null
@@ -39,10 +43,6 @@
  *  semantic: Boolean flag indicating whether data must be submitted in semantic order (slower).
  *            default value: false
  *
- * Note: When a target is specified and a dataType is not, this call is routed through
- *       jQuery's 'load' method in order to load content into the target element.  In all
- *       other cases this call is routed through jQuery's 'ajax' method and the options argument 
- *       is passed through to the ajax call.
  *
  * The 'before' callback can be provided as a hook for running pre-submit logic or for
  * validating the form data.  If the 'before' callback returns false then the form will
@@ -83,6 +83,12 @@
  *
  * When using ajaxForm(), however, this is done for you.
  *
+ * @example
+ * $('#myForm').ajaxSubmit(function(data) {
+ *     alert('Form submit succeeded! Server returned: ' + data);
+ * });
+ * @desc Submit form and alert server response
+ *
  *
  * @example
  * var options = {
@@ -94,7 +100,7 @@
  *
  * @example
  * var options = {
- *     after: function(responseText) {
+ *     success: function(responseText) {
  *         alert(responseText);
  *     }
  * };
@@ -104,7 +110,7 @@
  *
  * @example
  * var options = {
- *     before: function(formArray, jqForm) {
+ *     beforeSubmit: function(formArray, jqForm) {
  *         if (formArray.length == 0) {
  *             alert('Please enter data.');
  *             return false;
@@ -119,7 +125,7 @@
  * var options = {
  *     url: myJsonUrl.php,
  *     dataType: 'json',
- *     after: function(data) {
+ *     success: function(data) {
  *        // 'data' is an object representing the the evaluated json data
  *     }
  * };
@@ -131,7 +137,7 @@
  * var options = {
  *     url: myXmlUrl.php,
  *     dataType: 'xml',
- *     after: function(responseXML) {
+ *     success: function(responseXML) {
  *        // responseXML is XML document object
  *        var data = $('myElement', responseXML).text();
  *     }
@@ -160,23 +166,22 @@
  * @author jQuery Community
  */
 jQuery.fn.ajaxSubmit = function(options) {
+    if (typeof options == 'function')
+        options = { success: options };
+
     options = jQuery.extend({
-        target:   null,
-        url:      this.attr('action') || '',
-        method:   this.attr('method') || 'GET',
-        before:   null,
-        after:    null,
-        dataType: null, // 'xml', 'script', or 'json' (@see jQuery.httpData)
-        semantic: false
+        url:    this.attr('action') || '',
+        method: this.attr('method') || 'GET'
     }, options || {});
 
-    // remap 'after' to 'success' for the load and ajax methods
+    // 'before' and 'after' are deprecated (temporarily remap them)
     options.success = options.success || options.after;
+    options.beforeSubmit = options.beforeSubmit || options.before;
 
     var a = this.formToArray(options.semantic);
 
     // give pre-submit callback an opportunity to abort the submit
-    if (options.before && options.before(a, this, options) === false) return;
+    if (options.beforeSubmit && options.beforeSubmit(a, this, options) === false) return;
 
     var q = jQuery.param(a);
     var get = (options.method && options.method.toUpperCase() == 'GET');
@@ -229,7 +234,7 @@ jQuery.fn.ajaxSubmit = function(options) {
  *
  * @example
  * var options = {
- *     after: function(responseText) {
+ *     success: function(responseText) {
  *         alert(responseText);
  *     }
  * };
@@ -239,7 +244,7 @@ jQuery.fn.ajaxSubmit = function(options) {
  *
  * @example
  * var options = {
- *     before: function(formArray, jqForm) {
+ *     beforeSubmit: function(formArray, jqForm) {
  *         if (formArray.length == 0) {
  *             alert('Please enter data.');
  *             return false;
