@@ -132,6 +132,25 @@ test("ajaxSubmit: target == DOM element", function() {
     $("#form2").ajaxSubmit(opts);
 });
 
+// test simulated $.load behavior
+test("ajaxSubmit: load target with scripts", function() {
+    stop();
+    $('#targetDiv').empty();
+    
+    var opts = {
+        target: '#targetDiv',
+        url:    'doc-with-scripts.html',
+        success: function(responseText) { // post-callback
+            ok( true, 'success-callback');
+            ok( $('#targetDiv').text().match("Lorem ipsum"), "targetDiv updated");
+            ok( unitTestVariable1 === true, 'first script block executed');
+            ok( unitTestVariable2 === true, 'second script block executed');
+            start();
+        }
+    };
+    
+    $("#form2").ajaxSubmit(opts);
+});
 
 
 // test ajaxSubmit pre-submit callback
