@@ -44,14 +44,15 @@
  *            default value: false
  *
  *
- * The 'before' callback can be provided as a hook for running pre-submit logic or for
- * validating the form data.  If the 'before' callback returns false then the form will
- * not be submitted. The 'before' callback is invoked with two arguments: the form data
- * in array format, and the jQuery object.  The form data array takes the following form:
+ * The 'beforeSubmit' callback can be provided as a hook for running pre-submit logic or for
+ * validating the form data.  If the 'beforeSubmit' callback returns false then the form will
+ * not be submitted. The 'beforeSubmit' callback is invoked with three arguments: the form data
+ * in array format, the jQuery object, and the options object passed into ajaxSubmit.  
+ * The form data array takes the following form:
  *
  *     [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ]
  *
- * If an 'after' callback method is provided it is invoked after the response has been returned
+ * If a 'success' callback method is provided it is invoked after the response has been returned
  * from the server.  It is passed the responseText or responseXML value (depending on dataType).
  * See jQuery.ajax for further details.
  *
@@ -161,7 +162,6 @@
  * @return jQuery
  * @see formToArray
  * @see ajaxForm
- * @see load
  * @see $.ajax
  * @author jQuery Community
  */
