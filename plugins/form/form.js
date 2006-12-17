@@ -190,16 +190,19 @@ jQuery.fn.ajaxSubmit = function(options) {
         // if url already has a '?' then append args after '&'
         options.url += (options.url.indexOf('?') >= 0 ? '&' : '?') + q;
 
+    // remap 'method' to 'type' for the ajax method
+    options.type = options.method;
+    options.data = get ? null : q;  // data is null for 'get' or the query string for 'post'
+
     // perform a load on the target only if dataType is not provided
-    if (!options.dataType && options.target)
-        jQuery(options.target).load(options.url, get ? null : a, options.success);
-    else {
-        // remap 'method' to 'type' for the ajax method
-        options.type = options.method;
-        options.data = get ? null : q;  // data is null for 'get' or the query string for 'post'
-        // pass options along to ajax method
-        jQuery.ajax(options);
+    if (!options.dataType && options.target) {
+        var oldSuccess = options.success || function(){};
+        options.success = function(data, status) {
+            jQuery(options.target).html(data).evalScripts().each(oldSuccess, [data, status]);
+        }
     }
+        
+    jQuery.ajax(options);
     return this;
 };
 
