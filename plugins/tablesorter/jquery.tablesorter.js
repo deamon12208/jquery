@@ -52,6 +52,7 @@ jQuery.fn.tableSorter = function(o) {
 		textExtractionCustom: false,
 		bind: false,
 		addHeaderLink: false,
+		lockedSortDir: false,
 		dateFormat: 'mm/dd/yyyy' /** us default, uk dd/mm/yyyy */
 	};
 
@@ -138,12 +139,12 @@ jQuery.fn.tableSorter = function(o) {
 						jQuery(oCell).wrapInner({element: '<a href="#">', name: 'a', className: 'sorter'});
 
 						jQuery(".sorter",oCell).click(function(e) {
-							sortOnColumn( jQuery(this).parent(), (jQuery(this).parent()[0].count++) % 2, jQuery(this).parent()[0].index );
+							sortOnColumn( jQuery(this).parent(), ((defaults.lockedSortDir) ? defaults.lockedSortDir : jQuery(this).parent()[0].count++) % 2, jQuery(this).parent()[0].index );
 							return false;
 						});
 					} else {
 						jQuery(oCell).click(function(e) {
-							sortOnColumn( jQuery(this), (jQuery(this)[0].count++) % 2, jQuery(this)[0].index );
+							sortOnColumn( jQuery(this), ((defaults.lockedSortDir) ? defaults.lockedSortDir : jQuery(this)[0].count++) % 2, jQuery(this)[0].index );
 							return false;
 						});
 					}
