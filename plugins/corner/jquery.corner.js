@@ -1,7 +1,7 @@
 /*
  * jQuery corner plugin
  *
- * version 1.4 (12/11/2006)
+ * version 1.5 (12/20/2006)
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -109,6 +109,7 @@ jQuery.fn.corner = function(o) {
     strip.style.backgroundColor = sc || 'transparent';
     strip.style.borderStyle = 'solid';
     return this.each(function(index){
+        if (jQuery.browser.msie) this.style.zoom = 1; // force 'hasLayout' in IE
         if (!keep) this.style.border = 'none';
         strip.style.borderColor = cc || gpc(this.parentNode);
         if (jQuery.css(this,'position') == 'static')
