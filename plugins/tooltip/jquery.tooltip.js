@@ -154,7 +154,7 @@
 			settings = this.tSettings;
 			
 		// save title, remove from element and set to helper
-		oldTitle = title = source.attr('title');
+		var title = oldTitle = source.attr('title');
 		source.attr('title','');
 		if(settings.showBody) {
 			var parts = title.split(settings.showBody);
@@ -175,7 +175,7 @@
 		}
 		
 		// if element has href or src, add and show it, otherwise hide it
-		href = (source.attr('href') || source.attr('src'));
+		var href = (source.attr('href') || source.attr('src'));
 		if( settings.showURL && href )
 			tUrl.html(href.replace('http://', '')).show();
 		else 
@@ -203,12 +203,8 @@
 	// delete timeout and show helper
 	function show() {
 		tID = null;
-		//var body = $(helper).parent();
-		//var overflow = body.css("overflow");
-		//body.css("overflow", "hidden");
 		helper.show();
 		update();
-		//body.css("overflow", overflow);
 	}
 	
 	/**
@@ -226,14 +222,9 @@
 		var left = helper[0].offsetLeft;
 		var top = helper[0].offsetTop;
 		if(event) {
-			// get the current mouse position
-			function pos(c) {
-				var p = c == 'X' ? 'Left' : 'Top';
-				return event['page' + c] || (event['client' + c] + (document.documentElement['scroll' + p] || document.body['scroll' + p])) || 0;
-			}
 			// position the helper 15 pixel to bottom right, starting from mouse position
-			left = pos('X') + 15;
-			top = pos('Y') + 15;
+			left = event.pageX + 15;
+			top = event.pageY + 15;
 			helper.css({
 				left: left + 'px',
 				top: top + 'px'
@@ -258,14 +249,6 @@
 		var e = document.documentElement || {},
 			b = document.body || {},
 			w = window;
-
-		return {
-			x: w.pageXOffset || e.scrollLeft || b.scrollLeft || 0,
-			y: w.pageYOffset || e.scrollTop || b.scrollTop || 0,
-			cx: min( e.clientWidth, b.clientWidth, w.innerWidth ),
-			cy: min( e.clientHeight, b.clientHeight, w.innerHeight )
-		};
-
 		function min() {
 			var v = Infinity;
 			for( var i = 0;  i < arguments.length;  i++ ) {
@@ -274,6 +257,12 @@
 			}
 			return v;
 		}
+		return {
+			x: w.pageXOffset || e.scrollLeft || b.scrollLeft || 0,
+			y: w.pageYOffset || e.scrollTop || b.scrollTop || 0,
+			cx: min( e.clientWidth, b.clientWidth, w.innerWidth ),
+			cy: min( e.clientHeight, b.clientHeight, w.innerHeight )
+		};
 	}
 	
 	// hide helper and restore added classes and the title
