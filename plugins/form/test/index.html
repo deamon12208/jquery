@@ -60,7 +60,7 @@ test("formToArray: text promotion for missing value attributes", function() {
 
     // verify all the option values
     for (var i=0; i < a.length; i++) {
-        //ok( a[i].name  == expected[i].name,  'Name: '  + a[i].name  + ' = ' + expected[i].name);
+        ok( a[i].name  == expected[i].name,  'Name: '  + a[i].name  + ' = ' + expected[i].name);
         ok( a[i].value == expected[i].value, 'Value: ' + a[i].value + ' = ' + expected[i].value);
     }
 });
@@ -79,6 +79,127 @@ test("serialize: pseudo form", function() {
     ok( s.constructor == String, "type check");
     ok( s.split('&').length == 3, "string array length");
 });
+
+// test resetForm
+test("resetForm (text input)", function() {
+    var $el = $('#form1 input[@name=Name]');
+    var val = $el.val();
+    ok( 'MyName1' == val, 'before: ' + val);
+    $el.val("test");
+    val = $el.val();
+    ok( 'test' == $el.val(), 'update: ' + val);
+    $('#form1').resetForm();
+    val = $el.val();
+    ok( 'MyName1' == val, 'after: ' + val);
+});
+
+// test resetForm
+test("resetForm (select)", function() {
+    var $el = $('#form1 select[@name=Single]');
+    var val = $el.val();
+    ok( 'one' == val, 'before: ' + val);
+    $el.val("two");
+    val = $el.val();
+    ok( 'two' == $el.val(), 'update: ' + val);
+    $('#form1').resetForm();
+    val = $el.val();
+    ok( 'one' == val, 'after: ' + val);
+});
+
+// test resetForm
+test("resetForm (textarea)", function() {
+    var $el = $('#form1 textarea');
+    var val = $el.val();
+    ok( 'This is Form1' == val, 'before: ' + val);
+    $el.val("test");
+    val = $el.val();
+    ok( 'test' == val, 'udpate: ' + val);
+    $('#form1').resetForm();
+    val = $el.val();
+    ok( 'This is Form1' == val, 'after: ' + val);
+});
+
+// test resetForm
+test("resetForm (checkbox)", function() {
+    var el = $('#form1 input:checkbox:checked')[0];
+    var val = el.value;
+    ok( el.checked, 'before: ' + el.checked);
+    el.checked = false;
+    ok( !el.checked, 'update: ' + el.checked);
+    $('#form1').resetForm();
+    ok( el.checked, 'after: ' + el.checked);
+});
+
+// test resetForm
+test("resetForm (radio)", function() {
+    var el = $('#form1 input:radio:checked')[0];
+    var val = el.value;
+    ok( el.checked, 'before: ' + el.checked);
+    el.checked = false;
+    ok( !el.checked, 'update: ' + el.checked);
+    $('#form1').resetForm();
+    ok( el.checked, 'after: ' + el.checked);
+});
+
+
+// test clearForm
+test("clearForm (text input)", function() {
+    var $el = $('#form1 input[@name=Name]');
+    var val = $el.val();
+    ok( 'MyName1' == val, 'before: ' + val);
+    $('#form1').clearForm();
+    val = $el.val();
+    ok( '' == val, 'after: ' + val);
+});
+
+// test resetForm
+test("clearForm (select)", function() {
+    var $el = $('#form1 select[@name=Single]');
+    var val = $el.val();
+    ok( 'one' == val, 'before: ' + val);
+    $('#form1').clearForm();
+    val = $el.val();
+    ok( '' == val, 'after: ' + val);
+});
+
+// test clearForm; here we're testing that a hidden field is NOT cleared
+test("clearForm: (hidden input)", function() {
+    var $el = $('#form1 input:hidden');
+    var val = $el.val();
+    ok( 'hiddenValue' == val, 'before: ' + val);
+    $('#form1').clearForm();
+    val = $el.val();
+    ok( 'hiddenValue' == val, 'after: ' + val);
+});
+
+
+// test clearForm; here we're testing that a submit element is NOT cleared
+test("clearForm: (submit input)", function() {
+    var $el = $('#form1 input:submit');
+    var val = $el.val();
+    ok( 'Submit1' == val, 'before: ' + val);
+    $('#form1').clearForm();
+    val = $el.val();
+    ok( 'Submit1' == val, 'after: ' + val);
+});
+
+// test clearForm
+test("clearForm (checkbox)", function() {
+    var el = $('#form1 input:checkbox:checked')[0];
+    ok( el.checked, 'before: ' + el.checked);
+    $('#form1').clearForm();
+    ok( !el.checked, 'after: ' + el.checked);
+});
+
+
+// test clearForm
+test("clearForm (radio)", function() {
+    var el = $('#form1 input:radio:checked')[0];
+    ok( el.checked, 'before: ' + el.checked);
+    $('#form1').clearForm();
+    ok( !el.checked, 'after: ' + el.checked);
+});
+
 
 // test ajaxSubmit target update
 test("ajaxSubmit: target == String", function() {
