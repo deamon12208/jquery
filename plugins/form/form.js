@@ -43,6 +43,10 @@
  *  semantic: Boolean flag indicating whether data must be submitted in semantic order (slower).
  *            default value: false
  *
+ *  resetForm: Boolean flag indicating whether the form should be reset if the submit is successful
+ *
+ *  clearForm: Boolean flag indicating whether the form should be cleared if the submit is successful
+ *
  *
  * The 'beforeSubmit' callback can be provided as a hook for running pre-submit logic or for
  * validating the form data.  If the 'beforeSubmit' callback returns false then the form will
@@ -148,6 +152,13 @@
  *
  *
  * @example
+ * var options = {
+ *     resetForm: true
+ * };
+ * $('#myForm').ajaxSubmit(options);
+ * @desc submit form and reset it if successful
+ *
+ * @example
  * $('#myForm).submit(function() {
  *    $(this).ajaxSubmit();
  *    return false;
@@ -194,18 +205,29 @@ jQuery.fn.ajaxSubmit = function(options) {
     options.type = options.method;
     options.data = get ? null : q;  // data is null for 'get' or the query string for 'post'
 
+    var $form = this;
+    var callbacks = [];
+    if (options.resetForm) callbacks.push(function() { $form.resetForm(); });
+    if (options.clearForm) callbacks.push(function() { $form.clearForm(); });
+
     // perform a load on the target only if dataType is not provided
     if (!options.dataType && options.target) {
         var oldSuccess = options.success || function(){};
-        options.success = function(data, status) {
+        callbacks.push(function(data, status) {
             jQuery(options.target).html(data).evalScripts().each(oldSuccess, [data, status]);
-        }
+        });
     }
+    else if (options.success) 
+        callbacks.push(options.success);
+
+    options.success = function(data, status) {
+        for (var i=0; i < callbacks.length; i++)
+            callbacks[i](data, status);
+    };
         
     jQuery.ajax(options);
     return this;
 };
-
 
 /**
  * ajaxForm() provides a mechanism for fully automating form submission.
@@ -530,3 +552,54 @@ jQuery.fieldValue = function(el, successful) {
     }
     return el.value;
 };
+
+
+/**
+ * Clears the form data.  Takes the following actions on the form's input fields:
+ *  - input text fields will have their 'value' property set to the empty string
+ *  - select elements will have their 'selectedIndex' property set to -1
+ *  - checkbox and radio inputs will have their 'checked' property set to false
+ *  - inputs of type submit, button, reset, and hidden will *not* be effected
+ *  - button elements will *not* be effected
+ *
+ * @example $('form').clearForm();
+ * @desc Clear all forms on the page.
+ *
+ * @name clearForm
+ * @type jQuery
+ * @cat Plugins/Form
+ * @see resetForm
+ */
+jQuery.fn.clearForm = function() {
+    return this.each(function() {
+        jQuery(':input', this).each(function() {
+            var t = this.type;
+            var tag = this.tagName.toLowerCase();
+            if (t == 'text' || t == 'password' || tag == 'textarea')
+                this.value = '';
+            else if (t == 'checkbox' || t == 'radio')
+                this.checked = false;
+            else if (tag == 'select')
+                this.selectedIndex = -1;
+        });
+    });
+}
+
+/**
+ * Resets the form data.  Causes all form elements to be reset to their original value.
+ *
+ * @example $('form').resetForm();
+ * @desc Resets all forms on the page.
+ *
+ * @name resetForm
+ * @type jQuery
+ * @cat Plugins/Form
+ * @see clearForm
+ */
+jQuery.fn.resetForm = function() {
+    return this.each(function() {
+        if (this.reset) 
+            this.reset();
+    });
+}
+
