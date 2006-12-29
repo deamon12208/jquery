@@ -290,7 +290,7 @@ jQuery.iSort = {
 					onChange : 	o.onChange||o.onchange,
 					fx : o.fx ? o.fx : false,
 					ghosting : o.ghosting ? true : false,
-					tolerance: o.tolerance ? o.tolerance : 'pointer'
+					tolerance: o.tolerance ? o.tolerance : 'intersect'
 				}
 			);
 			
