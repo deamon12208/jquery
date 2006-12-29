@@ -225,11 +225,11 @@ jQuery.iDrag =	{
 				jQuery.iDrag.helper.css('filter', 'alpha(opacity=' + elm.dragCfg.opacity * 100 + ')');
 			}
 		}
-		if (elm.dragCfg.ghosting == false) {
-			dEs.display = 'none';
-		}
 		if (jQuery.iDrop && jQuery.iDrop.count > 0 ){
 			jQuery.iDrop.highlight(elm);
+		}
+		if (elm.dragCfg.ghosting == false) {
+			dEs.display = 'none';
 		}
 		return false;
 	},
