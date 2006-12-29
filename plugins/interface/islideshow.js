@@ -305,7 +305,8 @@ jQuery.islideshow = {
 				indic = parseInt(i) + 1;
 				el.ss.slideslinks.o.append('<a href="#' + indic + o.container + '" class="slideshowLink">' + indic + '</a>' + (indic != el.ss.images.length ? el.ss.slideslinks.linksSeparator : ''));
 			}
-			jQuery('a', el.ss.slideslinks.o).click(
+			jQuery('a', el.ss.slideslinks.o).bind(
+				'click',
 				function()
 				{
 					jQuery.islideshow.go({link:this})
@@ -337,14 +338,14 @@ jQuery.islideshow = {
 			container.append('<a href="#2' + o.container + '" class="slideshowNextSlide">&nbsp;</a>');
 			el.ss.nextslide.o = jQuery('.slideshowNextSlide', el);
 			el.ss.nextslide.o.css('position', 'absolute').css('display', 'none').css('overflow','hidden').css('fontSize', '30px').addClass(el.ss.nextslide.nextslideClass);
-			el.ss.nextslide.o.click(jQuery.islideshow.gonext);
+			el.ss.nextslide.o.bind('click', jQuery.islideshow.gonext);
 		}
 		if (o.prevslideClass) {
 			el.ss.prevslide= {prevslideClass:o.prevslideClass};
 			container.append('<a href="#0' + o.container + '" class="slideshowPrevslide">&nbsp;</a>');
 			el.ss.prevslide.o = jQuery('.slideshowPrevslide', el);
 			el.ss.prevslide.o.css('position', 'absolute').css('display', 'none').css('overflow','hidden').css('fontSize', '30px').addClass(el.ss.prevslide.prevslideClass);
-			el.ss.prevslide.o.click(jQuery.islideshow.goprev);
+			el.ss.prevslide.o.binc('click', jQuery.islideshow.goprev);
 		}
 		
 		container.prepend('<div class="slideshowHolder"></div>');
