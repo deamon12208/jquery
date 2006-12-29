@@ -89,8 +89,8 @@ jQuery.iDrop = {
 				if (jQuery.className.has(jQuery.iDrag.dragged,iEL.dropCfg.a)) {
 					if (iEL.dropCfg.m == false) {
 						iEL.dropCfg.p = jQuery.extend(
-							jQuery.iUtil.getPosition(iEL),
-							jQuery.iUtil.getSize(iEL)
+							jQuery.iUtil.getPositionLite(iEL),
+							jQuery.iUtil.getSizeLite(iEL)
 						);//jQuery.iUtil.getPos(iEL);
 						iEL.dropCfg.m = true;
 					}
@@ -131,8 +131,8 @@ jQuery.iDrop = {
 				iEL = jQuery.iDrop.zones[i].get(0);
 				if (jQuery.className.has(jQuery.iDrag.dragged,iEL.dropCfg.a)) {
 					iEL.dropCfg.p = jQuery.extend(
-						jQuery.iUtil.getPosition(iEL),
-						jQuery.iUtil.getSize(iEL)
+						jQuery.iUtil.getPositionLite(iEL),
+						jQuery.iUtil.getSizeLite(iEL)
 					);
 					if (iEL.dropCfg.ac) {
 						jQuery.iDrop.zones[i].addClass(iEL.dropCfg.ac);
@@ -159,19 +159,21 @@ jQuery.iDrop = {
 		jQuery.iDrop.overzone = false;
 		var i;
 		applyOnHover = false;
+		hlt = 0;
 		for (i in jQuery.iDrop.highlighted)
 		{
 			iEL = jQuery.iDrop.highlighted[i].get(0);
 			if ( 
 					jQuery.iDrop.overzone == false
 					 && 
-					 jQuery.iDrop[iEL.dropCfg.t](
+					jQuery.iDrop[iEL.dropCfg.t](
 					 	iEL.dropCfg.p.x, 
 						iEL.dropCfg.p.y, 
 						iEL.dropCfg.p.wb, 
 						iEL.dropCfg.p.hb
-					) 
-				) {
+					)
+					 
+			) {
 				if (iEL.dropCfg.hc && iEL.dropCfg.h == false) {
 					jQuery.iDrop.highlighted[i].removeClass(iEL.dropCfg.ac);
 					jQuery.iDrop.highlighted[i].addClass(iEL.dropCfg.hc);
@@ -187,9 +189,10 @@ jQuery.iDrop = {
 					jQuery.iSort.helper.get(0).className = iEL.dropCfg.shc;
 					jQuery.iSort.checkhover(iEL);
 				}
-			} else {
+				hlt ++;
+			} else if(iEL.dropCfg.h == true) {
 				//onOut function
-				if (iEL.dropCfg.onOut && iEL.dropCfg.h == true) {
+				if (iEL.dropCfg.onOut) {
 					iEL.dropCfg.onOut.apply(iEL, [e, clonedEl, iEL.dropCfg.fx]);
 				}
 				if (iEL.dropCfg.hc) {
