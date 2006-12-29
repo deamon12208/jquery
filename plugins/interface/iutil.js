@@ -71,6 +71,16 @@ jQuery.iUtil = {
 		}
 		return {x:x, y:y};
 	},
+	getPositionLite : function(el)
+	{
+		var x = 0, y = 0;
+		while(el) {
+			x += el.offsetLeft || 0;
+			y += el.offsetTop || 0;
+			el = el.offsetParent;
+		}
+		return {x:x, y:y};
+	},
 	getSize : function(e)
 	{
 		var w = jQuery.css(e,'width');
@@ -94,6 +104,10 @@ jQuery.iUtil = {
 			es.visibility = oldVisibility;
 		}
 		return {w:w, h:h, wb:wb, hb:hb};
+	},
+	getSizeLite : function(el)
+	{
+		return {wb:el.offsetWidth||0,hb:el.offsetHeight||0};
 	},
 	getClient : function(e)
 	{
@@ -212,6 +226,31 @@ jQuery.iUtil = {
 				}
 			}
 		);
+	},
+	centerEl : function(el, axis)
+	{
+		clientScroll = $.iUtil.getScroll();
+		windowSize = $.iUtil.getSize(el);
+		if (!axis || axis == 'vertically')
+			$(el).css(
+				{
+					top: clientScroll.t + ((Math.max(clientScroll.h,clientScroll.ih) - clientScroll.t - windowSize.hb)/2) + 'px'
+				}
+			);
+		if (!axis || axis == 'horizontally')
+			$(el).css(
+				{
+					left:	clientScroll.l + ((Math.max(clientScroll.w,clientScroll.iw) - clientScroll.l - windowSize.wb)/2) + 'px'
+				}
+			);
+	},
+	fixPNG : function (el, emptyGIF) {
+		var images = $('img[@src*="png"]', el||document), png;
+		images.each( function() {
+			png = this.src;				
+			this.src = emptyGIF;
+			this.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + png + "')";
+		});
 	}
 };
 
