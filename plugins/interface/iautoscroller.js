@@ -16,20 +16,27 @@ jQuery.iAutoscroller = {
 	timer: null,
 	elToScroll: null,
 	elsToScroll: null,
-	start: function(el, els)
+	step: 10,
+	start: function(el, els, step, interval)
 	{
 		jQuery.iAutoscroller.elToScroll = el;
 		jQuery.iAutoscroller.elsToScroll = els;
-		jQuery.iAutoscroller.timer = window.setInterval(jQuery.iAutoscroller.doScroll, 40);
+		jQuery.iAutoscroller.step = parseInt(step)||10;
+		jQuery.iAutoscroller.timer = window.setInterval(jQuery.iAutoscroller.doScroll, parseInt(interval)||40);
 	},
 	doScroll : function()
 	{
-		for (i in jQuery.iAutoscroller.elsToScroll) {
-				parentData = jQuery.extend(
-					jQuery.iUtil.getPositionLite(jQuery.iAutoscroller.elsToScroll[i]),
-					jQuery.iUtil.getSizeLite(jQuery.iAutoscroller.elsToScroll[i]),
-					jQuery.iUtil.getScroll(jQuery.iAutoscroller.elsToScroll[i])
-				);
+		for (i=0;i<jQuery.iAutoscroller.elsToScroll.length; i++) {
+				if(!jQuery.iAutoscroller.elsToScroll[i].parentData) {
+					jQuery.iAutoscroller.elsToScroll[i].parentData = jQuery.extend(
+						jQuery.iUtil.getPositionLite(jQuery.iAutoscroller.elsToScroll[i]),
+						jQuery.iUtil.getSizeLite(jQuery.iAutoscroller.elsToScroll[i]),
+						jQuery.iUtil.getScroll(jQuery.iAutoscroller.elsToScroll[i])
+					);
+				} else {
+					jQuery.iAutoscroller.elsToScroll[i].parentData.t = jQuery.iAutoscroller.elsToScroll[i].scrollTop;
+					jQuery.iAutoscroller.elsToScroll[i].parentData.l = jQuery.iAutoscroller.elsToScroll[i].scrollLeft;
+				}
 				
 				if (jQuery.iAutoscroller.elToScroll.dragCfg && jQuery.iAutoscroller.elToScroll.dragCfg.init == true) {
 					elementData = {
@@ -44,24 +51,28 @@ jQuery.iAutoscroller = {
 						jQuery.iUtil.getSizeLite(jQuery.iAutoscroller.elToScroll)
 					);
 				}
-				
-				if (parentData.t > 0 && parentData.y + parentData.t > elementData.y) {
-					jQuery.iAutoscroller.elsToScroll[i].scrollTop -= 10;
-				} else if (parentData.t <= parentData.h && parentData.t + parentData.hb < elementData.y + elementData.hb) {
-					jQuery.iAutoscroller.elsToScroll[i].scrollTop += 10;
+				if (
+					jQuery.iAutoscroller.elsToScroll[i].parentData.t > 0
+					 && 
+					jQuery.iAutoscroller.elsToScroll[i].parentData.y + jQuery.iAutoscroller.elsToScroll[i].parentData.t > elementData.y) {
+					jQuery.iAutoscroller.elsToScroll[i].scrollTop -= jQuery.iAutoscroller.step;
+				} else if (jQuery.iAutoscroller.elsToScroll[i].parentData.t <= jQuery.iAutoscroller.elsToScroll[i].parentData.h && jQuery.iAutoscroller.elsToScroll[i].parentData.t + jQuery.iAutoscroller.elsToScroll[i].parentData.hb < elementData.y + elementData.hb) {
+					jQuery.iAutoscroller.elsToScroll[i].scrollTop += jQuery.iAutoscroller.step;
 				}
-				if (parentData.l > 0 && parentData.x + parentData.l > elementData.x) {
-					jQuery.iAutoscroller.elsToScroll[i].scrollLeft -= 10;
-				} else if (parentData.l <= parentData.wh && parentData.l + parentData.wb < elementData.x + elementData.wb) {
-					jQuery.iAutoscroller.elsToScroll[i].scrollLeft += 10;
+				if (jQuery.iAutoscroller.elsToScroll[i].parentData.l > 0 && jQuery.iAutoscroller.elsToScroll[i].parentData.x + jQuery.iAutoscroller.elsToScroll[i].parentData.l > elementData.x) {
+					jQuery.iAutoscroller.elsToScroll[i].scrollLeft -= jQuery.iAutoscroller.step;
+				} else if (jQuery.iAutoscroller.elsToScroll[i].parentData.l <= jQuery.iAutoscroller.elsToScroll[i].parentData.wh && jQuery.iAutoscroller.elsToScroll[i].parentData.l + jQuery.iAutoscroller.elsToScroll[i].parentData.wb < elementData.x + elementData.wb) {
+					jQuery.iAutoscroller.elsToScroll[i].scrollLeft += jQuery.iAutoscroller.step;
 				}
 		}
 	},
 	stop: function()
 	{
-		console.log('stop');
 		window.clearInterval(jQuery.iAutoscroller.timer);
 		jQuery.iAutoscroller.elToScroll = null;
 		jQuery.iAutoscroller.elsToScroll = null;
+		for (i in jQuery.iAutoscroller.elsToScroll) {
+			jQuery.iAutoscroller.elsToScroll[i].parentData = null;
+		}
 	}
 };
