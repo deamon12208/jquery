@@ -262,12 +262,12 @@ jQuery.iDrop = {
 				}
 				this.dropCfg = {
 					a : o.accept,
-					ac: o.activeclass, 
-					hc:	o.hoverclass,
-					shc: o.helperclass,
-					onDrop:	o.ondrop||o.onDrop,
-					onHover: o.onHover||o.onhover,
-					onOut: o.onOut||o.onout,
+					ac: o.activeclass||false, 
+					hc:	o.hoverclass||false,
+					shc: o.helperclass||false,
+					onDrop:	o.ondrop||o.onDrop||false,
+					onHover: o.onHover||o.onhover||false,
+					onOut: o.onOut||o.onout||false,
 					t: o.tolerance && ( o.tolerance == 'fit' || o.tolerance == 'intersect') ? o.tolerance : 'pointer',
 					fx: o.fx ? o.fx : false,
 					m: false,
