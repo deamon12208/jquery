@@ -512,6 +512,18 @@ jQuery.iDrag =	{
 				}
 				var el = this;
 				var dhe = o.handle ? jQuery(this).find(o.handle) : jQuery(this);
+				if(jQuery.browser.msie) {
+					dhe.each(
+						function()
+						{
+							this.onselectstart = function(){return false;};
+							this.ondrag = function(){return false;}
+						}
+					);
+				} else if (jQuery.browser.mozilla){
+					dhe.css('-moz-user-select', 'none');
+					dhe.css('user-select', 'none');
+				}
 				this.dragCfg = {
 					dhe: dhe,
 					revert : o.revert ? true : false,
