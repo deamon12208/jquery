@@ -42,7 +42,7 @@ jQuery.iUtil = {
 		var x = 0;
 		var y = 0;
 		var restoreStyle = false;
-		es = e.style;
+		var es = e.style;
 		if (jQuery(e).css('display') == 'none') {
 			oldVisibility = es.visibility;
 			oldPosition = es.position;
@@ -51,7 +51,7 @@ jQuery.iUtil = {
 			es.position = 'absolute';
 			restoreStyle = true;
 		}
-		el = e;
+		var el = e;
 		while (el){
 			x += el.offsetLeft + (el.currentStyle && !jQuery.browser.opera ?parseInt(el.currentStyle.borderLeftWidth)||0:0);
 			y += el.offsetTop + (el.currentStyle && !jQuery.browser.opera ?parseInt(el.currentStyle.borderTopWidth)||0:0);
@@ -87,7 +87,7 @@ jQuery.iUtil = {
 		var h = jQuery.css(e,'height');
 		var wb = 0;
 		var hb = 0;
-		es = e.style;
+		var es = e.style;
 		if (jQuery(e).css('display') != 'none') {
 			wb = e.offsetWidth;
 			hb = e.offsetHeight;
@@ -111,6 +111,7 @@ jQuery.iUtil = {
 	},
 	getClient : function(e)
 	{
+		var h, w, de;
 		if (e) {
 			w = e.clientWidth;
 			h = e.clientHeight;
@@ -123,6 +124,7 @@ jQuery.iUtil = {
 	},
 	getScroll : function (e)
 	{
+		var t, l, w, h, iw, ih;
 		if (e) {
 			t = e.scrollTop;
 			l = e.scrollLeft;
@@ -149,11 +151,11 @@ jQuery.iUtil = {
 	},
 	getMargins : function(e, toInteger)
 	{
-		el = jQuery(e);
-		t = el.css('marginTop') || '';
-		r = el.css('marginRight') || '';
-		b = el.css('marginBottom') || '';
-		l = el.css('marginLeft') || '';
+		var el = jQuery(e);
+		var t = el.css('marginTop') || '';
+		var r = el.css('marginRight') || '';
+		var b = el.css('marginBottom') || '';
+		var l = el.css('marginLeft') || '';
 		if (toInteger)
 			return {
 				t: parseInt(t)||0,
@@ -166,11 +168,11 @@ jQuery.iUtil = {
 	},
 	getPadding : function(e, toInteger)
 	{
-		el = jQuery(e);
-		t = el.css('paddingTop') || '';
-		r = el.css('paddingRight') || '';
-		b = el.css('paddingBottom') || '';
-		l = el.css('paddingLeft') || '';
+		var el = jQuery(e);
+		var t = el.css('paddingTop') || '';
+		var r = el.css('paddingRight') || '';
+		var b = el.css('paddingBottom') || '';
+		var l = el.css('paddingLeft') || '';
 		if (toInteger)
 			return {
 				t: parseInt(t)||0,
@@ -183,11 +185,11 @@ jQuery.iUtil = {
 	},
 	getBorder : function(e, toInteger)
 	{
-		el = jQuery(e);
-		t = el.css('borderTopWidth') || '';
-		r = el.css('borderRightWidth') || '';
-		b = el.css('borderBottomWidth') || '';
-		l = el.css('borderLeftWidth') || '';
+		var el = jQuery(e);
+		var t = el.css('borderTopWidth') || '';
+		var r = el.css('borderRightWidth') || '';
+		var b = el.css('borderBottomWidth') || '';
+		var l = el.css('borderLeftWidth') || '';
 		if (toInteger)
 			return {
 				t: parseInt(t)||0,
@@ -200,8 +202,8 @@ jQuery.iUtil = {
 	},
 	getPointer : function(event)
 	{
-		x = event.pageX || (event.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft)) || 0;
-		y = event.pageY || (event.clientY + (document.documentElement.scrollTop || document.body.scrollTop)) || 0;
+		var x = event.pageX || (event.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft)) || 0;
+		var y = event.pageY || (event.clientY + (document.documentElement.scrollTop || document.body.scrollTop)) || 0;
 		return {x:x, y:y};
 	},
 	traverseDOM : function(nodeEl, func)
@@ -229,8 +231,8 @@ jQuery.iUtil = {
 	},
 	centerEl : function(el, axis)
 	{
-		clientScroll = $.iUtil.getScroll();
-		windowSize = $.iUtil.getSize(el);
+		var clientScroll = $.iUtil.getScroll();
+		var windowSize = $.iUtil.getSize(el);
 		if (!axis || axis == 'vertically')
 			$(el).css(
 				{
