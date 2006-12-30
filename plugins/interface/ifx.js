@@ -142,9 +142,9 @@ jQuery.fx = function( elem, options, prop, transition ){
 					for ( var p in z.el.curAnim ) {
 						y[ p ] = z.el.orig[p] + ( p == "opacity" ? "" : "px" );
 
-						// set its height and/or width to auto
+						/*// set its height and/or width to auto
 						if ( p == 'height' || p == 'width' )
-							jQuery.setAuto( z.el, p );
+							jQuery.setAuto( z.el, p );*/
 					}
 				}
 			}
