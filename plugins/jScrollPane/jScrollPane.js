@@ -46,11 +46,13 @@ jQuery.fn.jScrollPane = function(settings)
 				if ($c.unmousewheel) {
 					$c.unmousewheel();
 				}
-				jQuery('.jScrollPaneTrack', $c).remove();
+				jQuery('>.jScrollPaneTrack', $c).remove();
 				$this.css({'top':0});
 			} else {
+				this.originalPadding = $this.css('padding');
+				this.originalSidePaddingTotal = (parseInt($this.css('paddingLeft')) || 0) + (parseInt($this.css('paddingRight')) || 0);
 				var paneWidth = $this.innerWidth();
-				var paneHeight = $this.outerHeight();
+				var paneHeight = $this.innerHeight();
 				$this.wrap(
 					jQuery('<div>').attr(
 						{'className':'jScrollPaneContainer'}
@@ -62,10 +64,11 @@ jQuery.fn.jScrollPane = function(settings)
 					)
 				);
 			}
+			var p = this.originalSidePaddingTotal;
 			$this.css(
 				{
 					'height':'auto',
-					'width':paneWidth - settings.scrollbarWidth - settings.scrollbarMargin+ 'px',
+					'width':paneWidth - settings.scrollbarWidth - settings.scrollbarMargin - p + 'px',
 					'paddingRight':settings.scrollbarMargin + 'px'
 				}
 			);
@@ -136,7 +139,7 @@ jQuery.fn.jScrollPane = function(settings)
 					positionDrag(getPos(e, 'Y') - currentOffset.top - dragMiddle);
 				};
 				
-				var $drag = jQuery('.jScrollPaneDrag', $container);
+				var $drag = jQuery('>.jScrollPaneTrack .jScrollPaneDrag', $container);
 				$drag.css(
 					{'height':(percentInView*paneHeight)+'px'}
 				).bind('mousedown', onStartDrag);
@@ -162,13 +165,14 @@ jQuery.fn.jScrollPane = function(settings)
 				};
 				var onTrackClick = function(event)
 				{
+					initDrag();
 					onTrackMouseMove(event);
 					trackScrollInc = 0;
 					trackScrollInterval = setInterval(doTrackScroll, 100);
 					jQuery('body').bind('mouseup', onStopTrackClick).bind('mousemove', onTrackMouseMove);
 				};
 				
-				var $track = jQuery('.jScrollPaneTrack', $container);
+				var $track = jQuery('>.jScrollPaneTrack', $container);
 				$track.bind('mousedown', onTrackClick);
 				
 				// if the mousewheel plugin has been included then also react to the mousewheel
@@ -177,6 +181,7 @@ jQuery.fn.jScrollPane = function(settings)
 						function (event, delta) {
 							initDrag();
 							positionDrag(dragPosition - delta * mouseWheelMultiplier);
+							return false;
 						},
 						true
 					);					
@@ -188,8 +193,8 @@ jQuery.fn.jScrollPane = function(settings)
 				$this.css(
 					{
 						'height':paneHeight+'px',
-						'width':paneWidth+'px',
-						'paddingRight':0
+						'width':paneWidth-this.originalSidePaddingTotal+'px',
+						'padding':this.originalPadding
 					}
 				);
 			}
