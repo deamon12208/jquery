@@ -16,6 +16,8 @@
 <link rel="Stylesheet" media="screen" href="../../../jquery/test/data/testsuite.css" />
 
 <script>
+_config.asyncTimeout = 5;
+
 // test form with inputs named 'action' and 'method'
 test("'action' and 'method' form attributes", function() {
     var f = $("#form1");
@@ -65,7 +67,6 @@ test("formToArray: text promotion for missing value attributes", function() {
     }
 });
 
-
 // test string serialization
 test("serialize: param count", function() {
     var s = $("#form1").formSerialize();
@@ -80,6 +81,7 @@ test("serialize: pseudo form", function() {
     ok( s.split('&').length == 3, "string array length");
 });
 
+
 // test resetForm
 test("resetForm (text input)", function() {
     var $el = $('#form1 input[@name=Name]');
@@ -90,7 +92,7 @@ test("resetForm (text input)", function() {
     ok( 'test' == $el.val(), 'update: ' + val);
     $('#form1').resetForm();
     val = $el.val();
-    ok( 'MyName1' == val, 'after: ' + val);
+    ok( 'MyName1' == val, 'success: ' + val);
 });
 
 // test resetForm
@@ -103,7 +105,7 @@ test("resetForm (select)", function() {
     ok( 'two' == $el.val(), 'update: ' + val);
     $('#form1').resetForm();
     val = $el.val();
-    ok( 'one' == val, 'after: ' + val);
+    ok( 'one' == val, 'success: ' + val);
 });
 
 // test resetForm
@@ -116,7 +118,7 @@ test("resetForm (textarea)", function() {
     ok( 'test' == val, 'udpate: ' + val);
     $('#form1').resetForm();
     val = $el.val();
-    ok( 'This is Form1' == val, 'after: ' + val);
+    ok( 'This is Form1' == val, 'success: ' + val);
 });
 
 // test resetForm
@@ -127,7 +129,7 @@ test("resetForm (checkbox)", function() {
     el.checked = false;
     ok( !el.checked, 'update: ' + el.checked);
     $('#form1').resetForm();
-    ok( el.checked, 'after: ' + el.checked);
+    ok( el.checked, 'success: ' + el.checked);
 });
 
 // test resetForm
@@ -138,7 +140,7 @@ test("resetForm (radio)", function() {
     el.checked = false;
     ok( !el.checked, 'update: ' + el.checked);
     $('#form1').resetForm();
-    ok( el.checked, 'after: ' + el.checked);
+    ok( el.checked, 'success: ' + el.checked);
 });
 
 
@@ -149,7 +151,7 @@ test("clearForm (text input)", function() {
     ok( 'MyName1' == val, 'before: ' + val);
     $('#form1').clearForm();
     val = $el.val();
-    ok( '' == val, 'after: ' + val);
+    ok( '' == val, 'success: ' + val);
 });
 
 // test resetForm
@@ -159,7 +161,7 @@ test("clearForm (select)", function() {
     ok( 'one' == val, 'before: ' + val);
     $('#form1').clearForm();
     val = $el.val();
-    ok( '' == val, 'after: ' + val);
+    ok( '' == val, 'success: ' + val);
 });
 
 // test clearForm; here we're testing that a hidden field is NOT cleared
@@ -169,7 +171,7 @@ test("clearForm: (hidden input)", function() {
     ok( 'hiddenValue' == val, 'before: ' + val);
     $('#form1').clearForm();
     val = $el.val();
-    ok( 'hiddenValue' == val, 'after: ' + val);
+    ok( 'hiddenValue' == val, 'success: ' + val);
 });
 
 
@@ -180,7 +182,7 @@ test("clearForm: (submit input)", function() {
     ok( 'Submit1' == val, 'before: ' + val);
     $('#form1').clearForm();
     val = $el.val();
-    ok( 'Submit1' == val, 'after: ' + val);
+    ok( 'Submit1' == val, 'success: ' + val);
 });
 
 // test clearForm
@@ -188,7 +190,7 @@ test("clearForm (checkbox)", function() {
     var el = $('#form1 input:checkbox:checked')[0];
     ok( el.checked, 'before: ' + el.checked);
     $('#form1').clearForm();
-    ok( !el.checked, 'after: ' + el.checked);
+    ok( !el.checked, 'success: ' + el.checked);
 });
 
 
@@ -197,23 +199,23 @@ test("clearForm (radio)", function() {
     var el = $('#form1 input:radio:checked')[0];
     ok( el.checked, 'before: ' + el.checked);
     $('#form1').clearForm();
-    ok( !el.checked, 'after: ' + el.checked);
+    ok( !el.checked, 'success: ' + el.checked);
 });
-
 
 // test ajaxSubmit target update
 test("ajaxSubmit: target == String", function() {
     $('#targetDiv').empty();
     stop();
-    
     var opts = {
         target: '#targetDiv',
-        after: function() { // post-callback
+        success: function() { // post-callback
             ok( true, 'post-callback');
             ok( $('#targetDiv').text().match("Lorem ipsum"), "targetDiv updated");
             start();
         }
     };
+
+    expect(2);
     $('#form3').ajaxSubmit(opts);
 });
 
@@ -225,13 +227,14 @@ test("ajaxSubmit: target == jQuery object", function() {
     
     var opts = {
         target: target,
-        after: function(responseText) { // post-callback
+        success: function(responseText) { // post-callback
             ok( true, 'post-callback');
             ok( $('#targetDiv').text().match("Lorem ipsum"), "targetDiv updated");
             start();
         }
     };
     
+    expect(2);
     $("#form2").ajaxSubmit(opts);
 });
 
@@ -243,13 +246,14 @@ test("ajaxSubmit: target == DOM element", function() {
     
     var opts = {
         target: target,
-        after: function(responseText) { // post-callback
+        success: function(responseText) { // post-callback
             ok( true, 'post-callback');
             ok( $('#targetDiv').text().match("Lorem ipsum"), "targetDiv updated");
             start();
         }
     };
     
+    expect(2);
     $("#form2").ajaxSubmit(opts);
 });
 
@@ -257,19 +261,20 @@ test("ajaxSubmit: target == DOM element", function() {
 test("ajaxSubmit: load target with scripts", function() {
     stop();
     $('#targetDiv').empty();
-    
+   
     var opts = {
         target: '#targetDiv',
-        url:    'doc-with-scripts.html',
+        url:    'doc-with-scripts.html?' + new Date().getTime(),
         success: function(responseText) { // post-callback
             ok( true, 'success-callback');
             ok( $('#targetDiv').text().match("Lorem ipsum"), "targetDiv updated");
-            ok( unitTestVariable1 === true, 'first script block executed');
-            ok( unitTestVariable2 === true, 'second script block executed');
+            ok( typeof unitTestVariable1 != 'undefined', 'first script block executed');
+            ok( typeof unitTestVariable2 != 'undefined', 'second script block executed');
             start();
         }
     };
     
+    expect(4);
     $("#form2").ajaxSubmit(opts);
 });
 
@@ -285,27 +290,16 @@ test("ajaxSubmit: pre-submit callback", function() {
         }
     };
 
+    expect(4);
     $('#form3').ajaxSubmit(opts);
 });
-
-
-// test ajaxSubmit with function argument
-test("ajaxSubmit: function arg", function() {
-    stop();
-
-    $('#form3').ajaxSubmit(function() {
-        ok( true, 'callback hit');
-        start();
-    });
-});
-
 
 // test ajaxSubmit post-submit callback for response and status text
 test("ajaxSubmit: post-submit callback", function() {
     stop();
 
     var opts = {
-        after: function(responseText, statusText) { // post-submit callback
+        success: function(responseText, statusText) { // post-submit callback
             ok( true, 'post-submit callback');
             ok( responseText.match("Lorem ipsum"), "responseText");
             ok( statusText == "success", "statusText");
@@ -313,7 +307,19 @@ test("ajaxSubmit: post-submit callback", function() {
         }
     };
 
+    expect(3);
     $('#form3').ajaxSubmit(opts);
+});
+
+// test ajaxSubmit with function argument
+test("ajaxSubmit: function arg", function() {
+    stop();
+
+    expect(1);
+    $('#form3').ajaxSubmit(function() {
+        ok( true, 'callback hit');
+        start();
+    });
 });
 
 // test semantic support via ajaxSubmit's pre-submit callback
@@ -332,6 +338,7 @@ test("ajaxSubmit: semantic test", function() {
         }
     };
 
+    expect(9);
     $('#form2').ajaxSubmit(opts);
 });
 
@@ -342,7 +349,7 @@ test("ajaxSubmit: dataType == json", function() {
     var opts = {
         url: 'json.txt',
         dataType: 'json',
-        after: function(data, statusText) { // post-submit callback
+        success: function(data, statusText) { // post-submit callback
             // assert that the json data was evaluated
             ok( typeof data == 'object', 'json data type');
             ok( data.name == 'jquery-test', 'json data contents');
@@ -350,6 +357,7 @@ test("ajaxSubmit: dataType == json", function() {
         }
     };
 
+    expect(2);
     $('#form2').ajaxSubmit(opts);
 });
 
@@ -360,13 +368,14 @@ test("ajaxSubmit: dataType == script", function() {
     var opts = {
         url: 'script.txt?' + new Date().getTime(), // don't let ie cache it
         dataType: 'script',
-        after: function(responseText, statusText) { // post-submit callback
+        success: function(responseText, statusText) { // post-submit callback
             ok( typeof formScriptTest == 'function', 'script evaluated');
             ok( responseText.match('formScriptTest'), 'script returned');
             start();
         }
     };
 
+    expect(2);
     $('#form2').ajaxSubmit(opts);
 });
 
@@ -377,15 +386,17 @@ test("ajaxSubmit: dataType == xml", function() {
     var opts = {
         url: 'test.xml',
         dataType: 'xml',
-        after: function(responseXML, statusText) { // post-submit callback
+        success: function(responseXML, statusText) { // post-submit callback
             ok( typeof responseXML == 'object', 'data type xml');
             ok( $('test', responseXML).size() == 3, 'xml data query');
             start();
         }
     };
 
+    expect(2);
     $('#form2').ajaxSubmit(opts);
 });
+
 
 // test that args embedded in the action are honored; no real way
 // to assert this so successful callback is used to signal success
@@ -393,12 +404,13 @@ test("ajaxSubmit: existing args in action attr", function() {
     stop();
 
     var opts = {
-        after: function() { // post-submit callback
+        success: function() { // post-submit callback
             ok( true, 'post callback');
             start();
         }
     };
 
+    expect(1);
     $('#form5').ajaxSubmit(opts);
 });
 
@@ -412,11 +424,12 @@ test("ajaxSubmit: cancel submit", function() {
             ok( jq.jquery, "type check jQuery");
             return false;  // return false to abort submit
         },
-        after: function() { // post-submit callback
+        success: function() { // post-submit callback
             ok( false, "should not hit this post-submit callback");
         }
     };
 
+    expect(3);
     $('#form3').ajaxSubmit(opts);
 });
 
@@ -431,7 +444,7 @@ test("ajaxSubmit: pseudo-form", function() {
             ok( jq.jquery, "type check jQuery");
             ok( jq[0].tagName.toLowerCase() == 'div', "jQuery arg == 'div'");
         },
-        after: function() { // post-submit callback
+        success: function() { // post-submit callback
             ok( true, 'post-submit callback');
             start();
         },
@@ -441,6 +454,7 @@ test("ajaxSubmit: pseudo-form", function() {
         method: 'post'
     };
 
+    expect(5);
     $("#pseudo").ajaxSubmit(opts);
 });
 
@@ -449,7 +463,7 @@ test("ajaxSubmit: evaluate response", function() {
     stop();
     
     var opts = {
-        after: function(responseText) { // post-callback
+        success: function(responseText) { // post-callback
             ok( true, 'post-callback');
             var data = eval.call(window, '('+responseText+')');
             ok( data.name == 'jquery-test', 'evaled respone');
@@ -458,6 +472,7 @@ test("ajaxSubmit: evaluate response", function() {
         url: 'json.txt'
     };
     
+    expect(2);
     $("#form2").ajaxSubmit(opts);
 });
 
@@ -471,12 +486,13 @@ test("ajaxForm: pre and post callbacks", function() {
             ok( a.constructor == Array, "type check");
             ok( jq.jquery, "type check jQuery");
         },
-        after: function() { // post-submit callback
+        success: function() { // post-submit callback
             ok( true, 'post-submit callback');
             start();
         }
     };
 
+    expect(4);
     $("#form4").ajaxForm(opts);
     $('#submitForm4')[0].click();  // trigger the submit button
 });
@@ -493,6 +509,7 @@ test("ajaxForm: capture submit element", function() {
         }
     };
 
+    expect(4);
     $("#form4").ajaxForm(opts);
     $('#submitForm4withName')[0].click();
 });
@@ -510,6 +527,7 @@ test("ajaxForm: capture submit image coordinates", function() {
         }
     };
 
+    expect(5);
     $("#form4").ajaxForm(opts);
     $('#form4imageSubmit')[0].click();
 });
@@ -526,13 +544,14 @@ test("ajaxForm: update target div", function() {
             ok( a.constructor == Array, "type check");
             ok( jq.jquery, "type check jQuery");
         },
-        after: function() {
+        success: function() {
             ok( true, 'post-callback');
             ok( $('#targetDiv').text().match("Lorem ipsum"), "targetDiv updated");
             start();
         }
     };
 
+    expect(5);
     $("#form4").ajaxForm(opts);
     $('#submitForm4')[0].click();
 });
@@ -548,6 +567,7 @@ test("'success' callback", function() {
         }
     };
 
+    expect(1);
     $('#form3').ajaxSubmit(opts);
 });
 
@@ -561,11 +581,12 @@ test("'error' callback", function() {
             ok( true, 'error-callback');
             start();
         },
-        after: function() { // post-submit callback
+        success: function() { // post-submit callback
             ok( false, "should not hit post-submit callback");
         }
     };
 
+    expect(1);
     $('#form3').ajaxSubmit(opts);
 });
 
