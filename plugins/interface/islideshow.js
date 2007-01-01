@@ -58,9 +58,16 @@ jQuery.islideshow = {
 	timer : function (c)
 	{
 		slideshow = document.getElementById(c);
-		slide = slideshow.ss.currentslide + 1;
-		if (slideshow.ss.images.length < slide) {
-			slide = 1;
+		if (slideshow.ss.random) {
+			slide = slideshow.ss.currentslide;
+			while(slide == slideshow.ss.currentslide) {
+				slide = 1 + parseInt(Math.random() * slideshow.ss.images.length);
+			}
+		} else {
+			slide = slideshow.ss.currentslide + 1;
+			if (slideshow.ss.images.length < slide) {
+				slide = 1;
+			}
 		}
 		images = jQuery('img', slideshow.ss.holder);
 		slideshow.ss.currentslide = slide;
@@ -157,11 +164,12 @@ jQuery.islideshow = {
 				var img = new Image();
 				img.slideshow = jQuery.attr(slideshow,'id');
 				img.slide = slide-1;
-				img.onload = jQuery.islideshow.display;
 				img.src = slideshow.ss.images[slideshow.ss.currentslide-1].src ;
 				if (img.complete) {
 					img.onload = null;
 					jQuery.islideshow.display.apply(img);
+				} else {
+					img.onload = jQuery.islideshow.display;
 				}
 				//slideshow.ss.holder.html('<img src="' + slideshow.ss.images[slide-1].src + '" />');
 				if (slideshow.ss.slideCaption) {
@@ -184,11 +192,12 @@ jQuery.islideshow = {
 		var img = new Image();
 		img.slideshow = jQuery.attr(slideshow,'id');
 		img.slide = slideshow.ss.currentslide - 1;
-		img.onload = jQuery.islideshow.display;
 		img.src = slideshow.ss.images[slideshow.ss.currentslide - 1].src ;
 		if (img.complete) {
 			img.onload = null;
 			jQuery.islideshow.display.apply(img);
+		} else {
+			img.onload = jQuery.islideshow.display;
 		}
 		if (slideshow.ss.slideCaption) {
 			slideshow.ss.slideCaption.o.html(slideshow.ss.images[slideshow.ss.currentslide-1].caption);
@@ -238,14 +247,16 @@ jQuery.islideshow = {
 				.css('top', y + 'px')
 				.css('left', x + 2 * this.width/3 + 'px')
 				.css('width', this.width/3 + 'px')
-				.css('height', this.height + 'px');
+				.css('height', this.height + 'px')
+				.attr('title', slideshow.ss.images[nextslide-1].caption);
 		slideshow.ss.nextslide.o.get(0).href = '#' + nextslide + jQuery.attr(slideshow, 'id');
 		slideshow.ss.prevslide.o
 				.css('display','block')
 				.css('top', y + 'px')
 				.css('left', x + 'px')
 				.css('width', this.width/3 + 'px')
-				.css('height', this.height + 'px');
+				.css('height', this.height + 'px')
+				.attr('title', slideshow.ss.images[prevslide-1].caption);
 		slideshow.ss.prevslide.o.get(0).href = '#' + prevslide + jQuery.attr(slideshow, 'id');
 	},
 	build : function(o)
@@ -264,6 +275,7 @@ jQuery.islideshow = {
 		el.ss = {};
 		
 		el.ss.images = o.images ? o.images : [];
+		el.ss.random = o.random && o.random == true || false;
 		imgs = el.getElementsByTagName('IMG');
 		for(i = 0; i< imgs.length; i++) {
 			indic = el.ss.images.length;
@@ -301,9 +313,9 @@ jQuery.islideshow = {
 				el.ss.slideslinks.o.css('bottom',b + 'px');
 			}
 			el.ss.slideslinks.linksSeparator = o.linksSeparator ? o.linksSeparator : ' ';
-			for (i in el.ss.images) {
+			for (var i=0; i<el.ss.images.length; i++) {
 				indic = parseInt(i) + 1;
-				el.ss.slideslinks.o.append('<a href="#' + indic + o.container + '" class="slideshowLink">' + indic + '</a>' + (indic != el.ss.images.length ? el.ss.slideslinks.linksSeparator : ''));
+				el.ss.slideslinks.o.append('<a href="#' + indic + o.container + '" class="slideshowLink" title="' + el.ss.images[i].caption + '">' + indic + '</a>' + (indic != el.ss.images.length ? el.ss.slideslinks.linksSeparator : ''));
 			}
 			jQuery('a', el.ss.slideslinks.o).bind(
 				'click',
@@ -345,7 +357,7 @@ jQuery.islideshow = {
 			container.append('<a href="#0' + o.container + '" class="slideshowPrevslide">&nbsp;</a>');
 			el.ss.prevslide.o = jQuery('.slideshowPrevslide', el);
 			el.ss.prevslide.o.css('position', 'absolute').css('display', 'none').css('overflow','hidden').css('fontSize', '30px').addClass(el.ss.prevslide.prevslideClass);
-			el.ss.prevslide.o.binc('click', jQuery.islideshow.goprev);
+			el.ss.prevslide.o.bind('click', jQuery.islideshow.goprev);
 		}
 		
 		container.prepend('<div class="slideshowHolder"></div>');
@@ -357,14 +369,15 @@ jQuery.islideshow = {
 			el.ss.loader.css('position', 'absolute');
 			var img = new Image();
 			img.slideshow = o.container;
-			img.onload = function()
-			{
-				jQuery.islideshow.go({loader:this});
-			};
 			img.src = o.loader;
 			if (img.complete) {
 				img.onload = null;
 				jQuery.islideshow.go({loader:img});
+			} else {
+				img.onload = function()
+				{
+					jQuery.islideshow.go({loader:this});
+				};
 			}
 		} else {
 			jQuery.islideshow.go({container:el});
