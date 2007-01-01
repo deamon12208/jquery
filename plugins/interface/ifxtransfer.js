@@ -50,6 +50,19 @@ jQuery.fx.itransferTo = function(e, o)
 	if (z.classname) {
 		jQuery.transferHelper.addClass(z.classname);
 	}
+	z.diffWidth = 0;
+	z.diffHeight = 0;
+	
+	if(jQuery.boxModel) {
+		z.diffWidth = (parseInt(jQuery.transferHelper.css('borderLeftWidth')) || 0 )
+					+ (parseInt(jQuery.transferHelper.css('borderRightWidth')) || 0)
+					+ (parseInt(jQuery.transferHelper.css('paddingLeft')) || 0)
+					+ (parseInt(jQuery.transferHelper.css('paddingRight')) || 0);
+		z.diffHeight = (parseInt(jQuery.transferHelper.css('borderTopWidth')) || 0 )
+					+ (parseInt(jQuery.transferHelper.css('borderBottomWidth')) || 0)
+					+ (parseInt(jQuery.transferHelper.css('paddingTop')) || 0)
+					+ (parseInt(jQuery.transferHelper.css('paddingBottom')) || 0);
+	}
 	z.start = jQuery.extend(
 		jQuery.iUtil.getPosition(z.el.get(0)),
 		jQuery.iUtil.getSize(z.el.get(0))
@@ -58,6 +71,10 @@ jQuery.fx.itransferTo = function(e, o)
 		jQuery.iUtil.getPosition(z.to),
 		jQuery.iUtil.getSize(z.to)
 	);
+	z.start.wb -= z.diffWidth;
+	z.start.hb -= z.diffHeight;
+	z.end.wb -= z.diffWidth;
+	z.end.hb -= z.diffHeight;
 	z.callback = o.complete;
 
 	// Execute the transfer
