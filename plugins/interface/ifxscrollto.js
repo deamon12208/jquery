@@ -19,7 +19,7 @@ jQuery.fn.extend (
 				new jQuery.fx.ScrollTo(this, o, axis, transition);
 			});
 		},
-		/*inspired by macx.de*/
+		/*inspired by David Maciejewski www.macx.de*/
 		ScrollToAnchors : function(s, axis, transition) {
 			return this.each(
 				function()
