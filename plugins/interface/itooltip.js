@@ -48,9 +48,9 @@ jQuery.iTooltip = {
 			jEl.attr('title','');
 			jQuery('#tooltipTitle').html(title);
 			if (href)
-				jQuery('#tooltipURL').html(href.replace('http://', '')).show();
+				jQuery('#tooltipURL').html(href.replace('http://', ''));
 			else 
-				jQuery('#tooltipURL').html('').hide();
+				jQuery('#tooltipURL').html('');
 			helper = jQuery('#tooltipHelper');
 			if(el.tooltipCFG.className){
 				helper.get(0).className = el.tooltipCFG.className;
