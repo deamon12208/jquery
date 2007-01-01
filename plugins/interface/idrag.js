@@ -517,12 +517,14 @@ jQuery.iDrag =	{
 						function()
 						{
 							this.onselectstart = function(){return false;};
-							this.ondrag = function(){return false;}
+							this.ondrag = function(){return false;};
+							this.unselectable = "on";
 						}
 					);
-				} else if (jQuery.browser.mozilla){
+				} else {
 					dhe.css('-moz-user-select', 'none');
 					dhe.css('user-select', 'none');
+					dhe.css('-khtml-user-select', 'none');
 				}
 				this.dragCfg = {
 					dhe: dhe,
