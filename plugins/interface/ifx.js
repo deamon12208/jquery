@@ -352,25 +352,25 @@ jQuery.fx.transitions = function(p, n, firstNum, delta, duration, type)
 
 jQuery.fx.parseColor = function(color)
 {
-	if (result = /rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)/.exec(color))
+	if (result = /^rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)$/.exec(color))
 		return {
 			r: parseInt(result[1]),
 			g: parseInt(result[2]),
 			b: parseInt(result[3])
 		};
-	else if (result = /rgb\(\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*\)/.exec(color)) 
+	else if (result = /rgb\(\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*\)$/.exec(color)) 
 		return {
 			r: parseFloat(result[1])*2.55,
 			g: parseFloat(result[2])*2.55,
 			b: parseFloat(result[3])*2.55
 		};
-	else if (result = /#([a-fA-F0-9])([a-fA-F0-9])([a-fA-F0-9])$/.exec(color))
+	else if (result = /^#([a-fA-F0-9])([a-fA-F0-9])([a-fA-F0-9])$/.exec(color))
 		return {
 			r: parseInt("0x"+ result[1] + result[1]),
 			g: parseInt("0x" + result[2] + result[2]),
 			b: parseInt("0x" + result[3] + result[3])
 		};
-	else if (result = /#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})/.exec(color))
+	else if (result = /^#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})$/.exec(color))
 		return {
 			r: parseInt("0x" + result[1]),
 			g: parseInt("0x" + result[2]),
