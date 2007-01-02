@@ -24,8 +24,9 @@
  *
  *  url:      URL to which the form data will be submitted.
  *            default value: value of form's 'action' attribute
- *
- *  method:   The method in which the form data should be submitted, 'GET' or 'POST'.
+ *  
+ *  method:   @deprecated use 'type'
+ *  type:     The method in which the form data should be submitted, 'GET' or 'POST'.
  *            default value: value of form's 'method' attribute (or 'GET' if none found)
  *
  *  before:   @deprecated use 'beforeSubmit'
@@ -181,13 +182,14 @@ jQuery.fn.ajaxSubmit = function(options) {
         options = { success: options };
 
     options = jQuery.extend({
-        url:    this.attr('action') || '',
-        method: this.attr('method') || 'GET'
+        url:  this.attr('action') || '',
+        type: this.attr('method') || 'GET'
     }, options || {});
 
-    // 'before' and 'after' are deprecated (temporarily remap them)
+    // remap deprecated options (temporarily)
     options.success = options.success || options.after;
     options.beforeSubmit = options.beforeSubmit || options.before;
+    options.type = options.type || options.method;
 
     var a = this.formToArray(options.semantic);
 
@@ -195,18 +197,16 @@ jQuery.fn.ajaxSubmit = function(options) {
     if (options.beforeSubmit && options.beforeSubmit(a, this, options) === false) return;
 
     var q = jQuery.param(a);
-    var get = (options.method && options.method.toUpperCase() == 'GET');
 
-    if (get)
+    if (options.type.toUpperCase() == 'GET') {
         // if url already has a '?' then append args after '&'
         options.url += (options.url.indexOf('?') >= 0 ? '&' : '?') + q;
+        options.data = null;  // data is null for 'get'
+    }
+    else
+        options.data = q; // data is the query string for 'post'
 
-    // remap 'method' to 'type' for the ajax method
-    options.type = options.method;
-    options.data = get ? null : q;  // data is null for 'get' or the query string for 'post'
-
-    var $form = this;
-    var callbacks = [];
+    var $form = this, callbacks = [];
     if (options.resetForm) callbacks.push(function() { $form.resetForm(); });
     if (options.clearForm) callbacks.push(function() { $form.clearForm(); });
 
@@ -221,7 +221,7 @@ jQuery.fn.ajaxSubmit = function(options) {
         callbacks.push(options.success);
 
     options.success = function(data, status) {
-        for (var i=0; i < callbacks.length; i++)
+        for (var i=0, max=callbacks.length; i < max; i++)
             callbacks[i](data, status);
     };
         
@@ -291,20 +291,27 @@ jQuery.fn.ajaxSubmit = function(options) {
  */
 jQuery.fn.ajaxForm = function(options) {
     return this.each(function() {
-        jQuery("input:submit,input:image", this).click(function(ev) {
-            this.form.clk = this;
-
-            if (ev.offsetX != undefined) {
-                this.form.clk_x = ev.offsetX;
-                this.form.clk_y = ev.offsetY;
-            } else if (typeof jQuery.fn.offset == 'function') { // try to use dimensions plugin
-                var offset = $(this).offset();
-                this.form.clk_x = ev.pageX - offset.left;
-                this.form.clk_y = ev.pageY - offset.top;
-            } else {
-                this.form.clk_x = ev.pageX - this.offsetLeft;
-                this.form.clk_y = ev.pageY - this.offsetTop;
+        jQuery("input:submit,input:image,button", this).click(function(ev) {
+            if (this.type == 'reset') return;
+            var $form = this.form;
+            $form.clk = this;
+            if (this.type == 'image') {
+                if (ev.offsetX != undefined) {
+                    $form.clk_x = ev.offsetX;
+                    $form.clk_y = ev.offsetY;
+                } else if (typeof jQuery.fn.offset == 'function') { // try to use dimensions plugin
+                    var offset = $(this).offset();
+                    $form.clk_x = ev.pageX - offset.left;
+                    $form.clk_y = ev.pageY - offset.top;
+                } else {
+                    $form.clk_x = ev.pageX - this.offsetLeft;
+                    $form.clk_y = ev.pageY - this.offsetTop;
+                }
             }
+            // clear form vars
+            setTimeout(function() {
+                $form.clk = $form.clk_x = $form.clk_y = null;
+                }, 10);
         })
     }).submit(function(e) {
         jQuery(this).ajaxSubmit(options);
@@ -342,38 +349,26 @@ jQuery.fn.ajaxForm = function(options) {
  * @author jQuery Community
  */
 jQuery.fn.formToArray = function(semantic) {
-    var a = [];
-    var q = semantic ? ':input' : 'input,textarea,select,button';
+    var a = [], q = semantic ? ':input' : 'input,textarea,select,button';
 
     jQuery(q, this).each(function() {
         var n = this.name;
-        var t = this.type;
-        var tag = this.tagName.toLowerCase();
-
-        if ( !n || this.disabled || t == 'reset' ||
-            (t == 'checkbox' || t == 'radio') && !this.checked ||
-            (t == 'submit' || t == 'image' || t == 'button') && this.form && this.form.clk != this ||
-            tag == 'select' && this.selectedIndex == -1)
+        if (!n) return;
+        // handle image submit
+        if (this.type == 'image') {
+            if (this.form.clk_x != undefined)
+                a.push({name: n+'_x', value: this.form.clk_x}, {name: n+'_y', value: this.form.clk_y});
             return;
-
-        if (t == 'image' && this.form.clk_x != undefined)
-            return a.push(
-                {name: n+'_x', value: this.form.clk_x},
-                {name: n+'_y', value: this.form.clk_y}
-            );
-
-        if (tag == 'select') {
-            // pass select element off to fieldValue to reuse the IE logic
-            var val = jQuery.fieldValue(this, false); // pass false to optimize fieldValue
-            if (t == 'select-multiple') {
-                for (var i=0; i < val.length; i++)
-                    a.push({name: n, value: val[i]});
-            }
-            else
-                a.push({name: n, value: val});
         }
-        else
-            a.push({name: n, value: this.value});
+        // delegate to fieldValue
+        var v = jQuery.fieldValue(this, true);
+        if (v === null) return;
+        if (v.constructor == Array) {
+            for(var i=0, max=v.length; i < max; i++)
+                a.push({name: n, value: v[i]});
+        }
+        else 
+            a.push({name: n, value: v});
     });
     return a;
 };
@@ -436,14 +431,15 @@ jQuery.fn.formSerialize = function(semantic) {
 jQuery.fn.fieldSerialize = function(successful) {
     var a = [];
     this.each(function() {
-        if (!this.name) return;
-        var val = jQuery.fieldValue(this, successful);
-        if (val && val.constructor == Array) {
-            for (var i=0; i < val.length; i++)
-                a.push({name: this.name, value: val[i]});
+        var n = this.name;
+        if (!n) return;
+        var v = jQuery.fieldValue(this, successful);
+        if (v && v.constructor == Array) {
+            for (var i=0,max=v.length; i < max; i++)
+                a.push({name: n, value: v[i]});
         }
-        else if (val !== null && typeof val != 'undefined')
-            a.push({name: this.name, value: val});
+        else if (v !== null && typeof v != 'undefined')
+            a.push({name: this.name, value: v});
     });
     //hand off to jQuery.param for proper encoding
     return jQuery.param(a);
@@ -459,8 +455,11 @@ jQuery.fn.fieldSerialize = function(successful) {
  * The default value of the successful argument is true.  If this value is false then
  * the value of the first field element in the jQuery object is returned.
  *
+ * Note: If no valid value can be determined the return value will be undifined.
+ *
  * Note: The fieldValue returned for a select-multiple element or for a checkbox input will
- *       always be an array.
+ *       always be an array if it is not undefined.
+ *
  *
  * @example var data = $("#myPasswordElement").formValue();
  * @desc Gets the current value of the myPasswordElement element
@@ -483,24 +482,23 @@ jQuery.fn.fieldSerialize = function(successful) {
  * @cat Plugins/Form
  */
 jQuery.fn.fieldValue = function(successful) {
-    var cbVal = [], cbName = null;
+    var cbVal, cbName;
 
     // loop until we find a value
-    for (var i = 0; i < this.length; i++) {
+    for (var i=0, max=this.length; i < max; i++) {
         var el = this[i];
-        if (el.type == 'checkbox') {
-            if (!cbName) cbName = el.name || 'unnamed';
-            if (cbName != el.name) // return if we hit a checkbox with a different name
-                return cbVal;
-            var val = jQuery.fieldValue(el, successful);
-            if (val !== null && typeof val != 'undefined') 
-                cbVal.push(val);
-        }
-        else {
-            var val = jQuery.fieldValue(el, successful);
-            if (val !== null && typeof val != 'undefined') 
-                return val;
-        }
+        var v = jQuery.fieldValue(el, successful);
+        if (v === null || typeof v == 'undefined' || (v.constructor == Array && !v.length))
+            continue;
+
+        // for checkboxes, consider multiple elements, for everything else just return first valid value
+        if (el.type != 'checkbox') return v;
+
+        cbName = cbName || el.name;
+        if (cbName != el.name) // return if we hit a checkbox with a different name
+            return cbVal;
+        cbVal = cbVal || [];
+        cbVal.push(v);
     }
     return cbVal;
 };
@@ -525,9 +523,7 @@ jQuery.fn.fieldValue = function(successful) {
  * @cat Plugins/Form
  */
 jQuery.fieldValue = function(el, successful) {
-    var n = el.name;
-    var t = el.type;
-    var tag = el.tagName.toLowerCase();
+    var n = el.name, t = el.type, tag = el.tagName.toLowerCase();
     if (typeof successful == 'undefined') successful = true;
 
     if (successful && ( !n || el.disabled || t == 'reset' ||
@@ -537,13 +533,13 @@ jQuery.fieldValue = function(el, successful) {
             return null;
     
     if (tag == 'select') {
-        var a = [];
-        for(var i=0; i < el.options.length; i++) {
-            var op = el.options[i];
+        var a = [], one = (t == 'select-one'), ops = el.options;
+        for(var i=0,max=ops.length; i < max; i++) {
+            var op = ops[i];
             if (op.selected) {
                 // extra pain for IE...
                 var v = jQuery.browser.msie && !(op.attributes['value'].specified) ? op.text : op.value;
-                if (t == 'select-one')
+                if (one)
                     return v;
                 a.push(v);
             }
@@ -563,7 +559,7 @@ jQuery.fieldValue = function(el, successful) {
  *  - button elements will *not* be effected
  *
  * @example $('form').clearForm();
- * @desc Clear all forms on the page.
+ * @desc Clears all forms on the page.
  *
  * @name clearForm
  * @type jQuery
@@ -572,18 +568,38 @@ jQuery.fieldValue = function(el, successful) {
  */
 jQuery.fn.clearForm = function() {
     return this.each(function() {
-        jQuery(':input', this).each(function() {
-            var t = this.type;
-            var tag = this.tagName.toLowerCase();
-            if (t == 'text' || t == 'password' || tag == 'textarea')
-                this.value = '';
-            else if (t == 'checkbox' || t == 'radio')
-                this.checked = false;
-            else if (tag == 'select')
-                this.selectedIndex = -1;
-        });
+        jQuery('input,select,textarea', this).clearInputs();
     });
 }
+
+/**
+ * Clears the selected form elements.  Takes the following actions on the matched elements:
+ *  - input text fields will have their 'value' property set to the empty string
+ *  - select elements will have their 'selectedIndex' property set to -1
+ *  - checkbox and radio inputs will have their 'checked' property set to false
+ *  - inputs of type submit, button, reset, and hidden will *not* be effected
+ *  - button elements will *not* be effected
+ *
+ * @example $('.myInputs').clearInputs();
+ * @desc Clears all inputs with class myInputs
+ *
+ * @name clearInputs
+ * @type jQuery
+ * @cat Plugins/Form
+ * @see clearForm
+ */
+jQuery.fn.clearInputs = function() {
+    return this.each(function() {
+        var t = this.type, tag = this.tagName.toLowerCase();
+        if (t == 'text' || t == 'password' || tag == 'textarea')
+            this.value = '';
+        else if (t == 'checkbox' || t == 'radio')
+            this.checked = false;
+        else if (tag == 'select')
+            this.selectedIndex = -1;
+    });
+}
+
 
 /**
  * Resets the form data.  Causes all form elements to be reset to their original value.
@@ -598,8 +614,9 @@ jQuery.fn.clearForm = function() {
  */
 jQuery.fn.resetForm = function() {
     return this.each(function() {
-        if (this.reset) 
+        // guard against an input with the name of 'reset'
+        // note that IE reports the reset function as an 'object'
+        if (typeof this.reset == 'function' || (typeof this.reset == 'object' && !this.reset.nodeType)) 
             this.reset();
     });
 }
-
