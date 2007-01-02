@@ -180,10 +180,19 @@ jQuery.fn.jScrollPane = function(settings)
 					$container.mousewheel(
 						function (event, delta) {
 							initDrag();
+							var d = dragPosition;
 							positionDrag(dragPosition - delta * mouseWheelMultiplier);
-							return false;
+							if (d != dragPosition) {
+								if (event.preventDefault) {
+									event.preventDefault();
+								} else {
+									event.returnValue = false;
+								}
+								return false;
+							}
+							return true;
 						},
-						true
+						false
 					);					
 				}
 				
