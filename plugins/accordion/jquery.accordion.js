@@ -31,20 +31,20 @@ jQuery.fn.nextUntil = function(expr) {
     });
 
     return this.pushStack( match, arguments );
-}; 
+};
 
 /**
  * Make the selected elements Accordion widgets.
  *´
  * Semantic requirements:
- * 
+ *
  * If the structure of your container is flat with unique
  * tags for header and content elements, eg. a definition list
  * (dl > dt + dd), you don't have to specify any options at
  * all.
  *
  * If your structure uses the same elements for header and
- * content or uses some kind of nested structure, you have to 
+ * content or uses some kind of nested structure, you have to
  * specify the header elements, eg. via class, see the second example.
  *
  * Use activate(Number) to change the active content programmatically.
@@ -93,10 +93,10 @@ jQuery.fn.nextUntil = function(expr) {
  * @see activate(Number)
  *
  * @name Accordion
- * @cat Plugin/Accordion
+ * @cat Plugins/Accordion
  * @author Jörn Zaefferer (http://bassistance.de)
  */
- 
+
 /**
  * Activate a content part of the Accordion programmatically with the position zero-based index.
  *
@@ -118,41 +118,41 @@ jQuery.fn.nextUntil = function(expr) {
  * @cat Plugins/Accordion
  * @author Jörn Zaefferer (http://bassistance.de)
  */
- 
+
 // create private scope with $ alias for jQuery
 (function($) {
 	// save reference to plugin method
 	var plugin = $.fn.Accordion = function(settings) {
-		
+
 		// setup configuration
 		// TODO: allow multiple arguments to extend, see bug #344
 		settings = $.extend($.extend({}, arguments.callee.defaults), $.extend({
 			// define context defaults
 			header: $(':first-child', this)[0].tagName // take first childs tagName as header
 		}, settings || {}));
-		
+
 		// calculate active if not specified, using the first header
 		var container = this,
 			active = settings.active ? $(settings.active, this) : settings.active === false ? $("<div>") : $(settings.header, this).eq(0),
 			running = 0;
-		
+
 		$(settings.header, container)
 			.not(active && active[0] || "")
 			.nextUntil(settings.header)
 			.hide();
 		active.addClass(settings.selectedClass);
-		
+
 		var clickHandler = function(event) {
 			// get the click target
 			var clicked = $(event.target);
 			// if animations are still active, or the active header is the target, ignore click
 			if(running || clicked[0] == active[0] || !clicked.is(settings.header))
 				return;
-			
+
 			// switch classes
 			active.removeClass(settings.selectedClass);
 			clicked.addClass(settings.selectedClass);
-			
+
 			// find elements to show and hide
 			var toShow = $(clicked).nextUntil(settings.header),
 				toHide = $(active).nextUntil(settings.header),
@@ -163,7 +163,7 @@ jQuery.fn.nextUntil = function(expr) {
 			var finished = function() {
 				if(--running)
 					return;
-				
+
 				// trigger custom change event
 				container.trigger("change", data);
 			};
@@ -172,7 +172,7 @@ jQuery.fn.nextUntil = function(expr) {
 			// solution: animate should check for speed of 0 and do something about it
 			toHide.slideUp(settings.hideSpeed, finished);
 			toShow.slideDown(settings.showSpeed, finished);
-			
+
 			if(event.preventDefault)
 				event.preventDefault();
 		};
@@ -182,7 +182,7 @@ jQuery.fn.nextUntil = function(expr) {
 				target: $(settings.header, this)[index]
 			});
 		};
-	
+
 		return container
 			.bind("click", clickHandler)
 			.bind("activate", activateHandlder);
@@ -193,10 +193,10 @@ jQuery.fn.nextUntil = function(expr) {
 		showSpeed: 'slow',
 		hideSpeed: 'fast'
 	};
-	
+
 	// shortcut for trigger, nicer API and easily to document
 	$.fn.activate = function(index) {
 		return this.trigger('activate', [index || 0]);
 	};
-	
+
 })(jQuery);
