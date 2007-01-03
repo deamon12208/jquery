@@ -1,5 +1,5 @@
 /* Copyright (c) 2006 Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
- * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) 
+ * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
  * Thanks to: http://adomas.org/javascript-mouse-wheel/ for some pointers.
  * Thanks to: Mathias Bank(http://www.mathias-bank.de) for a scope bug fix.
@@ -17,7 +17,7 @@ jQuery.fn.extend({
 	 * to prevent the default action, just pass in 'true' for the preventDefault
 	 * param.
 	 *
-	 * Only one handler function should be used per an element. 
+	 * Only one handler function should be used per an element.
 	 * Meaning call $().mousewheel only once per an element.
 	 *
 	 * @example $("p").mousewheel(function(event, delta){
@@ -31,12 +31,12 @@ jQuery.fn.extend({
 	 * @type jQuery
 	 * @param Function handler The function to call when onmousewheel fires. Should take two params: event and delta.
 	 * @param Boolean preventDefault Should the default action be prevented?
-	 * @cat Events
+	 * @cat Plugins/Mousewheel
 	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
 	 */
 	/**
 	 * Apply the mousewheel event to the elements in the jQuery object.
-	 * The up and down handler functions should be prepared to take the 
+	 * The up and down handler functions should be prepared to take the
 	 * event object and a param called 'delta'. The 'delta' param is a number
 	 * either > 0 or < 0. > 0 = up and < 0 = down.
 	 *
@@ -46,10 +46,10 @@ jQuery.fn.extend({
 	 * param.
 	 *
 	 * The method takes two functions. The first is fired only on when the
-	 * mousewheel is moved up. The second is fired only when the mouswheel is 
+	 * mousewheel is moved up. The second is fired only when the mouswheel is
 	 * moved down.
 	 *
-	 * Only one handler function should be used per an element. 
+	 * Only one handler function should be used per an element.
 	 * Meaning call $().mousewheel only once per an element.
 	 *
 	 * @example $("p").mousewheel(function(event, delta){
@@ -63,7 +63,7 @@ jQuery.fn.extend({
 	 * @param Function upHandler The function to call when the mousewheel is moved up. Should take two params: event and delta.
 	 * @param Function downHandler The function to call when the mousewheel is moved down. Should take two params: event and delta.
 	 * @param Boolean preventDefault Should the default action be prevented?
-	 * @cat Events
+	 * @cat Plugins/Mousewheel
 	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
 	 */
 	mousewheel: function(up, down, preventDefault) {
@@ -76,7 +76,7 @@ jQuery.fn.extend({
 			}
 		);
 	},
-	
+
 	/**
 	 * Apply the mousewheeldown event to the elements in the jQuery object.
 	 * The handler function should be prepared to take the event object
@@ -90,11 +90,11 @@ jQuery.fn.extend({
 	 * to prevent the default action, just pass in 'true' for the preventDefault
 	 * param.
 	 *
-	 * Only one handler function should be used per an element. 
+	 * Only one handler function should be used per an element.
 	 * Meaning call $().mousewheel only once per an element. This will
 	 * overwrite any previous mousewheel event, even a mousewheelup event.
 	 * To get a seperate up and down function just use mousewheel and pass
-	 * two functions: the first is the up handler and the second is the 
+	 * two functions: the first is the up handler and the second is the
 	 * down handler.
 	 *
 	 * @example $("p").mousewheeldown(function(event, delta){
@@ -105,13 +105,13 @@ jQuery.fn.extend({
 	 * @type jQuery
 	 * @param Function handler The function to call when the mousewheel is moved down. Should take two params: event and delta.
 	 * @param Boolean preventDefault Should the default action be prevented?
-	 * @cat Events
+	 * @cat Plugins/Mousewheel
 	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
 	 */
 	mousewheeldown: function(fn, preventDefault) {
 		return this.mousewheel(function(){}, fn, preventDefault);
 	},
-	
+
 	/**
 	 * Apply the mousewheelup event to the elements in the jQuery object.
 	 * The handler function should be prepared to take the event object
@@ -125,11 +125,11 @@ jQuery.fn.extend({
 	 * to prevent the default action, just pass in 'true' for the preventDefault
 	 * param.
 	 *
-	 * Only one handler function should be used per an element. 
+	 * Only one handler function should be used per an element.
 	 * Meaning call $().mousewheel only once per an element. This will
 	 * overwrite any previous mousewheel event, even a mousewheeldown event.
 	 * To get a seperate up and down function just use mousewheel and pass
-	 * two functions: the first is the up handler and the second is the 
+	 * two functions: the first is the up handler and the second is the
 	 * down handler.
 	 *
 	 * @example $("p").mousewheeldown(function(event, delta){
@@ -140,13 +140,13 @@ jQuery.fn.extend({
 	 * @type jQuery
 	 * @param Function handler The function to call when the mousewheel is moved up. Should take two params: event and delta.
 	 * @param Boolean preventDefault Should the default action be prevented?
-	 * @cat Events
+	 * @cat Plugins/Mousewheel
 	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
 	 */
 	mousewheelup: function(fn, preventDefault) {
 		return this.mousewheel(fn, function(){}, preventDefault);
 	},
-	
+
 	/**
 	 * This method removes the applied mousewheel event from the elements
 	 * in the jQuery object. The $().mousewheel and $().unmousewheel is only
@@ -155,7 +155,7 @@ jQuery.fn.extend({
 	 *
 	 * @name unmousewheel
 	 * @type jQuery
-	 * @cat Events
+	 * @cat Plugins/Mousewheel
 	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
 	 */
 	unmousewheel: function() {
@@ -173,11 +173,11 @@ jQuery.fn.extend({
 	 *
 	 * @name unmousewheeldown
 	 * @type jQuery
-	 * @cat Events
+	 * @cat Plugins/Mousewheel
 	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
 	 */
 	unmousewheeldown: jQuery.fn.unmousewheel,
-	
+
 	/**
 	 * This method removes the applied mousewheel event from the elements
 	 * in the jQuery object. The $().mousewheel and $().unmousewheel is only
@@ -186,7 +186,7 @@ jQuery.fn.extend({
 	 *
 	 * @name unmousewheelup
 	 * @type jQuery
-	 * @cat Events
+	 * @cat Plugins/Mousewheel
 	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
 	 */
 	unmousewheelup: jQuery.fn.unmousewheel
@@ -200,7 +200,7 @@ jQuery.fn.extend({
  * mousewheel event attached to them.
  *
  * @private
- * @cat Core	
+ * @cat @cat Plugins/Mousewheel
  * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
  */
 jQuery.event.mousewheel = {
@@ -215,17 +215,17 @@ jQuery.event.mousewheel = {
 	 * @param Function handler The function to call when onmousewheel fires.
 	 * @param Boolean preventDefault Should the default action be prevented?.
 	 * @see jQuery.fn.mousewheel
-	 * @cat Core
+	 * @cat Plugins/Mousewheel
 	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
 	 */
 	giveFocus: function(el, up, down, preventDefault) {
 		if (el._handleMousewheel) jQuery(el).unmousewheel();
-		
+
 		if (preventDefault == window.undefined && down && down.constructor != Function) {
 			preventDefault = down;
 			down = null;
 		}
-		
+
 		el._handleMousewheel = function(event) {
 			if (!event) event = window.event;
 			if (preventDefault) // cannot call any methods before preventing default (firefox)
@@ -243,12 +243,12 @@ jQuery.event.mousewheel = {
 			else if (down && delta < 0)
 				down.apply(el, [event, delta]);
 		};
-		
+
 		if (window.addEventListener)
 			window.addEventListener('DOMMouseScroll', el._handleMousewheel, false);
 		window.onmousewheel = document.onmousewheel = el._handleMousewheel;
 	},
-	
+
 	/**
 	 * Removes the mousewheel event focus from the
 	 * element passed in.
@@ -256,12 +256,12 @@ jQuery.event.mousewheel = {
 	 * @private
 	 * @name removeFocus
 	 * @see jQuery.fn.unmousewheel
-	 * @cat Core
+	 * @cat Plugins/Mousewheel
 	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
 	 */
 	removeFocus: function(el) {
 		if (!el._handleMousewheel) return;
-		
+
 		if (window.removeEventListener)
 			window.removeEventListener('DOMMouseScroll', el._handleMousewheel, false);
 		window.onmousewheel = document.onmousewheel = null;
