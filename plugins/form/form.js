@@ -24,7 +24,7 @@
  *
  *  url:      URL to which the form data will be submitted.
  *            default value: value of form's 'action' attribute
- *  
+ *
  *  method:   @deprecated use 'type'
  *  type:     The method in which the form data should be submitted, 'GET' or 'POST'.
  *            default value: value of form's 'method' attribute (or 'GET' if none found)
@@ -52,7 +52,7 @@
  * The 'beforeSubmit' callback can be provided as a hook for running pre-submit logic or for
  * validating the form data.  If the 'beforeSubmit' callback returns false then the form will
  * not be submitted. The 'beforeSubmit' callback is invoked with three arguments: the form data
- * in array format, the jQuery object, and the options object passed into ajaxSubmit.  
+ * in array format, the jQuery object, and the options object passed into ajaxSubmit.
  * The form data array takes the following form:
  *
  *     [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ]
@@ -64,7 +64,7 @@
  *
  * The dataType option provides a means for specifying how the server response should be handled.
  * This maps directly to the jQuery.httpData method.  The following values are supported:
- * 
+ *
  *      'xml':    if dataType == 'xml' the server response is treated as XML and the 'after'
  *                   callback method, if specified, will be passed the responseXML value
  *      'json':   if dataType == 'json' the server response will be evaluted and passed to
@@ -183,7 +183,7 @@ jQuery.fn.ajaxSubmit = function(options) {
 
     options = jQuery.extend({
         url:  this.attr('action') || '',
-        type: this.attr('method') || 'GET'
+        method: this.attr('method') || 'GET'
     }, options || {});
 
     // remap deprecated options (temporarily)
@@ -217,14 +217,14 @@ jQuery.fn.ajaxSubmit = function(options) {
             jQuery(options.target).html(data).evalScripts().each(oldSuccess, [data, status]);
         });
     }
-    else if (options.success) 
+    else if (options.success)
         callbacks.push(options.success);
 
     options.success = function(data, status) {
         for (var i=0, max=callbacks.length; i < max; i++)
             callbacks[i](data, status);
     };
-        
+
     jQuery.ajax(options);
     return this;
 };
@@ -367,7 +367,7 @@ jQuery.fn.formToArray = function(semantic) {
             for(var i=0, max=v.length; i < max; i++)
                 a.push({name: n, value: v[i]});
         }
-        else 
+        else
             a.push({name: n, value: v});
     });
     return a;
@@ -401,7 +401,7 @@ jQuery.fn.formSerialize = function(semantic) {
 
 
 /**
- * Serializes all field elements in the jQuery object into a query string. 
+ * Serializes all field elements in the jQuery object into a query string.
  * This method will return a string in the format: name1=value1&amp;name2=value2
  *
  * The successful argument controls whether or not serialization is limited to
@@ -531,7 +531,7 @@ jQuery.fieldValue = function(el, successful) {
         (t == 'submit' || t == 'image' || t == 'button') && el.form && el.form.clk != el ||
         tag == 'select' && el.selectedIndex == -1))
             return null;
-    
+
     if (tag == 'select') {
         var a = [], one = (t == 'select-one'), ops = el.options;
         for(var i=0,max=ops.length; i < max; i++) {
@@ -616,7 +616,7 @@ jQuery.fn.resetForm = function() {
     return this.each(function() {
         // guard against an input with the name of 'reset'
         // note that IE reports the reset function as an 'object'
-        if (typeof this.reset == 'function' || (typeof this.reset == 'object' && !this.reset.nodeType)) 
+        if (typeof this.reset == 'function' || (typeof this.reset == 'object' && !this.reset.nodeType))
             this.reset();
     });
 }
