@@ -476,6 +476,27 @@ test("ajaxSubmit: evaluate response", function() {
     $("#form2").ajaxSubmit(opts);
 });
 
+// make sure deprecated options still work
+test("deprecated option props", function() {
+    stop();
+
+    var opts = {
+        method: 'post',
+        before: function(a, jq, o) {
+            ok( true, 'before');
+            ok( o.type == 'post', 'method: post=' + o.type);
+        },
+        after: function() { // post-callback
+            ok( true, 'after');
+            start();
+        }
+    };
+
+    expect(3);
+    $("#form2").ajaxSubmit(opts);
+});
+
+
 // test pre and post callbacks for ajaxForm
 test("ajaxForm: pre and post callbacks", function() {
     stop();
