@@ -20,6 +20,9 @@ jQuery.fx.animateClass = function(el, classToAnimate, duration, callback) {
 	var endClass = typeof classToAnimate == 'string' ? classToAnimate : classToAnimate[1];
 	var startClass = typeof classToAnimate == 'string' ? null : classToAnimate[0];
 	var oldStyleAttr = jQuery(el).attr("style") || '';
+	/* In IE, style is a object.. */
+	if(typeof oldStyleAttr == 'object') oldStyleAttr = oldStyleAttr["cssText"];
+	
 	jQuery(el).removeClass(endClass);
 	if (startClass) {
 		jQuery(el).addClass(startClass);
@@ -66,7 +69,16 @@ jQuery.fx.animateClass = function(el, classToAnimate, duration, callback) {
 		duration,
 		function()
 		{
-			jQuery(this).addClass(endClass).attr('style',oldStyleAttr);
+			jQuery(this).addClass(endClass);
+			/* Change style attribute back to original.
+			 * For IE, we need to clear the damn object.
+			 */
+			if(typeof jQuery(this).attr("style") == 'object') {
+				jQuery(this).attr("style")["cssText"] = "";
+				jQuery(this).attr("style")["cssText"] = oldStyleAttr;
+			} else {
+				jQuery(this).attr("style", oldStyleAttr);	
+			}
 			jQuery.dequeue(this, 'interfaceClassFX');
 		}
 	);
