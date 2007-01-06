@@ -13,93 +13,93 @@
 
 jQuery.fn.extend(
 	{
-		SlideInUp : function (speed,callback, transition)
+		SlideInUp : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
-				new jQuery.fx.slide(this, speed, callback, 'up', 'in', transition);
+				new jQuery.fx.slide(this, speed, callback, 'up', 'in', easing);
 			});
 		},
 		
-		SlideOutUp : function (speed,callback, transition)
+		SlideOutUp : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
-				new jQuery.fx.slide(this, speed, callback, 'up', 'out', transition);
+				new jQuery.fx.slide(this, speed, callback, 'up', 'out', easing);
 			});
 		},
 		
-		SlideToggleUp : function (speed,callback, transition)
+		SlideToggleUp : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
-				new jQuery.fx.slide(this, speed, callback, 'up', 'toggle', transition);
+				new jQuery.fx.slide(this, speed, callback, 'up', 'toggle', easing);
 			});
 		},
 		
-		SlideInDown : function (speed,callback, transition)
+		SlideInDown : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
-				new jQuery.fx.slide(this, speed, callback, 'down', 'in', transition);
+				new jQuery.fx.slide(this, speed, callback, 'down', 'in', easing);
 			});
 		},
 		
-		SlideOutDown : function (speed,callback, transition)
+		SlideOutDown : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
-				new jQuery.fx.slide(this, speed, callback, 'down', 'out', transition);
+				new jQuery.fx.slide(this, speed, callback, 'down', 'out', easing);
 			});
 		},
 		
-		SlideToggleDown : function (speed,callback, transition)
+		SlideToggleDown : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
-				new jQuery.fx.slide(this, speed, callback, 'down', 'toggle', transition);
+				new jQuery.fx.slide(this, speed, callback, 'down', 'toggle', easing);
 			});
 		},
 		
-		SlideInLeft : function (speed,callback, transition)
+		SlideInLeft : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
-				new jQuery.fx.slide(this, speed, callback, 'left', 'in', transition);
+				new jQuery.fx.slide(this, speed, callback, 'left', 'in', easing);
 			});
 		},
 		
-		SlideOutLeft :  function (speed,callback, transition)
+		SlideOutLeft :  function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
-				new jQuery.fx.slide(this, speed, callback, 'left', 'out', transition);
+				new jQuery.fx.slide(this, speed, callback, 'left', 'out', easing);
 			});
 		},
 		
-		SlideToggleLeft : function (speed,callback, transition)
+		SlideToggleLeft : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
-				new jQuery.fx.slide(this, speed, callback, 'left', 'toggle', transition);
+				new jQuery.fx.slide(this, speed, callback, 'left', 'toggle', easing);
 			});
 		},
 		
-		SlideInRight : function (speed,callback, transition)
+		SlideInRight : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
-				new jQuery.fx.slide(this, speed, callback, 'right', 'in', transition);
+				new jQuery.fx.slide(this, speed, callback, 'right', 'in', easing);
 			});
 		},
 		
-		SlideOutRight : function (speed,callback, transition)
+		SlideOutRight : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
-				new jQuery.fx.slide(this, speed, callback, 'right', 'out', transition);
+				new jQuery.fx.slide(this, speed, callback, 'right', 'out', easing);
 			});
 		},
 		
-		SlideToggleRight : function (speed,callback, transition)
+		SlideToggleRight : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
-				new jQuery.fx.slide(this, speed, callback, 'right', 'toggle', transition);
+				new jQuery.fx.slide(this, speed, callback, 'right', 'toggle', easing);
 			});
 		}
 	}
 );
 
-jQuery.fx.slide = function(e, speed, callback, direction, type, transition)
+jQuery.fx.slide = function(e, speed, callback, direction, type, easing)
 {
 	if (!jQuery.fxCheckTag(e)) {
 		jQuery.dequeue(e, 'interfaceFX');
@@ -107,7 +107,7 @@ jQuery.fx.slide = function(e, speed, callback, direction, type, transition)
 	}
 	var z = this;
 	z.el = jQuery(e);
-	z.transition = transition||'original';
+	z.easing = easing||'original';
 	if ( type == 'toggle') {
 		type = z.el.css('display') == 'none' ? 'in' : 'out';
 	}
@@ -146,7 +146,7 @@ jQuery.fx.slide = function(e, speed, callback, direction, type, transition)
 					z.complete
 				),
 				'top',
-				z.transition
+				z.easing
 			);
 			z.efx = new jQuery.fx(
 				z.fx.wrapper.get(0), 
@@ -154,7 +154,7 @@ jQuery.fx.slide = function(e, speed, callback, direction, type, transition)
 					z.speed
 				),
 				'height',
-				z.transition
+				z.easing
 			);
 			if (z.type == 'in') {
 				z.ef.custom (-z.fx.oldStyle.sizes.hb, 0);
@@ -172,7 +172,7 @@ jQuery.fx.slide = function(e, speed, callback, direction, type, transition)
 					z.complete
 				),
 				'top',
-				z.transition
+				z.easing
 			);
 			if (z.type == 'in') {
 				z.ef.custom (z.fx.oldStyle.sizes.hb, 0);
@@ -188,7 +188,7 @@ jQuery.fx.slide = function(e, speed, callback, direction, type, transition)
 					z.complete
 				),
 				'left',
-				z.transition
+				z.easing
 			);
 			z.efx = new jQuery.fx(
 				z.fx.wrapper.get(0), 
@@ -196,7 +196,7 @@ jQuery.fx.slide = function(e, speed, callback, direction, type, transition)
 					z.speed
 				),
 				'width',
-				z.transition
+				z.easing
 			);
 			if (z.type == 'in') {
 				z.ef.custom (-z.fx.oldStyle.sizes.wb, 0);
@@ -214,7 +214,7 @@ jQuery.fx.slide = function(e, speed, callback, direction, type, transition)
 					z.complete
 				),
 				'left',
-				z.transition
+				z.easing
 			);
 			if (z.type == 'in') {
 				z.ef.custom (z.fx.oldStyle.sizes.wb, 0);

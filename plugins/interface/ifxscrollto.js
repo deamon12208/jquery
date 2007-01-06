@@ -13,14 +13,14 @@
 
 jQuery.fn.extend (
 	{
-		ScrollTo : function(s, axis, transition) {
+		ScrollTo : function(s, axis, easing) {
 			o = jQuery.speed(s);
 			return this.queue('interfaceFX',function(){
-				new jQuery.fx.ScrollTo(this, o, axis, transition);
+				new jQuery.fx.ScrollTo(this, o, axis, easing);
 			});
 		},
 		/*inspired by David Maciejewski www.macx.de*/
-		ScrollToAnchors : function(s, axis, transition) {
+		ScrollToAnchors : function(s, axis, easing) {
 			return this.each(
 				function()
 				{
@@ -28,7 +28,7 @@ jQuery.fn.extend (
 						function(e)
 						{
 							parts = this.href.split('#');
-							jQuery('#' + parts[1]).ScrollTo(s, axis, transition);
+							jQuery('#' + parts[1]).ScrollTo(s, axis, easing);
 							return false;
 						}
 					);
@@ -38,13 +38,13 @@ jQuery.fn.extend (
 	}
 );
 
-jQuery.fx.ScrollTo = function (e, o, axis, transition)
+jQuery.fx.ScrollTo = function (e, o, axis, easing)
 {
 	var z = this;
 	z.o = o;
 	z.e = e;
 	z.axis = /vertical|horizontal/.test(axis) ? axis : false;
-	z.transition = transition||'original';
+	z.easing = easing;
 	p = jQuery.iUtil.getPosition(e);
 	s = jQuery.iUtil.getScroll();
 	z.clear = function(){clearInterval(z.timer);z.timer=null;jQuery.dequeue(z.e, 'interfaceFX');};
@@ -63,8 +63,24 @@ jQuery.fx.ScrollTo = function (e, o, axis, transition)
 			z.clear();
 			setTimeout(function(){z.scroll(z.endTop, z.endLeft)},13);
 		} else {
-			st = !z.axis || z.axis == 'vertical' ? jQuery.fx.transitions(p, n, z.startTop, (z.endTop - z.startTop), z.o.duration, z.transition) : z.startTop;
-			sl = !z.axis || z.axis == 'horizontal' ? jQuery.fx.transitions(p, n, z.startLeft, (z.endLeft - z.startLeft), z.o.duration, z.transition) : z.startLeft;
+			if (!z.axis || z.axis == 'vertical') {
+				if (!jQuery.easing || !jQuery.easing[z.easing]) {
+					st = ((-Math.cos(p*Math.PI)/2) + 0.5) * (z.endTop-z.startTop) + z.startTop;
+				} else {
+					st = jQuery.easing[z.easing](p, n, z.startTop, (z.endTop - z.startTop), z.o.duration);
+				}
+			} else {
+				st = z.startTop;
+			}
+			if (!z.axis || z.axis == 'horizontal') {
+				if (!jQuery.easing || !jQuery.easing[z.easing]) {
+					sl = ((-Math.cos(p*Math.PI)/2) + 0.5) * (z.endTop-z.startTop) + z.startTop;
+				} else {
+					sl = jQuery.easing[z.easing](p, n, z.startLeft, (z.endLeft - z.startLeft), z.o.duration);
+				}
+			} else {
+				sl = z.startLeft;
+			}
 			z.scroll(st, sl);
 		}
 	};

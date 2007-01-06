@@ -11,7 +11,7 @@
  *
  */
 
-jQuery.fn.Highlight = function(duration, color, callback, transition) {
+jQuery.fn.Highlight = function(duration, color, callback, easing) {
 	return this.queue(
 		'interfaceColorFX',
 		function()
@@ -23,7 +23,8 @@ jQuery.fn.Highlight = function(duration, color, callback, transition) {
 					jQuery.dequeue(this, 'interfaceColorFX');
 					if (callback)
 						callback.apply(this);
-				}
+				},
+				easing
 		  	);
 		}
 	);

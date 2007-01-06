@@ -13,55 +13,55 @@
 
 jQuery.fn.extend(
 	{
-		CloseVertically : function (speed, callback, transition) {
+		CloseVertically : function (speed, callback, easing) {
 			return this.queue('interfaceFX', function(){
-				new jQuery.fx.OpenClose(this, speed, callback, 'vertically', 'close', transition);
+				new jQuery.fx.OpenClose(this, speed, callback, 'vertically', 'close', easing);
 			});
 		},
 		
-		CloseHorizontally : function (speed, callback, transition) {
+		CloseHorizontally : function (speed, callback, easing) {
 			return this.queue('interfaceFX', function(){
-				new jQuery.fx.OpenClose(this, speed, callback, 'horizontally', 'close', transition);
+				new jQuery.fx.OpenClose(this, speed, callback, 'horizontally', 'close', easing);
 			});
 		},
 		
-		SwitchHorizontally : function (speed, callback, transition) 
+		SwitchHorizontally : function (speed, callback, easing) 
 		{
 			return this.queue('interfaceFX', function(){
 				if (jQuery.css(this, 'display') == 'none') {
-					new jQuery.fx.OpenClose(this, speed, callback, 'horizontally', 'open', transition);
+					new jQuery.fx.OpenClose(this, speed, callback, 'horizontally', 'open', easing);
 				} else {
-					new jQuery.fx.OpenClose(this, speed, callback, 'horizontally', 'close', transition);
+					new jQuery.fx.OpenClose(this, speed, callback, 'horizontally', 'close', easing);
 				}
 			});
 		},
 		
-		SwitchVertically : function (speed, callback, transition) 
+		SwitchVertically : function (speed, callback, easing) 
 		{
 			return this.queue('interfaceFX', function(){
 				if (jQuery.css(this, 'display') == 'none') {
-					new jQuery.fx.OpenClose(this, speed, callback, 'vertically', 'open', transition);
+					new jQuery.fx.OpenClose(this, speed, callback, 'vertically', 'open', easing);
 				} else {
-					new jQuery.fx.OpenClose(this, speed, callback, 'vertically', 'close', transition);
+					new jQuery.fx.OpenClose(this, speed, callback, 'vertically', 'close', easing);
 				}
 			});
 		},
 		
-		OpenVertically : function (speed, callback, transition) {
+		OpenVertically : function (speed, callback, easing) {
 			return this.queue('interfaceFX', function(){
-				new jQuery.fx.OpenClose(this, speed, callback, 'vertically', 'open', transition);
+				new jQuery.fx.OpenClose(this, speed, callback, 'vertically', 'open', easing);
 			});
 		},
 		
-		OpenHorizontally : function (speed, callback, transition) {
+		OpenHorizontally : function (speed, callback, easing) {
 			return this.queue('interfaceFX', function(){
-				new jQuery.fx.OpenClose(this, speed, callback, 'horizontally', 'open', transition);
+				new jQuery.fx.OpenClose(this, speed, callback, 'horizontally', 'open', easing);
 			});
 		}
 	}
 );
 
-jQuery.fx.OpenClose = function (e, speed, callback, direction, type, transition)
+jQuery.fx.OpenClose = function (e, speed, callback, direction, type, easing)
 {
 	if (!jQuery.fxCheckTag(e)) {
 		jQuery.dequeue(e, 'interfaceFX');
@@ -70,7 +70,7 @@ jQuery.fx.OpenClose = function (e, speed, callback, direction, type, transition)
 	var z = this;
 	var restoreStyle = false;
 	z.el = jQuery(e);
-	z.transition = transition||'original';
+	z.easing = easing;
 	z.callback = callback;
 	z.type = type;
 	z.speed = speed;
@@ -119,7 +119,7 @@ jQuery.fx.OpenClose = function (e, speed, callback, direction, type, transition)
 				z.el.get(0),
 				jQuery.speed(speed-15, callback),
 				'height',
-				z.transition
+				z.easing
 			);
 			z.et = new jQuery.fx(
 				z.el.get(0),
@@ -128,7 +128,7 @@ jQuery.fx.OpenClose = function (e, speed, callback, direction, type, transition)
 					z.complete
 				),
 				'top',
-				z.transition
+				z.easing
 			);
 			if (z.type == 'close') {
 				z.eh.custom(z.oldP.h,0);
@@ -143,7 +143,7 @@ jQuery.fx.OpenClose = function (e, speed, callback, direction, type, transition)
 				z.el.get(0),
 				jQuery.speed(speed-15, callback),
 				'width',
-				z.transition
+				z.easing
 			);
 			z.et = new jQuery.fx(
 				z.el.get(0),
@@ -152,7 +152,7 @@ jQuery.fx.OpenClose = function (e, speed, callback, direction, type, transition)
 					z.complete
 				),
 				'left',
-				z.transition
+				z.easing
 			);
 			if (z.type == 'close') {
 				z.eh.custom(z.oldP.w,0);

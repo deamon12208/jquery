@@ -13,30 +13,30 @@
 
 jQuery.fn.extend(
 	{
-		Fold : function (speed, height, callback, transition)
+		Fold : function (speed, height, callback, easing)
 		{
 			return this.queue('interfaceFX',function(){
-				new jQuery.fx.DoFold(this, speed, height, callback, 'fold', transition);
+				new jQuery.fx.DoFold(this, speed, height, callback, 'fold', easing);
 			});
 		},
 		
-		UnFold : function (speed, height, callback, transition)
+		UnFold : function (speed, height, callback, easing)
 		{
 			return this.queue('interfaceFX',function(){
-				new jQuery.fx.DoFold(this, speed, height, callback, 'unfold', transition);
+				new jQuery.fx.DoFold(this, speed, height, callback, 'unfold', easing);
 			});
 		},
 		
-		FoldToggle : function (speed, height, callback, transition)
+		FoldToggle : function (speed, height, callback, easing)
 		{
 			return this.queue('interfaceFX',function(){
-				new jQuery.fx.DoFold(this, speed, height, callback, 'toggle', transition);
+				new jQuery.fx.DoFold(this, speed, height, callback, 'toggle', easing);
 			});
 		}
 	}
 );
 
-jQuery.fx.DoFold = function (e, speed, height, callback, type, transition)
+jQuery.fx.DoFold = function (e, speed, height, callback, type, easing)
 {
 	if (!jQuery.fxCheckTag(e)) {
 		jQuery.dequeue(e, 'interfaceFX');
@@ -44,7 +44,7 @@ jQuery.fx.DoFold = function (e, speed, height, callback, type, transition)
 	}
 	var z = this;
 	z.el = jQuery(e);
-	z.transition = transition||'original';
+	z.easing = easing;
 	if ( type == 'toggle') {
 		type = z.el.css('display') == 'none' ? 'unfold' : 'fold';
 	}
@@ -84,13 +84,13 @@ jQuery.fx.DoFold = function (e, speed, height, callback, type, transition)
 								z.complete
 							),
 							'height',
-							z.transition
+							z.easing
 						);
 						z.ef.custom(z.height, z.fx.oldStyle.sizes.hb);
 					}
 				), 
 				'width',
-				z.transition
+				z.easing
 			);
 		z.ef.custom(0, z.fx.oldStyle.sizes.wb);
 	} else {
@@ -107,13 +107,13 @@ jQuery.fx.DoFold = function (e, speed, height, callback, type, transition)
 								z.complete
 							),
 							'width',
-							z.transition
+							z.easing
 						);
 						z.ef.custom(z.fx.oldStyle.sizes.wb, 0);
 					}
 				), 
 				'height',
-				z.transition
+				z.easing
 			);
 		z.ef.custom(z.fx.oldStyle.sizes.hb, z.height);
 	}

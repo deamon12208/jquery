@@ -13,38 +13,38 @@
 
 jQuery.fn.extend(
 	{
-		BlindUp : function (speed, callback, transition)
+		BlindUp : function (speed, callback, easing)
 		{
 			return this.queue('interfaceFX',function(){
-				new jQuery.fx.BlindDirection(this, speed, callback, 'up', transition);
+				new jQuery.fx.BlindDirection(this, speed, callback, 'up', easing);
 			});
 		},
 		
 		BlindDown : function (speed, callback, transition)
 		{
 			return this.queue('interfaceFX',function(){
-				new jQuery.fx.BlindDirection(this, speed, callback, 'down', transition);
+				new jQuery.fx.BlindDirection(this, speed, callback, 'down', easing);
 			});
 		},
 		
 		BlindToggleVertically : function (speed, callback, transition)
 		{
 			return this.queue('interfaceFX',function(){
-				new jQuery.fx.BlindDirection(this, speed, callback, 'togglever', transition);
+				new jQuery.fx.BlindDirection(this, speed, callback, 'togglever', easing);
 			});
 		},
 		
 		BlindLeft : function (speed, callback, transition)
 		{
 			return this.queue('interfaceFX',function(){
-				new jQuery.fx.BlindDirection(this, speed, callback, 'left', transition);
+				new jQuery.fx.BlindDirection(this, speed, callback, 'left', easing);
 			});
 		},
 		
 		BlindRight : function (speed, callback, transition)
 		{
 			return this.queue('interfaceFX',function(){
-				new jQuery.fx.BlindDirection(this, speed, callback, 'right', transition);
+				new jQuery.fx.BlindDirection(this, speed, callback, 'right', easing);
 			});
 		},
 		
@@ -57,7 +57,7 @@ jQuery.fn.extend(
 	}
 );
 
-jQuery.fx.BlindDirection = function (e, speed, callback, direction, transition)
+jQuery.fx.BlindDirection = function (e, speed, callback, direction, easing)
 {
 	if (!jQuery.fxCheckTag(e)) {
 		jQuery.dequeue(e, 'interfaceFX');
@@ -66,7 +66,7 @@ jQuery.fx.BlindDirection = function (e, speed, callback, direction, transition)
 	var z = this;
 	z.el = jQuery(e);
 	z.size = jQuery.iUtil.getSize(e);
-	z.transition = transition||'original';
+	z.easing = easing;
 	if (!e.ifxFirstDisplay)
 		e.ifxFirstDisplay = z.el.css('display');
 	if ( direction == 'togglever') {
@@ -101,7 +101,7 @@ jQuery.fx.BlindDirection = function (e, speed, callback, direction, transition)
 					z.complete
 				),
 				'height',
-				z.transition
+				z.easing
 			);
 			fxh.custom(z.fx.oldStyle.sizes.hb, 0);
 		break;
@@ -115,7 +115,7 @@ jQuery.fx.BlindDirection = function (e, speed, callback, direction, transition)
 					z.complete
 				),
 				'height',
-				z.transition
+				z.easing
 			);
 			fxh.custom(0, z.fx.oldStyle.sizes.hb);
 		break;
@@ -127,7 +127,7 @@ jQuery.fx.BlindDirection = function (e, speed, callback, direction, transition)
 					z.complete
 				),
 				'width',
-				z.transition
+				z.easing
 			);
 			fxh.custom(z.fx.oldStyle.sizes.wb, 0);
 		break;
@@ -141,7 +141,7 @@ jQuery.fx.BlindDirection = function (e, speed, callback, direction, transition)
 					z.complete
 				),
 				'width',
-				z.transition
+				z.easing
 			);
 			fxh.custom(0, z.fx.oldStyle.sizes.wb);
 		break;

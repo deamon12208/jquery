@@ -13,34 +13,34 @@
 
 jQuery.fn.extend(
 	{
-		Grow : function(duration, callback, transition) {
+		Grow : function(duration, callback, easing) {
 			return this.queue('interfaceFX',function(){
-				new jQuery.fx.Scale(this, duration, 1, 100, true, callback, 'grow', transition);
+				new jQuery.fx.Scale(this, duration, 1, 100, true, callback, 'grow', easing);
 			});
 		},
 		
-		Shrink : function(duration, callback, transition) {
+		Shrink : function(duration, callback, easing) {
 			return this.queue('interfaceFX',function(){
-				new jQuery.fx.Scale(this, duration, 100, 1, true, callback, 'shrink', transition);
+				new jQuery.fx.Scale(this, duration, 100, 1, true, callback, 'shrink', easing);
 			});
 		},
 		
-		Puff : function(duration, callback, transition) {
+		Puff : function(duration, callback, easing) {
 			return this.queue('interfaceFX',function(){
-				transition = transition || 'easeout';
-				new jQuery.fx.Scale(this, duration, 100, 150, true, callback, 'puff', transition);
+				var easing = easing || 'easeout';
+				new jQuery.fx.Scale(this, duration, 100, 150, true, callback, 'puff', easing);
 			});
 		},
 		
-		Scale : function(duration, from, to, restore, callback, transition) {
+		Scale : function(duration, from, to, restore, callback, easing) {
 			return this.queue('interfaceFX',function(){
-				new jQuery.fx.Scale(this, duration, from, to, restore, callback, 'Scale', transition);
+				new jQuery.fx.Scale(this, duration, from, to, restore, callback, 'Scale', easing);
 			});
 		}
 	}
 );
 
-jQuery.fx.Scale = function (e, duration, from, to, restore, callback, type, transition)
+jQuery.fx.Scale = function (e, duration, from, to, restore, callback, type, easing)
 {
 	if (!jQuery.fxCheckTag(e)) {
 		jQuery.dequeue(e, 'interfaceFX');
@@ -50,7 +50,7 @@ jQuery.fx.Scale = function (e, duration, from, to, restore, callback, type, tran
 	z.el = jQuery(e);
 	z.from = parseInt(from) || 100;
 	z.to = parseInt(to) || 100;
-	z.transition = transition||'original';
+	z.easing = easing;
 	z.duration = jQuery.speed(duration).duration;
 	z.restore = restore|| null;
 	z.callback = callback;
@@ -172,12 +172,23 @@ jQuery.fx.Scale = function (e, duration, from, to, restore, callback, type, tran
 			z.clear();
 		} else {
 			o = 1;
-			s = jQuery.fx.transitions(p, n, z.from, (z.to-z.from), z.duration, z.transition);
+			if (!jQuery.easing || !jQuery.easing[z.easing]) {
+				s = ((-Math.cos(p*Math.PI)/2) + 0.5) * (z.to-z.from) + z.from;
+			} else {
+				s = jQuery.easing[z.easing](p, n, z.from, (z.to-z.from), z.duration);
+			}
 			if (z.type) {
-				t = jQuery.fx.transitions(p, n, z.startTop, (z.endTop-z.startTop), z.duration, z.transition);
-				l = jQuery.fx.transitions(p, n, z.startLeft, (z.endLeft-z.startLeft), z.duration, z.transition);
-				if (z.type == 'puff')
-					o = jQuery.fx.transitions(p, n, 0.9999, -0.9999, z.duration, z.transition);
+				if (!jQuery.easing || !jQuery.easing[z.easing]) {
+					t = ((-Math.cos(p*Math.PI)/2) + 0.5) * (z.endTop-z.startTop) + z.startTop;
+					l = ((-Math.cos(p*Math.PI)/2) + 0.5) * (z.endLeft-z.startLeft) + z.startLeft;
+					if (z.type == 'puff')
+						o = ((-Math.cos(p*Math.PI)/2) + 0.5) * (-0.9999) + 0.9999;
+				} else {
+					t = jQuery.easing[z.easing](p, n, z.startTop, (z.endTop-z.startTop), z.duration);
+					l = jQuery.easing[z.easing](p, n, z.startLeft, (z.endLeft-z.startLeft), z.duration);
+					if (z.type == 'puff')
+						o = jQuery.easing[z.easing](p, n, 0.9999, -0.9999, z.duration);
+				}
 			}
 			z.zoom(s, l, t, false, o);
 		}

@@ -102,10 +102,6 @@ jQuery.fx.buildWrapper = function(e)
 	return {oldStyle:oldStyle, wrapper:jQuery(wr)};
 };
 
-jQuery.fx.transitions = function(p, n, firstNum, delta, duration, type) {
-	return ((-Math.cos(p*Math.PI)/2) + 0.5) * delta + firstNum;
-};
-
 jQuery.fx.namedColors = {
 	'aqua':[0,255,255],
 	'azure':[240,255,255],
@@ -228,14 +224,14 @@ jQuery.fx.animatedColorsCssRules = [
 	'outlineColor'
 ];
 
-jQuery.fx.animateColor = function (e, duration, colors, callback, transition)
+jQuery.fx.animateColor = function (e, duration, colors, callback, easing)
 {
 	/*if (!jQuery.fxCheckTag(e) || !color) {
 		jQuery.dequeue(e, 'interfaceFX');
 		return false;
 	}*/
 	var z = this;
-	z.transition = transition||'original';
+	z.easing = easing;
 	z.duration = jQuery.speed(duration).duration;
 	z.callback = callback;
 	z.el = jQuery(e);
@@ -268,15 +264,21 @@ jQuery.fx.animateColor = function (e, duration, colors, callback, transition)
 			);
 			z.clear();
 		} else {
-			o = 1;
-			s = jQuery.fx.transitions(p, n, z.from, (z.to-z.from), z.duration, z.transition);
-			
+			o = 1;			
 			for(i in z.colors) {
-				newColor = {
-					r: parseInt(jQuery.fx.transitions(p, n, z.colors[i][0].r, (z.colors[i][1].r-z.colors[i][0].r), z.duration, z.transition)),
-					g: parseInt(jQuery.fx.transitions(p, n, z.colors[i][0].g, (z.colors[i][1].g-z.colors[i][0].g), z.duration, z.transition)),
-					b: parseInt(jQuery.fx.transitions(p, n, z.colors[i][0].b, (z.colors[i][1].b-z.colors[i][0].b), z.duration, z.transition))
-				};
+				if (!jQuery.easing || !jQuery.easing[z.easing]) {
+					newColor = {
+						r: parseInt(((-Math.cos(p*Math.PI)/2) + 0.5) * (z.colors[i][1].r-z.colors[i][0].r) + z.colors[i][0].r),
+						g: parseInt(((-Math.cos(p*Math.PI)/2) + 0.5) * (z.colors[i][1].g-z.colors[i][0].g) + z.colors[i][0].g),
+						b: parseInt(((-Math.cos(p*Math.PI)/2) + 0.5) * (z.colors[i][1].b-z.colors[i][0].b) + z.colors[i][0].b)
+					};
+				} else {
+					newColor = {
+						r: parseInt(jQuery.easing[z.easing](p, n, z.colors[i][0].r, (z.colors[i][1].r-z.colors[i][0].r), z.duration)),
+						g: parseInt(jQuery.easing[z.easing](p, n, z.colors[i][0].g, (z.colors[i][1].g-z.colors[i][0].g), z.duration)),
+						b: parseInt(jQuery.easing[z.easing](p, n, z.colors[i][0].b, (z.colors[i][1].b-z.colors[i][0].b), z.duration))
+					};
+				}
 				z.el.css(i, 'rgb(' + newColor.r + ',' + newColor.g + ',' + newColor.b + ')');
 			}
 		}
@@ -285,8 +287,8 @@ jQuery.fx.animateColor = function (e, duration, colors, callback, transition)
 
 };
 
-jQuery.fn.animateColor = function(duration, color, callback, transition) {
+jQuery.fn.animateColor = function(duration, color, callback, easing) {
 	return this.queue('interfaceFX',function(){
-		new jQuery.fx.animateColor(this, duration, color, callback, transition);
+		new jQuery.fx.animateColor(this, duration, color, callback, easing);
 	});
 };
