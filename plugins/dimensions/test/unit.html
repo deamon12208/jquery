@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>jQuery dimenions.js Unit Test</title>
+		
+		<!-- load latest build of jquery.js -->
+		<script type="text/javascript" src="../../../jquery/dist/jquery.js"></script>
+
+		<!-- load testrunner from jquery project -->
+		<script type="text/javascript" src="../../../jquery/test/data/testrunner.js"></script>
+
+		<!-- load dimensions.js (this is what we're testing! -->
+		<script type="text/javascript" src="../dimensions.js"></script>
+		
+		<link rel="Stylesheet" media="screen" href="../../../jquery/test/data/testsuite.css" />
+		
+		<script type="text/javascript" charset="utf-8">
+			test("height()", function() {
+				// get height of #underlay
+				$('html, body').css('height', '100%');
+				var h = parseInt( $('#underlay')[0].offsetHeight );
+				$('html, body').css('height', '');
+				
+				// compare #underlay height with window's inner height
+				ok( $(window).height() == h, "on window" );
+				
+				// set #wrapper height to #underlay height
+				$('#wrapper').css('height', h+'px');
+				
+				// compare #wrapper height to document height
+				ok( $(document).height() == h, "on document without scrollbars" );
+				
+				// adjust #wrapper height to force scrollbars
+				$('#wrapper').css('height', h+20+'px');
+				
+				// compare #wrapper height to document height
+				ok( $(document).height() == h+20, "on document with scrollbars" );
+				
+				// reset wrapper height to remove scrollbars
+				$('#wrapper').css('height', '');
+			});
+			
+			test("width()", function() {
+				// get width of #underlay
+				var w = parseInt( $('#underlay')[0].offsetWidth );
+				
+				// compare #underlay width with window's inner width
+				ok( $(window).width() == w, "on window" );
+				
+				// set #wrapper width to #underlay width
+				$('#wrapper').css('width', w+'px');
+				
+				// compare #wrapper width to document width
+				ok( $(document).width() == w, "on document without scrollbars" );
+				
+				// set underlay height to be auto to avoid vertical scrollbar
+				$('#underlay').css('height', ''); 
+				
+				// adjust #wrapper width to force scrollbars
+				$('#wrapper').css('width', w+20+'px');
+				
+				// compare #wrapper width to document width
+				ok( $(document).width() == w+20, "on document with scrollbars" );
+				
+				// reset wrapper width to remove scrollbars
+				$('#wrapper').css('width', '');
+				$('#underlay').css('height', '');
+			});
+			
+			test("innerHeight()", function() {
+				$('#main').show();
+				ok( $('#inner').innerHeight() == 104, "on an element" );
+				$('#main').hide();
+			});
+			
+			test("innerWidth()", function() {
+				$('#main').show();
+				ok( $('#inner').innerWidth() == 104, "on an element" );
+				$('#main').hide();
+			});
+			
+			test("outerHeight()", function() {
+				$('#main').show();
+				ok( $('#inner').outerHeight() == 106, "on an element" );
+				$('#main').hide();
+			});
+			
+			test("outerWidth()", function() {
+				$('#main').show();
+				ok( $('#inner').outerWidth() == 106, "on an element" );
+				$('#main').hide();
+			});
+			
+			test("scrollLeft()", function() {
+				// get width of #underlay
+				var w = parseInt( $('#underlay')[0].offsetWidth );
+				
+				// set underlay height to be auto to avoid vertical scrollbar
+				$('#underlay').css('height', 'auto'); 
+				
+				// adjust #wrapper width to force scrollbars
+				$('#wrapper').css('width', w+100+'px');
+				window.scrollTo(20,0);
+				ok( $(window).scrollLeft() == 20, "on the window" );
+				ok( $(document).scrollLeft() == 20, "on the document" );
+				window.scrollTo(0,0);
+				
+				// reset wrapper width to remove scrollbars
+				$('#wrapper').css('width', '');
+				$('#underlay').css('height', '');
+			});
+			
+			test("scrollTop()", function() {
+				// get height of #underlay
+				$('html, body').css('height', '100%');
+				var h = parseInt( $('#underlay')[0].offsetHeight );
+				$('html, body').css('height', '');
+				
+				// adjust #wrapper width to force scrollbars
+				$('#wrapper').css('height', h+100+'px');
+				window.scroll(0,20);
+				ok( $(window).scrollTop() == 20, "on the window" );
+				ok( $(document).scrollTop() == 20, "on the document" );
+				window.scrollTo(0,0);
+				
+				// reset wrapper width to remove scrollbars
+				$('#wrapper').css('height', '');
+			});
+		</script>
+		
+		<style type="text/css" media="screen">
+			#underlay { position: absolute; width: 100%; height: 100%; z-index: -1; }
+			#inner, #outer { margin: 5px; border: 1px solid #000; padding: 2px; width: 100px; height: 100px; }
+		</style>
+		
+	</head>
+	<body>
+		<table id="underlay" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td>&nbsp;</td></tr></tbody></table>
+		<div id="wrapper">
+			<h1 id="banner">jQuery form.js - Test Suite</h1>
+			<h2 id="userAgent"></h2>
+
+			<!-- Test HTML -->
+			<div id="main" style="display: none;">
+				<div id="inner"></div>
+				<div id="outer"></div>
+			</div>
+		
+			<ol id="tests"></ol>
+		</div>
+	</body>
+</html>
