@@ -24,7 +24,7 @@
  *
  *  url:      URL to which the form data will be submitted.
  *            default value: value of form's 'action' attribute
- *
+ *  
  *  method:   @deprecated use 'type'
  *  type:     The method in which the form data should be submitted, 'GET' or 'POST'.
  *            default value: value of form's 'method' attribute (or 'GET' if none found)
@@ -52,7 +52,7 @@
  * The 'beforeSubmit' callback can be provided as a hook for running pre-submit logic or for
  * validating the form data.  If the 'beforeSubmit' callback returns false then the form will
  * not be submitted. The 'beforeSubmit' callback is invoked with three arguments: the form data
- * in array format, the jQuery object, and the options object passed into ajaxSubmit.
+ * in array format, the jQuery object, and the options object passed into ajaxSubmit.  
  * The form data array takes the following form:
  *
  *     [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ]
@@ -64,7 +64,7 @@
  *
  * The dataType option provides a means for specifying how the server response should be handled.
  * This maps directly to the jQuery.httpData method.  The following values are supported:
- *
+ * 
  *      'xml':    if dataType == 'xml' the server response is treated as XML and the 'after'
  *                   callback method, if specified, will be passed the responseXML value
  *      'json':   if dataType == 'json' the server response will be evaluted and passed to
@@ -75,10 +75,12 @@
  * Note that it does not make sense to use both the 'target' and 'dataType' options.  If both
  * are provided the target will be ignored.
  *
- * The semantic argument can be used to force form serialization in semantic order.  If your
- * form must be submitted with name/value pairs in semantic order then pass true for this arg,
- * otherwise pass false (or nothing) to avoid the overhead for this logic (which can be
- * significant for very large forms).
+ * The semantic argument can be used to force form serialization in semantic order.
+ * This is normally true anyway, unless the form contains input elements of type='image'.
+ * If your form must be submitted with name/value pairs in semantic order and your form
+ * contains an input of type='image" then pass true for this arg, otherwise pass false 
+ * (or nothing) to avoid the overhead for this logic.
+ *
  *
  * When used on its own, ajaxSubmit() is typically bound to a form's submit event like this:
  *
@@ -182,7 +184,7 @@ jQuery.fn.ajaxSubmit = function(options) {
         options = { success: options };
 
     options = jQuery.extend({
-        url:  this.attr('action') || '',
+        url:    this.attr('action') || '',
         method: this.attr('method') || 'GET'
     }, options || {});
 
@@ -217,14 +219,14 @@ jQuery.fn.ajaxSubmit = function(options) {
             jQuery(options.target).html(data).evalScripts().each(oldSuccess, [data, status]);
         });
     }
-    else if (options.success)
+    else if (options.success) 
         callbacks.push(options.success);
 
     options.success = function(data, status) {
         for (var i=0, max=callbacks.length; i < max; i++)
             callbacks[i](data, status);
     };
-
+        
     jQuery.ajax(options);
     return this;
 };
@@ -291,8 +293,7 @@ jQuery.fn.ajaxSubmit = function(options) {
  */
 jQuery.fn.ajaxForm = function(options) {
     return this.each(function() {
-        jQuery("input:submit,input:image,button", this).click(function(ev) {
-            if (this.type == 'reset') return;
+        jQuery("input:submit,input:image,button:submit", this).click(function(ev) {
             var $form = this.form;
             $form.clk = this;
             if (this.type == 'image') {
@@ -332,9 +333,10 @@ jQuery.fn.ajaxForm = function(options) {
  * ajaxSubmit() and ajaxForm() methods.
  *
  * The semantic argument can be used to force form serialization in semantic order.
- * If your form must be submitted with name/value pairs in semantic order then pass
- * true for this arg, otherwise pass false (or nothing) to avoid the overhead for
- * this logic (which can be significant for very large forms).
+ * This is normally true anyway, unless the form contains input elements of type='image'.
+ * If your form must be submitted with name/value pairs in semantic order and your form
+ * contains an input of type='image" then pass true for this arg, otherwise pass false 
+ * (or nothing) to avoid the overhead for this logic.
  *
  * @example var data = $("#myForm").formToArray();
  * $.post( "myscript.cgi", data );
@@ -349,27 +351,44 @@ jQuery.fn.ajaxForm = function(options) {
  * @author jQuery Community
  */
 jQuery.fn.formToArray = function(semantic) {
-    var a = [], q = semantic ? ':input' : 'input,textarea,select,button';
+    var a = [];
+    if (this.length == 0) return a;
 
-    jQuery(q, this).each(function() {
-        var n = this.name;
-        if (!n) return;
-        // handle image submit
-        if (this.type == 'image') {
-            if (this.form.clk_x != undefined)
-                a.push({name: n+'_x', value: this.form.clk_x}, {name: n+'_y', value: this.form.clk_y});
-            return;
+    var form = this[0];
+    var els = semantic ? form.getElementsByTagName('*') : form.elements;
+    if (!els) return a;
+	for(var i=0, max=els.length; i < max; i++) {
+		var el = els[i];
+        var n = el.name;
+        if (!n) continue;
+
+        if (semantic) {
+            // handle image inputs on the fly
+            if(!el.disabled && el.type == "image" && form.clk == el) {
+                a.push({name: n+'.x', value: form.clk_x}, {name: n+'.y', value: form.clk_y});
+                continue;
+            }
         }
-        // delegate to fieldValue
-        var v = jQuery.fieldValue(this, true);
-        if (v === null) return;
+        var v = jQuery.fieldValue(el, true);
+        if (v === null) continue;
         if (v.constructor == Array) {
-            for(var i=0, max=v.length; i < max; i++)
-                a.push({name: n, value: v[i]});
+            for(var j=0, jmax=v.length; j < jmax; j++)
+                a.push({name: n, value: v[j]});
         }
-        else
+        else 
             a.push({name: n, value: v});
-    });
+	}
+
+    if (!semantic) {
+        // input type=='image' are not found in elements array! handle them here
+        var inputs = form.getElementsByTagName("input");
+        for(var i=0, max=inputs.length; i < max; i++) {
+            var input = inputs[i];
+            var n = input.name;
+            if(n && !input.disabled && input.type == "image" && form.clk == input)
+                a.push({name: n+'.x', value: form.clk_x}, {name: n+'.y', value: form.clk_y});
+        }
+    }
     return a;
 };
 
@@ -401,7 +420,7 @@ jQuery.fn.formSerialize = function(semantic) {
 
 
 /**
- * Serializes all field elements in the jQuery object into a query string.
+ * Serializes all field elements in the jQuery object into a query string. 
  * This method will return a string in the format: name1=value1&amp;name2=value2
  *
  * The successful argument controls whether or not serialization is limited to
@@ -528,19 +547,22 @@ jQuery.fieldValue = function(el, successful) {
 
     if (successful && ( !n || el.disabled || t == 'reset' ||
         (t == 'checkbox' || t == 'radio') && !el.checked ||
-        (t == 'submit' || t == 'image' || t == 'button') && el.form && el.form.clk != el ||
+        (t == 'submit' || t == 'image') && el.form && el.form.clk != el ||
         tag == 'select' && el.selectedIndex == -1))
             return null;
-
+    
     if (tag == 'select') {
-        var a = [], one = (t == 'select-one'), ops = el.options;
-        for(var i=0,max=ops.length; i < max; i++) {
+        var index = el.selectedIndex;
+        if (index < 0) return null;
+        var a = [], ops = el.options;
+        var one = (t == 'select-one');
+        var max = (one ? index+1 : ops.length);
+        for(var i=(one ? index : 0); i < max; i++) {
             var op = ops[i];
             if (op.selected) {
                 // extra pain for IE...
                 var v = jQuery.browser.msie && !(op.attributes['value'].specified) ? op.text : op.value;
-                if (one)
-                    return v;
+                if (one) return v;
                 a.push(v);
             }
         }
@@ -616,7 +638,7 @@ jQuery.fn.resetForm = function() {
     return this.each(function() {
         // guard against an input with the name of 'reset'
         // note that IE reports the reset function as an 'object'
-        if (typeof this.reset == 'function' || (typeof this.reset == 'object' && !this.reset.nodeType))
+        if (typeof this.reset == 'function' || (typeof this.reset == 'object' && !this.reset.nodeType)) 
             this.reset();
     });
 }
