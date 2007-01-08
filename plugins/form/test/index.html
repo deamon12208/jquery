@@ -76,7 +76,7 @@ test("serialize: param count", function() {
 
 // test support for input elements not contained within a form
 test("serialize: pseudo form", function() {
-    var s = $("#pseudo").formSerialize();
+    var s = $("#pseudo *").fieldSerialize();
     ok( s.constructor == String, "type check");
     ok( s.split('&').length == 3, "string array length");
 });
@@ -543,8 +543,27 @@ test("ajaxForm: capture submit image coordinates", function() {
             ok( true, 'pre-callback');
             ok( a.constructor == Array, "type check");
             ok( jq.jquery, "type check jQuery");
-            ok( arrayValue(a, 'myImage_x') != null, "x coord");
-            ok( arrayValue(a, 'myImage_y') != null, "y coord");
+            ok( arrayValue(a, 'myImage.x') != null, "x coord");
+            ok( arrayValue(a, 'myImage.y') != null, "y coord");
+        }
+    };
+
+    expect(5);
+    $("#form4").ajaxForm(opts);
+    $('#form4imageSubmit')[0].click();
+});
+
+// test image submit support
+test("ajaxForm: capture submit image coordinates (semantic=true)", function() {
+
+    var opts = {
+        semantic: true,
+        before: function(a, jq) { // pre-callback
+            ok( true, 'pre-callback');
+            ok( a.constructor == Array, "type check");
+            ok( jq.jquery, "type check jQuery");
+            ok( arrayValue(a, 'myImage.x') != null, "x coord");
+            ok( arrayValue(a, 'myImage.y') != null, "y coord");
         }
     };
 
