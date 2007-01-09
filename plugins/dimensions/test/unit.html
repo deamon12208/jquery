@@ -38,7 +38,9 @@
 				// compare #wrapper height to document height
 				ok( $(document).height() == h+20, "on document with scrollbars" );
 				
+				$('#main').show();
 				ok( $('#test').height() == 100, "on an element" );
+				$('#main').hide();
 				
 				// reset wrapper height to remove scrollbars
 				$('#wrapper').css('height', '');
@@ -66,7 +68,9 @@
 				// compare #wrapper width to document width
 				ok( $(document).width() == w+20, "on document with scrollbars" );
 				
+				$('#main').show();
 				ok( $('#test').width() == 100, "on an element" );
+				$('#main').hide();
 				
 				// reset wrapper width to remove scrollbars
 				$('#wrapper').css('width', '');

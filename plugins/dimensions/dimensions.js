@@ -33,7 +33,7 @@ jQuery.fn.height = function() {
 	if ( this.get(0) == document ) 
 		return Math.max( document.body.scrollHeight, document.body.offsetHeight );
 	
-	return arguments[0] != undefined ? this.css("height", arguments[0]) : parseInt( this.css("height") );
+	return arguments[0] != undefined ? this.css("height", arguments[0]) : jQuery.css(this[0], "height");
 };
 
 /**
@@ -63,7 +63,7 @@ jQuery.fn.width = function() {
 	if ( this.get(0) == document )
 		return Math.max( document.body.scrollWidth, document.body.offsetWidth );
 	
-	return arguments[0] != undefined ? this.css("width", arguments[0]) : parseInt( this.css("width") );
+	return arguments[0] != undefined ? this.css("width", arguments[0]) : jQuery.css(this[0], "width");
 };
 
 /**
