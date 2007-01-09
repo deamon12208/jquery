@@ -222,7 +222,7 @@ jQuery.fn.offset = function(includeScrollOffsets) {
 		}
 		
 		var op = parent.offsetParent;
-		if (op.tagName == 'BODY' || op.tagName == 'HTML') {
+		if (op && (op.tagName == 'BODY' || op.tagName == 'HTML')) {
 			// Safari and IE don't add the body margin for elments positioned with static or relative
 			if ((jQuery.browser.safari || jQuery.browser.msie) && jQuery.css(parent, 'position') != 'absolute') {
 				x += parseInt(jQuery.css(op, 'marginLeft')) || 0;
