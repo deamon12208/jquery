@@ -1,6 +1,4 @@
-/* This plugin extends jQuery's height() and width() functions and
- * adds more handy stuff for cross-browser compatibility.
- *
+/* 
  * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) 
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
  * 
@@ -14,7 +12,7 @@
  * If used on window, returns the viewport's (window) height
  *
  * @example $("#testdiv").height()
- * @result "200px"
+ * @result 200
  *
  * @example $(document).height()
  * @result 800
@@ -35,7 +33,7 @@ jQuery.fn.height = function() {
 	if ( this.get(0) == document ) 
 		return Math.max( document.body.scrollHeight, document.body.offsetHeight );
 	
-	return this.css("height", arguments[0]);
+	return arguments[0] != undefined ? this.css("height", arguments[0]) : parseInt( this.css("height") );
 };
 
 /**
@@ -44,7 +42,7 @@ jQuery.fn.height = function() {
  * If used on window, returns the viewport's (window) width
  *
  * @example $("#testdiv").width()
- * @result "200px"
+ * @result 200
  *
  * @example $(document).width()
  * @result 800
@@ -65,7 +63,7 @@ jQuery.fn.width = function() {
 	if ( this.get(0) == document )
 		return Math.max( document.body.scrollWidth, document.body.offsetWidth );
 	
-	return this.css("width", arguments[0]);
+	return arguments[0] != undefined ? this.css("width", arguments[0]) : parseInt( this.css("width") );
 };
 
 /**
