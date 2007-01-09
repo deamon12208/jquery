@@ -186,10 +186,10 @@ jQuery.fn.scrollTop = function() {
  * 
  * For accurate readings make sure to use pixel values for margins, borders and padding.
  * 
- * @example: $("#testdiv").offset()
- * @result: { top: 100, left: 100, scrollTop: 10, scrollLeft: 10 }
+ * @example $("#testdiv").offset()
+ * @result { top: 100, left: 100, scrollTop: 10, scrollLeft: 10 }
  *
- * @example: $("#testdiv").offset(false)
+ * @example $("#testdiv").offset(false)
  * @result { top: 100, left: 100 }
  *
  * @name offset	
