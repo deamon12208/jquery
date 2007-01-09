@@ -362,12 +362,11 @@ jQuery.fn.formToArray = function(semantic) {
         var n = el.name;
         if (!n) continue;
 
-        if (semantic) {
-            // handle image inputs on the fly
-            if(!el.disabled && el.type == "image" && form.clk == el) {
+        if (semantic && form.clk && el.type == "image") {
+            // handle image inputs on the fly when semantic == true
+            if(!el.disabled && form.clk == el)
                 a.push({name: n+'.x', value: form.clk_x}, {name: n+'.y', value: form.clk_y});
-                continue;
-            }
+            continue;
         }
         var v = jQuery.fieldValue(el, true);
         if (v === null) continue;
@@ -379,7 +378,7 @@ jQuery.fn.formToArray = function(semantic) {
             a.push({name: n, value: v});
 	}
 
-    if (!semantic) {
+    if (!semantic && form.clk) {
         // input type=='image' are not found in elements array! handle them here
         var inputs = form.getElementsByTagName("input");
         for(var i=0, max=inputs.length; i < max; i++) {
