@@ -38,6 +38,8 @@
 				// compare #wrapper height to document height
 				ok( $(document).height() == h+20, "on document with scrollbars" );
 				
+				ok( $('#test').height() == 100, "on an element" );
+				
 				// reset wrapper height to remove scrollbars
 				$('#wrapper').css('height', '');
 			});
@@ -63,6 +65,8 @@
 				
 				// compare #wrapper width to document width
 				ok( $(document).width() == w+20, "on document with scrollbars" );
+				
+				ok( $('#test').width() == 100, "on an element" );
 				
 				// reset wrapper width to remove scrollbars
 				$('#wrapper').css('width', '');
@@ -132,7 +136,7 @@
 		
 		<style type="text/css" media="screen">
 			#underlay { position: absolute; width: 100%; height: 100%; z-index: -1; }
-			#inner, #outer { margin: 5px; border: 1px solid #000; padding: 2px; width: 100px; height: 100px; }
+			#test, #inner, #outer { margin: 5px; border: 1px solid #000; padding: 2px; width: 100px; height: 100px; }
 		</style>
 		
 	</head>
@@ -144,6 +148,7 @@
 
 			<!-- Test HTML -->
 			<div id="main" style="display: none;">
+				<div id="test"></div>
 				<div id="inner"></div>
 				<div id="outer"></div>
 			</div>
