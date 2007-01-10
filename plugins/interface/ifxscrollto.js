@@ -24,7 +24,7 @@ jQuery.fn.extend (
 			return this.each(
 				function()
 				{
-					jQuery('a[@href^="#"]', this).click(
+					jQuery('a[@href*="#"]', this).click(
 						function(e)
 						{
 							parts = this.href.split('#');

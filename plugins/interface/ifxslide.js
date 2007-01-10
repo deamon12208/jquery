@@ -107,7 +107,8 @@ jQuery.fx.slide = function(e, speed, callback, direction, type, easing)
 	}
 	var z = this;
 	z.el = jQuery(e);
-	z.easing = easing||'original';
+	z.easing = typeof callback == 'string' ? callback : easing||null;
+	z.callback = typeof callback == 'function' ? callback : null;
 	if ( type == 'toggle') {
 		type = z.el.css('display') == 'none' ? 'in' : 'out';
 	}
@@ -116,7 +117,6 @@ jQuery.fx.slide = function(e, speed, callback, direction, type, easing)
 	z.el.show();
 	
 	z.speed = speed;
-	z.callback = callback;
 	z.fx = jQuery.fx.buildWrapper(e);
 	
 	z.type = type;
@@ -143,18 +143,18 @@ jQuery.fx.slide = function(e, speed, callback, direction, type, easing)
 				z.el.get(0), 
 				jQuery.speed(
 					z.speed,
+					z.easing,
 					z.complete
 				),
-				'top',
-				z.easing
+				'top'
 			);
 			z.efx = new jQuery.fx(
 				z.fx.wrapper.get(0), 
 				jQuery.speed(
-					z.speed
+					z.speed,
+					z.easing
 				),
-				'height',
-				z.easing
+				'height'
 			);
 			if (z.type == 'in') {
 				z.ef.custom (-z.fx.oldStyle.sizes.hb, 0);
@@ -169,10 +169,10 @@ jQuery.fx.slide = function(e, speed, callback, direction, type, easing)
 				z.el.get(0), 
 				jQuery.speed(
 					z.speed,
+					z.easing,
 					z.complete
 				),
-				'top',
-				z.easing
+				'top'
 			);
 			if (z.type == 'in') {
 				z.ef.custom (z.fx.oldStyle.sizes.hb, 0);
@@ -185,18 +185,18 @@ jQuery.fx.slide = function(e, speed, callback, direction, type, easing)
 				z.el.get(0), 
 				jQuery.speed(
 					z.speed,
+					z.easing,
 					z.complete
 				),
-				'left',
-				z.easing
+				'left'
 			);
 			z.efx = new jQuery.fx(
 				z.fx.wrapper.get(0), 
 				jQuery.speed(
-					z.speed
+					z.speed,
+					z.easing
 				),
-				'width',
-				z.easing
+				'width'
 			);
 			if (z.type == 'in') {
 				z.ef.custom (-z.fx.oldStyle.sizes.wb, 0);
@@ -211,10 +211,10 @@ jQuery.fx.slide = function(e, speed, callback, direction, type, easing)
 				z.el.get(0), 
 				jQuery.speed(
 					z.speed,
+					z.easing,
 					z.complete
 				),
-				'left',
-				z.easing
+				'left'
 			);
 			if (z.type == 'in') {
 				z.ef.custom (z.fx.oldStyle.sizes.wb, 0);

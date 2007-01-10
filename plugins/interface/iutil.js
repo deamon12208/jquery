@@ -125,7 +125,7 @@ jQuery.iUtil = {
 	getScroll : function (e)
 	{
 		var t, l, w, h, iw, ih;
-		if (e) {
+		if (e && e.nodeName.toLowerCase() != 'body') {
 			t = e.scrollTop;
 			l = e.scrollLeft;
 			w = e.scrollWidth;

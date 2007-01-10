@@ -44,7 +44,7 @@ jQuery.iTTabs =
 			function()
 			{
 				if (this.hasTabsEnabled && this.hasTabsEnabled == true) {
-					jQuery(this).unkeydown(jQuery.iTTabs.doTab);
+					jQuery(this).unbind('keydown', jQuery.iTTabs.doTab);
 					this.hasTabsEnabled = false;
 				}
 			}
@@ -56,7 +56,7 @@ jQuery.iTTabs =
 			function()
 			{
 				if (this.tagName == 'TEXTAREA' && (!this.hasTabsEnabled || this.hasTabsEnabled == false)) {
-					jQuery(this).keydown(jQuery.iTTabs.doTab);
+					jQuery(this).bind('keydown', jQuery.iTTabs.doTab);
 					this.hasTabsEnabled = true;
 				}
 			}

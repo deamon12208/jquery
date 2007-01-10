@@ -39,24 +39,20 @@ jQuery.fx.buildWrapper = function(e)
 	var t = jQuery(e);
 	var es = e.style;
 	var restoreStyle = false;
+	
+	if (t.css('display') == 'none') {
+		oldVisibility = t.css('visibility');
+		t.css('visibility', 'hidden').show();
+		restoreStyle = true;
+	}
 	oldStyle = {};
 	oldStyle.position = t.css('position');
 	oldStyle.sizes = jQuery.iUtil.getSize(e);
 	oldStyle.margins = jQuery.iUtil.getMargins(e);
 	
 	oldFloat = e.currentStyle ? e.currentStyle.styleFloat : t.css('float');
-	
-	if (t.css('display') == 'none') {
-		oldVisibility = t.css('visibility');
-		t.show();
-		restoreStyle = true;
-	}
 	oldStyle.top = parseInt(t.css('top'))||0;
 	oldStyle.left = parseInt(t.css('left'))||0;
-	if (restoreStyle) {
-		t.hide();
-		es.visibility = oldVisibility;
-	}
 	var wid = 'w_' + parseInt(Math.random() * 10000);
 	var wr = document.createElement(/img|br|input|hr|select|textarea|object|iframe|button|form|table|ul|dl|ol/i.test(e.nodeName) ? 'div' : e.nodeName);
 	jQuery.attr(wr,'id', wid);
@@ -99,6 +95,10 @@ jQuery.fx.buildWrapper = function(e)
 	es.listStyle = 'none';
 	es.top = '0px';
 	es.left = '0px';
+	if (restoreStyle) {
+		t.hide();
+		es.visibility = oldVisibility;
+	}
 	return {oldStyle:oldStyle, wrapper:jQuery(wr)};
 };
 
@@ -180,7 +180,7 @@ jQuery.fx.parseColor = function(color)
 			b: parseInt("0x" + result[3])
 		};
 	else
-		return false;
+		return {r: 255, g: 255, b: 255};
 };
 jQuery.fx.animatedCssRules = [
 	'borderBottomWidth',

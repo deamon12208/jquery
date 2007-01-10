@@ -70,8 +70,8 @@ jQuery.fx.OpenClose = function (e, speed, callback, direction, type, easing)
 	var z = this;
 	var restoreStyle = false;
 	z.el = jQuery(e);
-	z.easing = easing;
-	z.callback = callback;
+	z.easing = typeof callback == 'string' ? callback : easing||null;
+	z.callback = typeof callback == 'function' ? callback : null;
 	z.type = type;
 	z.speed = speed;
 	z.oldP = jQuery.iUtil.getSize(e);
@@ -117,18 +117,17 @@ jQuery.fx.OpenClose = function (e, speed, callback, direction, type, easing)
 		case 'vertically':
 			z.eh = new jQuery.fx(
 				z.el.get(0),
-				jQuery.speed(speed-15, callback),
-				'height',
-				z.easing
+				jQuery.speed(speed-15, z.easing, callback),
+				'height'
 			);
 			z.et = new jQuery.fx(
 				z.el.get(0),
 				jQuery.speed(
 					z.speed,
+					z.easing,
 					z.complete
 				),
-				'top',
-				z.easing
+				'top'
 			);
 			if (z.type == 'close') {
 				z.eh.custom(z.oldP.h,0);
@@ -141,18 +140,17 @@ jQuery.fx.OpenClose = function (e, speed, callback, direction, type, easing)
 		case 'horizontally':
 			z.eh = new jQuery.fx(
 				z.el.get(0),
-				jQuery.speed(speed-15, callback),
-				'width',
-				z.easing
+				jQuery.speed(speed-15, z.easing, callback),
+				'width'
 			);
 			z.et = new jQuery.fx(
 				z.el.get(0),
 				jQuery.speed(
 					z.speed,
+					z.easing,
 					z.complete
 				),
-				'left',
-				z.easing
+				'left'
 			);
 			if (z.type == 'close') {
 				z.eh.custom(z.oldP.w,0);

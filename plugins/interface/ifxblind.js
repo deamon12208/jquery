@@ -20,38 +20,38 @@ jQuery.fn.extend(
 			});
 		},
 		
-		BlindDown : function (speed, callback, transition)
+		BlindDown : function (speed, callback, easing)
 		{
 			return this.queue('interfaceFX',function(){
 				new jQuery.fx.BlindDirection(this, speed, callback, 'down', easing);
 			});
 		},
 		
-		BlindToggleVertically : function (speed, callback, transition)
+		BlindToggleVertically : function (speed, callback, easing)
 		{
 			return this.queue('interfaceFX',function(){
 				new jQuery.fx.BlindDirection(this, speed, callback, 'togglever', easing);
 			});
 		},
 		
-		BlindLeft : function (speed, callback, transition)
+		BlindLeft : function (speed, callback, easing)
 		{
 			return this.queue('interfaceFX',function(){
 				new jQuery.fx.BlindDirection(this, speed, callback, 'left', easing);
 			});
 		},
 		
-		BlindRight : function (speed, callback, transition)
+		BlindRight : function (speed, callback, easing)
 		{
 			return this.queue('interfaceFX',function(){
 				new jQuery.fx.BlindDirection(this, speed, callback, 'right', easing);
 			});
 		},
 		
-		BlindToggleHorizontally : function (speed, callback, transition)
+		BlindToggleHorizontally : function (speed, callback, easing)
 		{
 			return this.queue('interfaceFX',function(){
-				new jQuery.fx.BlindDirection(this, speed, callback, 'togglehor', transition);
+				new jQuery.fx.BlindDirection(this, speed, callback, 'togglehor', easing);
 			});
 		}
 	}
@@ -66,7 +66,7 @@ jQuery.fx.BlindDirection = function (e, speed, callback, direction, easing)
 	var z = this;
 	z.el = jQuery(e);
 	z.size = jQuery.iUtil.getSize(e);
-	z.easing = easing;
+	z.easing = typeof callback == 'string' ? callback : easing||null;
 	if (!e.ifxFirstDisplay)
 		e.ifxFirstDisplay = z.el.css('display');
 	if ( direction == 'togglever') {
@@ -76,7 +76,7 @@ jQuery.fx.BlindDirection = function (e, speed, callback, direction, easing)
 	}
 	z.el.show();
 	z.speed = speed;
-	z.callback = callback;
+	z.callback = typeof callback == 'function' ? callback : null;
 	z.fx = jQuery.fx.buildWrapper(e);
 	z.direction = direction;
 	z.complete = function()
@@ -98,10 +98,10 @@ jQuery.fx.BlindDirection = function (e, speed, callback, direction, easing)
 				z.fx.wrapper.get(0),
 				jQuery.speed(
 					z.speed,
+					z.easing,
 					z.complete
 				),
-				'height',
-				z.easing
+				'height'
 			);
 			fxh.custom(z.fx.oldStyle.sizes.hb, 0);
 		break;
@@ -112,10 +112,10 @@ jQuery.fx.BlindDirection = function (e, speed, callback, direction, easing)
 				z.fx.wrapper.get(0),
 				jQuery.speed(
 					z.speed,
+					z.easing,
 					z.complete
 				),
-				'height',
-				z.easing
+				'height'
 			);
 			fxh.custom(0, z.fx.oldStyle.sizes.hb);
 		break;
@@ -124,10 +124,10 @@ jQuery.fx.BlindDirection = function (e, speed, callback, direction, easing)
 				z.fx.wrapper.get(0),
 				jQuery.speed(
 					z.speed,
+					z.easing,
 					z.complete
 				),
-				'width',
-				z.easing
+				'width'
 			);
 			fxh.custom(z.fx.oldStyle.sizes.wb, 0);
 		break;
@@ -138,10 +138,10 @@ jQuery.fx.BlindDirection = function (e, speed, callback, direction, easing)
 				z.fx.wrapper.get(0),
 				jQuery.speed(
 					z.speed,
+					z.easing,
 					z.complete
 				),
-				'width',
-				z.easing
+				'width'
 			);
 			fxh.custom(0, z.fx.oldStyle.sizes.wb);
 		break;

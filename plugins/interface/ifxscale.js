@@ -50,10 +50,10 @@ jQuery.fx.Scale = function (e, duration, from, to, restore, callback, type, easi
 	z.el = jQuery(e);
 	z.from = parseInt(from) || 100;
 	z.to = parseInt(to) || 100;
-	z.easing = easing;
+	z.easing = typeof callback == 'string' ? callback : easing||null;
+	z.callback = typeof callback == 'function' ? callback : null;
 	z.duration = jQuery.speed(duration).duration;
 	z.restore = restore|| null;
-	z.callback = callback;
 	z.oldP = jQuery.iUtil.getSize(e);
 	z.oldStyle = {
 		width: z.el.css('width'),

@@ -29,8 +29,36 @@ jQuery.iSlider = {
 		);
 	},
 	
+	get : function()
+	{
+		var values = [];
+		this.each(
+			function(slider)
+			{
+				if (this.isSlider) {
+					values[slider] = [];
+					var elm = this;
+					var sizes = jQuery.iUtil.getSize(this);
+					this.slideCfg.sliders.each(
+						function (key) 
+						{
+							var x = this.offsetLeft;
+							var y = this.offsetTop;
+							xproc = parseInt(x * 100 / (sizes.w - this.offsetWidth));
+							yproc = parseInt(y * 100 / (sizes.h - this.offsetHeight));
+							values[slider][key] = [xproc||0, yproc||0, x||0, y||0];
+						}
+					);
+				}
+			}
+		);
+		return values;
+	},
+	
 	modifyContainer : function (elm)
 	{
+		elm.dragCfg.containerMaxx = elm.dragCfg.cont.w - elm.dragCfg.oC.wb;
+		elm.dragCfg.containerMaxy = elm.dragCfg.cont.h - elm.dragCfg.oC.hb;
 		if (elm.SliderContainer.slideCfg.restricted ) {
 			next = elm.SliderContainer.slideCfg.sliders.get(elm.SliderIteration+1);
 			if (next) {
@@ -68,8 +96,8 @@ jQuery.iSlider = {
 				yfrac = parseInt(y/elm.dragCfg.fracH);
 				yproc = yfrac * 100 / elm.dragCfg.fractions;
 		} else {
-			xproc = parseInt(x * 100 / elm.dragCfg.maxx);
-			yproc = parseInt(y * 100 / elm.dragCfg.maxy);
+			xproc = parseInt(x * 100 / elm.dragCfg.containerMaxx);
+			yproc = parseInt(y * 100 / elm.dragCfg.containerMaxy);
 		}
 		elm.dragCfg.lastSi = [xproc||0, yproc||0, x||0, y||0];
 		if (elm.dragCfg.onSlide)
@@ -232,6 +260,7 @@ jQuery.iSlider = {
 jQuery.fn.extend(
 	{
 		Slider : jQuery.iSlider.build,
-		SliderSetValues : jQuery.iSlider.set
+		SliderSetValues : jQuery.iSlider.set,
+		SliderGetValues : jQuery.iSlider.get
 	}
 );

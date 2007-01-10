@@ -306,11 +306,11 @@ jQuery.iDrag =	{
 		if (dragged.dragCfg.revert == false) {
 			if (dragged.dragCfg.fx > 0) {
 				if (!dragged.dragCfg.axis || dragged.dragCfg.axis == 'horizontally') {
-					x = new jQuery.fx(dragged,dragged.dragCfg.fx, 'left');
+					x = new jQuery.fx(dragged,{duration:dragged.dragCfg.fx}, 'left');
 					x.custom(dragged.dragCfg.oR.x,dragged.dragCfg.nRx);
 				}
 				if (!dragged.dragCfg.axis || dragged.dragCfg.axis == 'vertically') {
-					y = new jQuery.fx(dragged,dragged.dragCfg.fx, 'top');
+					y = new jQuery.fx(dragged,{duration:dragged.dragCfg.fx}, 'top');
 					y.custom(dragged.dragCfg.oR.y,dragged.dragCfg.nRy);
 				}
 			} else {
@@ -518,7 +518,7 @@ jQuery.iDrag =	{
 						{
 							this.onselectstart = function(){return false;};
 							this.ondrag = function(){return false;};
-							this.unselectable = "on";
+							this.selectable = "on";
 						}
 					);
 				} else {

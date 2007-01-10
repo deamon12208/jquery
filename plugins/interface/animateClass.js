@@ -16,7 +16,7 @@
  * @author Stefan Petre
  */
  
-jQuery.fx.animateClass = function(el, classToAnimate, duration, callback) {
+jQuery.fx.animateClass = function(el, classToAnimate, duration, easing, callback) {
 	var endClass = typeof classToAnimate == 'string' ? classToAnimate : classToAnimate[1];
 	var startClass = typeof classToAnimate == 'string' ? null : classToAnimate[0];
 	var oldStyleAttr = jQuery(el).attr("style") || '';
@@ -63,29 +63,30 @@ jQuery.fx.animateClass = function(el, classToAnimate, duration, callback) {
 	}
 	jQuery(el)
 		.removeClass(endClass)
-		.animateColor(duration, toColors, callback)
+		.animateColor(duration, toColors, easing, callback)
 		.animate(
-		toAnimate,
-		duration,
-		function()
-		{
-			jQuery(this).addClass(endClass);
-			/* Change style attribute back to original.
-			 * For IE, we need to clear the damn object.
-			 */
-			if(typeof jQuery(this).attr("style") == 'object') {
-				jQuery(this).attr("style")["cssText"] = "";
-				jQuery(this).attr("style")["cssText"] = oldStyleAttr;
-			} else {
-				jQuery(this).attr("style", oldStyleAttr);	
+			toAnimate,
+			duration,
+			easing,
+			function()
+			{
+				jQuery(this).addClass(endClass);
+				/* Change style attribute back to original.
+				 * For IE, we need to clear the damn object.
+				 */
+				if(typeof jQuery(this).attr("style") == 'object') {
+					jQuery(this).attr("style")["cssText"] = "";
+					jQuery(this).attr("style")["cssText"] = oldStyleAttr;
+				} else {
+					jQuery(this).attr("style", oldStyleAttr);	
+				}
+				jQuery.dequeue(this, 'interfaceClassFX');
 			}
-			jQuery.dequeue(this, 'interfaceClassFX');
-		}
-	);
+		);
 }
 
-jQuery.fn.animateClass = function(classToAnimate, duration, callback, transition) {
+jQuery.fn.animateClass = function(classToAnimate, duration, callback, easing) {
 	return this.queue('interfaceClassFX',function(){
-		jQuery.fx.animateClass(this, classToAnimate, duration, callback, transition);
+		jQuery.fx.animateClass(this, classToAnimate, duration, callback, easing);
 	});
 };

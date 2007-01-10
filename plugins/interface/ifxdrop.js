@@ -95,7 +95,7 @@ jQuery.fx.DropOutDirectiont = function (e, speed, callback, direction, type, eas
 	}
 	var z = this;
 	z.el = jQuery(e);
-	z.easing = easing;
+	z.easing = typeof callback == 'string' ? callback : easing||null;
 	z.oldStyle = {};
 	z.oldStyle.position = z.el.css('position');
 	z.oldStyle.top = z.el.css('top');
@@ -106,10 +106,12 @@ jQuery.fx.DropOutDirectiont = function (e, speed, callback, direction, type, eas
 		type = z.el.css('display') == 'none' ? 'in' : 'out';
 	}
 	z.el.show();
+	
 	if (z.oldStyle.position != 'relative' && z.oldStyle.position != 'absolute') {
 		z.el.css('position', 'relative');
 	}
 	z.type = type;
+	callback = typeof callback == 'function' ? callback : null;
 	/*sizes = ['em','px','pt','%'];
 	for(i in sizes) {
 		if (z.oldStyle.top.indexOf(sizes[i])>0) {
@@ -125,23 +127,23 @@ jQuery.fx.DropOutDirectiont = function (e, speed, callback, direction, type, eas
 	directionIncrement = 1;
 	switch (direction){
 		case 'up':
-			z.e = new jQuery.fx(z.el.get(0), jQuery.speed(speed - 15,callback), 'top', z.easing);
+			z.e = new jQuery.fx(z.el.get(0), jQuery.speed(speed - 15, z.easing,callback), 'top');
 			z.point = parseFloat(z.oldStyle.top)||0;
 			z.unit = z.topUnit;
 			directionIncrement = -1;
 		break;
 		case 'down':
-			z.e = new jQuery.fx(z.el.get(0), jQuery.speed(speed - 15,callback), 'top', z.easing);
+			z.e = new jQuery.fx(z.el.get(0), jQuery.speed(speed - 15, z.easing,callback), 'top');
 			z.point = parseFloat(z.oldStyle.top)||0;
 			z.unit = z.topUnit;
 		break;
 		case 'right':
-			z.e = new jQuery.fx(z.el.get(0), jQuery.speed(speed - 15,callback), 'left', z.easing);
+			z.e = new jQuery.fx(z.el.get(0), jQuery.speed(speed - 15, z.easing,callback), 'left');
 			z.point = parseFloat(z.oldStyle.left)||0;
 			z.unit = z.leftUnit;
 		break;
 		case 'left':
-			z.e = new jQuery.fx(z.el.get(0), jQuery.speed(speed - 15,callback), 'left', z.easing);
+			z.e = new jQuery.fx(z.el.get(0), jQuery.speed(speed - 15, z.easing,callback), 'left');
 			z.point = parseFloat(z.oldStyle.left)||0;
 			z.unit = z.leftUnit;
 			directionIncrement = -1;
@@ -151,7 +153,7 @@ jQuery.fx.DropOutDirectiont = function (e, speed, callback, direction, type, eas
 		z.el.get(0),
 		jQuery.speed
 		(
-		 	speed,
+		 	speed, z.easing,
 			function()
 			{
 				z.el.css(z.oldStyle);
@@ -163,7 +165,7 @@ jQuery.fx.DropOutDirectiont = function (e, speed, callback, direction, type, eas
 				jQuery.dequeue(z.el.get(0), 'interfaceFX');
 			}
 		 ),
-		'opacity', z.easing
+		'opacity'
 	);
 	if (type == 'in') {
 		z.e.custom(z.point+ 100*directionIncrement, z.point);

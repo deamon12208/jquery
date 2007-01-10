@@ -86,7 +86,7 @@ jQuery.iDrop = {
 		for (i in jQuery.iDrop.zones) {
 			if (jQuery.iDrop.zones[i] != null) {
 				iEL = jQuery.iDrop.zones[i].get(0);
-				if (jQuery.className.has(jQuery.iDrag.dragged,iEL.dropCfg.a)) {
+				if (jQuery(jQuery.iDrag.dragged).is('.' + iEL.dropCfg.a)) {
 					if (iEL.dropCfg.m == false) {
 						iEL.dropCfg.p = jQuery.extend(
 							jQuery.iUtil.getPositionLite(iEL),
@@ -105,6 +105,9 @@ jQuery.iDrop = {
 						jQuery.iSort.measure(iEL);
 						elm.style.display = elm.dragCfg.oD;
 						oneIsSortable = true;
+					}
+					if (iEL.dropCfg.onActivate) {
+						iEL.dropCfg.onActivate.apply(jQuery.iDrop.zones[i].get(0), [jQuery.iDrag.dragged]);
 					}
 				}
 			}
@@ -129,7 +132,7 @@ jQuery.iDrop = {
 		for (i in jQuery.iDrop.zones) {
 			if (jQuery.iDrop.zones[i] != null) {
 				iEL = jQuery.iDrop.zones[i].get(0);
-				if (jQuery.className.has(jQuery.iDrag.dragged,iEL.dropCfg.a)) {
+				if (jQuery(jQuery.iDrag.dragged).is('.' + iEL.dropCfg.a)) {
 					iEL.dropCfg.p = jQuery.extend(
 						jQuery.iUtil.getPositionLite(iEL),
 						jQuery.iUtil.getSizeLite(iEL)
@@ -175,7 +178,6 @@ jQuery.iDrop = {
 					 
 			) {
 				if (iEL.dropCfg.hc && iEL.dropCfg.h == false) {
-					jQuery.iDrop.highlighted[i].removeClass(iEL.dropCfg.ac);
 					jQuery.iDrop.highlighted[i].addClass(iEL.dropCfg.hc);
 				}
 				//chec if onHover function has to be called
@@ -197,14 +199,13 @@ jQuery.iDrop = {
 				}
 				if (iEL.dropCfg.hc) {
 					jQuery.iDrop.highlighted[i].removeClass(iEL.dropCfg.hc);
-					jQuery.iDrop.highlighted[i].addClass(iEL.dropCfg.ac);
 				}
 				iEL.dropCfg.h = false;
 			}
 		}
 		if (jQuery.iSort && jQuery.iDrop.overzone == false) {
 			jQuery.iSort.helper.get(0).style.display = 'none';
-			jQuery('body').append(jQuery.iSort.helper.get(0));
+			//jQuery('body').append(jQuery.iSort.helper.get(0));
 		}
 		//call onhover
 		if(applyOnHover) {
@@ -268,6 +269,7 @@ jQuery.iDrop = {
 					onDrop:	o.ondrop||o.onDrop||false,
 					onHover: o.onHover||o.onhover||false,
 					onOut: o.onOut||o.onout||false,
+					onActivate: o.onActivate||false,
 					t: o.tolerance && ( o.tolerance == 'fit' || o.tolerance == 'intersect') ? o.tolerance : 'pointer',
 					fx: o.fx ? o.fx : false,
 					m: false,
@@ -277,8 +279,8 @@ jQuery.iDrop = {
 					id = jQuery.attr(this,'id');
 					jQuery.iSort.collected[id] = this.dropCfg.a;
 					this.dropCfg.s = true;
-					if(o.onchange) {
-						this.dropCfg.onchange = o.onchange;
+					if(o.onChange) {
+						this.dropCfg.onChange = o.onChange;
 						this.dropCfg.os = jQuery.iSort.serialize(id).hash;
 					}
 				}
