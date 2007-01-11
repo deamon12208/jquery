@@ -132,6 +132,14 @@ barProperties = function(bar, type) {
     thumb: function() { return this._thumb },
     toggleAutohide: function() { this.setAutohide(!this.autohide); },
     toggle: function() { if(this.hidden) this.show(); else this.hide() },
+    _verticalHasScrolled: bar.verticalHasScrolled,
+    verticalHasScrolled: function() { 
+      this._verticalHasScrolled(); this.scrollarea.onverticalchange && this.scrollarea.onverticalchange(this.scrollarea.topPercent()); 
+    },
+    _horizontalHasScrolled: bar.verticalHasScrolled,
+    horizontalHasScrolled: function() { 
+      this._horizontalHasScrolled(); this.scrollarea.onhorizontalchange && this.scrollarea.onhorizontalchange(this.scrollarea.leftPercent()); 
+    },    
     type: type
   }
 }
@@ -181,13 +189,21 @@ var jVerticalScrollbar = function(bar, options) {
  * * '''verticalScrollTo(position):''' Accepts an integer; moves the content within the scroll area to 'position'
  * * '''horizontalScrollTo(position):'''  Accepts an integer; moves the content within the scroll area to 'position'
  * 
- * It also adds six new methods:
- * * '''bind():''' Applies jQuery's bind method to the content inside the scroll area
- * * '''unbind():''' Applies jQuery's unbind method to the the content inside the scroll area
- * * '''one():''' Applies jQuery's one method to the the content inside the scroll area
- * * '''trigger():''' Applies jQuery's trigger method to the the content inside the scroll area
+ * It also adds new methods:
+ * * '''bind(fn):''' Applies jQuery's bind method to the content inside the scroll area
+ * * '''unbind(fn):''' Applies jQuery's unbind method to the the content inside the scroll area
+ * * '''one(fn):''' Applies jQuery's one method to the the content inside the scroll area
+ * * '''trigger(fn):''' Applies jQuery's trigger method to the the content inside the scroll area
  * * '''contentWidth():''' Provides the current width of the content area
  * * '''contentHeight():''' Provides the current height of the content area
+ * * '''topPercent():''' The percentage that the scrollArea is scrolled from the top
+ * * '''leftPercent():''' The percentage that the scrollArea is scrolled from the left
+ * * '''verticalChange(fn):''' This callback will be fired when when a vertical change occurs in the scrollArea
+ * * '''horizontalChange(fn):''' This callback will be fired when when a horizontal change occurs in the scrollArea
+ * 
+ * It also adds new properies:
+ * * onverticalchange: A function called when the scrollArea changes vertically. It is passed topPercent() as a parameter
+ * * onhorizontalchange: A function called when the scrollArea changes vertically. It is passed leftPercent() as a parameter
  * 
  * @param Element area The DOM Element that will become the jScrollArea
  * @param Object options A hash of options for the jScrollArea
@@ -204,7 +220,11 @@ var jScrollArea = function(area, options) {
     horizontalScrollbar: function() { return jQuery.map(this._scrollbars, function(i) { return (i.type == "horizontal") ? i : undefined })[0] },
     verticalScrollbar: function() { return jQuery.map(this._scrollbars, function(i) { return (i.type == "vertical") ? i : undefined })[0] },
     contentHeight: function() { return this.viewHeight / this.viewToContentHeightRatio },
-    contentWidth: function() { return this.viewWidth / this.viewToContentWidthRatio }
+    contentWidth: function() { return this.viewWidth / this.viewToContentWidthRatio },
+    topPercent: function() { return (this.content.scrollTop / (this.contentHeight() - this.viewHeight)) },
+    leftPercent: function() { return (this.content.scrollLeft / (this.contentWidth() - this.viewWidth)) },
+    horizontalChange: function(fn) { this.onhorizontalchange = fn; return this; },
+    verticalChange: function(fn) { this.onverticalchange = fn; return this; }
   })
 }
 
