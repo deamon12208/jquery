@@ -1,5 +1,5 @@
 /**
- * Tabs 2.5 - jQuery plugin for accessible, unobtrusive tabs
+ * Tabs 2.5.1 - jQuery plugin for accessible, unobtrusive tabs
  *
  * http://stilbuero.de/tabs/
  *
@@ -193,10 +193,9 @@ $.fn.tabs = function(initial, settings) {
 
         var tabs = $('>ul:eq(0)>li>a', this);
 
-        // hide tabs contents other than initial
-        $('>' + settings.tabStruct, this).not(':eq(' + settings.initial + ')').addClass(settings.hideClass);
-
         // highlight tab accordingly
+        $('>' + settings.tabStruct, this).filter(':eq(' + settings.initial + ')').show().end().not(':eq(' + settings.initial + ')').addClass(settings.hideClass);
+
         $('>ul:eq(0)>li:eq(' + settings.initial + ')', this).addClass(settings.selectedClass);
 
         // setup auto height
@@ -295,7 +294,9 @@ $.fn.tabs = function(initial, settings) {
         // enable history support if history plugin is present
         if (settings.bookmarkable) {
             tabs.history();
-            $.ajaxHistory.initialize();
+            $.ajaxHistory.initialize(function() {
+                $('>ul:eq(0)>li>a', container).eq(settings.initial).click();
+            });
         }
 
         // attach activateTab event, required for activating a tab programmatically
@@ -359,7 +360,7 @@ $.fn.tabs = function(initial, settings) {
         });
 
         // attach click event
-        tabs.bind('click', function(e) {
+        tabs.bind('click', function() {
 
             var jqLi = $(this.parentNode);
 
@@ -398,11 +399,13 @@ $.fn.tabs = function(initial, settings) {
                             onHide(clicked, toShow[0], toHide[0]);
                         }
                         toShow.removeClass(settings.hideClass).animate(showAnim, showSpeed, function() {
+                            // maintain flexible height and accessibility in print
+                            toHide.addClass(settings.hideClass).css({display: '', overflow: '', height: '', opacity: ''});
+                            toShow.css({overflow: '', height: '', opacity: ''});
                             if ($.browser.msie) {
-                                toHide[0].style.filter = '';  // @ IE, maintain acccessibility for print
-                                toHide.addClass(settings.hideClass).css({display: '', overflow: '', height: ''}); // maintain flexible height and acccessibility for print
+                                toHide[0].style.filter = '';
+                                toShow[0].style.filter = '';
                             }
-                            toShow.css({height: '', overflow: ''}); // maintain flexible height
                             if (typeof onShow == 'function') {
                                 onShow(clicked, toShow[0], toHide[0]);
                             }

@@ -1,5 +1,5 @@
 /**
- * History/Remote 0.1 - jQuery plugin for enabling history and bookmarking in Ajax driven
+ * History/Remote 0.2 - jQuery plugin for enabling history and bookmarking in Ajax driven
  *                      applications in an unobtrusive and accessible manner ("Hijax").
  *
  * http://stilbuero.de/jquery/history/
@@ -28,11 +28,22 @@
  */
 $.ajaxHistory = new function() {
 
+    var RESET_EVENT = 'historyReset';
+
     var _currentHash = location.hash;
     var _intervalId = null;
     var _observeHistory; // define outside if/else required by Opera
 
     this.update = function() { }; // empty function body for graceful degradation
+
+    // create custom event for state reset
+    var _defaultReset = function() {
+        var output = $('.remote-output');
+        if (output.children().size() > 0) {
+            output.empty();
+        }
+    };
+    $(document).bind(RESET_EVENT, _defaultReset);
 
     if ($.browser.msie) {
 
@@ -66,8 +77,7 @@ $.ajaxHistory = new function() {
                     location.hash = iframeHash;
                 } else {
                     location.hash = '';
-                    var output = $('.remote-output');
-                    if (output.children().size() > 0) output.empty();
+                    $(document).trigger(RESET_EVENT);
                 }
             }
         };
@@ -86,8 +96,7 @@ $.ajaxHistory = new function() {
                 }
             } else if (_currentHash) {
                 _currentHash = '';
-                var output = $('.remote-output');
-                if (output.children().size() > 0) output.empty();
+                $(document).trigger(RESET_EVENT);
             }
         };
 
@@ -134,8 +143,7 @@ $.ajaxHistory = new function() {
                 if (document.URL.indexOf('#') >= 0) {
                     $('a[@href$="' + '#' + document.URL.split('#')[1] + '"]').click();
                 } else {
-                    var output = $('.remote-output');
-                    if (output.children().size() > 0) output.empty();
+                    $(document).trigger(RESET_EVENT);
                 }
                 isFirst = true;
             }
@@ -143,7 +151,11 @@ $.ajaxHistory = new function() {
 
     }
 
-    this.initialize = function() {
+    this.initialize = function(callback) {
+        // custom callback to reset app state (no hash in url)
+        if (typeof callback == 'function') {
+            $(document).unbind(RESET_EVENT, _defaultReset).bind(RESET_EVENT, callback);
+        }
         // look for hash in current URL (not Safari)
         if (location.hash && typeof _addHistory == 'undefined') {
             $('a.remote[@href$="' + location.hash + '"]').click();
