@@ -6,10 +6,13 @@
  * $Rev$
  */
 
+jQuery.fn._height = jQuery.fn.height;
+jQuery.fn._width  = jQuery.fn.width;
+
 /**
- * Returns the css height value for the first matched element.
  * If used on document, returns the document's height (innerHeight)
  * If used on window, returns the viewport's (window) height
+ * See core docs on height() to see what happens when used on an element.
  *
  * @example $("#testdiv").height()
  * @result 200
@@ -33,13 +36,13 @@ jQuery.fn.height = function() {
 	if ( this.get(0) == document ) 
 		return Math.max( document.body.scrollHeight, document.body.offsetHeight );
 	
-	return arguments[0] != undefined ? this.css("height", arguments[0]) : jQuery.css(this[0], "height");
+	return this._height(arguments[0]);
 };
 
 /**
- * Returns the css width value for the first matched element.
  * If used on document, returns the document's width (innerWidth)
  * If used on window, returns the viewport's (window) width
+ * See core docs on height() to see what happens when used on an element.
  *
  * @example $("#testdiv").width()
  * @result 200
@@ -63,7 +66,7 @@ jQuery.fn.width = function() {
 	if ( this.get(0) == document )
 		return Math.max( document.body.scrollWidth, document.body.offsetWidth );
 	
-	return arguments[0] != undefined ? this.css("width", arguments[0]) : jQuery.css(this[0], "width");
+	return this._width(arguments[0]);
 };
 
 /**
