@@ -16,6 +16,8 @@
 		
 		<script type="text/javascript" charset="utf-8">
 			$(function() {
+				$('#userAgent').html(navigator.userAgent);
+				
 				$('a').click(function(event) {
 					var href = this.href;
 					var id = href.substr(href.indexOf('#'));
@@ -31,12 +33,12 @@
 				});
 			});
 		</script>
+
+		<link rel="Stylesheet" media="screen" href="../../../jquery/test/data/testsuite.css" />
 		
 		<style>
-			body { margin: 10px; padding: 5px; }
-			h1 { margin-top: 0; margin-left: 0; padding-top: 0; padding-left: 0; }
-			
-			#moveable{ position: absolute; top: 50px; left: 270px; width: 50px; height: 50px; border: 2px solid #000; background-color: #ccc; }
+			p { margin-left: 20px; }
+			#moveable{ position: absolute; top: 110px; left: 250px; width: 50px; height: 50px; border: 2px solid #000; background-color: #ccc; }
 			
 			#static { position: static; margin: 5px; border: 2px solid #000; padding: 3px; width: 200px; height: 200px; background-color: #822; }
 			#staticChild1 { position: static; margin: 5px; border: 2px solid #000; padding: 3px; width: 150px; height: 150px; background-color:  #092; }
@@ -47,7 +49,7 @@
 			#relativeChild2 { position: relative; top: -5px; left: -5px; margin: 5px; border: 2px solid #000; padding: 3px; width: 100px; height: 100px; background-color: #980; }
 			
 			#absolute { position: absolute; top: 200px; right: 10px; margin: 5px; border: 2px solid #000; padding: 3px; width: 200px; height: 200px; background-color: #822; }
-			#absoluteChild1 { position: absolute; top: -200px; right: -10px; margin: 5px; border: 2px solid #000; padding: 3px; width: 150px; height: 150px; background-color:  #092; }
+			#absoluteChild1 { position: absolute; top: -100px; right: -10px; margin: 5px; border: 2px solid #000; padding: 3px; width: 150px; height: 150px; background-color:  #092; }
 			#absoluteChild2 { position: absolute; top: 100px; right: 10px; margin: 5px; border: 2px solid #000; padding: 3px; width: 100px; height: 100px; background-color: #980; }
 			
 			#absolute2 { position: absolute; top: 300px; left: 400px; margin: 5px; border: 2px solid #000; padding: 3px; width: 100px; height: 100px; background-color: #822; }
@@ -59,7 +61,8 @@
 		</style>
 	</head>
 	<body>
-		<h1>jQuery dimensions.js Visual Test</h1>
+		<h1 id="banner">jQuery dimensions.js - Test/Demo for .offset()</h1>
+		<h2 id="userAgent"></h2>
 		<p>Select a div to move the grey box too.</p>
 		<ul>
 			<li><a href="#static">Move to static 1</a></li>
