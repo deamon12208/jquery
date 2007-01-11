@@ -27,11 +27,10 @@ if(window.widget) {
 
 jQuery.fn.flipTo = function(expr) {
   var other = jQuery(expr);
-  
-  if(widget) widget.prepareForTransition("Switch");
+  if(typeof widget != "undefined") widget.prepareForTransition("ToBack");
   this.hide();
   other.show();
-  if(widget) setTimeout("widget.performTransition()", 0);
+  if(typeof widget != "undefined") setTimeout("widget.performTransition()", 0);
 };
 
 /**
@@ -108,12 +107,12 @@ jQuery.fn.makeScrollAreaWithBars = function(options, vertAttrs, horizAttrs) {
   var jContent = $(area.content)
   var offset = jContent.offset();
   if(vertAttrs) { 
-    jQuery("<div class='vertical-bar'></div>").attr(vertAttrs || {}).appendTo("body")
+    jQuery("<div class='vertical-bar'></div>").attr(vertAttrs || {}).appendTo(jContent.parent())
       .css({height: jContent.height() + "px", top: offset.top + "px", left: jContent.width() + offset.left + "px"})
       .verticalScrollbarFor(area);
   }
   if(horizAttrs) {
-    jQuery("<div class='horizontal-bar'></div>").attr(horizAttrs || {}).appendTo("body")
+    jQuery("<div class='horizontal-bar'></div>").attr(horizAttrs || {}).appendTo(jContent.parent())
       .css({width: jContent.width() + "px", left: offset.left + "px", top: jContent.height() + offset.top + "px"})
       .horizontalScrollbarFor(area);
   }
@@ -182,11 +181,13 @@ var jVerticalScrollbar = function(bar, options) {
  * * '''verticalScrollTo(position):''' Accepts an integer; moves the content within the scroll area to 'position'
  * * '''horizontalScrollTo(position):'''  Accepts an integer; moves the content within the scroll area to 'position'
  * 
- * It also adds four new methods:
+ * It also adds six new methods:
  * * '''bind():''' Applies jQuery's bind method to the content inside the scroll area
  * * '''unbind():''' Applies jQuery's unbind method to the the content inside the scroll area
  * * '''one():''' Applies jQuery's one method to the the content inside the scroll area
  * * '''trigger():''' Applies jQuery's trigger method to the the content inside the scroll area
+ * * '''contentWidth():''' Provides the current width of the content area
+ * * '''contentHeight():''' Provides the current height of the content area
  * 
  * @param Element area The DOM Element that will become the jScrollArea
  * @param Object options A hash of options for the jScrollArea
@@ -201,7 +202,9 @@ var jScrollArea = function(area, options) {
     trigger: function(type) { jQuery(this.content).trigger(type); return this; },
     scrollbars: function() { return this._scrollbars },
     horizontalScrollbar: function() { return jQuery.map(this._scrollbars, function(i) { return (i.type == "horizontal") ? i : undefined })[0] },
-    verticalScrollbar: function() { return jQuery.map(this._scrollbars, function(i) { return (i.type == "vertical") ? i : undefined })[0] }
+    verticalScrollbar: function() { return jQuery.map(this._scrollbars, function(i) { return (i.type == "vertical") ? i : undefined })[0] },
+    contentHeight: function() { return this.viewHeight / this.viewToContentHeightRatio },
+    contentWidth: function() { return this.viewWidth / this.viewToContentWidthRatio }
   })
 }
 
@@ -230,7 +233,7 @@ var jGlassButton = function(button, options) {
     unbind: function(type, fn) { jQuery(this.button()).unbind(type, fn); return this.button; },
     one: function(type, fn) { jQuery(this.button()).one(type, fn); return this.button; },
     trigger: function(type) { jQuery(this.button()).trigger(type); return this.button; },
-    button: function() { return this._container; }
+    button: function() { return this._container.parentNode; }
   });
 };
 
@@ -247,3 +250,17 @@ jQuery.fn.makeGlassButton = function(options) {
     return jGlassButton(i, jQuery.extend(options || {}, {label: i.innerHTML}));
   }));
 }
+
+var jSlider = function(type, size, attrs, appendTo) {
+  if(type == "horizontal")
+    slider = new AppleHorizontalSlider($("<div></div>").attr(attrs).appendTo(appendTo).css("width", size + "px")[0]);
+  else
+    slider = new AppleVerticalSlider($("<div></div>").attr(attrs).appendTo(appendTo).css("height", size + "px")[0]);
+  return jQuery.extend(slider, {
+    size: size,
+    change: function(fnVal) { 
+      this.onchanged = fnVal; 
+      return this;
+    }
+  })
+} 
