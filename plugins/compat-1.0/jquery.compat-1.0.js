@@ -1,10 +1,10 @@
 // UPGRADE: The following attribute helpers should now be used as:
 // .attr("title") or .attr("title","new title")
-jQuery.each(["id","title","name","href","src","rel"], function(i){
-	jQuery.fn[ i ] = function(h) {
+jQuery.each(["id","title","name","href","src","rel"], function(i,n){
+	jQuery.fn[ n ] = function(h) {
 		return h == undefined ?
-			this.length ? this[0][i] : null :
-			this.attr( i, h );
+			this.length ? this[0][n] : null :
+			this.attr( n, h );
 	};
 });
 
