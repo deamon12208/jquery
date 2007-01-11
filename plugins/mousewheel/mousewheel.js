@@ -38,6 +38,9 @@ jQuery.fn.extend({
 	mousewheel: function(fn, preventDefault) {
 		return this.each(function() {
 			
+			if (!fn.guid)
+				fn.guid = jQuery.event.guid++;
+			
 			// set preventDefault option
 			if (preventDefault !== false) this._mwPreventDefault = true;
 			
@@ -84,7 +87,8 @@ jQuery.fn.extend({
 
 				// call the handler
 				for (var i=0; i<self._mwHandlers.length; i++)
-					self._mwHandlers[i].call(self, event, delta);
+					if (self._mwHandlers[i])
+						self._mwHandlers[i].call(self, event, delta);
 				
 				return self._mPreventDefault ? false : true;
 			};
@@ -98,21 +102,27 @@ jQuery.fn.extend({
 	},
 
 	/**
-	 * This method removes the applied mousewheel event from the elements
-	 * in the jQuery object. The $().mousewheel and $().unmousewheel is only
-	 * capable of handling one handler function per an element. Therefore,
-	 * there is no need to pass anything to this method.
+	 * This method removes one or all applied mousewheel events from the elements.
+	 * You can remove a single handler function by passing it as the first param.
+	 * If you do not pass anything, it will remove all handlers.
 	 *
 	 * @name unmousewheel
+	 * @param Function handler The handler function to remove from the mousewheel event.
 	 * @type jQuery
 	 * @cat Plugins/Mousewheel
 	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
 	 */
-	unmousewheel: function() {
+	unmousewheel: function(fn) {
 		return this.each(function() {
-			jQuery(this).unbind('mouseover', jQuery.event.mousewheel.handleHover).unbind('mouseout', jQuery.event.mousewheel.handleHover);
-			this._mwPreventDefault = this._mwHandlers = this._mwOver = this._mwOut = null;
-			jQuery.event.mousewheel.removeFocus(this);
+			if (fn && this._mwHandlers.length > 1) {
+				for (var i=0; i<this._mwHandlers.length; i++)
+					if (this._mwHandlers[i] && this._mwHandlers[i].guid == fn.guid)
+						delete this._mwHandlers[i];
+			} else {
+				jQuery(this).unbind('mouseover', jQuery.event.mousewheel.handleHover).unbind('mouseout', jQuery.event.mousewheel.handleHover);
+				this._mwPreventDefault = this._mwHandlers = this._mwOver = this._mwOut = null;
+				jQuery.event.mousewheel.removeFocus(this);
+			}
 		});
 	}
 });

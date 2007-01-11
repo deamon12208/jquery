@@ -107,6 +107,10 @@
 					})
 					.unmousewheel();
 				
+				var testRemoval = function(event, delta) {
+					console.log('#test4: I should not have been logged');
+				};
+				
 				$('#test4')
 					.mousewheel(function(event, delta) {
 						if (delta > 0)
@@ -114,12 +118,14 @@
 						else if (delta < 0)
 							console.log('#test4: down ('+delta+')');
 					})
+					.mousewheel(testRemoval)
 					.mousewheel(function(event, delta) {
 						if (delta > 0)
 							console.log('#test4: up ('+delta+') from 2nd handler');
 						else if (delta < 0)
 							console.log('#test4: down ('+delta+') from 2nd handler');
-					});
+					})
+					.unmousewheel(testRemoval);
 				
 				$('#test5')
 					.mousewheel(function(event, delta) {
