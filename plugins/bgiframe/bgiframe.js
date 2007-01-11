@@ -4,13 +4,21 @@
  */
 
 /**
- * The bgiframe applies the iframe hack to get around zIndex
- * issues in IE6. It will only apply itself in IE and adds
- * a class to the iframe called 'bgiframe'.
+ * The bgiframe is chainable and applies the iframe hack to get 
+ * around zIndex issues in IE6. It will only apply itself in IE 
+ * and adds a class to the iframe called 'bgiframe'.
  * 
  * It does take borders into consideration but all values
  * need to be in pixels and the element needs to have
  * position relative or absolute.
+ *
+ * NOTICE: This plugin uses CSS expersions in order to work
+ * with an element's borders, height and with and can result in poor 
+ * performance when used on an element that changes properties 
+ * like size and position a lot. Two of these expressions can be
+ * removed if border doesn't matter and performance does.
+ * See lines 39 and 40 below and set top: 0 and left: 0
+ * instead of their current values.
  *
  * @example $('div').bgiframe();
  * @before <div><p>Paragraph</p></div>
@@ -18,7 +26,7 @@
  *
  * @name bgiframe
  * @type jQuery
- * @cat DOM
+ * @cat Plugins/bgiframe
  * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
  */
 jQuery.fn.bgiframe = function() {
@@ -29,7 +37,7 @@ jQuery.fn.bgiframe = function() {
 		var html = '<iframe class="bgiframe" tabindex="-1" '
 		 					+'style="display:block; position:absolute; '
 							+'top: expression(((parseInt(this.parentNode.currentStyle.borderTopWidth)  || 0) * -1) + \'px\'); '
-							+'left:expression(((parseInt(this.parentNode.currentStyle.borderLeftWidth) || 0) * -1) + \'px\'); '
+							+'left:expression(((parseInt(this.parentNode.currentStyle.borderLeftWidth) || 0) * -1) + \'px\'); ' 
 							+'z-index:-1; filter:Alpha(Opacity=\'0\'); '
 							+'width:expression(this.parentNode.offsetWidth + \'px\'); '
 							+'height:expression(this.parentNode.offsetHeight + \'px\')"/>';
