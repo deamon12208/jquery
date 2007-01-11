@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html debug="true">
+	<head>
+		<title>Testing mousewheel plugin</title>
+		<!-- load latest build of jquery.js -->
+		<script type="text/javascript" src="../../../jquery/dist/jquery.js"></script>
+
+		<!-- load mousewheel.js (this is what we're testing! -->
+		<script type="text/javascript" src="../mousewheel.js"></script>
+		
+		<link rel="Stylesheet" media="screen" href="../../../jquery/test/data/testsuite.css" />
+		
+		<!-- load firebug lite -->
+		<script type="text/javascript" src="../../../firebuglite/firebug.js"></script>
+		
+		<style>
+			#test1 {
+				background-color: #000;
+				width: 100px;
+				height: 100px;
+				color: #fff;
+				float: left;
+			}
+			
+			#test2 {
+				background-color: #333;
+				width: 100px;
+				height: 100px;
+				color: #fff;
+				float: left;
+			}
+			
+			#test3 {
+				background-color: #666;
+				width: 100px;
+				height: 100px;
+				color: #fff;
+				float: left;
+			}
+			
+			#test4 {
+				background-color: #000;
+				width: 100px;
+				height: 100px;
+				color: #fff;
+				float: left;
+			}
+			
+			#test5 {
+				background-color: #333;
+				padding: 5px;
+				width: 400px;
+				height: 400px;
+				color: #fff;
+				float: left;
+			}
+			
+			#test6 {
+				background-color: #666;
+				padding: 5px;
+				width: 250px;
+				height: 250px;
+				color: #fff;
+				float: left;
+			}
+
+			#test7 {
+				background-color: #000;
+				padding: 5px;
+				width: 100px;
+				height: 100px;
+				color: #fff;
+				float: left;
+			}
+			
+			#forceScroll {
+				clear: both;
+				height: 1000px;
+			}
+		</style>
+		<script type="text/javascript">
+			$(function() {
+				$('#userAgent').html(navigator.userAgent);
+				
+				
+				$('#test1')
+					.mousewheel(function(event, delta) {
+						if (delta > 0)
+							console.log('#test1: up ('+delta+')');
+						else if (delta < 0)
+							console.log('#test1: down ('+delta+')');
+					}, false);
+				
+				$('#test2')
+					.mousewheel(function(event, delta) {
+						if (delta > 0)
+							console.log('#test2: up ('+delta+')');
+						else if (delta < 0)
+							console.log('#test2: down ('+delta+')');
+					});
+				
+				$('#test3')
+					.hover(function() { console.log('#test3: mouseover'); }, function() { console.log('#test3: mouseout'); })
+					.mousewheel(function(event, delta) {
+						console.log('#test3: I should not have been logged');
+					})
+					.unmousewheel();
+				
+				$('#test4')
+					.mousewheel(function(event, delta) {
+						if (delta > 0)
+							console.log('#test4: up ('+delta+')');
+						else if (delta < 0)
+							console.log('#test4: down ('+delta+')');
+					})
+					.mousewheel(function(event, delta) {
+						if (delta > 0)
+							console.log('#test4: up ('+delta+') from 2nd handler');
+						else if (delta < 0)
+							console.log('#test4: down ('+delta+') from 2nd handler');
+					});
+				
+				$('#test5')
+					.mousewheel(function(event, delta) {
+						if (delta > 0)
+							console.log('#test5: up ('+delta+')');
+						else if (delta < 0)
+							console.log('#test5: down ('+delta+')');
+					});
+				
+				$('#test6')
+					.mousewheel(function(event, delta) {
+						if (delta > 0)
+							console.log('#test6: up ('+delta+')');
+						else if (delta < 0)
+							console.log('#test6: down ('+delta+')');
+					});
+
+				$('#test7')
+					.mousewheel(function(event, delta) {
+						if (delta > 0)
+							console.log('#test7: up ('+delta+')');
+						else if (delta < 0)
+							console.log('#test7 down ('+delta+')');
+					});
+			});
+		</script>
+	</head>
+	<body>
+		<h1 id="banner">jQuery mousewheel.js - Test</h1>
+		<h2 id="userAgent"></h2>
+		
+		<ul>
+			<li><strong>Test1</strong> is just using the plain on mousewheel() with a function passed in and does not prevent default.</li>
+			<li><strong>Test2</strong> should prevent the default action.</li>
+			<li><strong>Test3</strong> should only log a mouseover and mouseout event. Testing unmousewheel().</li>
+			<li><strong>Test4</strong> has two handlers.</li>
+			<li><strong>Test5</strong> is like Test2 but has children. Should stop after mousing over Test5.</li>
+			<li><strong>Test6</strong> should only do something when the mousewheel is moved down.</li>
+			<li><strong>Test7</strong> should only do something when the mousewheel is moved up and prevent the default action.</li>
+		</ul>
+		
+		
+		<div id="test1"><p>Test1</p></div>
+		<div id="test2"><p>Test2</p></div>
+		<div id="test3"><p>Test3</p></div>
+		<div id="test4"><p>Test4</p></div>
+		<div id="test5">
+			<p>Test5</p>
+			<div id="test6">
+				<p>Test6</p>
+				<div id="test7"><p>Test7</p></div>
+			</div>
+		</div>
+		
+		<div id="forceScroll"></div>
+	</body>
+</html>
