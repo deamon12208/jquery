@@ -55,3 +55,9 @@ jQuery.fn.ancestors = jQuery.fn.parents;
 
 // UPGRADE: The CSS selector :nth-child() now starts at 1, instead of 0
 jQuery.expr[":"]["nth-child"] = "jQuery.nth(a.parentNode.firstChild,parseInt(m[3])+1,'nextSibling')==a";
+
+// UPGRADE: .filter(["div", "span"]) now becomes .filter("div, span")
+jQuery.fn._filter = jQuery.fn.filter;
+jQuery.fn.filter = function(arr){
+	return this._filter( arr.constructor == Array ? arr.join(",") : arr );
+};
