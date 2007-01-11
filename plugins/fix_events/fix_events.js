@@ -55,7 +55,7 @@
   
     // Fix relatedTarget
     if ( isUndefined(event.relatedTarget) && isDefined(event.fromElement) )
-      event.relatedTarget = event.fromElement || event.toElement;
+      event.relatedTarget = (event.fromElement == event.target) ? event.toElement : event.fromElement;
     
     // Fix offsetX/offsetY
     if ( isUndefined(event.offsetX) && isDefined(event.pageX) ) {
