@@ -84,7 +84,7 @@ jQuery.fn.width = function() {
 jQuery.fn.innerHeight = function() {
 	return this.get(0) == window || this.get(0) == document ?
 		this.height() :
-		this.get(0).offsetHeight - parseInt(this.css("borderTopWidth") || 0) - parseInt(this.css("borderBottomWidth") || 0);
+		this.get(0).offsetHeight - (parseInt(this.css("borderTopWidth")) || 0) - (parseInt(this.css("borderBottomWidth")) || 0);
 };
 
 /**
@@ -102,7 +102,7 @@ jQuery.fn.innerHeight = function() {
 jQuery.fn.innerWidth = function() {
 	return this.get(0) == window || this.get(0) == document ?
 		this.width() :
-		this.get(0).offsetWidth - parseInt(this.css("borderLeftWidth") || 0) - parseInt(this.css("borderRightWidth") || 0);
+		this.get(0).offsetWidth - (parseInt(this.css("borderLeftWidth")) || 0) - (parseInt(this.css("borderRightWidth")) || 0);
 };
 
 /**
