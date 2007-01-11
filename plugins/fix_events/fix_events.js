@@ -91,7 +91,7 @@
   	return event;  
   }
   
-})
+})()
 
 isUndefined = function(n) { return typeof n == "undefined" }
 isDefined   = function(n) { return typeof n != "undefined" }
