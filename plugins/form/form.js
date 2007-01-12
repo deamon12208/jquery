@@ -1,6 +1,6 @@
 /*
  * jQuery form plugin
- * @requires jQuery v1.0.2
+ * @requires jQuery v1.0.3
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
