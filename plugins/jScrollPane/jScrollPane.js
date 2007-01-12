@@ -15,14 +15,14 @@
  *
  * @example jQuery(".scroll-pane").jScrollPane();
  *
- * @name mousewheel
+ * @name jScrollPane
  * @type jQuery
  * @param Object	settings	hash with options, described below.
  * 								scrollbarWidth - the width of the generated scrollbar in pixels
  * 								scrollbarMargin - the amount of space to leave on the side of the scrollbar in pixels
  * 								wheelSpeed - The speed the pane will scroll in response to the mouse wheel in pixels
  * @return jQuery
- * @cat User Interface
+ * @cat Plugins/jScrollPane
  * @author Kelvin Luck (kelvin AT kelvinluck DOT com || http://www.kelvinluck.com)
  */
 jQuery.fn.jScrollPane = function(settings)
