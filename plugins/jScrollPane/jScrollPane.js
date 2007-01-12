@@ -197,12 +197,10 @@ jQuery.fn.jScrollPane = function(settings)
 									}
 									p = $(p).parent()[0];
 									if (p == document) {
-										dragOccured = false;
 										break;
 									}
 								}
-							}
-							if (dragOccured) {
+							} else {
 								if (event.preventDefault) {
 									event.preventDefault();
 								} else {
