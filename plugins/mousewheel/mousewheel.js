@@ -157,10 +157,13 @@ jQuery.event.mousewheel = {
 		// If we actually just moused on to a sub-element 
 		// that doesn't have a mousewheel event attached, ignore it
 		if ( p == this ) {
-			if (event.type == 'mouseout' && to._mwHandlers) {
-				//console.log('mouseout from ' + event.target.id + ' to ' + to.id);
-				jQuery.event.mousewheel.removeFocus(event.target);
-				jQuery.event.mousewheel.giveFocus(to);
+			
+			if (event.type == 'mouseout') {
+				if (!to._mwHandlers)
+					while (to && !to._mwHandlers) try { to = to.parentNode; } catch(e) { to = null; }
+				
+				if (to && to._mwHandlers)
+					jQuery.event.mousewheel.giveFocus(to);
 			}
 			return false;
 		}
