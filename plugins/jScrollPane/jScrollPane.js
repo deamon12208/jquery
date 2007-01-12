@@ -1,7 +1,7 @@
 /* Copyright (c) 2006 Kelvin Luck (kelvin AT kelvinluck DOT com || http://www.kelvinluck.com)
- * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
+ * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) 
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
- *
+ * 
  * See http://kelvinluck.com/assets/jquery/jScrollPane/
  * $Id$
  */
@@ -15,14 +15,14 @@
  *
  * @example jQuery(".scroll-pane").jScrollPane();
  *
- * @name jScrollPane
+ * @name mousewheel
  * @type jQuery
  * @param Object	settings	hash with options, described below.
  * 								scrollbarWidth - the width of the generated scrollbar in pixels
  * 								scrollbarMargin - the amount of space to leave on the side of the scrollbar in pixels
  * 								wheelSpeed - The speed the pane will scroll in response to the mouse wheel in pixels
  * @return jQuery
- * @cat Plugins/jScrollPane
+ * @cat User Interface
  * @author Kelvin Luck (kelvin AT kelvinluck DOT com || http://www.kelvinluck.com)
  */
 jQuery.fn.jScrollPane = function(settings)
@@ -38,7 +38,7 @@ jQuery.fn.jScrollPane = function(settings)
 		function()
 		{
 			var $this = jQuery(this);
-
+			
 			if (jQuery(this).parent().is('.jScrollPaneContainer')) {
 				var $c = jQuery(this).parent();
 				var paneWidth = $c.innerWidth();
@@ -58,7 +58,7 @@ jQuery.fn.jScrollPane = function(settings)
 						{'className':'jScrollPaneContainer'}
 					).css(
 						{
-							'height':paneHeight+'px',
+							'height':paneHeight+'px', 
 							'width':paneWidth+'px'
 						}
 					)
@@ -82,32 +82,32 @@ jQuery.fn.jScrollPane = function(settings)
 						jQuery('<div>').attr({'className':'jScrollPaneDrag'}).css({'width':settings.scrollbarWidth+'px'})
 					)
 				);
-
+				
 				var $pane = jQuery(this).css({'position':'absolute', 'overflow':'visible'});
-
+				
 				var currentOffset;
 				var maxY;
 				var mouseWheelMultiplier;
 				// store this in a seperate variable so we can keep track more accurately than just updating the css property..
 				var dragPosition = 0;
 				var dragMiddle = percentInView*paneHeight/2;
-
+				
 				// pos function borrowed from tooltip plugin and adapted...
 				var getPos = function (event, c) {
 					var p = c == 'X' ? 'Left' : 'Top';
 					return event['page' + c] || (event['client' + c] + (document.documentElement['scroll' + p] || document.body['scroll' + p])) || 0;
 				};
-
+				
 				var ignoreNativeDrag = function() {	return false; };
-
+				
 				var initDrag = function()
 				{
-					currentOffset = $drag.offset();
+					currentOffset = $drag.offset(false);
 					currentOffset.top -= dragPosition;
-					maxY = paneHeight - currentOffset.height;
+					maxY = paneHeight - $drag[0].offsetHeight;
 					mouseWheelMultiplier = 2 * settings.wheelSpeed * maxY / contentHeight;
 				};
-
+				
 				var onStartDrag = function(event)
 				{
 					initDrag();
@@ -138,12 +138,12 @@ jQuery.fn.jScrollPane = function(settings)
 				{
 					positionDrag(getPos(e, 'Y') - currentOffset.top - dragMiddle);
 				};
-
+				
 				var $drag = jQuery('>.jScrollPaneTrack .jScrollPaneDrag', $container);
 				$drag.css(
 					{'height':(percentInView*paneHeight)+'px'}
 				).bind('mousedown', onStartDrag);
-
+				
 				var trackScrollInterval;
 				var trackScrollInc;
 				var trackScrollMousePos;
@@ -171,10 +171,10 @@ jQuery.fn.jScrollPane = function(settings)
 					trackScrollInterval = setInterval(doTrackScroll, 100);
 					jQuery('body').bind('mouseup', onStopTrackClick).bind('mousemove', onTrackMouseMove);
 				};
-
+				
 				var $track = jQuery('>.jScrollPaneTrack', $container);
 				$track.bind('mousedown', onTrackClick);
-
+				
 				// if the mousewheel plugin has been included then also react to the mousewheel
 				if ($container.mousewheel) {
 					$container.mousewheel(
@@ -182,7 +182,27 @@ jQuery.fn.jScrollPane = function(settings)
 							initDrag();
 							var d = dragPosition;
 							positionDrag(dragPosition - delta * mouseWheelMultiplier);
-							if (d != dragPosition) {
+							var dragOccured = d != dragPosition;
+							if (!dragOccured) {
+								// try and apply the mouse event to parents?
+								var $p = $(this).parent();
+								if ($p.length == 0) {
+									return true;
+								}
+								var p = $p[0];
+								var r = p != document;
+								while (r) {
+									if (p._mwHandlers) {
+										r = p._mwHandlers[0](event, delta);
+									}
+									p = $(p).parent()[0];
+									if (p == document) {
+										dragOccured = false;
+										break;
+									}
+								}
+							}
+							if (dragOccured) {
 								if (event.preventDefault) {
 									event.preventDefault();
 								} else {
@@ -193,11 +213,11 @@ jQuery.fn.jScrollPane = function(settings)
 							return true;
 						},
 						false
-					);
+					);					
 				}
-
+				
 				initDrag();
-
+				
 			} else {
 				$this.css(
 					{
