@@ -221,6 +221,7 @@ jQuery.ImageBox = {
 	{
 		el = elm ? jQuery(elm) : jQuery(this);
 		linkRel =  el.attr('rel');
+		var totalImages, iteration, prevImage, nextImage;
 		if (linkRel != 'imagebox') {
 			gallery = jQuery('a[@rel=' + linkRel + ']');
 			totalImages = gallery.size();
