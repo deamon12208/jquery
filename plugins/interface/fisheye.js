@@ -13,7 +13,7 @@
 /**
  * Build a Fisheye menu from a list of links
  *
- * @name Accordion
+ * @name Fisheye
  * @description Build a Fisheye menu from a list of links
  * @param Hash hash A hash of parameters
  * @option String items items selection

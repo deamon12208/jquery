@@ -33,7 +33,6 @@
  * @cat Plugins/Interface
  * @author Stefan Petre
  */
-jQuery.fn.Autocomplete = jQuery.iAuto.build;
 jQuery.iAuto = {
 	helper : null,
 	content : null,
@@ -442,3 +441,4 @@ jQuery.iAuto = {
 		);
 	}
 };
+jQuery.fn.Autocomplete = jQuery.iAuto.build;

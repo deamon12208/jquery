@@ -11,48 +11,6 @@
  *
  */
 
-
-jQuery.fn.extend ({
-		/**
-		 * Create a resizable element with a number of advanced options including callback, dragging
-		 * 
-		 * @name Resizable
-		 * @description Create a resizable element with a number of advanced options including callback, dragging
-		 * @param Hash hash A hash of parameters. All parameters are optional.
-		 * @option Hash handlers hash with keys for each resize direction (e, es, s, sw, w, nw, n) and value string selection
-		 * @option Integer minWidth (optional) the minimum width that element can be resized to
-		 * @option Integer maxWidth (optional) the maximum width that element can be resized to
-		 * @option Integer minHeight (optional) the minimum height that element can be resized to
-		 * @option Integer maxHeight (optional) the maximum height that element can be resized to
-		 * @option Integer minTop (optional) the minmum top position to wich element can be moved to
-		 * @option Integer minLeft (optional) the minmum left position to wich element can be moved to
-		 * @option Integer maxRight (optional) the maximum right position to wich element can be moved to
-		 * @option Integer maxBottom (optional) the maximum bottom position to wich element can be moved to
-		 * @option Float ration (optional) the ratio between width and height to constrain elements sizes to that ratio
-		 * @option Mixed dragHandle (optional) true to make the element draggable, string selection for drag handle
-		 * @option Function onDragStart (optional) A function to be executed whenever the dragging starts
-		 * @option Function onDragStop (optional) A function to be executed whenever the dragging stops
-		 * @option Function onDrag (optional) A function to be executed whenever the element is dragged
-		 * @option Function onStart (optional) A function to be executed whenever the element starts to be resized
-		 * @option Function onStop (optional) A function to be executed whenever the element stops to be resized
-		 * @option Function onResize (optional) A function to be executed whenever the element is resized
-		 * @type jQuery
-		 * @cat Plugins/Interface
-		 * @author Stefan Petre
-		 */
-		Resizable: jQuery.iResize.build,
-		/**
-		 * Destroy a resizable
-		 * 
-		 * @name ResizableDestroy
-		 * @description Destroy a resizable
-		 * @type jQuery
-		 * @cat Plugins/Interface
-		 * @author Stefan Petre
-		 */
-		ResizableDestroy: jQuery.iResize.destroy
-	});
-
 jQuery.iResize = {
 	resizeElement: null,
 	resizeDirection: null,
@@ -443,3 +401,45 @@ jQuery.iResize = {
 		);
 	}
 };
+
+
+jQuery.fn.extend ({
+		/**
+		 * Create a resizable element with a number of advanced options including callback, dragging
+		 * 
+		 * @name Resizable
+		 * @description Create a resizable element with a number of advanced options including callback, dragging
+		 * @param Hash hash A hash of parameters. All parameters are optional.
+		 * @option Hash handlers hash with keys for each resize direction (e, es, s, sw, w, nw, n) and value string selection
+		 * @option Integer minWidth (optional) the minimum width that element can be resized to
+		 * @option Integer maxWidth (optional) the maximum width that element can be resized to
+		 * @option Integer minHeight (optional) the minimum height that element can be resized to
+		 * @option Integer maxHeight (optional) the maximum height that element can be resized to
+		 * @option Integer minTop (optional) the minmum top position to wich element can be moved to
+		 * @option Integer minLeft (optional) the minmum left position to wich element can be moved to
+		 * @option Integer maxRight (optional) the maximum right position to wich element can be moved to
+		 * @option Integer maxBottom (optional) the maximum bottom position to wich element can be moved to
+		 * @option Float ration (optional) the ratio between width and height to constrain elements sizes to that ratio
+		 * @option Mixed dragHandle (optional) true to make the element draggable, string selection for drag handle
+		 * @option Function onDragStart (optional) A function to be executed whenever the dragging starts
+		 * @option Function onDragStop (optional) A function to be executed whenever the dragging stops
+		 * @option Function onDrag (optional) A function to be executed whenever the element is dragged
+		 * @option Function onStart (optional) A function to be executed whenever the element starts to be resized
+		 * @option Function onStop (optional) A function to be executed whenever the element stops to be resized
+		 * @option Function onResize (optional) A function to be executed whenever the element is resized
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
+		Resizable: jQuery.iResize.build,
+		/**
+		 * Destroy a resizable
+		 * 
+		 * @name ResizableDestroy
+		 * @description Destroy a resizable
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
+		ResizableDestroy: jQuery.iResize.destroy
+	});
