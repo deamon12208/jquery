@@ -11,8 +11,21 @@
  *
  */
 
+/**
+ * Slides the element
+ */
 jQuery.fn.extend(
 	{
+		/**
+		 * @name SlideInUp
+		 * @description slides the element in up
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		SlideInUp : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
@@ -20,6 +33,16 @@ jQuery.fn.extend(
 			});
 		},
 		
+		/**
+		 * @name SlideOutUp
+		 * @description slides the element out up
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		SlideOutUp : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
@@ -27,6 +50,16 @@ jQuery.fn.extend(
 			});
 		},
 		
+		/**
+		 * @name SlideToggleUp
+		 * @description slides the element in/out up
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		SlideToggleUp : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
@@ -34,6 +67,16 @@ jQuery.fn.extend(
 			});
 		},
 		
+		/**
+		 * @name SlideInDown
+		 * @description slides the element in down
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		SlideInDown : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
@@ -41,6 +84,16 @@ jQuery.fn.extend(
 			});
 		},
 		
+		/**
+		 * @name SlideOutDown
+		 * @description slides the element out down
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		SlideOutDown : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
@@ -48,6 +101,16 @@ jQuery.fn.extend(
 			});
 		},
 		
+		/**
+		 * @name SlideToggleDown
+		 * @description slides the element in/out down
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		SlideToggleDown : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
@@ -55,6 +118,16 @@ jQuery.fn.extend(
 			});
 		},
 		
+		/**
+		 * @name SlideInLeft
+		 * @description slides the element in left
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		SlideInLeft : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
@@ -62,6 +135,16 @@ jQuery.fn.extend(
 			});
 		},
 		
+		/**
+		 * @name SlideOutLeft
+		 * @description slides the element out left
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		SlideOutLeft :  function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
@@ -69,6 +152,16 @@ jQuery.fn.extend(
 			});
 		},
 		
+		/**
+		 * @name SlideToggleLeft
+		 * @description slides the element in/out left
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		SlideToggleLeft : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
@@ -76,6 +169,16 @@ jQuery.fn.extend(
 			});
 		},
 		
+		/**
+		 * @name SlideInRight
+		 * @description slides the element in right
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		SlideInRight : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
@@ -83,6 +186,16 @@ jQuery.fn.extend(
 			});
 		},
 		
+		/**
+		 * @name SlideOutRight
+		 * @description slides the element out right
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		SlideOutRight : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){
@@ -90,6 +203,16 @@ jQuery.fn.extend(
 			});
 		},
 		
+		/**
+		 * @name SlideToggleRight
+		 * @description slides the element in/out right
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		SlideToggleRight : function (speed,callback, easing)
 		{
 			return this.queue('interfaceFX', function(){

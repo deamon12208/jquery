@@ -11,6 +11,15 @@
  *
  */
 
+/**
+ * @name Bounce
+ * @description makes the element to bounce
+ * @param Integer hight the hight in pxels for element to jumps to
+ * @param Function callback (optional) A function to be executed whenever the animation completes.
+ * @type jQuery
+ * @cat Plugins/Interface
+ * @author Stefan Petre
+ */
 jQuery.fn.Bounce = function (hight, callback) {
 	return this.queue('interfaceFX', function(){
 		if (!jQuery.fxCheckTag(this)) {

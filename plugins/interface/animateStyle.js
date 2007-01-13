@@ -12,9 +12,24 @@
  */
  
 /**
+ * @name animateStyle
+ * @description Animates an element from its initital layout by appling inline CSS rules
+ * @param String styleToAnimate string of inline CSS rules to animate to
+ * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+ * @param Function callback (optional) A function to be executed whenever the animation completes.
+ * @param String easing (optional) The name of the easing effect that you want to use.
+ * @type jQuery
+ * @cat Plugins/Interface
  * @author Paul Bakaus
  * @author Stefan Petre
  */
+
+jQuery.fn.animateStyle = function(styleToAnimate, duration, callback, easing) {
+	return this.queue('interfaceStyleFX',function(){
+		jQuery.fx.animateStyle(this, styleToAnimate, duration, callback, easing);
+	});
+};
+
 jQuery.fx.animateStyle = function(el, styleToAnimate, duration, easing, callback) {
 	var newStyles;
 	if (typeof styleToAnimate == 'string') {
@@ -98,10 +113,4 @@ jQuery.convertInlineStylesToHash = function(stylesToConvert) {
 		);
 	}
 	return newStyles;
-};
-
-jQuery.fn.animateStyle = function(styleToAnimate, duration, callback, easing) {
-	return this.queue('interfaceStyleFX',function(){
-		jQuery.fx.animateStyle(this, styleToAnimate, duration, callback, easing);
-	});
 };

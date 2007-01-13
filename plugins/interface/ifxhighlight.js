@@ -11,7 +11,19 @@
  *
  */
 
-jQuery.fn.Highlight = function(duration, color, callback, easing) {
+
+/**
+ * @name Highlight
+ * @description Animates the backgroudn color to create a highlight animation
+ * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+ * @param String color color to highlight from
+ * @param Function callback (optional) A function to be executed whenever the animation completes.
+ * @param String easing (optional) The name of the easing effect that you want to use.
+ * @type jQuery
+ * @cat Plugins/Interface
+ * @author Stefan Petre
+ */
+jQuery.fn.Highlight = function(speed, color, callback, easing) {
 	return this.queue(
 		'interfaceColorFX',
 		function()
@@ -25,7 +37,7 @@ jQuery.fn.Highlight = function(duration, color, callback, easing) {
 			if(typeof this.oldStyleAttr == 'object') this.oldStyleAttr = this.oldStyleAttr["cssText"];
 			
 			jQuery(this).animateColor(
-				duration,
+				speed,
 				{'backgroundColor':[color, oldColor]},
 				function() {
 					jQuery.dequeue(this, 'interfaceColorFX');

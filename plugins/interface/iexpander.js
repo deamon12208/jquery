@@ -10,6 +10,17 @@
  *   
  *
  */
+ 
+/**
+ * Expands text and textarea elements while new characters are typed to the a miximum width
+ *
+ * @name Expander
+ * @description Expands text and textarea elements while new characters are typed to the a miximum width
+ * @param Mixed limit integer if only expands in width, array if expands in width and height
+ * @type jQuery
+ * @cat Plugins/Interface
+ * @author Stefan Petre
+ */
 
 jQuery.iExpander =
 {

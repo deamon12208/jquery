@@ -10,6 +10,39 @@
  *
  */
 
+/**
+ * Create an accordion from a HTML structure
+ *
+ * @example $('#myAccordion').Accordion(
+ *				{
+ *					headerSelector	: 'dt',
+ *					panelSelector	: 'dd',
+ *					activeClass		: 'myAccordionActive',
+ *					hoverClass		: 'myAccordionHover',
+ *					panelHeight		: 200,
+ *					speed			: 300
+ *				}
+ *			);
+ * @desc Converts definition list with id 'myAccordion' into an accordion width dt tags as headers and dd tags as panels
+ * 
+ * @name Accordion
+ * @description Create an accordion from a HTML structure
+ * @param Hash hash A hash of parameters
+ * @option Integer panelHeight the pannels' height
+ * @option String headerSelector selector for header elements
+ * @option String panelSelector selector for panel elements
+ * @option String activeClass (optional) CSS Class for active header
+ * @option String hoverClass (optional) CSS Class for hovered header
+ * @option Function onShow (optional) callback called whenever an pannel gets active
+ * @option Function onHide (optional) callback called whenever an pannel gets incative
+ * @option Function onClick (optional) callback called just before an panel gets active
+ * @option Mixed speed (optional) animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+ * @option Integer crrentPanel (otional) the active panel on initialisation
+ *
+ * @type jQuery
+ * @cat Plugins/Interface
+ * @author Stefan Petre
+ */
 jQuery.iAccordion = {
 	build : function(options)
 	{
@@ -31,7 +64,7 @@ jQuery.iAccordion = {
 					headers				: jQuery(options.headerSelector, this),
 					panels				: jQuery(options.panelSelector, this),
 					speed				: options.speed||400,
-					currentPanel		: 0
+					currentPanel		: options.currentPanel||0
 				};
 				el.accordionCfg.panels
 					.hide()

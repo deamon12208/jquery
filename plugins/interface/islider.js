@@ -11,6 +11,48 @@
  *
  */
 
+jQuery.fn.extend(
+	{
+		/**
+		 * Create a slider width options
+		 * 
+		 * @name Slider
+		 * @description Create a slider width options
+		 * @param Hash hash A hash of parameters. All parameters are optional.
+		 * @option Mixed accepts string to select slider indicators or DOMElement slider indicator
+		 * @option Integer factions (optional) number of sgments to divide and snap slider
+		 * @option Function onSlide (optional) A function to be executed whenever slider indicator it is moved
+		 * @option Function onChanged (optional) A function to be executed whenever slider indicator was moved
+		 * @option Array values (optional) Initial values for slider indicators
+		 * @option Boolean restricted (optional) if true the slider indicator can not be moved beyond adjacent indicators
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
+		Slider : jQuery.iSlider.build,
+		/**
+		 * Set value/position for slider indicators
+		 * 
+		 * @name SliderSetValues
+		 * @description Set value/position for slider indicators
+		 * @param Array values array width values for each indicator
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
+		SliderSetValues : jQuery.iSlider.set,
+		/**
+		 * Get value/position for slider indicators
+		 * 
+		 * @name SliderSetValues
+		 * @description Get value/position for slider indicators
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
+		SliderGetValues : jQuery.iSlider.get
+	}
+);
 jQuery.iSlider = {
 	tabindex : 1,
 	set : function (values)
@@ -255,12 +297,3 @@ jQuery.iSlider = {
 		);
 	}
 };
-
-
-jQuery.fn.extend(
-	{
-		Slider : jQuery.iSlider.build,
-		SliderSetValues : jQuery.iSlider.set,
-		SliderGetValues : jQuery.iSlider.get
-	}
-);

@@ -11,20 +11,53 @@
  *
  */
 
+/**
+ * Applies an open/close animation to element
+ */
 jQuery.fn.extend(
 	{
+		/**
+		 * @name CloseVertically
+		 * @description closes the element vertically
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		CloseVertically : function (speed, callback, easing) {
 			return this.queue('interfaceFX', function(){
 				new jQuery.fx.OpenClose(this, speed, callback, 'vertically', 'close', easing);
 			});
 		},
 		
+		/**
+		 * @name CloseHorizontally
+		 * @description closes the element horizontally
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		CloseHorizontally : function (speed, callback, easing) {
 			return this.queue('interfaceFX', function(){
 				new jQuery.fx.OpenClose(this, speed, callback, 'horizontally', 'close', easing);
 			});
 		},
 		
+		/**
+		 * @name SwitchHorizontally
+		 * @description opens/closes the element horizontally
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		SwitchHorizontally : function (speed, callback, easing) 
 		{
 			return this.queue('interfaceFX', function(){
@@ -36,6 +69,16 @@ jQuery.fn.extend(
 			});
 		},
 		
+		/**
+		 * @name SwitchVertically
+		 * @description opens/closes the element vertically
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		SwitchVertically : function (speed, callback, easing) 
 		{
 			return this.queue('interfaceFX', function(){
@@ -47,12 +90,32 @@ jQuery.fn.extend(
 			});
 		},
 		
+		/**
+		 * @name OpenVertically
+		 * @description opens the element vertically
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		OpenVertically : function (speed, callback, easing) {
 			return this.queue('interfaceFX', function(){
 				new jQuery.fx.OpenClose(this, speed, callback, 'vertically', 'open', easing);
 			});
 		},
 		
+		/**
+		 * @name OpenHorizontally
+		 * @description opens the element horizontally
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		OpenHorizontally : function (speed, callback, easing) {
 			return this.queue('interfaceFX', function(){
 				new jQuery.fx.OpenClose(this, speed, callback, 'horizontally', 'open', easing);

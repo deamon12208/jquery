@@ -12,10 +12,23 @@
  */
  
 /**
+ * @name animateClass
+ * @description Animates an element from its initital layout to a changed layout by a CSS class
+ * @param Mixed classToAnimate string class to animate or array of two classes to animate from to
+ * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+ * @param Function callback (optional) A function to be executed whenever the animation completes.
+ * @param String easing (optional) The name of the easing effect that you want to use.
+ * @type jQuery
+ * @cat Plugins/Interface
  * @author Paul Bakaus
  * @author Stefan Petre
  */
- 
+jQuery.fn.animateClass = function(classToAnimate, speed, callback, easing) {
+	return this.queue('interfaceClassFX',function(){
+		jQuery.fx.animateClass(this, classToAnimate, speed, callback, easing);
+	});
+};
+
 jQuery.fx.animateClass = function(el, classToAnimate, duration, easing, callback) {
 	var endClass = typeof classToAnimate == 'string' ? classToAnimate : classToAnimate[1];
 	var startClass = typeof classToAnimate == 'string' ? null : classToAnimate[0];
@@ -83,10 +96,4 @@ jQuery.fx.animateClass = function(el, classToAnimate, duration, easing, callback
 				jQuery.dequeue(this, 'interfaceClassFX');
 			}
 		);
-}
-
-jQuery.fn.animateClass = function(classToAnimate, duration, callback, easing) {
-	return this.queue('interfaceClassFX',function(){
-		jQuery.fx.animateClass(this, classToAnimate, duration, callback, easing);
-	});
 };

@@ -11,6 +11,33 @@
  */
 
 
+/**
+ * Creates an image slideshow. The slideshow can autoplay slides, each image can have caption, navigation links: next, prev, each slide. A page may have more then one slideshow, eachone working independently. Each slide can be bookmarked. The source images can be defined by JavaScript in slideshow options or by HTML placing images inside container.
+ *
+ * 
+ * 
+ * @name Slideshow
+ * @description Creates an image slideshow. The slideshow can autoplay slides, each image can have caption, navigation links: next, prev, each slide. A page may have more then one slideshow, eachone working independently. Each slide can be bookmarked. The source images can be defined by JavaScript in slideshow options or by HTML placing images inside container.
+ * @param Hash hash A hash of parameters
+ * @option String container container ID
+ * @option String loader path to loading indicator image
+ * @option String linksPosition (optional) images links position ['top'|'bottom'|null]
+ * @option String linksClass (optional) images links cssClass
+ * @option String linksSeparator (optional) images links separator
+ * @option Integer fadeDuration fade animation duration in miliseconds
+ * @option String activeLinkClass (optional) active image link CSS class
+ * @option String nextslideClass (optional) next image CSS class
+ * @option String prevslideClass (optional) previous image CSS class
+ * @option String captionPosition (optional) image caption position ['top'|'bottom'|null]
+ * @option String captionClass (optional) image caption CSS class
+ * @option String autoplay (optional) seconds to wait untill next images is displayed. This option will make the slideshow to autoplay.
+ * @option String random (optional) if slideshow autoplayes the images can be randomized
+ * @option Array images (optional) array of hash with keys 'src' (path to image) and 'cation' (image caption) for images
+ *
+ * @type jQuery
+ * @cat Plugins/Interface
+ * @author Stefan Petre
+ */
 jQuery.islideshow = {
 	slideshows: [],
 	gonext : function()

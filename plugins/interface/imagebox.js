@@ -12,6 +12,73 @@
  *
  */
 
+/**
+ * This a jQuery equivalent for Lightbox2. Alternative to image popups that will display images in an overlay. All links that have attribute 'rel' starting with 'imagebox' and link to an image will display the image inside the page. Galleries can by build buy giving the value 'imagebox-galname' to attribute 'rel'. Attribute 'title' will be used as caption.
+ *
+ * CSS
+ *	#ImageBoxOverlay
+ *	{
+ *		background-color: #000;
+ *	}
+ *	#ImageBoxCaption
+ *	{
+ *		background-color: #F4F4EC;
+ *	}
+ *	#ImageBoxContainer
+ *	{
+ *		width: 250px;
+ *		height: 250px;
+ *		background-color: #F4F4EC;
+ *	}
+ *	#ImageBoxCaptionText
+ *	{
+ *		font-weight: bold;
+ *		padding-bottom: 5px;
+ *		font-size: 13px;
+ *		color: #000;
+ *	}
+ *	#ImageBoxCaptionImages
+ *	{
+ *		margin: 0;
+ *	}
+ *	#ImageBoxNextImage
+ *	{
+ *		background-image: url(images/imagebox/spacer.gif);
+ *		background-color: transparent;
+ *	}
+ *	#ImageBoxPrevImage
+ *	{
+ *		background-image: url(images/imagebox/spacer.gif);
+ *		background-color: transparent;
+ *	}
+ *	#ImageBoxNextImage:hover
+ *	{
+ *		background-image: url(images/imagebox/next_image.jpg);
+ *		background-repeat:	no-repeat;
+ *		background-position: right top;
+ *	}
+ *	#ImageBoxPrevImage:hover
+ *	{
+ *		background-image: url(images/imagebox/prev_image.jpg);
+ *		background-repeat:	no-repeat;
+ *		background-position: left bottom;
+ *	}
+ * 
+ * @name Imagebox
+ * @description This a jQuery equivalent for Lightbox2. Alternative to image popups that will display images in an overlay. All links that have attribute 'rel' starting with 'imagebox' and link to an image will display the image inside the page. Galleries can by build buy giving the value 'imagebox-galname' to attribute 'rel'. Attribute 'title' will be used as caption.
+ * @param Hash hash A hash of parameters
+ * @option Integer border border width
+ * @option String loaderSRC path to loading image
+ * @option String closeHTML path to close overlay image
+ * @option Float overlayOpacity opacity for overlay
+ * @option String textImage when a galalry it is build then the iteration is displayed
+ * @option String textImageFrom when a galalry it is build then the iteration is displayed
+ * @option Integer fadeDuration fade duration in miliseconds
+ *
+ * @type jQuery
+ * @cat Plugins/Interface
+ * @author Stefan Petre
+ */
 jQuery.ImageBox = {
 	options : {
 		border				: 10,

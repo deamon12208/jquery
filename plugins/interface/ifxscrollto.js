@@ -10,17 +10,39 @@
  *   
  *
  */
-
+/**
+ * Applies a scrolling effect to document until the element gets into viewport
+ */
 jQuery.fn.extend (
 	{
-		ScrollTo : function(s, axis, easing) {
-			o = jQuery.speed(s);
+		/**
+		 * @name ScrollTo
+		 * @description scrolls the document until the lement gets into viewport
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param String axis (optional) whatever to scroll on vertical, horizontal or both axis ['vertical'|'horizontal'|null]
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
+		ScrollTo : function(speed, axis, easing) {
+			o = jQuery.speed(speed);
 			return this.queue('interfaceFX',function(){
 				new jQuery.fx.ScrollTo(this, o, axis, easing);
 			});
 		},
+		/**
+		 * @name ScrollToAnchors
+		 * @description all links to '#elementId' will animate scroll
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param String axis (optional) whatever to scroll on vertical, horizontal or both axis ['vertical'|'horizontal'|null]
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		/*inspired by David Maciejewski www.macx.de*/
-		ScrollToAnchors : function(s, axis, easing) {
+		ScrollToAnchors : function(speed, axis, easing) {
 			return this.each(
 				function()
 				{
@@ -28,7 +50,7 @@ jQuery.fn.extend (
 						function(e)
 						{
 							parts = this.href.split('#');
-							jQuery('#' + parts[1]).ScrollTo(s, axis, easing);
+							jQuery('#' + parts[1]).ScrollTo(speed, axis, easing);
 							return false;
 						}
 					);

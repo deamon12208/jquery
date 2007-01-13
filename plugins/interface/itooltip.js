@@ -11,6 +11,23 @@
  *
  */
 
+/**
+ * Creates tooltips using title attribute
+ *
+ * 
+ * 
+ * @name ToolTip
+ * @description Creates tooltips using title attribute
+ * @param Hash hash A hash of parameters
+ * @option String position tooltip's position ['top'|'left'|'right'|'bottom'|'mouse']
+ * @options Function onShow (optional) A function to be executed whenever the tooltip is displayed
+ * @options Function onHide (optional) A function to be executed whenever the tooltip is hidden
+ *
+ * @type jQuery
+ * @cat Plugins/Interface
+ * @author Stefan Petre
+ */
+jQuery.fn.ToolTip = jQuery.iTooltip.build;
 jQuery.iTooltip = {
 	current : null,
 	focused : false,
@@ -164,4 +181,3 @@ jQuery.iTooltip = {
 		);
 	}
 };
-jQuery.fn.ToolTip = jQuery.iTooltip.build;

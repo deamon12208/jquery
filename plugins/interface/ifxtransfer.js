@@ -12,6 +12,20 @@
  */
 
 jQuery.transferHelper = null;
+/**
+ * 
+ * @name TransferTo
+ * @description Animates an new build element to simulate a transfer action from one element to other
+ * @param Hash hash A hash of parameters
+ * @option Mixed to DOMElement or element ID to transfer to
+ * @option String className CSS class to apply to transfer element
+ * @option String duration animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+ * @option Function callback (optional) A function to be executed whenever the animation completes.
+ *
+ * @type jQuery
+ * @cat Plugins/Interface
+ * @author Stefan Petre
+ */
 jQuery.fn.TransferTo = function(o)
 {
 	return this.queue('interfaceFX', function(){

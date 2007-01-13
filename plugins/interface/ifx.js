@@ -11,6 +11,9 @@
  *
  */
 
+/**
+ * Validates elements that can be animated
+ */
 jQuery.fxCheckTag = function(e)
 {
 	if (/tr|td|tbody|caption|thead|tfoot|col|colgroup|th|body|header|script|frame|frameset|option|optgroup|meta/i.test(e.nodeName) )
@@ -18,6 +21,10 @@ jQuery.fxCheckTag = function(e)
 	else 
 		return true;
 };
+
+/**
+ * Destroy the wrapper used for some animations
+ */
 jQuery.fx.destroyWrapper = function(e, old)
 {
 	c = e.firstChild;
@@ -32,6 +39,10 @@ jQuery.fx.destroyWrapper = function(e, old)
 	e.parentNode.insertBefore(c, e);
 	e.parentNode.removeChild(e);
 };
+
+/**
+ * Builds a wrapper used for some animations
+ */
 jQuery.fx.buildWrapper = function(e)
 {
 	if (!jQuery.fxCheckTag(e))
@@ -102,6 +113,9 @@ jQuery.fx.buildWrapper = function(e)
 	return {oldStyle:oldStyle, wrapper:jQuery(wr)};
 };
 
+/**
+ * named colors
+ */
 jQuery.fx.namedColors = {
 	'aqua':[0,255,255],
 	'azure':[240,255,255],
@@ -147,6 +161,10 @@ jQuery.fx.namedColors = {
 	'white':[255,255,255],
 	'yellow':[255,255,0]
 };
+
+/**
+ * parses a color to an object for reg, green and blue
+ */
 jQuery.fx.parseColor = function(color)
 {
 	if (jQuery.fx.namedColors[color]) 
@@ -182,6 +200,10 @@ jQuery.fx.parseColor = function(color)
 	else
 		return {r: 255, g: 255, b: 255};
 };
+
+/**
+ * CSS rules that can be animated
+ */
 jQuery.fx.animatedCssRules = [
 	'borderBottomWidth',
 	'borderLeftWidth',
@@ -214,6 +236,9 @@ jQuery.fx.animatedCssRules = [
     'width',
 	'zIndex'
 ];
+/**
+ * CSS color rules that can be animated
+ */
 jQuery.fx.animatedColorsCssRules = [
 	'backgroundColor',
 	'borderBottomColor',
@@ -224,6 +249,21 @@ jQuery.fx.animatedColorsCssRules = [
 	'outlineColor'
 ];
 
+/**
+ * Function that handles colors animation
+ *
+ * @name animate color
+ * @description animates colors
+ * @param DOMElement e the element that should be animated
+ * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+ * @param Hash colors a hash width keys as css proporties and values array of two colors to animate (start and end colors)
+ * @param Function callback (optional) A function to be executed whenever the animation completes.
+ * @param String easing (optional) The name of the easing effect that you want to use.
+ *
+ * @type jQuery
+ * @cat Plugins/Interface
+ * @author Stefan Petre
+ */
 jQuery.fx.animateColor = function (e, duration, colors, callback, easing)
 {
 	/*if (!jQuery.fxCheckTag(e) || !color) {

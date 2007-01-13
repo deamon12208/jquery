@@ -11,6 +11,15 @@
  *
  */
 
+/**
+ * @name Shake
+ * @description makes the element to shake
+ * @param Integer times how many tomes to shake the element
+ * @param Function callback (optional) A function to be executed whenever the animation completes.
+ * @type jQuery
+ * @cat Plugins/Interface
+ * @author Stefan Petre
+ */
 jQuery.fn.Shake = function (times, callback) {
 	return this.queue('interfaceFX',function(){
 		if (!jQuery.fxCheckTag(this)) {

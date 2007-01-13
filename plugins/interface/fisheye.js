@@ -10,30 +10,26 @@
  *
  */
 
+/**
+ * Build a Fisheye menu from a list of links
+ *
+ * @name Accordion
+ * @description Build a Fisheye menu from a list of links
+ * @param Hash hash A hash of parameters
+ * @option String items items selection
+ * @option String container container element
+ * @option Integer itemWidth the minimum width for each item
+ * @option Integer maxWidth the maximum width for each item
+ * @option String itemsText selection of element that contains the text for each item
+ * @option Integer proximity the distance from element that make item to interact
+ * @option String valign vertical alignment
+ * @option String halign horizontal alignment
+ *
+ * @type jQuery
+ * @cat Plugins/Interface
+ * @author Stefan Petre
+ */
 jQuery.iFisheye = {
-	
-	positionContainer : function(el, toAdd)
-	{
-		if (el.fisheyeCfg.halign)
-			if (el.fisheyeCfg.halign == 'center')
-				el.fisheyeCfg.container.get(0).style.left = (el.offsetWidth - el.fisheyeCfg.itemWidth * el.fisheyeCfg.items.size())/2 - toAdd/2 + 'px';
-			else if (el.fisheyeCfg.halign == 'left')
-				el.fisheyeCfg.container.get(0).style.left =  - toAdd/el.fisheyeCfg.items.size() + 'px';
-			else if (el.fisheyeCfg.halign == 'right')
-				el.fisheyeCfg.container.get(0).style.left =  (el.offsetWidth - el.fisheyeCfg.itemWidth * el.fisheyeCfg.items.size()) - toAdd/2 + 'px';
-		el.fisheyeCfg.container.get(0).style.width = el.fisheyeCfg.itemWidth * el.fisheyeCfg.items.size() + toAdd + 'px';
-	},
-	
-	positionItems : function(el)
-	{
-		el.fisheyeCfg.items.each(
-			function(nr)
-			{
-				this.style.width = el.fisheyeCfg.itemWidth + 'px';
-				this.style.left = el.fisheyeCfg.itemWidth * nr + 'px';
-			}
-		);
-	},
 	
 	build : function(options)
 	{
@@ -117,6 +113,29 @@ jQuery.iFisheye = {
 				);
 			}
 		)
+	},
+	
+	positionContainer : function(el, toAdd)
+	{
+		if (el.fisheyeCfg.halign)
+			if (el.fisheyeCfg.halign == 'center')
+				el.fisheyeCfg.container.get(0).style.left = (el.offsetWidth - el.fisheyeCfg.itemWidth * el.fisheyeCfg.items.size())/2 - toAdd/2 + 'px';
+			else if (el.fisheyeCfg.halign == 'left')
+				el.fisheyeCfg.container.get(0).style.left =  - toAdd/el.fisheyeCfg.items.size() + 'px';
+			else if (el.fisheyeCfg.halign == 'right')
+				el.fisheyeCfg.container.get(0).style.left =  (el.offsetWidth - el.fisheyeCfg.itemWidth * el.fisheyeCfg.items.size()) - toAdd/2 + 'px';
+		el.fisheyeCfg.container.get(0).style.width = el.fisheyeCfg.itemWidth * el.fisheyeCfg.items.size() + toAdd + 'px';
+	},
+	
+	positionItems : function(el)
+	{
+		el.fisheyeCfg.items.each(
+			function(nr)
+			{
+				this.style.width = el.fisheyeCfg.itemWidth + 'px';
+				this.style.left = el.fisheyeCfg.itemWidth * nr + 'px';
+			}
+		);
 	}
 }
 

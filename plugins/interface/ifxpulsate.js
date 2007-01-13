@@ -10,7 +10,17 @@
  *   
  *
  */
-
+ 
+/**
+ * @name Bounce
+ * @description makes the element to pulsate
+ * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+ * @param Integer times how many times to pulsate
+ * @param Function callback (optional) A function to be executed whenever the animation completes.
+ * @type jQuery
+ * @cat Plugins/Interface
+ * @author Stefan Petre
+ */
 jQuery.fn.Pulsate = function(speed, times, callback) {
 	return this.queue('interfaceFX',function(){
 		if (!jQuery.fxCheckTag(this)) {

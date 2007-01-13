@@ -11,8 +11,22 @@
  *
  */
 
+/**
+ * Applies a folding animation to element
+ */
 jQuery.fn.extend(
 	{
+		/**
+		 * @name Fold
+		 * @description folds the element
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Integer height the height in pixels to fold element to
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		Fold : function (speed, height, callback, easing)
 		{
 			return this.queue('interfaceFX',function(){
@@ -20,6 +34,17 @@ jQuery.fn.extend(
 			});
 		},
 		
+		/**
+		 * @name UnFold
+		 * @description unfolds the element
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Integer height the height in pixels to unfold element to
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		UnFold : function (speed, height, callback, easing)
 		{
 			return this.queue('interfaceFX',function(){
@@ -27,6 +52,17 @@ jQuery.fn.extend(
 			});
 		},
 		
+		/**
+		 * @name FoldToggle
+		 * @description folds/unfolds the element
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Integer height the height in pixels to folds/unfolds element to
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		FoldToggle : function (speed, height, callback, easing)
 		{
 			return this.queue('interfaceFX',function(){

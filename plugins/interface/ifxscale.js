@@ -10,37 +10,82 @@
  *   
  *
  */
-
+/**
+ * Applies a scallign animation to element
+ */
 jQuery.fn.extend(
 	{
-		Grow : function(duration, callback, easing) {
+		/**
+		 * @name Grow
+		 * @description scales the element from 0 to intitial size
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
+		Grow : function(speed, callback, easing) {
 			return this.queue('interfaceFX',function(){
-				new jQuery.fx.Scale(this, duration, 1, 100, true, callback, 'grow', easing);
+				new jQuery.fx.Scale(this, speed, 1, 100, true, callback, 'grow', easing);
 			});
 		},
 		
-		Shrink : function(duration, callback, easing) {
+		/**
+		 * @name Shrink
+		 * @description scales the element from intitial size to 0
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
+		Shrink : function(speed, callback, easing) {
 			return this.queue('interfaceFX',function(){
-				new jQuery.fx.Scale(this, duration, 100, 1, true, callback, 'shrink', easing);
+				new jQuery.fx.Scale(this, speed, 100, 1, true, callback, 'shrink', easing);
 			});
 		},
 		
-		Puff : function(duration, callback, easing) {
+		/**
+		 * @name Puff
+		 * @description makes element to dispear by scalling to 150% and fading it out
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
+		Puff : function(speed, callback, easing) {
 			return this.queue('interfaceFX',function(){
 				var easing = easing || 'easeout';
-				new jQuery.fx.Scale(this, duration, 100, 150, true, callback, 'puff', easing);
+				new jQuery.fx.Scale(this, speed, 100, 150, true, callback, 'puff', easing);
 			});
 		},
 		
-		Scale : function(duration, from, to, restore, callback, easing) {
+		/**
+		 * @name Scale
+		 * @description scales the element
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Integer from initial scalling procentage
+		 * @param Integer to final scalling procentage
+		 * @param Boolean reastore whatever to restore the initital scalling procentage when animation ends
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
+		Scale : function(speed, from, to, restore, callback, easing) {
 			return this.queue('interfaceFX',function(){
-				new jQuery.fx.Scale(this, duration, from, to, restore, callback, 'Scale', easing);
+				new jQuery.fx.Scale(this, speed, from, to, restore, callback, 'Scale', easing);
 			});
 		}
 	}
 );
 
-jQuery.fx.Scale = function (e, duration, from, to, restore, callback, type, easing)
+jQuery.fx.Scale = function (e, speed, from, to, restore, callback, type, easing)
 {
 	if (!jQuery.fxCheckTag(e)) {
 		jQuery.dequeue(e, 'interfaceFX');
@@ -52,7 +97,7 @@ jQuery.fx.Scale = function (e, duration, from, to, restore, callback, type, easi
 	z.to = parseInt(to) || 100;
 	z.easing = typeof callback == 'string' ? callback : easing||null;
 	z.callback = typeof callback == 'function' ? callback : null;
-	z.duration = jQuery.speed(duration).duration;
+	z.duration = jQuery.speed(speed).duration;
 	z.restore = restore|| null;
 	z.oldP = jQuery.iUtil.getSize(e);
 	z.oldStyle = {

@@ -10,9 +10,22 @@
  *   
  *
  */
-
+ 
+/**
+ * Applies a blinding animation to element
+ */
 jQuery.fn.extend(
 	{
+		/**
+		 * @name BlindUp
+		 * @description blinds the element up
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		BlindUp : function (speed, callback, easing)
 		{
 			return this.queue('interfaceFX',function(){
@@ -20,6 +33,16 @@ jQuery.fn.extend(
 			});
 		},
 		
+		/**
+		 * @name BlindDown
+		 * @description blinds the element down
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		BlindDown : function (speed, callback, easing)
 		{
 			return this.queue('interfaceFX',function(){
@@ -27,6 +50,16 @@ jQuery.fn.extend(
 			});
 		},
 		
+		/**
+		 * @name BlindToggleVertically
+		 * @description blinds the element up or down
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		BlindToggleVertically : function (speed, callback, easing)
 		{
 			return this.queue('interfaceFX',function(){
@@ -34,6 +67,16 @@ jQuery.fn.extend(
 			});
 		},
 		
+		/**
+		 * @name BlindLeft
+		 * @description blinds the element left
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		BlindLeft : function (speed, callback, easing)
 		{
 			return this.queue('interfaceFX',function(){
@@ -41,6 +84,16 @@ jQuery.fn.extend(
 			});
 		},
 		
+		/**
+		 * @name BlindRight
+		 * @description blinds the element right
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		BlindRight : function (speed, callback, easing)
 		{
 			return this.queue('interfaceFX',function(){
@@ -48,6 +101,16 @@ jQuery.fn.extend(
 			});
 		},
 		
+		/**
+		 * @name BlindToggleHorizontally
+		 * @description blinds the element left and right
+		 * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
+		 * @param Function callback (optional) A function to be executed whenever the animation completes.
+		 * @param String easing (optional) The name of the easing effect that you want to use.
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
 		BlindToggleHorizontally : function (speed, callback, easing)
 		{
 			return this.queue('interfaceFX',function(){

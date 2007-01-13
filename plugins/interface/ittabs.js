@@ -12,6 +12,32 @@
  *
  */
 
+jQuery.fn.extend (
+	{
+		/**
+		 * Enable tabs in textareas
+		 * 
+		 * @name EnableTabs
+		 * @description Enable tabs in textareas
+		 *
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
+		EnableTabs : jQuery.iTTabs.build,
+		/**
+		 * Disable tabs in textareas
+		 * 
+		 * @name DisableTabs
+		 * @description Disable tabs in textareas
+		 *
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 * @author Stefan Petre
+		 */
+		DisableTabs : jQuery.iTTabs.destroy
+	}
+);
 jQuery.iTTabs =
 {
 	doTab : function(e)
@@ -63,10 +89,3 @@ jQuery.iTTabs =
 		);			
 	}
 };
-
-jQuery.fn.extend (
-	{
-		EnableTabs : jQuery.iTTabs.build,
-		DisableTabs : jQuery.iTTabs.destroy
-	}
-);

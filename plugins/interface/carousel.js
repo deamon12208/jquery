@@ -9,34 +9,65 @@
  * and GPL (GPL-LICENSE.txt) licenses.
  *
  */
-
+/**
+ * Created a 3D Carousel from a list of images, with reflections and animated by mouse position
+ * 
+ * @example window.onload = 
+ *			function()
+ *			{
+ *				$('#carousel').Carousel(
+ *					{
+ *						itemWidth: 110,
+ *						itemHeight: 62,
+ *						itemMinWidth: 50,
+ *						items: 'a',
+ *						reflections: .5,
+ *						rotationSpeed: 1.8
+ *					}
+ *				);
+ *			}
+ * HTML
+ *			<div id="carousel">
+ *				<a href="" title=""><img src="" width="100%" /></a>
+ *				<a href="" title=""><img src="" width="100%" /></a>
+ *				<a href="" title=""><img src="" width="100%" /></a>
+ *				<a href="" title=""><img src="" width="100%" /></a>
+ *				<a href="" title=""><img src="" width="100%" /></a>
+ *			</div>
+ * CSS
+ *			#carousel
+ *			{
+ *				width: 700px;
+ *				height: 150px;
+ *				background-color: #111;
+ *				position: absolute;
+ *				top: 200px;
+ *				left: 100px;
+ *			}
+ *			#carousel a
+ *			{
+ *				position: absolute;
+ *				width: 110px;
+ *			}
+ *
+ * @desc Creates a 3D carousel from all images inside div tag with id 'carousel'
+ *
+ *
+ * @name 3D Carousel
+ * @description Created a 3D Carousel from a list of images, with reflections and animated by mouse position
+ * @param Hash hash A hash of parameters
+ * @option String items items selection
+ * @option Integer itemWidth the max width for each item
+ * @option Integer itemHeight the max height for each item
+ * @option Integer itemMinWidth the minimum width for each item, the height is automaticaly calculated to keep proportions
+ * @option Float rotationSpeed the speed for rotation animation
+ * @option Float reflectionSize the reflection size a fraction from items' height
+ *
+ * @type jQuery
+ * @cat Plugins/Interface
+ * @author Stefan Petre
+ */
 jQuery.iCarousel = {
-
-	positionItems : function(el)
-	{
-		el.carouselCfg.items.each(
-			function (nr)
-			{
-				angle = el.carouselCfg.start+nr*el.carouselCfg.step;
-				x = el.carouselCfg.radiusX*Math.cos(angle);
-				y = el.carouselCfg.radiusY*Math.sin(angle) ;
-				itemZIndex = parseInt(100*(el.carouselCfg.radiusY+y)/(2*el.carouselCfg.radiusY));
-				parte = (el.carouselCfg.radiusY+y)/(2*el.carouselCfg.radiusY);
-				
-				width = parseInt((el.carouselCfg.itemWidth - el.carouselCfg.itemMinWidth) * parte + el.carouselCfg.itemMinWidth);
-				height = parseInt(width * el.carouselCfg.itemHeight / el.carouselCfg.itemWidth);
-				this.style.top = el.carouselCfg.paddingY + y - height/2 + "px";
-	     		this.style.left = el.carouselCfg.paddingX + x - width/2 + "px";
-	     		this.style.width = width + "px";
-	     		this.style.height = height + "px";
-	     		this.style.zIndex = itemZIndex;
-				el.carouselCfg.reflections[nr].style.top = parseInt(el.carouselCfg.paddingY + y + height - 1 - height/2) + "px";
-				el.carouselCfg.reflections[nr].style.left = parseInt(el.carouselCfg.paddingX + x - width/2) + "px";
-				el.carouselCfg.reflections[nr].style.width = width + "px";
-				el.carouselCfg.reflections[nr].style.height = parseInt(height * el.carouselCfg.reflectionSize) + "px";
-			}
-		);
-	},
 	
 	build : function(options)
 	{
@@ -193,6 +224,32 @@ jQuery.iCarousel = {
 							}
 						}
 					)
+			}
+		);
+	},
+
+	positionItems : function(el)
+	{
+		el.carouselCfg.items.each(
+			function (nr)
+			{
+				angle = el.carouselCfg.start+nr*el.carouselCfg.step;
+				x = el.carouselCfg.radiusX*Math.cos(angle);
+				y = el.carouselCfg.radiusY*Math.sin(angle) ;
+				itemZIndex = parseInt(100*(el.carouselCfg.radiusY+y)/(2*el.carouselCfg.radiusY));
+				parte = (el.carouselCfg.radiusY+y)/(2*el.carouselCfg.radiusY);
+				
+				width = parseInt((el.carouselCfg.itemWidth - el.carouselCfg.itemMinWidth) * parte + el.carouselCfg.itemMinWidth);
+				height = parseInt(width * el.carouselCfg.itemHeight / el.carouselCfg.itemWidth);
+				this.style.top = el.carouselCfg.paddingY + y - height/2 + "px";
+	     		this.style.left = el.carouselCfg.paddingX + x - width/2 + "px";
+	     		this.style.width = width + "px";
+	     		this.style.height = height + "px";
+	     		this.style.zIndex = itemZIndex;
+				el.carouselCfg.reflections[nr].style.top = parseInt(el.carouselCfg.paddingY + y + height - 1 - height/2) + "px";
+				el.carouselCfg.reflections[nr].style.left = parseInt(el.carouselCfg.paddingX + x - width/2) + "px";
+				el.carouselCfg.reflections[nr].style.width = width + "px";
+				el.carouselCfg.reflections[nr].style.height = parseInt(height * el.carouselCfg.reflectionSize) + "px";
 			}
 		);
 	}

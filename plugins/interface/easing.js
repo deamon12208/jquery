@@ -1,4 +1,19 @@
-jQuery.extend({	
+/**
+ * Interface Elements for jQuery
+ * Easing formulas
+ *
+ * http://interface.eyecon.ro
+ *
+ * Copyright (c) 2006 Stefan Petre
+ * Dual licensed under the MIT (MIT-LICENSE.txt)
+ * and GPL (GPL-LICENSE.txt) licenses.
+ */
+ 
+/**
+ * Starting with jQuery 1.1  the fx function accepts easing formulas that can be used with .animation() and most of FX plugins from Interface. The object can be extended to accept new easing formulas
+ */
+ 
+ jQuery.extend({	
 	/**
 	 *
 	 * @param Integer p period step in animation
