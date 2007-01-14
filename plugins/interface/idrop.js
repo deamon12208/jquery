@@ -99,7 +99,7 @@ jQuery.iDrop = {
 					}
 					jQuery.iDrop.highlighted[i] = jQuery.iDrop.zones[i];
 					//if (jQuery.iSort && jQuery.iDrag.dragged.dragCfg.so) {
-					if (jQuery.iSort && iEL.dropCfg.s == true) {
+					if (jQuery.iSort && iEL.dropCfg.s && jQuery.iDrag.dragged.dragCfg.so) {
 						iEL.dropCfg.el = jQuery('.' + iEL.dropCfg.a, iEL);
 						elm.style.display = 'none';
 						jQuery.iSort.measure(iEL);
@@ -142,7 +142,7 @@ jQuery.iDrop = {
 					}
 					jQuery.iDrop.highlighted[i] = jQuery.iDrop.zones[i];
 					
-					if (jQuery.iSort && iEL.dropCfg.s == true) {
+					if (jQuery.iSort && iEL.dropCfg.s && jQuery.iDrag.dragged.dragCfg.so) {
 						iEL.dropCfg.el = jQuery('.' + iEL.dropCfg.a, iEL);
 						elm.style.display = 'none';
 						jQuery.iSort.measure(iEL);
@@ -187,7 +187,7 @@ jQuery.iDrop = {
 				iEL.dropCfg.h = true;
 				jQuery.iDrop.overzone = iEL;
 				//if(jQuery.iSort && jQuery.iDrag.dragged.dragCfg.so) {
-				if(jQuery.iSort && iEL.dropCfg.s == true) {
+				if(jQuery.iSort && iEL.dropCfg.s && jQuery.iDrag.dragged.dragCfg.so) {
 					jQuery.iSort.helper.get(0).className = iEL.dropCfg.shc;
 					jQuery.iSort.checkhover(iEL);
 				}
@@ -203,7 +203,7 @@ jQuery.iDrop = {
 				iEL.dropCfg.h = false;
 			}
 		}
-		if (jQuery.iSort && jQuery.iDrop.overzone == false) {
+		if (jQuery.iSort && !jQuery.iDrop.overzone && jQuery.iDrag.dragged.so) {
 			jQuery.iSort.helper.get(0).style.display = 'none';
 			//jQuery('body').append(jQuery.iSort.helper.get(0));
 		}

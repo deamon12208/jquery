@@ -27,7 +27,6 @@
  * @cat Plugins/Interface
  * @author Stefan Petre
  */
-jQuery.fn.ToolTip = jQuery.iTooltip.build;
 jQuery.iTooltip = {
 	current : null,
 	focused : false,
@@ -181,3 +180,5 @@ jQuery.iTooltip = {
 		);
 	}
 };
+
+jQuery.fn.ToolTip = jQuery.iTooltip.build;

@@ -325,7 +325,7 @@ jQuery.iDrag =	{
 			}
 		} else if (dragged.dragCfg.fx > 0) {
 			dragged.dragCfg.prot = true;
-			if(jQuery.iDrop && jQuery.iDrop.overzone && jQuery.iSort) {
+			if(jQuery.iDrop && jQuery.iDrop.overzone && jQuery.iSort && dragged.dragCfg.so) {
 				dh = jQuery.iUtil.getPosition(jQuery.iSort.helper.get(0));
 			} else {
 				dh = false;
@@ -355,7 +355,7 @@ jQuery.iDrag =	{
 		if (jQuery.iDrop && jQuery.iDrop.count > 0 ){
 			jQuery.iDrop.checkdrop(dragged);
 		}
-		if (jQuery.iSort && jQuery.iDrop.overzone) {
+		if (jQuery.iSort && jQuery.iDrop.overzone && dragged.dragCfg.so) {
 			jQuery.iSort.check(dragged);
 		}
 		if (dragged.dragCfg.onChange && (dragged.dragCfg.nRx != dragged.dragCfg.oR.x || dragged.dragCfg.nRy != dragged.dragCfg.oR.y)){

@@ -160,6 +160,6 @@ jQuery.iAccordion = {
 			}
 		);
 	}
-}
+};
 
 jQuery.fn.Accordion = jQuery.iAccordion.build;

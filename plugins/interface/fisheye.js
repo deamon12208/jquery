@@ -48,7 +48,7 @@ jQuery.iFisheye = {
 					valign: options.valign,
 					halign: options.halign,
 					maxWidth : options.maxWidth
-				}
+				};
 				jQuery.iFisheye.positionContainer(el, 0);
 				jQuery(window).bind(
 					'resize',
@@ -137,6 +137,6 @@ jQuery.iFisheye = {
 			}
 		);
 	}
-}
+};
 
 jQuery.fn.Fisheye = jQuery.iFisheye.build;

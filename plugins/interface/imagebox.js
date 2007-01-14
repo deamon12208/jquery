@@ -7,8 +7,6 @@
  * Copyright (c) 2006 Stefan Petre
  * Dual licensed under the MIT (MIT-LICENSE.txt) 
  * and GPL (GPL-LICENSE.txt) licenses.
- *   
- * $Revision$
  *
  */
 
@@ -299,7 +297,7 @@ jQuery.ImageBox = {
 		imageSrc =  el.attr('href');
 		captionText = el.attr('title');
 		pageSize = jQuery.iUtil.getScroll();
-		overlay = jQuery('#ImageBoxOverlay')
+		overlay = jQuery('#ImageBoxOverlay');
 		if (overlay.css('display') == 'none') {
 			if (jQuery.browser.msie) {
 				jQuery('#ImageBoxIframe')
@@ -512,4 +510,4 @@ jQuery.ImageBox = {
 		jQuery('#ImageBoxNextImage').get(0).onclick = null;
 		return false;
 	}
-}
+};

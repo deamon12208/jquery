@@ -94,7 +94,7 @@ jQuery.iCarousel = {
 					reflections : [],
 					protectRotation : false,
 					increment: 2*Math.PI/360
-				}
+				};
 				el.carouselCfg.radiusX = (el.carouselCfg.size.w - el.carouselCfg.itemWidth)/2;
 				el.carouselCfg.radiusY =  (el.carouselCfg.size.h - el.carouselCfg.itemHeight - el.carouselCfg.itemHeight * el.carouselCfg.reflectionSize)/2;
 				el.carouselCfg.step =  2*Math.PI/el.carouselCfg.items.size();
@@ -167,7 +167,7 @@ jQuery.iCarousel = {
 											0, 
 											el.carouselCfg.itemWidth, 
 											height
-									);
+										);
 									}
 								}
 							}
@@ -180,7 +180,7 @@ jQuery.iCarousel = {
 						'mouseover',
 						function(e)
 						{
-							el.carouselCfg.protectRotation = true
+							el.carouselCfg.protectRotation = true;
 							el.carouselCfg.speed = el.carouselCfg.increment*0.1 * el.carouselCfg.speed / Math.abs(el.carouselCfg.speed);
 							return false;
 						}
@@ -223,7 +223,7 @@ jQuery.iCarousel = {
 								el.carouselCfg.speed = el.carouselCfg.rotationSpeed * el.carouselCfg.increment * (el.carouselCfg.size.w/2 - mousex) / (el.carouselCfg.size.w/2);
 							}
 						}
-					)
+					);
 			}
 		);
 	},
@@ -253,5 +253,5 @@ jQuery.iCarousel = {
 			}
 		);
 	}
-}
+};
 jQuery.fn.Carousel = jQuery.iCarousel.build;
