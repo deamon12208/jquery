@@ -12,6 +12,10 @@
 
 /**
  * This a jQuery equivalent for Lightbox2. Alternative to image popups that will display images in an overlay. All links that have attribute 'rel' starting with 'imagebox' and link to an image will display the image inside the page. Galleries can by build buy giving the value 'imagebox-galname' to attribute 'rel'. Attribute 'title' will be used as caption.
+ * Keyboard navigation:
+ *  -  next image: arrow right, page down, 'n' key, space
+ *  -  previous image: arrow left, page up, 'p' key, backspace
+ *  -  close: escape
  *
  * CSS
  *	#ImageBoxOverlay
@@ -89,11 +93,75 @@ jQuery.ImageBox = {
 	},
 	imageLoaded : false,
 	firstResize : false,
+	currentRel : null,
+	
+	keyPressed : function(event)
+	{
+		if(jQuery('#ImageBoxOuterContainer').css('display') == 'none')
+			return;
+		pressedKey = event.charCode || event.keyCode || -1;
+		switch (pressedKey)
+		{
+			//end
+			case 35:
+				if (jQuery.ImageBox.currentRel)
+					jQuery.ImageBox.start(null, jQuery('a[@rel=' + jQuery.ImageBox.currentRel+ ']:last').get(0));
+			break;
+			//home
+			case 36:
+				if (jQuery.ImageBox.currentRel)
+					jQuery.ImageBox.start(null, jQuery('a[@rel=' + jQuery.ImageBox.currentRel+ ']:first').get(0));
+			break;
+			//left
+			case 37:
+			//backspace
+			case 8:
+			//page up
+			case 33:
+			//p
+			case 80:
+			case 112:
+				var prevEl = jQuery('#ImageBoxPrevImage');
+				if(prevEl.get(0).onclick != null) {
+					prevEl.get(0).onclick.apply(prevEl.get(0));
+				}
+			break;
+			//up
+			case 38:
+			break;
+			//right
+			case 39:
+			//page down
+			case 34:
+			//space
+			case 32:
+			//n
+			case 110:
+			case 78:
+				var nextEl = jQuery('#ImageBoxNextImage');
+				if(nextEl.get(0).onclick != null) {
+					nextEl.get(0).onclick.apply(nextEl.get(0));
+				}
+			break;
+			//down;
+			case 40:
+			break;
+			//escape
+			case 27:
+				jQuery.ImageBox.hideImage();
+			break;
+		}
+	},
 	
 	init : function(options)
 	{
 		if (options)
 			jQuery.extend(jQuery.ImageBox.options, options);
+		if (window.event) {
+			jQuery('body',document).bind('keypress', jQuery.ImageBox.keyPressed);
+		} else {
+			jQuery(document).bind('keypress', jQuery.ImageBox.keyPressed);
+		}
 		jQuery('a').each(
 			function()
 			{
@@ -288,6 +356,7 @@ jQuery.ImageBox = {
 		linkRel =  el.attr('rel');
 		var totalImages, iteration, prevImage, nextImage;
 		if (linkRel != 'imagebox') {
+			jQuery.ImageBox.currentRel = linkRel;
 			gallery = jQuery('a[@rel=' + linkRel + ']');
 			totalImages = gallery.size();
 			iteration = gallery.index(elm ? elm : this);
@@ -345,8 +414,10 @@ jQuery.ImageBox = {
 	loadImage : function(imageSrc, captiontext, pageSize, totalImages, iteration, prevImage, nextImage)
 	{
 		jQuery('#ImageBoxCurrentImage').remove();
-		prevImageEl = jQuery('#ImageBoxPrevImage').hide();
-		nextImageEl = jQuery('#ImageBoxNextImage').hide();
+		prevImageEl = jQuery('#ImageBoxPrevImage');
+		prevImageEl.hide();
+		nextImageEl = jQuery('#ImageBoxNextImage');
+		nextImageEl.hide();
 		loader = jQuery('#ImageBoxLoader');
 		container = jQuery('#ImageBoxContainer');
 		outerContainer = jQuery('#ImageBoxOuterContainer');
@@ -508,6 +579,7 @@ jQuery.ImageBox = {
 		);
 		jQuery('#ImageBoxPrevImage').get(0).onclick = null;
 		jQuery('#ImageBoxNextImage').get(0).onclick = null;
+		jQuery.ImageBox.currentRel = null;
 		return false;
 	}
 };
