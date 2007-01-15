@@ -90,8 +90,7 @@
 	// the public plugin method
 	$.fn.Tooltip = function(settings) {
 		// setup configuration
-		// TODO: allow multiple arguments to extend, see bug #344
-		settings = $.extend($.extend({}, arguments.callee.defaults), settings || {});
+		settings = $.extend({}, arguments.callee.defaults, settings);
 	
 		// there can be only one tooltip helper
 		if( !helper ) {
@@ -100,20 +99,19 @@
 				// hide it at first
 				.hide()
 				// move to top and position absolute, to let it follow the mouse
-				.css({ position: 'absolute', zIndex: 3000 })
+				.css({ position: 'absolute', zIndex: "3000" })
 				// add to document
 				.appendTo('body');
-				
+			
 			// save references to title and url elements
 			tTitle = $('h3', helper);
-			tBody = $('p:eq(0)', helper);
-			tUrl = $('p:eq(1)', helper);
+			tBody = $('p.body', helper);
+			tUrl = $('p.url', helper);
 		}
 		
 		// bind events for every selected element with a title attribute
 		$(this).filter('[@title]')
 			// save settings into each element
-			// TODO: pass settings via event system, not yet possible
 			.each(function() {
 				this.tSettings = settings;
 			})
