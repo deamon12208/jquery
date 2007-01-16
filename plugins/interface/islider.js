@@ -62,15 +62,17 @@ jQuery.iSlider = {
 		if (elm.SliderContainer.slideCfg.restricted ) {
 			next = elm.SliderContainer.slideCfg.sliders.get(elm.SliderIteration+1);
 			if (next) {
-				elm.dragCfg.cont.w = parseInt(jQuery(next).css('left')) + elm.dragCfg.oC.wb;
-				elm.dragCfg.cont.h = parseInt(jQuery(next).css('top')) + elm.dragCfg.oC.hb;
+				elm.dragCfg.cont.w = parseInt(jQuery(next).css('left'))||0 + elm.dragCfg.oC.wb;
+				elm.dragCfg.cont.h = parseInt(jQuery(next).css('top'))||0 + elm.dragCfg.oC.hb;
 			}
 			prev = elm.SliderContainer.slideCfg.sliders.get(elm.SliderIteration-1);
 			if (prev) {
-				elm.dragCfg.cont.x += parseInt(jQuery(prev).css('left'));
-				elm.dragCfg.cont.y += parseInt(jQuery(prev).css('top'));
-				elm.dragCfg.cont.w -= parseInt(jQuery(prev).css('left'));
-				elm.dragCfg.cont.h -= parseInt(jQuery(prev).css('top'));
+				var prevLeft = parseInt(jQuery(prev).css('left'))||0;
+				var prevTop = parseInt(jQuery(prev).css('left'))||0;
+				elm.dragCfg.cont.x += prevLeft;
+				elm.dragCfg.cont.y += prevTop;
+				elm.dragCfg.cont.w -= prevLeft;
+				elm.dragCfg.cont.h -= prevTop;
 			}
 		}
 		elm.dragCfg.maxx = elm.dragCfg.cont.w - elm.dragCfg.oC.wb;
@@ -181,15 +183,15 @@ jQuery.iSlider = {
 			dx = newCoords.dx;
 			dy = newCoords.dy;
 		}
+		
 		nx = elm.dragCfg.oR.x + dx;
 		ny = elm.dragCfg.oR.y + dy;
 		
 		if (elm.dragCfg.si && (elm.dragCfg.onSlide || elm.dragCfg.onChange)) {
 			jQuery.iSlider.onSlide(elm, nx, ny);
 		}
-		nx = !elm.dragCfg.axis || elm.dragCfg.axis == 'horizontally' ? nx : elm.dragCfg.oR.x;
-		ny = !elm.dragCfg.axis || elm.dragCfg.axis == 'vertically' ? ny : elm.dragCfg.oR.y;
-		
+		nx = !elm.dragCfg.axis || elm.dragCfg.axis == 'horizontally' ? nx : elm.dragCfg.oR.x||0;
+		ny = !elm.dragCfg.axis || elm.dragCfg.axis == 'vertically' ? ny : elm.dragCfg.oR.y||0;
 		elm.style.left = nx + 'px';
 		elm.style.top = ny + 'px';
 	},
@@ -205,7 +207,7 @@ jQuery.iSlider = {
 				if (toDrag.size() == 0) {
 					return;
 				}
-				params = {
+				var params = {
 					containment: 'parent',
 					si : true,
 					onSlide : o.onSlide && o.onSlide.constructor == Function ? o.onSlide : null,
