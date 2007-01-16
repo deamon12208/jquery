@@ -94,12 +94,14 @@ jQuery.ImageBox = {
 	imageLoaded : false,
 	firstResize : false,
 	currentRel : null,
+	animationInProgress : false,
+	opened : false,
 	
 	keyPressed : function(event)
 	{
-		if(jQuery('#ImageBoxOuterContainer').css('display') == 'none')
+		if(!jQuery.ImageBox.opened || jQuery.ImageBox.animationInProgress)
 			return;
-		pressedKey = event.charCode || event.keyCode || -1;
+		var pressedKey = event.charCode || event.keyCode || -1;
 		switch (pressedKey)
 		{
 			//end
@@ -158,9 +160,9 @@ jQuery.ImageBox = {
 		if (options)
 			jQuery.extend(jQuery.ImageBox.options, options);
 		if (window.event) {
-			jQuery('body',document).bind('keypress', jQuery.ImageBox.keyPressed);
+			jQuery('body',document).bind('keyup', jQuery.ImageBox.keyPressed);
 		} else {
-			jQuery(document).bind('keypress', jQuery.ImageBox.keyPressed);
+			jQuery(document).bind('keyup', jQuery.ImageBox.keyPressed);
 		}
 		jQuery('a').each(
 			function()
@@ -170,7 +172,7 @@ jQuery.ImageBox = {
 				hrefAttr 		= el.attr('href')||'';
 				imageTypes 		= /\.jpg|\.jpeg|\.png|\.gif|\.bmp/g;
 				if (hrefAttr.toLowerCase().match(imageTypes) != null && relAttr.toLowerCase().indexOf('imagebox') == 0) {
-					el.click(jQuery.ImageBox.start);
+					el.bind('click', jQuery.ImageBox.start);
 				}
 			}
 		);
@@ -210,7 +212,7 @@ jQuery.ImageBox = {
 				}
 			)
 			.append(document.createTextNode(' '))
-			.click(jQuery.ImageBox.hideImage);
+			.bind('click', jQuery.ImageBox.hideImage);
 		
 		captionText = document.createElement('div');
 		jQuery(captionText)
@@ -249,7 +251,7 @@ jQuery.ImageBox = {
 				}
 			)
 			.append(jQuery.ImageBox.options.closeHTML)
-			.click(jQuery.ImageBox.hideImage);
+			.bind('click', jQuery.ImageBox.hideImage);
 			
 		captionEl = document.createElement('div');
 		jQuery(captionEl)
@@ -367,7 +369,8 @@ jQuery.ImageBox = {
 		captionText = el.attr('title');
 		pageSize = jQuery.iUtil.getScroll();
 		overlay = jQuery('#ImageBoxOverlay');
-		if (overlay.css('display') == 'none') {
+		if (!jQuery.ImageBox.opened) {
+			jQuery.ImageBox.opened = true;
 			if (jQuery.browser.msie) {
 				jQuery('#ImageBoxIframe')
 					.css ('height', Math.max(pageSize.ih,pageSize.h) + 'px')
@@ -423,6 +426,7 @@ jQuery.ImageBox = {
 		outerContainer = jQuery('#ImageBoxOuterContainer');
 		captionEl = jQuery('#ImageBoxCaption').css('visibility', 'hidden');
 		jQuery('#ImageBoxCaptionText').html(captionText);
+		jQuery.ImageBox.animationInProgress = true;
 		if (totalImages)
 			jQuery('#ImageBoxCaptionImages').html(
 				jQuery.ImageBox.options.textImage 
@@ -478,7 +482,7 @@ jQuery.ImageBox = {
 		imageEl = new Image;
 		jQuery(imageEl)
 			.attr('id', 'ImageBoxCurrentImage')
-			.load(
+			.bind('load', 
 			function()
 			{
 				containerW = imageEl.width + jQuery.ImageBox.options.border * 2;
@@ -548,7 +552,11 @@ jQuery.ImageBox = {
 													{
 														top		: -1
 													},
-													jQuery.ImageBox.options.fadeDuration
+													jQuery.ImageBox.options.fadeDuration,
+													function()
+													{
+														jQuery.ImageBox.animationInProgress = false;
+													}
 												);
 										}
 									);
@@ -580,6 +588,8 @@ jQuery.ImageBox = {
 		jQuery('#ImageBoxPrevImage').get(0).onclick = null;
 		jQuery('#ImageBoxNextImage').get(0).onclick = null;
 		jQuery.ImageBox.currentRel = null;
+		jQuery.ImageBox.opened = false;
+		jQuery.ImageBox.animationInProgress = false;
 		return false;
 	}
 };
