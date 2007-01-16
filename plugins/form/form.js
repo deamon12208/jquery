@@ -357,8 +357,8 @@ jQuery.fn.formToArray = function(semantic) {
     var form = this[0];
     var els = semantic ? form.getElementsByTagName('*') : form.elements;
     if (!els) return a;
-	for(var i=0, max=els.length; i < max; i++) {
-		var el = els[i];
+    for(var i=0, max=els.length; i < max; i++) {
+        var el = els[i];
         var n = el.name;
         if (!n) continue;
 
@@ -376,7 +376,7 @@ jQuery.fn.formToArray = function(semantic) {
         }
         else 
             a.push({name: n, value: v});
-	}
+    }
 
     if (!semantic && form.clk) {
         // input type=='image' are not found in elements array! handle them here
@@ -591,7 +591,7 @@ jQuery.fn.clearForm = function() {
     return this.each(function() {
         jQuery('input,select,textarea', this).clearInputs();
     });
-}
+};
 
 /**
  * Clears the selected form elements.  Takes the following actions on the matched elements:
