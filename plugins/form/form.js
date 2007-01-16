@@ -619,7 +619,7 @@ jQuery.fn.clearInputs = function() {
         else if (tag == 'select')
             this.selectedIndex = -1;
     });
-}
+};
 
 
 /**
