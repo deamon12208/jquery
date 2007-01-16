@@ -28,6 +28,9 @@
  * @option Function onSelect (optional) A function to be executed whenever an item it is selected
  * @option Function onShow (optional) A function to be executed whenever the suggection box is displayed
  * @option Function onHide (optional) A function to be executed whenever the suggection box is hidden
+ * @option Boolean inputWidth (optional) Whatever to resize suggestion box to fit input's width
+ * @option Boolean multiple (optional) If true the suggestion box will accept more values separated by multipleSeparator option
+ * @option String multipleSeparator (optional) String to separate multiple values
  *
  * @type jQuery
  * @cat Plugins/Interface
@@ -73,12 +76,10 @@ jQuery.iAuto = {
 			} else {
 				jQuery.iAuto.helper.hide();
 			}
-			if (jQuery.iAuto.iframe)
-				jQuery.iAuto.iframe.hide();
 			if (jQuery.iAuto.subject.autoCFG.onHide)
 				jQuery.iAuto.subject.autoCFG.onHide.apply(jQuery.iAuto.subject, [jQuery.iAuto.helper, jQuery.iAuto.iframe]);
 		} else {
-			jQuery.iAuto.empty;
+			jQuery.iAuto.empty();
 		}
 		window.clearTimeout(jQuery.iAuto.timer);
 	},
@@ -86,13 +87,22 @@ jQuery.iAuto = {
 	update : function ()
 	{
 		var subject = jQuery.iAuto.subject;
-		if (subject && subject.value != jQuery.iAuto.lastValue && subject.value.length >= subject.autoCFG.minchars) {
-			jQuery.iAuto.lastValue = subject.value;
-			jQuery.iAuto.currentValue = subject.value;
+		var subjectValue = subject.value;
+		var preValue = '';
+		if (subject.autoCFG.multiple) {
+			var separatorPosition = subjectValue.lastIndexOf(subject.autoCFG.multipleSeparator);
+			if (separatorPosition > -1) {
+				preValue = subjectValue.substr(0, separatorPosition) + subject.autoCFG.multipleSeparator;
+				subjectValue = subjectValue.substr(separatorPosition + subject.autoCFG.multipleSeparator.length, subjectValue.length);
+			}
+		}
+		if (subject && subjectValue != jQuery.iAuto.lastValue && subjectValue.length >= subject.autoCFG.minchars) {
+			jQuery.iAuto.lastValue = subjectValue;
+			jQuery.iAuto.currentValue = subjectValue;
 
 			data = {
 				field: $(subject).attr('name')||'field',
-				value: subject.value
+				value: subjectValue
 			};
 
 			jQuery.ajax(
@@ -112,12 +122,12 @@ jQuery.iAuto = {
 								}
 							);
 							if (subject.autoCFG.autofill) {
-								subject.value = $('value', subject.autoCFG.lastSuggestion.get(0)).text();
-								jQuery.iAuto.selection(subject, jQuery.iAuto.currentValue.length, subject.value.length);
+								subject.value = preValue + $('value', subject.autoCFG.lastSuggestion.get(0)).text();
+								jQuery.iAuto.selection(subject, preValue.length + jQuery.iAuto.currentValue.length, subject.value.length);
 							}
 							
 							if (size > 0) {
-								jQuery.iAuto.whiteItems(subject, toWrite);
+								jQuery.iAuto.writeItems(subject, toWrite);
 							} else {
 								jQuery.iAuto.clear();
 							}
@@ -131,13 +141,13 @@ jQuery.iAuto = {
 		}
 	},
 	
-	whiteItems : function(subject, toWrite)
+	writeItems : function(subject, toWrite)
 	{
 		jQuery.iAuto.content.html(toWrite);
 		jQuery.iAuto.items = $('li', jQuery.iAuto.content.get(0));
 		jQuery.iAuto.items
 			.mouseover(jQuery.iAuto.hoverItem)
-			.click(jQuery.iAuto.clickItem);
+			.bind('click', jQuery.iAuto.clickItem);
 		position = jQuery.iUtil.getPosition(subject);
 		size = jQuery.iUtil.getSize(subject);
 		jQuery.iAuto.helper
@@ -156,6 +166,11 @@ jQuery.iAuto = {
 		jQuery.iAuto.items.get(0).className = subject.autoCFG.selectClass;
 		
 		if (jQuery.iAuto.helper.css('display') == 'none') {
+			if (subject.autoCFG.inputWidth) {
+				var borders = jQuery.iUtil.getPadding(subject, true);
+				var paddings = jQuery.iUtil.getBorder(subject, true);
+				jQuery.iAuto.helper.css('width', subject.offsetWidth - (jQuery.boxModel ? (borders.l + borders.r + paddings.l + paddings.r) : 0 ) + 'px');
+			}
 			if (subject.autoCFG.fx) {
 				switch(subject.autoCFG.fx.type) {
 					case 'fade':
@@ -198,7 +213,7 @@ jQuery.iAuto = {
 			);
 			
 			if (toWrite != '') {
-				jQuery.iAuto.whiteItems(subject, toWrite);
+				jQuery.iAuto.writeItems(subject, toWrite);
 				
 				this.autoCFG.inCache = true;
 				return;
@@ -230,7 +245,17 @@ jQuery.iAuto = {
 	autocomplete : function(e)
 	{
 		window.clearTimeout(jQuery.iAuto.timer);
-		pressedKey = e.charCode || e.keyCode || -1;
+		var subjectValue = this.value;
+		var preValue = '';
+		if (this.autoCFG.multiple) {
+			var separatorPosition = subjectValue.lastIndexOf(this.autoCFG.multipleSeparator);
+			if (separatorPosition > -1) {
+				preValue = subjectValue.substr(0, separatorPosition) + this.autoCFG.multipleSeparator;
+				subjectValue = subjectValue.substr(separatorPosition + this.autoCFG.multipleSeparator.length, subjectValue.length);
+			}
+		}
+				
+		var pressedKey = e.charCode || e.keyCode || -1;
 		if (/13|27|35|36|38|40/.test(pressedKey) && jQuery.iAuto.items) {
 			if (window.event) {
 				window.event.cancelBubble = true;
@@ -240,19 +265,19 @@ jQuery.iAuto = {
 				e.stopPropagation();
 			}
 			if (jQuery.iAuto.selectedItem != null) 
-				jQuery.iAuto.items.get(jQuery.iAuto.selectedItem).className = '';
+				jQuery.iAuto.items.get(jQuery.iAuto.selectedItem||0).className = '';
 			else
 				jQuery.iAuto.selectedItem = -1;
-				
 			switch(pressedKey) {
 				//enter
 				case 13:
 					if (jQuery.iAuto.selectedItem == -1)
 						jQuery.iAuto.selectedItem = 0;
-					selectedItem = jQuery.iAuto.items.get(jQuery.iAuto.selectedItem);
-					this.value = selectedItem.getAttribute('rel');
-					jQuery.iAuto.lastValue = this.value;
-					jQuery.iAuto.selection(this, jQuery.iAuto.lastValue.length, this.value.length);
+					selectedItem = jQuery.iAuto.items.get(jQuery.iAuto.selectedItem||0);
+					this.value = preValue + selectedItem.getAttribute('rel') + this.autoCFG.multipleSeparator;
+					jQuery.iAuto.lastValue = subjectValue;
+					//jQuery.iAuto.selection(this, preValue.length + jQuery.iAuto.lastValue.length, this.value.length);
+					this.focus();
 					jQuery.iAuto.clear();
 					if (this.autoCFG.onSelect) {
 						iteration = parseInt(selectedItem.getAttribute('dir'))||0;
@@ -264,7 +289,7 @@ jQuery.iAuto = {
 					break;
 				//escape
 				case 27:
-					this.value = jQuery.iAuto.lastValue;
+					this.value = preValue + jQuery.iAuto.lastValue;
 					this.autoCFG.lastSuggestion = null;
 					jQuery.iAuto.clear();
 					if (this.scrollIntoView)
@@ -291,19 +316,19 @@ jQuery.iAuto = {
 						jQuery.iAuto.selectedItem = 0;
 					break;
 			}
-			jQuery.iAuto.items.get(jQuery.iAuto.selectedItem).className = this.autoCFG.selectClass;
-			if (jQuery.iAuto.items.get(jQuery.iAuto.selectedItem).scrollIntoView)
-				jQuery.iAuto.items.get(jQuery.iAuto.selectedItem).scrollIntoView(false);
+			jQuery.iAuto.items.get(jQuery.iAuto.selectedItem||0).className = this.autoCFG.selectClass;
+			if (jQuery.iAuto.items.get(jQuery.iAuto.selectedItem||0).scrollIntoView)
+				jQuery.iAuto.items.get(jQuery.iAuto.selectedItem||0).scrollIntoView(false);
 			if(this.autoCFG.autofill) {
-				this.value = jQuery.iAuto.items.get(jQuery.iAuto.selectedItem).getAttribute('rel');
-				jQuery.iAuto.selection(this, jQuery.iAuto.lastValue.length, this.value.length);
+				this.value = preValue + jQuery.iAuto.items.get(jQuery.iAuto.selectedItem||0).getAttribute('rel');
+				jQuery.iAuto.selection(this, preValue.length + jQuery.iAuto.lastValue.length, this.value.length);
 			}
 			return false;
 		}
 		jQuery.iAuto.checkCache.apply(this);
 		
 		if (this.autoCFG.inCache == false) {
-			if (this.value != jQuery.iAuto.lastValue && this.value.length >= this.autoCFG.minchars)
+			if (subjectValue != jQuery.iAuto.lastValue && subjectValue.length >= this.autoCFG.minchars)
 				jQuery.iAuto.timer = window.setTimeout(jQuery.iAuto.update, this.autoCFG.delay);
 			if (jQuery.iAuto.items) {
 				jQuery.iAuto.clear();
@@ -328,10 +353,10 @@ jQuery.iAuto = {
 	{
 		if (jQuery.iAuto.items) {
 			if (jQuery.iAuto.selectedItem != null) 
-				jQuery.iAuto.items.get(jQuery.iAuto.selectedItem).className = '';
-			jQuery.iAuto.items.get(jQuery.iAuto.selectedItem).className = '';
+				jQuery.iAuto.items.get(jQuery.iAuto.selectedItem||0).className = '';
+			jQuery.iAuto.items.get(jQuery.iAuto.selectedItem||0).className = '';
 			jQuery.iAuto.selectedItem = parseInt(this.getAttribute('dir'))||0;
-			jQuery.iAuto.items.get(jQuery.iAuto.selectedItem).className = jQuery.iAuto.subject.autoCFG.selectClass;
+			jQuery.iAuto.items.get(jQuery.iAuto.selectedItem||0).className = jQuery.iAuto.subject.autoCFG.selectClass;
 		}
 	},
 
@@ -343,9 +368,19 @@ jQuery.iAuto = {
 		event.preventDefault();
 		event.stopPropagation();
 
-		jQuery.iAuto.subject.value = this.getAttribute('rel');
-		jQuery.iAuto.lastValue = jQuery.iAuto.subject.value;
-		jQuery.iAuto.selection(jQuery.iAuto.subject, jQuery.iAuto.lastValue.length, jQuery.iAuto.subject.value.length);
+		var subjectValue = jQuery.iAuto.subject.value;
+		var preValue = '';
+		if (jQuery.iAuto.subject.autoCFG.multiple) {
+			var separatorPosition = subjectValue.lastIndexOf(jQuery.iAuto.subject.autoCFG.multipleSeparator);
+			if (separatorPosition > -1) {
+				preValue = subjectValue.substr(0, separatorPosition) + jQuery.iAuto.subject.autoCFG.multipleSeparator;
+				subjectValue = subjectValue.substr(separatorPosition + jQuery.iAuto.subject.autoCFG.multipleSeparator.length, subjectValue.length);
+			}
+		}
+		jQuery.iAuto.subject.value = preValue + this.getAttribute('rel') + jQuery.iAuto.subject.autoCFG.multipleSeparator;
+		jQuery.iAuto.lastValue = this.getAttribute('rel');
+		//jQuery.iAuto.selection(jQuery.iAuto.subject, preValue.length + jQuery.iAuto.lastValue.length, jQuery.iAuto.subject.value.length);
+		jQuery.iAuto.subject.focus();
 		jQuery.iAuto.clear();
 		if (jQuery.iAuto.subject.autoCFG.onSelect) {
 			iteration = parseInt(this.getAttribute('dir'))||0;
@@ -399,6 +434,9 @@ jQuery.iAuto = {
 				this.autoCFG.onSelect = options.onSelect && options.onSelect.constructor == Function ? options.onSelect : null;
 				this.autoCFG.onShow = options.onShow && options.onShow.constructor == Function ? options.onShow : null;
 				this.autoCFG.onHide = options.onHide && options.onHide.constructor == Function ? options.onHide : null;
+				this.autoCFG.inputWidth = options.inputWidth||false;
+				this.autoCFG.multiple = options.multiple||false;
+				this.autoCFG.multipleSeparator = this.autoCFG.multiple ? (options.multipleSeparator||', '):'';
 				this.autoCFG.autofill = options.autofill ? true : false;
 				this.autoCFG.delay = Math.abs(parseInt(options.delay)||1000);
 				if (options.fx && options.fx.constructor == Object) {
