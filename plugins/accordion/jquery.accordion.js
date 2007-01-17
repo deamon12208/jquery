@@ -103,15 +103,13 @@ jQuery.fn.nextUntil = function(expr) {
  * If the index is not specified, it defaults to zero, if it is an invalid index, eg. a string,
  * nothing happens.
  *
- * Requires jQuery core revision >= 557.
- *
  * @example $('#accordion').activate(1);
  * @desc Activate the second content of the Accordion contained in <div id="accordion">.
  * @example $('#nav').activate();
  * @desc Activate the first content of the Accordion contained in <ul id="nav">.
  *
- * @param Number index An Integer specifying the zero-based index of the content to be
- *				 activated. Defaults to 0.
+ * @param Number index (optional) An Integer specifying the zero-based index of the content to be
+ *				 activated. Default: 0
  * @type jQuery
  *
  * @name activate
@@ -125,18 +123,17 @@ jQuery.fn.nextUntil = function(expr) {
 	var plugin = $.fn.Accordion = function(settings) {
 
 		// setup configuration
-		// TODO: allow multiple arguments to extend, see bug #344
-		settings = $.extend($.extend({}, arguments.callee.defaults), $.extend({
+		settings = $.extend({}, arguments.callee.defaults, {
 			// define context defaults
 			header: $(':first-child', this)[0].tagName // take first childs tagName as header
-		}, settings || {}));
+		}, settings);
 
 		// calculate active if not specified, using the first header
 		var container = this,
 			active = settings.active ? $(settings.active, this) : settings.active === false ? $("<div>") : $(settings.header, this).eq(0),
 			running = 0;
 
-		$(settings.header, container)
+		container.find(settings.header)
 			.not(active && active[0] || "")
 			.nextUntil(settings.header)
 			.hide();
@@ -154,8 +151,8 @@ jQuery.fn.nextUntil = function(expr) {
 			clicked.addClass(settings.selectedClass);
 
 			// find elements to show and hide
-			var toShow = $(clicked).nextUntil(settings.header),
-				toHide = $(active).nextUntil(settings.header),
+			var toShow = clicked.nextUntil(settings.header),
+				toHide = active.nextUntil(settings.header),
 				data = [clicked, active, toShow, toHide];
 			active = clicked;
 			// count elements to animate
@@ -173,8 +170,7 @@ jQuery.fn.nextUntil = function(expr) {
 			toHide.slideUp(settings.hideSpeed, finished);
 			toShow.slideDown(settings.showSpeed, finished);
 
-			if(event.preventDefault)
-				event.preventDefault();
+			return false;
 		};
 		var activateHandlder = function(event, index) {
 			// call clickHandler with custom event
@@ -184,7 +180,7 @@ jQuery.fn.nextUntil = function(expr) {
 		};
 
 		return container
-			.bind("click", clickHandler)
+			.click(clickHandler)
 			.bind("activate", activateHandlder);
 	};
 	// define static defaults
