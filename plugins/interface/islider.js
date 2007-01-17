@@ -62,8 +62,8 @@ jQuery.iSlider = {
 		if (elm.SliderContainer.slideCfg.restricted ) {
 			next = elm.SliderContainer.slideCfg.sliders.get(elm.SliderIteration+1);
 			if (next) {
-				elm.dragCfg.cont.w = parseInt(jQuery(next).css('left'))||0 + elm.dragCfg.oC.wb;
-				elm.dragCfg.cont.h = parseInt(jQuery(next).css('top'))||0 + elm.dragCfg.oC.hb;
+				elm.dragCfg.cont.w = (parseInt(jQuery(next).css('left'))||0) + elm.dragCfg.oC.wb;
+				elm.dragCfg.cont.h = (parseInt(jQuery(next).css('top'))||0) + elm.dragCfg.oC.hb;
 			}
 			prev = elm.SliderContainer.slideCfg.sliders.get(elm.SliderIteration-1);
 			if (prev) {
