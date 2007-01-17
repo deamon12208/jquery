@@ -16,35 +16,36 @@
  * @name Draggable
  * @descr Creates draggable elements that can be moved across the page.
  * @param Hash hash A hash of parameters. All parameters are optional.
- * @option String handle The jQuery selector matching the handle that starts the draggable
- * @option DOMElement handle The DOM Element of the handle that starts the draggable
- * @option Boolean revert When true, on stop-drag the element returns to initial position
- * @option Boolean ghosting When true, a copy of the element is moved
- * @option Integer zIndex zIndex depth for the element while it is being dragged
- * @option Float opacity A number between 0 and 1 that indicates the opacity of the element while being dragged
- * @option Integer grid A number of pixels indicating the grid that the element should snap to
- * @option Array grid A number of x-pixels and y-pixels indicating the grid that the element should snap to
- * @option Integer fx Duration for the effect (like ghosting or revert) applied to the draggable
- * @option String containment Define the zone where the draggable can be moved. 'parent' moves it inside parent
+ * @option String handle (optional) The jQuery selector matching the handle that starts the draggable
+ * @option DOMElement handle (optional) The DOM Element of the handle that starts the draggable
+ * @option Boolean revert (optional) When true, on stop-drag the element returns to initial position
+ * @option Boolean ghosting (optional) When true, a copy of the element is moved
+ * @option Integer zIndex (optional) zIndex depth for the element while it is being dragged
+ * @option Float opacity (optional) A number between 0 and 1 that indicates the opacity of the element while being dragged
+ * @option Integer grid (optional) (optional) A number of pixels indicating the grid that the element should snap to
+ * @option Array grid (optional) A number of x-pixels and y-pixels indicating the grid that the element should snap to
+ * @option Integer fx (optional) Duration for the effect (like ghosting or revert) applied to the draggable
+ * @option String containment (optional) Define the zone where the draggable can be moved. 'parent' moves it inside parent
  *                           element, while 'document' prevents it from leaving the document and forcing additional
  *                           scrolling
  * @option Array containment An 4-element array (topm left, width, height) indicating the containment of the element
- * @option String axis Set an axis: vertical (with 'vertically') or horizontal (with 'horizontally')
- * @option Function onStart Callback function triggered when the dragging starts
- * @option Function onStop Callback function triggered when the dragging stops
- * @option Function onChange Callback function triggered when the dragging stop *and* the element was moved at least
+ * @option String axis (optional) Set an axis: vertical (with 'vertically') or horizontal (with 'horizontally')
+ * @option Function onStart (optional) Callback function triggered when the dragging starts
+ * @option Function onStop (optional) Callback function triggered when the dragging stops
+ * @option Function onChange (optional) Callback function triggered when the dragging stop *and* the element was moved at least
  *                          one pixel
- * @option Function onDrag Callback function triggered while the element is dragged. Receives two parameters: x and y
+ * @option Function onDrag (optional) Callback function triggered while the element is dragged. Receives two parameters: x and y
  *                        coordinates. You can return an object with new coordinates {x: x, y: y} so this way you can
  *                        interact with the dragging process (for instance, build your containment)
  * @option Boolean insideParent Forces the element to remain inside its parent when being dragged (like Google Maps)
- * @option Integer snapDistance The element is not moved unless it is dragged more than snapDistance. You can prevent
+ * @option Integer snapDistance (optional) The element is not moved unless it is dragged more than snapDistance. You can prevent
  *                             accidental dragging and keep regular clicking enabled (for links or form elements, 
  *                             for instance)
- * @option Object cursorAt The dragged element is moved to the cursor position with the offset specified. Accepts value
+ * @option Object cursorAt (optional) The dragged element is moved to the cursor position with the offset specified. Accepts value
  *                        for top, left, right and bottom offset. Basically, this forces the cursor to a particular
  *                        position during the entire drag operation.
- * @option Boolean autoSize When true, the drag helper is resized to its content, instead of the dragged element's sizes
+ * @option Boolean autoSize (optional) When true, the drag helper is resized to its content, instead of the dragged element's sizes
+ * @option String frameClass (optional) When is set the cloned element is hidden so only a frame is dragged
  * @type jQuery
  * @cat Plugins/Interface
  * @author Stefan Petre
@@ -128,7 +129,6 @@ jQuery.iDrag =	{
 		}
 
 		jQuery.iDrag.helper.empty();
-
 		clonedEl = elm.cloneNode(true);
 		jQuery.iUtil.purgeEvents(clonedEl);
 		jQuery(clonedEl).css(
@@ -143,10 +143,7 @@ jQuery.iDrag =	{
 		clonedEl.style.marginBottom = '0';
 		clonedEl.style.marginLeft = '0';
 		jQuery.iDrag.helper.append(clonedEl);
-
-		if (elm.dragCfg.onStart)
-			elm.dragCfg.onStart.apply(elm, [clonedEl]);
-
+		
 		dhs = jQuery.iDrag.helper.get(0).style;
 
 		if (elm.dragCfg.autoSize) {
@@ -225,6 +222,13 @@ jQuery.iDrag =	{
 				jQuery.iDrag.helper.css('filter', 'alpha(opacity=' + elm.dragCfg.opacity * 100 + ')');
 			}
 		}
+
+		if(elm.dragCfg.frameClass) {
+			jQuery.iDrag.helper.addClass(elm.dragCfg.frameClass);
+			jQuery.iDrag.helper.get(0).firstChild.style.display = 'none';
+		}
+		if (elm.dragCfg.onStart)
+			elm.dragCfg.onStart.apply(elm, [clonedEl]);
 		if (jQuery.iDrop && jQuery.iDrop.count > 0 ){
 			jQuery.iDrop.highlight(elm);
 		}
@@ -301,6 +305,9 @@ jQuery.iDrag =	{
 
 		if (dragged.si) {
 			jQuery.iDrag.helper.css('cursor', 'move');
+		}
+		if(elm.dragCfg.frameClass) {
+			jQuery.iDrag.helper.removeClass(elm.dragCfg.frameClass);
 		}
 
 		if (dragged.dragCfg.revert == false) {
@@ -545,7 +552,9 @@ jQuery.iDrag =	{
 					axis : /vertically|horizontally/.test(o.axis) ? o.axis : false,
 					snapDistance : o.snapDistance ? parseInt(o.snapDistance)||0 : 0,
 					cursorAt: o.cursorAt ? o.cursorAt : false,
-					autoSize : o.autoSize ? true : false
+					autoSize : o.autoSize ? true : false,
+					frameClass : o.frameClass || false
+					
 				};
 				if (o.onDragModifier && o.onDragModifier.constructor == Function)
 					this.dragCfg.onDragModifier.user = o.onDragModifier;
