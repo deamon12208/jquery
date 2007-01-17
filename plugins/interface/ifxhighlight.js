@@ -32,6 +32,12 @@ jQuery.fn.Highlight = function(speed, color, callback, easing) {
 			easing = typeof callback == 'string' ? callback : easing||null;
 			callback = typeof callback == 'function' ? callback : null;
 			var oldColor = jQuery(this).css('backgroundColor');
+			var parentEl = this.parentNode;
+			while(oldColor == 'transparent' && parentEl) {
+				oldColor = jQuery(parentEl).css('backgroundColor');
+				parentEl = parentEl.parentNode;
+			}
+			
 			
 			/* In IE, style is a object.. */
 			if(typeof this.oldStyleAttr == 'object') this.oldStyleAttr = this.oldStyleAttr["cssText"];
