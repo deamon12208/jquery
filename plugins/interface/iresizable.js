@@ -89,7 +89,11 @@ jQuery.iResize = {
 
 		// Callback
 		if (typeof jQuery.iResize.dragged.resizeOptions.onDrag === 'function') {
-			jQuery.iResize.dragged.resizeOptions.onDrag.apply(jQuery.iResize.dragged, [newLeft, newTop]);
+			var newPos = jQuery.iResize.dragged.resizeOptions.onDrag.apply(jQuery.iResize.dragged, [newLeft, newTop]);
+			if (typeof newPos == 'array' && newPos.length == 2) {
+				newLeft = newPos[0];
+				newTop = newPos[1];
+			}
 		}
 
 		// Update the element
