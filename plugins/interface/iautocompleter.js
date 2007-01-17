@@ -28,6 +28,7 @@
  * @option Function onSelect (optional) A function to be executed whenever an item it is selected
  * @option Function onShow (optional) A function to be executed whenever the suggection box is displayed
  * @option Function onHide (optional) A function to be executed whenever the suggection box is hidden
+ * @option Function onHighlight (optional) A function to be executed whenever an item it is highlighted
  *
  * @type jQuery
  * @cat Plugins/Interface
@@ -159,6 +160,7 @@ jQuery.iAuto = {
 		}
 		jQuery.iAuto.selectedItem = 0;
 		jQuery.iAuto.items.get(0).className = subject.autoCFG.selectClass;
+		jQuery.iAuto.applyOn(subject,subject.autoCFG.lastSuggestion.get(0), 'onHighlight');
 		
 		if (jQuery.iAuto.helper.css('display') == 'none') {
 			if (subject.autoCFG.inputWidth) {
@@ -291,9 +293,6 @@ jQuery.iAuto = {
 		} else {
 			fieldData.item = fieldData.value;
 		}
-		console.log('pre: ' + fieldData.pre);
-		console.log('post: ' + fieldData.post);
-		console.log('item: ' + fieldData.item);
 		return fieldData;
 	},
 	
@@ -333,7 +332,7 @@ jQuery.iAuto = {
 					jQuery.iAuto.clear();
 					if (this.autoCFG.onSelect) {
 						iteration = parseInt(selectedItem.getAttribute('dir'))||0;
-						jQuery.iAuto.applyOnSelect(this,this.autoCFG.lastSuggestion.get(iteration));
+						jQuery.iAuto.applyOn(this,this.autoCFG.lastSuggestion.get(iteration), 'onSelect');
 					}
 					if (this.scrollIntoView)
 						this.scrollIntoView(false);
@@ -368,6 +367,7 @@ jQuery.iAuto = {
 						jQuery.iAuto.selectedItem = 0;
 					break;
 			}
+			jQuery.iAuto.applyOn(this,this.autoCFG.lastSuggestion.get(jQuery.iAuto.selectedItem||0), 'onHighlight');
 			jQuery.iAuto.items.get(jQuery.iAuto.selectedItem||0).className = this.autoCFG.selectClass;
 			if (jQuery.iAuto.items.get(jQuery.iAuto.selectedItem||0).scrollIntoView)
 				jQuery.iAuto.items.get(jQuery.iAuto.selectedItem||0).scrollIntoView(false);
@@ -395,15 +395,15 @@ jQuery.iAuto = {
 		return true;
 	},
 
-	applyOnSelect : function(field, item)
+	applyOn: function(field, item, type)
 	{
-		if (field.autoCFG.onSelect) {
+		if (field.autoCFG[type]) {
 			var data = {};
 			childs = item.getElementsByTagName('*');
 			for(i=0; i<childs.length; i++){
 				data[childs[i].tagName] = childs[i].firstChild.nodeValue;
 			}
-			field.autoCFG.onSelect.apply(field,[data]);
+			field.autoCFG[type].apply(field,[data]);
 		}
 	},
 	
@@ -437,7 +437,7 @@ jQuery.iAuto = {
 		jQuery.iAuto.clear();
 		if (jQuery.iAuto.subject.autoCFG.onSelect) {
 			iteration = parseInt(this.getAttribute('dir'))||0;
-			jQuery.iAuto.applyOnSelect(jQuery.iAuto.subject,jQuery.iAuto.subject.autoCFG.lastSuggestion.get(iteration));
+			jQuery.iAuto.applyOnSelect(jQuery.iAuto.subject,jQuery.iAuto.subject.autoCFG.lastSuggestion.get(iteration), 'onSelect');
 		}
 
 		return false;
@@ -487,6 +487,7 @@ jQuery.iAuto = {
 				this.autoCFG.onSelect = options.onSelect && options.onSelect.constructor == Function ? options.onSelect : null;
 				this.autoCFG.onShow = options.onShow && options.onShow.constructor == Function ? options.onShow : null;
 				this.autoCFG.onHide = options.onHide && options.onHide.constructor == Function ? options.onHide : null;
+				this.autoCFG.onHighlight = options.onHighlight && options.onHighlight.constructor == Function ? options.onHighlight : null;
 				this.autoCFG.inputWidth = options.inputWidth||false;
 				this.autoCFG.multiple = options.multiple||false;
 				this.autoCFG.multipleSeparator = this.autoCFG.multiple ? (options.multipleSeparator||', '):'';
