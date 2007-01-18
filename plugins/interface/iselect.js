@@ -16,8 +16,8 @@ jQuery.selectKeyHelper = null;
 jQuery.selectdrug = null;
 jQuery.selectCurrent = [];	// For current selection
 jQuery.selectKeyDown = function(e) {
-	code = (window.event) ? window.event.keyCode : e.which;
-	if (code == 17) {
+	var pressedKey = e.charCode || e.keyCode || -1;
+	if (pressedKey == 17) {
 		jQuery.selectKeyHelper = true;
 	}
 };
