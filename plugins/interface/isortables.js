@@ -132,6 +132,10 @@ jQuery.iSort = {
 			fnc(ts);
 		}
 		jQuery.iSort.changed = [];
+		jQuery.iSort.helper.after(e);
+		if (e.dragCfg.fx > 0) {
+			jQuery(e).fadeIn(e.dragCfg.fx);
+		}
 		jQuery('body').append(jQuery.iSort.helper.get(0));
 	},
 	
@@ -277,13 +281,13 @@ jQuery.iSort = {
 					activeclass : o.activeclass ? o.activeclass : false,
 					hoverclass : o.hoverclass ? o.hoverclass : false,
 					helperclass : o.helperclass ? o.helperclass : false,
-					onDrop: function (drag, fx) 
+					/*onDrop: function (drag, fx) 
 							{
 								jQuery.iSort.helper.after(drag);
 								if (fx > 0) {
 									jQuery(drag).fadeIn(fx);
 								}
-							},
+							},*/
 					onHover: o.onHover||o.onhover,
 					onOut: o.onOut||o.onout,
 					sortable : true,
