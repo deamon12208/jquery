@@ -267,6 +267,19 @@ jQuery.iSort = {
 		);
 	},
 	
+	destroy: function()
+	{
+		return this.each(
+			function()
+			{
+				jQuery('.' + this.sortCfg.accept).DraggableDestroy();
+				jQuery(this).DroppableDestroy();
+				this.sortCfg = null;
+				this.isSortable = null;
+			}
+		);
+	}
+	
 	build : function (o)
 	{
 		if (o.accept && jQuery.iUtil && jQuery.iDrag && jQuery.iDrop) {
@@ -339,22 +352,30 @@ jQuery.iSort = {
 	}
 };
 
-/**
- * A new item can be added to a sortable by adding it to the DOM and then adding it via
- * SortableAddItem. 
- *
- * @name SortableAddItem
- * @param DOMElement elem A DOM Element to add to the sortable list
- * @example $('#sortable1').append('<li id="newitem">new item</li>')
- *                         .SortableAddItem($("#new_item")[0])
- * @type jQuery
- * @cat Plugins/Interface
- */
-
 jQuery.fn.extend(
 	{
 		Sortable : jQuery.iSort.build,
-		SortableAddItem : jQuery.iSort.addItem
+		/**
+		 * A new item can be added to a sortable by adding it to the DOM and then adding it via
+		 * SortableAddItem. 
+		 *
+		 * @name SortableAddItem
+		 * @param DOMElement elem A DOM Element to add to the sortable list
+		 * @example $('#sortable1').append('<li id="newitem">new item</li>')
+		 *                         .SortableAddItem($("#new_item")[0])
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 */
+		SortableAddItem : jQuery.iSort.addItem,
+		/**
+		 * Destroy a sortable
+		 *
+		 * @name SortableDestroy
+		 * @example $('#sortable1').SortableDestroy();
+		 * @type jQuery
+		 * @cat Plugins/Interface
+		 */
+		SortableDestroy: jQuery.iSort.destroy
 	}
 );
 
