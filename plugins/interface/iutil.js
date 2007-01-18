@@ -12,31 +12,6 @@
  */
 
 jQuery.iUtil = {
-	getPos : function (e, s)
-	{
-		var l = 0;
-		var t  = 0;
-		var sl = 0;
-		var st  = 0;
-		var w = jQuery.css(e,'width');
-		var h = jQuery.css(e,'height');
-		var wb = e.offsetWidth;
-		var hb = e.offsetHeight;
-		while (e.offsetParent){
-			l += e.offsetLeft + (e.currentStyle?parseInt(e.currentStyle.borderLeftWidth)||0:0);
-			t += e.offsetTop  + (e.currentStyle?parseInt(e.currentStyle.borderTopWidth)||0:0);
-			if (s) {
-				sl += e.parentNode.scrollLeft||0;
-				st += e.parentNode.scrollTop||0;
-			}
-			e = e.offsetParent;
-		}
-		l += e.offsetLeft + (e.currentStyle?parseInt(e.currentStyle.borderLeftWidth)||0:0);
-		t += e.offsetTop  + (e.currentStyle?parseInt(e.currentStyle.borderTopWidth)||0:0);
-		st = t - st;
-		sl = l - sl;
-		return {x:l, y:t, sx:sl, sy:st, w:w, h:h, wb:wb, hb:hb};
-	},
 	getPosition : function(e)
 	{
 		var x = 0;
@@ -107,7 +82,10 @@ jQuery.iUtil = {
 	},
 	getSizeLite : function(el)
 	{
-		return {wb:el.offsetWidth||0,hb:el.offsetHeight||0};
+		return {
+			wb:el.offsetWidth||0,
+			hb:el.offsetHeight||0
+		};
 	},
 	getClient : function(e)
 	{
