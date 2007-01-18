@@ -278,7 +278,7 @@ jQuery.iSort = {
 				this.isSortable = null;
 			}
 		);
-	}
+	},
 	
 	build : function (o)
 	{
