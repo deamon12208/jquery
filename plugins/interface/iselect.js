@@ -12,7 +12,7 @@
  */
 
 jQuery.selectHelper = null;
-jQuery.selectKeyHelper = null;
+jQuery.selectKeyHelper = false;
 jQuery.selectdrug = null;
 jQuery.selectCurrent = [];	// For current selection
 jQuery.selectKeyDown = function(e) {
@@ -25,33 +25,15 @@ jQuery.selectKeyUp = function(e) {
 	jQuery.selectKeyHelper = false;
 };
 jQuery.selectstart = function(e) {
-	if (window.event) {
-		window.event.cancelBubble = true;
-		window.event.returnValue = false;
-		this.f.sx = window.event.clientX + document.documentElement.scrollLeft + document.body.scrollLeft;
-		this.f.sy = window.event.clientY + document.documentElement.scrollTop + document.body.scrollTop;
-	} else {
-		e.preventDefault();
-		e.stopPropagation();
-		this.f.sx = e.clientX;
-		this.f.sy = e.clientY;
-	}
-	this.f.pos = jQuery.iUtil.getPos(this);
-	if (
-		this.clientWidth &&
-		(
-			(this.f.pos.x + this.clientWidth) < this.f.sx
-			||
-			(this.f.pos.y + this.clientHeight) < this.f.sy
-		)
-	) {
-		return;
-	}
-	this.f.sx --;
-	this.f.sy --;
+	this.f.pointer = jQuery.iUtil.getPointer(e);
+	this.f.pos = jQuery.extend(
+		jQuery.iUtil.getPosition(this), 
+		jQuery.iUtil.getSize(this)
+	);
+	
 	this.f.scr = jQuery.iUtil.getScroll(this);
-	this.f.pos.sx += this.f.scr.l;
-	this.f.pos.sy += this.f.scr.t;
+	this.f.pointer.x -= this.f.pos.x;
+	this.f.pointer.y -= this.f.pos.y;
 	jQuery(this).append(jQuery.selectHelper.get(0));
 	if (this.f.hc)
 		jQuery.selectHelper.addClass(this.f.hc).css('display','block');
@@ -64,9 +46,6 @@ jQuery.selectstart = function(e) {
 	);
 	if (this.f.o) {
 		jQuery.selectHelper.css('opacity', this.f.o);
-		if (window.ActiveXObject) {
-			jQuery.selectHelper.css('filter', 'alpha(opacity=' + this.f.o * 100 + ')');
-		}
 	}
 
 	jQuery.selectdrug = this;
@@ -75,7 +54,12 @@ jQuery.selectstart = function(e) {
 	this.f.el.each(
 		function ()
 		{
-			this.pos = jQuery.iUtil.getPos(this);
+			this.pos = {
+				x: this.offsetLeft + (this.currentStyle && !jQuery.browser.opera ?parseInt(this.currentStyle.borderLeftWidth)||0:0) + (jQuery.selectdrug.scrollLeft||0), 
+				y: this.offsetTop + (this.currentStyle && !jQuery.browser.opera ?parseInt(this.currentStyle.borderTopWidth)||0:0) + (jQuery.selectdrug.scrollTop||0),
+				wb: this.offsetWidth,
+				hb: this.offsetHeight
+			};
 			if (this.s == true) {
 				if (jQuery.selectKeyHelper == false) {
 					this.s = false;
@@ -89,112 +73,77 @@ jQuery.selectstart = function(e) {
 			}
 		}
 	);
-	jQuery.selectcheck(null, this.f.sx + 1, this.f.sy + 1, this);
+	jQuery.selectcheck.apply(this, [e]);
+	jQuery(document)
+		.bind('mousemove', jQuery.selectcheck)
+		.bind('mouseup', jQuery.selectstop);
+	return false;
 };
-jQuery.selectcheck = function(e, nx, ny, el)
+jQuery.selectcheck = function(e)
 {
 	if(!jQuery.selectdrug)
 		return;
-	if (e) {
-		if (window.event) {
-			window.event.cancelBubble = true;
-			window.event.returnValue = false;
-			nx = window.event.clientX + document.documentElement.scrollLeft + document.body.scrollLeft;
-			ny = window.event.clientY + document.documentElement.scrollTop + document.body.scrollTop;
-		} else {
-			e.preventDefault();
-			e.stopPropagation();
-			nx = e.clientX;
-			ny = e.clientY;
-		}
+	jQuery.selectcheckApply.apply(jQuery.selectdrug, [e]);
+};
+jQuery.selectcheckApply = function(e)
+{
+	if(!jQuery.selectdrug)
+		return;
+	var pointer = jQuery.iUtil.getPointer(e);
+	
+	var scr = jQuery.iUtil.getScroll(jQuery.selectdrug);
+	pointer.x += scr.l - this.f.scr.l - this.f.pos.x;
+	pointer.y += scr.t - this.f.scr.t - this.f.pos.y;
+	
+	var sx = Math.min(pointer.x, this.f.pointer.x);
+	var sw = Math.min(Math.abs(pointer.x - this.f.pointer.x), Math.abs(this.f.scr.w - sx));
+	var sy = Math.min(pointer.y, this.f.pointer.y);
+	var sh = Math.min(Math.abs(pointer.y - this.f.pointer.y), Math.abs(this.f.scr.h - sy));
+	if (this.scrollTop > 0 && pointer.y - 20 < this.scrollTop) {
+		var diff = Math.min(scr.t, 10);
+		sy -= diff;
+		sh += diff;
+		this.scrollTop -= diff;
+	} else if (this.scrollTop+ this.f.pos.h < this.f.scr.h && pointer.y + 20 > this.scrollTop + this.f.pos.h) {
+		var diff = Math.min(this.f.scr.h - this.scrollTop, 10);
+		this.scrollTop += diff;
+		if (this.scrollTop != scr.t)
+			sh += diff;
 	}
-	if (!el) {
-		el = this;
-	}
-	if (el.clientWidth && nx > (el.f.pos.x + el.clientWidth)) {
-		nx = el.f.pos.x + el.clientWidth;
-	}
-	if (el.clientHeight && ny > (el.f.pos.y + el.clientHeight)) {
-		ny = el.f.pos.y + el.clientHeight;
-	}
-	scr = jQuery.iUtil.getScroll(el);
-	mt = ny - el.f.pos.y;
-	mb = el.f.pos.y + el.f.pos.h - ny;
-	ml = nx - el.f.pos.x;
-	mr = el.f.pos.x + el.f.pos.w - nx;
-	if (mt < 40 && el.scrollTop > 0){
-		if (el.scrollTop > 10) {
-			el.scrollTop -= 10;
-			el.f.sy += 10;
-		} else {
-			el.f.sy += el.scrollTop;
-			el.scrollTop = 0;
-		}
-	} else if (mb < 40 && el.scrollTop < (el.scrollHeight - el.f.pos.h)) {
-		if ((el.scrollHeight - el.f.pos.h - el.scrollTop) > 10) {
-			el.scrollTop += 10;
-			el.f.sy -= 10;
-		} else {
-			el.f.sy -= el.scrollHeight - el.f.pos.h - el.scrollTop;
-			el.scrollTop = el.scrollHeight - el.f.pos.h;
-		}
-	}
-	if (ml < 40 && el.scrollLeft > 0){
-		if (el.scrollLeft > 10) {
-			el.scrollLeft -= 10;
-			el.f.sx += 10;
-		} else {
-			el.f.sx += el.scrollLeft;
-			el.scrollLeft = 0;
-		}
-	} else if (mr < 40 && el.scrollLeft < (el.scrollWidth - el.f.pos.w)) {
-		if ((el.scrollWidth - el.f.pos.w - el.scrollLeft) > 10) {
-			el.scrollLeft += 10;
-			el.f.sx -= 10;
-		} else {
-			el.f.sx -= el.scrollWidth - el.f.pos.w - el.scrollLeft;
-			el.scrollLeft = el.scrollWidth - el.f.pos.w;
-		}
-	}
-
-	if (nx > el.f.sx){
-		sx = el.f.sx;
-		sw = nx - el.f.sx;
-	} else {
-		sx = nx;
-		sw = el.f.sx - nx;
-	}
-	if (ny > el.f.sy){
-		sy = el.f.sy;
-		sh = ny - el.f.sy;
-	} else {
-		sy = ny;
-		sh = el.f.sy - ny;
+	if (this.scrollLeft > 0 && pointer.x - 20 < this.scrollLeft) {
+		var diff = Math.min(scr.l, 10);
+		sx -= diff;
+		sw += diff;
+		this.scrollLeft -= diff;
+	} else if (this.scrollLeft+ this.f.pos.w < this.f.scr.w && pointer.x + 20 > this.scrollLeft + this.f.pos.w) {
+		var diff = Math.min(this.f.scr.w - this.scrollLeft, 10);
+		this.scrollLeft += diff;
+		if (this.scrollLeft != scr.l)
+			sw += diff;
 	}
 	jQuery.selectHelper.css(
 		{
-			left:	sx + scr.l - el.f.pos.x + 'px',
-			top:	sy + scr.t - el.f.pos.y + 'px',
+			left:	sx + 'px',
+			top:	sy + 'px',
 			width:	sw + 'px',
 			height:	sh + 'px'
 		}
 	);
-	jQuery.selectHelper.l = sx + scr.l;
-	jQuery.selectHelper.t = sy + scr.t;
+	jQuery.selectHelper.l = sx + this.f.scr.l;
+	jQuery.selectHelper.t = sy + this.f.scr.t;
 	jQuery.selectHelper.r = jQuery.selectHelper.l + sw;
 	jQuery.selectHelper.b = jQuery.selectHelper.t + sh;
 	jQuery.selectedone = false;
-	el.f.el.each(
+	this.f.el.each(
 		function () {
 			// Locate the current element in the current selection
 			iIndex = jQuery.selectCurrent.indexOf(jQuery.attr(this, 'id'));
-
 			// In case we are currently OVER an item
 			if (
 				! ( this.pos.x > jQuery.selectHelper.r
-				|| (this.pos.x + this.pos.w) < jQuery.selectHelper.l
+				|| (this.pos.x + this.pos.wb) < jQuery.selectHelper.l
 				|| this.pos.y > jQuery.selectHelper.b
-				|| (this.pos.y + this.pos.h) < jQuery.selectHelper.t
+				|| (this.pos.y + this.pos.hb) < jQuery.selectHelper.t
 				)
 			)
 			{
@@ -230,9 +179,19 @@ jQuery.selectcheck = function(e, nx, ny, el)
 			}
 		}
 	);
+	return false;
 };
 jQuery.selectstop = function(e)
 {
+	if(!jQuery.selectdrug)
+		return;
+	jQuery.selectstopApply.apply(jQuery.selectdrug, [e]);
+};
+jQuery.selectstopApply = function(e)
+{
+	jQuery(document)
+		.unbind('mousemove', jQuery.selectcheck)
+		.unbind('mouseup', jQuery.selectstop);
 	if(!jQuery.selectdrug)
 		return;
 	jQuery.selectHelper.css('display','none');
@@ -310,7 +269,7 @@ jQuery.fn.Selectable = function(o)
 				onselectstop : o.onselectstop ? o.onselectstop : false
 			};
 			this.f.el = jQuery('.' + o.accept);
-			jQuery(this).bind('mousedown', jQuery.selectstart).bind('mousemove', jQuery.selectcheck).bind('mouseup', jQuery.selectstop).css('position', 'relative');
+			jQuery(this).bind('mousedown', jQuery.selectstart).css('position', 'relative');
 		}
 	);
 };
