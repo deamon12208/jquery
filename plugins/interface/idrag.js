@@ -228,7 +228,7 @@ jQuery.iDrag =	{
 			jQuery.iDrag.helper.get(0).firstChild.style.display = 'none';
 		}
 		if (elm.dragCfg.onStart)
-			elm.dragCfg.onStart.apply(elm, [clonedEl]);
+			elm.dragCfg.onStart.apply(elm, [clonedEl, elm.dragCfg.oR.x, elm.dragCfg.oR.y]);
 		if (jQuery.iDrop && jQuery.iDrop.count > 0 ){
 			jQuery.iDrop.highlight(elm);
 		}
