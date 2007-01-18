@@ -93,7 +93,7 @@ jQuery.iDrag =	{
 				dy = elm.dragCfg.currentPointer.y - parentPos.y - sliderSize.hb/2 - sliderPos.y;
 				jQuery.iSlider.dragmoveBy(elm, [dx, dy]);
 		}
-		return false;
+		return jQuery.selectKeyHelper||false;
 	},
 
 	dragstart : function(e)
