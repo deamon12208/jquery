@@ -130,7 +130,7 @@ jQuery.iDrag =	{
 
 		jQuery.iDrag.helper.empty();
 		clonedEl = elm.cloneNode(true);
-		jQuery.iUtil.purgeEvents(clonedEl);
+		
 		jQuery(clonedEl).css(
 			{
 				display:	'block',
