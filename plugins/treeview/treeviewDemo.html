@@ -7,12 +7,13 @@
 	
 	<link rel="stylesheet" type="text/css" href="treeView.php-Dateien/style.css" media="all" />
 	<script src="../../jquery/dist/jquery.js" type="text/javascript"></script>
-	<script src="jquery.tree.js" type="text/javascript"></script>
+	<script src="jquery.treeview.js" type="text/javascript"></script>
+	<script src="../metadata/metadata.js" type="text/javascript"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
-		$("ul.tv:first").Tree();
-		$("ul.tv:eq(1)").Tree({ speed: "normal" });
-		$("ul.tv:last").Tree({ speed: "fast"});
+		$("ul.treeview:first").Treeview();
+		$("ul.treeview:eq(1)").Treeview({ speed: "normal" });
+		$("ul.treeview:last").Treeview({ speed: "fast"});
 	});
 	</script>
 	<style type="text/css">
@@ -30,21 +31,21 @@
 			color: #333;
 			padding-left: 20px;
 		} /* Reset Font Size */
-	
-		ul.tv, .tv ul { 
+
+		ul.treeview, .treeview ul { 
 			padding: 0;
 			margin: 0;
 			list-style: none;
 		}	
 
-		.tv li { 
+		.treeview li { 
 			position: relative;
 			margin: 0;
 			padding: 4px 0 3px 20px;
 			z-index: 10;
 		}
-		
-		.tv div.hitarea { /* Clickable Area */
+
+		.treeview div.hitarea {
 			_background: #fff;
 			_filter: alpha(opacity=0);
 			height: 15px;
@@ -57,16 +58,16 @@
 			z-index: 50;
 		}
 
-  	.tv li { background: url(images/tv-item.gif) 0 0 no-repeat; }
-  	.tv .collapsable { background-image: url(images/tv-collapsable.gif); }
-  	.tv .expandable { background-image: url(images/tv-expandable.gif); }
-  	.tv .last { background-image: url(images/tv-item-last.gif); }
-  	.tv .lastCollapsable { background-image: url(images/tv-collapsable-last.gif); }
-  	.tv .lastExpandable { background-image: url(images/tv-expandable-last.gif); }
+  	.treeview li { background: url(images/tv-item.gif) 0 0 no-repeat; }
+  	.treeview .collapsable { background-image: url(images/tv-collapsable.gif); }
+  	.treeview .expandable { background-image: url(images/tv-expandable.gif); }
+  	.treeview .last { background-image: url(images/tv-item-last.gif); }
+  	.treeview .lastCollapsable { background-image: url(images/tv-collapsable-last.gif); }
+  	.treeview .lastExpandable { background-image: url(images/tv-expandable-last.gif); }
 
 	</style></head><body>
 	<h4>Sample 1 - default animation (none at all)</h4>
-	<ul class="tv">
+	<ul class="treeview">
 		<li>Item 1
 			<ul>
 				<li>Item 1.1</li>
@@ -89,7 +90,7 @@
 	</ul>
 	
 	<h4>Sample 2 - normal animation</h4>
-	<ul class="tv">
+	<ul class="treeview {speed:'normal'}">
 		<li>Item 1</li>
 		<li>
 			Item 2
@@ -114,7 +115,7 @@
 	</ul>	
 	
 	<h4>Sample 3 - fast animations</h4>
-	<ul class="tv">
+	<ul class="treeview {speed:'fast'}">
 	<li class="closed">Item 1
 		<ul>
 			<li>Item 1.0
