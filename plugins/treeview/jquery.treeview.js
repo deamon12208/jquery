@@ -96,6 +96,18 @@
 		this.toggleAll = buildControlMethod();
 	}
 
+	$.fn.TreeControl = function(controller) {
+		$("a:eq(0)", this).click(function() {
+			controller.collapseAll();
+		});
+		$("a:eq(1)", this).click(function() {
+			controller.expandAll();
+		});
+		$("a:eq(2)", this).click(function() {
+			controller.toggleAll();
+		});
+		return this;
+	}
 	
 	$.fn.collapse = function() {
 		$(".collapsable>ul", this).hide();

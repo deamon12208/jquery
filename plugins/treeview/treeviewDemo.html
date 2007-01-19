@@ -12,15 +12,7 @@
 	<script type="text/javascript">
 	$(document).ready(function(){
 		var controller = $("ul.treeview:first").Treeview();
-		$("#collapse").click(function() {
-			controller.collapseAll();
-		});
-		$("#expand").click(function() {
-			controller.expandAll();
-		});
-		$("#toggle").click(function() {
-			controller.toggleAll();
-		});
+		$("#treecontrol").TreeControl(controller);
 		
 		$("ul.treeview:eq(1)").Treeview({ speed: "normal" });
 		$("ul.treeview:last").Treeview({ speed: "fast"});
@@ -77,10 +69,10 @@
 
 	</style></head><body>
 	<h4>Sample 1 - default animation (none at all)</h4>
-	<div>
-		<a id="collapse" href="#">Collapse All</a>
-		<a id="expand" href="#">Expand All</a>
-		<a id="toggle" href="#">Toggle All</a>
+	<div id="treecontrol">
+		<a href="#">Collapse All</a>
+		<a href="#">Expand All</a>
+		<a href="#">Toggle All</a>
 	</div>
 	<ul class="treeview">
 		<li>Item 1
