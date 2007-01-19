@@ -46,6 +46,16 @@
  */
  
 /**
+ * Takes a TreeController and applies it to a group of three links.
+ *
+ * TODO: Example
+ *
+ * @name TreeControl
+ * @type jQuery
+ * @cat Plugins/Treeview
+ */ 
+ 
+/**
  * Hides all branches of the tree.
  *
  * @name TreeController.collapseAll
