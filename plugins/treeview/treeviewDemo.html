@@ -11,7 +11,17 @@
 	<script src="../metadata/metadata.js" type="text/javascript"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
-		$("ul.treeview:first").Treeview();
+		var controller = $("ul.treeview:first").Treeview();
+		$("#collapse").click(function() {
+			controller.collapseAll();
+		});
+		$("#expand").click(function() {
+			controller.expandAll();
+		});
+		$("#toggle").click(function() {
+			controller.toggleAll();
+		});
+		
 		$("ul.treeview:eq(1)").Treeview({ speed: "normal" });
 		$("ul.treeview:last").Treeview({ speed: "fast"});
 	});
@@ -67,6 +77,11 @@
 
 	</style></head><body>
 	<h4>Sample 1 - default animation (none at all)</h4>
+	<div>
+		<a id="collapse" href="#">Collapse All</a>
+		<a id="expand" href="#">Expand All</a>
+		<a id="toggle" href="#">Toggle All</a>
+	</div>
 	<ul class="treeview">
 		<li>Item 1
 			<ul>
@@ -86,7 +101,12 @@
 				<li>Item 2.2</li>
 			</ul>
 		</li>
-		<li>Item 3</li>
+		<li class="closed">Item 3
+			<ul>
+				<li>Item 3.1</li>
+			</ul>
+		</li>
+		<li>Item 4</li>
 	</ul>
 	
 	<h4>Sample 2 - normal animation</h4>

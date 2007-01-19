@@ -40,9 +40,35 @@
  * @param Map options
  * @option speed String|Number Speed of animation, see animate() for details. Default: null, no animation
  * @option closed String Mark li elements with this class to collapse them at first. Default: "closed"
+ * @type TreeController
  * @name Treeview
  * @cat Plugins/Treeview
  */
+ 
+/**
+ * Hides all branches of the tree.
+ *
+ * @name TreeController.collapseAll
+ * @type TreeController
+ * @cat Plugins/Treeview
+ */
+ 
+/**
+ * Shows all branches of the tree.
+ *
+ * @name TreeController.expandAll
+ * @type TreeController
+ * @cat Plugins/Treeview
+ */
+ 
+/**
+ * Toggles all branches of the tree, showing collapsed and hiding expanded.
+ *
+ * @name TreeController.toggleAll
+ * @type TreeController
+ * @cat Plugins/Treeview
+ */
+ 
 (function($) {
 
 	$.fn.swapClass = function(c1,c2) {
@@ -55,13 +81,33 @@
 			}					
 		});
 	};
+	
+	function TreeController(tree, settings, toggler) {
+		function buildControlMethod(filter) {
+			return function() {
+				toggler( $("div." + settings.hitarea, tree).filter(function() {
+					return filter ? $(this).parent("." + filter).length : true;
+				}) );
+				return this;
+			}
+		}
+		this.collapseAll = buildControlMethod(settings.collapsable);
+		this.expandAll = buildControlMethod(settings.expandable);
+		this.toggleAll = buildControlMethod();
+	}
+
+	
+	$.fn.collapse = function() {
+		$(".collapsable>ul", this).hide();
+		return this;
+	}
 
 	// define plugin method, currently no options
 	$.fn.Treeview = function(settings) {
 	
 		// handle toggle event
-		function toggler() {
-			$(this).parent()
+		var toggler = function(start) {
+			$(start.type ? this : start).parent()
 				.swapClass(settings.collapsable, settings.expandable)
 				.swapClass(settings.lastCollapsable, settings.lastExpandable)
 				.find(">ul")
@@ -106,6 +152,6 @@
 			.toggle( toggler, toggler );
 		
 		// return unmodified this for chaining
-		return this;
+		return new TreeController(this, settings, toggler);
 	}
 })(jQuery);
