@@ -33,7 +33,7 @@ jQuery.iUtil = {
 			el = el.offsetParent;
 		}
 		el = e;
-		while (el && el.tagName.toLowerCase() != 'body')
+		while (el && el.tagName  && el.tagName.toLowerCase() != 'body')
 		{
 			x -= el.scrollLeft||0;
 			y -= el.scrollTop||0;
