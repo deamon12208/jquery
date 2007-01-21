@@ -92,43 +92,38 @@
 		});
 	};
 	
-	function TreeController(tree, settings, toggler) {
-		function buildControlMethod(filter) {
+	$.fn.TreeControl = function(controller) {
+		function build(method) {
 			return function() {
-				toggler( $("div." + settings.hitarea, tree).filter(function() {
-					return filter ? $(this).parent("." + filter).length : true;
-				}) );
-				return this;
+				controller[method]();
+				return false;
 			}
 		}
-		this.collapseAll = buildControlMethod(settings.collapsable);
-		this.expandAll = buildControlMethod(settings.expandable);
-		this.toggleAll = buildControlMethod();
-	}
-
-	$.fn.TreeControl = function(controller) {
-		$("a:eq(0)", this).click(function() {
-			controller.collapseAll();
-		});
-		$("a:eq(1)", this).click(function() {
-			controller.expandAll();
-		});
-		$("a:eq(2)", this).click(function() {
-			controller.toggleAll();
-		});
+		$(":eq(0)", this).click( build("collapseAll") );
+		$(":eq(1)", this).click( build("expandAll") );
+		$(":eq(2)", this).click( build("toggleAll") ); 
 		return this;
 	}
 	
-	$.fn.collapse = function() {
-		$(".collapsable>ul", this).hide();
-		return this;
-	}
-
 	// define plugin method, currently no options
 	$.fn.Treeview = function(settings) {
 	
+		function TreeController(tree) {
+			function build(filter) {
+				return function() {
+					toggler( $("div." + settings.hitarea, tree).filter(function() {
+						return filter ? $(this).parent("." + filter).length : true;
+					}) );
+					return this;
+				}
+			}
+			this.collapseAll = build(settings.collapsable);
+			this.expandAll = build(settings.expandable);
+			this.toggleAll = build();
+		}
+	
 		// handle toggle event
-		var toggler = function(start) {
+		function toggler(start) {
 			$(start.type ? this : start).parent()
 				.swapClass(settings.collapsable, settings.expandable)
 				.swapClass(settings.lastCollapsable, settings.lastExpandable)
@@ -139,6 +134,7 @@
 		// allow everyone to define their own classes, and animations
 		settings = $.extend({
 			speed: null,
+			control: null,
 			closed: "closed",
 			expandable: "expandable",
 			collapsable: "collapsable",
@@ -147,6 +143,8 @@
 			last: "last",
 			hitarea: "hitarea"
 		}, settings);
+		
+		this.addClass("treeview");
 		
 		// mark last tree items
 		$("li:last-child", this).addClass("last");
@@ -173,7 +171,10 @@
 			// apply toggle event to hitarea
 			.toggle( toggler, toggler );
 		
-		// return unmodified this for chaining
-		return new TreeController(this, settings, toggler);
+		var control = new TreeController(this);
+		if(settings.control)
+			$(settings.control).TreeControl(control)
+		
+		return control;
 	}
 })(jQuery);
