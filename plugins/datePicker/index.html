@@ -6,7 +6,8 @@
 <link rel="stylesheet" type="text/css" href="styles.css" title="default" media="screen" />
 
 <script type="text/javascript" src="/mint/?js"></script>
-<script type="text/javascript" src="jquery.js"></script>
+<!--<script type="text/javascript" src="jquery.js"></script>-->
+<script type="text/javascript" src="jquery-1.1.js"></script>
 <script type="text/javascript" src="datePicker.js"></script>
 <!--<script type="text/javascript" src="datePicker_source.js"></script>-->
 <script type="text/javascript">
@@ -68,7 +69,7 @@ function init()
 	<p>No validation is performed on the text input when the form is submitted and it is presumed that the server processing the form is expecting dates in the format you specify.</p>
 	
 	<h2>Version</h2>
-	<p>r33 - released 26th November [<a href="#changelog">changelog</a>]</p>
+	<p>r1141 - released 21st January [<a href="#changelog">changelog</a>]</p>
 	
 	<h2>Example</h2>
 	<form action="#" method="post">
@@ -114,7 +115,7 @@ $.datePicker.setLanguageStrings(
 	
 	<h2>Requirements</h2>
 	<ul>
-		<li><a href="http://jquery.com/">jQuery</a> - obviously! I've tested against <a href="jquery.js">1.0.3 [rev 501]</a>.</li>
+		<li><a href="http://jquery.com/">jQuery</a> - obviously! I've tested against <a href="jquery-1.1.js">1.1 [rev 1073]</a>.</li>
 	</ul>
 		
 	<h2>Download</h2>
@@ -126,6 +127,7 @@ $.datePicker.setLanguageStrings(
 	
 	<h2 id="changelog">Changelog</h2>
 	<ul>
+		<li>21st January 2007 - updated jQuery to 1.1 and made changes to allow plugin to function with it [r1141]</li>
 		<li>26th November 2006 - fix so that the weekend styling works when firstDayOfWeek != 0 (thanks to Nicko Cadell for pointing out the careless error) [r33]</li>
 		<li>25th November 2006 - change to add styles for weekend and weekday to the table [r32]</li>
 		<li>23rd November 2006 - change to allow you to click directly on the input field by passing inputClick:true when you create your datePickers (thanks to <a href="http://www.texotela.co.uk/">Sam Collett</a>) [r31]</li>

@@ -7,7 +7,7 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *
  * $LastChangedDate: 2006-11-26 17:52:59 +0000 (Sun, 26 Nov 2006) $
- * $Rev: 33 $
+ * $Rev$
  */
 
 jQuery.datePicker = function()
@@ -92,7 +92,7 @@ jQuery.datePicker = function()
 			// not in first display month so show a previous link
 			firstMonth = false;
 			var lastMonth = new Date(d.getFullYear(), d.getMonth()-1, 1);
-			var prevLink = jQuery("<a>").href('javascript:;').html(navLinks.p).click(function()
+			var prevLink = jQuery("<a>").attr('href', 'javascript:;').html(navLinks.p).click(function()
 			{
 				jQuery.datePicker.changeMonth(lastMonth, this);
 				return false;
@@ -107,7 +107,7 @@ jQuery.datePicker = function()
 			// in the last month - no next link
 			finalMonth = false;
 			var nextMonth = new Date(d.getFullYear(), d.getMonth()+1, 1);
-			var nextLink = jQuery("<a>").href('javascript:;').html(navLinks.n).click(function()
+			var nextLink = jQuery("<a>").attr('href', 'javascript:;').html(navLinks.n).click(function()
 			{
 				jQuery.datePicker.changeMonth(nextMonth, this);
 				return false;
@@ -208,9 +208,9 @@ jQuery.datePicker = function()
 		// the memory is freed. If they aren't chained then pressing next or previous doesn't double the used
 		// memory so only one chunk of memory is used when you open the calendar (which is also freed when you
 		// close the calendar).
-		jQuery('div.popup-calendar a', _openCal).unbind();
-		jQuery('div.popup-calendar', _openCal).empty();
-		jQuery('div.popup-calendar', _openCal).remove();
+		jQuery('div.popup-calendar a', _openCal[0]).unbind();
+		jQuery('div.popup-calendar', _openCal[0]).empty();
+		jQuery('div.popup-calendar', _openCal[0]).remove();
 		_openCal.append(c);
 	};
 	var _closeDatePicker = function()
@@ -259,11 +259,13 @@ jQuery.datePicker = function()
 				_closeDatePicker();
 			}
 			this.blur();
-			var input = jQuery('input', jQuery(this).findClosestParent('input'))[0];
+			var input = jQuery('input', jQuery(this).findClosestParent('input')[0])[0];
+			
 			_firstDate = input._startDate;
 			_lastDate = input._endDate;
 			_firstDayOfWeek = input._firstDayOfWeek;
 			_openCal = jQuery(this).findClosestParent('div.popup-calendar');
+			
 			var d = jQuery(input).val();
 			if (d != '') {
 				if (_dateToStr(_strToDate(d)) == d) {
@@ -295,7 +297,7 @@ jQuery.datePicker = function()
 		selectDate: function(d, ele)
 		{
 			selectedDate = d;
-			var $theInput = jQuery('input', jQuery(ele).findClosestParent('input'));
+			var $theInput = jQuery('input', jQuery(ele).findClosestParent('input')[0]);
 			$theInput.val(d);
 			$theInput.trigger('change');
 			_closeDatePicker(ele);
@@ -369,7 +371,7 @@ jQuery.fn.findClosestParent = function(s)
 {
 	var ele = this;
 	while (true) {
-		if (jQuery(s, ele).length > 0) {
+		if (jQuery(s, ele[0]).length > 0) {
 			return (ele);
 		}
 		ele = ele.parent();
@@ -401,7 +403,7 @@ jQuery.fn.datePicker = function(a)
 			).after(
 				calBut
 			);
-			calBut.click(jQuery.datePicker.show);
+			calBut.bind('click', jQuery.datePicker.show);
 			jQuery.datePicker.setInited(this);
 		}
 	});
