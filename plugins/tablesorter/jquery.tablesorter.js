@@ -6,7 +6,7 @@
  * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
  *
- * jQueryDate: 2006-08-21 14:43:23 +0000 (Mon, 21 Aug 2006) jQuery
+ * jQueryDate: 
  * jQueryAuthor: Christian jQuery
  *
  */
@@ -29,38 +29,18 @@ jQuery.fn.tableSorter = function(o) {
 		useCache: true,
 		debug: false,
 		textExtraction: 'simple',
-		features: {
-
-		},
-		styles: {
-
-		},
-
-
-		// text extraction stuff
-		/**
-		* @param textExtraction
-		* @type string
-		* @example textExtraction: 'simple'
-		*/
-
-		/**
-		* @param textExtractionCustom
-		* @type object
-		* @example textExtractionCustom: { 1:function(o) { return o.innerHTML;} }
-		*/
 		textExtractionCustom: false,
-		bind: false,
+		bind: true,
 		addHeaderLink: false,
 		lockedSortDir: false,
 		dateFormat: 'mm/dd/yyyy' /** us default, uk dd/mm/yyyy */
 	};
 
+	/** init transfer object */
+	
+ 
 	return this.each(function(){
-
-
-
-
+	
 		/** merge default with custom options */
 		jQuery.extend(defaults, o);
 
@@ -72,6 +52,7 @@ jQuery.fn.tableSorter = function(o) {
 		var COLUMN_CELL;				/** stores the current cell object */
 		var COLUMN_DIR;					/** stores the current soring direction */
 		var COLUMN_HEADER_LENGTH;		/** stores the columns header length */
+		var COLUMN_ROW_LENGTH;
 		var ROW_LAST_HIGHLIGHT_OBJ = false;
 		var COLUMN_LAST_INDEX = -1;
 		var COLUMN_LAST_DIR = defaults.sortDir;
@@ -82,18 +63,39 @@ jQuery.fn.tableSorter = function(o) {
 		if(defaults.stripRowsOnStartUp && defaults.stripingRowClass) {
 			jQuery.tableSorter.utils.stripRows(oTable,defaults);
 		}
-
+		
+		/** this is consired evil */
+		jQuery.extend(this, {
+			getTransfer: function() {
+				return this.data;
+			},
+			setTransfer: function(d) {
+				this.data = d
+			},
+			removeTransfer: function() {
+				this.data = null;
+			}
+			
+		})
+		
 		if(defaults.bind) {
-			//var fn = ;
-			jQuery(this).bind(defaults.bind,doSorting);
+			/** bind events to the tablesorter element */
+			jQuery(this).bind("resort",doSorting);
+			jQuery(this).bind("flushCache",flushCache);
+			
+			/** methods for appender */
+			jQuery(this).bind("getColumnData",getColumnData);
+			jQuery(this).bind("append",appendRow);
+			
+			
 		}
-
+		
+		
 		/** Store length of table rows. */
 		var tableRowLength = oTable.tBodies[0].rows.length-1;
 
 		/** Index column data. */
 		buildColumnDataIndex();
-
 
 		function buildColumnHeaders() {
 			var oFirstTableRow = oTable.rows[0];
@@ -131,7 +133,6 @@ jQuery.fn.tableSorter = function(o) {
 						}
 					}
 
-
 					if(defaults.headerClass) {
 						jQuery(oCell).addClass(defaults.headerClass);
 					}
@@ -149,21 +150,8 @@ jQuery.fn.tableSorter = function(o) {
 						});
 					}
 
-
-					//jQuery(oCell).append('<div class="filterIcon">&nbsp;</div>');
-
 					oCell.index = i;
 					oCell.count = defaults.sortDir;
-
-					/**
-					jQuery(".filterIcon",oCell).click(function(e) {
-						filterColumn(jQuery(this).parent(),jQuery(this).parent()[0].index);
-						//e.preventDefault();
-					});
-					*/
-
-
-
 				}
 			}
 			/** blah, add comment later, code is pretty self explanable. */
@@ -186,14 +174,15 @@ jQuery.fn.tableSorter = function(o) {
 		/** break out and put i jQuery.tableSorter? */
 		function buildColumnDataIndex() {
 			/** make colum data. */
-			var l = oTable.tBodies[0].rows.length;
+			COLUMN_ROW_LENGTH = oTable.tBodies[0].rows.length;
+			var l = COLUMN_ROW_LENGTH;
 			for (var i=0;i < l; i++) {
 				/** Add the table data to main data array */
 				COLUMN_DATA.push(oTable.tBodies[0].rows[i]);
 			}
 			/** when done, build headers. */
 			buildColumnHeaders();
-		}
+		}	
 		function addColGroup(columnsHeader) {
 			var oSampleTableRow = oTable.rows[1];
 			/** adjust header to the sample rows */
@@ -202,50 +191,44 @@ jQuery.fn.tableSorter = function(o) {
 					jQuery(columnsHeader.cells[i]).css("width",oSampleTableRow.cells[i].clientWidth + "px");
 			}
 		}
-
-		function filterColumn(oCell,index) {
-
-			COLUMN_INDEX = index;
-
-			var flatData = jQuery.tableSorter.data.flatten(COLUMN_DATA,COLUMN_SORTER_CACHE,index);
-			var l = flatData.length;
-			var p = COLUMN_SORTER_CACHE[COLUMN_INDEX];
-			var f = jQuery.tableSorter.filter[p.filter];
-			var o = jQuery("#filter");
-			o.show().empty();
-			// sort to get min and max values.
-			flatData.sort(p.sorter);
-
-			f.render(o,flatData[0][1],flatData[l-1][1]);
-
-			// add buttons.
-			o.append('<div><input type="reset" value="clear"/><input type="submit" value="apply"/></div>');
-
-			jQuery('input[@type="submit"]',o).click(function() {
-				var min = jQuery('input[@name="min"]',o).val();
-				var max = jQuery('input[@name="max"]',o).val();
-				jQuery.tableSorter.filter.applyFilter(min,max);
-			});
-
-			jQuery('input[@type="reset"]',o).click(function() {
-				jQuery.tableSorter.filter.resetFilter();
-				o.hide();
-			});
-
-			var d = {
-				oTable: oTable,
-				defaults: defaults,
-				f: f,
-				data: flatData,
-				type: p.filter,
-				columnData: COLUMN_DATA,
-				index: COLUMN_INDEX,
-				lastIndex: COLUMN_LAST_INDEX
-			}
-
-			jQuery.tableSorter.filter.setData(d);
-
+		/** private clear cache method */
+		function flushCache() {
+			COLUMN_CACHE = [];
 		}
+		
+		function getColumnData() {
+			this.setTransfer(COLUMN_DATA);
+		}
+		
+		function appendRow() {
+			/** get from transfet object*/
+			var row = this.getTransfer();
+			/** append to table dom structure */
+			jQuery("> tbody",this).append(row);
+			/** add new row to column data */
+			addAppendedRowsToIndex();
+			/** flush column cache */
+			flushCache();
+			/** trigger resort */
+			doSorting();
+		}
+		
+		function addAppendedRowsToIndex() {
+			
+			var oldIndex = COLUMN_ROW_LENGTH;
+			COLUMN_ROW_LENGTH = oTable.tBodies[0].rows.length;
+			var newIndex = COLUMN_ROW_LENGTH;
+			
+			for (var i=oldIndex;i < newIndex; i++) {
+				/** Add the table data to main data array */
+				COLUMN_DATA.push(oTable.tBodies[0].rows[i]);
+			}
+		
+		
+		
+		}
+		
+		
 		function sortOnColumn(oCell,dir,index) {
 			/** trigger event sort start. */
 			if(tableRowLength > defaults.minRowsForWaitingMsg) {
@@ -327,11 +310,13 @@ jQuery.fn.sortStart = function(fn) {
 jQuery.fn.sortReload = function(fn) {
 	return this.bind("sortStart",fn);
 };
-
 jQuery.fn.sortStop = function(fn) {
 	return this.bind("sortStop",fn);
 };
 
+jQuery.fn.sortStop = function(fn) {
+	return this.bind("sortStop",fn);
+};
 
 
 jQuery.tableSorter = {
@@ -354,10 +339,12 @@ jQuery.tableSorter = {
 			} else {
 				return true
 			}
+		},
+		clear: function(cache) {
+			cache = [];
 		}
 	},
 	data: {
-
 		flatten: function(columnData,columnCache,columnIndex) {
 			var flatData = [];
 			var l = columnData.length;
@@ -466,11 +453,6 @@ jQuery.tableSorter = {
 				jQuery.tableSorter.utils.stripRows(o,defaults);
 			}
 			if(defaults.highlightClass) {
-				/**
-				if(lastIndex != index && lastIndex > -1) {
-					jQuery("tbody:first/tr",o).find("td:eq(" + lastIndex + ")").removeClass(defaults.highlightClass).end();
-				}
-				*/
 				jQuery("> tbody:first/tr",o).find("> td:eq(" + index + ")").addClass(defaults.highlightClass).end();
 			}
 			/** empty object, good practice! */
@@ -544,7 +526,6 @@ jQuery.tableSorter.parsers.generic = {
 	format: function(s) {
 		return s.toLowerCase();
 	},
-	filter: 'text',
 	sorter: jQuery.tableSorter.sorters.generic
 };
 
@@ -556,7 +537,6 @@ jQuery.tableSorter.parsers.currency = {
 	format: function(s) {
 		return parseFloat(s.replace(new RegExp(/[^0-9.]/g),''));
 	},
-	filter: 'numeric',
 	sorter: jQuery.tableSorter.sorters.numeric
 };
 jQuery.tableSorter.parsers.integer = {
@@ -573,12 +553,11 @@ jQuery.tableSorter.parsers.integer = {
 jQuery.tableSorter.parsers.floating = {
 	id: 'floating',
 	is: function(s) {
-		return s.match(new RegExp(/(\+|-)?[0-9]+\.[0-9]+((E|e)(\+|-)?[0-9]+)?/));
+		return s.match(new RegExp(/^(\+|-)?[0-9]+\.[0-9]+((E|e)(\+|-)?[0-9]+)?$/));
 	},
 	format: function(s) {
 		return parseFloat(s.replace(new RegExp(/,/),''));
 	},
-	filter: 'numeric',
 	sorter: jQuery.tableSorter.sorters.numeric
 };
 
@@ -599,7 +578,6 @@ jQuery.tableSorter.parsers.ipAddress = {
 		}
 		return r;
 	},
-	filter: 'numeric',
 	sorter: jQuery.tableSorter.sorters.numeric
 };
 jQuery.tableSorter.parsers.url = {
@@ -610,7 +588,6 @@ jQuery.tableSorter.parsers.url = {
 	format: function(s) {
 		return s.replace(new RegExp(/(https?|ftp|file):\/\//),'');
 	},
-	filter: 'text',
 	sorter: jQuery.tableSorter.sorters.generic
 };
 jQuery.tableSorter.parsers.isoDate = {
@@ -621,7 +598,6 @@ jQuery.tableSorter.parsers.isoDate = {
 	format: function(s) {
 		return parseFloat(new Date(s.replace(new RegExp(/-/g),'/')).getTime());
 	},
-	filter: 'date',
 	sorter: jQuery.tableSorter.sorters.numeric
 };
 jQuery.tableSorter.parsers.usLongDate = {
@@ -632,7 +608,6 @@ jQuery.tableSorter.parsers.usLongDate = {
 	format: function(s) {
 		return parseFloat((new Date(s)).getTime());
 	},
-	filter: 'date',
 	sorter: jQuery.tableSorter.sorters.numeric
 };
 jQuery.tableSorter.parsers.shortDate = {
@@ -652,7 +627,6 @@ jQuery.tableSorter.parsers.shortDate = {
 		}
 		return parseFloat((new Date(s)).getTime());
 	},
-	filter: 'date',
 	sorter: jQuery.tableSorter.sorters.numeric
 };
 jQuery.tableSorter.parsers.time = {
@@ -663,25 +637,8 @@ jQuery.tableSorter.parsers.time = {
     format: function(s) {
         return parseFloat((new Date("2000/01/01 " + s)).getTime());
     },
-    filter: 'date',
     sorter: jQuery.tableSorter.sorters.numeric
 };
-jQuery.tableSorter.parsers.checkbox = {
-    id: 'input',
-    is: function(s) {
-        return s.toLowerCase().match(/<input[^>]*checkbox[^>]*/i);;
-    },
-    format: function(s) {
-        var integer = 0;
-        if(s.toLowerCase().match(/<input[^>]*checked*/i)) {
-        	integer = 1;
-        }
-        return integer;
-    },
-    filter: 'checkbox',
-    sorter: jQuery.tableSorter.sorters.numeric
-};
-
 /** add parsers */
 jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.currency);
 jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.integer);
@@ -692,4 +649,3 @@ jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.ipAddress);
 jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.url);
 jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.time);
 jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.floating);
-jQuery.tableSorter.analyzer.add(jQuery.tableSorter.parsers.checkbox);
