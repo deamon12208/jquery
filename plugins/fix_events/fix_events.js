@@ -53,7 +53,7 @@
   
   var oldFix = $.event.fix;
   
-  $.event.fix = function(event) {
+  $.event.fix = function(event, el) {
     event = oldFix(event);
 
 		var originalEvent = event;
@@ -70,6 +70,10 @@
     // Fix relatedTarget
     if ( isUndefined(event.relatedTarget) && isDefined(event.fromElement) )
       event.relatedTarget = (event.fromElement == event.target) ? event.toElement : event.fromElement;
+    
+    // Fix currentTarget
+    if ( isUndefined(event.currentTarget) )
+      event.currentTarget = el;    
     
     // Fix offsetX/offsetY
     if ( isUndefined(event.offsetX) && isDefined(event.pageX) ) {
@@ -107,7 +111,82 @@
     if ( isUndefined(event.charCode) && event.type == "keypress" )
       event.charCode = event.keyCode;
       
+    if ( event.type == "keydown" )
+      event.currentTarget.keyCode = event.keyCode;
+      
+    if ( event.type == "keypress" ) {
+      event.keyCode = event.currentTarget.keyCode;
+      event.currentTarget.keyChar = event.keyChar;
+    }
+      
+    if ( event.type == "keyup" ) {
+      event.currentTarget.keyCode = undefined;
+      event.keyChar = event.currentTarget.keyChar;
+      event.currentTarget.keyChar = undefined; 
+    }
+      
   	return event;  
   } 
- 
+  
+  $.event.handle = function(event) {
+  	if ( typeof jQuery == "undefined" ) return;
+  
+  	// Handle the second event of a trigger
+  	if ( jQuery.event.triggered ) {
+  		jQuery.event.triggered = false;
+  		return;
+  	}
+  
+  	// Empty object is for triggered events with no data
+  	event = jQuery.event.fix( event || window.event || {}, this ); 
+  
+  	// returned undefined or false
+  	var returnValue;
+  
+  	var c = this.events[event.type];
+  
+  	var args = [].slice.call( arguments, 1 );
+  	args.unshift( event );
+  
+  	for ( var j in c ) {
+  		// Pass in a reference to the handler function itself
+  		// So that we can later remove it
+  		args[0].handler = c[j];
+  		args[0].data = c[j].data;
+  
+  		if ( c[j].apply( this, args ) === false ) {
+  			event.preventDefault();
+  			event.stopPropagation();
+  			returnValue = false;
+  		}
+  	}
+  
+  	// Clean up added properties in IE to prevent memory leak
+  	if (jQuery.browser.msie) event.target = event.preventDefault = event.stopPropagation = event.handler = event.data = null;
+  
+  	return returnValue;
+  }
+
+  var blankFn = function() { };
+
+  $.fn.bind = function( type, data, fn ) {
+		return this.each(function(){
+			jQuery.event.add( this, type, fn || data, data );
+      if(type == "keypress") {
+        $(this).bind("keydown", blankFn);
+        $(this).bind("keyup", blankFn);
+      }
+		});
+	};
+  
+	$.fn.unbind = function( type, fn ) {
+  	return this.each(function(){
+  		jQuery.event.remove( this, type, fn );
+      if(type == "keypress") {
+        $(this).unbind("keydown", blankFn);
+        $(this).unbind("keyup", blankFn);
+      }
+  	});
+  };
+
 })(jQuery);
