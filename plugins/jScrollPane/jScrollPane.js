@@ -21,6 +21,7 @@
  *								scrollbarWidth - the width of the generated scrollbar in pixels
  *								scrollbarMargin - the amount of space to leave on the side of the scrollbar in pixels
  *								wheelSpeed - The speed the pane will scroll in response to the mouse wheel in pixels
+ *								showArrows - Whether to display arrows for the user to scroll with
  * @return jQuery
  * @cat Plugins/jScrollPane
  * @author Kelvin Luck (kelvin AT kelvinluck DOT com || http://www.kelvinluck.com)
@@ -31,7 +32,8 @@ jQuery.fn.jScrollPane = function(settings)
 		{
 			scrollbarWidth : 10,
 			scrollbarMargin : 5,
-			wheelSpeed : 18
+			wheelSpeed : 18,
+			showArrows : false
 		}, settings
 	);
 	return this.each(
@@ -43,6 +45,7 @@ jQuery.fn.jScrollPane = function(settings)
 				var $c = jQuery(this).parent();
 				var paneWidth = $c.innerWidth();
 				var paneHeight = $c.outerHeight();
+				var trackHeight = paneHeight;
 				if ($c.unmousewheel) {
 					$c.unmousewheel();
 				}
@@ -53,6 +56,7 @@ jQuery.fn.jScrollPane = function(settings)
 				this.originalSidePaddingTotal = (parseInt($this.css('paddingLeft')) || 0) + (parseInt($this.css('paddingRight')) || 0);
 				var paneWidth = $this.innerWidth();
 				var paneHeight = $this.innerHeight();
+				var trackHeight = paneHeight;
 				$this.wrap(
 					jQuery('<div>').attr(
 						{'className':'jScrollPaneContainer'}
@@ -83,6 +87,71 @@ jQuery.fn.jScrollPane = function(settings)
 					)
 				);
 				
+				var $track = jQuery('>.jScrollPaneTrack', $container);
+				var $drag = jQuery('>.jScrollPaneTrack .jScrollPaneDrag', $container);
+				
+				if (settings.showArrows) {
+					
+					var currentArrowButton;
+					var currentArrowDirection;
+					var currentArrowInterval;
+					var currentArrowInc;
+					var whileArrowButtonDown = function()
+					{
+						if (currentArrowInc > 8 || currentArrowInc%4==0) {
+							positionDrag(dragPosition + currentArrowDirection * mouseWheelMultiplier);
+						}
+						currentArrowInc ++;
+					};
+					var onArrowMouseUp = function(event)
+					{
+						jQuery('body').unbind('mouseup', onArrowMouseUp);
+						currentArrowButton.removeClass('jScrollActiveArrowButton');
+						clearInterval(currentArrowInterval);
+						//console.log($(event.target));
+						//currentArrowButton.parent().removeClass('jScrollArrowUpClicked jScrollArrowDownClicked');
+					};
+					var onArrowMouseDown = function() {
+						//console.log(direction);
+						//currentArrowButton = $(this);
+						jQuery('body').bind('mouseup', onArrowMouseUp);
+						currentArrowButton.addClass('jScrollActiveArrowButton');
+						currentArrowInc = 0;
+						currentArrowInterval = setInterval(whileArrowButtonDown, 100);
+					};
+					$container
+						.append(
+							jQuery('<a>')
+								.attr({'href':'javascript:;', 'className':'jScrollArrowUp'})
+								.css({'width':settings.scrollbarWidth+'px'})
+								.html('Scroll up')
+								.bind('mousedown', function()
+								{
+									currentArrowButton = $(this);
+									currentArrowDirection = -1;
+									onArrowMouseDown();
+									this.blur();
+									return false;
+								}),
+							jQuery('<a>')
+								.attr({'href':'javascript:;', 'className':'jScrollArrowDown'})
+								.css({'width':settings.scrollbarWidth+'px'})
+								.html('Scroll down')
+								.bind('mousedown', function()
+								{
+									currentArrowButton = $(this);
+									currentArrowDirection = 1;
+									onArrowMouseDown();
+									this.blur();
+									return false;
+								})
+						);
+					var topArrowHeight = jQuery('>.jScrollArrowUp', $container).height();
+					trackHeight = paneHeight - topArrowHeight - jQuery('>.jScrollArrowDown', $container).height();
+					$track
+						.css({'height': trackHeight+'px', top:topArrowHeight+'px'})
+				}
+				
 				var $pane = jQuery(this).css({'position':'absolute', 'overflow':'visible'});
 				
 				var currentOffset;
@@ -104,7 +173,7 @@ jQuery.fn.jScrollPane = function(settings)
 				{
 					currentOffset = $drag.offset(false);
 					currentOffset.top -= dragPosition;
-					maxY = paneHeight - $drag[0].offsetHeight;
+					maxY = trackHeight - $drag[0].offsetHeight;
 					mouseWheelMultiplier = 2 * settings.wheelSpeed * maxY / contentHeight;
 				};
 				
@@ -139,7 +208,6 @@ jQuery.fn.jScrollPane = function(settings)
 					positionDrag(getPos(e, 'Y') - currentOffset.top - dragMiddle);
 				};
 				
-				var $drag = jQuery('>.jScrollPaneTrack .jScrollPaneDrag', $container);
 				$drag.css(
 					{'height':(percentInView*paneHeight)+'px'}
 				).bind('mousedown', onStartDrag);
@@ -172,7 +240,6 @@ jQuery.fn.jScrollPane = function(settings)
 					jQuery('body').bind('mouseup', onStopTrackClick).bind('mousemove', onTrackMouseMove);
 				};
 				
-				var $track = jQuery('>.jScrollPaneTrack', $container);
 				$track.bind('mousedown', onTrackClick);
 				
 				// if the mousewheel plugin has been included then also react to the mousewheel
