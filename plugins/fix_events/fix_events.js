@@ -45,6 +45,11 @@
  *  ** 123: F12
  *  ** 144: Num-Lock
  *  ** 145: Scroll Lock
+ *  
+ *  NOTE:
+ *  * keypress now has full support for keyCode
+ *  * keyup now has full support for keyChar
+ *  
  */
 
 (function($) {
