@@ -18,9 +18,9 @@
  * @name jScrollPane
  * @type jQuery
  * @param Object	settings	hash with options, described below.
- * 								scrollbarWidth - the width of the generated scrollbar in pixels
- * 								scrollbarMargin - the amount of space to leave on the side of the scrollbar in pixels
- * 								wheelSpeed - The speed the pane will scroll in response to the mouse wheel in pixels
+ *								scrollbarWidth - the width of the generated scrollbar in pixels
+ *								scrollbarMargin - the amount of space to leave on the side of the scrollbar in pixels
+ *								wheelSpeed - The speed the pane will scroll in response to the mouse wheel in pixels
  * @return jQuery
  * @cat Plugins/jScrollPane
  * @author Kelvin Luck (kelvin AT kelvinluck DOT com || http://www.kelvinluck.com)
@@ -49,7 +49,7 @@ jQuery.fn.jScrollPane = function(settings)
 				jQuery('>.jScrollPaneTrack', $c).remove();
 				$this.css({'top':0});
 			} else {
-				this.originalPadding = $this.css('padding');
+				this.originalPadding = $this.css('paddingTop') + ' ' + $this.css('paddingRight') + ' ' + $this.css('paddingBottom') + ' ' + $this.css('paddingLeft');
 				this.originalSidePaddingTotal = (parseInt($this.css('paddingLeft')) || 0) + (parseInt($this.css('paddingRight')) || 0);
 				var paneWidth = $this.innerWidth();
 				var paneHeight = $this.innerHeight();
