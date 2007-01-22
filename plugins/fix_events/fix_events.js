@@ -54,9 +54,19 @@
   var oldFix = $.event.fix;
   
   $.event.fix = function(event) {
-    // Fix target, pageX/pageY, stopPropagation, and preventDefault
-    event = oldFix(event) 
-  
+    event = oldFix(event);
+
+		var originalEvent = event;
+		event = jQuery.extend({}, originalEvent);
+		
+		event.preventDefault = function() {
+			return originalEvent.preventDefault();
+		};
+    
+		event.stopPropagation = function() {
+			return originalEvent.stopPropagation();
+		};
+
     // Fix relatedTarget
     if ( isUndefined(event.relatedTarget) && isDefined(event.fromElement) )
       event.relatedTarget = (event.fromElement == event.target) ? event.toElement : event.fromElement;
@@ -75,6 +85,10 @@
     // Add modifiers
     if ( isUndefined(event.modifiers) && isDefined(event.ctrlKey) )
       event.modifiers = (event.altKey ? 1 : 0) + (event.ctrlKey ? 2 : 0) + (event.shiftKey ? 4 : 0);
+
+    // Add AltGraph
+    if ( isDefined(event.modifiers) )
+      event.altGraph = (event.modifiers & 1 && event.modifiers & 2);
       
     // Add which for click: 1 == left; 2 == middle; 3 == right
     // Note: button is not normalized, so don't use it
@@ -82,7 +96,7 @@
       event.which = (event.button & 1 ? 1 : ( event.button & 2 ? 3 : ( event.button & 4 ? 2 : 0 ) ));
   
     // Add which for keypresses: keyCode
-    if ( isUndefined(event.which) && isDefined(event.keyCode) )
+    if ( (isUndefined(event.which) || event.type == "keypress") && isDefined(event.keyCode) )
       event.which = event.keyCode;
       
     // Add timeStamp if none exists
@@ -91,9 +105,9 @@
       
     // If it's a keypress event, add charCode to IE
     if ( isUndefined(event.charCode) && event.type == "keypress" )
-      event.charCode = event.keyCode
+      event.charCode = event.keyCode;
       
   	return event;  
-  }
-  
-})(jQuery)
+  } 
+ 
+})(jQuery);
