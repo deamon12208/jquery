@@ -6,7 +6,7 @@
  * Licensed under the MIT License:
  *   http://www.opensource.org/licenses/mit-license.php
  *
- * $LastChangedDate: 2006-11-26 17:52:59 +0000 (Sun, 26 Nov 2006) $
+ * $LastChangedDate$
  * $Rev$
  */
 
@@ -407,7 +407,7 @@ jQuery.fn.datePicker = function(a)
 			jQuery.datePicker.setInited(this);
 		}
 	});
-	
+	return this;
 };
 /*
 <!-- Generated calendar HTML looks like this - style with CSS -->
