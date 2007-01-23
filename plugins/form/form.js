@@ -589,7 +589,7 @@ jQuery.fieldValue = function(el, successful) {
  */
 jQuery.fn.clearForm = function() {
     return this.each(function() {
-        jQuery('input,select,textarea', this).clearInputs();
+        jQuery('input,select,textarea', this).clearFields();
     });
 };
 
@@ -601,15 +601,15 @@ jQuery.fn.clearForm = function() {
  *  - inputs of type submit, button, reset, and hidden will *not* be effected
  *  - button elements will *not* be effected
  *
- * @example $('.myInputs').clearInputs();
+ * @example $('.myInputs').clearFields();
  * @desc Clears all inputs with class myInputs
  *
- * @name clearInputs
+ * @name clearFields
  * @type jQuery
  * @cat Plugins/Form
  * @see clearForm
  */
-jQuery.fn.clearInputs = function() {
+jQuery.fn.clearFields = jQuery.fn.clearInputs = function() {
     return this.each(function() {
         var t = this.type, tag = this.tagName.toLowerCase();
         if (t == 'text' || t == 'password' || tag == 'textarea')
