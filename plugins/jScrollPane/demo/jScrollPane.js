@@ -102,7 +102,7 @@ jQuery.fn.jScrollPane = function(settings)
 					var currentArrowInc;
 					var whileArrowButtonDown = function()
 					{
-						if (currentArrowInc > 8 || currentArrowInc%4==0) {
+						if (currentArrowInc > 4 || currentArrowInc%4==0) {
 							positionDrag(dragPosition + currentArrowDirection * mouseWheelMultiplier);
 						}
 						currentArrowInc ++;
