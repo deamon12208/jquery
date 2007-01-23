@@ -23,14 +23,19 @@
 .jScrollPaneDragTop {
 	position: absolute;
 	top: 0;
+	left: 0;
+	overflow: hidden;
 }
 .jScrollPaneDragBottom {
 	position: absolute;
 	bottom: 0;
+	left: 0;
+	overflow: hidden;
 }
 a.jScrollArrowUp {
 	display: block;
 	position: absolute;
+	z-index: 1;
 	top: 0;
 	right: 0;
 	text-indent: -2000px;
@@ -45,6 +50,7 @@ a.jScrollArrowUp:hover {
 a.jScrollArrowDown {
 	display: block;
 	position: absolute;
+	z-index: 1;
 	bottom: 0;
 	right: 0;
 	text-indent: -2000px;
