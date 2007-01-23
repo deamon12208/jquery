@@ -33,7 +33,8 @@ jQuery.fn.jScrollPane = function(settings)
 			scrollbarWidth : 10,
 			scrollbarMargin : 5,
 			wheelSpeed : 18,
-			showArrows : false
+			showArrows : false,
+			arrowSize : undefined
 		}, settings
 	);
 	return this.each(
@@ -83,7 +84,10 @@ jQuery.fn.jScrollPane = function(settings)
 				var $container = $this.parent();
 				$container.append(
 					jQuery('<div>').attr({'className':'jScrollPaneTrack'}).css({'width':settings.scrollbarWidth+'px'}).append(
-						jQuery('<div>').attr({'className':'jScrollPaneDrag'}).css({'width':settings.scrollbarWidth+'px'})
+						jQuery('<div>').attr({'className':'jScrollPaneDrag'}).css({'width':settings.scrollbarWidth+'px'}).append(
+							jQuery('<div>').attr({'className':'jScrollPaneDragTop'}).css({'width':settings.scrollbarWidth+'px'}),
+							jQuery('<div>').attr({'className':'jScrollPaneDragBottom'}).css({'width':settings.scrollbarWidth+'px'})
+						)
 					)
 				);
 				
@@ -146,10 +150,16 @@ jQuery.fn.jScrollPane = function(settings)
 									return false;
 								})
 						);
-					var topArrowHeight = jQuery('>.jScrollArrowUp', $container).height();
-					trackHeight = paneHeight - topArrowHeight - jQuery('>.jScrollArrowDown', $container).height();
-					$track
-						.css({'height': trackHeight+'px', top:topArrowHeight+'px'})
+					if (settings.arrowSize) {
+						trackHeight = paneHeight - settings.arrowSize - settings.arrowSize;
+						$track
+							.css({'height': trackHeight+'px', top:settings.arrowSize+'px'})
+					} else {
+						var topArrowHeight = jQuery('>.jScrollArrowUp', $container).height();
+						trackHeight = paneHeight - topArrowHeight - jQuery('>.jScrollArrowDown', $container).height();
+						$track
+							.css({'height': trackHeight+'px', top:topArrowHeight+'px'})
+					}
 				}
 				
 				var $pane = jQuery(this).css({'position':'absolute', 'overflow':'visible'});

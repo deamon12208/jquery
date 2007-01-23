@@ -15,9 +15,18 @@
 }
 .jScrollPaneDrag {
 	position: absolute;
+	z-index: 2;
 	background: #666;
 	cursor: pointer;
 	overflow: hidden;
+}
+.jScrollPaneDragTop {
+	position: absolute;
+	top: 0;
+}
+.jScrollPaneDragBottom {
+	position: absolute;
+	bottom: 0;
 }
 a.jScrollArrowUp {
 	display: block;
