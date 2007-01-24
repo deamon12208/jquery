@@ -16,7 +16,7 @@ $.fn.searchField = function() {
 			this.value = "";
 		}
 	}).blur(function() {
-		if( !this.value.length ) {
+		if( this.value = "" ) {
 			this.value = this.defaultValue;
 		}
 	});
