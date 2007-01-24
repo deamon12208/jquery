@@ -176,7 +176,7 @@ jQuery.ImageBox = {
 				}
 			}
 		);
-		if ($.browser.msie) {
+		if (jQuery.browser.msie) {
 			iframe = document.createElement('iframe');
 			jQuery(iframe)
 				.attr(

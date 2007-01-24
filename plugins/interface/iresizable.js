@@ -333,7 +333,7 @@ jQuery.iResize = {
 				el.resizeOptions.minLeft = options.minLeft || -1000;
 				el.resizeOptions.maxRight = options.maxRight || 3000;
 				el.resizeOptions.maxBottom = options.maxBottom || 3000;
-				elPosition = $(el).css('position');
+				elPosition = jQuery(el).css('position');
 				if (!(elPosition == 'relative' || elPosition == 'absolute')) {
 					el.style.position = 'relative';
 				}

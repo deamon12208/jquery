@@ -92,28 +92,28 @@ jQuery.iAuto = {
 			jQuery.iAuto.currentValue = subjectValue.item;
 
 			data = {
-				field: $(subject).attr('name')||'field',
+				field: jQuery(subject).attr('name')||'field',
 				value: subjectValue.item
 			};
 
 			jQuery.ajax(
 				{
 					type: 'POST',
-					data: $.param(data),
+					data: jQuery.param(data),
 					success: function(xml)
 					{
-						subject.autoCFG.lastSuggestion = $('item',xml);
+						subject.autoCFG.lastSuggestion = jQuery('item',xml);
 						size = subject.autoCFG.lastSuggestion.size();
 						if (size > 0) {
 							var toWrite = '';
 							subject.autoCFG.lastSuggestion.each(
 								function(nr)
 								{
-									toWrite += '<li rel="' + $('value', this).text() + '" dir="' + nr + '" style="cursor: default;">' + $('text', this).text() + '</li>';
+									toWrite += '<li rel="' + jQuery('value', this).text() + '" dir="' + nr + '" style="cursor: default;">' + jQuery('text', this).text() + '</li>';
 								}
 							);
 							if (subject.autoCFG.autofill) {
-								var valueToAdd = $('value', subject.autoCFG.lastSuggestion.get(0)).text();
+								var valueToAdd = jQuery('value', subject.autoCFG.lastSuggestion.get(0)).text();
 								subject.value = subjectValue.pre + valueToAdd + subject.autoCFG.multipleSeparator + subjectValue.post;
 								jQuery.iAuto.selection(
 									subject, 
@@ -140,7 +140,7 @@ jQuery.iAuto = {
 	writeItems : function(subject, toWrite)
 	{
 		jQuery.iAuto.content.html(toWrite);
-		jQuery.iAuto.items = $('li', jQuery.iAuto.content.get(0));
+		jQuery.iAuto.items = jQuery('li', jQuery.iAuto.content.get(0));
 		jQuery.iAuto.items
 			.mouseover(jQuery.iAuto.hoverItem)
 			.bind('click', jQuery.iAuto.clickItem);
@@ -201,10 +201,10 @@ jQuery.iAuto = {
 			subject.autoCFG.lastSuggestion.each(
 				function(nr)
 				{
-					value = $('value', this).text().toLowerCase();
+					value = jQuery('value', this).text().toLowerCase();
 					inputValue = subject.value.toLowerCase();
 					if (value.indexOf(inputValue) == 0) {
-						toWrite += '<li rel="' + $('value', this).text() + '" dir="' + nr + '" style="cursor: default;">' + $('text', this).text() + '</li>';
+						toWrite += '<li rel="' + jQuery('value', this).text() + '" dir="' + nr + '" style="cursor: default;">' + jQuery('text', this).text() + '</li>';
 					}
 				}
 			);
@@ -465,13 +465,13 @@ jQuery.iAuto = {
 		}
 
 		if (!jQuery.iAuto.helper) {
-			if ($.browser.msie) {
-				$('body', document).append('<iframe style="display:none;position:absolute;filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);" id="autocompleteIframe" src="javascript:false;" frameborder="0" scrolling="no"></iframe>');
-				jQuery.iAuto.iframe = $('#autocompleteIframe');
+			if (jQuery.browser.msie) {
+				jQuery('body', document).append('<iframe style="display:none;position:absolute;filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);" id="autocompleteIframe" src="javascript:false;" frameborder="0" scrolling="no"></iframe>');
+				jQuery.iAuto.iframe = jQuery('#autocompleteIframe');
 			}
-			$('body', document).append('<div id="autocompleteHelper" style="position: absolute; top: 0; left: 0; z-index: 30001; display: none;"><ul style="margin: 0;padding: 0; list-style: none; z-index: 30002;">&nbsp;</ul></div>');
-			jQuery.iAuto.helper = $('#autocompleteHelper');
-			jQuery.iAuto.content = $('ul', jQuery.iAuto.helper);
+			jQuery('body', document).append('<div id="autocompleteHelper" style="position: absolute; top: 0; left: 0; z-index: 30001; display: none;"><ul style="margin: 0;padding: 0; list-style: none; z-index: 30002;">&nbsp;</ul></div>');
+			jQuery.iAuto.helper = jQuery('#autocompleteHelper');
+			jQuery.iAuto.content = jQuery('ul', jQuery.iAuto.helper);
 		}
 
 		return this.each(
@@ -511,7 +511,7 @@ jQuery.iAuto = {
 				this.autoCFG.lastSuggestion = null;
 				this.autoCFG.inCache = false;
 
-				$(this)
+				jQuery(this)
 					.attr('autocomplete', 'off')
 					.focus(
 						function()

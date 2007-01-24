@@ -209,23 +209,23 @@ jQuery.iUtil = {
 	},
 	centerEl : function(el, axis)
 	{
-		var clientScroll = $.iUtil.getScroll();
-		var windowSize = $.iUtil.getSize(el);
+		var clientScroll = jQuery.iUtil.getScroll();
+		var windowSize = jQuery.iUtil.getSize(el);
 		if (!axis || axis == 'vertically')
-			$(el).css(
+			jQuery(el).css(
 				{
 					top: clientScroll.t + ((Math.max(clientScroll.h,clientScroll.ih) - clientScroll.t - windowSize.hb)/2) + 'px'
 				}
 			);
 		if (!axis || axis == 'horizontally')
-			$(el).css(
+			jQuery(el).css(
 				{
 					left:	clientScroll.l + ((Math.max(clientScroll.w,clientScroll.iw) - clientScroll.l - windowSize.wb)/2) + 'px'
 				}
 			);
 	},
 	fixPNG : function (el, emptyGIF) {
-		var images = $('img[@src*="png"]', el||document), png;
+		var images = jQuery('img[@src*="png"]', el||document), png;
 		images.each( function() {
 			png = this.src;				
 			this.src = emptyGIF;

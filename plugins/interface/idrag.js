@@ -98,10 +98,10 @@ jQuery.iDrag =	{
 
 	dragstart : function(e)
 	{
-		elm = jQuery.iDrag.dragged;
+		var elm = jQuery.iDrag.dragged;
 		elm.dragCfg.init = true;
 
-		dEs = elm.style;
+		var dEs = elm.style;
 
 		elm.dragCfg.oD = jQuery.css(elm,'display');
 		elm.dragCfg.oP = jQuery.css(elm,'position');
@@ -115,7 +115,7 @@ jQuery.iDrag =	{
 		elm.dragCfg.diffX = 0;
 		elm.dragCfg.diffY = 0;
 		if (jQuery.browser.msie) {
-			oldBorder = jQuery.iUtil.getBorder(elm, true);
+			var oldBorder = jQuery.iUtil.getBorder(elm, true);
 			elm.dragCfg.diffX = oldBorder.l||0;
 			elm.dragCfg.diffY = oldBorder.t||0;
 		}
@@ -129,7 +129,7 @@ jQuery.iDrag =	{
 		}
 
 		jQuery.iDrag.helper.empty();
-		clonedEl = elm.cloneNode(true);
+		var clonedEl = elm.cloneNode(true);
 		
 		jQuery(clonedEl).css(
 			{
@@ -144,7 +144,7 @@ jQuery.iDrag =	{
 		clonedEl.style.marginLeft = '0';
 		jQuery.iDrag.helper.append(clonedEl);
 		
-		dhs = jQuery.iDrag.helper.get(0).style;
+		var dhs = jQuery.iDrag.helper.get(0).style;
 
 		if (elm.dragCfg.autoSize) {
 			dhs.width = 'auto';
@@ -246,11 +246,11 @@ jQuery.iDrag =	{
 					{x:0,y:0},
 					jQuery.iUtil.getSize(elm.parentNode)
 				);
-				contBorders = jQuery.iUtil.getBorder(elm.parentNode, true);
+				var contBorders = jQuery.iUtil.getBorder(elm.parentNode, true);
 				elm.dragCfg.cont.w = elm.dragCfg.cont.wb - contBorders.l - contBorders.r;
 				elm.dragCfg.cont.h = elm.dragCfg.cont.hb - contBorders.t - contBorders.b;
 			} else if (elm.dragCfg.containment == 'document') {
-				clnt = jQuery.iUtil.getClient();
+				var clnt = jQuery.iUtil.getClient();
 				elm.dragCfg.cont = {
 					x : 0,
 					y : 0,
@@ -291,7 +291,7 @@ jQuery.iDrag =	{
 		if (jQuery.iDrag.dragged == null) {
 			return;
 		}
-		dragged = jQuery.iDrag.dragged;
+		var dragged = jQuery.iDrag.dragged;
 
 		jQuery.iDrag.dragged = null;
 
@@ -301,23 +301,23 @@ jQuery.iDrag =	{
 		if (dragged.dragCfg.so == true) {
 			jQuery(dragged).css('position', dragged.dragCfg.oP);
 		}
-		dEs = dragged.style;
+		var dEs = dragged.style;
 
 		if (dragged.si) {
 			jQuery.iDrag.helper.css('cursor', 'move');
 		}
-		if(elm.dragCfg.frameClass) {
-			jQuery.iDrag.helper.removeClass(elm.dragCfg.frameClass);
+		if(dragged.dragCfg.frameClass) {
+			jQuery.iDrag.helper.removeClass(dragged.dragCfg.frameClass);
 		}
 
 		if (dragged.dragCfg.revert == false) {
 			if (dragged.dragCfg.fx > 0) {
 				if (!dragged.dragCfg.axis || dragged.dragCfg.axis == 'horizontally') {
-					x = new jQuery.fx(dragged,{duration:dragged.dragCfg.fx}, 'left');
+					var x = new jQuery.fx(dragged,{duration:dragged.dragCfg.fx}, 'left');
 					x.custom(dragged.dragCfg.oR.x,dragged.dragCfg.nRx);
 				}
 				if (!dragged.dragCfg.axis || dragged.dragCfg.axis == 'vertically') {
-					y = new jQuery.fx(dragged,{duration:dragged.dragCfg.fx}, 'top');
+					var y = new jQuery.fx(dragged,{duration:dragged.dragCfg.fx}, 'top');
 					y.custom(dragged.dragCfg.oR.y,dragged.dragCfg.nRy);
 				}
 			} else {
@@ -332,10 +332,9 @@ jQuery.iDrag =	{
 			}
 		} else if (dragged.dragCfg.fx > 0) {
 			dragged.dragCfg.prot = true;
-			if(jQuery.iDrop && jQuery.iDrop.overzone && jQuery.iSort && dragged.dragCfg.so) {
+			var dh = false;
+			if(jQuery.iDrop && jQuery.iSort && dragged.dragCfg.so) {
 				dh = jQuery.iUtil.getPosition(jQuery.iSort.helper.get(0));
-			} else {
-				dh = false;
 			}
 			jQuery.iDrag.helper.animate(
 				{
@@ -362,7 +361,7 @@ jQuery.iDrag =	{
 		if (jQuery.iDrop && jQuery.iDrop.count > 0 ){
 			jQuery.iDrop.checkdrop(dragged);
 		}
-		if (jQuery.iSort && jQuery.iDrop.overzone && dragged.dragCfg.so) {
+		if (jQuery.iSort && dragged.dragCfg.so) {
 			jQuery.iSort.check(dragged);
 		}
 		if (dragged.dragCfg.onChange && (dragged.dragCfg.nRx != dragged.dragCfg.oR.x || dragged.dragCfg.nRy != dragged.dragCfg.oR.y)){
@@ -424,11 +423,11 @@ jQuery.iDrag =	{
 			}
 		}
 
-		dx = dragged.dragCfg.currentPointer.x - dragged.dragCfg.pointer.x;
-		dy = dragged.dragCfg.currentPointer.y - dragged.dragCfg.pointer.y;
+		var dx = dragged.dragCfg.currentPointer.x - dragged.dragCfg.pointer.x;
+		var dy = dragged.dragCfg.currentPointer.y - dragged.dragCfg.pointer.y;
 
-		for (i in dragged.dragCfg.onDragModifier) {
-			newCoords = dragged.dragCfg.onDragModifier[i].apply(dragged, [dragged.dragCfg.oR.x + dx, dragged.dragCfg.oR.y + dy, dx, dy]);
+		for (var i in dragged.dragCfg.onDragModifier) {
+			var newCoords = dragged.dragCfg.onDragModifier[i].apply(dragged, [dragged.dragCfg.oR.x + dx, dragged.dragCfg.oR.y + dy, dx, dy]);
 			if (newCoords && newCoords.constructor == Object) {
 				dx = i != 'user' ? newCoords.dx : (newCoords.x - dragged.dragCfg.oR.x);
 				dy = i != 'user' ? newCoords.dy : (newCoords.y - dragged.dragCfg.oR.y);
@@ -455,43 +454,18 @@ jQuery.iDrag =	{
 		}
 		
 		if (jQuery.iDrop && jQuery.iDrop.count > 0 ){
-			jQuery.iDrop.checkhover(dragged, clonedEl);
+			jQuery.iDrop.checkhover(dragged);
 		}
 		return false;
 	},
 
 	build : function(o)
 	{
-			/*if (jQuery.browser.msie) {
-				jQuery(window)
-					.bind(
-						'unload',
-						function()
-						{
-							jQuery('body')
-								.unbind('mousemove', jQuery.iDrag.dragmove)
-								.unbind('mouseup', jQuery.iDrag.dragstop);
-							jQuery.iDrag.helper = null;
-							jQuery.iDrag.dragged = null;
-							jQuery('*').each(
-								function()
-								{
-									if (this.dragElem) {
-										jQuery(this).unbind('mousedown', jQuery.iDrag.dragstart);
-										this.dragElem = null;
-										this.onselectstart = null;
-										this.ondragstart = null;
-									}
-								}
-							);
-						}
-					);
-			}*/
 		if (!jQuery.iDrag.helper) {
 			jQuery('body',document).append('<div id="dragHelper"></div>');
 			jQuery.iDrag.helper = jQuery('#dragHelper');
-			el = jQuery.iDrag.helper.get(0);
-			els = el.style;
+			var el = jQuery.iDrag.helper.get(0);
+			var els = el.style;
 			els.position = 'absolute';
 			els.display = 'none';
 			els.cursor = 'move';

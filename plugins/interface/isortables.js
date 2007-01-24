@@ -71,12 +71,15 @@ jQuery.iSort = {
 		if (jQuery.iDrag.dragged == null) {
 			return;
 		}
-		var i;
+		var shs, margins,c, cs;
 		
 		jQuery.iSort.helper.get(0).className = jQuery.iDrag.dragged.dragCfg.hpc;
 		shs = jQuery.iSort.helper.get(0).style;
 		shs.display = 'block';
-		jQuery.iSort.helper.oC = jQuery.iUtil.getPos(jQuery.iSort.helper.get(0));
+		jQuery.iSort.helper.oC = jQuery.extend(
+			jQuery.iUtil.getPosition(jQuery.iSort.helper.get(0)),
+			jQuery.iUtil.getSize(jQuery.iSort.helper.get(0))
+		);
 		
 		shs.width = jQuery.iDrag.dragged.dragCfg.oC.wb + 'px';
 		shs.height = jQuery.iDrag.dragged.dragCfg.oC.hb + 'px';
@@ -111,14 +114,14 @@ jQuery.iSort = {
 		}
 		jQuery.iSort.helper.removeClass(e.dragCfg.hpc).html('&nbsp;');
 		jQuery.iSort.inFrontOf = null;
-		shs = jQuery.iSort.helper.get(0).style;
+		var shs = jQuery.iSort.helper.get(0).style;
 		shs.display = 'none';
-		ts = [];
-		fnc = false;
+		var ts = [];
+		var fnc = false;
 		for(var i=0; i<jQuery.iSort.changed.length; i++){
-			iEL = jQuery.iDrop.zones[jQuery.iSort.changed[i]].get(0);
-			id = jQuery.attr(iEL, 'id');
-			ser = jQuery.iSort.serialize(id);
+			var iEL = jQuery.iDrop.zones[jQuery.iSort.changed[i]].get(0);
+			var id = jQuery.attr(iEL, 'id');
+			var ser = jQuery.iSort.serialize(id);
 			if (iEL.dropCfg.os != ser.hash) {
 				iEL.dropCfg.os = ser.hash;
 				if (fnc == false && iEL.dropCfg.onChange) {
@@ -183,17 +186,12 @@ jQuery.iSort = {
 		if (jQuery.iDrag.dragged == null) {
 			return;
 		}
-		var i;
 		e.dropCfg.el.each (
 			function ()
 			{
 				this.pos = jQuery.extend(
-					jQuery.iUtil.getSize(this),
-					jQuery.iUtil.getPosition(this)
-					/*{
-						x: this.offsetLeft||0 - this.parentNode.scrollLeft||0, 
-						y: this.offsetTop||0 - this.parentNode.scrollTop||0
-					}*/
+					jQuery.iUtil.getSizeLite(this),
+					jQuery.iUtil.getPositionLite(this)
 				);
 			}
 		);
@@ -314,7 +312,7 @@ jQuery.iSort = {
 			return this.each(
 				function()
 				{
-					dragCfg = {
+					var dragCfg = {
 						revert : o.revert? true : false,
 						zindex : 3000,
 						opacity : o.opacity ? parseFloat(o.opacity) : false,
@@ -325,6 +323,7 @@ jQuery.iSort = {
 						handle: o.handle ? o.handle : null,
 						containment: o.containment ? o.containment : null,
 						onStart : o.onStart && o.onStart.constructor == Function ? o.onStart : false,
+						onDrag : o.onDrag && o.onDrag.constructor == Function ? o.onDrag : false,
 						onStop : o.onStop && o.onStop.constructor == Function ? o.onStop : false,
 						axis : /vertically|horizontally/.test(o.axis) ? o.axis : false,
 						snapDistance : o.snapDistance ? parseInt(o.snapDistance)||0 : false,

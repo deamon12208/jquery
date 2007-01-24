@@ -77,8 +77,8 @@ jQuery.iCarousel = {
 				var el = this;
 				var increment = 2*Math.PI/360;
 				var maxRotation = 2*Math.PI;
-				if($(el).css('position') != 'relative' && $(el).css('position') != 'absolute') {
-					$(el).css('position', 'relative');
+				if(jQuery(el).css('position') != 'relative' && jQuery(el).css('position') != 'absolute') {
+					jQuery(el).css('position', 'relative');
 				}
 				el.carouselCfg = {
 					items : jQuery(options.items, this),

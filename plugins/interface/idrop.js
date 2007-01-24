@@ -82,10 +82,10 @@ jQuery.iDrop = {
 		}
 		var i;
 		jQuery.iDrop.highlighted = {};
-		oneIsSortable = false;
+		var oneIsSortable = false;
 		for (i in jQuery.iDrop.zones) {
 			if (jQuery.iDrop.zones[i] != null) {
-				iEL = jQuery.iDrop.zones[i].get(0);
+				var iEL = jQuery.iDrop.zones[i].get(0);
 				if (jQuery(jQuery.iDrag.dragged).is('.' + iEL.dropCfg.a)) {
 					if (iEL.dropCfg.m == false) {
 						iEL.dropCfg.p = jQuery.extend(
@@ -131,7 +131,7 @@ jQuery.iDrop = {
 		jQuery.iDrop.highlighted = {};
 		for (i in jQuery.iDrop.zones) {
 			if (jQuery.iDrop.zones[i] != null) {
-				iEL = jQuery.iDrop.zones[i].get(0);
+				var iEL = jQuery.iDrop.zones[i].get(0);
 				if (jQuery(jQuery.iDrag.dragged).is('.' + iEL.dropCfg.a)) {
 					iEL.dropCfg.p = jQuery.extend(
 						jQuery.iUtil.getPositionLite(iEL),
@@ -147,7 +147,6 @@ jQuery.iDrop = {
 						elm.style.display = 'none';
 						jQuery.iSort.measure(iEL);
 						elm.style.display = elm.dragCfg.oD;
-						oneIsSortable = true;
 					}
 				}
 			}
@@ -161,11 +160,11 @@ jQuery.iDrop = {
 		}
 		jQuery.iDrop.overzone = false;
 		var i;
-		applyOnHover = false;
-		hlt = 0;
+		var applyOnHover = false;
+		var hlt = 0;
 		for (i in jQuery.iDrop.highlighted)
 		{
-			iEL = jQuery.iDrop.highlighted[i].get(0);
+			var iEL = jQuery.iDrop.highlighted[i].get(0);
 			if ( 
 					jQuery.iDrop.overzone == false
 					 && 
@@ -216,7 +215,7 @@ jQuery.iDrop = {
 	{
 		var i;
 		for (i in jQuery.iDrop.highlighted) {
-			iEL = jQuery.iDrop.highlighted[i].get(0);
+			var iEL = jQuery.iDrop.highlighted[i].get(0);
 			if (iEL.dropCfg.ac) {
 				jQuery.iDrop.highlighted[i].removeClass(iEL.dropCfg.ac);
 			}
