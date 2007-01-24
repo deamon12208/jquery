@@ -12,11 +12,13 @@
  */
 $.fn.searchField = function() {
 	return this.focus(function() {
+		// remove default value, but nothing else
 		if( this.value == this.defaultValue ) {
 			this.value = "";
 		}
 	}).blur(function() {
-		if( !this.value ) {
+		// check for length, for value == 0
+		if( !this.value.length ) {
 			this.value = this.defaultValue;
 		}
 	});
