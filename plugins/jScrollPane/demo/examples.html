@@ -2,7 +2,7 @@
 	
 <html>
 	<head>
-		<title>jScrollPane</title>
+		<title>jScrollPane examples</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<style type="text/css">
 			body {
@@ -70,18 +70,24 @@
 			}
 			.osX a.jScrollArrowUp {
 				height: 24px;
-				background: url(osx_arrow_up.gif) no-repeat 0 -30px;
+				background: url(osx_arrow_up.png) no-repeat 0 -30px;
 			}
 			.osX a.jScrollArrowUp:hover {
 				background-position: 0 0;
 			}
 			.osX a.jScrollArrowDown {
 				height: 24px;
-				background: url(osx_arrow_down.gif) no-repeat 0 -30px;
+				background: url(osx_arrow_down.png) no-repeat 0 -30px;
 			}
 			.osX a.jScrollArrowDown:hover {
 				background-position: 0 0;
 			}
+			
+			/* IE SPECIFIC HACKED STYLES */
+			* html .osX .jScrollPaneDragBottom {
+				bottom: -1px;
+			}
+			/* /IE SPECIFIC HACKED STYLES */
 		</style>
 		<link rel="stylesheet" type="text/css" media="all" href="jScrollPane.css" />
 		<script type="text/javascript" src="jquery-1.1.1.js"></script>

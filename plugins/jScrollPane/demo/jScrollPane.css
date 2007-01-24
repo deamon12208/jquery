@@ -15,7 +15,6 @@
 }
 .jScrollPaneDrag {
 	position: absolute;
-	z-index: 2;
 	background: #666;
 	cursor: pointer;
 	overflow: hidden;
