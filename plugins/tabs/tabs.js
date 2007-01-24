@@ -13,7 +13,7 @@
 (function($) { // simulate block scope
 
 /**
- * Create an accessible, unobtrusive tab interface based on a certain HTML structure.
+ * Create an accessible, unobtrusive tab interface based on a particular HTML structure.
  *
  * The underlying HTML has to look like this:
  *
@@ -176,10 +176,10 @@ $.fn.tabs = function(initial, settings) {
                     // prevent page scroll to fragment
                     if ($.browser.msie || $.browser.opera) {
                         var toShow = $(location.hash);
-                        var toShowId = toShow.id();
-                        toShow.id('');
+                        var toShowId = toShow.attr('id');
+                        toShow.attr('id', '');
                         setTimeout(function() {
-                            toShow.id(toShowId); // restore id
+                            toShow.attr('id', toShowId); // restore id
                         }, 500);
                     }
                     _unFocus();
@@ -376,9 +376,9 @@ $.fn.tabs = function(initial, settings) {
                     // prevent scrollbar scrolling to 0 and than back in IE7, happens only if bookmarking/history is enabled
                     if (settings.bookmarkable && $.browser.msie) {
                         var toShowId = this.hash.replace('#', '');
-                        toShow.id('');
+                        toShow.attr('id', '');
                         setTimeout(function() {
-                            toShow.id(toShowId); // restore id
+                            toShow.attr('id', toShowId); // restore id
                         }, 0);
                     }
 
