@@ -14,11 +14,9 @@
 /**
  * Takes an unordered list and makes all branches collapsable.
  *
- * Mark initially closed branches with "closed", open with "open".
+ * Classify initially closed branches with "closed", open with "open".
  *
- * The following styles are necessary in your stylesheet. Modify them to fit your needs.
- *
- * .treeview, .treeview ul { 
+ * @example .treeview, .treeview ul { 
  * 	padding: 0;
  * 	margin: 0;
  * 	list-style: none;
@@ -32,16 +30,12 @@
  * }
  * 
  * .treeview li { background: url(images/tv-item.gif) 0 0 no-repeat; }
- *
  * .treeview .collapsable { background-image: url(images/tv-collapsable.gif); }
- *
  * .treeview .expandable { background-image: url(images/tv-expandable.gif); }
- *
  * .treeview .last { background-image: url(images/tv-item-last.gif); }
- *
  * .treeview .lastCollapsable { background-image: url(images/tv-collapsable-last.gif); }
- *
  * .treeview .lastExpandable { background-image: url(images/tv-expandable-last.gif); }
+ * @desc The following styles are necessary in your stylesheet.
  *
  * @example $("ul").Treeview();
  * @before <ul>
@@ -63,12 +57,24 @@
  *	</li>
  *	<li>Item 3</li>
  * </ul>
+ * @desc Basic usage example
  *
- * @param Map options
- * @option String|Number speed Speed of animation, see animate() for details. Default: null, no animation
- * @option String closed Mark li elements with this class to collapse them at first. Default: "closed"
- * @option Boolean collapsed Start with all branches collapsed. Default: false, all expanded
- * @type TreeController
+ * @example $("ul").Treeview({ speed: "fast", collapsed: true});
+ * @desc Create a treeview that starts with all branches collapsed. Toggling branches is animated.
+ *
+ * @example $("ul").Treeview({ control: #treecontrol });
+ * @before <div id="treecontrol">
+ *   <a href="#">Collapse All</a>
+ *   <a href="#">Expand All</a>
+ *   <a href="#">Toggle All</a>
+ * </div>
+ * @desc Creates a treeview that can be controlled with a few links.
+ *
+ * @param Map options Optional settings to configure treeview
+ * @option String|Number speed Speed of animation, see animate() for details. Default: none, no animation
+ * @option Boolean collapsed Start with all branches collapsed. Default: none, all expanded
+ * @option String control Expression to select a container for a treecontrol, see last example. Very likely to be changed/improved in future versions.
+ * @type jQuery
  * @name Treeview
  * @cat Plugins/Treeview
  */
@@ -119,6 +125,9 @@
 	// define plugin method, currently no options
 	$.fn.Treeview = function(settings) {
 	
+		// currently no defaults necessary, all implicit
+		settings = $.extend({}, settings);
+	
 		function treeController(tree, control) {
 			function build(filter) {
 				return function() {
@@ -141,24 +150,25 @@
 				.find(">ul")
 				.toggle(settings.speed);
 		}
-	
+
+		// add treeview class to activate styles
 		this.addClass("treeview");
 		
 		// mark last tree items
 		$("li:last-child", this).addClass(CLASSES.last);
 		
-		// collapse whole tree or only those marked as closed, except those marked as open
+		// collapse whole tree, or only those marked as closed, anyway except those marked as open
 		$( (settings.collapsed ? "li" : "li." + CLASSES.closed) + ":not(." + CLASSES.open + ") > ul", this).hide();
 		
 		// find all tree items with child lists
 		$("li[ul]", this)
 			// handle closed ones first
-			.filter("[ul:hidden], ." + CLASSES.closed).not("[ul:visible]")
+			.filter("[>ul:hidden]")
 				.addClass(CLASSES.expandable)
 				.swapClass(CLASSES.last, CLASSES.lastExpandable)
-				.end().end()
+				.end()
 			// handle open ones
-			.not("." + CLASSES.closed)
+			.not("[>ul:hidden]")
 				.addClass(CLASSES.collapsable)
 				.swapClass(CLASSES.last, CLASSES.lastCollapsable)
 				.end()
