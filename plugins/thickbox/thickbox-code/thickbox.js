@@ -114,7 +114,7 @@ function TB_show(caption, url, imageGroup) {//function called when the user clic
 			
 			if (!(TB_PrevHTML == "")) {
 				function goPrev(){
-					if($(document).unclick(goPrev)){$(document).unclick(goPrev)};
+					if($(document).unbind("click",goPrev)){$(document).unbind("click",goPrev)};
 					$("#TB_window").remove();
 					$("body").append("<div id='TB_window'></div>");
 					TB_show(TB_PrevCaption, TB_PrevURL, imageGroup);
@@ -229,9 +229,9 @@ function TB_showIframe(){
 }
 
 function TB_remove() {
- 	$("#TB_imageOff").unclick();
-	$("#TB_overlay").unclick();
-	$("#TB_closeWindowButton").unclick();
+ 	$("#TB_imageOff").unbind("click");
+	$("#TB_overlay").unbind("click");
+	$("#TB_closeWindowButton").unbind("click");
 	$("#TB_window").fadeOut("fast",function(){$('#TB_window,#TB_overlay,#TB_HideSelect').remove();});
 	$("#TB_load").remove();
 	return false;

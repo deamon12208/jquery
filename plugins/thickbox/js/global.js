@@ -201,7 +201,7 @@ $.tabs = function(containerId, start) {
     var id = '#' + containerId;
     var i = (typeof start == "number") ? start - 1 : 0;
     $(id + '>div:eq(' + i + ')').css({display:"block"});
-    $(id + '>ul>li:nth-child(' + i + ')').addClass(ON_CLASS);
+    $(id + '>ul>li:nth-child(' + (i+1) + ')').addClass(ON_CLASS);
     $(id + '>ul>li>a').click(function() {
         if (!$(this.parentNode).is('.' + ON_CLASS)) {
             var re = /([_\-\w]+$)/i;
