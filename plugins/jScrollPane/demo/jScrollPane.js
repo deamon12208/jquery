@@ -3,7 +3,7 @@
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
  * 
  * See http://kelvinluck.com/assets/jquery/jScrollPane/
- * $Id: jScrollPane.js 1042 2007-01-12 22:30:27Z kelvin $
+ * $Id$
  */
 
 /**
@@ -121,6 +121,7 @@ jQuery.fn.jScrollPane = function(settings)
 						jQuery('body').bind('mouseup', onArrowMouseUp);
 						currentArrowButton.addClass('jScrollActiveArrowButton');
 						currentArrowInc = 0;
+						whileArrowButtonDown();
 						currentArrowInterval = setInterval(whileArrowButtonDown, 100);
 					};
 					$container

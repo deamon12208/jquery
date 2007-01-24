@@ -121,6 +121,7 @@ jQuery.fn.jScrollPane = function(settings)
 						jQuery('body').bind('mouseup', onArrowMouseUp);
 						currentArrowButton.addClass('jScrollActiveArrowButton');
 						currentArrowInc = 0;
+						whileArrowButtonDown();
 						currentArrowInterval = setInterval(whileArrowButtonDown, 100);
 					};
 					$container
