@@ -1,6 +1,9 @@
 /* Copyright (c) 2006 Brandon Aaron (http://brandonaaron.net)
  * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) 
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
+ *
+ * $LastChangedDate$
+ * $Rev$
  */
 
 /**
@@ -29,7 +32,7 @@
  * @cat Plugins/bgiframe
  * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
  */
-jQuery.fn.bgiframe = function() {
+jQuery.fn.bgIframe = jQuery.fn.bgiframe = function() {
 	// This is only for IE6
 	if ( !(jQuery.browser.msie && typeof XMLHttpRequest == 'function') ) return this;
 	
