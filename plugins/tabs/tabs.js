@@ -1,5 +1,5 @@
 /**
- * Tabs 2.5.1 - jQuery plugin for accessible, unobtrusive tabs
+ * Tabs 2.5.2 - jQuery plugin for accessible, unobtrusive tabs
  *
  * http://stilbuero.de/tabs/
  *
@@ -273,16 +273,16 @@ $.fn.tabs = function(initial, settings) {
             if (settings.fxShow) {
                 showAnim = settings.fxShow;
                 showSpeed = settings.fxShowSpeed || settings.fxSpeed;
-            } else {
-                showAnim['opacity'] = 'show';
-                showSpeed = settings.bookmarkable ? 50 : 1; // as little as 50 prevents browser scroll to the tab
+            } else { // use some kind of animation to prevent browser scrolling to the tab
+                showAnim['min-width'] = 0; // avoid opacity, causes flicker in Firefox
+                showSpeed = settings.bookmarkable ? 50 : 1; // as little as 50 is sufficient
             }
             if (settings.fxHide) {
                 hideAnim = settings.fxHide;
                 hideSpeed = settings.fxHideSpeed || settings.fxSpeed;
-            } else {
-                hideAnim['opacity'] = 'hide';
-                hideSpeed = settings.bookmarkable ? 50 : 1; // as little as 50 prevents browser scroll to the tab
+            } else { // use some kind of animation to prevent browser scrolling to the tab
+                hideAnim['min-width'] = 0; // avoid opacity, causes flicker in Firefox
+                hideSpeed = settings.bookmarkable ? 50 : 1; // as little as 50 is sufficient
             }
         }
 
@@ -396,10 +396,9 @@ $.fn.tabs = function(initial, settings) {
                         if (typeof onHide == 'function') {
                             onHide(clicked, toShow[0], toHide[0]);
                         }
+                        toHide.addClass(settings.hideClass).css({display: '', overflow: '', height: '', opacity: ''}); // maintain flexible height and accessibility in print etc.
                         toShow.removeClass(settings.hideClass).animate(showAnim, showSpeed, function() {
-                            // maintain flexible height and accessibility in print
-                            toHide.addClass(settings.hideClass).css({display: '', overflow: '', height: '', opacity: ''});
-                            toShow.css({overflow: '', height: '', opacity: ''});
+                            toShow.css({overflow: '', height: '', opacity: ''}); // maintain flexible height and accessibility in print etc.
                             if ($.browser.msie) {
                                 toHide[0].style.filter = '';
                                 toShow[0].style.filter = '';
