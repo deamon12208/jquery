@@ -41,6 +41,14 @@ jQuery.datePicker = function()
 			case 'dmy':
 				dParts = dIn.split(dateSeparator);
 				return new Date(dParts[2], Number(dParts[1])-1, Number(dParts[0]));
+			case 'dmmy':
+				dParts = dIn.split(dateSeparator);
+				for (var m=0; m<12; m++) {
+					if (dParts[1].toLowerCase() == months[m].substr(0,3).toLowerCase())  {
+						return new Date(Number(dParts[2]), m, Number(dParts[0]));
+					}
+				}
+				return undefined;
 			case 'mdy':
 			default:
 				var parts = parts ? parts : [2, 1, 0];
@@ -58,6 +66,8 @@ jQuery.datePicker = function()
 				return dY + dateSeparator + dM + dateSeparator + dD;
 			case 'dmy':
 				return dD + dateSeparator + dM + dateSeparator + dY;
+			case 'dmmy':
+				return dD + dateSeparator + months[d.getMonth()].substr(0,3) + dateSeparator + dY;
 			case 'mdy':
 			default:
 				return dM + dateSeparator + dD + dateSeparator + dY;
