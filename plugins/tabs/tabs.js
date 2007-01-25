@@ -156,7 +156,7 @@ $.fn.tabs = function(initial, settings) {
         tabStruct: 'div'
     }, settings || {});
 
-    $.browser.msie6 = $.browser.msie && typeof XMLHttpRequest == 'function';
+    $.browser.msie6 = $.browser.msie6 || $.browser.msie && typeof XMLHttpRequest == 'function';
 
     // helper to prevent scroll to fragment
     var _unFocus = function() {
@@ -167,10 +167,11 @@ $.fn.tabs = function(initial, settings) {
     return this.each(function() {
 
         var container = this;
+        var tabs = $('>ul:eq(0)>li>a', this);
 
         // retrieve active tab from hash in url
         if (location.hash) {
-            $('>ul:eq(0)>li>a', this).each(function(i) {
+            tabs.each(function(i) {
                 if (this.hash == location.hash) {
                     settings.initial = i;
                     // prevent page scroll to fragment
@@ -191,11 +192,8 @@ $.fn.tabs = function(initial, settings) {
             _unFocus(); // fix IE focussing bottom of the page for some unknown reason
         }
 
-        var tabs = $('>ul:eq(0)>li>a', this);
-
         // highlight tab accordingly
         $('>' + settings.tabStruct, this).filter(':eq(' + settings.initial + ')').show().end().not(':eq(' + settings.initial + ')').addClass(settings.hideClass);
-
         $('>ul:eq(0)>li:eq(' + settings.initial + ')', this).addClass(settings.selectedClass);
 
         // setup auto height
@@ -295,7 +293,7 @@ $.fn.tabs = function(initial, settings) {
         if (settings.bookmarkable) {
             tabs.history();
             $.ajaxHistory.initialize(function() {
-                $('>ul:eq(0)>li>a', container).eq(settings.initial).click();
+                tabs.eq(settings.initial).click();
             });
         }
 
