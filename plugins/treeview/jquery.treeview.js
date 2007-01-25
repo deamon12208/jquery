@@ -1,5 +1,5 @@
 /*
- * Treeview - jQuery plugin to hide and show branches of a tree
+ * Treeview 1.0 - jQuery plugin to hide and show branches of a tree
  *
  * Copyright (c) 2006 Jörn Zaefferer, Myles Angell
  *
@@ -14,7 +14,11 @@
 /**
  * Takes an unordered list and makes all branches collapsable.
  *
- * Classify initially closed branches with "closed", open with "open".
+ * The "treeview" class is added if not already present.
+ *
+ * To hide branches on first display, mark their li elements with
+ * the class "closed". If the "collapsed" option is used, mark intially open
+ * branches with class "open".
  *
  * @example .treeview, .treeview ul { 
  * 	padding: 0;
@@ -35,32 +39,45 @@
  * .treeview .last { background-image: url(images/tv-item-last.gif); }
  * .treeview .lastCollapsable { background-image: url(images/tv-collapsable-last.gif); }
  * .treeview .lastExpandable { background-image: url(images/tv-expandable-last.gif); }
- * @desc The following styles are necessary in your stylesheet.
+ * @desc The following styles are necessary in your stylesheet. There is an alternative set of images available.
  *
  * @example $("ul").Treeview();
  * @before <ul>
- * 	<li>Item 1
- *  	<ul>
- * 			<li>Item 1.1</li>
- *    	</ul>
- *  </li>
- *  <li class="closed">Item 2 (starts as closed)
- * 		<ul>
- * 			<li>Item 2.1
- * 				<ul>
- * 					<li>Item 2.1.1</li>
- * 					<li>Item 2.1.2</li>
- * 				</ul>
- * 			</li>
- * 			<li>Item 2.2</li>
- * 	 	</ul>
- *	</li>
- *	<li>Item 3</li>
+ *   <li>Item 1
+ *     <ul>
+ *       <li>Item 1.1</li>
+ *     </ul>
+ *   </li>
+ *   <li class="closed">Item 2 (starts closed)
+ *     <ul>
+ *       <li>Item 2.1
+ *         <ul>
+ *           <li>Item 2.1.1</li>
+ *           <li>Item 2.1.2</li>
+ *         </ul>
+ *       </li>
+ *       <li>Item 2.2</li>
+ *     </ul>
+ *   </li>
+ *   <li>Item 3</li>
  * </ul>
  * @desc Basic usage example
  *
  * @example $("ul").Treeview({ speed: "fast", collapsed: true});
- * @desc Create a treeview that starts with all branches collapsed. Toggling branches is animated.
+ * @before <ul>
+ *   <li class="open">Item 1 (starts open)
+ *     <ul>
+ *       <li>Item 1.1</li>
+ *     </ul>
+ *   </li>
+ *   <li>Item 2
+ *     <ul>
+ *       <li>Item 2.1</li>
+ *       <li>Item 2.2</li>
+ *     </ul>
+ *   </li>
+ * </ul>
+ * @desc Create a treeview that starts collapsed. Toggling branches is animated.
  *
  * @example $("ul").Treeview({ control: #treecontrol });
  * @before <div id="treecontrol">
@@ -69,11 +86,12 @@
  *   <a href="#">Toggle All</a>
  * </div>
  * @desc Creates a treeview that can be controlled with a few links.
+ * Very likely to be changed/improved in future versions.
  *
  * @param Map options Optional settings to configure treeview
  * @option String|Number speed Speed of animation, see animate() for details. Default: none, no animation
  * @option Boolean collapsed Start with all branches collapsed. Default: none, all expanded
- * @option String control Expression to select a container for a treecontrol, see last example. Very likely to be changed/improved in future versions.
+ * @option <Content> control Container for a treecontrol, see last example.
  * @type jQuery
  * @name Treeview
  * @cat Plugins/Treeview
@@ -81,7 +99,8 @@
 
 (function($) {
 
-	// classes used by the plugin, need to be styled via external stylesheet
+	// classes used by the plugin
+	// need to be styled via external stylesheet, see first example
 	var CLASSES = {
 		open: "open",
 		closed: "closed",
@@ -111,6 +130,7 @@
 			left: -21
 		});
 
+	// necessary helper method
 	$.fn.swapClass = function(c1,c2) {
 		return this.each(function() {
 			var $this = $(this);
@@ -122,32 +142,44 @@
 		});
 	};
 	
-	// define plugin method, currently no options
+	// define plugin method
 	$.fn.Treeview = function(settings) {
 	
 		// currently no defaults necessary, all implicit
 		settings = $.extend({}, settings);
 	
+		// factory for treecontroller
 		function treeController(tree, control) {
-			function build(filter) {
+			// factory for click handlers
+			function handler(filter) {
 				return function() {
-					toggler( $("div." + CLASSES.hitarea, tree).filter(function() {
+					// reuse toggle event handler, applying the elements to toggle
+					// start searching for all hitareas
+					toggler.apply( $("div." + CLASSES.hitarea, tree).filter(function() {
+						// for plain toggle, no filter is provided, otherwise we need to check the parent element
 						return filter ? $(this).parent("." + filter).length : true;
 					}) );
 					return false;
 				}
 			}
-			$(":eq(0)", control).click( build(CLASSES.collapsable) );
-			$(":eq(1)", control).click( build(CLASSES.expandable) );
-			$(":eq(2)", control).click( build() ); 
+			// click on first element to collapse tree
+			$(":eq(0)", control).click( handler(CLASSES.collapsable) );
+			// click on second to expand tree
+			$(":eq(1)", control).click( handler(CLASSES.expandable) );
+			// click on third to toggle tree
+			$(":eq(2)", control).click( handler() ); 
 		}
 	
 		// handle toggle event
-		function toggler(start) {
-			$(start.type ? this : start).parent()
+		function toggler() {
+			// this refers to hitareas, we need to find the parent lis first
+			$(this).parent()
+				// swap classes
 				.swapClass(CLASSES.collapsable, CLASSES.expandable)
 				.swapClass(CLASSES.lastCollapsable, CLASSES.lastExpandable)
+				// find child lists
 				.find(">ul")
+				// toggle them
 				.toggle(settings.speed);
 		}
 
@@ -176,10 +208,12 @@
 			.append("<div class=\"" + CLASSES.hitarea + "\">")
 			// find hitarea
 			.find("div." + CLASSES.hitarea)
+			// apply styles to hitarea
 			.css(hitareaCSS)
 			// apply toggle event to hitarea
 			.toggle( toggler, toggler );
 		
+		// if control option is set, create the treecontroller
 		if(settings.control)
 			treeController(this, settings.control);
 		
