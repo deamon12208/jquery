@@ -28,12 +28,12 @@ jQuery.fn._width  = jQuery.fn.width;
  * @cat Plugins/Dimensions
  */
 jQuery.fn.height = function() {
-	if ( this.get(0) == window )
+	if ( this[0] == window )
 		return self.innerHeight ||
 			jQuery.boxModel && document.documentElement.clientHeight ||
 			document.body.clientHeight;
 	
-	if ( this.get(0) == document ) 
+	if ( this[0] == document ) 
 		return Math.max( document.body.scrollHeight, document.body.offsetHeight );
 	
 	return this._height(arguments[0]);
@@ -58,12 +58,12 @@ jQuery.fn.height = function() {
  * @cat Plugins/Dimensions
  */
 jQuery.fn.width = function() {
-	if ( this.get(0) == window )
+	if ( this[0] == window )
 		return self.innerWidth ||
 			jQuery.boxModel && document.documentElement.clientWidth ||
 			document.body.clientWidth;
 	
-	if ( this.get(0) == document )
+	if ( this[0] == document )
 		return Math.max( document.body.scrollWidth, document.body.offsetWidth );
 	
 	return this._width(arguments[0]);
@@ -82,9 +82,11 @@ jQuery.fn.width = function() {
  * @cat Plugins/Dimensions
  */
 jQuery.fn.innerHeight = function() {
-	return this.get(0) == window || this.get(0) == document ?
+	return this[0] == window || this[0] == document ?
 		this.height() :
-		this.get(0).offsetHeight - (parseInt(this.css("borderTopWidth")) || 0) - (parseInt(this.css("borderBottomWidth")) || 0);
+		this.css('display') != 'none' ?
+		 	this[0].offsetHeight - (parseInt(this.css("borderTopWidth")) || 0) - (parseInt(this.css("borderBottomWidth")) || 0) :
+			this.height() + (parseInt(this.css("paddingTop")) || 0) + (parseInt(this.css("paddingBottom")) || 0);
 };
 
 /**
@@ -100,9 +102,11 @@ jQuery.fn.innerHeight = function() {
  * @cat Plugins/Dimensions
  */
 jQuery.fn.innerWidth = function() {
-	return this.get(0) == window || this.get(0) == document ?
+	return this[0] == window || this[0] == document ?
 		this.width() :
-		this.get(0).offsetWidth - (parseInt(this.css("borderLeftWidth")) || 0) - (parseInt(this.css("borderRightWidth")) || 0);
+		this.css('display') != 'none' ?
+			this[0].offsetWidth - (parseInt(this.css("borderLeftWidth")) || 0) - (parseInt(this.css("borderRightWidth")) || 0) :
+			this.height() + (parseInt(this.css("paddingLeft")) || 0) + (parseInt(this.css("paddingRight")) || 0);
 };
 
 /**
@@ -117,9 +121,12 @@ jQuery.fn.innerWidth = function() {
  * @cat Plugins/Dimensions
  */
 jQuery.fn.outerHeight = function() {
-	return this.get(0) == window || this.get(0) == document ?
+	return this[0] == window || this[0] == document ?
 		this.height() :
-		this.get(0).offsetHeight;	
+		this.css('display') != 'none' ?
+			this[0].offsetHeight :
+			this.height() + (parseInt(this.css("borderTopWidth")) || 0) + (parseInt(this.css("borderBottomWidth")) || 0)
+				+ (parseInt(this.css("paddingTop")) || 0) + (parseInt(this.css("paddingBottom")) || 0);
 };
 
 /**
@@ -134,9 +141,12 @@ jQuery.fn.outerHeight = function() {
  * @cat Plugins/Dimensions
  */
 jQuery.fn.outerWidth = function() {
-	return this.get(0) == window || this.get(0) == document ?
+	return this[0] == window || this[0] == document ?
 		this.width() :
-		this.get(0).offsetWidth;
+		this.css('display') != 'none' ?
+			this[0].offsetWidth :
+			this.height() + (parseInt(this.css("borderLeftWidth")) || 0) + (parseInt(this.css("borderRightWidth")) || 0)
+				+ (parseInt(this.css("paddingLeft")) || 0) + (parseInt(this.css("paddingRight")) || 0);
 };
 
 /**
@@ -151,12 +161,12 @@ jQuery.fn.outerWidth = function() {
  * @cat Plugins/Dimensions
  */
 jQuery.fn.scrollLeft = function() {
-	if ( this.get(0) == window || this.get(0) == document )
+	if ( this[0] == window || this[0] == document )
 		return self.pageXOffset ||
 			jQuery.boxModel && document.documentElement.scrollLeft ||
 			document.body.scrollLeft;
 	
-	return this.get(0).scrollLeft;
+	return this[0].scrollLeft;
 };
 
 /**
@@ -171,12 +181,12 @@ jQuery.fn.scrollLeft = function() {
  * @cat Plugins/Dimensions
  */
 jQuery.fn.scrollTop = function() {
-	if ( this.get(0) == window || this.get(0) == document )
+	if ( this[0] == window || this[0] == document )
 		return self.pageYOffset ||
 			jQuery.boxModel && document.documentElement.scrollTop ||
 			document.body.scrollTop;
 
-	return this.get(0).scrollTop;
+	return this[0].scrollTop;
 };
 
 /**

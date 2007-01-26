@@ -47,7 +47,9 @@
 				$('#main').show();
 				ok( $('#test').height() == 100, "getting on an element" );
 				$('#test').height(50);
-				ok( $('#test').height() == 50, "setting on an element")
+				ok( $('#test').height() == 50, "setting on an element" );
+				ok( $('#test').hide().height() == 50, "getting when display: none" );
+				$('#test').show();
 				$('#main').hide();
 				
 				// reset wrapper height to remove scrollbars
@@ -82,7 +84,8 @@
 				$('#main').show();
 				ok( $('#test').width() == 100, "getting on an element" );
 				$('#test').width(50);
-				ok( $('#test').width() == 50, "setting on an element")
+				ok( $('#test').width() == 50, "setting on an element" );
+				ok( $('#test').hide().width() == 50, "getting on an element with display: none" );
 				$('#main').hide();
 				
 				// reset wrapper width to remove scrollbars
@@ -92,25 +95,29 @@
 			
 			test("innerHeight()", function() {
 				$('#main').show();
-				ok( $('#inner').innerHeight() == 104, "on an element" );
+				ok( $('#inner').show().innerHeight() == 104, "on an element" );
+				ok( $('#inner').hide().innerHeight() == 104, "on an element with display: none" );
 				$('#main').hide();
 			});
 			
 			test("innerWidth()", function() {
 				$('#main').show();
-				ok( $('#inner').innerWidth() == 104, "on an element" );
+				ok( $('#inner').show().innerWidth() == 104, "on an element" );
+				ok( $('#inner').hide().innerWidth() == 104, "on an element with display: none" );
 				$('#main').hide();
 			});
 			
 			test("outerHeight()", function() {
 				$('#main').show();
-				ok( $('#inner').outerHeight() == 106, "on an element" );
+				ok( $('#outer').show().outerHeight() == 106, "on an element" );
+				ok( $('#outer').hide().outerHeight() == 106, "on an element with display: none" );
 				$('#main').hide();
 			});
 			
 			test("outerWidth()", function() {
 				$('#main').show();
-				ok( $('#inner').outerWidth() == 106, "on an element" );
+				ok( $('#outer').show().outerWidth() == 106, "on an element" );
+				ok( $('#outer').hide().outerWidth() == 106, "on and element with display: none" );
 				$('#main').hide();
 			});
 			
