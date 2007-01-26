@@ -3,7 +3,7 @@
 <html debug="true">
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-		<title>jQuery cloneEvents.js Unit Test</title>
+		<title>jQuery copyEvents.js Unit Test</title>
 		
 		<!-- load latest build of jquery.js -->
 		<script type="text/javascript" src="../../../jquery/dist/jquery.js"></script>
@@ -12,7 +12,7 @@
 		<script type="text/javascript" src="../../../jquery/test/data/testrunner.js"></script>
 
 		<!-- load dimensions.js (this is what we're testing! -->
-		<script type="text/javascript" src="../cloneEvents.js"></script>
+		<script type="text/javascript" src="../copyEvents.js"></script>
 		
 		<!-- load firebug lite 
 		<script type="text/javascript" src="../../../../firebuglite/firebug.js"></script>-->
@@ -20,7 +20,7 @@
 		<link rel="Stylesheet" media="screen" href="../../../jquery/test/data/testsuite.css" />
 		
 		<script type="text/javascript" charset="utf-8">
-			test("cloneEventsFrom()", function() {
+			test("copyEvents()", function() {
 				var clickCount = mouseoverCount = mouseoutCount = 0;
 				
 				// Create event handlers for A tag
@@ -37,7 +37,7 @@
 					
 				// clone events from a to 'from' li tags
 				$('#main li.from')
-					.cloneEventsFrom('#main a.from')
+					.copyEvents('#main a.from')
 					// fire events
 					.trigger('click')
 					.trigger('mouseover')
@@ -49,7 +49,7 @@
 				ok( mouseoutCount  == 2, 'Testing mouseout count' );
 			});
 			
-			test("cloneEventsTo()", function() {
+			test("copyEventsTo()", function() {
 				var clickCount = mouseoverCount = mouseoutCount = 0;
 				
 				// Create event handlers for A tag
@@ -66,9 +66,43 @@
 				
 				// clone events from a to 'from' li tags
 				$('#main a.to')
-					.cloneEventsTo('#main li.to');
+					.copyEventsTo('#main li.to');
 					
 				$('#main li.to')
+					// fire events
+					.trigger('click')
+					.trigger('mouseover')
+					.trigger('mouseout');
+				
+				// check counts
+				ok( clickCount     == 2, 'Testing click count' );
+				ok( mouseoverCount == 2, 'Testing mouseover count' );
+				ok( mouseoutCount  == 2, 'Testing mouseout count' );
+			});
+			
+			test("cloneWithEvents()", function() {
+				var clickCount = mouseoverCount = mouseoutCount = 0;
+				
+				// Create event handlers for A tag
+				$('#main a.to')
+					.bind('click', function() { 
+						clickCount++; 
+					})
+					.bind('mouseover', function() {
+						mouseoverCount++;
+					})
+					.bind('mouseout', function() {
+						mouseoutCount++;
+					});	
+				
+				// clone events from a to 'from' li tags
+				$('#main a.to')
+					.copyEventsTo('#main li.to');
+				
+				var lis = $('#main li.to')
+					.cloneWithEvents()
+					.appendTo('#main ul');
+				lis
 					// fire events
 					.trigger('click')
 					.trigger('mouseover')
@@ -82,7 +116,7 @@
 		</script>		
 	</head>
 	<body>
-		<h1 id="banner">jQuery form.js - Test Suite</h1>
+		<h1 id="banner">jQuery copyEvents.js - Test Suite</h1>
 		<h2 id="userAgent"></h2>
 
 		<!-- Test HTML -->

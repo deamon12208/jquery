@@ -12,14 +12,14 @@ jQuery.fn.extend({
 	 * element passed in from the jQuery object to all
 	 * the current matched elements in the jQuery object.
 	 *
-	 * @name cloneEventsFrom
+	 * @name copyEvents
 	 * @param jQuery|String|DOM Element jQuery object to copy events from. Only uses the first matched element.
 	 * @type jQuery
-	 * @cat Plugins/cloneEvents
+	 * @cat Plugins/copyEvents
 	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
 	 */
-	cloneEventsFrom: function(from) {
-		jQuery.event.clone(from, this);
+	copyEvents: function(from) {
+		jQuery.event.copy(from, this);
 		return this;
 	},
 	
@@ -28,15 +28,28 @@ jQuery.fn.extend({
 	 * elements from the passed in jQuery object from 
 	 * the first matched element in the jQuery object.
 	 *
-	 * @name cloneEventsTo
+	 * @name copyEventsTo
 	 * @param jQuery|String|DOM Element jQuery object to copy events to. Copies to all matched elements.
 	 * @type jQuery
-	 * @cat Plugins/cloneEvents
+	 * @cat Plugins/copyEvents
 	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
 	 */
-	cloneEventsTo: function(to) {
-		jQuery.event.clone(this, to);
+	copyEventsTo: function(to) {
+		jQuery.event.copy(this, to);
 		return this;
+	},
+	
+	/**
+	 * Does a .clone() and also copies the events.
+	 * 
+	 * @name cloneWithEvents
+	 * @type jQuery
+	 * @param Boolean deep (Optional) Set to false if you don't want to clone all descendant nodes, in addition to the element itself.
+	 * @cat Plugins/copyEvents
+	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
+	 */
+	cloneWithEvents: function(deep) {
+		return this.clone( deep ).copyEvents( this );
 	}
 });
 
@@ -44,14 +57,14 @@ jQuery.fn.extend({
  * Logic for copying events from one jQuery object to another.
  *
  * @private	
- * @name jQuery.events.clone
+ * @name jQuery.events.copy
  * @param jQuery|String|DOM Element jQuery object to copy events from. Only uses the first matched element.
  * @param jQuery|String|DOM Element jQuery object to copy events to. Copies to all matched elements.
  * @type undefined
- * @cat Plugins/cloneEvents
+ * @cat Plugins/copyEvents
  * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
  */
-jQuery.event.clone = function(from, to) {
+jQuery.event.copy = function(from, to) {
 	from = (from.jquery) ? from : jQuery(from);
 	to   = (to.jquery)   ? to   : jQuery(to);
 	
