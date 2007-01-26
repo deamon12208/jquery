@@ -10,7 +10,7 @@ body { margin: 0; padding: 0; font-size: small; }
 h1 { padding: 10px; margin: 0; font-size: large }
 h2 { padding: 10px; background-color: #ddd; color: black; margin: 0; font-size: small; font-weight: normal }
 #banner { padding: 15px; background-color: #06b; color: white; font-size: large; border-bottom: 1px solid #ccc }
-#main { background: #eee; }
+#main { background: #eee; padding: 10px }
 div.section { clear: left; xposition: relative }
 div.section h1 { padding: 20px 20px 0 20px }
 div.section h2 { background: #eee; padding: 1px 20px;  }
@@ -29,6 +29,8 @@ div.fun   { margin: 2px; }
 #box2 { height: 150px;  }                              /* fixed height */
 #box3 { width:  300px; margin:auto }                   /* fixed width */
 #box4 { height: 150px; width: 300px; margin:auto }     /* fixed height and width */
+
+div.plain  { background-color: #6af; text-align: center; }
 </style>
 
 <script type="text/javascript" src="../../jquery/dist/jquery.js"></script>
@@ -43,8 +45,10 @@ div.fun   { margin: 2px; }
             eval(t);
         });
 
-        // fixed/fluid tests
-        $("div.box").corner();
+        // fixed/fluid/plain tests
+        $("div.box, div.plain").corner();
+        
+        // absolute position
         $("#abs").corner("cc:#06b");
 	});
 </script>
@@ -196,6 +200,25 @@ div.fun   { margin: 2px; }
         lorem ipsum dolor sit amet consectetuer adipiscing elit sed lorem leo lorem leo consectetuer adipiscing elit
     </div>
     
+    <div class="section">
+        <h1>Plain Styling</h1>
+        <h2>The following divs test normal fluid content with only the styles shown</h2>
+    </div>
+
+    <div class="plain" style="padding: 30px">
+        <strong>Round<br /></strong>
+        This is a plain div with a 30px padding
+    </div>
+    <p />
+    <div class="plain" style="padding: 0">
+        <strong>Round<br /></strong>
+        This is a plain div with a 0px padding
+    </div>
+    <p />
+    <div class="plain" style="padding: 30px; margin: 30px">
+        <strong>Round<br /></strong>
+        This is a plain div with a 30px padding and 30px margin
+    </div>
     <br />
     
 </div> <!-- main -->
