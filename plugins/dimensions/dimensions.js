@@ -263,8 +263,10 @@ jQuery.fn.offset = function(options, returnObject) {
 			// Need to get scroll offsets in-between offsetParents
 			do {
 				sl += parent.scrollLeft || 0;
-				st += parent.scrollTop  || 0;				
+				st += parent.scrollTop  || 0;
+							
 				parent = parent.parentNode;
+				
 				// Mozilla removes the border if the parent has overflow property other than visible
 				if (jQuery.browser.mozilla && parent != elem && parent != op && jQuery.css(parent, 'overflow') != 'visible') {
 					y += parseInt(jQuery.css(parent, 'borderTopWidth')) || 0;
@@ -295,6 +297,7 @@ jQuery.fn.offset = function(options, returnObject) {
 		y += parseInt(jQuery.css(elem, 'paddingTop'))  || 0;
 	}
 	
+	// Opera thinks offset is scroll offset for display: inline elements
 	if (options.scroll && jQuery.browser.opera && jQuery.css(elem, 'display') == 'inline') {
 		sl -= elem.scrollLeft || 0;
 		st -= elem.scrollTop  || 0;
