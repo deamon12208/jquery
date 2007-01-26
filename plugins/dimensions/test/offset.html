@@ -7,12 +7,13 @@
 		
 		<!-- load latest build of jquery.js -->
 		<script type="text/javascript" src="../../../jquery/dist/jquery.js"></script>
+		
+		<!-- load firebug lite -->
+		<script type="text/javascript" src="../../../firebuglite/firebug.js"></script>
 
 		<!-- load dimensions.js (this is what we're testing! -->
 		<script type="text/javascript" src="../dimensions.js"></script>
 		
-		<!-- load firebug lite -->
-		<script type="text/javascript" src="../../../firebuglite/firebug.js"></script>
 		
 		<script type="text/javascript" charset="utf-8">
 			$(function() {
@@ -31,7 +32,7 @@
 					var time = new Date();
 					$(id).offset(options, offset);
 					console.log(new Date() - time + ' milliseconds');
-					$('#moveable').css({ top: offset.top+'px', left: offset.left+'px' });
+					$('#moveable').css(offset);
 					var props = '';
 					for (prop in offset)
 						props += prop + ': ' + offset[prop] + '\n';
@@ -63,11 +64,13 @@
 			#absoluteChild2 { position: absolute; top: 100px; right: 10px; margin: 5px; border: 2px solid #000; padding: 3px; width: 100px; height: 100px; background-color: #980; }
 			
 			#absolute2 { position: absolute; top: 300px; left: 400px; margin: 5px; border: 2px solid #000; padding: 3px; width: 100px; height: 100px; background-color: #822; }
-			#relative2 { overflow: auto; position: relative; top: 50px; left: 50px; margin: 5px; border: 2px solid #000; padding: 3px; width: 300px; height: 300px; background-color: #092; }
-			#static2 { position: static; margin: 5px; border: 2px solid #000; padding: 3px; width: 250px; height: 250px; background-color: #980; }
-			#relative3 { position: relative; top: 25px; left: 25px; margin: 5px; border: 2px solid #000; padding: 3px; width: 100px; height: 100px; background-color: #822; }
-			#absolute3 { position: absolute; top: 20px; right: -20px; margin: 5px; border: 2px solid #000; padding: 3px; width: 100px; height: 100px; background-color: #092; }
-			#static3 { position: static; margin: 5px; border: 2px solid #000; padding: 3px; width: 250px; height: 250px; background-color: #980; }
+			#relative2 { position: relative; top: 50px; left: 50px; margin: 5px; border: 2px solid #000; padding: 3px; width: 300px; height: 300px; background-color: #092; }
+			#static2 { overflow: hidden; position: static; margin: 5px; border: 2px solid #000; padding: 3px; width: 250px; height: 250px; background-color: #980; }
+			#relative3 { overflow: auto; position: relative; top: 10px; left: 10px; margin: 5px; border: 2px solid #000; padding: 3px; width: 200px; height: 200px; background-color: #822; }
+			#absolute3 { position: absolute; top: 30px; right: -90px; margin: 5px; border: 2px solid #000; padding: 3px; width: 200px; height: 200px; background-color: #092; }
+			#static3 { position: static; margin: 10px; border: 2px solid #000; padding: 3px; width: 250px; height: 250px; background-color: #980; }
+			
+			#inline { display: inline; border: 2px solid #000; }
 		</style>
 	</head>
 	<body>
@@ -97,6 +100,7 @@
 			<li><a href="#relative3">Move to relative 3</a></li>
 			<li><a href="#absolute3">Move to absolute 3</a></li>
 			<li><a href="#static3">Move to static 3</a></li>
+			<li><a href="#inline">Move to inline 1</a></li>
 		</ul>
 		
 		<div id="static"> Static 1
@@ -122,7 +126,9 @@
 				<div id="static2"> Static 2
 					<div id="relative3"> Relative 3
 						<div id="absolute3"> Absolute 3
-							<div id="static3"> Static 3</div>
+							<div id="static3"> Static 3
+								<div id="inline">Inline 1</div>
+							</div>
 						</div>
 					</div>
 				</div>

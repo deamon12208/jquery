@@ -229,6 +229,8 @@ jQuery.fn.offset = function(options, returnObject) {
 	do {
 		x += parent.offsetLeft || 0;
 		y += parent.offsetTop  || 0;
+		
+		console.log(' ' + parent.id + ' ' + x + ' ' + y);
 
 		// Mozilla and IE do not add the border
 		if (jQuery.browser.mozilla || jQuery.browser.msie) {
@@ -241,7 +243,7 @@ jQuery.fn.offset = function(options, returnObject) {
 			y += bt;
 			
 			// Mozilla removes the border if the parent has overflow property other than visible
-			if (jQuery.browser.mozilla && jQuery.css(parent, 'overflow') != 'visible' && parent != elem) {
+			if (jQuery.browser.mozilla && parent != elem && jQuery.css(parent, 'overflow') != 'visible') {
 				x += bl;
 				y += bt;
 			}
@@ -259,11 +261,15 @@ jQuery.fn.offset = function(options, returnObject) {
 
 		if (options.scroll) {
 			// Need to get scroll offsets in-between offsetParents
-			var op = parent.offsetParent;
 			do {
 				sl += parent.scrollLeft || 0;
-				st += parent.scrollTop  || 0;
+				st += parent.scrollTop  || 0;				
 				parent = parent.parentNode;
+				// Mozilla removes the border if the parent has overflow property other than visible
+				if (jQuery.browser.mozilla && parent != elem && parent != op && jQuery.css(parent, 'overflow') != 'visible') {
+					y += parseInt(jQuery.css(parent, 'borderTopWidth')) || 0;
+					x += parseInt(jQuery.css(parent, 'borderLeftWidth')) || 0;
+				}
 			} while (parent != op);
 		} else {
 			parent = parent.offsetParent;
@@ -287,6 +293,11 @@ jQuery.fn.offset = function(options, returnObject) {
 	if ( options.padding ) {
 		x += parseInt(jQuery.css(elem, 'paddingLeft')) || 0;
 		y += parseInt(jQuery.css(elem, 'paddingTop'))  || 0;
+	}
+	
+	if (options.scroll && jQuery.browser.opera && jQuery.css(elem, 'display') == 'inline') {
+		sl -= elem.scrollLeft || 0;
+		st -= elem.scrollTop  || 0;
 	}
 	
 	var returnValue = options.scroll ? { top: y - st, left: x - sl, scrollTop:  st, scrollLeft: sl }
