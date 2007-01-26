@@ -1,7 +1,7 @@
 /*
  * jQuery corner plugin
  *
- * version 1.7 (12/26/2007)
+ * version 1.7 (1/26/2007)
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
