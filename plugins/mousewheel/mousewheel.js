@@ -78,12 +78,13 @@ jQuery.fn.extend({
 
 				// normalize delta property
 				var delta = 0;
-				if (event.wheelDelta)
+				if (event.wheelDelta) {
 					delta = event.wheelDelta/120;
+					if (window.opera)
+						delta = -(event.wheelDelta/120);
+				} 
 				else if (event.detail)
 					delta = -event.detail/3;
-				else if (window.opera)
-					delta = -(event.wheelDelta/120);
 
 				// call the handler
 				for (var i=0; i<self._mwHandlers.length; i++)
