@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 0.7 (01/17/2007)
+ * Version 0.8 (01/25/2007)
  * @requires jQuery v1.0
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -11,13 +11,15 @@
  */
  (function($) {
 /**
- * blockUI provides a way to effectively simulate synchronous behavior during ajax operations 
- * without locking the browser.  It will prevent user operations for the current page while it is
+ * blockUI provides a mechanism for blocking user interaction with a page.  This can be
+ * a very effective way to simulate synchronous behavior during ajax operations  without
+ * locking the browser.  It will prevent user operations for the current page while it is
  * active.  blockUI accepts the following two optional arguments:
  *
  *   (String|Element|jQuery) message: The message to be displayed while the UI is blocked. The message argument
  *              can be a plain text string, like "Processing...", an HTML string like,
  *              "<h1><img src="busy.gif" /> Please wait...</h1>", a DOM element, or a jQuery object.
+ *              The default message is "<h1>Please wait...</h1>"
  *
  *   (Object) css:  Object which contains css values to override the default styles of
  *              the message.  Use this argument if you wish to override the default 
@@ -28,6 +30,24 @@
  *                    border: '5px solid #f00,
  *                    fontWeight: 'bold'
  *              });
+ *
+ *
+ * IMPORTANT NOTE ON STYLES AND POSITIONING:
+ * ----------------------------------------
+ * The default styling of the blocking message includes the following:
+ *
+ *    top:50%;left:50%;width:250px;margin:-50px 0 0 -125px
+ *
+ * These styles work well for common messages like "Please wait".  If you require different positioning
+ * or if you're using long messages, or message elements with a height significantly greater than
+ * 100px please use the css argument to provide the necessary styles for your message.
+ *
+ * In addition to the positioning styles mentioned above, the following styles are also
+ * applied by default:
+ *
+ *     padding:0;text-align:center;background-color:#fff;border:3px solid #aaa
+ *
+ * The css argument can be used to override any of these styles.
  *
  * @example
  * $.blockUI();
