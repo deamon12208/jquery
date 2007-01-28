@@ -229,8 +229,6 @@ jQuery.fn.offset = function(options, returnObject) {
 	do {
 		x += parent.offsetLeft || 0;
 		y += parent.offsetTop  || 0;
-		
-		console.log(' ' + parent.id + ' ' + x + ' ' + y);
 
 		// Mozilla and IE do not add the border
 		if (jQuery.browser.mozilla || jQuery.browser.msie) {
