@@ -1,0 +1,30 @@
+<project name="jQuery plugins" basedir=".">
+
+    <!-- SETUP -->
+
+    <property description="Source Folder" name="SRC_DIR" value="." />
+    <property description="Files for parsing etc." name="BUILD_DIR" value="../jquery/build" />
+    <property description="Rhino JS Engine" name="JAR" value="${BUILD_DIR}/js.jar" />
+	<property name="prefix" value="/jquery." />
+
+    <!-- MAIN -->
+
+    <target name="pack" description="Main jquery build, set PLUGINS property to include plugins">
+    	<echo message="Packing ${PLUGIN}" />
+        <java jar="${JAR}" fork="true">
+            <arg value="${BUILD_DIR}/build/pack.js" />
+            <arg value="${PLUGIN}" />
+            <arg value="${PLUGIN_PACK}" />
+        </java>
+        <echo message="${PLUGIN_PACK} built." />
+    </target>
+
+    <target name="quicksearch">
+    	<property name="folder" value="quicksearch${prefix}" />
+        <antcall target="pack">
+            <param name="PLUGIN" value="${folder}quicksearch.js" />
+        	<param name="PLUGIN_PACK" value="${folder}quicksearch.pack.js" />
+        </antcall>
+    </target>
+
+</project>
