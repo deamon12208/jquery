@@ -123,6 +123,7 @@
  *                          Default value: "tabs-hide".
  * @option String loadingClass The CSS class used for indicating that an Ajax tab is currently
  *                             loading, for example by showing a spinner.
+ *                             Default value: "tabs-loading".
  * @option String tabStruct A CSS selector or basic XPath expression reflecting a nested HTML
  *                          structure that is different from the default single div structure
  *                          (one div with an id inside the overall container holds one tab's
@@ -179,7 +180,7 @@ $.fn.tabs = function(initial, settings) {
         if (settings.remote) {
             var remoteUrls = {};
             tabs.each(function(i) {
-                var id = 'remote-' + ++i;
+                var id = 'tabs-remote-' + ++i;
                 var hash = '#' + id;
                 remoteUrls[hash] = this.href;
                 this.href = hash;
@@ -193,7 +194,7 @@ $.fn.tabs = function(initial, settings) {
                 if (this.hash == location.hash) {
                     settings.initial = i;
                     // prevent page scroll to fragment
-                    if ($.browser.msie || $.browser.opera) {
+                    if (($.browser.msie || $.browser.opera) && !settings.remote) {
                         var toShow = $(location.hash);
                         var toShowId = toShow.attr('id');
                         toShow.attr('id', '');
@@ -230,15 +231,6 @@ $.fn.tabs = function(initial, settings) {
                             el.style.height = '';
                             el.minHeight = null;
                         }
-                        /* This does not work reliable
-                        if (jq.is(':visible')) {
-                            // prevent too much flicker
-                            var clone = jq.clone().css({display: 'block', position: 'absolute', visibility: 'hidden', 'min-height': '', height: ''}).appendTo(container);
-                            h = clone.get(0).offsetHeight;
-                            clone.remove();
-                        } else {
-                            h = jq.css({'min-height': ''}).height(); // use jQuery's height() to get hidden element values
-                        }*/
                         h = jq.css({'min-height': ''}).height(); // use jQuery's height() to get hidden element values
                     } else {
                         h = jq.height(); // use jQuery's height() to get hidden element values
@@ -277,7 +269,7 @@ $.fn.tabs = function(initial, settings) {
         }
 
         // setup animations
-        var showAnim = {}, hideAnim = {}, showSpeed, hideSpeed;
+        var showAnim = {}, hideAnim = {}, showSpeed = settings.fxShowSpeed || settings.fxSpeed, hideSpeed = settings.fxHideSpeed || settings.fxSpeed;
         if (settings.fxSlide || settings.fxFade) {
             if (settings.fxSlide) {
                 showAnim['height'] = 'show';
@@ -287,18 +279,15 @@ $.fn.tabs = function(initial, settings) {
                 showAnim['opacity'] = 'show';
                 hideAnim['opacity'] = 'hide';
             }
-            showSpeed = hideSpeed = settings.fxSpeed;
         } else {
             if (settings.fxShow) {
                 showAnim = settings.fxShow;
-                showSpeed = settings.fxShowSpeed || settings.fxSpeed;
             } else { // use some kind of animation to prevent browser scrolling to the tab
                 showAnim['min-width'] = 0; // avoid opacity, causes flicker in Firefox
                 showSpeed = settings.bookmarkable ? 50 : 1; // as little as 50 is sufficient
             }
             if (settings.fxHide) {
                 hideAnim = settings.fxHide;
-                hideSpeed = settings.fxHideSpeed || settings.fxSpeed;
             } else { // use some kind of animation to prevent browser scrolling to the tab
                 hideAnim['min-width'] = 0; // avoid opacity, causes flicker in Firefox
                 hideSpeed = settings.bookmarkable ? 50 : 1; // as little as 50 is sufficient
@@ -307,13 +296,6 @@ $.fn.tabs = function(initial, settings) {
 
         // callbacks
         var onClick = settings.onClick, onHide = settings.onHide, onShow = settings.onShow;
-
-        // enable history support if history plugin is present
-        if (settings.bookmarkable) {
-            $.ajaxHistory.initialize(function() {
-                tabs.eq(settings.initial).click();
-            });
-        }
 
         // attach activateTab event, required for activating a tab programmatically
         tabs.bind('triggerTab', function() {
@@ -378,76 +360,78 @@ $.fn.tabs = function(initial, settings) {
         // attach click event
         tabs.bind('click', function(e) {
 
+            var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
+
             var jqLi = $(this.parentNode);
 
-            if (jqLi.is('.' + settings.disabledClass)) { // if tab is disabled stop here
+            // if tab is already selected or disabled stop here
+            if (jqLi.is('.' + settings.selectedClass) || jqLi.is('.' + settings.disabledClass)) {
+                this.blur();
                 return false;
             }
 
-            if (!jqLi.is('.' + settings.selectedClass)) {
+            // show new tab
+            var toShow = $(this.hash);
+            if (toShow.size() > 0) {
 
-                var toShow = $(this.hash);
-                if (toShow.size() > 0) {
+                // prevent scrollbar scrolling to 0 and than back in IE7, happens only if bookmarking/history is enabled
+                if ($.browser.msie && settings.bookmarkable) {
+                    var toShowId = this.hash.replace('#', '');
+                    toShow.attr('id', '');
+                    setTimeout(function() {
+                        toShow.attr('id', toShowId); // restore id
+                    }, 0);
+                }
 
-                    // prevent scrollbar scrolling to 0 and than back in IE7, happens only if bookmarking/history is enabled
-                    if (settings.bookmarkable && $.browser.msie) {
-                        var toShowId = this.hash.replace('#', '');
-                        toShow.attr('id', '');
-                        setTimeout(function() {
-                            toShow.attr('id', toShowId); // restore id
-                        }, 0);
+                var clicked = this;
+                var toHide = $('>' + settings.tabStruct + ':visible', container);
+
+                if (typeof onClick == 'function') {
+                    // without this timeout Firefox gets really confused and calls callbacks twice...
+                    setTimeout(function() {
+                        onClick(clicked, toShow[0], toHide[0]);
+                    }, 0);
+                }
+
+                // switch tab, animation prevents browser scrolling to the fragment
+                function switchTab() {
+                    if (trueClick) { // add to history only if true click occured, not a triggered click
+                        $.ajaxHistory.update(clicked.hash);
                     }
-
-                    var clicked = this;
-                    var toHide = $('>' + settings.tabStruct + ':visible', container);
-
-                    if (typeof onClick == 'function') {
-                        // without this timeout Firefox gets really confused and calls callbacks twice...
-                        setTimeout(function() {
-                            onClick(clicked, toShow[0], toHide[0]);
-                        }, 0);
-                    }
-
-                    // switch tab, animation prevents browser scrolling to the fragment
-                    function switchTab() {
-                        toHide.animate(hideAnim, hideSpeed, function() { //
-                            $(clicked.parentNode).addClass(settings.selectedClass).siblings().removeClass(settings.selectedClass);
-                            if (typeof onHide == 'function') {
-                                onHide(clicked, toShow[0], toHide[0]);
+                    toHide.animate(hideAnim, hideSpeed, function() { //
+                        $(clicked.parentNode).addClass(settings.selectedClass).siblings().removeClass(settings.selectedClass);
+                        if (typeof onHide == 'function') {
+                            onHide(clicked, toShow[0], toHide[0]);
+                        }
+                        toHide.addClass(settings.hideClass).css({display: '', overflow: '', height: '', opacity: ''}); // maintain flexible height and accessibility in print etc.
+                        toShow.removeClass(settings.hideClass).animate(showAnim, showSpeed, function() {
+                            toShow.css({overflow: '', height: '', opacity: ''}); // maintain flexible height and accessibility in print etc.
+                            if ($.browser.msie) {
+                                toHide[0].style.filter = '';
+                                toShow[0].style.filter = '';
                             }
-                            toHide.addClass(settings.hideClass).css({display: '', overflow: '', height: '', opacity: ''}); // maintain flexible height and accessibility in print etc.
-                            toShow.removeClass(settings.hideClass).animate(showAnim, showSpeed, function() {
-                                toShow.css({overflow: '', height: '', opacity: ''}); // maintain flexible height and accessibility in print etc.
-                                if ($.browser.msie) {
-                                    toHide[0].style.filter = '';
-                                    toShow[0].style.filter = '';
-                                }
-                                if (typeof onShow == 'function') {
-                                    onShow(clicked, toShow[0], toHide[0]);
-                                }
-                                var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
-                                if (trueClick) { // add to history only if true click occured, not a triggered click
-                                    $.ajaxHistory.update(clicked.hash);
-                                }
-                            });
+                            if (typeof onShow == 'function') {
+                                onShow(clicked, toShow[0], toHide[0]);
+                            }
                         });
-                    }
+                    });
+                }
 
-                    if (!settings.remote) {
-                        switchTab();
-                    } else {
-                        var jqThis = $(this);
-                        jqThis.addClass(settings.loadingClass);
-                        $(this.hash).load(remoteUrls[this.hash], function() {
+                if (!settings.remote) {
+                    switchTab();
+                } else {
+                    var jqThis = $(this);
+                    jqThis.addClass(settings.loadingClass);
+                    setTimeout(function() { // Timeout is again required in IE, "wait" for id being restored
+                        $(clicked.hash).load(remoteUrls[clicked.hash], function() {
                             switchTab();
                             jqThis.removeClass(settings.loadingClass);
                         });
-                    }
-
-                } else {
-                    alert('There is no such container.');
+                    }, 0);
                 }
 
+            } else {
+                alert('There is no such container.');
             }
 
             // Set scrollbar to saved position - need to use timeout with 0 to prevent browser scroll to target of hash
@@ -463,8 +447,16 @@ $.fn.tabs = function(initial, settings) {
 
         });
 
+        // trigger load of initial Ajax tab
         if (settings.remote) {
             tabs.eq(settings.initial).trigger('click').end();
+        }
+
+        // enable history support if bookmarking and history is turned on
+        if (settings.bookmarkable) {
+            $.ajaxHistory.initialize(function() {
+                tabs.eq(settings.initial).trigger('click').end();
+            });
         }
 
     });
