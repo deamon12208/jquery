@@ -1,5 +1,5 @@
 /**
- * Tabs 2.5.2 - jQuery plugin for accessible, unobtrusive tabs
+ * Tabs 2.6 - jQuery plugin for accessible, unobtrusive tabs
  *
  * http://stilbuero.de/tabs/
  *
@@ -64,6 +64,8 @@
  *                              changing hash in the URL of the browser) is enabled. Default value:
  *                              false, unless the History/Remote plugin is included. In that case the
  *                              default value becomes true. @see $.ajaxHistory.initialize
+ * @option Boolean remote Boolean flag indicating that tab content has to be loaded remotely from
+ *                        the url given in the href attribute of the tab menu anchor elements.
  * @option Boolean fxFade Boolean flag indicating whether fade in/out animations are used for tab
  *                        switching. Can be combined with fxSlide. Will overrule fxShow/fxHide.
  *                        Default value: false.
@@ -119,6 +121,8 @@
  *                          of "display: none" in the style attribute to maintain control over
  *                          visibility in other media types than screen, most notably print.
  *                          Default value: "tabs-hide".
+ * @option String loadingClass The CSS class used for indicating that an Ajax tab is currently
+ *                             loading, for example by showing a spinner.
  * @option String tabStruct A CSS selector or basic XPath expression reflecting a nested HTML
  *                          structure that is different from the default single div structure
  *                          (one div with an id inside the overall container holds one tab's
@@ -139,6 +143,7 @@ $.fn.tabs = function(initial, settings) {
         initial: (initial && typeof initial == 'number' && initial > 0) ? --initial : 0,
         disabled: null,
         bookmarkable: $.ajaxHistory ? true : false,
+        remote: false,
         fxFade: null,
         fxSlide: null,
         fxShow: null,
@@ -153,21 +158,34 @@ $.fn.tabs = function(initial, settings) {
         selectedClass: 'tabs-selected',
         disabledClass: 'tabs-disabled',
         hideClass: 'tabs-hide',
+        loadingClass: 'tabs-loading',
         tabStruct: 'div'
     }, settings || {});
 
     $.browser.msie6 = $.browser.msie6 || $.browser.msie && typeof XMLHttpRequest == 'function';
 
     // helper to prevent scroll to fragment
-    var _unFocus = function() {
+    function unFocus() {
         scrollTo(0, 0);
-    };
+    }
 
     // initialize tabs
     return this.each(function() {
 
         var container = this;
         var tabs = $('>ul:eq(0)>li>a', this);
+
+        // prepare remote tabs
+        if (settings.remote) {
+            var remoteUrls = {};
+            tabs.each(function(i) {
+                var id = 'remote-' + ++i;
+                var hash = '#' + id;
+                remoteUrls[hash] = this.href;
+                this.href = hash;
+                $(container).append('<div id="' + id + '" class="fragment"></div>');
+            });
+        }
 
         // retrieve active tab from hash in url
         if (location.hash) {
@@ -183,18 +201,20 @@ $.fn.tabs = function(initial, settings) {
                             toShow.attr('id', toShowId); // restore id
                         }, 500);
                     }
-                    _unFocus();
+                    unFocus();
                     return false; // break
                 }
             });
         }
         if ($.browser.msie) {
-            _unFocus(); // fix IE focussing bottom of the page for some unknown reason
+            unFocus(); // fix IE focussing bottom of the page for some unknown reason
         }
 
         // highlight tab accordingly
         $('>' + settings.tabStruct, this).filter(':eq(' + settings.initial + ')').show().end().not(':eq(' + settings.initial + ')').addClass(settings.hideClass);
-        $('>ul:eq(0)>li:eq(' + settings.initial + ')', this).addClass(settings.selectedClass);
+        if (!settings.remote) {
+            $('>ul:eq(0)>li:eq(' + settings.initial + ')', this).addClass(settings.selectedClass);
+        }
 
         // setup auto height
         if (settings.fxAutoHeight) {
@@ -257,8 +277,7 @@ $.fn.tabs = function(initial, settings) {
         }
 
         // setup animations
-        var showAnim = {}, hideAnim = {};
-        var showSpeed, hideSpeed;
+        var showAnim = {}, hideAnim = {}, showSpeed, hideSpeed;
         if (settings.fxSlide || settings.fxFade) {
             if (settings.fxSlide) {
                 showAnim['height'] = 'show';
@@ -291,7 +310,6 @@ $.fn.tabs = function(initial, settings) {
 
         // enable history support if history plugin is present
         if (settings.bookmarkable) {
-            tabs.history();
             $.ajaxHistory.initialize(function() {
                 tabs.eq(settings.initial).click();
             });
@@ -358,7 +376,7 @@ $.fn.tabs = function(initial, settings) {
         });
 
         // attach click event
-        tabs.bind('click', function() {
+        tabs.bind('click', function(e) {
 
             var jqLi = $(this.parentNode);
 
@@ -391,23 +409,40 @@ $.fn.tabs = function(initial, settings) {
                     }
 
                     // switch tab, animation prevents browser scrolling to the fragment
-                    toHide.animate(hideAnim, hideSpeed, function() { //
-                        $(clicked.parentNode).addClass(settings.selectedClass).siblings().removeClass(settings.selectedClass);
-                        if (typeof onHide == 'function') {
-                            onHide(clicked, toShow[0], toHide[0]);
-                        }
-                        toHide.addClass(settings.hideClass).css({display: '', overflow: '', height: '', opacity: ''}); // maintain flexible height and accessibility in print etc.
-                        toShow.removeClass(settings.hideClass).animate(showAnim, showSpeed, function() {
-                            toShow.css({overflow: '', height: '', opacity: ''}); // maintain flexible height and accessibility in print etc.
-                            if ($.browser.msie) {
-                                toHide[0].style.filter = '';
-                                toShow[0].style.filter = '';
+                    function switchTab() {
+                        toHide.animate(hideAnim, hideSpeed, function() { //
+                            $(clicked.parentNode).addClass(settings.selectedClass).siblings().removeClass(settings.selectedClass);
+                            if (typeof onHide == 'function') {
+                                onHide(clicked, toShow[0], toHide[0]);
                             }
-                            if (typeof onShow == 'function') {
-                                onShow(clicked, toShow[0], toHide[0]);
-                            }
+                            toHide.addClass(settings.hideClass).css({display: '', overflow: '', height: '', opacity: ''}); // maintain flexible height and accessibility in print etc.
+                            toShow.removeClass(settings.hideClass).animate(showAnim, showSpeed, function() {
+                                toShow.css({overflow: '', height: '', opacity: ''}); // maintain flexible height and accessibility in print etc.
+                                if ($.browser.msie) {
+                                    toHide[0].style.filter = '';
+                                    toShow[0].style.filter = '';
+                                }
+                                if (typeof onShow == 'function') {
+                                    onShow(clicked, toShow[0], toHide[0]);
+                                }
+                                var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
+                                if (trueClick) { // add to history only if true click occured, not a triggered click
+                                    $.ajaxHistory.update(clicked.hash);
+                                }
+                            });
                         });
-                    });
+                    }
+
+                    if (!settings.remote) {
+                        switchTab();
+                    } else {
+                        var jqThis = $(this);
+                        jqThis.addClass(settings.loadingClass);
+                        $(this.hash).load(remoteUrls[this.hash], function() {
+                            switchTab();
+                            jqThis.removeClass(settings.loadingClass);
+                        });
+                    }
 
                 } else {
                     alert('There is no such container.');
@@ -427,6 +462,11 @@ $.fn.tabs = function(initial, settings) {
             return settings.bookmarkable;
 
         });
+
+        if (settings.remote) {
+            tabs.eq(settings.initial).trigger('click').end();
+        }
+
     });
 
 };
