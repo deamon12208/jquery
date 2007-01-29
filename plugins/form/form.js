@@ -640,4 +640,4 @@ jQuery.fn.resetForm = function() {
         if (typeof this.reset == 'function' || (typeof this.reset == 'object' && !this.reset.nodeType)) 
             this.reset();
     });
-}
+};
