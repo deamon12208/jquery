@@ -5,3 +5,5 @@
 - Added GPL/MIT dual license header to source
 - Added custom alias scope
 - Changed default delay to 250
+- Moved public helper functions to private scopes
+- Fixed missing semicolons to compress source
