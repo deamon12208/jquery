@@ -1,5 +1,10 @@
 <project name="jQuery plugins" basedir=".">
 
+	<!--
+	  - Use this build to test compressed plugins. Add your own plugins by copying
+	  - the quicksearch build and modifying the three properties (folder, plugin, plugin_pack).
+ 	  -->
+	
     <!-- SETUP -->
 
     <property description="Source Folder" name="SRC_DIR" value="." />
@@ -9,21 +14,21 @@
 
     <!-- MAIN -->
 
-    <target name="pack" description="Main jquery build, set PLUGINS property to include plugins">
-    	<echo message="Packing ${PLUGIN}" />
+    <target name="pack" description="Do not call directly.">
+    	<echo message="Packing ${plugin}" />
         <java jar="${JAR}" fork="true">
             <arg value="${BUILD_DIR}/build/pack.js" />
-            <arg value="${PLUGIN}" />
-            <arg value="${PLUGIN_PACK}" />
+            <arg value="${plugin}" />
+            <arg value="${plugin_pack}" />
         </java>
-        <echo message="${PLUGIN_PACK} built." />
+        <echo message="${plugin_pack} built." />
     </target>
 
-    <target name="quicksearch">
+    <target name="quicksearch" description="Build packed quicksearch plugin.">
     	<property name="folder" value="quicksearch${prefix}" />
         <antcall target="pack">
-            <param name="PLUGIN" value="${folder}quicksearch.js" />
-        	<param name="PLUGIN_PACK" value="${folder}quicksearch.pack.js" />
+            <param name="plugin" value="${folder}quicksearch.js" />
+        	<param name="plugin_pack" value="${folder}quicksearch.pack.js" />
         </antcall>
     </target>
 
