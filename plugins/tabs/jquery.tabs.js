@@ -180,7 +180,7 @@ $.fn.tabs = function(initial, settings) {
         if (settings.remote) {
             var remoteUrls = {};
             tabs.each(function(i) {
-                var id = 'tabs-remote-' + ++i;
+                var id = 'tabs-remote-' + (i + 1);
                 var hash = '#' + id;
                 remoteUrls[hash] = this.href;
                 this.href = hash;

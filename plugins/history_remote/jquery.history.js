@@ -227,7 +227,7 @@ $.fn.remote = function(output) {
     target.addClass('remote-output');
     return this.each(function(i) {
         var remoteURL = this.href;
-        var hash = '#remote-' + ++i;
+        var hash = '#remote-' + (i + 1);
         this.href = hash;
         $(this).click(function(e) {
             var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
