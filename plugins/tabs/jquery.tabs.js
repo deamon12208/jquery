@@ -395,7 +395,7 @@ $.fn.tabs = function(initial, settings) {
 
                 // switch tab, animation prevents browser scrolling to the fragment
                 function switchTab() {
-                    if (trueClick) { // add to history only if true click occured, not a triggered click
+                    if (settings.bookmarkable && trueClick) { // add to history only if true click occured, not a triggered click
                         $.ajaxHistory.update(clicked.hash);
                     }
                     toHide.animate(hideAnim, hideSpeed, function() { //
