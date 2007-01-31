@@ -364,11 +364,13 @@ $.fn.tabs = function(initial, settings) {
 
             var jqLi = $(this.parentNode);
 
-            // if tab is already selected or disabled stop here
-            if (jqLi.is('.' + settings.selectedClass) || jqLi.is('.' + settings.disabledClass)) {
+            // if tab is already selected or disabled or animation is still running stop here
+            if (container.running || jqLi.is('.' + settings.selectedClass) || jqLi.is('.' + settings.disabledClass)) {
                 this.blur();
                 return false;
             }
+
+            container['running'] = true;
 
             // show new tab
             var toShow = $(this.hash);
@@ -413,6 +415,8 @@ $.fn.tabs = function(initial, settings) {
                             if (typeof onShow == 'function') {
                                 onShow(clicked, toShow[0], toHide[0]);
                             }
+                            container.running = null;
+                            delete container['running'];
                         });
                     });
                 }
