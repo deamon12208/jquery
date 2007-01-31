@@ -301,7 +301,7 @@ jQuery.fn.ajaxForm = function(options) {
                     $form.clk_x = ev.offsetX;
                     $form.clk_y = ev.offsetY;
                 } else if (typeof jQuery.fn.offset == 'function') { // try to use dimensions plugin
-                    var offset = $(this).offset();
+                    var offset = jQuery(this).offset();
                     $form.clk_x = ev.pageX - offset.left;
                     $form.clk_y = ev.pageY - offset.top;
                 } else {
