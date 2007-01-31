@@ -103,6 +103,7 @@ jQuery.iDrop = {
 						iEL.dropCfg.el = jQuery('.' + iEL.dropCfg.a, iEL);
 						elm.style.display = 'none';
 						jQuery.iSort.measure(iEL);
+						iEL.dropCfg.os = jQuery.iSort.serialize(jQuery.attr(iEL, 'id')).hash;
 						elm.style.display = elm.dragCfg.oD;
 						oneIsSortable = true;
 					}

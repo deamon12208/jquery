@@ -116,6 +116,11 @@ jQuery.iSort = {
 		jQuery.iSort.inFrontOf = null;
 		var shs = jQuery.iSort.helper.get(0).style;
 		shs.display = 'none';
+		jQuery.iSort.helper.after(e);
+		if (e.dragCfg.fx > 0) {
+			jQuery(e).fadeIn(e.dragCfg.fx);
+		}
+		jQuery('body').append(jQuery.iSort.helper.get(0));
 		var ts = [];
 		var fnc = false;
 		for(var i=0; i<jQuery.iSort.changed.length; i++){
@@ -131,15 +136,10 @@ jQuery.iSort = {
 				ts[ts.length] = ser;
 			}
 		}
+		jQuery.iSort.changed = [];
 		if (fnc != false && ts.length > 0) {
 			fnc(ts);
 		}
-		jQuery.iSort.changed = [];
-		jQuery.iSort.helper.after(e);
-		if (e.dragCfg.fx > 0) {
-			jQuery(e).fadeIn(e.dragCfg.fx);
-		}
-		jQuery('body').append(jQuery.iSort.helper.get(0));
 	},
 	
 	checkhover : function(e,o)

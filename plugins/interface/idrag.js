@@ -28,7 +28,7 @@
  * @option String containment (optional) Define the zone where the draggable can be moved. 'parent' moves it inside parent
  *                           element, while 'document' prevents it from leaving the document and forcing additional
  *                           scrolling
- * @option Array containment An 4-element array (topm left, width, height) indicating the containment of the element
+ * @option Array containment An 4-element array (top, left, width, height) indicating the containment of the element
  * @option String axis (optional) Set an axis: vertical (with 'vertically') or horizontal (with 'horizontally')
  * @option Function onStart (optional) Callback function triggered when the dragging starts
  * @option Function onStop (optional) Callback function triggered when the dragging stops
