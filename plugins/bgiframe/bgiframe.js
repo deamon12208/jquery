@@ -37,7 +37,7 @@ jQuery.fn.bgIframe = jQuery.fn.bgiframe = function() {
 	if ( !(jQuery.browser.msie && typeof XMLHttpRequest == 'function') ) return this;
 	
 	return this.each(function() {
-		var html = '<iframe class="bgiframe" src="//:" tabindex="-1" '
+		var html = '<iframe class="bgiframe" src="javascript:false;document.write(\'\');" tabindex="-1" '
 		 					+'style="display:block; position:absolute; '
 							+'top: expression(((parseInt(this.parentNode.currentStyle.borderTopWidth)  || 0) * -1) + \'px\'); '
 							+'left:expression(((parseInt(this.parentNode.currentStyle.borderLeftWidth) || 0) * -1) + \'px\'); ' 
