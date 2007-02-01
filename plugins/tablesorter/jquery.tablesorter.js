@@ -25,7 +25,7 @@ jQuery.fn.tableSorter = function(o) {
 		disableHeader: -1,
 		stripRowsOnStartUp: false,
 		columnParser: false,
-		rowHighlightClass: true,
+		rowHighlightClass: false,
 		useCache: true,
 		debug: false,
 		textExtraction: 'simple',
@@ -35,12 +35,10 @@ jQuery.fn.tableSorter = function(o) {
 		lockedSortDir: false,
 		dateFormat: 'mm/dd/yyyy' /** us default, uk dd/mm/yyyy */
 	};
-
-	/** init transfer object */
-	
  
 	return this.each(function(){
-	
+	/** add a class name for identifiying the table for companion plugins */
+			
 		/** merge default with custom options */
 		jQuery.extend(defaults, o);
 
@@ -64,31 +62,24 @@ jQuery.fn.tableSorter = function(o) {
 			jQuery.tableSorter.utils.stripRows(oTable,defaults);
 		}
 		
-		/** this is consired evil */
-		jQuery.extend(this, {
-			getTransfer: function() {
-				return this.data;
-			},
-			setTransfer: function(d) {
-				this.data = d
-			},
-			removeTransfer: function() {
-				this.data = null;
-			}
-			
-		})
+		/** bind events to the tablesorter element */
+		jQuery(this).bind("resort",doSorting);
 		
-		if(defaults.bind) {
-			/** bind events to the tablesorter element */
-			jQuery(this).bind("resort",doSorting);
-			jQuery(this).bind("flushCache",flushCache);
+		jQuery(this).bind("flushCache",function(event) {
+			COLUMN_CACHE = [];
+		});
+		
+		jQuery(this).bind("updateColumnData",function(event) {
 			
-			/** methods for appender */
-			jQuery(this).bind("getColumnData",getColumnData);
-			jQuery(this).bind("append",appendRow);
+			var oldIndex = COLUMN_ROW_LENGTH;
+			COLUMN_ROW_LENGTH = oTable.tBodies[0].rows.length;
+			var newIndex = COLUMN_ROW_LENGTH;
 			
-			
-		}
+			for (var i=oldIndex;i < newIndex; i++) {
+				/** Add the table data to main data array */
+				COLUMN_DATA.push(oTable.tBodies[0].rows[i]);
+			}
+		});
 		
 		
 		/** Store length of table rows. */
@@ -191,43 +182,6 @@ jQuery.fn.tableSorter = function(o) {
 					jQuery(columnsHeader.cells[i]).css("width",oSampleTableRow.cells[i].clientWidth + "px");
 			}
 		}
-		/** private clear cache method */
-		function flushCache() {
-			COLUMN_CACHE = [];
-		}
-		
-		function getColumnData() {
-			this.setTransfer(COLUMN_DATA);
-		}
-		
-		function appendRow() {
-			/** get from transfet object*/
-			var row = this.getTransfer();
-			/** append to table dom structure */
-			jQuery("> tbody",this).append(row);
-			/** add new row to column data */
-			addAppendedRowsToIndex();
-			/** flush column cache */
-			flushCache();
-			/** trigger resort */
-			doSorting();
-		}
-		
-		function addAppendedRowsToIndex() {
-			
-			var oldIndex = COLUMN_ROW_LENGTH;
-			COLUMN_ROW_LENGTH = oTable.tBodies[0].rows.length;
-			var newIndex = COLUMN_ROW_LENGTH;
-			
-			for (var i=oldIndex;i < newIndex; i++) {
-				/** Add the table data to main data array */
-				COLUMN_DATA.push(oTable.tBodies[0].rows[i]);
-			}
-		
-		
-		
-		}
-		
 		
 		function sortOnColumn(oCell,dir,index) {
 			/** trigger event sort start. */
@@ -252,6 +206,7 @@ jQuery.fn.tableSorter = function(o) {
 			/** if this is fired, with a straight call, sortStart / Stop would never be fired. */
 			setTimeout(doSorting,0);
 		}
+		
 		function doSorting() {
 			/** added check to see if COLUMN_INDEX is set */
 			if(COLUMN_INDEX >= 0) {
@@ -498,7 +453,7 @@ jQuery.fn.wrapInner = function(o) {
     return this.each(function(){
                  var jQ = jQuery(this);
                  var c = jQ.html();
-                 jQ.empty().append(o.element).find(o.name).html(c).addClass(o.className).end();
+                 jQ.empty().append(o.el).filter(o.id).html(c);
     });
 };
 
