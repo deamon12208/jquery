@@ -67,8 +67,8 @@ jQuery.iUtil = {
 			wb = e.offsetWidth;
 			hb = e.offsetHeight;
 		} else {
-			oldVisibility = es.visibility;
-			oldPosition = es.position;
+			var oldVisibility = es.visibility;
+			var oldPosition = es.position;
 			es.visibility = 'hidden';
 			es.display = 'block';
 			es.position = 'absolute';
