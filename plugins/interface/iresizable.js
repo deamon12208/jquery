@@ -217,7 +217,11 @@ jQuery.iResize = {
 		}
 
 		if (jQuery.iResize.resizeElement.resizeOptions.ratio) {
-			nHeight = jQuery.iResize.getHeightMinMax(newSizes.width * jQuery.iResize.resizeElement.resizeOptions.ratio);
+			if (jQuery.iResize.resizeDirection == 'n' || jQuery.iResize.resizeDirection == 's')
+				nWidth = newSizes.height * jQuery.iResize.resizeElement.resizeOptions.ratio;
+			else
+				nWidth = newSizes.width;
+			nHeight = jQuery.iResize.getHeightMinMax(nWidth * jQuery.iResize.resizeElement.resizeOptions.ratio);
 			nWidth = nHeight / jQuery.iResize.resizeElement.resizeOptions.ratio;
 
 			switch (jQuery.iResize.resizeDirection){
