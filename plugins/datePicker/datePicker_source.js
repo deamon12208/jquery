@@ -399,7 +399,7 @@ jQuery.fn.datePicker = function(a)
 			var chooseDate = jQuery.datePicker.getChooseDateStr();
 			var calBut;
 			if(a && a.inputClick){
-				calBut = jQuery(this).attr({'class':'date-picker', 'title':chooseDate})
+				calBut = jQuery(this).attr('title', chooseDate).addClass('date-picker');
 			}
 			else {
 				calBut = jQuery("<a>").attr({'href':'javascript:;',
