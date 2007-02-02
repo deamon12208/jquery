@@ -195,7 +195,7 @@ jQuery.iDrop = {
 			} else if(iEL.dropCfg.h == true) {
 				//onOut function
 				if (iEL.dropCfg.onOut) {
-					iEL.dropCfg.onOut.apply(iEL, [e, clonedEl, iEL.dropCfg.fx]);
+					iEL.dropCfg.onOut.apply(iEL, [e, jQuery.iDrag.helper.get(0).firstChild, iEL.dropCfg.fx]);
 				}
 				if (iEL.dropCfg.hc) {
 					jQuery.iDrop.highlighted[i].removeClass(iEL.dropCfg.hc);
@@ -209,7 +209,7 @@ jQuery.iDrop = {
 		}
 		//call onhover
 		if(applyOnHover) {
-			jQuery.iDrop.overzone.dropCfg.onHover.apply(jQuery.iDrop.overzone, [e, clonedEl]);
+			jQuery.iDrop.overzone.dropCfg.onHover.apply(jQuery.iDrop.overzone, [e, jQuery.iDrag.helper.get(0).firstChild]);
 		}
 	},
 	checkdrop : function (e)
