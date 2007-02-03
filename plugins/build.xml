@@ -31,5 +31,13 @@
         	<param name="plugin_pack" value="${folder}quicksearch.pack.js" />
         </antcall>
     </target>
+	
+	<target name="accordion" description="Build packed accordion plugin.">
+	    	<property name="folder" value="accordion${prefix}" />
+	        <antcall target="pack">
+	            <param name="plugin" value="${folder}accordion.js" />
+	        	<param name="plugin_pack" value="${folder}accordion.pack.js" />
+	        </antcall>
+	    </target>
 
 </project>

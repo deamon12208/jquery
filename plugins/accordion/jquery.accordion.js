@@ -1,5 +1,5 @@
 /*
- * Accordion - jQuery widget
+ * Accordion 1.1 - jQuery menu widget
  *
  * Copyright (c) 2006 Jörn Zaefferer, Frank Marcia
  *
@@ -35,7 +35,7 @@ jQuery.fn.nextUntil = function(expr) {
 
 /**
  * Make the selected elements Accordion widgets.
- *´
+ *
  * Semantic requirements:
  *
  * If the structure of your container is flat with unique
@@ -50,36 +50,56 @@ jQuery.fn.nextUntil = function(expr) {
  * Use activate(Number) to change the active content programmatically.
  *
  * @example $('#list1').Accordion();
- * @before <dl id="list1"><dt>Header 1><dd>Content 1</dd>[...]</dl>
- * @desc Creates a Accordion from the given definition list
+ * @before <dl id="list1">
+ *   <dt>Header 1</dt>
+ *   <dd>Content 1</dd>
+ *   <dt>Header 2</dt>
+ *   <dd>Content 2</dd>
+ * </dl>
+ * @desc Creates an Accordion from the given definition list
  *
  * @example $('#list2').Accordion({
  *   header: 'div.title'
  * });
- * @before <div id="nav"><div><div class="title">Header 1><div>Content 1</div></div>[...]</div>
- * @desc Creates a Accordion from the given div structure
+ * @before <div id="nav">
+ *  <div>
+ *    <div class="title">Header 1</div>
+ *    <div>Content 1</div>
+ *  </div>
+ *  <div>
+ *    <div class="title">Header 2</div>
+ *    <div>Content 2</div>
+ *  </div>
+ * </div>
+ * @desc Creates an Accordion from the given div structure
  *
  * @example $('#nav').Accordion({
  *   header: 'a.head'
  * });
  * @before <ul id="nav">
  *   <li>
- *     <a class="head">Header 1>
+ *     <a class="head">Header 1</a>
  *     <ul>
  *       <li><a href="#">Link 1</a></li>
  *       <li><a href="#">Link 2></a></li>
  *     </ul>
  *   </li>
- *   [...]
+ *   <li>
+ *     <a class="head">Header 2</a>
+ *     <ul>
+ *       <li><a href="#">Link 3</a></li>
+ *       <li><a href="#">Link 4></a></li>
+ *     </ul>
+ *   </li>
  * </ul>
- * @desc Creates a Accordion from the given navigation list
+ * @desc Creates an Accordion from the given navigation list
  *
  * @example $('#accordion').Accordion().change(function(event, newHeader, oldHeader, newContent, oldContent) {
  *   $('#status').html(newHeader.text());
  * });
  * @desc Updates the #status element with the text of the selected header every time the accordion changes
  *
- * @param Object settings key/value pairs of optional settings.
+ * @param Map options key/value pairs of optional settings.
  * @option String|Element|jQuery|Boolean active Selector for the active element, default is the first child, set to false to display none at start
  * @option String|Element|jQuery header Selector for the header element, eg. div.title, a.head, default is the first child's tagname
  * @option String|Number showSpeed Speed for the slideIn, default is 'slow'
@@ -87,34 +107,30 @@ jQuery.fn.nextUntil = function(expr) {
  * @option String selectedClass Class for active header elements, default is 'selected'
  *
  * @event change Called everytime the accordion changes, params: event, newHeader, oldHeader, newContent, oldContent
- *
  * @type jQuery
- *
  * @see activate(Number)
- *
  * @name Accordion
  * @cat Plugins/Accordion
- * @author Jörn Zaefferer (http://bassistance.de)
  */
 
 /**
- * Activate a content part of the Accordion programmatically with the position zero-based index.
+ * Activate a content part of the Accordion programmatically at the given zero-based index.
  *
  * If the index is not specified, it defaults to zero, if it is an invalid index, eg. a string,
  * nothing happens.
  *
  * @example $('#accordion').activate(1);
  * @desc Activate the second content of the Accordion contained in <div id="accordion">.
+ *
  * @example $('#nav').activate();
  * @desc Activate the first content of the Accordion contained in <ul id="nav">.
  *
  * @param Number index (optional) An Integer specifying the zero-based index of the content to be
  *				 activated. Default: 0
- * @type jQuery
  *
+ * @type jQuery
  * @name activate
  * @cat Plugins/Accordion
- * @author Jörn Zaefferer (http://bassistance.de)
  */
 
 // create private scope with $ alias for jQuery
