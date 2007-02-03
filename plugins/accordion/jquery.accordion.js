@@ -139,7 +139,7 @@ jQuery.fn.nextUntil = function(expr) {
 	var plugin = $.fn.Accordion = function(settings) {
 
 		// setup configuration
-		settings = $.extend({}, arguments.callee.defaults, {
+		settings = $.extend({}, plugin.defaults, {
 			// define context defaults
 			header: $(':first-child', this)[0].tagName // take first childs tagName as header
 		}, settings);
