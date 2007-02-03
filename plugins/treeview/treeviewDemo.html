@@ -50,6 +50,27 @@
 	  	.treeview .lastCollapsable { background-image: url(images/tv-collapsable-last.gif); }
 	  	.treeview .lastExpandable { background-image: url(images/tv-expandable-last.gif); }
 	  	
+	  	#red.treeview li { background: url(images/red/tv-item.gif) 0 0 no-repeat; }
+	  	#red.treeview .collapsable { background-image: url(images/red/tv-collapsable.gif); }
+	  	#red.treeview .expandable { background-image: url(images/red/tv-expandable.gif); }
+	  	#red.treeview .last { background-image: url(images/red/tv-item-last.gif); }
+	  	#red.treeview .lastCollapsable { background-image: url(images/red/tv-collapsable-last.gif); }
+	  	#red.treeview .lastExpandable { background-image: url(images/red/tv-expandable-last.gif); }
+	  	
+	  	#black.treeview li { background: url(images/black/tv-item.gif) 0 0 no-repeat; }
+	  	#black.treeview .collapsable { background-image: url(images/black/tv-collapsable.gif); }
+	  	#black.treeview .expandable { background-image: url(images/black/tv-expandable.gif); }
+	  	#black.treeview .last { background-image: url(images/black/tv-item-last.gif); }
+	  	#black.treeview .lastCollapsable { background-image: url(images/black/tv-collapsable-last.gif); }
+	  	#black.treeview .lastExpandable { background-image: url(images/black/tv-expandable-last.gif); }
+	  	
+	  	#gray.treeview li { background: url(images/gray/tv-item.gif) 0 0 no-repeat; }
+	  	#gray.treeview .collapsable { background-image: url(images/gray/tv-collapsable.gif); }
+	  	#gray.treeview .expandable { background-image: url(images/gray/tv-expandable.gif); }
+	  	#gray.treeview .last { background-image: url(images/gray/tv-item-last.gif); }
+	  	#gray.treeview .lastCollapsable { background-image: url(images/gray/tv-collapsable-last.gif); }
+	  	#gray.treeview .lastExpandable { background-image: url(images/gray/tv-expandable-last.gif); }
+	  	
 	  	#treecontrol { margin: 1em 0; }
 
 	</style>
@@ -83,13 +104,13 @@
 		<li>Item 4</li>
 	</ul>
 	
-	<h4>Sample 2 - two trees with one tree control</h4>
+	<h4>Sample 2 - two trees with one tree control, black and gray image set</h4>
 	<div id="treecontrol">
 		<a href="#">Collapse All</a>
 		<a href="#">Expand All</a>
 		<a href="#">Toggle All</a>
 	</div>
-	<ul>
+	<ul id="black">
 		<li>Item 1</li>
 		<li>
 			Item 2
@@ -112,7 +133,7 @@
 			</ul>
 		</li>
 	</ul>
-	<ul>
+	<ul id="gray">
 		<li>Item 1</li>
 		<li>
 			Item 2
@@ -124,20 +145,49 @@
 						<li>Item 2.1.2</li>
 					</ul>
 				</li>
-				<li>Item 2.2</li>
+				<li>Item 2.2.1</li>
+				<li>Item 2.2.2</li>
+				<li>Item 2.2.3</li>
+				<li>Item 2.2.4</li>
+				<li>Item 2.2.5</li>
+				<li>Item 2.2.6</li>
+				<li>Item 2.2.7</li>
+				<li>Item 2.2.8</li>
 				<li>
 					Item 2.3
 					<ul>
 						<li>Item 2.3.1</li>
 						<li>Item 2.3.2</li>
+						<li>Item 2.3.3</li>
+						<li>Item 2.3.4</li>
+						<li>Item 2.3.5</li>
+						<li>Item 2.3.6</li>
+						<li>Item 2.3.7</li>
+						<li>Item 2.3.8</li>
+						<li>Item 2.3.9</li>
+					</ul>
+				</li>
+				<li>
+					Item 2.4
+					<ul>
+						<li>Item 2.4.1</li>
+						<li>Item 2.4.2</li>
+						<li>Item 2.4.3</li>
+						<li>Item 2.4.4</li>
+						<li>Item 2.4.5</li>
+						<li>Item 2.4.6</li>
+						<li>Item 2.4.7</li>
+						<li>Item 2.4.8</li>
+						<li>Item 2.4.9</li>
 					</ul>
 				</li>
 			</ul>
 		</li>
+		<li>Item 3</li>
 	</ul>	
 	
-	<h4>Sample 3 - fast animations, all branches collapsed at first</h4>
-	<ul>
+	<h4>Sample 3 - fast animations, all branches collapsed at first, red image set</h4>
+	<ul id="red">
 	<li class="closed">Item 1
 		<ul>
 			<li>Item 1.0
@@ -218,6 +268,7 @@
 						<li>Item 3.0.1.0</li>
 						<li>Item 3.0.1.1</li>
 					</ul>
+					
 				</li>
 					<li>Item 3.0.2
 					<ul>
