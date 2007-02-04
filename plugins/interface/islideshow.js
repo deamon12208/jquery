@@ -313,7 +313,10 @@ jQuery.islideshow = {
 			return;
 		}
 		
-		el.ss.oP = jQuery.iUtil.getPos(el);
+		el.ss.oP = jQuery.extend(
+				jQuery.iUtil.getPosition(el),
+				jQuery.iUtil.getSize(el)
+			);
 		el.ss.oPad = jQuery.iUtil.getPadding(el);
 		el.ss.oBor = jQuery.iUtil.getBorder(el);
 		t = parseInt(el.ss.oPad.t) + parseInt(el.ss.oBor.t);
@@ -351,7 +354,7 @@ jQuery.islideshow = {
 					jQuery.islideshow.go({link:this})
 				}
 			);
-			el.ss.slideslinks.dimm = jQuery.iUtil.getPos(el.ss.slideslinks.o.get(0));
+			el.ss.slideslinks.dimm = jQuery.iUtil.getSize(el.ss.slideslinks.o.get(0));
 		}
 		if (o.captionPosition || o.captionClass) {
 			el.ss.slideCaption = {};
@@ -369,7 +372,7 @@ jQuery.islideshow = {
 				el.ss.slideCaption.captionPosition = 'bottom';
 				el.ss.slideCaption.o.css('bottom', (el.ss.slideslinks && el.ss.slideslinks.linksPosition == 'bottom' ? el.ss.slideslinks.dimm.hb + b : b) + 'px');
 			}
-			el.ss.slideCaption.dimm = jQuery.iUtil.getPos(el.ss.slideCaption.o.get(0));
+			el.ss.slideCaption.dimm = jQuery.iUtil.getSize(el.ss.slideCaption.o.get(0));
 		}
 		
 		if (o.nextslideClass) {
