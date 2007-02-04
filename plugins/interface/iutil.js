@@ -16,15 +16,13 @@ jQuery.iUtil = {
 	{
 		var x = 0;
 		var y = 0;
-		var restoreStyle = false;
 		var es = e.style;
 		if (jQuery(e).css('display') == 'none') {
-			oldVisibility = es.visibility;
-			oldPosition = es.position;
+			var oldVisibility = es.visibility;
+			var oldPosition = es.position;
 			es.visibility = 'hidden';
 			es.display = 'block';
 			es.position = 'absolute';
-			restoreStyle = true;
 		}
 		var el = e;
 		while (el){
@@ -39,7 +37,7 @@ jQuery.iUtil = {
 			y -= el.scrollTop||0;
 			el = el.parentNode;
 		}
-		if (restoreStyle) {
+		if (oldVisibility) {
 			es.display = 'none';
 			es.position = oldPosition;
 			es.visibility = oldVisibility;
