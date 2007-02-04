@@ -250,85 +250,146 @@ jQuery.fx.animatedColorsCssRules = [
 ];
 
 /**
- * Function that handles colors animation
- *
- * @name animate color
- * @description animates colors
- * @param DOMElement e the element that should be animated
- * @param Mixed speed animation speed, integer for miliseconds, string ['slow' | 'normal' | 'fast']
- * @param Hash colors a hash width keys as css proporties and values array of two colors to animate (start and end colors)
- * @param Function callback (optional) A function to be executed whenever the animation completes.
- * @param String easing (optional) The name of the easing effect that you want to use.
- *
- * @type jQuery
- * @cat Plugins/Interface
- * @author Stefan Petre
+ * Overwrite animation to use new FX function
  */
-jQuery.fx.animateColor = function (e, duration, colors, callback, easing)
-{
-	/*if (!jQuery.fxCheckTag(e) || !color) {
-		jQuery.dequeue(e, 'interfaceFX');
-		return false;
-	}*/
-	var z = this;
-	z.easing = easing;
-	z.duration = jQuery.speed(duration).duration;
-	z.callback = callback;
-	z.el = jQuery(e);
-	z.colors = colors;
-	var cnt = 0;
-	for(i in z.colors) {
-		z.colors[i] = [jQuery.fx.parseColor(z.colors[i][0]),jQuery.fx.parseColor(z.colors[i][1])];
-		cnt ++;
-	}
+jQuery.fn.extend({
 	
-	if (cnt == 0) {
-		return false;
+	animate: function( prop, speed, easing, callback ) {
+		return this.queue(function(){
+			var opt = jQuery.speed(speed, easing, callback);
+			var e = new jQuery.fxe( this, opt, prop );
+			
+		});
 	}
-	
-	z.t=(new Date).getTime();
-	z.clear = function(){clearInterval(z.timer);z.timer=null;};
-	z.step = function(){
-		var t = (new Date).getTime();
-		var n = t - z.t;
-		var p = n / z.duration;
-		if (t >= z.duration+z.t) {
-			setTimeout(
-				function(){
-					jQuery.dequeue(z.el.get(0), 'interfaceFX');
-					if (z.callback && typeof z.callback == 'function') {
-						z.callback.apply(z.el.get(0));
-					}
-				},
-				13
-			);
-			z.clear();
-		} else {
-			o = 1;			
-			for(i in z.colors) {
-				if (!jQuery.easing || !jQuery.easing[z.easing]) {
-					newColor = {
-						r: parseInt(((-Math.cos(p*Math.PI)/2) + 0.5) * (z.colors[i][1].r-z.colors[i][0].r) + z.colors[i][0].r),
-						g: parseInt(((-Math.cos(p*Math.PI)/2) + 0.5) * (z.colors[i][1].g-z.colors[i][0].g) + z.colors[i][0].g),
-						b: parseInt(((-Math.cos(p*Math.PI)/2) + 0.5) * (z.colors[i][1].b-z.colors[i][0].b) + z.colors[i][0].b)
-					};
-				} else {
-					newColor = {
-						r: parseInt(jQuery.easing[z.easing](p, n, z.colors[i][0].r, (z.colors[i][1].r-z.colors[i][0].r), z.duration)),
-						g: parseInt(jQuery.easing[z.easing](p, n, z.colors[i][0].g, (z.colors[i][1].g-z.colors[i][0].g), z.duration)),
-						b: parseInt(jQuery.easing[z.easing](p, n, z.colors[i][0].b, (z.colors[i][1].b-z.colors[i][0].b), z.duration))
-					};
+});
+/**
+ * Improved FXC function that aniamtes collection of properties per timer. Accepts inline styles and class names to animate
+ */
+jQuery.extend({
+		
+	fxe: function( elem, options, prop ){
+
+		var z = this, marked;
+
+		// The styles
+		var y = elem.style;
+		var props = {};
+		z.startTime = (new Date()).getTime();
+		
+		z.getValues = function(tp, vp)
+		{
+			for (var i=0; i<jQuery.fx.animatedCssRules.length; i++) {
+				if (jQuery.fx.animatedCssRules[i] == tp)
+					return [parseFloat( jQuery.curCSS(elem, tp) ), parseFloat(vp)];
+			}
+			for (var i=0; i<jQuery.fx.animatedColorsCssRules.length; i++) {
+				if (jQuery.fx.animatedColorsCssRules[i] == tp)
+					return [jQuery.fx.parseColor(jQuery.curCSS(elem, tp)), jQuery.fx.parseColor(vp)];
+			}
+			return false;
+		};
+		
+		for(p in prop) {
+			if (p == 'style') {
+				var newStyles = jQuery.parseStyle(prop[p]);
+				for (np in newStyles) {
+					values = this.getValues(np, newStyles[np]);
+					if (values != false)
+						props[np] = values;
 				}
-				z.el.css(i, 'rgb(' + newColor.r + ',' + newColor.g + ',' + newColor.b + ')');
+			} else if (p == 'className') {
+				if (document.styleSheets)
+					for (var i=0; i<document.styleSheets.length; i++){
+						var cssRules = document.styleSheets[i].cssRules||document.styleSheets[i].rules||null;
+						if (cssRules) {
+							for (var j=0; j<cssRules.length; j++) {
+								if(cssRules[j].selectorText == '.' + prop[p]) {
+									var rule = new RegExp('\.' + prop[p] + ' {');
+									var styles = cssRules[j].style.cssText;
+									var newStyles = jQuery.parseStyle(styles.replace(rule, '').replace(/}/g, ''));
+									for (np in newStyles) {
+										values = this.getValues(np, newStyles[np]);
+										if (values != false)
+											props[np] = values;
+									}
+								}
+							}
+						}
+					}
+			} else {
+				
+				values = this.getValues(p, prop[p]);
+				if (values != false)
+					props[p] = values;
 			}
 		}
-	};
+
+		z.step = function(){
+			var t = (new Date()).getTime();
+			if (t > options.duration + z.startTime) {
+				clearInterval(z.timer);
+				z.timer = null;
+				for (p in props) {
+					if ( p == "opacity" )
+						jQuery.attr(y, "opacity", props[p][1]);
+					else if (typeof props[p][1] == 'object')
+						y[p] = 'rgb(' + props[p][1].r +',' + props[p][1].g +',' + props[p][1].b +')';
+					else 
+						y[p] = props[p][1] + (p != 'zIndex' && p != 'fontWeight' ? 'px':'');
+				}
+
+				if ( jQuery.isFunction( options.complete ) )
+					options.complete.apply( elem );
+			} else {
+				var n = t - this.startTime;
+				var pr = n / options.duration;
+				for (p in props) {
+					if ( p == "opacity" )
+						jQuery.attr(y, "opacity", options.easing && jQuery.easing[options.easing] ?
+					jQuery.easing[options.easing](pr, n,  props[p][0], (props[p][1]-props[p][0]), options.duration) :
+					((-Math.cos(pr*Math.PI)/2) + 0.5) * (props[p][1]-props[p][0]) + props[p][0]);
+						
+					else if (typeof props[p][1] == 'object') {
+						y[p] = 'rgb('
+						+ parseInt(options.easing && jQuery.easing[options.easing] ?
+					jQuery.easing[options.easing](pr, n,  props[p][0].r, (props[p][1].r-props[p][0].r), options.duration) :
+					((-Math.cos(pr*Math.PI)/2) + 0.5) * (props[p][1].r-props[p][0].r) + props[p][0].r)
+						+ ','
+						+ parseInt(options.easing && jQuery.easing[options.easing] ?
+					jQuery.easing[options.easing](pr, n,  props[p][0].g, (props[p][1].g-props[p][0].g), options.duration) :
+					((-Math.cos(pr*Math.PI)/2) + 0.5) * (props[p][1].g-props[p][0].g) + props[p][0].g)
+						+ ','
+						+ parseInt(options.easing && jQuery.easing[options.easing] ?
+					jQuery.easing[options.easing](pr, n,  props[p][0].b, (props[p][1].r-props[p][0].b), options.duration) :
+					((-Math.cos(pr*Math.PI)/2) + 0.5) * (props[p][1].b-props[p][0].b) + props[p][0].b)
+						+')';
+					} else {
+						y[p] = (options.easing && jQuery.easing[options.easing] ?
+					jQuery.easing[options.easing](pr, n,  props[p][0], (props[p][1]-props[p][0]), options.duration) :
+					((-Math.cos(pr*Math.PI)/2) + 0.5) * (props[p][1]-props[p][0]) + props[p][0]) + (p != 'zIndex' && p != 'fontWeight' ? 'px':'');
+					}
+				}
+
+			}
+		};
 	z.timer=setInterval(function(){z.step();},13);
+	
+	}
+});
 
-};
-
-jQuery.fn.animateColor = function(duration, color, callback, easing) {
-	return this.queue('interfaceFX',function(){
-		new jQuery.fx.animateColor(this, duration, color, callback, easing);
-	});
+jQuery.parseStyle = function(stylesToConvert) {
+	var newStyles = {};
+	if (typeof stylesToConvert == 'string') {
+		stylesArray = stylesToConvert.toLowerCase().split(';');
+		jQuery.each(
+			stylesArray,
+			function() {
+				rule = this.split(':');
+				if (rule.length == 2) {
+					newStyles[jQuery.trim(rule[0].replace(/\-(\w)/g,function(m,c){return c.toUpperCase();}))] = jQuery.trim(rule[1]);
+				}
+			}
+		);
+	}
+	return newStyles;
 };
