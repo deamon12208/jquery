@@ -117,49 +117,48 @@ jQuery.fx.buildWrapper = function(e)
  * named colors
  */
 jQuery.fx.namedColors = {
-	'aqua':[0,255,255],
-	'azure':[240,255,255],
-	'beige':[245,245,220],
-	'black':[0,0,0],
-	'blue':[0,0,255],
-	'brown':[165,42,42],
-	'cyan':[0,255,255],
-	'darkblue':[0,0,139],
-	'darkcyan':[0,139,139],
-	'darkgrey':[169,169,169],
-	'darkgreen':[0,100,0],
-	'darkkhaki':[189,183,107],
-	'darkmagenta':[139,0,139],
-	'darkolivegreen':[85,107,47],
-	'darkorange':[255,140,0],
-	'darkorchid':[153,50,204],
-	'darkred':[139,0,0],
-	'darksalmon':[233,150,122],
-	'darkviolet':[148,0,211],
-	'fuchsia':[255,0,255],
-	'gold':[255,215,0],
-	'green':[0,128,0],
-	'indigo':[75,0,130],
-	'khaki':[240,230,140],
-	'lightblue':[173,216,230],
-	'lightcyan':[224,255,255],
-	'lightgreen':[144,238,144],
-	'lightgrey':[211,211,211],
-	'lightpink':[255,182,193],
-	'lightyellow':[255,255,224],
-	'lime':[0,255,0],
-	'magenta':[255,0,255],
-	'maroon':[128,0,0],
-	'navy':[0,0,128],
-	'olive':[128,128,0],
-	'orange':[255,165,0],
-	'pink':[255,192,203],
-	'purple':[128,0,128],
-	'red':[255,0,0],
-	'silver':[192,192,192],
-	'238,130,238':[238,130,238],
-	'white':[255,255,255],
-	'yellow':[255,255,0]
+	aqua:[0,255,255],
+	azure:[240,255,255],
+	beige:[245,245,220],
+	black:[0,0,0],
+	blue:[0,0,255],
+	brown:[165,42,42],
+	cyan:[0,255,255],
+	darkblue:[0,0,139],
+	darkcyan:[0,139,139],
+	darkgrey:[169,169,169],
+	darkgreen:[0,100,0],
+	darkkhaki:[189,183,107],
+	darkmagenta:[139,0,139],
+	darkolivegreen:[85,107,47],
+	darkorange:[255,140,0],
+	darkorchid:[153,50,204],
+	darkred:[139,0,0],
+	darksalmon:[233,150,122],
+	darkviolet:[148,0,211],
+	fuchsia:[255,0,255],
+	gold:[255,215,0],
+	green:[0,128,0],
+	indigo:[75,0,130],
+	khaki:[240,230,140],
+	lightblue:[173,216,230],
+	lightcyan:[224,255,255],
+	lightgreen:[144,238,144],
+	lightgrey:[211,211,211],
+	lightpink:[255,182,193],
+	lightyellow:[255,255,224],
+	lime:[0,255,0],
+	magenta:[255,0,255],
+	maroon:[128,0,0],
+	navy:[0,0,128],
+	olive:[128,128,0],
+	orange:[255,165,0],
+	pink:[255,192,203],
+	purple:[128,0,128],
+	red:[255,0,0],
+	silver:[192,192,192],
+	white:[255,255,255],
+	yellow:[255,255,0]
 };
 
 /**
@@ -204,50 +203,52 @@ jQuery.fx.parseColor = function(color)
 /**
  * CSS rules that can be animated
  */
-jQuery.fx.animatedCssRules = [
-	'borderBottomWidth',
-	'borderLeftWidth',
-	'borderRightWidth',
-	'borderTopWidth',
-	'bottom',
-	'fontSize',
-	'height',
-	'left',
-	'letterSpacing',
-	'lineHeight',
-	'marginBottom',
-	'marginLeft',
-	'marginRight',
-	'marginTop',
-	'maxHeight',
-	'maxWidth',
-	'minHeight',
-	'minWidth',
-	'opacity',
-	'outlineOffset',
-	'outlineWidth',
-	'paddingBottom',
-	'paddingLeft',
-	'paddingRight',
-	'paddingTop',
-	'right',
-	'textIndent',
-	'top',
-    'width',
-	'zIndex'
-];
+jQuery.fx.cssProps = {
+	borderWidth:1,
+	borderBottomWidth:1,
+	borderLeftWidth:1,
+	borderRightWidth:1,
+	borderTopWidth:1,
+	bottom:1,
+	fontSize:1,
+	height:1,
+	left:1,
+	letterSpacing:1,
+	lineHeight:1,
+	marginBottom:1,
+	marginLeft:1,
+	marginRight:1,
+	marginTop:1,
+	maxHeight:1,
+	maxWidth:1,
+	minHeight:1,
+	minWidth:1,
+	opacity:1,
+	outlineOffset:1,
+	outlineWidth:1,
+	paddingBottom:1,
+	paddingLeft:1,
+	paddingRight:1,
+	paddingTop:1,
+	right:1,
+	textIndent:1,
+	top:1,
+    width:1,
+	zIndex:1
+};
 /**
  * CSS color rules that can be animated
  */
-jQuery.fx.animatedColorsCssRules = [
-	'backgroundColor',
-	'borderBottomColor',
-	'borderLeftColor',
-	'borderRightColor',
-	'borderTopColor',
-	'color',
-	'outlineColor'
-];
+jQuery.fx.colorCssProps = {
+	backgroundColor:1,
+	borderBottomColor:1,
+	borderLeftColor:1,
+	borderRightColor:1,
+	borderTopColor:1,
+	borderColor:1,
+	color:1,
+	outlineColor:1
+};
 
 /**
  * Overwrite animation to use new FX function
@@ -266,26 +267,27 @@ jQuery.fn.extend({
  * Improved FXC function that aniamtes collection of properties per timer. Accepts inline styles and class names to animate
  */
 jQuery.extend({
-		
+	easing :  {
+		linear: function(p, n, firstNum, delta, duration) {
+			return ((-Math.cos(p*Math.PI)/2) + 0.5) * delta + firstNum;
+		}
+	},
 	fxe: function( elem, options, prop ){
 
-		var z = this, marked;
+		var z = this, values;
 
 		// The styles
 		var y = elem.style;
 		var props = {};
 		z.startTime = (new Date()).getTime();
+		options.easing = options.easing && jQuery.easing[options.easing] ? options.easing : 'linear';
 		
 		z.getValues = function(tp, vp)
 		{
-			for (var i=0; i<jQuery.fx.animatedCssRules.length; i++) {
-				if (jQuery.fx.animatedCssRules[i] == tp)
-					return [parseFloat( jQuery.curCSS(elem, tp) ), parseFloat(vp)];
-			}
-			for (var i=0; i<jQuery.fx.animatedColorsCssRules.length; i++) {
-				if (jQuery.fx.animatedColorsCssRules[i] == tp)
-					return [jQuery.fx.parseColor(jQuery.curCSS(elem, tp)), jQuery.fx.parseColor(vp)];
-			}
+			if (jQuery.fx.cssProps[tp])
+				return [parseFloat( jQuery.curCSS(elem, tp) ), parseFloat(vp)];
+			else if (jQuery.fx.colorCssProps[tp])
+				return [jQuery.fx.parseColor(jQuery.curCSS(elem, tp)), jQuery.fx.parseColor(vp)];
 			return false;
 		};
 		
@@ -317,13 +319,12 @@ jQuery.extend({
 						}
 					}
 			} else {
-				
 				values = this.getValues(p, prop[p]);
 				if (values != false)
 					props[p] = values;
 			}
 		}
-
+		
 		z.step = function(){
 			var t = (new Date()).getTime();
 			if (t > options.duration + z.startTime) {
@@ -344,29 +345,20 @@ jQuery.extend({
 				var n = t - this.startTime;
 				var pr = n / options.duration;
 				for (p in props) {
-					if ( p == "opacity" )
-						jQuery.attr(y, "opacity", options.easing && jQuery.easing[options.easing] ?
-					jQuery.easing[options.easing](pr, n,  props[p][0], (props[p][1]-props[p][0]), options.duration) :
-					((-Math.cos(pr*Math.PI)/2) + 0.5) * (props[p][1]-props[p][0]) + props[p][0]);
-						
-					else if (typeof props[p][1] == 'object') {
+					if (typeof props[p][1] == 'object') {
 						y[p] = 'rgb('
-						+ parseInt(options.easing && jQuery.easing[options.easing] ?
-					jQuery.easing[options.easing](pr, n,  props[p][0].r, (props[p][1].r-props[p][0].r), options.duration) :
-					((-Math.cos(pr*Math.PI)/2) + 0.5) * (props[p][1].r-props[p][0].r) + props[p][0].r)
+						+ parseInt(jQuery.easing[options.easing](pr, n,  props[p][0].r, (props[p][1].r-props[p][0].r), options.duration))
 						+ ','
-						+ parseInt(options.easing && jQuery.easing[options.easing] ?
-					jQuery.easing[options.easing](pr, n,  props[p][0].g, (props[p][1].g-props[p][0].g), options.duration) :
-					((-Math.cos(pr*Math.PI)/2) + 0.5) * (props[p][1].g-props[p][0].g) + props[p][0].g)
+						+ parseInt(jQuery.easing[options.easing](pr, n,  props[p][0].g, (props[p][1].g-props[p][0].g), options.duration))
 						+ ','
-						+ parseInt(options.easing && jQuery.easing[options.easing] ?
-					jQuery.easing[options.easing](pr, n,  props[p][0].b, (props[p][1].r-props[p][0].b), options.duration) :
-					((-Math.cos(pr*Math.PI)/2) + 0.5) * (props[p][1].b-props[p][0].b) + props[p][0].b)
+						+ parseInt(jQuery.easing[options.easing](pr, n,  props[p][0].b, (props[p][1].b-props[p][0].b), options.duration))
 						+')';
 					} else {
-						y[p] = (options.easing && jQuery.easing[options.easing] ?
-					jQuery.easing[options.easing](pr, n,  props[p][0], (props[p][1]-props[p][0]), options.duration) :
-					((-Math.cos(pr*Math.PI)/2) + 0.5) * (props[p][1]-props[p][0]) + props[p][0]) + (p != 'zIndex' && p != 'fontWeight' ? 'px':'');
+						var pValue = jQuery.easing[options.easing](pr, n,  props[p][0], (props[p][1]-props[p][0]), options.duration);
+						if ( p == "opacity" )
+							jQuery.attr(y, "opacity", pvalue);
+						else 
+							y[p] = pValue + (p != 'zIndex' && p != 'fontWeight' ? 'px':'');
 					}
 				}
 
@@ -377,19 +369,16 @@ jQuery.extend({
 	}
 });
 
-jQuery.parseStyle = function(stylesToConvert) {
+jQuery.parseStyle = function(styles) {
 	var newStyles = {};
-	if (typeof stylesToConvert == 'string') {
-		stylesArray = stylesToConvert.toLowerCase().split(';');
-		jQuery.each(
-			stylesArray,
-			function() {
-				rule = this.split(':');
-				if (rule.length == 2) {
-					newStyles[jQuery.trim(rule[0].replace(/\-(\w)/g,function(m,c){return c.toUpperCase();}))] = jQuery.trim(rule[1]);
-				}
+	if (typeof styles == 'string') {
+		styles = styles.toLowerCase().split(';');
+		for(var i=0; i< styles.length; i++){
+			rule = styles[i].split(':');
+			if (rule.length == 2) {
+				newStyles[jQuery.trim(rule[0].replace(/\-(\w)/g,function(m,c){return c.toUpperCase();}))] = jQuery.trim(rule[1]);
 			}
-		);
+		}
 	}
 	return newStyles;
 };
