@@ -124,7 +124,7 @@
 	};
 	
 	// ie specific stlyes for hitareas
-	if( $.browser.msie )
+	if( $.browser.msie && typeof XMLHttpRequest == "function" )
 		$.extend( hitareaCSS, {
 			background: "#fff",
 			filter: "alpha(opacity=0)",
