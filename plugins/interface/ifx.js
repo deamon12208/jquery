@@ -199,12 +199,10 @@ jQuery.fx.parseColor = function(color)
 	else
 		return {r: 255, g: 255, b: 255};
 };
-
 /**
  * CSS rules that can be animated
  */
 jQuery.fx.cssProps = {
-	borderWidth:1,
 	borderBottomWidth:1,
 	borderLeftWidth:1,
 	borderRightWidth:1,
@@ -245,9 +243,16 @@ jQuery.fx.colorCssProps = {
 	borderLeftColor:1,
 	borderRightColor:1,
 	borderTopColor:1,
-	borderColor:1,
 	color:1,
 	outlineColor:1
+};
+
+jQuery.fx.cssSides = ['Top', 'Right', 'Bottom', 'Left'];
+jQuery.fx.cssSidesEnd = {
+	'borderWidth': ['border', 'Width'],
+	'borderColor': ['border', 'Color'],
+	'margin': ['margin', ''],
+	'padding': ['padding', '']
 };
 
 /**
@@ -285,9 +290,46 @@ jQuery.extend({
 		z.getValues = function(tp, vp)
 		{
 			if (jQuery.fx.cssProps[tp])
-				return [parseFloat( jQuery.curCSS(elem, tp) ), parseFloat(vp)];
+				props[tp] = [parseFloat( jQuery.curCSS(elem, tp) ), parseFloat(vp)];
 			else if (jQuery.fx.colorCssProps[tp])
-				return [jQuery.fx.parseColor(jQuery.curCSS(elem, tp)), jQuery.fx.parseColor(vp)];
+				props[tp] = [jQuery.fx.parseColor(jQuery.curCSS(elem, tp)), jQuery.fx.parseColor(vp)];
+			else if(/^margin|padding|border$|borderColor|borderWidth/i.test(tp)) {
+				var m = vp.match(/([^\s]+)/g);
+				switch(tp){
+					case 'margin':
+					case 'padding':
+					case 'borderWidth':
+					case 'borderColor':
+						m[3] = m[3]||m[1]||m[0];
+						m[2] = m[2]||m[0];
+						m[1] = m[1]||m[0];
+						for(var i = 0; i < jQuery.fx.cssSides.length; i++) {
+							var nmp = jQuery.fx.cssSidesEnd[tp][0] + jQuery.fx.cssSides[i] + jQuery.fx.cssSidesEnd[tp][1];
+							props[nmp] = tp == 'borderColor' ?
+								[jQuery.fx.parseColor(jQuery.curCSS(elem, nmp)), jQuery.fx.parseColor(m[i])]
+								: [parseFloat( jQuery.curCSS(elem, nmp) ), parseFloat(m[i])];
+						}
+						break;
+					case 'border':
+						for(var i = 0; i< m.length; i++) {
+							var floatVal = parseFloat(m[i]);
+							var sideEnd = !isNaN(floatVal) ? 'Width' : (!/transparent|none|hidden|dotted|dashed|solid|double|groove|ridge|inset|outset/i.test(m[i]) ? 'Color' : false);
+							if (sideEnd) {
+								for(var j = 0; j < jQuery.fx.cssSides.length; j++) {
+									nmp = 'border' + jQuery.fx.cssSides[j] + sideEnd;
+									props[nmp] = sideEnd == 'Color' ?
+								[jQuery.fx.parseColor(jQuery.curCSS(elem, nmp)), jQuery.fx.parseColor(m[i])]
+								: [parseFloat( jQuery.curCSS(elem, nmp) ), floatVal];
+								}
+							} else {
+								elem.style['borderStyle'] = m[i];
+							}
+						}
+						break;
+				}
+			} else {
+				elem.style[tp] = vp;
+			}
 			return false;
 		};
 		
@@ -295,9 +337,7 @@ jQuery.extend({
 			if (p == 'style') {
 				var newStyles = jQuery.parseStyle(prop[p]);
 				for (np in newStyles) {
-					values = this.getValues(np, newStyles[np]);
-					if (values != false)
-						props[np] = values;
+					this.getValues(np, newStyles[np]);
 				}
 			} else if (p == 'className') {
 				if (document.styleSheets)
@@ -310,18 +350,14 @@ jQuery.extend({
 									var styles = cssRules[j].style.cssText;
 									var newStyles = jQuery.parseStyle(styles.replace(rule, '').replace(/}/g, ''));
 									for (np in newStyles) {
-										values = this.getValues(np, newStyles[np]);
-										if (values != false)
-											props[np] = values;
+										this.getValues(np, newStyles[np]);
 									}
 								}
 							}
 						}
 					}
 			} else {
-				values = this.getValues(p, prop[p]);
-				if (values != false)
-					props[p] = values;
+				this.getValues(p, prop[p]);
 			}
 		}
 		
