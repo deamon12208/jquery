@@ -184,11 +184,19 @@ $.ajaxHistory = new function() {
  * @example $('a.remote').remote('#output');
  * @before <a class="remote" href="/path/to/content.html">Update</a>
  * @result <a class="remote" href="#remote-1">Update</a>
- * @desc Alter a link of the class "remote" to an Ajax-enhanced link and let it load content from "/path/to/content.html" via XmlHttpRequest
- *       into an element with the id "output".
+ * @desc Alter a link of the class "remote" to an Ajax-enhanced link and let it load content from
+ *       "/path/to/content.html" via XmlHttpRequest into an element with the id "output".
+ * @example $('a.remote').remote('#output', {hashPrefix: 'chapter'});
+ * @before <a class="remote" href="/path/to/content.html">Update</a>
+ * @result <a class="remote" href="#chapter-1">Update</a>
+ * @desc Alter a link of the class "remote" to an Ajax-enhanced link and let it load content from
+ *       "/path/to/content.html" via XmlHttpRequest into an element with the id "output".
  *
  * @param String expr A string containing a CSS selector or basic XPath specifying the element to load
  *                    content into via XmlHttpRequest.
+ * @param Object settings An object literal containing key/value pairs to provide optional settings.
+ * @option String hashPrefix A String that is used for constructing the hash the link's href attribute
+ *                           gets altered to, such as "#remote-1". Default value: "remote-".
  * @type jQuery
  *
  * @name remote
@@ -213,21 +221,35 @@ $.ajaxHistory = new function() {
  * @before <a class="remote" href="/path/to/content.html">Update</a>
  * @result <a class="remote" href="#remote-1">Update</a>
  * @desc Alter a link of the class "remote" to an Ajax-enhanced link and let it load content from
- *       "/path/to/content.html" via XmlHttpRequest into an element.
+ *       "/path/to/content.html" via XmlHttpRequest into an element with the id "output".
+ * @example $('a.remote').remote('#output', {hashPrefix: 'chapter'});
+ * @before <a class="remote" href="/path/to/content.html">Update</a>
+ * @result <a class="remote" href="#chapter-1">Update</a>
+ * @desc Alter a link of the class "remote" to an Ajax-enhanced link and let it load content from
+ *       "/path/to/content.html" via XmlHttpRequest into an element with the id "output".
  *
  * @param Element elem A DOM element to load content into via XmlHttpRequest.
+ * @param Object settings An object literal containing key/value pairs to provide optional settings.
+ * @option String hashPrefix A String that is used for constructing the hash the link's href attribute
+ *                           gets altered to, such as "#remote-1". Default value: "remote-".
  * @type jQuery
  *
  * @name remote
  * @cat Plugins/Remote
  * @author Klaus Hartl/klaus.hartl@stilbuero.de
  */
-$.fn.remote = function(output) {
+$.fn.remote = function(output, settings) {
+
+    settings = $.extend({
+        hashPrefix: 'remote-'
+    }, settings || {});
+
     var target = $(output).size() && $(output) || $('<div></div>').appendTo('body');
     target.addClass('remote-output');
+
     return this.each(function(i) {
         var remoteURL = this.href;
-        var hash = '#remote-' + (i + 1);
+        var hash = '#' + settings.hashPrefix + (i + 1);
         this.href = hash;
         $(this).click(function(e) {
             var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
@@ -238,6 +260,7 @@ $.fn.remote = function(output) {
             });
         });
     });
+
 };
 
 // Internal, used to enable history for the Tabs plugin.
