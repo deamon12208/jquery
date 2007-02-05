@@ -19,8 +19,7 @@
  *
  * @name searchField
  * @type jQuery
- * @cat Plugins/Utilities
- * @author Jörn Zaefferer (http://bassistance.de)
+ * @cat Plugins/SearchField
  */
 $.fn.searchField = function() {
 	return this.focus(function() {
