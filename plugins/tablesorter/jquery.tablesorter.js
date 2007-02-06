@@ -83,7 +83,7 @@ jQuery.fn.tableSorter = function(o) {
 		
 		
 		/** Store length of table rows. */
-		var tableRowLength = oTable.tBodies[0].rows.length-1;
+		var tableRowLength = (oTable.tBodies[0] && oTable.tBodies[0].rows.length-1) || 0;
 
 		/** Index column data. */
 		buildColumnDataIndex();
@@ -165,7 +165,7 @@ jQuery.fn.tableSorter = function(o) {
 		/** break out and put i jQuery.tableSorter? */
 		function buildColumnDataIndex() {
 			/** make colum data. */
-			COLUMN_ROW_LENGTH = oTable.tBodies[0].rows.length;
+			COLUMN_ROW_LENGTH = (oTable.tBodies[0] && oTable.tBodies[0].rows.length) || 0;
 			var l = COLUMN_ROW_LENGTH;
 			for (var i=0;i < l; i++) {
 				/** Add the table data to main data array */
@@ -487,7 +487,7 @@ jQuery.tableSorter.parsers.generic = {
 jQuery.tableSorter.parsers.currency = {
 	id: 'currency',
 	is: function(s) {
-		return s.match(/^[£$]/);
+		return s.match(new RegExp(/^[£$]/));
 	},
 	format: function(s) {
 		return parseFloat(s.replace(new RegExp(/[^0-9.]/g),''));
@@ -497,7 +497,7 @@ jQuery.tableSorter.parsers.currency = {
 jQuery.tableSorter.parsers.integer = {
 	id: 'integer',
 	is: function(s) {
-		return s.match(/^\b\d+\b$/);
+		return s.match(new RegExp(/^\d+$/));
 	},
 	format: function(s) {
 		return parseFloat(s);
@@ -524,14 +524,14 @@ jQuery.tableSorter.parsers.ipAddress = {
 	format: function(s) {
 		var a = s.split('.');
 		var r = '';
-		for (var i = 0; i < a.length; i++) {
-		   if(a[i].length == 2) {
-				r += '0' + a[i];
+		for (var i = 0, item; item = a[i]; i++) {
+		   if(item.length == 2) {
+				r += '0' + item;
 		   } else {
-				r += a[i];
+				r += item;
 		   }
 		}
-		return r;
+		return parseFloat(r);
 	},
 	sorter: jQuery.tableSorter.sorters.numeric
 };
