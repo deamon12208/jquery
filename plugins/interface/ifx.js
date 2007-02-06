@@ -16,7 +16,7 @@
  */
 jQuery.fxCheckTag = function(e)
 {
-	if (/tr|td|tbody|caption|thead|tfoot|col|colgroup|th|body|header|script|frame|frameset|option|optgroup|meta/i.test(e.nodeName) )
+	if (/^tr$|^td$|^tbody$|^caption$|^thead$|^tfoot$|^col$|^colgroup$|^th$|^body$|^header$|^script$|^frame$|^frameset$|^option$|^optgroup$|^meta$/i.test(e.nodeName) )
 		return false;
 	else 
 		return true;
@@ -65,7 +65,7 @@ jQuery.fx.buildWrapper = function(e)
 	oldStyle.top = parseInt(t.css('top'))||0;
 	oldStyle.left = parseInt(t.css('left'))||0;
 	var wid = 'w_' + parseInt(Math.random() * 10000);
-	var wr = document.createElement(/img|br|input|hr|select|textarea|object|iframe|button|form|table|ul|dl|ol/i.test(e.nodeName) ? 'div' : e.nodeName);
+	var wr = document.createElement(/^img$|^br$|^input$|^hr$|^select$|^textarea$|^object$|^iframe$|^button$|^form$|^table$|^ul$|^dl$|^ol$/i.test(e.nodeName) ? 'div' : e.nodeName);
 	jQuery.attr(wr,'id', wid);
 	wrapEl = jQuery(wr).addClass('fxWrapper');
 	var wrs = wr.style;
@@ -164,7 +164,7 @@ jQuery.fx.namedColors = {
 /**
  * parses a color to an object for reg, green and blue
  */
-jQuery.fx.parseColor = function(color)
+jQuery.fx.parseColor = function(color, notColor)
 {
 	if (jQuery.fx.namedColors[color]) 
 		return {
@@ -197,7 +197,7 @@ jQuery.fx.parseColor = function(color)
 			b: parseInt("0x" + result[3])
 		};
 	else
-		return {r: 255, g: 255, b: 255};
+		return notColor == true ? false : {r: 255, g: 255, b: 255};
 };
 /**
  * CSS rules that can be animated
@@ -293,19 +293,13 @@ jQuery.extend({
 				props[tp] = [parseFloat( jQuery.curCSS(elem, tp) ), parseFloat(vp)];
 			else if (jQuery.fx.colorCssProps[tp])
 				props[tp] = [jQuery.fx.parseColor(jQuery.curCSS(elem, tp)), jQuery.fx.parseColor(vp)];
-			else if(/^margin|padding|border$|borderColor|borderWidth/i.test(tp)) {
-				var m = vp.match(/([^\s]+)/g);
+			else if(/^margin$|padding$|border$|borderColor$|borderWidth$/i.test(tp)) {
+				var m = vp.replace(/\s+/g, ' ').replace(/rgb\s*\(\s*/g,'rgb(').replace(/\s*,\s*/g,',').replace(/\s*\)/g,')').match(/([^\s]+)/g);
 				switch(tp){
 					case 'margin':
 					case 'padding':
 					case 'borderWidth':
 					case 'borderColor':
-						if(
-							/^rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)$/.test(vp)
-							||
-							/rgb\(\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*\)$/.test(vp)
-						)
-							m = [vp];
 						m[3] = m[3]||m[1]||m[0];
 						m[2] = m[2]||m[0];
 						m[1] = m[1]||m[0];
