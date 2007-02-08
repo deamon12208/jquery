@@ -55,7 +55,9 @@
 	
 	test("pop",function(){
 		var $lis = $('#testList li');
-		isSet($lis.pop().get(),q('first','second','third','fourth','fifth'),'Basic Pop');
+		popped={};
+		isSet($lis.pop(false,'popped').get(),q('first','second','third','fourth','fifth'),'Basic Pop');
+		ok($lis[$lis.length-1]==popped,'Popped Element');
 		isSet($lis.get(),q('first','second','third','fourth','fifth','sixth'),'Non Destructive');
 		$lis.pop(true);
 		isSet($lis.get(),q('first','second','third','fourth','fifth'),'Destructive');
@@ -63,7 +65,9 @@
 	
 	test("shift",function(){
 		var $lis = $('#testList li');
-		isSet($lis.shift().get(),q('second','third','fourth','fifth','sixth'),'Basic Shift');
+		shifted={};
+		isSet($lis.shift(false,'shifted').get(),q('second','third','fourth','fifth','sixth'),'Basic Shift');
+		ok($lis[0]==shifted,'Shifted Element');
 		isSet($lis.get(),q('first','second','third','fourth','fifth','sixth'),'Non Destructive');
 		$lis.shift(true);
 		isSet($lis.get(),q('second','third','fourth','fifth','sixth'),'Destructive');

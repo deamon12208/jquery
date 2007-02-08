@@ -89,32 +89,38 @@ jQuery.fn.slice = function(start,end,destruct) {
 /**
  * Remove the last element in the jQuery element collection and disregard
  * Note: This does not return the popped element, which is unlike the native Array.pop
- * Javascript function.
+ * Javascript function. It returns a jQuery object to maintain chainability. See
+ * returnVar parameter for a workaround.
  *
  * @example $('li').pop().length == $('li').length - 1
  *
  * @name shift
  * @type jQuery
  * @param Boolean destruct If true, this function will act distructively on a cached jQuery object
+ * @param String returnVar If supplied the name of an existing global variable, said variable will be populated with the popped element
  * @cat Plugins/Array
  */
-jQuery.fn.pop = function(destruct){
+jQuery.fn.pop = function(destruct,returnVar){
+	if(returnVar) window[returnVar] = this.get(this.length-1);
 	return this.slice( 0, -1, destruct );
 };
 
 /**
  * Remove the first element in the jQuery element collection and disregard
  * Note: This does not return the shifted element, which is unlike the native Array.shift
- * Javascript function.
+ * Javascript function. It returns a jQuery object to maintain chainability. See
+ * returnVar parameter for a workaround.
  *
  * @example $('li').shift()[0] == 2nd li found
  *
  * @name shift
  * @type jQuery
  * @param Boolean destruct If true, this function will act distructively on a cached jQuery object
+ * @param String returnVar If supplied the name of an existing global variable, said variable will be populated with the shifted element
  * @cat Plugins/Array
  */
-jQuery.fn.shift = function(destruct){
+jQuery.fn.shift = function(destruct,returnVar){
+	if(returnVar) window[returnVar] = this.get(0);
 	return this.slice( 1, this.length, destruct );
 };
 
