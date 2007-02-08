@@ -35,15 +35,15 @@
 jQuery.fn.bgIframe = jQuery.fn.bgiframe = function() {
 	// This is only for IE6
 	if ( !(jQuery.browser.msie && typeof XMLHttpRequest == 'function') ) return this;
-	
+	var html = '<iframe class="bgiframe" src="javascript:false;document.write(\'\');" tabindex="-1" '
+	 					+'style="display:block; position:absolute; '
+						+'top: expression(((parseInt(this.parentNode.currentStyle.borderTopWidth)  || 0) * -1) + \'px\'); '
+						+'left:expression(((parseInt(this.parentNode.currentStyle.borderLeftWidth) || 0) * -1) + \'px\'); ' 
+						+'z-index:-1; filter:Alpha(Opacity=\'0\'); '
+						+'width:expression(this.parentNode.offsetWidth + \'px\'); '
+						+'height:expression(this.parentNode.offsetHeight + \'px\')"/>';
 	return this.each(function() {
-		var html = '<iframe class="bgiframe" src="javascript:false;document.write(\'\');" tabindex="-1" '
-		 					+'style="display:block; position:absolute; '
-							+'top: expression(((parseInt(this.parentNode.currentStyle.borderTopWidth)  || 0) * -1) + \'px\'); '
-							+'left:expression(((parseInt(this.parentNode.currentStyle.borderLeftWidth) || 0) * -1) + \'px\'); ' 
-							+'z-index:-1; filter:Alpha(Opacity=\'0\'); '
-							+'width:expression(this.parentNode.offsetWidth + \'px\'); '
-							+'height:expression(this.parentNode.offsetHeight + \'px\')"/>';
-		this.insertBefore( document.createElement(html), this.firstChild );
+		if ( jQuery('iframe.bgiframe', this).length == 0) )
+			this.insertBefore( document.createElement(html), this.firstChild );
 	});
 };
