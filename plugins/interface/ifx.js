@@ -266,6 +266,13 @@ jQuery.fn.extend({
 			var e = new jQuery.fxe( this, opt, prop );
 			
 		});
+	},
+	stop : function(step) {
+		return this.each(function(){
+			if (this.animationHandler)
+				jQuery.stopAnim(this, step);
+			
+		});
 	}
 });
 /**
@@ -278,20 +285,34 @@ jQuery.extend({
 		}
 	},
 	fxe: function( elem, options, prop ){
-
 		var z = this, values;
 
 		// The styles
 		var y = elem.style;
+		var oldOverflow = jQuery.css(elem, "overflow");
 		var props = {};
 		z.startTime = (new Date()).getTime();
 		options.easing = options.easing && jQuery.easing[options.easing] ? options.easing : 'linear';
 		
 		z.getValues = function(tp, vp)
 		{
-			if (jQuery.fx.cssProps[tp])
-				props[tp] = [parseFloat( jQuery.curCSS(elem, tp) ), parseFloat(vp)];
-			else if (jQuery.fx.colorCssProps[tp])
+			if (jQuery.fx.cssProps[tp]) {
+				if (vp == 'show' || vp == 'hide' || vp == 'toggle') {
+					if ( !elem.orig ) elem.orig = {};
+					var r = parseFloat( jQuery.curCSS(elem, tp) );
+					elem.orig[tp] = r && r > -10000 ? r : (parseFloat( jQuery.css(elem,tp) )||0);
+					vp = vp == 'toggle' && jQuery.curCSS(elem, 'display') == 'none' ? 'show' : 'hide';
+					options[vp] = true;
+					props[tp] = vp == 'show' ? [0, elem.orig[tp]] : [elem.orig[tp], 0];
+					if (tp != 'opacity')
+						y[tp] = props[tp][0] + (tp != 'zIndex' && tp != 'fontWeight' ? 'px':'');
+					else
+						jQuery.attr(y, "opacity", props[tp][0]);
+					y.overflow = 'hidden';
+				} else {
+					props[tp] = [parseFloat( jQuery.curCSS(elem, tp) ), parseFloat(vp)||0];
+				}
+			} else if (jQuery.fx.colorCssProps[tp])
 				props[tp] = [jQuery.fx.parseColor(jQuery.curCSS(elem, tp)), jQuery.fx.parseColor(vp)];
 			else if(/^margin$|padding$|border$|borderColor$|borderWidth$/i.test(tp)) {
 				var m = vp.replace(/\s+/g, ' ').replace(/rgb\s*\(\s*/g,'rgb(').replace(/\s*,\s*/g,',').replace(/\s*\)/g,')').match(/([^\s]+)/g);
@@ -322,13 +343,13 @@ jQuery.extend({
 								: [parseFloat( jQuery.curCSS(elem, nmp) ), floatVal];
 								}
 							} else {
-								elem.style['borderStyle'] = m[i];
+								y['borderStyle'] = m[i];
 							}
 						}
 						break;
 				}
 			} else {
-				elem.style[tp] = vp;
+				y[tp] = vp;
 			}
 			return false;
 		};
@@ -361,6 +382,9 @@ jQuery.extend({
 			}
 		}
 		
+		if (options.show)
+			y.display = "";
+		
 		z.step = function(){
 			var t = (new Date()).getTime();
 			if (t > options.duration + z.startTime) {
@@ -374,7 +398,16 @@ jQuery.extend({
 					else 
 						y[p] = props[p][1] + (p != 'zIndex' && p != 'fontWeight' ? 'px':'');
 				}
-
+				if ( options.hide || options.show )
+					for ( var p in elem.orig )
+						if (p == "opacity")
+							jQuery.attr(y, p, elem.orig[p]);
+						else
+							y[p] = "";
+				if (options.hide)
+					y.display = 'none';
+				y.overflow = oldOverflow;
+				elem.animationHandler = null;
 				if ( jQuery.isFunction( options.complete ) )
 					options.complete.apply( elem );
 			} else {
@@ -392,7 +425,7 @@ jQuery.extend({
 					} else {
 						var pValue = jQuery.easing[options.easing](pr, n,  props[p][0], (props[p][1]-props[p][0]), options.duration);
 						if ( p == "opacity" )
-							jQuery.attr(y, "opacity", pvalue);
+							jQuery.attr(y, "opacity", pValue);
 						else 
 							y[p] = pValue + (p != 'zIndex' && p != 'fontWeight' ? 'px':'');
 					}
@@ -401,9 +434,20 @@ jQuery.extend({
 			}
 		};
 	z.timer=setInterval(function(){z.step();},13);
-	
+	elem.animationHandler = z;
+	},
+	stopAnim: function(elem, step)
+	{
+		if (step)
+			elem.animationHandler.startTime -= 100000000
+		else {
+			window.clearInterval(elem.animationHandler.timer);
+			elem.animationHandler = null;
+			jQuery.dequeue(elem, "fx");
+		}
 	}
-});
+}
+);
 
 jQuery.parseStyle = function(styles) {
 	var newStyles = {};
