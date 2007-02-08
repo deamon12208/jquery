@@ -3,9 +3,9 @@
  * more like a Javascript Array
  *
  * Based on work by the jQuery Community (http://www.nabble.com/.each-backwards---tf2399145.html#a6690114)
- * and brainknot.com (http://www.brainknot.com/code/jQarray.js)
+ * and Kenton Simpson (http://www.brainknot.com/code/jQarray.js)
  *
- * Copyright (c) 2007 Paul McLanahan
+ * Copyright (c) 2007 Paul McLanahan, Kenton Simpson
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
