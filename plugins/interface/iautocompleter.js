@@ -437,7 +437,7 @@ jQuery.iAuto = {
 		jQuery.iAuto.clear();
 		if (jQuery.iAuto.subject.autoCFG.onSelect) {
 			iteration = parseInt(this.getAttribute('dir'))||0;
-			jQuery.iAuto.applyOnSelect(jQuery.iAuto.subject,jQuery.iAuto.subject.autoCFG.lastSuggestion.get(iteration), 'onSelect');
+			jQuery.iAuto.applyOn(jQuery.iAuto.subject,jQuery.iAuto.subject.autoCFG.lastSuggestion.get(iteration), 'onSelect');
 		}
 
 		return false;
