@@ -63,6 +63,13 @@ jQuery.iDrag =	{
 					this.dragCfg.dhe.unbind('mousedown', jQuery.iDrag.draginit);
 					this.dragCfg = null;
 					this.isDraggable = false;
+					if(jQuery.browser.msie) {
+						this.unselectable = "off";
+					} else {
+						this.style.MozUserSelect = '';
+						this.style.KhtmlUserSelect = '';
+						this.style.userSelect = '';
+					}
 				}
 			}
 		);
@@ -472,11 +479,11 @@ jQuery.iDrag =	{
 			els.listStyle = 'none';
 			els.overflow = 'hidden';
 			if (window.ActiveXObject) {
-				el.onselectstart = function(){return false;};
-				el.ondragstart = function(){return false;};
+				el.unselectable = "on";
 			} else {
 				els.mozUserSelect = 'none';
 				els.userSelect = 'none';
+				els.KhtmlUserSelect = 'none';
 			}
 		}
 		if (!o) {
@@ -497,9 +504,7 @@ jQuery.iDrag =	{
 					dhe.each(
 						function()
 						{
-							this.onselectstart = function(){return false;};
-							this.ondrag = function(){return false;};
-							this.selectable = "on";
+							this.unselectable = "on";
 						}
 					);
 				} else {
