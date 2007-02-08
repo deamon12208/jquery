@@ -2,7 +2,7 @@
  * searchField - jQuery plugin to display and remove
  * a default value in a searchvalue on blur/focus
  *
- * Copyright (c) 2006 Jörn Zaefferer
+ * Copyright (c) 2007 Jörn Zaefferer, Paul McLanahan
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -11,26 +11,35 @@
  */
 
 /**
- * Clear the help text in a search field when focused,
- * a restore it on blur if nothing was entered.
+ * Clear the help text in a search field (either in the value or title attribute)
+ * when focused, and restore it on blur if nothing was entered. If the value is
+ * blank but there is a title attribute, the title will be moved to the initial value.
  *
  * @example $('#quicksearch').searchField();
- * @before <input id="quicksearch" value="Enter search here" name="quicksearch" />
+ * @before <input id="quicksearch" title="Enter search here" name="quicksearch" />
+ * @result <input id="quicksearch" value="Enter search here" name="quicksearch" />
  *
  * @name searchField
  * @type jQuery
  * @cat Plugins/SearchField
  */
-$.fn.searchField = function() {
-	return this.focus(function() {
-		// remove default value, but nothing else
-		if( this.value == this.defaultValue ) {
-			this.value = "";
+jQuery.fn.searchField = function(){
+	return this.each(function(){
+		var $this = jQuery(this);
+		// setup initial value from title if no initial value
+		if(this.title && this.title.length && !this.value.length){
+			$this.val(this.title);
+			$this.removeAttr('title');
 		}
-	}).blur(function() {
-		// check for length, for value == 0
-		if( !this.value.length ) {
-			this.value = this.defaultValue;
+		// attach listeners if there is a value
+		if(this.value.length){
+			this.defaultValue = this.value;
+			$this.focus(function(){
+				if(this.value==this.defaultValue) this.value='';
+			})
+			.blur(function(){
+				if(!this.value.length)this.value=this.defaultValue;
+			});
 		}
 	});
 };
