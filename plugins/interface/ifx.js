@@ -27,8 +27,8 @@ jQuery.fxCheckTag = function(e)
  */
 jQuery.fx.destroyWrapper = function(e, old)
 {
-	c = e.firstChild;
-	cs = c.style;
+	var c = e.firstChild;
+	var cs = c.style;
 	cs.position = old.position;
 	cs.marginTop = old.margins.t;
 	cs.marginLeft = old.margins.l;
@@ -56,18 +56,18 @@ jQuery.fx.buildWrapper = function(e)
 		t.css('visibility', 'hidden').show();
 		restoreStyle = true;
 	}
-	oldStyle = {};
+	var oldStyle = {};
 	oldStyle.position = t.css('position');
 	oldStyle.sizes = jQuery.iUtil.getSize(e);
 	oldStyle.margins = jQuery.iUtil.getMargins(e);
 	
-	oldFloat = e.currentStyle ? e.currentStyle.styleFloat : t.css('float');
+	var oldFloat = e.currentStyle ? e.currentStyle.styleFloat : t.css('float');
 	oldStyle.top = parseInt(t.css('top'))||0;
 	oldStyle.left = parseInt(t.css('left'))||0;
 	var wid = 'w_' + parseInt(Math.random() * 10000);
 	var wr = document.createElement(/^img$|^br$|^input$|^hr$|^select$|^textarea$|^object$|^iframe$|^button$|^form$|^table$|^ul$|^dl$|^ol$/i.test(e.nodeName) ? 'div' : e.nodeName);
 	jQuery.attr(wr,'id', wid);
-	wrapEl = jQuery(wr).addClass('fxWrapper');
+	var wrapEl = jQuery(wr).addClass('fxWrapper');
 	var wrs = wr.style;
 	var top = 0;
 	var left = 0;
@@ -272,6 +272,12 @@ jQuery.fn.extend({
 			if (this.animationHandler)
 				jQuery.stopAnim(this, step);
 			
+		});
+	},
+	stopAll : function(step) {
+		return this.stop(step).each(function(){
+			if ( this.queue && this.queue['fx'] )
+				this.queue.fx = [];
 		});
 	}
 });
