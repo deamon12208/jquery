@@ -102,7 +102,7 @@ jQuery.iUtil = {
 	},
 	getScroll : function (e)
 	{
-		var t, l, w, h, iw, ih;
+		var t=0, l=0, w=0, h=0, iw=0, ih=0;
 		if (e && e.nodeName.toLowerCase() != 'body') {
 			t = e.scrollTop;
 			l = e.scrollLeft;
@@ -111,7 +111,7 @@ jQuery.iUtil = {
 			iw = 0;
 			ih = 0;
 		} else  {
-			if (document.documentElement && document.documentElement.scrollTop) {
+			if (document.documentElement) {
 				t = document.documentElement.scrollTop;
 				l = document.documentElement.scrollLeft;
 				w = document.documentElement.scrollWidth;
