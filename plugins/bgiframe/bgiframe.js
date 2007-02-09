@@ -43,7 +43,7 @@ jQuery.fn.bgIframe = jQuery.fn.bgiframe = function() {
 						+'width:expression(this.parentNode.offsetWidth + \'px\'); '
 						+'height:expression(this.parentNode.offsetHeight + \'px\')"/>';
 	return this.each(function() {
-		if ( jQuery('iframe.bgiframe', this).length == 0) )
+		if ( jQuery('iframe.bgiframe', this).length == 0 )
 			this.insertBefore( document.createElement(html), this.firstChild );
 	});
 };
