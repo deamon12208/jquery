@@ -154,9 +154,9 @@ jQuery.iAuto = {
 			jQuery.iAuto.iframe
 				.css('top', position.y + size.hb + 'px')
 				.css('left', position.x +  'px')
-				/*.css('width', jQuery.iAuto.helper.css('width') + 'px')
+				.css('width', jQuery.iAuto.helper.css('width') + 'px')
 				.css('height', jQuery.iAuto.helper.css('height') + 'px')
-				.css('display', 'block');*/
+				.css('display', 'block');
 		}
 		jQuery.iAuto.selectedItem = 0;
 		jQuery.iAuto.items.get(0).className = subject.autoCFG.selectClass;
