@@ -267,6 +267,12 @@ jQuery.fn.extend({
 			
 		});
 	},
+	pause: function(speed, callback) {
+		return this.queue(function(){
+			var opt = jQuery.speed(speed, callback);
+			var e = new jQuery.pause( this, opt );
+		});
+	},
 	stop : function(step) {
 		return this.each(function(){
 			if (this.animationHandler)
@@ -287,6 +293,17 @@ jQuery.fn.extend({
  * Improved FXC function that aniamtes collection of properties per timer. Accepts inline styles and class names to animate
  */
 jQuery.extend({
+	pause: function(elem, options)
+	{
+		var z = this, values;
+		z.step = function()
+		{
+			if ( jQuery.isFunction( options.complete ) )
+				options.complete.apply( elem );
+		};
+		z.timer=setInterval(function(){z.step();},options.duration);
+		elem.animationHandler = z;
+	},
 	easing :  {
 		linear: function(p, n, firstNum, delta, duration) {
 			return ((-Math.cos(p*Math.PI)/2) + 0.5) * delta + firstNum;
