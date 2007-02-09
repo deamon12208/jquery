@@ -96,7 +96,7 @@ jQuery.fx.ScrollTo = function (e, o, axis, easing)
 			}
 			if (!z.axis || z.axis == 'horizontal') {
 				if (!jQuery.easing || !jQuery.easing[z.easing]) {
-					sl = ((-Math.cos(p*Math.PI)/2) + 0.5) * (z.endTop-z.startTop) + z.startTop;
+					sl = ((-Math.cos(p*Math.PI)/2) + 0.5) * (z.endLeft-z.startLeft) + z.startLeft;
 				} else {
 					sl = jQuery.easing[z.easing](p, n, z.startLeft, (z.endLeft - z.startLeft), z.o.duration);
 				}
