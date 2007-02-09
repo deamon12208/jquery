@@ -1,0 +1,44 @@
+/* import skin */
+@import "jquery.thickbox.skin.css";
+
+/* basic thickbox interface */
+html, body {
+    min-height: 100%;
+}
+#tb-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9998;
+    width: 100%;
+    height: 100%;
+}
+#tb-loading, #tb-window {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+}
+#tb-loading {
+    z-index: 9999;
+    margin: -25px 0 0 -25px;
+    width: 50px;
+    height: 50px;
+}
+#tb-window {
+    display: none;
+    z-index: 10000;
+    margin: -200px 0 0 -150px; /* temp */
+    width: 350px;
+    height: 400px;
+}
+#tb-window.confirm {
+    margin-top: -50px;
+    height: 100px;
+}
+
+/* IE specific */
+* html #tb-background iframe { /* hide selects in IE 6, not required in IE 7 */
+    border: 0;
+    width: 100%;
+    height: 100%;
+}
