@@ -275,7 +275,9 @@ jQuery.fn.extend({
 		});
 	},
 	stopAll : function(step) {
-		return this.stop(step).each(function(){
+		return this.each(function(){
+			if (this.animationHandler)
+				jQuery.stopAnim(this, step);
 			if ( this.queue && this.queue['fx'] )
 				this.queue.fx = [];
 		});
@@ -296,6 +298,7 @@ jQuery.extend({
 		// The styles
 		var y = elem.style;
 		var oldOverflow = jQuery.css(elem, "overflow");
+		var oldDisplay= jQuery.css(elem, "display");
 		var props = {};
 		z.startTime = (new Date()).getTime();
 		options.easing = options.easing && jQuery.easing[options.easing] ? options.easing : 'linear';
@@ -307,14 +310,13 @@ jQuery.extend({
 					if ( !elem.orig ) elem.orig = {};
 					var r = parseFloat( jQuery.curCSS(elem, tp) );
 					elem.orig[tp] = r && r > -10000 ? r : (parseFloat( jQuery.css(elem,tp) )||0);
-					vp = vp == 'toggle' && jQuery.curCSS(elem, 'display') == 'none' ? 'show' : 'hide';
+					vp = vp == 'toggle' ? ( oldDisplay == 'none' ? 'show' : 'hide') : vp;
 					options[vp] = true;
 					props[tp] = vp == 'show' ? [0, elem.orig[tp]] : [elem.orig[tp], 0];
 					if (tp != 'opacity')
 						y[tp] = props[tp][0] + (tp != 'zIndex' && tp != 'fontWeight' ? 'px':'');
 					else
 						jQuery.attr(y, "opacity", props[tp][0]);
-					y.overflow = 'hidden';
 				} else {
 					props[tp] = [parseFloat( jQuery.curCSS(elem, tp) ), parseFloat(vp)||0];
 				}
@@ -387,9 +389,11 @@ jQuery.extend({
 				this.getValues(p, prop[p]);
 			}
 		}
+		y.display = oldDisplay == 'none' ? 'block' : oldDisplay;
+		y.overflow = 'hidden';
 		
-		if (options.show)
-			y.display = "";
+		/*if (options.show)
+			y.display = "";*/
 		
 		z.step = function(){
 			var t = (new Date()).getTime();
@@ -410,8 +414,7 @@ jQuery.extend({
 							jQuery.attr(y, p, elem.orig[p]);
 						else
 							y[p] = "";
-				if (options.hide)
-					y.display = 'none';
+				y.display = options.hide ? 'none' : (oldDisplay !='none' ? oldDisplay : 'block');
 				y.overflow = oldOverflow;
 				elem.animationHandler = null;
 				if ( jQuery.isFunction( options.complete ) )
