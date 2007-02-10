@@ -115,7 +115,7 @@ jQuery.fn.extend({
 	 */
 	unmousewheel: function(fn) {
 		return this.each(function() {
-			if (fn && this._mwHandlers.length > 1) {
+			if (fn && this._mwHandlers) {
 				for (var i=0; i<this._mwHandlers.length; i++)
 					if (this._mwHandlers[i] && this._mwHandlers[i].guid == fn.guid)
 						delete this._mwHandlers[i];
