@@ -18,7 +18,7 @@ jQuery.iUtil = {
 		var y = 0;
 		var es = e.style;
 		var restoreStyles = false;
-		if (jQuery(e).css('display') == 'none') {
+		if (jQuery.curCSS(e,'display') == 'none') {
 			var oldVisibility = es.visibility;
 			var oldPosition = es.position;
 			restoreStyles = true;
@@ -27,17 +27,34 @@ jQuery.iUtil = {
 			es.position = 'absolute';
 		}
 		var el = e;
-		while (el){
-			x += el.offsetLeft + (el.currentStyle && !jQuery.browser.opera ?parseInt(el.currentStyle.borderLeftWidth)||0:0);
-			y += el.offsetTop + (el.currentStyle && !jQuery.browser.opera ?parseInt(el.currentStyle.borderTopWidth)||0:0);
+		if (el.getBoundingClientRect) { // IE
+			var box = el.getBoundingClientRect();
+			x = box.left + Math.max(doc.documentElement.scrollLeft, doc.body.scrollLeft);
+			y = box.top + Math.max(doc.documentElement.scrollTop, doc.body.scrollTop);
+		} else {
+			x = el.offsetLeft;
+			y = el.offsetTop;
 			el = el.offsetParent;
-		}
-		el = e;
-		while (el && el.tagName  && el.tagName.toLowerCase() != 'body')
-		{
-			x -= el.scrollLeft||0;
-			y -= el.scrollTop||0;
-			el = el.parentNode;
+			if (e != el) {
+				while (el) {
+					x += el.offsetLeft;
+					y += el.offsetTop;
+					el = el.offsetParent;
+				}
+			}
+			if (jQuery.browser.safari && jQuery.curCSS(e, 'position') == 'absolute' ) {
+				x -= document.body.offsetLeft;
+				y -= document.body.offsetTop;
+			}
+			el = e.parentNode;
+			while (el && el.tagName.toUpperCase() != 'BODY' && el.tagName.toUpperCase() != 'HTML') 
+			{
+				if (jQuery.curCSS(el, 'display') != 'inline') {
+					x -= el.scrollLeft;
+					y -= el.scrollTop;
+				}
+				el = el.parentNode;
+			}
 		}
 		if (restoreStyles == true) {
 			es.display = 'none';
@@ -63,7 +80,7 @@ jQuery.iUtil = {
 		var wb = 0;
 		var hb = 0;
 		var es = e.style;
-		if (jQuery(e).css('display') != 'none') {
+		if (jQuery.curCSS(e, 'display') != 'none') {
 			wb = e.offsetWidth;
 			hb = e.offsetHeight;
 		} else {
