@@ -465,7 +465,7 @@ jQuery.extend({
 	stopAnim: function(elem, step)
 	{
 		if (step)
-			elem.animationHandler.startTime -= 100000000
+			elem.animationHandler.startTime -= 100000000;
 		else {
 			window.clearInterval(elem.animationHandler.timer);
 			elem.animationHandler = null;

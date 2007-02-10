@@ -29,8 +29,8 @@ jQuery.iUtil = {
 		var el = e;
 		if (el.getBoundingClientRect) { // IE
 			var box = el.getBoundingClientRect();
-			x = box.left + Math.max(doc.documentElement.scrollLeft, doc.body.scrollLeft);
-			y = box.top + Math.max(doc.documentElement.scrollTop, doc.body.scrollTop);
+			x = box.left + Math.max(document.documentElement.scrollLeft, document.body.scrollLeft) - 2;
+			y = box.top + Math.max(document.documentElement.scrollTop, document.body.scrollTop) - 2;
 		} else {
 			x = el.offsetLeft;
 			y = el.offsetTop;
@@ -75,8 +75,8 @@ jQuery.iUtil = {
 	},
 	getSize : function(e)
 	{
-		var w = jQuery.css(e,'width');
-		var h = jQuery.css(e,'height');
+		var w = jQuery.curCSS(e,'width');
+		var h = jQuery.curCSS(e,'height');
 		var wb = 0;
 		var hb = 0;
 		var es = e.style;

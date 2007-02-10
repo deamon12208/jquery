@@ -191,7 +191,7 @@ jQuery.iSort = {
 			{
 				this.pos = jQuery.extend(
 					jQuery.iUtil.getSizeLite(this),
-					jQuery.iUtil.getPositionLite(this)
+					jQuery.iUtil.getPosition(this)
 				);
 			}
 		);

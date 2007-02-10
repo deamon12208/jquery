@@ -89,7 +89,7 @@ jQuery.iDrop = {
 				if (jQuery(jQuery.iDrag.dragged).is('.' + iEL.dropCfg.a)) {
 					if (iEL.dropCfg.m == false) {
 						iEL.dropCfg.p = jQuery.extend(
-							jQuery.iUtil.getPositionLite(iEL),
+							jQuery.iUtil.getPosition(iEL),
 							jQuery.iUtil.getSizeLite(iEL)
 						);//jQuery.iUtil.getPos(iEL);
 						iEL.dropCfg.m = true;
@@ -135,7 +135,7 @@ jQuery.iDrop = {
 				var iEL = jQuery.iDrop.zones[i].get(0);
 				if (jQuery(jQuery.iDrag.dragged).is('.' + iEL.dropCfg.a)) {
 					iEL.dropCfg.p = jQuery.extend(
-						jQuery.iUtil.getPositionLite(iEL),
+						jQuery.iUtil.getPosition(iEL),
 						jQuery.iUtil.getSizeLite(iEL)
 					);
 					if (iEL.dropCfg.ac) {
