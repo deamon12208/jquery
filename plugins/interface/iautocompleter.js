@@ -152,11 +152,11 @@ jQuery.iAuto = {
 			.addClass(subject.autoCFG.helperClass);
 		if (jQuery.iAuto.iframe) {
 			jQuery.iAuto.iframe
+				.css('display', 'block')
 				.css('top', position.y + size.hb + 'px')
 				.css('left', position.x +  'px')
-				.css('width', jQuery.iAuto.helper.css('width') + 'px')
-				.css('height', jQuery.iAuto.helper.css('height') + 'px')
-				.css('display', 'block');
+				.css('width', jQuery.iAuto.helper.css('width'))
+				.css('height', jQuery.iAuto.helper.css('height'));
 		}
 		jQuery.iAuto.selectedItem = 0;
 		jQuery.iAuto.items.get(0).className = subject.autoCFG.selectClass;
