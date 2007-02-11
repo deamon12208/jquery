@@ -7,6 +7,7 @@
 	<script type="text/javascript" src="jquery.array.js"></script>
 	<script type="text/javascript">
 	test("Requirements",function(){
+		expect(8);
 		ok(jQuery,"jQuery");
 		ok(jQuery.fn.jquery, "jQuery Version: "+jQuery.fn.jquery);
 		ok(Array.prototype.push, "Array.push()");
@@ -20,6 +21,7 @@
 	module('Array');
 	
 	test("reverse",function(){
+		expect(3);
 		var $lis = $('#testList li');
 		isSet($lis.reverse().get(),q('sixth','fifth','fourth','third','second','first'),'Basic Reverse');
 		isSet($lis.get(),q('first','second','third','fourth','fifth','sixth'),'Non Destructive');
@@ -28,6 +30,7 @@
 	});
 	
 	test('sort',function(){
+		expect(3);
 		var sortFn = function(a,b){return parseInt(a.innerHTML) - parseInt(b.innerHTML);};
 		var $lis = $('#testList li');
 		isSet($lis.sort(sortFn).get(),q('third','fourth','second','fifth','first','sixth'),'Basic Numeric Sort');
@@ -37,6 +40,7 @@
 	});
 	
 	test("randomize",function(){
+		expect(3);
 		var $lis = $('#testList li');
 		// not sure how to test randomize other than to assert that the array is no longer in the same order
 		isNotSet($lis.randomize().get(),q('first','second','third','fourth','fifth','sixth'),'Basic Randomize');
@@ -46,6 +50,7 @@
 	});
 	
 	test("slice",function(){
+		expect(3);
 		var $lis = $('#testList li');
 		isSet($lis.slice(1,4).get(),q('second','third','fourth'),'Basic Slice');
 		isSet($lis.get(),q('first','second','third','fourth','fifth','sixth'),'Non Destructive');
@@ -54,26 +59,27 @@
 	});
 	
 	test("pop",function(){
-		var $lis = $('#testList li');
-		popped={};
-		isSet($lis.pop(false,'popped').get(),q('first','second','third','fourth','fifth'),'Basic Pop');
-		ok($lis[$lis.length-1]==popped,'Popped Element');
+		expect(4);
+		var $lis = $('#testList li'), returned = {};
+		isSet($lis.pop(false,returned).get(),q('first','second','third','fourth','fifth'),'Basic Pop');
+		ok($lis[$lis.length-1]==returned.pop,'Popped Element');
 		isSet($lis.get(),q('first','second','third','fourth','fifth','sixth'),'Non Destructive');
 		$lis.pop(true);
 		isSet($lis.get(),q('first','second','third','fourth','fifth'),'Destructive');
 	});
 	
 	test("shift",function(){
-		var $lis = $('#testList li');
-		shifted={};
-		isSet($lis.shift(false,'shifted').get(),q('second','third','fourth','fifth','sixth'),'Basic Shift');
-		ok($lis[0]==shifted,'Shifted Element');
+		expect(4);
+		var $lis = $('#testList li'), returned = {};
+		isSet($lis.shift(false,returned).get(),q('second','third','fourth','fifth','sixth'),'Basic Shift');
+		ok($lis[0]==returned.shift,'Shifted Element');
 		isSet($lis.get(),q('first','second','third','fourth','fifth','sixth'),'Non Destructive');
 		$lis.shift(true);
 		isSet($lis.get(),q('second','third','fourth','fifth','sixth'),'Destructive');
 	});
 	
 	test("rotate",function(){
+		expect(4);
 		var $lis = $('#testList li');
 		isSet($lis.rotate().get(),q('second','third','fourth','fifth','sixth','first'),'Basic Rotate');
 		isSet($lis.rotate().rotate().get(),q('third','fourth','fifth','sixth','first','second'),'Double Rotate');
