@@ -111,12 +111,17 @@
         }, settings);
 
         return this.each(function() {
-            var jqEl = $(this);
-            var isForm = jqEl.is('form');
-            var type;
+            var type, jqEl = $(this), isForm = jqEl.is('form');
             if (isForm) {
                 type = 'confirm';
+                if (!settings.onConfirm) {
+                    var f = this;
+                    settings.onConfirm = function() {
+                        f.submit();
+                    }
+                }
             }
+
             // bind event
             jqEl.bind((isForm ? 'submit' : 'click'), function(e) {
                 $.thickbox(type, settings);
@@ -128,6 +133,8 @@
                 //     image: $('img', this).size() == 1
                 //     content: this.hash
                 //     ajax: this.href ... (?)
+
+
                 this.blur(); // remove focus from active element
                 return false;
             });

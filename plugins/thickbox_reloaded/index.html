@@ -13,22 +13,16 @@
             $(function() {
 
                 // Thickbox confirm
-                $('form').each(function() {
-                    $(this).thickbox({
-                        onConfirm: function() {
-                            form.submit();
-                        }
-                    });
-                });
+                $('form').thickbox();
 
-            })
+            });
         </script>
     </head>
     <body>
         <h1>jQuery Thickbox plugin demo and test page</h1>
 
         <h2>Form confirm</h2>
-        <form style="height: 800px;" action="#">
+        <form action="#">
             <fieldset>
                 <input type="hidden" name="was" value="submitted" />
                 <div>Defer form to Thickbox confirm dialog: <input type="submit" value="Go" /></div>
