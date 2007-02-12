@@ -23,7 +23,7 @@ jQuery.fn.tableSorter = function(o) {
 		rowLimit: 0,
 		minRowsForWaitingMsg: 0,
 		disableHeader: -1,
-		stripRowsOnStartUp: false,
+		stripeRowsOnStartUp: false,
 		columnParser: false,
 		rowHighlightClass: false,
 		useCache: true,
@@ -58,8 +58,8 @@ jQuery.fn.tableSorter = function(o) {
 		/** table object holder.*/
 		var oTable = this;
 
-		if(defaults.stripRowsOnStartUp && defaults.stripingRowClass) {
-			jQuery.tableSorter.utils.stripRows(oTable,defaults);
+		if(defaults.stripeRowsOnStartUp && defaults.stripingRowClass) {
+			jQuery.tableSorter.utils.stripeRows(oTable,defaults);
 		}
 		
 		/** bind events to the tablesorter element */
@@ -405,7 +405,7 @@ jQuery.tableSorter = {
 				/** remove old! */
 				jQuery("> tbody:first/tr",o).removeClass(defaults.stripingRowClass[0]).removeClass(defaults.stripingRowClass[1]);
 				/** add new! */
-				jQuery.tableSorter.utils.stripRows(o,defaults);
+				jQuery.tableSorter.utils.stripeRows(o,defaults);
 			}
 			if(defaults.highlightClass) {
 				jQuery("> tbody:first/tr",o).find("> td:eq(" + index + ")").addClass(defaults.highlightClass).end();
@@ -413,7 +413,7 @@ jQuery.tableSorter = {
 			/** empty object, good practice! */
 			c=null;
 		},
-		stripRows: function(o,defaults) {
+		stripeRows: function(o,defaults) {
 			jQuery("> tbody:first/tr:visible:even",o).addClass(defaults.stripingRowClass[0]);
 			jQuery("> tbody:first/tr:visible:odd",o).addClass(defaults.stripingRowClass[1]);
 		},
