@@ -11,7 +11,7 @@
         <script type="text/javascript" src="jquery.thickbox.js"></script>
         <script type="text/javascript">
             $(function() {
-            
+
                 // Thickbox confirm
                 $('form').each(function() {
                     $(this).thickbox({
@@ -20,20 +20,20 @@
                         }
                     });
                 });
-            
+
             })
         </script>
     </head>
     <body>
         <h1>jQuery Thickbox plugin demo and test page</h1>
-        
+
         <h2>Form confirm</h2>
-        <form action="#">
+        <form style="height: 800px;" action="#">
             <fieldset>
                 <input type="hidden" name="was" value="submitted" />
                 <div>Defer form to Thickbox confirm dialog: <input type="submit" value="Go" /></div>
             </fieldset>
         </form>
-        
+
     </body>
 </html>

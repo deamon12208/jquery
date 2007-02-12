@@ -41,7 +41,7 @@
                     break;
             }
 
-            function block(e) {
+            function blockKeys(e) {
                 var allowed = $('*', window);
                 for (var i = 0, k = allowed.length; i < k; i++) {
                     if (allowed[i] == e.target) {
@@ -51,12 +51,16 @@
                 return false;
             }
 
+            function blockScroll() {
+                return false;
+            }
+
             function keydown(e) {
                 var key = e.which || e.keyCode || null;
                 if (key && key == 27) {
                     hide();
                 } else {
-                    block(e);
+                    blockKeys(e);
                 }
             }
 
@@ -71,7 +75,8 @@
                     }
                 });
                 // attach keyboard event handler
-                $(document).bind('keydown', keydown).bind('keypress', block);
+                $(document).bind('keydown', keydown).bind('keypress', blockKeys);
+                $(window).bind('scroll', blockScroll);
             }
 
             // remove everything
@@ -83,7 +88,8 @@
                 });
                 background.unbind('click').fadeOut('fast', typeof callback == 'function' ? callback : function() { });
                 // remove keyboard event handler
-                $(document).unbind('keydown', keydown).unbind('keypress', block);
+                $(document).unbind('keydown', keydown).unbind('keypress', blockKeys);
+                $(window).unbind('scroll', blockScroll);
             }
 
             show();
