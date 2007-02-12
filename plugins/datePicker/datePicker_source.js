@@ -101,7 +101,7 @@ jQuery.datePicker = function()
 		if (!(d.getMonth() == _firstDate.getMonth() && d.getFullYear() == _firstDate.getFullYear())) {
 			// not in first display month so show a previous link
 			firstMonth = false;
-			var lastMonth = new Date(d.getFullYear(), d.getMonth()-1, 1);
+			var lastMonth = d.getMonth() == 0 ? new Date(d.getFullYear()-1, 11, 1) : new Date(d.getFullYear(), d.getMonth()-1, 1);
 			var prevLink = jQuery("<a>").attr('href', 'javascript:;').html(navLinks.p).click(function()
 			{
 				jQuery.datePicker.changeMonth(lastMonth, this);
