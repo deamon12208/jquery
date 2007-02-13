@@ -23,6 +23,14 @@
         </java>
         <echo message="${plugin_pack} built." />
     </target>
+	
+	<target name="zip" description="Do not call directly.">
+    	<echo message="Zipping ${plugin}" />
+		<zip destfile="${plugin}/jquery.${plugin}.zip">
+			<zipfileset dir="${plugin}" excludes="*.zip" />
+		</zip>
+        <echo message="${plugin} zipped" />
+    </target>
 
     <target name="quicksearch" description="Build packed quicksearch plugin.">
     	<property name="folder" value="quicksearch${prefix}" />
@@ -33,11 +41,14 @@
     </target>
 	
 	<target name="accordion" description="Build packed accordion plugin.">
-	    	<property name="folder" value="accordion${prefix}" />
-	        <antcall target="pack">
-	            <param name="plugin" value="${folder}accordion.js" />
-	        	<param name="plugin_pack" value="${folder}accordion.pack.js" />
-	        </antcall>
-	    </target>
+    	<property name="folder" value="accordion${prefix}" />
+        <antcall target="pack">
+            <param name="plugin" value="${folder}accordion.js" />
+        	<param name="plugin_pack" value="${folder}accordion.pack.js" />
+        </antcall>
+		<antcall target="zip">
+			<param name="plugin" value="accordion" />
+		</antcall>
+    </target>
 
 </project>

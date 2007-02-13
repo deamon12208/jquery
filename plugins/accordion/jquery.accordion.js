@@ -105,6 +105,7 @@ jQuery.fn.nextUntil = function(expr) {
  * @option String|Number showSpeed Speed for the slideIn, default is 'slow'
  * @option String|Number hideSpeed Speed for the slideOut, default is 'fast'
  * @option String selectedClass Class for active header elements, default is 'selected'
+ * @option Boolean alwaysOpen Whether there must be one content element open, default is true. 
  *
  * @event change Called everytime the accordion changes, params: event, newHeader, oldHeader, newContent, oldContent
  * @type jQuery
@@ -158,8 +159,11 @@ jQuery.fn.nextUntil = function(expr) {
 		var clickHandler = function(event) {
 			// get the click target
 			var clicked = $(event.target);
+			
+			var clickedActive = clicked[0] == active[0];
+			
 			// if animations are still active, or the active header is the target, ignore click
-			if(running || clicked[0] == active[0] || !clicked.is(settings.header))
+			if(running || (settings.alwaysOpen && clickedActive) || !clicked.is(settings.header))
 				return;
 
 			// switch classes
@@ -183,8 +187,13 @@ jQuery.fn.nextUntil = function(expr) {
 			// TODO if hideSpeed is set to zero, animations are crappy
 			// workaround: use hide instead
 			// solution: animate should check for speed of 0 and do something about it
-			toHide.slideUp(settings.hideSpeed, finished);
-			toShow.slideDown(settings.showSpeed, finished);
+			if(!settings.alwaysOpen && clickedActive) {
+				toShow.slideToggle(settings.showSpeed, finished);
+				finished();
+			} else {
+				toHide.filter(":hidden").each(finished).end().filter(":visible").slideUp(settings.hideSpeed, finished);
+				toShow.slideDown(settings.showSpeed, finished);
+			}
 
 			return false;
 		};
@@ -203,7 +212,8 @@ jQuery.fn.nextUntil = function(expr) {
 	plugin.defaults = {
 		selectedClass: "selected",
 		showSpeed: 'slow',
-		hideSpeed: 'fast'
+		hideSpeed: 'fast',
+		alwaysOpen: true
 	};
 
 	// shortcut for trigger, nicer API and easily to document
