@@ -20,6 +20,7 @@ jQuery.datePicker = function()
 	var navLinks = {p:'Prev', n:'Next', c:'Close', b:'Choose date'};
 	var dateFormat = 'dmy';
 	var dateSeparator = "/";
+	var _drawingMonth = false;
 	var _firstDayOfWeek;
 	var _firstDate;
 	var _lastDate;
@@ -251,10 +252,12 @@ jQuery.datePicker = function()
 	};
 	var _checkMouse = function(e)
 	{
-		var target = jQuery.browser.msie ? window.event.srcElement : e.target;
-		var cp = jQuery(target).findClosestParent('div.popup-calendar');
-		if (cp.get(0).className != 'date-picker-holder') {
-			_closeDatePicker();
+		if (!_drawingMonth) {
+			var target = jQuery.browser.msie ? window.event.srcElement : e.target;
+			var cp = jQuery(target).findClosestParent('div.popup-calendar');
+			if (cp.get(0).className != 'date-picker-holder') {
+				_closeDatePicker();
+			}
 		}
 	};
 
@@ -301,8 +304,9 @@ jQuery.datePicker = function()
 		},
 		changeMonth: function(d, e)
 		{
-
+			_drawingMonth = true;
 			_draw(_getCalendarDiv(d));
+			_drawingMonth = false;
 		},
 		selectDate: function(d, ele)
 		{

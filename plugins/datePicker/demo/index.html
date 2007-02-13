@@ -69,7 +69,7 @@ function init()
 	<p>No validation is performed on the text input when the form is submitted and it is presumed that the server processing the form is expecting dates in the format you specify.</p>
 	
 	<h2>Version</h2>
-	<p>r1331 - released 12th February 2007 [<a href="#changelog">changelog</a>]</p>
+	<p>r1334 - released 13th February 2007 [<a href="#changelog">changelog</a>]</p>
 	
 	<h2>Example</h2>
 	<form action="#" method="post">
@@ -127,6 +127,7 @@ $.datePicker.setLanguageStrings(
 	
 	<h2 id="changelog">Changelog</h2>
 	<ul>
+        <li>13th February 2007 - fix for issue with Firefox on Linux closing the datePicker when you clicked quickly on the previous or next buttons (thanks to Ray Lee and Ned Collyer for reporting) [r1334]</li>
 		<li>12th February 2007 - fix for issue with Safari not being able to move back beyod a January (thanks to Randy Phillips) [r1331]</li>
 		<li>2nd Febuary 2007 - fix for <a href="http://jquery.com/dev/bugs/bug/876/">bug 876</a> (thanks to Brandon for applying the fix!) [r1255]</li>
 		<li>24th January 2007 - fix to allow d/mm/y (e.g. 1/Jul/2007) format dates (thanks to Guillermo Sansovic for the patch) [r1190]</li>
