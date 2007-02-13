@@ -15,21 +15,21 @@
         thickbox: function(type, settings) {
 
             // setup
-            var BACKGROUND_ID = 'tb-background';
+            var DIM_ID = 'tb-dim';
             var LOADING_ID = 'tb-loading';
-            var WINDOW_ID = 'tb-window';
+            var MODAL_ID = 'tb-modal';
             var jq;
-            jq = $('#' + BACKGROUND_ID);
-            var background = jq.size() && jq || $('<div id="' + BACKGROUND_ID + '">' + ($.browser.msie6 ? '<iframe src="javascript:;"></iframe>' : '') + '</div>').appendTo(document.body);
+            jq = $('#' + DIM_ID);
+            var dim = jq.size() && jq || $('<div id="' + DIM_ID + '">' + ($.browser.msie6 ? '<iframe src="javascript:;"></iframe>' : '') + '</div>').appendTo(document.body);
             jq = $('#' + LOADING_ID);
             var loading = jq.size() && jq || $('<div id="' + LOADING_ID + '"></div>').appendTo(document.body);
-            jq = $('#' + WINDOW_ID);
-            var window = jq.size() && jq || $('<div id="' + WINDOW_ID + '" class="' + type + '"></div>').appendTo(document.body);
+            jq = $('#' + MODAL_ID);
+            var modal = jq.size() && jq || $('<div id="' + MODAL_ID + '" class="' + type + '"></div>').appendTo(document.body);
 
             switch (type) {
                 case 'confirm':
-                    window.append('<h2>' + settings.confirmTitle + '</h2>');
-                    var p = $('<p></p>').appendTo(window);
+                    modal.append('<h2>' + settings.confirmTitle + '</h2>');
+                    var p = $('<p></p>').appendTo(modal);
                     $('<a id="tb-confirm" href="#">' + settings.confirmYes + '</a><span> | </span>').appendTo(p).click(function() {
                         hide(settings.onConfirm); // pass onConfirm as callback to hide
                         return false;
@@ -67,9 +67,9 @@
             // show everything
             function show() {
                 // reveal stuff
-                background.bind('click', hide).fadeIn('fast', function() {
+                dim.bind('click', hide).fadeIn('fast', function() {
                     loading.show();
-                    window.show();
+                    modal.show();
                     if (typeof settings.onShow == 'function') {
                         settings.onShow();
                     }
@@ -83,10 +83,10 @@
             function hide(callback) {
                 // hide stuff
                 loading.hide();
-                window.fadeOut('fast', function() {
-                    window.empty();
+                modal.fadeOut('fast', function() {
+                    modal.empty();
                 });
-                background.unbind('click').fadeOut('fast', typeof callback == 'function' ? callback : function() { });
+                dim.unbind('click').fadeOut('fast', typeof callback == 'function' ? callback : function() { });
                 // remove keyboard event handler
                 $(document).unbind('keydown', keydown).unbind('keypress', blockKeys);
                 $(window).unbind('scroll', blockScroll);

@@ -1,19 +1,19 @@
 /* default skin for thickbox interface */
-#tb-background {
+#tb-dim {
     background: #000;
     opacity: .6;
 }
 #tb-loading {
     background: url(jquery.thickbox.spinner.gif) no-repeat 50% 50%;
 }
-#tb-window {
+#tb-modal {
     border: 4px solid #525252;
     background: #fff;
 }
-#tb-window.confirm * {
+#tb-modal.confirm * {
     margin: 0;
 }
-#tb-window.confirm h2 {
+#tb-modal.confirm h2 {
     margin: 0 0 .5em;
     font-size: 12px;
 }
