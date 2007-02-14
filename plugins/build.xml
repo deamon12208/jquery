@@ -1,12 +1,15 @@
-<project name="jQuery plugins" basedir=".">
+<project name="jQuery plugins" basedir="../jquery">
 
 	<!--
 	  - Use this build to test compressed plugins and build distributions.
+	  -
+	  - Requires jquery build files to be available, modify basedir and SRC_DIR
+	  - if you named the directories other then "jquery" and "plugins"
  	  -->
 	
     <!-- SETUP -->
 
-    <property description="Source Folder" name="SRC_DIR" value="." />
+    <property description="Source Folder" name="SRC_DIR" value="../plugins/" />
     <property description="Files for parsing etc." name="BUILD_DIR" value="../jquery/build" />
     <property description="Rhino JS Engine" name="JAR" value="${BUILD_DIR}/js.jar" />
 	<property name="prefix" value="/jquery." />
@@ -25,14 +28,14 @@
 	
 	<target name="zip" description="Do not call directly.">
     	<echo message="Zipping ${plugin}" />
-		<zip destfile="${plugin}/jquery.${plugin}.zip">
-			<zipfileset dir="${plugin}" excludes="*.zip" />
+		<zip destfile="${SRC_DIR}${plugin}/jquery.${plugin}.zip">
+			<zipfileset dir="${SRC_DIR}${plugin}" excludes="*.zip" />
 		</zip>
         <echo message="${plugin} zipped" />
     </target>
 	
 	<target name="generic" description="Do not call directly.">
-    	<property name="folder" value="${name}${prefix}" />
+    	<property name="folder" value="${SRC_DIR}${name}${prefix}" />
         <antcall target="pack">
             <param name="plugin" value="${folder}${name}.js" />
         	<param name="plugin_pack" value="${folder}${name}.pack.js" />
