@@ -50,14 +50,15 @@ jQuery.fx.buildWrapper = function(e)
 	var t = jQuery(e);
 	var es = e.style;
 	var restoreStyle = false;
+	var oldStyle = {};
+	oldStyle.position = t.css('position');
 	
 	if (t.css('display') == 'none') {
 		oldVisibility = t.css('visibility');
-		t.css('visibility', 'hidden').show();
+		es.visibility = 'hidden';
+		es.display = '';
 		restoreStyle = true;
 	}
-	var oldStyle = {};
-	oldStyle.position = t.css('position');
 	oldStyle.sizes = jQuery.iUtil.getSize(e);
 	oldStyle.margins = jQuery.iUtil.getMargins(e);
 	
@@ -76,16 +77,17 @@ jQuery.fx.buildWrapper = function(e)
 		left = oldStyle.left;
 	}
 	
+	wrs.display = 'none';
 	wrs.top = top + 'px';
 	wrs.left = left + 'px';
 	wrs.position = oldStyle.position != 'relative' && oldStyle.position != 'absolute' ? 'relative' : oldStyle.position;
+	wrs.overflow = 'hidden';
 	wrs.height = oldStyle.sizes.hb + 'px';
 	wrs.width = oldStyle.sizes.wb + 'px';
 	wrs.marginTop = oldStyle.margins.t;
 	wrs.marginRight = oldStyle.margins.r;
 	wrs.marginBottom = oldStyle.margins.b;
 	wrs.marginLeft = oldStyle.margins.l;
-	wrs.overflow = 'hidden';
 	if (jQuery.browser.msie) {
 		wrs.styleFloat = oldFloat;
 	} else {
@@ -97,7 +99,6 @@ jQuery.fx.buildWrapper = function(e)
 	es.opacity = 0.999;
 	//t.wrap(wr);
 	e.parentNode.insertBefore(wr, e);
-	wr.appendChild(e);
 	es.marginTop = '0px';
 	es.marginRight = '0px';
 	es.marginBottom = '0px';
@@ -107,9 +108,11 @@ jQuery.fx.buildWrapper = function(e)
 	es.top = '0px';
 	es.left = '0px';
 	if (restoreStyle) {
-		t.hide();
+		es.display = 'none';
 		es.visibility = oldVisibility;
 	}
+	wr.appendChild(e);
+	wrs.display = 'block';
 	return {oldStyle:oldStyle, wrapper:jQuery(wr)};
 };
 
