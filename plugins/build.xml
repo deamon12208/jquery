@@ -1,8 +1,7 @@
 <project name="jQuery plugins" basedir=".">
 
 	<!--
-	  - Use this build to test compressed plugins. Add your own plugins by copying
-	  - the quicksearch build and modifying the three properties (folder, plugin, plugin_pack).
+	  - Use this build to test compressed plugins and build distributions.
  	  -->
 	
     <!-- SETUP -->
@@ -31,24 +30,34 @@
 		</zip>
         <echo message="${plugin} zipped" />
     </target>
-
-    <target name="quicksearch" description="Build packed quicksearch plugin.">
-    	<property name="folder" value="quicksearch${prefix}" />
-        <antcall target="pack">
-            <param name="plugin" value="${folder}quicksearch.js" />
-        	<param name="plugin_pack" value="${folder}quicksearch.pack.js" />
-        </antcall>
-    </target>
 	
-	<target name="accordion" description="Build packed accordion plugin.">
-    	<property name="folder" value="accordion${prefix}" />
+	<target name="generic" description="Do not call directly.">
+    	<property name="folder" value="${name}${prefix}" />
         <antcall target="pack">
-            <param name="plugin" value="${folder}accordion.js" />
-        	<param name="plugin_pack" value="${folder}accordion.pack.js" />
+            <param name="plugin" value="${folder}${name}.js" />
+        	<param name="plugin_pack" value="${folder}${name}.pack.js" />
         </antcall>
 		<antcall target="zip">
-			<param name="plugin" value="accordion" />
+			<param name="plugin" value="${name}" />
 		</antcall>
+    </target>
+
+    <target name="quicksearch" description="Build quicksearch plugin.">
+    	<antcall target="generic">
+			<param name="name" value="quicksearch" />
+		</antcall>
+    </target>
+	
+	<target name="accordion" description="Build accordion plugin.">
+		<antcall target="generic">
+			<param name="name" value="accordion" />
+		</antcall>
+    </target>
+	
+	<target name="treeview" description="Build treeview plugin.">
+        <antcall target="generic">
+            <param name="name" value="treeview" />
+        </antcall>
     </target>
 
 </project>

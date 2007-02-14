@@ -11,7 +11,10 @@
 	$(document).ready(function(){
 		$("body > ul:first").Treeview();
 		$("body > ul:eq(1), body > ul:eq(2)").Treeview({ control: "#treecontrol" });
-		$("body > ul:last").Treeview({ speed: "fast", collapsed: true });
+		var lastTree = $("body > ul:last").Treeview({ speed: "fast", collapsed: true });
+		$("#add").click(function() {
+			$("<li>New branch</li>").prependTo(lastTree.find("ul[li]:last"));
+		});
 	});
 	</script>
 	<style type="text/css">
@@ -281,5 +284,7 @@
 			</li>
 		</ul>
 	</li>
-</ul>
+	</ul>
+	<button id="add">Add items to above tree</button>
+	
 </body></html>

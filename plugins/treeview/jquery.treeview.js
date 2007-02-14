@@ -123,7 +123,7 @@
 		zIndex: 50
 	};
 	
-	// ie specific stlyes for hitareas
+	// ie < 7 specific styles for hitareas
 	if( $.browser.msie && typeof XMLHttpRequest == "function" )
 		$.extend( hitareaCSS, {
 			background: "#fff",
