@@ -2,9 +2,9 @@
  * Date picker plugin for jQuery
  * http://kelvinluck.com/assets/jquery/datePicker
  *
- * Copyright (c) 2006 Kelvin Luck (kelvnluck.com)
+ * Copyright (c) 2006 Kelvin Luck (kelvinluck.com)
  * Licensed under the MIT License:
- *   http://www.opensource.org/licenses/mit-license.php
+ * http://www.opensource.org/licenses/mit-license.php
  *
  * $LastChangedDate$
  * $Rev$
@@ -93,7 +93,7 @@ jQuery.datePicker = function()
 			d = new Date(_lastDate.getFullYear(), _lastDate.getMonth(), 1);;
 		}
 
-		var jCalDiv = jQuery("<div>").attr('class','popup-calendar');
+		var jCalDiv = jQuery("<div></div>").attr('class','popup-calendar');
 		var firstMonth = true;
 		var firstDate = _firstDate.getDate();
 
@@ -103,12 +103,12 @@ jQuery.datePicker = function()
 			// not in first display month so show a previous link
 			firstMonth = false;
 			var lastMonth = d.getMonth() == 0 ? new Date(d.getFullYear()-1, 11, 1) : new Date(d.getFullYear(), d.getMonth()-1, 1);
-			var prevLink = jQuery("<a>").attr('href', 'javascript:;').html(navLinks.p).click(function()
+			var prevLink = jQuery("<a></a>").attr('href', 'javascript:;').html(navLinks.p).click(function()
 			{
 				jQuery.datePicker.changeMonth(lastMonth, this);
 				return false;
 			});
-			prevLinkDiv = jQuery("<div>").attr('class','link-prev').html('&lt;').append(prevLink);
+			prevLinkDiv = jQuery("<div></div>").attr('class','link-prev').html('&lt;').append(prevLink);
 		}
 
 		var finalMonth = true;
@@ -118,33 +118,33 @@ jQuery.datePicker = function()
 			// in the last month - no next link
 			finalMonth = false;
 			var nextMonth = new Date(d.getFullYear(), d.getMonth()+1, 1);
-			var nextLink = jQuery("<a>").attr('href', 'javascript:;').html(navLinks.n).click(function()
+			var nextLink = jQuery("<a></a>").attr('href', 'javascript:;').html(navLinks.n).click(function()
 			{
 				jQuery.datePicker.changeMonth(nextMonth, this);
 				return false;
 			});
-			nextLinkDiv = jQuery("<div>").attr('class','link-next').html('&gt;').prepend(nextLink);
+			nextLinkDiv = jQuery("<div></div>").attr('class','link-next').html('&gt;').prepend(nextLink);
 		}
 
-		var closeLink = jQuery("<a>").attr('href','javascript:;').html(navLinks.c).click(function()
+		var closeLink = jQuery("<a></a>").attr('href','javascript:;').html(navLinks.c).click(function()
 		{
 			jQuery.datePicker.closeCalendar();
 		});
 
 		jCalDiv.append(
-			jQuery("<div>").attr('class', 'link-close').append(closeLink),
-			jQuery("<h3>").html(months[d.getMonth()] + ' ' + d.getFullYear())
+			jQuery("<div></div>").attr('class', 'link-close').append(closeLink),
+			jQuery("<h3></h3>").html(months[d.getMonth()] + ' ' + d.getFullYear())
 		);
-		var headRow = jQuery("<tr>");
+		var headRow = jQuery("<tr></tr>");
 		for (var i=_firstDayOfWeek; i<_firstDayOfWeek+7; i++) {
 			var weekday = i%7;
 			var day = days[weekday];
 			headRow.append(
-				jQuery("<th>").attr({'scope':'col', 'abbr':day, 'title':day, 'class':(weekday == 0 || weekday == 6 ? 'weekend' : 'weekday')}).html(day.substr(0, 1))
+				jQuery("<th></th>").attr({'scope':'col', 'abbr':day, 'title':day, 'class':(weekday == 0 || weekday == 6 ? 'weekend' : 'weekday')}).html(day.substr(0, 1))
 			);
 		}
 
-		var tBody = jQuery("<tbody>");
+		var tBody = jQuery("<tbody></tbody>");
 
 		var lastDay = (new Date(d.getFullYear(), d.getMonth()+1, 0)).getDate();
 		var curDay = _firstDayOfWeek - d.getDay();
@@ -155,7 +155,7 @@ jQuery.datePicker = function()
 
 		var w = 0;
 		while (w++<6) {
-			var thisRow = jQuery("<tr>");
+			var thisRow = jQuery("<tr></tr>");
 			for (var i=0; i<7; i++) {
 				var weekday = (_firstDayOfWeek + i) % 7;
 				var atts = {'class':(weekday == 0 || weekday == 6 ? 'weekend ' : 'weekday ')};
@@ -171,7 +171,7 @@ jQuery.datePicker = function()
 				} else {
 					d.setDate(curDay+1);
 					var dStr = _dateToStr(d);
-					dayStr = jQuery("<a>").attr({'href':'javascript:;', 'rel':dStr}).html(curDay+1).click(function(e)
+					dayStr = jQuery("<a></a>").attr({'href':'javascript:;', 'rel':dStr}).html(curDay+1).click(function(e)
 					{
 						jQuery.datePicker.selectDate(jQuery.attr(this, 'rel'), this);
 						return false;
@@ -184,14 +184,14 @@ jQuery.datePicker = function()
 				if (thisMonth && curDay+1 == todayDate) {
 					atts['class'] += 'today';
 				}
-				thisRow.append(jQuery("<td>").attr(atts).append(dayStr));
+				thisRow.append(jQuery("<td></td>").attr(atts).append(dayStr));
 				curDay++;
 			}
 			tBody.append(thisRow);
 		}
 
 		jCalDiv.append(
-			jQuery("<table>").attr('cellspacing',2).append("<thead>")
+			jQuery("<table></table>").attr('cellspacing',2).append("<thead></thead>")
 			.find("thead").append(headRow).parent().append(tBody.children())
 		).append(prevLinkDiv).append(nextLinkDiv);
 
@@ -406,14 +406,14 @@ jQuery.fn.datePicker = function(a)
 				calBut = jQuery(this).attr('title', chooseDate).addClass('date-picker');
 			}
 			else {
-				calBut = jQuery("<a>").attr({'href':'javascript:;',
+				calBut = jQuery("<a></a>").attr({'href':'javascript:;',
 'class':'date-picker', 'title':chooseDate})
 				.append("<span>" + chooseDate + "</span>");
 			}
 			jQuery(this).wrap(
 				'<div class="date-picker-holder"></div>'
 			).before(
-				jQuery("<div>").attr({'class':'popup-calendar'})
+				jQuery("<div></div>").attr({'class':'popup-calendar'})
 			).after(
 				calBut
 			);
