@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 0.9 (01/29/2007)
+ * Version 0.91 (02/15/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -22,7 +22,7 @@
  *              The default message is "<h1>Please wait...</h1>"
  *
  *   (Object) css:  Object which contains css values to override the default styles of
- *              the message.  Use this argument if you wish to override the default 
+ *              the message.  Use this argument if you wish to override the default
  *              styles.  The css Object should be in a format suitable for the jQuery.css
  *              function.  For example:
  *              $.blockUI({
@@ -75,7 +75,7 @@ $.blockUI = function(msg, css) {
     }
     msg = msg ? (msg.nodeType ? $(msg) : msg) : '<h1>Please wait...</h1>';
     $.blockUI.impl.init(msg, css || {});
-}; 
+};
 
 /**
  * unblockUI removes the UI block that was put in place by blockUI
@@ -97,15 +97,15 @@ $.blockUI.impl = {
     vis: 0, g: 0, m: 0,
     ie6: $.browser.msie && typeof XMLHttpRequest == 'function',
     noalpha: (window.opera && window.opera.version() < 9) || ($.browser.mozilla && /Linux/.test(navigator.platform)),
-    show: function(s) { 
+    show: function(s) {
         if (s) {
             this.g.show();
             setTimeout(this.focus, 100);
         }
         else {
-            this.g.hide(); 
+            this.g.hide();
         }
-        this.vis = s 
+        this.vis = s
     },
     focus: function() {
         var v = $('input:visible', $.blockUI.impl.m)[0];
@@ -118,7 +118,7 @@ $.blockUI.impl = {
             return this.show(1);
         }
         $('html,body').css('height','100%');
-        var h = function(e) { 
+        var h = function(e) {
             if (!$.blockUI.impl.vis) return true;
             // allow event if target is within the block msg
             var set = $('*',$.blockUI.impl.m);
@@ -133,10 +133,14 @@ $.blockUI.impl = {
         m = $('<div id="blockUI" style="z-index:3000;cursor:wait;padding:0;position:fixed;top:50%;left:50%;width:250px;margin:-50px 0 0 -125px;text-align:center;background-color:#fff;border:3px solid #aaa"></div>');
         $.blockUI.impl.m = m;
         $([f[0],w[0]]).css({position:'fixed',width:'100%',height:'100%',top:'0',left:'0'});
+
+        // workaround for the non-secured items popup in ie6
+        if (this.ie6) f.attr('src','javascript:document.write("");');
+
         this.g  = $([f[0],w[0],m[0]]).appendTo('body');
         m.append(msg).css(css);
         if (msg.jquery) msg.show();
-        
+
         this.noalpha ? f.css('width','0') : f.css('opacity','0.6');
 
         if (this.ie6) {
