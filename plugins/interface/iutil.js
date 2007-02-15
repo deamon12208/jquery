@@ -18,7 +18,7 @@ jQuery.iUtil = {
 		var y = 0;
 		var es = e.style;
 		var restoreStyles = false;
-		if (jQuery.curCSS(e,'display') == 'none') {
+		if (jQuery.css(e,'display') == 'none') {
 			var oldVisibility = es.visibility;
 			var oldPosition = es.position;
 			restoreStyles = true;
@@ -42,14 +42,14 @@ jQuery.iUtil = {
 					el = el.offsetParent;
 				}
 			}
-			if (jQuery.browser.safari && jQuery.curCSS(e, 'position') == 'absolute' ) {
+			if (jQuery.browser.safari && jQuery.css(e, 'position') == 'absolute' ) {
 				x -= document.body.offsetLeft;
 				y -= document.body.offsetTop;
 			}
 			el = e.parentNode;
 			while (el && el.tagName.toUpperCase() != 'BODY' && el.tagName.toUpperCase() != 'HTML') 
 			{
-				if (jQuery.curCSS(el, 'display') != 'inline') {
+				if (jQuery.css(el, 'display') != 'inline') {
 					x -= el.scrollLeft;
 					y -= el.scrollTop;
 				}
@@ -75,11 +75,11 @@ jQuery.iUtil = {
 	},
 	getSize : function(e)
 	{
-		var w = jQuery.curCSS(e,'width');
-		var h = jQuery.curCSS(e,'height');
+		var w = jQuery.css(e,'width');
+		var h = jQuery.css(e,'height');
 		var wb = 0;
 		var hb = 0;
-		if (jQuery.curCSS(e, 'display') != 'none') {
+		if (jQuery.css(e, 'display') != 'none') {
 			wb = e.offsetWidth;
 			hb = e.offsetHeight;
 		} else {
@@ -87,7 +87,7 @@ jQuery.iUtil = {
 			var oldVisibility = es.visibility;
 			var oldPosition = es.position;
 			es.visibility = 'hidden';
-			es.display = '';
+			es.display = 'block';
 			es.position = 'absolute';
 			wb = e.offsetWidth;
 			hb = e.offsetHeight;
@@ -144,10 +144,10 @@ jQuery.iUtil = {
 	},
 	getMargins : function(e, toInteger)
 	{
-		var t = jQuery.curCSS(e,'marginTop') || '';
-		var r = jQuery.curCSS(e,'marginRight') || '';
-		var b = jQuery.curCSS(e,'marginBottom') || '';
-		var l = jQuery.curCSS(e,'marginLeft') || '';
+		var t = jQuery.css(e,'marginTop') || '';
+		var r = jQuery.css(e,'marginRight') || '';
+		var b = jQuery.css(e,'marginBottom') || '';
+		var l = jQuery.css(e,'marginLeft') || '';
 		if (toInteger)
 			return {
 				t: parseInt(t)||0,
@@ -160,10 +160,10 @@ jQuery.iUtil = {
 	},
 	getPadding : function(e, toInteger)
 	{
-		var t = jQuery.curCSS(e,'paddingTop') || '';
-		var r = jQuery.curCSS(e,'paddingRight') || '';
-		var b = jQuery.curCSS(e,'paddingBottom') || '';
-		var l = jQuery.curCSS(e,'paddingLeft') || '';
+		var t = jQuery.css(e,'paddingTop') || '';
+		var r = jQuery.css(e,'paddingRight') || '';
+		var b = jQuery.css(e,'paddingBottom') || '';
+		var l = jQuery.css(e,'paddingLeft') || '';
 		if (toInteger)
 			return {
 				t: parseInt(t)||0,
@@ -176,10 +176,10 @@ jQuery.iUtil = {
 	},
 	getBorder : function(e, toInteger)
 	{
-		var t = jQuery.curCSS(e,'borderTopWidth') || '';
-		var r = jQuery.curCSS(e,'borderRightWidth') || '';
-		var b = jQuery.curCSS(e,'borderBottomWidth') || '';
-		var l = jQuery.curCSS(e,'borderLeftWidth') || '';
+		var t = jQuery.css(e,'borderTopWidth') || '';
+		var r = jQuery.css(e,'borderRightWidth') || '';
+		var b = jQuery.css(e,'borderBottomWidth') || '';
+		var l = jQuery.css(e,'borderLeftWidth') || '';
 		if (toInteger)
 			return {
 				t: parseInt(t)||0,
