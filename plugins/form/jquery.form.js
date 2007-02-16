@@ -24,7 +24,7 @@
  *
  *  url:      URL to which the form data will be submitted.
  *            default value: value of form's 'action' attribute
- *  
+ *
  *  method:   @deprecated use 'type'
  *  type:     The method in which the form data should be submitted, 'GET' or 'POST'.
  *            default value: value of form's 'method' attribute (or 'GET' if none found)
@@ -52,7 +52,7 @@
  * The 'beforeSubmit' callback can be provided as a hook for running pre-submit logic or for
  * validating the form data.  If the 'beforeSubmit' callback returns false then the form will
  * not be submitted. The 'beforeSubmit' callback is invoked with three arguments: the form data
- * in array format, the jQuery object, and the options object passed into ajaxSubmit.  
+ * in array format, the jQuery object, and the options object passed into ajaxSubmit.
  * The form data array takes the following form:
  *
  *     [ { name: 'username', value: 'jresig' }, { name: 'password', value: 'secret' } ]
@@ -64,7 +64,7 @@
  *
  * The dataType option provides a means for specifying how the server response should be handled.
  * This maps directly to the jQuery.httpData method.  The following values are supported:
- * 
+ *
  *      'xml':    if dataType == 'xml' the server response is treated as XML and the 'after'
  *                   callback method, if specified, will be passed the responseXML value
  *      'json':   if dataType == 'json' the server response will be evaluted and passed to
@@ -78,7 +78,7 @@
  * The semantic argument can be used to force form serialization in semantic order.
  * This is normally true anyway, unless the form contains input elements of type='image'.
  * If your form must be submitted with name/value pairs in semantic order and your form
- * contains an input of type='image" then pass true for this arg, otherwise pass false 
+ * contains an input of type='image" then pass true for this arg, otherwise pass false
  * (or nothing) to avoid the overhead for this logic.
  *
  *
@@ -196,7 +196,7 @@ jQuery.fn.ajaxSubmit = function(options) {
     var a = this.formToArray(options.semantic);
 
     // give pre-submit callback an opportunity to abort the submit
-    if (options.beforeSubmit && options.beforeSubmit(a, this, options) === false) return;
+    if (options.beforeSubmit && options.beforeSubmit(a, this, options) === false) return this;
 
     var q = jQuery.param(a);
 
@@ -216,17 +216,17 @@ jQuery.fn.ajaxSubmit = function(options) {
     if (!options.dataType && options.target) {
         var oldSuccess = options.success || function(){};
         callbacks.push(function(data, status) {
-            jQuery(options.target).html(data).evalScripts().each(oldSuccess, [data, status]);
+            jQuery(options.target).attr("innerHTML", data).evalScripts().each(oldSuccess, [data, status]);
         });
     }
-    else if (options.success) 
+    else if (options.success)
         callbacks.push(options.success);
 
     options.success = function(data, status) {
         for (var i=0, max=callbacks.length; i < max; i++)
             callbacks[i](data, status);
     };
-        
+
     jQuery.ajax(options);
     return this;
 };
@@ -335,7 +335,7 @@ jQuery.fn.ajaxForm = function(options) {
  * The semantic argument can be used to force form serialization in semantic order.
  * This is normally true anyway, unless the form contains input elements of type='image'.
  * If your form must be submitted with name/value pairs in semantic order and your form
- * contains an input of type='image" then pass true for this arg, otherwise pass false 
+ * contains an input of type='image" then pass true for this arg, otherwise pass false
  * (or nothing) to avoid the overhead for this logic.
  *
  * @example var data = $("#myForm").formToArray();
@@ -374,7 +374,7 @@ jQuery.fn.formToArray = function(semantic) {
             for(var j=0, jmax=v.length; j < jmax; j++)
                 a.push({name: n, value: v[j]});
         }
-        else 
+        else
             a.push({name: n, value: v});
     }
 
@@ -419,7 +419,7 @@ jQuery.fn.formSerialize = function(semantic) {
 
 
 /**
- * Serializes all field elements in the jQuery object into a query string. 
+ * Serializes all field elements in the jQuery object into a query string.
  * This method will return a string in the format: name1=value1&amp;name2=value2
  *
  * The successful argument controls whether or not serialization is limited to
@@ -549,7 +549,7 @@ jQuery.fieldValue = function(el, successful) {
         (t == 'submit' || t == 'image') && el.form && el.form.clk != el ||
         tag == 'select' && el.selectedIndex == -1))
             return null;
-    
+
     if (tag == 'select') {
         var index = el.selectedIndex;
         if (index < 0) return null;
@@ -637,7 +637,7 @@ jQuery.fn.resetForm = function() {
     return this.each(function() {
         // guard against an input with the name of 'reset'
         // note that IE reports the reset function as an 'object'
-        if (typeof this.reset == 'function' || (typeof this.reset == 'object' && !this.reset.nodeType)) 
+        if (typeof this.reset == 'function' || (typeof this.reset == 'object' && !this.reset.nodeType))
             this.reset();
     });
 };
