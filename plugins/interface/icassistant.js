@@ -38,5 +38,5 @@ jQuery.icA = {
 				.bind('mousemove', jQuery.icA.move);
 		}
 	}
-}
+};
 jQuery(document).ready(function(){jQuery.icA.init()});

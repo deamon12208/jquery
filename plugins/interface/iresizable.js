@@ -369,7 +369,10 @@ jQuery.iResize = {
 								});
 							handleEl.bind('mousedown', jQuery.iResize.startDrag);
 						}
-					} else if (el.resizeOptions.dragHandle == true) {
+					} else if (el.resizeOptions.dragHandle.tagName) {
+						el.resizeOptions.dragHandle.dragEl = el;
+						jQuery(el.resizeOptions.dragHandle).bind('mousedown', jQuery.iResize.startDrag);
+					}else if (el.resizeOptions.dragHandle == true) {
 						jQuery(this).bind('mousedown', jQuery.iResize.startDrag);
 					}
 				}

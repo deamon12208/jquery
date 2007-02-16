@@ -68,7 +68,7 @@ jQuery.fx.buildWrapper = function(e)
 	var wid = 'w_' + parseInt(Math.random() * 10000);
 	var wr = document.createElement(/^img$|^br$|^input$|^hr$|^select$|^textarea$|^object$|^iframe$|^button$|^form$|^table$|^ul$|^dl$|^ol$/i.test(e.nodeName) ? 'div' : e.nodeName);
 	jQuery.attr(wr,'id', wid);
-	var wrapEl = jQuery(wr).addClass('fxWrapper');
+	wr.className = 'fxWrapper';
 	var wrs = wr.style;
 	var top = 0;
 	var left = 0;
@@ -93,11 +93,6 @@ jQuery.fx.buildWrapper = function(e)
 	} else {
 		wrs.cssFloat = oldFloat;
 	}
-	if (jQuery.browser == "msie") {
-		es.filter = "alpha(opacity=" + 0.999*100 + ")";
-	}
-	es.opacity = 0.999;
-	//t.wrap(wr);
 	e.parentNode.insertBefore(wr, e);
 	es.marginTop = '0px';
 	es.marginRight = '0px';
@@ -293,7 +288,7 @@ jQuery.fn.extend({
 	}
 });
 /**
- * Improved FXC function that aniamtes collection of properties per timer. Accepts inline styles and class names to animate
+ * Improved FX function that aniamtes collection of properties per timer. Accepts inline styles and class names to animate
  */
 jQuery.extend({
 	pause: function(elem, options)
