@@ -7,6 +7,7 @@
  *   http://www.gnu.org/licenses/gpl.html
  *
  * Revision: $Id$
+ * Version: 0.9
  */
 
 /**
