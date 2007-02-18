@@ -12,7 +12,7 @@
 		<link rel="Stylesheet" media="screen" href="../../../jquery/test/data/testsuite.css" />
 		
 		<!-- load firebug lite -->
-		<script type="text/javascript" src="../../../firebuglite/firebug.js"></script>
+		<script type="text/javascript" src="http://brandon.jquery.com/firebuglite/firebug.js"></script>
 		
 		<style>
 			#test1 {
@@ -90,7 +90,7 @@
 							console.log('#test1: up ('+delta+')');
 						else if (delta < 0)
 							console.log('#test1: down ('+delta+')');
-					}, false);
+					});
 				
 				$('#test2')
 					.mousewheel(function(event, delta) {
@@ -98,6 +98,7 @@
 							console.log('#test2: up ('+delta+')');
 						else if (delta < 0)
 							console.log('#test2: down ('+delta+')');
+						return false; // prevent default
 					});
 				
 				$('#test3')
@@ -117,6 +118,7 @@
 							console.log('#test4: up ('+delta+')');
 						else if (delta < 0)
 							console.log('#test4: down ('+delta+')');
+						return false;
 					})
 					.mousewheel(testRemoval)
 					.mousewheel(function(event, delta) {
@@ -124,6 +126,7 @@
 							console.log('#test4: up ('+delta+') from 2nd handler');
 						else if (delta < 0)
 							console.log('#test4: down ('+delta+') from 2nd handler');
+						return false;
 					})
 					.unmousewheel(testRemoval);
 				
@@ -133,6 +136,9 @@
 							console.log('#test5: up ('+delta+')');
 						else if (delta < 0)
 							console.log('#test5: down ('+delta+')');
+						
+						event.stopPropagation();
+						event.preventDefault();
 					});
 				
 				$('#test6')
@@ -141,6 +147,9 @@
 							console.log('#test6: up ('+delta+')');
 						else if (delta < 0)
 							console.log('#test6: down ('+delta+')');
+						
+						event.stopPropagation();
+						event.preventDefault();
 					});
 
 				$('#test7')
@@ -149,6 +158,8 @@
 							console.log('#test7: up ('+delta+')');
 						else if (delta < 0)
 							console.log('#test7 down ('+delta+')');
+						
+						event.preventDefault();
 					});
 			});
 		</script>
@@ -164,7 +175,7 @@
 			<li><strong>Test4</strong> has two handlers.</li>
 			<li><strong>Test5</strong> is like Test2 but has children. The children should not scroll until mousing over them.</li>
 			<li><strong>Test6</strong> is like Test5 but should not scroll children or parents.</li>
-			<li><strong>Test7</strong> is like Test6 but has no children. Shouldn't scroll parents.</li>
+			<li><strong>Test7</strong> is like Test6 but has no children. It will propagate the event and scroll test 6 as well.</li>
 		</ul>
 		
 		
