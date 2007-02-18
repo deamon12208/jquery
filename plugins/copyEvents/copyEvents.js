@@ -6,7 +6,9 @@
  * $Rev$
  */
 
-jQuery.fn.extend({
+(function($) {
+
+$.fn.extend({
 	/**
 	 * Copies event handlers from the first matched
 	 * element passed in from the jQuery object to all
@@ -19,7 +21,7 @@ jQuery.fn.extend({
 	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
 	 */
 	copyEvents: function(from) {
-		jQuery.event.copy(from, this);
+		$.event.copy(from, this);
 		return this;
 	},
 	
@@ -35,10 +37,10 @@ jQuery.fn.extend({
 	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
 	 */
 	copyEventsTo: function(to) {
-		jQuery.event.copy(this, to);
+		$.event.copy(this, to);
 		return this;
 	},
-	
+
 	/**
 	 * Does a .clone() and also copies the events.
 	 * 
@@ -64,16 +66,18 @@ jQuery.fn.extend({
  * @cat Plugins/copyEvents
  * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
  */
-jQuery.event.copy = function(from, to) {
-	from = (from.jquery) ? from : jQuery(from);
-	to   = (to.jquery)   ? to   : jQuery(to);
-	
-	if (!from.size() || !from[0].events || !to.size()) return;
-		
-	var events = from[0].events;
+$.event.copy = function(from, to) {
+	from = (from.jquery) ? from : $(from);
+	to   = (to.jquery)   ? to   : $(to);
+
+	if (!from.size() || !(from[0].events || from[0].$events) || !to.size()) return;
+
+	var events = from[0].events || from[0].$events;
 	to.each(function() {
 		for (var type in events)
 			for (var handler in events[type])
-				jQuery.event.add(this, type, events[type][handler], events[type][handler].data);
+				$.event.add(this, type, events[type][handler], events[type][handler].data);
 	});
 };
+
+})(jQuery);
