@@ -2,7 +2,7 @@
 	"name": "jQuery-Accordion",
 	"version": 1.1,
 	"author": [
-		"John Resig <jeresig@gmail.com>"
+		"Jörn Zaefferer <joern.zaefferer@gmail.com>"
 	],
 	"abstract": "Provides an accordion widget for the jQuery library",
 	"license": "mit, gpl",
