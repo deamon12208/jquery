@@ -114,8 +114,8 @@
 						performs some of its initialization after the OnLoad event has completed.
 				**************************************************************************** -->
 	<script language="JavaScript" type="text/javascript">
-			// Invoke ConformanceChecks so that they happen at the end of OnLoad processing.
-			OpenAjax.addOnLoad("ConformanceChecks");
+			// Test that we're passing window.onload stuff back to the OpenAjax handler
+			$(window).load( ConformanceChecks );
 	</script>
 
 
