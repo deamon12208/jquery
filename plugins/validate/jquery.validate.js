@@ -234,7 +234,7 @@ $.fn.validate = function(options) {
 	}
 	if( validator.settings.event ) {
 		// validate all elements on some other event like blur or keypress
-		validator.elements[validator.settings.event](function() {
+		validator.elements.bind(validator.settings.event, function() {
 			validator.errorList = {};
 			validator.hideElementErrors(this);
 			validator.validateElement(this);
@@ -373,7 +373,7 @@ v.prototype = {
 				message = m[elementID][rule.name];
 		else
 			message = method.message;
-		return message.replace("{0}", first || "").replace("{1}", param[1] || "");
+		return message && message.replace("{0}", first || "").replace("{1}", param[1] || "");
 	},
 
 	/*
@@ -611,7 +611,6 @@ v.methods = {
 		case 'input':
 			switch( element.type.toLowerCase() ) {
 			case 'checkbox':
-				return element.checked;
 			case 'radio':
 				return getLength(value, element) > 0;
 			}
