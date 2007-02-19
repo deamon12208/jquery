@@ -69,10 +69,10 @@ $.fn.extend({
 $.event.copy = function(from, to) {
 	from = (from.jquery) ? from : $(from);
 	to   = (to.jquery)   ? to   : $(to);
+	
+	var events;
+	if (!from.size() || !(events = from[0].events || from[0].$events) || !to.size()) return;
 
-	if (!from.size() || !(from[0].events || from[0].$events) || !to.size()) return;
-
-	var events = from[0].events || from[0].$events;
 	to.each(function() {
 		for (var type in events)
 			for (var handler in events[type])
