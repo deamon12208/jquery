@@ -12,7 +12,7 @@
     $.browser.msie6 = $.browser.msie6 || $.browser.msie && typeof XMLHttpRequest == 'function';
 
     $.extend({
-        thickbox: function(type, settings) {
+        thickbox: function(type, settings, callbacks) {
 
             // setup
             var DIM_ID = 'tb-dim';
@@ -31,7 +31,7 @@
                     modal.append('<h2>' + settings.confirmTitle + '</h2>');
                     var p = $('<p></p>').appendTo(modal);
                     $('<a id="tb-confirm" href="#">' + settings.confirmYes + '</a><span> | </span>').appendTo(p).click(function() {
-                        hide(settings.onConfirm); // pass onConfirm as callback to hide
+                        hide(callbacks.onConfirm); // pass onConfirm as callback to hide
                         return false;
                     });
                     $('<a id="tb-cancel" href="#">' + settings.confirmNo + '</a> ').appendTo(p).click(function() {
@@ -111,29 +111,27 @@
         }, settings);
 
         return this.each(function() {
-            var type, jqEl = $(this), isForm = jqEl.is('form');
+            var type, callbacks = {}, $$ = $(this), isForm = $$.is('form');
+
             if (isForm) {
                 type = 'confirm';
-                if (!settings.onConfirm) {
-                    var f = this;
-                    settings.onConfirm = function() {
-                        f.submit();
-                    }
+                callbacks['onConfirm'] = settings.onConfirm || function() {
+                    $$[0].submit();
                 }
             }
 
             // bind event
-            jqEl.bind((isForm ? 'submit' : 'click'), function(e) {
-                $.thickbox(type, settings);
-                // TODO:
-                // pass in callback for confirm
-                // pass in type: confirm | image | content | ajax
-                // depends on:
-                //     confirm: this.is('form')
-                //     image: $('img', this).size() == 1
-                //     content: this.hash
-                //     ajax: this.href ... (?)
+            $$.bind((isForm ? 'submit' : 'click'), function() {
+                $.thickbox(type, settings, callbacks);
 
+                // TODO:
+                // types: image | content | ajax | iframe
+                // depends on:
+                //     confirm: this is form
+                //     image: this.href is image
+                //     content: this.hash
+                //     ajax: this.href is internal and not image
+                //     iframe: this.href is external and not image
 
                 this.blur(); // remove focus from active element
                 return false;
