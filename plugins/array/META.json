@@ -2,7 +2,9 @@
 	"name": "jQuery-Array",
 	"version": 0.1,
 	"author": [
-		"John Resig <jeresig@gmail.com>"
+		"John Resig <jeresig@gmail.com>",
+		"Paul McLanahan",
+		"Kenton Simpson"
 	],
 	"abstract": "A collection of jQuery plugins to make jQuery objects behave more like a JavaScript Array",
 	"license": "mit, gpl",
