@@ -29,7 +29,6 @@
 		$.validator.defaults.debug = true;
 		
 		var v = $("#form").validate({
-			event: "keyup",
 			submitHandler: function(form) {
 				$(form).ajaxSubmit({
 					dataType: "json",
