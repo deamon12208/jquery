@@ -40,12 +40,12 @@
 		}	
 
 		.treeview li { 
-			position: relative;
 			margin: 0;
 			padding: 3px 0pt 3px 16px;
-			z-index: 10;
 		}
-
+		
+		ul.dir li { padding: 2px 0 0 16px; }
+		
 	  	.treeview li { background: url(images/tv-item.gif) 0 0 no-repeat; }
 	  	.treeview .collapsable { background-image: url(images/tv-collapsable.gif); }
 	  	.treeview .expandable { background-image: url(images/tv-expandable.gif); }
@@ -80,31 +80,29 @@
 	</head>
 	<body>
 	<h4>Sample 1 - default</h4>
-	<ul>
-		<li>Item 1
+	<ul class="dir">
+		<li><img src="images/folder.gif" /> Folder 1
 			<ul>
-				<li>Item 1.1</li>
+				<li><img src="images/file.gif" /> Item 1.1</li>
 			</ul>
 		</li>
-		<li>
-			Item 2
+		<li><img src="images/folder.gif" /> Folder 2
 			<ul>
-				<li>
-					Item 2.1
+				<li><img src="images/folder.gif" /> Subfolder 2.1
 					<ul>
-						<li>Item 2.1.1</li>
-						<li>Item 2.1.2</li>
+						<li><img src="images/file.gif" /> File 2.1.1</li>
+						<li><img src="images/file.gif" /> File 2.1.2</li>
 					</ul>
 				</li>
-				<li>Item 2.2</li>
+				<li><img src="images/file.gif" /> File 2.2</li>
 			</ul>
 		</li>
-		<li class="closed">Item 3 (closed at start)
+		<li class="closed"><img src="images/folder.gif" /> Folder 3 (closed at start)
 			<ul>
-				<li>Item 3.1</li>
+				<li><img src="images/file.gif" /> File 3.1</li>
 			</ul>
 		</li>
-		<li>Item 4</li>
+		<li><img src="images/file.gif" /> File 4</li>
 	</ul>
 	
 	<h4>Sample 2 - two trees with one tree control, black and gray image set</h4>

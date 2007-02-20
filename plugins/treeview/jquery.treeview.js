@@ -1,5 +1,5 @@
 /*
- * Treeview 1.0 - jQuery plugin to hide and show branches of a tree
+ * Treeview 1.1 - jQuery plugin to hide and show branches of a tree
  *
  * Copyright (c) 2006 Jörn Zaefferer, Myles Angell
  *
@@ -27,10 +27,8 @@
  * }	
  * 
  * .treeview li { 
- * 	position: relative;
  * 	margin: 0;
  * 	padding: 4px 0 3px 20px;
- * 	z-index: 10;
  * }
  * 
  * .treeview li { background: url(images/tv-item.gif) 0 0 no-repeat; }
@@ -39,7 +37,7 @@
  * .treeview .last { background-image: url(images/tv-item-last.gif); }
  * .treeview .lastCollapsable { background-image: url(images/tv-collapsable-last.gif); }
  * .treeview .lastExpandable { background-image: url(images/tv-expandable-last.gif); }
- * @desc The following styles are necessary in your stylesheet. There is an alternative set of images available.
+ * @desc The following styles are necessary in your stylesheet. There is are alternative sets of images available.
  *
  * @example $("ul").Treeview();
  * @before <ul>
@@ -116,19 +114,19 @@
 	var hitareaCSS = {
 		height: 15,
 		width: 15,
-		position: "absolute",
-		top: 1,
-		left: -1,
-		cursor: "pointer",
-		zIndex: 50
+		marginLeft: "-15px",
+		"float": "left",
+		cursor: "pointer"
 	};
 	
-	// ie < 7 specific styles for hitareas
-	if( $.browser.msie && typeof XMLHttpRequest == "function" )
+	// ie specific styles for hitareas
+	if( $.browser.msie )
 		$.extend( hitareaCSS, {
+			
 			background: "#fff",
 			filter: "alpha(opacity=0)",
-			left: -21
+			//http://www.positioniseverything.net/explorer/doubled-margin.html
+			display: "inline"
 		});
 
 	// necessary helper method
@@ -205,7 +203,7 @@
 				.swapClass(CLASSES.last, CLASSES.lastCollapsable)
 				.end()
 			// append hitarea
-			.append("<div class=\"" + CLASSES.hitarea + "\">")
+			.prepend("<div class=\"" + CLASSES.hitarea + "\">")
 			// find hitarea
 			.find("div." + CLASSES.hitarea)
 			// apply styles to hitarea
