@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 0.91 (02/15/2007)
+ * Version 0.92 (02/19/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -30,6 +30,11 @@
  *                    border: '5px solid #f00,
  *                    fontWeight: 'bold'
  *              });
+ *
+ *  The default blocking message is "<h1>Please wait...</h1>" but this can be overridden
+ *  by assigning a value to $.blockUI.defaultMessage in your own code.  For example:
+ *
+ *  $.blockUI.defaultMessage = "<h1>Bitte Wartezeit</h1>";
  *
  *
  * IMPORTANT NOTE ON STYLES AND POSITIONING:
@@ -69,13 +74,17 @@
  * @see unblockUI
  */
 $.blockUI = function(msg, css) {
+    // check to see if we were only passed the css object (a literal)
     if (msg && typeof msg == 'object' && !msg.jquery && !msg.nodeType) {
         css = msg;
         msg = null;
     }
-    msg = msg ? (msg.nodeType ? $(msg) : msg) : '<h1>Please wait...</h1>';
-    $.blockUI.impl.init(msg, css || {});
+    msg = msg ? (msg.nodeType ? $(msg) : msg) : null;
+    $.blockUI.impl.init(msg || $.blockUI.defaultMessage, css || {});
 };
+
+// override this in your code to change the default message
+$.blockUI.defaultMessage = '<h1>Please wait...</h1>';
 
 /**
  * unblockUI removes the UI block that was put in place by blockUI
@@ -90,38 +99,40 @@ $.blockUI = function(msg, css) {
  * @see blockUI
  */
 $.unblockUI = function(options) {
-    if ($.blockUI.impl.g) $.blockUI.impl.show(0);
+    if ($.blockUI.impl.blockSet) $.blockUI.impl.show(0);
 };
 
 $.blockUI.impl = {
-    vis: 0, g: 0, m: 0,
+    visible: 0, blockSet: 0, msgDiv: 0,
     ie6: $.browser.msie && typeof XMLHttpRequest == 'function',
     noalpha: (window.opera && window.opera.version() < 9) || ($.browser.mozilla && /Linux/.test(navigator.platform)),
     show: function(s) {
         if (s) {
-            this.g.show();
+            this.blockSet.show();
             setTimeout(this.focus, 100);
         }
-        else {
-            this.g.hide();
-        }
-        this.vis = s
+        else this.blockSet.hide();
+        this.visible = s
     },
     focus: function() {
-        var v = $('input:visible', $.blockUI.impl.m)[0];
+        var v = $(':input:visible', $.blockUI.impl.msgDiv)[0];
         if (v) v.focus();
     },
     init: function(msg, css) {
-        if ($.blockUI.impl.g) {
-            $.blockUI.impl.m.empty().append(msg).css(css);
+        if ($.blockUI.impl.blockSet) {
+            // just update the message if blockSet has already been created
+            $.blockUI.impl.msgDiv.empty().append(msg).css(css);
             if (msg.jquery) msg.show();
-            return this.show(1);
+            this.show(1);
+            return;
         }
         $('html,body').css('height','100%');
+
+        // event handler to suppress events when block message is showing
         var h = function(e) {
-            if (!$.blockUI.impl.vis) return true;
+            if (!$.blockUI.impl.visible) return true;
             // allow event if target is within the block msg
-            var set = $('*',$.blockUI.impl.m);
+            var set = $(':input:visible',$.blockUI.impl.msgDiv);
             for (var i=0, max=set.length; i < max; i++)
                 if (set[i] == e.target) return true;
             return false;
@@ -130,14 +141,14 @@ $.blockUI.impl = {
 
         var f = $('<iframe style="z-index:1000;background-color:#fff;border:none"></iframe>');
         var w = $('<div style="z-index:2000;cursor:wait"></div>');
-        m = $('<div id="blockUI" style="z-index:3000;cursor:wait;padding:0;position:fixed;top:50%;left:50%;width:250px;margin:-50px 0 0 -125px;text-align:center;background-color:#fff;border:3px solid #aaa"></div>');
-        $.blockUI.impl.m = m;
+        var m = $('<div id="blockUI" style="z-index:3000;cursor:wait;padding:0;position:fixed;top:50%;left:50%;width:250px;margin:-50px 0 0 -125px;text-align:center;background-color:#fff;border:3px solid #aaa"></div>');
+        $.blockUI.impl.msgDiv = m;
         $([f[0],w[0]]).css({position:'fixed',width:'100%',height:'100%',top:'0',left:'0'});
 
         // workaround for the non-secured items popup in ie6
         if (this.ie6) f.attr('src','javascript:document.write("");');
 
-        this.g  = $([f[0],w[0],m[0]]).appendTo('body');
+        this.blockSet  = $([f[0],w[0],m[0]]).appendTo('body');
         m.append(msg).css(css);
         if (msg.jquery) msg.show();
 
