@@ -62,5 +62,11 @@
             <param name="name" value="treeview" />
         </antcall>
     </target>
+	
+	<target name="validate" description="Build validate plugin.">
+        <antcall target="generic">
+            <param name="name" value="validate" />
+        </antcall>
+    </target>
 
 </project>
