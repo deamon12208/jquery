@@ -9,11 +9,26 @@
         <link rel="stylesheet" href="jquery.thickbox.css" type="text/css" media="screen, projection" />
         <script type="text/javascript" src="jquery-1.1.1.js"></script>
         <script type="text/javascript" src="jquery.thickbox.js"></script>
+
+        <style type="text/css" media="projection, screen">
+            #demo-inline #content {
+                display: none;
+            }
+        </style>
         <script type="text/javascript">
             $(function() {
 
-                // Thickbox confirm
-                $('form').thickbox();
+                // Thickbox load from inline
+                $('#demo-inline a').thickbox();
+
+                // Thickbox load content via Ajax
+                $('#demo-ajax a').thickbox();
+
+                // Thickbox load external
+                $('#demo-external a').thickbox();
+
+                // Thickbox form submit confirm
+                $('#demo-form form').thickbox();
 
             });
         </script>
@@ -21,13 +36,35 @@
     <body>
         <h1>jQuery Thickbox plugin demo and test page</h1>
 
-        <h2>Form confirm</h2>
-        <form action="#">
-            <fieldset>
-                <input type="hidden" name="was" value="submitted" />
-                <div>Defer form to Thickbox confirm dialog: <input type="submit" value="Go" /></div>
-            </fieldset>
-        </form>
+        <div id="demo-inline">
+            <h2>Inline Content</h2>
+            <p><a href="#content">Show Thickbox</a></p>
+            <div id="content">
+                <h3>This content was loaded from inside the document</h3>
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+            </div>
+        </div>
+
+        <div id="demo-ajax">
+            <h2>Content via Ajax</h2>
+            <p><a href="content.html">Show Thickbox</a></p>
+        </div>
+
+        <div id="demo-external">
+            <h2>External Content</h2>
+            <p><a href="http://jquery.com">Show Thickbox</a></p>
+        </div>
+
+        <div id="demo-form">
+            <h2>Form Confirm</h2>
+            <form action="">
+                <fieldset>
+                    <legend>Confirmation</legend>
+                    <input type="hidden" name="was" value="submitted" />
+                    <div>Defer form to Thickbox confirm dialog: <input type="submit" value="Go" /></div>
+                </fieldset>
+            </form>
+        </div>
 
     </body>
 </html>

@@ -1,0 +1,14 @@
+Thickbox Reloaded
+================================================
+
+What's new?
+
+* Chainable method to bind Thickbox to links and forms.
+* Confirm type Thickbox, triggered by binding Thickbox to a form.
+* Automatic type detection depending on type of element, respectively on type of link:
+    image: href is an image
+    content: href is a hash
+    ajax: href is internal and not image
+    iframe: href is external and not image
+    confirm: element is form
+* Improved UI blocking (Thanks to Mike "Malsup")
