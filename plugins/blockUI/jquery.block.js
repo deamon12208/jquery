@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 0.92 (02/19/2007)
+ * Version 0.93 (02/22/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -12,7 +12,7 @@
  (function($) {
 /**
  * blockUI provides a mechanism for blocking user interaction with a page.  This can be
- * a very effective way to simulate synchronous behavior during ajax operations  without
+ * a very effective way to simulate synchronous behavior during ajax operations without
  * locking the browser.  It will prevent user operations for the current page while it is
  * active.  blockUI accepts the following two optional arguments:
  *
@@ -126,33 +126,24 @@ $.blockUI.impl = {
             this.show(1);
             return;
         }
-        $('html,body').css('height','100%');
-
-        // event handler to suppress events when block message is showing
-        var h = function(e) {
-            if (!$.blockUI.impl.visible) return true;
-            // allow event if target is within the block msg
-            var set = $(':input:visible',$.blockUI.impl.msgDiv);
-            for (var i=0, max=set.length; i < max; i++)
-                if (set[i] == e.target) return true;
-            return false;
-        };
-        $().bind('keypress',h).bind('keydown',h).bind('mousedown',h);
-
         var f = $('<iframe style="z-index:1000;background-color:#fff;border:none"></iframe>');
         var w = $('<div style="z-index:2000;cursor:wait"></div>');
         var m = $('<div id="blockUI" style="z-index:3000;cursor:wait;padding:0;position:fixed;top:50%;left:50%;width:250px;margin:-50px 0 0 -125px;text-align:center;background-color:#fff;border:3px solid #aaa"></div>');
         $.blockUI.impl.msgDiv = m;
         $([f[0],w[0]]).css({position:'fixed',width:'100%',height:'100%',top:'0',left:'0'});
-
-        // workaround for the non-secured items popup in ie6
-        if (this.ie6) f.attr('src','javascript:document.write("");');
-
-        this.blockSet  = $([f[0],w[0],m[0]]).appendTo('body');
-        m.append(msg).css(css);
-        if (msg.jquery) msg.show();
-
         this.noalpha ? f.css('width','0') : f.css('opacity','0.6');
+        m.append(msg).css(css);
+
+        if (this.ie6) {
+            // workaround for the non-secured items popup in ie6
+            f.attr('src','javascript:document.write("");');
+            // stretch content area if it's short
+            if (jQuery.boxModel && document.body.offsetHeight < document.documentElement.clientHeight)
+                $('html,body').css('height','100%');
+        }
+
+        this.blockSet = $([f[0],w[0],m[0]]).appendTo('body');
+        if (msg.jquery) msg.show();
 
         if (this.ie6) {
             $.each([f,w,m], function(i) {
@@ -170,6 +161,83 @@ $.blockUI.impl = {
         }
         this.show(1);
     }
+};
+
+// event handler to suppress keyboard/mouse events when blocking
+var h = function(e) {
+    if (!$.blockUI.impl.visible) {
+        // disallow events for elements inside blocked elements
+        var ok = true;
+        $('iframe.block').each(function() {
+            if (!ok) return;
+            var a=[], set = jQuery.getAll(this.parentNode, a, null);
+            for (var i=0, max=set.length; i < max; i++)
+                if (set[i] == e.target) {
+                    ok = false;
+                    return;
+                }
+        });
+        return ok;
+    }
+    // allow event if target is within the block msg
+    var set = $(':input:visible',$.blockUI.impl.msgDiv);
+    for (var i=0, max=set.length; i < max; i++)
+        if (set[i] == e.target) return true;
+    return false;
+};
+$().bind('keypress',h).bind('keydown',h).bind('mousedown',h);
+
+
+
+/**
+ * Blocks user interaction with the selected elements using an iframe.  Most of
+ * this logic comes from Brandon Aaron's bgiframe plugin.  Thanks, Brandon!
+ *
+ * @example
+ * $('div.special').block();
+ * @desc prevent user interaction with all div elements with the 'special' class.
+ *
+ * @example
+ * $('div.special').block( {
+ *     opacity: .4,
+ *     zIndex: 1000
+ * });
+ * @desc prevent user interaction with all div elements with the 'special' class
+ * and use custom opacity and zIndex values for the blocking iframe.
+ *
+ * @example
+ * $('div.special').unblock();
+ * @desc unblock all div elements with the 'special' class.
+ *
+ * @type jQuery
+ * @param Object options (valid options: opacity and zIndex)
+ * @cat Plugins/blockUI
+ */
+$.fn.block = function(options) {
+    options = jQuery.extend({ opacity: .6, zIndex: 500 }, options || {});
+	var f = '<iframe class="block" tabindex="-1" style="display:block;position:absolute;'
+                +'background-color:#fff;border:none;z-index:'+options.zIndex+';';
+	if ($.browser.msie)
+		f += 'filter:Alpha(Opacity=\'' + options.opacity * 100 + '\'); '
+			+'top: expression(((parseInt(this.parentNode.currentStyle.borderTopWidth)  || 0) * -1) + \'px\'); '
+			+'left:expression(((parseInt(this.parentNode.currentStyle.borderLeftWidth) || 0) * -1) + \'px\'); '
+			+'width:expression(this.parentNode.offsetWidth + \'px\'); '
+			+'height:expression(this.parentNode.offsetHeight + \'px\')" '
+            +'src="javascript:document.write(\'\');" />';
+	else
+		f += 'width:100%;height:100%;top:0;left:0;opacity:' + options.opacity + '"/>';
+	return this.each(function() {
+		if ($('iframe.block', this).length > 0) return;
+		if ($.css(this,'position') == 'static')
+			this.style.position = 'relative';
+        $(f).prependTo(this);
+	});
+};
+
+$.fn.unblock = function() {
+	return this.each(function() {
+		$('iframe.block', this).remove();
+	});
 };
 
 })(jQuery);
