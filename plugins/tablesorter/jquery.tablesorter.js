@@ -187,7 +187,7 @@
 			function sortOnColumn(oCell,dir,index) {
 				/** trigger event sort start. */
 				if(tableRowLength > defaults.minRowsForWaitingMsg) {
-					$.event.trigger( "sortStart");
+					$(oTable).trigger( "sortStart");
 				}
 				/** define globals for current sorting. */
 				COLUMN_INDEX = index;
@@ -247,7 +247,7 @@
 					columns = null;
 					/** trigger stop event. */
 					if(tableRowLength > defaults.minRowsForWaitingMsg) {
-						$.event.trigger("sortStop",[COLUMN_INDEX]);
+						$(oTable).trigger("sortStop",[COLUMN_INDEX]);
 					}
 					COLUMN_LAST_INDEX = COLUMN_INDEX;
 				}
