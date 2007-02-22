@@ -10,7 +10,6 @@
  * jQueryAuthor: Christian jQuery
  *
  */
-
 (function($) {
 
 	$.fn.tableSorter = function(o) {
@@ -195,8 +194,7 @@
 				COLUMN_CELL = oCell;
 				COLUMN_DIR = dir;
 				/** clear all classes, need to be optimized. */
-				$("th."+defaults.sortClassAsc,oTable).removeClass(defaults.sortClassAsc);
-				$("th."+defaults.sortClassDesc,oTable).removeClass(defaults.sortClassDesc);
+				$("th",oTable).removeClass(defaults.sortClassAsc).removeClass(defaults.sortClassDesc);
 				/**add active class and append image. */
 				$(COLUMN_CELL).addClass((dir % 2 ? defaults.sortClassAsc : defaults.sortClassDesc));
 				/** remove highlighting */
