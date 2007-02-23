@@ -47,12 +47,18 @@
                 jq = $('#' + MODAL_ID);
                 modal = jq.size() && jq || $('<div id="' + MODAL_ID + '"></div>').appendTo(document.body);
                 modal.attr({'class': type});
+                $('<p id="' + TITLE_BAR_ID + '"><a href="#" title="Close this window">Close</a></p>').appendTo(modal).bind('click', hide);
                 // reveal stuff
-                dim.one('click', hide).fadeIn('fast', function() {
+                dim.unbind('click').one('click', hide); // unbind shouldn't be necessary - WTF?
+                if (dim.is(':visible')) {
                     loading.show();
-                    $('<p id="' + TITLE_BAR_ID + '"><a href="#" title="Close this window">Close</a></p>').appendTo(modal).bind('click', hide);
                     builder(); // build specific type
-                });
+                } else {
+                    dim.fadeIn('fast', function() {
+                        loading.show();
+                        builder(); // build specific type
+                    });
+                }
 
                 // TODO set min-height/min-width of body to dimensions of Thickbox to avoid window moving out of viewport
 
@@ -170,6 +176,17 @@
                                 // if an image group is given
                                 if (rel) {
 
+                                    function buildShowFunc(el) {
+                                        return function() {
+                                            unbindPager();
+                                            modal.fadeOut('fast', function() {
+                                                modal.empty();
+                                                $(el).trigger('click');
+                                            });
+                                            return false;
+                                        };
+                                    }
+
                                     // find the anchors that are part of the the group
                                     var group = $('a[@rel="' + rel + '"]').get(), count = '', next = '', prev = '', showNext = function() {}, showPrev = function() {};
 
@@ -180,29 +197,18 @@
                                             count = "Image " + (i + 1) + " of " + group.length;
                                             if (group[i + 1]) { // if there is a next image
                                                 next = '<strong id="' + NEXT_ID + '"><a href="#" title="Show next image">' + settings.nextTitle + '</a></strong>';
-                                                showNext = function() {
-                                                    unbindPager();
-                                                    hide(); // TODO do not use brute force hide!
-                                                    $(group[i + 1]).trigger('click');
-                                                    return false;
-                                                };
+                                                showNext = buildShowFunc(group[i + 1]);
                                             }
                                             if (group[i - 1]) { // if there is a previous image
                                                 prev = '<strong id="' + PREV_ID + '"><a href="#" title="Show previous image">' + settings.prevTitle + '</a></strong>';
-                                                showPrev = function(e) {
-                                                    unbindPager();
-                                                    hide(); // TODO do not use brute force hide!
-                                                    $(group[i - 1]).trigger('click');
-                                                    return false;
-                                                };
+                                                showPrev = buildShowFunc(group[i - 1]);
                                             }
                                             break; // stop searching
                                         }
                                     }
 
-                                    // Add additional key handler
+                                    // add additional key handler
                                     var pager = function(e) {
-                                        $(document).unbind(e);
                                         var key = e.which || e.keyCode || null;
                                         if (typeof key == 'number') {
                                             switch (key) {
@@ -223,7 +229,7 @@
                                     };
                                     $(document).bind('keydown', pager);
                                     dim.one('click', unbindPager);
-                                    $('#' + TITLE_BAR_ID).bind('click', unbindPager);
+                                    $('#' + TITLE_BAR_ID + ' a').bind('click', unbindPager);
 
                                 }
 
