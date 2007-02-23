@@ -17,4 +17,5 @@ What's new?
 * Optional for top/left positioning (instead of centering), unit defaults to 'px'
 * Easier skins: The look is separated into an extra style sheet
 * Scrolling via mousewheel/touchpad is blocked
+* Lets you define custom animations for showing the modal window
 * Requires jQuery 1.1.1

@@ -9,6 +9,8 @@
 
 (function($) { // simulate block scope
 
+    // TODO preload spinner image
+
     $.browser.msie6 = $.browser.msie6 || $.browser.msie && typeof XMLHttpRequest == 'function';
 
     $.extend({
@@ -18,7 +20,7 @@
 
             // needful things
             var IMAGE = 'image', INLINE = 'inline', AJAX = 'ajax', EXTERNAL = 'external', CONFIRM = 'confirm'; // Thickbox type constants
-            var DIM_ID = 'tb-dim', LOADING_ID = 'tb-loading', MODAL_ID = 'tb-modal'; // Ids
+            var DIM_ID = 'tb-dim', LOADING_ID = 'tb-loading', MODAL_ID = 'tb-modal', CONTENT_ID = 'tb-content', TITLE_BAR_ID = 'tb-title-bar', CAPTION_ID = 'tb-caption', NEXT_ID = 'tb-next', PREV_ID = 'tb-prev'; // Ids
             var dim, loading, modal;
 
             // default values
@@ -27,6 +29,8 @@
                 left: '',
                 width: 300,
                 height: 400,
+                nextTitle: 'Next',
+                prevTitle: 'Previous',
                 confirmTitle: 'Are you sure?',
                 confirmYes: 'Yes',
                 confirmNo: 'No'
@@ -44,14 +48,14 @@
                 modal = jq.size() && jq || $('<div id="' + MODAL_ID + '"></div>').appendTo(document.body);
                 modal.attr({'class': type});
                 // reveal stuff
-                dim
-                    .bind('click', function() {
-                        hide();
-                    })
-                    .fadeIn('fast', function() {
-                        loading.show();
-                        builder(); // build specific type
-                    });
+                dim.one('click', hide).fadeIn('fast', function() {
+                    loading.show();
+                    $('<p id="' + TITLE_BAR_ID + '"><a href="#" title="Close this window">Close</a></p>').appendTo(modal).bind('click', hide);
+                    builder(); // build specific type
+                });
+
+                // TODO set min-height/min-width of body to dimensions of Thickbox to avoid window moving out of viewport
+
                 // attach keyboard event handler
                 $(document).bind('keydown', keydown).bind('keypress', blockKeys);
                 $(window).bind('scroll', blockScroll);
@@ -62,11 +66,12 @@
                 loading.hide();
                 var css = {width: width + 'px', height: height + 'px'}, noUnit = /^\d+$/;
                 if (!top) {
+                    css['top'] = '';
                     if (!$.browser.msie6) { // take away IE6
-                        css['top'] = '';
                         css['margin-top'] = '-' + parseInt(height / 2) + 'px';
-                    } else {
-                        // TODO set expression here for IE6
+                    } else { // set dynamic property for IE6 to emulate fixed positioning
+                        // TODO test this
+                        modal[0].style.setExpression('margin-top', '0 - parseInt(this.offsetHeight / 2) + (document.documentElement && document.documentElement.scrollTop || document.body.scrollTop) + "px"');
                     }
                 } else {
                     css['top'] = top + (top.match(noUnit) ? 'px' : '');
@@ -79,7 +84,7 @@
                     css['left'] = left + (left.match(noUnit) ? 'px' : '');
                     css['margin-left'] = '';
                 }
-                modal.show().css(css); // TODO use modal.animate and allow custom animations
+                modal.show().css(css); // TODO use modal.animate() and allow custom animations
             }
 
             // remove everything
@@ -89,10 +94,11 @@
                 modal.fadeOut('fast', function() {
                     modal.empty();
                 });
-                dim.unbind('click').fadeOut('fast', typeof callback == 'function' ? callback : function() {});
+                dim.fadeOut('fast', typeof callback == 'function' ? callback : function() {});
                 // remove keyboard event handler
                 $(document).unbind('keydown', keydown).unbind('keypress', blockKeys);
                 $(window).unbind('scroll', blockScroll);
+                return false;
             }
 
             // helper
@@ -137,6 +143,8 @@
                     height: defaultValues.height,
                     /*onConfirm: null,
                     slideshow: null, TODO option for slideshow? */
+                    nextTitle: defaultValues.nextTitle,
+                    prevTitle: defaultValues.prevTitle,
                     confirmTitle: defaultValues.confirmTitle,
                     confirmYes: defaultValues.confirmYes,
                     confirmNo: defaultValues.confirmNo
@@ -157,6 +165,68 @@
                     switch (type) {
                         case IMAGE:
                             builder = function() {
+                                var caption = $$.attr('title'), rel = $$.attr('rel');
+
+                                // if an image group is given
+                                if (rel) {
+
+                                    // find the anchors that are part of the the group
+                                    var group = $('a[@rel="' + rel + '"]').get(), count = '', next = '', prev = '', showNext = function() {}, showPrev = function() {};
+
+                                    // loop through the anchors, looking for ourself, saving information about previous and next image
+                                    for (var i = 0, k = group.length; i < k; i++) {
+                                        var a = group[i];
+                                        if (a == $$[0]) { // look for ourself
+                                            count = "Image " + (i + 1) + " of " + group.length;
+                                            if (group[i + 1]) { // if there is a next image
+                                                next = '<strong id="' + NEXT_ID + '"><a href="#" title="Show next image">' + settings.nextTitle + '</a></strong>';
+                                                showNext = function() {
+                                                    unbindPager();
+                                                    hide(); // TODO do not use brute force hide!
+                                                    $(group[i + 1]).trigger('click');
+                                                    return false;
+                                                };
+                                            }
+                                            if (group[i - 1]) { // if there is a previous image
+                                                prev = '<strong id="' + PREV_ID + '"><a href="#" title="Show previous image">' + settings.prevTitle + '</a></strong>';
+                                                showPrev = function(e) {
+                                                    unbindPager();
+                                                    hide(); // TODO do not use brute force hide!
+                                                    $(group[i - 1]).trigger('click');
+                                                    return false;
+                                                };
+                                            }
+                                            break; // stop searching
+                                        }
+                                    }
+
+                                    // Add additional key handler
+                                    var pager = function(e) {
+                                        $(document).unbind(e);
+                                        var key = e.which || e.keyCode || null;
+                                        if (typeof key == 'number') {
+                                            switch (key) {
+                                                case 27:
+                                                    $(document).unbind(e); // remove this event handler
+                                                    break;
+                                                case 37: // TODO 188?
+                                                    showPrev();
+                                                    break;
+                                                case 39: // TODO 190?
+                                                    showNext();
+                                                    break;
+                                            }
+                                        }
+                                    };
+                                    var unbindPager = function() {
+                                        $(document).unbind('keydown', pager);
+                                    };
+                                    $(document).bind('keydown', pager);
+                                    dim.one('click', unbindPager);
+                                    $('#' + TITLE_BAR_ID).bind('click', unbindPager);
+
+                                }
+
                                 // preload image and trigger Thickbox rendering when loading is completed
                                 var img = new Image();
                                 img.onload = function() {
@@ -186,7 +256,21 @@
                                     imgWidth= parseInt(imgWidth);
                                     imgHeight = parseInt(imgHeight);
 
-                                    modal.append('<img src="' +  $$.attr('href') + '" alt="TODO" width="' + imgWidth + '" height="' + imgHeight + '" />');
+                                    $('<img src="' +  $$.attr('href') + '" alt="Image" width="' + imgWidth + '" height="' + imgHeight + '" title="' + caption + '" />').appendTo(modal);
+                                    if (caption || count) {
+                                        var html = [];
+                                        html.push('<div id="' + CAPTION_ID + '">');
+                                        if (caption) {
+                                            html.push('<p>', caption, '</p>');
+                                        }
+                                        if (count) {
+                                            html.push('<p>', count, prev, next, '</p>');
+                                        }
+                                        html.push('</div>');
+                                        $(html.join('')).appendTo(modal);
+                                        $('#' + NEXT_ID + ' a').bind('click', showNext);
+                                        $('#' + PREV_ID + ' a').bind('click', showPrev);
+                                    }
                                     show(imgWidth + 30, imgHeight + 60, settings.top, settings.left);
                                 };
                                 img.src = $$.attr('href');
@@ -201,20 +285,20 @@
                             break;
                         case AJAX:
                             builder = function() {
-                                modal.load($$.attr('href'), function() {
+                                $('<div id="' + CONTENT_ID + '"></div>').appendTo(modal).load($$.attr('href'), function() {
                                     show(settings.width, settings.height, settings.top, settings.left);
                                 });
                             };
                             break;
                         case EXTERNAL:
                             builder = function() {
-                                modal.html('<iframe src="' +  $$.attr('href') + '" frameborder="0"></iframe>');
+                                $('<iframe id="' + CONTENT_ID + '" src="' +  $$.attr('href') + '" frameborder="0"></iframe>').appendTo(modal);
                                 show(settings.width, settings.height, settings.top, settings.left);
                             };
                             break;
                         case CONFIRM:
                             builder = function() {
-                                modal.append('<h2>' + settings.confirmTitle + '</h2>');
+                                $('<h2>' + settings.confirmTitle + '</h2>').appendTo(modal);
                                 var p = $('<p></p>').appendTo(modal);
                                 $('<a id="tb-confirm" href="#">' + settings.confirmYes + '</a><span> | </span>').appendTo(p).click(function() {
                                     // pass confirm as callback to hide
@@ -237,7 +321,7 @@
                     }
 
                     // bind event
-                    $$.bind((isForm ? 'submit' : 'click'), function() {
+                    $$.bind((type == CONFIRM ? 'submit' : 'click'), function() {
                         setup(type, settings, builder);
                         this.blur(); // remove focus from active element
                         return false;
