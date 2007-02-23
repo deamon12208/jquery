@@ -12,3 +12,9 @@ What's new?
     iframe: href is external and not image
     confirm: element is form
 * Improved UI blocking (Thanks to Mike "Malsup")
+* Options for width/height are now passed in as settings object literal or are
+  stored as default values via $.thickbox.defaults({ width: 300, height: 400 })
+* Optional for top/left positioning (instead of centering), unit defaults to 'px'
+* Easier skins: The look is separated into an extra style sheet
+* Scrolling via mousewheel/touchpad is blocked
+* Requires jQuery 1.1.1

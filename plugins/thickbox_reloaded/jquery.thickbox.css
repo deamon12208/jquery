@@ -27,12 +27,13 @@ html, body {
 #tb-modal {
     display: none;
     z-index: 10000;
-    margin: -200px 0 0 -150px; /* temp */
+    /*margin: -200px 0 0 -150px; /* temp * /
     width: 350px;
-    height: 400px;
+    height: 400px;*/
 }
 #tb-modal.confirm {
-    margin-top: -50px;
+    /*margin-top: -50px;*/
+    width: 350px;
     height: 100px;
 }
 

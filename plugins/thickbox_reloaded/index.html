@@ -11,6 +11,17 @@
         <script type="text/javascript" src="jquery.thickbox.js"></script>
 
         <style type="text/css" media="projection, screen">
+            #demo-gallery ul {
+                list-style: none;
+                overflow: hidden; /* containing floats */
+                margin: 0;
+                padding: 0;
+            }
+            #demo-gallery li {
+                float: left;
+                margin: 0 1em 0 0;
+            }
+
             #demo-inline #content {
                 display: none;
             }
@@ -18,11 +29,17 @@
         <script type="text/javascript">
             $(function() {
 
+                // Thickbox single image
+                $('#demo-single a').thickbox();
+
+                // Thickbox grouped images
+                $('#demo-gallery a').thickbox();
+
                 // Thickbox load from inline
                 $('#demo-inline a').thickbox();
 
                 // Thickbox load content via Ajax
-                $('#demo-ajax a').thickbox();
+                $('#demo-ajax a').thickbox({ top: '10', left: '10' }); // Unit defaults to 'px'
 
                 // Thickbox load external
                 $('#demo-external a').thickbox();
@@ -35,6 +52,21 @@
     </head>
     <body>
         <h1>jQuery Thickbox plugin demo and test page</h1>
+
+        <div id="demo-single">
+            <h2>Single Image</h2>
+            <p><a href="single.jpg"><img src="single_t.jpg" alt="Show image" width="100" height="75" /></a></p>
+        </div>
+
+        <div id="demo-gallery">
+            <h2>Image Gallery</h2>
+            <ul>
+                <li><a href="plant1.jpg" rel="gallery"><img src="plant1_t.jpg" alt="Show image" width="100" height="75" /></a></li>
+                <li><a href="plant2.jpg" rel="gallery"><img src="plant2_t.jpg" alt="Show image" width="100" height="75" /></a></li>
+                <li><a href="plant3.jpg" rel="gallery"><img src="plant3_t.jpg" alt="Show image" width="100" height="75" /></a></li>
+                <li><a href="plant4.jpg" rel="gallery"><img src="plant4_t.jpg" alt="Show image" width="100" height="75" /></a></li>
+            </ul>
+        </div>
 
         <div id="demo-inline">
             <h2>Inline Content</h2>
