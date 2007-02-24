@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 0.93 (02/22/2007)
+ * Version 0.94 (02/24/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -80,7 +80,7 @@ $.blockUI = function(msg, css) {
         msg = null;
     }
     msg = msg ? (msg.nodeType ? $(msg) : msg) : null;
-    $.blockUI.impl.init(msg || $.blockUI.defaultMessage, css || {});
+    $.blockUI.impl.show(1, msg || $.blockUI.defaultMessage, css || {});
 };
 
 // override this in your code to change the default message
@@ -104,89 +104,68 @@ $.unblockUI = function(options) {
 
 $.blockUI.impl = {
     visible: 0, blockSet: 0, msgDiv: 0,
-    ie6: $.browser.msie && typeof XMLHttpRequest == 'function',
-    noalpha: (window.opera && window.opera.version() < 9) || ($.browser.mozilla && /Linux/.test(navigator.platform)),
-    show: function(s) {
+    op8: window.opera && window.opera.version() < 9,
+    show: function(s,msg,css) {
+        if (!this.blockSet) this.init();
         if (s) {
-            this.blockSet.show();
+            this.msgDiv.empty().append(msg).css(css);
+            if (msg.jquery) msg.show();
             setTimeout(this.focus, 100);
         }
-        else this.blockSet.hide();
+        s ? this.blockSet.show() : this.blockSet.hide();
         this.visible = s
+        this.bind(s);
     },
     focus: function() {
         var v = $(':input:visible', $.blockUI.impl.msgDiv)[0];
         if (v) v.focus();
     },
-    init: function(msg, css) {
-        if ($.blockUI.impl.blockSet) {
-            // just update the message if blockSet has already been created
-            $.blockUI.impl.msgDiv.empty().append(msg).css(css);
-            if (msg.jquery) msg.show();
-            this.show(1);
-            return;
-        }
+    init: function() {
+        var ie6 = $.browser.msie && typeof XMLHttpRequest == 'function';
         var f = $('<iframe style="z-index:1000;background-color:#fff;border:none"></iframe>');
+        if (ie6) f.attr('src','javascript:false;document.write(\'\');');
         var w = $('<div style="z-index:2000;cursor:wait"></div>');
         var m = $('<div id="blockUI" style="z-index:3000;cursor:wait;padding:0;position:fixed;top:50%;left:50%;width:250px;margin:-50px 0 0 -125px;text-align:center;background-color:#fff;border:3px solid #aaa"></div>');
-        $.blockUI.impl.msgDiv = m;
+        this.msgDiv = m;
         $([f[0],w[0]]).css({position:'fixed',width:'100%',height:'100%',top:'0',left:'0'});
-        this.noalpha ? f.css('width','0') : f.css('opacity','0.6');
-        m.append(msg).css(css);
-
-        if (this.ie6) {
-            // workaround for the non-secured items popup in ie6
-            f.attr('src','javascript:document.write("");');
+        var noalpha = this.op8 || ($.browser.mozilla && /Linux/.test(navigator.platform));
+        noalpha ? f.css('width','0') : f.css('opacity','0.6');
+        this.blockSet = $([f[0],w[0],m[0]]).appendTo('body');
+        if (ie6) {
             // stretch content area if it's short
             if (jQuery.boxModel && document.body.offsetHeight < document.documentElement.clientHeight)
                 $('html,body').css('height','100%');
-        }
-
-        this.blockSet = $([f[0],w[0],m[0]]).appendTo('body');
-        if (msg.jquery) msg.show();
-
-        if (this.ie6) {
+            // simulate fixed position
             $.each([f,w,m], function(i) {
                 var s = this[0].style;
                 s.position = 'absolute';
                 if (i < 2)
-                    s.setExpression('height',
-                        'document.body.scrollHeight > document.body.offsetHeight ? document.body.scrollHeight : document.body.offsetHeight + "px"');
+                    s.setExpression('height','document.body.scrollHeight > document.body.offsetHeight ? document.body.scrollHeight : document.body.offsetHeight + "px"');
                 else {
-                    s.setExpression('top',
-                        '(document.documentElement.clientHeight || document.body.clientHeight) / 2 - (this.offsetHeight / 2) + (blah = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop) + "px"');
+                    s.setExpression('top','(document.documentElement.clientHeight || document.body.clientHeight) / 2 - (this.offsetHeight / 2) + (blah = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop) + "px"');
                     s.marginTop = 0;
                 }
             });
         }
-        this.show(1);
-    }
-};
-
-// event handler to suppress keyboard/mouse events when blocking
-var h = function(e) {
-    if (!$.blockUI.impl.visible) {
-        // disallow events for elements inside blocked elements
-        var ok = true;
-        $('iframe.block').each(function() {
-            if (!ok) return;
-            var a=[], set = jQuery.getAll(this.parentNode, a, null);
-            for (var i=0, max=set.length; i < max; i++)
-                if (set[i] == e.target) {
-                    ok = false;
-                    return;
-                }
+    },
+    // event handler to suppress keyboard/mouse events when blocking
+    handler: function(e) {
+        // always allow tab
+        if (e.keyCode && e.keyCode == 9) return true;
+        // if blocking entire page, only allow events in the message area
+        if ($.blockUI.impl.visible)
+            return $(e.target).parents('#blockUI').length > 0;
+        // otherwise, allow event if it's not within a blocked element
+        return $(e.target).parents().children('iframe.block').length == 0;
+    },
+    // bind/unbind the handler
+    bind: function(b, $e) {
+        $e = $e ? $e.find('a,:input') : $();
+        jQuery.each(['mousedown','mouseup','keydown','keypress','keyup','click'], function(i,o) {
+            $e[b?'bind':'unbind'](o, $.blockUI.impl.handler);
         });
-        return ok;
     }
-    // allow event if target is within the block msg
-    var set = $(':input:visible',$.blockUI.impl.msgDiv);
-    for (var i=0, max=set.length; i < max; i++)
-        if (set[i] == e.target) return true;
-    return false;
 };
-$().bind('keypress',h).bind('keydown',h).bind('mousedown',h);
-
 
 
 /**
@@ -214,7 +193,7 @@ $().bind('keypress',h).bind('keydown',h).bind('mousedown',h);
  * @cat Plugins/blockUI
  */
 $.fn.block = function(options) {
-    options = jQuery.extend({ opacity: .6, zIndex: 500 }, options || {});
+    options = jQuery.extend({ opacity: .6, zIndex: 1000 }, options || {});
 	var f = '<iframe class="block" tabindex="-1" style="display:block;position:absolute;'
                 +'background-color:#fff;border:none;z-index:'+options.zIndex+';';
 	if ($.browser.msie)
@@ -223,21 +202,34 @@ $.fn.block = function(options) {
 			+'left:expression(((parseInt(this.parentNode.currentStyle.borderLeftWidth) || 0) * -1) + \'px\'); '
 			+'width:expression(this.parentNode.offsetWidth + \'px\'); '
 			+'height:expression(this.parentNode.offsetHeight + \'px\')" '
-            +'src="javascript:document.write(\'\');" />';
+            +'src="javascript:document.write(\'\');" /></iframe>';
 	else
-		f += 'width:100%;height:100%;top:0;left:0;opacity:' + options.opacity + '"/>';
+		f += 'width:100%;height:100%;top:0;left:0;opacity:' + options.opacity + '"/></iframe>';
+    $.blockUI.impl.bind(1,this);
 	return this.each(function() {
 		if ($('iframe.block', this).length > 0) return;
 		if ($.css(this,'position') == 'static')
 			this.style.position = 'relative';
-        $(f).prependTo(this);
+        var $f = $(f).prependTo(this);
+        if ($.blockUI.impl.op8) $.fn.block.simAlpha(true,$f,this);
 	});
 };
 
 $.fn.unblock = function() {
+    $.blockUI.impl.bind(0,this);
 	return this.each(function() {
 		$('iframe.block', this).remove();
+        if ($.blockUI.impl.op8) $.fn.block.simAlpha(false,0,this);
 	});
+};
+
+$.fn.block.simAlpha = function(dis,$f,el) {
+    if ($f) $f.css('width','0');
+    $(':input', el).each(function() {
+        dis = dis || !!this.$orig_disabled;
+        if (dis) this.$orig_disabled = this.disabled;
+        this.disabled = dis;
+    });
 };
 
 })(jQuery);
