@@ -39,6 +39,10 @@
 					required: true,
 					email: true
 				},
+				topic: {
+					required: "#newsletter:checked",
+					minLength: 2
+				},
 				agree: { required: true	}
 			},
 			messages: {
@@ -63,7 +67,6 @@
 		});
 		
 		// propose username by combining first- and lastname
-		// TODO strip/check illegal characters
 		$("#username").focus(function() {
 			var firstname = $("#firstname").val();
 			var lastname = $("#lastname").val();
@@ -71,19 +74,33 @@
 				this.value = firstname + "." + lastname;
 			}
 		});
+		/*
+		code to hide topic selection, disable for demo
+		// newsletter topics are optional, hide at first
+		var newsletter = $("#newsletter");
+		var topics = $("#newsletter_topics")[newsletter.is(":checked") ? "show" : "hide"]();
+		// show when newsletter is checked
+		newsletter.change(function() {
+			topics[this.checked ? "show" : "hide"]();
+		});
+		*/
 	});
 </script>
 
 <style type="text/css">
 #commentForm { width: 500px; }
 #commentForm label { width: 250px; }
-#commentForm label.error { margin-left: 253px; }
-
+#commentForm label.error, #commentForm input.submit { margin-left: 253px; }
+	
 #signupForm { width: 670px; }
 #signupForm label.error {
 	margin-left: 10px;
 	width: auto;
 	display: inline;
+}
+#newsletter_topics label.error {
+	display: none;
+	margin-left: 103px;
 }
 </style>
 
@@ -147,6 +164,26 @@
 			<label for="agree">Please agree to our policy</label>
 			<input type="checkbox" id="agree" name="agree" />
 		</p>
+		<p>
+			<label for="newsletter">I'd like to receive the newsletter</label>
+			<input type="checkbox" id="newsletter" name="newsletter" />
+		</p>
+		<fieldset id="newsletter_topics">
+			<legend>Topics (select at least two) - note: would be hidden when newsletter isn't selected, but is visible here for the demo</legend>
+			<label for="topic_marketflash">
+				<input type="checkbox" id="topic_marketflash" value="marketflash" name="topic" />
+				Marketflash
+			</label>
+			<label for="topic_fuzz">
+				<input type="checkbox" id="topic_fuzz" value="fuzz" name="topic" />
+				Latest fuzz
+			</label>
+			<label for="topic_digester">
+				<input type="checkbox" id="topic_digester" value="digester" name="topic" />
+				Mailing list digester
+			</label>
+			<label for="topic" class="error">Please select at least two topics you'd like to receive.</label>
+		</fieldset>
 		<p>
 			<input class="submit" type="submit" value="Submit"/>
 		</p>
