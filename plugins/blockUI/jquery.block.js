@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 0.94 (02/24/2007)
+ * Version 0.95 (02/25/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -131,7 +131,7 @@ $.blockUI.impl = {
         var noalpha = this.op8 || ($.browser.mozilla && /Linux/.test(navigator.platform));
         noalpha ? f.css('width','0') : f.css('opacity','0.6');
         this.blockSet = $([f[0],w[0],m[0]]).appendTo('body');
-        if (ie6) {
+        if (ie6 || ($.browser.msie && !jQuery.boxModel)) {
             // stretch content area if it's short
             if (jQuery.boxModel && document.body.offsetHeight < document.documentElement.clientHeight)
                 $('html,body').css('height','100%');
