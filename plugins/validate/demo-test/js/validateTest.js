@@ -293,20 +293,22 @@ test("validator.element(): simple", function() {
 test("validator.hide(): input", function() {
 	var errorLabel = $('#errorFirstname');
 	var element = $('#firstname')[0];
+	element.value ="bla";
 	var v = $('#testForm1').validate();
 	errorLabel.show();
-	ok( errorLabel.is(":visible"), "Error label visible after validation" );
-	v.hide(element);
-	ok( errorLabel.is(":hidden"), "Error label not visible after hiding it" );
+	ok( errorLabel.is(":visible"), "Error label visible before validation" );
+	v.single(element);
+	ok( errorLabel.is(":hidden"), "Error label not visible after validation" );
 });
 
 test("validator.hide(): radio", function() {
 	var errorLabel = $('#agreeLabel');
 	var element = $('#agb')[0];
+	element.checked = true;
 	var v = $('#testForm2').validate({ errorClass: "xerror" });
 	errorLabel.show();
 	ok( errorLabel.is(":visible"), "Error label visible after validation" );
-	v.hide(element);
+	v.single(element);
 	ok( errorLabel.is(":hidden"), "Error label not visible after hiding it" );
 });
 
@@ -314,11 +316,12 @@ test("validator.hide(): errorWrapper", function() {
 	expect(2);
 	var errorLabel = $('#errorWrapper');
 	var element = $('#meal')[0];
+	element.selectedIndex = 1;
 	
 	errorLabel.show();
 	ok( errorLabel.is(":visible"), "Error label visible after validation" );
 	var v = $('#testForm3').validate({ errorWrapper: "li", errorContainer: $("#errorContainer") });
-	v.hide(element);
+	v.single(element);
 	ok( errorLabel.is(":hidden"), "Error label not visible after hiding it" );
 });
 
@@ -355,10 +358,10 @@ test("validator.showErrors()", function() {
 	var v = $('#testForm1').validate();
 	ok( errorLabel.is(":hidden") );
 	equals( 0, $("label.error[@for=lastname]").size() );
-	v.errorList = { lastname: {required: true}, firstname: {required: true}};
+	v.errorList = { firstname: "required", lastname: "bla" };
 	v.showErrors();
-	ok( errorLabel.is(":visible") );
-	ok( $("label.error[@for=lastname]").is(":visible") );
+	equals( true, errorLabel.is(":visible") );
+	equals( true, $("label.error[@for=lastname]").is(":visible") );
 });
 
 test("validator.showErrors() - external messages", function() {

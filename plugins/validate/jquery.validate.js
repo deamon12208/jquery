@@ -17,8 +17,6 @@ Test form plugin integration
 Try to modularize more parts, eg. error display
 	Combining different ways to display messages?
 	An alert on submit, and normal messages in addition
-Don't hide labels when showing them again directly
-	How to determine which labels have to be hidden?
 */
 
 /**
@@ -253,9 +251,23 @@ jQuery.fn.validate = function( options ) {
 	return validator;
 };
 
+// find all objects that are not in the other set
+jQuery.fn.containsNot = function(b) {
+    return this.pushStack( $.grep(this, function(e) {
+        var contains = false;
+        $.each(b, function(i, n) {
+            if(e == n)
+                contains = true;
+        });
+        return !contains;
+    }));
+};
+
 // constructor for validator
 jQuery.validator = function( options, form ) {
 	this.errorList = {};
+	this.toHide = $([]);
+	this.toShow = $([]);
 
 	// override defaults with client settings
 	var settings = this.settings = jQuery.extend( {}, jQuery.validator.defaults, options );
@@ -314,10 +326,7 @@ jQuery.extend(jQuery.validator, {
 			this.settings.errorContainer.hide();
 	
 			// hide all error labels for the form
-			var labels = jQuery("label." + this.settings.errorClass, this.errorContext).hide();
-			if( this.settings.errorWrapper ) {
-				labels.parents(this.settings.errorWrapper).hide();
-			}
+			this.toHide = jQuery("label." + this.settings.errorClass, this.errorContext);
 	
 			// validate elements
 			var instance = this;
@@ -397,19 +406,12 @@ jQuery.extend(jQuery.validator, {
 		 */
 		single: function(element) {
 			this.errorList = {};
-			this.hide(element)
+			this.toHide = jQuery("label." + this.settings.errorClass + "[@for=" + this.findId(element) + "]", this.errorContext);
 			this.element(element);
 			this.showErrors();
 			
 		},
 		
-		hide: function(element) {
-			var error = jQuery("label." + this.settings.errorClass + "[@for=" + this.findId(element) + "]", this.errorContext).hide();
-			if( this.settings.errorWrapper ) {
-				error.parent(this.settings.errorWrapper).hide();
-			}
-		},
-	
 		/*
 		 * Check if the validated form has errors or not,
 		 * if it has, display them.
@@ -426,6 +428,12 @@ jQuery.extend(jQuery.validator, {
 				this.showErrors();
 				return false;
 			} else {
+				// TODO write a test for this
+				// refactor it!
+				this.toHide.hide();
+				if( this.settings.errorWrapper ) {
+					this.toHide.parents(this.settings.errorWrapper).hide();
+				}
 				// delgate submission if possible, if it has no errors
 				if(this.settings.submitHandler) {
 					// delegate submission to handler
@@ -445,6 +453,8 @@ jQuery.extend(jQuery.validator, {
 		showErrors: function() {
 			this.settings.errorContainer.show();
 			this.settings.errorLabelContainer.show();
+			this.toShow = $([]);
+			
 			var first = true;
 			for(var elementID in this.errorList) {
 				if( first && this.settings.focusInvalid ) {
@@ -468,12 +478,19 @@ jQuery.extend(jQuery.validator, {
 				// display the error label for the first failed method
 				this.showError(elementID, this.errorList[elementID][0]);
 			}
+			
+			var toHide = this.toHide.containsNot(this.toShow).hide();
+			this.toShow.show();
+			if( this.settings.errorWrapper ) {
+				toHide.parents(this.settings.errorWrapper).hide();
+				this.toShow.parents(this.settings.errorWrapper).show();
+			}
 		},
 	
 		/*
 		 * Searches for an error label inside an errorContainer (if specified) or
 		 * the current form or, when validating single elements, inside the document.
-		 * If errors are not specified for every rule, it searches for a generic error.
+		 * If there is no error label present, one is generated.
 		 * Check settings and markup, if the form is invalid, but no error is displayed.
 		 */
 		showError: function(elementID, message) {
@@ -487,24 +504,20 @@ jQuery.extend(jQuery.validator, {
 				if( error.attr("generated") ) {
 					error.text(message);
 				}
-				error.show();
-				if ( wrapper ) {
-					error.parents(wrapper).show();
-				}
 			} else {
 				// create label with custom message or title or default message
 				// display default message
 				// TODO can't change message
-				var error = jQuery("<label>").attr({"for": elementID, generated: true}).addClass("error").html(message);
+				error = jQuery("<label>").attr({"for": elementID, generated: true}).addClass("error").html(message);
 				if ( wrapper ) {
-					error = error.show().wrap("<" + wrapper + "></" + wrapper + ">").parent();
+					error = error.wrap("<" + wrapper + "></" + wrapper + ">").parent();
 				}
 				if ( !this.errorContainer.append(error).length ) 
 					error.insertAfter(element);
-				error.show();
 			}
+			this.toShow = this.toShow.add(error);
 		},
-	
+		
 		/*
 		 * Searches all rules for the given element and returns them as an
 		 * array of rule object, each with a name and parameters.
