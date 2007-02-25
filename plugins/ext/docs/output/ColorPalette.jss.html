@@ -1,0 +1,70 @@
+<html><head><title>ColorPalette.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>ColorPalette.js</h1><pre class="highlighted"><code>Ext.ColorPalette = <b>function</b>(config){
+    Ext.ColorPalette.superclass.constructor.call(<b>this</b>, config);
+    <b>this</b>.addEvents({
+        select: true
+    });
+
+    <b>if</b>(this.handler){
+        <b>this</b>.on('select', <b>this</b>.handler, <b>this</b>.scope, true);
+    }
+};
+Ext.extend(Ext.ColorPalette, Ext.Component, {
+    itemCls : 'x-color-palette',
+    value : null,
+    ctype: 'Ext.ColorPalette',
+
+    colors : [
+        '000000', '993300', '333300', '003300', '003366', '000080', '333399', '333333',
+        '800000', 'FF6600', '808000', '008000', '008080', '0000FF', '666699', '808080',
+        'FF0000', 'FF9900', '99CC00', '339966', '33CCCC', '3366FF', '800080', '969696',
+        'FF00FF', 'FFCC00', 'FFFF00', '00FF00', '00FFFF', '00CCFF', '993366', 'C0C0C0',
+        'FF99CC', 'FFCC99', 'FFFF99', 'CCFFCC', 'CCFFFF', '99CCFF', 'CC99FF', 'FFFFFF'
+    ],
+
+    onRender : <b>function</b>(container){
+        <b>var</b> t = <b>new</b> Ext.MasterTemplate(
+            '&lt;tpl&gt;&lt;a href=&quot;#&quot; class=&quot;color-{0}&quot; hidefocus=&quot;on&quot;&gt;&lt;em&gt;&lt;span style=&quot;background:#{0}&quot;&gt;&amp;#160;&lt;/span&gt;&lt;/em&gt;&lt;/a&gt;&lt;/tpl&gt;'
+        );
+        <b>var</b> c = <b>this</b>.colors;
+        <b>for</b>(var i = 0, len = c.length; i &lt; len; i++){
+            t.add([c[i]]);
+        }
+        <b>var</b> el = document.createElement('div');
+        el.className = <b>this</b>.itemCls;
+        t.overwrite(el);
+        container.dom.appendChild(el);
+        <b>this</b>.el = Ext.get(el);
+        <b>this</b>.el.on('click', <b>this</b>.handleClick,  <b>this</b>, {delegate: 'a'});
+    },
+
+    afterRender : <b>function</b>(){
+        <b>if</b>(this.value){
+            <b>var</b> s = <b>this</b>.value;
+            <b>this</b>.value = null;
+            <b>this</b>.select(s);
+        }
+    },
+
+    handleClick : <b>function</b>(e, t){
+        e.preventDefault();
+        <b>if</b>(!<b>this</b>.disabled){
+            <b>var</b> c = t.className.match(/(?:^|\s)color-(.{6})(?:\s|$)/)[1];
+            <b>this</b>.select(c.toUpperCase());
+        }
+    },
+
+    select : <b>function</b>(color){
+        color = color.replace('#', '');
+        <b>if</b>(color != <b>this</b>.value){
+            <b>var</b> el = <b>this</b>.el;
+            <b>if</b>(this.value){
+                el.child('a.color-'+<b>this</b>.value).removeClass('x-color-palette-sel');
+            }
+            el.child('a.color-'+color).addClass('x-color-palette-sel');
+            <b>this</b>.value = color;
+            <b>this</b>.fireEvent('select', <b>this</b>, color);
+        }
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">yui-ext - Copyright &copy; 2006 Jack Slocum.  |
+    Yahoo! UI - Copyright &copy; 2006 Yahoo! Inc.<br />All rights reserved.</div>
+    </body></html>

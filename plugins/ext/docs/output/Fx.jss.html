@@ -1,0 +1,585 @@
+<html><head><title>Fx.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>Fx.js</h1><pre class="highlighted"><code>Ext.enableFx = true;
+
+Ext.apply(Ext.Element.prototype, {
+    slideIn : <b>function</b>(anchor, o){
+        <b>var</b> el = <b>this</b>.getFxEl();
+        o = o || {};
+
+        el.queueFx(o, <b>function</b>(){
+
+            anchor = anchor || 'tl';
+
+            <i>// fix display to visibility</i>
+            <b>this</b>.fixDisplay();
+
+            <i>// restore values after effect</i>
+            <b>var</b> r = <b>this</b>.getFxRestore();
+
+            <b>var</b> b = <b>this</b>.getBox();
+            <i>// fixed size <b>for</b> slide</i>
+            <b>this</b>.setSize(b);
+
+            <i>// wrap <b>if</b> needed</i>
+            <b>var</b> wrap = <b>this</b>.fxWrap(r.pos, o, 'hidden');
+
+            <b>var</b> st = <b>this</b>.dom.style;
+            st.visibility = 'visible';
+            st.position = 'absolute';
+
+            <i>// clear out temp styles after slide and unwrap</i>
+            <b>var</b> after = <b>function</b>(){
+                el.fxUnwrap(wrap, r.pos, o);
+                st.width = r.width;
+                st.height = r.height;
+                el.afterFx(o);
+            };
+            <i>// time to calc the positions</i>
+            <b>var</b> a, pt = {to: [b.x, b.y]}, bw = {to: b.width}, bh = {to: b.height};
+
+            <b>switch</b>(anchor.toLowerCase()){
+                <b>case</b> 't':
+                    wrap.setSize(b.width, 0);
+                    st.left = st.bottom = '0';
+                    a = {height: bh};
+                <b>break</b>;
+                <b>case</b> 'l':
+                    wrap.setSize(0, b.height);
+                    st.right = st.top = '0';
+                    a = {width: bw};
+                <b>break</b>;
+                <b>case</b> 'r':
+                    wrap.setSize(0, b.height);
+                    wrap.setX(b.right);
+                    st.left = st.top = '0';
+                    a = {width: bw, points: pt};
+                <b>break</b>;
+                <b>case</b> 'b':
+                    wrap.setSize(b.width, 0);
+                    wrap.setY(b.bottom);
+                    st.left = st.top = '0';
+                    a = {height: bh, points: pt};
+                <b>break</b>;
+                <b>case</b> 'tl':
+                    wrap.setSize(0, 0);
+                    st.right = st.bottom = '0';
+                    a = {width: bw, height: bh};
+                <b>break</b>;
+                <b>case</b> 'bl':
+                    wrap.setSize(0, 0);
+                    wrap.setY(b.y+b.height);
+                    st.right = st.top = '0';
+                    a = {width: bw, height: bh, points: pt};
+                <b>break</b>;
+                <b>case</b> 'br':
+                    wrap.setSize(0, 0);
+                    wrap.setXY([b.right, b.bottom]);
+                    st.left = st.top = '0';
+                    a = {width: bw, height: bh, points: pt};
+                <b>break</b>;
+                <b>case</b> 'tr':
+                    wrap.setSize(0, 0);
+                    wrap.setX(b.x+b.width);
+                    st.left = st.bottom = '0';
+                    a = {width: bw, height: bh, points: pt};
+                <b>break</b>;
+            }
+            <b>this</b>.dom.style.visibility = 'visible';
+            wrap.show();
+
+            arguments.callee.anim = wrap.fxanim(a,
+                o,
+                YAHOO.util.Motion,
+                .5,
+                YAHOO.util.Easing.easeOut, after);
+        });
+        <b>return</b> this;
+    },
+
+    slideOut : <b>function</b>(anchor, o){
+        <b>var</b> el = <b>this</b>.getFxEl();
+        o = o || {};
+
+        el.queueFx(o, <b>function</b>(){
+
+            anchor = anchor || 'tl';
+
+            <i>// restore values after effect</i>
+            <b>var</b> r = <b>this</b>.getFxRestore();
+
+            <b>var</b> b = <b>this</b>.getBox();
+            <i>// fixed size <b>for</b> slide</i>
+            <b>this</b>.setSize(b);
+
+            <i>// wrap <b>if</b> needed</i>
+            <b>var</b> wrap = <b>this</b>.fxWrap(r.pos, o, 'visible');
+
+            <b>var</b> st = <b>this</b>.dom.style;
+            st.visibility = 'visible';
+            st.position = 'absolute';
+
+            wrap.setSize(b);
+
+            <b>var</b> after = <b>function</b>(){
+                el.hide();
+
+                el.fxUnwrap(wrap, r.pos, o);
+
+                st.width = r.width;
+                st.height = r.height;
+
+                el.afterFx(o);
+            };
+
+            <b>var</b> a, zero = {to: 0};
+            <b>switch</b>(anchor.toLowerCase()){
+                <b>case</b> 't':
+                    st.left = st.bottom = '0';
+                    a = {height: zero};
+                <b>break</b>;
+                <b>case</b> 'l':
+                    st.right = st.top = '0';
+                    a = {width: zero};
+                <b>break</b>;
+                <b>case</b> 'r':
+                    st.left = st.top = '0';
+                    a = {width: zero, points: {to:[b.right, b.y]}};
+                <b>break</b>;
+                <b>case</b> 'b':
+                    st.left = st.top = '0';
+                    a = {height: zero, points: {to:[b.x, b.bottom]}};
+                <b>break</b>;
+                <b>case</b> 'tl':
+                    st.right = st.bottom = '0';
+                    a = {width: zero, height: zero};
+                <b>break</b>;
+                <b>case</b> 'bl':
+                    st.right = st.top = '0';
+                    a = {width: zero, height: zero, points: {to:[b.x, b.bottom]}};
+                <b>break</b>;
+                <b>case</b> 'br':
+                    st.left = st.top = '0';
+                    a = {width: zero, height: zero, points: {to:[b.x+b.width, b.bottom]}};
+                <b>break</b>;
+                <b>case</b> 'tr':
+                    st.left = st.bottom = '0';
+                    a = {width: zero, height: zero, points: {to:[b.right, b.y]}};
+                <b>break</b>;
+            }
+
+            arguments.callee.anim = wrap.fxanim(a,
+                o,
+                YAHOO.util.Motion,
+                .5,
+                YAHOO.util.Easing.easeOut, after);
+        });
+        <b>return</b> this;
+    },
+
+    puff : <b>function</b>(o){
+        <b>var</b> el = <b>this</b>.getFxEl();
+        o = o || {};
+
+        el.queueFx(o, <b>function</b>(){
+            <b>this</b>.clearOpacity();
+            <b>this</b>.show();
+
+            <i>// restore values after effect</i>
+            <b>var</b> r = <b>this</b>.getFxRestore();
+            <b>var</b> st = <b>this</b>.dom.style;
+
+            <b>var</b> after = <b>function</b>(){
+                el.hide();
+
+                el.clearOpacity();
+
+                el.setPositioning(r.pos);
+                st.width = r.width;
+                st.height = r.height;
+
+                el.afterFx(o);
+            };
+
+            <b>var</b> width = <b>this</b>.getWidth();
+            <b>var</b> height = <b>this</b>.getHeight();
+
+            arguments.callee.anim = <b>this</b>.fxanim({
+                    width : {to: <b>this</b>.adjustWidth(width * 2)},
+                    height : {to: <b>this</b>.adjustHeight(height * 2)},
+                    points : {by: [-(width * .5), -(height * .5)]},
+                    opacity : {to: 0},
+                    fontSize: {to:200, unit: '%'}
+                },
+                o,
+                YAHOO.util.Motion,
+                .5,
+                YAHOO.util.Easing.easeOut, after);
+        });
+        <b>return</b> this;
+    },
+
+    switchOff : <b>function</b>(o){
+        <b>var</b> el = <b>this</b>.getFxEl();
+        o = o || {};
+
+        el.queueFx(o, <b>function</b>(){
+            <b>this</b>.clearOpacity();
+            <b>this</b>.clip();
+
+            <i>// restore values after effect</i>
+            <b>var</b> r = <b>this</b>.getFxRestore();
+            <b>var</b> st = <b>this</b>.dom.style;
+
+            <b>var</b> after = <b>function</b>(){
+                el.hide();
+
+                el.clearOpacity();
+                el.setPositioning(r.pos);
+                st.width = r.width;
+                st.height = r.height;
+
+                el.afterFx(o);
+            };
+
+            <b>this</b>.fxanim({opacity:{to:0.3}}, {duration: .1, callback: <b>function</b>(){
+                <b>this</b>.clearOpacity();
+                (<b>function</b>(){
+                    <b>this</b>.fxanim({
+                        height:{to:1},
+                        points:{by:[0, <b>this</b>.getHeight() * .5]}
+                    }, o, YAHOO.util.Motion, 0.3, YAHOO.util.Easing.easeIn, after);
+                }).defer(100, <b>this</b>);
+            }, scope: <b>this</b>});
+        });
+        <b>return</b> this;
+    },
+
+    <i>/**
+     * Highlights the Element by setting a color (defaults to background-color) and then
+     * fading back to the original color. If no original color is available, you should
+     * provide an &quot;endColor&quot; option which will be cleared after the animation. The available options
+     * <b>for</b> the &quot;options&quot; parameter are listed below (<b>with</b> their <b>default</b> values): &lt;br/&gt;
+&lt;pre&gt;&lt;code&gt;
+el.highlight('ff0000', {&lt;br/&gt;
+    attr: 'background-color',&lt;br/&gt;
+    endColor: (current color) or 'ffffff'&lt;br/&gt;
+    callback: yourFunction,&lt;br/&gt;
+    scope: yourObject,&lt;br/&gt;
+    easing: YAHOO.util.Easing.easeNone, &lt;br/&gt;
+    duration: .75&lt;br/&gt;
+});
+&lt;/code&gt;&lt;/pre&gt;
+     * @param {String} color (optional) The highlight color. Should be a 6 char hex color (no #). (defaults to ffff9c)
+     * @param {Object} options (optional) Object literal <b>with</b> any of the options listed above
+     */</i>
+    highlight : <b>function</b>(color, o){
+        <b>var</b> el = <b>this</b>.getFxEl();
+        o = o || {};
+
+        el.queueFx(o, <b>function</b>(){
+            color = color || 'ffff9c';
+            attr = o.attr || 'backgroundColor';
+
+            <b>this</b>.clearOpacity();
+            <b>this</b>.show();
+
+            <b>var</b> origColor = <b>this</b>.getColor(attr);
+            endColor = (o.endColor || origColor) || 'ffffff';
+
+            <b>var</b> after = <b>function</b>(){
+                el.dom.style[attr] = origColor || '';
+                el.afterFx(o);
+            };
+
+            <b>var</b> a = {};
+            a[attr] = {from: color, to: endColor};
+
+            arguments.callee.anim = <b>this</b>.fxanim(a,
+                o,
+                YAHOO.util.ColorAnim,
+                1,
+                YAHOO.util.Easing.easeIn, after);
+        });
+        <b>return</b> this;
+    },
+
+    <i>/**
+    * Show a ripple of exploding, attenuating borders to draw attention to an Element.
+    * @param {&lt;i&gt;Number&lt;i&gt;} color (optional) The color of the border (<b>default</b> to #C3DAF9).
+    * @param {&lt;i&gt;Number&lt;/i&gt;} count (optional) How many ripples. defaults to 1
+    * @param {&lt;i&gt;Float&lt;/i&gt;} options (optional) 
+    */</i>
+    frame : <b>function</b>(color, count, o){
+        <b>var</b> el = <b>this</b>.getFxEl();
+        o = o || {};
+
+        el.queueFx(o, <b>function</b>(){
+            color = color || &quot;#C3DAF9&quot;;
+            <b>if</b>(color.length == 6){
+                color = '#' + color;
+            }
+            count = count || 1;
+            duration = o.duration || 1;
+            <b>this</b>.show();
+
+            <b>var</b> b = <b>this</b>.getBox();
+            <b>var</b> animFn = <b>function</b>(){
+                <b>var</b> proxy = <b>this</b>.createProxy({
+                     tag:&quot;div&quot;,
+                     style:{
+                        visbility:&quot;hidden&quot;,
+                        position:&quot;absolute&quot;,
+                        'z-index':&quot;35000&quot;, <i>// yee haw</i>
+                        border:&quot;0px solid &quot; + color
+                     }
+                  });
+                <b>var</b> scale = Ext.isBorderBox ? 2 : 1;
+                proxy.animate({
+                    top:{from:b.y, to:b.y - 20},
+                    left:{from:b.x, to:b.x - 20},
+                    borderWidth:{from:0, to:10},
+                    opacity:{from:1, to:0},
+                    height:{from:b.height, to:(b.height + (20*scale))},
+                    width:{from:b.width, to:(b.width + (20*scale))}
+                }, duration, <b>function</b>(){
+                    proxy.remove();
+                });
+                <b>if</b>(--count &gt; 0){
+                     animFn.defer((duration/2)*1000, <b>this</b>);
+                }<b>else</b>{
+                    el.afterFx(o);
+                }
+            };
+            animFn.call(<b>this</b>);
+        });
+        <b>return</b> this;
+    },
+
+    pause : <b>function</b>(seconds){
+        <b>var</b> el = <b>this</b>.getFxEl();
+        <b>var</b> o = {};
+
+        el.queueFx(o, <b>function</b>(){
+            setTimeout(<b>function</b>(){
+                el.afterFx(o);
+            }, seconds * 1000);
+        });
+        <b>return</b> this;
+    },
+
+    fadeIn : <b>function</b>(o){
+        <b>this</b>.show(o || true);
+        <b>return</b> this;
+    },
+
+    fadeOut : <b>function</b>(o){
+        <b>this</b>.hide(o || true);
+        <b>return</b> this;
+    },
+
+    ghost : <b>function</b>(anchor, o){
+        <b>var</b> el = <b>this</b>.getFxEl();
+        o = o || {};
+
+        el.queueFx(o, <b>function</b>(){
+            anchor = anchor || 'b';
+
+            <i>// restore values after effect</i>
+            <b>var</b> r = <b>this</b>.getFxRestore();
+            <b>var</b> w = <b>this</b>.getWidth(),
+                h = <b>this</b>.getHeight();
+
+            <b>var</b> st = <b>this</b>.dom.style;
+
+            <b>var</b> after = <b>function</b>(){
+                el.hide();
+
+                el.clearOpacity();
+                el.setPositioning(r.pos);
+                st.width = r.width;
+                st.height = r.height;
+
+                el.afterFx(o);
+            };
+
+            <b>var</b> a = {opacity: {to: 0}, points: {}}, pt = a.points;
+            <b>switch</b>(anchor.toLowerCase()){
+                <b>case</b> 't':
+                    pt.by = [0, -h];
+                <b>break</b>;
+                <b>case</b> 'l':
+                    pt.by = [-w, 0];
+                <b>break</b>;
+                <b>case</b> 'r':
+                    pt.by = [w, 0];
+                <b>break</b>;
+                <b>case</b> 'b':
+                    pt.by = [0, h];
+                <b>break</b>;
+                <b>case</b> 'tl':
+                    pt.by = [-w, -h];
+                <b>break</b>;
+                <b>case</b> 'bl':
+                    pt.by = [-w, h];
+                <b>break</b>;
+                <b>case</b> 'br':
+                    pt.by = [w, h];
+                <b>break</b>;
+                <b>case</b> 'tr':
+                    pt.by = [w, -h];
+                <b>break</b>;
+            }
+
+            arguments.callee.anim = <b>this</b>.fxanim(a,
+                o,
+                YAHOO.util.Motion,
+                .5,
+                YAHOO.util.Easing.easeOut, after);
+        });
+        <b>return</b> this;
+    },
+
+    syncFx : <b>function</b>(){
+        <b>this</b>.fxDefaults = Ext.apply(<b>this</b>.fxDefaults || {}, {
+            block : false,
+            concurrent : true,
+            stopFx : false
+        });
+    },
+
+    sequenceFx : <b>function</b>(){
+        <b>this</b>.fxDefaults = Ext.apply(<b>this</b>.fxDefaults || {}, {
+            block : false,
+            concurrent : false,
+            stopFx : false
+        });
+    },
+
+    nextFx : <b>function</b>(){
+        <b>var</b> ef = <b>this</b>.fxQueue[0];
+        <b>if</b>(ef){
+            ef.call(<b>this</b>);
+        }
+    },
+
+    hasActiveFx : <b>function</b>(){
+        <b>return</b> this.fxQueue &amp;&amp; <b>this</b>.fxQueue[0];
+    },
+
+    stopFx : <b>function</b>(){
+        <b>if</b>(this.hasActiveFx()){
+            <b>var</b> cur = <b>this</b>.fxQueue[0];
+            <b>if</b>(cur &amp;&amp; cur.anim &amp;&amp; cur.anim.isAnimated()){
+                <b>this</b>.fxQueue = [cur]; <i>// clear out others</i>
+                cur.anim.stop(true);
+            }
+        }
+        <b>return</b> this;
+    },
+
+    beforeFx : <b>function</b>(o){
+        <b>if</b>(this.hasActiveFx() &amp;&amp; !o.concurrent){
+           <b>if</b>(o.stopFx){
+               <b>this</b>.stopFx();
+               <b>return</b> true;
+           }
+           <b>return</b> false;
+        }
+        <b>return</b> true;
+    },
+
+    hasFxBlock : <b>function</b>(){
+        <b>var</b> q = <b>this</b>.fxQueue;
+        <b>return</b> q &amp;&amp; q[0] &amp;&amp; q[0].block;
+    },
+
+    queueFx : <b>function</b>(o, fn){
+        <b>if</b>(!<b>this</b>.fxQueue){
+            <b>this</b>.fxQueue = [];
+        }
+        <b>if</b>(!<b>this</b>.hasFxBlock()){
+            Ext.applyIf(o, <b>this</b>.fxDefaults);
+            <b>var</b> run = <b>this</b>.beforeFx(o);
+            fn.block = o.block;
+            <b>this</b>.fxQueue.push(fn);
+            <b>if</b>(run){
+                <b>this</b>.nextFx();
+            }
+        }
+    },
+
+    fxWrap : <b>function</b>(pos, o, vis){
+        <b>var</b> wrap;
+        <b>if</b>(!o.wrap || !(wrap = Ext.get(o.wrap))){
+            <b>var</b> div = document.createElement('div');
+            div.style.visibility = vis;
+            wrap = Ext.get(<b>this</b>.dom.parentNode.insertBefore(div, <b>this</b>.dom));
+            wrap.setPositioning(pos);
+            <b>if</b>(wrap.getStyle('position') == 'static'){
+                wrap.position('relative');
+            }
+            <b>this</b>.clearPositioning();
+            wrap.clip();
+            wrap.dom.appendChild(<b>this</b>.dom);
+        }
+        <b>return</b> wrap;
+    },
+
+    fxUnwrap : <b>function</b>(wrap, pos, o){
+        <b>this</b>.clearPositioning();
+        <b>this</b>.setPositioning(pos);
+        <b>if</b>(!o.wrap){
+            wrap.dom.parentNode.insertBefore(<b>this</b>.dom, wrap.dom);
+            wrap.remove();
+        }
+    },
+
+    getFxRestore : <b>function</b>(){
+       <b>return</b> {pos: <b>this</b>.getPositioning(), width: <b>this</b>.getStyle('width'), height : <b>this</b>.getStyle('height')};
+    },
+
+    afterFx : <b>function</b>(o){
+        <b>this</b>.fxQueue.shift();
+        <b>if</b>(o.remove){
+            <b>this</b>.remove();
+        }
+        Ext.callback(o.callback, o.scope, [<b>this</b>]);
+        <b>this</b>.nextFx();
+    },
+
+    getFxEl : <b>function</b>(){ <i>// support <b>for</b> composite element fx</i>
+        <b>if</b>(this.shadow){  <i>// layer element?</i>
+            <b>return</b> this;
+        }
+        <b>return</b> Ext.get(<b>this</b>.dom);
+    },
+
+    fxanim : <b>function</b>(args, opt, animType, defaultDur, defaultEase, cb){
+        <b>var</b> ES = YAHOO.util.Easing; opt = opt || {};
+        <b>if</b>(typeof opt.easing == 'string'){
+            opt.easing = ES[opt.easing];
+        }
+        <b>var</b> anim = opt.anim = <b>new</b> (animType || YAHOO.util.Anim)(
+                <b>this</b>.dom, args,
+                (opt.duration || defaultDur) || .35,
+                (opt.easing || defaultEase) || ES.easeOut
+        );
+        anim.animateX(<b>function</b>(){
+            Ext.callback(cb, <b>this</b>);
+        }, <b>this</b>);
+        <b>return</b> anim;
+    },
+
+    anim : <b>function</b>(a, o, t, d, e, cb){
+        <b>var</b> el = <b>this</b>.getFxEl();
+        el.queueFx(o, <b>function</b>(){
+            <b>var</b> c = <b>function</b>(){
+                Ext.callback(cb, <b>this</b>, [<b>this</b>]);
+                el.afterFx(o);
+            };
+            <b>this</b>.fxanim(a, o, t, d, e, c);
+        });
+        <b>return</b> this;
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">yui-ext - Copyright &copy; 2006 Jack Slocum.  |
+    Yahoo! UI - Copyright &copy; 2006 Yahoo! Inc.<br />All rights reserved.</div>
+    </body></html>

@@ -1,0 +1,18 @@
+/*
+ * Ext - JS Library 1.0 Alpha 2
+ * Copyright(c) 2006-2007, Jack Slocum.
+ */
+
+#lib-bar {
+    position:absolute;
+    top:0;
+    right:0;
+   
+    z-index:30000;
+}
+#lib-bar-inner {
+    padding:4px;
+}
+#lib-bar * {
+    font-size:11px;
+}

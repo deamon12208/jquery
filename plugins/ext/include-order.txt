@@ -1,0 +1,11 @@
+Your include order should be:
+
+yui-utilities.js or jquery.js
+ext-yui-adapter.js or ext-jquery-adapter.js
+ext-all.js (or core)
+
+and optionally
+
+ext-back-compat.js
+
+See the examples folders for more examples.

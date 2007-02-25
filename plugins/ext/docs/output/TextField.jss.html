@@ -1,0 +1,62 @@
+<html><head><title>TextField.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>TextField.js</h1><pre class="highlighted"><code>Ext.form.TextField = <b>function</b>(config){
+    Ext.form.TextField.superclass.constructor.call(<b>this</b>, config);
+};
+
+Ext.extend(Ext.form.TextField, Ext.form.Field,  {
+    initEvents : <b>function</b>(){
+        Ext.form.TextField.superclass.initEvents.call(<b>this</b>);
+        <b>this</b>.el.on(<b>this</b>.validationEvent, <b>this</b>.validate, <b>this</b>, {buffer: <b>this</b>.validationDelay});
+        <b>if</b>(this.selectOnFocus){
+            <b>this</b>.el.on('focus', <b>function</b>(){
+                try{
+                    <b>this</b>.dom.select();
+                }catch(e){}
+            });
+        }
+    },
+
+    validateValue : <b>function</b>(value){
+        <b>if</b>(value.length &lt; 1){ <i>// <b>if</b> it's blank</i>
+             <b>if</b>(this.allowBlank){
+                 <b>this</b>.clearInvalid();
+                 <b>return</b> true;
+             }<b>else</b>{
+                 <b>this</b>.markInvalid(<b>this</b>.blankText);
+                 <b>return</b> false;
+             }
+        }
+        <b>if</b>(value.length &lt; <b>this</b>.minLength){
+            <b>this</b>.markInvalid(String.format(<b>this</b>.minLengthText, <b>this</b>.minLength));
+            <b>return</b> false;
+        }
+        <b>if</b>(value.length &gt; <b>this</b>.maxLength){
+            <b>this</b>.markInvalid(String.format(<b>this</b>.maxLengthText, <b>this</b>.maxLength));
+            <b>return</b> false;
+        }
+        <b>if</b>(typeof <b>this</b>.validator == '<b>function</b>'){
+            <b>var</b> msg = <b>this</b>.validator(value);
+            <b>if</b>(msg !== true){
+                <b>this</b>.markInvalid(msg);
+                <b>return</b> false;
+            }
+        }
+        <b>if</b>(this.regex &amp;&amp; !<b>this</b>.regex.test(value)){
+            <b>this</b>.markInvalid(<b>this</b>.regexText);
+            <b>return</b> false;
+        }
+        <b>return</b> true;
+    },
+    
+    allowBlank : true,
+    minLength : 0,
+    maxLength : Number.MAX_VALUE,
+    minLengthText : 'The minimum length <b>for</b> this field is {0}',
+    maxLengthText : 'The maximum length <b>for</b> this field is {0}',
+    selectOnFocus : false,
+    blankText : 'This field is required',
+    validator : null,
+    regex : null,
+    regexText : ''
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">yui-ext - Copyright &copy; 2006 Jack Slocum.  |
+    Yahoo! UI - Copyright &copy; 2006 Yahoo! Inc.<br />All rights reserved.</div>
+    </body></html>

@@ -1,0 +1,313 @@
+<html><head><title>QuickTips.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>QuickTips.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.QuickTips
+ * @singleton
+ */</i>
+Ext.QuickTips = <b>function</b>(){
+    <b>var</b> el, tipBody, tipTitle, tm, cfg, close, tagEls = {}, reader, esc, anim, removeCls = null;
+    <b>var</b> ce, bd, xy;
+    <b>var</b> visible = false, disabled = true, inited = false;
+    <b>var</b> showProc = 1, hideProc = 1, dismissProc = 1, locks = [];
+    <b>var</b> E = YAHOO.util.Event, dd;
+    
+    <b>var</b> onOver = <b>function</b>(e){
+        <b>if</b>(disabled){
+            <b>return</b>;
+        }
+        <b>var</b> t = e.getTarget();
+        <b>if</b>(!t){
+            <b>return</b>;
+        }
+        <b>if</b>(ce &amp;&amp; t == ce.el){
+            clearTimeout(hideProc);
+            <b>return</b>;
+        }
+        <b>if</b>(t &amp;&amp; tagEls[t.id]){
+            tagEls[t.id].el = t;
+            showProc = show.defer(tm.showDelay, tm, [tagEls[t.id]]);
+            <b>return</b>;
+        }
+        <b>var</b> ttp;
+        <b>if</b>(tm.interceptTitles &amp;&amp; t.title){
+            ttp = t.title;
+            t.qtip = ttp;
+            t.removeAttribute('title');
+            e.preventDefault();
+        }<b>else</b>{
+            ttp = t.qtip || reader.getAttribute(t, cfg.attribute);
+        }
+        <b>if</b>(ttp){
+            <i>//xy = e.getXY();</i>
+            <i>//xy[0] += 12; xy[1] += 20;</i>
+            showProc = show.defer(tm.showDelay, tm, [{
+                el: t, 
+                text: ttp, 
+                width: reader.getAttribute(t, cfg.width),
+                autoHide: reader.getAttribute(t, cfg.hide) != 'user',
+                title: reader.getAttribute(t, cfg.title),
+           	    cls: reader.getAttribute(t, cfg.cls)
+            }]);
+        }
+    };
+    
+    <b>var</b> onOut = <b>function</b>(e){
+        clearTimeout(showProc);
+        <b>var</b> t = e.getTarget();
+        <b>if</b>(t &amp;&amp; ce &amp;&amp; ce.el == t &amp;&amp; (tm.autoHide &amp;&amp; ce.autoHide !== false)){
+            hideProc = setTimeout(hide, tm.hideDelay);
+        }
+    };
+    
+    <b>var</b> onMove = <b>function</b>(e){
+        <b>if</b>(disabled){
+            <b>return</b>;
+        }
+        xy = e.getXY();
+        xy[1] += 18;
+        <b>if</b>(tm.trackMouse &amp;&amp; ce){
+            el.setXY(xy);
+        }
+    };
+    
+    <b>var</b> onDown = <b>function</b>(e){
+        clearTimeout(showProc);
+        clearTimeout(hideProc);
+        <b>if</b>(!e.within(el)){
+            <b>if</b>(tm.hideOnClick &amp;&amp; ce &amp;&amp; ce.autoHide !== false){
+                hide();
+                tm.disable();
+            }
+        }
+    };
+    
+    <b>var</b> onUp = <b>function</b>(e){
+        tm.enable();
+    };
+    
+    <b>var</b> show = <b>function</b>(o){
+        <b>if</b>(disabled){
+            <b>return</b>;
+        }
+        clearTimeout(dismissProc);
+        stopAnim();
+        ce = o;
+        <b>if</b>(removeCls){ <i>// <b>in</b> case manually hidden</i>
+            el.removeClass(removeCls);
+            removeCls = null;
+        }
+        <b>if</b>(ce.cls){
+            el.addClass(ce.cls);
+            removeCls = ce.cls;
+        }
+        <b>if</b>(ce.title){
+            tipTitleText.update(ce.title);
+            tipTitle.show();
+        }<b>else</b>{
+            tipTitle.hide();
+        }
+        tipBody.update(o.text);
+        <b>if</b>(!ce.width){
+            <b>if</b>(tipBody.dom.style.width){
+               tipBody.dom.style.width  = '';
+            }
+            <b>if</b>(tipBody.dom.offsetWidth &gt; tm.maxWidth){
+                tipBody.setWidth(tm.maxWidth);
+            }
+            <b>if</b>(tipBody.dom.offsetWidth &lt; tm.minWidth){
+                tipBody.setWidth(tm.minWidth);
+            }
+        }<b>else</b>{
+            tipBody.setWidth(ce.width);
+        }
+        <b>if</b>(!ce.autoHide){
+            close.setDisplayed(true);
+            <b>if</b>(dd){
+                dd.unlock();
+            }
+        }<b>else</b>{
+            close.setDisplayed(false);
+            <b>if</b>(dd){
+                dd.lock();
+            }
+        }
+        <b>if</b>(xy){
+            el.setXY(xy);
+        }
+        <b>if</b>(tm.animate){
+            anim.attributes = {opacity:{to:1}};
+            el.setOpacity(.1);
+            el.setStyle('visibility', 'visible');
+            anim.animateX(afterShow);
+        }<b>else</b>{
+            afterShow();
+        }
+    };
+    
+    <b>var</b> afterShow = <b>function</b>(){
+        <b>if</b>(ce){
+            el.show();
+            esc.enable();
+            <b>if</b>(tm.autoDismiss &amp;&amp; ce.autoHide !== false){
+                dismissProc = setTimeout(hide, tm.autoDismissDelay);
+            }
+        }
+    };
+    
+    <b>var</b> hide = <b>function</b>(noanim){
+        clearTimeout(dismissProc);
+        clearTimeout(hideProc);
+        ce = null;
+        <b>if</b>(el.isVisible()){
+            esc.disable();
+            stopAnim();
+            <b>if</b>(noanim !== true &amp;&amp; tm.animate){
+                anim.attributes = {opacity:{to:.1}};
+                el.beforeAction();
+                anim.animateX(afterHide);
+            }<b>else</b>{
+                afterHide();
+            } 
+        }
+    };
+    
+    <b>var</b> afterHide = <b>function</b>(){
+        el.hide();
+        <b>if</b>(removeCls){
+            el.removeClass(removeCls);
+            removeCls = null;
+        }
+    };
+    
+    <b>var</b> stopAnim = <b>function</b>(){
+        <b>if</b>(anim &amp;&amp; anim.isAnimated()){
+            anim.stop();
+        }
+    };
+    
+    <b>return</b> {
+       init : <b>function</b>(){
+          tm = Ext.QuickTips;
+          cfg = tm.tagConfig;
+          reader = <b>new</b> Ext.CustomTagReader(cfg.namespace);
+          <b>if</b>(!inited){
+              el = <b>new</b> Ext.Layer({cls:'x-tip', shadow:'sides', useDisplay: false});
+              el.update('&lt;div class=&quot;x-tip-hd-left&quot;&gt;&lt;div class=&quot;x-tip-hd-right&quot;&gt;&lt;div class=&quot;x-tip-hd&quot;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;');
+              tipTitle = Ext.get(el.dom.firstChild);
+              tipTitleText = Ext.get(el.dom.firstChild.firstChild.firstChild);
+              tipTitle.enableDisplayMode('block');
+              tipBody = el.createChild({tag:'div', cls:'x-tip-bd'});
+              close = el.createChild({tag:'div', cls:'x-tip-close'});
+              close.on('click', hide);
+              d = Ext.get(document);
+              d.on('mousedown', onDown);
+              d.on('mouseup', onUp);
+              d.on('mouseover', onOver);
+              d.on('mouseout', onOut);
+              d.on('mousemove', onMove);
+              esc = d.addKeyListener(27, hide);
+              esc.disable();
+              <b>if</b>(tm.animate){
+                  anim = <b>new</b> YAHOO.util.Anim(el.dom, {}, .1);
+              }
+              <b>if</b>(YAHOO.util.DD){
+                  dd = el.initDD('<b>default</b>', null, {
+                      onDrag : <b>function</b>(){
+                          el.sync();  
+                      }
+                  });
+                  dd.setHandleElId(tipTitleText.id);
+                  dd.lock();
+              }
+              inited = true;
+          }
+          <i>// scan is disabled</i>
+          <i>//<b>this</b>.scan(document.body);</i>
+          <b>this</b>.enable(); 
+       },
+       
+       tips : <b>function</b>(config){
+           <b>var</b> cs = config instanceof Array ? config : arguments;
+           <b>for</b>(var i = 0, len = cs.length; i &lt; len; i++) {
+               <b>var</b> c = cs[i];
+               <b>var</b> target = c.target;
+               <b>if</b>(target){
+                   <b>if</b>(target instanceof Array){
+                       <b>for</b>(var j = 0, jlen = target.length; j &lt; jlen; j++){
+                           tagEls[target[j]] = c;
+                       }
+                   }<b>else</b>{
+                       tagEls[target] = c;
+                   }               	   
+               }
+           }
+       },
+       
+       enable : <b>function</b>(){
+           <b>if</b>(inited){
+               locks.pop();
+               <b>if</b>(locks.length &lt; 1){
+                   disabled = false;
+               }
+           }
+       },
+       
+       disable : <b>function</b>(){
+          disabled = true;
+          clearTimeout(showProc);
+          clearTimeout(hideProc);
+          clearTimeout(dismissProc);
+          <b>if</b>(ce){
+              hide(true);
+          }
+          locks.push(1);
+       },
+       
+       <i>/*scan : <b>function</b>(toScan){
+           toScan = toScan.dom ? toScan.dom : YAHOO.util.Dom.get(toScan);
+           <b>var</b> found = [];
+           reader.eachElement(cfg.tag, toScan, <b>function</b>(el){
+               <b>var</b> t = reader.getAttribute(el, cfg.target);
+           	   <b>if</b>(t){
+           	       found.push({
+           	          target: t.indexOf(',') != -1 ? t.split(',') : t, 
+                      text: el.innerHTML,
+                      autoHide: reader.getAttribute(el, cfg.hide) != 'user',
+                      width: reader.getAttribute(el, cfg.width),
+           	          title: reader.getAttribute(el, cfg.title),
+           	          cls: reader.getAttribute(el, cfg.cls)
+           	       });
+           	   }
+           	   el.parentNode.removeChild(el);
+           });
+           <b>this</b>.tips(found);
+       },*/</i>
+       
+       tagConfig : { 
+           namespace : 'ext',
+           tag : 'qtip',
+           attribute : 'qtip',
+           width : 'width',
+           target : 'target',
+           title : 'qtitle',
+           hide : 'hide',
+           cls : 'qclass'
+       },
+       
+       minWidth : 75,
+       maxWidth : 300,
+       interceptTitles : true,
+       trackMouse : false,
+       hideOnClick : true,
+       showDelay : 500,
+       hideDelay : 200,
+       autoHide : true,
+       autoDismiss : true,
+       autoDismissDelay : 5000,
+       <i>/**
+        * True to turn on fade animation. Defaults to false (ClearType/scrollbar flicker issues <b>in</b> IE7).
+        * @type Boolean
+        */</i>
+       animate : false 
+   };
+}();</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">yui-ext - Copyright &copy; 2006 Jack Slocum.  |
+    Yahoo! UI - Copyright &copy; 2006 Yahoo! Inc.<br />All rights reserved.</div>
+    </body></html>

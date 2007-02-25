@@ -1,0 +1,291 @@
+<html><head><title>SplitLayoutRegion.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>SplitLayoutRegion.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.SplitLayoutRegion
+ * @extends Ext.LayoutRegion
+ * Adds a splitbar and other (private) useful functionality to a LayoutRegion
+ */</i>
+Ext.SplitLayoutRegion = <b>function</b>(mgr, config, pos, cursor){
+    <b>this</b>.cursor = cursor;
+    Ext.SplitLayoutRegion.superclass.constructor.call(<b>this</b>, mgr, config, pos);
+    <b>if</b>(config.split){
+        <b>this</b>.hide();
+    }
+};
+
+Ext.extend(Ext.SplitLayoutRegion, Ext.LayoutRegion, {
+    splitTip : 'Drag to resize. Double click to hide.',
+    applyConfig : <b>function</b>(config){
+        Ext.SplitLayoutRegion.superclass.applyConfig.call(<b>this</b>, config);
+        <b>if</b>(config.split){
+            <b>if</b>(!<b>this</b>.split){
+                <b>var</b> splitEl = Ext.DomHelper.append(<b>this</b>.mgr.el.dom, 
+                        {tag: 'div', id: <b>this</b>.el.id + '-split', cls: 'x-layout-split x-layout-split-'+<b>this</b>.position, html: '&amp;#160;'});
+                <i>/** The SplitBar <b>for</b> this region @type Ext.SplitBar */</i>
+                <b>this</b>.split = <b>new</b> Ext.SplitBar(splitEl, <b>this</b>.el);
+                <b>this</b>.split.on('moved', <b>this</b>.onSplitMove, <b>this</b>);
+                <b>this</b>.split.useShim = config.useShim === true;
+                YAHOO.util.Dom.setStyle([<b>this</b>.split.el.dom, <b>this</b>.split.proxy], 'cursor', <b>this</b>.cursor);
+                <b>this</b>.split.getMaximumSize = <b>this</b>.getMaxSize.createDelegate(<b>this</b>);
+                <b>this</b>.split.el.dom.title = <b>this</b>.splitTip;
+                <b>if</b>(config.collapsible !== false){
+                    <b>this</b>.split.el.on('dblclick', <b>this</b>.collapse,  <b>this</b>);
+                }
+            }
+            <b>if</b>(typeof config.minSize != 'undefined'){
+                <b>this</b>.split.minSize = config.minSize;
+            }
+            <b>if</b>(typeof config.maxSize != 'undefined'){
+                <b>this</b>.split.maxSize = config.maxSize;
+            }
+        }
+    },
+    
+    getMaxSize : <b>function</b>(){
+         <b>var</b> cmax = <b>this</b>.config.maxSize || 10000;
+         <b>var</b> center = <b>this</b>.mgr.getRegion('center');
+         <b>return</b> Math.min(cmax, (<b>this</b>.el.getWidth()+center.getEl().getWidth())-center.getMinWidth());
+    },
+    
+    onSplitMove : <b>function</b>(split, newSize){
+        <b>this</b>.fireEvent('resized', <b>this</b>, newSize);
+    },
+    
+    <i>/** 
+     * Returns the SplitBar <b>for</b> this region.
+     * @<b>return</b> {Ext.SplitBar}
+     */</i>
+    getSplitBar : <b>function</b>(){
+        <b>return</b> this.split;
+    },
+    
+    hide : <b>function</b>(){
+        <b>if</b>(this.split){
+            <b>this</b>.split.el.setLocation(-2000,-2000);
+            <b>this</b>.split.el.hide();
+        }
+        Ext.SplitLayoutRegion.superclass.hide.call(<b>this</b>);
+    },
+    
+    show : <b>function</b>(){
+        <b>if</b>(this.split){
+            <b>this</b>.split.el.show();
+        }
+        Ext.SplitLayoutRegion.superclass.show.call(<b>this</b>);
+    },
+    
+    beforeSlide: <b>function</b>(){
+        <b>if</b>(Ext.isGecko){<i>// firefox overflow auto bug workaround</i>
+            <b>this</b>.bodyEl.clip();
+            <b>if</b>(this.tabs) <b>this</b>.tabs.bodyEl.clip();
+            <b>if</b>(this.activePanel){
+                <b>this</b>.activePanel.getEl().clip();
+                
+                <b>if</b>(this.activePanel.beforeSlide){
+                    <b>this</b>.activePanel.beforeSlide();
+                }
+            }
+        }
+    },
+    
+    afterSlide : <b>function</b>(){
+        <b>if</b>(Ext.isGecko){<i>// firefox overflow auto bug workaround</i>
+            <b>this</b>.bodyEl.unclip();
+            <b>if</b>(this.tabs) <b>this</b>.tabs.bodyEl.unclip();
+            <b>if</b>(this.activePanel){
+                <b>this</b>.activePanel.getEl().unclip();
+                <b>if</b>(this.activePanel.afterSlide){
+                    <b>this</b>.activePanel.afterSlide();
+                }
+            }
+        }
+    },
+
+    initAutoHide : <b>function</b>(){
+        <b>if</b>(!<b>this</b>.autoHideHd){
+            <b>var</b> st = <b>new</b> Ext.util.DelayedTask(<b>this</b>.slideIn, <b>this</b>);
+            <b>this</b>.autoHideHd = {
+                'mouseout': <b>function</b>(e){
+                    <b>if</b>(!e.within(<b>this</b>.el, true)){
+                        st.delay(500);
+                    }
+                },
+                'mouseover' : <b>function</b>(e){
+                    st.cancel();
+                },
+                scope : <b>this</b>
+            };
+        }
+        <b>this</b>.el.on(<b>this</b>.autoHideHd);
+    },
+
+    clearAutoHide : <b>function</b>(){
+        <b>this</b>.el.un('mouseout', <b>this</b>.autoHideHd.mouseout);
+        <b>this</b>.el.un('mouseover', <b>this</b>.autoHideHd.mouseover);
+    },
+
+    <i>// these names are backwards but not changed <b>for</b> compat</i>
+    slideOut : <b>function</b>(){
+        <b>if</b>(this.isSlid){
+            <b>return</b>;
+        }
+        <b>this</b>.isSlid = true;
+        <b>this</b>.snapshot = {
+            'colbtn': <b>this</b>.collapseBtn.isVisible(),
+            'closebtn': <b>this</b>.closeBtn.isVisible()
+        };
+        <b>this</b>.collapseBtn.hide();
+        <b>this</b>.closeBtn.hide();
+        <b>this</b>.el.show();
+        <b>this</b>.el.alignTo(<b>this</b>.collapsedEl, <b>this</b>.getCollapseAnchor(), <b>this</b>.getAlignAdj());
+        <b>this</b>.beforeSlide();
+        <b>this</b>.el.setStyle('z-index', 20000);
+        <b>this</b>.el.slideIn(<b>this</b>.getSlideAnchor(), {
+            callback: <b>function</b>(){
+                <b>this</b>.afterSlide();
+                <b>this</b>.initAutoHide();
+                Ext.get(document).on('click', <b>this</b>.slideInIf, <b>this</b>);
+                <b>this</b>.fireEvent('slideshow', <b>this</b>);
+            },
+            scope: <b>this</b>,
+            block: true
+        });
+    },
+
+    slideIn : <b>function</b>(callback){
+        <b>if</b>(!<b>this</b>.isSlid){
+            <b>return</b>;
+        }
+        <b>this</b>.beforeSlide();
+        <b>this</b>.el.slideOut(<b>this</b>.getSlideAnchor(), {
+            callback: <b>function</b>(){
+                <b>this</b>.isSlid = false;
+                <b>this</b>.el.setStyle('z-index', '');
+                <b>this</b>.el.setLeftTop(-10000, -10000);
+                <b>this</b>.afterSlide();
+                <b>this</b>.clearAutoHide();
+                Ext.get(document).un('click', <b>this</b>.slideInIf, <b>this</b>);
+                <b>this</b>.collapseBtn.setVisible(<b>this</b>.snapshot.colbtn);
+                <b>this</b>.closeBtn.setVisible(<b>this</b>.snapshot.closebtn);
+                Ext.callback(callback);
+                <b>this</b>.fireEvent('slidehide', <b>this</b>);
+            },
+            scope: <b>this</b>,
+            block: true
+        });
+    },
+    
+    slideInIf : <b>function</b>(e){
+        <b>if</b>(!e.within(<b>this</b>.el)){
+            <b>this</b>.slideIn();
+        }
+    },
+
+    animateCollapse : <b>function</b>(){
+        <b>this</b>.beforeSlide();
+        <b>this</b>.el.setStyle('z-index', 20000);
+        <b>this</b>.el.slideOut(<b>this</b>.getSlideAnchor(), {
+            callback : <b>function</b>(){
+                <b>this</b>.el.setStyle('z-index', '');
+                <b>this</b>.collapsedEl.show({duration:.1});
+                <b>this</b>.afterSlide();
+                <b>this</b>.el.setLocation(-10000,-10000);
+                <b>this</b>.el.hide();
+                <b>this</b>.fireEvent('collapsed', <b>this</b>);
+            },
+            scope: <b>this</b>,
+            block: true
+        });
+    },
+
+    animateExpand : <b>function</b>(){
+        <b>this</b>.beforeSlide();
+        <b>this</b>.el.alignTo(<b>this</b>.collapsedEl, <b>this</b>.getCollapseAnchor(), <b>this</b>.getExpandAdj());
+        <b>this</b>.el.setStyle('z-index', 20000);
+        <b>this</b>.collapsedEl.hide({
+            duration:.1
+        });
+        <b>this</b>.el.slideIn(<b>this</b>.getSlideAnchor(), {
+            callback : <b>function</b>(){
+                <b>this</b>.el.setStyle('z-index', '');
+                <b>this</b>.afterSlide();
+                <b>if</b>(this.split){
+                    <b>this</b>.split.el.show();
+                }
+                <b>this</b>.fireEvent('invalidated', <b>this</b>);
+                <b>this</b>.fireEvent('expanded', <b>this</b>);
+            },
+            scope: <b>this</b>,
+            block: true
+        });
+    },
+
+    anchors : {
+        'west' : 'left',
+        'east' : 'right',
+        'north' : 'top',
+        'south' : 'bottom'
+    },
+
+    sanchors : {
+        'west' : 'l',
+        'east' : 'r',
+        'north' : 'n',
+        'south' : 'b'
+    },
+
+    canchors : {
+        'west' : 'tl-tr',
+        'east' : 'tr-tl',
+        'north' : 'tl-bl',
+        'south' : 'bl-tl'
+    },
+
+    getAnchor : <b>function</b>(){
+        <b>return</b> this.anchors[<b>this</b>.position];
+    },
+
+    getCollapseAnchor : <b>function</b>(){
+        <b>return</b> this.canchors[<b>this</b>.position];
+    },
+
+    getSlideAnchor : <b>function</b>(){
+        <b>return</b> this.sanchors[<b>this</b>.position];
+    },
+
+    getAlignAdj : <b>function</b>(){
+        <b>var</b> cm = <b>this</b>.cmargins;
+        <b>switch</b>(this.position){
+            <b>case</b> 'west':
+                <b>return</b> [-cm.right,  -cm.top];
+            <b>break</b>;
+            <b>case</b> 'east':
+                <b>return</b> [cm.left,  -cm.top];
+            <b>break</b>;
+            <b>case</b> 'north':
+                <b>return</b> [-cm.left,  -cm.bottom];
+            <b>break</b>;
+            <b>case</b> 'south':
+                <b>return</b> [-cm.left,  cm.top];
+            <b>break</b>;
+        }
+    },
+
+    getExpandAdj : <b>function</b>(){
+        <b>var</b> c = <b>this</b>.collapsedEl, cm = <b>this</b>.cmargins;
+        <b>switch</b>(this.position){
+            <b>case</b> 'west':
+                <b>return</b> [-(cm.right+c.getWidth()+cm.left),  -cm.top];
+            <b>break</b>;
+            <b>case</b> 'east':
+                <b>return</b> [cm.right+c.getWidth()+cm.left,  -cm.top];
+            <b>break</b>;
+            <b>case</b> 'north':
+                <b>return</b> [-cm.right, -(cm.top+cm.bottom+c.getHeight())];
+            <b>break</b>;
+            <b>case</b> 'south':
+                <b>return</b> [-cm.right, cm.top+cm.bottom+c.getHeight()];
+            <b>break</b>;
+        }
+    }
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">yui-ext - Copyright &copy; 2006 Jack Slocum.  |
+    Yahoo! UI - Copyright &copy; 2006 Yahoo! Inc.<br />All rights reserved.</div>
+    </body></html>

@@ -1,0 +1,137 @@
+<html><head><title>MenuButton.js</title><link rel="stylesheet" type="text/css" href="../resources/style.css" media="screen"/></head><body><h1>MenuButton.js</h1><pre class="highlighted"><code><i>/**
+ * @class Ext.MenuButton
+ * @extends Ext.Button
+ * Simple Button class
+ * @cfg {Function} arrowHandler A <b>function</b> called when the arrow button is clicked (can be used instead of click event)
+ * @cfg {String} arrowTooltip The title attribute of the arrow
+ * @constructor
+ * Create a <b>new</b> menu button
+ * @param {String/HTMLElement/Element} renderTo The element to append the button to
+ * @param {Object} config The config object
+ */</i>
+Ext.MenuButton = <b>function</b>(renderTo, config){
+    Ext.MenuButton.superclass.constructor.call(<b>this</b>, renderTo, config);
+    <i>/**
+     * @event arrowclick
+     * Fires when <b>this</b> arrow is clicked
+     * @param {Button} <b>this</b>
+     * @param {EventObject} e The click event
+     */</i>
+    <b>this</b>.events['arrowclick'] = true;
+};
+
+Ext.extend(Ext.MenuButton, Ext.Button, {
+    render : <b>function</b>(renderTo){
+        <i>// <b>this</b> is one sweet looking template!</i>
+        <b>var</b> tpl = <b>new</b> Ext.Template(
+            '&lt;table cellspacing=&quot;0&quot; class=&quot;x-btn-menu-wrap&quot;&gt;&lt;tr&gt;&lt;td&gt;',
+            '&lt;a href=&quot;#&quot; class=&quot;x-btn-focus x-btn-menu-text-focus&quot; title=&quot;{1:htmlEncode}&quot;&gt;',
+            '&lt;table cellspacing=&quot;0&quot; class=&quot;x-btn-wrap x-btn-menu-text-wrap&quot;&gt;&lt;tbody&gt;',
+            '&lt;tr&gt;&lt;td class=&quot;x-btn-left&quot;&gt;&amp;#160;&lt;/td&gt;&lt;td class=&quot;x-btn-center&quot;&gt;&lt;span class=&quot;x-btn-text&quot; unselectable=&quot;on&quot;&gt;{0}&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;',
+            '&lt;/tbody&gt;&lt;/table&gt;&lt;/a&gt;&lt;/td&gt;&lt;td&gt;',
+            '&lt;a href=&quot;#&quot; class=&quot;x-btn-focus x-btn-menu-arrow-focus&quot; title=&quot;{2:htmlEncode}&quot;&gt;',
+            '&lt;table cellspacing=&quot;0&quot; class=&quot;x-btn-wrap  x-btn-menu-arrow-wrap&quot;&gt;&lt;tbody&gt;',
+            '&lt;tr&gt;&lt;td class=&quot;x-btn-center&quot; unselectable=&quot;on&quot;&gt;&lt;span&gt;&amp;#160;&lt;/span&gt;&lt;/td&gt;&lt;td class=&quot;x-btn-right&quot;&gt;&amp;#160;&lt;/td&gt;&lt;/tr&gt;',
+            '&lt;/tbody&gt;&lt;/table&gt;&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;'
+        );
+        <b>var</b> btn = tpl.append(renderTo, [<b>this</b>.text, <b>this</b>.tooltip || '', <b>this</b>.arrowTooltip || ''], true);
+        <b>if</b>(this.cls){
+            btn.addClass(<b>this</b>.cls);
+        }
+        <b>this</b>.el = btn;
+        <b>this</b>.autoWidth();
+        btn.addClass('x-btn');
+        btn.on('click', <b>this</b>.onClick, <b>this</b>);
+        btn.on('mouseover', <b>this</b>.onMouseOver, <b>this</b>);
+        btn.on('mouseout', <b>this</b>.onMouseOut, <b>this</b>);
+        btn.on('mousedown', <b>this</b>.onMouseDown, <b>this</b>);
+        btn.on('mouseup', <b>this</b>.onMouseUp, <b>this</b>);
+        <b>if</b>(this.hidden){
+            <b>this</b>.hide();
+        }
+        <b>if</b>(this.disabled){
+            <b>this</b>.disable();
+        }
+        <b>if</b>(this.menu){
+            <b>this</b>.menu.on('show', <b>this</b>.onMenuShow, <b>this</b>);
+            <b>this</b>.menu.on('hide', <b>this</b>.onMenuHide, <b>this</b>);
+        }
+    },
+    
+    autoWidth : <b>function</b>(){
+        <b>if</b>(this.el){
+            <b>var</b> tbl = <b>this</b>.el.child('table:first');
+            <b>var</b> tbl2 = <b>this</b>.el.child('table:last');
+            <b>this</b>.el.setWidth('auto');
+            tbl.setWidth('auto');
+            <b>if</b>(this.minWidth){
+                <b>if</b>(this.hidden){
+                    <b>this</b>.el.beginMeasure();
+                }
+                <b>if</b>((tbl.getWidth()+tbl2.getWidth()) &lt; <b>this</b>.minWidth){
+                    tbl.setWidth(<b>this</b>.minWidth-tbl2.getWidth());
+                }
+                <b>if</b>(this.hidden){
+                    <b>this</b>.el.endMeasure();
+                }
+            }
+            <b>this</b>.el.setWidth(tbl.getWidth()+tbl2.getWidth());
+        } 
+    },
+    <i>/**
+     * Sets <b>this</b> button's click handler
+     * @param {Function} handler The <b>function</b> to call when the button is clicked
+     * @param {Object} scope (optional) Scope <b>for</b> the <b>function</b> passed above
+     */</i>
+    setHandler : <b>function</b>(handler, scope){
+        <b>this</b>.handler = handler;
+        <b>this</b>.scope = scope;  
+    },
+    
+    <i>/**
+     * Sets <b>this</b> button's arrow click handler
+     * @param {Function} handler The <b>function</b> to call when the arrow is clicked
+     * @param {Object} scope (optional) Scope <b>for</b> the <b>function</b> passed above
+     */</i>
+    setArrowHandler : <b>function</b>(handler, scope){
+        <b>this</b>.arrowHandler = handler;
+        <b>this</b>.scope = scope;  
+    },
+    
+    <i>/**
+     * Focus the button
+     */</i>
+    focus : <b>function</b>(){
+        <b>this</b>.el.child('a:first').focus();    
+    },
+    
+    onClick : <b>function</b>(e){
+        e.preventDefault();
+        <b>if</b>(!<b>this</b>.disabled){
+            <b>if</b>(e.getTarget('.x-btn-menu-arrow-wrap') || e.getTarget('.x-btn-menu-arrow-focus')){
+                <b>if</b>(this.menu &amp;&amp; !<b>this</b>.menu.isVisible()){
+                    <b>this</b>.menu.show(<b>this</b>.el, <b>this</b>.menuAlign);
+                }
+                <b>this</b>.fireEvent('arrowclick', <b>this</b>, e);
+                <b>if</b>(this.arrowHandler){
+                    <b>this</b>.arrowHandler.call(<b>this</b>.scope || <b>this</b>, <b>this</b>, e);
+                }
+            }<b>else</b>{
+                <b>this</b>.fireEvent('click', <b>this</b>, e);
+                <b>if</b>(this.handler){
+                    <b>this</b>.handler.call(<b>this</b>.scope || <b>this</b>, <b>this</b>, e);
+                }
+            }
+        }
+    },
+    onMouseDown : <b>function</b>(e){
+        <b>if</b>(!<b>this</b>.disabled){
+            Ext.fly(e.getTarget('table')).addClass('x-btn-click');
+        }
+    },
+    onMouseUp : <b>function</b>(e){
+        Ext.fly(e.getTarget('table')).removeClass('x-btn-click');
+    }   
+});</code></pre><hr><div style="font-size:10px;text-align:center;color:gray;">yui-ext - Copyright &copy; 2006 Jack Slocum.  |
+    Yahoo! UI - Copyright &copy; 2006 Yahoo! Inc.<br />All rights reserved.</div>
+    </body></html>
