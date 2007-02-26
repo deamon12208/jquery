@@ -14,9 +14,8 @@ var _config = {
 };
 
 $(function() {
-	$('#userAgent').html(navigator.userAgent);
-	if($.browser.safari)
-		$("h1").append("&nbsp;- Slowed down for Safari to prevent crashes");
+	if(!$.browser.safari)
+		$('#userAgent').html(navigator.userAgent);
 	runTest();	
 });
 
@@ -66,14 +65,6 @@ function runTest() {
 }
 
 function test(name, callback, nowait) {
-	// safari seems to have some memory problems, so we need to slow it down
-	if($.browser.safari && !nowait) {
-		test("", function() {
-			stop();
-			setTimeout(start, 250);
-		}, true);
-	}
-
 	if(_config.currentModule)
 		name = _config.currentModule + " module: " + name;
 		

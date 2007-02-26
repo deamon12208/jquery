@@ -342,13 +342,13 @@ test("validator.valid()", function() {
 	expect(5);
 	var v = $('#testForm3').validate();
 	ok( v.valid(), "No errors, must be valid" );
-	v.errorList = { meal: {required: true} };
+	v.errorList = { meal: "foo" };
 	ok( !v.valid(), "One error, must be invalid" );
 	v = $('#testForm3').validate({ submitHandler: function() {
 		ok( true, "Submit handler was called" );
 	}});
 	ok( !v.valid(), "No errors, must be valid but returning false and calling the submit handler" );
-	v.errorList = { meal: {required: true} };
+	v.errorList = { meal: "foo" };
 	ok( !v.valid(), "One error, must be invalid, no call to submit handler" );
 });
 
