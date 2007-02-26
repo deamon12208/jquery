@@ -255,7 +255,7 @@ jQuery.extend(jQuery.fn, {
 		
 		// select all valid inputs inside the form (no submit or reset buttons)
 		// and listen for focus events to save reference to last focused element
-		validator.elements = jQuery(":input:not(:submit):not(:reset)", this).focus(function() {
+		validator.elements = this.find(":input:not(:submit):not(:reset)").focus(function() {
 			validator.lastActive = this;
 		});
 		
@@ -279,22 +279,22 @@ jQuery.extend(jQuery.fn, {
 		return validator;
 	},
 	// find all element that are not in the other set
-	containsNot: function(others) {
-	    return this.pushStack( $.grep(this, function(e) {
+	containsNot: function( others ) {
+	    return this.pushStack( $.grep( this, function(e) {
 	        var contains = false;
-	        others.each(function(i, n) {
+	        others.each( function( i, n ) {
 	            if(e == n)
 	                contains = true;
-	        });
+	        } );
 	        return !contains;
-	    }));
+	    } ) );
 	},
 	// destructive add
-	push: function(t) {
-		return this.setArray( jQuery.merge(this.get(), t) );
+	push: function( t ) {
+		return this.setArray( jQuery.merge( this.get(), t ) );
 	},
-	forId: function(id) {
-		return this.filter("[@for=" + id + "]");
+	forId: function( id ) {
+		return this.filter( "[@for=" + id + "]" );
 	}
 });
 
@@ -307,12 +307,12 @@ jQuery.validator = function( options, form ) {
 	this.currentForm = form[0];
 	
 	// find the element to look for and put error labels
-	function get(element) {
-		return element.length && element;
+	function get( container ) {
+		return container.length && container;
 	}
-	this.errorContainer = get(this.settings.errorLabelContainer) || get(this.settings.errorContainer) || jQuery([]);
-	this.errorContext = get(this.errorContainer) || form;
-	this.containers = this.settings.errorContainer.add(this.settings.errorLabelContainer);
+	this.errorContainer = get( this.settings.errorLabelContainer ) || get( this.settings.errorContainer ) || jQuery( [] );
+	this.errorContext = get( this.errorContainer ) || form;
+	this.containers = this.settings.errorContainer.add( this.settings.errorLabelContainer );
 	
 	this.reset();
 };
@@ -329,67 +329,63 @@ jQuery.extend(jQuery.validator, {
 	defaults: {
 		errorClass: "error",
 		focusInvalid: true,
-		errorContainer: jQuery([]),
-		errorLabelContainer: jQuery([]),
+		errorContainer: jQuery( [] ),
+		errorLabelContainer: jQuery( [] ),
 		onsubmit: true
 	},
 	
 	// methods for validator object
 	prototype: {
 	
-		// validates a form, preventing the submit always in debug mode
 		form: function() {
-			this.reset();
-	
+			this.prepare();
 			for ( var i = 0, element; element = this.elements[i++]; ) {
-				this.check(element);
+				this.check( element );
 			}
-	
 			return this.valid();
 		},
 		
 		single: function( element ) {
-			this.reset(element);
-			this.check(element);
+			this.reset();
+			this.toHide = this.errors().forId( this.findId(element) );
+			this.check( element );
 			this.showErrors();
 			
 		},
 		
-		// finds all error labels
 		errors: function() {
 			return jQuery( "label." + this.settings.errorClass, this.errorContext );
 		},
 		
 		reset: function( element ) {
 			this.errorList = {};
-			this.toShow = $([]);
-			this.toHide = element ? this.errors().forId( this.findId(element) ) : this.errors();
-			if ( !element ) {
-				this.toShow.push( this.containers );
-				this.toHide.push( this.containers );
-			}
+			this.toShow = $( [] );
+			this.toHide = $( [] );
+		},
+		
+		prepare: function() {
+			this.reset();
+			this.toHide = this.errors().push( this.containers );
+			this.toShow.push( this.containers );
 		},
 	
 		/*
 		 * Searches the given element for rules and then
 		 * tests the element to these rules.
 		 */
-		check: function(element) {
+		check: function( element ) {
 			// TODO fails in opera at first line of jQuery.className.has
-			jQuery(element).removeClass(this.settings.errorClass);
-			var rules = this.rules(element);
-			for( var i=0, rule; rule = rules[i]; i++ ) {
+			jQuery( element ).removeClass( this.settings.errorClass );
+			var rules = this.rules( element );
+			for( var i = 0, rule; rule = rules[i++]; ) {
 				try {
-					var method = jQuery.validator.methods[rule.name];
-					if( !method)
-						throw("element() error: No method found with name " + rule.name);
-					var result = method( element.value, element, rule.parameters, rules );
+					var result = jQuery.validator.methods[rule.name]( element.value, element, rule.parameters, rules );
 					// stop validating for explicit stop-result
 					if( result === -1 )
 						break;
 					if( !result ) {
 						jQuery(element).addClass( this.settings.errorClass );
-						this.formatAndAdd(method, rule, element);
+						this.formatAndAdd(jQuery.validator.methods[rule.name], rule, element);
 						break;
 					}
 				} catch(e) {
@@ -400,13 +396,13 @@ jQuery.extend(jQuery.validator, {
 			}
 		},
 		
-		message: function(id, rule) {
+		message: function( id, rule ) {
 			var m = this.messages[id];
 			return m && (m.constructor == String ? m : m[rule.name]);
 		},
 		
-		formatAndAdd: function(method, rule, element) {
-			var id = this.findId(element),
+		formatAndAdd: function( method, rule, element) {
+			var id = this.findId( element ),
 				param = rule.parameters;
 			this.errorList[id] = (
 					element.title
@@ -414,8 +410,8 @@ jQuery.extend(jQuery.validator, {
 					|| method.message
 					|| "<strong>Warning: No message defined for " + id + "</strong>"
 				)
-				.replace("{0}", (param.constructor == Array ? param[0] : param) || "")
-				.replace("{1}", param[1] || "")
+				.replace( "{0}", (param.constructor == Array ? param[0] : param) || "" )
+				.replace( "{1}", param[1] || "" );
 		},
 		
 		valid: function() {
@@ -436,12 +432,12 @@ jQuery.extend(jQuery.validator, {
 			var count = 0;
 			jQuery.each( this.errorList, function() {
 				count++;
-			});			
+			} );			
 			return count;
 		},
 		
 		hideErrors: function() {
-			this.toggle("Hide");
+			this.toggle( "Hide" );
 		},
 		
 		// ignore this
@@ -450,7 +446,7 @@ jQuery.extend(jQuery.validator, {
 			function which() {
 				return self["to" + that];
 			}
-			if( this.settings.wrapper ) {
+			if ( this.settings.wrapper ) {
 				which().push( which().parents( this.settings.wrapper ) );
 			}
 			which()[that.toLowerCase()]();
@@ -465,13 +461,13 @@ jQuery.extend(jQuery.validator, {
 		 */
 		showErrors: function() {
 		
-			if(this.settings.showErrors) {
-				this.settings.showErrors(this.errorList, this);
+			if ( this.settings.showErrors) {
+				this.settings.showErrors( this.errorList, this );
 				return;
 			}
 			
 			var first = true;
-			for(var elementID in this.errorList) {
+			for ( var elementID in this.errorList ) {
 				if( first && this.settings.focusInvalid ) {
 					// check if the last focused element is invalid
 					if( this.lastActive && this.errorList[this.lastActive.id])
@@ -485,17 +481,17 @@ jQuery.extend(jQuery.validator, {
 							var element = jQuery("#"+elementID);
 							// radio/checkbox doesn't have an ID
 							if(element.length)
-								element[0].focus()
+								element[0].focus();
 						} catch(e) { this.settings.debug && window.console && console.error(e); }
 					}
 					first = false;
 				}
 				// display the error label for the first failed method
-				this.showError(elementID, this.errorList[elementID]);
+				this.showError( elementID, this.errorList[elementID] );
 			}
 			
-			this.toHide.containsNot(this.toShow)
-			this.toggle("Hide").toggle("Show");
+			this.toHide.containsNot( this.toShow );
+			this.toggle( "Hide" ).toggle( "Show" );
 		},
 		
 		/*
