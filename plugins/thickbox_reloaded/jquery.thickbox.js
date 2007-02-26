@@ -9,8 +9,6 @@
 
 (function($) { // simulate block scope
 
-    // TODO preload spinner image
-
     $.browser.msie6 = $.browser.msie6 || $.browser.msie && typeof XMLHttpRequest == 'function';
 
     $.extend({
@@ -20,7 +18,7 @@
 
             // needful things
             var IMAGE = 'image', INLINE = 'inline', AJAX = 'ajax', EXTERNAL = 'external', CONFIRM = 'confirm'; // Thickbox type constants
-            var DIM_ID = 'tb-dim', LOADING_ID = 'tb-loading', MODAL_ID = 'tb-modal', CONTENT_ID = 'tb-content', TITLE_BAR_ID = 'tb-title-bar', CAPTION_ID = 'tb-caption', NEXT_ID = 'tb-next', PREV_ID = 'tb-prev'; // Ids
+            var DIM_ID = 'tb-dim', LOADING_ID = 'tb-loading', MODAL_ID = 'tb-modal', CONTENT_ID = 'tb-content', TITLE_BAR_ID = 'tb-title-bar', CAPTION_ID = 'tb-caption', BROWSE_ID = 'tb-browse', NEXT_ID = 'tb-next', PREV_ID = 'tb-prev'; // Ids
             var dim, loading, modal;
 
             // default values
@@ -28,47 +26,52 @@
                 top: '',
                 left: '',
                 width: 300,
-                height: 400,
+                height: 340,
+                animate: null,
                 nextTitle: 'Next',
                 prevTitle: 'Previous',
                 confirmTitle: 'Are you sure?',
                 confirmYes: 'Yes',
-                confirmNo: 'No'
+                confirmNo: 'No',
+                spinnerImgSrc: 'jquery.thickbox.spinner.gif'
             };
+
+            // preload spinner image
+            var spinner = new Image();
+            spinner.src = defaultValues.spinnerImgSrc;
 
             // setup Thickbox
             function setup(type, settings, builder) {
                 // get or create elements
                 var jq;
                 jq = $('#' + DIM_ID);
-                dim = jq.size() && jq || $('<div id="' + DIM_ID + '">' + ($.browser.msie6 ? '<iframe src="javascript:;"></iframe>' : '') + '</div>').appendTo(document.body);
+                dim = jq.size() && jq || $('<div id="' + DIM_ID + '">' + ($.browser.msie6 ? '<iframe src="javascript:;"></iframe>' : '') + '</div>').appendTo(document.body).hide();
                 jq = $('#' + LOADING_ID);
                 loading = jq.size() && jq || $('<div id="' + LOADING_ID + '"></div>').appendTo(document.body);
+                loading.css({'background-image': 'url(' + defaultValues.spinnerImgSrc + ')'})
                 jq = $('#' + MODAL_ID);
                 modal = jq.size() && jq || $('<div id="' + MODAL_ID + '"></div>').appendTo(document.body);
                 modal.attr({'class': type});
-                $('<p id="' + TITLE_BAR_ID + '"><a href="#" title="Close this window">Close</a></p>').appendTo(modal).bind('click', hide);
+                $('<div id="' + TITLE_BAR_ID + '"><a href="#" title="Close this window">Close</a></div>').appendTo(modal).find('a').bind('click', hide);
                 // reveal stuff
-                dim.unbind('click').one('click', hide); // unbind shouldn't be necessary - WTF?
+                dim.unbind('click').one('click', hide); // unbind should be unnecessary - WTF?
                 if (dim.is(':visible')) {
                     loading.show();
                     builder(); // build specific type
                 } else {
-                    dim.fadeIn('fast', function() {
+                    //dim.fadeIn('fast', function() {
+                        dim.show();
                         loading.show();
                         builder(); // build specific type
-                    });
+                    //});
                 }
-
-                // TODO set min-height/min-width of body to dimensions of Thickbox to avoid window moving out of viewport
-
                 // attach keyboard event handler
                 $(document).bind('keydown', keydown).bind('keypress', blockKeys);
                 $(window).bind('scroll', blockScroll);
             }
 
             // show and positioning
-            function show(width, height, top, left) {
+            function show(width, height, top, left, animate) {
                 loading.hide();
                 var css = {width: width + 'px', height: height + 'px'}, noUnit = /^\d+$/;
                 if (!top) {
@@ -85,12 +88,12 @@
                 }
                 if (!left) {
                     css['left'] = '';
-                    css['margin-left'] = '-' + parseInt(width / 2) + 'px';
+                    css['margin-left'] = '-' + parseInt(width / 2) + 'px'; // TODO prevent modal window being pushed out of viewport, onresize as well
                 } else {
                     css['left'] = left + (left.match(noUnit) ? 'px' : '');
                     css['margin-left'] = '';
                 }
-                modal.show().css(css); // TODO use modal.animate() and allow custom animations
+                animate ? modal.css(css).animate(animate.animation, animate.speed) : modal.css(css).show();
             }
 
             // remove everything
@@ -131,6 +134,12 @@
                 }
             }
 
+            function buildTitle(title) {
+                if (title) {
+                    $('#' + TITLE_BAR_ID).prepend('<h2>' + title + '</h2>');
+                }
+            }
+
             /* public */
 
             // set default values
@@ -147,13 +156,14 @@
                     left: defaultValues.left,
                     width: defaultValues.width,
                     height: defaultValues.height,
-                    /*onConfirm: null,
-                    slideshow: null, TODO option for slideshow? */
                     nextTitle: defaultValues.nextTitle,
                     prevTitle: defaultValues.prevTitle,
                     confirmTitle: defaultValues.confirmTitle,
                     confirmYes: defaultValues.confirmYes,
-                    confirmNo: defaultValues.confirmNo
+                    confirmNo: defaultValues.confirmNo,
+                    /* onConfirm: null, remember for documentation */
+                    /* animate: defaultValues.animate, remember for documentation, example {animation: { opacity: 'show' }, speed: 1000} */
+                    slideshow: false // TODO implement
                 }, settings);
 
                 return this.each(function() {
@@ -192,8 +202,7 @@
 
                                     // loop through the anchors, looking for ourself, saving information about previous and next image
                                     for (var i = 0, k = group.length; i < k; i++) {
-                                        var a = group[i];
-                                        if (a == $$[0]) { // look for ourself
+                                        if (group[i] == $$[0]) { // look for ourself
                                             count = "Image " + (i + 1) + " of " + group.length;
                                             if (group[i + 1]) { // if there is a next image
                                                 next = '<strong id="' + NEXT_ID + '"><a href="#" title="Show next image">' + settings.nextTitle + '</a></strong>';
@@ -265,19 +274,17 @@
                                     $('<img src="' +  $$.attr('href') + '" alt="Image" width="' + imgWidth + '" height="' + imgHeight + '" title="' + caption + '" />').appendTo(modal);
                                     if (caption || count) {
                                         var html = [];
-                                        html.push('<div id="' + CAPTION_ID + '">');
                                         if (caption) {
-                                            html.push('<p>', caption, '</p>');
+                                            html.push('<p id="' + CAPTION_ID + '">', caption, '</p>');
                                         }
                                         if (count) {
-                                            html.push('<p>', count, prev, next, '</p>');
+                                            html.push('<p id="' + BROWSE_ID + '">', count, prev, next, '</p>');
                                         }
-                                        html.push('</div>');
                                         $(html.join('')).appendTo(modal);
                                         $('#' + NEXT_ID + ' a').bind('click', showNext);
                                         $('#' + PREV_ID + ' a').bind('click', showPrev);
                                     }
-                                    show(imgWidth + 30, imgHeight + 60, settings.top, settings.left);
+                                    show(imgWidth + 30, imgHeight + 60, settings.top, settings.left, settings.animate);
                                 };
                                 img.src = $$.attr('href');
                             };
@@ -285,28 +292,31 @@
                         case INLINE:
                             var content = $($$[0].hash); // preserve content via closure
                             builder = function() {
-                                content.appendTo(modal);
-                                show(settings.width, settings.height, settings.top, settings.left);
+                                buildTitle($$.attr('title'));
+                                $('<div id="' + CONTENT_ID + '"></div>').append(content).appendTo(modal);
+                                show(settings.width, settings.height, settings.top, settings.left, settings.animate);
                             };
                             break;
                         case AJAX:
                             builder = function() {
+                                buildTitle($$.attr('title'));
                                 $('<div id="' + CONTENT_ID + '"></div>').appendTo(modal).load($$.attr('href'), function() {
-                                    show(settings.width, settings.height, settings.top, settings.left);
+                                    show(settings.width, settings.height, settings.top, settings.left, settings.animate);
                                 });
                             };
                             break;
                         case EXTERNAL:
                             builder = function() {
+                                buildTitle($$.attr('title'));
                                 $('<iframe id="' + CONTENT_ID + '" src="' +  $$.attr('href') + '" frameborder="0"></iframe>').appendTo(modal);
-                                show(settings.width, settings.height, settings.top, settings.left);
+                                show(settings.width, settings.height, settings.top, settings.left, settings.animate);
                             };
                             break;
                         case CONFIRM:
                             builder = function() {
-                                $('<h2>' + settings.confirmTitle + '</h2>').appendTo(modal);
-                                var p = $('<p></p>').appendTo(modal);
-                                $('<a id="tb-confirm" href="#">' + settings.confirmYes + '</a><span> | </span>').appendTo(p).click(function() {
+                                buildTitle(settings.confirmTitle);
+                                var p = $('<p id="' + CONTENT_ID + '"></p>').appendTo(modal);
+                                $('<a id="tb-confirm" href="#">' + settings.confirmYes + '</a>').appendTo(p).click(function() {
                                     // pass confirm as callback to hide
                                     hide(settings.onConfirm || function() {
                                         $$[0].submit();
@@ -317,7 +327,8 @@
                                     hide();
                                     return false;
                                 });
-                                show(settings.width, settings.height, settings.top, settings.left);
+                                // If height is still the default value, change it here...
+                                show(settings.width, (settings.height == defaultValues.height ? 70 : settings.height), settings.top, settings.left, settings.animate);
                             };
                             break;
                         default:

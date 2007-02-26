@@ -1,7 +1,7 @@
-/* default skin for thickbox interface */
-a img {
-    border: 1px solid #525252;
-}
+/* Default skin for Thickbox interface */
+
+/* shared */
+
 #tb-dim {
     background: #000;
     opacity: .6;
@@ -10,19 +10,111 @@ a img {
     background: url(jquery.thickbox.spinner.gif) no-repeat 50% 50%;
 }
 #tb-modal {
-    border: 4px solid #525252;
+    border: 2px solid #525252;
     background: #fff;
+    color: #333;
 }
-#tb-modal.confirm * {
+#tb-title-bar {
+    overflow: hidden; /* containing floats */
+    padding: 3px 0 2px 6px;
+    background: #e8e8e8;
+}
+#tb-title-bar *, #tb-caption, #tb-browse {
+    font: 12px/1.3 Arial, Helvetica, Geneva, "sans-serif";
     margin: 0;
 }
-#tb-modal.confirm h2 {
-    margin: 0 0 .5em;
-    font-size: 12px;
+#tb-title-bar h2 {
+    float: left;
+}
+#tb-title-bar a { /* image replacement */
+    float: right;
+    overflow: hidden;
+    width: 19px;
+    height: 18px;
+    background: url(jquery.thickbox.close.gif) no-repeat 50% 50%;
+    line-height: 30px;
+    text-indent: 1000px;
 }
 
-/* TODO */
-#tb-modal * {
-    font: 12px/1.3 Helvetica, Arial, Geneva, "sans-serif";
+/* specific types */
+
+/* image*/
+#tb-modal.image img, #tb-caption, #tb-browse {
+    margin: 0 15px;
+}
+#tb-modal.image img {
+	display: block;
+	margin-top: 15px;
+    margin-bottom: 5px;
+    border: 1px solid #ccc;
+}
+.image #tb-title-bar {
+    position: absolute;
+    top: 14px;
+    right: 13px;
+    padding: 0;
+    height: auto;
+}
+.image #tb-title-bar a {
+    display: block;
+    float: none;
     margin: 0;
+    background-color: #fff;
+    opacity: .75;
+}
+.image #tb-title-bar a:hover, .image #tb-title-bar a:focus, .image #tb-title-bar a:active {
+    opacity: 1;
+}
+#tb-browse, #tb-browse a {
+    font-size: 10px;
+	color: #666;
+}
+#tb-browse a {
+    margin: 0 0 0 1em;
+}
+#tb-browse a:hover, #tb-browse a:focus, #tb-browse a:active {
+    color: #000;
+}
+
+/* other */
+#tb-title-bar {
+    overflow: hidden;
+    padding: 0 0 0 6px;
+    height: 1.5em;
+}
+#tb-title-bar h2 {
+    margin: 4px 0 0;
+}
+#tb-title-bar a {
+    margin: 3px 0 0;
+}
+#tb-content {
+   position: absolute;
+   top: 1.5em; /* #tb-title-bar::height */
+   right: 0;
+   bottom: 0;
+   left: 0;
+}
+div#tb-content, p#tb-content {
+   overflow: auto;
+   padding: 15px 15px 0;
+}
+iframe#tb-content {
+    width: 100%;
+}
+
+/* confirm */
+.confirm #tb-content {
+    margin: 0;
+    text-align: right;
+}
+.confirm #tb-content a {
+	color: #666;
+    font: 12px/1.3 Arial, Helvetica, Geneva, "sans-serif";
+}
+.confirm #tb-content a:hover, .confirm #tb-content a:focus, .confirm #tb-content a:active {
+    color: #000;
+}
+#tb-confirm {
+    float: left;
 }
