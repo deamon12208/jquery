@@ -258,7 +258,7 @@ jQuery.fn.validate = function( options ) {
 jQuery.fn.containsNot = function(b) {
     return this.pushStack( $.grep(this, function(e) {
         var contains = false;
-        $.each(b, function(i, n) {
+        b.each(function(i, n) {
             if(e == n)
                 contains = true;
         });
@@ -266,31 +266,42 @@ jQuery.fn.containsNot = function(b) {
     }));
 };
 
+// destructive add
+jQuery.fn.push = function(t) {
+	return this.setArray(
+		jQuery.merge(
+			this.get(),
+			t.constructor == String ?
+				jQuery(t).get() :
+				t.length != undefined && (!t.nodeName || t.nodeName == "FORM") ?
+					t : [t] )
+	);
+};
+
 // constructor for validator
 jQuery.validator = function( options, form ) {
-	this.errorList = {};
-	this.toHide = $([]);
-	this.toShow = $([]);
+	this.reset();
 
 	// override defaults with client settings
-	var settings = this.settings = jQuery.extend( {}, jQuery.validator.defaults, options );
+	this.settings = jQuery.extend( {}, jQuery.validator.defaults, options );
 	
 	// select all valid inputs inside the form (no submit or reset buttons)
-	this.elements = jQuery(":input:not(:submit):not(:reset)", form);
-
-	this.currentForm = form[0];
-	// find the element to look for error labels
-	this.errorContainer = settings.errorLabelContainer.length && settings.errorLabelContainer
-		|| settings.errorContainer.length && settings.errorContainer
-		|| jQuery([])
-	this.errorContext = this.errorContainer.length && this.errorContainer || form;
-	
-	// listen for focus events to save reference to last focused element
+	// and listen for focus events to save reference to last focused element
 	var instance = this;
-	this.elements.focus(function() {
+	this.elements = jQuery(":input:not(:submit):not(:reset)", form).focus(function() {
 		instance.lastActive = this;
 	});
 
+	this.currentForm = form[0];
+	
+	// find the element to look for error labels
+	function get(element) {
+		return element.length && element;
+	}
+	this.errorContainer = get(this.settings.errorLabelContainer) || get(this.settings.errorContainer) || jQuery([]);
+	this.errorContext = get(this.errorContainer) || form;
+	
+	
 };
 
 jQuery.extend(jQuery.validator, {
@@ -319,26 +330,33 @@ jQuery.extend(jQuery.validator, {
 		 * (or if debug mode is on).
 		 */
 		form: function() {
+			this.reset();
 	
-			// reset errors
-			this.errorList = {};
+			// hide all error labels for the form, and the containers
+			this.toHide.push(this.errors())
+				.push(this.settings.errorLabelContainer)
+				.push(this.settings.errorContainer);
 	
-			// TODO try to move some more of these into element()
-			
-			this.settings.errorLabelContainer.hide();
-			this.settings.errorContainer.hide();
+			// validate elements, for loop avoids unnecessary closure
+			for ( var i=0, element; element = this.elements[i]; i++ ) {
+				this.element(element);
+			}
 	
-			// hide all error labels for the form
-			this.toHide = jQuery("label." + this.settings.errorClass, this.errorContext);
-	
-			// validate elements
-			var instance = this;
-			this.elements.each(function() {
-				instance.element(this);
-			});
-	
-			// check if the form is valid and return
 			return this.valid();
+		},
+		
+		errors: function() {
+			return jQuery( "label." + this.settings.errorClass, this.errorContext );
+		},
+		
+		errorsFor: function(id) {
+			return this.errors().filter("[@for=" + id + "]");
+		},
+		
+		reset: function() {
+			this.errorList = {};
+			this.toHide = $([]);
+			this.toShow = $([]);
 		},
 	
 		/*
@@ -411,8 +429,8 @@ jQuery.extend(jQuery.validator, {
 		 * To hide labels for a form, use hideFormErrors().
 		 */
 		single: function(element) {
-			this.errorList = {};
-			this.toHide = jQuery("label." + this.settings.errorClass + "[@for=" + this.findId(element) + "]", this.errorContext);
+			this.reset();
+			this.toHide.push(this.errorsFor(this.findId(element)));
 			this.element(element);
 			this.showErrors();
 			
@@ -461,9 +479,7 @@ jQuery.extend(jQuery.validator, {
 				this.settings.showErrors(this.errorList, this);
 				return;
 			}
-			this.settings.errorContainer.show();
-			this.settings.errorLabelContainer.show();
-			this.toShow = $([]);
+			this.toShow = this.settings.errorContainer.add(this.settings.errorLabelContainer);
 			
 			var first = true;
 			for(var elementID in this.errorList) {
@@ -507,7 +523,7 @@ jQuery.extend(jQuery.validator, {
 			var element = jQuery("#" + elementID).addClass(this.settings.errorClass),
 				// find message for this label
 				message = message || "<strong>Warning: No message defined for " + elementID + "</strong>",
-				error = jQuery("label." + this.settings.errorClass, this.errorContext).filter("[@for=" + elementID + "]"),
+				error = this.errorsFor(elementID),
 				wrapper = this.settings.errorWrapper;
 			if ( error.length ) {
 				// check if we have a generated label, replace the message then
@@ -525,7 +541,7 @@ jQuery.extend(jQuery.validator, {
 				if ( !this.errorContainer.append(error).length ) 
 					error.insertAfter(element);
 			}
-			this.toShow = this.toShow.add(error);
+			this.toShow.push(error);
 		},
 		
 		/*
