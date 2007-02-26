@@ -1,0 +1,26 @@
+== ChangeLog ==
+
+== Rev. 1432 (2007-02-26) ==
+* Fixed calculation of scroll offsets when the parent is the body
+
+== Rev. 1395 (2007-02-21) ==
+* Fixed body margin issue in IE for the offset method
+
+== Rev. 1213 (2007-01-28) ==
+* Removed rogue console.log statement from dimensions plugin
+
+== Rev. 1209 (2007-01-26) ==
+* Adding some comments to offset method
+
+== Rev. 1208 (2007-01-26) ==
+* Mozilla not including border on static elements with overflow != visible
+* Opera not calculating offset properly with inline elements
+
+== Rev. 1206 (2007-01-26) ==
+* Updated dimensions methods innerHeight, innerWidth, outerHeight and outerWidth to work with elements that have display: none
+
+== Rev. 1043 (2007-01-12) ==
+* Added the relevant svn:keywords to dimensions
+
+== Rev. 1035 (2007-01-12) ==
+* API CHANGE: Offset method takes an options hash and optional return object.

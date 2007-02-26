@@ -225,7 +225,7 @@ jQuery.fn.scrollTop = function() {
  * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
  */
 jQuery.fn.offset = function(options, returnObject) {
-	var x = 0, y = 0, elem = this[0], parent = this[0], sl = 0, st = 0, options = jQuery.extend({ margin: true, border: true, padding: false, scroll: true }, options || {});
+	var x = 0, y = 0, elem = this[0], parent = this[0], op, sl = 0, st = 0, options = jQuery.extend({ margin: true, border: true, padding: false, scroll: true }, options || {});
 	do {
 		x += parent.offsetLeft || 0;
 		y += parent.offsetTop  || 0;
@@ -246,21 +246,10 @@ jQuery.fn.offset = function(options, returnObject) {
 				y += bt;
 			}
 		}
-		
-		var op = parent.offsetParent;
-		if (op && (op.tagName == 'BODY' || op.tagName == 'HTML')) {
-			// Safari doesn't add the body margin for elments positioned with static or relative
-			if (jQuery.browser.safari && jQuery.css(parent, 'position') != 'absolute') {
-				x += parseInt(jQuery.css(op, 'marginLeft')) || 0;
-				y += parseInt(jQuery.css(op, 'marginTop'))  || 0;
-			}
-			
-			// Exit the loop
-			break;
-		}
 
 		if (options.scroll) {
 			// Need to get scroll offsets in-between offsetParents
+			op = parent.offsetParent;
 			do {
 				sl += parent.scrollLeft || 0;
 				st += parent.scrollTop  || 0;
@@ -273,8 +262,16 @@ jQuery.fn.offset = function(options, returnObject) {
 					x += parseInt(jQuery.css(parent, 'borderLeftWidth')) || 0;
 				}
 			} while (parent != op);
-		} else {
+		} else
 			parent = parent.offsetParent;
+		
+		if (parent && (parent.tagName == 'BODY' || parent.tagName == 'HTML')) {
+			// Safari doesn't add the body margin for elments positioned with static or relative
+			if (jQuery.browser.safari && jQuery.css(parent, 'position') != 'absolute') {
+				x += parseInt(jQuery.css(op, 'marginLeft')) || 0;
+				y += parseInt(jQuery.css(op, 'marginTop'))  || 0;
+			}
+			break; // Exit the loop
 		}
 	} while (parent);
 	
@@ -304,7 +301,7 @@ jQuery.fn.offset = function(options, returnObject) {
 	}
 	
 	var returnValue = options.scroll ? { top: y - st, left: x - sl, scrollTop:  st, scrollLeft: sl }
-									: { top: y, left: x };
+	                                 : { top: y, left: x };
 
 	if (returnObject) { jQuery.extend(returnObject, returnValue); return this; }
 	else              { return returnValue; }
