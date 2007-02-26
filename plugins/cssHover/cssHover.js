@@ -52,7 +52,7 @@ jQuery.cssHover = new function() {
 		blnJQuery = blnJQuery || false;
 		objTemp = (domElem.chDomElem != null) ? domElem.chDomElem : domElem;
 		return (blnJQuery == true) ? jQuery(objTemp) : objTemp;
-	}
+	};
 
 	//----------------------------------------------------------------------------------------------------
 
@@ -65,7 +65,7 @@ jQuery.cssHover = new function() {
 			jQuery.cssHover.objqCurrent.trigger('mouseup');
 		}
 		jQuery.cssHover.objqCurrent = null;
-	}
+	};
 
 	//----------------------------------------------------------------------------------------------------
 
@@ -80,7 +80,7 @@ jQuery.cssHover = new function() {
 
 		// Set new object
 		jQuery.cssHover.objqCurrent = objqElem;
-	}
+	};
 
 	//----------------------------------------------------------------------------------------------------
 
@@ -132,7 +132,7 @@ jQuery.cssHover = new function() {
 
 		// Free object
 		objqTemp = null;
-	}
+	};
 
 	//----------------------------------------------------------------------------------------------------
 
@@ -144,7 +144,7 @@ jQuery.cssHover = new function() {
 		objButton.chSetClass('over', (!objButton.chBlnState && blnMouseOver));
 		objButton.chSetClass('active', (objButton.chBlnState && !blnMouseOver));
 		objButton.chSetClass('active_over', (objButton.chBlnState && blnMouseOver));
-	}
+	};
 
 	//----------------------------------------------------------------------------------------------------
 
