@@ -128,6 +128,8 @@ test("rule: required with dependencies", function() {
     	e = $('#hidden2, #select1, #area2, #radio1, #check2');
 	ok( rule(e[0].value, e[0], "asffsaa"), "Valid text input due to depencie not met" );
 	ok(!rule(e[0].value, e[0], "input"), "Invalid text input" );
+	ok( rule(e[0].value, e[0], function() { return false; }), "Valid text input due to depencie not met" );
+	ok(!rule(e[0].value, e[0], function() { return true; }), "Invalid text input" );
 	ok( rule(e[1].value, e[1], "asfsfa"), "Valid select due to dependency not met" );
 	ok(!rule(e[1].value, e[1], "input"), "Invalid select" );
 	ok( rule(e[2].value, e[2], "asfsafsfa"), "Valid textarea due to dependency not met" );
@@ -231,6 +233,7 @@ test("method default messages", function() {
 });
 
 test("$.validator.addMethod", function() {
+	expect( 3 );
 	$.validator.addMethod("hi", function(value) {
 		return value == "hi";
 	}, "hi me too");
@@ -243,6 +246,7 @@ test("$.validator.addMethod", function() {
 });
 
 test("validator.form(): simple", function() {
+	expect( 2 );
 	var form = $('#testForm1')[0];
 	var v = $(form).validate();
 	ok( !v.form(), 'Invalid form' );
@@ -252,6 +256,7 @@ test("validator.form(): simple", function() {
 });
 
 test("validator.form(): checkboxes: min/required", function() {
+	expect( 3 );
 	var form = $('#testForm6')[0];
 	var v = $(form).validate();
 	ok( !v.form(), 'Invalid form' );
@@ -261,6 +266,7 @@ test("validator.form(): checkboxes: min/required", function() {
 	ok( v.form(), 'Valid form' );
 });
 test("validator.form(): selects: min/required", function() {
+	expect( 3 );
 	var form = $('#testForm7')[0];
 	var v = $(form).validate();
 	ok( !v.form(), 'Invalid form' );
@@ -271,6 +277,7 @@ test("validator.form(): selects: min/required", function() {
 });
 
 test("validator.form(): with equalTo", function() {
+	expect( 2 );
 	var form = $('#testForm5')[0];
 	var v = $(form).validate();
 	ok( !v.form(), 'Invalid form' );
@@ -278,19 +285,21 @@ test("validator.form(): with equalTo", function() {
 	ok( v.form(), 'Valid form' );
 });
 
-test("validator.element(): simple", function() {
+test("validator.check(): simple", function() {
+	expect( 3 );
 	var element = $('#firstname')[0];
 	var v = $('#testForm1').validate();
 	ok( !v.errorList["firstname"], 'No errors yet' );
-	v.element(element);
+	v.check(element);
 	ok( v.errorList["firstname"], 'error exists' );
 	v.errorList = {};
 	$('#firstname').val("hi");
-	v.element(element);
+	v.check(element);
 	ok( !v.errorList["firstname"], 'No more errors' );
 });
 
 test("validator.hide(): input", function() {
+	expect( 2 );
 	var errorLabel = $('#errorFirstname');
 	var element = $('#firstname')[0];
 	element.value ="bla";
@@ -302,6 +311,7 @@ test("validator.hide(): input", function() {
 });
 
 test("validator.hide(): radio", function() {
+	expect( 2 );
 	var errorLabel = $('#agreeLabel');
 	var element = $('#agb')[0];
 	element.checked = true;
@@ -320,7 +330,7 @@ test("validator.hide(): errorWrapper", function() {
 	
 	errorLabel.show();
 	ok( errorLabel.is(":visible"), "Error label visible after validation" );
-	var v = $('#testForm3').validate({ errorWrapper: "li", errorContainer: $("#errorContainer") });
+	var v = $('#testForm3').validate({ wrapper: "li", errorContainer: $("#errorContainer") });
 	v.single(element);
 	ok( errorLabel.is(":hidden"), "Error label not visible after hiding it" );
 });
@@ -353,6 +363,7 @@ test("validator.valid()", function() {
 });
 
 test("validator.showErrors()", function() {
+	expect( 4 );
 	var errorLabel = $('#errorFirstname').hide();
 	var element = $('#firstname')[0];
 	var v = $('#testForm1').validate();
@@ -365,6 +376,7 @@ test("validator.showErrors()", function() {
 });
 
 test("validator.showErrors() - external messages", function() {
+	expect( 4 );
 	$.validator.addMethod("foo", function() { return false; });
 	$.validator.addMethod("bar", function() { return false; });
 	equals( 0, $("#testForm4 label.error[@for=f1]").size() );
@@ -416,6 +428,7 @@ test("validator.rules() - internal - select", function() {
 });
 
 test("validator.rules() - external", function() {
+	expect( 4 );
 	var element = $('#firstname')[0];
 	var v = $('#testForm1').validate({
 		rules: {
@@ -458,9 +471,12 @@ test("validator.rules() - internal - input", function() {
 	equals( 8, rule[2].parameters[1] );
 });
 
-test("validator.format", function() {
+test("validator.formatAndAdd", function() {
 	expect(2);
 	var v = $("#form").validate();
-	equals( "Please enter a value no longer then 2 characters.", v.format({message:"Please enter a value no longer then {0} characters."}, {parameters: 2}, null, {}) );
-	equals( "Please enter a value between 2 and 4.", v.format({message:"Please enter a value between {0} and {1}."}, {parameters:[2,4]}, null, {}) );
+	var fakeElement = { form: { id: "foo" }, name: "bar" };
+	v.formatAndAdd({message:"Please enter a value no longer then {0} characters."}, {parameters: 2}, fakeElement)
+	equals( "Please enter a value no longer then 2 characters.", v.errorList.foobar );
+	v.formatAndAdd({message:"Please enter a value between {0} and {1}."}, {parameters:[2,4]}, fakeElement)
+	equals( "Please enter a value between 2 and 4.", v.errorList.foobar );
 });
