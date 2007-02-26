@@ -41,14 +41,14 @@
             spinner.src = defaultValues.spinnerImgSrc;
 
             // setup Thickbox
-            function setup(type, settings, builder) {
+            function setup(type, builder) {
                 // get or create elements
                 var jq;
                 jq = $('#' + DIM_ID);
                 dim = jq.size() && jq || $('<div id="' + DIM_ID + '">' + ($.browser.msie6 ? '<iframe src="javascript:;"></iframe>' : '') + '</div>').appendTo(document.body).hide();
                 jq = $('#' + LOADING_ID);
                 loading = jq.size() && jq || $('<div id="' + LOADING_ID + '"></div>').appendTo(document.body);
-                loading.css({'background-image': 'url(' + defaultValues.spinnerImgSrc + ')'})
+                loading.css({'background-image': 'url(' + defaultValues.spinnerImgSrc + ')'});
                 jq = $('#' + MODAL_ID);
                 modal = jq.size() && jq || $('<div id="' + MODAL_ID + '"></div>').appendTo(document.body);
                 modal.attr({'class': type});
@@ -339,7 +339,7 @@
 
                     // bind event
                     $$.bind((type == CONFIRM ? 'submit' : 'click'), function() {
-                        setup(type, settings, builder);
+                        setup(type, builder);
                         this.blur(); // remove focus from active element
                         return false;
                     });
