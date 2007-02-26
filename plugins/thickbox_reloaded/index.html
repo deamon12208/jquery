@@ -11,6 +11,9 @@
         <script type="text/javascript" src="jquery.thickbox.js"></script>
 
         <style type="text/css" media="projection, screen">
+            a img {
+                border: 1px solid #525252;
+            }
             #demo-gallery ul {
                 list-style: none;
                 overflow: hidden; /* containing floats */
@@ -70,7 +73,7 @@
 
         <div id="demo-inline">
             <h2>Inline Content</h2>
-            <p><a href="#content">Show Thickbox</a></p>
+            <p><a href="#content" title="Inline Content">Show Thickbox</a></p>
             <div id="content">
                 <h3>This content was loaded from inside the document</h3>
                 <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
@@ -79,12 +82,12 @@
 
         <div id="demo-ajax">
             <h2>Content via Ajax</h2>
-            <p><a href="content.html">Show Thickbox</a></p>
+            <p><a href="content.html" title="Ajax">Show Thickbox</a></p>
         </div>
 
         <div id="demo-external">
             <h2>External Content</h2>
-            <p><a href="http://jquery.com">Show Thickbox</a></p>
+            <p><a href="http://jquery.com" title="External">Show Thickbox</a></p>
         </div>
 
         <div id="demo-form">
