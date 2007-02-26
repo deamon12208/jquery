@@ -1,6 +1,6 @@
 /* Default skin for Thickbox interface */
 
-/* shared */
+/* All types */
 
 #tb-dim {
     background: #000;
@@ -14,20 +14,11 @@
     background: #fff;
     color: #333;
 }
-#tb-title-bar {
-    overflow: hidden; /* containing floats */
-    padding: 3px 0 2px 6px;
-    background: #e8e8e8;
-}
 #tb-title-bar *, #tb-caption, #tb-browse {
     font: 12px/1.3 Arial, Helvetica, Geneva, "sans-serif";
     margin: 0;
 }
-#tb-title-bar h2 {
-    float: left;
-}
 #tb-title-bar a { /* image replacement */
-    float: right;
     overflow: hidden;
     width: 19px;
     height: 18px;
@@ -36,9 +27,9 @@
     text-indent: 1000px;
 }
 
-/* specific types */
+/* Specific types: image, inline, ajax, external, confirm. The modal window has these types set as class attribute for some extra styling. */
 
-/* image*/
+/* image */
 #tb-modal.image img, #tb-caption, #tb-browse {
     margin: 0 15px;
 }
@@ -54,13 +45,14 @@
     right: 13px;
     padding: 0;
     height: auto;
+    background: transparent;
 }
 .image #tb-title-bar a {
     display: block;
     float: none;
     margin: 0;
     background-color: #fff;
-    opacity: .75;
+    opacity: .7;
 }
 .image #tb-title-bar a:hover, .image #tb-title-bar a:focus, .image #tb-title-bar a:active {
     opacity: 1;
@@ -76,16 +68,19 @@
     color: #000;
 }
 
-/* other */
+/* inline, ajax, external, confirm */
 #tb-title-bar {
-    overflow: hidden;
+    overflow: hidden; /* containing floats */
     padding: 0 0 0 6px;
     height: 1.5em;
+    background: #e8e8e8;
 }
 #tb-title-bar h2 {
+    float: left;
     margin: 4px 0 0;
 }
 #tb-title-bar a {
+    float: right;
     margin: 3px 0 0;
 }
 #tb-content {
@@ -94,12 +89,13 @@
    right: 0;
    bottom: 0;
    left: 0;
-}
-div#tb-content, p#tb-content {
    overflow: auto;
    padding: 15px 15px 0;
 }
+
+/* external */
 iframe#tb-content {
+    padding: 0;
     width: 100%;
 }
 

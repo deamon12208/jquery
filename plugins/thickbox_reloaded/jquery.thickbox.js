@@ -1,5 +1,5 @@
 /**
- * Thickbox 3 - jQuery plugin
+ * Thickbox Reloaded (Thickbox 3) - jQuery plugin
  *
  * Copyright (c) 2007 Cody Lindley, Jšrn Zaefferer, Klaus Hartl (jquery.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
@@ -18,7 +18,7 @@
 
             // needful things
             var IMAGE = 'image', INLINE = 'inline', AJAX = 'ajax', EXTERNAL = 'external', CONFIRM = 'confirm'; // Thickbox type constants
-            var DIM_ID = 'tb-dim', LOADING_ID = 'tb-loading', MODAL_ID = 'tb-modal', CONTENT_ID = 'tb-content', TITLE_BAR_ID = 'tb-title-bar', CAPTION_ID = 'tb-caption', BROWSE_ID = 'tb-browse', NEXT_ID = 'tb-next', PREV_ID = 'tb-prev'; // Ids
+            var DIM_ID = 'tb-dim', LOADING_ID = 'tb-loading', MODAL_ID = 'tb-modal', TITLE_BAR_ID = 'tb-title-bar', CONTENT_ID = 'tb-content', CAPTION_ID = 'tb-caption', BROWSE_ID = 'tb-browse', NEXT_ID = 'tb-next', PREV_ID = 'tb-prev'; // Ids
             var dim, loading, modal;
 
             // default values
@@ -77,7 +77,7 @@
                 if (!top) {
                     css['top'] = '';
                     if (!$.browser.msie6) { // take away IE6
-                        css['margin-top'] = '-' + parseInt(height / 2) + 'px';
+                        css['margin-top'] = -parseInt(height / 2) + 'px';
                     } else { // set dynamic property for IE6 to emulate fixed positioning
                         // TODO test this
                         modal[0].style.setExpression('margin-top', '0 - parseInt(this.offsetHeight / 2) + (document.documentElement && document.documentElement.scrollTop || document.body.scrollTop) + "px"');
@@ -88,7 +88,7 @@
                 }
                 if (!left) {
                     css['left'] = '';
-                    css['margin-left'] = '-' + parseInt(width / 2) + 'px'; // TODO prevent modal window being pushed out of viewport, onresize as well
+                    css['margin-left'] = -parseInt(width / 2) + 'px'; // TODO prevent modal window being pushed out of viewport, onresize as well
                 } else {
                     css['left'] = left + (left.match(noUnit) ? 'px' : '');
                     css['margin-left'] = '';

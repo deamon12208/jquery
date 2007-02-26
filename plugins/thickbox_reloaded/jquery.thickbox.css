@@ -1,7 +1,9 @@
-/* import skin */
+/* Required style sheet for Thickbox interface */
+
+/* Import skin */
 @import "jquery.thickbox.skin.css";
 
-/* basic thickbox interface */
+/* Minimum requirements */
 html, body {
     min-height: 100%;
 }
