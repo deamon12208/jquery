@@ -32,7 +32,14 @@
 		$("#texttests").validate({
 			// important: combining focus with validation on blur can crash browsers
 			focusInvalid: false,
-			event: "blur"
+			event: "blur",
+			showErrors: function(errors, validator) {
+				var message = "";
+				$.each(errors, function(i, n) {
+					message += n + "\n";
+				});
+				alert(message);
+			}
 		});
 		
 	});

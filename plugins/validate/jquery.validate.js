@@ -12,11 +12,12 @@
 TODOs
 Allow more options for error display:
 	Inside tables
-	As alerts/dialogs
 Test form plugin integration
 Try to modularize more parts, eg. error display
 	Combining different ways to display messages?
 	An alert on submit, and normal messages in addition
+Refactor message handling: Don't pass around element IDs, instead pass around the
+	element itself
 */
 
 /**
@@ -223,6 +224,8 @@ Try to modularize more parts, eg. error display
  * @option String metaWrapper In case you use metadata for other plugins, too, you
  *		want to wrap your validation rules
  *		into their own object that can be specified via this option. Default: none
+ * @option Function showErrors A custom message display handler. Gets the map of errors as the
+ *		first argument and a refernce to the validator object as the second. Default: none, uses built-in message disply.
  *
  * @name validate
  * @type $.validator
@@ -362,7 +365,7 @@ jQuery.extend(jQuery.validator, {
 							console.error("could not find id/name for element, please check the element %o", element);
 						}
 						var list = this.errorList[id] || (this.errorList[id] = []);
-						list[list.length] = this.format(method, rule, id);
+						list[list.length] = this.format(method, rule, id, element);
 					}
 				} catch(e) {
 					if(this.settings.debug) {
@@ -385,11 +388,14 @@ jQuery.extend(jQuery.validator, {
 		 * @param Object rule
 		 * @param String elementID
 		 */
-		format: function(method, rule, elementID) {
+		format: function(method, rule, elementID, element) {
 			var m = this.settings.messages,
 				param = rule.parameters,
-				first = param.constructor == Array ? param[0] : param;
-			if(m && m[elementID])
+				first = param.constructor == Array ? param[0] : param,
+				title = element.title;
+			if ( title )
+				message = title;
+			else if ( m && m[elementID] )
 				if(m[elementID].constructor == String)
 					message = m[elementID];
 				else
@@ -451,6 +457,10 @@ jQuery.extend(jQuery.validator, {
 		 * The first invalid element is also focused.
 		 */
 		showErrors: function() {
+			if(this.settings.showErrors) {
+				this.settings.showErrors(this.errorList, this);
+				return;
+			}
 			this.settings.errorContainer.show();
 			this.settings.errorLabelContainer.show();
 			this.toShow = $([]);
@@ -496,7 +506,7 @@ jQuery.extend(jQuery.validator, {
 		showError: function(elementID, message) {
 			var element = jQuery("#" + elementID).addClass(this.settings.errorClass),
 				// find message for this label
-				message = element.attr('title') || message || "<strong>Warning: No message defined for " + elementID + "</strong>",
+				message = message || "<strong>Warning: No message defined for " + elementID + "</strong>",
 				error = jQuery("label." + this.settings.errorClass, this.errorContext).filter("[@for=" + elementID + "]"),
 				wrapper = this.settings.errorWrapper;
 			if ( error.length ) {
@@ -521,26 +531,30 @@ jQuery.extend(jQuery.validator, {
 		/*
 		 * Searches all rules for the given element and returns them as an
 		 * array of rule object, each with a name and parameters.
+		 * Returns an empty array if no rule was found.
 		 */
 		rules: function(element) {
-			var data;
-			if(this.settings.rules) {
-				data = this.settings.rules[this.findId(element)];
-			} else {
-				data = jQuery(element).data();
-				var metaWrapper = this.settings.metaWrapper;
-				if(metaWrapper)
-					data = data[metaWrapper];
-			}
+			if(!this.data(element))
+				return [];
 			var rules = [];
-			if(!data)
-				return rules;
-			jQuery.each(data, function(key, value) {
-				var rule = rules[rules.length] = {};
-				rule.name = key;
-				rule.parameters = value;
+			jQuery.each(this.data(element), function(key, value) {
+				rules[rules.length] = {
+					name: key,
+					parameters: value
+				};
 			});
 			return rules;
+		},
+		
+		data: function(element) {
+			if(this.settings.rules) {
+				return this.settings.rules[this.findId(element)];
+			} else {
+				var data = jQuery(element).data();
+				if(this.settings.metaWrapper)
+					data = data[this.settings.metaWrapper];
+				return data;
+			}
 		},
 		
 		findId: function(element) {

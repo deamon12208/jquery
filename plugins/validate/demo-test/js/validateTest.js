@@ -381,6 +381,18 @@ test("validator.showErrors() - external messages", function() {
 	equals( "Wohoo!", $("#testForm4 label.error[@for=f2]").text() );
 });
 
+test("validator.showErrors() - custom handler", function() {
+	expect(3);
+	var v = $('#testForm1').validate({
+		showErrors: function(errors, validator) {
+			equals( v, validator );
+			equals( "buga", errors.firstname );
+			equals( "buga", errors.lastname );
+		}
+	});
+	v.form();
+});
+
 
 test("validator.rules() - internal - input", function() {
 	expect(4);
@@ -449,6 +461,6 @@ test("validator.rules() - internal - input", function() {
 test("validator.format", function() {
 	expect(2);
 	var v = $("#form").validate();
-	equals( "Please enter a value no longer then 2 characters.", v.format({message:"Please enter a value no longer then {0} characters."}, {parameters: 2}) );
-	equals( "Please enter a value between 2 and 4.", v.format({message:"Please enter a value between {0} and {1}."}, {parameters:[2,4]}) );
+	equals( "Please enter a value no longer then 2 characters.", v.format({message:"Please enter a value no longer then {0} characters."}, {parameters: 2}, null, {}) );
+	equals( "Please enter a value between 2 and 4.", v.format({message:"Please enter a value between {0} and {1}."}, {parameters:[2,4]}, null, {}) );
 });
