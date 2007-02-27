@@ -140,7 +140,6 @@
                 for (var p in a) {
                     $.extend(a[p], b[p]);
                 }
-                //console.log(a);
                 return a;
             }
 
@@ -163,7 +162,6 @@
                     height: defaultValues.height,
                     nextTitle: defaultValues.nextTitle,
                     prevTitle: defaultValues.prevTitle,
-                    /*i18n: defaultValues.i18n,*/
                     /* onConfirm: null, remember for documentation */
                     /* animate: defaultValues.animate, remember for documentation, example {animation: { opacity: 'show' }, speed: 1000} */
                     slideshow: false // TODO implement
@@ -179,8 +177,6 @@
                     var isExternal = isLink && this.hostname != location.hostname;
                     var isForm = $$.is('form');
                     var type = isImage && IMAGE || isInline && INLINE || isAjax && AJAX || isExternal && EXTERNAL || isForm && CONFIRM;
-
-                    console.log(settings.i18n);
 
                     // switch type of Thickbox to be bound to element
                     var builder;
