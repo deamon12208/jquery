@@ -37,14 +37,6 @@
                 }
             };
 
-            var testI18n = {
-                close: { text: 'Close', title: 'Close this window' },
-                count: { text: 'Image #{image} of #{count}'},
-                next: { text: 'Next', title: 'Show next image' },
-                prev: { text: 'Previous', title: 'Show previous image' },
-                confirm: { what: 'Are you sure?', confirm: 'Yes', cancel: 'No' }
-            }
-
             // setup Thickbox
             function setup(type, builder) {
                 // get or create elements
