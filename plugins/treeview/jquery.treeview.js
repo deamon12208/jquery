@@ -1,5 +1,5 @@
 /*
- * Treeview 1.1 - jQuery plugin to hide and show branches of a tree
+ * Treeview 1.2 - jQuery plugin to hide and show branches of a tree
  *
  * Copyright (c) 2006 Jörn Zaefferer, Myles Angell
  *
@@ -90,6 +90,11 @@
  * @option String|Number speed Speed of animation, see animate() for details. Default: none, no animation
  * @option Boolean collapsed Start with all branches collapsed. Default: none, all expanded
  * @option <Content> control Container for a treecontrol, see last example.
+ * @option Boolean unique Set to allow only one branch on one level to be open
+ *		   (closing siblings which opening). Default: none
+ * @option Function toggle Callback when toggling a branch.
+ * 		   Arguments: "this" refers to the UL that was shown or hidden.
+ * 		   Works only with speed option set. Default: none
  * @type jQuery
  * @name Treeview
  * @cat Plugins/Treeview
@@ -130,7 +135,7 @@
 		});
 
 	// necessary helper method
-	$.fn.swapClass = function(c1,c2) {
+	$.fn.swapClass = function(c1, c2) {
 		return this.each(function() {
 			var $this = $(this);
 			if ( $.className.has(this, c1) )
@@ -139,6 +144,14 @@
 				$this.removeClass(c2).addClass(c1);
 		});
 	};
+	
+	$.fn.replaceclass = function(c1, c2) {
+		return this.each(function() {
+			var $this = $(this);
+			if ( $.className.has(this, c1) )
+				$this.removeClass(c1).addClass(c2);
+		});
+	}
 	
 	// define plugin method
 	$.fn.Treeview = function(settings) {
@@ -171,14 +184,22 @@
 		// handle toggle event
 		function toggler() {
 			// this refers to hitareas, we need to find the parent lis first
-			$(this).parent()
+			$( this ).parent()
 				// swap classes
-				.swapClass(CLASSES.collapsable, CLASSES.expandable)
-				.swapClass(CLASSES.lastCollapsable, CLASSES.lastExpandable)
+				.swapClass( CLASSES.collapsable, CLASSES.expandable )
+				.swapClass( CLASSES.lastCollapsable, CLASSES.lastExpandable )
 				// find child lists
-				.find(">ul")
+				.find( ">ul" )
 				// toggle them
-				.toggle(settings.speed);
+				.toggle( settings.speed, settings.toggle );
+			if ( settings.unique ) {
+				$( this ).parent()
+				.siblings()
+				.replaceclass( CLASSES.collapsable, CLASSES.expandable )
+				.replaceclass( CLASSES.lastCollapsable, CLASSES.lastExpandable )
+				.find( ">ul" )
+				.hide( settings.speed, settings.toggle );
+			}
 		}
 
 		// add treeview class to activate styles

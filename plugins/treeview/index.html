@@ -11,7 +11,14 @@
 	$(document).ready(function(){
 		$("body > ul:first").Treeview();
 		$("body > ul:eq(1), body > ul:eq(2)").Treeview({ control: "#treecontrol" });
-		var lastTree = $("body > ul:last").Treeview({ speed: "fast", collapsed: true });
+		var lastTree = $("body > ul:last").Treeview({
+			speed: "fast",
+			collapsed: true,
+			unique: true,
+			toggle: function() {
+				window.console && console.log && console.log("%o was toggled", $(this).parent());
+			}
+		});
 		$("#add").click(function() {
 			$("<li>New branch</li>").prependTo(lastTree.find("ul[li]:last"));
 		});
