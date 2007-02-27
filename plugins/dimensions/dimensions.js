@@ -1,7 +1,7 @@
-/* 
- * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) 
+/*
+ * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
- * 
+ *
  * $LastChangedDate$
  * $Rev$
  */
@@ -22,7 +22,7 @@ jQuery.fn._width  = jQuery.fn.width;
  *
  * @example $(window).height()
  * @result 400
- * 
+ *
  * @name height
  * @type Object
  * @cat Plugins/Dimensions
@@ -32,10 +32,10 @@ jQuery.fn.height = function() {
 		return self.innerHeight ||
 			jQuery.boxModel && document.documentElement.clientHeight ||
 			document.body.clientHeight;
-	
-	if ( this[0] == document ) 
+
+	if ( this[0] == document )
 		return Math.max( document.body.scrollHeight, document.body.offsetHeight );
-	
+
 	return this._height(arguments[0]);
 };
 
@@ -52,7 +52,7 @@ jQuery.fn.height = function() {
  *
  * @example $(window).width()
  * @result 400
- * 
+ *
  * @name width
  * @type Object
  * @cat Plugins/Dimensions
@@ -62,10 +62,10 @@ jQuery.fn.width = function() {
 		return self.innerWidth ||
 			jQuery.boxModel && document.documentElement.clientWidth ||
 			document.body.clientWidth;
-	
+
 	if ( this[0] == document )
 		return Math.max( document.body.scrollWidth, document.body.offsetWidth );
-	
+
 	return this._width(arguments[0]);
 };
 
@@ -76,7 +76,7 @@ jQuery.fn.width = function() {
  *
  * @example $("#testdiv").innerHeight()
  * @result 800
- * 
+ *
  * @name innerHeight
  * @type Number
  * @cat Plugins/Dimensions
@@ -96,7 +96,7 @@ jQuery.fn.innerHeight = function() {
  *
  * @example $("#testdiv").innerWidth()
  * @result 1000
- * 
+ *
  * @name innerWidth
  * @type Number
  * @cat Plugins/Dimensions
@@ -115,7 +115,7 @@ jQuery.fn.innerWidth = function() {
  *
  * @example $("#testdiv").outerHeight()
  * @result 1000
- * 
+ *
  * @name outerHeight
  * @type Number
  * @cat Plugins/Dimensions
@@ -135,7 +135,7 @@ jQuery.fn.outerHeight = function() {
  *
  * @example $("#testdiv").outerWidth()
  * @result 1000
- * 
+ *
  * @name outerWidth
  * @type Number
  * @cat Plugins/Dimensions
@@ -155,7 +155,7 @@ jQuery.fn.outerWidth = function() {
  *
  * @example $("#testdiv").scrollLeft()
  * @result 100
- * 
+ *
  * @name scrollLeft
  * @type Number
  * @cat Plugins/Dimensions
@@ -165,7 +165,7 @@ jQuery.fn.scrollLeft = function() {
 		return self.pageXOffset ||
 			jQuery.boxModel && document.documentElement.scrollLeft ||
 			document.body.scrollLeft;
-	
+
 	return this[0].scrollLeft;
 };
 
@@ -175,7 +175,7 @@ jQuery.fn.scrollLeft = function() {
  *
  * @example $("#testdiv").scrollTop()
  * @result 100
- * 
+ *
  * @name scrollTop
  * @type Number
  * @cat Plugins/Dimensions
@@ -191,12 +191,12 @@ jQuery.fn.scrollTop = function() {
 
 /**
  * Returns the location of the element in pixels from the top left corner of the viewport.
- * 
+ *
  * For accurate readings make sure to use pixel values for margins, borders and padding.
- * 
+ *
  * @example $("#testdiv").offset()
  * @result { top: 100, left: 100, scrollTop: 10, scrollLeft: 10 }
- * 
+ *
  * @example $("#testdiv").offset({ scroll: false })
  * @result { top: 90, left: 90 }
  *
@@ -204,21 +204,21 @@ jQuery.fn.scrollTop = function() {
  * $("#testdiv").offset({ scroll: false }, offset)
  * @result offset = { top: 90, left: 90 }
  *
- * @name offset	
+ * @name offset
  * @param Object options A hash of options describing what should be included in the final calculations of the offset.
  *                       The options include:
- *                           margin: Should the margin of the element be included in the calculations? True by default. 
+ *                           margin: Should the margin of the element be included in the calculations? True by default.
  *                                   If set to false the margin of the element is subtracted from the total offset.
  *                           border: Should the border of the element be included in the calculations? True by default.
  *                                   If set to false the border of the element is subtracted from the total offset.
  *                           padding: Should the padding of the element be included in the calculations? False by default.
  *                                    If set to true the padding of the element is added to the total offset.
- *                           scroll: Should the scroll offsets of the parent elements be included in the calculations? 
- *                                   True by default. When true, it adds the total scroll offsets of all parents to the 
- *                                   total offset and also adds two properties to the returned object, scrollTop and 
- *                                   scrollLeft. If set to false the scroll offsets of parent elements are ignored. 
+ *                           scroll: Should the scroll offsets of the parent elements be included in the calculations?
+ *                                   True by default. When true, it adds the total scroll offsets of all parents to the
+ *                                   total offset and also adds two properties to the returned object, scrollTop and
+ *                                   scrollLeft. If set to false the scroll offsets of parent elements are ignored.
  *                                   If scroll offsets are not needed, set to false to get a performance boost.
- * @param Object returnObject An object to store the return value in, so as not to break the chain. If passed in the 
+ * @param Object returnObject An object to store the return value in, so as not to break the chain. If passed in the
  *                            chain will not be broken and the result will be assigned to this object.
  * @type Object
  * @cat Plugins/Dimensions
@@ -235,11 +235,11 @@ jQuery.fn.offset = function(options, returnObject) {
 			// get borders
 			var bt = parseInt(jQuery.css(parent, 'borderTopWidth')) || 0;
 			var bl = parseInt(jQuery.css(parent, 'borderLeftWidth')) || 0;
-			
+
 			// add borders to offset
 			x += bl;
 			y += bt;
-			
+
 			// Mozilla removes the border if the parent has overflow property other than visible
 			if (jQuery.browser.mozilla && parent != elem && jQuery.css(parent, 'overflow') != 'visible') {
 				x += bl;
@@ -253,9 +253,9 @@ jQuery.fn.offset = function(options, returnObject) {
 			do {
 				sl += parent.scrollLeft || 0;
 				st += parent.scrollTop  || 0;
-							
+
 				parent = parent.parentNode;
-				
+
 				// Mozilla removes the border if the parent has overflow property other than visible
 				if (jQuery.browser.mozilla && parent != elem && parent != op && jQuery.css(parent, 'overflow') != 'visible') {
 					y += parseInt(jQuery.css(parent, 'borderTopWidth')) || 0;
@@ -264,8 +264,8 @@ jQuery.fn.offset = function(options, returnObject) {
 			} while (parent != op);
 		} else
 			parent = parent.offsetParent;
-		
-		if (parent && (parent.tagName == 'BODY' || parent.tagName == 'HTML')) {
+
+		if (parent && (parent.tagName.toLowerCase() == 'body' || parent.tagName.toLowerCase() == 'html')) {
 			// Safari doesn't add the body margin for elments positioned with static or relative
 			if (jQuery.browser.safari && jQuery.css(parent, 'position') != 'absolute') {
 				x += parseInt(jQuery.css(op, 'marginLeft')) || 0;
@@ -274,12 +274,12 @@ jQuery.fn.offset = function(options, returnObject) {
 			break; // Exit the loop
 		}
 	} while (parent);
-	
+
 	if ( !options.margin) {
 		x -= parseInt(jQuery.css(elem, 'marginLeft')) || 0;
 		y -= parseInt(jQuery.css(elem, 'marginTop'))  || 0;
 	}
-	
+
 	// Safari and Opera do not add the border for the element
 	if ( options.border && (jQuery.browser.safari || jQuery.browser.opera) ) {
 		x += parseInt(jQuery.css(elem, 'borderLeftWidth')) || 0;
@@ -288,18 +288,18 @@ jQuery.fn.offset = function(options, returnObject) {
 		x -= parseInt(jQuery.css(elem, 'borderLeftWidth')) || 0;
 		y -= parseInt(jQuery.css(elem, 'borderTopWidth'))  || 0;
 	}
-	
+
 	if ( options.padding ) {
 		x += parseInt(jQuery.css(elem, 'paddingLeft')) || 0;
 		y += parseInt(jQuery.css(elem, 'paddingTop'))  || 0;
 	}
-	
+
 	// Opera thinks offset is scroll offset for display: inline elements
 	if (options.scroll && jQuery.browser.opera && jQuery.css(elem, 'display') == 'inline') {
 		sl -= elem.scrollLeft || 0;
 		st -= elem.scrollTop  || 0;
 	}
-	
+
 	var returnValue = options.scroll ? { top: y - st, left: x - sl, scrollTop:  st, scrollLeft: sl }
 	                                 : { top: y, left: x };
 
