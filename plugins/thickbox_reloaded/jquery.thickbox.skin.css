@@ -34,8 +34,8 @@
     margin: 0 15px;
 }
 #tb-modal.image img {
-	display: block;
-	margin-top: 15px;
+    display: block;
+    margin-top: 15px;
     margin-bottom: 5px;
     border: 1px solid #ccc;
 }
@@ -58,8 +58,8 @@
     opacity: 1;
 }
 #tb-browse, #tb-browse a {
+    color: #666;
     font-size: 10px;
-	color: #666;
 }
 #tb-browse a {
     margin: 0 0 0 1em;
@@ -105,7 +105,7 @@ iframe#tb-content {
     text-align: right;
 }
 .confirm #tb-content a {
-	color: #666;
+    color: #666;
     font: 12px/1.3 Arial, Helvetica, Geneva, "sans-serif";
 }
 .confirm #tb-content a:hover, .confirm #tb-content a:focus, .confirm #tb-content a:active {
@@ -113,4 +113,7 @@ iframe#tb-content {
 }
 #tb-confirm {
     float: left;
+}
+#tb-cancel {
+    display: block;
 }
