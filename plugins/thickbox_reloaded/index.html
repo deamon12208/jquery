@@ -24,7 +24,6 @@
                 float: left;
                 margin: 0 1em 0 0;
             }
-
             #demo-inline #content {
                 display: none;
             }
@@ -46,6 +45,13 @@
 
                 // Thickbox load external
                 $('#demo-external a').thickbox();
+
+                // Overide some default values
+                $.thickbox.defaults({
+                    i18n: {
+                        confirm: { what: 'Please confirm', confirm: 'Okay', cancel: 'Back' }
+                    }
+                });
 
                 // Thickbox form submit confirm
                 $('#demo-form form').thickbox();
