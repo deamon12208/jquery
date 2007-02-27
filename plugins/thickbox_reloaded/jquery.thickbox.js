@@ -30,12 +30,20 @@
                 animate: null,
                 i18n: {
                     close: { text: 'Close', title: 'Close this window' },
-                    count: { text: 'Image #{image} of #{count}'},
+                    count: { text: 'Image #{image} of #{count}' },
                     next: { text: 'Next', title: 'Show next image' },
                     prev: { text: 'Previous', title: 'Show previous image' },
                     confirm: { what: 'Are you sure?', confirm: 'Yes', cancel: 'No' }
                 }
             };
+
+            var testI18n = {
+                close: { text: 'Close', title: 'Close this window' },
+                count: { text: 'Image #{image} of #{count}'},
+                next: { text: 'Next', title: 'Show next image' },
+                prev: { text: 'Previous', title: 'Show previous image' },
+                confirm: { what: 'Are you sure?', confirm: 'Yes', cancel: 'No' }
+            }
 
             // setup Thickbox
             function setup(type, builder) {
@@ -136,18 +144,13 @@
                 }
             }
 
-            function i18n(a, b) { // extending nested i18n object...
-                for (var p in a) {
-                    $.extend(a[p], b[p]);
-                }
-                return a;
-            }
-
             /* public */
 
             // set default values
             this.defaults = function(override) {
-                override.i18n = i18n(defaultValues.i18n, override.i18n);
+                for (var p in defaultValues.i18n) {
+                    override.i18n[p] = $.extend(defaultValues.i18n[p], override.i18n[p]);
+                }
                 defaultValues = $.extend(defaultValues, override);
             };
 
@@ -160,13 +163,10 @@
                     left: defaultValues.left,
                     width: defaultValues.width,
                     height: defaultValues.height,
-                    nextTitle: defaultValues.nextTitle,
-                    prevTitle: defaultValues.prevTitle,
                     /* onConfirm: null, remember for documentation */
                     /* animate: defaultValues.animate, remember for documentation, example {animation: { opacity: 'show' }, speed: 1000} */
                     slideshow: false // TODO implement
                 }, settings);
-                settings.i18n = i18n(defaultValues.i18n, settings && settings.i18n || {});
 
                 return this.each(function() {
                     var $$ = $(this);
@@ -205,14 +205,14 @@
                                     // loop through the anchors, looking for ourself, saving information about previous and next image
                                     for (var i = 0, k = group.length; i < k; i++) {
                                         if (group[i] == $$[0]) { // look for ourself
-                                            count = settings.i18n.count.text.replace(/#\{image\}/, i + 1);
+                                            count = defaultValues.i18n.count.text.replace(/#\{image\}/, i + 1);
                                             count = count.replace(/#\{count\}/, k);
                                             if (group[i + 1]) { // if there is a next image
-                                                next = '<strong id="' + NEXT_ID + '"><a href="#" title="' + settings.i18n.next.title + '">' + settings.i18n.next.text + '</a></strong>';
+                                                next = '<strong id="' + NEXT_ID + '"><a href="#" title="' + defaultValues.i18n.next.title + '">' + defaultValues.i18n.next.text + '</a></strong>';
                                                 showNext = buildShowFunc(group[i + 1]);
                                             }
                                             if (group[i - 1]) { // if there is a previous image
-                                                prev = '<strong id="' + PREV_ID + '"><a href="#" title="' + settings.i18n.prev.title + '">' + settings.i18n.prev.text + '</a></strong>';
+                                                prev = '<strong id="' + PREV_ID + '"><a href="#" title="' + defaultValues.i18n.prev.title + '">' + defaultValues.i18n.prev.text + '</a></strong>';
                                                 showPrev = buildShowFunc(group[i - 1]);
                                             }
                                             break; // stop searching
@@ -317,16 +317,16 @@
                             break;
                         case CONFIRM:
                             builder = function() {
-                                buildTitle(settings.i18n.confirm.what);
+                                buildTitle($('input[@type="submit"][@title]', $$).attr('title') || defaultValues.i18n.confirm.what);
                                 var p = $('<p id="' + CONTENT_ID + '"></p>').appendTo(modal);
-                                $('<a id="tb-confirm" href="#">' + settings.i18n.confirm.confirm + '</a>').appendTo(p).click(function() {
+                                $('<a id="tb-confirm" href="#">' + defaultValues.i18n.confirm.confirm + '</a>').appendTo(p).click(function() {
                                     // pass confirm as callback to hide
                                     hide(settings.onConfirm || function() {
                                         $$[0].submit();
                                     });
                                     return false;
                                 });
-                                $('<a id="tb-cancel" href="#">' + settings.i18n.confirm.cancel + '</a> ').appendTo(p).click(function() {
+                                $('<a id="tb-cancel" href="#">' + defaultValues.i18n.confirm.cancel + '</a> ').appendTo(p).click(function() {
                                     hide();
                                     return false;
                                 });

@@ -48,9 +48,7 @@
 
                 // Overide some default values
                 $.thickbox.defaults({
-                    i18n: {
-                        confirm: { what: 'Please confirm', confirm: 'Okay', cancel: 'Back' }
-                    }
+                    i18n: { confirm: { what: 'Please confirm', confirm: 'Okay', cancel: 'Back' } }
                 });
 
                 // Thickbox form submit confirm
@@ -98,6 +96,20 @@
 
         <div id="demo-form">
             <h2>Form Confirm</h2>
+            <form action="">
+                <fieldset>
+                    <legend>Confirmation</legend>
+                    <input type="hidden" name="was" value="submitted" />
+                    <div>Defer form to Thickbox confirm dialog: <input type="submit" value="Go" title="Are you sure?" /></div>
+                </fieldset>
+            </form>
+            <form action="">
+                <fieldset>
+                    <legend>Confirmation</legend>
+                    <input type="hidden" name="was" value="submitted" />
+                    <div>Defer form to Thickbox confirm dialog: <input type="submit" value="Go" title="Really?" /></div>
+                </fieldset>
+            </form>
             <form action="">
                 <fieldset>
                     <legend>Confirmation</legend>
