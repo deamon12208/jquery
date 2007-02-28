@@ -13,9 +13,6 @@ TODOs
 Allow more options for error display:
 	Inside tables
 Test form plugin integration
-Try to modularize more parts, eg. error display
-	Combining different ways to display messages?
-	An alert on submit, and normal messages in addition
 Refactor message handling: Don't pass around element IDs, instead pass around the
 	element itself
 */
@@ -27,72 +24,6 @@ Refactor message handling: Don't pass around element IDs, instead pass around th
  * the user presses enter when an input of that form is focused.
  *
  * It is also possible to validate each individual element of that form, eg. on blur or keyup.
- *
- * Following are a few aspects that you should know about when using this plugin.
- * The examples following demonstrate these aspects.
- *
- * Markup recommendations: A good form has labels associated with each input
- * element: The for attribute of the label has the same value as the id of the input.
- * If IDs aren't provided, they are generated, combining the ID of the containing
- * form (if any) with the name of the element, with the exception of radio and checkbox
- * inputs.
- *
- * Validation methods: A valiation method decides whether an element is valid.
- * Included are a set of common validation methods, like required.
- * Except required itself and equalTo, all validation methods declare an element valid
- * when it has no value at all. That way you can specify an element input to
- * contain a valid email adress, or nothing at all. All available methods are documented
- * below, as well as $.validator.addMethod, which you can use to add your own methods.
- *
- * Validation rules: A validation rule applies one or more validation methods to an
- * input element. You can specify validation rules via metadata or via plugin
- * settings (option rules). It is more a matter of taste which way you choose.
- * Using metadata is good for fast prototyping. Plugin settings are good for perfect
- * clean markup. Valid markup results from both approaches.
- * 
- * Error messages: An error message displays a hint for the user about invalid
- * elements, and what is wrong. There are three ways to provide error messages.
- * Via the title attribute of the input element to validate, via error labels and
- * via plugin settings (option messages). All included validation rules provide a
- * default error message which you can use for prototyping, because it is used when
- * no specific message is provided.
- *
- * Error message display: Error messages are handled via label elements with an
- * additional class (option errorClass). When provided in the markup, they are shown
- * and hidden accordingly, otherwise created on demand. By default, labels are created
- * after the invalid element. It is also possible to put them into an error container
- * (option errorContainer), even a container containing a general warning followed by
- * a list of errors is possible (option errorContainer together with errorLabelContainer).
- *
- * Focusing of invalid elements: By default, the first invalid element in a form is focused
- * after validating a form with invalid elements. To prevent confusion on the behalf of the user,
- * the plugin remembers the element that had focus before starting the validation, and focuses
- * that element. That way the user can try to fill out elements of the form at the end, without
- * being forced to focus them again and again. Because this doesn't work well when validating
- * on blur, you can disable the focusing entirely (option focusInvalid).
- *
- * Form submit: By default, the form submission is prevented when the form is invalid,
- * and submitted as normal when it is valid. You can also handle the submission
- * manually (option submitHandler).
- *
- * Validation event: By default, forms are validated on submit, triggered by the user clicking
- * the submit button or pressing enter when a form input is focused. Instead, each element can
- * be validated on a certain event like blur or keyup (option event).
- *
- * Developing and debugging a form: While developing and debugging the form, you should set
- * the debug option to true. That prevents the form submission on both valid and invalid forms
- * and outputs some helpful messages to window.console (available via Firebug) that help
- * debugging. When you have everything setup and don't get any error messages displayed, check if
- * your rules all accept empty elements as valid (like email or url methods).
- *
- * Validating multiple forms on one page: The plugin can handle only one form per call. In case
- * you have multiple forms on a single page which you want to validate, you can avoid having
- * to duplicate the plugin settings by modifying the defaults via $.validator.defaults. Use
- * $.extend($.validator.defaults, {...}) to override multiple settings at once.
- *
- * Validator object: The validation plugin method returns the instance of the validator object it uses.
- * That gives you full control over every aspect of the validation. Let me know if you come up
- * with something that I didn't have in mind. Thats why the plugin has nearly no private methods.
  *
  * @example $("#myform").validate();
  * @before <form id="myform">
@@ -242,7 +173,10 @@ Refactor message handling: Don't pass around element IDs, instead pass around th
  *		want to wrap your validation rules
  *		into their own object that can be specified via this option. Default: none
  * @option Function showErrors A custom message display handler. Gets the map of errors as the
- *		first argument and a refernce to the validator object as the second. Default: none, uses built-in message disply.
+ *		first argument and a refernce to the validator object as the second.
+ * 		You can trigger (in addition to your own messages) the default behaviour by calling
+ * 		the defaultShowErrors() method of the validator.
+ * 		Default: none, uses built-in message disply.
  *
  * @name validate
  * @type $.validator
@@ -337,6 +271,16 @@ jQuery.extend(jQuery.validator, {
 	// methods for validator object
 	prototype: {
 	
+		/**
+		 * Validate on instant the entire form.
+		 *
+		 * @example $("#myform").validate().form();
+		 * @desc Triggers form validation programmatcitally.
+		 *
+		 * @name jQuery.validator.protoype.form
+		 * @type Boolean True when the form is valid, otherwise false
+		 * @cat Plugins/Validate
+		 */
 		form: function() {
 			this.prepare();
 			for ( var i = 0, element; element = this.elements[i++]; ) {
@@ -345,9 +289,23 @@ jQuery.extend(jQuery.validator, {
 			return this.valid();
 		},
 		
-		single: function( element ) {
+		/**
+		 * Validate on instant a single element.
+		 *
+		 * @example $("#myform").validate().element( "#myselect" );
+		 * @desc Triggers form validation programmatcitally.
+		 *
+		 * @param String|Element element A selector or an element to validate
+		 *
+		 * @name jQuery.validator.protoype.element
+		 * @type Boolean True when the form is valid, otherwise false
+		 * @cat Plugins/Validate
+		 */
+		element: function( element ) {
+			// wrap element in and out of a jQuery object, that way we can accept expressions
+			element = jQuery( element )[0];
 			this.reset();
-			this.toHide = this.errors().forId( this.findId(element) );
+			this.toHide = this.errors().forId( this.findId( element ) );
 			this.check( element );
 			this.showErrors();
 			
@@ -369,18 +327,12 @@ jQuery.extend(jQuery.validator, {
 			this.toShow.push( this.containers );
 		},
 	
-		/*
-		 * Searches the given element for rules and then
-		 * tests the element to these rules.
-		 */
 		check: function( element ) {
-			// TODO fails in opera at first line of jQuery.className.has
 			jQuery( element ).removeClass( this.settings.errorClass );
 			var rules = this.rules( element );
 			for( var i = 0, rule; rule = rules[i++]; ) {
 				try {
 					var result = jQuery.validator.methods[rule.name]( element.value, element, rule.parameters, rules );
-					// stop validating for explicit stop-result
 					if( result === -1 )
 						break;
 					if( !result ) {
@@ -440,7 +392,6 @@ jQuery.extend(jQuery.validator, {
 			this.toggle( "Hide" );
 		},
 		
-		// ignore this
 		toggle: function(that) {
 			var self = this;
 			function which() {
@@ -453,19 +404,11 @@ jQuery.extend(jQuery.validator, {
 			return this;
 		},
 		
-		/*
-		 * Display an error label for every invalid element.
-		 * If there is more than one error, only the label
-		 * associated with the first error is displayed.
-		 * The first invalid element is also focused.
-		 */
 		showErrors: function() {
+			this.settings.showErrors ? this.settings.showErrors( this.errorList, this ) : this.defaultShowErrors();
+		},
 		
-			if ( this.settings.showErrors) {
-				this.settings.showErrors( this.errorList, this );
-				return;
-			}
-			
+		defaultShowErrors: function() {
 			var first = true;
 			for ( var elementID in this.errorList ) {
 				if( first && this.settings.focusInvalid ) {

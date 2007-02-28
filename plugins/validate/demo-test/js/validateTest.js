@@ -306,7 +306,7 @@ test("validator.hide(): input", function() {
 	var v = $('#testForm1').validate();
 	errorLabel.show();
 	ok( errorLabel.is(":visible"), "Error label visible before validation" );
-	v.single(element);
+	v.element(element);
 	ok( errorLabel.is(":hidden"), "Error label not visible after validation" );
 });
 
@@ -318,7 +318,7 @@ test("validator.hide(): radio", function() {
 	var v = $('#testForm2').validate({ errorClass: "xerror" });
 	errorLabel.show();
 	ok( errorLabel.is(":visible"), "Error label visible after validation" );
-	v.single(element);
+	v.element(element);
 	ok( errorLabel.is(":hidden"), "Error label not visible after hiding it" );
 });
 
@@ -331,7 +331,7 @@ test("validator.hide(): errorWrapper", function() {
 	errorLabel.show();
 	ok( errorLabel.is(":visible"), "Error label visible after validation" );
 	var v = $('#testForm3').validate({ wrapper: "li", errorContainer: $("#errorContainer") });
-	v.single(element);
+	v.element(element);
 	ok( errorLabel.is(":hidden"), "Error label not visible after hiding it" );
 });
 
