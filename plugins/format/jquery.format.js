@@ -52,17 +52,10 @@
  */
  
 /**
- * Extends jQuery's built-in text method to accept additional
- * arguments and use them to replace any percent-signs found in the
- * text string.
- *
- * @example jQuery.format("Hi <strong>%</strong> in the year %?", ["Peter", new Date().getYear() + 1900]);
- * @result "Hi &lt;strong&gt;Peter&lt;/strong&gt;, how are you today, in the year 2007?"
- * @desc Basic usage example
- *
- * @example jQuery.format("% %% done.", [56]);
- * @result "56 % done."
- * @desc Escaping of placeholder
+ * The formatter used by extended text() and html(). It replaces all
+ * placeholders found in the first argument by the elements of the array from the
+ * second argument. Would be the base to extend other HTML transforming methods
+ * as append().
  *
  * @param String value A template, containing percent-characters to indicate placeholders
  * @param Array<String> [...] An array of strings to replace the placeholders with
@@ -72,10 +65,6 @@
  */
  
 
-/**
- * Adds templating capabilities to jQuery's built-in methods like html and text.
- * Used like C's printf or Firebug's console.log.
- */
 (function($) {
 	
 	function replace(handler, args) {
