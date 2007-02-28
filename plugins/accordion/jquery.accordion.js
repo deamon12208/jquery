@@ -30,7 +30,7 @@ jQuery.fn.nextUntil = function(expr) {
         }
     });
 
-    return this.pushStack( match, arguments );
+    return this.pushStack( match );
 };
 
 /**
@@ -49,8 +49,8 @@ jQuery.fn.nextUntil = function(expr) {
  *
  * Use activate(Number) to change the active content programmatically.
  *
- * @example $('#list1').Accordion();
- * @before <dl id="list1">
+ * @example $('#nav').Accordion();
+ * @before <dl id="nav">
  *   <dt>Header 1</dt>
  *   <dd>Content 1</dd>
  *   <dt>Header 2</dt>
@@ -58,7 +58,7 @@ jQuery.fn.nextUntil = function(expr) {
  * </dl>
  * @desc Creates an Accordion from the given definition list
  *
- * @example $('#list2').Accordion({
+ * @example $('#nav').Accordion({
  *   header: 'div.title'
  * });
  * @before <div id="nav">
@@ -105,7 +105,8 @@ jQuery.fn.nextUntil = function(expr) {
  * @option String|Number showSpeed Speed for the slideIn, default is 'slow'
  * @option String|Number hideSpeed Speed for the slideOut, default is 'fast'
  * @option String selectedClass Class for active header elements, default is 'selected'
- * @option Boolean alwaysOpen Whether there must be one content element open, default is true. 
+ * @option Boolean alwaysOpen Whether there must be one content element open, default is true.
+ * @option Boolean animated Set to false to disable animations. Default: true
  *
  * @event change Called everytime the accordion changes, params: event, newHeader, oldHeader, newContent, oldContent
  * @type jQuery
@@ -177,8 +178,9 @@ jQuery.fn.nextUntil = function(expr) {
 			active = clicked;
 			// count elements to animate
 			running = toHide.size() + toShow.size();
-			var finished = function() {
-				if(--running)
+			var finished = function(cancel) {
+				running = cancel ? 0 : --running;
+				if ( running )
 					return;
 
 				// trigger custom change event
@@ -187,12 +189,22 @@ jQuery.fn.nextUntil = function(expr) {
 			// TODO if hideSpeed is set to zero, animations are crappy
 			// workaround: use hide instead
 			// solution: animate should check for speed of 0 and do something about it
-			if(!settings.alwaysOpen && clickedActive) {
-				toShow.slideToggle(settings.showSpeed, finished);
-				finished();
+			if ( settings.animated ) {
+				if ( !settings.alwaysOpen && clickedActive ) {
+					toShow.slideToggle(settings.showSpeed);
+					finished(true);
+				} else {
+					toHide.filter(":hidden").each(finished).end().filter(":visible").slideUp(settings.hideSpeed, finished);
+					toShow.slideDown(settings.showSpeed, finished);
+				}
 			} else {
-				toHide.filter(":hidden").each(finished).end().filter(":visible").slideUp(settings.hideSpeed, finished);
-				toShow.slideDown(settings.showSpeed, finished);
+				if ( !settings.alwaysOpen && clickedActive ) {
+					toShow.toggle();
+				} else {
+					toHide.hide();
+					toShow.show();
+				}
+				finished(true);
 			}
 
 			return false;
@@ -213,7 +225,8 @@ jQuery.fn.nextUntil = function(expr) {
 		selectedClass: "selected",
 		showSpeed: 'slow',
 		hideSpeed: 'fast',
-		alwaysOpen: true
+		alwaysOpen: true,
+		animated: true
 	};
 
 	// shortcut for trigger, nicer API and easily to document
