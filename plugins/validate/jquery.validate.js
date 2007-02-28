@@ -236,7 +236,7 @@ jQuery.extend(jQuery.fn, {
 jQuery.validator = function( options, form ) {
 
 	// override defaults with client settings
-	this.settings = jQuery.extend( {}, jQuery.validator.defaults, options );
+	this.settings = jQuery.extend( {}, jQuery.validator.defaultSettings, options );
 	this.messages = this.settings.messages || {};
 	this.currentForm = form[0];
 	
@@ -252,15 +252,8 @@ jQuery.validator = function( options, form ) {
 };
 
 jQuery.extend(jQuery.validator, {
-	/**
-	 * Default settings for validation.
-	 *
-	 * @see validate(Object)
-	 * @name jQuery.validator.defaults
-	 * @type Object<String, Object>
-	 * @cat Plugins/Validate
-	 */
-	defaults: {
+	
+	defaultSettings: {
 		errorClass: "error",
 		focusInvalid: true,
 		errorContainer: jQuery( [] ),
@@ -268,7 +261,52 @@ jQuery.extend(jQuery.validator, {
 		onsubmit: true
 	},
 	
-	// methods for validator object
+	/**
+	 * Modify default settings for validation.
+	 *
+	 * @example jQuery.validator.defaults({
+	 * 	debug: true
+	 * );
+	 * @desc Sets the debug setting for all validation calls following.
+	 *
+	 * @param Object<String, Object> settings
+	 * @name jQuery.validator.defaults()
+	 * @type undefined
+	 * @cat Plugins/Validate
+	 */
+	defaults: function(settings) {
+		jQuery.extend( jQuery.validator.defaultSettings, settings );
+	},
+	
+	/**
+	 * Default messages for all default methods.
+	 *
+	 * User addMethod() to add methods with messages.
+	 *
+	 * Replace these messages for localization.
+	 *
+	 * @property
+	 * @type String
+	 */
+	messages: {
+		required: "This field is required.",
+		maxLength: "Please enter a value no longer then {0} characters.",
+		minLength: "Please enter a value of at least {0} characters.",
+		rangeLength: "Please enter a value between {0} and {1} characters long.",
+		email: "Please enter a valid email address.",
+		url: "Please enter a valid URL.",
+		date: "Please enter a valid date.",
+		dateISO: "Please enter a valid date (ISO).",
+		dateDE: "Bitte geben Sie ein gültiges Datum ein.",
+		number: "Please enter a valid number.",
+		numberDE: "Bitte geben Sie eine Nummer ein.",
+		digits: "Please enter only digits",
+		equalTo: "Please enter the same value again.",
+		rangeValue: "Please enter a value between {0} and {1}.",
+		maxValue: "Please enter a value less than or equal to {0}.",
+		minValue: "Please enter a value greater than or equal to {0}."
+	},
+	
 	prototype: {
 	
 		/**
@@ -282,7 +320,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate
 		 */
 		form: function() {
-			this.prepare();
+			this.prepareForm();
 			for ( var i = 0, element; element = this.elements[i++]; ) {
 				this.check( element );
 			}
@@ -293,7 +331,7 @@ jQuery.extend(jQuery.validator, {
 		 * Validate on instant a single element.
 		 *
 		 * @example $("#myform").validate().element( "#myselect" );
-		 * @desc Triggers form validation programmatcitally.
+		 * @desc Triggers validation on a single element programmatically.
 		 *
 		 * @param String|Element element A selector or an element to validate
 		 *
@@ -302,13 +340,13 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate
 		 */
 		element: function( element ) {
-			// wrap element in and out of a jQuery object, that way we can accept expressions
-			element = jQuery( element )[0];
-			this.reset();
-			this.toHide = this.errors().forId( this.findId( element ) );
+			this.prepareElement( element );
 			this.check( element );
 			this.showErrors();
-			
+		},
+		
+		clean: function( selector ) {
+			return jQuery( selector )[0];
 		},
 		
 		errors: function() {
@@ -321,28 +359,34 @@ jQuery.extend(jQuery.validator, {
 			this.toHide = $( [] );
 		},
 		
-		prepare: function() {
+		prepareForm: function() {
 			this.reset();
 			this.toHide = this.errors().push( this.containers );
 			this.toShow.push( this.containers );
 		},
+		
+		prepareElement: function( element ) {
+			this.reset();
+			this.toHide = this.errors().forId( this.findId( this.clean( element ) ) );
+		},
 	
 		check: function( element ) {
+			element = this.clean( element );
 			jQuery( element ).removeClass( this.settings.errorClass );
 			var rules = this.rules( element );
 			for( var i = 0, rule; rule = rules[i++]; ) {
 				try {
-					var result = jQuery.validator.methods[rule.name]( element.value, element, rule.parameters, rules );
+					var result = jQuery.validator.methods[rule.method]( element.value, element, rule.parameters );
 					if( result === -1 )
 						break;
 					if( !result ) {
 						jQuery(element).addClass( this.settings.errorClass );
-						this.formatAndAdd(jQuery.validator.methods[rule.name], rule, element);
+						this.formatAndAdd( rule, element);
 						break;
 					}
 				} catch(e) {
 					this.settings.debug && window.console && console.error("exception occured when checking element " + element.id
-						 + ", check the '" + rule.name + "' method");
+						 + ", check the '" + rule.method + "' method");
 					throw e;
 				}
 			}
@@ -350,16 +394,16 @@ jQuery.extend(jQuery.validator, {
 		
 		message: function( id, rule ) {
 			var m = this.messages[id];
-			return m && (m.constructor == String ? m : m[rule.name]);
+			return m && (m.constructor == String ? m : m[rule.method]);
 		},
 		
-		formatAndAdd: function( method, rule, element) {
+		formatAndAdd: function( rule, element) {
 			var id = this.findId( element ),
 				param = rule.parameters;
 			this.errorList[id] = (
 					element.title
 					|| this.message(id, rule)
-					|| method.message
+					|| jQuery.validator.messages[rule.method]
 					|| "<strong>Warning: No message defined for " + id + "</strong>"
 				)
 				.replace( "{0}", (param.constructor == Array ? param[0] : param) || "" )
@@ -437,12 +481,6 @@ jQuery.extend(jQuery.validator, {
 			this.toggle( "Hide" ).toggle( "Show" );
 		},
 		
-		/*
-		 * Searches for an error label inside an errorContainer (if specified) or
-		 * the current form or, when validating single elements, inside the document.
-		 * If there is no error label present, one is generated.
-		 * Check settings and markup, if the form is invalid, but no error is displayed.
-		 */
 		showError: function(id, message) {
 			var error = this.errors().forId(id);
 			if ( error.length ) {
@@ -462,33 +500,25 @@ jQuery.extend(jQuery.validator, {
 			this.toShow.push(error);
 		},
 		
-		/*
-		 * Searches all rules for the given element and returns them as an
-		 * array of rule object, each with a name and parameters.
-		 * Returns an empty array if no rule was found.
-		 */
-		rules: function(element) {
-			if(!this.data(element))
+		rules: function( element ) {
+			if( !this.data( element ) )
 				return [];
 			var rules = [];
-			jQuery.each(this.data(element), function(key, value) {
+			jQuery.each( this.data(element), function(key, value) {
 				rules[rules.length] = {
-					name: key,
+					method: key,
 					parameters: value
 				};
-			});
+			} );
 			return rules;
 		},
 		
-		data: function(element) {
-			if(this.settings.rules) {
-				return this.settings.rules[this.findId(element)];
-			} else {
-				var data = jQuery(element).data();
-				if( this.settings.meta )
-					data = data[ this.settings.meta ];
-				return data;
-			}
+		data: function( element ) {
+			return this.settings.rules
+				? this.settings.rules[this.findId(element)]
+				: this.settings.meta
+					? jQuery(element).data()[ this.settings.meta ]
+					: jQuery(element).data();
 		},
 		
 		findId: function(element) {
@@ -534,30 +564,16 @@ jQuery.extend(jQuery.validator, {
 	/**
 	 * Defines a standard set of useful validation methods.
 	 * 
-	 * Can be extended, see example below.
+	 * Use jQuery.validator.addMethod() to add your own methods.
 	 *
 	 * If "all kind of text inputs" is mentioned for any if the methods defined here,
 	 * it refers to input elements of type text, password and file and textareas.
-	 *
-	 * Note: When you pass strings as paramters to your methods, explicitly convert them
-	 * to strings before using them. Strings read from metadata are of type "object", which
-	 * can cause weird problems. See the equalTo method for an example.
-	 *
-	 * @example jQuery.validator.methods.myMethod = function(value, element, parameters, validate) {
-	 * 	 var isValid = ...;
-	 *   return isValid;
-	 * }
-	 * @desc Defines a new method called "myMethod".
-	 *
-	 * @example jQuery.validator.methods.containsFoobar = function(value) {
-	 *   return value == "foobar";
-	 * }
-	 * @desc If you only need the value parameter, you don't have to specify the other arguments.
 	 *
 	 * @param String value the value of the element, eg. the text of a text input
 	 * @param Element element the input element itself, to check for content of attributes other then value
 	 * @param Object paramater Some parameter, like a number for min/max rules
 	 *
+	 * @property
 	 * @name jQuery.validator.methods
 	 * @type Object<String, Function(String,Element,Object):Boolean>
 	 * @cat Plugins/Validate/Methods
@@ -1032,38 +1048,7 @@ jQuery.extend(jQuery.validator, {
 	 * @cat Plugins/Validate
 	 */
 	addMethod: function(name, method, message) {
-		(jQuery.validator.methods[name] = method).message = message;
+		jQuery.validator.methods[name] = method;
+		jQuery.validator.messages[name] = message;
 	}
 });
-
-(function() {
-	/*
-	 * Add default messages directly to method functions.
-	 *
-	 * To add new methods, use jQuery.validator.addMethod
-	 *
-	 * To change default messages, change jQuery.validator.methods.[method].message
-	 */
-	var messages = {
-		required: "This field is required.",
-		maxLength: "Please enter a value no longer then {0} characters.",
-		minLength: "Please enter a value of at least {0} characters.",
-		rangeLength: "Please enter a value between {0} and {1} characters long.",
-		email: "Please enter a valid email address.",
-		url: "Please enter a valid URL.",
-		date: "Please enter a valid date.",
-		dateISO: "Please enter a valid date (ISO).",
-		dateDE: "Bitte geben Sie ein gültiges Datum ein.",
-		number: "Please enter a valid number.",
-		numberDE: "Bitte geben Sie eine Nummer ein.",
-		digits: "Please enter only digits",
-		equalTo: "Please enter the same value again.",
-		rangeValue: "Please enter a value between {0} and {1}.",
-		maxValue: "Please enter a value less than or equal to {0}.",
-		minValue: "Please enter a value greater than or equal to {0}."
-	};
-	for(var key in messages) {
-		jQuery.validator.methods[key].message = messages[key];
-	}
-})();
-

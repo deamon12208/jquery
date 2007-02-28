@@ -228,7 +228,7 @@ test("rule: equalTo", function() {
 test("method default messages", function() {
 	var m = $.validator.methods;
 	$.each(m, function(key) {
-		ok( m[key].message, key + " has a default message." );
+		ok( jQuery.validator.messages[key], key + " has a default message." );
 	});
 });
 
@@ -242,7 +242,7 @@ test("$.validator.addMethod", function() {
 	ok( !rule(e.value, e), "Invalid" );
 	e.value = "hi";
 	ok( rule(e.value, e), "Invalid" );
-	ok( rule.message == "hi me too", "Check custom message" );
+	ok( jQuery.validator.messages.hi == "hi me too", "Check custom message" );
 });
 
 test("validator.form(): simple", function() {
@@ -411,9 +411,9 @@ test("validator.rules() - internal - input", function() {
 	var element = $('#firstname')[0];
 	var v = $('#testForm1').validate();
 	var rule = v.rules(element);
-	equals( "required", rule[0].name );
+	equals( "required", rule[0].method );
 	equals( true, rule[0].parameters );
-	equals( "minLength", rule[1].name );
+	equals( "minLength", rule[1].method );
 	equals( 2, rule[1].parameters );
 });
 
@@ -423,7 +423,7 @@ test("validator.rules() - internal - select", function() {
 	var v = $('#testForm3').validate();
 	var rule = v.rules(element);
 	// fails in opera, bug is reported
-	equals( "required", rule[0].name );
+	equals( "required", rule[0].method );
 	ok( rule[0].parameters );
 });
 
@@ -436,9 +436,9 @@ test("validator.rules() - external", function() {
 		}
 	});
 	var rule = v.rules(element);
-	equals( "date", rule[0].name );
+	equals( "date", rule[0].method );
 	ok( rule[0].parameters );
-	equals( "min", rule[1].name );
+	equals( "min", rule[1].method );
 	equals( 5, rule[1].parameters );
 });
 
@@ -462,11 +462,11 @@ test("validator.rules() - internal - input", function() {
 	var element = $('#form8input')[0];
 	var v = $('#testForm8').validate();
 	var rule = v.rules(element);
-	equals( "required", rule[0].name );
+	equals( "required", rule[0].method );
 	equals( true, rule[0].parameters );
-	equals( "number", rule[1].name );
+	equals( "number", rule[1].method );
 	equals( true, rule[1].parameters );
-	equals( "rangeLength", rule[2].name );
+	equals( "rangeLength", rule[2].method );
 	equals( 2, rule[2].parameters[0] );
 	equals( 8, rule[2].parameters[1] );
 });
@@ -475,8 +475,10 @@ test("validator.formatAndAdd", function() {
 	expect(2);
 	var v = $("#form").validate();
 	var fakeElement = { form: { id: "foo" }, name: "bar" };
-	v.formatAndAdd({message:"Please enter a value no longer then {0} characters."}, {parameters: 2}, fakeElement)
+	jQuery.validator.messages.test1 = "Please enter a value no longer then {0} characters.";
+	jQuery.validator.messages.test2 = "Please enter a value between {0} and {1}.";
+	v.formatAndAdd({method: "test1", parameters: 2}, fakeElement)
 	equals( "Please enter a value no longer then 2 characters.", v.errorList.foobar );
-	v.formatAndAdd({message:"Please enter a value between {0} and {1}."}, {parameters:[2,4]}, fakeElement)
+	v.formatAndAdd({method: "test2", parameters:[2,4]}, fakeElement)
 	equals( "Please enter a value between 2 and 4.", v.errorList.foobar );
 });

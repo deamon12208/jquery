@@ -27,7 +27,9 @@ div.container { display: none }
 
 <script type="text/javascript">
 $(document).ready(function() {
-	$.validator.defaults.debug = true;
+	$.validator.defaults({
+		debug: true
+	});
 	$("#form1").validate({
 		errorContainer: $("#form1 div.error")
 	});
@@ -110,7 +112,7 @@ $(document).ready(function() {
 	
 </script>
 
-<a href="validate-demo.html">Back to main page</a>
+<a href="index.html">Back to main page</a>
 
 </body>
 </html>

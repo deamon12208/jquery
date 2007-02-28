@@ -11,7 +11,10 @@
 <script src="../jquery.validate.js" type="text/javascript"></script>
 
 <script type="text/javascript">
-	$.validator.defaults.debug = true;
+	$.validator.defaults({
+		debug: true
+	});
+	
 	$().ready(function() {
 		// validate the comment form when it is submitted
 		$("#commentForm").validate();
@@ -200,7 +203,7 @@
 
 <h3>Testsuite</h3>
 <ul>
-	<li><a href="ValidationTest.html">Validation Testsuite</a></li>
+	<li><a href="test.html">Validation Testsuite</a></li>
 </ul>	
 
 <h3>Javascript files used</h3>

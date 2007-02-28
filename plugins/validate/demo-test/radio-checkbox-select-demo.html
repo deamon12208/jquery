@@ -14,7 +14,9 @@
 <script type="text/javascript">
 	$.meta.setType("attr", "validate");
 	$(document).ready(function() {
-		$.validator.defaults.debug = true;
+		$.validator.defaults({
+			debug: true
+		});
 		
 		// validate selects on button click
 		$("#validateSelects").click(function() {
@@ -133,7 +135,7 @@
 	<p><button id="validateSelects">Validate Selecttests</button></p>
 </div>
 
-<a href="validate-demo.html">Back to main page</a>
+<a href="index.html">Back to main page</a>
 
 </body>
 </html>

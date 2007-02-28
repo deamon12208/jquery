@@ -78,7 +78,6 @@ function test(name, callback, nowait) {
 				console.warn(callback.toString());
 			}
 			_config.Test.push( [ false, "Died on test #" + (_config.Test.length+1) + ": " + e ] );
-			throw e;
 		}
 	});
 	synchronize(function() {
