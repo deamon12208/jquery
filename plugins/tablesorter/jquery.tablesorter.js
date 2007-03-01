@@ -358,7 +358,7 @@
 								var d = defaults.textExtractionType;
 								$.each(d,function(i) {
 									var val = o[d[i]];		
-									if(val.length > 0) {
+									if(val && val.length > 0) {
 										elementText = val;
 									}
 								});
