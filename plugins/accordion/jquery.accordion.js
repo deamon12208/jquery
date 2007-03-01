@@ -152,7 +152,7 @@ jQuery.fn.nextUntil = function(expr) {
 			running = 0;
 
 		container.find(settings.header)
-			.not(active && active[0] || "")
+			.not(active || "")
 			.nextUntil(settings.header)
 			.hide();
 		active.addClass(settings.selectedClass);
