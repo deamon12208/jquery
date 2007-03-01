@@ -21,7 +21,7 @@
 (function($) {
 	// save reference to plugin method
 	var plugin = $.fn.PeriodicalUpdate = function(settings) {
-		settings = $.extend(arguments.callee.defaults, settings || {});
+		settings = $.extend({}, arguments.callee.defaults, settings);
 
 		// Initialize
 		var container=this;
