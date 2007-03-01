@@ -32,6 +32,7 @@
 			debug: false,
 			textExtraction: 'simple',
 			textExtractionCustom: false,
+			textExtractionType: false,
 			bind: true,
 			addHeaderLink: false,
 			lockedSortDir: false,
@@ -40,7 +41,6 @@
 		};
 	 
 		return this.each(function(){
-		/** add a class name for identifiying the table for companion plugins */
 			
 			/** merge default with custom options */
 			$.extend(defaults, o);
@@ -354,10 +354,21 @@
 						elementText = defaults.textExtractionCustom[index](o);
 					} else {
 						if(defaults.textExtraction == 'simple') {
-							if(o.childNodes[0] && o.childNodes[0].hasChildNodes()) {
-								elementText = o.childNodes[0].innerHTML;
-							} else {
-								elementText = o.innerHTML;
+							if(typeof(defaults.textExtractionType) == "object") {
+								var d = defaults.textExtractionType;
+								$.each(d,function(i) {
+									var val = o[d[i]];		
+									if(val.length > 0) {
+										elementText = val;
+									}
+								});
+							} else { 
+							
+								if(o.childNodes[0] && o.childNodes[0].hasChildNodes()) {
+									elementText = o.childNodes[0].innerHTML;
+								} else {
+									elementText = o.innerHTML;
+								}
 							}
 						} else if(defaults.textExtraction == 'complex') {
 							// make a jquery object, this will take forever with large tables.
@@ -417,13 +428,6 @@
 				return a[1]-b[1];
 			}
 		}
-	};
-	$.fn.wrapInner = function(o) {
-	    return this.each(function(){
-	                 var jQ = $(this);
-	                 var c = jQ.html();
-	                 jQ.empty().append(o.el).filter(o.id).html(c);
-	    });
 	};
 	$.tableSorter.parsers.generic = {
 		id: 'generic',
