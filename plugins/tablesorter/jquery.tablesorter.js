@@ -46,8 +46,8 @@
 			$.extend(defaults, o);
 	
 			/** Private vars */
-			var COLUMN_DATA = [];			/** array for storing columns */
-			var COLUMN_CACHE = [];			/** array for storing sort caches.*/
+			var COLUMN_DATA;			/** array for storing columns */
+			var COLUMN_CACHE;			/** array for storing sort caches.*/
 			var COLUMN_INDEX;				/** int for storing current cell index */
 			var COLUMN_SORTER_CACHE = [];	/** array for sorter parser cache */
 			var COLUMN_CELL;				/** stores the current cell object */
@@ -72,24 +72,16 @@
 				COLUMN_CACHE = [];
 			});
 			
-			$(this).bind("updateColumnData",function(event) {
-				
-				var oldIndex = COLUMN_ROW_LENGTH;
-				COLUMN_ROW_LENGTH = oTable.tBodies[0].rows.length;
-				var newIndex = COLUMN_ROW_LENGTH;
-				
-				for (var i=oldIndex;i < newIndex; i++) {
-					/** Add the table data to main data array */
-					COLUMN_DATA.push(oTable.tBodies[0].rows[i]);
-				}
-			});
-			
+			$(this).bind("updateColumnData",buildColumnDataIndex);
 			
 			/** Store length of table rows. */
 			var tableRowLength = (oTable.tBodies[0] && oTable.tBodies[0].rows.length-1) || 0;
 	
 			/** Index column data. */
 			buildColumnDataIndex();
+			
+			/** when done, build headers. */
+			buildColumnHeaders();
 	
 			function buildColumnHeaders() {
 				var oFirstTableRow = oTable.rows[0];
@@ -166,15 +158,16 @@
 			/** break out and put i $.tableSorter? */
 			function buildColumnDataIndex() {
 				/** make colum data. */
+				COLUMN_DATA = [];
+				COLUMN_CACHE = [];
 				COLUMN_ROW_LENGTH = (oTable.tBodies[0] && oTable.tBodies[0].rows.length) || 0;
 				var l = COLUMN_ROW_LENGTH;
 				for (var i=0;i < l; i++) {
 					/** Add the table data to main data array */
 					COLUMN_DATA.push(oTable.tBodies[0].rows[i]);
 				}
-				/** when done, build headers. */
-				buildColumnHeaders();
-			}	
+			}
+				
 			function addColGroup(columnsHeader) {
 				var oSampleTableRow = oTable.rows[1];
 				/** adjust header to the sample rows */
