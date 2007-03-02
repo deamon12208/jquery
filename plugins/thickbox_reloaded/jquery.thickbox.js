@@ -42,7 +42,7 @@
                 // get or create elements
                 var jq;
                 jq = $('#' + DIM_ID);
-                dim = jq.size() && jq || $('<div id="' + DIM_ID + '">' + ($.browser.msie6 ? '<iframe src="javascript:;"></iframe>' : '') + '</div>').appendTo(document.body).hide();
+                dim = jq.size() && jq || $('<div id="' + DIM_ID + '">' + ($.browser.msie6 ? '<iframe src="about:blank" frameborder="0"></iframe>' : '') + '</div>').appendTo(document.body).hide();
                 jq = $('#' + LOADING_ID);
                 loading = jq.size() && jq || $('<div id="' + LOADING_ID + '"></div>').appendTo(document.body);
                 jq = $('#' + MODAL_ID);
@@ -75,8 +75,11 @@
                     if (!$.browser.msie6) { // take away IE6
                         css['margin-top'] = -parseInt(height / 2) + 'px';
                     } else { // set dynamic property for IE6 to emulate fixed positioning
-                        // TODO test this
-                        modal[0].style.setExpression('margin-top', '0 - parseInt(this.offsetHeight / 2) + (document.documentElement && document.documentElement.scrollTop || document.body.scrollTop) + "px"');
+                        dim[0].style.setExpression('height', 'document.body.scrollHeight > document.body.offsetHeight ? document.body.scrollHeight : document.body.offsetHeight + "px"');
+                        loading[0].style.setExpression('marginTop', '0 - parseInt(this.offsetHeight / 2) + (document.documentElement && document.documentElement.scrollTop || document.body.scrollTop) + "px"');
+                        modal[0].style.setExpression('marginTop', '0 - parseInt(this.offsetHeight / 2) + (document.documentElement && document.documentElement.scrollTop || document.body.scrollTop) + "px"');
+
+                        // TODO: remove expression or attach once ?!
                     }
                 } else {
                     css['top'] = top + (top.match(noUnit) ? 'px' : '');

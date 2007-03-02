@@ -117,3 +117,8 @@ iframe#tb-content {
 #tb-cancel {
     display: block;
 }
+
+/* IE specific */
+* html #tb-dim {
+    filter: Alpha(Opacity=60);
+}

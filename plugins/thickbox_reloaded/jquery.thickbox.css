@@ -5,6 +5,8 @@
 
 /* Minimum requirements */
 html, body {
+    margin: 0;
+    padding: 0;
     min-height: 100%;
 }
 #tb-dim {
@@ -32,8 +34,11 @@ html, body {
 }
 
 /* IE specific */
+* html #tb-dim, * html #tb-loading, * html #tb-modal {
+    position: absolute;
+}
 * html #tb-dim iframe { /* hide selects in IE 6, not required in IE 7 */
-    border: 0;
     width: 100%;
     height: 100%;
+    filter: Alpha(Opacity=0);
 }
