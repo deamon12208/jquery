@@ -11,8 +11,9 @@
 /*
 TODOs
 Allow more options for error display:
-	Inside tables
-	Other elements then labels for error labels? The missing for-attribute itsn't really worth the effort, improve the documentation instead
+	Allow customizing of placement of dynamic labels (eg. inside tables)
+	Allow other elements then labels for error labels? The missing for-attribute itsn't really worth the effort, improve the documentation instead
+	Add (more) examples
 Test form plugin integration
 Refactor message handling: Don't pass around element IDs, instead pass around the
 	element itself
