@@ -482,3 +482,83 @@ test("validator.formatAndAdd", function() {
 	v.formatAndAdd({method: "test2", parameters:[2,4]}, fakeElement)
 	equals( "Please enter a value between 2 and 4.", v.errorList.foobar );
 });
+
+test("error containers, simple", function() {
+	expect(12);
+	var container = $("#simplecontainer");
+	var v = $("#form").validate({
+		errorContainer: container
+	});
+	
+	v.prepareForm();
+	ok( v.valid(), "form is valid" );
+	equals( 0, container.find("label").length, "There should be no error labels" );
+	
+	v.prepareForm();
+	v.errorList = {
+		"foo": "bar",
+		"required": "necessary"
+	}
+	ok( !v.valid(), "form is not valid after adding errors manually" );
+	equals( 2, container.find("label").length, "There should be two error labels" );
+	ok( container.is(":visible"), "Check that the container is visible" );
+	container.find("label").each(function() {
+		ok( $(this).is(":visible"), "Check that each label is visible" );
+	});
+	
+	v.prepareForm();
+	ok( v.valid(), "form is not valid after adding errors manually" );
+	equals( 2, container.find("label").length, "There should still be two error labels" );
+	ok( container.is(":hidden"), "Check that the container is hidden" );
+	container.find("label").each(function() {
+		ok( $(this).is(":hidden"), "Check that each label is hidden" );
+	});
+});
+
+test("error containers, with labelcontainer", function() {
+	expect(28);
+	var container = $("#container"),
+		labelcontainer = $("#labelcontainer");
+	var v = $("#form").validate({
+		errorContainer: container,
+		errorLabelContainer: labelcontainer,
+		wrapper: "li"
+	});
+	
+	v.prepareForm();
+	ok( v.valid(), "form is valid" );
+	equals( 0, container.find("label").length, "There should be no error labels in the container" );
+	equals( 0, labelcontainer.find("label").length, "There should be no error labels in the labelcontainer" );
+	equals( 0, labelcontainer.find("li").length, "There should be no lis labels in the labelcontainer" );
+	
+	v.prepareForm();
+	v.errorList = {
+		"foo": "bar",
+		"required": "necessary"
+	}
+	ok( !v.valid(), "form is not valid after adding errors manually" );
+	equals( 0, container.find("label").length, "There should be no error label in the container" );
+	equals( 2, labelcontainer.find("label").length, "There should be two error labels in the labelcontainer" );
+	equals( 2, labelcontainer.find("li").length, "There should be two error lis in the labelcontainer" );
+	ok( container.is(":visible"), "Check that the container is visible" );
+	ok( labelcontainer.is(":visible"), "Check that the labelcontainer is visible" );
+	labelcontainer.find("label").each(function() {
+		ok( $(this).is(":visible"), "Check that each label is visible" );
+		equals( "li", $(this).parent()[0].tagName.toLowerCase(), "Check that each label is wrapped in an li" );
+		ok( $(this).parent("li").is(":visible"), "Check that each parent li is visible" );
+	});
+	
+	
+	v.prepareForm();
+	ok( v.valid(), "form is not valid after adding errors manually" );
+	equals( 0, container.find("label").length, "There should be no error label in the container" );
+	equals( 2, labelcontainer.find("label").length, "There should be two error labels in the labelcontainer" );
+	equals( 2, labelcontainer.find("li").length, "There should be two error lis in the labelcontainer" );
+	ok( container.is(":hidden"), "Check that the container is hidden" );
+	ok( labelcontainer.is(":hidden"), "Check that the labelcontainer is hidden" );
+	labelcontainer.find("label").each(function() {
+		ok( $(this).is(":hidden"), "Check that each label is visible" );
+		equals( "li", $(this).parent()[0].tagName.toLowerCase(), "Check that each label is wrapped in an li" );
+		ok( $(this).parent("li").is(":hidden"), "Check that each parent li is visible" );
+	});
+});

@@ -12,6 +12,7 @@
 TODOs
 Allow more options for error display:
 	Inside tables
+	Other elements then labels for error labels? The missing for-attribute itsn't really worth the effort, improve the documentation instead
 Test form plugin integration
 Refactor message handling: Don't pass around element IDs, instead pass around the
 	element itself
@@ -492,7 +493,9 @@ jQuery.extend(jQuery.validator, {
 				// create label
 				error = jQuery("<label>").attr({"for": id, generated: true}).addClass("error").html(message);
 				if ( this.settings.wrapper ) {
-					error = error.show().wrap("<" + this.settings.wrapper + ">").parent();
+					// make sure the element is visible, even in IE
+					// actually showing the wrapped element is handled elsewhere
+					error = error.hide().show().wrap("<" + this.settings.wrapper + ">").parent();
 				}
 				if ( !this.errorContainer.append(error).length ) 
 					error.insertAfter("#" + id);
