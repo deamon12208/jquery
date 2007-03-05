@@ -267,7 +267,7 @@ jQuery.fn.offset = function(options, returnObject) {
 
 		if (parent && (parent.tagName.toLowerCase() == 'body' || parent.tagName.toLowerCase() == 'html')) {
 			// Safari doesn't add the body margin for elments positioned with static or relative
-			if (jQuery.browser.safari && jQuery.css(parent, 'position') != 'absolute') {
+			if ((jQuery.browser.safari || (jQuery.browser.msie && jQuery.boxModel)) && jQuery.css(parent, 'position') != 'absolute') {
 				x += parseInt(jQuery.css(op, 'marginLeft')) || 0;
 				y += parseInt(jQuery.css(op, 'marginTop'))  || 0;
 			}
