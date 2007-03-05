@@ -63,6 +63,12 @@
         </antcall>
     </target>
 	
+	<target name="format" description="Build format plugin.">
+        <antcall target="generic">
+            <param name="name" value="format" />
+        </antcall>
+    </target>
+	
 	<target name="validate" description="Build validate plugin.">
         <antcall target="generic">
             <param name="name" value="validate" />
