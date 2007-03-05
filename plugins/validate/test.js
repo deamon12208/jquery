@@ -330,7 +330,7 @@ test("validator.hide(): errorWrapper", function() {
 	
 	errorLabel.show();
 	ok( errorLabel.is(":visible"), "Error label visible after validation" );
-	var v = $('#testForm3').validate({ wrapper: "li", errorContainer: $("#errorContainer") });
+	var v = $('#testForm3').validate({ wrapper: "li", errorLabelContainer: $("#errorContainer") });
 	v.element(element);
 	ok( errorLabel.is(":hidden"), "Error label not visible after hiding it" );
 });
@@ -352,13 +352,13 @@ test("validator.valid()", function() {
 	expect(5);
 	var v = $('#testForm3').validate();
 	ok( v.valid(), "No errors, must be valid" );
-	v.errorList = { meal: "foo" };
+	v.errorList = {"meal": "foo"};
 	ok( !v.valid(), "One error, must be invalid" );
 	v = $('#testForm3').validate({ submitHandler: function() {
 		ok( true, "Submit handler was called" );
 	}});
 	ok( !v.valid(), "No errors, must be valid but returning false and calling the submit handler" );
-	v.errorList = { meal: "foo" };
+	v.errorList = {"meal": "foo"};
 	ok( !v.valid(), "One error, must be invalid, no call to submit handler" );
 });
 
@@ -369,8 +369,7 @@ test("validator.showErrors()", function() {
 	var v = $('#testForm1').validate();
 	ok( errorLabel.is(":hidden") );
 	equals( 0, $("label.error[@for=lastname]").size() );
-	v.errorList = { firstname: "required", lastname: "bla" };
-	v.showErrors();
+	v.showErrors({"firstname": "required", "lastname": "bla"});
 	equals( true, errorLabel.is(":visible") );
 	equals( true, $("label.error[@for=lastname]").is(":visible") );
 });
@@ -487,7 +486,7 @@ test("error containers, simple", function() {
 	expect(12);
 	var container = $("#simplecontainer");
 	var v = $("#form").validate({
-		errorContainer: container
+		errorLabelContainer: container
 	});
 	
 	v.prepareForm();
@@ -495,10 +494,7 @@ test("error containers, simple", function() {
 	equals( 0, container.find("label").length, "There should be no error labels" );
 	
 	v.prepareForm();
-	v.errorList = {
-		"foo": "bar",
-		"required": "necessary"
-	}
+	v.errorList = {"foo": "bar", "required": "necessary"};
 	ok( !v.valid(), "form is not valid after adding errors manually" );
 	equals( 2, container.find("label").length, "There should be two error labels" );
 	ok( container.is(":visible"), "Check that the container is visible" );
@@ -532,10 +528,7 @@ test("error containers, with labelcontainer", function() {
 	equals( 0, labelcontainer.find("li").length, "There should be no lis labels in the labelcontainer" );
 	
 	v.prepareForm();
-	v.errorList = {
-		"foo": "bar",
-		"required": "necessary"
-	}
+	v.errorList = {"foo": "bar", "required": "necessary"};
 	ok( !v.valid(), "form is not valid after adding errors manually" );
 	equals( 0, container.find("label").length, "There should be no error label in the container" );
 	equals( 2, labelcontainer.find("label").length, "There should be two error labels in the labelcontainer" );

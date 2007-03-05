@@ -26,6 +26,10 @@
 			loader.hide();
 		});
 		
+		$().ajaxError(function(a, b, e) {
+			throw e;
+		});
+		
 		$.validator.defaults({
 			debug: true
 		});
@@ -36,8 +40,7 @@
 					dataType: "json",
 					after: function(result) {
 						if(result.status) {
-							v.errorList = result.data;
-							v.showErrors();
+							v.showErrors(result.data);
 						}	
 					}
 				});

@@ -80,18 +80,9 @@ Refactor message handling: Don't pass around element IDs, instead pass around th
  *
  * @example $("#myform").validate({
  *   errorClass: "invalid",
- *   errorContainer: $("#messageBox"),
+ *   errorLabelContainer: $("#messageBox"),
  *   wrapper: "li"
  * });
- * @desc Validates a form on submit. The class used to search, create and display
- * error labels is changed to "invalid". This is also added to invalid elements.
- *
- * All error labels are displayed inside an unordered list with the ID "messageBox", as
- * specified by the jQuery object passed as errorContainer option. All error elements
- * are wrapped inside an li element, to create a list of messages.
- *
- * To ease the setup of the form, debug option is set to true, preventing a submit
- * of the form no matter of being valid or not.
  * @before <ul id="messageBox" />
  * <form id="myform" action="/login" method="post">
  *   <label>Firstname</label>
@@ -108,19 +99,22 @@ Refactor message handling: Don't pass around element IDs, instead pass around th
  *   <input name="fname" class="{required:true} invalid" />
  *   <label>Lastname</label>
  *   <input name="lname" title="Your lastname, please!" class="{required:true} invalid" />
- * </form> 
+ * </form>
+ * @desc Validates a form on submit. The class used to search, create and display
+ * error labels is changed to "invalid". This is also added to invalid elements.
+ *
+ * All error labels are displayed inside an unordered list with the ID "messageBox", as
+ * specified by the jQuery object passed as errorContainer option. All error elements
+ * are wrapped inside an li element, to create a list of messages.
+ *
+ * To ease the setup of the form, debug option is set to true, preventing a submit
+ * of the form no matter of being valid or not.
  *
  * @example $("#myform").validate({
  *   errorContainer: $("#messageBox1, #messageBox2"),
  *   errorLabelContainer: $("#messageBox1 ul"),
  *   wrapper: "li",
  * });
- * @desc Validates a form on submit. Similar to the above example, but with an additional
- * container for error messages. The elements given as the errorContainer are all shown
- * and hidden when errors occur. But the error labels themselve are added to the element(s)
- * given as errorLabelContainer, here an unordered list. Therefore the error labels are
- * also wrapped into li elements (wrapper option).
- *
  * @before <div id="messageBox1">
  *   <h3>The are errors in your form!</h3>
  *   <ul/>
@@ -144,13 +138,17 @@ Refactor message handling: Don't pass around element IDs, instead pass around th
  *   <label>Lastname</label>
  *   <input name="lname" title="Your lastname, please!" class="{required:true} error" />
  * </form>
+ * @desc Validates a form on submit. Similar to the above example, but with an additional
+ * container for error messages. The elements given as the errorContainer are all shown
+ * and hidden when errors occur. But the error labels themselve are added to the element(s)
+ * given as errorLabelContainer, here an unordered list. Therefore the error labels are
+ * also wrapped into li elements (wrapper option).
  *
  * @param Map options Optional settings to configure validation
  * @option String errorClass Use this class to look for existing error labels and add it to
  *		invalid elements. Default: "error"
- * @option jQuery errorContainer Search and append error labels inside or to this container. Default: none
- * @option jQuery errorLabelContainer Search and append error labels to this container. Default: none
- *		If specified, this container is used instead of the errorContainer, but both are shown and hidden when necessary
+ * @option jQuery errorContainer Hide and show this container when validating. Default: none
+ * @option jQuery errorLabelContainer Search and append error labels to this container, and show and hide it accordingly. Default: none
  * @option String wrapper Wrap error labels with the specified element, eg "li". Default: none
  * @option Boolean debug If true, the form is not submitted and certain errors are display on the console (requires Firebug or Firebug lite). Default: none
  * @option Boolean focusInvalid Focus the last active or first invalid element. Disable for blur-validation, crashes IE otherwise. Default: true
@@ -237,17 +235,11 @@ jQuery.extend(jQuery.fn, {
 // constructor for validator
 jQuery.validator = function( options, form ) {
 
-	// override defaults with client settings
 	this.settings = jQuery.extend( {}, jQuery.validator.defaultSettings, options );
-	this.messages = this.settings.messages || {};
-	this.currentForm = form[0];
 	
-	// find the element to look for and put error labels
-	function get( container ) {
-		return container.length && container;
-	}
-	this.errorContainer = get( this.settings.errorLabelContainer ) || get( this.settings.errorContainer ) || jQuery( [] );
-	this.errorContext = get( this.errorContainer ) || form;
+	this.currentForm = form[0];
+	this.errorContainer = this.settings.errorLabelContainer;
+	this.errorContext = this.errorContainer.length && this.errorContainer || form;
 	this.containers = this.settings.errorContainer.add( this.settings.errorLabelContainer );
 	
 	this.reset();
@@ -256,6 +248,7 @@ jQuery.validator = function( options, form ) {
 jQuery.extend(jQuery.validator, {
 	
 	defaultSettings: {
+		messages: {},
 		errorClass: "error",
 		focusInvalid: true,
 		errorContainer: jQuery( [] ),
@@ -347,6 +340,27 @@ jQuery.extend(jQuery.validator, {
 			this.showErrors();
 		},
 		
+		/**
+		 * Show the specified messages.
+		 *
+		 * @example var validator = $("#myform").validate();
+		 * validator.addErrors({"firstname": "I know that your firstname is Pete, Pete!"});
+		 * validator.showErrors();
+		 * @desc Adds and shows error message programmatically.
+		 *
+		 * @param Map errors One or more key/value pairs of identifiers (IDs or names) and messages
+		 *
+		 * @name jQuery.validator.protoype.showErrors
+		 * @cat Plugins/Validate
+		 */
+		showErrors: function(errors) {
+			if(errors)
+				jQuery.extend(this.errorList, errors);
+			this.settings.showErrors
+				? this.settings.showErrors( this.errorList, this )
+				: this.defaultShowErrors();
+		},
+		
 		clean: function( selector ) {
 			return jQuery( selector )[0];
 		},
@@ -395,8 +409,10 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		message: function( id, rule ) {
-			var m = this.messages[id];
-			return m && (m.constructor == String ? m : m[rule.method]);
+			var m = this.settings.messages[id];
+			return m && (m.constructor == String
+				? m
+				: m[rule.method]);
 		},
 		
 		formatAndAdd: function( rule, element) {
@@ -408,7 +424,9 @@ jQuery.extend(jQuery.validator, {
 					|| jQuery.validator.messages[rule.method]
 					|| "<strong>Warning: No message defined for " + id + "</strong>"
 				)
-				.replace( "{0}", (param.constructor == Array ? param[0] : param) || "" )
+				.replace( "{0}", (param.constructor == Array
+					? param[0]
+					: param) || "" )
 				.replace( "{1}", param[1] || "" );
 		},
 		
@@ -448,10 +466,6 @@ jQuery.extend(jQuery.validator, {
 			}
 			which()[that.toLowerCase()]();
 			return this;
-		},
-		
-		showErrors: function() {
-			this.settings.showErrors ? this.settings.showErrors( this.errorList, this ) : this.defaultShowErrors();
 		},
 		
 		defaultShowErrors: function() {
@@ -526,7 +540,9 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		findId: function(element) {
-			var id = ( /radio|checkbox/i.test(element.type) ) ? element.name : element.id;
+			var id = ( /radio|checkbox/i.test(element.type) )
+				? element.name
+				: element.id;
 			// generate id when none is found
 			if(!id) {
 				var formId = element.form.id,
@@ -550,7 +566,9 @@ jQuery.extend(jQuery.validator, {
 	},
 	
 	depend: function(param, element) {
-		return this.dependTypes[typeof param] ? this.dependTypes[typeof param](param, element) : true;
+		return this.dependTypes[typeof param]
+			? this.dependTypes[typeof param](param, element)
+			: true;
 	},
 	
 	dependTypes: {
