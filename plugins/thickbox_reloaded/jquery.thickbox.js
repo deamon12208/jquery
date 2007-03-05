@@ -82,14 +82,14 @@
                         // TODO: remove expression or attach once ?!
                     }
                 } else {
-                    css['top'] = top + (top.match(noUnit) ? 'px' : '');
+                    css['top'] = top + ((top + '').match(noUnit) ? 'px' : '');
                     css['margin-top'] = '';
                 }
                 if (!left) {
                     css['left'] = '';
                     css['margin-left'] = -parseInt(width / 2) + 'px'; // TODO prevent modal window being pushed out of viewport, onresize as well
                 } else {
-                    css['left'] = left + (left.match(noUnit) ? 'px' : '');
+                    css['left'] = left + ((left + '').match(noUnit) ? 'px' : '');
                     css['margin-left'] = '';
                 }
                 animate ? modal.css(css).animate(animate.animation, animate.speed) : modal.css(css).show();
