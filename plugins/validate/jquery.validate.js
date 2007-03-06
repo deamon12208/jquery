@@ -1,5 +1,5 @@
 /*
- * Form Validation: jQuery form validation plug-in v1.0 alpha 3
+ * Form Validation: jQuery form validation plug-in v1.0 beta 1
  *
  * Copyright (c) 2006 Jörn Zaefferer
  *
@@ -7,11 +7,6 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  */
-
-/*
-TODOs
-Test form plugin integration
-*/
 
 /**
  * Validates either a single form on submit or a list of elements on a user-defined event.
@@ -178,8 +173,6 @@ Test form plugin integration
  * @param Map options Optional settings to configure validation
  * @option String errorClass Use this class to look for existing error labels and add it to
  *		invalid elements. Default: "error"
- * @option jQuery errorContainer Hide and show this container when validating. Default: none
- * @option jQuery errorLabelContainer Search and append error labels to this container, and show and hide it accordingly. Default: none
  * @option String wrapper Wrap error labels with the specified element, eg "li". Default: none
  * @option Boolean debug If true, the form is not submitted and certain errors are display on the console (requires Firebug or Firebug lite). Default: none
  * @option Boolean focusInvalid Focus the last active or first invalid element. Disable for blur-validation, crashes IE otherwise. Default: true
@@ -203,12 +196,17 @@ Test form plugin integration
  * @option String meta In case you use metadata for other plugins, too, you
  *		want to wrap your validation rules
  *		into their own object that can be specified via this option. Default: none
+ * @option jQuery errorContainer Hide and show this container when validating. Default: none
+ * @option jQuery errorLabelContainer Search and append error labels to this container, and show and hide it accordingly. Default: none
  * @option Function showErrors A custom message display handler. Gets the map of errors as the
  *		first argument and a refernce to the validator object as the second.
  * 		You can trigger (in addition to your own messages) the default behaviour by calling
  * 		the defaultShowErrors() method of the validator.
  * 		Default: none, uses built-in message disply.
- * @option Function errorPlacement TODO
+ * @option Function errorPlacement Used to customize placement of created error labels.
+ *		First argument: jQuery object containing the created error label
+ *		Second argument: jQuery object containing the invalid element
+ *		Default: Places the error label after the invalid element
  *
  * @name validate
  * @type $.validator
@@ -267,7 +265,7 @@ jQuery.extend(jQuery.fn, {
 // constructor for validator
 jQuery.validator = function( options, form ) {
 
-	this.settings = jQuery.extend( {}, jQuery.validator.defaultSettings, options );
+	this.settings = jQuery.extend( {}, jQuery.validator.defaults, options );
 	
 	this.currentForm = form[0];
 	this.labelContainer = this.settings.errorLabelContainer;
@@ -279,7 +277,7 @@ jQuery.validator = function( options, form ) {
 
 jQuery.extend(jQuery.validator, {
 	
-	defaultSettings: {
+	defaults: {
 		messages: {},
 		errorClass: "error",
 		focusInvalid: true,
@@ -291,18 +289,18 @@ jQuery.extend(jQuery.validator, {
 	/**
 	 * Modify default settings for validation.
 	 *
-	 * @example jQuery.validator.defaults({
+	 * @example jQuery.validator.setDefaults({
 	 * 	debug: true
 	 * );
 	 * @desc Sets the debug setting for all validation calls following.
 	 *
 	 * @param Object<String, Object> settings
-	 * @name jQuery.validator.defaults()
+	 * @name jQuery.validator.setDefaults
 	 * @type undefined
 	 * @cat Plugins/Validate
 	 */
-	defaults: function(settings) {
-		jQuery.extend( jQuery.validator.defaultSettings, settings );
+	setDefaults: function(settings) {
+		jQuery.extend( jQuery.validator.defaults, settings );
 	},
 	
 	/**
@@ -424,7 +422,7 @@ jQuery.extend(jQuery.validator, {
 			var rules = this.rules( element );
 			for( var i = 0, rule; rule = rules[i++]; ) {
 				try {
-					var result = jQuery.validator.methods[rule.method]( element.value, element, rule.parameters );
+					var result = jQuery.validator.methods[rule.method]( jQuery.trim(element.value), element, rule.parameters );
 					if( result === -1 )
 						break;
 					if( !result ) {
@@ -625,7 +623,7 @@ jQuery.extend(jQuery.validator, {
 	 * If "all kind of text inputs" is mentioned for any if the methods defined here,
 	 * it refers to input elements of type text, password and file and textareas.
 	 *
-	 * @param String value the value of the element, eg. the text of a text input
+	 * @param String value The trimmed value of the element, eg. the text of a text input (trimmed: whitespace removed at start and end)
 	 * @param Element element the input element itself, to check for content of attributes other then value
 	 * @param Object paramater Some parameter, like a number for min/max rules
 	 *
@@ -714,7 +712,7 @@ jQuery.extend(jQuery.validator, {
 					return jQuery.validator.getLength(value, element) > 0;
 				}
 			default:
-				return jQuery.trim(value).length > 0;
+				return value.length > 0;
 			}
 		},
 	

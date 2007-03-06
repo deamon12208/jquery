@@ -8,12 +8,12 @@
 	"license": "mit, gpl",
 	"distribution_type": "enhancement",
 	"requires": {
-		"jQuery": 1.1
+		"jQuery": 1.1.2
 	},
 	"provides": {
 		"jQuery.validate": {
 			"version": 1.0,
-			"file": "jquery.accordion.js"
+			"file": "jquery.validate.js"
 		}
 	},
 	"keywords": [
