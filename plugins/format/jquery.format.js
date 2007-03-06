@@ -17,7 +17,7 @@
  * html string.
  *
  * @example jQuery("div").html("Hi <strong>%</strong> in the year %?", name, new Date().getYear() + 1900);
- * @result [ <div>Hi <strong>Peter</strong>, how are you today, in the year 2007?</div> ]
+ * @result [ <div>Hi <strong>Peter</strong> in the year 2007?</div> ]
  * @desc Basic usage example
  *
  * @example jQuery("div").html("% %% done.", 56);
@@ -37,7 +37,7 @@
  * text string.
  *
  * @example jQuery("div").text("Hi <strong>%</strong> in the year %?", "Peter", new Date().getYear() + 1900);
- * @result [ <div>Hi &lt;strong&gt;Peter&lt;/strong&gt;, how are you today, in the year 2007?</div> ]
+ * @result [ <div>Hi &lt;strong&gt;Peter&lt;/strong&gt; in the year 2007?</div> ]
  * @desc Basic usage example
  *
  * @example jQuery("div").text("% %% done.", 56);
