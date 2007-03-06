@@ -104,7 +104,7 @@ $.fn.extend({
 // clean-up
 $(window)
 	.bind('unload', function() {
-		var els = $.event._mwCache;
+		var els = $.event._mwCache || [];
 		for (var i=0; i<els.length; i++)
 			els[i].unmousewheel();
 	});
