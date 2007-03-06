@@ -102,8 +102,8 @@ jQuery.fn.nextUntil = function(expr) {
  * @param Map options key/value pairs of optional settings.
  * @option String|Element|jQuery|Boolean active Selector for the active element, default is the first child, set to false to display none at start
  * @option String|Element|jQuery header Selector for the header element, eg. div.title, a.head, default is the first child's tagname
- * @option String|Number showSpeed Speed for the slideIn, default is 'slow'
- * @option String|Number hideSpeed Speed for the slideOut, default is 'fast'
+ * @option String|Number showSpeed Speed for the slideIn, default is 'slow' (for numbers: smaller = faster)
+ * @option String|Number hideSpeed Speed for the slideOut, default is 'fast' (for numbers: smaller = faster)
  * @option String selectedClass Class for active header elements, default is 'selected'
  * @option Boolean alwaysOpen Whether there must be one content element open, default is true.
  * @option Boolean animated Set to false to disable animations. Default: true
