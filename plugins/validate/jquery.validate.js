@@ -10,13 +10,7 @@
 
 /*
 TODOs
-Allow more options for error display:
-	Allow customizing of placement of dynamic labels (eg. inside tables)
-	Allow other elements then labels for error labels? The missing for-attribute itsn't really worth the effort, improve the documentation instead
-	Add (more) examples
 Test form plugin integration
-Refactor message handling: Don't pass around element IDs, instead pass around the
-	element itself
 */
 
 /**
@@ -110,6 +104,43 @@ Refactor message handling: Don't pass around element IDs, instead pass around th
  * To ease the setup of the form, debug option is set to true, preventing a submit
  * of the form no matter of being valid or not.
  *
+ *
+ * @example $("#myform").validate({
+ * 	errorPlacement: function(error, id) {
+ * 		error.appendTo( $("#" + id).parent("td").next("td") );
+ * 	}
+ * });
+ * @before <form id="myform" action="/login" method="post">
+ * 	<table>
+ * 		<tr>
+ * 			<td><label>Firstname</label>
+ * 			<td><input name="fname" class="{required:true}" /></td>
+ * 			<td></td>
+ * 		</tr>
+ * 		<tr>
+ * 			<td><label>Lastname</label></td>
+ * 			<td><input name="lname" title="Your lastname, please!" class="{required:true}" /></td>
+ * 			<td></td>
+ * 		</tr>
+ * 	</table>
+ * </form>
+ * @result <form id="myform" action="/login" method="post">
+ * 	<table>
+ * 		<tr>
+ * 			<td><label>Firstname</label>
+ * 			<td><input name="fname" class="{required:true}" /></td>
+ * 			<td><label for="fname" class="invalid">Please specify your firstname!</label></td>
+ * 		</tr>
+ * 		<tr>
+ * 			<td><label>Lastname</label></td>
+ * 			<td><input name="lname" title="Your lastname, please!" class="{required:true}" /></td>
+ * 			<td><label for="lname" class="invalid">Your lastname, please!</label></td>
+ * 		</tr>
+ * 	</table>
+ * </form>
+ * @desc Validates a form on submit. Customizes the placement of the generated labels
+ * by appending them to the next table cell.
+ *
  * @example $("#myform").validate({
  *   errorContainer: $("#messageBox1, #messageBox2"),
  *   errorLabelContainer: $("#messageBox1 ul"),
@@ -177,6 +208,7 @@ Refactor message handling: Don't pass around element IDs, instead pass around th
  * 		You can trigger (in addition to your own messages) the default behaviour by calling
  * 		the defaultShowErrors() method of the validator.
  * 		Default: none, uses built-in message disply.
+ * @option Function errorPlacement TODO
  *
  * @name validate
  * @type $.validator
@@ -206,7 +238,7 @@ jQuery.extend(jQuery.fn, {
 		if ( validator.settings.event ) {
 			// validate all elements on some other event like blur or keypress
 			validator.elements.bind( validator.settings.event, function() {
-				validator.single(this);
+				validator.element(this);
 			} );
 		}
 		
@@ -238,8 +270,8 @@ jQuery.validator = function( options, form ) {
 	this.settings = jQuery.extend( {}, jQuery.validator.defaultSettings, options );
 	
 	this.currentForm = form[0];
-	this.errorContainer = this.settings.errorLabelContainer;
-	this.errorContext = this.errorContainer.length && this.errorContainer || form;
+	this.labelContainer = this.settings.errorLabelContainer;
+	this.errorContext = this.labelContainer.length && this.labelContainer || form;
 	this.containers = this.settings.errorContainer.add( this.settings.errorLabelContainer );
 	
 	this.reset();
@@ -512,8 +544,10 @@ jQuery.extend(jQuery.validator, {
 					// actually showing the wrapped element is handled elsewhere
 					error = error.hide().show().wrap("<" + this.settings.wrapper + ">").parent();
 				}
-				if ( !this.errorContainer.append(error).length ) 
-					error.insertAfter("#" + id);
+				if ( !this.labelContainer.append(error).length )
+					this.settings.errorPlacement
+						? this.settings.errorPlacement(error, jQuery("#" + id) )
+						: error.insertAfter("#" + id);
 			}
 			this.toShow.push(error);
 		},
