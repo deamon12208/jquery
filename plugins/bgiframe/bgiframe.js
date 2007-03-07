@@ -35,7 +35,7 @@
 jQuery.fn.bgIframe = jQuery.fn.bgiframe = function() {
 	// This is only for IE6
 	if ( !(jQuery.browser.msie && typeof XMLHttpRequest == 'function') ) return this;
-	var html = '<iframe class="bgiframe" src="javascript:false;document.write(\'\');" tabindex="-1" '
+	var html = '<iframe class="bgiframe" src="javascript:;" tabindex="-1" '
 	 					+'style="display:block; position:absolute; '
 						+'top: expression(((parseInt(this.parentNode.currentStyle.borderTopWidth)  || 0) * -1) + \'px\'); '
 						+'left:expression(((parseInt(this.parentNode.currentStyle.borderLeftWidth) || 0) * -1) + \'px\'); ' 
