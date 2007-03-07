@@ -396,7 +396,7 @@
 				} else if(typeof(arg) == "string") {
 					return (arg.toLowerCase() == $.tableSorter.utils.getElementText(defaults,o,'header',index).toLowerCase()) ? true : false;
 				} else if(arg.parentNode) {
-	       return (o == arg) ? true : false
+	       			return (o == arg) ? true : false
 				} else if(typeof(arg) == "object") {
 					var l = arg.length;
 					if(!this.lastFound) { this.lastFound = -1; }
@@ -496,7 +496,7 @@
 			return s.match(new RegExp(/^\d{4}[\/-]\d{1,2}[\/-]\d{1,2}$/));
 		},
 		format: function(s) {
-			return parseFloat(new Date(s.replace(new RegExp(/-/g),'/')).getTime());
+			return parseFloat((s != "") ? new Date(s.replace(new RegExp(/-/g),'/')).getTime() : "0");
 		},
 		sorter: $.tableSorter.sorters.numeric
 	};
