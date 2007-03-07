@@ -101,8 +101,8 @@
  *
  *
  * @example $("#myform").validate({
- * 	errorPlacement: function(error, id) {
- * 		error.appendTo( $("#" + id).parent("td").next("td") );
+ * 	errorPlacement: function(error, element) {
+ * 		error.appendTo( element.parent("td").next("td") );
  * 	}
  * });
  * @before <form id="myform" action="/login" method="post">
