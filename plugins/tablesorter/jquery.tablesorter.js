@@ -187,15 +187,9 @@
 				COLUMN_CELL = oCell;
 				COLUMN_DIR = dir;
 				/** clear all classes, need to be optimized. */
-				$("th",oTable).removeClass(defaults.sortClassAsc).removeClass(defaults.sortClassDesc);
+				$("thead th",oTable).removeClass(defaults.sortClassAsc).removeClass(defaults.sortClassDesc);
 				/**add active class and append image. */
 				$(COLUMN_CELL).addClass((dir % 2 ? defaults.sortClassAsc : defaults.sortClassDesc));
-				/** remove highlighting */
-				if(defaults.highlightClass) {
-					if(COLUMN_LAST_INDEX != COLUMN_INDEX && COLUMN_LAST_INDEX > -1) {
-						$("> tbody:first/tr",o).find("> td:eq(" + COLUMN_LAST_INDEX + ")").removeClass(defaults.highlightClass).end();
-					}
-				}
 				/** if this is fired, with a straight call, sortStart / Stop would never be fired. */
 				setTimeout(doSorting,0);
 			}
@@ -235,7 +229,7 @@
 						flatData = null;
 					}
 					/** append to table > tbody */
-					$.tableSorter.utils.appendToTable(defaults,oTable,columns,defaults,COLUMN_INDEX,COLUMN_LAST_INDEX);
+					$.tableSorter.utils.appendToTable(defaults,oTable,columns,COLUMN_INDEX,COLUMN_LAST_INDEX);
 					/** good practise i guess */
 					columns = null;
 					/** trigger stop event. */
@@ -382,10 +376,15 @@
 					$.tableSorter.utils.stripeRows(defaults,o);
 				}
 				if(defaults.highlightClass) {
-					$("> tbody:first/tr",o).find("> td:eq(" + index + ")").addClass(defaults.highlightClass).end();
+					$.tableSorter.utils.highlightColumn(defaults,o,index,lastIndex);
 				}
+				
 				/** empty object, good practice! */
 				c=null;
+			},
+			highlightColumn : function(defaults,o,index, lastIndex) {
+				$("> tbody:first/tr", o).find("td:eq(" + lastIndex+ ")").removeClass(defaults.highlightClass);
+				$("> tbody:first/tr", o).find("td:eq(" + index + ")").addClass(defaults.highlightClass);
 			},
 			stripeRows: function(defaults,o) {
 				$("> tbody:first/tr:visible:even",o).addClass(defaults.stripingRowClass[0]);
