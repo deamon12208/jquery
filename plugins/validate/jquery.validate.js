@@ -536,7 +536,7 @@ jQuery.extend(jQuery.validator, {
 				}
 			} else {
 				// create label
-				error = jQuery("<label>").attr({"for": id, generated: true}).addClass("error").html(message);
+				error = jQuery("<label>").attr({"for": id, generated: true}).addClass(this.settings.errorClass).html(message);
 				if ( this.settings.wrapper ) {
 					// make sure the element is visible, even in IE
 					// actually showing the wrapped element is handled elsewhere
