@@ -26,6 +26,9 @@
  * @cat Plugins/jScrollPane
  * @author Kelvin Luck (kelvin AT kelvinluck DOT com || http://www.kelvinluck.com)
  */
+jQuery.jScrollPane = {
+	active : []
+};
 jQuery.fn.jScrollPane = function(settings)
 {
 	settings = jQuery.extend(
@@ -34,7 +37,8 @@ jQuery.fn.jScrollPane = function(settings)
 			scrollbarMargin : 5,
 			wheelSpeed : 18,
 			showArrows : false,
-			arrowSize : undefined
+			arrowSize : undefined,
+			animateTo : false
 		}, settings
 	);
 	return this.each(
@@ -182,6 +186,7 @@ jQuery.fn.jScrollPane = function(settings)
 				
 				var initDrag = function()
 				{
+					ceaseAnimation();
 					currentOffset = $drag.offset(false);
 					currentOffset.top -= dragPosition;
 					maxY = trackHeight - $drag[0].offsetHeight;
@@ -258,6 +263,7 @@ jQuery.fn.jScrollPane = function(settings)
 					$container.mousewheel(
 						function (event, delta) {
 							initDrag();
+							ceaseAnimation();
 							var d = dragPosition;
 							positionDrag(dragPosition - delta * mouseWheelMultiplier);
 							var dragOccured = d != dragPosition;
@@ -291,9 +297,48 @@ jQuery.fn.jScrollPane = function(settings)
 						false
 					);					
 				}
+				var _animateToPosition;
+				var _animateToInterval;
+				function animateToPosition()
+				{
+					var diff = (_animateToPosition - dragPosition) / 3;
+					if (diff > 1 || diff < -1) {
+						positionDrag(dragPosition + diff);
+					} else {
+						positionDrag(_animateToPosition);
+						ceaseAnimation();
+					}
+				}
+				ceaseAnimation = function()
+				{
+					if (_animateToInterval) {
+						clearInterval(_animateToInterval);
+						delete _animateToPosition;
+					}
+				}
+				var scrollTo = function(pos)
+				{
+					ceaseAnimation();
+					var destDragPosition = -pos/(paneHeight-contentHeight) * maxY;
+					if (settings.animateTo) {
+						_animateToPosition = destDragPosition;
+						_animateToInterval = setInterval(animateToPosition, 100);
+					} else {
+						positionDrag(destDragPosition);
+					}
+				};
+				$this[0].scrollTo = scrollTo;
+				
+				$this[0].scrollBy = function(delta)
+				{
+					var currentPos = -parseInt($pane.css('top')) || 0;
+					scrollTo(currentPos + delta);
+				};
 				
 				initDrag();
 				
+				jQuery.jScrollPane.active.push($this[0]);
+
 			} else {
 				$this.css(
 					{
@@ -302,7 +347,18 @@ jQuery.fn.jScrollPane = function(settings)
 						'padding':this.originalPadding
 					}
 				);
+				// remove from active list?
 			}
 		}
 	)
 }
+
+// clean up the scrollTo expandos
+jQuery(window)
+	.bind('unload', function() {
+		var els = jQuery.jScrollPane.active; 
+		for (var i=0; i<els.length; i++) {
+			els[i].scrollTo = els[i].scrollBy = null;
+		}
+	}
+);
