@@ -34,14 +34,13 @@ jQuery.selectstart = function(e) {
 	this.f.scr = jQuery.iUtil.getScroll(this);
 	this.f.pointer.x -= this.f.pos.x;
 	this.f.pointer.y -= this.f.pos.y;
-	jQuery(this).append(jQuery.selectHelper.get(0));
 	if (this.f.hc)
-		jQuery.selectHelper.addClass(this.f.hc).css('display','block');
+		jQuery.selectHelper.addClass(this.f.hc);
 	jQuery.selectHelper.css(
 		{
 			display: 'block',
-			width: '0px',
-			height: '0px'
+			width: '1px',
+			height: '1px'
 		}
 	);
 	if (this.f.o) {
@@ -73,6 +72,8 @@ jQuery.selectstart = function(e) {
 			}
 		}
 	);
+	jQuery(this).append(jQuery.selectHelper.get(0));
+	this.f.selectBorders = jQuery.iUtil.getBorder(jQuery.selectHelper[0], true);
 	jQuery.selectcheck.apply(this, [e]);
 	jQuery(document)
 		.bind('mousemove', jQuery.selectcheck)
@@ -125,8 +126,8 @@ jQuery.selectcheckApply = function(e)
 		{
 			left:	sx + 'px',
 			top:	sy + 'px',
-			width:	sw + 'px',
-			height:	sh + 'px'
+			width:	sw - (this.f.selectBorders.l + this.f.selectBorders.r) + 'px',
+			height:	sh - (this.f.selectBorders.t + this.f.selectBorders.b) + 'px'
 		}
 	);
 	jQuery.selectHelper.l = sx + this.f.scr.l;
@@ -269,7 +270,7 @@ jQuery.fn.Selectable = function(o)
 				onselectstop : o.onselectstop ? o.onselectstop : false
 			};
 			this.f.el = jQuery('.' + o.accept);
-			jQuery(this).bind('mousedown', jQuery.selectstart).css('position', 'relative');
+			jQuery(this).bind('mousedown', jQuery.selectstart);
 		}
 	);
 };

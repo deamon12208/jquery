@@ -111,7 +111,12 @@ jQuery.iResize = {
 		// Initialize resizable
 		jQuery.iResize.resizeElement = this.resizeElement;
 		jQuery.iResize.resizeDirection = this.resizeDirection;
+
 		jQuery.iResize.pointer = jQuery.iUtil.getPointer(e);
+		// Callback function
+		if (jQuery.iResize.resizeElement.resizeOptions.onStart) {
+			jQuery.iResize.resizeElement.resizeOptions.onStart.apply(jQuery.iResize.resizeElement, [this]);
+		}
 		jQuery.iResize.sizes = {
 				width: parseInt(jQuery(this.resizeElement).css('width'))||0,
 				height: parseInt(jQuery(this.resizeElement).css('height'))||0
@@ -120,11 +125,6 @@ jQuery.iResize = {
 				top: parseInt(jQuery(this.resizeElement).css('top'))||0,
 				left: parseInt(jQuery(this.resizeElement).css('left'))||0
 			};
-
-		// Callback function
-		if (jQuery.iResize.resizeElement.resizeOptions.onStart) {
-			jQuery.iResize.resizeElement.resizeOptions.onStart.apply(jQuery.iResize.resizeElement, [this]);
-		}
 
 		return false;
 	},
@@ -297,6 +297,11 @@ jQuery.iResize = {
 		}
 
 		var newDimensions = false;
+		elS = jQuery.iResize.resizeElement.style;
+		elS.left = newPosition.left + 'px';
+		elS.top = newPosition.top + 'px';
+		elS.width = newSizes.width + 'px';
+		elS.height = newSizes.height + 'px';
 		if (jQuery.iResize.resizeElement.resizeOptions.onResize) {
 			newDimensions = jQuery.iResize.resizeElement.resizeOptions.onResize.apply( jQuery.iResize.resizeElement, [ newSizes, newPosition ] );
 			if (newDimensions) {
@@ -309,11 +314,10 @@ jQuery.iResize = {
 				}
 			}
 		}
-			elS = jQuery.iResize.resizeElement.style;
-			elS.left = newPosition.left + 'px';
-			elS.top = newPosition.top + 'px';
-			elS.width = newSizes.width + 'px';
-			elS.height = newSizes.height + 'px';
+		elS.left = newPosition.left + 'px';
+		elS.top = newPosition.top + 'px';
+		elS.width = newSizes.width + 'px';
+		elS.height = newSizes.height + 'px';
 
 		return false;
 	},
