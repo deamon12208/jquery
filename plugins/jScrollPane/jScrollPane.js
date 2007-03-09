@@ -267,32 +267,7 @@ jQuery.fn.jScrollPane = function(settings)
 							var d = dragPosition;
 							positionDrag(dragPosition - delta * mouseWheelMultiplier);
 							var dragOccured = d != dragPosition;
-							if (!dragOccured) {
-								// try and apply the mouse event to parents?
-								var $p = $(this).parent();
-								if ($p.length == 0) {
-									return true;
-								}
-								var p = $p[0];
-								var r = p != document;
-								while (r) {
-									if (p._mwHandlers) {
-										r = p._mwHandlers[0](event, delta);
-									}
-									p = $(p).parent()[0];
-									if (p == document) {
-										break;
-									}
-								}
-							} else {
-								if (event.preventDefault) {
-									event.preventDefault();
-								} else {
-									event.returnValue = false;
-								}
-								return false;
-							}
-							return true;
+							return !dragOccured;
 						},
 						false
 					);					
