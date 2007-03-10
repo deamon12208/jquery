@@ -1,5 +1,5 @@
 /*
- * Accordion 1.1 - jQuery menu widget
+ * Accordion 1.2 - jQuery menu widget
  *
  * Copyright (c) 2006 Jörn Zaefferer, Frank Marcia
  *
@@ -10,28 +10,6 @@
  * Revision: $Id$
  *
  */
-
-// nextUntil is necessary, would be nice to have this in jQuery core
-jQuery.fn.nextUntil = function(expr) {
-    var match = [];
-
-    // We need to figure out which elements to push onto the array
-    this.each(function(){
-        // Traverse through the sibling nodes
-        for( var i = this.nextSibling; i; i = i.nextSibling ) {
-            // Make sure that we're only dealing with elements
-            if ( i.nodeType != 1 ) continue;
-
-            // If we find a match then we need to stop
-            if ( jQuery.filter( expr, [i] ).r.length ) break;
-
-            // Otherwise, add it on to the stack
-            match.push( i );
-        }
-    });
-
-    return this.pushStack( match );
-};
 
 /**
  * Make the selected elements Accordion widgets.
@@ -49,7 +27,11 @@ jQuery.fn.nextUntil = function(expr) {
  *
  * Use activate(Number) to change the active content programmatically.
  *
- * @example $('#nav').Accordion();
+ * A change event is triggered everytime the accordion changes. Apart from
+ * the event object, all arguments are jQuery objects.
+ * Arguments: event, newHeader, oldHeader, newContent, oldContent
+ *
+ * @example jQuery('#nav').Accordion();
  * @before <dl id="nav">
  *   <dt>Header 1</dt>
  *   <dd>Content 1</dd>
@@ -58,7 +40,7 @@ jQuery.fn.nextUntil = function(expr) {
  * </dl>
  * @desc Creates an Accordion from the given definition list
  *
- * @example $('#nav').Accordion({
+ * @example jQuery('#nav').Accordion({
  *   header: 'div.title'
  * });
  * @before <div id="nav">
@@ -73,7 +55,7 @@ jQuery.fn.nextUntil = function(expr) {
  * </div>
  * @desc Creates an Accordion from the given div structure
  *
- * @example $('#nav').Accordion({
+ * @example jQuery('#nav').Accordion({
  *   header: 'a.head'
  * });
  * @before <ul id="nav">
@@ -94,10 +76,10 @@ jQuery.fn.nextUntil = function(expr) {
  * </ul>
  * @desc Creates an Accordion from the given navigation list
  *
- * @example $('#accordion').Accordion().change(function(event, newHeader, oldHeader, newContent, oldContent) {
- *   $('#status').html(newHeader.text());
+ * @example jQuery('#accordion').Accordion().change(function(event, newHeader, oldHeader, newContent, oldContent) {
+ *   jQuery('#status').html(newHeader.text());
  * });
- * @desc Updates the #status element with the text of the selected header every time the accordion changes
+ * @desc Updates the element with id status with the text of the selected header every time the accordion changes
  *
  * @param Map options key/value pairs of optional settings.
  * @option String|Element|jQuery|Boolean active Selector for the active element, default is the first child, set to false to display none at start
@@ -107,8 +89,8 @@ jQuery.fn.nextUntil = function(expr) {
  * @option String selectedClass Class for active header elements, default is 'selected'
  * @option Boolean alwaysOpen Whether there must be one content element open, default is true.
  * @option Boolean animated Set to false to disable animations. Default: true
+ * @option String event The event on which to trigger the accordion, eg. "mouseover". Default: "click"
  *
- * @event change Called everytime the accordion changes, params: event, newHeader, oldHeader, newContent, oldContent
  * @type jQuery
  * @see activate(Number)
  * @name Accordion
@@ -121,10 +103,10 @@ jQuery.fn.nextUntil = function(expr) {
  * If the index is not specified, it defaults to zero, if it is an invalid index, eg. a string,
  * nothing happens.
  *
- * @example $('#accordion').activate(1);
+ * @example jQuery('#accordion').activate(1);
  * @desc Activate the second content of the Accordion contained in <div id="accordion">.
  *
- * @example $('#nav').activate();
+ * @example jQuery('#nav').activate();
  * @desc Activate the first content of the Accordion contained in <ul id="nav">.
  *
  * @param Number index (optional) An Integer specifying the zero-based index of the content to be
@@ -134,21 +116,59 @@ jQuery.fn.nextUntil = function(expr) {
  * @name activate
  * @cat Plugins/Accordion
  */
+ 
+/**
+ * Override the default settings of the Accordion. Affects only following plugin calls.
+ *
+ * @example jQuery.Accordion.setDefaults({
+ * 	showSpeed: 1000,
+ * 	hideSpeed: 150
+ * });
+ *
+ * @param Map options key/value pairs of optional settings, see Accordion() for details
+ *
+ * @type jQuery
+ * @name setDefaults
+ * @cat Plugins/Accordion
+ */
 
-// create private scope with $ alias for jQuery
-(function($) {
-	// save reference to plugin method
-	var plugin = $.fn.Accordion = function(settings) {
-
+jQuery.fn.extend({
+	// nextUntil is necessary, would be nice to have this in jQuery core
+	nextUntil: function(expr) {
+	    var match = [];
+	
+	    // We need to figure out which elements to push onto the array
+	    this.each(function(){
+	        // Traverse through the sibling nodes
+	        for( var i = this.nextSibling; i; i = i.nextSibling ) {
+	            // Make sure that we're only dealing with elements
+	            if ( i.nodeType != 1 ) continue;
+	
+	            // If we find a match then we need to stop
+	            if ( jQuery.filter( expr, [i] ).r.length ) break;
+	
+	            // Otherwise, add it on to the stack
+	            match.push( i );
+	        }
+	    });
+	
+	    return this.pushStack( match );
+	},
+	// the plugin method itself
+	Accordion: function(settings) {
 		// setup configuration
-		settings = $.extend({}, plugin.defaults, {
+		settings = jQuery.extend({}, jQuery.Accordion.defaults, {
 			// define context defaults
-			header: $(':first-child', this)[0].tagName // take first childs tagName as header
+			header: jQuery(':first-child', this)[0].tagName // take first childs tagName as header
 		}, settings);
 
 		// calculate active if not specified, using the first header
 		var container = this,
-			active = settings.active ? $(settings.active, this) : settings.active === false ? $("<div>") : $(settings.header, this).eq(0),
+			active = settings.active
+				? jQuery(settings.active, this)
+				: settings.active === false
+					? jQuery("<div>")
+					: jQuery(settings.header, this).eq(0),
 			running = 0;
 
 		container.find(settings.header)
@@ -157,9 +177,9 @@ jQuery.fn.nextUntil = function(expr) {
 			.hide();
 		active.addClass(settings.selectedClass);
 
-		var clickHandler = function(event) {
+		function clickHandler(event) {
 			// get the click target
-			var clicked = $(event.target);
+			var clicked = jQuery(event.target);
 			
 			var clickedActive = clicked[0] == active[0];
 			
@@ -209,29 +229,34 @@ jQuery.fn.nextUntil = function(expr) {
 
 			return false;
 		};
-		var activateHandlder = function(event, index) {
+		function activateHandlder(event, index) {
 			// call clickHandler with custom event
 			clickHandler({
-				target: $(settings.header, this)[index]
+				target: jQuery(settings.header, this)[index]
 			});
 		};
 
 		return container
-			.click(clickHandler)
+			.bind(settings.event, clickHandler)
 			.bind("activate", activateHandlder);
-	};
-	// define static defaults
-	plugin.defaults = {
+	},
+	// programmatic triggering
+	activate: function(index) {
+		return this.trigger('activate', [index || 0]);
+	}
+});
+
+jQuery.Accordion = {};
+jQuery.extend(jQuery.Accordion, {
+	defaults: {
 		selectedClass: "selected",
 		showSpeed: 'slow',
 		hideSpeed: 'fast',
 		alwaysOpen: true,
-		animated: true
-	};
-
-	// shortcut for trigger, nicer API and easily to document
-	$.fn.activate = function(index) {
-		return this.trigger('activate', [index || 0]);
-	};
-
-})(jQuery);
+		animated: true,
+		event: "click"
+	},
+	setDefaults: function(settings) {
+		jQuery.extend(jQuery.Accordion.defaults, settings);
+	}
+});

@@ -11,15 +11,16 @@
 
 	<script type="text/javascript">
 	function simpleLog(message) {
-		$('<div>' + message + '</div>').appendTo('#log');
+		jQuery('<div>' + message + '</div>').appendTo('#log');
 	}
 
-	$(function(){
+	jQuery().ready(function(){
 		// simple Accordion
-		$('#list1').Accordion();
+		jQuery('#list1').Accordion();
 		
 		// highly customized Accordion
-		$('#list2').Accordion({
+		jQuery('#list2').Accordion({
+			event: "mouseover",
 			active: 'dt.selected',
 			selectedClass: "active",
 			showSpeed: "fast",
@@ -30,13 +31,13 @@
 		});
 		
 		// set global defaults for all following Accordions, will be valid for #list1, #list2 and #list4, #list3 sets them for itself
-		$.extend($.fn.Accordion.defaults, {
+		jQuery.Accordion.setDefaults({
 			showSpeed: 1000,
 			hideSpeed: 150
 		});
 		
 		// first simple Accordion with special markup
-		$('#list3').Accordion({
+		jQuery('#list3').Accordion({
 			header: 'div.title',
 			active: false,
 			alwaysOpen: false,
@@ -44,15 +45,15 @@
 		});
 		
 		// second simple Accordion with special markup
-		$('#list4').Accordion({
+		jQuery('#list4').Accordion({
 			active: 'a.selected',
 			header: 'a.head'
 		});
 		
 		// bind to change event of select to control first and seconds accordion
 		// similar to tab's plugin triggerTab(), without an extra method
-		$('#switch select').change(function() {
-			$('#list1, #list2').activate( this.selectedIndex-1 );
+		jQuery('#switch select').change(function() {
+			jQuery('#list1, #list2').activate( this.selectedIndex-1 );
 		});
 	});
 	</script>
