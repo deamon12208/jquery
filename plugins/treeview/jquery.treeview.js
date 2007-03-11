@@ -208,26 +208,66 @@
 			$( (settings.collapsed ? "li" : "li." + CLASSES.closed) + ":not(." + CLASSES.open + ") > ul", this).hide();
 			
 			// find all tree items with child lists
-			$("li[ul]", this)
-				// handle closed ones first
-				.filter("[>ul:hidden]")
+			var branches = $("li[>ul]", this);
+			
+			function serialize() {
+				var data = [];
+				branches.each(function(i, e) {
+					data[i] = settings.collapsed
+						? $(e).is("[>ul:visible]")
+							? !$(e).is("." + CLASSES.open)
+								? 1
+								: 0
+							: $(e).is("." + CLASSES.open)
+								? 1
+								: 0
+						: $(e).is("[>ul:hidden]")
+							? !$(e).is("." + CLASSES.closed)
+								? 1
+								: 0
+							: $(e).is("." + CLASSES.closed)
+								? 1
+								: 0;
+				});
+				$.cookie("treestorage", Object.toJSON(data));
+			}
+			
+			function deserialize() {
+				var stored = $.cookie("treestorage");
+				if ( stored ) {
+					var data = stored.parseJSON();
+					branches.each(function(i, e) {
+						if( data[i] ) {
+							$(e).find(">ul").toggle();
+						}
+					});
+				}
+			}
+			
+			if (settings.store)	{
+				deserialize();
+				$(window).unload(serialize);
+			}
+			
+			// handle closed ones first
+			branches.filter("[>ul:hidden]")
 					.addClass(CLASSES.expandable)
-					.swapClass(CLASSES.last, CLASSES.lastExpandable)
-					.end()
-				// handle open ones
-				.not("[>ul:hidden]")
+					.swapClass(CLASSES.last, CLASSES.lastExpandable);
+					
+			// handle open ones
+			branches.not("[>ul:hidden]")
 					.addClass(CLASSES.collapsable)
-					.swapClass(CLASSES.last, CLASSES.lastCollapsable)
-					.end()
-				// append hitarea
-				.prepend("<div class=\"" + CLASSES.hitarea + "\">")
+					.swapClass(CLASSES.last, CLASSES.lastCollapsable);
+					
+			// append hitarea
+			branches.prepend("<div class=\"" + CLASSES.hitarea + "\">")
 				// find hitarea
 				.find("div." + CLASSES.hitarea)
 				// apply styles to hitarea
 				.css(hitareaCSS)
 				// apply toggle event to hitarea
 				.toggle( toggler, toggler );
-			
+				
 			// if control option is set, create the treecontroller
 			if ( settings.control )
 				treeController(this, settings.control);
