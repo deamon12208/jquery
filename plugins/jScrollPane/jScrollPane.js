@@ -18,10 +18,14 @@
  * @name jScrollPane
  * @type jQuery
  * @param Object	settings	hash with options, described below.
- *								scrollbarWidth - the width of the generated scrollbar in pixels
- *								scrollbarMargin - the amount of space to leave on the side of the scrollbar in pixels
- *								wheelSpeed - The speed the pane will scroll in response to the mouse wheel in pixels
- *								showArrows - Whether to display arrows for the user to scroll with
+ *								scrollbarWidth	-	The width of the generated scrollbar in pixels
+ *								scrollbarMargin	-	The amount of space to leave on the side of the scrollbar in pixels
+ *								wheelSpeed		-	The speed the pane will scroll in response to the mouse wheel in pixels
+ *								showArrows		-	Whether to display arrows for the user to scroll with
+ *								arrowSize		-	The height of the arrow buttons if showArrows=true
+ *								animateTo		-	Whether to animate when calling scrollTo and scrollBy
+ *								dragMinHeight	-	The minimum height to allow the drag bar to be
+ *								dragMaxHeight	-	The maximum height to allow the drag bar to be
  * @return jQuery
  * @cat Plugins/jScrollPane
  * @author Kelvin Luck (kelvin AT kelvinluck DOT com || http://www.kelvinluck.com)
@@ -38,7 +42,9 @@ jQuery.fn.jScrollPane = function(settings)
 			wheelSpeed : 18,
 			showArrows : false,
 			arrowSize : undefined,
-			animateTo : false
+			animateTo : false,
+			dragMinHeight : 1,
+			dragMaxHeight : 99999
 		}, settings
 	);
 	return this.each(
@@ -224,8 +230,9 @@ jQuery.fn.jScrollPane = function(settings)
 					positionDrag(getPos(e, 'Y') - currentOffset.top - dragMiddle);
 				};
 				
+				var dragH = Math.max(Math.min(percentInView*paneHeight, settings.dragMaxHeight), settings.dragMinHeight);
 				$drag.css(
-					{'height':(percentInView*paneHeight)+'px'}
+					{'height':dragH+'px'}
 				).bind('mousedown', onStartDrag);
 				
 				var trackScrollInterval;
