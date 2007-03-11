@@ -292,13 +292,13 @@ jQuery.fn.jScrollPane = function(settings)
 						ceaseAnimation();
 					}
 				}
-				ceaseAnimation = function()
+				var ceaseAnimation = function()
 				{
 					if (_animateToInterval) {
 						clearInterval(_animateToInterval);
 						delete _animateToPosition;
 					}
-				}
+				};
 				var scrollTo = function(pos)
 				{
 					ceaseAnimation();
@@ -334,7 +334,7 @@ jQuery.fn.jScrollPane = function(settings)
 			}
 		}
 	)
-}
+};
 
 // clean up the scrollTo expandos
 jQuery(window)
