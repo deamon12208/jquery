@@ -242,17 +242,6 @@ jQuery.extend(jQuery.fn, {
 		
 		return validator;
 	},
-	// find all element that are not in the other set
-	containsNot: function( others ) {
-	    return this.pushStack( $.grep( this, function(e) {
-	        var contains = false;
-	        others.each( function( i, n ) {
-	            if(e == n)
-	                contains = true;
-	        } );
-	        return !contains;
-	    } ) );
-	},
 	// destructive add
 	push: function( t ) {
 		return this.setArray( jQuery.merge( this.get(), t ) );
@@ -523,7 +512,7 @@ jQuery.extend(jQuery.validator, {
 				this.showError( elementID, this.errorList[elementID] );
 			}
 			
-			this.toHide.containsNot( this.toShow );
+			this.toHide = this.toHide.not( this.toShow );
 			this.toggle( "Hide" ).toggle( "Show" );
 		},
 		
