@@ -259,8 +259,9 @@ jQuery.fn.jScrollPane = function(settings)
 					initDrag();
 					onTrackMouseMove(event);
 					trackScrollInc = 0;
-					trackScrollInterval = setInterval(doTrackScroll, 100);
 					jQuery('body').bind('mouseup', onStopTrackClick).bind('mousemove', onTrackMouseMove);
+					trackScrollInterval = setInterval(doTrackScroll, 100);
+					doTrackScroll();
 				};
 				
 				$track.bind('mousedown', onTrackClick);
