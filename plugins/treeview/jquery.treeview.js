@@ -229,15 +229,15 @@
 								? 1
 								: 0;
 				});
-				$.cookie("treestorage", Object.toJSON(data));
+				$.cookie("treestorage", data.join(""));
 			}
 			
 			function deserialize() {
 				var stored = $.cookie("treestorage");
 				if ( stored ) {
-					var data = stored.parseJSON();
+					var data = stored.split("");
 					branches.each(function(i, e) {
-						if( data[i] ) {
+						if( parseInt(data[i]) ) {
 							$(e).find(">ul").toggle();
 						}
 					});
