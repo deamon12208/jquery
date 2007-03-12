@@ -521,7 +521,7 @@ jQuery.extend(jQuery.validator, {
 			if ( error.length ) {
 				// check if we have a generated label, replace the message then
 				if( error.attr("generated") ) {
-					error.text(message);
+					error.html(message);
 				}
 			} else {
 				// create label
