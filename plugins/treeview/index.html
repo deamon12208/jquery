@@ -10,8 +10,9 @@
 	<script src="jquery.treeview.js" type="text/javascript"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
-		$("body > ul:first").Treeview();
-		$("body > ul:eq(1), body > ul:eq(2)").Treeview({ control: "#treecontrol" });
+		
+		$("body > ul:first").Treeview({ store: true });
+		$("body > ul:eq(1), body > ul:eq(2)").Treeview({ control: "#treecontrol", store: true });
 		var lastTree = $("body > ul:last").Treeview({
 			speed: "fast",
 			collapsed: true,

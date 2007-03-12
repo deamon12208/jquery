@@ -210,6 +210,31 @@
 			// find all tree items with child lists
 			var branches = $("li[>ul]", this);
 			
+			function get() {
+				return $.cookie("treestorage") ? $.cookie("treestorage").split(",") : [];
+			}
+			
+			function store(data) {
+				if( !data || !data.length )
+					// try to delete cookie
+					$.cookie("treestorage", "", {expires: -1});
+				else
+					$.cookie("treestorage", data.join(","));
+			}
+			
+			function push(data) {
+				var stored = get();
+				stored.push(data);
+				store(stored);
+			}
+			
+			function shift() {
+				var stored = get();
+				var data = stored.shift();
+				store(stored);
+				return data;
+			}
+			
 			function serialize() {
 				var data = [];
 				branches.each(function(i, e) {
@@ -229,15 +254,15 @@
 								? 1
 								: 0;
 				});
-				$.cookie("treestorage", data.join(""));
+				push( data.join("") );
 			}
 			
 			function deserialize() {
-				var stored = $.cookie("treestorage");
+				var stored = shift();
 				if ( stored ) {
-					var data = stored.split("");
+					stored = stored.split("");
 					branches.each(function(i, e) {
-						if( parseInt(data[i]) ) {
+						if( parseInt(stored[i]) ) {
 							$(e).find(">ul").toggle();
 						}
 					});
