@@ -189,7 +189,8 @@ jQuery.fn.extend({
 
 			// switch classes
 			active.removeClass(settings.selectedClass);
-			clicked.addClass(settings.selectedClass);
+			if ( !clickedActive )
+				clicked.addClass(settings.selectedClass);
 
 			// find elements to show and hide
 			var toShow = clicked.nextUntil(settings.header),
