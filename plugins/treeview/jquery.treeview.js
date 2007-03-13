@@ -271,7 +271,7 @@
 			
 			if (settings.store)	{
 				deserialize();
-				$(window).unload(serialize);
+				$(window).bind("beforeunload", serialize);
 			}
 			
 			// handle closed ones first
