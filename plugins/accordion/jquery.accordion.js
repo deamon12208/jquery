@@ -181,6 +181,14 @@ jQuery.fn.extend({
 			// get the click target
 			var clicked = jQuery(event.target);
 			
+			// due to the event delegation model, we have to check if one
+			// of the parent elements is our actual header, and find that
+			if ( clicked.parents(settings.header).length ) {
+				while ( !clicked.is(settings.header) ) {
+					clicked = clicked.parent();
+				}
+			}
+			
 			var clickedActive = clicked[0] == active[0];
 			
 			// if animations are still active, or the active header is the target, ignore click
@@ -188,15 +196,16 @@ jQuery.fn.extend({
 				return;
 
 			// switch classes
-			active.removeClass(settings.selectedClass);
-			if ( !clickedActive )
+			active.toggleClass(settings.selectedClass);
+			if ( !clickedActive ) {
 				clicked.addClass(settings.selectedClass);
+			}
 
 			// find elements to show and hide
 			var toShow = clicked.nextUntil(settings.header),
 				toHide = active.nextUntil(settings.header),
 				data = [clicked, active, toShow, toHide];
-			active = clicked;
+			active = clickedActive ? jQuery([]) : clicked;
 			// count elements to animate
 			running = toHide.size() + toShow.size();
 			var finished = function(cancel) {
