@@ -363,8 +363,7 @@ jQuery.extend(jQuery.validator, {
 		 * Show the specified messages.
 		 *
 		 * @example var validator = $("#myform").validate();
-		 * validator.addErrors({"firstname": "I know that your firstname is Pete, Pete!"});
-		 * validator.showErrors();
+		 * validator.showErrors({"firstname": "I know that your firstname is Pete, Pete!"});
 		 * @desc Adds and shows error message programmatically.
 		 *
 		 * @param Map errors One or more key/value pairs of identifiers (IDs or names) and messages
