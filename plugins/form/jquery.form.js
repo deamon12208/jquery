@@ -7,7 +7,7 @@
  *   http://www.gnu.org/licenses/gpl.html
  *
  * Revision: $Id$
- * Version: 0.9
+ * Version: 0.91
  */
 
 /**
@@ -199,10 +199,15 @@ jQuery.fn.ajaxSubmit = function(options) {
     // give pre-submit callback an opportunity to abort the submit
     if (options.beforeSubmit && options.beforeSubmit(a, this, options) === false) return this;
 
-    var q = jQuery.param(a);
+    // fire vetoable 'validate' event
+    var veto = {};
+    jQuery.event.trigger('form.submit.validate', [a, this, options, veto]);
+    if (veto.veto)
+        return this;
+
+    var q = jQuery.param(a);//.replace(/%20/g,'+');
 
     if (options.type.toUpperCase() == 'GET') {
-        // if url already has a '?' then append args after '&'
         options.url += (options.url.indexOf('?') >= 0 ? '&' : '?') + q;
         options.data = null;  // data is null for 'get'
     }
@@ -228,6 +233,8 @@ jQuery.fn.ajaxSubmit = function(options) {
             callbacks[i](data, status);
     };
 
+    // fire 'notify' event
+    jQuery.event.trigger('form.submit.notify', [this, options]);
     jQuery.ajax(options);
     return this;
 };
@@ -466,60 +473,85 @@ jQuery.fn.fieldSerialize = function(successful) {
 
 
 /**
- * Returns the value of the field element in the jQuery object.  If there is more than one field element
- * in the jQuery object the value of the first successful one is returned.
+ * Returns the value(s) of the first (successful) element(s) in the matched set in an array.  If there are
+ * other elements in the matched set with the same name, the values of those elements is included
+ * in the result.  For example, consider the following form:
+ *
+ *  <form><fieldset>
+ *      <input name="A" type="text" />
+ *      <input name="A" type="text" />
+ *      <input name="B" type="checkbox" value="B1" />
+ *      <input name="B" type="checkbox" value="B2"/>
+ *      <input name="C" type="radio" value="C1" />
+ *      <input name="C" type="radio" value="C2" />
+ *  </fieldset></form>
+ *
+ *  var v = $(':text').fieldValue();
+ *  // if no values are entered into the text inputs
+ *  v == ['','']
+ *  // if values entered into the text inputs are 'foo' and 'bar'
+ *  v == ['foo','bar']
+ *
+ *  var v = $(':checkbox').fieldValue();
+ *  // if neither checkbox is checked
+ *  v === undefined
+ *  // if both checkboxes are checked
+ *  v == ['B1', 'B2']
+ *
+ *  var v = $(':radio').fieldValue();
+ *  // if neither radio is checked
+ *  v === undefined
+ *  // if first radio is checked
+ *  v == ['C1']
  *
  * The successful argument controls whether or not the field element must be 'successful'
  * (per http://www.w3.org/TR/html4/interact/forms.html#successful-controls).
  * The default value of the successful argument is true.  If this value is false then
  * the value of the first field element in the jQuery object is returned.
  *
- * Note: If no valid value can be determined the return value will be undifined.
+ * Note: This method *always* returns an array.  If no valid value can be determined the
+ *       array will be empty, otherwise it will contain one or more values.
  *
- * Note: The fieldValue returned for a select-multiple element or for a checkbox input will
- *       always be an array if it is not undefined.
+ * @example var data = $("#myPasswordElement").fieldValue();
+ * alert(data[0]);
+ * @desc Alerts the current value of the myPasswordElement element
  *
+ * @example var data = $("#myForm :input").fieldValue();
+ * @desc Get the value(s) of the first successful form element in myForm
  *
- * @example var data = $("#myPasswordElement").formValue();
- * @desc Gets the current value of the myPasswordElement element
+ * @example var data = $("#myForm :checkbox").fieldValue();
+ * @desc Get the value(s) for the first successful checkbox element(s) in the jQuery object.
  *
- * @example var data = $("#myForm :input").formValue();
- * @desc Get the value of the first successful control in the jQuery object.
+ * @example var data = $("#mySingleSelect").fieldValue();
+ * @desc Get the value(s) of the select control
  *
- * @example var data = $("#myForm :checkbox").formValue();
- * @desc Get the array of values for the first set of successful checkbox controls in the jQuery object.
+ * @example var data = $(':text').fieldValue();
+ * @desc Get the value(s) of the first successful text input or textarea
  *
- * @example var data = $("#mySingleSelect").formValue();
- * @desc Get the value of the select control
- *
- * @example var data = $("#myMultiSelect").formValue();
- * @desc Get the array of selected values for the select-multiple control
+ * @example var data = $("#myMultiSelect").fieldValue();
+ * @desc Get the values for the select-multiple control
  *
  * @name fieldValue
  * @param Boolean successful true if value returned must be for a successful controls (default is true)
- * @type String or Array<String>
+ * @type Array<String>
  * @cat Plugins/Form
  */
 jQuery.fn.fieldValue = function(successful) {
-    var cbVal, cbName;
+    var val=[], name;
 
     // loop until we find a value
     for (var i=0, max=this.length; i < max; i++) {
         var el = this[i];
         var v = jQuery.fieldValue(el, successful);
         if (v === null || typeof v == 'undefined' || (v.constructor == Array && !v.length))
+            continue; // keep looping until we find an element with a value
+
+        name = name || el.name;
+        if (name != el.name) // once we have a value we only add to the array for elements with the same name
             continue;
-
-        // for checkboxes, consider multiple elements, for everything else just return first valid value
-        if (el.type != 'checkbox') return v;
-
-        cbName = cbName || el.name;
-        if (cbName != el.name) // return if we hit a checkbox with a different name
-            return cbVal;
-        cbVal = cbVal || [];
-        cbVal.push(v);
+        v.constructor == Array ? jQuery.merge(val, v) : val.push(v);
     }
-    return cbVal;
+    return val;
 };
 
 /**
@@ -530,7 +562,9 @@ jQuery.fn.fieldValue = function(successful) {
  * The default value of the successful argument is true.  If the given element is not
  * successful and the successful arg is not false then the returned value will be null.
  *
- * Note: The fieldValue returned for a select-multiple element will always be an array.
+ * Note: If the successful flag is true (default) but the element is not successful, the return will be null
+ * Note: The value returned for a successful select-multiple element will always be an array.
+ * Note: If the element has no value the return value will be undefined.
  *
  * @example var data = jQuery.fieldValue($("#myPasswordElement")[0]);
  * @desc Gets the current value of the myPasswordElement element
@@ -538,7 +572,7 @@ jQuery.fn.fieldValue = function(successful) {
  * @name fieldValue
  * @param Element el The DOM element for which the value will be returned
  * @param Boolean successful true if value returned must be for a successful controls (default is true)
- * @type String or Array<String>
+ * @type String or Array<String> or null or undefined
  * @cat Plugins/Form
  */
 jQuery.fieldValue = function(el, successful) {

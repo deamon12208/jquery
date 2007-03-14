@@ -280,7 +280,6 @@ test("ajaxSubmit: load target with scripts", function() {
     $("#form2").ajaxSubmit(opts);
 });
 
-
 // test ajaxSubmit pre-submit callback
 test("ajaxSubmit: pre-submit callback", function() {
     var opts = {
@@ -288,7 +287,7 @@ test("ajaxSubmit: pre-submit callback", function() {
             ok( true, 'pre-submit callback');
             ok( a.constructor == Array, "type check array");
             ok( jq.jquery, "type check jQuery");
-            ok( jq[0].tagName.toLowerCase() == 'form', "jQuery arg == 'form'");
+            ok( jq[0].tagName.toLowerCase() == 'form', "jQuery arg == 'form': " + jq[0].tagName.toLowerCase());
         }
     };
 
@@ -468,7 +467,7 @@ test("ajaxSubmit: evaluate response", function() {
         success: function(responseText) { // post-callback
             ok( true, 'post-callback');
             var data = eval.call(window, '('+responseText+')');
-            ok( data.name == 'jquery-test', 'evaled respone');
+            ok( data.name == 'jquery-test', 'evaled response');
             start();
         },
         url: 'json.txt'
@@ -477,6 +476,7 @@ test("ajaxSubmit: evaluate response", function() {
     expect(2);
     $("#form2").ajaxSubmit(opts);
 });
+
 
 // make sure deprecated options still work
 test("deprecated option props", function() {
@@ -497,7 +497,6 @@ test("deprecated option props", function() {
     expect(3);
     $("#form2").ajaxSubmit(opts);
 });
-
 
 // test pre and post callbacks for ajaxForm
 test("ajaxForm: pre and post callbacks", function() {
@@ -634,12 +633,12 @@ test("'error' callback", function() {
 
 
 test("fieldValue(true)", function() {
-    ok ('5'  == $('#fieldTest input').fieldValue(true), 'input');
-    ok ('1'  == $('#fieldTest :input').fieldValue(true), ':input');
-    ok ('5'  == $('#fieldTest :hidden').fieldValue(true), ':hidden');
-    ok ('14' == $('#fieldTest :password').fieldValue(true), ':password');
-    ok ('12' == $('#fieldTest :radio').fieldValue(true), ':radio');
-    ok ('1'  == $('#fieldTest select').fieldValue(true), 'select');
+    ok ('5'  == $('#fieldTest input').fieldValue(true)[0], 'input');
+    ok ('1'  == $('#fieldTest :input').fieldValue(true)[0], ':input');
+    ok ('5'  == $('#fieldTest :hidden').fieldValue(true)[0], ':hidden');
+    ok ('14' == $('#fieldTest :password').fieldValue(true)[0], ':password');
+    ok ('12' == $('#fieldTest :radio').fieldValue(true)[0], ':radio');
+    ok ('1'  == $('#fieldTest select').fieldValue(true)[0], 'select');
 
     var expected = ['8','10'];
     var result = $('#fieldTest :checkbox').fieldValue(true);
@@ -659,12 +658,17 @@ test("fieldValue(false)", function() {
     ok ('1'  == $('#fieldTest :input').fieldValue(false), ':input');
     ok ('5'  == $('#fieldTest :hidden').fieldValue(false), ':hidden');
     ok ('14' == $('#fieldTest :password').fieldValue(false), ':password');
-    ok ('11' == $('#fieldTest :radio').fieldValue(false), ':radio');
     ok ('1'  == $('#fieldTest select').fieldValue(false), 'select');
 
     var expected = ['8','9','10'];
     var result = $('#fieldTest :checkbox').fieldValue(false);
     ok (result.length == expected.length, 'result size check (checkbox): ' + result.length + '=' + expected.length);
+    for (var i=0; i < result.length; i++)
+        ok ( result[i] == expected[i], expected[i] );
+
+    expected = ['11','12','13'];
+    result = $('#fieldTest :radio').fieldValue(false);
+    ok (result.length == expected.length, 'result size check (radio): ' + result.length + '=' + expected.length);
     for (var i=0; i < result.length; i++)
         ok ( result[i] == expected[i], expected[i] );
 
@@ -762,6 +766,8 @@ test("fieldSerialize(false) :radio", function() {
     for (var i=0; i < result.length; i++)
         ok( result[i] == expected[i], expected[i] + ' = ' + result[i]);
 });
+
+
 
 // helper method
 function arrayCount(arr, key) {
@@ -883,6 +889,11 @@ function arrayValue(arr, key) {
                 <option value="" selected="selected">EMPTY_STRING</option>
                 <option selected="selected">MISSING_ATTR</option>
             </select>
+        </div></form>
+
+        <!-- form7, 'enctype' testing -->
+        <form id="form7" action="text.php" method="post" enctype="text/css"><div>
+            <textarea name="doc">body { padding: 0}</textarea>
         </div></form>
 
         <!-- pseudo-form -->
