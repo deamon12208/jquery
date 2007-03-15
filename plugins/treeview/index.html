@@ -10,9 +10,8 @@
 	<script src="jquery.treeview.js" type="text/javascript"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
-		$("body > ul:first").Treeview({ store: true });
-		$("body > ul:eq(1), body > ul:eq(2)").Treeview({ control: "#treecontrol", store: true });
-		var lastTree = $("body > ul:last").Treeview({
+		$("#browser").Treeview();
+		$("#red").Treeview({
 			speed: "fast",
 			collapsed: true,
 			unique: true,
@@ -21,6 +20,7 @@
 				window.console && console.log && console.log("%o was toggled", $(this).parent());
 			}
 		});
+		$("#black, #gray").Treeview({ control: "#treecontrol" });
 	});
 	</script>
 	<style type="text/css">
@@ -86,7 +86,7 @@
 	</head>
 	<body>
 	<h4>Sample 1 - default</h4>
-	<ul class="dir">
+	<ul id="browser" class="dir">
 		<li><img src="images/folder.gif" /> Folder 1
 			<ul>
 				<li><img src="images/file.gif" /> Item 1.1</li>
@@ -111,89 +111,7 @@
 		<li><img src="images/file.gif" /> File 4</li>
 	</ul>
 	
-	<h4>Sample 2 - two trees with one tree control, black and gray image set</h4>
-	<div id="treecontrol">
-		<a href="#">Collapse All</a>
-		<a href="#">Expand All</a>
-		<a href="#">Toggle All</a>
-	</div>
-	<ul id="black">
-		<li>Item 1</li>
-		<li>
-			Item 2
-			<ul>
-				<li>
-					Item 2.1
-					<ul>
-						<li>Item 2.1.1</li>
-						<li>Item 2.1.2</li>
-					</ul>
-				</li>
-				<li>Item 2.2</li>
-				<li class="closed">
-					Item 2.3 (closed at start)
-					<ul>
-						<li>Item 2.3.1</li>
-						<li>Item 2.3.2</li>
-					</ul>
-				</li>
-			</ul>
-		</li>
-	</ul>
-	<ul id="gray">
-		<li>Item 1</li>
-		<li>
-			Item 2
-			<ul>
-				<li class="closed">
-					Item 2.1 (closed at start)
-					<ul>
-						<li>Item 2.1.1</li>
-						<li>Item 2.1.2</li>
-					</ul>
-				</li>
-				<li>Item 2.2.1</li>
-				<li>Item 2.2.2</li>
-				<li>Item 2.2.3</li>
-				<li>Item 2.2.4</li>
-				<li>Item 2.2.5</li>
-				<li>Item 2.2.6</li>
-				<li>Item 2.2.7</li>
-				<li>Item 2.2.8</li>
-				<li>
-					Item 2.3
-					<ul>
-						<li>Item 2.3.1</li>
-						<li>Item 2.3.2</li>
-						<li>Item 2.3.3</li>
-						<li>Item 2.3.4</li>
-						<li>Item 2.3.5</li>
-						<li>Item 2.3.6</li>
-						<li>Item 2.3.7</li>
-						<li>Item 2.3.8</li>
-						<li>Item 2.3.9</li>
-					</ul>
-				</li>
-				<li>
-					Item 2.4
-					<ul>
-						<li>Item 2.4.1</li>
-						<li>Item 2.4.2</li>
-						<li>Item 2.4.3</li>
-						<li>Item 2.4.4</li>
-						<li>Item 2.4.5</li>
-						<li>Item 2.4.6</li>
-						<li>Item 2.4.7</li>
-						<li>Item 2.4.8</li>
-						<li>Item 2.4.9</li>
-					</ul>
-				</li>
-			</ul>
-		</li>
-		<li>Item 3</li>
-	</ul>	
-	
-	<h4>Sample 3 - fast animations, all branches collapsed at first, red image set</h4>
+	<h4>Sample 2 - fast animations, all branches collapsed at first, red image set, with cookie-based state-saving</h4>
 	<ul id="red">
 	<li class="closed">Item 1
 		<ul>
@@ -289,5 +207,87 @@
 		</ul>
 	</li>
 	</ul>
+	
+	<h4>Sample 3 - two trees with one tree control, black and gray image set</h4>
+	<div id="treecontrol">
+		<a href="#">Collapse All</a>
+		<a href="#">Expand All</a>
+		<a href="#">Toggle All</a>
+	</div>
+	<ul id="black">
+		<li>Item 1</li>
+		<li>
+			Item 2
+			<ul>
+				<li>
+					Item 2.1
+					<ul>
+						<li>Item 2.1.1</li>
+						<li>Item 2.1.2</li>
+					</ul>
+				</li>
+				<li>Item 2.2</li>
+				<li class="closed">
+					Item 2.3 (closed at start)
+					<ul>
+						<li>Item 2.3.1</li>
+						<li>Item 2.3.2</li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+	</ul>
+	<ul id="gray">
+		<li>Item 1</li>
+		<li>
+			Item 2
+			<ul>
+				<li class="closed">
+					Item 2.1 (closed at start)
+					<ul>
+						<li>Item 2.1.1</li>
+						<li>Item 2.1.2</li>
+					</ul>
+				</li>
+				<li>Item 2.2.1</li>
+				<li>Item 2.2.2</li>
+				<li>Item 2.2.3</li>
+				<li>Item 2.2.4</li>
+				<li>Item 2.2.5</li>
+				<li>Item 2.2.6</li>
+				<li>Item 2.2.7</li>
+				<li>Item 2.2.8</li>
+				<li>
+					Item 2.3
+					<ul>
+						<li>Item 2.3.1</li>
+						<li>Item 2.3.2</li>
+						<li>Item 2.3.3</li>
+						<li>Item 2.3.4</li>
+						<li>Item 2.3.5</li>
+						<li>Item 2.3.6</li>
+						<li>Item 2.3.7</li>
+						<li>Item 2.3.8</li>
+						<li>Item 2.3.9</li>
+					</ul>
+				</li>
+				<li>
+					Item 2.4
+					<ul>
+						<li>Item 2.4.1</li>
+						<li>Item 2.4.2</li>
+						<li>Item 2.4.3</li>
+						<li>Item 2.4.4</li>
+						<li>Item 2.4.5</li>
+						<li>Item 2.4.6</li>
+						<li>Item 2.4.7</li>
+						<li>Item 2.4.8</li>
+						<li>Item 2.4.9</li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+		<li>Item 3</li>
+	</ul>	
 	
 </body></html>

@@ -96,6 +96,12 @@
  * 		   Arguments: "this" refers to the UL that was shown or hidden.
  * 		   Works only with speed option set (set speed: 1 to enable callback without animations).
  *		   Default: none
+ * @option Boolean|Object store When set, stores the tree-state in a cookie when leaving/reloading the page,
+ * 		   and restoring that state when loading the page. By default, no state is stored. Only one tree-per-page can be stored.
+ * 	       When specifying the option as a boolean-true, the default setting for cookie-storage is used,
+ * 		   saving the state for the browser session. To set a different expiration, set the option to an
+ *  	   object with a "expiration" property. Refer to the cookie plugin for details about
+ * 	       possible values of that object.
  * @type jQuery
  * @name Treeview
  * @cat Plugins/Treeview
@@ -210,31 +216,6 @@
 			// find all tree items with child lists
 			var branches = $("li[>ul]", this);
 			
-			function get() {
-				return $.cookie("treestorage") ? $.cookie("treestorage").split(",") : [];
-			}
-			
-			function store(data) {
-				if( !data || !data.length )
-					// try to delete cookie
-					$.cookie("treestorage", "", {expires: -1});
-				else
-					$.cookie("treestorage", data.join(","));
-			}
-			
-			function push(data) {
-				var stored = get();
-				stored.push(data);
-				store(stored);
-			}
-			
-			function shift() {
-				var stored = get();
-				var data = stored.shift();
-				store(stored);
-				return data;
-			}
-			
 			function serialize() {
 				var data = [];
 				branches.each(function(i, e) {
@@ -254,15 +235,15 @@
 								? 1
 								: 0;
 				});
-				push( data.join("") );
+				$.cookie("treestorage", data.join(""), settings.store.expiration );
 			}
 			
 			function deserialize() {
-				var stored = shift();
+				var stored = $.cookie("treestorage");
 				if ( stored ) {
-					stored = stored.split("");
+					var data = stored.split("");
 					branches.each(function(i, e) {
-						if( parseInt(stored[i]) ) {
+						if( parseInt(data[i]) ) {
 							$(e).find(">ul").toggle();
 						}
 					});
@@ -271,7 +252,7 @@
 			
 			if (settings.store)	{
 				deserialize();
-				$(window).bind("beforeunload", serialize);
+				$(window).unload(serialize);
 			}
 			
 			// handle closed ones first
