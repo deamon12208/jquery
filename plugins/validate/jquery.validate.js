@@ -1,7 +1,7 @@
 /*
- * Form Validation: jQuery form validation plug-in v1.0 beta 1
+ * Form Validation: jQuery form validation plug-in v1.0 beta 2
  *
- * Copyright (c) 2006 J鰎n Zaefferer
+ * Copyright (c) 2006 J枚rn Zaefferer
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -24,7 +24,7 @@
  *
  * @example $("input").validate({
  * 		focusInvalid: false,
- * 		event: blur
+ * 		event: "blur"
  * });
  * @desc Validates all input elements on blur event (when the element looses focus).
  * Deactivates focus of invalid elements.
@@ -38,10 +38,11 @@
  * the default submit.
  *
  * @example $("#myform").validate({
+ *  event: "keyup"
  * 	rules: {
  * 		firstname: { required: true },
  * 		age: {
- *			required: true,
+ *			required: "#firstname:blank",
  * 			number: true,
  * 			minValue: 3
  * 		},
@@ -62,17 +63,17 @@
  *		age: "Please specify your age as a number (at least 3)."
  * 	}
  * });
- * @desc Validate a form on submit. Rules are specified for three element,
- * and a message is customized for the "password" and the "age" elements.
- * Inline rules are ignored. The password is only required when the age is lower
- * then 18.
+ * @desc Validate a form on submit and each element on keyup. Rules are specified
+ * for three elements, and a message is customized for the "password" and the
+ * "age" elements. Inline rules are ignored. The password is only required when the age is lower
+ * then 18. The age is only required when the firstname is blank.
  *
  * @example $("#myform").validate({
  *   errorClass: "invalid",
  *   errorLabelContainer: $("#messageBox"),
  *   wrapper: "li"
  * });
- * @before <ul id="messageBox" />
+ * @before <ul id="messageBox"></ul>
  * <form id="myform" action="/login" method="post">
  *   <label>Firstname</label>
  *   <input name="fname" class="{required:true}" />
@@ -143,7 +144,7 @@
  * });
  * @before <div id="messageBox1">
  *   <h3>The are errors in your form!</h3>
- *   <ul/>
+ *   <ul></ul>
  * </div>
  * <form id="myform" action="/login" method="post">
  *   <label>Firstname</label>
@@ -251,6 +252,36 @@ jQuery.extend(jQuery.fn, {
 	}
 });
 
+/**
+ * Custom expression to filter for blank fields.
+ *
+ * @example jQuery("input:blank").length
+ * @before <input value="" /><input value="  " /><input value="abc" />
+ * @result 2
+ *
+ * @property
+ * @type String
+ * @name :blank
+ * @cat Plugins/Validate
+ */
+ 
+/**
+ * Custom expression to filter for filled fields.
+ *
+ * @example jQuery("input:filled").length
+ * @before <input value="" /><input value="  " /><input value="abc" />
+ * @result 1
+ *
+ * @property
+ * @type String
+ * @name :filled
+ * @cat Plugins/Validate
+ */
+jQuery.extend(jQuery.expr[":"], {
+	blank: "!jQuery.trim(a.value)",
+	filled: "!!jQuery.trim(a.value)"
+});
+
 // constructor for validator
 jQuery.validator = function( options, form ) {
 
@@ -301,6 +332,8 @@ jQuery.extend(jQuery.validator, {
 	 *
 	 * @property
 	 * @type String
+	 * @name jQuery.validator.messages
+	 * @cat Plugins/Validate
 	 */
 	messages: {
 		required: "This field is required.",
@@ -311,7 +344,7 @@ jQuery.extend(jQuery.validator, {
 		url: "Please enter a valid URL.",
 		date: "Please enter a valid date.",
 		dateISO: "Please enter a valid date (ISO).",
-		dateDE: "Bitte geben Sie ein g黮tiges Datum ein.",
+		dateDE: "Bitte geben Sie ein g锟絣tiges Datum ein.",
 		number: "Please enter a valid number.",
 		numberDE: "Bitte geben Sie eine Nummer ein.",
 		digits: "Please enter only digits",
@@ -377,6 +410,26 @@ jQuery.extend(jQuery.validator, {
 			this.settings.showErrors
 				? this.settings.showErrors( this.errorList, this )
 				: this.defaultShowErrors();
+		},
+		
+		/**
+		 * Resets the controlled form, including resetting input fields
+		 * to their original value (requires form plugin), removing classes
+		 * indicating invalid elements and hiding error messages.
+		 *
+		 * @example var validator = $("#myform").validate();
+		 * validator.resetForm();
+		 * @desc Reset the form controlled by this validator.
+		 *
+		 * @name jQuery.validator.protoype.resetForm
+		 * @cat Plugins/Validate
+		 */
+		resetForm: function() {
+			if( jQuery.fn.resetForm )
+				jQuery( this.currentForm ).resetForm();
+			this.prepareForm();
+			this.hideErrors();
+			this.elements.removeClass( this.settings.errorClass );
 		},
 		
 		clean: function( selector ) {
@@ -908,9 +961,9 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		url: function(value, element) {
-			return !jQuery.validator.methods.required(value, element) || /^(https?|ftp):\/\/[A-Z0-9](\.?[A-Z0-9能謁[A-Z0-9_\-能謁*)*(\/([A-Z0-9能謁[A-Z0-9_\-\.能謁*)?)*(\?([A-Z0-9能謁[A-Z0-9_\-\.%\+=&能謁*)?)?$/i.test(value);
+			return !jQuery.validator.methods.required(value, element) || /^(https?|ftp):\/\/[A-Z0-9](\.?[A-Z0-9脛脺脰][A-Z0-9_\-脛脺脰]*)*(\/([A-Z0-9脛脺脰][A-Z0-9_\-\.脛脺脰]*)?)*(\?([A-Z0-9脛脺脰][A-Z0-9_\-\.%\+=&脛脺脰]*)?)?$/i.test(value);
 		},
-	
+        
 		/**
 		 * Return true, if the value is a valid date. Uses JavaScripts built-in
 		 * Date to test if the date is valid, and is therefore very limited.
