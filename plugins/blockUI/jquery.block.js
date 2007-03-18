@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.00 (02/28/2007)
+ * Version 1.01 - test (03/17/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -152,7 +152,7 @@ $.blockUI.impl = {
         msg = msg ? (msg.nodeType ? $(msg) : msg) : full ? $.blockUI.defaults.pageMessage : $.blockUI.defaults.elementMessage;
         var basecss = jQuery.extend({}, full ? $.blockUI.defaults.pageMessageCSS : $.blockUI.defaults.elementMessageCSS);
         css = jQuery.extend(basecss, css || {});
-        var f = (this.ie6) ? $('<iframe class="blockUI" style="z-index:1000;border:none;margin:0;padding:0 position:absolute;width:100%;height:100%;top:0;left:0" src="javascript:false;document.write(\'\');"></iframe>')
+        var f = ($.browser.msie) ? $('<iframe class="blockUI" style="z-index:1000;border:none;margin:0;padding:0;position:absolute;width:100%;height:100%;top:0;left:0" src="javascript:false;document.write(\'\');"></iframe>')
                            : $('<div class="blockUI" style="display:none"></div>');
         var w = $('<div class="blockUI" style="z-index:1001;cursor:wait;border:none;margin:0;padding:0;width:100%;height:100%;top:0;left:0"></div>');
         var m = full ? $('<div class="blockUI blockMsg" style="z-index:1002;cursor:wait;padding:0;position:fixed"></div>')
@@ -161,21 +161,19 @@ $.blockUI.impl = {
         if (msg) m.css(css);
         if (!noalpha) w.css($.blockUI.defaults.overlayCSS);
         if (this.op8) w.css({ width:''+el.clientWidth,height:''+el.clientHeight }); // lame
-        if (this.ie6) f.css('opacity','0.0');
+        if ($.browser.msie) f.css('opacity','0.0');
+
         $([f[0],w[0],m[0]]).appendTo(full ? 'body' : el);
         if (full) this.pageBlock = m[0];
 
-        if (this.ie6 || ($.browser.msie && !$.boxModel)) {
-            // stretch content area if it's short
-            if (full && $.boxModel && document.body.offsetHeight < document.documentElement.clientHeight)
-                $('html,body').css('height','100%');
+        var activex = $.browser.msie && $('object,embed', full ? null : el).length > 0
+        if (this.ie6 || activex) { // ie7 needs abs positioning to account for activex issues (when scrolling)
             // simulate fixed position
             $.each([f,w,m], function(i) {
                 var s = this[0].style;
                 s.position = 'absolute';
                 if (i < 2) {
-                    full ? s.setExpression('height','document.body.scrollHeight > document.body.offsetHeight ? document.body.scrollHeight : document.body.offsetHeight + "px"')
-                         : s.setExpression('height','this.parentNode.offsetHeight + "px"');
+                    full ? s.setExpression('height','document.body.scrollHeight + "px"') : s.setExpression('height','this.parentNode.offsetHeight + "px"');
                     full ? s.setExpression('width','jQuery.boxModel && document.documentElement.clientWidth || document.body.clientWidth + "px"')
                          : s.setExpression('width','this.parentNode.offsetWidth + "px"');
                 }
