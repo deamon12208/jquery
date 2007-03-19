@@ -1,0 +1,6 @@
+== New and Noteworthy ==
+
+== 1.0 ==
+
+* Updated to work with jQuery 1.1.2+
+* Added cloneWithEvents to clone elements and copy it's events at the same time
