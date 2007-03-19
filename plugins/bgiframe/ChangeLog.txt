@@ -1,0 +1,10 @@
+== New and Noteworthy ==
+
+== 2.0 ==
+
+* Added ability change settings like width, height, src and more.
+
+== 1.0 ==
+
+* Only adds iframe once per an element
+* Works with SSL enabled pages
