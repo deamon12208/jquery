@@ -1,0 +1,15 @@
+== New and Noteworthy ==
+
+== 2.1 ==
+
+* Fixed an issue with the unload handler
+
+== 2.0 ==
+
+* Major reduction in code size and complexity (internals have change a whole lot)
+
+== 1.0 ==
+
+* Fixed Opera issue
+* Fixed an issue with children elements that also have a mousehweel handler
+* Added ability to handle multiple handlers
