@@ -1,5 +1,5 @@
 /*
- * Tooltip - jQuery plugin  for styled tooltips
+ * Tooltip 1.0 - jQuery plugin  for styled tooltips
  *
  * Copyright (c) 2006 Jörn Zaefferer, Stefan Petre
  *
@@ -64,6 +64,7 @@
  * @option String showBody If specified, uses the String to split the title, displaying the first part in the h3 tag, all following in the p.body tag, separated with <br/>s, default is null
  * @option String extraClass If specified, adds the class to the tooltip helper, default is null
  * @option Boolean fixPNG If true, fixes transparent PNGs in IE, default is false
+ * @option Function bodyHandler TODO document me
  *
  * @name Tooltip
  * @type jQuery
@@ -154,9 +155,12 @@
 		// save title, remove from element and set to helper
 		var title = oldTitle = source.attr('title');
 		source.attr('title','');
-		if(settings.showBody) {
+		if ( settings.bodyHandler ) {
+			tTitle.hide();
+			tBody.html( settings.bodyHandler.call(this) ).show();
+		} else if ( settings.showBody ) {
 			var parts = title.split(settings.showBody);
-			tTitle.html(parts.shift());
+			tTitle.html(parts.shift()).show();
 			tBody.empty();
 			for(var i = 0, part; part = parts[i]; i++) {
 				if(i > 0)

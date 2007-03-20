@@ -13,6 +13,10 @@
 }
 #tooltip h3, #tooltip p { margin: 0; }
 
+#extended { margin: 2em 0; }
+#extended label { text-decoration: underline; }
+#extended div.tooltip { display: none; }
+
 #tooltip.fancy {
 	opacity: 0.95;
 	font-family: Arial;
@@ -49,6 +53,14 @@ $('img').Tooltip({
 $('#right2 a').Tooltip({ showURL: false });
 
 $("map *").Tooltip();
+
+$("#extended label").Tooltip({
+	bodyHandler: function() {
+		return $(this).next().html();
+	},
+	delay: 0,
+	track: true
+});
 
 // modify global settings
 $.extend($.fn.Tooltip.defaults, {
@@ -95,6 +107,24 @@ mouse track:</p>
 	<a title="Yahoo doo2 - wohooo" href="http://yahoo.com">Link to yahoo1</a>
 	<a title="Yahoo doo3" href="http://yahoo.com">Link to yahoo2</a>
 	<a title="Yahoo doo4 - buga!" href="http://yahoo.com">Link to yahoo3</a>
+</div>
+
+<div id="extended">
+	<label title="tooltip" for="input">Label for ABC</label>
+	<div class="tooltip">
+		<h3>Blatooltip data</h3>
+		<table border="1">
+			<tr>
+				<td>Wohoo</td>
+				<td>Waa</td>
+			</tr>
+			<tr>
+				<td>Bla</td>
+				<td>Blu</td>
+			</tr>
+		</table>
+	</div>
+	<input id="input" value="ABC" />
 </div>
 
 <br/>
