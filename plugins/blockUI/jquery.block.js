@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.01 - test (03/17/2007)
+ * Version 1.02 - test (03/19/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -187,7 +187,7 @@ $.blockUI.impl = {
         this.bind(1, el);
         m.append(msg).show();
         if (msg.jquery) msg.show();
-        full ? setTimeout(this.focus, 10): this.center(m[0]);
+        full ? setTimeout(this.focus, 200): this.center(m[0]);
         if (this.op8) this.simulate(true,el);
     },
     remove: function(el) {
@@ -231,7 +231,7 @@ $.blockUI.impl = {
         });
     },
     focus: function() {
-        var v = $(':input:visible', $.blockUI.impl.pageBlock)[0];
+        var v = $(':input:visible:enabled', $.blockUI.impl.pageBlock)[0];
         if (v) v.focus();
     },
     center: function(el) {
