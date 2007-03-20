@@ -248,7 +248,7 @@ jQuery.extend(jQuery.fn, {
 		return this.setArray( jQuery.merge( this.get(), t ) );
 	},
 	forId: function( id ) {
-		return this.filter( "[@for=" + id + "]" );
+		return this.filter( "[@for='" + id + "']" );
 	}
 });
 
@@ -633,7 +633,7 @@ jQuery.extend(jQuery.validator, {
 			return jQuery("option:selected", element).length;
 		case 'input':
 			if( /radio|checkbox/i.test(element.type) )
-				return jQuery(element.form || document).find('[@name=' + element.name + ']:checked').length;
+				return jQuery(element.form || document).find('[@name="' + element.name + '"]:checked').length;
 		}
 		return value.length;
 	},
