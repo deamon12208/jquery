@@ -1,6 +1,7 @@
 /**
- * History/Remote 0.2 - jQuery plugin for enabling history and bookmarking in Ajax driven
- *                      applications in an unobtrusive and accessible manner ("Hijax").
+ * History/Remote - jQuery plugin for enabling history and bookmarking in Ajax driven
+ *                  applications in an unobtrusive and accessible manner ("Hijax").
+ * @requires jQuery v1.0.3
  *
  * http://stilbuero.de/jquery/history/
  *
@@ -9,9 +10,10 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  *
+ * Version: 0.2.2
  */
 
-(function($) { // simulate block scope
+(function($) { // block scope
 
 /**
  * Initialize the history event listener. Subsequent calls will not result in additional listeners.
@@ -38,16 +40,13 @@ $.ajaxHistory = new function() {
 
     // create custom event for state reset
     var _defaultReset = function() {
-        var output = $('.remote-output');
-        if (output.children().size() > 0) {
-            output.empty();
-        }
+        $('.remote-output').empty();
     };
     $(document).bind(RESET_EVENT, _defaultReset);
 
     if ($.browser.msie) {
 
-        var _historyIframe; // for IE
+        var _historyIframe, initialized = false; // for IE
 
         // add hidden iframe
         $(function() {
@@ -75,11 +74,12 @@ $.ajaxHistory = new function() {
                     // order does matter, set location.hash after triggering the click...
                     $('a[@href$="' + iframeHash + '"]').click();
                     location.hash = iframeHash;
-                } else {
+                } else if (initialized) {
                     location.hash = '';
                     $(document).trigger(RESET_EVENT);
                 }
             }
+            initialized = true;
         };
 
     } else if ($.browser.mozilla || $.browser.opera) {
@@ -111,7 +111,7 @@ $.ajaxHistory = new function() {
             _forwardStack = [];
 
         });
-        var isFirst = false;
+        var isFirst = false, initialized = false;
         _addHistory = function(hash) {
             _backStack.push(hash);
             _forwardStack.length = 0; // clear forwardStack (true click occured)
@@ -142,11 +142,12 @@ $.ajaxHistory = new function() {
                 // document.URL doesn't change in Safari
                 if (document.URL.indexOf('#') >= 0) {
                     $('a[@href$="' + '#' + document.URL.split('#')[1] + '"]').click();
-                } else {
+                } else if (initialized) {
                     $(document).trigger(RESET_EVENT);
                 }
                 isFirst = true;
             }
+            initialized = true;
         };
 
     }
