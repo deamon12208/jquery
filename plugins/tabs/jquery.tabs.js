@@ -1,5 +1,6 @@
 /**
- * Tabs 2.6 - jQuery plugin for accessible, unobtrusive tabs
+ * Tabs - jQuery plugin for accessible, unobtrusive tabs
+ * @requires jQuery v1.0.3
  *
  * http://stilbuero.de/tabs/
  *
@@ -8,9 +9,16 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  *
+ * Version: 2.7
  */
 
-(function($) { // simulate block scope
+(function($) { // block scope
+
+$.extend({
+    tabs: {
+        remoteCount: 0 // TODO in Tabs 3 this is going to be more cleanly in one single namespace
+    }
+});
 
 /**
  * Create an accessible, unobtrusive tab interface based on a particular HTML structure.
@@ -19,17 +27,17 @@
  *
  * <div id="container">
  *     <ul>
- *         <li><a href="#section-1">Section 1</a></li>
- *         <li><a href="#section-2">Section 2</a></li>
- *         <li><a href="#section-3">Section 3</a></li>
+ *         <li><a href="#fragment-1">Section 1</a></li>
+ *         <li><a href="#fragment-2">Section 2</a></li>
+ *         <li><a href="#fragment-3">Section 3</a></li>
  *     </ul>
- *     <div id="section-1">
+ *     <div id="fragment-1">
  *
  *     </div>
- *     <div id="section-2">
+ *     <div id="fragment-2">
  *
  *     </div>
- *     <div id="section-3">
+ *     <div id="fragment-3">
  *
  *     </div>
  * </div>
@@ -53,19 +61,30 @@
  *       content upon tab switching.
  *
  * @param Number initial An integer specifying the position of the tab (no zero-based index) that
- *                       gets first activated, e.g. on page load. If a hash in the URL of the page
- *                       refers to one fragment (tab container) of a tab interface, this parameter
- *                       will be ignored and instead the tab belonging to that fragment in that
- *                       specific tab interface will be activated. Defaults to 1 if omitted.
+ *                       gets activated at first (on page load). Two alternative ways to specify
+ *                       the active tab will overrule this argument. First a li element
+ *                       (representing one single tab) belonging to the selected tab class, e.g.
+ *                       set the selected tab class (default: "tabs-selected", see option
+ *                       selectedClass) for one of the unordered li elements in the HTML source.
+ *                       In addition if a fragment identifier/hash in the URL of the page refers
+ *                       to the id of a tab container of a tab interface the corresponding tab will
+ *                       be activated and both the initial argument as well as an eventually
+ *                       declared class attribute will be overruled. Defaults to 1 if omitted.
  * @param Object settings An object literal containing key/value pairs to provide optional settings.
  * @option Array<Number> disabled An array containing the position of the tabs (no zero-based index)
  *                                that should be disabled on initialization. Default value: null.
+ *                                A tab can also be disabled by simply adding the disabling class
+ *                                (default: "tabs-disabled", see option disabledClass) to the li
+ *                                element representing that particular tab.
  * @option Boolean bookmarkable Boolean flag indicating if support for bookmarking and history (via
  *                              changing hash in the URL of the browser) is enabled. Default value:
  *                              false, unless the History/Remote plugin is included. In that case the
  *                              default value becomes true. @see $.ajaxHistory.initialize
  * @option Boolean remote Boolean flag indicating that tab content has to be loaded remotely from
  *                        the url given in the href attribute of the tab menu anchor elements.
+ * @option String hashPrefix A String that is used for constructing the hash the link's href attribute
+ *                           of a remote tab gets altered to, such as "#remote-1".
+ *                           Default value: "remote-tab-".
  * @option Boolean fxFade Boolean flag indicating whether fade in/out animations are used for tab
  *                        switching. Can be combined with fxSlide. Will overrule fxShow/fxHide.
  *                        Default value: false.
@@ -99,7 +118,10 @@
  *                          function gets passed three arguments: the first one is the clicked
  *                          tab (e.g. an anchor element), the second one is the DOM element
  *                          containing the content of the clicked tab (e.g. the div), the third
- *                          argument is the one of the tab that gets hidden. Default value: null.
+ *                          argument is the one of the tab that gets hidden. If this callback
+ *                          returns false, the tab switch is canceled (use to disallow tab
+ *                          switching for the reason of a failed form validation for example).
+ *                          Default value: null.
  * @option Function onHide A function to be invoked upon tab switch, immediatly after one tab's
  *                         content got hidden (with or without an animation) and right before the
  *                         next tab is revealed. The function gets passed three arguments: the
@@ -113,10 +135,16 @@
  *                         tab (e.g. an anchor element), the second one is the DOM element
  *                         containing the content of the clicked tab, (e.g. the div), the third
  *                         argument is the one of the tab that gets hidden. Default value: null.
+ * @option String navClass A CSS class that is used to identify the tabs unordered list by class if
+ *                         the required HTML structure differs from the default one.
+ *                         Default value: "tabs-nav".
  * @option String selectedClass The CSS class attached to the li element representing the
  *                              currently selected (active) tab. Default value: "tabs-selected".
  * @option String disabledClass The CSS class attached to the li element representing a disabled
  *                              tab. Default value: "tabs-disabled".
+ * @option String containerClass A CSS class that is used to identify tab containers by class if
+ *                               the required HTML structure differs from the default one.
+ *                               Default value: "tabs-container".
  * @option String hideClass The CSS class used for hiding inactive tabs. A class is used instead
  *                          of "display: none" in the style attribute to maintain control over
  *                          visibility in other media types than screen, most notably print.
@@ -124,11 +152,11 @@
  * @option String loadingClass The CSS class used for indicating that an Ajax tab is currently
  *                             loading, for example by showing a spinner.
  *                             Default value: "tabs-loading".
- * @option String tabStruct A CSS selector or basic XPath expression reflecting a nested HTML
- *                          structure that is different from the default single div structure
- *                          (one div with an id inside the overall container holds one tab's
- *                          content). If for instance an additional div is required to wrap up the
- *                          several tab containers such a structure is expressed by "div>div".
+ * @option String tabStruct @deprecated A CSS selector or basic XPath expression reflecting a
+ *                          nested HTML structure that is different from the default single div
+ *                          structure (one div with an id inside the overall container holds one
+ *                          tab's content). If for instance an additional div is required to wrap
+ *                          up the several tab containers such a structure is expressed by "div>div".
  *                          Default value: "div".
  * @type jQuery
  *
@@ -145,6 +173,7 @@ $.fn.tabs = function(initial, settings) {
         disabled: null,
         bookmarkable: $.ajaxHistory ? true : false,
         remote: false,
+        hashPrefix: 'remote-tab-',
         fxFade: null,
         fxSlide: null,
         fxShow: null,
@@ -156,8 +185,10 @@ $.fn.tabs = function(initial, settings) {
         onClick: null,
         onHide: null,
         onShow: null,
+        navClass: 'tabs-nav',
         selectedClass: 'tabs-selected',
         disabledClass: 'tabs-disabled',
+        containerClass: 'tabs-container',
         hideClass: 'tabs-hide',
         loadingClass: 'tabs-loading',
         tabStruct: 'div'
@@ -173,22 +204,45 @@ $.fn.tabs = function(initial, settings) {
     // initialize tabs
     return this.each(function() {
 
+        // remember wrapper for later
         var container = this;
-        var tabs = $('>ul:eq(0)>li>a', this);
+
+        // setup nav
+        var nav = $('ul.' + settings.navClass,  container);
+        nav = nav.size() && nav || $('>ul:eq(0)', container); // fallback to default structure
+        var tabs = $('a', nav);
 
         // prepare remote tabs
         if (settings.remote) {
             var remoteUrls = {};
-            tabs.each(function(i) {
-                var id = 'tabs-remote-' + (i + 1);
+            tabs.each(function() {
+                $(this).html('<span>' + $(this).html() + '</span>');
+                var id = settings.hashPrefix + (++$.tabs.remoteCount);
                 var hash = '#' + id;
                 remoteUrls[hash] = this.href;
                 this.href = hash;
-                $(container).append('<div id="' + id + '" class="fragment"></div>');
+                $('<div id="' + id + '" class="' + settings.containerClass + '"></div>').appendTo(container);
             });
         }
 
-        // retrieve active tab from hash in url
+        // set up containers
+        var containers = $('div.' + settings.containerClass, container);
+        containers = containers.size() && containers || $('>' + settings.tabStruct, container); // fallback to default structure
+
+        // attach classes for styling if not present
+        nav.is('.' + settings.navClass) || nav.addClass(settings.navClass);
+        containers.each(function() {
+            var $$ = $(this);
+            $$.is('.' + settings.containerClass) || $$.addClass(settings.containerClass);
+        });
+
+        // try to retrieve active tab from class in HTML
+        var hasSelectedClass = $('li', nav).index( $('li.' + settings.selectedClass, nav)[0] );
+        if (hasSelectedClass >= 0) {
+           settings.initial = hasSelectedClass;
+        }
+
+        // try to retrieve active tab from hash in url, will override class in HTML
         if (location.hash) {
             tabs.each(function(i) {
                 if (this.hash == location.hash) {
@@ -212,18 +266,17 @@ $.fn.tabs = function(initial, settings) {
         }
 
         // highlight tab accordingly
-        $('>' + settings.tabStruct, this).filter(':eq(' + settings.initial + ')').show().end().not(':eq(' + settings.initial + ')').addClass(settings.hideClass);
+        containers.filter(':eq(' + settings.initial + ')').show().end().not(':eq(' + settings.initial + ')').addClass(settings.hideClass);
         if (!settings.remote) {
-            $('>ul:eq(0)>li:eq(' + settings.initial + ')', this).addClass(settings.selectedClass);
+            $('li', nav).removeClass(settings.selectedClass).eq(settings.initial).addClass(settings.selectedClass); // we need to remove classes eventually if hash takes precedence over class
         }
 
         // setup auto height
         if (settings.fxAutoHeight) {
             // helper
-            var tabsContents = $('>' + settings.tabStruct, container);
             var _setAutoHeight = function(reset) {
                 // get tab heights in top to bottom ordered array
-                var heights = $.map(tabsContents.get(), function(el) {
+                var heights = $.map(containers.get(), function(el) {
                     var h, jq = $(el);
                     if (reset) {
                         if ($.browser.msie6) {
@@ -240,12 +293,12 @@ $.fn.tabs = function(initial, settings) {
                     return b - a;
                 });
                 if ($.browser.msie6) {
-                    tabsContents.each(function() {
+                    containers.each(function() {
                         this.minHeight = heights[0] + 'px';
                         this.style.setExpression('behaviour', 'this.style.height = this.minHeight ? this.minHeight : "1px"'); // using an expression to not make print styles useless
                     });
                 } else {
-                    tabsContents.css({'min-height': heights[0] + 'px'});
+                    containers.css({'min-height': heights[0] + 'px'});
                 }
             };
             // call once for initialization
@@ -299,43 +352,55 @@ $.fn.tabs = function(initial, settings) {
 
         // attach activateTab event, required for activating a tab programmatically
         tabs.bind('triggerTab', function() {
+
+            // if the tab is already selected or disabled or animation is still running stop here
+            var li = $(this.parentNode);
+            if (container.locked || li.is('.' + settings.selectedClass) || li.is('.' + settings.disabledClass)) {
+                return false;
+            }
+
             var hash = this.hash;
-            if ($(hash).is(':hidden') && !$(this.parentNode).is('.' + settings.disabledClass)) { // trigger only if not already visible and not if disabled
 
-                if ($.browser.msie) {
+            if ($.browser.msie) {
 
-                    $(this).click();
-                    if (settings.bookmarkable) {
-                        $.ajaxHistory.update(hash);
-                        location.hash = hash.replace('#', '');
-                    }
+                $(this).trigger('click');
+                if (settings.bookmarkable) {
+                    $.ajaxHistory.update(hash);
+                    location.hash = hash.replace('#', '');
+                }
 
-                } else if ($.browser.safari) {
+            } else if ($.browser.safari) {
 
-                    // Simply setting location.hash puts Safari into the eternal load state... ugh! Submit a form instead.
-                    var tempForm = $('<form action="' + hash + '"><div><input type="submit" value="h" /></div></form>').get(0); // no need to append it to the body
-                    tempForm.submit(); // does not trigger the form's submit event...
-                    $(this).click(); // ...thus do stuff here
-                    if (settings.bookmarkable) {
-                        $.ajaxHistory.update(hash);
-                    }
+                // Simply setting location.hash puts Safari into the eternal load state... ugh! Submit a form instead.
+                var tempForm = $('<form action="' + hash + '"><div><input type="submit" value="h" /></div></form>').get(0); // no need to append it to the body
+                tempForm.submit(); // does not trigger the form's submit event...
+                $(this).trigger('click'); // ...thus do stuff here
+                if (settings.bookmarkable) {
+                    $.ajaxHistory.update(hash);
+                }
 
+            } else {
+
+                if (settings.bookmarkable) {
+                    location.hash = hash.replace('#', '');
                 } else {
-
-                    if (settings.bookmarkable) {
-                        location.hash = hash.replace('#', '');
-                    } else {
-                        $(this).click();
-                    }
-
+                    $(this).trigger('click');
                 }
 
             }
+
         });
 
         // attach disable event, required for disabling a tab
         tabs.bind('disableTab', function() {
-            $(this.parentNode).addClass(settings.disabledClass);
+            var li = $(this.parentNode);
+            if ($.browser.safari) { /* Fix opacity tab after disabling in Safari... */
+                li.animate({ opacity: 0 }, 1, function() {
+                   li.css({opacity: ''});
+                });
+            }
+            li.addClass(settings.disabledClass);
+
         });
 
         // disabled from settings
@@ -347,13 +412,12 @@ $.fn.tabs = function(initial, settings) {
 
         // attach enable event, required for reenabling a tab
         tabs.bind('enableTab', function() {
-            var jq = $(this.parentNode);
-            jq.removeClass(settings.disabledClass);
-            if ($.browser.safari) {
-                jq.fadeTo(1, 1.0).css({display: '', opacity: 1}); /* Fix disappearing tab after enabling in Safari... */
-                setTimeout(function() {
-                    jq.css({opacity: ''});
-                }, 30); // ...do not chain and use little timeout, ugh!
+            var li = $(this.parentNode);
+            li.removeClass(settings.disabledClass);
+            if ($.browser.safari) { /* Fix disappearing tab after enabling in Safari... */
+                li.animate({ opacity: 1 }, 1, function() {
+                    li.css({opacity: ''});
+                });
             }
         });
 
@@ -361,11 +425,11 @@ $.fn.tabs = function(initial, settings) {
         tabs.bind('click', function(e) {
 
             var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
+            var clicked = this, li = $(this.parentNode), toShow = $(this.hash), toHide = containers.filter(':visible');
 
-            var jqLi = $(this.parentNode);
-
-            // if tab is already selected or disabled or animation is still running stop here
-            if (container.locked || jqLi.is('.' + settings.selectedClass) || jqLi.is('.' + settings.disabledClass)) {
+            // if onClick returns false, the tab is already selected or disabled or animation is still running stop here
+            if ((typeof onClick == 'function' && onClick(this, toShow[0], toHide[0]) == false && trueClick) ||
+                container.locked || li.is('.' + settings.selectedClass) || li.is('.' + settings.disabledClass)) {
                 this.blur();
                 return false;
             }
@@ -373,8 +437,7 @@ $.fn.tabs = function(initial, settings) {
             container['locked'] = true;
 
             // show new tab
-            var toShow = $(this.hash);
-            if (toShow.size() > 0) {
+            if (toShow.size()) {
 
                 // prevent scrollbar scrolling to 0 and than back in IE7, happens only if bookmarking/history is enabled
                 if ($.browser.msie && settings.bookmarkable) {
@@ -382,16 +445,6 @@ $.fn.tabs = function(initial, settings) {
                     toShow.attr('id', '');
                     setTimeout(function() {
                         toShow.attr('id', toShowId); // restore id
-                    }, 0);
-                }
-
-                var clicked = this;
-                var toHide = $('>' + settings.tabStruct + ':visible', container);
-
-                if (typeof onClick == 'function') {
-                    // without this timeout Firefox gets really confused and calls callbacks twice...
-                    setTimeout(function() {
-                        onClick(clicked, toShow[0], toHide[0]);
                     }, 0);
                 }
 
@@ -423,12 +476,14 @@ $.fn.tabs = function(initial, settings) {
                 if (!settings.remote) {
                     switchTab();
                 } else {
-                    var jqThis = $(this);
-                    jqThis.addClass(settings.loadingClass);
+                    var $$ = $(this), span = $('span', this)[0], text = span.innerHTML;
+                    $$.addClass(settings.loadingClass);
+                    span.innerHTML = 'Loading&#8230;'; // CAUTION: html(...) crashes Safari
                     setTimeout(function() { // Timeout is again required in IE, "wait" for id being restored
                         $(clicked.hash).load(remoteUrls[clicked.hash], function() {
                             switchTab();
-                            jqThis.removeClass(settings.loadingClass);
+                            span.innerHTML = text; // CAUTION: html(...) crashes Safari
+                            $$.removeClass(settings.loadingClass);
                         });
                     }, 0);
                 }
@@ -446,7 +501,7 @@ $.fn.tabs = function(initial, settings) {
 
             this.blur(); // prevent IE from keeping other link focussed when using the back button
 
-            return settings.bookmarkable;
+            return settings.bookmarkable && !!trueClick; // convert undefined to Boolean for IE
 
         });
 
@@ -467,8 +522,9 @@ $.fn.tabs = function(initial, settings) {
 };
 
 /**
- * Activate a tab programmatically with the given position (no zero-based index),
- * as if the tab itself were clicked.
+ * Activate a tab programmatically with the given position (no zero-based index)
+ * or its id, e.g. the URL's fragment identifier/hash representing a tab, as if the tab
+ * itself were clicked.
  *
  * @example $('#container').triggerTab(2);
  * @desc Activate the second tab of the tab interface contained in <div id="container">.
@@ -476,10 +532,14 @@ $.fn.tabs = function(initial, settings) {
  * @desc Activate the first tab of the tab interface contained in <div id="container">.
  * @example $('#container').triggerTab();
  * @desc Activate the first tab of the tab interface contained in <div id="container">.
+ * @example $('#container').triggerTab('fragment-2');
+ * @desc Activate a tab via its URL fragment identifier representation.
  *
- * @param Number position An integer specifying the position of the tab (no zero-based
- *                        index) to be activated. If this parameter is omitted, the first
- *                        tab will be activated.
+ * @param String|Number tab Either a string that matches the id of the tab (the URL's
+ *                          fragment identifier/hash representing a tab) or an integer
+ *                          specifying the position of the tab (no zero-based index) to
+ *                          be activated. If this parameter is omitted, the first tab
+ *                          will be activated.
  * @type jQuery
  *
  * @name triggerTab
@@ -493,9 +553,11 @@ $.fn.tabs = function(initial, settings) {
  * @example $('#container').disableTab(2);
  * @desc Disable the second tab of the tab interface contained in <div id="container">.
  *
- * @param Number position An integer specifying the position of the tab (no zero-based
- *                        index) to be disabled. If this parameter is omitted, the first
- *                        tab will be disabled.
+ * @param String|Number tab Either a string that matches the id of the tab (the URL's
+ *                          fragment identifier/hash representing a tab) or an integer
+ *                          specifying the position of the tab (no zero-based index) to
+ *                          be disabled. If this parameter is omitted, the first tab
+ *                          will be disabled.
  * @type jQuery
  *
  * @name disableTab
@@ -509,9 +571,11 @@ $.fn.tabs = function(initial, settings) {
  * @example $('#container').enableTab(2);
  * @desc Enable the second tab of the tab interface contained in <div id="container">.
  *
- * @param Number position An integer specifying the position of the tab (no zero-based
- *                        index) to be enabled. If this parameter is omitted, the first
- *                        tab will be enabled.
+ * @param String|Number tab Either a string that matches the id of the tab (the URL's
+ *                          fragment identifier/hash representing a tab) or an integer
+ *                          specifying the position of the tab (no zero-based index) to
+ *                          be enabled. If this parameter is omitted, the first tab
+ *                          will be enabled.
  * @type jQuery
  *
  * @name enableTab
@@ -522,10 +586,17 @@ $.fn.tabs = function(initial, settings) {
 var tabEvents = ['triggerTab', 'disableTab', 'enableTab'];
 for (var i = 0; i < tabEvents.length; i++) {
     $.fn[tabEvents[i]] = (function(tabEvent) {
-        return function(tabIndex) {
+        return function(tab) {
             return this.each(function() {
-                var i = tabIndex && tabIndex > 0 && tabIndex - 1 || 0; // fall back to 0
-                $('>ul:eq(0)>li>a', this).eq(i).trigger(tabEvent);
+                var nav = $('ul.tabs-nav' , this);
+                nav = nav.size() && nav || $('>ul:eq(0)', this); // fallback to default structure
+                var a;
+                if (!tab || typeof tab == 'number') {
+                    a = $('li>a', nav).eq((tab && tab > 0 && tab - 1 || 0)); // fall back to 0
+                } else if (typeof tab == 'string') {
+                    a = $('li>a[@href$="#' + tab + '"]', nav);
+                }
+                a.trigger(tabEvent);
             });
         };
     })(tabEvents[i]);
