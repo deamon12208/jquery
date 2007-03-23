@@ -112,7 +112,7 @@ jQuery.fn.pop = function(destruct,returnObject){
  * Javascript function. It returns a jQuery object to maintain chainability. See
  * returnObject parameter for a workaround.
  *
- * @example $('li').shift()[0] == 2nd li found
+ * @example $('li').shift()[0] == 2nd <li> found
  *
  * @name shift
  * @type jQuery
@@ -128,7 +128,7 @@ jQuery.fn.shift = function(destruct,returnObject){
 /**
  * Move the first jQuery element to the last
  *
- * @example $('li').rotate()[0] == 2nd li found
+ * @example $('li').rotate()[0] == 2nd <li> found
  *
  * @name rotate
  * @type jQuery
@@ -139,4 +139,20 @@ jQuery.fn.rotate = function(destruct){
 	var a = this.get();
 	a.push(a.shift());
 	return this[destruct?'setArray':'pushStack']( a );
+};
+
+/**
+ * Move the last jQuery element to the first
+ *
+ * @example $('li').rrotate()[0] == last <li> found
+ *
+ * @name rrotate
+ * @type jQuery
+ * @param Boolean destruct If true, this function will act distructively on a cached jQuery object
+ * @cat Plugins/Array
+ */
+jQuery.fn.rrotate = function(destruct){
+  var a = this.get();
+  a.unshift(a.pop());
+  return this[destruct?'setArray':'pushStack']( a );
 };
