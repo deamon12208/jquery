@@ -60,7 +60,7 @@ jQuery.fn.jScrollPane = function(settings)
 				if ($c.unmousewheel) {
 					$c.unmousewheel();
 				}
-				jQuery('>.jScrollPaneTrack', $c).remove();
+				jQuery('>.jScrollPaneTrack, >.jScrollArrowUp, >.jScrollArrowDown', $c).remove();
 				$this.css({'top':0});
 			} else {
 				this.originalPadding = $this.css('paddingTop') + ' ' + $this.css('paddingRight') + ' ' + $this.css('paddingBottom') + ' ' + $this.css('paddingLeft');
