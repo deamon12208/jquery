@@ -50,7 +50,7 @@ div.date-picker-holder, div.date-picker-holder * {
 	margin: 0;
 	padding: 0;
 }
-div.date-picker-holder {
+div.popup-calendar-wrapper {
 	position: relative;
 }
 div.date-picker-holder input {
@@ -61,7 +61,7 @@ div.popup-calendar {
 	position: absolute;
 	z-index: 2;
 	top: 0;
-	left: -16px; /* value for IE */
+	left: 0; /* value for IE */
 	padding: 4px;
 	border: 2px solid #000;
 	background: #fff;

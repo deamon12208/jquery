@@ -194,7 +194,7 @@ jQuery.datePicker = function()
 			jQuery("<table></table>").attr('cellspacing',2).append("<thead></thead>")
 			.find("thead").append(headRow).parent().append(tBody.children())
 		).append(prevLinkDiv).append(nextLinkDiv);
-
+		
 		if (jQuery.browser.msie) {
 
 			// we put a styled iframe behind the calendar so HTML SELECT elements don't show through
@@ -207,6 +207,7 @@ jQuery.datePicker = function()
 							'height:3000px"/>'].join('');
 			jCalDiv.append(document.createElement(iframe));
 		}
+		
 		jCalDiv.css({'display':'block'});
 		return jCalDiv[0];
 	};
@@ -254,7 +255,8 @@ jQuery.datePicker = function()
 	{
 		if (!_drawingMonth) {
 			var target = jQuery.browser.msie ? window.event.srcElement : e.target;
-			var cp = jQuery(target).findClosestParent('div.popup-calendar');
+			console.log(jQuery(target));
+			var cp = jQuery(target).findClosestParent('div.popup-calendar-wrapper');
 			if (cp.get(0).className != 'date-picker-holder') {
 				_closeDatePicker();
 			}
@@ -277,7 +279,7 @@ jQuery.datePicker = function()
 			_firstDate = input._startDate;
 			_lastDate = input._endDate;
 			_firstDayOfWeek = input._firstDayOfWeek;
-			_openCal = jQuery(this).findClosestParent('div.popup-calendar');
+			_openCal = jQuery(this).parent().find('>div.popup-calendar-wrapper');
 			
 			var d = jQuery(input).val();
 			if (d != '') {
@@ -412,9 +414,10 @@ jQuery.fn.datePicker = function(a)
 			}
 			jQuery(this).wrap(
 				'<div class="date-picker-holder"></div>'
-			).before(
-				jQuery("<div></div>").attr({'class':'popup-calendar'})
 			).after(
+				jQuery('<div></div>').attr('class', 'popup-calendar-wrapper').append(
+					jQuery("<div></div>").attr({'class':'popup-calendar'})
+				),
 				calBut
 			);
 			calBut.bind('click', jQuery.datePicker.show);

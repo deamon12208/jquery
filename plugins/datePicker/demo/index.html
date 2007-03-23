@@ -6,10 +6,9 @@
 <link rel="stylesheet" type="text/css" href="styles.css" title="default" media="screen" />
 
 <script type="text/javascript" src="/mint/?js"></script>
-<!--<script type="text/javascript" src="jquery.js"></script>-->
-<script type="text/javascript" src="jquery-1.1.js"></script>
+<script type="text/javascript" src="jquery-1.1.2.js"></script>
 <script type="text/javascript" src="datePicker.js"></script>
-<!--<script type="text/javascript" src="datePicker_source.js"></script>-->
+<!--<script type="text/javascript" src="../datePicker_source.js"></script>-->
 <script type="text/javascript">
 $(document).ready(init);
 function init()
@@ -69,7 +68,7 @@ function init()
 	<p>No validation is performed on the text input when the form is submitted and it is presumed that the server processing the form is expecting dates in the format you specify.</p>
 	
 	<h2>Version</h2>
-	<p>r1342 - released 14th February 2007 [<a href="#changelog">changelog</a>]</p>
+	<p>r1566 - released 23rd March 2007 [<a href="#changelog">changelog</a>]</p>
 	
 	<h2>Example</h2>
 	<form action="#" method="post">
@@ -127,6 +126,7 @@ $.datePicker.setLanguageStrings(
 	
 	<h2 id="changelog">Changelog</h2>
 	<ul>
+		<li>23rd March 2007 - fixed the IE7 showthrough calendar issue and updated jQuery to 1.1.2 [r1566]</li>
 		<li>14th February 2007 - fix so that the date picker works on XHTML pages served as application/xhtml+xml (thanks to Jason Karns) [r1342]</li>
         <li>13th February 2007 - fix for issue with Firefox on Linux closing the datePicker when you clicked quickly on the previous or next buttons (thanks to Ray Lee and Ned Collyer for reporting) [r1334]</li>
 		<li>12th February 2007 - fix for issue with Safari not being able to move back beyod a January (thanks to Randy Phillips) [r1331]</li>
@@ -165,7 +165,7 @@ $.datePicker.setLanguageStrings(
 		<li>4th June 2006 - added the ability to specify a "first selectable date" in the past [r4]</li>
 		<li>3rd June 2006 - inital release [r3]</li>
 	</ul>
-	<p>This plugin is stored in a <a href="http://subversion.tigris.org/">Subversion</a> repository. If you want to access old versions or do diffs of the changes between versions please use your subversion client to access http://svn.kelvinluck.com/j_datePicker/</p>
+	<p>This plugin is stored in a <a href="http://subversion.tigris.org/">Subversion</a> repository. If you want to access old versions or do diffs of the changes between versions please use your subversion client to access the jquery subversion repository at svn://jquery.com/trunk/plugins/datePicker/</p>
 	
 	<h2>Feedback</h2>
 	<p>Feedback is greatly appreciated, either via the comments on the bottom of <a href="/projects/jquery-date-picker">this page</a> on my site, the <a href="http://jquery.com/discuss/">jQuery mailing list</a> or my <a href="/contact/">contact form</a>.</p>
