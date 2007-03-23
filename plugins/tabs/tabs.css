@@ -11,7 +11,7 @@
 }
 
 /* Skin */
- body {
+body, .tabs-container { /* declare background color for container to avoid distorted fonts in IE while fading */
     background: #fff;
 }
 .tabs-nav {
