@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.03  (03/22/2007)
+ * Version 1.04  (03/25/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -132,7 +132,9 @@ $.blockUI.defaults = {
     // styles for the message when blocking the entire page
     pageMessageCSS:    { width:'250px', margin:'-50px 0 0 -125px', top:'50%', left:'50%', textAlign:'center', color:'#000', backgroundColor:'#fff', border:'3px solid #aaa' },
     // styles for the message when blocking an element
-    elementMessageCSS: { width:'250px', padding:'10px', textAlign:'center', backgroundColor:'#fff'}
+    elementMessageCSS: { width:'250px', padding:'10px', textAlign:'center', backgroundColor:'#fff'},
+    // allow body element to be stetched in ie6
+    ie6Stretch: 1
 };
 
 // the gory details
@@ -166,14 +168,20 @@ $.blockUI.impl = {
         $([f[0],w[0],m[0]]).appendTo(full ? 'body' : el);
         if (full) this.pageBlock = m[0];
 
+        // ie7 needs to use absolute positioning to account for activex issues (when scrolling)
         var activex = $.browser.msie && $('object,embed', full ? null : el).length > 0
-        if (this.ie6 || activex) { // ie7 needs abs positioning to account for activex issues (when scrolling)
+        if (this.ie6 || activex) { 
+            // stretch content area if it's short
+            if (full && $.blockUI.defaults.ie6Stretch && $.boxModel)
+                $('html,body').css('height','100%');
+
             // simulate fixed position
             $.each([f,w,m], function(i) {
                 var s = this[0].style;
                 s.position = 'absolute';
                 if (i < 2) {
-                    full ? s.setExpression('height','document.body.scrollHeight + "px"') : s.setExpression('height','this.parentNode.offsetHeight + "px"');
+                    full ? s.setExpression('height','document.body.scrollHeight > document.body.offsetHeight ? document.body.scrollHeight : document.body.offsetHeight + "px"') : s.setExpression('height','this.parentNode.offsetHeight + "px"');
+//                    full ? s.setExpression('height','document.body.scrollHeight + "px"') : s.setExpression('height','this.parentNode.offsetHeight + "px"');
                     full ? s.setExpression('width','jQuery.boxModel && document.documentElement.clientWidth || document.body.clientWidth + "px"')
                          : s.setExpression('width','this.parentNode.offsetWidth + "px"');
                 }
@@ -231,8 +239,9 @@ $.blockUI.impl = {
         });
     },
     focus: function() {
+        if (!$.blockUI.impl.pageBlock) return;
         var v = $(':input:visible:enabled', $.blockUI.impl.pageBlock)[0];
-        if (v && $.blockUI.impl.pageBlock) v.focus();
+        if (v) v.focus();
     },
     center: function(el) {
 		var p = el.parentNode, s = el.style;
