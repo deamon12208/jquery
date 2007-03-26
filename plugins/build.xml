@@ -75,6 +75,12 @@
         </antcall>
     </target>
 
+    <target name="cookie" description="Build cookie plugin.">
+        <antcall target="generic">
+            <param name="name" value="cookie" />
+        </antcall>
+    </target>
+    
     <target name="tabs" description="Build Tabs plugin.">
         <antcall target="generic">
             <param name="name" value="tabs" />
