@@ -225,7 +225,7 @@ jQuery.fn.scrollTop = function() {
  * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
  */
 jQuery.fn.offset = function(options, returnObject) {
-	var x = 0, y = 0, elem = this[0], parent = this[0], op, sl = 0, st = 0, options = jQuery.extend({ margin: true, border: true, padding: false, scroll: true }, options || {});
+	var x = 0, y = 0, elem = this[0], parent = this[0], absparent=false, relparent=false, op, sl = 0, st = 0, options = jQuery.extend({ margin: true, border: true, padding: false, scroll: true }, options || {});
 	do {
 		x += parent.offsetLeft || 0;
 		y += parent.offsetTop  || 0;
@@ -245,6 +245,11 @@ jQuery.fn.offset = function(options, returnObject) {
 				x += bl;
 				y += bt;
 			}
+			
+			// Mozilla does not include the border on body if an element isn't positioned absolute and is without an absolute parent
+			if (jQuery.css(parent, 'position') == 'absolute') absparent = true;
+			// IE does not include the border on the body if an element is position static and without an absolute or relative parent
+			if (jQuery.css(parent, 'position') == 'relative') relparent = true;
 		}
 
 		if (options.scroll) {
@@ -258,18 +263,25 @@ jQuery.fn.offset = function(options, returnObject) {
 
 				// Mozilla removes the border if the parent has overflow property other than visible
 				if (jQuery.browser.mozilla && parent != elem && parent != op && jQuery.css(parent, 'overflow') != 'visible') {
-					y += parseInt(jQuery.css(parent, 'borderTopWidth')) || 0;
 					x += parseInt(jQuery.css(parent, 'borderLeftWidth')) || 0;
+					y += parseInt(jQuery.css(parent, 'borderTopWidth')) || 0;
 				}
-			} while (parent != op);
+			} while (op && parent != op);
 		} else
 			parent = parent.offsetParent;
 
 		if (parent && (parent.tagName.toLowerCase() == 'body' || parent.tagName.toLowerCase() == 'html')) {
-			// Safari doesn't add the body margin for elments positioned with static or relative
-			if ((jQuery.browser.safari || (jQuery.browser.msie && jQuery.boxModel)) && jQuery.css(parent, 'position') != 'absolute') {
-				x += parseInt(jQuery.css(op, 'marginLeft')) || 0;
-				y += parseInt(jQuery.css(op, 'marginTop'))  || 0;
+			// Safari and IE Standards Mode doesn't add the body margin for elments positioned with static or relative
+			if ((jQuery.browser.safari || (jQuery.browser.msie && jQuery.boxModel)) && jQuery.css(elem, 'position') != 'absolute') {
+				x += parseInt(jQuery.css(parent, 'marginLeft')) || 0;
+				y += parseInt(jQuery.css(parent, 'marginTop'))  || 0;
+			}
+			// Mozilla does not include the border on body if an element isn't positioned absolute and is without an absolute parent
+			// IE does not include the border on the body if an element is positioned static and without an absolute or relative parent
+			if ( (jQuery.browser.mozilla && !absparent) || 
+			     (jQuery.browser.msie && jQuery.css(elem, 'position') == 'static' && (!relparent || !absparent)) ) {
+				x += parseInt(jQuery.css(parent, 'borderLeftWidth')) || 0;
+				y += parseInt(jQuery.css(parent, 'borderTopWidth'))  || 0;
 			}
 			break; // Exit the loop
 		}

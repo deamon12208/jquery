@@ -1,5 +1,8 @@
 == ChangeLog ==
 
+== Rev. 1601 (2007-03-27) ==
+* Fixed calculation of offsets when a border is present on the body
+
 == Rev. 1485 (2007-03-04) ==
 * Fixed body margin issue for standards compliant pages in IE (introduced in Rev. 1395)
 
