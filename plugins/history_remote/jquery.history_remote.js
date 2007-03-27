@@ -52,9 +52,12 @@ $.ajaxHistory = new function() {
         $(function() {
             _historyIframe = $('<iframe style="display: none;"></iframe>').appendTo(document.body).get(0);
             var iframe = _historyIframe.contentWindow.document;
+            // create initial history entry
             iframe.open();
             iframe.close();
-            iframe.location.hash = _currentHash.replace('#', '');
+            if (_currentHash && _currentHash != '#') {
+                iframe.location.hash = _currentHash.replace('#', '');
+            }
         });
 
         this.update = function(hash) {
@@ -70,7 +73,7 @@ $.ajaxHistory = new function() {
             var iframeHash = iframe.location.hash;
             if (iframeHash != _currentHash) {
                 _currentHash = iframeHash;
-                if (iframeHash != '#') {
+                if (iframeHash && iframeHash != '#') {
                     // order does matter, set location.hash after triggering the click...
                     $('a[@href$="' + iframeHash + '"]').click();
                     location.hash = iframeHash;
