@@ -1,6 +1,6 @@
 {
 	"name": "jQuery-Tabs",
-	"version": 2.6,
+	"version": 2.7,
 	"author": [
 		"Klaus Hartl <klaus.hartl@stilbuero.de>"
 	],
@@ -12,7 +12,7 @@
 	},
 	"provides": {
 		"jQuery.Tabs": {
-			"version": 2.6,
+			"version": 2.7,
 			"file": "jquery.tabs.js"
 		}
 	},
