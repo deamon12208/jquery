@@ -208,7 +208,7 @@ $.fn.tabs = function(initial, settings) {
         var container = this;
 
         // setup nav
-        var nav = $('ul.' + settings.navClass,  container);
+        var nav = $('ul.' + settings.navClass, container);
         nav = nav.size() && nav || $('>ul:eq(0)', container); // fallback to default structure
         var tabs = $('a', nav);
 
