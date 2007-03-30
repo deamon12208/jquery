@@ -354,7 +354,7 @@ $.fn.tabs = function(initial, settings) {
         tabs.bind('triggerTab', function() {
 
             // if the tab is already selected or disabled or animation is still running stop here
-            var li = $(this.parentNode);
+            var li = $(this).parents('li:eq(0)');
             if (container.locked || li.is('.' + settings.selectedClass) || li.is('.' + settings.disabledClass)) {
                 return false;
             }
@@ -393,7 +393,7 @@ $.fn.tabs = function(initial, settings) {
 
         // attach disable event, required for disabling a tab
         tabs.bind('disableTab', function() {
-            var li = $(this.parentNode);
+            var li = $(this).parents('li:eq(0)');
             if ($.browser.safari) { /* Fix opacity tab after disabling in Safari... */
                 li.animate({ opacity: 0 }, 1, function() {
                    li.css({opacity: ''});
@@ -412,7 +412,7 @@ $.fn.tabs = function(initial, settings) {
 
         // attach enable event, required for reenabling a tab
         tabs.bind('enableTab', function() {
-            var li = $(this.parentNode);
+            var li = $(this).parents('li:eq(0)');
             li.removeClass(settings.disabledClass);
             if ($.browser.safari) { /* Fix disappearing tab after enabling in Safari... */
                 li.animate({ opacity: 1 }, 1, function() {
@@ -425,7 +425,7 @@ $.fn.tabs = function(initial, settings) {
         tabs.bind('click', function(e) {
 
             var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
-            var clicked = this, li = $(this.parentNode), toShow = $(this.hash), toHide = containers.filter(':visible');
+            var clicked = this, li = $(this).parents('li:eq(0)'), toShow = $(this.hash), toHide = containers.filter(':visible');
 
             // if onClick returns false, the tab is already selected or disabled or animation is still running stop here
             if ((typeof onClick == 'function' && onClick(this, toShow[0], toHide[0]) == false && trueClick) ||
@@ -454,7 +454,7 @@ $.fn.tabs = function(initial, settings) {
                         $.ajaxHistory.update(clicked.hash);
                     }
                     toHide.animate(hideAnim, hideSpeed, function() { //
-                        $(clicked.parentNode).addClass(settings.selectedClass).siblings().removeClass(settings.selectedClass);
+                        $(clicked).parents('li:eq(0)').addClass(settings.selectedClass).siblings().removeClass(settings.selectedClass);
                         if (typeof onHide == 'function') {
                             onHide(clicked, toShow[0], toHide[0]);
                         }
@@ -592,9 +592,9 @@ for (var i = 0; i < tabEvents.length; i++) {
                 nav = nav.size() && nav || $('>ul:eq(0)', this); // fallback to default structure
                 var a;
                 if (!tab || typeof tab == 'number') {
-                    a = $('li>a', nav).eq((tab && tab > 0 && tab - 1 || 0)); // fall back to 0
+                    a = $('li a', nav).eq((tab && tab > 0 && tab - 1 || 0)); // fall back to 0
                 } else if (typeof tab == 'string') {
-                    a = $('li>a[@href$="#' + tab + '"]', nav);
+                    a = $('li a[@href$="#' + tab + '"]', nav);
                 }
                 a.trigger(tabEvent);
             });
