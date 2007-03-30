@@ -4,12 +4,11 @@
 
 <html>
 <head>
-	<title>jQuery Accordion</title>
+	<title>jQuery Squeezebox</title>
 	
-	<link rel="stylesheet" href="accordion.css" />
+	<link rel="stylesheet" href="squeezebox.css" />
 	
 	<script type="text/javascript" src="../../jquery/dist/jquery.js"></script>
-	<script type="text/javascript" src="jquery.accordion.js"></script>
 	<script type="text/javascript" src="jquery.squeezebox.js"></script>
 
 	<script type="text/javascript">
@@ -18,41 +17,35 @@
 	}
 
 	jQuery().ready(function(){
-		// simple Accordion
-		jQuery('#list1').Accordion();
+		// simple Squeezebox
+		jQuery('#list1').Squeezebox();
 		
-		// highly customized Accordion
-		jQuery('#list2').Accordion({
+		// highly customized Squeezebox
+		jQuery('#list2').Squeezebox({
 			event: "mouseover",
-			active: 'dt.selected',
+			active: '.selected',
 			selectedClass: "active",
-			showSpeed: "fast",
-			hideSpeed: "fast"
+			speed: "fast"
 		}).change(function(event, newHeader, oldHeader, newContent, oldContent) {
-			simpleLog(oldHeader.text() + ' hidden');
 			simpleLog(newHeader.text() + ' shown');
 		});
 		
-		// set global defaults for all following Accordions, will be valid for #list1, #list2 and #list4, #list3 sets them for itself
-		jQuery.Accordion.setDefaults({
-			showSpeed: 1000,
-			hideSpeed: 150
+		// set global defaults for all following Squeezeboxs, will be valid for #list1, #list2 and #list4, #list3 sets them for itself
+		jQuery.Squeezebox.setDefaults({
+			speed: 1000
 		});
 		
-		// first simple Accordion with special markup
-		jQuery('#list3').Accordion({
+		// first simple Squeezebox with special markup
+		jQuery('#list3').Squeezebox({
 			header: 'div.title',
-			active: false,
-			alwaysOpen: false,
 			animated: false
 		});
 		
-		// second simple Accordion with special markup
-		jQuery('#list4').Accordion({
+		// second simple Squeezebox with special markup
+		jQuery('#list4').Squeezebox({
 			active: '.selected',
 			header: 'a.head',
-			showSpeed: 'fast',
-			alwaysOpen: false
+			speed: 'fast'
 		});
 		
 		// bind to change event of select to control first and seconds accordion
@@ -65,8 +58,8 @@
 
 </head>
 <body>
-		<h1>jQuery Accordion Demo</h1>
-		
+		<h1>jQuery Squeezebox Demo</h1>
+
 		<h2>Standard, container is a div, header is h3 and content p</h2>
 
 		<div id="list1">
@@ -188,8 +181,7 @@
 			</dd>
 		</dl>
 
-		<h2>Divitus structure, div container, div header (class title), div
-		content, no active on startup and can be completely closed</h2>
+		<h2>Divitus structure, div container, div header (class title)</h2>
 
 		<div id="list3">
 			<div>

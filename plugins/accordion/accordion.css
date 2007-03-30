@@ -1,0 +1,61 @@
+* { margin: 0; padding: 0; }
+body { padding-left: 1em; margin-bottom: 8em; }
+#list1, #list2, #list3, #list4 { width:20em; }
+#list2 dd { height: 10em; }
+
+dt, h3, a.head { cursor:pointer; border:1px solid #CCCCCC; margin-top:0.5em; padding:0.1em; }
+a.head { display:block; }
+li ul { margin-left: 1em; }
+li { list-style-type: none; }
+dt.active { background-color:#C0C0C0; }
+dt.notActive { background-color:#E0E0E0; }
+dd, p    { background-color:#F5F5F5; padding:0.1em; border:1px solid #C0C0C0; border-top-width:0; margin: 0 }
+#log { position:absolute; top:0; right:1em; text-align:right; }
+#switch { position: absolute; top: 0; right: 15em; }
+h2 { margin-top: 1.5em; }
+#list3 { border: 2px solid #111; }
+#list3 div { background-color: #eee; }
+#list3 div.title { text-decoration: underline; }
+#list3 div.selected { font-weight: bold; }
+a.selected { background-color: #789 }
+
+#list4 {
+	border:1px solid #5263AB;
+	margin:0px;
+	padding:0px;
+	text-indent:0px;
+	background-color:#E2E2E2;
+	width:200px;
+}
+#list4 a.head {
+	background:#5263AB url(collapsed.gif) no-repeat scroll 3px 4px;
+	color:#FFFFFF;
+	display:block;
+	font-weight:bold;
+	margin:0px;
+	padding:0px;
+	text-indent:14px;
+	text-decoration: none;
+}
+#list4 a.head:hover {
+	color:#FFFF99;
+}
+#list4 a.selected {
+	background-image: url(expanded.gif);
+}
+#list4 ul {
+	border-width:0px;
+	margin:0px;
+	padding:0px;
+	text-indent:0px;
+}
+#list4 li li a {
+	color:#000000;
+	display:block;
+	text-indent:10px;
+	text-decoration: none;
+}
+#list4 li li a:hover {
+	background-color:#FFFF99;
+	color:#FF0000;
+}
