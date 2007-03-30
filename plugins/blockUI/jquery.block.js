@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.05  (03/29/2007)
+ * Version 1.06  (03/30/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -196,7 +196,6 @@ $.blockUI.impl = {
         m.append(msg).show();
         if (msg.jquery) msg.show();
         full ? setTimeout(this.focus, 200): this.center(m[0]);
-        if (this.op8) this.simulate(true,el);
     },
     remove: function(el) {
         this.bind(0, el);
@@ -206,7 +205,6 @@ $.blockUI.impl = {
             this.pageBlock = null;
         }
         else $('.blockUI', el).remove();
-        if (this.op8) this.simulate(false,el);
     },
     // event handler to suppress keyboard/mouse events when blocking
     handler: function(e) {
@@ -224,17 +222,6 @@ $.blockUI.impl = {
         var $e = full ? $() : $(el).find('a,:input');
         $.each(['mousedown','mouseup','keydown','keypress','keyup','click'], function(i,o) {
             $e[b?'bind':'unbind'](o, $.blockUI.impl.handler);
-        });
-    },
-    // simulate blocking in opera8
-    simulate: function(dis, el) {
-        var full = el == window;
-        $(':input', full ? 'body' : el).each(function() {
-            if (full && $(this).parents('div.blockMsg').length > 0) return;
-            if (this.$orig_disabled == undefined)
-                this.$orig_disabled = this.disabled || 0;
-            var d = dis || this.$orig_disabled;
-            this.disabled = d;
         });
     },
     focus: function() {
