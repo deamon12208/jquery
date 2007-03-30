@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.04  (03/25/2007)
+ * Version 1.05  (03/29/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -232,9 +232,8 @@ $.blockUI.impl = {
         $(':input', full ? 'body' : el).each(function() {
             if (full && $(this).parents('div.blockMsg').length > 0) return;
             if (this.$orig_disabled == undefined)
-                this.$orig_disabled = this.disabled;
+                this.$orig_disabled = this.disabled || 0;
             var d = dis || this.$orig_disabled;
-            if (d) this.$orig_disabled = this.disabled;
             this.disabled = d;
         });
     },
