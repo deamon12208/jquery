@@ -86,7 +86,7 @@ test("serialize: pseudo form", function() {
 test("resetForm (text input)", function() {
     var $el = $('#form1 input[@name=Name]');
     var val = $el.val();
-    ok( 'MyName1' == val, 'before: ' + val);
+    ok( 'MyName1' == val, 'beforeSubmit: ' + val);
     $el.val("test");
     val = $el.val();
     ok( 'test' == $el.val(), 'update: ' + val);
@@ -99,7 +99,7 @@ test("resetForm (text input)", function() {
 test("resetForm (select)", function() {
     var $el = $('#form1 select[@name=Single]');
     var val = $el.val();
-    ok( 'one' == val, 'before: ' + val);
+    ok( 'one' == val, 'beforeSubmit: ' + val);
     $el.val("two");
     val = $el.val();
     ok( 'two' == $el.val(), 'update: ' + val);
@@ -112,7 +112,7 @@ test("resetForm (select)", function() {
 test("resetForm (textarea)", function() {
     var $el = $('#form1 textarea');
     var val = $el.val();
-    ok( 'This is Form1' == val, 'before: ' + val);
+    ok( 'This is Form1' == val, 'beforeSubmit: ' + val);
     $el.val("test");
     val = $el.val();
     ok( 'test' == val, 'udpate: ' + val);
@@ -125,7 +125,7 @@ test("resetForm (textarea)", function() {
 test("resetForm (checkbox)", function() {
     var el = $('#form1 input:checkbox:checked')[0];
     var val = el.value;
-    ok( el.checked, 'before: ' + el.checked);
+    ok( el.checked, 'beforeSubmit: ' + el.checked);
     el.checked = false;
     ok( !el.checked, 'update: ' + el.checked);
     $('#form1').resetForm();
@@ -136,7 +136,7 @@ test("resetForm (checkbox)", function() {
 test("resetForm (radio)", function() {
     var el = $('#form1 input:radio:checked')[0];
     var val = el.value;
-    ok( el.checked, 'before: ' + el.checked);
+    ok( el.checked, 'beforeSubmit: ' + el.checked);
     el.checked = false;
     ok( !el.checked, 'update: ' + el.checked);
     $('#form1').resetForm();
@@ -148,7 +148,7 @@ test("resetForm (radio)", function() {
 test("clearForm (text input)", function() {
     var $el = $('#form1 input[@name=Name]');
     var val = $el.val();
-    ok( 'MyName1' == val, 'before: ' + val);
+    ok( 'MyName1' == val, 'beforeSubmit: ' + val);
     $('#form1').clearForm();
     val = $el.val();
     ok( '' == val, 'success: ' + val);
@@ -158,7 +158,7 @@ test("clearForm (text input)", function() {
 test("clearForm (select)", function() {
     var $el = $('#form1 select[@name=Single]');
     var val = $el.val();
-    ok( 'one' == val, 'before: ' + val);
+    ok( 'one' == val, 'beforeSubmit: ' + val);
     $('#form1').clearForm();
     val = $el.val();
     ok( '' == val, 'success: ' + val);
@@ -168,7 +168,7 @@ test("clearForm (select)", function() {
 test("clearForm: (hidden input)", function() {
     var $el = $('#form1 input:hidden');
     var val = $el.val();
-    ok( 'hiddenValue' == val, 'before: ' + val);
+    ok( 'hiddenValue' == val, 'beforeSubmit: ' + val);
     $('#form1').clearForm();
     val = $el.val();
     ok( 'hiddenValue' == val, 'success: ' + val);
@@ -179,7 +179,7 @@ test("clearForm: (hidden input)", function() {
 test("clearForm: (submit input)", function() {
     var $el = $('#form1 input:submit');
     var val = $el.val();
-    ok( 'Submit1' == val, 'before: ' + val);
+    ok( 'Submit1' == val, 'beforeSubmit: ' + val);
     $('#form1').clearForm();
     val = $el.val();
     ok( 'Submit1' == val, 'success: ' + val);
@@ -188,7 +188,7 @@ test("clearForm: (submit input)", function() {
 // test clearForm
 test("clearForm (checkbox)", function() {
     var el = $('#form1 input:checkbox:checked')[0];
-    ok( el.checked, 'before: ' + el.checked);
+    ok( el.checked, 'beforeSubmit: ' + el.checked);
     $('#form1').clearForm();
     ok( !el.checked, 'success: ' + el.checked);
 });
@@ -197,7 +197,7 @@ test("clearForm (checkbox)", function() {
 // test clearForm
 test("clearForm (radio)", function() {
     var el = $('#form1 input:radio:checked')[0];
-    ok( el.checked, 'before: ' + el.checked);
+    ok( el.checked, 'beforeSubmit: ' + el.checked);
     $('#form1').clearForm();
     ok( !el.checked, 'success: ' + el.checked);
 });
@@ -283,7 +283,7 @@ test("ajaxSubmit: load target with scripts", function() {
 // test ajaxSubmit pre-submit callback
 test("ajaxSubmit: pre-submit callback", function() {
     var opts = {
-        before: function(a, jq) { // pre-submit callback
+        beforeSubmit: function(a, jq) { // pre-submit callback
             ok( true, 'pre-submit callback');
             ok( a.constructor == Array, "type check array");
             ok( jq.jquery, "type check jQuery");
@@ -329,7 +329,7 @@ test("ajaxSubmit: semantic test", function() {
 
     var opts = {
         semantic: true,
-        before: function(a, jq) { // pre-submit callback
+        beforeSubmit: function(a, jq) { // pre-submit callback
             ok( true, 'pre-submit callback');
             ok( a.constructor == Array, "type check");
             ok( jq.jquery, "type check jQuery");
@@ -419,7 +419,7 @@ test("ajaxSubmit: existing args in action attr", function() {
 test("ajaxSubmit: cancel submit", function() {
 
     var opts = {
-        before: function(a, jq) { // pre-submit callback
+        beforeSubmit: function(a, jq) { // pre-submit callback
             ok( true, 'pre-submit callback');
             ok( a.constructor == Array, "type check");
             ok( jq.jquery, "type check jQuery");
@@ -439,7 +439,7 @@ test("ajaxSubmit: pseudo-form", function() {
     stop();
 
     var opts = {
-        before: function(a, jq) { // pre-submit callback
+        beforeSubmit: function(a, jq) { // pre-submit callback
             ok( true, 'pre-submit callback');
             ok( a.constructor == Array, "type check");
             ok( jq.jquery, "type check jQuery");
@@ -478,32 +478,12 @@ test("ajaxSubmit: evaluate response", function() {
 });
 
 
-// make sure deprecated options still work
-test("deprecated option props", function() {
-    stop();
-
-    var opts = {
-        method: 'post',
-        before: function(a, jq, o) {
-            ok( true, 'before');
-            ok( o.type == 'post', 'method: post=' + o.type);
-        },
-        after: function() { // post-callback
-            ok( true, 'after');
-            start();
-        }
-    };
-
-    expect(3);
-    $("#form2").ajaxSubmit(opts);
-});
-
 // test pre and post callbacks for ajaxForm
 test("ajaxForm: pre and post callbacks", function() {
     stop();
 
     var opts = {
-        before: function(a, jq) { // pre-submit callback
+        beforeSubmit: function(a, jq) { // pre-submit callback
             ok( true, 'pre-submit callback');
             ok( a.constructor == Array, "type check");
             ok( jq.jquery, "type check jQuery");
@@ -523,7 +503,7 @@ test("ajaxForm: pre and post callbacks", function() {
 test("ajaxForm: capture submit element", function() {
 
     var opts = {
-        before: function(a, jq) { // pre-callback
+        beforeSubmit: function(a, jq) { // pre-callback
             ok( true, 'pre-callback');
             ok( a.constructor == Array, "type check");
             ok( jq.jquery, "type check jQuery");
@@ -540,7 +520,7 @@ test("ajaxForm: capture submit element", function() {
 test("ajaxForm: capture submit image coordinates", function() {
 
     var opts = {
-        before: function(a, jq) { // pre-callback
+        beforeSubmit: function(a, jq) { // pre-callback
             ok( true, 'pre-callback');
             ok( a.constructor == Array, "type check");
             ok( jq.jquery, "type check jQuery");
@@ -559,7 +539,7 @@ test("ajaxForm: capture submit image coordinates (semantic=true)", function() {
 
     var opts = {
         semantic: true,
-        before: function(a, jq) { // pre-callback
+        beforeSubmit: function(a, jq) { // pre-callback
             ok( true, 'pre-callback');
             ok( a.constructor == Array, "type check");
             ok( jq.jquery, "type check jQuery");
@@ -580,7 +560,7 @@ test("ajaxForm: update target div", function() {
 
     var opts = {
         target: '#targetDiv',
-        before: function(a, jq) { // pre-callback
+        beforeSubmit: function(a, jq) { // pre-callback
             ok( true, 'pre-callback');
             ok( a.constructor == Array, "type check");
             ok( jq.jquery, "type check jQuery");
