@@ -7,7 +7,7 @@
  *   http://www.gnu.org/licenses/gpl.html
  *
  * Revision: $Id$
- * Version: 0.91
+ * Version: .95
  */
 
 /**
@@ -26,15 +26,12 @@
  *  url:      URL to which the form data will be submitted.
  *            default value: value of form's 'action' attribute
  *
- *  method:   @deprecated use 'type'
  *  type:     The method in which the form data should be submitted, 'GET' or 'POST'.
  *            default value: value of form's 'method' attribute (or 'GET' if none found)
  *
- *  before:   @deprecated use 'beforeSubmit'
  *  beforeSubmit:  Callback method to be invoked before the form is submitted.
  *            default value: null
  *
- *  after:    @deprecated use 'success'
  *  success:  Callback method to be invoked after the form has been successfully submitted
  *            and the response has been returned from the server
  *            default value: null
@@ -184,15 +181,9 @@ jQuery.fn.ajaxSubmit = function(options) {
     if (typeof options == 'function')
         options = { success: options };
 
-    options = jQuery.extend({
-        url:    this.attr('action') || '',
-        method: this.attr('method') || 'GET'
-    }, options || {});
-
-    // remap deprecated options (temporarily)
-    options.success = options.success || options.after;
-    options.beforeSubmit = options.beforeSubmit || options.before;
-    options.type = options.type || options.method;
+    options = options || {};
+    options.url = options.url || this.attr('action') || window.location;
+    options.type = options.type || this.attr('method') || 'GET';
 
     var a = this.formToArray(options.semantic);
 
@@ -233,11 +224,139 @@ jQuery.fn.ajaxSubmit = function(options) {
             callbacks[i](data, status);
     };
 
+    // are there files to upload?
+    var files = jQuery('input:file', this).fieldValue();
+    var found = false;
+    for (var j=0; j < files.length; j++)
+        if (files[j]) 
+            found = true;
+
+    if (options.iframe || found) // options.iframe allows user to force iframe mode
+        fileUpload();
+    else
+        jQuery.ajax(options);
+
     // fire 'notify' event
     jQuery.event.trigger('form.submit.notify', [this, options]);
-    jQuery.ajax(options);
     return this;
+
+
+    // private function for handling file uploads (hat tip to YAHOO!)
+    function fileUpload() {
+        var form = $form[0];
+        var opts = jQuery.extend({}, jQuery.ajaxSettings, options);
+        
+        var id = 'jqFormIO' + jQuery.fn.ajaxSubmit.counter++;
+        var $io = jQuery('<iframe id="' + id + '" name="' + id + '" />');
+        var io = $io[0];
+        var op8 = jQuery.browser.opera && window.opera.version() < 9;
+        if (jQuery.browser.msie || op8) io.src = 'javascript:false;document.write("");';
+        $io.css({ position: 'absolute', top: '-1000px', left: '-1000px' });
+
+        // make sure form attrs are set
+        form.method = 'POST';
+        form.encoding ? form.encoding = 'multipart/form-data' : form.enctype = 'multipart/form-data';
+
+        var xhr = { // mock object
+            responseText: null,
+            responseXML: null,
+            status: 0,
+            statusText: 'n/a',
+            getAllResponseHeaders: function() {},
+            getResponseHeader: function() {},
+            setRequestHeader: function() {}
+        };
+        
+        var g = opts.global;
+        // trigger ajax global events so that activity/block indicators work like normal
+        if (g && ! jQuery.active++) jQuery.event.trigger("ajaxStart");
+        if (g) jQuery.event.trigger("ajaxSend", [xhr, opts]);
+        
+        var cbInvoked = 0;
+        var timedOut = 0;
+        
+        // take a breath so that pending repaints get some cpu time before the upload starts
+        setTimeout(function() {
+            $io.appendTo('body');
+            // jQuery's event binding doesn't work for iframe events in IE
+            io.attachEvent ? io.attachEvent('onload', cb) : io.addEventListener('load', cb, false);
+            form.action = opts.url;
+            var t = form.target;
+            form.target = id;
+
+            // support timout
+            if (opts.timeout)
+                setTimeout(function() { timedOut = true; cb(); }, opts.timeout);
+
+            form.submit();
+            form.target = t; // reset
+        }, 10);
+        
+        function cb() {
+            if (cbInvoked++) return;
+            
+            io.detachEvent ? io.detachEvent('onload', cb) : io.removeEventListener('load', cb, false);
+
+            var ok = true;
+            try {
+                if (timedOut) throw 'timeout';
+                // extract the server response from the iframe
+                var data, doc;
+                doc = io.contentWindow ? io.contentWindow.document : io.contentDocument ? io.contentDocument : io.document;
+                xhr.responseText = doc.body ? doc.body.innerHTML : null;
+                xhr.responseXML = doc.XMLDocument ? doc.XMLDocument : doc;
+                
+                if (opts.dataType == 'json' || opts.dataType == 'script') {
+                    var ta = doc.getElementsByTagName('textarea')[0];
+                    data = ta ? ta.value : xhr.responseText;
+                    if (opts.dataType == 'json')
+                        eval("data = " + data);
+                    else
+                        jQuery.globalEval(data);
+                }
+                else if (opts.dataType == 'xml') {
+                    data = xhr.responseXML;
+                    if (!data && xhr.responseText != null)
+                        data = toXml(xhr.responseText);
+                }
+                else {
+                    data = xhr.responseText;
+                }
+            }
+            catch(e){
+                ok = false;
+                jQuery.handleError(opts, xhr, 'error', e);
+            }
+
+            // ordering of these callbacks/triggers is odd, but that's how $.ajax does it
+            if (ok) {
+                opts.success(data, 'success');
+                if (g) jQuery.event.trigger("ajaxSuccess", [xhr, opts]);
+            }
+            if (g) jQuery.event.trigger("ajaxComplete", [xhr, opts]);
+            if (g && ! --jQuery.active) jQuery.event.trigger("ajaxStop");
+            if (opts.complete) opts.complete(xhr, ok ? 'success' : 'error');
+
+            // clean up
+            setTimeout(function() { 
+                $io.remove(); 
+                xhr.responseXML = null;
+            }, 100);
+        };
+        
+        function toXml(s, doc) {
+            if (window.ActiveXObject) {
+                doc = new ActiveXObject('Microsoft.XMLDOM');
+                doc.async = 'false';
+                doc.loadXML(s);
+            }
+            else
+                doc = (new DOMParser()).parseFromString(s, 'text/xml');
+            return (doc && doc.documentElement && doc.documentElement.tagName != 'parsererror') ? doc : null;
+        }
+    };
 };
+jQuery.fn.ajaxSubmit.counter = 0; // used to create unique iframe ids
 
 /**
  * ajaxForm() provides a mechanism for fully automating form submission.
@@ -579,7 +698,7 @@ jQuery.fieldValue = function(el, successful) {
     var n = el.name, t = el.type, tag = el.tagName.toLowerCase();
     if (typeof successful == 'undefined') successful = true;
 
-    if (successful && ( !n || el.disabled || t == 'reset' ||
+    if (successful && (!n || el.disabled || t == 'reset' || t == 'button' ||
         (t == 'checkbox' || t == 'radio') && !el.checked ||
         (t == 'submit' || t == 'image') && el.form && el.form.clk != el ||
         tag == 'select' && el.selectedIndex == -1))
