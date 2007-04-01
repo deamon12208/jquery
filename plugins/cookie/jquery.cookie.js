@@ -55,8 +55,9 @@
 jQuery.cookie = function(name, value, options) {
     if (typeof value != 'undefined') { // name and value given, set cookie
         options = options || {};
-        if (value == null) {
-            jQuery.cookie(name, '', $.extend(options, { expires: -1 }));
+        if (value === null) {
+            value = '';
+            options.expires = -1;
         }
         var expires = '';
         if (options.expires && (typeof options.expires == 'number' || options.expires.toUTCString)) {
