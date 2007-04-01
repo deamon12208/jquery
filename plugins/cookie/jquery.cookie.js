@@ -17,8 +17,8 @@
  * @desc Create a cookie with all available options.
  * @example $.cookie('the_cookie', 'the_value');
  * @desc Create a session cookie.
- * @example $.cookie('the_cookie', '', {expires: -1});
- * @desc Delete a cookie by setting a date in the past.
+ * @example $.cookie('the_cookie', null);
+ * @desc Delete a cookie by passing null as value.
  *
  * @param String name The name of the cookie.
  * @param String value The value of the cookie.
@@ -55,8 +55,11 @@
 jQuery.cookie = function(name, value, options) {
     if (typeof value != 'undefined') { // name and value given, set cookie
         options = options || {};
+        if (value == null) {
+            jQuery.cookie(name, '', $.extend(options, { expires: -1 }));
+        }
         var expires = '';
-        if (options.expires && (typeof options.expires == 'number' || options.expires.toGMTString)) {
+        if (options.expires && (typeof options.expires == 'number' || options.expires.toUTCString)) {
             var date;
             if (typeof options.expires == 'number') {
                 date = new Date();
@@ -64,7 +67,7 @@ jQuery.cookie = function(name, value, options) {
             } else {
                 date = options.expires;
             }
-            expires = '; expires=' + date.toGMTString(); // use expires attribute, max-age is not supported by IE
+            expires = '; expires=' + date.toUTCString(); // use expires attribute, max-age is not supported by IE
         }
         var path = options.path ? '; path=' + options.path : '';
         var domain = options.domain ? '; domain=' + options.domain : '';
