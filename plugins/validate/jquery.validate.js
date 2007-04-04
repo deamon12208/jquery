@@ -8,8 +8,19 @@
  *   http://www.gnu.org/licenses/gpl.html
  */
 
+/*
+TODO
+- use array with {name, message, element} objects intead of errorList object
+- remove any dependencie on ids
+  - add a forName attribute to generated error message, and for only if an id is present
+  - don't generate ids
+- allow other elements for error messages, promote em
+- allow handling more then one form is one call to validate, ignoring the validator instance problems in that case
+ - maybe loop trough all forms and return only the last validator instance
+*/
+
 /**
- * Validates either a single form on submit or a list of elements on a user-defined event.
+ * Validates a single form.
  *
  * The normal behaviour is to validate a form when a submit button is clicked or
  * the user presses enter when an input of that form is focused.
@@ -216,7 +227,7 @@
 
 jQuery.extend(jQuery.fn, {
 	validate: function( options ) {
-		var validator = new jQuery.validator( options, this );
+		var validator = new jQuery.validator( options, this[0] );
 		
 		// select all valid inputs inside the form (no submit or reset buttons)
 		// and listen for focus events to save reference to last focused element
@@ -284,12 +295,11 @@ jQuery.extend(jQuery.expr[":"], {
 
 // constructor for validator
 jQuery.validator = function( options, form ) {
-
 	this.settings = jQuery.extend( {}, jQuery.validator.defaults, options );
 	
-	this.currentForm = form[0];
+	this.currentForm = form;
 	this.labelContainer = this.settings.errorLabelContainer;
-	this.errorContext = this.labelContainer.length && this.labelContainer || form;
+	this.errorContext = this.labelContainer.length && this.labelContainer || jQuery(form);
 	this.containers = this.settings.errorContainer.add( this.settings.errorLabelContainer );
 	
 	this.reset();
