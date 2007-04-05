@@ -478,11 +478,11 @@ $.fn.tabs = function(initial, settings) {
                 } else {
                     var $$ = $(this), span = $('span', this)[0], text = span.innerHTML;
                     $$.addClass(settings.loadingClass);
-                    span.innerHTML = 'Loading&#8230;'; // CAUTION: html(...) crashes Safari
+                    span.innerHTML = 'Loading&#8230;'; // CAUTION: html(...) crashes Safari with jQuery 1.1.2
                     setTimeout(function() { // Timeout is again required in IE, "wait" for id being restored
                         $(clicked.hash).load(remoteUrls[clicked.hash], function() {
                             switchTab();
-                            span.innerHTML = text; // CAUTION: html(...) crashes Safari
+                            span.innerHTML = text; // CAUTION: html(...) crashes Safari with jQuery 1.1.2
                             $$.removeClass(settings.loadingClass);
                         });
                     }, 0);

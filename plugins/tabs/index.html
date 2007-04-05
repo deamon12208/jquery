@@ -12,12 +12,6 @@
         <script src="jquery.history_remote.pack.js" type="text/javascript"></script>
         <script src="jquery.tabs.pack.js" type="text/javascript"></script>
         <script type="text/javascript">
-            // Tabs - hide tabs before initialization to avoid flash of content
-            // Add styles via JavaScript for graceful degradation...
-            //document.write('<style type="text/css" media="projection, screen">.fragment { display: none; }<\/style>');
-
-            //$('head').append('<link rel="stylesheet" href="tabs_js.css" media="projection, screen" />');
-
             $(function() {
 
                 $('#container-1').tabs();
@@ -60,10 +54,10 @@
             });
         </script>
 
-        <link rel="stylesheet" href="tabs.css" type="text/css" media="print, projection, screen">
+        <link rel="stylesheet" href="jquery.tabs.css" type="text/css" media="print, projection, screen">
         <!-- Additional IE/Win specific style sheet (Conditional Comments) -->
         <!--[if lte IE 7]>
-        <link rel="stylesheet" href="tabs_ie.css" type="text/css" media="projection, screen">
+        <link rel="stylesheet" href="jquery.tabs-ie.css" type="text/css" media="projection, screen">
         <![endif]-->
         <style type="text/css" media="screen, projection">
 
