@@ -523,6 +523,8 @@
 			} else if(defaults.dateFormat == "dd/mm/yyyy" || defaults.dateFormat == "dd-mm-yyyy") {
 				/** reformat the string in ISO format */
 				s = s.replace(new RegExp(/(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})/), '$3/$2/$1');
+			} else if(defaults.dateFormat == "dd/mm/yy" || defaults.dateFormat == "dd-mm-yy") {
+				s = s.replace(new RegExp(/(\d{1,2})[\/-](\d{1,2})[\/-](\d{2})/), '$1/$2/$3');	
 			}
 			return parseFloat((new Date(s)).getTime());
 		},
