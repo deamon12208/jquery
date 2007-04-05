@@ -86,7 +86,9 @@
 		// the title of the current element, used for restoring
 		oldTitle,
 		// timeout id for delayed tooltips
-		tID;
+		tID,
+		// IE 5.5 or 6
+		IE = $.browser.msie && /MSIE\s(5\.5|6\.)/.test(navigator.userAgent);
 	
 	// the public plugin method
 	$.fn.Tooltip = function(settings) {
@@ -160,7 +162,8 @@
 			tBody.html( settings.bodyHandler.call(this) ).show();
 		} else if ( settings.showBody ) {
 			var parts = title.split(settings.showBody);
-			tTitle.html(parts.shift()).show();
+			if (parts.length > 1)
+				tTitle.html(parts.shift()).show();
 			tBody.empty();
 			for(var i = 0, part; part = parts[i]; i++) {
 				if(i > 0)
@@ -188,14 +191,18 @@
 			helper.addClass(settings.extraClass);
 		}
 		// fix PNG background for IE
-		if (settings.fixPNG && $.browser.msie ) {
+		if (settings.fixPNG && IE ) {
 			helper.each(function () {
-				if (this.currentStyle.backgroundImage != 'none') {
-					var image = this.currentStyle.backgroundImage;
-					image = image.substring(5, image.length - 2);
+				var image = $(this).css('backgroundImage');
+				if (image.match(/^url\(["'](.*\.png)["']\)$/i)) {
+					image = RegExp.$1;
 					$(this).css({
 						'backgroundImage': 'none',
 						'filter': "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=crop, src='" + image + "')"
+					}).each(function () {
+						var position = $(this).css('position');
+						if (position != 'absolute' && position != 'relative')
+							$(this).css('position', 'relative');
 					});
 				}
 			});
@@ -286,7 +293,7 @@
 			.unbind('mouseout', hide);
 			
 		// remove PNG background fix for IE
-		if( this.tSettings.fixPNG && $.browser.msie ) {
+		if( this.tSettings.fixPNG && IE ) {
 			helper.each(function () {
 				$(this).css({'filter': '', backgroundImage: ''});
 			});
