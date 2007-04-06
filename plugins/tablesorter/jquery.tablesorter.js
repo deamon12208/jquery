@@ -365,6 +365,13 @@
 				}
 				return elementText;
 			},
+			formatFloat: function(s) {
+
+				var i = parseInt(s);
+				
+				return (isNaN(i)) ? 0 : i;
+				
+			},
 			appendToTable: function(defaults,o,c,index,lastIndex) {
 				var l = c.length;
 				$("> tbody:first",o).empty().append(c);
@@ -437,7 +444,7 @@
 			return s.match(new RegExp(/^[£$?.]/g));
 		},
 		format: function(s) {
-			return parseFloat(s.replace(new RegExp(/[^0-9.]/g),''));
+			return $.tableSorter.utils.formatFloat(s.replace(new RegExp(/[^0-9.]/g),''));
 		},
 		sorter: $.tableSorter.sorters.numeric
 	};
@@ -447,7 +454,7 @@
 			return s.match(new RegExp(/^\d+$/));
 		},
 		format: function(s) {
-			return parseFloat(s);
+			return $.tableSorter.utils.formatFloat(s);
 		},
 		sorter: $.tableSorter.sorters.numeric
 	};
@@ -457,7 +464,7 @@
 			return s.match(new RegExp(/^(\+|-)?[0-9]+\.[0-9]+((E|e)(\+|-)?[0-9]+)?$/));
 		},
 		format: function(s) {
-			return parseFloat(s.replace(new RegExp(/,/),''));
+			return $.tableSorter.utils.formatFloat(s.replace(new RegExp(/,/),''));
 		},
 		sorter: $.tableSorter.sorters.numeric
 	};
@@ -476,7 +483,7 @@
 					r += item;
 			   }
 			}
-			return parseFloat(r);
+			return $.tableSorter.utils.formatFloat(r);
 		},
 		sorter: $.tableSorter.sorters.numeric
 	};
@@ -506,7 +513,7 @@
 			return s.match(new RegExp(/^[A-Za-z]{3,10}\.? [0-9]{1,2}, ([0-9]{4}|'?[0-9]{2}) (([0-2]?[0-9]:[0-5][0-9])|([0-1]?[0-9]:[0-5][0-9]\s(AM|PM)))$/));
 		},
 		format: function(s) {
-			return parseFloat((new Date(s)).getTime());
+			return $.tableSorter.utils.formatFloat((new Date(s)).getTime());
 		},
 		sorter: $.tableSorter.sorters.numeric
 	};
@@ -526,7 +533,7 @@
 			} else if(defaults.dateFormat == "dd/mm/yy" || defaults.dateFormat == "dd-mm-yy") {
 				s = s.replace(new RegExp(/(\d{1,2})[\/-](\d{1,2})[\/-](\d{2})/), '$1/$2/$3');	
 			}
-			return parseFloat((new Date(s)).getTime());
+			return $.tableSorter.utils.formatFloat((new Date(s)).getTime());
 		},
 		sorter: $.tableSorter.sorters.numeric
 	};
@@ -536,7 +543,7 @@
 	        return s.toUpperCase().match(new RegExp(/^(([0-2]?[0-9]:[0-5][0-9])|([0-1]?[0-9]:[0-5][0-9]\s(AM|PM)))$/));
 	    },
 	    format: function(s) {
-	        return parseFloat((new Date("2000/01/01 " + s)).getTime());
+	        return $.tableSorter.utils.formatFloat((new Date("2000/01/01 " + s)).getTime());
 	    },
 	    sorter: $.tableSorter.sorters.numeric
 	};
