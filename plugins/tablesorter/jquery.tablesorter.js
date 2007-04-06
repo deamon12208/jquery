@@ -349,8 +349,7 @@
 										elementText = val;
 									}
 								});
-							} else { 
-							
+							} else {
 								if(o.childNodes[0] && o.childNodes[0].hasChildNodes()) {
 									elementText = o.childNodes[0].innerHTML;
 								} else {
@@ -366,11 +365,8 @@
 				return elementText;
 			},
 			formatFloat: function(s) {
-
-				var i = parseInt(s);
-				
-				return (isNaN(i)) ? parseInt("0.0") : i;
-				
+				var i = parseFloat(s);
+				return (isNaN(i)) ? 0 : i;
 			},
 			appendToTable: function(defaults,o,c,index,lastIndex) {
 				var l = c.length;
@@ -434,7 +430,7 @@
 			return true;
 		},
 		format: function(s) {
-			return s.toLowerCase();
+			return jQuery.trim(s.toLowerCase());
 		},
 		sorter: $.tableSorter.sorters.generic
 	};
@@ -493,7 +489,7 @@
 			return s.match(new RegExp(/(https?|ftp|file):\/\//));
 		},
 		format: function(s) {
-			return s.replace(new RegExp(/(https?|ftp|file):\/\//),'');
+			return jQuery.trim(s.replace(new RegExp(/(https?|ftp|file):\/\//),''));
 		},
 		sorter: $.tableSorter.sorters.generic
 	};
