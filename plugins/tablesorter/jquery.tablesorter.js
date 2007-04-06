@@ -454,7 +454,6 @@
 			return s.match(new RegExp(/^\d+$/));
 		},
 		format: function(s) {
-console.log($.tableSorter.utils.formatFloat(s));
 			return $.tableSorter.utils.formatFloat(s);
 		},
 		sorter: $.tableSorter.sorters.numeric
