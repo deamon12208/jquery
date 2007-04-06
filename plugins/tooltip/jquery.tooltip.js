@@ -93,7 +93,7 @@
 	// the public plugin method
 	$.fn.Tooltip = function(settings) {
 		// setup configuration
-		settings = $.extend({}, arguments.callee.defaults, settings);
+		settings = $.extend({}, $.Tooltip.defaults, settings);
 	
 		// there can be only one tooltip helper
 		if( !helper ) {
@@ -139,6 +139,10 @@
 		// update at least once
 		update(event);
 		
+		// hide the helper when the mouse was clicked on the element
+		if (this.tSettings.event != "click")
+			$(this).bind('click', hide);
+		
 		// hide the helper when the mouse moves out of the element
 		$(this).bind('mouseout', hide);
 	}
@@ -175,7 +179,7 @@
 			else
 				tBody.hide();
 		} else {
-			tTitle.html(title);
+			tTitle.html(title).show();
 			tBody.hide();
 		}
 		
@@ -275,40 +279,49 @@
 	}
 	
 	// hide helper and restore added classes and the title
-	function hide() {
+	function hide(event) {
 		// clear timeout if possible
 		if(tID)
 			clearTimeout(tID);
 		// no more current element
 		current = null;
 		helper.hide();
-		// remove optional class
-		if( this.tSettings.extraClass ) {
-			helper.removeClass( this.tSettings.extraClass);
-		}
+		
+		removeExtraClass(this);
 		
 		// restore title and remove this listener
-		$(this)
-			.attr('title', oldTitle)
-			.unbind('mouseout', hide);
+		if (event.type != "click") {
+			$(this)
+				.attr('title', oldTitle)
+				.unbind('mouseout', hide);
+		}
+		if (this.tSettings.event != "click")
+			$(this).unbind('click', hide);
 			
-		// remove PNG background fix for IE
-		if( this.tSettings.fixPNG && IE ) {
+		removePNGfix(this);
+	}
+	
+	function removeExtraClass(element) {
+		if( element.tSettings.extraClass ) {
+			helper.removeClass( element.tSettings.extraClass);
+		}
+	}
+	
+	function removePNGfix(element) {
+		if( element.tSettings.fixPNG && IE ) {
 			helper.each(function () {
-				$(this).css({'filter': '', backgroundImage: ''});
+				$(element).css({'filter': '', backgroundImage: ''});
 			});
 		}
 	}
 	
+	$.Tooltip = {};
+	
 	// define global defaults, editable by client
-	$.fn.Tooltip.defaults = {
+	$.Tooltip.defaults = {
 		delay: 250,
 		event: "mouseover",
-		track: false,
-		showURL: true,
-		showBody: null,
-		extraClass: null,
-		fixPNG: false
+		showURL: true
 	};
 
 })(jQuery);
