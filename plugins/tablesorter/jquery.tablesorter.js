@@ -369,7 +369,7 @@
 
 				var i = parseInt(s);
 				
-				return (isNaN(i)) ? 0 : i;
+				return (isNaN(i)) ? 0.0 : i;
 				
 			},
 			appendToTable: function(defaults,o,c,index,lastIndex) {
