@@ -22,6 +22,12 @@
  *
  * @example $.ajaxHistory.initialize();
  *
+ * @param Function callback A single function that will be executed in case there is no fragment
+ *                          identifier/hash in the URL, for example by using the back button.
+ *                          Optional. If specified it will overwrite the default action of 
+ *                          emptying all containers that are used to load content into (without 
+ *                          hash there cannot be any content loaded, like a page load without
+ *                          hash in its URL).
  * @type undefined
  *
  * @name $.ajaxHistory.initialize()
@@ -201,6 +207,7 @@ $.ajaxHistory = new function() {
  * @param Object settings An object literal containing key/value pairs to provide optional settings.
  * @option String hashPrefix A String that is used for constructing the hash the link's href attribute
  *                           gets altered to, such as "#remote-1". Default value: "remote-".
+ * @param Function callback A single function that will be executed when the request is complete. 
  * @type jQuery
  *
  * @name remote
@@ -236,14 +243,19 @@ $.ajaxHistory = new function() {
  * @param Object settings An object literal containing key/value pairs to provide optional settings.
  * @option String hashPrefix A String that is used for constructing the hash the link's href attribute
  *                           gets altered to, such as "#remote-1". Default value: "remote-".
+ * @param Function callback A single function that will be executed when the request is complete. 
  * @type jQuery
  *
  * @name remote
  * @cat Plugins/Remote
  * @author Klaus Hartl/klaus.hartl@stilbuero.de
  */
-$.fn.remote = function(output, settings) {
+$.fn.remote = function(output, settings, callback) {
 
+    if (typeof settings == 'function') { // shift arguments
+        callback = settings;
+        settings = {};
+    }
     settings = $.extend({
         hashPrefix: 'remote-'
     }, settings || {});
@@ -261,6 +273,7 @@ $.fn.remote = function(output, settings) {
                 if (trueClick) {
                     $.ajaxHistory.update(hash); // setting hash in callback is required to make it work in Safari
                 }
+                typeof callback == 'function' && callback();
             });
         });
     });
