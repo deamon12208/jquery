@@ -74,55 +74,88 @@
 (function($) {
 	
 	// the tooltip element
-	var helper,
-		// it's title part
-		tTitle,
-		// it's body part
-		tBody,
-		// it's url part
-		tUrl,
+	var helper = {},
 		// the current tooltipped element
 		current,
 		// the title of the current element, used for restoring
-		oldTitle,
+		title,
 		// timeout id for delayed tooltips
 		tID,
 		// IE 5.5 or 6
 		IE = $.browser.msie && /MSIE\s(5\.5|6\.)/.test(navigator.userAgent);
-	
-	// the public plugin method
-	$.fn.Tooltip = function(settings) {
-		// setup configuration
-		settings = $.extend({}, $.Tooltip.defaults, settings);
-	
-		// there can be only one tooltip helper
-		if( !helper ) {
-			// create the helper, h3 for title, div for url
-			helper = $('<div id="tooltip"><h3></h3><p class="body"></p><p class="url"></p></div>')
-				// hide it at first
-				.hide()
-				// move to top and position absolute, to let it follow the mouse
-				.css({ position: 'absolute', zIndex: "3000" })
-				// add to document
-				.appendTo('body');
-			
-			// save references to title and url elements
-			tTitle = $('h3', helper);
-			tBody = $('p.body', helper);
-			tUrl = $('p.url', helper);
-		}
 		
-		// bind events for every selected element with a title attribute
-		$(this).filter('[@title]')
-			// save settings into each element
-			.each(function() {
-				this.tSettings = settings;
-			})
-			// bind events
-			.bind("mouseover", save)
-			.bind(settings.event, handle);
-		return this;
-	};
+	$.fn.extend({
+		Tooltip: function(settings) {
+			// setup configuration
+			settings = $.extend({}, $.Tooltip.defaults, settings);
+		
+			createHelper();
+			
+			// bind events for every selected element with a title attribute
+			this.filter('[@title]')
+				// save settings into each element
+				.each(function() {
+					this.tSettings = settings;
+				})
+				// bind events
+				.bind("mouseover", save)
+				.bind(settings.event, handle);
+			return this;
+		},
+		fixPNG: IE ? function() {
+			return this.each(function () {
+				var image = $(this).css('backgroundImage');
+				if (image.match(/^url\(["'](.*\.png)["']\)$/i)) {
+					image = RegExp.$1;
+					$(this).css({
+						'backgroundImage': 'none',
+						'filter': "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=crop, src='" + image + "')"
+					}).each(function () {
+						var position = $(this).css('position');
+						if (position != 'absolute' && position != 'relative')
+							$(this).css('position', 'relative');
+					});
+				}
+			});
+		} : function() { return this; },
+		unfixPNG: IE ? function() {
+			return this.each(function () {
+				$(this).css({'filter': '', backgroundImage: ''});
+			});
+		} : function() { return this; },
+		getAndSetAttr: function(name, value) {
+			var result = this.attr(name);
+			this.attr(name, value);
+			return result;
+		},
+		hideWhenEmpty: function() {
+			return this.each(function() {
+				$(this)[ $(this).html() ? "show" : "hide" ]();
+			});
+		},
+		url: function() {
+			return this.attr('href') || this.attr('src');
+		}
+	});
+	
+	function createHelper() {
+		// there can be only one tooltip helper
+		if( helper.parent )
+			return;
+		// create the helper, h3 for title, div for url
+		helper.parent = $('<div id="tooltip"><h3></h3><p class="body"></p><p class="url"></p></div>')
+			// hide it at first
+			.hide()
+			// move to top and position absolute, to let it follow the mouse
+			.css({ position: 'absolute', zIndex: "3000" })
+			// add to document
+			.appendTo('body');
+		
+		// save references to title and url elements
+		helper.title = $('h3', helper.parent);
+		helper.body = $('p.body', helper.parent);
+		helper.url = $('p.url', helper.parent);
+	}
 	
 	// main event handler to start showing tooltips
 	function handle(event) {
@@ -152,71 +185,47 @@
 		// if this is the current source, or it has no title (occurs with click event), stop
 		if(this == current || !this.title)
 			return;
+
 		// save current
 		current = this;
+		title = $(this).getAndSetAttr('title', '');
 		
-		var source = $(this),
-			settings = this.tSettings;
-			
-		// save title, remove from element and set to helper
-		var title = oldTitle = source.attr('title');
-		source.attr('title','');
-		if ( settings.bodyHandler ) {
-			tTitle.hide();
-			tBody.html( settings.bodyHandler.call(this) ).show();
-		} else if ( settings.showBody ) {
-			var parts = title.split(settings.showBody);
-			if (parts.length > 1)
-				tTitle.html(parts.shift()).show();
-			tBody.empty();
+		if ( this.tSettings.bodyHandler ) {
+			helper.title.hide();
+			helper.body.html( this.tSettings.bodyHandler.call(this) ).show();
+		} else if ( this.tSettings.showBody ) {
+			var parts = title.split(this.tSettings.showBody);
+			helper.title.html(parts.shift()).show();
+			helper.body.empty();
 			for(var i = 0, part; part = parts[i]; i++) {
 				if(i > 0)
-					tBody.append("<br/>");
-				tBody.append(part);
+					helper.body.append("<br/>");
+				helper.body.append(part);
 			}
-			if(tBody.html())
-				tBody.show();
-			else
-				tBody.hide();
+			helper.body.hideWhenEmpty();
 		} else {
-			tTitle.html(title).show();
-			tBody.hide();
+			helper.title.html(title).show();
+			helper.body.hide();
 		}
 		
 		// if element has href or src, add and show it, otherwise hide it
-		var href = (source.attr('href') || source.attr('src'));
-		if( settings.showURL && href )
-			tUrl.html(href.replace('http://', '')).show();
+		if( this.tSettings.showURL && $(this).url() )
+			helper.url.html( $(this).url().replace('http://', '') ).show();
 		else 
-			tUrl.hide();
+			helper.url.hide();
 		
 		// add an optional class for this tip
-		if( settings.extraClass ) {
-			helper.addClass(settings.extraClass);
-		}
+		helper.parent.addClass(this.tSettings.extraClass);
+		
 		// fix PNG background for IE
-		if (settings.fixPNG && IE ) {
-			helper.each(function () {
-				var image = $(this).css('backgroundImage');
-				if (image.match(/^url\(["'](.*\.png)["']\)$/i)) {
-					image = RegExp.$1;
-					$(this).css({
-						'backgroundImage': 'none',
-						'filter': "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=crop, src='" + image + "')"
-					}).each(function () {
-						var position = $(this).css('position');
-						if (position != 'absolute' && position != 'relative')
-							$(this).css('position', 'relative');
-					});
-				}
-			});
-		}
+		if (this.tSettings.fixPNG )
+			helper.parent.fixPNG();
 	}
 	
 	// delete timeout and show helper
 	function show() {
 		tID = null;
-		helper.show();
+		helper.parent.show();
 		update();
 	}
 	
@@ -232,29 +241,29 @@
 			return;	
 		}
 		
-		var left = helper[0].offsetLeft;
-		var top = helper[0].offsetTop;
+		var left = helper.parent[0].offsetLeft;
+		var top = helper.parent[0].offsetTop;
 		if(event) {
 			// position the helper 15 pixel to bottom right, starting from mouse position
 			left = event.pageX + 15;
 			top = event.pageY + 15;
-			helper.css({
+			helper.parent.css({
 				left: left + 'px',
 				top: top + 'px'
 			});
 		}
 		
 		var v = viewport(),
-			h = helper[0];
+			h = helper.parent[0];
 		// check horizontal position
 		if(v.x + v.cx < h.offsetLeft + h.offsetWidth) {
 			left -= h.offsetWidth + 20;
-			helper.css({left: left + 'px'});
+			helper.parent.css({left: left + 'px'});
 		}
 		// check vertical position
 		if(v.y + v.cy < h.offsetTop + h.offsetHeight) {
 			top -= h.offsetHeight + 20;
-			helper.css({top: top + 'px'});
+			helper.parent.css({top: top + 'px'});
 		}
 	}
 	
@@ -285,34 +294,20 @@
 			clearTimeout(tID);
 		// no more current element
 		current = null;
-		helper.hide();
 		
-		removeExtraClass(this);
+		helper.parent.hide().removeClass( this.tSettings.extraClass );
 		
 		// restore title and remove this listener
 		if (event.type != "click") {
 			$(this)
-				.attr('title', oldTitle)
+				.attr('title', title)
 				.unbind('mouseout', hide);
 		}
 		if (this.tSettings.event != "click")
 			$(this).unbind('click', hide);
 			
-		removePNGfix(this);
-	}
-	
-	function removeExtraClass(element) {
-		if( element.tSettings.extraClass ) {
-			helper.removeClass( element.tSettings.extraClass);
-		}
-	}
-	
-	function removePNGfix(element) {
-		if( element.tSettings.fixPNG && IE ) {
-			helper.each(function () {
-				$(element).css({'filter': '', backgroundImage: ''});
-			});
-		}
+		if( this.tSettings.fixPNG )
+			helper.parent.unfixPNG();
 	}
 	
 	$.Tooltip = {};
@@ -321,7 +316,8 @@
 	$.Tooltip.defaults = {
 		delay: 250,
 		event: "mouseover",
-		showURL: true
+		showURL: true,
+		extraClass: ""
 	};
 
 })(jQuery);
