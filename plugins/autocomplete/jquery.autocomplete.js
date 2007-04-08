@@ -1,6 +1,4 @@
 jQuery.autocomplete = function(input, options) {
-	// Create a link to self
-	var me = this;
 
 	// Create jQuery object for input element
 	var $input = $(input).attr("autocomplete", "off");
@@ -18,7 +16,7 @@ jQuery.autocomplete = function(input, options) {
 	if( options.width > 0 )
 		$results.css("width", options.width);
 
-	input.autocompleter = me;
+	input.autocompleter = this;
 
 	var timeout = null;
 	var prev = "";
@@ -63,12 +61,12 @@ jQuery.autocomplete = function(input, options) {
 		});
 
 		// add the data items to the cache
-		for( var k in stMatchSets ){
+		jQuery.each(stMatchSets, function(i, value) {
 			// increase the cache size
 			options.cacheLength++;
 			// add to the cache
-			addToCache(k, stMatchSets[k]);
-		}
+			addToCache(i, value);
+		});
 	}
 
 	$input
@@ -88,7 +86,8 @@ jQuery.autocomplete = function(input, options) {
 			case 13: // return
 				if( selectCurrent() ){
 					// make sure to blur off the current field
-					$input.get(0).blur();
+					if( !options.multiple )
+						$input.blur();
 					e.preventDefault();
 				}
 				break;
@@ -112,8 +111,8 @@ jQuery.autocomplete = function(input, options) {
 	hideResultsNow();
 
 	function onChange() {
-		// ignore if the following keys are pressed: [del] [shift] [capslock]
-		if( lastKeyPressCode == 46 || (lastKeyPressCode > 8 && lastKeyPressCode < 32) ) return $results.hide();
+		if( ignoreKeypress() )
+			return $results.hide();
 		
 		var v = $input.val();
 		if ( !hasInputChanged(v) )
@@ -131,6 +130,13 @@ jQuery.autocomplete = function(input, options) {
 			$results.hide();
 		}
 	};
+	
+	function ignoreKeypress(key) {
+		// ignore if the following keys are pressed: [del] [shift] [capslock]
+		// why shift etc.?
+		// how about selecting the first entry when pressing enter?
+		return lastKeyPressCode == 46; // || (lastKeyPressCode > 8 && lastKeyPressCode < 32);
+	}
 	
 	function rememberInput(value) {
 		prev = value;
@@ -156,11 +162,6 @@ jQuery.autocomplete = function(input, options) {
 		lis.removeClass("ac_over");
 
 		$(lis[active]).addClass("ac_over");
-
-		// Weird behaviour in IE
-		// if (lis[active] && lis[active].scrollIntoView) {
-		// 	lis[active].scrollIntoView(false);
-		// }
 
 	};
 
@@ -193,7 +194,7 @@ jQuery.autocomplete = function(input, options) {
 		prev = v;
 		$results.html("");
 		
-		if(options.mode == "multiple") {
+		if ( options.multiple ) {
 			var old_value = $input.val();
 			if(old_value.lastIndexOf(options.multipleSeparator) >= 1) {
 				var sep_pos = old_value.lastIndexOf(options.multipleSeparator);
@@ -361,7 +362,7 @@ jQuery.autocomplete = function(input, options) {
 	};
 
 	function makeUrl(q) {
-		if(options.mode == "multiple") {
+		if ( options.multiple ) {
 			if(q.lastIndexOf(options.multipleSeparator) >= 1) {
 				sep_pos = q.lastIndexOf(options.multipleSeparator);
 				q = q.substr(sep_pos+1);
@@ -464,7 +465,6 @@ jQuery.autocomplete = function(input, options) {
 	}
 
 	function addToCache(q, data) {
-		if (!data || !q || !options.cacheLength) return;
 		if (!cache.length || cache.length > options.cacheLength) {
 			flushCache();
 			cache.length++;
@@ -504,7 +504,7 @@ jQuery.autocomplete.defaults = {
 	maxItemsToShow: -1,
 	autoFill: false,
 	width: 0,
-	mode: "single",
+	multiple: false,
 	multipleSeparator: ","
 };
 
