@@ -308,7 +308,7 @@ jQuery.autocomplete = function(input, options) {
 			li.extra = extra;
 			ul.appendChild(li);
 			$(li).hover(
-				function() { $("li", ul).removeClass("ac_over"); $(this).addClass("ac_over"); active = $("li", ul).indexOf($(this).get(0)); },
+				function() { $("li", ul).removeClass("ac_over"); $(this).addClass("ac_over"); active = $("li", ul).index($(this).get(0)); },
 				function() { $(this).removeClass("ac_over"); }
 			).click(function(e) { e.preventDefault(); e.stopPropagation(); selectItem(this) });
 		}
@@ -453,50 +453,38 @@ jQuery.autocomplete = function(input, options) {
 	}
 }
 
-jQuery.fn.autocomplete = function(url, options, data) {
-	// Make sure options exists
-	options = options || {};
-	// Set url as option
-	options.url = url;
-	// set some bulk local data
-	options.data = ((typeof data == "object") && (data.constructor == Array)) ? data : null;
+jQuery.autocomplete.defaults = {
+	inputClass: "ac_input",
+	resultsClass: "ac_results",
+	loadingClass: "ac_loading",
+	lineSeparator: "\n",
+	cellSeparator: "|",
+	minChars: 1,
+	delay: 400,
+	matchCase: 0,
+	matchSubset: 1,
+	matchContains: 0,
+	cacheLength: 1,
+	mustMatch: 0,
+	extraParams: {},
+	selectFirst: false,
+	selectOnly: false,
+	maxItemsToShow: -1,
+	autoFill: false,
+	width: 0
+};
 
-	// Set default values for required options
-	options.inputClass = options.inputClass || "ac_input";
-	options.resultsClass = options.resultsClass || "ac_results";
-	options.lineSeparator = options.lineSeparator || "\n";
-	options.cellSeparator = options.cellSeparator || "|";
-	options.minChars = options.minChars || 1;
-	options.delay = options.delay || 400;
-	options.matchCase = options.matchCase || 0;
-	options.matchSubset = options.matchSubset || 1;
-	options.matchContains = options.matchContains || 0;
-	options.cacheLength = options.cacheLength || 1;
-	options.mustMatch = options.mustMatch || 0;
-	options.extraParams = options.extraParams || {};
-	options.loadingClass = options.loadingClass || "ac_loading";
-	options.selectFirst = options.selectFirst || false;
-	options.selectOnly = options.selectOnly || false;
-	options.maxItemsToShow = options.maxItemsToShow || -1;
-	options.autoFill = options.autoFill || false;
-	options.width = parseInt(options.width, 10) || 0;
+jQuery.fn.autocomplete = function(urlOrData, options) {
+
+	options = jQuery.extend({}, jQuery.autocomplete.defaults, options);
+
+	// Set url or data as option
+	options[ typeof urlOrData == "string" ? 'url' : 'data' ] = urlOrData;
 
 	this.each(function() {
-		var input = this;
-		new jQuery.autocomplete(input, options);
+		new jQuery.autocomplete(this, options);
 	});
 
 	// Don't break the chain
 	return this;
 }
-
-jQuery.fn.autocompleteArray = function(data, options) {
-	return this.autocomplete(null, options, data);
-}
-
-jQuery.fn.indexOf = function(e){
-	for( var i=0; i<this.length; i++ ){
-		if( this[i] == e ) return i;
-	}
-	return -1;
-};

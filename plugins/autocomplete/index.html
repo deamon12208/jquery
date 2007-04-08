@@ -4,35 +4,29 @@
 	<title>jQuery Autocomplete</title>
 	<script type="text/javascript" src="jquery-1.1.2.pack.js"></script>
 	<script type='text/javascript' src='jquery.autocomplete.js'></script>
-<link rel="stylesheet" type="text/css" href="main.css" />
+	<link rel="stylesheet" type="text/css" href="main.css" />
 	<link rel="stylesheet" type="text/css" href="jquery.autocomplete.css" />
 </head>
 
 <body>
 
-<h1>
-	jQuery Autocomplete Mod
-</h1>
+<h1>jQuery Autocomplete Mod</h1>
 
 <div id="content">
 <p>This is based on Dylan's initial plugin and Dan's and Anjesh' mods.</p>
 
-<h2>
-	Enhancements
-</h2>
+<h2>Enhancements</h2>
 <ul>
 	<li>
 		Allow multiple selections for both local and remote data.
 	</li>
 </ul>
 
-<form action="" onsubmit="return false;">
-
+<form onsubmit="return false;">
 	<p>
 		Multiple:
 		<textarea id='suggest' cols='40' rows='3'></textarea>
 	</p>
-
 	<p>
 		Local City Autocomplete:
 		<input type="text" id="CityLocal" value="" />
@@ -40,42 +34,16 @@
 		<input type="button" value="Get Value" onclick="lookupLocal();" />
 		(Shows a max of 10 entries)
 	</p>
-
 	<p>
 		Ajax City Autocomplete:
 		<input type="text" id="CityAjax" value="" style="width: 200px;" />
 		<input type="button" value="Get Value" onclick="lookupAjax();" />
 	</p>
-
 	<p>
-
 		Some dropdown:
 		<select name="Test1" id="idTest1">
 			<option value="1">Item 1</option>
 			<option value="2">Item 2</option>
-			<option value="3">Item 3</option>
-			<option value="4">Item 4</option>
-		</select>
-
-	</p>
-
-	<p>
-		Some dropdown 2:
-		<select name="Test2" id="idTest2">
-			<option value="1">Item 1</option>
-			<option value="2">Item 2</option>
-			<option value="3">Item 3</option>
-
-			<option value="4">Item 4</option>
-		</select>
-	</p>
-
-	<p>
-		Some dropdown 3:
-		<select name="Test3" id="idTest3">
-			<option value="1">Item 1</option>
-			<option value="2">Item 2</option>
-
 			<option value="3">Item 3</option>
 			<option value="4">Item 4</option>
 		</select>
@@ -123,33 +91,34 @@ function lookupLocal(){
 $(document).ready(function() {
 
 	$("#suggest").autocomplete('search.php', {
-		minChars:1,
-		matchSubset:1,
-		matchContains:1,
-		cacheLength:10,
-		onItemSelect:selectItem,
-		formatItem:formatItem,
-		selectOnly:1,
-		mode:"multiple",
-		multipleSeparator:"|"
+		minChars: 1,
+		matchSubset: 1,
+		matchContains: 1,
+		cacheLength: 10,
+		onItemSelect: selectItem,
+		formatItem: formatItem,
+		selectOnly: 1,
+		mode: "multiple",
+		multipleSeparator: "|"
 	});
 
 	$("#CityAjax").autocomplete(
 		"search.php",
 		{
-			delay:10,
-			minChars:2,
-			matchSubset:1,
-			matchContains:1,
-			cacheLength:10,
-			onItemSelect:selectItem,
-			onFindValue:findValue,
-			formatItem:formatItem,
-			autoFill:true
+			delay: 10,
+			minChars: 2,
+			matchSubset: 1,
+			matchContains: 1,
+			cacheLength: 10,
+			onItemSelect: selectItem,
+			onFindValue: findValue,
+			formatItem: formatItem,
+			autoFill: true,
+			maxItemsToShow: 10
 		}
 	);
 
-	$("#CityLocal").autocompleteArray(
+	$("#CityLocal").autocomplete(
 		[
 			"Aberdeen", "Ada", "Adamsville", "Addyston", "Adelphi", "Adena", "Adrian", "Akron",
 			"Albany", "Alexandria", "Alger", "Alledonia", "Alliance", "Alpha", "Alvada",
@@ -354,13 +323,13 @@ $(document).ready(function() {
 			"Zoar"
 		],
 		{
-			delay:10,
-			minChars:1,
-			matchSubset:1,
-			onItemSelect:selectItem,
-			onFindValue:findValue,
-			autoFill:true,
-			maxItemsToShow:10
+			delay: 10,
+			minChars: 1,
+			matchSubset: 1,
+			onItemSelect: selectItem,
+			onFindValue: findValue,
+			autoFill: true,
+			maxItemsToShow: 10
 		}
 	);
 });
