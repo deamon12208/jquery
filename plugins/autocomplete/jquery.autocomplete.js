@@ -1,3 +1,16 @@
+/*
+ * Autocomplete - jQuery plugin
+ *
+ * Copyright (c) 2007 Dylan Verheul, Dan G. Switzer, Anjesh Tuladhar, Jörn Zaefferer
+ *
+ * Dual licensed under the MIT and GPL licenses:
+ *   http://www.opensource.org/licenses/mit-license.php
+ *   http://www.gnu.org/licenses/gpl.html
+ *
+ * Revision: $Id$
+ *
+ */
+
 jQuery.autocomplete = function(input, options) {
 
 	// Create jQuery object for input element
