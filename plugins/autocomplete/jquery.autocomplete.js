@@ -7,7 +7,7 @@ jQuery.autocomplete = function(input, options) {
 	if (options.inputClass) $input.addClass(options.inputClass);
 
 	// Create results
-	var $results = $("<div>")
+	var $results = jQuery("<div>")
 		.hide()
 		.addClass(options.resultsClass)
 		.css("position", "absolute")
@@ -138,28 +138,24 @@ jQuery.autocomplete = function(input, options) {
 	}
 
  	function moveSelect(step) {
-
-		var lis = $("li", $results);
-		if (!lis) return;
-
+		var lis = $results.find("li");
+		
 		active += step;
 
+		// wrap around
 		if (active < 0) {
-			active = 0;
-		} else if (active >= lis.size()) {
 			active = lis.size() - 1;
+		} else if (active >= lis.size()) {
+			active = 0;
 		}
 
-		lis.removeClass("ac_over");
-
-		$(lis[active]).addClass("ac_over");
-
+		lis.indexClass(active, "ac_over");
 	};
-
+	
 	function selectCurrent() {
-		var li = $("li.ac_over", $results)[0];
+		var li = jQuery("li.ac_over", $results)[0];
 		if (!li) {
-			var $li = $("li", $results);
+			var $li = $results.find("li");
 			if (options.selectOnly) {
 				if ($li.length == 1) li = $li[0];
 			} else if (options.selectFirst) {
@@ -180,7 +176,7 @@ jQuery.autocomplete = function(input, options) {
 			li.extra = [];
 			li.selectValue = "";
 		}
-		var v = $.trim(li.selectValue ? li.selectValue : li.innerHTML);
+		var v = jQuery.trim(li.selectValue ? li.selectValue : li.innerHTML);
 		input.lastSelected = v;
 		prev = v;
 		$results.html("");
@@ -287,7 +283,7 @@ jQuery.autocomplete = function(input, options) {
 		var parsed = [];
 		var rows = data.split(options.lineSeparator);
 		for (var i=0; i < rows.length; i++) {
-			var row = $.trim(rows[i]);
+			var row = jQuery.trim(rows[i]);
 			if (row) {
 				parsed[parsed.length] = row.split(options.cellSeparator);
 			}
@@ -296,7 +292,7 @@ jQuery.autocomplete = function(input, options) {
 	};
 
 	function dataToDom(data) {
-		var ul = document.createElement("ul");
+		var ul = jQuery("<ul>");
 		var num = data.length;
 
 		// limited results to a max number
@@ -306,13 +302,10 @@ jQuery.autocomplete = function(input, options) {
 			var row = data[i];
 			if (!row) continue;
 			var li = document.createElement("li");
-			if (options.formatItem) {
-				li.innerHTML = options.formatItem(row, i, num);
-				li.selectValue = row[0];
-			} else {
-				li.innerHTML = row[0];
-				li.selectValue = row[0];
-			}
+			li.innerHTML = options.formatItem 
+				? options.formatItem(row, i, num)
+				: row[0];
+			li.selectValue = row[0];
 			var extra = null;
 			if (row.length > 1) {
 				extra = [];
@@ -321,13 +314,18 @@ jQuery.autocomplete = function(input, options) {
 				}
 			}
 			li.extra = extra;
-			ul.appendChild(li);
-			$(li).hover(
-				function() { $("li", ul).removeClass("ac_over"); $(this).addClass("ac_over"); active = $("li", ul).index($(this).get(0)); },
-				function() { $(this).removeClass("ac_over"); }
-			).click(function(e) { e.preventDefault(); e.stopPropagation(); selectItem(this) });
+			ul.append(li);
+			jQuery(li).hover( function() {
+				active = ul.find("li").removeClass("ac_over").index(this);
+				jQuery(this).addClass("ac_over");
+			}, function() {
+				jQuery(this).removeClass("ac_over");
+			}).click(function() {
+				selectItem(this);
+				return false;
+			});
 		}
-		return ul;
+		return ul[0];
 	};
 
 	function requestData(q) {
@@ -337,7 +335,7 @@ jQuery.autocomplete = function(input, options) {
 			receiveData(q, data);
 		// if an AJAX url has been supplied, try loading the data now
 		} else if( (typeof options.url == "string") && (options.url.length > 0) ){
-			$.get(makeUrl(q), function(data) {
+			jQuery.get(makeUrl(q), function(data) {
 				data = parseData(data);
 				cache.add(q, data);
 				receiveData(q, data);
@@ -378,7 +376,7 @@ jQuery.autocomplete = function(input, options) {
 		if (data) {
 			findValueCallback(q, data);
 		} else if( (typeof options.url == "string") && (options.url.length > 0) ){
-			$.get(makeUrl(q), function(data) {
+			jQuery.get(makeUrl(q), function(data) {
 				data = parseData(data)
 				cache.add(q, data);
 				findValueCallback(q, data);
@@ -431,6 +429,17 @@ jQuery.autocomplete = function(input, options) {
 		return {x:curleft,y:curtop};
 	}
 }
+
+/**
+ * Add a class to the selected index, and remove it from the other matched elements.
+ *
+ * @name indexClass
+ * @param Number index The index of the element to match
+ * @param String className The className to add and remove
+ */
+jQuery.fn.indexClass = function(index, className) {
+	return this.removeClass(className).eq(index).addClass(className).end();
+};
 
 jQuery.autocomplete.Cache = function(options) {
 
