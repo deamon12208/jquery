@@ -134,7 +134,7 @@
 							});
 						}
 						oCell.index = i;
-						oCell.count = defaults.sortDir;
+						oCell.count = 0;
 					}
 				}
 				/** comming feature. */
