@@ -360,14 +360,6 @@ jQuery.autocomplete = function(input, options) {
 		return url;
 	};
 
-	this.flushCache = function() {
-		cache.flush();
-	};
-
-	this.setExtraParams = function(p) {
-		options.extraParams = p;
-	};
-
 	this.findValue = function(){
 		var q = $input.val();
 
