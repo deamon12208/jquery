@@ -17,25 +17,16 @@ jQuery.autocomplete = function(input, options) {
 		$results.css("width", options.width);
 
 	input.autocompleter = this;
-
+	input.lastSelected = $input.val();
+	
 	var timeout = null;
 	var prev = "";
 	var active = -1;
-	var cache = {};
+	var cache = new jQuery.autocomplete.Cache(options);
 	var keyb = false;
 	var hasFocus = false;
 	var lastKeyPressCode = null;
-
-	// flush cache
-	function flushCache(){
-		cache = {};
-		cache.data = {};
-		cache.length = 0;
-	};
-
-	// flush cache
-	flushCache();
-
+	
 	// if there is a data array supplied
 	if( options.data ){
 		var sFirstChar = "", stMatchSets = {};
@@ -65,7 +56,7 @@ jQuery.autocomplete = function(input, options) {
 			// increase the cache size
 			options.cacheLength++;
 			// add to the cache
-			addToCache(i, value);
+			cache.add(i, value);
 		});
 	}
 
@@ -344,7 +335,7 @@ jQuery.autocomplete = function(input, options) {
 	};
 
 	function requestData(q) {
-		var data = options.cacheLength ? loadFromCache(q) : null;
+		var data = options.cacheLength ? cache.load(q) : null;
 		// recieve the cached data
 		if (data) {
 			receiveData(q, data);
@@ -352,7 +343,7 @@ jQuery.autocomplete = function(input, options) {
 		} else if( (typeof options.url == "string") && (options.url.length > 0) ){
 			$.get(makeUrl(q), function(data) {
 				data = parseData(data);
-				addToCache(q, data);
+				cache.add(q, data);
 				receiveData(q, data);
 			});
 		// if there's been no data found, remove the loading class
@@ -375,38 +366,8 @@ jQuery.autocomplete = function(input, options) {
 		return url;
 	};
 
-	function loadFromCache(q) {
-		if (!q) return null;
-		if (cache.data[q]) return cache.data[q];
-		if (options.matchSubset) {
-			for (var i = q.length - 1; i >= options.minChars; i--) {
-				var qs = q.substr(0, i);
-				var c = cache.data[qs];
-				if (c) {
-					var csub = [];
-					for (var j = 0; j < c.length; j++) {
-						var x = c[j];
-						var x0 = x[0];
-						if (matchSubset(x0, q)) {
-							csub[csub.length] = x;
-						}
-					}
-					return csub;
-				}
-			}
-		}
-		return null;
-	};
-
-	function matchSubset(s, sub) {
-		if (!options.matchCase) s = s.toLowerCase();
-		var i = s.indexOf(sub);
-		if (i == -1) return false;
-		return i == 0 || options.matchContains;
-	};
-
 	this.flushCache = function() {
-		flushCache();
+		cache.flush();
 	};
 
 	this.setExtraParams = function(p) {
@@ -417,13 +378,13 @@ jQuery.autocomplete = function(input, options) {
 		var q = $input.val();
 
 		if (!options.matchCase) q = q.toLowerCase();
-		var data = options.cacheLength ? loadFromCache(q) : null;
+		var data = options.cacheLength ? cache.load(q) : null;
 		if (data) {
 			findValueCallback(q, data);
 		} else if( (typeof options.url == "string") && (options.url.length > 0) ){
 			$.get(makeUrl(q), function(data) {
 				data = parseData(data)
-				addToCache(q, data);
+				cache.add(q, data);
 				findValueCallback(q, data);
 			});
 		} else {
@@ -464,16 +425,6 @@ jQuery.autocomplete = function(input, options) {
 		if( options.onFindValue ) setTimeout(function() { options.onFindValue(li) }, 1);
 	}
 
-	function addToCache(q, data) {
-		if (!cache.length || cache.length > options.cacheLength) {
-			flushCache();
-			cache.length++;
-		} else if (!cache[q]) {
-			cache.length++;
-		}
-		cache.data[q] = data;
-	};
-
 	function findPos(obj) {
 		var curleft = obj.offsetLeft || 0;
 		var curtop = obj.offsetTop || 0;
@@ -484,6 +435,57 @@ jQuery.autocomplete = function(input, options) {
 		return {x:curleft,y:curtop};
 	}
 }
+
+jQuery.autocomplete.Cache = function(options) {
+
+	this.flush = function() {
+		this.data = {};
+		this.length = 0;
+	}
+	
+	this.flush();
+	
+	function matchSubset(s, sub) {
+		if (!options.matchCase) s = s.toLowerCase();
+		var i = s.indexOf(sub);
+		if (i == -1) return false;
+		return i == 0 || options.matchContains;
+	};
+	
+	this.add = function(q, data) {
+		if (!this.length || this.length > options.cacheLength) {
+			this.flush();
+			this.length++;
+		} else if (!this[q]) {
+			this.length++;
+		}
+		this.data[q] = data;
+	};
+	this.load = function(q) {
+		if (!q)
+			return null;
+		if (this.data[q])
+			return this.data[q];
+		if (options.matchSubset) {
+			for (var i = q.length - 1; i >= options.minChars; i--) {
+				var qs = q.substr(0, i);
+				var c = this.data[qs];
+				if (c) {
+					var csub = [];
+					for (var j = 0; j < c.length; j++) {
+						var x = c[j];
+						var x0 = x[0];
+						if (matchSubset(x0, q)) {
+							csub[csub.length] = x;
+						}
+					}
+					return csub;
+				}
+			}
+		}
+		return null;
+	};
+};
 
 jQuery.autocomplete.defaults = {
 	inputClass: "ac_input",
