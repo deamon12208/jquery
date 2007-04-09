@@ -492,11 +492,11 @@ jQuery.autocomplete.defaults = {
 	cellSeparator: "|",
 	minChars: 1,
 	delay: 400,
-	matchCase: 0,
-	matchSubset: 1,
-	matchContains: 0,
-	cacheLength: 1,
-	mustMatch: 0,
+	matchCase: false,
+	matchSubset: true,
+	matchContains: false,
+	cacheLength: 10,
+	mustMatch: false,
 	extraParams: {},
 	selectFirst: false,
 	selectOnly: false,
@@ -507,6 +507,47 @@ jQuery.autocomplete.defaults = {
 	multipleSeparator: ","
 };
 
+/**
+ * Apply to one or more text inputs or textareas to provide 
+ * autocompletion.
+ *
+ * @example $("#input_box").autocomplete("my_autocomplete_backend.php");
+ * @before <input id="input_box" />
+ * @desc When a user starts typing in the input box, the autocompleter
+ * will request my_autocomplete_backend.php with a GET parameter
+ * named q that contains the current value of the input box.
+ * Let's assume that the user has typed "foo"(without quotes).
+ * Autocomplete will then request my_autocomplete_backend.php?q=foo.
+ *
+ * The backend should output possible values for the autocompleter, each
+ * on a single line. Output cannot contain the pipe symbol "|", since that
+ * is considered a separator (more on that later).
+ *
+ * Note that the autocompleter will present the options in the order the backend sends them.
+ *
+ * @name autocomplte
+ * @type jQuery
+ * @param String|Array urlOrData Pass either an URL for remote-autocompletion
+ *		 or an array of data for local auto-completion
+ * @param Map options Optional settings
+ * @option String inputClass This class will be added to the input box. default value: "ac_input"
+ * @option String resultsClass The class for the UL that will contain the result items (result items are LI elements). default value: "ac_results"
+ * @option String loadingClass The class for the input box while results are being fetched from the server. default value: "ac_loading"
+ * @option String lineSeparator The character that separates lines in the results from the backend. default value: "\n"
+ * @option String cellSeparator The character that separates cells in the results from the backend. default value: "|"
+ * @option Number minChars The minimum number of characters a user has to type before the autocompleter activates. default value: 1
+ * @option Number delay The delay in milliseconds the autocompleter waits after a keystroke to activate itself. default value: 400
+ * @option Number cacheLength The number of backend query results to store in cache. If set to 1 (the current result), no caching will happen. Do not set below 1. default value: 10
+ * @option Boolean matchSubset Whether or not the autocompleter can use a cache for more specific queries. This means that all matches of "foot" are a subset of all matches for "foo". Usually this is true, and using this options decreases server load and increases performance. Only useful with cacheLength settings bigger then one, like 10. default value: true
+ * @option Boolean matchCase Whether or not the comparison is case sensitive. Only important only if you use caching. default value: false
+ * @option Boolean matchContains Whether or not the comparison looks inside (i.e. does "ba" match "foo bar") the search results. Only important if you use caching. default value: false
+ * @option Booolean mustMatch If set to true, the autocompleter will only allow results that are presented by the backend. Note that illegal values result in an empty input box. In the example at the beginning of this documentation, typing "footer" would result in an empty input box. default value: false
+ * @option Object extraParams Extra parameters for the backend. If you were to specify { bar:4 }, the autocompleter would call my_autocomplete_backend.php?q=foo&bar=4 (assuming the input box contains "foo"). default value: {}
+ * @option Boolean selectFirst If this is set to true, the first autocomplete value will be automatically selected on tab/return, even if it has not been handpicked by keyboard or mouse action. If there is a handpicked (highlighted) result, that result will take precedence. default value: false
+ * @option Boolean selectOnly If this is set to true, and there is only one autocomplete when the user hits tab/return, it will be selected even if it has not been handpicked by keyboard or mouse action. This overrides selectFirst. default value: false
+ * @option Function formatItem Provides advanced markup for an item. For each row of results, this function will be called. The returned value will be displayed inside an LI element in the results list. Autocompleter will provide 3 parameters: the results row, the position of the row in the list of results, and the number of items in the list of results. default value: none
+ * @option Function onSelectItem Called when an item is selected. The autocompleter will specify a single argument, being the LI element selected. This LI element will have an attribute "extra" that contains an array of all cells that the backend specified. default value: none
+ */
 jQuery.fn.autocomplete = function(urlOrData, options) {
 
 	options = jQuery.extend({}, jQuery.autocomplete.defaults, options);
