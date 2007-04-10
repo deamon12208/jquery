@@ -6,8 +6,8 @@
 				var position, delta;
 				if (options.cursorAt) {
 					position = {
-						x: $.DDM.pointer.x + options.cursorAt.x,
-						y: $.DDM.pointer.y + options.cursorAt.y
+						x: $.DDM.pointer.x + this.DB.extraOffset.x,
+						y: $.DDM.pointer.y + this.DB.extraOffset.y
 					}
 				} else {
 					delta = {
@@ -16,6 +16,23 @@
 					}
 					if (this.DB.grid) {
 						delta = this.DB.applyGrid(delta);
+					}
+					if (this.DB.limitOffset) {
+						delta = {
+							x: Math.max(
+								this.DB.limitOffset.x,
+								Math.min(
+									this.DB.position.x + delta.x,
+									this.DB.limitOffset.x + this.DB.limitOffset.w - this.DB.size.wb
+								)) - this.DB.position.x,
+							y: Math.max(
+								this.DB.limitOffset.y,
+								Math.min(
+									this.DB.position.y + delta.y,
+									this.DB.limitOffset.y + this.DB.limitOffset.h - this.DB.size.hb
+								))-this.DB.position.y
+						};
+						
 					}
 					position = {
 						x: this.DB.offset.x + delta.x,
@@ -39,6 +56,48 @@
 					x: this.DB.draggedEls.offsetLeft,
 					y: this.DB.draggedEls.offsetTop
 				};
+				if (this.DB.cursorAt) {
+					this.DB.extraOffset = {
+						x: this.DB.cursorAt.left ?
+							(this.DB.cursorAt.left * (-1))
+							: this.DB.cursorAt.right ?
+								(- this.DB.size.wb + this.DB.cursorAt.right)
+								: 0,
+						y: this.DB.cursorAt.top ?
+							(this.DB.cursorAt.top * (-1))
+							: this.DB.cursorAt.bottom ?
+								(- this.DB.size.hb + this.DB.cursorAt.bottom)
+								: 0
+					};
+				}
+				if (this.DB.containment) {
+					if (this.DB.containment.parentNode) {
+						this.DB.limitOffset = $.extend(
+							$.iUtil.getPosition(this.DB.containment),
+							$.iUtil.getSize(this.DB.containment)
+						);
+						this.DB.limitOffset.h = this.DB.limitOffset.hb;
+						this.DB.limitOffset.w = this.DB.limitOffset.wb;
+					} else if(this.DB.containment === 'document') {
+						var clientScroll = $.iUtil.getScroll();
+						this.DB.limitOffset = {
+							x: 0,
+							y: 0,
+							h: Math.max(clientScroll.h,clientScroll.ih),
+							w: Math.max(clientScroll.w,clientScroll.iw)
+						};
+					} else if(this.DB.containment === 'viewport') {
+						var clientScroll = $.iUtil.getScroll();
+						this.DB.limitOffset = {
+							x: clientScroll.l,
+							y: clientScroll.t,
+							h: Math.min(clientScroll.h,clientScroll.ih),
+							w: Math.min(clientScroll.w,clientScroll.iw)
+						};
+					} else {
+						this.DB.limitOffset = this.DB.containment;
+					}
+				}
 				var el = this.DB.proxy||this.DB.draggedEls;
 				if (options.zIndex) {
 					this.DB.oldZIndex = $.attr(el, 'zIndex');
@@ -107,7 +166,10 @@
 					);
 				}
 				if (isAllowed == true) {
-					if(options.ghostly) {
+					if(options.ghostly || options.helper === 'clone') {
+						if (options.helper == 'clone') {
+							options.ghostly = true;
+						}
 						el.DB.proxy = $(del).clone(true).insertAfter(del)[0];
 					} else if (options.helper) {
 						el.DB.proxy = $(options.helper.apply(del)).insertAfter(del)[0];
@@ -141,6 +203,9 @@
 				el = $(options.handle, this);
 				if (el.size() == 0 )
 					el = this;
+			}
+			if (options.preventionDistance) {
+				options.snap = options.preventionDistance;
 			}
 			el.each(function(){
 				if (!this.DB) {

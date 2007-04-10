@@ -26,7 +26,7 @@ body
 	position: absolute;
 	width: 100px;
 	height: 100px;
-	top: 100px;
+	top: 1300px;
 	left: 50px;
 	background-color: #68BFEF;
 	border: 5px solid #0090DF;
@@ -117,6 +117,23 @@ body
 	background-color: #68BFEF;
 	border: 1px solid #0090DF 
 }
+#drag10 {
+	position: absolute;
+	width: 100px;
+	height: 100px;
+	top: 300px;
+	left: 100px;
+	background-color: #68BFEF;
+	border: 1px solid #0090DF 
+}
+#container {
+	position: absolute;
+	background-color: #eee;
+	width: 300px;
+	height: 300px;
+	top: 230px;
+	left: 50px;
+}
 </style>
 </head>
 <body>
@@ -129,6 +146,8 @@ body
 <div id="drag7"><div></div>Drag by handle</div>
 <div id="drag9">Cursor at 16, 16</div>
 <div id="drag8">Drag arround a circle</div>
+<div id="container"></div>
+<div id="drag10">Contained to an element position</div>
 <script type="text/javascript">
 $(document).ready(
 	function()
@@ -138,7 +157,7 @@ $(document).ready(
 				zIndex: 1,
 				dragPrevention: 'a,input,textarea',
 				clickTimeout: false,
-				snap: 20,
+				preventionDistance: 20,
 				helper: function() {
 					var myHelper = document.createElement("div");
 					$(myHelper).css({
@@ -177,7 +196,7 @@ $(document).ready(
 			}
 		});
 		$('#drag4').draggable({grid:{x:50,y:50}});
-		$('#drag9').draggable({cursorAt:{x:16,y:16}});
+		$('#drag9').draggable({cursorAt:{bottom:-16,right:-16}});
 		$('#drag8').draggable({
 			dragModifier: function(position) {
 				
@@ -193,6 +212,7 @@ $(document).ready(
 				}
 			}
 		});
+		$("#drag10").draggable({containment:'viewport'});
 	}
 );
 </script>

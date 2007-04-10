@@ -126,16 +126,16 @@ jQuery.iUtil = {
 			w = e.scrollWidth;
 			h = e.scrollHeight;
 		} else  {
-			if (document.documentElement) {
-				t = document.documentElement.scrollTop;
-				l = document.documentElement.scrollLeft;
-				w = document.documentElement.scrollWidth;
-				h = document.documentElement.scrollHeight;
-			} else if (document.body) {
+			if (document.body) {
 				t = document.body.scrollTop;
 				l = document.body.scrollLeft;
 				w = document.body.scrollWidth;
 				h = document.body.scrollHeight;
+			} else if (document.documentElement) {
+				t = document.documentElement.scrollTop;
+				l = document.documentElement.scrollLeft;
+				w = document.documentElement.scrollWidth;
+				h = document.documentElement.scrollHeight;
 			}
 			iw = self.innerWidth||document.documentElement.clientWidth||document.body.clientWidth||0;
 			ih = self.innerHeight||document.documentElement.clientHeight||document.body.clientHeight||0;
