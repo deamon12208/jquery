@@ -29,12 +29,13 @@
 			if (!$.DDM.dragged) {
 				return false;
 			}
-			
-			//store current event target
-			$.DDM.currentTarget = e.target;
-			
-			//store pointer position
-			$.DDM.pointer = $.DDM.dragged.DB.getPointer.apply($.DDM.dragged,[e]);
+			if (e) {
+				//store current event target
+				$.DDM.currentTarget = e.target;
+				
+				//store pointer position
+				$.DDM.pointer = $.DDM.dragged.DB.getPointer.apply($.DDM.dragged,[e]);
+			}
 			
 			//if the pointer was not moved enough do not start the dragging action
 			if (!$.DDM.dragged.DB.dragThreshMet) {
