@@ -26,7 +26,7 @@ body
 	position: absolute;
 	width: 100px;
 	height: 100px;
-	top: 1300px;
+	top: 100px;
 	left: 50px;
 	background-color: #68BFEF;
 	border: 5px solid #0090DF;
@@ -212,7 +212,7 @@ $(document).ready(
 				}
 			}
 		});
-		$("#drag10").draggable({containment:'viewport'});
+		$("#drag10").draggable({containment:document.getElementById('container')});
 	}
 );
 </script>

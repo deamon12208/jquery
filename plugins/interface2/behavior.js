@@ -1,22 +1,42 @@
 
 (function($) {
+	//drag and drop manager
 	$.DDM = {
+		
+		//define a new draggable behavior
 		drag: function(el, options) {
 			el.DB = new $.dragBehavior(el, options);
 		},
+		
+		//define a new droppable behavior
 		drop: function(el, options) {
 			el.DrB = new $.dropBehavior(el, options);
 		},
+		
+		//drop targets
 		targets: [],
+		
+		//current pointer position
 		pointer: null,
+		
+		//dragged element/elements
 		dragged: null,
-		clickTimeout: null,
+		
+		//timeout holder
+		preventionTimeout: null,
+		
 		mouseMove: function(e) {
 			if (!$.DDM.dragged) {
 				return false;
 			}
+			
+			//store current event target
 			$.DDM.currentTarget = e.target;
+			
+			//store pointer position
 			$.DDM.pointer = $.DDM.dragged.DB.getPointer.apply($.DDM.dragged,[e]);
+			
+			//if the pointer was not moved enough do not start the dragging action
 			if (!$.DDM.dragged.DB.dragThreshMet) {
 				var snap = Math.max(
 					Math.abs($.DDM.pointer.x - $.DDM.dragged.DB.pointer.x),
@@ -27,44 +47,58 @@
 				}
 				return;
 			}
+			
 			$.DDM.dragged.DB.beforeDrag.apply($.DDM.dragged, [e]);
 			var toReturn = $.DDM.dragged.DB.drag.apply($.DDM.dragged, [e]);
+			
+			//check if dragged element validates against drop targets
 			if ($.DDM.dragged.DB.hasTargets) {
 				for (var i=0; i< $.DDM.dragged.DB.targets.length; i++) {
 					$.DDM.dragged.DB.targets[i].DrB.checkTarget.apply($.DDM.dragged.DB.targets[i], [e]);
 				}
 			}
+			
 			if (toReturn === false) {
 				return false;
 			}
 			return;
 		},
+		
 		mouseUp: function(e) {
 			if (!$.DDM.dragged)
 				return;
 			$.DDM.currentTarget = e.target;
 			var toReturn = true;
-			clearTimeout($.DDM.clickTimeout);
 			var dragged = $.DDM.dragged ;
+			clearTimeout($.DDM.preventionTimeout);
+			
+			//if the dragging action started
 			if (dragged.DB.dragThreshMet) {
 				dragged.DB.beforeStopDrag.apply(dragged,[e]);
 				toReturn = dragged.DB.stopDrag.apply(dragged,[e]);
 			}
+			
 			$.DDM.clearTargets(e);
 			$.DDM.clearOptions();
+			
 			$(document).unbind('mousemove', $.DDM.mouseMove);
 			$(document).unbind('mouseup', $.DDM.mouseUp);
+			
 			return toReturn;
 		},
+		//start the dragging action
 		startDrag: function(e) {
 			if (!$.DDM.dragged)
 				return;
-			clearTimeout($.DDM.clickTimeout);
+			clearTimeout($.DDM.preventionTimeout);
+			
 			$.DDM.dragged.DB.beforeStartDrag.apply($.DDM.dragged, [e]);
 			$.DDM.dragged.DB.dragThreshMet = true;
+			
 			return $.DDM.dragged.DB.startDrag.apply($.DDM.dragged, [e]);
 		},
 		
+		//check the drop targets and validate if are posibile targets for current dragged element
 		findTargets: function() {
 			for( var i=0; i< $.DDM.targets.length; i++) {
 				for (var j in $.DDM.targets[i].DrB.groups) {
@@ -78,6 +112,7 @@
 			$.DDM.dragged.DB.hasTargets = ($.DDM.dragged.DB.targets.length>0) ;
 		},
 		
+		//clear the previously activated drop targets
 		clearTargets: function(e) {
 			for (var i=0; i< $.DDM.dragged.DB.targets.length; i++) {
 				$.DDM.dragged.DB.targets[i].DrB.onDeactivate.apply($.DDM.dragged.DB.targets[i], [e]);
@@ -86,6 +121,7 @@
 			$.DDM.dragged.DB.hasTargets = false;
 		},
 		
+		//clear all options stored in the dragging action
 		clearOptions: function() {
 			$.DDM.currentTarget = null;
 			$.DDM.dragged.DB.dragThreshMet = false;
@@ -94,6 +130,7 @@
 		}
 	};
 	
+	//drag behavior object
 	$.dragBehavior = function(el, options) {
 		this.init(el, options);
 	};
@@ -106,7 +143,7 @@
 		pointer: null,
 		proxy: null,
 		dragThreshMet: false,
-		clickTimeout: 400,
+		preventionTimeout: 400,
 		beforeStartDrag: function(){},
 		getPointer: function(e){return {x:e.pageX,y:e.pageY}},
 		startDrag: function() {},
@@ -142,14 +179,14 @@
 			$.DDM.dragged = this;
 			$.DDM.dragged.DB.dragThreshMet = false;
 			$.DDM.dragged.DB.pointer = $.DDM.pointer = {x:e.pageX, y:e.pageY};
-			if (this.DB.clickTimeout) {
-				$.DDM.clickTimeout = setTimeout(function(){$.DDM.startDrag(e)}, this.DB.clickTimeout);
+			if (this.DB.preventionTimeout) {
+				$.DDM.preventionTimeout = setTimeout(function(){$.DDM.startDrag(e)}, this.DB.preventionTimeout);
 			}
 			$.DDM.findTargets();
 			return false;
 		}
 	};
-		
+	//drop behavior object
 	$.dropBehavior = function(el, options) {
 		this.init(el, options);
 	};

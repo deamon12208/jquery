@@ -32,6 +32,16 @@ body
 	background-color: #68BFEF;
 	border: 5px solid #0090DF;
 }
+#drag2
+{
+	position: absolute;
+	width: 100px;
+	height: 100px;
+	top: 50px;
+	left: 500px;
+	background-color: #68BFEF;
+	border: 5px solid #0090DF;
+}
 #droptarget1 {
 	position: absolute;
 	top: 200px;
@@ -56,15 +66,25 @@ body
 	height: 200px;
 	background-color: #eee;
 }
+#droptarget4 {
+	position: absolute;
+	top: 200px;
+	left: 800px;
+	width: 200px;
+	height: 200px;
+	background-color: #eee;
+}
 #droptarget1.active,
 #droptarget2.active,
-#droptarget3.active
+#droptarget3.active,
+#droptarget4.active
 {
 	background-color: #6e6;
 }
 #droptarget1.hover,
 #droptarget2.hover,
-#droptarget3.hover
+#droptarget3.hover,
+#droptarget4.hover
 {
 	background-color: #f09;
 }
@@ -74,29 +94,37 @@ body
 <div id="droptarget1">accepts element if the cursor hovers</div>
 <div id="droptarget2">accepts element if intersects</div>
 <div id="droptarget3">accepts element if fits</div>
+<div id="droptarget4">fastmode drop target based on mouseover and on mouseout</div>
 <div id="drag1"></div>
+<div id="drag2"></div>
 
 <script type="text/javascript">
 $(document).ready(
 	function()
 	{
 		$('#drag1').draggable();
+		$('#drag2').draggable({cursorAt:{left:-16, top: -16}, revert: true, ghostly: true});
 		$('#droptarget1').droppable({
-			accept: 'div',
+			accept: '#drag1',
 			hoverClass: 'hover',
 			activeClass: 'active'
 		});
 		$('#droptarget2').droppable({
-			accept: 'div',
+			accept: '#drag1',
 			hoverClass: 'hover',
 			activeClass: 'active',
 			tolerance: 'intersect'
 		});
 		$('#droptarget3').droppable({
-			accept: 'div',
+			accept: '#drag1',
 			hoverClass: 'hover',
 			activeClass: 'active',
 			tolerance: 'fit'
+		});
+		$('#droptarget4').droppable({
+			accept: '#drag2',
+			hoverClass: 'hover',
+			activeClass: 'active'
 		});
 	}
 );

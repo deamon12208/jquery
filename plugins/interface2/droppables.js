@@ -36,6 +36,11 @@
 				if (options.activeClass) {
 					$(this).addClass(options.activeClass);
 				}
+				this.DrB.isMouseOver = false;
+				if ($.DDM.dragged.DB.cursorAt) {
+					$(this).bind('mouseover', $.markDroppablesOver);
+					$(this).bind('mouseout', $.markDroppablesOut);
+				}
 			},
 			onDeactivate: function() {
 				if (options.activeClass) {
@@ -48,15 +53,22 @@
 					this.DrB.isOver = false;
 					$(this).removeClass(options.hoverClass);
 				}
+				if ($.DDM.dragged.DB.cursorAt) {
+					$(this).bind('mouseover', $.markDroppablesOver);
+					$(this).bind('mouseout', $.markDroppablesOut);
+				}
+				this.DrB.isMouseOver = false;
 			},
 			checkTarget: function() {
-				var dragged = {
-					x: $.DDM.dragged.DB.position.x + $.DDM.pointer.x - $.DDM.dragged.DB.pointer.x,
-					y: $.DDM.dragged.DB.position.y + $.DDM.pointer.y - $.DDM.dragged.DB.pointer.y,
-					w: $.DDM.dragged.DB.size.wb,
-					h: $.DDM.dragged.DB.size.hb
+				if (!$.DDM.dragged.DB.cursorAt) {
+					var dragged = {
+						x: $.DDM.dragged.DB.position.x + $.DDM.pointer.x - $.DDM.dragged.DB.pointer.x,
+						y: $.DDM.dragged.DB.position.y + $.DDM.pointer.y - $.DDM.dragged.DB.pointer.y,
+						w: $.DDM.dragged.DB.size.wb,
+						h: $.DDM.dragged.DB.size.hb
+					}
 				}
-				if (this.DrB.valid[this.DrB.tolerance](this.DrB, dragged)) {
+				if (($.DDM.dragged.DB.cursorAt && this.DrB.isMouseOver == true) || this.DrB.valid[this.DrB.tolerance](this.DrB, dragged)) {
 					if (!this.DrB.isOver && options.hoverClass) {
 						this.DrB.isOver = true;
 						$(this).addClass(options.hoverClass);
@@ -77,5 +89,11 @@
 		return this.each(function(){
 			$.DDM.drop(this, options);
 		});
+	};
+	$.markDroppablesOver = function(e) {
+		this.DrB.isMouseOver = true;
+	};
+	$.markDroppablesOut = function(e) {
+		this.DrB.isMouseOver = false;
 	};
  })(jQuery);
