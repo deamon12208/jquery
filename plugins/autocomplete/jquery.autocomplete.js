@@ -101,13 +101,11 @@ jQuery.autocomplete = function(input, options) {
 				timeout = setTimeout(onChange, options.delay);
 				break;
 		}
-	})
-	.focus(function(){
-		// track whether the field has focus, we shouldn't process any results if the field no longer has focus
+	}).focus(function(){
+		// track whether the field has focus, we shouldn't process any
+		// results if the field no longer has focus
 		hasFocus = true;
-	})
-	.blur(function() {
-		// track whether the field has focus
+	}).blur(function() {
 		hasFocus = false;
 		hideResults();
 	});
@@ -129,7 +127,7 @@ jQuery.autocomplete = function(input, options) {
 			$input.addClass(options.loadingClass);
 			if (!options.matchCase)
 				v = v.toLowerCase();
-			requestData(v);
+			request(v, receiveData, stopLoading);
 		} else {
 			stopLoading();
 			$results.hide();
@@ -158,44 +156,36 @@ jQuery.autocomplete = function(input, options) {
 	}
 
  	function moveSelect(step) {
-		var lis = $results.find("li");
-		
+		var listItems = $results.find("li");
 		active += step;
-
-		// wrap around
-		if (active < 0) {
-			active = lis.size() - 1;
-		} else if (active >= lis.size()) {
-			active = 0;
-		}
-
-		lis.indexClass(active, "ac_over");
+		wrapSelection(listItems);
+		listItems.indexClass(active, "ac_over");
 	};
 	
+	function wrapSelection(listItems) {
+		if (active < 0) {
+			active = listItems.size() - 1;
+		} else if (active >= listItems.size()) {
+			active = 0;
+		}
+	}
+	
 	function selectCurrent() {
-		var li = jQuery("li.ac_over", $results)[0];
-		if (!li) {
-			var $li = $results.find("li");
-			if (options.selectOnly) {
-				if ($li.length == 1) li = $li[0];
-			} else if (options.selectFirst) {
-				li = $li[0];
+		var listItems = $results.find("li");
+		var selected = listItems.filter(".ac_over")[0];
+		if ( !selected ) {
+			if ( (options.selectOnly && listItems.length == 1) || options.selectFirst ) {
+				selected = listItems[0];
 			}
 		}
-		if (li) {
-			selectItem(li);
+		if (selected) {
+			selectItem(selected);
 			return true;
-		} else {
+		} else
 			return false;
-		}
 	};
 
 	function selectItem(li) {
-		if (!li) {
-			li = document.createElement("li");
-			li.extra = [];
-			li.selectValue = "";
-		}
 		var v = jQuery.trim(li.selectValue ? li.selectValue : li.innerHTML);
 		input.lastSelected = v;
 		prev = v;
@@ -213,7 +203,10 @@ jQuery.autocomplete = function(input, options) {
 		
 		$input.val(v);
 		hideResultsNow();
-		if (options.onItemSelect) setTimeout(function() { options.onItemSelect(li) }, 1);
+		if (options.onItemSelect) 
+			setTimeout(function() {
+				options.onItemSelect(li)
+			}, 10);
 	};
 
 	// selects a portion of the input string
@@ -281,18 +274,15 @@ jQuery.autocomplete = function(input, options) {
 	function receiveData(q, data) {
 		if ( data && data.length && hasFocus ) {
 			stopLoading();
-			
 			$results.empty().append(dataToDom(data)).bgiframe();
-			
 			autoFill(q, data[0][0]);
-			
 			showResults();
 		} else {
 			hideResultsNow();
 		}
 	};
 
-	function parseData(data) {
+	function parseAndCacheData(q, data) {
 		var parsed = [];
 		var rows = data.split(options.lineSeparator);
 		for (var i=0; i < rows.length; i++) {
@@ -301,35 +291,18 @@ jQuery.autocomplete = function(input, options) {
 				parsed[parsed.length] = row.split(options.cellSeparator);
 			}
 		}
+		cache.add(q, parsed);
 		return parsed;
 	};
 
 	function dataToDom(data) {
-		var ul = jQuery("<ul>");
-		var num = data.length;
-
-		// limited results to a max number
-		if( (options.maxItemsToShow > 0) && (options.maxItemsToShow < num) ) num = options.maxItemsToShow;
-
+		var ul = document.createElement("ul");
+		var num = limitNumberOfItems(data.length);
 		for (var i=0; i < num; i++) {
-			var row = data[i];
-			if (!row) continue;
-			var li = document.createElement("li");
-			li.innerHTML = options.formatItem 
-				? options.formatItem(row, i, num)
-				: row[0];
-			li.selectValue = row[0];
-			var extra = null;
-			if (row.length > 1) {
-				extra = [];
-				for (var j=1; j < row.length; j++) {
-					extra[extra.length] = row[j];
-				}
-			}
-			li.extra = extra;
-			ul.append(li);
-			jQuery(li).hover( function() {
-				active = ul.find("li").removeClass("ac_over").index(this);
+			if (!data[i])
+				continue;
+			createListItem(data[i], i, num).appendTo(ul).hover( function() {
+				active = jQuery("li", ul).removeClass("ac_over").index(this);
 				jQuery(this).addClass("ac_over");
 			}, function() {
 				jQuery(this).removeClass("ac_over");
@@ -338,26 +311,75 @@ jQuery.autocomplete = function(input, options) {
 				return false;
 			});
 		}
-		return ul[0];
+		return ul;
 	};
+	
+	function limitNumberOfItems(available) {
+		return (options.maxItemsToShow > 0) && (options.maxItemsToShow < available)
+			? options.maxItemsToShow
+			: available;
+	}
+	
+	function createListItem(row, i, num) {
+		var item = document.createElement("li");
+		item.innerHTML = options.formatItem 
+				? options.formatItem(row, i, num)
+				: row[0];
+			item.selectValue = row[0];
+		var extra = null;
+		if (row.length > 1) {
+			extra = [];
+			for (var j=1; j < row.length; j++) {
+				extra[extra.length] = row[j];
+			}
+		}
+		item.extra = extra;
+		return jQuery(item);
+	}
+	
+	function findValueCallback(q, data){
+		if (data)
+			stopLoading();
+			
+		if( !options.onFindValue )
+			return;
 
-	function requestData(q) {
-		var data = options.cacheLength ? cache.load(q) : null;
+		var num = (data) ? data.length : 0;
+		var li = null;
+
+		for (var i=0; i < num; i++) {
+			if( data[i][0].toLowerCase() == q.toLowerCase() ){
+				li = createListItem(data[i], i, num)[0];
+				break;
+			}
+		}
+
+		setTimeout(function() {
+			options.onFindValue(li)
+		}, 10);
+	}
+
+	this.findValue = function(){
+		request($input.val(), findValueCallback, findValueCallback);
+	}
+	
+	function request(q, success, failure) {
+		if (!options.matchCase)
+			q = q.toLowerCase();
+		var data = cache.load(q);
 		// recieve the cached data
 		if (data && data.length) {
-			receiveData(q, data);
+			success(q, data);
 		// if an AJAX url has been supplied, try loading the data now
 		} else if( (typeof options.url == "string") && (options.url.length > 0) ){
 			jQuery.get(makeUrl(q), function(data) {
-				data = parseData(data);
-				cache.add(q, data);
-				receiveData(q, data);
+				//receiveData(q, parseAndCacheData(q, data));
+				success(q, parseAndCacheData(q, data));
 			});
-		// if there's been no data found, remove the loading class
 		} else {
-			stopLoading();
+			failure(q);
 		}
-	};
+	}
 
 	function makeUrl(q) {
 		if ( options.multiple ) {
@@ -372,59 +394,8 @@ jQuery.autocomplete = function(input, options) {
 		return url;
 	};
 
-	this.findValue = function(){
-		var q = $input.val();
-
-		if (!options.matchCase) q = q.toLowerCase();
-		var data = options.cacheLength ? cache.load(q) : null;
-		if (data) {
-			findValueCallback(q, data);
-		} else if( (typeof options.url == "string") && (options.url.length > 0) ){
-			jQuery.get(makeUrl(q), function(data) {
-				data = parseData(data)
-				cache.add(q, data);
-				findValueCallback(q, data);
-			});
-		} else {
-			// no matches
-			findValueCallback(q, null);
-		}
-	}
-	
 	function stopLoading() {
 		$input.removeClass(options.loadingClass);
-	}
-
-	function findValueCallback(q, data){
-		if (data) $input.removeClass(options.loadingClass);
-
-		var num = (data) ? data.length : 0;
-		var li = null;
-
-		for (var i=0; i < num; i++) {
-			var row = data[i];
-
-			if( row[0].toLowerCase() == q.toLowerCase() ){
-				li = document.createElement("li");
-				if (options.formatItem) {
-					li.innerHTML = options.formatItem(row, i, num);
-					li.selectValue = row[0];
-				} else {
-					li.innerHTML = row[0];
-					li.selectValue = row[0];
-				}
-				var extra = null;
-				if( row.length > 1 ){
-					extra = [];
-					for (var j=1; j < row.length; j++) {
-						extra[extra.length] = row[j];
-					}
-				}
-				li.extra = extra;
-			}
-		}
-
-		if( options.onFindValue ) setTimeout(function() { options.onFindValue(li) }, 1);
 	}
 
 	// TODO use dimensions plug instead?
@@ -476,7 +447,7 @@ jQuery.autocomplete.Cache = function(options) {
 		this.data[q] = data;
 	};
 	this.load = function(q) {
-		if (!q)
+		if (!q || !options.cacheLength || !this.length)
 			return null;
 		if (this.data[q])
 			return this.data[q];
