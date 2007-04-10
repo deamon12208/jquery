@@ -97,8 +97,8 @@ jQuery.autocomplete = function(input, options) {
 				break;
 			default:
 				active = -1;
-				if (timeout) clearTimeout(timeout);
-				timeout = setTimeout(function(){onChange();}, options.delay);
+				clearTimeout(timeout);
+				timeout = setTimeout(onChange, options.delay);
 				break;
 		}
 	})
@@ -124,16 +124,23 @@ jQuery.autocomplete = function(input, options) {
 		
 		rememberInput(v);
 		
-		if (v.length >= options.minChars) {
+		v = lastWord(v);
+		if ( v.length >= options.minChars) {
 			$input.addClass(options.loadingClass);
 			if (!options.matchCase)
 				v = v.toLowerCase();
 			requestData(v);
 		} else {
-			$input.removeClass(options.loadingClass);
+			stopLoading();
 			$results.hide();
 		}
 	};
+	
+	function lastWord(value) {
+		return options.multiple
+			? value.substring( value.indexOf(options.multipleSeparator) + (value.indexOf(options.multipleSeparator) != -1 ? options.multipleSeparator.length : 0) )
+			: value;
+	}
 	
 	function ignoreKeypress(key) {
 		// ignore if the following keys are pressed: [del] [shift] [capslock]
@@ -197,9 +204,8 @@ jQuery.autocomplete = function(input, options) {
 		if ( options.multiple ) {
 			var old_value = $input.val();
 			if(old_value.lastIndexOf(options.multipleSeparator) >= 1) {
-				var sep_pos = old_value.lastIndexOf(options.multipleSeparator);
-				value = old_value.substr(0,sep_pos+1);
-				v = value + v + options.multipleSeparator;
+				var sep_pos = old_value.lastIndexOf( options.multipleSeparator ) + options.multipleSeparator.length;
+				v = old_value.substr(0, sep_pos) + v + options.multipleSeparator;
 			} else {
 				v += options.multipleSeparator;
 			}
@@ -232,9 +238,10 @@ jQuery.autocomplete = function(input, options) {
 	};
 
 	// fills in the input box w/the first match (assumed to be the best match)
-	function autoFill(sValue){
+	function autoFill(q, sValue){
+		// autofill in the complete box w/the first match as long as the user hasn't entered in more data
 		// if the last user key pressed was backspace, don't autofill
-		if( lastKeyPressCode != 8 ){
+		if( options.autoFill && ($input.val().toLowerCase() == q.toLowerCase()) && lastKeyPressCode != 8 ){
 			// fill in the value (keep the case the user has typed)
 			$input.val($input.val() + sValue.substring(prev.length));
 			// select the portion of the value not typed by the user (so the next character will erase)
@@ -249,42 +256,36 @@ jQuery.autocomplete = function(input, options) {
 		var iWidth = (options.width > 0) ? options.width : $input.width();
 		// reposition
 		$results.css({
-			width: parseInt(iWidth) + "px",
-			top: (pos.y + input.offsetHeight) + "px",
-			left: pos.x + "px"
+			width: iWidth,
+			top: pos.y + input.offsetHeight,
+			left: pos.x
 		}).show();
 	};
 
 	function hideResults() {
-		if (timeout) clearTimeout(timeout);
+		clearTimeout(timeout);
 		timeout = setTimeout(hideResultsNow, 200);
 	};
 
 	function hideResultsNow() {
-		if (timeout) clearTimeout(timeout);
-		$input.removeClass(options.loadingClass);
-		if ($results.is(":visible")) {
-			$results.hide();
-		}
+		clearTimeout(timeout);
+		stopLoading();
+		$results.hide();
 		if (options.mustMatch) {
-			var v = $input.val();
-			if (v != input.lastSelected) {
+			if ($input.val() != input.lastSelected) {
 				selectItem(null);
 			}
 		}
 	};
 
 	function receiveData(q, data) {
-		if (data) {
-			$input.removeClass(options.loadingClass);
-			$results.html("");
-
-			// if the field no longer has focus or if there are no matches, do not display the drop down
-			if( !hasFocus || data.length == 0 ) return hideResultsNow();
-
-			$results.append(dataToDom(data)).bgiframe();
-			// autofill in the complete box w/the first match as long as the user hasn't entered in more data
-			if( options.autoFill && ($input.val().toLowerCase() == q.toLowerCase()) ) autoFill(data[0][0]);
+		if ( data && data.length && hasFocus ) {
+			stopLoading();
+			
+			$results.empty().append(dataToDom(data)).bgiframe();
+			
+			autoFill(q, data[0][0]);
+			
 			showResults();
 		} else {
 			hideResultsNow();
@@ -292,7 +293,6 @@ jQuery.autocomplete = function(input, options) {
 	};
 
 	function parseData(data) {
-		if (!data) return null;
 		var parsed = [];
 		var rows = data.split(options.lineSeparator);
 		for (var i=0; i < rows.length; i++) {
@@ -344,7 +344,7 @@ jQuery.autocomplete = function(input, options) {
 	function requestData(q) {
 		var data = options.cacheLength ? cache.load(q) : null;
 		// recieve the cached data
-		if (data) {
+		if (data && data.length) {
 			receiveData(q, data);
 		// if an AJAX url has been supplied, try loading the data now
 		} else if( (typeof options.url == "string") && (options.url.length > 0) ){
@@ -355,15 +355,14 @@ jQuery.autocomplete = function(input, options) {
 			});
 		// if there's been no data found, remove the loading class
 		} else {
-			$input.removeClass(options.loadingClass);
+			stopLoading();
 		}
 	};
 
 	function makeUrl(q) {
 		if ( options.multiple ) {
-			if(q.lastIndexOf(options.multipleSeparator) >= 1) {
-				sep_pos = q.lastIndexOf(options.multipleSeparator);
-				q = q.substr(sep_pos+1);
+			if ( q.lastIndexOf(options.multipleSeparator) >= 1 ) {
+				q = q.substr( q.lastIndexOf(options.multipleSeparator) + 1);
 			} 
 		}
 		var url = options.url + "?q=" + q;
@@ -390,6 +389,10 @@ jQuery.autocomplete = function(input, options) {
 			// no matches
 			findValueCallback(q, null);
 		}
+	}
+	
+	function stopLoading() {
+		$input.removeClass(options.loadingClass);
 	}
 
 	function findValueCallback(q, data){
@@ -424,6 +427,7 @@ jQuery.autocomplete = function(input, options) {
 		if( options.onFindValue ) setTimeout(function() { options.onFindValue(li) }, 1);
 	}
 
+	// TODO use dimensions plug instead?
 	function findPos(obj) {
 		var curleft = obj.offsetLeft || 0;
 		var curtop = obj.offsetTop || 0;
@@ -463,10 +467,10 @@ jQuery.autocomplete.Cache = function(options) {
 	};
 	
 	this.add = function(q, data) {
-		if (!this.length || this.length > options.cacheLength) {
+		if (this.length > options.cacheLength) {
 			this.flush();
-			this.length++;
-		} else if (!this[q]) {
+		}
+		if (!this.data[q]) {
 			this.length++;
 		}
 		this.data[q] = data;
