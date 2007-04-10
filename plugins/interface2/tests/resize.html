@@ -1,0 +1,164 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Resizables demo - Interface plugin for jQuery</title>
+<script type="text/javascript" src="../../../jquery/src/jquery/jquery.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx/fx.js"></script>
+<script type="text/javascript" src="../iutil.js"></script>
+<script type="text/javascript" src="../ifx.js"></script>
+<script type="text/javascript" src="../behavior.js"></script>
+<script type="text/javascript" src="../resizables.js"></script>
+<style type="text/css" media="all">
+
+body
+{
+	background: #fff;
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+#window {
+	position: absolute;
+	top: 100px;
+	left: 100px;
+	width: 400px;
+	height: 300px;
+	padding: 5px;
+	background-color: #68BFEF;
+}
+#title {
+	position: aboslute;
+	height: 30px;
+	line-height: 30px;
+	cursor: move;
+	width: 100%;
+	top: 0;
+	left: 0;
+}
+#content {
+	background-color: #fff;
+	position: absolute;
+	top: 30px;
+	left: 5px;
+	width: 400px;
+	height: 275px;
+}
+#resizen {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 5px;
+	width: 100%;
+	cursor: n-resize;
+}
+#resizene {
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: 10px;
+	width: 10;
+	cursor: ne-resize;
+}
+#resizee {
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: 100%;
+	width: 5px;
+	cursor: e-resize;
+}
+#resizese {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	height: 10px;
+	width: 10px;
+	cursor: se-resize;
+}
+#resizes {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	height: 5px;
+	width: 100%;
+	cursor: s-resize;
+}
+#resizesw {
+	position: absolute;
+	left: 0;
+	right: 0;
+	height: 10px;
+	width: 10px;
+	cursor: sw-resize;
+}
+#resizew {
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 5px;
+	cursor: w-resize;
+}
+#resizenw {
+	position: absolute;
+	left: 0;
+	top: 0;
+	height: 10px;
+	width: 10px;
+	cursor: nw-resize;
+}
+</style>
+</head>
+<body>
+
+<div id="window">
+	<div id="title">Window title</div>
+	<div id="content"></div>
+	<div id="resizen"></div>
+	<div id="resizee"></div>
+	<div id="resizes"></div>
+	<div id="resizew"></div>
+	<div id="resizenw"></div>
+	<div id="resizesw"></div>
+	<div id="resizese"></div>
+	<div id="resizene"></div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(
+	function()
+	{
+		var titleEL = $('#title');
+		var contentEL = $('#content');
+		$('#window').resizable({
+			minWidth: 200,
+			minHeight: 100,
+			maxWidth: 700,
+			maxHeight: 600,
+			handles: {
+				n: '#resizen',
+				ne: '#resizene',
+				e: '#resizee',
+				se: '#resizese',
+				s: '#resizes',
+				sw: '#resizesw',
+				w: '#resizew',
+				nw: '#resizenw'
+			},
+			dragHandle: '#title',
+			onResize: function(size, position) {
+				contentEL.css({
+					width: size.w +'px',
+					height: size.h - 25 + 'px'
+				});
+			}
+		});
+	}
+);
+</script>
+</body>
+</html>

@@ -5,6 +5,9 @@
 				if ($.DDM.currentTarget.resizeDirection) {
 					return $.DDM.currentTarget;
 				}
+				if (!el.DB.dragHandle) {
+					return;
+				}
 				var isDragHandle = false;
 				el.DB.dragHandle.each(function(){
 					if (this == $.DDM.currentTarget) {

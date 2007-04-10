@@ -75,8 +75,8 @@ jQuery.iUtil = {
 	},
 	getSize : function(e)
 	{
-		var w = jQuery.curCSS(e,'width');
-		var h = jQuery.curCSS(e,'height');
+		var w = parseInt(jQuery.curCSS(e,'width'), 10);
+		var h = parseInt(jQuery.curCSS(e,'height'), 10);
 		var wb = 0;
 		var hb = 0;
 		if (jQuery.curCSS(e, 'display') != 'none') {
