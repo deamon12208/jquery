@@ -138,7 +138,7 @@ jQuery.autocomplete = function(input, options) {
 	
 	function lastWord(value) {
 		return options.multiple
-			? value.substring( value.indexOf(options.multipleSeparator) + (value.indexOf(options.multipleSeparator) != -1 ? options.multipleSeparator.length : 0) )
+			? value.substring( value.lastIndexOf(options.multipleSeparator) + (value.lastIndexOf(options.multipleSeparator) != -1 ? options.multipleSeparator.length : 0) )
 			: value;
 	}
 	
