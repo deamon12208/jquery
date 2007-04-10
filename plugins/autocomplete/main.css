@@ -43,3 +43,8 @@ ul {
 #content {
 	padding: 10px;
 }
+
+label {
+	float: left;
+	width: 10em;
+}

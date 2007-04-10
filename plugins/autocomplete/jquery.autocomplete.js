@@ -11,7 +11,89 @@
  *
  */
 
-jQuery.autocomplete = function(input, options) {
+/*
+TODO
+- mixing multiple with autofill doesn't work yet, only for the first term
+- modify callbacks to pass additional data as arguments, instead of binding it to dom elements
+*/
+
+/**
+ * Provide autocomplete for one text-input or textarea (the first from the matched elements).
+ *
+ * @example $("#input_box").autocomplete("my_autocomplete_backend.php");
+ * @before <input id="input_box" />
+ * @desc Autocomplte a text-input with remote data. For small to giant datasets.
+ *
+ * When the user starts typing, a request is send to the specified backend ("my_autocomplete_backend.php"),
+ * with a GET parameter named q that contains the current value of the input box.
+ *
+ * A value of "foo" would result in this request url: my_autocomplete_backend.php?q=foo
+ *
+ * The result must return with one value on each line. The result is presented in the order
+ * the backend sends it.
+ *
+ * @example $("#input_box").autocomplete(["Cologne", "Berlin", "Munich"]);
+ * @before <input id="input_box" />
+ * @desc Autcomplete a text-input with local data. For small datasets.
+ *
+ * @example $.getJSON("my_backend.php", function(data) {
+ *   $("#input_box").autocomplete(data);
+ * });
+ * @before <input id="input_box" />
+ * @desc Autcomplete a text-input with data received via AJAX. For small to medium sized datasets.
+ *
+ * @example $("#mytextarea").autocomplete(["Cologne", "Berlin", "Munich"], {
+ *  multiple: true
+ * });
+ * @before <textarea id="mytextarea" />
+ * @desc Autcomplete a textarea with local data (for small datasets). Once the user chooses one
+ * value, a separator is appended (by default a comma, see multipleSeparator option) and more values
+ * are autocompleted.
+ *
+ * @name autocomplete
+ * @type jQuery.Autocompleter
+ * @param String|Array urlOrData Pass either an URL for remote-autocompletion or an array of data for local auto-completion
+ * @param Map options Optional settings
+ * @option String inputClass This class will be added to the input box. Default: "ac_input"
+ * @option String resultsClass The class for the UL that will contain the result items (result items are LI elements). Default: "ac_results"
+ * @option String loadingClass The class for the input box while results are being fetched from the server. Default: "ac_loading"
+ * @option String lineSeparator The character that separates lines in the results from the backend. Default: "\n"
+ * @option String cellSeparator The character that separates cells in the results from the backend. Default: "|"
+ * @option Number minChars The minimum number of characters a user has to type before the autocompleter activates. Default: 1
+ * @option Number delay The delay in milliseconds the autocompleter waits after a keystroke to activate itself. Default: 400 for remote, 10 for local
+ * @option Number cacheLength The number of backend query results to store in cache. If set to 1 (the current result), no caching will happen. Do not set below 1. Default: 10
+ * @option Boolean matchSubset Whether or not the autocompleter can use a cache for more specific queries. This means that all matches of "foot" are a subset of all matches for "foo". Usually this is true, and using this options decreases server load and increases performance. Only useful with cacheLength settings bigger then one, like 10. Default: true
+ * @option Boolean matchCase Whether or not the comparison is case sensitive. Only important only if you use caching. Default: false
+ * @option Boolean matchContains Whether or not the comparison looks inside (i.e. does "ba" match "foo bar") the search results. Only important if you use caching. Default: false
+ * @option Booolean mustMatch If set to true, the autocompleter will only allow results that are presented by the backend. Note that illegal values result in an empty input box. In the example at the beginning of this documentation, typing "footer" would result in an empty input box. Default: false
+ * @option Object extraParams Extra parameters for the backend. If you were to specify { bar:4 }, the autocompleter would call my_autocomplete_backend.php?q=foo&bar=4 (assuming the input box contains "foo"). Default: {}
+ * @option Boolean selectFirst If this is set to true, the first autocomplete value will be automatically selected on tab/return, even if it has not been handpicked by keyboard or mouse action. If there is a handpicked (highlighted) result, that result will take precedence. Default: true
+ * @option Function formatItem Provides advanced markup for an item. For each row of results, this function will be called. The returned value will be displayed inside an LI element in the results list. Autocompleter will provide 3 parameters: the results row, the position of the row in the list of results, and the number of items in the list of results. Default: none
+ * @option Function onSelectItem Called when an item is selected. The autocompleter will specify a single argument, being the LI element selected. This LI element will have an attribute "extra" that contains an array of all cells that the backend specified. Default: none
+ * @option Boolean multiple Whether to allow more then one autocomplted-value to enter. Default: false
+ * @option String multipleSeparator Seperator to put between values when using multiple option. Default: ", "
+ * @option Number width Specify a custom width for the select box. Default: width of the input element
+ * @option Boolean autoFill Fill the textinput while still selecting a value, replacing the value if more is type or something else is selected. Default: false
+ * @option Number maxItemsToShow Limit the number of items to show. Default: 10
+ */
+jQuery.fn.autocomplete = function(urlOrData, options) {
+	var isUrl = typeof urlOrData == "string";
+	options = jQuery.extend({}, jQuery.Autocompleter.defaults, {
+		url: isUrl ? urlOrData : null,
+		data: isUrl ? null : urlOrData,
+		delay: isUrl ? jQuery.Autocompleter.defaults.delay : 10
+	}, options);
+	return new jQuery.Autocompleter(this[0], options);
+}
+
+/**
+ * Call to find the current selected value. The callback is the same as for the onSelectItem callback.
+ *
+ * @name jQuery.Autocompleter.findValue
+ * @param Function callback Executed when the current value (possibly request via ajax) is found
+ * @type undefined
+ */
+jQuery.Autocompleter = function(input, options) {
 
 	// Create jQuery object for input element
 	var $input = $(input).attr("autocomplete", "off");
@@ -29,13 +111,12 @@ jQuery.autocomplete = function(input, options) {
 	if( options.width > 0 )
 		$results.css("width", options.width);
 
-	input.autocompleter = this;
 	input.lastSelected = $input.val();
 	
 	var timeout = null;
 	var prev = "";
 	var active = -1;
-	var cache = new jQuery.autocomplete.Cache(options);
+	var cache = new jQuery.Autocompleter.Cache(options);
 	var keyb = false;
 	var hasFocus = false;
 	var lastKeyPressCode = null;
@@ -111,10 +192,25 @@ jQuery.autocomplete = function(input, options) {
 	});
 
 	hideResultsNow();
+	
+	this.findValue = function(callback) {
+		function findValueCallback(q, data) {
+			if( data && data.length )
+				for (var i=0; i < data.length; i++)
+					if( data[i][0].toLowerCase() == q.toLowerCase() )
+						// todo: pass additional data directly to callback
+						callback(createListItem(data[i], i, data.length)[0]);
+			else
+				callback();
+		}
+		request($input.val(), findValueCallback, findValueCallback);
+	}
 
 	function onChange() {
-		if( ignoreKeypress() )
-			return $results.hide();
+		if( ignoreKeypress() ) {
+			$results.hide()
+			return;
+		}
 		
 		var v = $input.val();
 		if ( !hasInputChanged(v) )
@@ -173,10 +269,8 @@ jQuery.autocomplete = function(input, options) {
 	function selectCurrent() {
 		var listItems = $results.find("li");
 		var selected = listItems.filter(".ac_over")[0];
-		if ( !selected ) {
-			if ( (options.selectOnly && listItems.length == 1) || options.selectFirst ) {
-				selected = listItems[0];
-			}
+		if ( !selected && options.selectFirst ) {
+			selected = listItems[0];
 		}
 		if (selected) {
 			selectItem(selected);
@@ -203,10 +297,8 @@ jQuery.autocomplete = function(input, options) {
 		
 		$input.val(v);
 		hideResultsNow();
-		if (options.onItemSelect) 
-			setTimeout(function() {
-				options.onItemSelect(li)
-			}, 10);
+		// todo: pass additional data directly to callback
+		options.onSelectItem && options.onSelectItem(li);
 	};
 
 	// selects a portion of the input string
@@ -308,6 +400,7 @@ jQuery.autocomplete = function(input, options) {
 				jQuery(this).removeClass("ac_over");
 			}).click(function() {
 				selectItem(this);
+				$input.focus();
 				return false;
 			});
 		}
@@ -335,32 +428,6 @@ jQuery.autocomplete = function(input, options) {
 		}
 		item.extra = extra;
 		return jQuery(item);
-	}
-	
-	function findValueCallback(q, data){
-		if (data)
-			stopLoading();
-			
-		if( !options.onFindValue )
-			return;
-
-		var num = (data) ? data.length : 0;
-		var li = null;
-
-		for (var i=0; i < num; i++) {
-			if( data[i][0].toLowerCase() == q.toLowerCase() ){
-				li = createListItem(data[i], i, num)[0];
-				break;
-			}
-		}
-
-		setTimeout(function() {
-			options.onFindValue(li)
-		}, 10);
-	}
-
-	this.findValue = function(){
-		request($input.val(), findValueCallback, findValueCallback);
 	}
 	
 	function request(q, success, failure) {
@@ -398,7 +465,6 @@ jQuery.autocomplete = function(input, options) {
 		$input.removeClass(options.loadingClass);
 	}
 
-	// TODO use dimensions plug instead?
 	function findPos(obj) {
 		var curleft = obj.offsetLeft || 0;
 		var curtop = obj.offsetTop || 0;
@@ -410,9 +476,32 @@ jQuery.autocomplete = function(input, options) {
 	}
 }
 
+jQuery.Autocompleter.defaults = {
+	inputClass: "ac_input",
+	resultsClass: "ac_results",
+	loadingClass: "ac_loading",
+	lineSeparator: "\n",
+	cellSeparator: "|",
+	minChars: 1,
+	delay: 400,
+	matchCase: false,
+	matchSubset: true,
+	matchContains: false,
+	cacheLength: 10,
+	mustMatch: false,
+	extraParams: {},
+	selectFirst: true,
+	maxItemsToShow: 10,
+	autoFill: false,
+	width: 0,
+	multiple: false,
+	multipleSeparator: ","
+};
+
 /**
  * Add a class to the selected index, and remove it from the other matched elements.
  *
+ * @private
  * @name indexClass
  * @param Number index The index of the element to match
  * @param String className The className to add and remove
@@ -421,7 +510,7 @@ jQuery.fn.indexClass = function(index, className) {
 	return this.removeClass(className).eq(index).addClass(className).end();
 };
 
-jQuery.autocomplete.Cache = function(options) {
+jQuery.Autocompleter.Cache = function(options) {
 
 	this.flush = function() {
 		this.data = {};
@@ -471,87 +560,3 @@ jQuery.autocomplete.Cache = function(options) {
 		return null;
 	};
 };
-
-jQuery.autocomplete.defaults = {
-	inputClass: "ac_input",
-	resultsClass: "ac_results",
-	loadingClass: "ac_loading",
-	lineSeparator: "\n",
-	cellSeparator: "|",
-	minChars: 1,
-	delay: 400,
-	matchCase: false,
-	matchSubset: true,
-	matchContains: false,
-	cacheLength: 10,
-	mustMatch: false,
-	extraParams: {},
-	selectFirst: false,
-	selectOnly: false,
-	maxItemsToShow: -1,
-	autoFill: false,
-	width: 0,
-	multiple: false,
-	multipleSeparator: ", "
-};
-
-/**
- * Apply to one or more text inputs or textareas to provide 
- * autocompletion.
- *
- * @example $("#input_box").autocomplete("my_autocomplete_backend.php");
- * @before <input id="input_box" />
- * @desc When a user starts typing in the input box, the autocompleter
- * will request my_autocomplete_backend.php with a GET parameter
- * named q that contains the current value of the input box.
- * Let's assume that the user has typed "foo"(without quotes).
- * Autocomplete will then request my_autocomplete_backend.php?q=foo.
- *
- * The backend should output possible values for the autocompleter, each
- * on a single line. Output cannot contain the pipe symbol "|", since that
- * is considered a separator (more on that later).
- *
- * Note that the autocompleter will present the options in the order the backend sends them.
- *
- * @name autocomplte
- * @type jQuery
- * @param String|Array urlOrData Pass either an URL for remote-autocompletion
- *		 or an array of data for local auto-completion
- * @param Map options Optional settings
- * @option String inputClass This class will be added to the input box. Default: "ac_input"
- * @option String resultsClass The class for the UL that will contain the result items (result items are LI elements). Default: "ac_results"
- * @option String loadingClass The class for the input box while results are being fetched from the server. Default: "ac_loading"
- * @option String lineSeparator The character that separates lines in the results from the backend. Default: "\n"
- * @option String cellSeparator The character that separates cells in the results from the backend. Default: "|"
- * @option Number minChars The minimum number of characters a user has to type before the autocompleter activates. Default: 1
- * @option Number delay The delay in milliseconds the autocompleter waits after a keystroke to activate itself. Default: 400
- * @option Number cacheLength The number of backend query results to store in cache. If set to 1 (the current result), no caching will happen. Do not set below 1. Default: 10
- * @option Boolean matchSubset Whether or not the autocompleter can use a cache for more specific queries. This means that all matches of "foot" are a subset of all matches for "foo". Usually this is true, and using this options decreases server load and increases performance. Only useful with cacheLength settings bigger then one, like 10. Default: true
- * @option Boolean matchCase Whether or not the comparison is case sensitive. Only important only if you use caching. Default: false
- * @option Boolean matchContains Whether or not the comparison looks inside (i.e. does "ba" match "foo bar") the search results. Only important if you use caching. Default: false
- * @option Booolean mustMatch If set to true, the autocompleter will only allow results that are presented by the backend. Note that illegal values result in an empty input box. In the example at the beginning of this documentation, typing "footer" would result in an empty input box. Default: false
- * @option Object extraParams Extra parameters for the backend. If you were to specify { bar:4 }, the autocompleter would call my_autocomplete_backend.php?q=foo&bar=4 (assuming the input box contains "foo"). Default: {}
- * @option Boolean selectFirst If this is set to true, the first autocomplete value will be automatically selected on tab/return, even if it has not been handpicked by keyboard or mouse action. If there is a handpicked (highlighted) result, that result will take precedence. Default: false
- * @option Boolean selectOnly If this is set to true, and there is only one autocomplete when the user hits tab/return, it will be selected even if it has not been handpicked by keyboard or mouse action. This overrides selectFirst. Default: false
- * @option Function formatItem Provides advanced markup for an item. For each row of results, this function will be called. The returned value will be displayed inside an LI element in the results list. Autocompleter will provide 3 parameters: the results row, the position of the row in the list of results, and the number of items in the list of results. Default: none
- * @option Function onSelectItem Called when an item is selected. The autocompleter will specify a single argument, being the LI element selected. This LI element will have an attribute "extra" that contains an array of all cells that the backend specified. Default: none
- * @option Boolean multiple Whether to allow more then one autocomplted-value to enter. Default: false
- * @option String multipleSeparator Seperator to put between values when using multiple option. Default: ", "
- * @option Number width Width to use for both the textinput and the selectbox. Default: none
- * @option Boolean autoFill Fill the textinput while still selecting a value, replacing the value if more is type or something else is selected. Default: false
- * @option Number maxItemsToShow Limit the number of items to show. Default: no limit
- */
-jQuery.fn.autocomplete = function(urlOrData, options) {
-
-	options = jQuery.extend({}, jQuery.autocomplete.defaults, options);
-
-	// Set url or data as option
-	options[ typeof urlOrData == "string" ? 'url' : 'data' ] = urlOrData;
-
-	this.each(function() {
-		new jQuery.autocomplete(this, options);
-	});
-
-	// Don't break the chain
-	return this;
-}
