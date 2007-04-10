@@ -51,7 +51,7 @@
 			$.DDM.dragged.DB.beforeDrag.apply($.DDM.dragged, [e]);
 			var toReturn = $.DDM.dragged.DB.drag.apply($.DDM.dragged, [e]);
 			
-			//check if dragged element validates against drop targets
+			//checks if dragged element validates against drop targets
 			if ($.DDM.dragged.DB.hasTargets) {
 				for (var i=0; i< $.DDM.dragged.DB.targets.length; i++) {
 					$.DDM.dragged.DB.targets[i].DrB.checkTarget.apply($.DDM.dragged.DB.targets[i], [e]);

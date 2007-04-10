@@ -118,7 +118,7 @@
 				el.style.display = 'block';
 			},
 			startDrag: function() {
-				this.DB.onStart.apply(this.DB.draggedEls, [this.DB.proxy||this.DB.draggedEls]);
+				this.DB.onStart.apply(this.DB.draggedEls, [this.DB.proxy||this.DB.draggedEls, $.DDM.dragged.DB.targets]);
 				return false;
 			},
 			//get pointer (overides the default fonction because of the axis option)
