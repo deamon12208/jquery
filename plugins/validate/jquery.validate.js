@@ -199,7 +199,8 @@ TODO
  *      Default: none, the default message for the method is used.
  * @option Map rules Key/value pairs defining custom rules.
  *		Key is the ID or name (for radio/checkbox inputs) of an element,
- *		value is an object consisting of rule/parameter pairs, eg. {required: true, min: 3}
+ *		value is an object consisting of rule/parameter pairs, eg. {required: true, min: 3}.
+ *   	Once specified, metadata rules are completely ignored.
  *		Default: none, rules are read from metadata via metadata plugin
  * @option String event The event on which to validate. If anything is specified, like
  *		blur or keyup, each element is validated on that event. Default: none
