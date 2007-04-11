@@ -60,14 +60,12 @@
 				this.DrB.isMouseOver = false;
 			},
 			checkTarget: function() {
-				if (!$.DDM.dragged.DB.cursorAt) {
-					var dragged = {
-						x: $.DDM.dragged.DB.position.x + $.DDM.pointer.x - $.DDM.dragged.DB.pointer.x,
-						y: $.DDM.dragged.DB.position.y + $.DDM.pointer.y - $.DDM.dragged.DB.pointer.y,
-						w: $.DDM.dragged.DB.size.wb,
-						h: $.DDM.dragged.DB.size.hb
-					}
-				}
+				var dragged = {
+					x: $.DDM.dragged.DB.position.x + $.DDM.pointer.x - $.DDM.dragged.DB.pointer.x,
+					y: $.DDM.dragged.DB.position.y + $.DDM.pointer.y - $.DDM.dragged.DB.pointer.y,
+					w: $.DDM.dragged.DB.size.wb,
+					h: $.DDM.dragged.DB.size.hb
+				};
 				if (($.DDM.dragged.DB.cursorAt && this.DrB.isMouseOver == true) || this.DrB.valid[this.DrB.tolerance](this.DrB, dragged)) {
 					if (!this.DrB.isOver && options.hoverClass) {
 						this.DrB.isOver = true;

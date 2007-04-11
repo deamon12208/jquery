@@ -43,7 +43,7 @@
 					Math.abs($.DDM.pointer.x - $.DDM.dragged.DB.pointer.x),
 					Math.abs($.DDM.pointer.y - $.DDM.dragged.DB.pointer.y)
 				);
-				if (snap > $.DDM.dragged.DB.snap) {
+				if (snap >= $.DDM.dragged.DB.snap) {
 					return $.DDM.startDrag(e);
 				}
 				return;
@@ -154,7 +154,7 @@
 		stopDrag: function(){},
 		targets: [],
 		hasTargets: false,
-		snap: 3,
+		snap: 0,
 		getDraggedEls: function(el) {
 			return el;
 		},
@@ -180,11 +180,12 @@
 			$.DDM.dragged = this;
 			$.DDM.dragged.DB.dragThreshMet = false;
 			$.DDM.dragged.DB.pointer = $.DDM.pointer = {x:e.pageX, y:e.pageY};
+			$.DDM.findTargets();
 			if (this.DB.preventionTimeout) {
 				$.DDM.preventionTimeout = setTimeout(function(){$.DDM.startDrag(e)}, this.DB.preventionTimeout);
+				return false;
 			}
-			$.DDM.findTargets();
-			return false;
+			return $.DDM.startDrag(e);
 		}
 	};
 	//drop behavior object
