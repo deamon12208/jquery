@@ -19,6 +19,10 @@
 		//current pointer position
 		pointer: null,
 		
+		shiftKey: false,
+		altKey: false,
+		ctrlKey: false,
+		
 		//dragged element/elements
 		dragged: null,
 		
@@ -35,6 +39,9 @@
 				
 				//store pointer position
 				$.DDM.pointer = $.DDM.dragged.DB.getPointer.apply($.DDM.dragged,[e]);
+				$.DDM.shiftKey = e.shiftKey;
+				$.DDM.altKey = e.altKey;
+				$.DDM.ctrlKey = e.ctrlKey;
 			}
 			
 			//if the pointer was not moved enough do not start the dragging action
@@ -173,6 +180,9 @@
 			$(document).bind('mousemove', $.DDM.mouseMove);
 			$(document).bind('mouseup', $.DDM.mouseUp);
 			$.DDM.currentTarget = e.target;
+			$.DDM.shiftKey = e.shiftKey;
+			$.DDM.altKey = e.altKey;
+			$.DDM.ctrlKey = e.ctrlKey;
 			this.DB.draggedEls = this.DB.getDraggedEls(this, e);
 			if (!this.DB.draggedEls) {
 				return;

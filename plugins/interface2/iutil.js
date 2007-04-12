@@ -219,13 +219,13 @@ jQuery.iUtil = {
 			}
 		);
 	},
-	getInnerWidth :  function(el) {
-		return el.offsetWidth
+	getInnerWidth :  function(el, scroll) {
+		return (scroll ? Math.max(el.scrollWidth,el.offsetWidth) : el.offsetWidth)
 					- (parseInt($.curCSS(el, 'borderLeftWidth'), 10)||0)
 					- (parseInt($.curCSS(el, 'borderRightWidth'), 10)||0);
 	},
-	getInnerHeight : function(el) {
-		return el.offsetHeight
+	getInnerHeight : function(el, scroll) {
+		return (scroll ? Math.max(el.scrollHeight,el.offsetHeight) : el.offsetHeight)
 					- (parseInt($.curCSS(el, 'borderTopWidth'), 10)||0)
 					- (parseInt($.curCSS(el, 'borderBottomWidth'), 10)||0);
 	},

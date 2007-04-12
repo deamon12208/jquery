@@ -1,6 +1,8 @@
 
 (function($) {
+	
 	$.fn.slider = function(options) {
+		
 		options = $.extend({
 			keyup: function(e) {
 				if (/^35$|36$|38$|39$|40$|37$/.test(e.keyCode)) {
@@ -69,7 +71,7 @@
 			},
 			moveThumb: function(e, position) {
 				//apply grid
-				if (this.DB.grid && (this.DB.ticksOn || (e && (e.ctrlKey||e.shiftKey||e.altKey)))) {
+				if (this.DB.grid && (this.DB.ticksOn || $.DDM.ctrlKey||$.DDM.shiftKey||$.DDM.altKey)) {
 					position = this.DB.applyGrid(position);
 				}
 				$(this.DB.draggedEls).css({
@@ -99,14 +101,10 @@
 					w: $.iUtil.getInnerWidth(this) - this.DB.size.wb,
 					h: $.iUtil.getInnerHeight(this) - this.DB.size.hb
 				};
-				/*if (this.DB.ticks) {
-					this.DB.grid = {
-						x: this.DB.maximum.w/this.DB.ticks,
-						y: this.DB.maximum.h/this.DB.ticks
-					};
+				if (this.DB.ticks) {
 					this.DB.maximum.w = parseInt(Math.floor(this.DB.maximum.w/this.DB.grid.x)*this.DB.grid.x, 10);
-					this.DB.maximum.h = parseInt(Math.floor(this.DB.maximum.h/this.DB.ticks)*this.DB.ticks, 10);
-				}*/
+					this.DB.maximum.h = parseInt(Math.floor(this.DB.maximum.h/this.DB.grid.y)*this.DB.grid.y, 10);
+				}
 				this.DB.limitOffset = {
 					x: 0,
 					y: 0,
@@ -239,8 +237,8 @@
 			//apply grid to current position
 			applyGrid: function(delta) {
 				return {
-					x: (parseInt((delta.x + (this.grid.x* delta.x/Math.abs(delta.x))/2)/this.grid.x, 10)||0) * this.grid.x,
-					y: (parseInt((delta.y + (this.grid.y* delta.y/Math.abs(delta.y))/2)/this.grid.y, 10)||0) * this.grid.y
+					x: (parseInt(delta.x/this.grid.x, 10)||0) * this.grid.x,
+					y: (parseInt(delta.y/this.grid.y, 10)||0) * this.grid.y
 				};
 			},
 			restricted: false,
@@ -262,11 +260,11 @@
 		
 		return this.each(function(){
 			options.thumbs = $(options.thumbs, this);
-			curPosition = $.curCSS(this, 'position');
-			if (curPosition != 'absolute' && curPosition != 'relative') {
-				this.style.position = 'relative';
-			}
 			if (!this.DB || options.thumbs.size() == 0) {
+				curPosition = $.curCSS(this, 'position');
+				if (curPosition != 'absolute' && curPosition != 'relative') {
+					this.style.position = 'relative';
+				}
 				if (options.ticks) {
 					options.grid = {
 						x: parseInt($.iUtil.getInnerWidth(this)/options.ticks, 10),

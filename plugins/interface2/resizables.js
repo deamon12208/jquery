@@ -121,7 +121,7 @@
 							size.w = Math.min(Math.min(this.DB.maxRight - position.x, this.DB.maxWidth), Math.max(this.DB.minWidth, size.w));
 							break;
 					}
-					if (this.DB.preserveRatio) {
+					if (this.DB.preserveRatio && (this.DB.preserveRatioOn || e.ctrlKey||e.shiftKey||e.altKey)) {
 						switch(direction) {
 							case 'se':
 							case 'e':

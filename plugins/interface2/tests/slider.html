@@ -28,10 +28,11 @@ body
 	height: 25px;
 	overflow: hidden;
 	background-image: url(images/slider_back.png);
-	background-position: left 6px;
+	background-position: -1px 6px;
 	background-repeat: no-repeat;
 	top: 50px;
 	left: 150px;
+	overflow: hidden;
 }
 #horSlider .thumb {
 	position: absolute;
@@ -40,6 +41,7 @@ body
 	width: 11px;
 	height: 21px;
 	background-image: url(images/slider1.gif);
+	overflow: hidden;
 }
 #slider1 {
 	position: absolute;
@@ -79,6 +81,7 @@ body
 	background-repeat: no-repeat;
 	top: 50px;
 	left: 300px;
+	overflow: hidden;
 }
 #horSlider2 .thumb {
 	position: absolute;
@@ -87,6 +90,7 @@ body
 	width: 11px;
 	height: 21px;
 	background-image: url(images/slider2.gif);
+	overflow: hidden;
 }
 #horSlider2 .thumb2 {
 	position: absolute;
@@ -95,6 +99,7 @@ body
 	width: 11px;
 	height: 21px;
 	background-image: url(images/slider3.gif);
+	overflow: hidden;
 }
 #horSlider2 .thumb3 {
 	position: absolute;
@@ -103,6 +108,7 @@ body
 	width: 11px;
 	height: 21px;
 	background-image: url(images/slider4.gif);
+	overflow: hidden;
 }
 #verSlider {
 	position: absolute;
@@ -114,6 +120,7 @@ body
 	background-repeat: no-repeat;
 	top: 50px;
 	left: 50px;
+	overflow: hidden;
 }
 #verSlider .thumb {
 	position: absolute;
@@ -122,6 +129,7 @@ body
 	width: 21px;
 	height: 11px;
 	background-image: url(images/slider5.gif);
+	overflow: hidden;
 }
 
 #horSlider3 {
@@ -134,6 +142,7 @@ body
 	background-repeat: no-repeat;
 	top: 250px;
 	left: 150px;
+	overflow: hidden;
 }
 #horSlider3 .thumb {
 	position: absolute;
@@ -142,6 +151,7 @@ body
 	width: 11px;
 	height: 21px;
 	background-image: url(images/slider4.gif);
+	overflow: hidden;
 }
 #verSlider2 {
 	position: absolute;
@@ -153,6 +163,7 @@ body
 	background-repeat: no-repeat;
 	top: 250px;
 	left: 50px;
+	overflow: hidden;
 }
 #verSlider2 .thumb {
 	position: absolute;
@@ -161,6 +172,7 @@ body
 	width: 21px;
 	height: 11px;
 	background-image: url(images/slider5.gif);
+	overflow: hidden;
 }
 #toggleTicks {
 	position: absolute;
@@ -185,6 +197,8 @@ body
 	var slider1 = null;
 	var slider2 = null;
 	var slider3 = null;
+	var slider4 = null;
+	var slider5 = null;
 	var sliderver = null;
 	var sliderhor = null;
 	$(document).ready(

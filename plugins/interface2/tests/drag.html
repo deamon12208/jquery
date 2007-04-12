@@ -176,10 +176,8 @@ $(document).ready(
 				ghostly:true,
 				zIndex: true,
 				onStart: function(dragged) {
-					$(dragged).animate({opacity: 0.4}, 500);
 				},
 				onStop: function(dragged, position) {
-					$(dragged).animate({opacity: 1}, 500);
 					$(this).animate({left: position.x, top: position.y}, 500, function(){$(dragged).remove()});
 					return true;
 				}

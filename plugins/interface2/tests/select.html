@@ -1,0 +1,151 @@
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Selectable  demo - Interface plugin for jQuery</title>
+<script type="text/javascript" src="../../../jquery/src/jquery/jquery.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx/fx.js"></script>
+<script type="text/javascript" src="../iutil.js"></script>
+<script type="text/javascript" src="../ifx.js"></script>
+<script type="text/javascript" src="../behavior.js"></script>
+<script type="text/javascript" src="../selectables.js"></script>
+<script type="text/javascript" src="../autoscroller.js"></script>
+<style type="text/css" media="all">
+
+body
+{
+	background: #fff;
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+#msd
+{
+	width: 700px;
+	height: 400px;
+	overflow: auto;
+	position: relative;
+}
+.selectableitem
+{
+	width: 160px;
+	height: 140px;
+	margin: 10px;
+	float: left;
+	text-align: center;
+	padding: 10px;
+	border: 2px solid #fff;
+}
+.selectableitem p
+{
+	font-weight: bold;
+}
+.selectableitem div
+{
+	line-height: 120px;
+	height: 120px;
+	width: 160px;
+}
+.selectableitem div img
+{
+}
+.selecteditem
+{
+	border: 2px solid #999;
+	background-color: #f0f0f0;
+}
+.rubberband {
+	background-color: #eee;
+	border: 1px solid #666;
+}
+</style>
+</head>
+<body>
+	<div id="msd">
+		<div class="selectableitem" id="item1">
+			<div><img src="images/brasov2.jpg" alt="" /></div>
+			<p>Item 1</p>
+		</div>
+		<div class="selectableitem" id="item2">
+			<div><img src="images/brasov3.jpg" alt="" /></div>
+			<p>Item 2</p>
+	
+		</div>
+		<div class="selectableitem" id="item3">
+			<div><img src="images/brasov7.jpg" alt="" /></div>
+			<p>Item 3</p>
+		</div>
+		<div class="selectableitem" id="item4">
+			<div><img src="images/brasov18.jpg" alt="" /></div>
+			<p>Item 4</p>
+	
+		</div>
+		<div class="selectableitem" id="item5">
+			<div><img src="images/brasov22.jpg" alt="" /></div>
+			<p>Item 5</p>
+		</div>
+		<div class="selectableitem" id="item6">
+			<div><img src="images/brasov26.jpg" alt="" /></div>
+			<p>Item 6</p>
+	
+		</div>
+		<div class="selectableitem" id="item7">
+			<div><img src="images/brasov2.jpg" alt="" /></div>
+			<p>Item 7</p>
+		</div>
+		<div class="selectableitem" id="item8">
+			<div><img src="images/brasov3.jpg" alt="" /></div>
+			<p>Item 8</p>
+	
+		</div>
+		<div class="selectableitem" id="item9">
+			<div><img src="images/brasov7.jpg" alt="" /></div>
+			<p>Item 9</p>
+		</div>
+		<div class="selectableitem" id="item10">
+			<div><img src="images/brasov18.jpg" alt="" /></div>
+			<p>Item 10</p>
+	
+		</div>
+		<div class="selectableitem" id="item11">
+			<div><img src="images/brasov22.jpg" alt="" /></div>
+			<p>Item 11</p>
+		</div>
+		<div class="selectableitem" id="item12">
+			<div><img src="images/brasov26.jpg" alt="" /></div>
+			<p>Item 12</p>
+	
+		</div>
+	</div>
+	<script type="text/javascript">
+	var selectscroll;
+	$(document).ready(
+		function()
+		{
+			$('#msd').selectable({
+				subject: 'div.selectableitem',
+				selectedClass: 'selecteditem',
+				rubberbandClass: 'rubberband',
+				rubberbandOpacity: 0.5,
+				onStart: function() {
+					selectscroll = new $.autoscroller(this, 5, 30, 30);
+				},
+				onStop: function() {
+					selectscroll.stop();
+				},
+				onSelect: function() {
+				},
+				onDeselect: function() {
+				},
+				onSelected: function() {
+					return false;
+				}
+			});
+		}
+	);
+	</script>
+</body>
+</html>
