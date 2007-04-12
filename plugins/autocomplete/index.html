@@ -2,7 +2,7 @@
 <html>
 <head>
 
-<title>jQuery Autocomplete</title>
+<title>jQuery Autocomplete Plugin</title>
 <script type="text/javascript" src="jquery-1.1.2.pack.js"></script>
 <script type='text/javascript' src='jquery.bgiframe.min.js'></script>
 <script type='text/javascript' src='jquery.autocomplete.js'></script>
@@ -30,8 +30,8 @@ $().ready(function() {
 	
 	var completer2 = $("#suggest2").autocomplete("search.php", {
 		delay: 150,
-		formatItem: formatItem,
-		autoFill: true
+		width: 260,
+		formatItem: formatItem
 	});
 	$("#button2").click(function() {
 		completer2.findValue(findValueCallback);
@@ -48,7 +48,10 @@ $().ready(function() {
 		onSelectItem: findValueCallback,
 		multiple: true,
 		matchContains: true,
-		formatItem: formatItem
+		formatItem: formatItem,
+		extraParams: {
+			foo: "bar"
+		}
 	});
 
 });
@@ -58,17 +61,10 @@ $().ready(function() {
 
 <body>
 
-<h1>jQuery Autocomplete Mod</h1>
+<h1>jQuery Autocomplete Plugin</h1>
 
 <div id="content">
-	<p>This is based on Dylan's initial plugin and Dan's and Anjesh' mods.</p>
-	
-	<h2>Enhancements</h2>
-	<ul>
-		<li>
-			Allow multiple selections for both local and remote data.
-		</li>
-	</ul>
+	<h3>This is based on Dylan's initial plugin and Dan's and Anjesh' mods.</h3>
 	
 	<form onsubmit="return false;">
 		<p>
