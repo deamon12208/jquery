@@ -198,7 +198,7 @@ jQuery.datePicker = function()
 		if (jQuery.browser.msie) {
 
 			// we put a styled iframe behind the calendar so HTML SELECT elements don't show through
-			var iframe = [	'<iframe class="bgiframe" tabindex="-1" ',
+			var iframe = [	'<iframe class="bgiframe" tabindex="-1" src="blank.html" ',
 		 					'style="display:block; position:absolute;',
 							'top: 0;',
 							'left:0;',
@@ -255,7 +255,7 @@ jQuery.datePicker = function()
 	{
 		if (!_drawingMonth) {
 			var target = jQuery.browser.msie ? window.event.srcElement : e.target;
-			console.log(jQuery(target));
+			//console.log(jQuery(target));
 			var cp = jQuery(target).findClosestParent('div.popup-calendar-wrapper');
 			if (cp.get(0).className != 'date-picker-holder') {
 				_closeDatePicker();
