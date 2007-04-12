@@ -13,12 +13,14 @@
 
 /*
 TODO
-- modify callbacks to pass additional data as arguments, instead of binding it to dom elements
+- pass plain data to result handler instead of expanded dom element
 - trim/ignore whitespace between multiple items for more tolerance
+- allow modification of not-last value in multiple-fields
+- add support for multiple fields for findValue/result-event
 */
 
 /**
- * Provide autocomplete for one text-input or textarea (the first from the matched elements).
+ * Provide autocomplete for text-inputs or textareas.
  *
  * @example $("#input_box").autocomplete("my_autocomplete_backend.php");
  * @before <input id="input_box" />
@@ -51,7 +53,8 @@ TODO
  * are autocompleted.
  *
  * @name autocomplete
- * @type jQuery.Autocompleter
+ * @cat Plugins/Autocomplete
+ * @type jQuery
  * @param String|Array urlOrData Pass either an URL for remote-autocompletion or an array of data for local auto-completion
  * @param Map options Optional settings
  * @option String inputClass This class will be added to the input box. Default: "ac_input"
@@ -69,22 +72,61 @@ TODO
  * @option Object extraParams Extra parameters for the backend. If you were to specify { bar:4 }, the autocompleter would call my_autocomplete_backend.php?q=foo&bar=4 (assuming the input box contains "foo"). Default: {}
  * @option Boolean selectFirst If this is set to true, the first autocomplete value will be automatically selected on tab/return, even if it has not been handpicked by keyboard or mouse action. If there is a handpicked (highlighted) result, that result will take precedence. Default: true
  * @option Function formatItem Provides advanced markup for an item. For each row of results, this function will be called. The returned value will be displayed inside an LI element in the results list. Autocompleter will provide 3 parameters: the results row, the position of the row in the list of results, and the number of items in the list of results. Default: none
- * @option Function onSelectItem Called when an item is selected. The autocompleter will specify a single argument, being the LI element selected. This LI element will have an attribute "extra" that contains an array of all cells that the backend specified. Default: none
  * @option Boolean multiple Whether to allow more then one autocomplted-value to enter. Default: false
  * @option String multipleSeparator Seperator to put between values when using multiple option. Default: ", "
  * @option Number width Specify a custom width for the select box. Default: width of the input element
  * @option Boolean autoFill Fill the textinput while still selecting a value, replacing the value if more is type or something else is selected. Default: false
  * @option Number maxItemsToShow Limit the number of items to show. Default: 10
  */
-jQuery.fn.autocomplete = function(urlOrData, options) {
-	var isUrl = typeof urlOrData == "string";
-	options = jQuery.extend({}, jQuery.Autocompleter.defaults, {
-		url: isUrl ? urlOrData : null,
-		data: isUrl ? null : urlOrData,
-		delay: isUrl ? jQuery.Autocompleter.defaults.delay : 10
-	}, options);
-	return new jQuery.Autocompleter(this[0], options);
-}
+
+/**
+ * Handle the result of a search event. Is executed when the user selects a value or a
+ * programmatic search event is triggered.
+ *
+ * @example jQuery('input#suggest').result(function(event, li) {
+ *   jQuery("#result").html( !li ? "No match!" : "Selected: " + ( !!li.extra ? li.extra[0] : li.selectValue ));
+ * });
+ * @desc Bind a handler to the result event to display the selected value in a #result element
+ *
+ * @param Function handler The event handler, gets a default event object as first and
+ * 		the selected list item as second argument.
+ * @name result
+ * @cat Plugins/Autocomplete
+ * @type jQuery
+ */
+
+/**
+ * Trigger a search event. See result(Function) to binding to that event.
+ *
+ * @example jQuery('input#suggest').search();
+ * @desc Triggers a search event.
+ *
+ * @name search
+ * @cat Plugins/Autocomplete
+ * @type jQuery
+ */
+
+// * @option Function onSelectItem Called when an item is selected. The autocompleter will specify a single argument, being the LI element selected. This LI element will have an attribute "extra" that contains an array of all cells that the backend specified. Default: none
+
+jQuery.fn.extend({
+	autocomplete: function(urlOrData, options) {
+		var isUrl = typeof urlOrData == "string";
+		options = jQuery.extend({}, jQuery.Autocompleter.defaults, {
+			url: isUrl ? urlOrData : null,
+			data: isUrl ? null : urlOrData,
+			delay: isUrl ? jQuery.Autocompleter.defaults.delay : 10
+		}, options);
+		return this.each(function() {
+			new jQuery.Autocompleter(this, options);
+		});
+	},
+	result: function(handler) {
+		return this.bind("result", handler);
+	},
+	search: function() {
+		return this.trigger("search");
+	}
+});
 
 /**
  * Call to find the current selected value. The callback is the same as for the onSelectItem callback.
@@ -180,27 +222,24 @@ jQuery.Autocompleter = function(input, options) {
 	}).blur(function() {
 		hasFocus = false;
 		hideResults();
-	});
-
-	hideResultsNow();
-	
-	this.findValue = function(callback) {
+	}).bind("search", function() {
 		function findValueCallback(q, data) {
+			var result;
 			if( data && data.length ) {
 				for (var i=0; i < data.length; i++)
 					if( data[i][0].toLowerCase() == q.toLowerCase() ) {
 						// todo: pass additional data directly to callback
-						callback(createListItem(data[i], i, data.length)[0]);
-						return;
+						result = createListItem(data[i], i, data.length)[0];
+						break;
 					}
-				callback();
-			} else {
-				callback();
 			}
+			$input.trigger("result", [result]);
 		}
 		request($input.val(), findValueCallback, findValueCallback);
-	}
-
+	});
+	
+	hideResultsNow();
+	
 	function onChange() {
 		if( lastKeyPressCode == KEY.DEL ) {
 			select.hide();
@@ -252,7 +291,8 @@ jQuery.Autocompleter = function(input, options) {
 		$input.val(v);
 		hideResultsNow();
 		// todo: pass additional data directly to callback
-		options.onSelectItem && options.onSelectItem(li);
+		//options.onSelectItem && options.onSelectItem(li);
+		$input.trigger("result", [li]);
 		return true;
 	}
 
@@ -260,7 +300,6 @@ jQuery.Autocompleter = function(input, options) {
 	function autoFill(q, sValue){
 		// autofill in the complete box w/the first match as long as the user hasn't entered in more data
 		// if the last user key pressed was backspace, don't autofill
-		//console.log("$input.val(): %s, q: %s", lastWord($input.val()), q);
 		if( options.autoFill && (lastWord($input.val()).toLowerCase() == q.toLowerCase()) && lastKeyPressCode != 8 ) {
 			// fill in the value (keep the case the user has typed)
 			$input.val($input.val() + sValue.substring(lastWord(previousValue).length));

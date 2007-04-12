@@ -13,7 +13,7 @@
 <script type="text/javascript">
 $().ready(function() {
 
-	function findValueCallback(li) {
+	function findValueCallback(event, li) {
 		jQuery("#result").html( !li ? "No match!" : "Selected: " + ( !!li.extra ? li.extra[0] : li.selectValue ));
 	}
 	
@@ -21,31 +21,17 @@ $().ready(function() {
 		return row[0] + " (id: " + row[1] + ")";
 	}
 	
-	var completer1 = $("#suggest1").autocomplete(cities);
-	$("#button1").click(function() {
-		completer1.findValue(findValueCallback);
-		return false;
-	});
-	
-	
-	var completer2 = $("#suggest2").autocomplete("search.php", {
+	$("#suggest1").autocomplete(cities);
+	$("#suggest2").autocomplete("search.php", {
 		delay: 150,
 		width: 260,
 		formatItem: formatItem
 	});
-	$("#button2").click(function() {
-		completer2.findValue(findValueCallback);
-		return false;
-	});
-
 	$("#suggest3").autocomplete(cities, {
-		onSelectItem: findValueCallback,
 		multiple: true,
 		autoFill: true
 	});
-
 	$("#suggest4").autocomplete('search.php', {
-		onSelectItem: findValueCallback,
 		multiple: true,
 		matchContains: true,
 		formatItem: formatItem,
@@ -53,7 +39,9 @@ $().ready(function() {
 			foo: "bar"
 		}
 	});
-
+	$("#suggest1, #suggest2, #suggest3, #suggest4").result(findValueCallback).next().click(function() {
+		$(this).prev().search();
+	});
 });
 </script>
 	
@@ -70,20 +58,22 @@ $().ready(function() {
 		<p>
 			<label>Single City (local):</label>
 			<input type="text" id="suggest1" />
-			<input type="button" id="button1" value="Get Value" />
+			<input type="button" value="Get Value" />
 		</p>
 		<p>
 			<label>Single Bird (remote):</label>
 			<input type="text" id="suggest2" />
-			<input type="button" value="Get Value" id="button2" />
+			<input type="button" value="Get Value" />
 		</p>
 		<p>
 			<label>Multiple Cities (local):</label>
 			<textarea id='suggest3' cols='40' rows='3'></textarea>
+			<input type="button" value="Get Value" />
 		</p>
 		<p>
 			<label>Multiple Birds (remote):</label>
 			<textarea id='suggest4' cols='40' rows='3'></textarea>
+			<input type="button" value="Get Value" />
 		</p>
 		<p>
 			<label>Some dropdown:</label>
