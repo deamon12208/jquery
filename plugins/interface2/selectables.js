@@ -10,20 +10,36 @@
  */
 (function($) {
 	/**
-	 * Create a selectable element
+	 * Create a group of selectable elements, to provide an interface similar to Windows Explorer of
+	 * OSX's Finder. By applying this UI to a group of floated icons, a similar look-and-feel to desktop
+	 * GUIs can be provided.
+	 * 
+	 * Selectables allows customization of the "rubber band" (the lasso that selects the selectables)
+	 * styles via CSS, and has a full complement of event handlers.
 	 * 
 	 * @name selectable
 	 * @descr Create a selectable element.
 	 * @param Hash hash A hash of parameters
-	 * @option String subject The jQuery selector matching the element that can be selected
+	 * @option String subject The jQuery selector matching elements that can be selected
 	 * @option String selectedClass CSS class name applied to selected elements
-	 * @option String rubberbandClass CSS class name applied to rubberband
-	 * @option Float rubberbandOpacity Rubberband's opacity. Must by less or qual with 1
+	 * @option String rubberbandClass CSS class name applied to rubber band
+	 * @option Float rubberbandOpacity Rubber band's opacity. Must by <= 1
 	 * @option Function onStart (optional) Callback function triggered when the selection starts
 	 * @option Function onStop (optional) Callback function triggered when the selection stops
-	 * @option Function onSelect (optional) Callback function triggered when the selection stops and elements are selected
+	 * @option Function onSelect (optional) Callback function triggered after the selection stops and elements are selected
 	 * @option Function onDeselect (optional) Callback function triggered when elements are deselected
-	 * @option Function onSelected (optional) Callback function triggered when selections proccess start on a selected element. If the function returns true then the selection stops.
+	 * @option Function onSelected (optional) Callback function triggered when the selection process starts
+	 *         on a selected element, and before the element is selected. If the function returns true then 
+	 *         the selection stops.
+	 * @example $('#msd').selectable({
+	 *		 subject: 'div.selectableitem',
+	 *		 selectedClass: 'selecteditem',
+	 *		 rubberbandClass: 'rubberband',
+	 *		 rubberbandOpacity: 0.5,
+	 *		 onStart: function() {
+	 *		 	 selectscroll = new $.autoscroller(this, 5, 30, 30);
+	 *		 }
+	 *   });
 	 * @type jQuery
 	 * @cat Plugins/Interface
 	 * @author Stefan Petre
@@ -133,12 +149,12 @@
 			getDraggedEls: function(el, e) {
 				var targetEl = $.DDM.currentTarget;
 				while (targetEl && targetEl != el ) {
-					if ($(targetEl).is(el.DB.subject)) {
+					if ($(targetEl).is(el.DB.subject) && $(targetEl).is('.' + el.DB.selectedClass)) {
 						break;
 					}
 					targetEl = targetEl.parentNode;
 				}
-				if (targetEl != el && el.DB.onSelected.apply(this)) {
+				if (targetEl != el && !el.DB.onSelected.apply(this)) {
 					return false;
 				} else {
 					if (el.DB.selected && el.DB.selected.size() > 0 && !$.DDM.ctrlKey && !$.DDM.shiftKey && !$.DDM.altKey) {
@@ -172,18 +188,21 @@
 		});
 	};
 	
+	
 	/**
-	 * Serialize a selectable selection
+	 * Serialize the selected elements of a selectable container. This function targets the
+	 * container of the selectables, not the individual selectable elements themselves.
 	 * 
-	 * @name sortableSerialize
+	 * @name selectableSerialize
 	 * @descr Serialize a selectable selection.
+	 * @example $("#msd").selectableSerialize()
 	 * @param none
 	 * @return Hash hash A collection of 'id' attributes from the selected elements
 	 * @type jQuery
 	 * @cat Plugins/Interface
 	 * @author Stefan Petre
 	 */
-	$.fn.sortableSerialize = function(options) {
+	$.fn.selectableSerialize = function(options) {
 		var el = this.get(0);
 		var hash = [];
 		if (el && el.DB && el.DB.subjects && typeof el.DB.selected != 'undefined') {
@@ -197,10 +216,10 @@
 		return false;
 	};
 	/**
-	 * Get a selectable selection
+	 * Get the individual DOM Elements that are selected.
 	 * 
 	 * @name getSelection
-	 * @descr Get a selectable selection.
+	 * @descr Get the selected elements of a Selectable.
 	 * @param none
 	 * @return jQuery object All selected elements
 	 * @type jQuery
@@ -215,10 +234,10 @@
 		return false;
 	};
 	/**
-	 * Select all selectale elements
+	 * Select all elements that are eligible for selection.
 	 * 
 	 * @name selectAll
-	 * @descr Select all selectale elements.
+	 * @descr Select all selectable elements.
 	 * @param none
 	 * @return jQuery object
 	 * @type jQuery
@@ -233,10 +252,10 @@
 		})
 	};
 	/**
-	 * Select none of selectale elements
+	 * Deselect all elements that are eligible for selection. 
 	 * 
 	 * @name selectNone
-	 * @descr Select none selectale elements.
+	 * @descr Deselect all selectable elements.
 	 * @param none
 	 * @return jQuery object
 	 * @type jQuery
