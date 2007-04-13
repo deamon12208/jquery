@@ -136,12 +136,12 @@ body
 				onStop: function() {
 					selectscroll.stop();
 				},
-				onSelect: function() {
+				onBeforeSelect: function() {
 				},
 				onDeselect: function() {
 				},
 				onSelected: function() {
-					return false;
+					return true;
 				}
 			});
 		}
