@@ -216,7 +216,7 @@
 			onStart: function(){return false},
 			onResize: function(){return false},
 			onStop: function(){return false},
-			ratio: false,
+			preserveRatio: false,
 			minWidth: 10,
 			minHeight: 10,
 			maxWidth: 1600,
@@ -238,6 +238,27 @@
 				if (options.dragHandle) {
 					this.DB.dragHandle = $(options.dragHandle);
 				}
+			}
+		});
+	};
+	$.fn.resizableRatioOn = function() {
+		return this.each(function(){
+			if (this.DB && this.DB.preserveRatio) {
+				this.DB.preserveRatioOn = true;
+			}
+		});
+	};
+	$.fn.resizableRatioOff = function() {
+		return this.each(function(){
+			if (this.DB && this.DB.preserveRatio) {
+				this.DB.preserveRatioOn = false;
+			}
+		});
+	};
+	$.fn.resizableRatioToggle = function() {
+		return this.each(function(){
+			if (this.DB && this.DB.preserveRatio) {
+				this.DB.preserveRatio = !this.DB.preserveRatio;
 			}
 		});
 	};
