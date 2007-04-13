@@ -1,3 +1,13 @@
+/**
+ * Interface Elements for jQuery
+ * Resizable
+ *
+ * http://interface.eyecon.ro
+ *
+ * Copyright (c) 2006 Stefan Petre
+ * Dual licensed under the MIT (MIT-LICENSE.txt)
+ * and GPL (GPL-LICENSE.txt) licenses.
+ */
 (function($) {
 	$.fn.resizable = function(options) {
 		options = $.extend({
