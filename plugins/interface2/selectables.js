@@ -1,5 +1,33 @@
-
+/**
+ * Interface Elements for jQuery
+ * Selectable
+ *
+ * http://interface.eyecon.ro
+ *
+ * Copyright (c) 2006 Stefan Petre
+ * Dual licensed under the MIT (MIT-LICENSE.txt)
+ * and GPL (GPL-LICENSE.txt) licenses.
+ */
 (function($) {
+	/**
+	 * Create a selectable element
+	 * 
+	 * @name selectable
+	 * @descr Create a selectable element.
+	 * @param Hash hash A hash of parameters
+	 * @option String subject The jQuery selector matching the element that can be selected
+	 * @option String selectedClass CSS class name applied to selected elements
+	 * @option String rubberbandClass CSS class name applied to rubberband
+	 * @option Float rubberbandOpacity Rubberband's opacity. Must by less or qual with 1
+	 * @option Function onStart (optional) Callback function triggered when the selection starts
+	 * @option Function onStop (optional) Callback function triggered when the selection stops
+	 * @option Function onSelect (optional) Callback function triggered when the selection stops and elements are selected
+	 * @option Function onDeselect (optional) Callback function triggered when elements are deselected
+	 * @option Function onSelected (optional) Callback function triggered when selections proccess start on a selected element. If the function returns true then the selection stops.
+	 * @type jQuery
+	 * @cat Plugins/Interface
+	 * @author Stefan Petre
+	 */
 	$.fn.selectable = function(options) {
 		options = $.extend({
 			beforeStartDrag: function(e) {
@@ -142,5 +170,84 @@
 				$.DDM.drag(this, options);
 			}
 		});
+	};
+	
+	/**
+	 * Serialize a selectable selection
+	 * 
+	 * @name sortableSerialize
+	 * @descr Serialize a selectable selection.
+	 * @param none
+	 * @return Hash hash A collection of 'id' attributes from the selected elements
+	 * @type jQuery
+	 * @cat Plugins/Interface
+	 * @author Stefan Petre
+	 */
+	$.fn.sortableSerialize = function(options) {
+		var el = this.get(0);
+		var hash = [];
+		if (el && el.DB && el.DB.subjects && typeof el.DB.selected != 'undefined') {
+			$(el.DB.subject, el)
+				.filter('.' + el.DB.selectedClass)
+				.each(function(){
+					hash[hash.length] = $(this).attr('id');
+				});
+			return hash;
+		}
+		return false;
+	};
+	/**
+	 * Get a selectable selection
+	 * 
+	 * @name getSelection
+	 * @descr Get a selectable selection.
+	 * @param none
+	 * @return jQuery object All selected elements
+	 * @type jQuery
+	 * @cat Plugins/Interface
+	 * @author Stefan Petre
+	 */
+	$.fn.getSelection = function(options) {
+		var el = this.get(0);
+		if (el && el.DB && el.DB.subjects && typeof el.DB.selected != 'undefined') {
+			return $(el.DB.subject, el).filter('.' + el.DB.selectedClass);
+		}
+		return false;
+	};
+	/**
+	 * Select all selectale elements
+	 * 
+	 * @name selectAll
+	 * @descr Select all selectale elements.
+	 * @param none
+	 * @return jQuery object
+	 * @type jQuery
+	 * @cat Plugins/Interface
+	 * @author Stefan Petre
+	 */
+	$.fn.selectAll = function(options) {
+		return this.each(function(){
+			if (this.DB && this.DB.subjects && typeof this.DB.selected != 'undefined') {
+				$(this.DB.subject, this).addClass(this.DB.selectedClass);
+			}
+		})
+	};
+	/**
+	 * Select none of selectale elements
+	 * 
+	 * @name selectNone
+	 * @descr Select none selectale elements.
+	 * @param none
+	 * @return jQuery object
+	 * @type jQuery
+	 * @cat Plugins/Interface
+	 * @author Stefan Petre
+	 */
+	$.fn.selectNone = function(options) {
+		return this.each(function(){
+			if (this.DB && this.DB.subjects && typeof this.DB.selected != 'undefined') {
+				$(this.DB.subject, this).removeClass(this.DB.selectedClass);
+			}
+		})
 	};
 })(jQuery);
