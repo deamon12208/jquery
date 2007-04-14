@@ -23,6 +23,7 @@ TODO
 - modify demo to work with a proper form, no always-prevent-submit!
 - highlight match in select box (see http://kilp.net/test/autocomplete/screenshot1.gif )
 - add a callback to allow decoding the response
+- insert selectbox after input and position:absolute to offset calculations?
 */
 
 /**
