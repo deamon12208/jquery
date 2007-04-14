@@ -14,14 +14,12 @@
 /*
 TODO
 - pass plain data to result handler instead of expanded dom element, maybe add reference to input
-- trim/ignore whitespace between multiple items for more tolerance
 - allow modification of not-last value in multiple-fields
 - add support for multiple fields for findValue/result-event
 - add proper example for completing multiple values and updating related ids to a hidden field
 - modify demo to work with a proper form, no always-prevent-submit!
 - highlight match in select box (see http://kilp.net/test/autocomplete/screenshot1.gif )
 - add a callback to allow decoding the response
-- insert selectbox after input and position:absolute to offset calculations?
 */
 
 /**
@@ -168,12 +166,16 @@ jQuery.Autocompleter = function(input, options) {
 		lastKeyPressCode = event.keyCode;
 		switch(event.keyCode) {
 			case KEY.UP: // up
-				event.preventDefault();
-				select.prev();
+				if ( select.current() ) {
+					event.preventDefault();
+					select.prev();
+				}
 				break;
 			case KEY.DOWN: // down
-				event.preventDefault();
-				select.next();
+				if ( select.current() ) {
+					event.preventDefault();
+					select.next();
+				}
 				break;
 			case KEY.TAB:  // tab
 			case KEY.RETURN: // return
@@ -213,6 +215,12 @@ jQuery.Autocompleter = function(input, options) {
 		request($input.val(), findValueCallback, findValueCallback);
 	});
 	
+	$(input.form).submit(function() {
+		// todo: opera prefers to submit as soon as we press return
+		// preventing the entire submit isn't the right solution
+		return false;
+	});
+	
 	hideResultsNow();
 	
 	function onChange() {
@@ -240,10 +248,19 @@ jQuery.Autocompleter = function(input, options) {
 		}
 	};
 	
+	function trimWords(value) {
+		var words = value.split( jQuery.trim( options.multipleSeparator ) );
+		jQuery.each(words, function(i, value) {
+			words[i] = jQuery.trim(value);
+		});
+		return words;
+	}
+	
 	function lastWord(value) {
-		return options.multiple
-			? value.substring( value.lastIndexOf(options.multipleSeparator) + (value.lastIndexOf(options.multipleSeparator) != -1 ? options.multipleSeparator.length : 0) )
-			: value;
+		if ( !options.multiple )
+			return value;
+		var words = trimWords(value);
+		return words[words.length - 1];
 	}
 	
 	function selectCurrent() {
@@ -254,13 +271,11 @@ jQuery.Autocompleter = function(input, options) {
 		previousValue = v;
 		
 		if ( options.multiple ) {
-			var old_value = $input.val();
-			if(old_value.lastIndexOf(options.multipleSeparator) >= 1) {
-				var sep_pos = old_value.lastIndexOf( options.multipleSeparator ) + options.multipleSeparator.length;
-				v = old_value.substr(0, sep_pos) + v + options.multipleSeparator;
-			} else {
-				v += options.multipleSeparator;
+			var words = trimWords($input.val());
+			if ( words.length > 1 ) {
+				v = words.slice(0, words.length - 1).join( options.multipleSeparator ) + options.multipleSeparator + v;
 			}
+			v += options.multipleSeparator;
 		}
 		
 		$input.val(v);
@@ -387,7 +402,7 @@ jQuery.Autocompleter.defaults = {
 	autoFill: false,
 	width: 0,
 	multiple: false,
-	multipleSeparator: ","
+	multipleSeparator: ", "
 };
 
 jQuery.Autocompleter.Cache = function(options) {

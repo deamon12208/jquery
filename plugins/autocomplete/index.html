@@ -56,7 +56,7 @@ $().ready(function() {
 <div id="content">
 	<h3>This is based on Dylan's initial plugin and Dan's and Anjesh' mods.</h3>
 	
-	<form onsubmit="return false;">
+	<form>
 		<p>
 			<label>Single City (local):</label>
 			<input type="text" id="suggest1" />
@@ -79,14 +79,13 @@ $().ready(function() {
 		</p>
 		<p>
 			<label>Some dropdown:</label>
-			<select name="Test1" id="idTest1">
-				<option value="1">Item 12334455</option>
+			<select>
+				<option value="">Item 12334455</option>
 				<option value="2">Item 2</option>
 				<option value="3">Item 3</option>
 				<option value="4">Item 4</option>
 			</select>
 		</p>
-	
 	</form>
 	
 	<h3>Result:</h3> <h2 id="result"></h2>
