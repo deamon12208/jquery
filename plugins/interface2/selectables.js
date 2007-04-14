@@ -112,9 +112,10 @@
 					top: y + 'px',
 					left: x + 'px'
 				});
+				
 				el.DB.subjects.each(function(){
-					top = this.offsetTop;
-					left = this.offsetLeft;
+					var top = this.offsetTop;
+					var left = this.offsetLeft;
 					if (
 						! ( left > x + width
 						|| left + this.offsetWidth < x
