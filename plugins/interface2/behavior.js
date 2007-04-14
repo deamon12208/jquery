@@ -98,10 +98,10 @@
 		startDrag: function(e) {
 			if (!$.DDM.dragged)
 				return;
-			clearTimeout($.DDM.preventionTimeout);
+			$.DDM.dragged.DB.dragThreshMet = true;
+			clearTimeout($.DDM.preventionTimeout );
 			
 			$.DDM.dragged.DB.beforeStartDrag.apply($.DDM.dragged, [e]);
-			$.DDM.dragged.DB.dragThreshMet = true;
 			
 			return $.DDM.dragged.DB.startDrag.apply($.DDM.dragged, [e]);
 		},
