@@ -18,7 +18,6 @@ TODO
 - add support for multiple fields for findValue/result-event
 - add proper example for completing multiple values and updating related ids to a hidden field
 - modify demo to work with a proper form, no always-prevent-submit!
-- highlight match in select box (see http://kilp.net/test/autocomplete/screenshot1.gif )
 - add a callback to allow decoding the response
 */
 
@@ -206,7 +205,7 @@ jQuery.Autocompleter = function(input, options) {
 				for (var i=0; i < data.length; i++)
 					if( data[i][0].toLowerCase() == q.toLowerCase() ) {
 						// todo: pass additional data directly to callback
-						result = createListItem(data[i], i, data.length)[0];
+						result = createListItem(data[i], i, data.length, q)[0];
 						break;
 					}
 			}
@@ -316,7 +315,7 @@ jQuery.Autocompleter = function(input, options) {
 	function receiveData(q, data) {
 		if ( data && data.length && hasFocus ) {
 			stopLoading();
-			select.display(data);
+			select.display(data, q);
 			autoFill(q, data[0][0]);
 			select.show();
 		} else {
@@ -336,12 +335,15 @@ jQuery.Autocompleter = function(input, options) {
 		cache.add(q, parsed);
 		return parsed;
 	};
-
-	function createListItem(row, i, num) {
+	
+	function createListItem(row, i, num, q) {
+		function highlight(value) {
+			return value.replace(new RegExp("(" + q + ")", "gi"), "<strong>$1</strong>");
+		}
 		var item = document.createElement("li");
 		item.innerHTML = options.formatItem 
-				? options.formatItem(row, i, num)
-				: row[0];
+				? highlight(options.formatItem(row, i, num))
+				: highlight(row[0]);
 			item.selectValue = row[0];
 		var extra = null;
 		if (row.length > 1) {
@@ -542,12 +544,12 @@ jQuery.Autocompleter.Select = function (options, input, select, create) {
 			: available;
 	}
 	
-	function dataToDom(data) {
+	function dataToDom(data, q) {
 		var num = limitNumberOfItems(data.length);
 		for (var i=0; i < num; i++) {
 			if (!data[i])
 				continue;
-			create(data[i], i, num).appendTo(list);
+			create(data[i], i, num, q).appendTo(list);
 		}
 		listItems = list.find("li");
 		if ( options.selectFirst ) {
@@ -557,9 +559,9 @@ jQuery.Autocompleter.Select = function (options, input, select, create) {
 	}
 	
 	return {
-		display: function(data) {
+		display: function(data, q) {
 			list.empty();
-			dataToDom(data);
+			dataToDom(data, q);
 			list.bgiframe();
 		},
 		next: function() {
