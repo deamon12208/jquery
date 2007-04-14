@@ -147,7 +147,8 @@ jQuery.Autocompleter = function(input, options) {
 		DOWN: 40,
 		DEL: 46,
 		TAB: 9,
-		RETURN: 13
+		RETURN: 13,
+		ESC: 27
 	};
 
 	// Create jQuery object for input element
@@ -164,26 +165,29 @@ jQuery.Autocompleter = function(input, options) {
 		// track last key pressed
 		lastKeyPressCode = event.keyCode;
 		switch(event.keyCode) {
-			case KEY.UP: // up
-				if ( select.current() ) {
+			case KEY.UP:
+				if ( select.visible() ) {
 					event.preventDefault();
 					select.prev();
 				}
 				break;
-			case KEY.DOWN: // down
-				if ( select.current() ) {
+			case KEY.DOWN:
+				if ( select.visible() ) {
 					event.preventDefault();
 					select.next();
 				}
 				break;
-			case KEY.TAB:  // tab
-			case KEY.RETURN: // return
+			case KEY.TAB:
+			case KEY.RETURN:
 				if( selectCurrent() ){
 					// make sure to blur off the current field
 					if( !options.multiple )
 						$input.blur();
 					event.preventDefault();
 				}
+				break;
+			case KEY.ESC:
+				select.hide();
 				break;
 			default:
 				select.noneActive();
@@ -573,8 +577,11 @@ jQuery.Autocompleter.Select = function (options, input, select, create) {
 		hide: function() {
 			element.hide();
 		},
+		visible : function() {
+			return element.is(":visible");
+		},
 		current: function() {
-			return !element.is(":hidden") && (listItems.filter(".ac_over")[0] || options.selectFirst && listItems[0]);
+			return this.visible() && (listItems.filter(".ac_over")[0] || options.selectFirst && listItems[0]);
 		},
 		show: function() {
 			// get the position of the input field right now (in case the DOM is shifted)
