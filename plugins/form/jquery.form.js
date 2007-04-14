@@ -7,7 +7,7 @@
  *   http://www.gnu.org/licenses/gpl.html
  *
  * Revision: $Id$
- * Version: .95
+ * Version: .96
  */
 
 /**
@@ -181,9 +181,10 @@ jQuery.fn.ajaxSubmit = function(options) {
     if (typeof options == 'function')
         options = { success: options };
 
-    options = options || {};
-    options.url = options.url || this.attr('action') || window.location;
-    options.type = options.type || this.attr('method') || 'GET';
+    options = jQuery.extend({
+        url:  this.attr('action') || window.location,
+        type: this.attr('method') || 'GET'
+    }, options || {});
 
     var a = this.formToArray(options.semantic);
 
