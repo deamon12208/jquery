@@ -17,8 +17,6 @@ TODO
 - trim/ignore whitespace between multiple items for more tolerance
 - allow modification of not-last value in multiple-fields
 - add support for multiple fields for findValue/result-event
-- check http://plazes.com/plazes where field for different behaviour with tab key and up/down
-- when using selectFirst option, always mark the first item as selected
 - add proper example for completing multiple values and updating related ids to a hidden field
 - modify demo to work with a proper form, no always-prevent-submit!
 - highlight match in select box (see http://kilp.net/test/autocomplete/screenshot1.gif )
@@ -40,6 +38,9 @@ TODO
  *
  * The result must return with one value on each line. The result is presented in the order
  * the backend sends it.
+ *
+ * Depends on dimensions plugin's offset method for correct positioning of the select box and bgiframe plugin
+ * to fix IE's problem with selects.
  *
  * @example $("#input_box").autocomplete(["Cologne", "Berlin", "Munich"]);
  * @before <input id="input_box" />
@@ -162,39 +163,6 @@ jQuery.Autocompleter = function(input, options) {
 	var lastKeyPressCode;
 	var select = jQuery.Autocompleter.Select(options, input, selectCurrent, createListItem);
 	
-	// if there is a data array supplied
-	if( options.data ){
-		var sFirstChar = "", stMatchSets = {};
-
-		// no url was specified, we need to adjust the cache length to make sure it fits the local data store
-		if( !options.url ) options.cacheLength = 1;
-
-		// loop through the array and create a lookup structure
-		jQuery.each(options.data, function(i, value) {
-			// if row is a string, make an array otherwise just reference the array
-			var row = (typeof value == "string") ? [value] : value;
-
-			// if the length is zero, don't add to list
-			if( row[0].length > 0 ){
-				// get the first character
-				sFirstChar = row[0].charAt(0).toLowerCase();
-				// if no lookup array for this character exists, look it up now
-				if( !stMatchSets[sFirstChar] )
-					stMatchSets[sFirstChar] = [];
-				// if the match is a string
-				stMatchSets[sFirstChar].push(row);
-			}
-		});
-
-		// add the data items to the cache
-		jQuery.each(stMatchSets, function(i, value) {
-			// increase the cache size
-			options.cacheLength++;
-			// add to the cache
-			cache.add(i, value);
-		});
-	}
-
 	$input.keydown(function(event) {
 		// track last key pressed
 		lastKeyPressCode = event.keyCode;
@@ -434,12 +402,7 @@ jQuery.Autocompleter.Cache = function(options) {
 		return i == 0 || options.matchContains;
 	};
 	
-	return {
-		flush: function() {
-			data = {};
-			length = 0;
-		},
-		add: function(q, value) {
+	function add(q, value) {
 			if (length > options.cacheLength) {
 				this.flush();
 			}
@@ -447,7 +410,47 @@ jQuery.Autocompleter.Cache = function(options) {
 				length++;
 			}
 			data[q] = value;
+		}
+	
+	// if there is a data array supplied
+	if( options.data ){
+		var sFirstChar = "", stMatchSets = {};
+
+		// no url was specified, we need to adjust the cache length to make sure it fits the local data store
+		if( !options.url ) options.cacheLength = 1;
+
+		// loop through the array and create a lookup structure
+		jQuery.each(options.data, function(i, value) {
+			// if row is a string, make an array otherwise just reference the array
+			var row = (typeof value == "string") ? [value] : value;
+
+			// if the length is zero, don't add to list
+			if( row[0].length > 0 ){
+				// get the first character
+				sFirstChar = row[0].charAt(0).toLowerCase();
+				// if no lookup array for this character exists, look it up now
+				if( !stMatchSets[sFirstChar] )
+					stMatchSets[sFirstChar] = [];
+				// if the match is a string
+				stMatchSets[sFirstChar].push(row);
+			}
+		});
+
+		// add the data items to the cache
+		jQuery.each(stMatchSets, function(i, value) {
+			// increase the cache size
+			options.cacheLength++;
+			// add to the cache
+			add(i, value);
+		});
+	}
+	
+	return {
+		flush: function() {
+			data = {};
+			length = 0;
 		},
+		add: add,
 		load: function(q) {
 			if (!q || !options.cacheLength || !length)
 				return null;
@@ -532,16 +535,10 @@ jQuery.Autocompleter.Select = function (options, input, select, create) {
 			create(data[i], i, num).appendTo(list);
 		}
 		listItems = list.find("li");
-	}
-	
-	function findPos(obj) {
-		var curleft = obj.offsetLeft || 0;
-		var curtop = obj.offsetTop || 0;
-		while (obj = obj.offsetParent) {
-			curleft += obj.offsetLeft
-			curtop += obj.offsetTop
+		if ( options.selectFirst ) {
+			listItems.eq(0).addClass(CLASSES.ACTIVE);
+			active = 0;
 		}
-		return {x: curleft, y:curtop};
 	}
 	
 	return {
@@ -564,12 +561,12 @@ jQuery.Autocompleter.Select = function (options, input, select, create) {
 		},
 		show: function() {
 			// get the position of the input field right now (in case the DOM is shifted)
-			var pos = findPos(input);
+			var offset = jQuery(input).offset({scroll: false, border: false});
 			// either use the specified width, or autocalculate based on form element
 			element.css({
 				width: options.width > 0 ? options.width : jQuery(input).width(),
-				top: pos.y + input.offsetHeight,
-				left: pos.x
+				top: offset.top + input.offsetHeight,
+				left: offset.left
 			}).show();
 		},
 		noneActive: function() {
