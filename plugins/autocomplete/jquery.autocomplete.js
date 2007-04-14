@@ -13,15 +13,16 @@
 
 /*
 TODO
-- pass plain data to result handler instead of expanded dom element
+- pass plain data to result handler instead of expanded dom element, maybe add reference to input
 - trim/ignore whitespace between multiple items for more tolerance
 - allow modification of not-last value in multiple-fields
 - add support for multiple fields for findValue/result-event
 - check http://plazes.com/plazes where field for different behaviour with tab key and up/down
 - when using selectFirst option, always mark the first item as selected
 - add proper example for completing multiple values and updating related ids to a hidden field
-- modify demo to work with a propery form, no always-prevent-submit!
+- modify demo to work with a proper form, no always-prevent-submit!
 - highlight match in select box (see http://kilp.net/test/autocomplete/screenshot1.gif )
+- add a callback to allow decoding the response
 */
 
 /**
@@ -296,7 +297,6 @@ jQuery.Autocompleter = function(input, options) {
 		$input.val(v);
 		hideResultsNow();
 		// todo: pass additional data directly to callback
-		//options.onSelectItem && options.onSelectItem(li);
 		$input.trigger("result", [li]);
 		return true;
 	}

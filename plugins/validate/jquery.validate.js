@@ -17,6 +17,9 @@ TODO
 - allow other elements for error messages, promote em
 - allow handling more then one form is one call to validate, ignoring the validator instance problems in that case
  - maybe loop trough all forms and return only the last validator instance
+ - don't return validator instance, provide custom events instead
+- focus invalid only on submit event, that removes all problems with blur
+- prefer plugin option messages over title attribute, preventing problems with google toolbar
 */
 
 /**
