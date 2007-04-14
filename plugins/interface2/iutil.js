@@ -220,14 +220,18 @@ jQuery.iUtil = {
 		);
 	},
 	getInnerWidth :  function(el, scroll) {
-		return (scroll ? Math.max(el.scrollWidth,el.offsetWidth) : el.offsetWidth)
+		var offsetW = el.offsetWidth;
+		return scroll ? Math.max(el.scrollWidth,offsetW) - offsetW + el.clientWidth:el.clientWidth;
+		/*return (scroll ? Math.max(el.scrollWidth,el.offsetWidth) : el.offsetWidth)
 					- (parseInt($.curCSS(el, 'borderLeftWidth'), 10)||0)
-					- (parseInt($.curCSS(el, 'borderRightWidth'), 10)||0);
+					- (parseInt($.curCSS(el, 'borderRightWidth'), 10)||0);*/
 	},
 	getInnerHeight : function(el, scroll) {
-		return (scroll ? Math.max(el.scrollHeight,el.offsetHeight) : el.offsetHeight)
+		var offsetH = el.offsetHeight;
+		return scroll ? Math.max(el.scrollHeight,offsetH) - offsetH + el.clientHeight:el.clientHeight;
+		/*return (scroll ? Math.max(el.scrollHeight,el.offsetHeight) : el.offsetHeight)
 					- (parseInt($.curCSS(el, 'borderTopWidth'), 10)||0)
-					- (parseInt($.curCSS(el, 'borderBottomWidth'), 10)||0);
+					- (parseInt($.curCSS(el, 'borderBottomWidth'), 10)||0);*/
 	},
 	getExtraWidth : function(el) {
 		if($.boxModel)
