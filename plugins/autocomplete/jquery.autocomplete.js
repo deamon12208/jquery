@@ -13,7 +13,7 @@
 
 /*
 TODO
-- pass plain data to result handler instead of expanded dom element, maybe add reference to input
+- pass plain data to result handler instead of expanded dom element, maybe add reference to input - WIP
 - add proper example for completing multiple values and updating related ids to a hidden field
 - modify demo to work with a proper form, no always-prevent-submit!
 - add a callback to allow decoding the response
@@ -105,7 +105,7 @@ TODO
  */
 
 /**
- * Trigger a search event. See result(Function) to binding to that event.
+ * Trigger a search event. See result(Function) for binding to that event.
  *
  * @example jQuery('input#suggest').search();
  * @desc Triggers a search event.
@@ -211,12 +211,16 @@ jQuery.Autocompleter = function(input, options) {
 	}).blur(function() {
 		hasFocus = 0;
 		hideResults();
+	}).click(function() {
+		if ( hasFocus++ > 1 && !select.visible() ) {
+			onChange(0, true);
+		}
 	}).bind("search", function() {
 		function findValueCallback(q, data) {
 			var result;
 			if( data && data.length ) {
 				for (var i=0; i < data.length; i++)
-					if( data[i][0].toLowerCase() == q.toLowerCase() ) {
+					if( data[i].value.toLowerCase() == q.toLowerCase() ) {
 						// todo: pass additional data directly to callback
 						result = createListItem(data[i], i, data.length, q)[0];
 						break;
@@ -225,11 +229,6 @@ jQuery.Autocompleter = function(input, options) {
 			$input.trigger("result", [result]);
 		}
 		request($input.val(), findValueCallback, findValueCallback);
-	}).click(function() {
-		if ( hasFocus++ > 1 && !select.visible() ) {
-			//select.show();
-			onChange(0, true);
-		}
 	});
 	
 	$(input.form).submit(function() {
@@ -239,6 +238,30 @@ jQuery.Autocompleter = function(input, options) {
 	});
 	
 	hideResultsNow();
+	
+	function selectCurrent() {
+		//var li = select.current();
+		//if( !li )
+			//return false;
+		var v = select.value(); //jQuery.trim(li.selectValue ? li.selectValue : li.innerHTML);
+		
+		v = options.formatResult && options.formatResult(v) || v;
+		previousValue = v;
+		
+		if ( options.multiple ) {
+			var words = trimWords($input.val());
+			if ( words.length > 1 ) {
+				v = words.slice(0, words.length - 1).join( options.multipleSeparator ) + options.multipleSeparator + v;
+			}
+			v += options.multipleSeparator;
+		}
+		
+		$input.val(v);
+		hideResultsNow();
+		// todo: pass additional data directly to callback
+		$input.trigger("result", v); //[li]);
+		return true;
+	}
 	
 	function onChange(crap, skipPrevCheck) {
 		if( lastKeyPressCode == KEY.DEL ) {
@@ -280,28 +303,6 @@ jQuery.Autocompleter = function(input, options) {
 		return words[words.length - 1];
 	}
 	
-	function selectCurrent() {
-		var li = select.current();
-		if( !li )
-			return false;
-		var v = jQuery.trim(li.selectValue ? li.selectValue : li.innerHTML);
-		previousValue = v;
-		
-		if ( options.multiple ) {
-			var words = trimWords($input.val());
-			if ( words.length > 1 ) {
-				v = words.slice(0, words.length - 1).join( options.multipleSeparator ) + options.multipleSeparator + v;
-			}
-			v += options.multipleSeparator;
-		}
-		
-		$input.val(v);
-		hideResultsNow();
-		// todo: pass additional data directly to callback
-		$input.trigger("result", [li]);
-		return true;
-	}
-
 	// fills in the input box w/the first match (assumed to be the best match)
 	function autoFill(q, sValue){
 		// autofill in the complete box w/the first match as long as the user hasn't entered in more data
@@ -334,7 +335,7 @@ jQuery.Autocompleter = function(input, options) {
 		if ( data && data.length && hasFocus ) {
 			stopLoading();
 			select.display(data, q);
-			autoFill(q, data[0][0]);
+			autoFill(q, data[0].value);
 			select.show();
 		} else {
 			hideResultsNow();
@@ -343,11 +344,11 @@ jQuery.Autocompleter = function(input, options) {
 
 	function parseAndCacheData(q, data) {
 		var parsed = [];
-		var rows = data.split(options.lineSeparator);
+		var rows = data.split("\n");
 		for (var i=0; i < rows.length; i++) {
 			var row = jQuery.trim(rows[i]);
 			if (row) {
-				parsed[parsed.length] = row.split(options.cellSeparator);
+				parsed[parsed.length] = row; //row.split(options.cellSeparator);
 			}
 		}
 		cache.add(q, parsed);
@@ -360,9 +361,10 @@ jQuery.Autocompleter = function(input, options) {
 		}
 		var item = document.createElement("li");
 		item.innerHTML = options.formatItem 
-				? highlight(options.formatItem(row, i, num))
-				: highlight(row[0]);
-			item.selectValue = row[0];
+				? highlight(options.formatItem(row.data, i, num))
+				: highlight(row.value);
+		//item.selectValue = row[0];
+		/*
 		var extra = null;
 		if (row.length > 1) {
 			extra = [];
@@ -371,6 +373,7 @@ jQuery.Autocompleter = function(input, options) {
 			}
 		}
 		item.extra = extra;
+		*/
 		return jQuery(item);
 	}
 	
@@ -407,8 +410,8 @@ jQuery.Autocompleter.defaults = {
 	inputClass: "ac_input",
 	resultsClass: "ac_results",
 	loadingClass: "ac_loading",
-	lineSeparator: "\n",
-	cellSeparator: "|",
+	//lineSeparator: "\n",
+	//cellSeparator: "|",
 	minChars: 1,
 	delay: 400,
 	matchCase: false,
@@ -432,7 +435,8 @@ jQuery.Autocompleter.Cache = function(options) {
 	var length = 0;
 	
 	function matchSubset(s, sub) {
-		if (!options.matchCase) s = s.toLowerCase();
+		if (!options.matchCase) 
+			s = s.toLowerCase();
 		var i = s.indexOf(sub);
 		if (i == -1) return false;
 		return i == 0 || options.matchContains;
@@ -450,33 +454,36 @@ jQuery.Autocompleter.Cache = function(options) {
 	
 	// if there is a data array supplied
 	if( options.data ){
-		var sFirstChar = "", stMatchSets = {};
+		var stMatchSets = {},
+			nullData = 0;
 
 		// no url was specified, we need to adjust the cache length to make sure it fits the local data store
 		if( !options.url ) options.cacheLength = 1;
 		
-		var nullData = 0;
 		stMatchSets[""] = [];
 
 		// loop through the array and create a lookup structure
-		jQuery.each(options.data, function(i, value) {
+		jQuery.each(options.data, function(i, rawValue) {
 			// if row is a string, make an array otherwise just reference the array
-			var row = (typeof value == "string") ? [value] : value;
 			
-			// if the length is zero, don't add to list
-			if( row[0].length > 0 ){
-				// get the first character
-				sFirstChar = row[0].charAt(0).toLowerCase();
-				// if no lookup array for this character exists, look it up now
-				if( !stMatchSets[sFirstChar] )
-					stMatchSets[sFirstChar] = [];
-				// if the match is a string
-				stMatchSets[sFirstChar].push(row);
-				
-				if ( nullData++ < options.max ) {
-					stMatchSets[""].push(row);
-				}
+			
+			value = options.formatItem ? options.formatItem(rawValue) : rawValue;
+			var firstChar = value.charAt(0).toLowerCase();
+			// if no lookup array for this character exists, look it up now
+			if( !stMatchSets[firstChar] )
+				stMatchSets[firstChar] = [];
+			// if the match is a string
+			var row = {
+				value: value,
+				data: rawValue
 			}
+			
+			stMatchSets[firstChar].push(row);
+			
+			if ( nullData++ < options.max ) {
+				stMatchSets[""].push(row);
+			}
+			
 		});
 
 		// add the data items to the cache
@@ -501,17 +508,14 @@ jQuery.Autocompleter.Cache = function(options) {
 				return data[q];
 			if (options.matchSubset) {
 				for (var i = q.length - 1; i >= options.minChars; i--) {
-					var qs = q.substr(0, i);
-					var c = data[qs];
+					var c = data[q.substr(0, i)];
 					if (c) {
 						var csub = [];
-						for (var j = 0; j < c.length; j++) {
-							var x = c[j];
-							var x0 = x[0];
-							if (matchSubset(x0, q)) {
+						jQuery.each(c, function(i, x) {
+							if (matchSubset(x.value, q)) {
 								csub[csub.length] = x;
 							}
-						}
+						});
 						return csub;
 					}
 				}
@@ -545,7 +549,9 @@ jQuery.Autocompleter.Select = function (options, input, select, create) {
 		return false;
 	});
 	var listItems,
-		active = -1;
+		active = -1,
+		data,
+		term = "";
 		
 	if( options.width > 0 )
 		element.css("width", options.width);
@@ -577,13 +583,13 @@ jQuery.Autocompleter.Select = function (options, input, select, create) {
 			: available;
 	}
 	
-	function dataToDom(data, q) {
-		console.log(arguments);
+	function dataToDom() {
 		var num = limitNumberOfItems(data.length);
 		for (var i=0; i < num; i++) {
 			if (!data[i])
 				continue;
-			create(data[i], i, num, q).appendTo(list);
+			// here data[i] is already the formatted value, we need the original
+			create(data[i], i, num, term).appendTo(list);
 		}
 		listItems = list.find("li");
 		if ( options.selectFirst ) {
@@ -593,9 +599,11 @@ jQuery.Autocompleter.Select = function (options, input, select, create) {
 	}
 	
 	return {
-		display: function(data, q) {
+		display: function(d, q) {
+			data = d;
+			term = q;
 			list.empty();
-			dataToDom(data, q);
+			dataToDom();
 			list.bgiframe();
 		},
 		next: function() {
@@ -629,6 +637,10 @@ jQuery.Autocompleter.Select = function (options, input, select, create) {
 		noneActive: function() {
 			active = -1;
 			listItems.removeClass(CLASSES.ACTIVE);
+		},
+		value: function() {
+			var result = data[active];
+			return options.formatResult && options.formatResult(result.data) || result.value;
 		}
 	};
 }

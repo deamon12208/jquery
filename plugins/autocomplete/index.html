@@ -15,11 +15,17 @@
 $().ready(function() {
 
 	function findValueCallback(event, li) {
-		jQuery("#result").html( !li ? "No match!" : "Selected: " + ( !!li.extra ? li.extra[0] : li.selectValue ));
+		jQuery("#result").html( !li ? "No match!" : "Selected: " + li); //( !!li.extra ? li.extra[0] : li.selectValue ));
+		//console.log(arguments);
 	}
 	
 	function formatItem(row) {
+		var row = row.split("|");
 		return row[0] + " (id: " + row[1] + ")";
+	}
+	
+	function formatResult(row) {
+		return row.split("|")[0];
 	}
 	
 	$("#suggest1").autocomplete(cities);
@@ -28,10 +34,21 @@ $().ready(function() {
 		max: 12,
 		autoFill: true
 	});
+	$("#suggest13").autocomplete(emails, {
+		minChars: 0,
+		width: 280,
+		formatItem: function(row) {
+			return "\"" + row.name + "\" <" + row.to + ">";
+		},
+		formatResult: function(row) {
+			return row.to;
+		}
+	});
 	$("#suggest2").autocomplete("search.php", {
 		delay: 150,
 		width: 260,
 		formatItem: formatItem,
+		formatResult: formatResult,
 		selectFirst: false
 	});
 	$("#suggest3").autocomplete(cities, {
@@ -43,11 +60,12 @@ $().ready(function() {
 		multiple: true,
 		matchContains: true,
 		formatItem: formatItem,
+		formatResult: formatResult,
 		extraParams: {
 			foo: "bar"
 		}
 	});
-	$("#suggest1, #suggest2, #suggest3, #suggest4").result(findValueCallback).next().click(function() {
+	$("#suggest1, #suggest12, #suggest2, #suggest3, #suggest4").result(findValueCallback).next().click(function() {
 		$(this).prev().search();
 	});
 });
@@ -72,6 +90,12 @@ $().ready(function() {
 			<label>Month (local):</label>
 			<input type="text" id="suggest12" />
 			<input type="button" value="Get Value" />
+		</p>
+		<p>
+			<label>E-Mail (local):</label>
+			<input type="text" id="suggest13" />
+			<input type="button" value="Get Value" />
+		</p>
 		<p>
 			<label>Single Bird (remote):</label>
 			<input type="text" id="suggest2" />
