@@ -161,7 +161,7 @@ jQuery.Autocompleter = function(input, options) {
 	var timeout;
 	var previousValue = "";
 	var cache = jQuery.Autocompleter.Cache(options);
-	var hasFocus = false;
+	var hasFocus = 0;
 	var lastKeyPressCode;
 	var select = jQuery.Autocompleter.Select(options, input, selectCurrent, createListItem);
 	
@@ -227,7 +227,8 @@ jQuery.Autocompleter = function(input, options) {
 		request($input.val(), findValueCallback, findValueCallback);
 	}).click(function() {
 		if ( hasFocus++ > 1 && !select.visible() ) {
-			select.show();
+			//select.show();
+			onChange(0, true);
 		}
 	});
 	
@@ -239,7 +240,7 @@ jQuery.Autocompleter = function(input, options) {
 	
 	hideResultsNow();
 	
-	function onChange() {
+	function onChange(crap, skipPrevCheck) {
 		if( lastKeyPressCode == KEY.DEL ) {
 			select.hide();
 			return;
@@ -247,7 +248,7 @@ jQuery.Autocompleter = function(input, options) {
 		
 		var currentValue = $input.val();
 		
-		if ( currentValue == previousValue )
+		if ( !skipPrevCheck && currentValue == previousValue )
 			return;
 		
 		previousValue = currentValue;
@@ -462,10 +463,6 @@ jQuery.Autocompleter.Cache = function(options) {
 			// if row is a string, make an array otherwise just reference the array
 			var row = (typeof value == "string") ? [value] : value;
 			
-			if ( nullData < options.max ) {
-				stMatchSets[""].push(row);
-			}
-
 			// if the length is zero, don't add to list
 			if( row[0].length > 0 ){
 				// get the first character
@@ -475,6 +472,10 @@ jQuery.Autocompleter.Cache = function(options) {
 					stMatchSets[sFirstChar] = [];
 				// if the match is a string
 				stMatchSets[sFirstChar].push(row);
+				
+				if ( nullData++ < options.max ) {
+					stMatchSets[""].push(row);
+				}
 			}
 		});
 
@@ -494,7 +495,6 @@ jQuery.Autocompleter.Cache = function(options) {
 		},
 		add: add,
 		load: function(q) {
-			console.log(q);
 			if (!options.cacheLength || !length)
 				return null;
 			if (data[q])
@@ -578,6 +578,7 @@ jQuery.Autocompleter.Select = function (options, input, select, create) {
 	}
 	
 	function dataToDom(data, q) {
+		console.log(arguments);
 		var num = limitNumberOfItems(data.length);
 		for (var i=0; i < num; i++) {
 			if (!data[i])
@@ -613,6 +614,8 @@ jQuery.Autocompleter.Select = function (options, input, select, create) {
 			return this.visible() && (listItems.filter("." + CLASSES.ACTIVE)[0] || options.selectFirst && listItems[0]);
 		},
 		show: function() {
+			//if ( !input.value )
+			//	return;
 			// get the position of the input field right now (in case the DOM is shifted)
 			var offset = jQuery(input).offset({scroll: false, border: false});
 			// either use the specified width, or autocalculate based on form element

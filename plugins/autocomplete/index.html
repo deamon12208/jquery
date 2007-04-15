@@ -23,6 +23,11 @@ $().ready(function() {
 	}
 	
 	$("#suggest1").autocomplete(cities);
+	$("#suggest12").autocomplete(months, {
+		minChars: 0,
+		max: 12,
+		autoFill: true
+	});
 	$("#suggest2").autocomplete("search.php", {
 		delay: 150,
 		width: 260,
@@ -63,6 +68,10 @@ $().ready(function() {
 			<input type="text" id="suggest1" />
 			<input type="button" value="Get Value" />
 		</p>
+		<p>
+			<label>Month (local):</label>
+			<input type="text" id="suggest12" />
+			<input type="button" value="Get Value" />
 		<p>
 			<label>Single Bird (remote):</label>
 			<input type="text" id="suggest2" />
