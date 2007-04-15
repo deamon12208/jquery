@@ -14,11 +14,14 @@
 /*
 TODO
 - pass plain data to result handler instead of expanded dom element, maybe add reference to input
-- allow modification of not-last value in multiple-fields
-- add support for multiple fields for findValue/result-event
 - add proper example for completing multiple values and updating related ids to a hidden field
 - modify demo to work with a proper form, no always-prevent-submit!
 - add a callback to allow decoding the response
+- fix mustMatch
+- add scrollbars and page down/up, option for height or number of items to be visible without scrolling
+- add display select on click when input already has focus, without entering anything
+- add support for multiple fields for findValue/result-event
+- allow modification of not-last value in multiple-fields
 */
 
 /**
@@ -81,7 +84,8 @@ TODO
  * @option String multipleSeparator Seperator to put between values when using multiple option. Default: ", "
  * @option Number width Specify a custom width for the select box. Default: width of the input element
  * @option Boolean autoFill Fill the textinput while still selecting a value, replacing the value if more is type or something else is selected. Default: false
- * @option Number maxItemsToShow Limit the number of items to show. Default: 10
+ * @option Number max Limit the number of items in the select box. Default: 10
+ * @option TODO Number size Limit the number of items to show at once. Default: 
  */
 
 /**
@@ -166,15 +170,21 @@ jQuery.Autocompleter = function(input, options) {
 		lastKeyPressCode = event.keyCode;
 		switch(event.keyCode) {
 			case KEY.UP:
+				event.preventDefault();
 				if ( select.visible() ) {
-					event.preventDefault();
 					select.prev();
+				} else {
+					select.show();
+					select.noneActive();
 				}
 				break;
 			case KEY.DOWN:
+				event.preventDefault();
 				if ( select.visible() ) {
-					event.preventDefault();
 					select.next();
+				} else {
+					select.show();
+					select.noneActive();
 				}
 				break;
 			case KEY.TAB:
@@ -190,7 +200,6 @@ jQuery.Autocompleter = function(input, options) {
 				select.hide();
 				break;
 			default:
-				select.noneActive();
 				clearTimeout(timeout);
 				timeout = setTimeout(onChange, options.delay);
 				break;
@@ -198,9 +207,9 @@ jQuery.Autocompleter = function(input, options) {
 	}).focus(function(){
 		// track whether the field has focus, we shouldn't process any
 		// results if the field no longer has focus
-		hasFocus = true;
+		hasFocus++;
 	}).blur(function() {
-		hasFocus = false;
+		hasFocus = 0;
 		hideResults();
 	}).bind("search", function() {
 		function findValueCallback(q, data) {
@@ -216,6 +225,10 @@ jQuery.Autocompleter = function(input, options) {
 			$input.trigger("result", [result]);
 		}
 		request($input.val(), findValueCallback, findValueCallback);
+	}).click(function() {
+		if ( hasFocus++ > 1 && !select.visible() ) {
+			select.show();
+		}
 	});
 	
 	$(input.form).submit(function() {
@@ -404,7 +417,8 @@ jQuery.Autocompleter.defaults = {
 	mustMatch: false,
 	extraParams: {},
 	selectFirst: true,
-	maxItemsToShow: 10,
+	max: 10,
+	//size: 10,
 	autoFill: false,
 	width: 0,
 	multiple: false,
@@ -439,11 +453,18 @@ jQuery.Autocompleter.Cache = function(options) {
 
 		// no url was specified, we need to adjust the cache length to make sure it fits the local data store
 		if( !options.url ) options.cacheLength = 1;
+		
+		var nullData = 0;
+		stMatchSets[""] = [];
 
 		// loop through the array and create a lookup structure
 		jQuery.each(options.data, function(i, value) {
 			// if row is a string, make an array otherwise just reference the array
 			var row = (typeof value == "string") ? [value] : value;
+			
+			if ( nullData < options.max ) {
+				stMatchSets[""].push(row);
+			}
 
 			// if the length is zero, don't add to list
 			if( row[0].length > 0 ){
@@ -473,7 +494,8 @@ jQuery.Autocompleter.Cache = function(options) {
 		},
 		add: add,
 		load: function(q) {
-			if (!q || !options.cacheLength || !length)
+			console.log(q);
+			if (!options.cacheLength || !length)
 				return null;
 			if (data[q])
 				return data[q];
@@ -512,12 +534,12 @@ jQuery.Autocompleter.Select = function (options, input, select, create) {
 		.appendTo("body");
 
 	var list = jQuery("<ul>").appendTo(element).mouseover( function(event) {
-		active = jQuery("li", list).removeClass(CLASSES.ACTIVE).index(event.target);
-		jQuery(event.target).addClass(CLASSES.ACTIVE);
+		active = jQuery("li", list).removeClass(CLASSES.ACTIVE).index(target(event));
+		jQuery(target(event)).addClass(CLASSES.ACTIVE);
 	}).mouseout( function(event) {
-		jQuery(event.target).removeClass(CLASSES.ACTIVE);
+		jQuery(target(event)).removeClass(CLASSES.ACTIVE);
 	}).click(function(event) {
-		jQuery(event.target).addClass(CLASSES.ACTIVE);
+		jQuery(target(event)).addClass(CLASSES.ACTIVE);
 		select();
 		input.focus();
 		return false;
@@ -527,6 +549,13 @@ jQuery.Autocompleter.Select = function (options, input, select, create) {
 		
 	if( options.width > 0 )
 		element.css("width", options.width);
+		
+	function target(event) {
+		var element = event.target;
+		while(element.tagName != "LI")
+			element = element.parentNode;
+		return element;
+	}
 
 	function moveSelect(step) {
 		active += step;
@@ -543,8 +572,8 @@ jQuery.Autocompleter.Select = function (options, input, select, create) {
 	}
 	
 	function limitNumberOfItems(available) {
-		return (options.maxItemsToShow > 0) && (options.maxItemsToShow < available)
-			? options.maxItemsToShow
+		return (options.max > 0) && (options.max < available)
+			? options.max
 			: available;
 	}
 	
@@ -581,7 +610,7 @@ jQuery.Autocompleter.Select = function (options, input, select, create) {
 			return element.is(":visible");
 		},
 		current: function() {
-			return this.visible() && (listItems.filter(".ac_over")[0] || options.selectFirst && listItems[0]);
+			return this.visible() && (listItems.filter("." + CLASSES.ACTIVE)[0] || options.selectFirst && listItems[0]);
 		},
 		show: function() {
 			// get the position of the input field right now (in case the DOM is shifted)
@@ -589,12 +618,14 @@ jQuery.Autocompleter.Select = function (options, input, select, create) {
 			// either use the specified width, or autocalculate based on form element
 			element.css({
 				width: options.width > 0 ? options.width : jQuery(input).width(),
+				//height: jQuery(listItems[0]).height() * options.size,
 				top: offset.top + input.offsetHeight,
 				left: offset.left
 			}).show();
 		},
 		noneActive: function() {
 			active = -1;
+			listItems.removeClass(CLASSES.ACTIVE);
 		}
 	};
 }
