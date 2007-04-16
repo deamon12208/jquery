@@ -13,7 +13,6 @@
 
 /*
 TODO
-- pass plain data to result handler instead of expanded dom element, maybe add reference to input - WIP
 - add proper example for completing multiple values and updating related ids to a hidden field
 - modify demo to work with a proper form, no always-prevent-submit!
 - add a callback to allow decoding the response
@@ -226,12 +225,9 @@ jQuery.Autocompleter = function(input, options) {
 			}
 			$input.trigger("result", result && [result.data, result.value]);
 		}
-		console.log(trimWords($input.val()));
 		jQuery.each(trimWords($input.val()), function(i, value) {
-			//if ( !options.multiple || value )
-				request(value, findValueCallback, findValueCallback);
+			request(value, findValueCallback, findValueCallback);
 		});
-		//request($input.val(), findValueCallback, findValueCallback);
 	});
 	
 	$(input.form).submit(function() {
@@ -260,8 +256,7 @@ jQuery.Autocompleter = function(input, options) {
 		
 		$input.val(v);
 		hideResultsNow();
-		// todo: pass additional data directly to callback
-		$input.trigger("result", [selected.data, selected.value]); //[li]);
+		$input.trigger("result", [selected.data, selected.value]);
 		return true;
 	}
 	
@@ -297,7 +292,7 @@ jQuery.Autocompleter = function(input, options) {
 		var words = value.split( jQuery.trim( options.multipleSeparator ) );
 		var result = [];
 		jQuery.each(words, function(i, value) {
-			if ( !!jQuery.trim(value) )
+			if ( jQuery.trim(value) )
 				result[i] = jQuery.trim(value);
 		});
 		return result;
@@ -629,8 +624,8 @@ jQuery.Autocompleter.Select = function (options, input, select) {
 				top: offset.top + input.offsetHeight,
 				left: offset.left
 			}).show();
-			active = -1;
-			listItems.removeClass(CLASSES.ACTIVE);
+			//active = -1;
+			//listItems.removeClass(CLASSES.ACTIVE);
 		},
 		selected: function() {
 			return data && data[active];
