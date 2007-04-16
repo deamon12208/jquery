@@ -230,12 +230,6 @@ jQuery.Autocompleter = function(input, options) {
 		});
 	});
 	
-	$(input.form).submit(function() {
-		// todo: opera prefers to submit as soon as we press return
-		// preventing the entire submit isn't the right solution
-		return false;
-	});
-	
 	hideResultsNow();
 	
 	function selectCurrent() {
