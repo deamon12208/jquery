@@ -161,8 +161,19 @@
 				limits.w = limits.x + Math.min(clientScroll.w,clientScroll.iw) - options.size.w;
 				limits.h = limits.y + Math.min(clientScroll.h,clientScroll.ih) - options.size.h;
 				// get position based on limits
-				pos.x = Math.max(limits.x, Math.min(pos.x, limits.w));
-				pos.y = Math.max(limits.y, Math.min(pos.y, limits.h));
+				/*pos.x = Math.max(limits.x, Math.min(pos.x, limits.w));
+				pos.y = Math.max(limits.y, Math.min(pos.y, limits.h));*/
+				
+				if (pos.x < limits.x) {
+					pos.x = options.elPos.x + options.elSize.wb + (options.elPos.x  - pos.x);
+				} else if (pos.x > limits.w ) {
+					pos.x = options.elPos.x - (pos.x - options.elPos.x) + options.size.w;
+				}
+				if (pos.y < limits.y) {
+					pos.y = options.elPos.y + options.elSize.hb + (options.elPos.y  - pos.y);
+				} else if (pos.y > limits.h ) {
+					pos.y = options.elPos.y - (pos.y - options.elPos.y) + options.size.h;
+				}
 				
 				//move tooltip
 				$.interfaceTooltip.helper.css({
@@ -195,7 +206,6 @@
 		}, options||{});
 		
 		return this.each(function(){
-			alert('da');
 			// change offset based on position
 			switch (options.position) {
 				case 'n':
