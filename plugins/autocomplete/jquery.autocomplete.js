@@ -163,7 +163,7 @@ jQuery.Autocompleter = function(input, options) {
 	var cache = jQuery.Autocompleter.Cache(options);
 	var hasFocus = 0;
 	var lastKeyPressCode;
-	var select = jQuery.Autocompleter.Select(options, input, selectCurrent, createListItem);
+	var select = jQuery.Autocompleter.Select(options, input, selectCurrent);
 	
 	$input.keydown(function(event) {
 		// track last key pressed
@@ -174,8 +174,7 @@ jQuery.Autocompleter = function(input, options) {
 				if ( select.visible() ) {
 					select.prev();
 				} else {
-					select.show();
-					select.noneActive();
+					onChange(0, true);
 				}
 				break;
 			case KEY.DOWN:
@@ -183,8 +182,7 @@ jQuery.Autocompleter = function(input, options) {
 				if ( select.visible() ) {
 					select.next();
 				} else {
-					select.show();
-					select.noneActive();
+					onChange(0, true);
 				}
 				break;
 			case KEY.TAB:
@@ -219,14 +217,14 @@ jQuery.Autocompleter = function(input, options) {
 		function findValueCallback(q, data) {
 			var result;
 			if( data && data.length ) {
-				for (var i=0; i < data.length; i++)
-					if( data[i].value.toLowerCase() == q.toLowerCase() ) {
-						// todo: pass additional data directly to callback
-						result = createListItem(data[i], i, data.length, q)[0];
+				for (var i=0; i < data.length; i++) {
+					if( data[i].result.toLowerCase() == q.toLowerCase() ) {
+						result = data[i];
 						break;
 					}
+				}
 			}
-			$input.trigger("result", [result]);
+			$input.trigger("result", result && [result.data, result.value]);
 		}
 		request($input.val(), findValueCallback, findValueCallback);
 	});
@@ -240,12 +238,11 @@ jQuery.Autocompleter = function(input, options) {
 	hideResultsNow();
 	
 	function selectCurrent() {
-		//var li = select.current();
-		//if( !li )
-			//return false;
-		var v = select.value(); //jQuery.trim(li.selectValue ? li.selectValue : li.innerHTML);
+		var selected = select.selected();
+		if( !selected )
+			return false;
 		
-		v = options.formatResult && options.formatResult(v) || v;
+		var v = selected.result;
 		previousValue = v;
 		
 		if ( options.multiple ) {
@@ -259,7 +256,7 @@ jQuery.Autocompleter = function(input, options) {
 		$input.val(v);
 		hideResultsNow();
 		// todo: pass additional data directly to callback
-		$input.trigger("result", v); //[li]);
+		$input.trigger("result", [selected.data, selected.value]); //[li]);
 		return true;
 	}
 	
@@ -324,9 +321,10 @@ jQuery.Autocompleter = function(input, options) {
 		select.hide();
 		clearTimeout(timeout);
 		stopLoading();
+		// TODO fix mustMatch...
 		if (options.mustMatch) {
 			if ($input.val() != previousValue) {
-				selectCurrent();
+				//selectCurrent();
 			}
 		}
 	};
@@ -342,41 +340,6 @@ jQuery.Autocompleter = function(input, options) {
 		}
 	};
 
-	function parseAndCacheData(q, data) {
-		var parsed = [];
-		var rows = data.split("\n");
-		for (var i=0; i < rows.length; i++) {
-			var row = jQuery.trim(rows[i]);
-			if (row) {
-				parsed[parsed.length] = row; //row.split(options.cellSeparator);
-			}
-		}
-		cache.add(q, parsed);
-		return parsed;
-	};
-	
-	function createListItem(row, i, num, q) {
-		function highlight(value) {
-			return value.replace(new RegExp("(" + q + ")", "gi"), "<strong>$1</strong>");
-		}
-		var item = document.createElement("li");
-		item.innerHTML = options.formatItem 
-				? highlight(options.formatItem(row.data, i, num))
-				: highlight(row.value);
-		//item.selectValue = row[0];
-		/*
-		var extra = null;
-		if (row.length > 1) {
-			extra = [];
-			for (var j=1; j < row.length; j++) {
-				extra[extra.length] = row[j];
-			}
-		}
-		item.extra = extra;
-		*/
-		return jQuery(item);
-	}
-	
 	function request(term, success, failure) {
 		if (!options.matchCase)
 			term = term.toLowerCase();
@@ -392,12 +355,31 @@ jQuery.Autocompleter = function(input, options) {
 					q: lastWord(term)
 				}, options.extraParams),
 				success: function(data) {
-					success(term, parseAndCacheData(term, data));
+					var parsed = options.parse && options.parse(data) || parse(data);
+					cache.add(term, parsed);
+					success(term, parsed);
 				}
 			});
 		} else {
 			failure(term);
 		}
+	}
+	
+	function parse(data) {
+		var parsed = [];
+		var rows = data.split("\n");
+		for (var i=0; i < rows.length; i++) {
+			var row = jQuery.trim(rows[i]);
+			if (row) {
+				row = row.split("|");
+				parsed[parsed.length] = {
+					data: row,
+					value: row[0],
+					result: options.formatResult && options.formatResult(row) || row[0]
+				};
+			}
+		}
+		return parsed;
 	}
 
 	function stopLoading() {
@@ -410,8 +392,6 @@ jQuery.Autocompleter.defaults = {
 	inputClass: "ac_input",
 	resultsClass: "ac_results",
 	loadingClass: "ac_loading",
-	//lineSeparator: "\n",
-	//cellSeparator: "|",
 	minChars: 1,
 	delay: 400,
 	matchCase: false,
@@ -467,7 +447,9 @@ jQuery.Autocompleter.Cache = function(options) {
 			// if row is a string, make an array otherwise just reference the array
 			
 			
-			value = options.formatItem ? options.formatItem(rawValue) : rawValue;
+			value = options.formatItem
+				? options.formatItem(rawValue, i+1, options.data.length)
+				: rawValue;
 			var firstChar = value.charAt(0).toLowerCase();
 			// if no lookup array for this character exists, look it up now
 			if( !stMatchSets[firstChar] )
@@ -475,7 +457,8 @@ jQuery.Autocompleter.Cache = function(options) {
 			// if the match is a string
 			var row = {
 				value: value,
-				data: rawValue
+				data: rawValue,
+				result: options.formatResult && options.formatResult(rawValue) || value
 			}
 			
 			stMatchSets[firstChar].push(row);
@@ -525,7 +508,7 @@ jQuery.Autocompleter.Cache = function(options) {
 	};
 };
 
-jQuery.Autocompleter.Select = function (options, input, select, create) {
+jQuery.Autocompleter.Select = function (options, input, select) {
 	var CLASSES = {
 		ACTIVE: "ac_over"
 	};
@@ -588,8 +571,12 @@ jQuery.Autocompleter.Select = function (options, input, select, create) {
 		for (var i=0; i < num; i++) {
 			if (!data[i])
 				continue;
-			// here data[i] is already the formatted value, we need the original
-			create(data[i], i, num, term).appendTo(list);
+			function highlight(value) {
+				return value.replace(new RegExp("(" + term + ")", "gi"), "<strong>$1</strong>");
+			}
+			jQuery("<li>").html( options.formatItem 
+					? highlight(options.formatItem(data[i].data, i+1, num))
+					: highlight(data[i].value) ).appendTo(list);
 		}
 		listItems = list.find("li");
 		if ( options.selectFirst ) {
@@ -614,6 +601,7 @@ jQuery.Autocompleter.Select = function (options, input, select, create) {
 		},
 		hide: function() {
 			element.hide();
+			active = -1;
 		},
 		visible : function() {
 			return element.is(":visible");
@@ -622,8 +610,6 @@ jQuery.Autocompleter.Select = function (options, input, select, create) {
 			return this.visible() && (listItems.filter("." + CLASSES.ACTIVE)[0] || options.selectFirst && listItems[0]);
 		},
 		show: function() {
-			//if ( !input.value )
-			//	return;
 			// get the position of the input field right now (in case the DOM is shifted)
 			var offset = jQuery(input).offset({scroll: false, border: false});
 			// either use the specified width, or autocalculate based on form element
@@ -633,14 +619,11 @@ jQuery.Autocompleter.Select = function (options, input, select, create) {
 				top: offset.top + input.offsetHeight,
 				left: offset.left
 			}).show();
-		},
-		noneActive: function() {
 			active = -1;
 			listItems.removeClass(CLASSES.ACTIVE);
 		},
-		value: function() {
-			var result = data[active];
-			return options.formatResult && options.formatResult(result.data) || result.value;
+		selected: function() {
+			return data && data[active];
 		}
 	};
 }

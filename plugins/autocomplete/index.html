@@ -14,18 +14,17 @@
 <script type="text/javascript">
 $().ready(function() {
 
-	function findValueCallback(event, li) {
-		jQuery("#result").html( !li ? "No match!" : "Selected: " + li); //( !!li.extra ? li.extra[0] : li.selectValue ));
-		//console.log(arguments);
+	function findValueCallback(event, data, formatted) {
+		jQuery("#result").text( !data ? "No match!" : "Selected: " + formatted);
 	}
 	
 	function formatItem(row) {
-		var row = row.split("|");
+		//var row = row.split("|");
 		return row[0] + " (id: " + row[1] + ")";
 	}
 	
 	function formatResult(row) {
-		return row.split("|")[0];
+		return row[0];
 	}
 	
 	$("#suggest1").autocomplete(cities);
@@ -36,9 +35,10 @@ $().ready(function() {
 	});
 	$("#suggest13").autocomplete(emails, {
 		minChars: 0,
-		width: 280,
-		formatItem: function(row) {
-			return "\"" + row.name + "\" <" + row.to + ">";
+		width: 310,
+		matchContains: true,
+		formatItem: function(row, i, max) {
+			return i + "/" + max + ": \"" + row.name + "\" <" + row.to + ">";
 		},
 		formatResult: function(row) {
 			return row.to;
@@ -65,7 +65,7 @@ $().ready(function() {
 			foo: "bar"
 		}
 	});
-	$("#suggest1, #suggest12, #suggest2, #suggest3, #suggest4").result(findValueCallback).next().click(function() {
+	$(":text, textarea").result(findValueCallback).next().click(function() {
 		$(this).prev().search();
 	});
 });
@@ -112,7 +112,7 @@ $().ready(function() {
 			<input type="button" value="Get Value" />
 		</p>
 		<p>
-			<label>Some dropdown:</label>
+			<label>Some dropdown (&lt;3 IE):</label>
 			<select>
 				<option value="">Item 12334455</option>
 				<option value="2">Item 2</option>
