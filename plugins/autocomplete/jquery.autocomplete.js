@@ -226,7 +226,12 @@ jQuery.Autocompleter = function(input, options) {
 			}
 			$input.trigger("result", result && [result.data, result.value]);
 		}
-		request($input.val(), findValueCallback, findValueCallback);
+		console.log(trimWords($input.val()));
+		jQuery.each(trimWords($input.val()), function(i, value) {
+			//if ( !options.multiple || value )
+				request(value, findValueCallback, findValueCallback);
+		});
+		//request($input.val(), findValueCallback, findValueCallback);
 	});
 	
 	$(input.form).submit(function() {
@@ -286,11 +291,16 @@ jQuery.Autocompleter = function(input, options) {
 	};
 	
 	function trimWords(value) {
+		if ( !value ) {
+			return [""];
+		}
 		var words = value.split( jQuery.trim( options.multipleSeparator ) );
+		var result = [];
 		jQuery.each(words, function(i, value) {
-			words[i] = jQuery.trim(value);
+			if ( !!jQuery.trim(value) )
+				result[i] = jQuery.trim(value);
 		});
-		return words;
+		return result;
 	}
 	
 	function lastWord(value) {

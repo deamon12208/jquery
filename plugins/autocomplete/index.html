@@ -15,7 +15,7 @@
 $().ready(function() {
 
 	function findValueCallback(event, data, formatted) {
-		jQuery("#result").text( !data ? "No match!" : "Selected: " + formatted);
+		$("<li>").text( !data ? "No match!" : "Selected: " + formatted).appendTo("#result");
 	}
 	
 	function formatItem(row) {
@@ -122,7 +122,7 @@ $().ready(function() {
 		</p>
 	</form>
 	
-	<h3>Result:</h3> <h2 id="result"></h2>
+	<h3>Result:</h3> <ol id="result"></ol>
 
 </div>
 
