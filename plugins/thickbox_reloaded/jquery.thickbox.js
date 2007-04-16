@@ -312,7 +312,7 @@
                             break;
                         case CONFIRM:
                             builder = function() {
-                                buildTitle($('input[@type="submit"][@title]', $$).attr('title') || defaultValues.i18n.confirm.what);
+                                buildTitle($('*[@type="submit"][@title]', $$).attr('title') || defaultValues.i18n.confirm.what);
                                 var p = $('<p id="' + CONTENT_ID + '"></p>').appendTo(modal);
                                 $('<a id="tb-confirm" href="#">' + defaultValues.i18n.confirm.confirm + '</a>').appendTo(p).click(function() {
                                     // pass confirm as callback to hide
