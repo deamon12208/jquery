@@ -21,6 +21,7 @@ TODO
 - add display select on click when input already has focus, without entering anything
 - add support for multiple fields for findValue/result-event
 - allow modification of not-last value in multiple-fields
+- replace adding/removing classes with li/a and :hover pseudo-class, just keep tracking which element is active, could help safari and performance in general
 */
 
 /**
