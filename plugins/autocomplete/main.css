@@ -6,10 +6,9 @@ ol,ul{list-style:none}
 caption,th{text-align:left}
 h1,h2,h3,h4,h5,h6{font-size:100%;font-style:normal;font-weight:normal}
 q:before,q:after{content:''}
-body{font:13px arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small}
-table{font-size:inherit;font:100%}
+body{font:13px arial,helvetica,clean,sans-serif;font-size:small;}
 select,input,textarea{font:99% arial,helvetica,clean,sans-serif}
-pre,code{font:115% monospace;*font-size:100%}
+pre,code{font:115% monospace;font-size:100%}
 body * {line-height:1.22em}
 body {
 	color: #202020;
@@ -47,4 +46,4 @@ label {
 	float: left;
 	width: 12em;
 }
-input { width: 15em; }
+input[type=text] { width: 15em; }

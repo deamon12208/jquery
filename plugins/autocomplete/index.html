@@ -68,6 +68,13 @@ $().ready(function() {
 	$(":text, textarea").result(findValueCallback).next().click(function() {
 		$(this).prev().search();
 	});
+	$("#suggest2").result(function(event, data, formatted) {
+		$(this).find("..+/input").val(data[1]);
+	});
+	$("#suggest4").result(function(event, data, formatted) {
+		var hidden = $(this).find("..+/input");
+		hidden.val( (hidden.val() ? hidden.val() + ";" : hidden.val()) + data[1]);
+	});
 });
 </script>
 	
@@ -102,6 +109,10 @@ $().ready(function() {
 			<input type="button" value="Get Value" />
 		</p>
 		<p>
+			<label>Hidden input</label>
+			<input />
+		</p>
+		<p>
 			<label>Multiple Cities (local):</label>
 			<textarea id='suggest3' cols='40' rows='3'></textarea>
 			<input type="button" value="Get Value" />
@@ -110,6 +121,10 @@ $().ready(function() {
 			<label>Multiple Birds (remote):</label>
 			<input id='suggest4' ></textarea>
 			<input type="button" value="Get Value" />
+		</p>
+		<p>
+			<label>Hidden input</label>
+			<input />
 		</p>
 		<p>
 			<label>Some dropdown (&lt;3 IE):</label>

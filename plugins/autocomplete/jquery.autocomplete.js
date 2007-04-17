@@ -1,5 +1,5 @@
 /*
- * Autocomplete - jQuery plugin
+ * Autocomplete - jQuery plugin 1.0 Alpha
  *
  * Copyright (c) 2007 Dylan Verheul, Dan G. Switzer, Anjesh Tuladhar, Jörn Zaefferer
  *
@@ -13,15 +13,10 @@
 
 /*
 TODO
-- add proper example for completing multiple values and updating related ids to a hidden field
-- modify demo to work with a proper form, no always-prevent-submit!
 - add a callback to allow decoding the response
 - fix mustMatch
 - add scrollbars and page down/up, option for height or number of items to be visible without scrolling
-- add display select on click when input already has focus, without entering anything
-- add support for multiple fields for findValue/result-event
 - allow modification of not-last value in multiple-fields
-- replace adding/removing classes with li/a and :hover pseudo-class, just keep tracking which element is active, could help safari and performance in general
 */
 
 /**
@@ -152,7 +147,8 @@ jQuery.Autocompleter = function(input, options) {
 		DEL: 46,
 		TAB: 9,
 		RETURN: 13,
-		ESC: 27
+		ESC: 27,
+		COMMA: 188
 	};
 
 	// Create jQuery object for input element
@@ -169,6 +165,7 @@ jQuery.Autocompleter = function(input, options) {
 		// track last key pressed
 		lastKeyPressCode = event.keyCode;
 		switch(event.keyCode) {
+		
 			case KEY.UP:
 				event.preventDefault();
 				if ( select.visible() ) {
@@ -177,6 +174,7 @@ jQuery.Autocompleter = function(input, options) {
 					onChange(0, true);
 				}
 				break;
+				
 			case KEY.DOWN:
 				event.preventDefault();
 				if ( select.visible() ) {
@@ -185,6 +183,9 @@ jQuery.Autocompleter = function(input, options) {
 					onChange(0, true);
 				}
 				break;
+			
+			// matches also semicolon
+			case options.multiple && jQuery.trim(options.multipleSeparator) == "," && KEY.COMMA:
 			case KEY.TAB:
 			case KEY.RETURN:
 				if( selectCurrent() ){
@@ -194,14 +195,18 @@ jQuery.Autocompleter = function(input, options) {
 					event.preventDefault();
 				}
 				break;
+				
 			case KEY.ESC:
 				select.hide();
 				break;
+				
 			default:
 				clearTimeout(timeout);
 				timeout = setTimeout(onChange, options.delay);
 				break;
 		}
+	}).keypress(function() {
+		// having fun with opera - remove this binding and Opera submits the form when we select an entry via return
 	}).focus(function(){
 		// track whether the field has focus, we shouldn't process any
 		// results if the field no longer has focus
@@ -210,6 +215,7 @@ jQuery.Autocompleter = function(input, options) {
 		hasFocus = 0;
 		hideResults();
 	}).click(function() {
+		// show select when clicking in a focused field
 		if ( hasFocus++ > 1 && !select.visible() ) {
 			onChange(0, true);
 		}
