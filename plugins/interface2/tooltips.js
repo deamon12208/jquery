@@ -255,5 +255,38 @@
 			}
 		});
 	};
+	$.fn.tooltipSetContent = function(html){
+		return this.each(function(){
+			if (options.visible == true) {
+				var ttContent = $(html);
+				if (!ttContent) {
+					ttContent = $('<div class="title">' + html + '</div>');
+				}
+				//wrapp tooltip's content
+				if(options.wrapper) {
+					ttContent.wrap(options.wrapper);
+				}
+				ttContent.appendTo($.interfaceTooltip.helper.get(0));
+			}
+		});
+	};
+	$.fn.tooltipShow = function(){
+		return this.each(function(){
+			if (options.event == 'click') {
+				$(this).trigger('click', options.showDelay);
+			} else {
+				$(this).trigger('mouseover', options.showDelay);
+			}
+		});
+	};
+	$.fn.tooltipHide = function(){
+		return this.each(function(){
+			if (options.event == 'click') {
+				$(this).trigger('click', options.hideDelay);
+			} else {
+				$(this).trigger('mouseout', options.hideDelay);
+			}
+		});
+	};
 	
 })(jQuery);
