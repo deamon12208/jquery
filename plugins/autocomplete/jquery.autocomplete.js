@@ -132,13 +132,6 @@ jQuery.fn.extend({
 	}
 });
 
-/**
- * Call to find the current selected value. The callback is the same as for the onSelectItem callback.
- *
- * @name jQuery.Autocompleter.findValue
- * @param Function callback Executed when the current value (possibly request via ajax) is found
- * @type undefined
- */
 jQuery.Autocompleter = function(input, options) {
 
 	var KEY = {
