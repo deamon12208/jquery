@@ -38,8 +38,8 @@ body
 }
 #list2 {
 	position: relative;
-	top: -170px;
-	left: 300px;
+	top: 0px;
+	left: 350px;
 }
 #list3 {
 	position: absolute;
@@ -118,6 +118,7 @@ $(document).ready(
 			context: true,
 			activeClass: 'activated',
 			hoverClass: 'hovered',
+			ghostly: true,
 			zIndex: 1000
 		});
 		$('#list2').sortable({
@@ -125,10 +126,7 @@ $(document).ready(
 			context: true,
 			activeClass: 'activated',
 			hoverClass: 'hovered',
-			zIndex: 1000,
-			onChange: function() {
-				console.log($('#list2').sortableSerialize('id', 'list'));
-			}
+			zIndex: 1000
 		});
 		$('#list3').sortable({
 			accept: 'li',
