@@ -2,7 +2,7 @@
 (function($) {
 	$.fn.draggable = function(options) {
 		options = $.extend({
-			drag: function(e) {
+			beforeDrag: function(e) {
 				var position, delta;
 				//if cursorAt then the element is positioned at cursor position
 				if (options.cursorAt) {
@@ -56,9 +56,13 @@
 				//get element position, offset position and size
 				this.DB.position = $.iUtil.getPosition(this.DB.draggedEls);
 				this.DB.size = $.iUtil.getSize(this.DB.draggedEls);
-				this.DB.offset = {
+				/*this.DB.offset = {
 					x: this.DB.draggedEls.offsetLeft,
 					y: this.DB.draggedEls.offsetTop
+				};*/
+				this.DB.offset = {
+					x: parseInt($.curCSS(this.DB.draggedEls, 'left'), 10),
+					y: parseInt($.curCSS(this.DB.draggedEls, 'top'), 10)
 				};
 				//if cursorAt then calculate the extra offset
 				if (this.DB.cursorAt) {
@@ -115,7 +119,7 @@
 					el.style.zIndex = 'number' == typeof options.zIndex ? options.zIndex : 1999;
 				}
 				
-				el.style.display = 'block';
+				el.style.display = '';
 			},
 			startDrag: function() {
 				this.DB.onStart.apply(this.DB.draggedEls, [this.DB.proxy||this.DB.draggedEls, $.DDM.dragged.DB.targets]);
@@ -128,7 +132,7 @@
 					y : this.DB.axis === 'x' ? this.DB.pointer.y : e.pageY
 				};
 			},
-			stopDrag: function() {
+			beforeStopDrag: function() {
 				var handledByUser = this.DB.onStop.apply(
 					this.DB.draggedEls,
 					[
@@ -172,7 +176,7 @@
 					isAllowed = true;
 				//if the event was fired by a illegal element or condition then stop the dragging
 				if ('function' == typeof options.dragPrevention) {
-					isAllowed = options.dragPreventionOn.apply(del,[$.DDM.currentTarget]);
+					isAllowed = options.dragPrevention.apply(del,[$.DDM.currentTarget]);
 				} else if ('string' == typeof options.dragPrevention) {
 					var chunks = options.dragPrevention.toUpperCase().split(',');
 					jQuery.each(
@@ -190,9 +194,9 @@
 						if (options.helper == 'clone') {
 							options.ghostly = true;
 						}
-						el.DB.proxy = $(del).clone(true).insertAfter(del)[0];
+						el.DB.proxy = $(del).clone(true).insertAfter(del).hide()[0];
 					} else if (options.helper) {
-						el.DB.proxy = $(options.helper.apply(del)).insertAfter(del)[0];
+						el.DB.proxy = $(options.helper.apply(del)).insertAfter(del).hide()[0];
 					}
 					if (el.DB.proxy) {
 						$(el.DB.proxy).css({
