@@ -17,25 +17,27 @@ TODO
 - fix mustMatch
 - add scrollbars and page down/up, option for height or number of items to be visible without scrolling
 - allow modification of not-last value in multiple-fields
+@option TODO Number size Limit the number of items to show at once. Default: 
 */
 
 /**
  * Provide autocomplete for text-inputs or textareas.
  *
+ * Depends on dimensions plugin's offset method for correct positioning of the select box and bgiframe plugin
+ * to fix IE's problem with selects.
+ *
  * @example $("#input_box").autocomplete("my_autocomplete_backend.php");
  * @before <input id="input_box" />
- * @desc Autocomplte a text-input with remote data. For small to giant datasets.
+ * @desc Autocomplete a text-input with remote data. For small to giant datasets.
  *
  * When the user starts typing, a request is send to the specified backend ("my_autocomplete_backend.php"),
- * with a GET parameter named q that contains the current value of the input box.
+ * with a GET parameter named q that contains the current value of the input box and a paremeter "limit" with
+ * the value specified for the max option.
  *
- * A value of "foo" would result in this request url: my_autocomplete_backend.php?q=foo
+ * A value of "foo" would result in this request url: my_autocomplete_backend.php?q=foo&limit=10
  *
  * The result must return with one value on each line. The result is presented in the order
  * the backend sends it.
- *
- * Depends on dimensions plugin's offset method for correct positioning of the select box and bgiframe plugin
- * to fix IE's problem with selects.
  *
  * @example $("#input_box").autocomplete(["Cologne", "Berlin", "Munich"]);
  * @before <input id="input_box" />
@@ -63,8 +65,6 @@ TODO
  * @option String inputClass This class will be added to the input box. Default: "ac_input"
  * @option String resultsClass The class for the UL that will contain the result items (result items are LI elements). Default: "ac_results"
  * @option String loadingClass The class for the input box while results are being fetched from the server. Default: "ac_loading"
- * @option String lineSeparator The character that separates lines in the results from the backend. Default: "\n"
- * @option String cellSeparator The character that separates cells in the results from the backend. Default: "|"
  * @option Number minChars The minimum number of characters a user has to type before the autocompleter activates. Default: 1
  * @option Number delay The delay in milliseconds the autocompleter waits after a keystroke to activate itself. Default: 400 for remote, 10 for local
  * @option Number cacheLength The number of backend query results to store in cache. If set to 1 (the current result), no caching will happen. Do not set below 1. Default: 10
@@ -74,23 +74,28 @@ TODO
  * @option Booolean mustMatch If set to true, the autocompleter will only allow results that are presented by the backend. Note that illegal values result in an empty input box. Default: false
  * @option Object extraParams Extra parameters for the backend. If you were to specify { bar:4 }, the autocompleter would call my_autocomplete_backend.php?q=foo&bar=4 (assuming the input box contains "foo"). Default: {}
  * @option Boolean selectFirst If this is set to true, the first autocomplete value will be automatically selected on tab/return, even if it has not been handpicked by keyboard or mouse action. If there is a handpicked (highlighted) result, that result will take precedence. Default: true
- * @option Function formatItem Provides advanced markup for an item. For each row of results, this function will be called. The returned value will be displayed inside an LI element in the results list. Autocompleter will provide 3 parameters: the results row, the position of the row in the list of results, and the number of items in the list of results. Default: none
+ * @option Function formatItem Provides advanced markup for an item. For each row of results, this function will be called. The returned value will be displayed inside an LI element in the results list. Autocompleter will provide 3 parameters: the results row, the position of the row in the list of results (starting at 1), and the number of items in the list of results. Default: none, assumes that a single row contains a single value.
+ * @option Function formatResult Similar to formatResult, but provides the formatting for the value to be put into the input field. Again three arguments: Data, position (starting with one) and total number of data. Default: none, assumes either plain data to use as result or uses the same value as provided by formatItem.
  * @option Boolean multiple Whether to allow more then one autocomplted-value to enter. Default: false
  * @option String multipleSeparator Seperator to put between values when using multiple option. Default: ", "
  * @option Number width Specify a custom width for the select box. Default: width of the input element
  * @option Boolean autoFill Fill the textinput while still selecting a value, replacing the value if more is type or something else is selected. Default: false
- * @option Number max Limit the number of items in the select box. Default: 10
- * @option TODO Number size Limit the number of items to show at once. Default: 
+ * @option Number max Limit the number of items in the select box. Is also send as a "limit" parameter with a remote request. Default: 10
  */
 
 /**
  * Handle the result of a search event. Is executed when the user selects a value or a
- * programmatic search event is triggered.
+ * programmatic search event is triggered (see search()).
  *
- * @example jQuery('input#suggest').result(function(event, li) {
- *   jQuery("#result").html( !li ? "No match!" : "Selected: " + ( !!li.extra ? li.extra[0] : li.selectValue ));
+ * You can add and remove (using unbind("result")) this event at any time.
+ *
+ * @example jQuery('input#suggest').result(function(event, data, formatted) {
+ *   jQuery("#result").html( !data ? "No match!" : "Selected: " + formatted);
  * });
- * @desc Bind a handler to the result event to display the selected value in a #result element
+ * @desc Bind a handler to the result event to display the selected value in a #result element.
+ *    The first argument is a generic event object, in this case with type "result".
+ *    The second argument refers to the selected data, which can be a plain string value or an array or object.
+ *    The third argument is the formatted value that is inserted into the input field.
  *
  * @param Function handler The event handler, gets a default event object as first and
  * 		the selected list item as second argument.
@@ -101,6 +106,10 @@ TODO
 
 /**
  * Trigger a search event. See result(Function) for binding to that event.
+ *
+ * A search event mimics the same behaviour as when the user selects a value from
+ * the list of autocomplete items. You can use it to execute anything that does something
+ * with the selected value, beyond simply putting the value into the input and submitting it.
  *
  * @example jQuery('input#suggest').search();
  * @desc Triggers a search event.
@@ -351,7 +360,8 @@ jQuery.Autocompleter = function(input, options) {
 			jQuery.ajax({
 				url: options.url,
 				data: jQuery.extend({
-					q: lastWord(term)
+					q: lastWord(term),
+					limit: options.max
 				}, options.extraParams),
 				success: function(data) {
 					var parsed = options.parse && options.parse(data) || parse(data);
