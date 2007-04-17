@@ -81,7 +81,8 @@
 						options.onOut.apply(this, [$.DDM.dragged])
 					}
 				}
-			}
+			},
+			tolerance: 'pointer'
 		}, options||{});
 		
 		return this.each(function(){
