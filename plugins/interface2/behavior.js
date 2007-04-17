@@ -108,6 +108,7 @@
 		
 		//check the drop targets and validate if are posibile targets for current dragged element
 		findTargets: function() {
+			$.DDM.dragged.DB.targets = [];
 			for( var i=0; i< $.DDM.targets.length; i++) {
 				for (var j in $.DDM.targets[i].DrB.groups) {
 					if ($.DDM.dragged.DB.groups[j] && $.DDM.targets[i].DrB.isTarget.apply($.DDM.targets[i])) {

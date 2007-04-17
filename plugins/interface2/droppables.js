@@ -28,7 +28,7 @@
 				}
 			},
 			isTarget: function() {
-				return $($.DDM.dragged).is(options.accept);
+				return $($.DDM.dragged).is(this.DrB.accept);
 			},
 			onActivate: function() {
 				this.DrB.position = $.iUtil.getPosition(this);
