@@ -14,6 +14,7 @@
 <script type="text/javascript" src="../draggables.js"></script>
 <script type="text/javascript" src="../droppables.js"></script>
 <script type="text/javascript" src="../sortables.js"></script>
+<script type="text/javascript" src="../autoscroller.js"></script>
 <style type="text/css" media="all">
 
 body
@@ -23,10 +24,10 @@ body
 }
 #list1 li,
 #list2 li,
-#list3 li {
+#list3 li,
+#list4 li{
 	position: relative;
 	cursor: move;
-	width: 300px;
 	height: 26px;
 	line-height: 26px;
 }
@@ -37,8 +38,8 @@ body
 }
 #list2 {
 	position: relative;
-	top: 30px;
-	left: 30px;
+	top: -170px;
+	left: 300px;
 }
 #list3 {
 	position: absolute;
@@ -51,34 +52,64 @@ body
 .hovered {
 	background-color: #fff0f0;
 }
+#list4 {
+	height: 200px;
+	width: 300px;
+	overflow: auto;
+	top: -150px;
+	position: relative;
+}
 </style>
 </head>
 <body>
 	<ul id="list1">
-		<li class="sortableItem">List 1 item 1</li>
-		<li class="sortableItem">List 1 item 2</li>
-		<li class="sortableItem">List 1 item 3</li>
-		<li class="sortableItem">List 1 item 4</li>
-		<li class="sortableItem">List 1 item 5</li>
-		<li class="sortableItem">List 1 item 6</li>
+		<li class="sortableItem" id="list11">List 1 item 1</li>
+		<li class="sortableItem" id="list12">List 1 item 2</li>
+		<li class="sortableItem" id="list13">List 1 item 3</li>
+		<li class="sortableItem" id="list14">List 1 item 4</li>
+		<li class="sortableItem" id="list15">List 1 item 5</li>
+		<li class="sortableItem" id="list16">List 1 item 6</li>
 	</ul>
 	<ul id="list2">
-		<li>List 2 item 1</li>
-		<li>List 2 item 2</li>
-		<li>List 2 item 3</li>
-		<li>List 2 item 4</li>
-		<li>List 2 item 5</li>
-		<li>List 2 item 6</li>
+		<li id="list21">List 2 item 1</li>
+		<li id="list22">List 2 item 2</li>
+		<li id="list23">List 2 item 3</li>
+		<li id="list24">List 2 item 4</li>
+		<li id="list25">List 2 item 5</li>
+		<li id="list26">List 2 item 6</li>
 	</ul>
 	<ul id="list3">
-		<li>List 3 item 1</li>
-		<li>List 3 item 2</li>
-		<li>List 3 item 3</li>
-		<li>List 3 item 4</li>
-		<li>List 3 item 5</li>
-		<li>List 3 item 6</li>
+		<li id="list31">List 3 item 1</li>
+		<li id="list32">List 3 item 2</li>
+		<li id="list33">List 3 item 3</li>
+		<li id="list34">List 3 item 4</li>
+		<li id="list35">List 3 item 5</li>
+		<li id="list36">List 3 item 6</li>
+	</ul>
+	<ul id="list4">
+		<li id="list41" class="sortableItem4">List 4 item 1</li>
+		<li id="list42" class="sortableItem4">List 4 item 2</li>
+		<li id="list43" class="sortableItem4">List 4 item 3</li>
+		<li id="list44" class="sortableItem4">List 4 item 4</li>
+		<li id="list45" class="sortableItem4">List 4 item 5</li>
+		<li id="list46" class="sortableItem4">List 4 item 6</li>
+		<li id="list47" class="sortableItem4">List 4 item 7</li>
+		<li id="list48" class="sortableItem4">List 4 item 8</li>
+		<li id="list49" class="sortableItem4">List 4 item 9</li>
+		<li id="list410" class="sortableItem4">List 4 item 10</li>
+		<li id="list411" class="sortableItem4">List 4 item 11</li>
+		<li id="list412" class="sortableItem4">List 4 item 12</li>
+		<li id="list413" class="sortableItem4">List 4 item 13</li>
+		<li id="list414" class="sortableItem4">List 4 item 14</li>
+		<li id="list415" class="sortableItem4">List 4 item 15</li>
+		<li id="list416" class="sortableItem4">List 4 item 16</li>
+		<li id="list417" class="sortableItem4">List 4 item 17</li>
+		<li id="list418" class="sortableItem4">List 4 item 18</li>
+		<li id="list419" class="sortableItem4">List 4 item 19</li>
 	</ul>
 <script type="text/javascript">
+
+var dropscroll, documentscroll;
 $(document).ready(
 	function()
 	{
@@ -87,15 +118,17 @@ $(document).ready(
 			context: true,
 			activeClass: 'activated',
 			hoverClass: 'hovered',
-			zIndex: 1000,
-			axis: 'y'
+			zIndex: 1000
 		});
 		$('#list2').sortable({
 			accept: 'li',
 			context: true,
 			activeClass: 'activated',
 			hoverClass: 'hovered',
-			zIndex: 1000
+			zIndex: 1000,
+			onChange: function() {
+				console.log($('#list2').sortableSerialize('id', 'list'));
+			}
 		});
 		$('#list3').sortable({
 			accept: 'li',
@@ -103,6 +136,23 @@ $(document).ready(
 			activeClass: 'activated',
 			hoverClass: 'hovered',
 			zIndex: 1000
+		});
+		$('#list4').sortable({
+			accept: 'li.sortableItem4',
+			context: true,
+			activeClass: 'activated',
+			hoverClass: 'hovered',
+			zIndex: 1000,
+			axis: 'y',
+			onHover: function() {
+				dropscroll = new $.autoscroller(this, 10, 10, 60);
+			},
+			onOut: function() {
+				dropscroll.stop();
+			},
+			onStop: function() {
+				dropscroll.stop();
+			}
 		});
 	}
 );
