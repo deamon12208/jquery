@@ -70,19 +70,21 @@
 					if (!this.DrB.isOver && options.hoverClass) {
 						this.DrB.isOver = true;
 						$(this).addClass(options.hoverClass);
-						if (options.onHover) {
-							options.onHover.apply(this, [$.DDM.dragged])
-						}
+						options.beforeHover.apply(this, [$.DDM.dragged]);
+						options.onHover.apply(this, [$.DDM.dragged]);
 					}
 				} else if (this.DrB.isOver && options.hoverClass) {
 					this.DrB.isOver = false;
 					$(this).removeClass(options.hoverClass);
-					if (options.onOut) {
-						options.onOut.apply(this, [$.DDM.dragged])
-					}
+					options.beforeOut.apply(this, [$.DDM.dragged]);
+					options.onOut.apply(this, [$.DDM.dragged]);
 				}
 			},
-			tolerance: 'pointer'
+			tolerance: 'pointer',
+			beforeHover: function(){},
+			onHover: function(){},
+			beforeOut: function(){},
+			onOut: function(){}
 		}, options||{});
 		
 		return this.each(function(){
