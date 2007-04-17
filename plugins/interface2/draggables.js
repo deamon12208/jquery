@@ -61,8 +61,8 @@
 					y: this.DB.draggedEls.offsetTop
 				};*/
 				this.DB.offset = {
-					x: parseInt($.curCSS(this.DB.draggedEls, 'left'), 10),
-					y: parseInt($.curCSS(this.DB.draggedEls, 'top'), 10)
+					x: parseInt($.curCSS(this.DB.draggedEls, 'left'), 10)||0,
+					y: parseInt($.curCSS(this.DB.draggedEls, 'top'), 10)||0
 				};
 				//if cursorAt then calculate the extra offset
 				if (this.DB.cursorAt) {
