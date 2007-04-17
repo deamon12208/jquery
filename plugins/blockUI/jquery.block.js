@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.06  (03/30/2007)
+ * Version 1.08  (04/16/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -168,9 +168,9 @@ $.blockUI.impl = {
         $([f[0],w[0],m[0]]).appendTo(full ? 'body' : el);
         if (full) this.pageBlock = m[0];
 
-        // ie7 needs to use absolute positioning to account for activex issues (when scrolling)
-        var activex = $.browser.msie && $('object,embed', full ? null : el).length > 0
-        if (this.ie6 || activex) { 
+        // ie7 must use absolute positioning in quirks mode and to account for activex issues (when scrolling)
+        var expr = $.browser.msie && (!$.boxModel || $('object,embed', full ? null : el).length > 0);
+        if (this.ie6 || expr) { 
             // stretch content area if it's short
             if (full && $.blockUI.defaults.ie6Stretch && $.boxModel)
                 $('html,body').css('height','100%');
