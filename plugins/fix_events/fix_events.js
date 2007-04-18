@@ -148,7 +148,7 @@
   	// returned undefined or false
   	var returnValue;
   
-  	var c = this.events[event.type];
+  	var c = this.$events[event.type];
   
   	var args = [].slice.call( arguments, 1 );
   	args.unshift( event );
