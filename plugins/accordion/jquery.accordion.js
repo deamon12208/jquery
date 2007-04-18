@@ -59,25 +59,46 @@
  * @desc Creates an Accordion from the given div structure
  *
  * @example jQuery('#nav').Accordion({
- *   header: 'a.head'
+ *   header: '.head',
+ *	 cloneFirst: true
  * });
  * @before <ul id="nav">
  *   <li>
- *     <a class="head">Header 1</a>
+ *     <a class="head" href="books/">Books</a>
  *     <ul>
- *       <li><a href="#">Link 1</a></li>
- *       <li><a href="#">Link 2></a></li>
+ *       <li><a href="books/fantasy/">Fantasy</a></li>
+ *       <li><a href="books/programming/">Programming</a></li>
  *     </ul>
  *   </li>
  *   <li>
- *     <a class="head">Header 2</a>
+ *     <a class="head" href="movies/">Movies</a>
  *     <ul>
- *       <li><a href="#">Link 3</a></li>
- *       <li><a href="#">Link 4></a></li>
+ *       <li><a href="movies/fantasy/">Fantasy</a></li>
+ *       <li><a href="movies/programming/">Programming</a></li>
  *     </ul>
  *   </li>
  * </ul>
- * @desc Creates an Accordion from the given navigation list
+ * @after <ul id="nav">
+ *   <li>
+ *     <a class="head" href="">Books</a>
+ *     <ul>
+ *       <li><a href="books/">Books</a></li>
+ *       <li><a href="books/fantasy/">Fantasy</a></li>
+ *       <li><a href="books/programming/">Programming</a></li>
+ *     </ul>
+ *   </li>
+ *   <li>
+ *     <a class="head" href="">Movies</a>
+ *     <ul>
+ *       <li><a href="movies/">Movies</a>
+ *       <li><a href="movies/fantasy/">Fantasy</a></li>
+ *       <li><a href="movies/programming/">Programming</a></li>
+ *     </ul>
+ *   </li>
+ * </ul>
+ * @desc Creates an Accordion from the given navigation list, cloning the header element to produce a clickable
+ * link. The class as specified in the header selector is removed from the cloned element. Currently this works
+ * only with the above structure, the header must be an anchor followed by a list.
  *
  * @example jQuery('#accordion').Accordion().change(function(event, newHeader, oldHeader, newContent, oldContent) {
  *   jQuery('#status').html(newHeader.text());
@@ -87,12 +108,13 @@
  * @param Map options key/value pairs of optional settings.
  * @option String|Element|jQuery|Boolean active Selector for the active element, default is the first child, set to false to display none at start
  * @option String|Element|jQuery header Selector for the header element, eg. div.title, a.head, default is the first child's tagname
- * @option String|Number showSpeed Speed for the slideIn, default is 'slow' (for numbers: smaller = faster)
- * @option String|Number hideSpeed Speed for the slideOut, default is 'fast' (for numbers: smaller = faster)
+ * @option String|Number showSpeed Speed for the slideIn, default is 'normal' (for numbers: smaller = faster)
+ * @option String|Number hideSpeed Speed for the slideOut, default is 'normal' (for numbers: smaller = faster)
  * @option String selectedClass Class for active header elements, default is 'selected'
  * @option Boolean alwaysOpen Whether there must be one content element open, default is true.
  * @option Boolean animated Set to false to disable animations. Default: true
  * @option String event The event on which to trigger the accordion, eg. "mouseover". Default: "click"
+ * @option Boolean cloneFirst Use this for a navigation menu where the header element must be available as a selectable target, see related example for more details
  *
  * @type jQuery
  * @see activate(Number)
@@ -101,19 +123,22 @@
  */
 
 /**
- * Activate a content part of the Accordion programmatically at the given zero-based index.
+ * Activate a content part of the Accordion programmatically.
  *
- * If the index is not specified, it defaults to zero, if it is an invalid index, eg. a string,
- * nothing happens.
+ * The index can be a zero-indexed number to match the position of the header to close
+ * or a string expression matching an element.
  *
  * @example jQuery('#accordion').activate(1);
  * @desc Activate the second content of the Accordion contained in <div id="accordion">.
  *
- * @example jQuery('#nav').activate();
- * @desc Activate the first content of the Accordion contained in <ul id="nav">.
+ * @example jQuery('#accordion').activate("a:first");
+ * @desc Activate the first element matching the given expression.
  *
- * @param Number index (optional) An Integer specifying the zero-based index of the content to be
- *				 activated. Default: 0
+ * @example jQuery('#nav').activate();
+ * @desc Close all content parts of the accordion.
+ *
+ * @param String|Number index (optional) An Integer specifying the zero-based index of the content to be
+ *				 activated or an expression specifying the element to close. Default: closes all.
  *
  * @type jQuery
  * @name activate
@@ -174,18 +199,68 @@ jQuery.fn.extend({
 					: jQuery(settings.header, this).eq(0),
 			running = 0;
 
-		container.find(settings.header)
+		var headers = container.find(settings.header);
+
+		if ( settings.cloneFirst ) {
+			headers.each(function() {
+				jQuery(this).clone().removeClass( settings.header.replace(/\./, '') ).prependTo( jQuery(this).next() ).wrap("<li>");
+			}).attr("href", "");
+		}
+
+		headers
 			.not(active || "")
 			.nextUntil(settings.header)
 			.hide();
 		active.addClass(settings.selectedClass);
+		
+		function toggle(toShow, toHide, data, clickedActive) {
+			var finished = function(cancel) {
+				running = cancel ? 0 : --running;
+				if ( running )
+					return;
 
+				// trigger custom change event
+				container.trigger("change", data);
+			};
+			
+			// count elements to animate
+			running = toHide.size() + toShow.size();
+			
+			// TODO if hideSpeed is set to zero, animations are crappy
+			// workaround: use hide instead
+			// solution: animate should check for speed of 0 and do something about it
+			if ( settings.animated ) {
+				if ( !settings.alwaysOpen && clickedActive ) {
+					toShow.slideToggle(settings.showSpeed);
+					finished(true);
+				} else {
+					toHide.filter(":hidden").each(finished).end().filter(":visible").slideUp(settings.hideSpeed, finished);
+					toShow.slideDown(settings.showSpeed, finished);
+				}
+			} else {
+				if ( !settings.alwaysOpen && clickedActive ) {
+					toShow.toggle();
+				} else {
+					toHide.hide();
+					toShow.show();
+				}
+				finished(true);
+			}
+		}
+		
 		function clickHandler(event) {
+			if ( !event.target && !settings.alwaysOpen ) {
+				active.toggleClass(settings.selectedClass);
+				var toHide = active.nextUntil(settings.header);
+				var toShow = active = jQuery([]);
+				toggle( toShow, toHide );
+			}
 			// get the click target
 			var clicked = jQuery(event.target);
 			
 			// due to the event delegation model, we have to check if one
 			// of the parent elements is our actual header, and find that
+			// TODO replace with parentUntil!
 			if ( clicked.parents(settings.header).length )
 				while ( !clicked.is(settings.header) )
 					clicked = clicked.parent();
@@ -208,43 +283,20 @@ jQuery.fn.extend({
 				data = [clicked, active, toShow, toHide];
 
 			active = clickedActive ? jQuery([]) : clicked;
-			// count elements to animate
-			running = toHide.size() + toShow.size();
-			var finished = function(cancel) {
-				running = cancel ? 0 : --running;
-				if ( running )
-					return;
-
-				// trigger custom change event
-				container.trigger("change", data);
-			};
-			// TODO if hideSpeed is set to zero, animations are crappy
-			// workaround: use hide instead
-			// solution: animate should check for speed of 0 and do something about it
-			if ( settings.animated ) {
-				if ( !settings.alwaysOpen && clickedActive ) {
-					toShow.slideToggle(settings.showSpeed);
-					finished(true);
-				} else {
-					toHide.filter(":hidden").each(finished).end().filter(":visible").slideUp(settings.hideSpeed, finished);
-					toShow.slideDown(settings.showSpeed, finished);
-				}
-			} else {
-				if ( !settings.alwaysOpen && clickedActive ) {
-					toShow.toggle();
-				} else {
-					toHide.hide();
-					toShow.show();
-				}
-				finished(true);
-			}
+			
+			toggle( toShow, toHide, data, clickedActive );
 
 			return !toShow.length;
 		};
 		function activateHandlder(event, index) {
 			// call clickHandler with custom event
+			var target = 
 			clickHandler({
-				target: jQuery(settings.header, this)[index]
+				target: index >= 0
+					? jQuery(settings.header, this)[index]
+					: typeof index == "string"
+						? jQuery(index, this)[0]
+						: null
 			});
 		};
 
@@ -254,7 +306,7 @@ jQuery.fn.extend({
 	},
 	// programmatic triggering
 	activate: function(index) {
-		return this.trigger('activate', [index || 0]);
+		return this.trigger('activate', [index]);
 	}
 });
 
@@ -262,8 +314,8 @@ jQuery.Accordion = {};
 jQuery.extend(jQuery.Accordion, {
 	defaults: {
 		selectedClass: "selected",
-		showSpeed: 'slow',
-		hideSpeed: 'fast',
+		showSpeed: 'normal',
+		hideSpeed: 'normal',
 		alwaysOpen: true,
 		animated: true,
 		event: "click"
