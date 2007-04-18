@@ -17,6 +17,8 @@ TODO
 - fix mustMatch
 - add scrollbars and page down/up, option for height or number of items to be visible without scrolling
 - allow modification of not-last value in multiple-fields
+- make highlighting optional
+- put callback in dataToDom to prevent rows to include in result (maybe via formatItem?)
 @option TODO Number size Limit the number of items to show at once. Default: 
 */
 
