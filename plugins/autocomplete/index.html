@@ -72,7 +72,7 @@ $().ready(function() {
 		$(this).find("..+/input").val(data[1]);
 	});
 	$("#suggest4").result(function(event, data, formatted) {
-		var hidden = $(this).find("..+/input");
+		var hidden = $(this).find("..+/:input");
 		hidden.val( (hidden.val() ? hidden.val() + ";" : hidden.val()) + data[1]);
 	});
 });
@@ -119,12 +119,12 @@ $().ready(function() {
 		</p>
 		<p>
 			<label>Multiple Birds (remote):</label>
-			<input id='suggest4' ></textarea>
+			<textarea id='suggest4'></textarea>
 			<input type="button" value="Get Value" />
 		</p>
 		<p>
 			<label>Hidden input</label>
-			<input />
+			<textarea></textarea>
 		</p>
 		<p>
 			<label>Some dropdown (&lt;3 IE):</label>
