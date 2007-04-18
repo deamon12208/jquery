@@ -288,9 +288,8 @@ jQuery.fn.extend({
 
 			return !toShow.length;
 		};
-		function activateHandlder(event, index) {
+		function activateHandler(event, index) {
 			// call clickHandler with custom event
-			var target = 
 			clickHandler({
 				target: index >= 0
 					? jQuery(settings.header, this)[index]
@@ -302,7 +301,7 @@ jQuery.fn.extend({
 
 		return container
 			.bind(settings.event, clickHandler)
-			.bind("activate", activateHandlder);
+			.bind("activate", activateHandler);
 	},
 	// programmatic triggering
 	activate: function(index) {
