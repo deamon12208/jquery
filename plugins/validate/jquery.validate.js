@@ -20,6 +20,21 @@ TODO
  - don't return validator instance, provide custom events instead
 - focus invalid only on submit event, that removes all problems with blur
 - prefer plugin option messages over title attribute, preventing problems with google toolbar
+- http://yav.sourceforge.net/en/validationrules.html
+
+$.validator.addMethod('xor', function(value, element, parameter) {
+	return value && jQuery(parameter).is(":blank");
+});
+
+rules: {
+	field1: { xor: "#field2" },
+	field2: { xor: "#field1" }
+}, messages: {
+	field1: "Please specify either field1 or field2",
+	field2: "Please specify either field1 or field2"
+}
+
+
 */
 
 /**
