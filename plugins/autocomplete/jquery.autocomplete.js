@@ -21,6 +21,7 @@ TODO
 - put callback in dataToDom to prevent rows to include in result (maybe via formatItem?)
 @option Number size Limit the number of items to show at once. Default: 
 @option Function parse - TEST AND DOCUMENT ME
+@option Boolean|Function highlight Whether and how to highlight matches in the select box. Set to false to disable. Set to a function to customize. Default: Wraps the search term in a <strong> element 
 */
 
 /**
@@ -584,7 +585,8 @@ jQuery.Autocompleter.Select = function (options, input, select) {
 			if (!data[i])
 				continue;
 			function highlight(value) {
-				return value.replace(new RegExp("(" + term + ")", "gi"), "<strong>$1</strong>");
+				//return value.replace(new RegExp("(" + term + ")", "gi"), "<strong>$1</strong>");
+				return value.replace(new RegExp("(<!<[^<>]*)(" + term + ")", "gi"), "$1<strong>$2</strong>");
 			}
 			jQuery("<li>").html( options.formatItem 
 					? highlight(options.formatItem(data[i].data, i+1, num))
