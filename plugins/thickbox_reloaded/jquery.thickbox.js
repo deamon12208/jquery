@@ -292,6 +292,7 @@
                             builder = function() {
                                 buildTitle($$.attr('title'));
                                 $('<div id="' + CONTENT_ID + '"></div>').append(content).appendTo(modal);
+                                content.show(); // in case itself is hidden and not its parent element
                                 show(settings.width, settings.height, settings.top, settings.left, settings.animate);
                             };
                             break;
