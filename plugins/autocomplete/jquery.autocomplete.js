@@ -19,7 +19,8 @@ TODO
 - allow modification of not-last value in multiple-fields
 - make highlighting optional
 - put callback in dataToDom to prevent rows to include in result (maybe via formatItem?)
-@option TODO Number size Limit the number of items to show at once. Default: 
+@option Number size Limit the number of items to show at once. Default: 
+@option Function parse - TEST AND DOCUMENT ME
 */
 
 /**
