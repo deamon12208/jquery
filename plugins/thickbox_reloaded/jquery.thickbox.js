@@ -292,7 +292,7 @@
                             builder = function() {
                                 buildTitle($$.attr('title'));
                                 $('<div id="' + CONTENT_ID + '"></div>').append(content).appendTo(modal);
-                                content.show(); // in case itself is hidden and not its parent element
+                                content.css('display', 'block'); // in case itself is hidden and not its parent element, WTF: show() fails in Opera
                                 show(settings.width, settings.height, settings.top, settings.left, settings.animate);
                             };
                             break;
