@@ -99,10 +99,19 @@
             function hide(callback) {
                 // hide stuff
                 loading.hide();
-                modal.fadeOut('fast', function() {
+
+                /*modal.fadeOut('fast', function() {
                     modal.empty();
-                });
-                dim.fadeOut('fast', typeof callback == 'function' ? callback : function() {});
+                });*/
+
+                modal.hide().empty();
+
+                //lets IE bork opacity on second opening
+                //dim.fadeOut('fast', typeof callback == 'function' ? callback : function() {});
+
+                dim.hide();
+                typeof callback == 'function' && callback();
+
                 // remove keyboard event handler
                 $(document).unbind('keydown', keydown).unbind('keypress', blockKeys);
                 $(window).unbind('scroll', blockScroll);
