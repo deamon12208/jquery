@@ -7,7 +7,7 @@
  *   http://www.gnu.org/licenses/gpl.html
  *
  * Revision: $Id$
- * Version: .96
+ * Version: .97
  */
 
 /**
@@ -593,9 +593,7 @@ jQuery.fn.fieldSerialize = function(successful) {
 
 
 /**
- * Returns the value(s) of the first (successful) element(s) in the matched set in an array.  If there are
- * other elements in the matched set with the same name, the values of those elements is included
- * in the result.  For example, consider the following form:
+ * Returns the value(s) of the element in the matched set.  For example, consider the following form:
  *
  *  <form><fieldset>
  *      <input name="A" type="text" />
@@ -626,8 +624,8 @@ jQuery.fn.fieldSerialize = function(successful) {
  *
  * The successful argument controls whether or not the field element must be 'successful'
  * (per http://www.w3.org/TR/html4/interact/forms.html#successful-controls).
- * The default value of the successful argument is true.  If this value is false then
- * the value of the first field element in the jQuery object is returned.
+ * The default value of the successful argument is true.  If this value is false the value(s)
+ * for each element is returned.
  *
  * Note: This method *always* returns an array.  If no valid value can be determined the
  *       array will be empty, otherwise it will contain one or more values.
@@ -637,37 +635,30 @@ jQuery.fn.fieldSerialize = function(successful) {
  * @desc Alerts the current value of the myPasswordElement element
  *
  * @example var data = $("#myForm :input").fieldValue();
- * @desc Get the value(s) of the first successful form element in myForm
+ * @desc Get the value(s) of the form elements in myForm
  *
  * @example var data = $("#myForm :checkbox").fieldValue();
- * @desc Get the value(s) for the first successful checkbox element(s) in the jQuery object.
+ * @desc Get the value(s) for the successful checkbox element(s) in the jQuery object.
  *
  * @example var data = $("#mySingleSelect").fieldValue();
  * @desc Get the value(s) of the select control
  *
  * @example var data = $(':text').fieldValue();
- * @desc Get the value(s) of the first successful text input or textarea
+ * @desc Get the value(s) of the text input or textarea elements
  *
  * @example var data = $("#myMultiSelect").fieldValue();
  * @desc Get the values for the select-multiple control
  *
  * @name fieldValue
- * @param Boolean successful true if value returned must be for a successful controls (default is true)
+ * @param Boolean successful true if only the values for successful controls should be returned (default is true)
  * @type Array<String>
  * @cat Plugins/Form
  */
 jQuery.fn.fieldValue = function(successful) {
-    var val=[], name;
-
-    // loop until we find a value
-    for (var i=0, max=this.length; i < max; i++) {
+    for (var val=[], i=0, max=this.length; i < max; i++) {
         var el = this[i];
         var v = jQuery.fieldValue(el, successful);
         if (v === null || typeof v == 'undefined' || (v.constructor == Array && !v.length))
-            continue; // keep looping until we find an element with a value
-
-        name = name || el.name;
-        if (name != el.name) // once we have a value we only add to the array for elements with the same name
             continue;
         v.constructor == Array ? jQuery.merge(val, v) : val.push(v);
     }
