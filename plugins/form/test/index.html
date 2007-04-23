@@ -634,11 +634,11 @@ test("fieldValue(true)", function() {
 });
 
 test("fieldValue(false)", function() {
-    ok ('5'  == $('#fieldTest input').fieldValue(false), 'input');
-    ok ('1'  == $('#fieldTest :input').fieldValue(false), ':input');
-    ok ('5'  == $('#fieldTest :hidden').fieldValue(false), ':hidden');
-    ok ('14' == $('#fieldTest :password').fieldValue(false), ':password');
-    ok ('1'  == $('#fieldTest select').fieldValue(false), 'select');
+    ok ('5'  == $('#fieldTest input').fieldValue(false)[0], 'input');
+    ok ('1'  == $('#fieldTest :input').fieldValue(false)[0], ':input');
+    ok ('5'  == $('#fieldTest :hidden').fieldValue(false)[0], ':hidden');
+    ok ('14' == $('#fieldTest :password').fieldValue(false)[0], ':password');
+    ok ('1'  == $('#fieldTest select').fieldValue(false)[0], 'select');
 
     var expected = ['8','9','10'];
     var result = $('#fieldTest :checkbox').fieldValue(false);
