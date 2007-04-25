@@ -2,7 +2,11 @@
 (function($) {
 	$.interfaceTooltip = {
 		helper: null,
-		timer: null
+		timer: null,
+		delay: 300,
+		hide: function(){
+			$.interfaceTooltip.helper.hide();
+		}
 	};
 	$.fn.tooltip = function(options) {
 		
@@ -64,6 +68,7 @@
 				
 				// define the timer for the delay
 				$.interfaceTooltip.timer = setTimeout(options.show, options.delay);
+				$.interfaceTooltip.delay = options.delay;
 				return options.beforeShow.apply(this, [e]);
 			},
 			hideDelay: function(e) {
@@ -242,7 +247,9 @@
 						zIndex: 3000
 					})
 					.appendTo('body');
-				$.interfaceTooltip.helper = $('#tooltip');
+				$.interfaceTooltip.helper = $('#tooltip')
+				.bind('mouseover', function(){clearTimeout($.interfaceTooltip.timer);})
+				.bind('mouseout',function(){$.interfaceTooltip.timer = setTimeout($.interfaceTooltip.hide, $.interfaceTooltip.delay)});
 			}
 			if (options.event == 'click') {
 				$(this).toggle(options.showDelay, options.hideDelay);
