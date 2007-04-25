@@ -74,6 +74,12 @@
             <param name="name" value="validate" />
         </antcall>
     </target>
+	
+	<target name="autocomplete" description="Build autocomplete plugin.">
+        <antcall target="generic">
+            <param name="name" value="autocomplete" />
+        </antcall>
+    </target>
 
     <target name="cookie" description="Build cookie plugin.">
         <antcall target="generic">
