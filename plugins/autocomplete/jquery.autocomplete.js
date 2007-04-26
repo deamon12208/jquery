@@ -534,10 +534,10 @@ jQuery.Autocompleter.Select = function (options, input, select) {
 		.appendTo("body");
 
 	var list = jQuery("<ul>").appendTo(element).mouseover( function(event) {
-		active = jQuery("li", list).removeClass(CLASSES.ACTIVE).index(target(event));
+		active = jQuery("li", list).removeClass().index(target(event));
 		jQuery(target(event)).addClass(CLASSES.ACTIVE);
 	}).mouseout( function(event) {
-		jQuery(target(event)).removeClass(CLASSES.ACTIVE);
+		jQuery(target(event)).removeClass();
 	}).click(function(event) {
 		jQuery(target(event)).addClass(CLASSES.ACTIVE);
 		select();
@@ -562,7 +562,7 @@ jQuery.Autocompleter.Select = function (options, input, select) {
 	function moveSelect(step) {
 		active += step;
 		wrapSelection();
-		listItems.removeClass(CLASSES.ACTIVE).eq(active).addClass(CLASSES.ACTIVE);
+		listItems.removeClass().eq(active).addClass(CLASSES.ACTIVE);
 	};
 	
 	function wrapSelection() {
@@ -579,14 +579,14 @@ jQuery.Autocompleter.Select = function (options, input, select) {
 			: available;
 	}
 	
-	function dataToDom() {
+	function fillList() {
+		list.empty();
 		var num = limitNumberOfItems(data.length);
 		for (var i=0; i < num; i++) {
 			if (!data[i])
 				continue;
 			function highlight(value) {
-				//return value.replace(new RegExp("(" + term + ")", "gi"), "<strong>$1</strong>");
-				return value.replace(new RegExp("(<!<[^<>]*)(" + term + ")", "gi"), "$1<strong>$2</strong>");
+				return value.replace(new RegExp("(?!<[^<>]*)(" + term + ")(?![^<>]*>)", "gi"), "<strong>$1</strong>");
 			}
 			jQuery("<li>").html( options.formatItem 
 					? highlight(options.formatItem(data[i].data, i+1, num))
@@ -597,15 +597,14 @@ jQuery.Autocompleter.Select = function (options, input, select) {
 			listItems.eq(0).addClass(CLASSES.ACTIVE);
 			active = 0;
 		}
+		list.bgiframe();
 	}
 	
 	return {
 		display: function(d, q) {
 			data = d;
 			term = q;
-			list.empty();
-			dataToDom();
-			list.bgiframe();
+			fillList();
 		},
 		next: function() {
 			moveSelect(1);
