@@ -624,17 +624,10 @@ jQuery.Autocompleter.Select = function (options, input, select) {
 			return this.visible() && (listItems.filter("." + CLASSES.ACTIVE)[0] || options.selectFirst && listItems[0]);
 		},
 		show: function() {
-			// get the position of the input field right now (in case the DOM is shifted)
-			var offset = jQuery(input).offset({scroll: false, border: false});
-			// either use the specified width, or autocalculate based on form element
 			element.css({
-				width: options.width > 0 ? options.width : jQuery(input).width(),
+				width: options.width > 0 ? options.width : jQuery(input).width()
 				//height: jQuery(listItems[0]).height() * options.size,
-				top: offset.top + input.offsetHeight,
-				left: offset.left
-			}).show();
-			//active = -1;
-			//listItems.removeClass(CLASSES.ACTIVE);
+			}).below(input).show();
 		},
 		selected: function() {
 			return data && data[active];
