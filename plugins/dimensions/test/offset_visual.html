@@ -12,7 +12,7 @@
 		<script type="text/javascript" src="../../../firebuglite/firebug.js"></script>
 
 		<!-- load dimensions.js (this is what we're testing! -->
-		<script type="text/javascript" src="../dimensions.js"></script>
+		<script type="text/javascript" src="../jquery.dimensions.js"></script>
 		
 		
 		<script type="text/javascript" charset="utf-8">
@@ -29,9 +29,9 @@
 						scroll:  parseInt( $('#scroll').val()  )
 					};
 					var offset = {};
-					var time = new Date();
+					var time = (new Date()).getTime();
 					$(id).offset(options, offset);
-					console.log(new Date() - time + ' milliseconds');
+					console.log(((new Date()).getTime() - time) + ' milliseconds');
 					$('#moveable').css(offset);
 					var props = '';
 					for (prop in offset)
@@ -70,7 +70,9 @@
 			#absolute3 { position: absolute; top: 30px; right: -90px; margin: 5px; border: 2px solid #000; padding: 3px; width: 200px; height: 200px; background-color: #092; }
 			#static3 { position: static; margin: 10px; border: 2px solid #000; padding: 3px; width: 250px; height: 250px; background-color: #980; }
 			
-			#inline { display: inline; border: 2px solid #000; }
+			#inline, #inline2 { display: inline; border: 2px solid #000; }
+			
+			#fixed { position: fixed; top: 0; right: 0; margin: 10px; border: 2px solid #000; padding: 3px; width: 100px; height: 100px; background-color: #980; }
 		</style>
 	</head>
 	<body>
@@ -101,7 +103,10 @@
 			<li><a href="#absolute3">Move to absolute 3</a></li>
 			<li><a href="#static3">Move to static 3</a></li>
 			<li><a href="#inline">Move to inline 1</a></li>
+			<!-- 			<li><a href="#fixed">Move to fixed 1</a></li>
+						<li><a href="#inline2">Move to inline 2</a></li> -->
 		</ul>
+		
 		
 		<div id="static"> Static 1
 			<div id="staticChild1"> Static Child 1
@@ -134,6 +139,10 @@
 				</div>
 			</div>
 		</div>
+		
+		<!-- <div id="fixed"> Fixed 1
+			<div id="inline2">Inline 2</div>
+		</div> -->
 		
 		<div id="moveable"></div>
 		

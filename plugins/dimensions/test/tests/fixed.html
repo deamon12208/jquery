@@ -1,0 +1,366 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>fixed testing</title>
+		<!-- load latest build of jquery.js -->
+		<script type="text/javascript" src="../../../../jquery/dist/jquery.js"></script>
+		<!-- load testrunner from jquery project -->
+		<script type="text/javascript" src="testrunner.js"></script>
+		<!-- load dimensions.js (this is what we're testing! -->
+		<script type="text/javascript" src="../../jquery.dimensions.js"></script>
+		<style type="text/css" media="screen">
+			body{ margin:0; border:0; padding:0; }
+			h1,h2,p,#tests{display:none;}
+			#main { width: 1000px; height: 1000px; }
+			#fix1,#fix2,#fix4 { position: fixed; margin:10px; border:2px solid #000; padding:5px; width:50px; height: 50px; background: #fff; }
+			#fix2 { top: 0; left: 125px; overflow: auto; }
+			#fix3 { margin:10px; border:2px solid #000; padding:5px; width:50px; height: 50px; background: #fff; }
+			#fix4 { bottom: 100px; right: 100px; }
+		</style>
+		
+		<script type="text/javascript" charset="utf-8">
+			$(window).bind('load', function() {
+				window.scrollTo(100,100);
+				runTest(function() {
+					window.parent.done($('#tests').html());
+				});
+			});
+			test('offset(): Fixed positioning', function() {
+				var offset  = {};
+				var options = {};
+
+				$('#fix1').offset(options, offset);
+				equals( 112, offset.top, "$('#fix1').offset().top" );
+				equals( 112, offset.left, "$('#fix1').offset().left" );
+
+				$('#fix2').offset(options, offset);
+				equals( 112, offset.top, "$('#fix2').offset().top" );
+				equals( 237, offset.left, "$('#fix2').offset().left" );
+
+				$('#fix3').offset(options, offset);
+				equals( 129, offset.top, "$('#fix3').offset().top" );
+				equals( 254, offset.left, "$('#fix3').offset().left" );
+
+				$('#fix4').offset(options, offset);
+				equals( 413, offset.top, "$('#fix4').offset().top" );
+				equals( 413, offset.left, "$('#fix4').offset().left" );
+
+				// yes padding
+				options = { padding: true };
+
+				$('#fix1').offset(options, offset);
+				equals( 117, offset.top, "$('#fix1').offset({padding:true}).top" );
+				equals( 117, offset.left, "$('#fix1').offset({padding:true}).left" );
+
+				$('#fix2').offset(options, offset);
+				equals( 117, offset.top, "$('#fix2').offset({padding:true}).top" );
+				equals( 242, offset.left, "$('#fix2').offset({padding:true}).left" );
+
+				$('#fix3').offset(options, offset);
+				equals( 134, offset.top, "$('#fix3').offset({padding:true}).top" );
+				equals( 259, offset.left, "$('#fix3').offset({padding:true}).left" );
+
+				$('#fix4').offset(options, offset);
+				equals( 418, offset.top, "$('#fix4').offset().top" );
+				equals( 418, offset.left, "$('#fix4').offset().left" );
+
+				// no border
+				options = { border: false };
+
+				$('#fix1').offset(options, offset);
+				equals( 110, offset.top, "$('#fix1').offset({border:false}).top" );
+				equals( 110, offset.left, "$('#fix1').offset({border:false}).left" );
+
+				$('#fix2').offset(options, offset);
+				equals( 110, offset.top, "$('#fix2').offset({border:false}).top" );
+				equals( 235, offset.left, "$('#fix2').offset({border:false}).left" );
+
+				$('#fix3').offset(options, offset);
+				equals( 127, offset.top, "$('#fix3').offset({border:false}).top" );
+				equals( 252, offset.left, "$('#fix3').offset({border:false}).left" );
+
+				$('#fix4').offset(options, offset);
+				equals( 411, offset.top, "$('#fix4').offset().top" );
+				equals( 411, offset.left, "$('#fix4').offset().left" );
+
+				// no margin
+				options = { margin: false };
+
+				$('#fix1').offset(options, offset);
+				equals( 102, offset.top, "$('#fix1').offset({margin:false}).top" );
+				equals( 102, offset.left, "$('#fix1').offset({margin:false}).left" );
+
+				$('#fix2').offset(options, offset);
+				equals( 102, offset.top, "$('#fix2').offset({margin:false}).top" );
+				equals( 227, offset.left, "$('#fix2').offset({margin:false}).left" );
+
+				$('#fix3').offset(options, offset);
+				equals( 119, offset.top, "$('#fix4').offset({margin:false}).top" );
+				equals( 244, offset.left, "$('#fix4').offset({margin:false}).left" );
+
+				$('#fix4').offset(options, offset);
+				equals( 403, offset.top, "$('#fix4').offset().top" );
+				equals( 403, offset.left, "$('#fix4').offset().left" );
+
+				// no margin or border
+				options = { margin: false, border: false };
+
+				$('#fix1').offset(options, offset);
+				equals( 100, offset.top, "$('#fix1').offset({margin:false,border:false}).top" );
+				equals( 100, offset.left, "$('#fix1').offset({margin:false,border:false}).left" );
+
+				$('#fix2').offset(options, offset);
+				equals( 100, offset.top, "$('#fix2').offset({margin:false,border:false}).top" );
+				equals( 225, offset.left, "$('#fix2').offset({margin:false,border:false}).left" );
+
+				$('#fix3').offset(options, offset);
+				equals( 117, offset.top, "$('#fix3').offset({margin:false,border:false}).top" );
+				equals( 242, offset.left, "$('#fix3').offset({margin:false,border:false}).left" );
+
+				$('#fix4').offset(options, offset);
+				equals( 401, offset.top, "$('#fix4').offset().top" );
+				equals( 401, offset.left, "$('#fix4').offset().left" );
+
+				// testing scroll offset
+				$('#fix2').scrollTop(10);
+				$('#fix2').scrollLeft(10);
+				$('#fix3').offset({}, offset);
+				equals( 119, offset.top, "Scroll offset of parent by 10 => $('#fix3').offset().top" );
+				equals( 244, offset.left, "Scroll offset of parent by 10 => $('#fix3').offset().left" );
+				$('#fix2').scrollTop(0);
+				$('#fix2').scrollLeft(0);
+			});
+			test('offset(): Fixed positioning with body margin', function() {
+				var offset  = {};
+				var options = {};
+				
+				$('body').css('margin', 10);
+
+				$('#fix1').offset(options, offset);
+				equals( 112, offset.top, "$('#fix1').offset().top" );
+				equals( 112, offset.left, "$('#fix1').offset().left" );
+
+				$('#fix2').offset(options, offset);
+				equals( 112, offset.top, "$('#fix2').offset().top" );
+				equals( 237, offset.left, "$('#fix2').offset().left" );
+
+				$('#fix3').offset(options, offset);
+				equals( 129, offset.top, "$('#fix3').offset().top" );
+				equals( 254, offset.left, "$('#fix3').offset().left" );
+
+				$('#fix4').offset(options, offset);
+				equals( 413, offset.top, "$('#fix4').offset().top" );
+				equals( 413, offset.left, "$('#fix4').offset().left" );
+
+				// yes padding
+				options = { padding: true };
+
+				$('#fix1').offset(options, offset);
+				equals( 117, offset.top, "$('#fix1').offset({padding:true}).top" );
+				equals( 117, offset.left, "$('#fix1').offset({padding:true}).left" );
+
+				$('#fix2').offset(options, offset);
+				equals( 117, offset.top, "$('#fix2').offset({padding:true}).top" );
+				equals( 242, offset.left, "$('#fix2').offset({padding:true}).left" );
+
+				$('#fix3').offset(options, offset);
+				equals( 134, offset.top, "$('#fix3').offset({padding:true}).top" );
+				equals( 259, offset.left, "$('#fix3').offset({padding:true}).left" );
+
+				$('#fix4').offset(options, offset);
+				equals( 418, offset.top, "$('#fix4').offset().top" );
+				equals( 418, offset.left, "$('#fix4').offset().left" );
+
+				// no border
+				options = { border: false };
+
+				$('#fix1').offset(options, offset);
+				equals( 110, offset.top, "$('#fix1').offset({border:false}).top" );
+				equals( 110, offset.left, "$('#fix1').offset({border:false}).left" );
+
+				$('#fix2').offset(options, offset);
+				equals( 110, offset.top, "$('#fix2').offset({border:false}).top" );
+				equals( 235, offset.left, "$('#fix2').offset({border:false}).left" );
+
+				$('#fix3').offset(options, offset);
+				equals( 127, offset.top, "$('#fix3').offset({border:false}).top" );
+				equals( 252, offset.left, "$('#fix3').offset({border:false}).left" );
+
+				$('#fix4').offset(options, offset);
+				equals( 411, offset.top, "$('#fix4').offset().top" );
+				equals( 411, offset.left, "$('#fix4').offset().left" );
+
+				// no margin
+				options = { margin: false };
+
+				$('#fix1').offset(options, offset);
+				equals( 102, offset.top, "$('#fix1').offset({margin:false}).top" );
+				equals( 102, offset.left, "$('#fix1').offset({margin:false}).left" );
+
+				$('#fix2').offset(options, offset);
+				equals( 102, offset.top, "$('#fix2').offset({margin:false}).top" );
+				equals( 227, offset.left, "$('#fix2').offset({margin:false}).left" );
+
+				$('#fix3').offset(options, offset);
+				equals( 119, offset.top, "$('#fix4').offset({margin:false}).top" );
+				equals( 244, offset.left, "$('#fix4').offset({margin:false}).left" );
+
+				$('#fix4').offset(options, offset);
+				equals( 403, offset.top, "$('#fix4').offset().top" );
+				equals( 403, offset.left, "$('#fix4').offset().left" );
+
+				// no margin or border
+				options = { margin: false, border: false };
+
+				$('#fix1').offset(options, offset);
+				equals( 100, offset.top, "$('#fix1').offset({margin:false,border:false}).top" );
+				equals( 100, offset.left, "$('#fix1').offset({margin:false,border:false}).left" );
+
+				$('#fix2').offset(options, offset);
+				equals( 100, offset.top, "$('#fix2').offset({margin:false,border:false}).top" );
+				equals( 225, offset.left, "$('#fix2').offset({margin:false,border:false}).left" );
+
+				$('#fix3').offset(options, offset);
+				equals( 117, offset.top, "$('#fix3').offset({margin:false,border:false}).top" );
+				equals( 242, offset.left, "$('#fix3').offset({margin:false,border:false}).left" );
+
+				$('#fix4').offset(options, offset);
+				equals( 401, offset.top, "$('#fix4').offset().top" );
+				equals( 401, offset.left, "$('#fix4').offset().left" );
+
+				// testing scroll offset
+				$('#fix2').scrollTop(10);
+				$('#fix2').scrollLeft(10);
+				$('#fix3').offset({}, offset);
+				equals( 119, offset.top, "Scroll offset of parent by 10 => $('#fix3').offset().top" );
+				equals( 244, offset.left, "Scroll offset of parent by 10 => $('#fix3').offset().left" );
+				$('#fix2').scrollTop(0);
+				$('#fix2').scrollLeft(0);
+				
+				$('body').css('margin', 0);
+			});
+			test('offset(): Fixed positioning with body border', function() {
+				var offset  = {};
+				var options = {};
+				
+				$('body').css('border', '10px solid #000');
+
+				$('#fix1').offset(options, offset);
+				equals( 112, offset.top, "$('#fix1').offset().top" );
+				equals( 112, offset.left, "$('#fix1').offset().left" );
+
+				$('#fix2').offset(options, offset);
+				equals( 112, offset.top, "$('#fix2').offset().top" );
+				equals( 237, offset.left, "$('#fix2').offset().left" );
+
+				$('#fix3').offset(options, offset);
+				equals( 129, offset.top, "$('#fix3').offset().top" );
+				equals( 254, offset.left, "$('#fix3').offset().left" );
+
+				$('#fix4').offset(options, offset);
+				equals( 413, offset.top, "$('#fix4').offset().top" );
+				equals( 413, offset.left, "$('#fix4').offset().left" );
+
+				// yes padding
+				options = { padding: true };
+
+				$('#fix1').offset(options, offset);
+				equals( 117, offset.top, "$('#fix1').offset({padding:true}).top" );
+				equals( 117, offset.left, "$('#fix1').offset({padding:true}).left" );
+
+				$('#fix2').offset(options, offset);
+				equals( 117, offset.top, "$('#fix2').offset({padding:true}).top" );
+				equals( 242, offset.left, "$('#fix2').offset({padding:true}).left" );
+
+				$('#fix3').offset(options, offset);
+				equals( 134, offset.top, "$('#fix3').offset({padding:true}).top" );
+				equals( 259, offset.left, "$('#fix3').offset({padding:true}).left" );
+
+				$('#fix4').offset(options, offset);
+				equals( 418, offset.top, "$('#fix4').offset().top" );
+				equals( 418, offset.left, "$('#fix4').offset().left" );
+
+				// no border
+				options = { border: false };
+
+				$('#fix1').offset(options, offset);
+				equals( 110, offset.top, "$('#fix1').offset({border:false}).top" );
+				equals( 110, offset.left, "$('#fix1').offset({border:false}).left" );
+
+				$('#fix2').offset(options, offset);
+				equals( 110, offset.top, "$('#fix2').offset({border:false}).top" );
+				equals( 235, offset.left, "$('#fix2').offset({border:false}).left" );
+
+				$('#fix3').offset(options, offset);
+				equals( 127, offset.top, "$('#fix3').offset({border:false}).top" );
+				equals( 252, offset.left, "$('#fix3').offset({border:false}).left" );
+
+				$('#fix4').offset(options, offset);
+				equals( 411, offset.top, "$('#fix4').offset().top" );
+				equals( 411, offset.left, "$('#fix4').offset().left" );
+
+				// no margin
+				options = { margin: false };
+
+				$('#fix1').offset(options, offset);
+				equals( 102, offset.top, "$('#fix1').offset({margin:false}).top" );
+				equals( 102, offset.left, "$('#fix1').offset({margin:false}).left" );
+
+				$('#fix2').offset(options, offset);
+				equals( 102, offset.top, "$('#fix2').offset({margin:false}).top" );
+				equals( 227, offset.left, "$('#fix2').offset({margin:false}).left" );
+
+				$('#fix3').offset(options, offset);
+				equals( 119, offset.top, "$('#fix4').offset({margin:false}).top" );
+				equals( 244, offset.left, "$('#fix4').offset({margin:false}).left" );
+
+				$('#fix4').offset(options, offset);
+				equals( 403, offset.top, "$('#fix4').offset().top" );
+				equals( 403, offset.left, "$('#fix4').offset().left" );
+
+				// no margin or border
+				options = { margin: false, border: false };
+
+				$('#fix1').offset(options, offset);
+				equals( 100, offset.top, "$('#fix1').offset({margin:false,border:false}).top" );
+				equals( 100, offset.left, "$('#fix1').offset({margin:false,border:false}).left" );
+
+				$('#fix2').offset(options, offset);
+				equals( 100, offset.top, "$('#fix2').offset({margin:false,border:false}).top" );
+				equals( 225, offset.left, "$('#fix2').offset({margin:false,border:false}).left" );
+
+				$('#fix3').offset(options, offset);
+				equals( 117, offset.top, "$('#fix3').offset({margin:false,border:false}).top" );
+				equals( 242, offset.left, "$('#fix3').offset({margin:false,border:false}).left" );
+
+				$('#fix4').offset(options, offset);
+				equals( 401, offset.top, "$('#fix4').offset().top" );
+				equals( 401, offset.left, "$('#fix4').offset().left" );
+
+				// testing scroll offset
+				$('#fix2').scrollTop(10);
+				$('#fix2').scrollLeft(10);
+				$('#fix3').offset({}, offset);
+				equals( 119, offset.top, "Scroll offset of parent by 10 => $('#fix3').offset().top" );
+				equals( 244, offset.left, "Scroll offset of parent by 10 => $('#fix3').offset().left" );
+				$('#fix2').scrollTop(0);
+				$('#fix2').scrollLeft(0);
+				
+				$('body').css('border', 0);
+			});
+		</script>
+	</head>
+	<body>
+		<div id="main">
+			<div id="fix1">
+				<div id="fix2">
+					<div id="fix3"></div>
+				</div>
+			</div>
+			<div id="fix4"></div>
+		</div>
+		<ol id="tests"></ol>
+	</body>
+</html>
