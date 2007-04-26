@@ -17,8 +17,8 @@ TODO
 - fix mustMatch
 - add scrollbars and page down/up, option for height or number of items to be visible without scrolling
 - allow modification of not-last value in multiple-fields
-- make highlighting optional
-- put callback in dataToDom to prevent rows to include in result (maybe via formatItem?)
+- put callback in select.fillList to prevent rows to include in result (maybe via formatItem?)
+ - started via skipItem callback, flawed, see comment in select.fillList()
 @option Number size Limit the number of items to show at once. Default: 
 @option Function parse - TEST AND DOCUMENT ME
 */
@@ -132,8 +132,6 @@ TODO
  * @cat Plugins/Autocomplete
  * @type jQuery
  */
-
-// * @option Function onSelectItem Called when an item is selected. The autocompleter will specify a single argument, being the LI element selected. This LI element will have an attribute "extra" that contains an array of all cells that the backend specified. Default: none
 
 jQuery.fn.extend({
 	autocomplete: function(urlOrData, options) {
@@ -605,7 +603,9 @@ jQuery.Autocompleter.Select = function (options, input, select) {
 		list.empty();
 		var num = limitNumberOfItems(data.length);
 		for (var i=0; i < num; i++) {
-			if (!data[i])
+			// skipItem doesn't work this way, we have to remove the skipped item from the raw data (bad for dynamic filtering) or find
+			// a different approach to get the selected entry then by index
+			if (!data[i]) // || (options.skipItem && options.skipItem(data[i], i, num)) )
 				continue;
 			
 			jQuery("<li>").html( options.formatItem 

@@ -32,7 +32,11 @@ $().ready(function() {
 		minChars: 0,
 		max: 12,
 		autoFill: true,
-		highlight: false
+		highlight: false,
+		skipItem: function(data, i, total) {
+			// don't show the current month in the list of values (for whatever reason)
+			return i == new Date().getMonth();
+		}
 	});
 	$("#suggest13").autocomplete(emails, {
 		minChars: 0,
