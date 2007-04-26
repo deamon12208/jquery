@@ -33,9 +33,11 @@ $().ready(function() {
 		max: 12,
 		autoFill: true,
 		highlight: false,
-		skipItem: function(data, i, total) {
+		formatItem: function(data, i, total) {
 			// don't show the current month in the list of values (for whatever reason)
-			return i == new Date().getMonth();
+			if ( i == new Date().getMonth() ) 
+				return false;
+			return data;
 		}
 	});
 	$("#suggest13").autocomplete(emails, {

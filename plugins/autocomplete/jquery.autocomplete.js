@@ -17,8 +17,6 @@ TODO
 - fix mustMatch
 - add scrollbars and page down/up, option for height or number of items to be visible without scrolling
 - allow modification of not-last value in multiple-fields
-- put callback in select.fillList to prevent rows to include in result (maybe via formatItem?)
- - started via skipItem callback, flawed, see comment in select.fillList()
 @option Number size Limit the number of items to show at once. Default: 
 @option Function parse - TEST AND DOCUMENT ME
 */
@@ -77,7 +75,7 @@ TODO
  * @option Booolean mustMatch If set to true, the autocompleter will only allow results that are presented by the backend. Note that illegal values result in an empty input box. Default: false
  * @option Object extraParams Extra parameters for the backend. If you were to specify { bar:4 }, the autocompleter would call my_autocomplete_backend.php?q=foo&bar=4 (assuming the input box contains "foo"). Default: {}
  * @option Boolean selectFirst If this is set to true, the first autocomplete value will be automatically selected on tab/return, even if it has not been handpicked by keyboard or mouse action. If there is a handpicked (highlighted) result, that result will take precedence. Default: true
- * @option Function formatItem Provides advanced markup for an item. For each row of results, this function will be called. The returned value will be displayed inside an LI element in the results list. Autocompleter will provide 3 parameters: the results row, the position of the row in the list of results (starting at 1), and the number of items in the list of results. Default: none, assumes that a single row contains a single value.
+ * @option Function|Boolean formatItem Provides advanced markup for an item. For each row of results, this function will be called. If false is returned, the row is skipped. Otherwise the returned value will be displayed inside an LI element in the results list. Autocompleter will provide 3 parameters: the results row, the position of the row in the list of results (starting at 1), and the number of items in the list of results. Default: none, assumes that a single row contains a single value.
  * @option Function formatResult Similar to formatResult, but provides the formatting for the value to be put into the input field. Again three arguments: Data, position (starting with one) and total number of data. Default: none, assumes either plain data to use as result or uses the same value as provided by formatItem.
  * @option Boolean multiple Whether to allow more then one autocomplted-value to enter. Default: false
  * @option String multipleSeparator Seperator to put between values when using multiple option. Default: ", "
@@ -483,6 +481,9 @@ jQuery.Autocompleter.Cache = function(options) {
 			value = options.formatItem
 				? options.formatItem(rawValue, i+1, options.data.length)
 				: rawValue;
+			if ( value === false )
+				return;
+				
 			var firstChar = value.charAt(0).toLowerCase();
 			// if no lookup array for this character exists, look it up now
 			if( !stMatchSets[firstChar] )
@@ -603,14 +604,14 @@ jQuery.Autocompleter.Select = function (options, input, select) {
 		list.empty();
 		var num = limitNumberOfItems(data.length);
 		for (var i=0; i < num; i++) {
-			// skipItem doesn't work this way, we have to remove the skipped item from the raw data (bad for dynamic filtering) or find
-			// a different approach to get the selected entry then by index
-			if (!data[i]) // || (options.skipItem && options.skipItem(data[i], i, num)) )
+			if (!data[i])
 				continue;
 			
-			jQuery("<li>").html( options.formatItem 
-					? options.highlight(options.formatItem(data[i].data, i+1, num), term)
-					: options.highlight(data[i].value, term) ).appendTo(list);
+			var formatted = options.formatItem ? options.formatItem(data[i].data, i+1, num) : data[i].value;
+			if ( formatted === false )
+				continue;
+			
+			jQuery("<li>").html( options.highlight(formatted, term) ).appendTo(list)[0].index = i;
 		}
 		listItems = list.find("li");
 		if ( options.selectFirst ) {
@@ -649,7 +650,7 @@ jQuery.Autocompleter.Select = function (options, input, select) {
 			}).below(input).show();
 		},
 		selected: function() {
-			return data && data[active];
+			return data && data[ listItems.filter("." + CLASSES.ACTIVE)[0].index ];
 		}
 	};
 }
