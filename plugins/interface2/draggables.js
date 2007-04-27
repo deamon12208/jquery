@@ -196,7 +196,7 @@
 						}
 						el.DB.proxy = $(del).clone(true).insertAfter(del).hide()[0];
 					} else if (options.helper) {
-						el.DB.proxy = $(options.helper.apply(del)).insertAfter(del).hide()[0];
+						el.DB.proxy = $(options.helper.apply(del)).hide()[0];
 					}
 					if (el.DB.proxy) {
 						$(el.DB.proxy).css({
