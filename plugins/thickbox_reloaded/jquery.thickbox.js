@@ -47,6 +47,7 @@
                 loading = jq.size() && jq || $('<div id="' + LOADING_ID + '"></div>').appendTo(document.body);
                 jq = $('#' + MODAL_ID);
                 modal = jq.size() && jq || $('<div id="' + MODAL_ID + '"></div>').appendTo(document.body);
+                modal.append('<b class="tl"></b><b class="tr"></b><b class="br"></b><b class="bl"></b>');
                 modal.attr({'class': type});
                 $('<div id="' + TITLE_BAR_ID + '"><a href="#" title="' + defaultValues.i18n.close.title + '">' + defaultValues.i18n.close.text + '</a></div>').appendTo(modal).find('a').bind('click', hide);
                 // reveal stuff
@@ -336,7 +337,7 @@
                                     return false;
                                 });
                                 // If height is still the default value, change it here...
-                                show(settings.width, (settings.height == defaultValues.height ? 70 : settings.height), settings.top, settings.left, settings.animate);
+                                show(settings.width, (settings.height == defaultValues.height ? 90 : settings.height), settings.top, settings.left, settings.animate);
                             };
                             break;
                         default:
