@@ -42,7 +42,7 @@ jQuery.fx.iBounce = function (e, hight, callback)
 	z.oldStyle.top = parseInt(z.el.css('top'))||0;
 	z.oldStyle.left = parseInt(z.el.css('left'))||0;
 	
-	if (z.oldStyle.position != 'relative' && z.oldStyle.position != 'absolute') {
+	if (z.oldStyle.position != 'relative' && z.oldStyle.position != 'absolute' && z.oldStyle.position != 'fixed') {
 		z.el.css('position', 'relative');
 	}
 	
