@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.08  (04/16/2007)
+ * Version 1.09  (04/26/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -97,8 +97,11 @@ $.unblockUI = function() {
 $.fn.block = function(msg, css) {
     return this.each(function() {
 		if (!this.$pos_checked) {
-            if ($.css(this,"position") == 'static')
+            if ($.css(this,"position") == 'static') {
                 this.style.position = 'relative';
+                if ($.browser.msie)
+                    this.style.zoom = 1; // force 'hasLayout' in IE
+            }
             this.$pos_checked = 1;
         }
         $.blockUI.impl.install(this, msg, css);
@@ -176,12 +179,12 @@ $.blockUI.impl = {
                 $('html,body').css('height','100%');
 
             // simulate fixed position
-            $.each([f,w,m], function(i) {
-                var s = this[0].style;
+            $.each([f,w,m], function(i,o) {
+                var s = o[0].style;
                 s.position = 'absolute';
                 if (i < 2) {
-                    full ? s.setExpression('height','document.body.scrollHeight > document.body.offsetHeight ? document.body.scrollHeight : document.body.offsetHeight + "px"') : s.setExpression('height','this.parentNode.offsetHeight + "px"');
-//                    full ? s.setExpression('height','document.body.scrollHeight + "px"') : s.setExpression('height','this.parentNode.offsetHeight + "px"');
+                    full ? s.setExpression('height','document.body.scrollHeight > document.body.offsetHeight ? document.body.scrollHeight : document.body.offsetHeight + "px"') 
+                         : s.setExpression('height','this.parentNode.offsetHeight + "px"');
                     full ? s.setExpression('width','jQuery.boxModel && document.documentElement.clientWidth || document.body.clientWidth + "px"')
                          : s.setExpression('width','this.parentNode.offsetWidth + "px"');
                 }
