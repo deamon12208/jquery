@@ -17,6 +17,7 @@ TODO
 - fix mustMatch
 - add scrollbars and page down/up, option for height or number of items to be visible without scrolling
 - allow modification of not-last value in multiple-fields
+- indicate that there are more items available when max limits the display
 @option Number size Limit the number of items to show at once. Default: 
 @option Function parse - TEST AND DOCUMENT ME
 */
