@@ -149,4 +149,10 @@
         </antcall>
     </target>
 
+	<target name="behavior" description="Build behavior plugin.">
+        <antcall target="minandpack">
+            <param name="name" value="behavior" />
+        </antcall>
+    </target>
+
 </project>
