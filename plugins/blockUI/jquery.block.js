@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.09  (04/26/2007)
+ * Version 1.10  (04/29/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -178,6 +178,9 @@ $.blockUI.impl = {
             if (full && $.blockUI.defaults.ie6Stretch && $.boxModel)
                 $('html,body').css('height','100%');
 
+            // fix ie6 problem with blocked element has a border width
+            var fix = !full && el.style.borderLeftWidth ? '0 - parseInt(jQuery(this.parentNode).css("borderLeftWidth"))' : 0;
+    
             // simulate fixed position
             $.each([f,w,m], function(i,o) {
                 var s = o[0].style;
@@ -187,6 +190,7 @@ $.blockUI.impl = {
                          : s.setExpression('height','this.parentNode.offsetHeight + "px"');
                     full ? s.setExpression('width','jQuery.boxModel && document.documentElement.clientWidth || document.body.clientWidth + "px"')
                          : s.setExpression('width','this.parentNode.offsetWidth + "px"');
+                    if (fix) s.setExpression('left', fix);
                 }
                 else {
                     full ? s.setExpression('top','(document.documentElement.clientHeight || document.body.clientHeight) / 2 - (this.offsetHeight / 2) + (blah = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop) + "px"')
