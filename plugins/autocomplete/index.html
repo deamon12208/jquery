@@ -32,7 +32,6 @@ $().ready(function() {
 		minChars: 0,
 		max: 12,
 		autoFill: true,
-		highlight: false,
 		formatItem: function(data, i, total) {
 			// don't show the current month in the list of values (for whatever reason)
 			if ( i == new Date().getMonth() ) 
@@ -72,6 +71,19 @@ $().ready(function() {
 			foo: "bar"
 		}
 	});
+	$("#suggest5").autocomplete("images.php", {
+		delay: 150,
+		width: 320,
+		max: 4,
+		highlight: false,
+		formatItem: function(data) {
+			return "<img src='images/" + data[0] + "'/> " + data[0].split(".")[0];
+		},
+		formatResult: function(data) {
+			return data[0].split(".")[0];
+		}
+	});
+	
 	$(":text, textarea").result(findValueCallback).next().click(function() {
 		$(this).prev().search();
 	});
@@ -132,6 +144,11 @@ $().ready(function() {
 		<p>
 			<label>Hidden input</label>
 			<textarea></textarea>
+		</p>
+		<p>
+			<label>Image search (remote):</label>
+			<input type="text" id='suggest5' />
+			<input type="button" value="Get Value" />
 		</p>
 		<p>
 			<label>Some dropdown (&lt;3 IE):</label>
