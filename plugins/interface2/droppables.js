@@ -46,12 +46,14 @@
 				if (options.activeClass) {
 					$(this).removeClass(options.activeClass);
 				}
-				if (this.DrB.isOver && options.hoverClass) {
+				if (this.DrB.isOver) {
 					if (options.onDrop) {
 						options.onDrop.apply(this, [$.DDM.dragged])
 					}
 					this.DrB.isOver = false;
-					$(this).removeClass(options.hoverClass);
+					if (options.hoverClass) {
+						$(this).removeClass(options.hoverClass);
+					}
 				}
 				if ($.DDM.dragged.DB.cursorAt) {
 					$(this).bind('mouseover', $.markDroppablesOver);
@@ -67,15 +69,19 @@
 					h: $.DDM.dragged.DB.size.hb
 				};
 				if (($.DDM.dragged.DB.cursorAt && this.DrB.isMouseOver == true) || this.DrB.valid[this.DrB.tolerance](this.DrB, dragged)) {
-					if (!this.DrB.isOver && options.hoverClass) {
+					if (!this.DrB.isOver) {
+						if (options.hoverClass) {
+							$(this).addClass(options.hoverClass);
+						}
 						this.DrB.isOver = true;
-						$(this).addClass(options.hoverClass);
 						options.beforeHover.apply(this, [$.DDM.dragged]);
 						options.onHover.apply(this, [$.DDM.dragged]);
 					}
-				} else if (this.DrB.isOver && options.hoverClass) {
+				} else if (this.DrB.isOver) {
 					this.DrB.isOver = false;
-					$(this).removeClass(options.hoverClass);
+					if (options.hoverClass) {
+						$(this).removeClass(options.hoverClass);
+					}
 					options.beforeOut.apply(this, [$.DDM.dragged]);
 					options.onOut.apply(this, [$.DDM.dragged]);
 				}
