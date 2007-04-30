@@ -16,7 +16,6 @@ TODO
 - add a callback to allow decoding the response
 - add scrollbars and page down/up, option for height or number of items to be visible without scrolling
 - allow modification of not-last value in multiple-fields
-- indicate that there are more items available when max limits the display
 @option Number size Limit the number of items to show at once. Default: 
 @option Function parse - TEST AND DOCUMENT ME
 */
@@ -83,6 +82,7 @@ TODO
  * @option Boolean autoFill Fill the textinput while still selecting a value, replacing the value if more is type or something else is selected. Default: false
  * @option Number max Limit the number of items in the select box. Is also send as a "limit" parameter with a remote request. Default: 10
  * @option Boolean|Function highlight Whether and how to highlight matches in the select box. Set to false to disable. Set to a function to customize. The function gets the value as the first argument and the search term as the second and must return the formatted value. Default: Wraps the search term in a <strong> element 
+ * @option Boolean|String moreItems Whether or not to show the "more items" text if there are more items than are currently be displayed. Set to false to disable. Set to a string to customize the html.
  */
 
 /**
@@ -131,6 +131,20 @@ TODO
  * @type jQuery
  */
 
+/**
+ * setOptions
+ *
+ * Updates the options for the current autocomplete field. This allows 
+ * you to change things like the URL, max items to display, etc. If you're
+ * changing the URL, be sure to remember to call the flushCache() method.
+ *
+ * @example jQuery('input#suggest').setOptions();
+ *
+ * @name setOptions
+ * @cat Plugins/Autocomplete
+ * @type jQuery
+ */
+ 
 jQuery.fn.extend({
 	autocomplete: function(urlOrData, options) {
 		var isUrl = typeof urlOrData == "string";
