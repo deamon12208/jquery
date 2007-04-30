@@ -82,7 +82,7 @@ TODO
  * @option Boolean autoFill Fill the textinput while still selecting a value, replacing the value if more is type or something else is selected. Default: false
  * @option Number max Limit the number of items in the select box. Is also send as a "limit" parameter with a remote request. Default: 10
  * @option Boolean|Function highlight Whether and how to highlight matches in the select box. Set to false to disable. Set to a function to customize. The function gets the value as the first argument and the search term as the second and must return the formatted value. Default: Wraps the search term in a <strong> element 
- * @option Boolean|String moreItems Whether or not to show the "more items" text if there are more items than are currently be displayed. Set to false to disable. Set to a string to customize the html.
+ * @option Boolean|String moreItems Whether or not to show the "more items" text if there are more items than are currently be displayed. Set to false to disable. Set to a string to customize the html. Default: Displays "more", surrounded with three arrows.
  */
 
 /**
@@ -132,13 +132,14 @@ TODO
  */
 
 /**
- * setOptions
- *
  * Updates the options for the current autocomplete field. This allows 
  * you to change things like the URL, max items to display, etc. If you're
  * changing the URL, be sure to remember to call the flushCache() method.
  *
- * @example jQuery('input#suggest').setOptions();
+ * @example jQuery('input#suggest').setOptions({
+ *  max: 15
+ * });
+ * @desc Changes the maximum number of items to display to 15.
  *
  * @name setOptions
  * @cat Plugins/Autocomplete
