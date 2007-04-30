@@ -84,6 +84,8 @@
 			if (dragged.DB.dragThreshMet) {
 				dragged.DB.beforeStopDrag.apply(dragged,[e]);
 				toReturn = dragged.DB.stopDrag.apply(dragged,[e]);
+			} else if(dragged.DB.proxy) {
+				$(dragged.DB.proxy).remove();
 			}
 			
 			$.DDM.clearTargets(e);
