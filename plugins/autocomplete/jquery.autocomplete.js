@@ -14,7 +14,6 @@
 /*
 TODO
 - add a callback to allow decoding the response
-- fix mustMatch
 - add scrollbars and page down/up, option for height or number of items to be visible without scrolling
 - allow modification of not-last value in multiple-fields
 - indicate that there are more items available when max limits the display
@@ -143,6 +142,8 @@ jQuery.fn.extend({
 		
 		// if highlight is set to false, replace it with a do-nothing function
 		options.highlight = options.highlight || function(value) { return value; };
+		// if moreItems is false, replace it w/empty string
+		options.moreItems = options.moreItems || "";
 		
 		return this.each(function() {
 			new jQuery.Autocompleter(this, options);
@@ -151,11 +152,14 @@ jQuery.fn.extend({
 	result: function(handler) {
 		return this.bind("result", handler);
 	},
-	search: function() {
-		return this.trigger("search");
+	search: function(handler) {
+		return this.trigger("search", [handler]);
 	},
 	flushCache: function() {
 		return this.trigger("flushCache");
+	},
+	setOptions: function(options){
+		return this.trigger("setOptions", [options]);
 	}
 });
 
@@ -240,6 +244,7 @@ jQuery.Autocompleter = function(input, options) {
 			onChange(0, true);
 		}
 	}).bind("search", function() {
+		var fn = (arguments.length > 1) ? arguments[1] : null;
 		function findValueCallback(q, data) {
 			var result;
 			if( data && data.length ) {
@@ -250,13 +255,17 @@ jQuery.Autocompleter = function(input, options) {
 					}
 				}
 			}
-			$input.trigger("result", result && [result.data, result.value]);
+			if( typeof fn == "function" ) fn(result);
+			else $input.trigger("result", result && [result.data, result.value]);
 		}
 		jQuery.each(trimWords($input.val()), function(i, value) {
 			request(value, findValueCallback, findValueCallback);
 		});
 	}).bind("flushCache", function() {
 		cache.flush();
+	}).bind("setOptions", function() {
+		// overwrite the options
+		for( var k in arguments[1] ) options[k] = arguments[1][k]
 	});
 	
 	hideResultsNow();
@@ -349,11 +358,14 @@ jQuery.Autocompleter = function(input, options) {
 		select.hide();
 		clearTimeout(timeout);
 		stopLoading();
-		// TODO fix mustMatch...
 		if (options.mustMatch) {
-			if ($input.val() != previousValue) {
-				//selectCurrent();
-			}
+			// call search and run callback
+			$input.search(
+				function (result){
+					// if no value found, clear the input box
+					if( !result ) $input.val("");
+				}
+			);
 		}
 	};
 
@@ -431,6 +443,7 @@ jQuery.Autocompleter.defaults = {
 	extraParams: {},
 	selectFirst: true,
 	max: 10,
+	moreItems: "&#x25be;&#x25be;&#x25be; more &#x25be;&#x25be;&#x25be;",
 	//size: 10,
 	autoFill: false,
 	width: 0,
@@ -554,7 +567,7 @@ jQuery.Autocompleter.Select = function (options, input, select) {
 		.addClass(options.resultsClass)
 		.css("position", "absolute")
 		.appendTo("body");
-
+	
 	var list = jQuery("<ul>").appendTo(element).mouseover( function(event) {
 		active = jQuery("li", list).removeClass().index(target(event));
 		jQuery(target(event)).addClass(CLASSES.ACTIVE);
@@ -570,6 +583,13 @@ jQuery.Autocompleter.Select = function (options, input, select) {
 		active = -1,
 		data,
 		term = "";
+		
+	if( options.moreItems.length > 0 ) 
+		var moreItems = jQuery("<div>")
+			.addClass("ac_moreItems")
+			.css("display", "none")
+			.html(options.moreItems)
+			.appendTo(element);
 		
 	if( options.width > 0 )
 		element.css("width", options.width);
@@ -619,6 +639,7 @@ jQuery.Autocompleter.Select = function (options, input, select) {
 			listItems.eq(0).addClass(CLASSES.ACTIVE);
 			active = 0;
 		}
+		if( options.moreItems.length > 0 ) moreItems.css("display", (data.length > num)? "block" : "none");
 		list.bgiframe();
 	}
 	

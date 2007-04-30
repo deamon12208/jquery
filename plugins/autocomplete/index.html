@@ -32,9 +32,12 @@ $().ready(function() {
 		minChars: 0,
 		max: 12,
 		autoFill: true,
+		// ADD / DGS2 / must match a value
+		mustMatch: true,
 		formatItem: function(data, i, total) {
+			// FIX / DGS2 / old code only excluded X item in list--not the actual current month
 			// don't show the current month in the list of values (for whatever reason)
-			if ( i == new Date().getMonth() ) 
+			if ( data == months[new Date().getMonth()] ) 
 				return false;
 			return data;
 		}
@@ -43,6 +46,7 @@ $().ready(function() {
 		minChars: 0,
 		width: 310,
 		matchContains: true,
+		autoFill: false,
 		formatItem: function(row, i, max) {
 			return i + "/" + max + ": \"" + row.name + "\" <" + row.to + ">";
 		},
@@ -95,6 +99,10 @@ $().ready(function() {
 		hidden.val( (hidden.val() ? hidden.val() + ";" : hidden.val()) + data[1]);
 	});
 });
+
+function changeOptions(){
+	$("#suggest1").setOptions({max: 5});
+}
 </script>
 	
 </head>
@@ -111,11 +119,13 @@ $().ready(function() {
 			<label>Single City (local):</label>
 			<input type="text" id="suggest1" />
 			<input type="button" value="Get Value" />
+			<input type="button" value="Change Max Items" onclick="changeOptions();" />
 		</p>
 		<p>
 			<label>Month (local):</label>
 			<input type="text" id="suggest12" />
 			<input type="button" value="Get Value" />
+			(Current month is excluded from list)
 		</p>
 		<p>
 			<label>E-Mail (local):</label>
