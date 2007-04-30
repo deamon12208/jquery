@@ -1,4 +1,6 @@
-<html>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Language" content="en" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -156,7 +158,7 @@ $(document).ready(
 			{
 				zIndex: 1,
 				dragPrevention: 'a,input,textarea',
-				clickTimeout: false,
+				preventionTimeout: false,
 				preventionDistance: 20,
 				helper: function() {
 					var myHelper = document.createElement("div");
@@ -166,7 +168,7 @@ $(document).ready(
 						height: this.offsetHeight + 'px',
 						opacity: 0.6,
 						position: 'absolute'
-					});
+					}).appendTo(this.parentNode);
 					return myHelper;
 				}
 			}
@@ -194,7 +196,7 @@ $(document).ready(
 			}
 		});
 		$('#drag4').draggable({grid:{x:50,y:50}});
-		$('#drag9').draggable({cursorAt:{bottom:-16,right:-16}});
+		$('#drag9').draggable({cursorAt:{bottom:-16,right:-16}, containment: 'document'});
 		$('#drag8').draggable({
 			dragModifier: function(position) {
 				
