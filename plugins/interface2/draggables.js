@@ -120,6 +120,7 @@
 				}
 				
 				el.style.display = '';
+				this.DB.beforeDrag.apply(this);
 			},
 			startDrag: function() {
 				this.DB.onStart.apply(this.DB.draggedEls, [this.DB.proxy||this.DB.draggedEls, $.DDM.dragged.DB.targets]);
