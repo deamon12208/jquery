@@ -196,6 +196,9 @@
 				$.DDM.preventionTimeout = setTimeout(function(){$.DDM.startDrag(e)}, this.DB.preventionTimeout);
 				return false;
 			}
+			if (this.DB.snap) {
+				return false;
+			}
 			return $.DDM.startDrag(e);
 		}
 	};
