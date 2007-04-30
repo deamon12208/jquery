@@ -118,7 +118,10 @@ iframe#tb-content {
     display: block;
 }
 
-/* IE specific - first selector for IE 6 and IE 7 Quirks Mode, second selector for IE 7 Standards Mode */
-* html #tb-dim, *:first-child+html #tb-dim {
+/* IE fixes - WARNING: do not group selectors, otherwise IE 6 will ignore complete rule (because of the + combinator) */
+* html #tb-dim { /* @ IE 6 & IE 7 Quirks Mode */
+    filter: Alpha(Opacity=60);
+}
+*:first-child+html #tb-dim { /* @ IE 7 Standards Mode */
     filter: Alpha(Opacity=60);
 }
