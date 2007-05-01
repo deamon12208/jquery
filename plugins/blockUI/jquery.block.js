@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.10  (04/29/2007)
+ * Version 1.11  (04/30/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -97,11 +97,9 @@ $.unblockUI = function() {
 $.fn.block = function(msg, css) {
     return this.each(function() {
 		if (!this.$pos_checked) {
-            if ($.css(this,"position") == 'static') {
+            if ($.css(this,"position") == 'static')
                 this.style.position = 'relative';
-                if ($.browser.msie)
-                    this.style.zoom = 1; // force 'hasLayout' in IE
-            }
+            if ($.browser.msie) this.style.zoom = 1; // force 'hasLayout' in IE
             this.$pos_checked = 1;
         }
         $.blockUI.impl.install(this, msg, css);
@@ -178,9 +176,13 @@ $.blockUI.impl = {
             if (full && $.blockUI.defaults.ie6Stretch && $.boxModel)
                 $('html,body').css('height','100%');
 
-            // fix ie6 problem with blocked element has a border width
-            var fix = !full && el.style.borderLeftWidth ? '0 - parseInt(jQuery(this.parentNode).css("borderLeftWidth"))' : 0;
-    
+            // fix ie6 problem when blocked element has a border width
+            if (this.ie6 && !full) {
+                var t = this.sz(el,'borderTopWidth'), l = this.sz(el,'borderLeftWidth');
+                var fixT = t ? '(0 - '+t+')' : 0;
+                var fixL = l ? '(0 - '+l+')' : 0;
+            }
+            
             // simulate fixed position
             $.each([f,w,m], function(i,o) {
                 var s = o[0].style;
@@ -190,11 +192,11 @@ $.blockUI.impl = {
                          : s.setExpression('height','this.parentNode.offsetHeight + "px"');
                     full ? s.setExpression('width','jQuery.boxModel && document.documentElement.clientWidth || document.body.clientWidth + "px"')
                          : s.setExpression('width','this.parentNode.offsetWidth + "px"');
-                    if (fix) s.setExpression('left', fix);
+                    if (fixL) s.setExpression('left', fixL);
+                    if (fixT) s.setExpression('top', fixT);
                 }
                 else {
-                    full ? s.setExpression('top','(document.documentElement.clientHeight || document.body.clientHeight) / 2 - (this.offsetHeight / 2) + (blah = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop) + "px"')
-                         : s.setExpression('top','this.parentNode.top');
+                    if (full) s.setExpression('top','(document.documentElement.clientHeight || document.body.clientHeight) / 2 - (this.offsetHeight / 2) + (blah = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop) + "px"')
                     s.marginTop = 0;
                 }
             });
@@ -238,11 +240,12 @@ $.blockUI.impl = {
     },
     center: function(el) {
 		var p = el.parentNode, s = el.style;
-        var l = (this.sz(p,1) - this.sz(el,1))/2, t = (this.sz(p,0) - this.sz(el,0))/2;
+        var l = (this.sz(p,"width") - this.sz(el,"width"))/2;
+        var t = (this.sz(p,"height") - this.sz(el,"height"))/2 + this.sz(p,"paddingTop")/2;
         s.left = l > 0 ? (l+'px') : '0';
         s.top  = t > 0 ? (t+'px') : '0';
     },
-    sz: function(el, w) { return parseInt($.css(el,(w?"width":"height"))); }
+    sz: function(el, p) { return parseInt($.css(el,p))||0; }
 };
 
 })(jQuery);
