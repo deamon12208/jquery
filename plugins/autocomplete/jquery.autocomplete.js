@@ -682,7 +682,7 @@ jQuery.Autocompleter.Select = function (options, input, select) {
 		},
 		show: function() {
 			element.css({
-				width: options.width > 0 ? options.width : jQuery(input).width()
+				width: typeof options.width == "string" || options.width > 0 ? options.width : jQuery(input).width()
 				//height: jQuery(listItems[0]).height() * options.size,
 			}).below(input).show();
 		},
