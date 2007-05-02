@@ -431,7 +431,7 @@ jQuery.Autocompleter = function(input, options) {
 				parsed[parsed.length] = {
 					data: row,
 					value: row[0],
-					result: options.formatResult && options.formatResult(row) || row[0]
+					result: options.formatResult && options.formatResult(row, row[0]) || row[0]
 				};
 			}
 		}
@@ -643,7 +643,7 @@ jQuery.Autocompleter.Select = function (options, input, select) {
 			if (!data[i])
 				continue;
 			
-			var formatted = options.formatItem ? options.formatItem(data[i].data, i+1, num) : data[i].value;
+			var formatted = options.formatItem ? options.formatItem(data[i].data, i+1, num, data[i].value) : data[i].value;
 			if ( formatted === false )
 				continue;
 			

@@ -19,10 +19,8 @@ $().ready(function() {
 	}
 	
 	function formatItem(row) {
-		//var row = row.split("|");
 		return row[0] + " (<strong>id: " + row[1] + "</strong>)";
 	}
-	
 	function formatResult(row) {
 		return row[0];
 	}
@@ -32,10 +30,8 @@ $().ready(function() {
 		minChars: 0,
 		max: 12,
 		autoFill: true,
-		// ADD / DGS2 / must match a value
 		mustMatch: true,
 		formatItem: function(data, i, total) {
-			// FIX / DGS2 / old code only excluded X item in list--not the actual current month
 			// don't show the current month in the list of values (for whatever reason)
 			if ( data == months[new Date().getMonth()] ) 
 				return false;
@@ -80,11 +76,11 @@ $().ready(function() {
 		width: 320,
 		max: 4,
 		highlight: false,
-		formatItem: function(data) {
-			return "<img src='images/" + data[0] + "'/> " + data[0].split(".")[0];
+		formatItem: function(data, i, n, value) {
+			return "<img src='images/" + value + "'/> " + value.split(".")[0];
 		},
-		formatResult: function(data) {
-			return data[0].split(".")[0];
+		formatResult: function(data, value) {
+			return value.split(".")[0];
 		}
 	});
 	
