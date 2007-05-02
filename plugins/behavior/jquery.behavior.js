@@ -35,7 +35,7 @@ $.extend($.fn, {
 			});
 		else if (!fn && typeof a == "string")
 			// remove only based on selector, context and type
-			$.each( $.behavior.behaviros, function(i,b) {
+			$.each( $.behavior.behaviors, function(i,b) {
 				if (this.selector == b.selector && this.context == b.context && type == b[3])
 					$.behavior.remove(i);
 			});
@@ -117,9 +117,9 @@ $.extend( $.behavior, {
 	 */
 	registerMethod: function() {
 		$.each( arguments, function(i,n) {
-			$.fn["_"+n] = $.fn[n];
+			var old = $.fn[n];
 			$.fn[n] = function() {
-				var r = $.fn["_"+n].apply(this, arguments);
+				var r = old.apply(this, arguments);
 				$.behavior.run();
 				return r;
 			}
@@ -203,9 +203,9 @@ $(function() {
 });
 
 // Overwrite jQuery.prototype.init to add context and selector properties to the jQuery object
-$.prototype._init = $.prototype.init;
+var init = $.prototype.init;
 $.prototype.init = function(a,c) {
-	var r = this._init(a,c);
+	var r = init.apply(this, [a,c]);
 	// copy over properties if they exist already
 	if (a && a.selector) {
 		r.context = a.context;
