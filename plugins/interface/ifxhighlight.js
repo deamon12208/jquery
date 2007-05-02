@@ -37,13 +37,11 @@ jQuery.fn.Highlight = function(speed, color, callback, easing) {
 				oldColor = jQuery(parentEl).css('backgroundColor');
 				parentEl = parentEl.parentNode;
 			}
-			jQuery(this).css('backgroundColor', color);
-			
 			
 			/* In IE, style is a object.. */
 			if(typeof this.oldStyleAttr == 'object') this.oldStyleAttr = this.oldStyleAttr["cssText"];
 			
-			jQuery(this).animate(
+			jQuery(this).css('backgroundColor', color).animate(
 				{'backgroundColor':oldColor},
 				speed,
 				easing,
