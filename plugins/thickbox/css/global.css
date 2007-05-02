@@ -219,6 +219,8 @@ border-top:2px solid #ccc;
 display: inline;
 list-style-type: none;
 padding:7px 20px 7px 15px;
+*padding-top:2px;
+_padding-top:7px;
 line-height:30px;
 font-size:1.6em;
 }
