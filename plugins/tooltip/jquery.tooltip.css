@@ -15,12 +15,16 @@
 	width: 16px;
 }
 
-#tooltip span.resize {
-	bottom: 0;
-	background: transparent url('resize.gif') no-repeat;
+#tooltip.modal h3 {
+	cursor: move;
 }
 
-#tooltip span.close {
+#tooltip.modal span.resize {
+	bottom: 0;
+	background: transparent url('resize.gif') no-repeat;
+	cursor: se-resize;
+}
+#tooltip.modal span.close {
 	top: 0;
 	background: transparent url('close.gif') no-repeat;
 }

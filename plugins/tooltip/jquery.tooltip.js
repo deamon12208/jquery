@@ -111,23 +111,31 @@
 				return false;
 			});
 		},
-		Modaltip: function() {
+		Modaltip: function(settings) {
+			settings = $.extend({
+				drag: "h3"
+			}, settings);
 			return this.click(function() {
 				var self = this;
 				blocked = true;
 				helper.parent
+				.addClass("modal")
 				.append("<span class='resize' />")
 				.append("<span class='close' />")
-				.jqDrag('h3')
+				.jqDrag(settings.drag)
 				.jqResize("span.resize")
 				.click(function(event) {
 					event.stopPropagation();
 				}).find("span.close").add(document.body).one('click', function(event) {
 					blocked = false;
-					helper.parent.unbind('click').css({
+					helper.parent
+					.unbind('click')
+					.css({
 						height: "",
 						width: ""
-					}).find("span.resize, span.close").remove();
+					})
+					.removeClass("modal")
+					.find("span.resize, span.close").remove();
 					hide.call(self, event);
 				});
 				return false;
