@@ -1,5 +1,5 @@
 /*
- * Tooltip 1.0 - jQuery plugin  for styled tooltips
+ * Tooltip 2.0 Alpha - jQuery plugin  for styled tooltips
  *
  * Copyright (c) 2006 Jörn Zaefferer, Stefan Petre
  *
@@ -84,7 +84,8 @@
 		// IE 5.5 or 6
 		IE = $.browser.msie && /MSIE\s(5\.5|6\.)/.test(navigator.userAgent),
 		// block all tooltips when one is transformed to a popup
-		blocked = false;
+		blocked = false,
+		track = false;
 		
 	$.fn.extend({
 		Tooltip: function(settings) {
@@ -196,8 +197,8 @@
 			show();
 		
 		// if selected, update the helper position when the mouse moves
-		if(this.tSettings.track)
-			$('body').bind('mousemove', update);
+		track = !!this.tSettings.track;
+		$('body').bind('mousemove', update);
 			
 		// update at least once
 		update(event);
@@ -267,6 +268,11 @@
 	function update(event)	{
 		if(blocked)
 			return;
+		
+		// stop updating when tracking is disabled and the tooltip is visible
+		if ( !track && helper.parent.is(":visible")) {
+			$('body').unbind('mousemove', update)
+		}
 		
 		// if no current element is available, remove this listener
 		if( current == null ) {
