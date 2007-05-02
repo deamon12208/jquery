@@ -5,43 +5,83 @@
  * $LastChangedDate$
  * $Rev$
  *
- * Version: 0.1 ALPHA
+ * Version: 0.2 ALPHA (Only works with jQuery Rev 1845 and higher)
  */
 
 (function($) {
 
+$.extend($.fn, {
+	behavior: function(type, fn) {
+		if ($.isFunction(type)) {
+			// type is function
+			fn = type;
+			type = undefined;
+		}
+		// create a new behavior
+		$.behavior(this.selector, this.context, type, fn);
+		// Run the behavior if document is ready
+		 if ($.isReady)
+		 	$.behavior.run($.behavior.behaviors.length-1);
+		// continue the chain
+		return this;
+	},
+	
+	unbehavior: function(type, fn) {
+		if (!type && !fn)
+			// remove only based on selector and context
+			$.each( $.behavior.behaviors, function(i,b) {
+				if (this.selector == b.selector && this.context == b.context)
+					$.behavior.remove(i);
+			});
+		else if (!fn && typeof a == "string")
+			// remove only based on selector, context and type
+			$.each( $.behavior.behaviros, function(i,b) {
+				if (this.selector == b.selector && this.context == b.context && type == b[3])
+					$.behavior.remove(i);
+			});
+		else {
+			if ($.isFunction(type)) {
+				// type is function
+				fn = type;
+				type = undefined;
+			}
+			// find this behavior
+			var id = $.behavior.find(this.selector, this.context, type, fn);
+			// remove it
+			if (id != undefined)
+				$.behavior.remove(id);
+		}
+		// continue the chain
+		return this;
+	}
+});
+
 /**
  * Registers a behavior to be run onDOMReady and anytime
  * the DOM is updated via append, appendTo, prepend,
- * prependTo, after and before (other methods can be 
+ * prependTo, after, before and html (other methods can be 
  * registered as well using the $.behavior.registerMethod).
  * The behavior will only run on elements once.
  * This method returns a number which is the id of the behavior.
  * This id can be used to only run and/or remove the specific behavior.
- * 
- * @example $.behavior('a[@href=#]', 'click', function() { return false; });
- * @example $.behavior('a[@href^=https]', 'addClass', 'secure');
  *
+ * @private
  * @name $.behavior
- * @param String selector The behavior will be run on the matched elements of the selector.
- * @param String action The method to be run on the matched elements.
  * @type Number
  * @cat Plugins/behavior
  * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
  */
-$.behavior = function(selector, action) {
+$.behavior = function(selector, context, type, fn) {
 	if (!$.behavior.behaviors) $.behavior.behaviors = [];
-	$.behavior.behaviors.push( [false].concat($.makeArray(arguments)) );
+	$.behavior.behaviors.push( [undefined].concat($.makeArray(arguments)) );
 	return $.behavior.behaviors.length-1;
 };
 
 $.extend( $.behavior, {
 	/**
 	 * Manually run one or all behaviors.
-	 * 
-	 * @example $.behavior.run(1);
-	 * @example $.behavior.run();
 	 *
+	 * @private
 	 * @name $.behavior.run
 	 * @param Number id The id of the behavior to run.
 	 * @type Undefined
@@ -49,8 +89,12 @@ $.extend( $.behavior, {
 	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
 	 */
 	run: function(id) {
+		// exit if there are no behaviors
+		if (!$.behavior.behaviors) return;
+		// run a specific behavior
 		if (id != undefined)
 			$.behavior._run(id)
+		// run all behaviors
 		else
 			$.each( $.behavior.behaviors, function(i) {
 				$.behavior._run(i);
@@ -64,6 +108,7 @@ $.extend( $.behavior, {
 	 * @example $.behavior.registerMethod("myMethod1");
 	 * @example $.behavior.registerMethod("myMethod1", "myMethod2", "myMethod3");
 	 *
+	 * @private
 	 * @name $.behavior.registerMethod
 	 * @param String name The name of the method to register with behavior
 	 * @type Undefined
@@ -83,10 +128,8 @@ $.extend( $.behavior, {
 	
 	/**
 	 * Remove one or all behaviors.
-	 * 
-	 * @example $.behavior.remove(1);
-	 * @example $.behavior.remove();
 	 *
+	 * @private
 	 * @name $.behavior.remove
 	 * @param Number id The id of the behavior to remove.
 	 * @type Undefined
@@ -101,6 +144,33 @@ $.extend( $.behavior, {
 	},
 	
 	/**
+	 * Find a particular behavior.
+	 *
+	 * @private
+	 * @name $.behavior.find
+	 * @type Number
+	 * @cat Plugins/behavior
+	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
+	 */
+	find: function(selector, context, type, fn) {
+		var id, args = arguments;
+		for (var i=0; i<$.behavior.behaviors.length; i++) {
+			var b = $.behavior.behaviors[i], r = true;
+			for (var k=0; k<args.length; k++) {
+				if (b[k+1] != args[k]){
+					r = false;
+					break;
+				}
+			}
+			if (r) {
+				id = i;
+				break;
+			}
+		}
+		return id;
+	},
+	
+	/**
 	 * Runs an individual behavior.
 	 * @private
 	 */
@@ -108,21 +178,45 @@ $.extend( $.behavior, {
 		var behavior = $.behavior.behaviors[id];
 		if ($.behavior.running || !behavior) return;
 		$.behavior.running = true;
-		var oldEls = $(behavior[0]);
-		behavior[0] = $(behavior[1]);
-		var newEls = $(behavior[0]).not(oldEls);
-		var args = [].concat(behavior).slice(3);
-		newEls[behavior[2]].apply( newEls, args );
+		var oldEls = $(behavior[0]), newEls,
+		    type   = behavior[3],
+		    fn     = behavior[4];
+		behavior[0] = $(behavior[1], behavior[2]);
+		newEls = $(behavior[0]).not(oldEls);
+		
+		if (type != undefined) 
+			newEls.bind(type, fn);
+		else
+			newEls.each(function() {
+				fn.apply(this, []);
+			});
 		$.behavior.running = false;
 	}
 });
 
 // Register core DOM Manipulation methods
-$.behavior.registerMethod('append', 'appendTo', 'prepend', 'prependTo', 'after', 'before');
+$.behavior.registerMethod('append', 'appendTo', 'prepend', 'prependTo', 'after', 'before', 'html');
 
 // Auto run behaviors onDOMReady
 $(function() {
 	$.behavior.run();
 });
+
+// Overwrite jQuery.prototype.init to add context and selector properties to the jQuery object
+$.prototype._init = $.prototype.init;
+$.prototype.init = function(a,c) {
+	var r = this._init(a,c);
+	// copy over properties if they exist already
+	if (a && a.selector) {
+		r.context = a.context;
+		r.selector = a.selector;
+	}
+	// set properties
+	if ( typeof a  == "string" ) {
+		r.context = c;
+		r.selector = a;
+	}
+	return r;
+};
 
 })(jQuery);

@@ -8,13 +8,21 @@
 		<script type="text/javascript" src="/jquery/dist/jquery.js"></script>
 		<script src="/plugins/behavior/jquery.behavior.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript" charset="utf-8">
-			var appendBehavior = $.behavior('div', 'append', '<a href="#">Test</a>');
-			var clickBehavior = $.behavior('div a', 'bind', 'click', function(){ alert('Applied via a behavior rule.'); return false;});
-			var addClassBehavior = $.behavior('div a', 'addClass', 'link');
+			$('div').behavior(function() {
+				$(this).append('<a href="#">Test</a>');
+			});
+			$('a', 'div').behavior('click', function() {
+				alert('Applied via a behavior rule');
+				return false;
+			});
 			$(function() {
+				var fn = function() { $(this).addClass('link'); };
+				$('div a').behavior(fn);
 				$('<div>New Div</div>').appendTo('body');
 				$('<div>New Div</div>').prependTo('body');
-				$.behavior.remove(addClassBehavior);
+				
+				$('div a').unbehavior(fn);
+				
 				$('<div>New Div</div>').appendTo('body');
 				$('<div>New Div</div>').prependTo('body');
 			});
