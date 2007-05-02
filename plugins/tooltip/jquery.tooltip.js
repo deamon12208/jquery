@@ -11,6 +11,14 @@
  *
  */
 
+/*
+TODO
+- more testing need for Modaltip and Foottip, maybe rename both
+- provide a nice approach to show URLs only for external links
+- change p.body and p.url to div.body and div.url
+- finally: release 2.0, being as backwards compatible as possible
+*/
+
 /**
  * Display a customized tooltip instead of the default one
  * for every selected element. The tooltip behaviour mimics
