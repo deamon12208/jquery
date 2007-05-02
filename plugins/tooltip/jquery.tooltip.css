@@ -1,0 +1,43 @@
+#tooltip {
+	position: absolute;
+	z-index: 3000;
+	border: 1px solid #111;
+	background-color: #eee;
+	opacity: 0.85;
+	padding: 5px;
+}
+#tooltip h3, #tooltip p { margin: 0; }
+
+#tooltip span.resize, #tooltip span.close {
+	position: absolute;
+	right: 0;
+	height: 16px;
+	width: 16px;
+}
+
+#tooltip span.resize {
+	bottom: 0;
+	background: transparent url('resize.gif') no-repeat;
+}
+
+#tooltip span.close {
+	top: 0;
+	background: transparent url('close.gif') no-repeat;
+}
+
+#tooltip.fancy {
+	opacity: 0.95;
+	font-family: Arial;
+	border: none;
+	width: 210px;
+	padding:20px;
+	height: 135px;
+	background: url('shadow.png');
+}
+#tooltip.fancy h3 {
+	margin-bottom: 0.75em;
+	font-size: 12pt;
+	width: 220px;
+	text-align: center;
+}
+#tooltip.fancy p { width: 220px; text-align: left; }

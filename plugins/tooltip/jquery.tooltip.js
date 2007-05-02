@@ -82,25 +82,55 @@
 		// timeout id for delayed tooltips
 		tID,
 		// IE 5.5 or 6
-		IE = $.browser.msie && /MSIE\s(5\.5|6\.)/.test(navigator.userAgent);
+		IE = $.browser.msie && /MSIE\s(5\.5|6\.)/.test(navigator.userAgent),
+		// block all tooltips when one is transformed to a popup
+		blocked = false;
 		
 	$.fn.extend({
 		Tooltip: function(settings) {
-			// setup configuration
 			settings = $.extend({}, $.Tooltip.defaults, settings);
-		
 			createHelper();
-			
-			// bind events for every selected element with a title attribute
-			this.filter('[@title]')
-				// save settings into each element
-				.each(function() {
+			return this.each(function() {
 					this.tSettings = settings;
 				})
-				// bind events
 				.bind("mouseover", save)
 				.bind(settings.event, handle);
-			return this;
+		},
+		Foottip: function(settings) {
+			this.each(function() {
+				$($(this).attr('href')).hide();
+			});
+			settings = $.extend({
+				bodyHandler: function() {
+					return $($(this).attr('href')).html();
+				},
+				showURL: false
+			}, settings);
+			return this.Tooltip(settings).click(function() {
+				return false;
+			});
+		},
+		Modaltip: function() {
+			return this.click(function() {
+				var self = this;
+				blocked = true;
+				helper.parent
+				.append("<span class='resize' />")
+				.append("<span class='close' />")
+				.jqDrag('h3')
+				.jqResize("span.resize")
+				.click(function(event) {
+					event.stopPropagation();
+				}).find("span.close").add(document.body).one('click', function(event) {
+					blocked = false;
+					helper.parent.unbind('click').css({
+						height: "",
+						width: ""
+					}).find("span.resize, span.close").remove();
+					hide.call(self, event);
+				});
+				return false;
+			});
 		},
 		fixPNG: IE ? function() {
 			return this.each(function () {
@@ -146,8 +176,6 @@
 		helper.parent = $('<div id="tooltip"><h3></h3><p class="body"></p><p class="url"></p></div>')
 			// hide it at first
 			.hide()
-			// move to top and position absolute, to let it follow the mouse
-			.css({ position: 'absolute', zIndex: "3000" })
 			// add to document
 			.appendTo('body');
 		
@@ -159,6 +187,8 @@
 	
 	// main event handler to start showing tooltips
 	function handle(event) {
+		if(blocked)
+			return;
 		// show helper, either with timeout or on instant
 		if( this.tSettings.delay )
 			tID = setTimeout(show, this.tSettings.delay);
@@ -174,7 +204,7 @@
 		
 		// hide the helper when the mouse was clicked on the element
 		if (this.tSettings.event != "click")
-			$(this).bind('click', hide);
+			//$(this).bind('click', hide);
 		
 		// hide the helper when the mouse moves out of the element
 		$(this).bind('mouseout', hide);
@@ -183,7 +213,7 @@
 	// save elements title before the tooltip is displayed
 	function save() {
 		// if this is the current source, or it has no title (occurs with click event), stop
-		if(this == current || !this.title)
+		if ( blocked || this == current || !this.title )
 			return;
 
 		// save current
@@ -235,12 +265,15 @@
 	 * removes itself when no current element
 	 */
 	function update(event)	{
+		if(blocked)
+			return;
+		
 		// if no current element is available, remove this listener
 		if( current == null ) {
 			$('body').unbind('mousemove', update);
 			return;	
 		}
-		
+
 		var left = helper.parent[0].offsetLeft;
 		var top = helper.parent[0].offsetTop;
 		if(event) {
@@ -289,6 +322,8 @@
 	
 	// hide helper and restore added classes and the title
 	function hide(event) {
+		if(blocked)
+			return;
 		// clear timeout if possible
 		if(tID)
 			clearTimeout(tID);
@@ -298,11 +333,11 @@
 		helper.parent.hide().removeClass( this.tSettings.extraClass );
 		
 		// restore title and remove this listener
-		if (event.type != "click") {
+		//if (event.type != "click") {
 			$(this)
-				.attr('title', title)
-				.unbind('mouseout', hide);
-		}
+				.unbind('mouseout', hide)
+				.attr('title', title);
+		//}
 		if (this.tSettings.event != "click")
 			$(this).unbind('click', hide);
 			
@@ -320,4 +355,33 @@
 		extraClass: ""
 	};
 
+})(jQuery);
+
+/*
+ * jqDnR - Minimalistic Drag'n'Resize for jQuery.
+ *
+ * Copyright (c) 2007 Brice Burgess <bhb@iceburg.net>, http://www.iceburg.net
+ * Licensed under the MIT License:
+ * http://www.opensource.org/licenses/mit-license.php
+ * 
+ * $Version: 2007.02.09 +r1
+ */
+(function($){
+$.fn.jqDrag=function(r){$.jqDnR.init(this,r,'d'); return this;};
+$.fn.jqResize=function(r){$.jqDnR.init(this,r,'r'); return this;};
+$.jqDnR={
+init:function(w,r,t){ r=(r)?$(r,w):w;
+	r.bind('mousedown',{w:w,t:t},function(e){ var h=e.data; var w=h.w;
+	hash=$.extend({oX:f(w,'left'),oY:f(w,'top'),oW:f(w,'width'),oH:f(w,'height'),pX:e.pageX,pY:e.pageY,o:w.css('opacity')},h);
+	h.w.css('opacity',0.8); $().mousemove($.jqDnR.drag).mouseup($.jqDnR.stop);
+	return false;});
+},
+drag:function(e) {var h=hash; var w=h.w[0];
+	if(h.t == 'd') h.w.css({left:h.oX + e.pageX - h.pX,top:h.oY + e.pageY - h.pY});
+	else h.w.css({width:Math.max(e.pageX - h.pX + h.oW,0),height:Math.max(e.pageY - h.pY + h.oH,0)});
+	return false;},
+stop:function(){var j=$.jqDnR; hash.w.css('opacity',hash.o); $().unbind('mousemove',j.drag).unbind('mouseup',j.stop);},
+h:false};
+var hash=$.jqDnR.h;
+var f=function(w,t){return parseInt(w.css(t)) || 0};
 })(jQuery);
