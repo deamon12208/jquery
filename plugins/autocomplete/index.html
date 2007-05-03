@@ -15,7 +15,7 @@
 $().ready(function() {
 
 	function findValueCallback(event, data, formatted) {
-		$("<li>").text( !data ? "No match!" : "Selected: " + formatted).appendTo("#result");
+		$("<li>").html( !data ? "No match!" : "Selected: " + formatted).appendTo("#result");
 	}
 	
 	function formatItem(row) {

@@ -325,7 +325,7 @@ jQuery.Autocompleter = function(input, options) {
 			$input.addClass(options.loadingClass);
 			if (!options.matchCase)
 				currentValue = currentValue.toLowerCase();
-			request(currentValue, receiveData, stopLoading);
+			request(currentValue, receiveData, hideResultsNow);
 		} else {
 			stopLoading();
 			select.hide();
