@@ -121,7 +121,7 @@
 
             // helper
             function blockKeys(e) {
-                var allowed = $('a, input, select, textarea', modal);
+                var allowed = $('a, button, input, select, textarea', modal);
                 for (var i = 0, k = allowed.length; i < k; i++) {
                     if (allowed[i] == e.target) {
                         return true;
