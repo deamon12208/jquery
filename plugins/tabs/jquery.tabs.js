@@ -433,7 +433,7 @@ $.fn.tabs = function(initial, settings) {
 
             // if animation is still running, tab is selected or disabled or onClick callback returns false stop here
             // check if onClick returns false last so that it is not executed for a disabled tab
-            if (container.locked || li.is('.' + settings.selectedClass) || li.is('.' + settings.disabledClass) || typeof onClick == 'function' && !onClick(this, toShow[0], toHide[0])) {
+            if (container.locked || li.is('.' + settings.selectedClass) || li.is('.' + settings.disabledClass) || typeof onClick == 'function' && onClick(this, toShow[0], toHide[0]) === false) {
                 this.blur();
                 return false;
             }
