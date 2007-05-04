@@ -9,7 +9,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  *
- * Version: 2.7.1
+ * Version: 2.7.2
  */
 
 (function($) { // block scope
@@ -610,5 +610,30 @@ for (var i = 0; i < tabEvents.length; i++) {
         };
     })(tabEvents[i]);
 }
+
+/**
+ * Get the position of the currently selected tab (no zero-based index).
+ *
+ * @example $('#container').activeTab();
+ * @desc Get the position of the currently selected tab of an interface
+ * contained in <div id="container">.
+ *
+ * @type Number
+ *
+ * @name activeTab
+ * @cat Plugins/Tabs
+ * @author Klaus Hartl/klaus.hartl@stilbuero.de
+ */
+
+$.fn.activeTab = function() {
+    var selectedTabs = [];
+    this.each(function() {
+        var nav = $('ul.tabs-nav' , this);
+        nav = nav.size() && nav || $('>ul:eq(0)', this); //fallback to default structure
+        var lis = $('li', nav);
+        selectedTabs.push(lis.index( lis.filter('.tabs-selected')[0] ) + 1);
+    });
+    return selectedTabs[0];
+};
 
 })(jQuery);
