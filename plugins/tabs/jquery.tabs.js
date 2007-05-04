@@ -9,7 +9,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  *
- * Version: 2.7
+ * Version: 2.7.1
  */
 
 (function($) { // block scope
@@ -82,6 +82,9 @@ $.extend({
  *                              default value becomes true. @see $.ajaxHistory.initialize
  * @option Boolean remote Boolean flag indicating that tab content has to be loaded remotely from
  *                        the url given in the href attribute of the tab menu anchor elements.
+ * @option String spinner The content of this string is shown in a tab while remote content is loading.
+ *                        Insert plain text as well as an img here. To turn off this notification
+ *                        pass an empty string or null. Default: "Loading&#8230;".
  * @option String hashPrefix A String that is used for constructing the hash the link's href attribute
  *                           of a remote tab gets altered to, such as "#remote-1".
  *                           Default value: "remote-tab-".
@@ -173,6 +176,7 @@ $.fn.tabs = function(initial, settings) {
         disabled: null,
         bookmarkable: $.ajaxHistory ? true : false,
         remote: false,
+        spinner: 'Loading&#8230;',
         hashPrefix: 'remote-tab-',
         fxFade: null,
         fxSlide: null,
@@ -394,7 +398,7 @@ $.fn.tabs = function(initial, settings) {
         // attach disable event, required for disabling a tab
         tabs.bind('disableTab', function() {
             var li = $(this).parents('li:eq(0)');
-            if ($.browser.safari) { /* Fix opacity tab after disabling in Safari... */
+            if ($.browser.safari) { /* Fix opacity of tab after disabling in Safari... */
                 li.animate({ opacity: 0 }, 1, function() {
                    li.css({opacity: ''});
                 });
@@ -427,9 +431,9 @@ $.fn.tabs = function(initial, settings) {
             var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
             var clicked = this, li = $(this).parents('li:eq(0)'), toShow = $(this.hash), toHide = containers.filter(':visible');
 
-            // if onClick returns false, the tab is already selected or disabled or animation is still running stop here
-            if ((typeof onClick == 'function' && onClick(this, toShow[0], toHide[0]) == false && trueClick) ||
-                container.locked || li.is('.' + settings.selectedClass) || li.is('.' + settings.disabledClass)) {
+            // if animation is still running, tab is selected or disabled or onClick callback returns false stop here
+            // check if onClick returns false last so that it is not executed for a disabled tab
+            if (container.locked || li.is('.' + settings.selectedClass) || li.is('.' + settings.disabledClass) || typeof onClick == 'function' && !onClick(this, toShow[0], toHide[0])) {
                 this.blur();
                 return false;
             }
@@ -468,7 +472,7 @@ $.fn.tabs = function(initial, settings) {
                             if (typeof onShow == 'function') {
                                 onShow(clicked, toShow[0], toHide[0]);
                             }
-                            container.locked = null;
+                            container['locked'] = null;
                         });
                     });
                 }
@@ -478,11 +482,16 @@ $.fn.tabs = function(initial, settings) {
                 } else {
                     var $$ = $(this), span = $('span', this)[0], text = span.innerHTML;
                     $$.addClass(settings.loadingClass);
-                    span.innerHTML = 'Loading&#8230;'; // CAUTION: html(...) crashes Safari with jQuery 1.1.2
+                    if (settings.spinner) {
+                        // TODO if spinner is image
+                        span.innerHTML = settings.spinner; // CAUTION: html(...) crashes Safari with jQuery 1.1.2
+                    }
                     setTimeout(function() { // Timeout is again required in IE, "wait" for id being restored
                         $(clicked.hash).load(remoteUrls[clicked.hash], function() {
                             switchTab();
-                            span.innerHTML = text; // CAUTION: html(...) crashes Safari with jQuery 1.1.2
+                            if (settings.spinner) {
+                                span.innerHTML = text; // CAUTION: html(...) crashes Safari with jQuery 1.1.2
+                            }
                             $$.removeClass(settings.loadingClass);
                         });
                     }, 0);
