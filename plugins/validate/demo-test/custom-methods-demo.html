@@ -32,7 +32,7 @@
 			errorElement: "em"
 		});
 		
-		$("#texttests").validate({
+		var validator = $("#texttests").validate({
 			// important: combining focus with validation on blur can crash browsers
 			errorContainer: $("#warning"),
 			showErrors: function(errors, validator) {
@@ -48,6 +48,12 @@
 			}
 		});
 		
+		var i = 0;
+		$("#add").click(function() {
+			$("<tr><td><label>More...</label></td><td><input test='required:true' name='list" + i++ + "' /></td><td>&nbsp;</td></tr>")
+				.appendTo("#texttests table tbody");
+			validator.refresh();
+		});
 	});
 </script>
 
@@ -85,17 +91,16 @@ em.error { color: blue; }
 				<td><input id="math" title="Please enter the correct result!" test="equal:11" /></td>
 				<td></td>
 			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td colspan="2"><input class="submit" type="submit" value="Submit"/></td>
-			</tr>
 		</table>
+		<input class="submit" type="submit" value="Submit"/>
 	</fieldset>
 </form>
 
+<button id="add">Add another input to the form</button>
+
 <h1 id="warning">Your form contains tons of errors! Please try again.</h1>
 
-<a href="index.html">Back to main page</a>
+<p><a href="index.html">Back to main page</a></p>
 
 </body>
 </html>

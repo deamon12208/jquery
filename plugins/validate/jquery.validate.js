@@ -18,9 +18,11 @@ TODO
 
 Recent changes:
 <li>Fixed potential issues with Google Toolbar by prefering plugin option messages over title attribute</li>
+<li>submitHandler is only called when an actual submit event was handled, validator.form() returns false only for invalid forms</li>
 <li>Invalid elements are now focused only on submit or via validator.focusInvalid(), avoiding all trouble with focus-on-blur</li>
 <li>IE6 error container layout issue is solved</li>
 <li>Customize error element via errorElement option</li>
+<li>Added validator.refresh() to find new inputs in the form</li>
 
 */
 
@@ -236,12 +238,6 @@ jQuery.extend(jQuery.fn, {
 	validate: function( options ) {
 		var validator = new jQuery.validator( options, this[0] );
 		
-		// select all valid inputs inside the form (no submit or reset buttons)
-		// and listen for focus events to save reference to last focused element
-		validator.elements = jQuery(this[0]).find(":input:not(:submit):not(:reset)").focus(function() {
-			validator.lastActive = this;
-		});
-		
 		if ( validator.settings.onsubmit ) {
 			// validate the form on submit
 			this.submit( function( event ) {
@@ -319,6 +315,7 @@ jQuery.validator = function( options, form ) {
 	this.containers = this.settings.errorContainer.add( this.settings.errorLabelContainer );
 	
 	this.reset();
+	this.refresh();
 };
 
 jQuery.extend(jQuery.validator, {
@@ -477,6 +474,16 @@ jQuery.extend(jQuery.validator, {
 					}
 				}
 			}
+		},
+		
+		refresh: function() {
+			var validator = this;
+			function focusHandler() {
+				validator.lastActive = this;
+			}
+			// select all valid inputs inside the form (no submit or reset buttons)
+			// and listen for focus events to save reference to last focused element
+			this.elements = jQuery(this.currentForm).find(":input:not(:submit):not(:reset)").focus(focusHandler);
 		},
 		
 		clean: function( selector ) {
