@@ -42,6 +42,7 @@
 					after: function(result) {
 						if(result.status) {
 							v.showErrors(result.data);
+							v.focusInvalid();
 						}	
 					}
 				});

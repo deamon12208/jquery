@@ -15,25 +15,7 @@ TODO
   - add a forName attribute to generated error message, and for only if an id is present
   - don't generate ids
 - allow other elements for error messages, promote em
-- allow handling more then one form is one call to validate, ignoring the validator instance problems in that case
- - maybe loop trough all forms and return only the last validator instance
- - don't return validator instance, provide custom events instead
-- focus invalid only on submit event, that removes all problems with blur
-- prefer plugin option messages over title attribute, preventing problems with google toolbar
 - http://yav.sourceforge.net/en/validationrules.html
-
-$.validator.addMethod('xor', function(value, element, parameter) {
-	return value && jQuery(parameter).is(":blank");
-});
-
-rules: {
-	field1: { xor: "#field2" },
-	field2: { xor: "#field1" }
-}, messages: {
-	field1: "Please specify either field1 or field2",
-	field2: "Please specify either field1 or field2"
-}
-
 
 */
 
@@ -205,7 +187,7 @@ rules: {
  *		invalid elements. Default: "error"
  * @option String wrapper Wrap error labels with the specified element, eg "li". Default: none
  * @option Boolean debug If true, the form is not submitted and certain errors are display on the console (requires Firebug or Firebug lite). Default: none
- * @option Boolean focusInvalid Focus the last active or first invalid element. Disable for blur-validation, crashes IE otherwise. Default: true
+ * @option Boolean focusInvalid Focus the last active or first invalid element on submit or via validator.focusInvalid(). Default: true
  * @option Function submitHandler Callback for handling the actual
  *		submit when the form is valid. Gets the form as the only argmument. Default: normal form submit
  * @option Map messages Key/value pairs defining custom messages.
@@ -250,7 +232,7 @@ jQuery.extend(jQuery.fn, {
 		
 		// select all valid inputs inside the form (no submit or reset buttons)
 		// and listen for focus events to save reference to last focused element
-		validator.elements = this.find(":input:not(:submit):not(:reset)").focus(function() {
+		validator.elements = jQuery(this[0]).find(":input:not(:submit):not(:reset)").focus(function() {
 			validator.lastActive = this;
 		});
 		
@@ -260,7 +242,16 @@ jQuery.extend(jQuery.fn, {
 				if ( validator.settings.debug )
 					// prevent form submit to be able to see console output
 					event.preventDefault();
-				return validator.form();
+				// prevent submit for invalid forms or custom submit handlers
+				if ( validator.form() ) {
+					return validator.settings.submitHandler
+						&& validator.settings.submitHandler( validator.currentForm )
+						&& false
+						|| true
+				} else {
+					validator.focusInvalid();
+					return false;
+				}
 			});
 		}
 		
@@ -461,6 +452,29 @@ jQuery.extend(jQuery.validator, {
 			this.elements.removeClass( this.settings.errorClass );
 		},
 		
+		focusInvalid: function() {
+			if( this.settings.focusInvalid ) {
+				// check if the last focused element is invalid
+				if( this.lastActive && this.errorList[this.lastActive.id])
+					// focus it
+					this.lastActive.focus();
+				// otherwise, find the firt invalid lement
+				else {
+					for ( elementID in this.errorList ) {
+						// IE throws an exception when focusing hidden element
+						try {
+							// focus the first invalid element
+							var element = jQuery("#"+elementID);
+							// radio/checkbox doesn't have an ID
+							if(element.length)
+								element[0].focus();
+						} catch(e) { this.settings.debug && window.console && console.log(e); }
+						break;
+					}
+				}
+			}
+		},
+		
 		clean: function( selector ) {
 			return jQuery( selector )[0];
 		},
@@ -519,8 +533,8 @@ jQuery.extend(jQuery.validator, {
 			var id = this.findId( element ),
 				param = rule.parameters;
 			this.errorList[id] = (
-					element.title
-					|| this.message(id, rule)
+					this.message(id, rule)
+					|| element.title
 					|| jQuery.validator.messages[rule.method]
 					|| "<strong>Warning: No message defined for " + id + "</strong>"
 				)
@@ -536,10 +550,6 @@ jQuery.extend(jQuery.validator, {
 				return false;
 			} else {
 				this.hideErrors();
-				if ( this.settings.submitHandler ) {
-					this.settings.submitHandler( this.currentForm );
-					return false;
-				}
 				return true;
 			}
 		},
@@ -569,30 +579,10 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		defaultShowErrors: function() {
-			var first = true;
 			for ( var elementID in this.errorList ) {
-				if( first && this.settings.focusInvalid ) {
-					// check if the last focused element is invalid
-					if( this.lastActive && this.errorList[this.lastActive.id])
-						// focus it
-						this.lastActive.focus();
-					// otherwise, find the firt invalid lement
-					else {
-						// IE throws an exception when focusing hidden element
-						try {
-							// focus the first invalid element
-							var element = jQuery("#"+elementID);
-							// radio/checkbox doesn't have an ID
-							if(element.length)
-								element[0].focus();
-						} catch(e) { this.settings.debug && window.console && console.error(e); }
-					}
-					first = false;
-				}
 				// display the error label for the first failed method
 				this.showError( elementID, this.errorList[elementID] );
 			}
-			
 			this.toHide = this.toHide.not( this.toShow );
 			this.toggle( "Hide" ).toggle( "Show" );
 		},
