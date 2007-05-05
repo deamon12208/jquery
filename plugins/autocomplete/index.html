@@ -25,12 +25,13 @@ $().ready(function() {
 		return row[0];
 	}
 	
-	$("#suggest1").autocomplete(cities);
+	$("#suggest1").autocomplete(cities, {matchContains: true});
 	$("#suggest12").autocomplete(months, {
 		minChars: 0,
 		max: 12,
 		autoFill: true,
 		mustMatch: true,
+		matchContains: false,
 		formatItem: function(data, i, total) {
 			// don't show the current month in the list of values (for whatever reason)
 			if ( data == months[new Date().getMonth()] ) 

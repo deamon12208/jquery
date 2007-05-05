@@ -500,7 +500,9 @@ jQuery.Autocompleter.Cache = function(options) {
 		// no url was specified, we need to adjust the cache length to make sure it fits the local data store
 		if( !options.url ) options.cacheLength = 1;
 		
+/*  *** not sure why this is here			
 		stMatchSets[""] = [];
+*/
 
 		// loop through the array and create a lookup structure
 		jQuery.each(options.data, function(i, rawValue) {
@@ -525,11 +527,12 @@ jQuery.Autocompleter.Cache = function(options) {
 			}
 			
 			stMatchSets[firstChar].push(row);
-			
+
+/*  *** not sure why this is here			
 			if ( nullData++ < options.max ) {
 				stMatchSets[""].push(row);
 			}
-			
+*/
 		});
 
 		// add the data items to the cache
@@ -550,8 +553,29 @@ jQuery.Autocompleter.Cache = function(options) {
 		load: function(q) {
 			if (!options.cacheLength || !length)
 				return null;
-			if (data[q])
+			/* 
+			 * if dealing w/local data and matchContains then we must make sure
+			 * to loop through all the data collections looking for matches
+			 */
+			if( !options.url && options.matchContains ){
+				// track all matches
+				var csub = [];
+				// loop through all the data grids for matches
+				for( var k in data ){
+					var c = data[k];
+					jQuery.each(c, function(i, x) {
+						// if we've got a match, add it to the array
+						if (matchSubset(x.value, q)) {
+							csub.push(x);
+						}
+					});
+				}				
+				return csub;
+			} else 
+			// if the exact item exists, use it
+			if (data[q]){
 				return data[q];
+			} else
 			if (options.matchSubset) {
 				for (var i = q.length - 1; i >= options.minChars; i--) {
 					var c = data[q.substr(0, i)];
