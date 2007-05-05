@@ -100,6 +100,18 @@ $().ready(function() {
 function changeOptions(){
 	$("#suggest1").setOptions({max: 5});
 }
+
+function changeToMonths(){
+	$("#suggest1")
+		// clear existing data
+		.val("")
+		// change the local data to months
+		.setOptions({data: months})
+		// get the label tag
+		.prev()
+		// update the label tag
+		.text("Month (local):");
+}
 </script>
 	
 </head>
@@ -117,6 +129,7 @@ function changeOptions(){
 			<input type="text" id="suggest1" />
 			<input type="button" value="Get Value" />
 			<input type="button" value="Change Max Items" onclick="changeOptions();" />
+			<input type="button" value="Change to Month Data" onclick="changeToMonths();" />
 		</p>
 		<p>
 			<label>Month (local):</label>

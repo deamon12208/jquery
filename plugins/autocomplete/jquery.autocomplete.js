@@ -280,7 +280,12 @@ jQuery.Autocompleter = function(input, options) {
 		cache.flush();
 	}).bind("setOptions", function() {
 		// overwrite the options
-		for( var k in arguments[1] ) options[k] = arguments[1][k]
+		for( var k in arguments[1] ){
+			// update the options
+			options[k] = arguments[1][k];
+			// if we've updated the data, repopulate
+			if( k == "data" ) cache.populate();
+		}
 	});
 	
 	hideResultsNow();
@@ -483,33 +488,24 @@ jQuery.Autocompleter.Cache = function(options) {
 	};
 	
 	function add(q, value) {
-			if (length > options.cacheLength) {
-				this.flush();
-			}
-			if (!data[q]) {
-				length++;
-			}
-			data[q] = value;
-		}
+		if (length > options.cacheLength) flush();
+		if (!data[q]) length++;
+		data[q] = value;
+	}
 	
-	// if there is a data array supplied
-	if( options.data ){
-		var stMatchSets = {},
-			nullData = 0;
+	function populate(){
+		if( !options.data ) return false;
+		// track the matches
+		var stMatchSets = {};
 
 		// no url was specified, we need to adjust the cache length to make sure it fits the local data store
 		if( !options.url ) options.cacheLength = 1;
 		
-/*  *** not sure why this is here			
-		stMatchSets[""] = [];
-*/
-
 		// loop through the array and create a lookup structure
 		jQuery.each(options.data, function(i, rawValue) {
 			// if row is a string, make an array otherwise just reference the array
 			
-			
-			value = options.formatItem
+			var value = options.formatItem
 				? options.formatItem(rawValue, i+1, options.data.length)
 				: rawValue;
 			if ( value === false )
@@ -517,8 +513,8 @@ jQuery.Autocompleter.Cache = function(options) {
 				
 			var firstChar = value.charAt(0).toLowerCase();
 			// if no lookup array for this character exists, look it up now
-			if( !stMatchSets[firstChar] )
-				stMatchSets[firstChar] = [];
+			if( !stMatchSets[firstChar] ) stMatchSets[firstChar] = [];
+
 			// if the match is a string
 			var row = {
 				value: value,
@@ -527,12 +523,6 @@ jQuery.Autocompleter.Cache = function(options) {
 			}
 			
 			stMatchSets[firstChar].push(row);
-
-/*  *** not sure why this is here			
-			if ( nullData++ < options.max ) {
-				stMatchSets[""].push(row);
-			}
-*/
 		});
 
 		// add the data items to the cache
@@ -544,12 +534,18 @@ jQuery.Autocompleter.Cache = function(options) {
 		});
 	}
 	
+	// populate any existing data
+	populate();
+	
+	function flush(){
+		data = {};
+		length = 0;
+	}
+	
 	return {
-		flush: function() {
-			data = {};
-			length = 0;
-		},
+		flush: flush,
 		add: add,
+		populate: populate,
 		load: function(q) {
 			if (!options.cacheLength || !length)
 				return null;
