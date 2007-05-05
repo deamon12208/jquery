@@ -14,8 +14,13 @@ TODO
 - remove any dependencie on ids
   - add a forName attribute to generated error message, and for only if an id is present
   - don't generate ids
-- allow other elements for error messages, promote em
 - http://yav.sourceforge.net/en/validationrules.html
+
+Recent changes:
+<li>Fixed potential issues with Google Toolbar by prefering plugin option messages over title attribute</li>
+<li>Invalid elements are now focused only on submit or via validator.focusInvalid(), avoiding all trouble with focus-on-blur</li>
+<li>IE6 error container layout issue is solved</li>
+<li>Customize error element via errorElement option</li>
 
 */
 
@@ -220,6 +225,7 @@ TODO
  *		First argument: jQuery object containing the created error label
  *		Second argument: jQuery object containing the invalid element
  *		Default: Places the error label after the invalid element
+ * @option String errorElement The element to use for generated error messages. Default: "label".
  *
  * @name validate
  * @type $.validator
@@ -320,6 +326,7 @@ jQuery.extend(jQuery.validator, {
 	defaults: {
 		messages: {},
 		errorClass: "error",
+		errorElement: "label",
 		focusInvalid: true,
 		errorContainer: jQuery( [] ),
 		errorLabelContainer: jQuery( [] ),
@@ -388,7 +395,7 @@ jQuery.extend(jQuery.validator, {
 		 */
 		form: function() {
 			this.prepareForm();
-			for ( var i = 0, element; element = this.elements[i++]; ) {
+			for ( var i = 0, element; element = this.elements[i]; i++ ) {
 				this.check( element );
 			}
 			return this.valid();
@@ -458,16 +465,13 @@ jQuery.extend(jQuery.validator, {
 				if( this.lastActive && this.errorList[this.lastActive.id])
 					// focus it
 					this.lastActive.focus();
-				// otherwise, find the firt invalid lement
+				// otherwise, find the first invalid lement
 				else {
 					for ( elementID in this.errorList ) {
 						// IE throws an exception when focusing hidden element
 						try {
 							// focus the first invalid element
-							var element = jQuery("#"+elementID);
-							// radio/checkbox doesn't have an ID
-							if(element.length)
-								element[0].focus();
+							jQuery("#"+elementID).focus();
 						} catch(e) { this.settings.debug && window.console && console.log(e); }
 						break;
 					}
@@ -480,7 +484,7 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		errors: function() {
-			return jQuery( "label." + this.settings.errorClass, this.errorContext );
+			return jQuery( this.settings.errorElement + "." + this.settings.errorClass, this.errorContext );
 		},
 		
 		reset: function( element ) {
@@ -596,7 +600,7 @@ jQuery.extend(jQuery.validator, {
 				}
 			} else {
 				// create label
-				error = jQuery("<label>").attr({"for": id, generated: true}).addClass(this.settings.errorClass).html(message);
+				error = jQuery("<" + this.settings.errorElement + ">").attr({"for": id, generated: true}).addClass(this.settings.errorClass).html(message);
 				if ( this.settings.wrapper ) {
 					// make sure the element is visible, even in IE
 					// actually showing the wrapped element is handled elsewhere
@@ -1125,8 +1129,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		equalTo: function(value, element, param) {
-			// strings read from metadata have typeof object, convert to string
-			return value == jQuery(""+param).val();
+			return value == jQuery(param).val();
 		}
 	},
 	
