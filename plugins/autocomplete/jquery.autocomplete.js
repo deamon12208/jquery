@@ -488,18 +488,26 @@ jQuery.Autocompleter.Cache = function(options) {
 	};
 	
 	function add(q, value) {
-		if (length > options.cacheLength) flush();
-		if (!data[q]) length++;
+		if (length > options.cacheLength){
+			flush();
+		}
+		if (!data[q]){ 
+			length++;
+		}
 		data[q] = value;
 	}
 	
 	function populate(){
 		if( !options.data ) return false;
 		// track the matches
-		var stMatchSets = {};
+		var stMatchSets = {},
+			nullData = 0;
 
 		// no url was specified, we need to adjust the cache length to make sure it fits the local data store
 		if( !options.url ) options.cacheLength = 1;
+		
+		// track all options for minChars = 0
+		stMatchSets[""] = [];
 		
 		// loop through the array and create a lookup structure
 		jQuery.each(options.data, function(i, rawValue) {
@@ -513,7 +521,8 @@ jQuery.Autocompleter.Cache = function(options) {
 				
 			var firstChar = value.charAt(0).toLowerCase();
 			// if no lookup array for this character exists, look it up now
-			if( !stMatchSets[firstChar] ) stMatchSets[firstChar] = [];
+			if( !stMatchSets[firstChar] ) 
+				stMatchSets[firstChar] = [];
 
 			// if the match is a string
 			var row = {
@@ -522,7 +531,13 @@ jQuery.Autocompleter.Cache = function(options) {
 				result: options.formatResult && options.formatResult(rawValue) || value
 			}
 			
+			// push the current match into the set list
 			stMatchSets[firstChar].push(row);
+
+			// keep track of minChars zero items
+			if ( nullData++ < options.max ) {
+				stMatchSets[""].push(row);
+			}
 		});
 
 		// add the data items to the cache
@@ -558,13 +573,17 @@ jQuery.Autocompleter.Cache = function(options) {
 				var csub = [];
 				// loop through all the data grids for matches
 				for( var k in data ){
-					var c = data[k];
-					jQuery.each(c, function(i, x) {
-						// if we've got a match, add it to the array
-						if (matchSubset(x.value, q)) {
-							csub.push(x);
-						}
-					});
+					// don't search through the stMatchSets[""] (minChars: 0) cache
+					// this prevents duplicates
+					if( k.length > 0 ){
+						var c = data[k];
+						jQuery.each(c, function(i, x) {
+							// if we've got a match, add it to the array
+							if (matchSubset(x.value, q)) {
+								csub.push(x);
+							}
+						});
+					}
 				}				
 				return csub;
 			} else 

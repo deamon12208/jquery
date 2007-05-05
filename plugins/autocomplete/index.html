@@ -25,7 +25,7 @@ $().ready(function() {
 		return row[0];
 	}
 	
-	$("#suggest1").autocomplete(cities, {matchContains: true});
+	$("#suggest1").autocomplete(cities);
 	$("#suggest12").autocomplete(months, {
 		minChars: 0,
 		max: 12,
@@ -57,6 +57,10 @@ $().ready(function() {
 		formatItem: formatItem,
 		formatResult: formatResult,
 		selectFirst: false
+	});
+	$("#suggest14").autocomplete(cities, {
+		matchContains: true,
+		minChars: 0
 	});
 	$("#suggest3").autocomplete(cities, {
 		multiple: true,
@@ -150,6 +154,11 @@ function changeToMonths(){
 		<p>
 			<label>Hidden input</label>
 			<input />
+		</p>
+		<p>
+			<label>Single City (contains):</label>
+			<input type="text" id="suggest14" />
+			<input type="button" value="Get Value" />
 		</p>
 		<p>
 			<label>Multiple Cities (local):</label>
