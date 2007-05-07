@@ -156,7 +156,7 @@
  * @param Map options key/value pairs of optional settings, see Accordion() for details
  *
  * @type jQuery
- * @name jQuery.Squeezebox.setDefaults
+ * @name jQuery.Accordion.setDefaults
  * @cat Plugins/Accordion
  */
 
