@@ -26,6 +26,7 @@ div.container { display: none }
 form.cmxform label.error, label.error {
 	display: inline;
 }
+form.cmxform { width: 30em; }
 </style>
 
 <script type="text/javascript">
@@ -78,6 +79,8 @@ $(document).ready(function() {
 		<li><label for="email" class="error">Please enter your email address</label></li>
 		<li><label for="phone" class="error">Please enter your phone <b>number</b> (between 2 and 8 characters)</label></li>
 		<li><label for="address" class="error">Please enter your address (at least 3 characters)</label></li>
+		<li><label for="avatar" class="error">Please select an image (png, jpg, jpeg, gif)</label></li>
+		<li><label for="cv" class="error">Please select a document (doc, docx, txt, pdf)</label></li>
 	</ol>
 </div>
 
@@ -95,6 +98,14 @@ $(document).ready(function() {
 		<p>
 			<label for="address">Address</label>
 			<input id="address" name="address" class="some other styles {validate:{required:true,minLength:3}}" />
+		</p>
+		<p>
+			<label for="avatar">Avatar</label>
+			<input type="file" id="avatar" name="avatar" class="{validate:{required:true,accept:true}}" />
+		</p>
+		<p>
+			<label for="cv">CV</label>
+			<input type="file" id="cv" name="cv" class="{validate:{required:true,accept:'docx?|txt|pdf'}}" />
 		</p>
 		<p>
 			<label for="agree">Please agree to our policy</label>

@@ -349,15 +349,15 @@ test("validator.hide(): container", function() {
 });
 
 test("validator.valid()", function() {
-	expect(5);
+	expect(4);
 	var v = $('#testForm3').validate();
 	ok( v.valid(), "No errors, must be valid" );
 	v.errorList = {"meal": "foo"};
 	ok( !v.valid(), "One error, must be invalid" );
 	v = $('#testForm3').validate({ submitHandler: function() {
-		ok( true, "Submit handler was called" );
+		ok( false, "Submit handler was called" );
 	}});
-	ok( !v.valid(), "No errors, must be valid but returning false and calling the submit handler" );
+	ok( v.valid(), "No errors, must be valid and returning true, even with the submit handler" );
 	v.errorList = {"meal": "foo"};
 	ok( !v.valid(), "One error, must be invalid, no call to submit handler" );
 });

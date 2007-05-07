@@ -1,5 +1,5 @@
 /*
- * Form Validation: jQuery form validation plug-in v1.0 beta 2
+ * Form Validation: jQuery form validation plug-in v1.0 beta 3
  *
  * Copyright (c) 2006 Jörn Zaefferer
  *
@@ -9,21 +9,12 @@
  */
 
 /*
-TODO
+TODOs
 - use array with {name, message, element} objects intead of errorList object
 - remove any dependencie on ids
   - add a forName attribute to generated error message, and for only if an id is present
   - don't generate ids
-- http://yav.sourceforge.net/en/validationrules.html
-
-Recent changes:
-<li>Fixed potential issues with Google Toolbar by prefering plugin option messages over title attribute</li>
-<li>submitHandler is only called when an actual submit event was handled, validator.form() returns false only for invalid forms</li>
-<li>Invalid elements are now focused only on submit or via validator.focusInvalid(), avoiding all trouble with focus-on-blur</li>
-<li>IE6 error container layout issue is solved</li>
-<li>Customize error element via errorElement option</li>
-<li>Added validator.refresh() to find new inputs in the form</li>
-
+- implement successPlacement or something similar (see custom-methods-demo.html)
 */
 
 /**
@@ -350,7 +341,7 @@ jQuery.extend(jQuery.validator, {
 	/**
 	 * Default messages for all default methods.
 	 *
-	 * User addMethod() to add methods with messages.
+	 * Use addMethod() to add methods with messages.
 	 *
 	 * Replace these messages for localization.
 	 *
@@ -375,7 +366,8 @@ jQuery.extend(jQuery.validator, {
 		equalTo: "Please enter the same value again.",
 		rangeValue: "Please enter a value between {0} and {1}.",
 		maxValue: "Please enter a value less than or equal to {0}.",
-		minValue: "Please enter a value greater than or equal to {0}."
+		minValue: "Please enter a value greater than or equal to {0}.",
+		accept: "Please enter a value with a valid extension."
 	},
 	
 	prototype: {
@@ -1114,6 +1106,27 @@ jQuery.extend(jQuery.validator, {
 		 */
 		digits: function(value, element) {
 			return !jQuery.validator.methods.required(value, element) || /^\d+$/.test(value);
+		},
+		
+		/**
+		 * Returns true if the value ends with one of the specified file extensions.
+		 * If nothing is specified, only images are allowed (default-param: "png|jpe?g|gif").
+		 *
+		 * Works with all kind of text inputs.
+		 *
+		 * @example <input type="file" name="avatar" class="{accept:true}" />
+		 * @desc Declares an optional file input element whose value must ends with '.png', '.jpg', '.jpeg' or '.gif'.
+		 *
+		 * @example <input type="file" name="avatar" class="{accept:'txt|docx?'}" />
+		 * @desc Declares an optional file input element whose value must ends with '.txt' or '.doc' or '.docx'.
+		 *
+		 * @name jQuery.validator.methods.accept
+		 * @type Boolean
+		 * @cat Plugins/Validate/Methods
+		 */
+		accept: function(value, element, param) {
+			param = typeof param == "string" ? param : "png|jpe?g|gif";
+			return !jQuery.validator.methods.required(value, element) || value.match(new RegExp(".(" + param + ")$")); 
 		},
 		
 		/**

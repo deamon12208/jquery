@@ -45,6 +45,10 @@
 			},
 			errorPlacement: function(error, element) {
 				error.appendTo( element.parent("td").next("td") );
+			},
+			// TODO implement successPlacement option or something like that
+			successPlacement: function(element) {
+				$("<em/>").addClass("success").appendTo(element.parent("td").next("td"));
 			}
 		});
 		
@@ -58,6 +62,16 @@
 </script>
 
 <style type="text/css">
+form.cmxform { width: 50em; }
+em.error {
+  background:url("images/unchecked.gif") no-repeat 0px 0px;
+  padding-left: 16px;
+}
+em.success {
+  background:url("images/checked.gif") no-repeat 0px 0px;
+  padding-left: 16px;
+}
+
 form.cmxform label.error {
 	margin-left: auto;
 	width: 250px;
