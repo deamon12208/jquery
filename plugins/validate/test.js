@@ -471,15 +471,19 @@ test("validator.rules() - internal - input", function() {
 });
 
 test("validator.formatAndAdd", function() {
-	expect(2);
+	expect(3);
 	var v = $("#form").validate();
 	var fakeElement = { form: { id: "foo" }, name: "bar" };
 	jQuery.validator.messages.test1 = "Please enter a value no longer then {0} characters.";
 	jQuery.validator.messages.test2 = "Please enter a value between {0} and {1}.";
 	v.formatAndAdd({method: "test1", parameters: 2}, fakeElement)
 	equals( "Please enter a value no longer then 2 characters.", v.errorList.foobar );
+	
 	v.formatAndAdd({method: "test2", parameters:[2,4]}, fakeElement)
 	equals( "Please enter a value between 2 and 4.", v.errorList.foobar );
+	
+	v.formatAndAdd({method: "test2", parameters:[0,4]}, fakeElement)
+	equals( "Please enter a value between 0 and 4.", v.errorList.foobar );
 });
 
 test("error containers, simple", function() {

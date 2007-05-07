@@ -542,9 +542,9 @@ jQuery.extend(jQuery.validator, {
 					|| "<strong>Warning: No message defined for " + id + "</strong>"
 				)
 				.replace( "{0}", (param.constructor == Array
-					? param[0]
-					: param) || "" )
-				.replace( "{1}", param[1] || "" );
+					? "" + param[0]
+					: "" + param) || "" )
+				.replace( "{1}", "" + param[1] || "" );
 		},
 		
 		valid: function() {
