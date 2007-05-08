@@ -68,7 +68,7 @@
             }
 
             // show and positioning
-            function show(width, height, top, left, animate) {
+            function show(width, height, top, left, animate, callback) {
                 loading.hide();
                 var css = {width: width + 'px', height: height + 'px'}, noUnit = /^\d+$/;
                 if (!top) {
@@ -94,6 +94,7 @@
                     css['margin-left'] = '';
                 }
                 animate ? modal.css(css).animate(animate.animation, animate.speed) : modal.css(css).show();
+                typeof callback == 'function' && callback(modal[0]);
             }
 
             // remove everything
@@ -160,7 +161,7 @@
             };
 
             // render Thickbox
-            this.render = function(settings) {
+            this.render = function(settings, callback) {
 
                 // initialize extra settings
                 settings = $.extend({
@@ -292,7 +293,7 @@
                                         $('#' + NEXT_ID + ' a').bind('click', showNext);
                                         $('#' + PREV_ID + ' a').bind('click', showPrev);
                                     }
-                                    show(imgWidth + 30, imgHeight + 60, settings.top, settings.left, settings.animate);
+                                    show(imgWidth + 30, imgHeight + 60, settings.top, settings.left, settings.animate, callback);
                                 };
                                 img.src = $$.attr('href');
                             };
@@ -303,14 +304,14 @@
                                 buildTitle($$.attr('title'));
                                 $('<div id="' + CONTENT_ID + '"></div>').append(content).appendTo(modal);
                                 content.css('display', 'block'); // in case itself is hidden and not its parent element, WTF: show() fails in Opera
-                                show(settings.width, settings.height, settings.top, settings.left, settings.animate);
+                                show(settings.width, settings.height, settings.top, settings.left, settings.animate, callback);
                             };
                             break;
                         case AJAX:
                             builder = function() {
                                 buildTitle($$.attr('title'));
                                 $('<div id="' + CONTENT_ID + '"></div>').appendTo(modal).load($$.attr('href'), function() {
-                                    show(settings.width, settings.height, settings.top, settings.left, settings.animate);
+                                    show(settings.width, settings.height, settings.top, settings.left, settings.animate, callback);
                                 });
                             };
                             break;
@@ -318,7 +319,7 @@
                             builder = function() {
                                 buildTitle($$.attr('title'));
                                 $('<iframe id="' + CONTENT_ID + '" src="' +  $$.attr('href') + '" frameborder="0"></iframe>').appendTo(modal);
-                                show(settings.width, settings.height, settings.top, settings.left, settings.animate);
+                                show(settings.width, settings.height, settings.top, settings.left, settings.animate, callback);
                             };
                             break;
                         case CONFIRM:
@@ -337,7 +338,7 @@
                                     return false;
                                 });
                                 // If height is still the default value, change it here...
-                                show(settings.width, (settings.height == defaultValues.height ? 90 : settings.height), settings.top, settings.left, settings.animate);
+                                show(settings.width, (settings.height == defaultValues.height ? 90 : settings.height), settings.top, settings.left, settings.animate, callback);
                             };
                             break;
                         default:
