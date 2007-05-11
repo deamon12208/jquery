@@ -23,7 +23,7 @@
  * @example $.ajaxHistory.initialize();
  *
  * @param Function callback A single function that will be executed in case there is no fragment
- *                          identifier/hash in the URL, for example by using the back button.
+ *                          identifier/hash in the URL, for example after using the back button.
  *                          Optional. If specified it will overwrite the default action of 
  *                          emptying all containers that are used to load content into (without 
  *                          hash there cannot be any content loaded, like a page load without
