@@ -7,7 +7,7 @@
  *
  * @name letters
  * @cat classic example show hide
- * @author Jake Wolpert (http://jpassoc.com/)
+ * @author Jake Wolpert (jakecigar@gmail.com)
  */
 jQuery.keysOf = function(obj){
 	var keys = []
@@ -21,7 +21,7 @@ jQuery.fn.letters = function(speed){
 	var div = jQuery("<div></div>")
 		.prependTo(ul.parent())
 	lis.each(function(){
-		var let = jQuery(this).hide().html().charAt(0).toUpperCase()
+		var let = jQuery(this).hide().text().charAt(0).toUpperCase()
 		if (!items[let]) items[let] = []
 		items[let].push(this)
 	})
