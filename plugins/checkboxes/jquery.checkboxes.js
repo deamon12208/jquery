@@ -1,6 +1,6 @@
-/**
+/*
  *
- * Copyright (c) 2006/2007 Sam Collett (http://www.texotela.co.uk)
+ * Copyright (c) 2006 Sam Collett (http://www.texotela.co.uk)
  * Licensed under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
  * 
@@ -12,97 +12,139 @@
  */
 
  
-/**
+/*
  * Toggle all checkboxes contained within a form
  *
  * @name     toggleCheckboxes
- * @param    ignore  Checkboxes to ignore
+ * @param    filter   only toggle checkboxes matching this expression
+ * @param    returnChecked   return checkboxes as jQuery object, default false
  * @author   Sam Collett (http://www.texotela.co.uk)
  * @example  $("#myform").toggleCheckboxes();
- * @example  $("#myform").toggleCheckboxes("[@name=ignorethis]");
+ * @example  $("#myform").toggleCheckboxes(".onlyme");
+ * @example  $("#myform").toggleCheckboxes(":not(.notme)");
+ * @example  $("#myform").toggleCheckboxes("*", true);
  *
  */
-jQuery.fn.toggleCheckboxes = function(ignore)
+jQuery.fn.toggleCheckboxes = function(filter, returnChecked)
 {
-	ignore = ignore || [];
-	return this.each(
+	filter = filter || "*";
+	returnChecked = returnChecked || false;
+	var returnWhat = jQuery([]);
+	this.each(
 		function()
 		{
-			jQuery("input[@type=checkbox]", this).not(ignore).each(
+			var checked = jQuery("input[@type=checkbox]", this).filter(filter).each(
 				function()
 				{
 					this.checked = !this.checked;
 				}
-			)
+			).filter(":checked");
+			returnWhat = checked;
 		}
 	)
+	if(!returnChecked)
+	{
+		returnWhat = this;
+	}
+	return returnWhat;
 }
 
-/**
+/*
  * Check all checkboxes contained within a form
  *
  * @name     checkCheckboxes
- * @param    ignore  Checkboxes to ignore
+ * @param    filter   only check checkboxes matching this expression
+ * @param    returnChecked   return checkboxes as jQuery object, default false
  * @author   Sam Collett (http://www.texotela.co.uk)
  * @example  $("#myform").checkCheckboxes();
- * @example  $("#myform").checkCheckboxes("[@name=ignorethis]");
+ * @example  $("#myform").checkCheckboxes(".onlyme");
+ * @example  $("#myform").checkCheckboxes(":not(.notme)");
+ * @example  $("#myform").checkCheckboxes("*", true);
  *
  */
-jQuery.fn.checkCheckboxes = function(ignore)
+jQuery.fn.checkCheckboxes = function(filter, returnChecked)
 {
-	ignore = ignore || [];
-	return this.each(
+	filter = filter || "*";
+	returnChecked = returnChecked || false;
+	var returnWhat = jQuery([]);
+	this.each(
 		function()
 		{
-			jQuery("input[@type=checkbox]", this).not(ignore).each(
+			var checked = jQuery("input[@type=checkbox]", this).filter(filter).each(
 				function()
 				{
 					this.checked = true;
 				}
-			)
+			).filter(":checked");
+			returnWhat = checked;
 		}
 	)
+	if(!returnChecked)
+	{
+		returnWhat = this;
+	}
+	return returnWhat;
 }
 
-/**
+/*
  * UnCheck all checkboxes contained within a form
  *
  * @name     unCheckCheckboxes
- * @param    ignore  Checkboxes to ignore
+ * @param    filter   only check checkboxes matching this expression
+ * @param    returnUnChecked   return unchecked checkboxes as jQuery object, default false
  * @author   Sam Collett (http://www.texotela.co.uk)
  * @example  $("#myform").unCheckCheckboxes();
- * @example  $("#myform").unCheckCheckboxes("[@name=ignorethis]");
+ * @example  $("#myform").unCheckCheckboxes(".onlyme");
+ * @example  $("#myform").unCheckCheckboxes(":not(.notme)");
+ * @example  $("#myform").unCheckCheckboxes("*", true);
  *
  */
-jQuery.fn.unCheckCheckboxes = function(ignore)
+jQuery.fn.unCheckCheckboxes = function(filter, returnUnChecked)
 {
-	ignore = ignore || [];
-	return this.each(
+	filter = filter || "*";
+	returnUnChecked = returnUnChecked || false;
+	var returnWhat = jQuery([]);
+	this.each(
 		function()
 		{
-			jQuery("input[@type=checkbox]", this).not(ignore).each(
+			var unChecked = jQuery("input[@type=checkbox]", this).filter(filter).each(
 				function()
 				{
 					this.checked = false;
 				}
-			)
+			).filter(":not(:checked)");
+			returnWhat = unChecked;
 		}
 	)
+	if(!returnUnChecked)
+	{
+		returnWhat = this;
+	}
+	return returnWhat;
 }
 
-/**
+/*
  * Makes checkboxes behave like a radio button group
  *   i.e. only one can be selected at a time
  *
  * @name     radioCheckboxGroup
- * @param    name  field name
+ * @param    name  field name (leave blank to apply to all check boxes)
+ * @param    filter  apply to checkboxes matching this expression
  * @author   Sam Collett (http://www.texotela.co.uk)
  * @example  $.radioCheckboxGroup("fieldname");
+ * @example  $.radioCheckboxGroup("fieldname", ".myclass");
+ * @example  $.radioCheckboxGroup("", ".myclass");
  *
  */
-jQuery.radioCheckboxGroup = function(name)
+jQuery.radioCheckboxGroup = function(name, filter)
 {
-	var x = jQuery("input[@name=" + name + "]");
+	filter = filter || "*";
+	var expression = "input[@type=checkbox]";
+	if(name)
+	{
+		expression += "[@name=" + name + "]"
+	}
+	var x = jQuery(expression).filter(filter);
 	x.click(
 		function()
 		{
