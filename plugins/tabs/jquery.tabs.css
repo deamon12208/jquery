@@ -26,6 +26,7 @@
 .tabs-nav li {
     float: left;
     margin: 0 0 0 1px;
+    min-width: 84px; /* be nice to Opera */
 }
 .tabs-nav a, .tabs-nav a span {
     display: block;
