@@ -1,6 +1,6 @@
 {
 	"name": "jQuery-copyEvents",
-	"version": 1.0,
+	"version": 1.0.1,
 	"author": [
 		"Brandon Aaron <brandon.aaron@gmail.com>"
 	],
@@ -12,15 +12,7 @@
 	},
 	"provides": {
 		"jQuery.copyEvents": {
-			"version": 1.0,
-			"file": "jquery.copyEvents.js"
-		},
-		"jQuery.copyEventsTo": {
-			"version": 1.0,
-			"file": "jquery.copyEvents.js"
-		},
-		"jQuery.cloneWithEvents": {
-			"version": 1.0,
+			"version": 1.0.1,
 			"file": "jquery.copyEvents.js"
 		}
 	},

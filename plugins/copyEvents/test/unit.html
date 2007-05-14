@@ -44,9 +44,9 @@
 					.trigger('mouseout');
 				
 				// check counts
-				ok( clickCount     == 2, 'Testing click count' );
+				ok( clickCount == 2, 'Testing click count' );
 				ok( mouseoverCount == 2, 'Testing mouseover count' );
-				ok( mouseoutCount  == 2, 'Testing mouseout count' );
+				ok( mouseoutCount == 2, 'Testing mouseout count' );
 			});
 			
 			test("copyEventsTo()", function() {
@@ -75,9 +75,9 @@
 					.trigger('mouseout');
 				
 				// check counts
-				ok( clickCount     == 2, 'Testing click count' );
+				ok( clickCount == 2, 'Testing click count' );
 				ok( mouseoverCount == 2, 'Testing mouseover count' );
-				ok( mouseoutCount  == 2, 'Testing mouseout count' );
+				ok( mouseoutCount == 2, 'Testing mouseout count' );
 			});
 			
 			test("cloneWithEvents()", function() {
@@ -93,7 +93,7 @@
 					})
 					.bind('mouseout', function() {
 						mouseoutCount++;
-					});	
+					});
 				
 				// clone events from a to 'from' li tags
 				$('#main a.to')
@@ -109,9 +109,39 @@
 					.trigger('mouseout');
 				
 				// check counts
-				ok( clickCount     == 2, 'Testing click count' );
+				ok( clickCount == 2, 'Testing click count' );
 				ok( mouseoverCount == 2, 'Testing mouseover count' );
-				ok( mouseoutCount  == 2, 'Testing mouseout count' );
+				ok( mouseoutCount == 2, 'Testing mouseout count' );
+			});
+			
+			test("cloneWithEvents(true)", function() {
+				var clickCount = mouseoverCount = mouseoutCount = 0;
+				
+				// Create event handlers for A tag
+				$('#deep a')
+					.bind('click', function() {
+						clickCount++; 
+					})
+					.bind('mouseover', function() {
+						mouseoverCount++;
+					})
+					.bind('mouseout', function() {
+						mouseoutCount++;
+					});
+				
+				var div = $('#deep')
+					.cloneWithEvents(true)
+					.appendTo('#main');
+				div.find('a')
+					// fire events
+					.trigger('click')
+					.trigger('mouseover')
+					.trigger('mouseout');
+				
+				// check counts
+				ok( clickCount == 2, 'Testing click count' );
+				ok( mouseoverCount == 2, 'Testing mouseover count' );
+				ok( mouseoutCount == 2, 'Testing mouseout count' );
 			});
 		</script>		
 	</head>
@@ -129,6 +159,11 @@
 			</ul>
 			<a href="#" class="from">Test A Tag 1</a>
 			<a href="#" class="to">Test A Tag 2</a>
+			
+			<div id="deep">
+				<p>Paragraph with a <a href="#">link</a></p>
+				<p>Another paragraph with a <a href="#">link</a></p>
+			</div>
 		</div>
 	
 		<ol id="tests"></ol>

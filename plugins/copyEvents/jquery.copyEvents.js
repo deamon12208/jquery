@@ -4,6 +4,8 @@
  *
  * $LastChangedDate$
  * $Rev$
+ *
+ * Version: 1.0.1
  */
 
 (function($) {
@@ -51,7 +53,17 @@ $.fn.extend({
 	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
 	 */
 	cloneWithEvents: function(deep) {
-		return this.clone( deep ).copyEvents( this );
+		var r = this.clone( deep ).copyEvents( this );
+		
+		if (deep !== false) {
+		// copy descendant events also
+			var $this = this.find('*');
+			r.find('*').each(function(i) {
+				$.event.copy($this[i], this);
+			});
+		}
+		
+		return r;
 	}
 });
 

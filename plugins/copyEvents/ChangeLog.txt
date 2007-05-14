@@ -1,5 +1,9 @@
 == New and Noteworthy ==
 
+== 1.0.1 ==
+
+* Updated cloneWithEvents to clone events on descendants when doing a deep clone
+
 == 1.0 ==
 
 * Updated to work with jQuery 1.1.2+
