@@ -9,7 +9,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  *
- * Version: 2.7.2
+ * Version: 2.7.3
  */
 
 (function($) { // block scope
@@ -220,7 +220,6 @@ $.fn.tabs = function(initial, settings) {
         if (settings.remote) {
             var remoteUrls = {};
             tabs.each(function() {
-                $(this).html('<span>' + $(this).html() + '</span>');
                 var id = settings.hashPrefix + (++$.tabs.remoteCount);
                 var hash = '#' + id;
                 remoteUrls[hash] = this.href;
@@ -480,17 +479,16 @@ $.fn.tabs = function(initial, settings) {
                 if (!settings.remote) {
                     switchTab();
                 } else {
-                    var $$ = $(this), span = $('span', this)[0], text = span.innerHTML;
-                    $$.addClass(settings.loadingClass);
+                    var $$ = $(this).addClass(settings.loadingClass), span = $('span', this)[0], tabTitle = span.innerHTML;
                     if (settings.spinner) {
                         // TODO if spinner is image
-                        span.innerHTML = settings.spinner; // CAUTION: html(...) crashes Safari with jQuery 1.1.2
+                        span.innerHTML = '<em>' + settings.spinner + '</em>'; // WARNING: html(...) crashes Safari with jQuery 1.1.2
                     }
                     setTimeout(function() { // Timeout is again required in IE, "wait" for id being restored
                         $(clicked.hash).load(remoteUrls[clicked.hash], function() {
                             switchTab();
                             if (settings.spinner) {
-                                span.innerHTML = text; // CAUTION: html(...) crashes Safari with jQuery 1.1.2
+                                span.innerHTML = tabTitle; // WARNING: html(...) crashes Safari with jQuery 1.1.2
                             }
                             $$.removeClass(settings.loadingClass);
                         });
