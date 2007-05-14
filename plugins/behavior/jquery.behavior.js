@@ -5,12 +5,29 @@
  * $LastChangedDate$
  * $Rev$
  *
- * Version: 0.2 ALPHA (Only works with jQuery Rev 1845 and higher)
+ * Version: 0.3
+ * Requires jQuery Rev 1845+
  */
 
 (function($) {
 
 $.extend($.fn, {
+	
+	/**
+	 * Using the selector and context this method applies a behavior
+	 * to the matched elements even after the DOM is updated. The behavior
+	 * only runs once per a matched element.
+	 * A behavior can one of two things: an event type and function reference
+	 * or just a function reference.
+	 * Passing an event type and function reference will bind the event to the
+	 * matched elements and just passing a function reference will call the function
+	 * for each matched element.
+	 * 
+	 * @name behavior
+	 * @type jQuery
+	 * @cat Plugins/behavior
+	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
+	 */
 	behavior: function(type, fn) {
 		if ($.isFunction(type)) {
 			// type is function
@@ -26,6 +43,25 @@ $.extend($.fn, {
 		return this;
 	},
 	
+	/**
+	 * This method removes a behavior based on selector, context, 
+	 * event type and/or function reference. This does not unbind
+	 * events bound by the behavior but instead just stops the behavior
+	 * from being run again.
+	 * 
+	 * Not passing any arguments will remove all behaviors for the
+	 * given selector and context. Only passing an event type will
+	 * remove all behaviors for the given selector, context and event
+	 * type. Only passing a function reference will remove all behaviors
+	 * for the given selector, context and function reference. Passing
+	 * an event type and function reference will remove all behaviors
+	 * for the given selector, context, event type and function reference.
+	 * 
+	 * @name unbehavior
+	 * @type jQuery
+	 * @cat Plugins/behavior
+	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
+	 */
 	unbehavior: function(type, fn) {
 		if (!type && !fn)
 			// remove only based on selector and context
@@ -195,7 +231,7 @@ $.extend( $.behavior, {
 });
 
 // Register core DOM Manipulation methods
-$.behavior.registerMethod('append', 'appendTo', 'prepend', 'prependTo', 'after', 'before', 'html');
+$.behavior.registerMethod('append', 'appendTo', 'prepend', 'prependTo', 'after', 'before', 'wrap', 'html');
 
 // Auto run behaviors onDOMReady
 $(function() {
