@@ -15,6 +15,10 @@ TODOs
   - add a forName attribute to generated error message, and for only if an id is present
   - don't generate ids
 - implement successPlacement or something similar (see custom-methods-demo.html)
+
+recent changes:
+<li>Fixed Opera select-issue (avoiding a attribute-collision)</li>
+<li>Fixed problems with focussing hidden elements in IE</li>
 */
 
 /**
@@ -453,18 +457,12 @@ jQuery.extend(jQuery.validator, {
 				// check if the last focused element is invalid
 				if( this.lastActive && this.errorList[this.lastActive.id])
 					// focus it
-					try {
-						this.lastActive.focus();
-					// focussing hidden elements throws an error in IE, swallow those
-					} catch(e) {}
+					this.lastActive.filter(":visible").focus();
 				// otherwise, find the first invalid lement
 				else {
 					for ( elementID in this.errorList ) {
-						// IE throws an exception when focusing hidden element
-						try {
-							// focus the first invalid element
-							jQuery("#"+elementID).focus();
-						} catch(e) {}
+						// focus the first invalid element
+						jQuery("#"+elementID).filter(":visible").focus();
 						break;
 					}
 				}
