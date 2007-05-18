@@ -19,6 +19,7 @@ TODOs
 recent changes:
 <li>Fixed Opera select-issue (avoiding a attribute-collision)</li>
 <li>Fixed problems with focussing hidden elements in IE</li>
+<li>Added feature to skip validation for submit buttons with class "cancel"</li>
 */
 
 /**
@@ -234,11 +235,21 @@ jQuery.extend(jQuery.fn, {
 		var validator = new jQuery.validator( options, this[0] );
 		
 		if ( validator.settings.onsubmit ) {
+		
+			// allow suppresing validation by adding a cancel class to the submit button
+			this.find("input.cancel:submit").click(function() {
+				this.form.cancel = true;
+			});
+		
 			// validate the form on submit
 			this.submit( function( event ) {
+				if ( this.cancel )
+					return;
+			
 				if ( validator.settings.debug )
 					// prevent form submit to be able to see console output
 					event.preventDefault();
+					
 				// prevent submit for invalid forms or custom submit handlers
 				if ( validator.form() ) {
 					return validator.settings.submitHandler
@@ -457,7 +468,7 @@ jQuery.extend(jQuery.validator, {
 				// check if the last focused element is invalid
 				if( this.lastActive && this.errorList[this.lastActive.id])
 					// focus it
-					this.lastActive.filter(":visible").focus();
+					jQuery(this.lastActive).filter(":visible").focus();
 				// otherwise, find the first invalid lement
 				else {
 					for ( elementID in this.errorList ) {
@@ -489,8 +500,8 @@ jQuery.extend(jQuery.validator, {
 		
 		reset: function( element ) {
 			this.errorList = {};
-			this.toShow = $( [] );
-			this.toHide = $( [] );
+			this.toShow = jQuery( [] );
+			this.toHide = jQuery( [] );
 		},
 		
 		prepareForm: function() {
