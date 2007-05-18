@@ -49,7 +49,7 @@ TODOs
  * @example $("#myform").validate({
  *  event: "keyup"
  * 	rules: {
- * 		firstname: { required: true },
+ * 		"first-name": { required: true },
  * 		age: {
  *			required: "#firstname:blank",
  * 			number: true,
@@ -453,7 +453,10 @@ jQuery.extend(jQuery.validator, {
 				// check if the last focused element is invalid
 				if( this.lastActive && this.errorList[this.lastActive.id])
 					// focus it
-					this.lastActive.focus();
+					try {
+						this.lastActive.focus();
+					// focussing hidden elements throws an error in IE, swallow those
+					} catch() {}
 				// otherwise, find the first invalid lement
 				else {
 					for ( elementID in this.errorList ) {
@@ -461,7 +464,7 @@ jQuery.extend(jQuery.validator, {
 						try {
 							// focus the first invalid element
 							jQuery("#"+elementID).focus();
-						} catch(e) { this.settings.debug && window.console && console.log(e); }
+						} catch() {}
 						break;
 					}
 				}
