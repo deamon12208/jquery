@@ -7,7 +7,7 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- * Revision: $Id: metadata.js 1097 2007-01-16 21:04:48Z joern $
+ * Revision: $Id: metadata.js 1631 2007-04-05 16:02:19Z joern $
  *
  */
 
@@ -58,13 +58,13 @@
 	// settings
 	$.meta = {
 	  type: "class",
-	  name: "data",
+	  name: "metadata",
 	  setType: function(type,name){
 	    this.type = type;
 	    this.name = name;
 	  },
 	  cre: /({.*})/,
-	  single: 'data'
+	  single: 'metadata'
 	};
 	
 	// reference to original setArray()
@@ -73,7 +73,7 @@
 	// define new setArray()
 	$.fn.setArray = function(arr){
 	    return setArray.apply( this, arguments ).each(function(){
-	      if ( this.metaDone ) return;
+	      if ( this.nodeType == 9 || $.isXMLDoc(this) || this.metaDone ) return;
 	      
 	      var data = "{}";
 	      
@@ -114,7 +114,7 @@
 	 * @type jQuery
 	 * @cat Plugins/Metadata
 	 */
-	$.fn.data = function(){
-	  return this[0][$.meta.single || "data"];
+	$.fn.data = function() {
+	  return this[0][$.meta.single];
 	};
 })(jQuery);
