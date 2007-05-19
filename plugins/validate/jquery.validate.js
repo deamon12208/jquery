@@ -15,6 +15,7 @@ TODOs
 recent changes:
 <li>Completely removed dependency on element IDs, though they are still used (when present) to link error labels to inputs. Achieved by using
 an array with {name, message, element} instead of an object with id:message pairs for the internal errorList.</li>
+<li>Added support for specifying simple rules as simple strings, eg. "required" is equivalent to {required: true}</li>
 <li>Fixed Opera select-issue (avoiding a attribute-collision)</li>
 <li>Fixed problems with focussing hidden elements in IE</li>
 <li>Added feature to skip validation for submit buttons with class "cancel"</li>
@@ -635,10 +636,17 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		rules: function( element ) {
-			if( !this.data( element ) )
+			var data = this.data( element );
+			if( !data )
 				return [];
 			var rules = [];
-			jQuery.each( this.data(element), function(key, value) {
+			// convert a simple string to a {string: true} rule, eg. "required" to {required:true}
+			if( typeof data == "string" ) {
+				var transformed = {};
+				transformed[data] = true;
+				data = transformed;
+			}
+			jQuery.each( data, function(key, value) {
 				rules[rules.length] = {
 					method: key,
 					parameters: value

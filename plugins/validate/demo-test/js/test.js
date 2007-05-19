@@ -588,13 +588,13 @@ test("findLastActive()", function() {
 	equals( lastInput, v.findLastActive() );
 });
 
-test("refresh()", function() {
+test("refresh() & validating multiple checkboxes with 'required'", function() {
 	expect(3);
 	var checkboxes = $("#form input[@name=check3]").attr("checked", false);
 	equals(5, checkboxes.size());
 	var v = $("#form").validate({
 		rules: {
-			check3: { required: true }
+			check3: "required"
 		}
 	});
 	v.form();
