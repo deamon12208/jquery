@@ -23,7 +23,7 @@ div.container ol li {
 	margin-left: 20px;
 }
 div.container { display: none }
-form.cmxform label.error, label.error {
+.container label.error {
 	display: inline;
 }
 form.cmxform { width: 30em; }
@@ -31,9 +31,6 @@ form.cmxform { width: 30em; }
 
 <script type="text/javascript">
 $(document).ready(function() {
-	$.validator.setDefaults({
-		debug: true
-	});
 	$("#form1").validate({
 		errorContainer: $("#form1 div.error")
 	});

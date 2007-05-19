@@ -289,13 +289,13 @@ test("validator.check(): simple", function() {
 	expect( 3 );
 	var element = $('#firstname')[0];
 	var v = $('#testForm1').validate();
-	ok( !v.errorList["firstname"], 'No errors yet' );
+	ok( v.errorList.length == 0, 'No errors yet' );
 	v.check(element);
-	ok( v.errorList["firstname"], 'error exists' );
+	ok( v.errorList.length == 1, 'error exists' );
 	v.errorList = {};
 	$('#firstname').val("hi");
 	v.check(element);
-	ok( !v.errorList["firstname"], 'No more errors' );
+	ok( !v.errorList.length == 1, 'No more errors' );
 });
 
 test("validator.hide(): input", function() {
@@ -350,15 +350,16 @@ test("validator.hide(): container", function() {
 
 test("validator.valid()", function() {
 	expect(4);
+	var errorList = [{name:"meal",message:"foo", element:$("#meal")[0]}];
 	var v = $('#testForm3').validate();
 	ok( v.valid(), "No errors, must be valid" );
-	v.errorList = {"meal": "foo"};
+	v.errorList = errorList;
 	ok( !v.valid(), "One error, must be invalid" );
 	v = $('#testForm3').validate({ submitHandler: function() {
 		ok( false, "Submit handler was called" );
 	}});
 	ok( v.valid(), "No errors, must be valid and returning true, even with the submit handler" );
-	v.errorList = {"meal": "foo"};
+	v.errorList = errorList;
 	ok( !v.valid(), "One error, must be invalid, no call to submit handler" );
 });
 
@@ -393,12 +394,14 @@ test("validator.showErrors() - external messages", function() {
 });
 
 test("validator.showErrors() - custom handler", function() {
-	expect(3);
+	expect(5);
 	var v = $('#testForm1').validate({
 		showErrors: function(errors, validator) {
 			equals( v, validator );
-			equals( "buga", errors.firstname );
-			equals( "buga", errors.lastname );
+			equals( "buga", errors[0].message );
+			equals( "firstname", errors[0].name );
+			equals( "buga", errors[1].message );
+			equals( "lastname", errors[1].name );
 		}
 	});
 	v.form();
@@ -471,19 +474,20 @@ test("validator.rules() - internal - input", function() {
 });
 
 test("validator.formatAndAdd", function() {
-	expect(3);
+	expect(4);
 	var v = $("#form").validate();
 	var fakeElement = { form: { id: "foo" }, name: "bar" };
 	jQuery.validator.messages.test1 = "Please enter a value no longer then {0} characters.";
 	jQuery.validator.messages.test2 = "Please enter a value between {0} and {1}.";
 	v.formatAndAdd({method: "test1", parameters: 2}, fakeElement)
-	equals( "Please enter a value no longer then 2 characters.", v.errorList.foobar );
+	equals( "Please enter a value no longer then 2 characters.", v.errorList[0].message );
+	equals( "bar", v.errorList[0].name );
 	
 	v.formatAndAdd({method: "test2", parameters:[2,4]}, fakeElement)
-	equals( "Please enter a value between 2 and 4.", v.errorList.foobar );
+	equals( "Please enter a value between 2 and 4.", v.errorList[1].message );
 	
 	v.formatAndAdd({method: "test2", parameters:[0,4]}, fakeElement)
-	equals( "Please enter a value between 0 and 4.", v.errorList.foobar );
+	equals( "Please enter a value between 0 and 4.", v.errorList[2].message );
 });
 
 test("error containers, simple", function() {
@@ -498,7 +502,7 @@ test("error containers, simple", function() {
 	equals( 0, container.find("label").length, "There should be no error labels" );
 	
 	v.prepareForm();
-	v.errorList = {"foo": "bar", "required": "necessary"};
+	v.errorList = [{name:"foo",message:"bar", element: {}}, {name: "required", message: "necessary", element: {}}];
 	ok( !v.valid(), "form is not valid after adding errors manually" );
 	equals( 2, container.find("label").length, "There should be two error labels" );
 	ok( container.is(":visible"), "Check that the container is visible" );
@@ -532,7 +536,7 @@ test("error containers, with labelcontainer", function() {
 	equals( 0, labelcontainer.find("li").length, "There should be no lis labels in the labelcontainer" );
 	
 	v.prepareForm();
-	v.errorList = {"foo": "bar", "required": "necessary"};
+	v.errorList = [{name:"foo",message:"bar", element: {}}, {name: "required", message: "necessary", element: {}}];
 	ok( !v.valid(), "form is not valid after adding errors manually" );
 	equals( 0, container.find("label").length, "There should be no error label in the container" );
 	equals( 2, labelcontainer.find("label").length, "There should be two error labels in the labelcontainer" );
@@ -558,4 +562,44 @@ test("error containers, with labelcontainer", function() {
 		equals( "li", $(this).parent()[0].tagName.toLowerCase(), "Check that each label is wrapped in an li" );
 		ok( $(this).parent("li").is(":hidden"), "Check that each parent li is visible" );
 	});
+});
+
+test("focusInvalid()", function() {
+	expect(1);
+	var inputs = $("#testForm1 input").focus(function() {
+		equals( inputs[0], this, "focused first element" );
+	});
+	var v = $("#testForm1").validate();
+	v.form();
+	// have to explicitly show input elements with error class, they are hidden by testsuite styles
+	inputs.show();
+	v.focusInvalid();
+});
+
+test("findLastActive()", function() {
+	expect(3);
+	var v = $("#testForm1").validate();
+	ok( !v.findLastActive() );
+	v.form();
+	v.focusInvalid();
+	ok( !v.findLastActive() );
+	var lastInput = $("#testForm1 input:last").focus()[0];
+	v.focusInvalid();
+	equals( lastInput, v.findLastActive() );
+});
+
+test("refresh()", function() {
+	expect(3);
+	var checkboxes = $("#form input[@name=check3]").attr("checked", false);
+	equals(5, checkboxes.size());
+	var v = $("#form").validate({
+		rules: {
+			check3: { required: true }
+		}
+	});
+	v.form();
+	equals(1, v.errorList.length);
+	checkboxes.filter(":last").attr("checked", true);
+	v.form();
+	equals(0, v.errorList.length);
 });
