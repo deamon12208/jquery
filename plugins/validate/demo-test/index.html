@@ -23,8 +23,8 @@
 		$("#signupForm").validate({
 			event: "keyup",
 			rules: {
-				firstname: { required: true },
-				lastname: { required: true },
+				firstname: "required",
+				lastname: "required",
 				username: {
 					required: true,
 					minLength: 2
@@ -46,7 +46,7 @@
 					required: "#newsletter:checked",
 					minLength: 2
 				},
-				agree: { required: true	}
+				agree: "required"
 			},
 			messages: {
 				firstname: "Please enter your firstname",

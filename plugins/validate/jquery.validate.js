@@ -53,7 +53,7 @@ an array with {name, message, element} instead of an object with id:message pair
  * @example $("#myform").validate({
  *  event: "keyup"
  * 	rules: {
- * 		"first-name": { required: true },
+ * 		"first-name": "required",
  * 		age: {
  *			required: "#firstname:blank",
  * 			number: true,
@@ -79,7 +79,9 @@ an array with {name, message, element} instead of an object with id:message pair
  * @desc Validate a form on submit and each element on keyup. Rules are specified
  * for three elements, and a message is customized for the "password" and the
  * "age" elements. Inline rules are ignored. The password is only required when the age is lower
- * then 18. The age is only required when the firstname is blank.
+ * then 18. The age is only required when the firstname is blank. Note that "first-name" is quoted, because
+ * it isn't a valid javascript identifier. "first-name": "required" also uses a shortcut replacement for
+ * { required: true }. That works for all trivial validations that expect no more then a boolean-true argument.
  *
  * @example $("#myform").validate({
  *   errorClass: "invalid",
