@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+		<title>debugging</title>
+		<script type="text/javascript" src="/js/jquery.js"></script>
+		<script type="text/javascript" src="jquery.debug.js"></script>
+		<script type="text/javascript">
+			var DEBUG = true
+			jQuery(function($){
+				var search = document.location.search
+				$.log('search',search)
+				var x =[[[1],{x:23,y:'7',z:true}]]
+				$.log('x',x)
+				$("#entry").submit(function(){$(this).debug("submitted");return false}).debug("the form")
+				$(":input")
+					.click(function(){$(this).debug("clicked")})
+					.change(function(){$(this).debug("changed")})
+					.debug('input fields')
+			});
+			
+		</script>
+	</head>
+	<body>
+		<h1>What's going on here?</h1>
+		<p>
+			Firebug can really help debugging jQuery! A little plugin can help even more! But, for those non-firefox browsers, no firebug... unless you use firebug lite.
+		</p>
+		<p>
+			Until now! I tried to mimic the display and behavior of firebug, while keeping this plugin small and with no other plugins required.
+		</p>
+		<p>
+			I hope you make good use of this <a href="jquery.debug.js">plugin</a>!
+		</p>
+		<p>
+			PS I haven't coded a regular alert in a long time with $.log
+		</p>
+		<p>
+			PPS tested with Firefox 2, Opera 9, Safari 2, and IE7
+		</p>
+		<form class="classy doggy" id="entry">
+			<!-- comment in form-->
+			<input type="text" id="tex" name="tex" size="50" maxlength="50" />
+			<input type="text" id="sex" name="sex" size="11" maxlength="11" />
+			<input type="text" id="hex" name="hex" size="11" maxlength="11" />
+			<input type="submit" name="Save" value="Save"/>
+		</form>
+	</body>
+</html>
