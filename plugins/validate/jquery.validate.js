@@ -9,13 +9,11 @@
  */
 
 /*
-TODOs
-- implement successPlacement or something similar (see custom-methods-demo.html)
-
 recent changes:
 <li>Completely removed dependency on element IDs, though they are still used (when present) to link error labels to inputs. Achieved by using
 an array with {name, message, element} instead of an object with id:message pairs for the internal errorList.</li>
 <li>Added support for specifying simple rules as simple strings, eg. "required" is equivalent to {required: true}</li>
+<li>Added success option to show the a field was validated successfully</li>
 <li>Fixed Opera select-issue (avoiding a attribute-collision)</li>
 <li>Fixed problems with focussing hidden elements in IE</li>
 <li>Added feature to skip validation for submit buttons with class "cancel"</li>
@@ -36,11 +34,12 @@ an array with {name, message, element} instead of an object with id:message pair
  * @desc Validates a form on submit. Rules are read from metadata.
  *
  * @example $("input").validate({
- * 		focusInvalid: false,
- * 		event: "blur"
+ * 		event: "blur",
+ *		success: "valid"
  * });
  * @desc Validates all input elements on blur event (when the element looses focus).
- * Deactivates focus of invalid elements.
+ * Adds a class "valid" to all error labels when the elements are valid and keeps showing
+ * them.
  *
  * @example $("#myform").validate({
  *   submitHandler: function(form) {
@@ -119,13 +118,16 @@ an array with {name, message, element} instead of an object with id:message pair
  * @example $("#myform").validate({
  * 	errorPlacement: function(error, element) {
  * 		error.appendTo( element.parent("td").next("td") );
+ * 	},
+ * 	success: function(label) {
+ * 		label.text("ok!").addClass("success");
  * 	}
  * });
  * @before <form id="myform" action="/login" method="post">
  * 	<table>
  * 		<tr>
  * 			<td><label>Firstname</label>
- * 			<td><input name="fname" class="{required:true}" /></td>
+ * 			<td><input name="fname" class="{required:true}" value="Pete" /></td>
  * 			<td></td>
  * 		</tr>
  * 		<tr>
@@ -139,8 +141,8 @@ an array with {name, message, element} instead of an object with id:message pair
  * 	<table>
  * 		<tr>
  * 			<td><label>Firstname</label>
- * 			<td><input name="fname" class="{required:true}" /></td>
- * 			<td><label for="fname" class="invalid">Please specify your firstname!</label></td>
+ * 			<td><input name="fname" class="{required:true}" value="Pete" /></td>
+ * 			<td><label for="fname" class="invalid success">ok!</label></td>
  * 		</tr>
  * 		<tr>
  * 			<td><label>Lastname</label></td>
@@ -150,7 +152,8 @@ an array with {name, message, element} instead of an object with id:message pair
  * 	</table>
  * </form>
  * @desc Validates a form on submit. Customizes the placement of the generated labels
- * by appending them to the next table cell.
+ * by appending them to the next table cell. Displays "ok!" for valid elements and adds a class
+ * "success" to the message (the class "invalid" is kept to identify the error label).
  *
  * @example $("#myform").validate({
  *   errorContainer: $("#messageBox1, #messageBox2"),
@@ -224,7 +227,11 @@ an array with {name, message, element} instead of an object with id:message pair
  *		First argument: jQuery object containing the created error label
  *		Second argument: jQuery object containing the invalid element
  *		Default: Places the error label after the invalid element
- * @option String errorElement The element to use for generated error messages. Default: "label".
+ * @option String errorElement The element to use for generated error messages. Default: "label"
+ * @option String|Function If specified, the error label is displayed to show a valid element. If 
+ * 		a String is given, its added as a class to the label. If a Function is given, its called with
+ *		the label (as a jQuery object) as its only argument. That can be used to add a text like "ok!".
+ *		Default: none
  *
  * @name validate
  * @type $.validator
@@ -420,13 +427,14 @@ jQuery.extend(jQuery.validator, {
 		 * @param String|Element element A selector or an element to validate
 		 *
 		 * @name jQuery.validator.protoype.element
-		 * @type Boolean True when the form is valid, otherwise false
+		 * @type Boolean True when the element is valid, otherwise false
 		 * @cat Plugins/Validate
 		 */
 		element: function( element ) {
 			this.prepareElement( element );
-			this.check( element );
+			var result = this.check( element );
 			this.showErrors();
+			return result;
 		},
 
 		/**
@@ -443,18 +451,30 @@ jQuery.extend(jQuery.validator, {
 		 */
 		showErrors: function(errors) {
 			if(errors) {
-				for ( name in errors ) {
-					this.errorList.push({
-						name: name,
-						message: errors[name],
-						element: jQuery("[@name=" + name + "]:first", this.currentForm)
-					});
-				}
+				this.deserializeErrorList(errors);
 			}
-			//	jQuery.extend(this.errorList, errors);
 			this.settings.showErrors
-				? this.settings.showErrors( this.errorList, this )
+				? this.settings.showErrors( this.serializeErrorList(), this )
 				: this.defaultShowErrors();
+		},
+		
+		deserializeErrorList: function(list) {
+			for ( name in list ) {
+				this.errorList.push({
+					message: list[name],
+					element: jQuery("[@name=" + name + "]:first", this.currentForm)[0]
+				});
+			}
+		},
+		
+		serializeErrorList: function() {
+			var result = {};
+			jQuery.each(this.errorList, function(i, n) {
+				if ( !n.message )
+					return;
+				result[n.element.name] = n.message;
+			});
+			return result;
 		},
 		
 		/**
@@ -479,32 +499,37 @@ jQuery.extend(jQuery.validator, {
 		
 		focusInvalid: function() {
 			if( this.settings.focusInvalid ) {
-				jQuery(this.findLastActive() || this.errorList[0].element).filter(":visible").focus();
+				try {
+					jQuery(this.findLastActive() || this.errorList.length && this.errorList[0].element || []).filter(":visible").focus();
+				} catch(e) { /* ignore IE throwing errors when focusing hidden elements */ }
 			}
 		},
 		
 		findLastActive: function() {
 			var lastActive = this.lastActive;
 			return lastActive && jQuery.grep(this.errorList, function(n) {
-				return n.name == lastActive.name;
+				return n.element.name == lastActive.name;
 			}).length == 1 && lastActive;
 		},
 		
 		refresh: function() {
 			var validator = this;
-			function focusHandler() {
-				validator.lastActive = this;
-			}
+			
 			// select all valid inputs inside the form (no submit or reset buttons)
 			var names = {};
 			this.elements = jQuery(this.currentForm).find("input, select, textarea, button").not(":submit").not(":reset").filter(function() {
+				
+				!this.name && validator.settings.debug && window.console && console.error( "%o has no name assigned", this);
+			
 				// select only the first element for each name
 				if ( this.name in names )
 					return false;
 				names[this.name] = true;
 				return true;
 			// and listen for focus events to save reference to last focused element
-			}).focus(focusHandler);
+			}).focus(function() {
+				validator.lastActive = this;
+			});
 		},
 		
 		clean: function( selector ) {
@@ -516,6 +541,7 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		reset: function( element ) {
+			this.successList = [];
 			this.errorList = [];
 			this.toShow = jQuery( [] );
 			this.toHide = jQuery( [] );
@@ -524,7 +550,6 @@ jQuery.extend(jQuery.validator, {
 		prepareForm: function() {
 			this.reset();
 			this.toHide = this.errors().push( this.containers );
-			this.toShow.push( this.containers );
 		},
 		
 		prepareElement: function( element ) {
@@ -544,7 +569,7 @@ jQuery.extend(jQuery.validator, {
 					if( !result ) {
 						jQuery(element).addClass( this.settings.errorClass );
 						this.formatAndAdd( rule, element);
-						break;
+						return false;
 					}
 				} catch(e) {
 					this.settings.debug && window.console && console.error("exception occured when checking element " + element.id
@@ -552,6 +577,10 @@ jQuery.extend(jQuery.validator, {
 					throw e;
 				}
 			}
+			// show the label for valid elements if success callback is configured
+			if ( this.settings.success )
+				this.successList.push(element);
+			return true;
 		},
 		
 		message: function( id, rule ) {
@@ -574,24 +603,14 @@ jQuery.extend(jQuery.validator, {
 						? "" + param[0]
 						: "" + param) || "" )
 					.replace( "{1}", "" + param[1] || "" ),
-				name: element.name,
 				element: element
 			});
 					
 		},
 		
 		valid: function() {
-			if ( this.errorList.length > 0 ) {
-				this.showErrors();
-				return false;
-			} else {
-				this.hideErrors();
-				return true;
-			}
-		},
-		
-		hideErrors: function() {
-			this.toggle( "Hide" );
+			this.showErrors();
+			return this.errorList.length == 0;
 		},
 		
 		toggle: function(that) {
@@ -607,36 +626,58 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		defaultShowErrors: function() {
-			for ( var i = 0; i < this.errorList.length; i++ ) {
-				this.showError( this.errorList[i].name, this.errorList[i].message, this.errorList[i].element );
+			for ( var i = 0, error; error = this.errorList[i]; i++ ) {
+				this.showLabel( error.element, error.message );
+			}
+			if( this.errorList.length ) {
+				this.toShow.push( this.containers );
+			}
+			for ( var i = 0, element; element = this.successList[i]; i++ ) {
+				this.showLabel( element );
 			}
 			this.toHide = this.toHide.not( this.toShow );
 			this.toggle( "Hide" ).toggle( "Show" );
 		},
 		
-		showError: function(name, message, element) {
-			var error = this.errors().forId(element.id || name);
-			if ( error.length ) {
+		showLabel: function(element, message) {
+			var label = this.errors().forId( this.idOrName(element) );
+			if ( label.length ) {
+				// refresh error/success class
+				label.removeClass().addClass( this.settings.errorClass );
+			
 				// check if we have a generated label, replace the message then
-				if( this.settings.overrideErrors || error.attr("generated") ) {
-					error.html(message);
+				if( this.settings.overrideErrors || label.attr("generated") ) {
+					label.html(message);
 				}
 			} else {
 				// create label
-				error = jQuery("<" + this.settings.errorElement + ">").attr({"for": element.id || name, generated: true}).addClass(this.settings.errorClass).html(message);
+				label = jQuery("<" + this.settings.errorElement + ">")
+					.attr({"for":  this.idOrName(element), generated: true})
+					.addClass(this.settings.errorClass)
+					.html(message || "");
 				if ( this.settings.wrapper ) {
 					// make sure the element is visible, even in IE
 					// actually showing the wrapped element is handled elsewhere
-					error = error.hide().show().wrap("<" + this.settings.wrapper + ">").parent();
+					label = label.hide().show().wrap("<" + this.settings.wrapper + ">").parent();
 				}
-				if ( !this.labelContainer.append(error).length )
+				if ( !this.labelContainer.append(label).length )
 					this.settings.errorPlacement
-						? this.settings.errorPlacement(error, element )
-						: error.insertAfter(element);
+						? this.settings.errorPlacement(label, jQuery(element) )
+						: label.insertAfter(element);
 			}
-			this.toShow.push(error);
+			if ( !message && this.settings.success ) {
+				label.text("");
+				typeof this.settings.success == "string"
+					? label.addClass( this.settings.success )
+					: this.settings.success( label );
+			}
+			this.toShow.push(label);
 		},
 		
+		idOrName: function(element) {
+			return /radio|checkbox/i.test(element.type) ? element.name : element.id || element.name;
+		},
+
 		rules: function( element ) {
 			var data = this.data( element );
 			if( !data )
@@ -656,17 +697,17 @@ jQuery.extend(jQuery.validator, {
 			} );
 			return rules;
 		},
-		
+
 		data: function( element ) {
 			return this.settings.rules
 				? this.settings.rules[ element.name ]
 				: this.settings.meta
 					? jQuery(element).data()[ this.settings.meta ]
 					: jQuery(element).data();
-		},
+		}
 		
 	},
-	
+
 	getLength: function(value, element) {
 		switch( element.nodeName.toLowerCase() ) {
 		case 'select':
@@ -677,13 +718,13 @@ jQuery.extend(jQuery.validator, {
 		}
 		return value.length;
 	},
-	
+
 	depend: function(param, element) {
 		return this.dependTypes[typeof param]
 			? this.dependTypes[typeof param](param, element)
 			: true;
 	},
-	
+
 	dependTypes: {
 		"boolean": function(param, element) {
 			return param;
@@ -695,7 +736,7 @@ jQuery.extend(jQuery.validator, {
 			return param(element);
 		}
 	},
-	
+
 	/**
 	 * Defines a standard set of useful validation methods.
 	 * 
@@ -714,7 +755,7 @@ jQuery.extend(jQuery.validator, {
 	 * @cat Plugins/Validate/Methods
 	 */
 	methods: {
-	
+
 		/**
 		 * Return false if the element is empty.
 		 *
@@ -787,16 +828,13 @@ jQuery.extend(jQuery.validator, {
 				var options = jQuery("option:selected", element);
 				return options.length > 0 && ( element.type == "select-multiple" || (jQuery.browser.msie && !(options[0].attributes['value'].specified) ? options[0].text : options[0].value).length > 0);
 			case 'input':
-				switch( element.type.toLowerCase() ) {
-				case 'checkbox':
-				case 'radio':
+				if ( /radio|checkbox/i.test(element.type) )
 					return jQuery.validator.getLength(value, element) > 0;
-				}
 			default:
 				return value.length > 0;
 			}
 		},
-	
+
 		/**
 		 * Return false, if the element is
 		 *
