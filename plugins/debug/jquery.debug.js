@@ -2,7 +2,10 @@ var DEBUG = true
 jQuery(function($) { // after load, so DEBUG can be overridden!!!
 	if (!("console" in window) || !("firebug" in console)){
 		if (DEBUG)
-			$('<div id="DEBUG" style ="position: fixed;left: 0px;height: 100px;overflow: auto;bottom: 0px;z-index: 1000;width: 100%;border-top: solid #0000FF"><ol></ol></div>').appendTo(document.body)
+			$('<div id="DEBUG" style ="position: fixed;left: 0px;height: 100px;overflow: auto;bottom: 0px;z-index: 1000;width: 100%;border-top: 5px solid #0000FF"><ol></ol></div>')
+			.attr('title','Shift Click to hide')
+			.click(function(e){$(this).height( e.shiftKey ?0 : 100)})
+			.appendTo(document.body)
 		window.console = {}
 		$.each(("log,debug,info,warn,error,assert,dir,dirxml,group,groupEnd,time,timeEnd,count,trace,profile,profileEnd".split(/,/)), function(i,o){
 			window.console[o] = function(msg){ $('#DEBUG ol').append( '<li>' + msg + '</li>' )}
