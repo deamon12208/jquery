@@ -3,19 +3,19 @@ var DEBUG = true;
 	$(function(){ // ready code
 		if (!("console" in window) || !("firebug" in console)){
 			if (DEBUG)
-				$('<div id="DEBUG" style ="position: fixed;left: 0px;height: 100px;overflow: auto;bottom: 0px;z-index: 1000;width: 100%;border-top: 5px solid #0000FF"><ol></ol></div>')
-				.attr('title','Shift Click to hide')
+				$('<div id="DEBUG" style ="position: fixed;left: 0px;height: 0px;overflow: auto;bottom: 0px;z-index: 1000;width: 100%;border-top: 5px solid #0000FF"><ol></ol></div>')
+				.attr('title','Click to show; Shift Click to hide')
 				.click(function(e){$(this).height( e.shiftKey ?0 : 100)})
 				.appendTo(document.body);
-/*
-			window.console = {};
-			$.each(("log,debug,info,warn,error,assert,dir,dirxml,group,groupEnd,time,timeEnd,count,trace,profile,profileEnd".split(/,/)), function(i,o){
-				window.console[o] = $.fn.debug
-			})
-*/
 		}
 	});
-	$.debug = function(msg){ $('#DEBUG ol').append( '<li>' + msg + '</li>' )};
+	if (!("console" in window)) { // make a firebug tiny
+		window.console = {};
+		$.each(("log,debug,info,warn,error,assert,dir,dirxml,group,groupEnd,time,timeEnd,count,trace,profile,profileEnd".split(/,/)), function(i,o){
+			window.console[o] = $.fn.debug
+		})
+	};
+	var debug = function(msg){ $('#DEBUG ol').append( '<li>' + msg + '</li>' )};
 	$.fn.debug = function(message) {
 		if (DEBUG) {
 			$.log.apply(this,[(message || 'debug') + ':',this]);
@@ -28,7 +28,7 @@ var DEBUG = true;
 			if("console" in window && 'firebug' in console)
 				console.debug.apply('',arguments);
 			else
-				$.debug($.map(arguments,function(o,i){
+				debug($.map(arguments,function(o,i){
 					return jsO(o,true)
 				}).join(' '));
 		return this
