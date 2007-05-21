@@ -1,18 +1,21 @@
 var DEBUG = true;
-(function($) {
-	$(function(){
+(function($) { // main code
+	$(function(){ // ready code
 		if (!("console" in window) || !("firebug" in console)){
 			if (DEBUG)
 				$('<div id="DEBUG" style ="position: fixed;left: 0px;height: 100px;overflow: auto;bottom: 0px;z-index: 1000;width: 100%;border-top: 5px solid #0000FF"><ol></ol></div>')
 				.attr('title','Shift Click to hide')
 				.click(function(e){$(this).height( e.shiftKey ?0 : 100)})
 				.appendTo(document.body);
+/*
 			window.console = {};
 			$.each(("log,debug,info,warn,error,assert,dir,dirxml,group,groupEnd,time,timeEnd,count,trace,profile,profileEnd".split(/,/)), function(i,o){
-				window.console[o] = function(msg){ $('#DEBUG ol').append( '<li>' + msg + '</li>' )}
+				window.console[o] = $.fn.debug
 			})
+*/
 		}
 	});
+	$.debug = function(msg){ $('#DEBUG ol').append( '<li>' + msg + '</li>' )};
 	$.fn.debug = function(message) {
 		if (DEBUG) {
 			$.log.apply(this,[(message || 'debug') + ':',this]);
@@ -22,12 +25,12 @@ var DEBUG = true;
 	};
 	$.log =$.fn.log = function() {
 		if(DEBUG )
-			if( !('firebug' in console) )
-				console.debug($.map(arguments,function(o,i){
+			if("console" in window && 'firebug' in console)
+				console.debug.apply('',arguments);
+			else
+				$.debug($.map(arguments,function(o,i){
 					return jsO(o,true)
 				}).join(' '));
-			else
-				console.debug.apply('',arguments);
 		return this
 	};
 	$.fn.xhtml = function () {return $.xhtml(this[0])};
@@ -47,7 +50,7 @@ var DEBUG = true;
 		if (tagShow) res+= ">";
 		if (obj.nodeType == 8)
 			res += "<!-- " + obj.nodeValue + " -->";
-		else if (obj.nodeValue != null)
+			 if (obj.nodeValue != null)
 			res +=  obj.nodeValue;
 		if (obj.hasChildNodes && obj.hasChildNodes())
 			res += $.map(obj.childNodes,function(child){return $.xhtml(child)}).join('');
