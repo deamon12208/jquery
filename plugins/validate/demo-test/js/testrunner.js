@@ -161,16 +161,54 @@ function ok(a, msg) {
  */
 function isSet(a, b, msg) {
 	var ret = true;
-	if ( a && b && a.length == b.length ) {
-		for ( var i in a )
+	if ( a && b && a.length != undefined && a.length == b.length ) {
+		for ( var i = 0; i < a.length; i++ )
 			if ( a[i] != b[i] )
 				ret = false;
 	} else
 		ret = false;
 	if ( !ret )
-		_config.Test.push( [ ret, msg + " expected: " + b + " result: " + a ] );
+		_config.Test.push( [ ret, msg + " expected: " + serialArray(b) + " result: " + serialArray(a) ] );
 	else 
 		_config.Test.push( [ ret, msg ] );
+}
+
+/**
+ * Asserts that two objects are equivalent
+ */
+function isObj(a, b, msg) {
+	var ret = true;
+	
+	if ( a && b ) {
+		for ( var i in a )
+			if ( a[i] != b[i] )
+				ret = false;
+
+		for ( i in b )
+			if ( a[i] != b[i] )
+				ret = false;
+	} else
+		ret = false;
+
+    _config.Test.push( [ ret, msg ] );
+}
+
+function serialArray( a ) {
+	var r = [];
+	
+	if ( a && a.length )
+        for ( var i = 0; i < a.length; i++ ) {
+            var str = a[i].nodeName;
+            if ( str ) {
+                str = str.toLowerCase();
+                if ( a[i].id )
+                    str += "#" + a[i].id;
+            } else
+                str = a[i];
+            r.push( str );
+        }
+
+	return "[ " + r.join(", ") + " ]"
 }
 
 /**
@@ -191,7 +229,7 @@ function q() {
  * @result returns true if "//[a]" return two elements with the IDs 'foo' and 'baar'
  */
 function t(a,b,c) {
-	var f = jQuery.find(b);
+	var f = jQuery(b);
 	var s = "";
 	for ( var i = 0; i < f.length; i++ )
 		s += (s && ",") + '"' + f[i].id + '"';
@@ -225,6 +263,25 @@ function url(value) {
  */
 function equals(expected, actual, message) {
 	var result = expected == actual;
-	message = message || result ? "okay" : "failed";
+	message = message || (result ? "okay" : "failed");
 	_config.Test.push( [ result, result ? message + ": " + expected : message + " expected: " + expected + " actual: " + actual ] );
+}
+
+/**
+ * Trigger an event on an element.
+ *
+ * @example triggerEvent( document.body, "click" );
+ *
+ * @param DOMElement elem
+ * @param String type
+ */
+function triggerEvent( elem, type, event ) {
+	if ( jQuery.browser.mozilla || jQuery.browser.opera ) {
+		event = document.createEvent("MouseEvents");
+		event.initMouseEvent(type, true, true, elem.ownerDocument.defaultView,
+			0, 0, 0, 0, 0, false, false, false, false, 0, null);
+		elem.dispatchEvent( event );
+	} else if ( jQuery.browser.msie ) {
+		elem.fireEvent("on"+type);
+	}
 }
