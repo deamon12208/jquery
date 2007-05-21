@@ -175,10 +175,12 @@
                 }, settings);
 
                 return this.each(function() {
-                    var $$ = $(this), hostname = this.hostname && this.hostname.replace(/:\d*$/, ''), port = this.port || 80;
+                    // Opera 9 incorrectly includes port in hostname property, thus it needs to be removed
+                    // Safari 2 reports '#' for an undefined hash, thus it needs to be sanitized as well
+                    var $$ = $(this), hostname = this.hostname && this.hostname.replace(/:\d*$/, ''), port = this.port || 80, hash = this.hash && this.hash.replace('#', '') || '';
                     var isLink = $$.is('a') && this.href;
                     var isImage = isLink && this.href.match(/\.(bmp|gif|jpe?g|png)/gi);
-                    var isInline = !!this.hash;
+                    var isInline = !!hash;
                     var isAjax = hostname == location.hostname && port == (location.port || 80) && !isInline;
                     var isExternal = isLink && (hostname != location.hostname || port != (location.port || 80));
                     var isForm = $$.is('form');
