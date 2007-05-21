@@ -175,12 +175,12 @@
                 }, settings);
 
                 return this.each(function() {
-                    var $$ = $(this);
+                    var $$ = $(this), hostname = this.hostname && this.hostname.replace(/:\d*$/, ''), port = this.port || 80;
                     var isLink = $$.is('a') && this.href;
                     var isImage = isLink && this.href.match(/\.(bmp|gif|jpe?g|png)/gi);
                     var isInline = !!this.hash;
-                    var isAjax = this.hostname == location.hostname && !isInline;
-                    var isExternal = isLink && this.hostname != location.hostname;
+                    var isAjax = hostname == location.hostname && port == (location.port || 80) && !isInline;
+                    var isExternal = isLink && (hostname != location.hostname || port != (location.port || 80));
                     var isForm = $$.is('form');
                     var type = isImage && IMAGE || isInline && INLINE || isAjax && AJAX || isExternal && EXTERNAL || isForm && CONFIRM;
 
