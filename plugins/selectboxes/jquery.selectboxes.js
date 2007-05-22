@@ -10,27 +10,6 @@
  * $LastChangedDate$
  * $Rev$
  *
- *  5 April 2007
- *    ajaxAddOption takes two additional arguments - fn (function to call when after the options have been added)
- *    and args (arguments to pass on to the function)
- *    New containsOption plugin, for checking if an option is within the select list
- *
- *  20 February 2007
- *    removeOption can now take a regular expression
- *    (useful if you want to remove multiple options in one go)
- *
- *  13 February 2007
- *    addOption can also replace options that already exist with the same value
- *    selectOptions can clear previously selected options
- *    new copyOptions now allows you to copy options from one select to another
- *
- *  2 February 2007
- *    Fix for Safari 2.0 - couldn't add option
- *
- *  5 December 2006
- *   Select option(s) by value with 'selectOptions'
- *   Based on code by Mathias Bank (http://www.mathias-bank.de)
- *
  */
  
 (function($) {
@@ -54,19 +33,21 @@ $.fn.addOption = function()
 	var sO = true;
 	// multiple items
 	var m = false;
-	if(typeof a[0] == "object")
+	// other variables
+	var items, v, t;
+	if(typeof(a[0]) == "object")
 	{
 		m = true;
-		var items = a[0];
+		items = a[0];
 	}
 	if(a.length >= 2)
 	{
-		if(typeof a[1] == "boolean") sO = a[1];
-		else if(typeof a[2] == "boolean") sO = a[2];
+		if(typeof(a[1]) == "boolean") sO = a[1];
+		else if(typeof(a[2]) == "boolean") sO = a[2];
 		if(!m)
 		{
-			var v = a[0];
-			var t = a[1];
+			v = a[0];
+			t = a[1];
 		}
 	}
 	this.each(
@@ -75,23 +56,23 @@ $.fn.addOption = function()
 			if(this.nodeName.toLowerCase() != "select") return;
 			if(m)
 			{
-				
-				for(var i in items)
+				for(var item in items)
 				{
-					$(this).addOption(i, items[i], sO);
+					$(this).addOption(item, items[item], sO);
 				}
 			}
 			else
 			{
 				var option = document.createElement("option");
-				option.value = v;
-				option.text = t;
-				var i;
+				option.value = v, option.text = t;
+				// do replacement
 				var r = false;
 				// get options
 				var o = this.options;
 				// get number of options
 				var oL = o.length;
+				// define i, for deciding where the option should be added
+				var i;
 				// loop through existing options
 				for(i = 0; i < oL; i++)
 				{
@@ -110,9 +91,9 @@ $.fn.addOption = function()
 				}
 			}
 		}
-	)
+	);
 	return this;
-}
+};
 
 /**
  * Add options via ajax
@@ -132,9 +113,9 @@ $.fn.addOption = function()
  */
 $.fn.ajaxAddOption = function(url, params, select, fn, args)
 {
-	if(typeof url != "string") return this;
-	if(typeof params != "object") params = {};
-	if(typeof select != "boolean") select = true;
+	if(typeof(url) != "string") return this;
+	if(typeof(params) != "object") params = {};
+	if(typeof(select) != "boolean") select = true;
 	this.each(
 		function()
 		{
@@ -144,9 +125,9 @@ $.fn.ajaxAddOption = function(url, params, select, fn, args)
 				function(r)
 				{
 					$(el).addOption(r, select);
-					if (typeof fn == "function")
+					if(typeof fn == "function")
 					{
-						if (typeof args == "object")
+						if(typeof args == "object")
 						{
 							fn.apply(el, args);
 						} 
@@ -158,9 +139,9 @@ $.fn.ajaxAddOption = function(url, params, select, fn, args)
 				}
 			);
 		}
-	)
+	);
 	return this;
-}
+};
 
 /**
  * Removes an option (by value or index) from a select box (or series of select boxes)
@@ -179,16 +160,17 @@ $.fn.removeOption = function()
 {
 	var a = arguments;
 	if(a.length == 0) return this;
-	var ta = typeof a[0];
-	if(ta == "string") var v = a[0];
-	else if(ta == "object" || ta == "function") var v = a[0]; /* regular expression */
-	else if(ta == "number") var i = a[0];
+	var ta = typeof(a[0]);
+	var v, i;
+	// has to be a string or regular expression (object in IE, function in Firefox)
+	if(ta == "string" || ta == "object" || ta == "function" ) v = a[0];
+	else if(ta == "number") i = a[0];
 	else return this;
 	this.each(
 		function()
 		{
 			if(this.nodeName.toLowerCase() != "select") return;
-			if(v)
+			if(!!v)
 			{
 				// get options
 				var o = this.options;
@@ -198,7 +180,7 @@ $.fn.removeOption = function()
 				{
 					if(v.constructor == RegExp)
 					{
-						if (o[i].value.match(v))
+						if(o[i].value.match(v))
 						{
 							o[i] = null;
 						}
@@ -214,9 +196,9 @@ $.fn.removeOption = function()
 				this.remove(i);
 			}
 		}
-	)
+	);
 	return this;
-}
+};
 
 /**
  * Sort options (ascending or descending) in a select box (or series of select boxes)
@@ -233,12 +215,11 @@ $.fn.removeOption = function()
  */
 $.fn.sortOptions = function(ascending)
 {
-	var a = typeof ascending == "undefined" ? true : ascending;
+	var a = typeof(ascending) == "undefined" ? true : !!ascending;
 	this.each(
 		function()
 		{
 			if(this.nodeName.toLowerCase() != "select") return;
-			
 			// get options
 			var o = this.options;
 			// get number of options
@@ -248,19 +229,17 @@ $.fn.sortOptions = function(ascending)
 			// loop through options, adding to sort array
 			for(var i = 0; i<oL; i++)
 			{
-				sA[i] =
-				{
+				sA[i] = {
 					v: o[i].value,
 					t: o[i].text
-				};
+				}
 			}
 			// sort items in array
 			sA.sort(
 				function(o1, o2)
 				{
 					// option text is made lowercase for case insensitive sorting
-					o1t = o1.t.toLowerCase();
-					o2t = o2.t.toLowerCase();
+					o1t = o1.t.toLowerCase(), o2t = o2.t.toLowerCase();
 					// if options are the same, no sorting is needed
 					if(o1t == o2t) return 0;
 					if(a)
@@ -280,9 +259,9 @@ $.fn.sortOptions = function(ascending)
 				o[i].value = sA[i].v;
 			}
 		}
-	)
+	);
 	return this;
-}
+};
 /**
  * Selects an option by value
  *
@@ -300,7 +279,7 @@ $.fn.sortOptions = function(ascending)
 $.fn.selectOptions = function(value, clear)
 {
 	var v = value;
-	var vT = typeof value;
+	var vT = typeof(value);
 	var c = clear || false;
 	// has to be a string or regular expression (object in IE, function in Firefox)
 	if(vT != "string" && vT != "function" && vT != "object") return this;
@@ -308,17 +287,15 @@ $.fn.selectOptions = function(value, clear)
 		function()
 		{
 			if(this.nodeName.toLowerCase() != "select") return this;
-			
 			// get options
 			var o = this.options;
 			// get number of options
 			var oL = o.length;
-			
 			for(var i = 0; i<oL; i++)
 			{
 				if(v.constructor == RegExp)
 				{
-					if (o[i].value.match(v))
+					if(o[i].value.match(v))
 					{
 						o[i].selected = true;
 					}
@@ -329,7 +306,7 @@ $.fn.selectOptions = function(value, clear)
 				}
 				else
 				{
-					if (o[i].value == v)
+					if(o[i].value == v)
 					{
 						o[i].selected = true;
 					}
@@ -340,9 +317,9 @@ $.fn.selectOptions = function(value, clear)
 				}
 			}
 		}
-	)
+	);
 	return this;
-}
+};
 
 /**
  * Copy options to another select
@@ -365,25 +342,21 @@ $.fn.copyOptions = function(to, which)
 		function()
 		{
 			if(this.nodeName.toLowerCase() != "select") return this;
-			
 			// get options
 			var o = this.options;
 			// get number of options
 			var oL = o.length;
-			
 			for(var i = 0; i<oL; i++)
 			{
-				if(w == "all" ||
-					(w == "selected" && o[i].selected)
-					)
+				if(w == "all" ||	(w == "selected" && o[i].selected))
 				{
 					$(to).addOption(o[i].value, o[i].text);
 				}
 			}
 		}
-	)
+	);
 	return this;
-}
+};
 
 /**
  * Checks if a select box has an option with the supplied value
@@ -403,8 +376,8 @@ $.fn.containsOption = function(value, fn)
 {
 	var found = false;
 	var v = value;
-	var vT = typeof value;
-	var fT = typeof fn;
+	var vT = typeof(v);
+	var fT = typeof(fn);
 	// has to be a string or regular expression (object in IE, function in Firefox)
 	if(vT != "string" && vT != "function" && vT != "object") return fT == "function" ? this: found;
 	this.each(
@@ -413,12 +386,10 @@ $.fn.containsOption = function(value, fn)
 			if(this.nodeName.toLowerCase() != "select") return this;
 			// option already found
 			if(found && fT != "function") return false;
-			
 			// get options
 			var o = this.options;
 			// get number of options
 			var oL = o.length;
-			
 			for(var i = 0; i<oL; i++)
 			{
 				if(v.constructor == RegExp)
@@ -439,8 +410,8 @@ $.fn.containsOption = function(value, fn)
 				}
 			}
 		}
-	)
+	);
 	return fT == "function" ? this : found;
-}
+};
 
 })(jQuery);

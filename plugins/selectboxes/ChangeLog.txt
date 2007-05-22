@@ -1,0 +1,23 @@
+22 May 2007
+  Packed version available using Dean Edwards' Packer: http://dean.edwards.name/packer/
+
+5 April 2007
+  ajaxAddOption takes two additional arguments - fn (function to call when after the options have been added)
+  and args (arguments to pass on to the function)
+  New containsOption plugin, for checking if an option is within the select list
+
+20 February 2007
+  removeOption can now take a regular expression
+  (useful if you want to remove multiple options in one go)
+
+13 February 2007
+  addOption can also replace options that already exist with the same value
+  selectOptions can clear previously selected options
+  new copyOptions now allows you to copy options from one select to another
+
+2 February 2007
+  Fix for Safari 2.0 - couldn't add option
+
+5 December 2006
+  Select option(s) by value with 'selectOptions'
+  Based on code by Mathias Bank (http://www.mathias-bank.de)
