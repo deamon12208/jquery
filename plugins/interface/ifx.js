@@ -288,7 +288,7 @@ jQuery.fn.extend({
 	}
 });
 /**
- * Improved FX function that aniamtes collection of properties per timer. Accepts inline styles and class names to animate
+ * Improved FX function that animates collection of properties per timer. Accepts inline styles and class names to animate
  */
 jQuery.extend({
 	pause: function(elem, options)
