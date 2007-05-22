@@ -10,6 +10,7 @@
 			jQuery(function($){
 				var search = document.location.search
 				console.log("wheee a console.log")
+				console.time("j")
 				$.log('search',search)
 				var x =[[[1],{x:23,y:'7',z:true}]]
 				$.log('x',x)
@@ -18,6 +19,7 @@
 					.click(function(){$(this).debug("clicked")})
 					.change(function(){$(this).debug("changed")})
 					.debug('input fields')
+				console.timeEnd('j')
 			});
 			
 		</script>
