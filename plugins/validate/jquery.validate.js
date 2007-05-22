@@ -13,6 +13,8 @@ recent changes:
 <li>Completely removed dependency on element IDs, though they are still used (when present) to link error labels to inputs. Achieved by using
 an array with {name, message, element} instead of an object with id:message pairs for the internal errorList.</li>
 <li>Added support for specifying simple rules as simple strings, eg. "required" is equivalent to {required: true}</li>
+<li>Added feature: Add errorClass to invalid field's parent element, making it easy to style the label/field container or the label for the field.</li>
+<li>Added feature: focusCleanup - If enabled, removes the errorClass from the invalid elements and hides all errors messages whenever the element is focused.</li>
 <li>Added success option to show the a field was validated successfully</li>
 <li>Fixed Opera select-issue (avoiding a attribute-collision)</li>
 <li>Fixed problems with focussing hidden elements in IE</li>
@@ -232,6 +234,8 @@ an array with {name, message, element} instead of an object with id:message pair
  * 		a String is given, its added as a class to the label. If a Function is given, its called with
  *		the label (as a jQuery object) as its only argument. That can be used to add a text like "ok!".
  *		Default: none
+ * @option Boolean focusCleanup If enabled, removes the errorClass from the invalid elements and hides
+ * 		all errors messages whenever the element is focused. Avoid combination with focusInvalid. Default: false
  *
  * @name validate
  * @type $.validator
@@ -286,13 +290,6 @@ jQuery.extend(jQuery.fn, {
 		return this.filter( "[@for='" + id + "']" );
 	}
 });
-
-Array.indexOf = function(hay, needle) {
-	for( var i = 0; i < hay.length; i++)
-		if ( this[i] === needle )
-            return i;
-	return -1;
-};
 
 /**
  * Custom expression to filter for blank fields.
@@ -529,6 +526,12 @@ jQuery.extend(jQuery.validator, {
 			// and listen for focus events to save reference to last focused element
 			}).focus(function() {
 				validator.lastActive = this;
+				
+				// hide error label and remove error class on focus if enabled
+				if ( validator.settings.focusCleanup ) {
+					$(this).removeClass( validator.settings.errorClass );
+					validator.errors().forId( validator.idOrName(this) ).hide();
+				}
 			});
 		},
 		
@@ -559,7 +562,7 @@ jQuery.extend(jQuery.validator, {
 	
 		check: function( element ) {
 			element = this.clean( element );
-			jQuery( element ).removeClass( this.settings.errorClass );
+			jQuery( element ).add( jQuery(element).parent() ).removeClass( this.settings.errorClass );
 			var rules = this.rules( element );
 			for( var i = 0, rule; rule = rules[i++]; ) {
 				try {
@@ -567,7 +570,7 @@ jQuery.extend(jQuery.validator, {
 					if( result === -1 )
 						break;
 					if( !result ) {
-						jQuery(element).addClass( this.settings.errorClass );
+						jQuery(element).add( jQuery(element).parent() ).addClass( this.settings.errorClass );
 						this.formatAndAdd( rule, element);
 						return false;
 					}
