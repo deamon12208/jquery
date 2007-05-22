@@ -3,18 +3,12 @@ var DEBUG = true;
 	$(function(){ // ready code
 		if (!("console" in window) || !("firebug" in console)){
 			if (DEBUG)
-				$('<div id="DEBUG" style ="position: fixed;left: 0px;height: 0px;overflow: auto;bottom: 0px;z-index: 1000;width: 100%;border-top: 5px solid #0000FF"><ol></ol></div>')
+				$('<div id="DEBUG" style ="background-color:#c1ebeb;position: fixed;left: 0px;height: 0px;overflow: auto;bottom: 0px;z-index: 1000;width: 100%;border-top: 5px solid #0000FF"><ol></ol></div>')
 				.attr('title','Click to show; Shift Click to hide')
 				.click(function(e){$(this).height( e.shiftKey ?0 : 100)})
 				.appendTo(document.body);
 		}
 	});
-	if (!("console" in window)) { // make a firebug tiny
-		window.console = {};
-		$.each(("log,debug,info,warn,error,assert,dir,dirxml,group,groupEnd,time,timeEnd,count,trace,profile,profileEnd".split(/,/)), function(i,o){
-			window.console[o] = $.fn.debug
-		})
-	};
 	var debug = function(msg){ $('#DEBUG ol').append( '<li>' + msg + '</li>' )};
 	$.fn.debug = function(message) {
 		if (DEBUG) {
@@ -32,6 +26,12 @@ var DEBUG = true;
 					return jsO(o,true)
 				}).join(' '));
 		return this
+	};
+	if (!(("console" in window) && (("open" in console)||("firebug" in console)))){
+		window.console = {};
+		$.each(("log,debug,info,warn,error,assert,dir,dirxml,group,groupEnd,time,timeEnd,count,trace,profile,profileEnd".split(/,/)), function(i,o){
+			window.console[o] = $.log
+		})
 	};
 	$.fn.xhtml = function () {return $.xhtml(this[0])};
 	$.xhtml = function(obj) { // dump the dom back to xhtml text
