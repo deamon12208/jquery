@@ -24,6 +24,10 @@
 	 */
 	easing :  {
 		linear: function(p, n, firstNum, delta, duration) {
+			return p * delta + firstNum;
+		},
+
+		swing: function(p, n, firstNum, delta, duration) {
 			return ((-Math.cos(p*Math.PI)/2) + 0.5) * delta + firstNum;
 		},
 		
