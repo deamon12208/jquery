@@ -1,5 +1,5 @@
 /*
- * Form Validation: jQuery form validation plug-in v1.0 beta 3
+ * Form Validation: jQuery form validation plug-in v1.0 RC 1
  *
  * Copyright (c) 2006 Jörn Zaefferer
  *
@@ -7,19 +7,6 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  */
-
-/*
-recent changes:
-<li>Completely removed dependency on element IDs, though they are still used (when present) to link error labels to inputs. Achieved by using
-an array with {name, message, element} instead of an object with id:message pairs for the internal errorList.</li>
-<li>Added support for specifying simple rules as simple strings, eg. "required" is equivalent to {required: true}</li>
-<li>Added feature: Add errorClass to invalid field's parent element, making it easy to style the label/field container or the label for the field.</li>
-<li>Added feature: focusCleanup - If enabled, removes the errorClass from the invalid elements and hides all errors messages whenever the element is focused.</li>
-<li>Added success option to show the a field was validated successfully</li>
-<li>Fixed Opera select-issue (avoiding a attribute-collision)</li>
-<li>Fixed problems with focussing hidden elements in IE</li>
-<li>Added feature to skip validation for submit buttons with class "cancel"</li>
-*/
 
 /**
  * Validates a single form.
