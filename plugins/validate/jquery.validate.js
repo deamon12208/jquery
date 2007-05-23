@@ -1,12 +1,25 @@
 /*
  * Form Validation: jQuery form validation plug-in v1.0 RC 1
  *
+ * http://bassistance.de/jquery-plugins/jquery-plugin-validation/
+ *
  * Copyright (c) 2006 Jörn Zaefferer
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  */
+
+/*
+TODO
+ - fix custom-method-demo: Replace alert with "6 errors occured please fix"
+ - exclude hidden fields from success-processing
+ - accept Functions as messages, providing runtime-custom-messages
+ - fix form-submit-prevention when using submitHandler
+ - fix packed version
+ - stop Firefox password manager on invalid forms, maybe stopping the click event on submit buttons
+ - modify build to add plugin header to packed bundle
+*/
 
 /**
  * Validates a single form.
@@ -249,10 +262,11 @@ jQuery.extend(jQuery.fn, {
 				// prevent submit for invalid forms or custom submit handlers
 				if ( this.cancel || validator.form() ) {
 					this.cancel = false;
-					return validator.settings.submitHandler
-						&& validator.settings.submitHandler( validator.currentForm )
-						&& false
-						|| true
+					if ( validator.settings.submitHandler ) {
+						validator.settings.submitHandler( validator.currentForm );
+						return false;
+					}
+					return true;
 				} else {
 					validator.focusInvalid();
 					return false;
