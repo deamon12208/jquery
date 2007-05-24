@@ -217,14 +217,29 @@ $.fn.tabs = function(initial, settings) {
         var tabs = $('a', nav);
 
         // prepare remote tabs
-        if (settings.remote) {
-            var remoteUrls = {};
+        if (settings.remote) {            
             tabs.each(function() {
-                var id = settings.hashPrefix + (++$.tabs.remoteCount);
-                var hash = '#' + id;
-                remoteUrls[hash] = this.href;
+                var id = settings.hashPrefix + (++$.tabs.remoteCount), hash = '#' + id, url = this.href;
                 this.href = hash;
                 $('<div id="' + id + '" class="' + settings.containerClass + '"></div>').appendTo(container);
+                
+                $(this).bind('loadRemoteTab', function(e, callback) {
+                    var $$ = $(this).addClass(settings.loadingClass), span = $('span', this)[0], tabTitle = span.innerHTML;
+                    if (settings.spinner) {
+                        // TODO if spinner is image
+                        span.innerHTML = '<em>' + settings.spinner + '</em>'; // WARNING: html(...) crashes Safari with jQuery 1.1.2
+                    }
+                    setTimeout(function() { // Timeout is again required in IE, "wait" for id being restored
+                        $(hash).load(url, function() {
+                            if (settings.spinner) {
+                                span.innerHTML = tabTitle; // WARNING: html(...) crashes Safari with jQuery 1.1.2
+                            }
+                            $$.removeClass(settings.loadingClass);
+                            callback && callback();
+                        });
+                    }, 0);   
+                });
+                
             });
         }
 
@@ -270,9 +285,9 @@ $.fn.tabs = function(initial, settings) {
 
         // highlight tab accordingly
         containers.filter(':eq(' + settings.initial + ')').show().end().not(':eq(' + settings.initial + ')').addClass(settings.hideClass);
-        if (!settings.remote) {
-            $('li', nav).removeClass(settings.selectedClass).eq(settings.initial).addClass(settings.selectedClass); // we need to remove classes eventually if hash takes precedence over class
-        }
+        $('li', nav).removeClass(settings.selectedClass).eq(settings.initial).addClass(settings.selectedClass); // we need to remove classes eventually if hash takes precedence over class
+        // trigger load of initial tab
+        tabs.eq(settings.initial).trigger('loadRemoteTab').end();
 
         // setup auto height
         if (settings.fxAutoHeight) {
@@ -432,7 +447,7 @@ $.fn.tabs = function(initial, settings) {
 
             // if animation is still running, tab is selected or disabled or onClick callback returns false stop here
             // check if onClick returns false last so that it is not executed for a disabled tab
-            if (container.locked || li.is('.' + settings.selectedClass) || li.is('.' + settings.disabledClass) || typeof onClick == 'function' && onClick(this, toShow[0], toHide[0]) === false) {
+            if (container['locked'] || li.is('.' + settings.selectedClass) || li.is('.' + settings.disabledClass) || typeof onClick == 'function' && onClick(this, toShow[0], toHide[0]) === false) {
                 this.blur();
                 return false;
             }
@@ -479,20 +494,7 @@ $.fn.tabs = function(initial, settings) {
                 if (!settings.remote) {
                     switchTab();
                 } else {
-                    var $$ = $(this).addClass(settings.loadingClass), span = $('span', this)[0], tabTitle = span.innerHTML;
-                    if (settings.spinner) {
-                        // TODO if spinner is image
-                        span.innerHTML = '<em>' + settings.spinner + '</em>'; // WARNING: html(...) crashes Safari with jQuery 1.1.2
-                    }
-                    setTimeout(function() { // Timeout is again required in IE, "wait" for id being restored
-                        $(clicked.hash).load(remoteUrls[clicked.hash], function() {
-                            switchTab();
-                            if (settings.spinner) {
-                                span.innerHTML = tabTitle; // WARNING: html(...) crashes Safari with jQuery 1.1.2
-                            }
-                            $$.removeClass(settings.loadingClass);
-                        });
-                    }, 0);
+                    $(clicked).trigger('loadRemoteTab', [switchTab]);
                 }
 
             } else {
@@ -511,11 +513,6 @@ $.fn.tabs = function(initial, settings) {
             return settings.bookmarkable && !!trueClick; // convert undefined to Boolean for IE
 
         });
-
-        // trigger load of initial Ajax tab
-        if (settings.remote) {
-            tabs.eq(settings.initial).trigger('click').end();
-        }
 
         // enable history support if bookmarking and history is turned on
         if (settings.bookmarkable) {
