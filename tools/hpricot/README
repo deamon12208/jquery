@@ -13,6 +13,11 @@ thing.
 *Please read this entire document* before making assumptions about how this
 software works.
 
+== jQuery on Rails
+
+Note that you will need to install this version of hpricot in order to use jQuery
+on Rails
+
 == An Overview
 
 Let's clear up what Hpricot is.
