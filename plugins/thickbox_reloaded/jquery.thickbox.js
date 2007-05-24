@@ -1,7 +1,7 @@
 /**
- * Thickbox Reloaded (Thickbox 3) - jQuery plugin
+ * Thickbox Reloaded - jQuery plugin
  *
- * Copyright (c) 2007 Cody Lindley, Jšrn Zaefferer, Klaus Hartl (jquery.com)
+ * Copyright (c) 2007 Klaus Hartl
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
@@ -16,10 +16,31 @@
 
             /* private */
 
-            // needful things
-            var IMAGE = 'image', INLINE = 'inline', AJAX = 'ajax', EXTERNAL = 'external', CONFIRM = 'confirm'; // Thickbox type constants
-            var DIM_ID = 'tb-dim', LOADING_ID = 'tb-loading', MODAL_ID = 'tb-modal', TITLE_BAR_ID = 'tb-title-bar', CONTENT_ID = 'tb-content', CAPTION_ID = 'tb-caption', BROWSE_ID = 'tb-browse', NEXT_ID = 'tb-next', PREV_ID = 'tb-prev'; // Ids
-            var dim, loading, modal;
+            // thickbox types
+            TB_TYPE = {
+                AJAX: 'ajax',
+                CONFIRM: 'confirm',
+                EXTERNAL: 'external',
+                IMAGE: 'image',
+                INLINE: 'inline'
+            };
+
+            // thickbox ids
+            TB_ID = {
+                DIM: 'tb-dim',
+                LOADING: 'tb-loading',
+                MODAL: 'tb-modal',
+                TITLE: 'tb-title',
+                CLOSE: 'tb-close',
+                CONTENT: 'tb-content',
+                CAPTION: 'tb-caption',
+                BROWSE: 'tb-browse',
+                NEXT: 'tb-next',
+                PREV: 'tb-prev'
+            };
+
+            // building blocks
+            var dim, loading, modal, content;
 
             // default values
             var defaultValues = {
@@ -39,17 +60,26 @@
 
             // setup Thickbox
             function setup(type, builder) {
+
                 // get or create elements
-                var jq;
-                jq = $('#' + DIM_ID);
-                dim = jq.size() && jq || $('<div id="' + DIM_ID + '">' + ($.browser.msie6 ? '<iframe src="about:blank" frameborder="0"></iframe>' : '') + '</div>').appendTo(document.body).hide();
-                jq = $('#' + LOADING_ID);
-                loading = jq.size() && jq || $('<div id="' + LOADING_ID + '"></div>').appendTo(document.body);
-                jq = $('#' + MODAL_ID);
-                modal = jq.size() && jq || $('<div id="' + MODAL_ID + '"></div>').appendTo(document.body);
-                modal.append('<b class="tl"></b><b class="tr"></b><b class="br"></b><b class="bl"></b>');
-                modal.attr({'class': type});
-                $('<div id="' + TITLE_BAR_ID + '"><a href="#" title="' + defaultValues.i18n.close.title + '">' + defaultValues.i18n.close.text + '</a></div>').appendTo(modal).find('a').bind('click', hide);
+                dim = $('#' + TB_ID.DIM);
+                dim = dim.size() && dim || $('<div id="' + TB_ID.DIM + '">' + ($.browser.msie6 ? '<iframe src="about:blank" frameborder="0"></iframe>' : '') + '</div>').appendTo(document.body).hide();
+
+                loading = $('#' + TB_ID.LOADING);
+                loading = loading.size() && loading || $('<div id="' + TB_ID.LOADING + '"></div>').appendTo(document.body);
+
+                modal = $('#' + TB_ID.MODAL);
+                modal = modal.size() && modal || $('<div id="' + TB_ID.MODAL + '"></div>').append('<b class="tl"></b><b class="tr"></b><b class="br"></b><b class="bl"></b>').appendTo(document.body);
+
+                content = $('#' + TB_ID.CONTENT);
+                content = content.size() && content || $('<div id="' + TB_ID.CONTENT + '"></div>').appendTo(modal);
+
+                // set type class
+                modal.attr('class', type);
+
+                // close button
+                $('<div id="' + TB_ID.CLOSE + '"><a href="#" title="' + defaultValues.i18n.close.title + '">' + defaultValues.i18n.close.text + '</a></div>').appendTo(modal).find('a').bind('click', hide);
+
                 // reveal stuff
                 dim.unbind('click').one('click', hide); // unbind should be unnecessary - WTF?
                 if (dim.is(':visible')) {
@@ -102,16 +132,11 @@
                 // hide stuff
                 loading.hide();
 
-                /*modal.fadeOut('fast', function() {
-                    modal.empty();
-                });*/
+                // TODO abort xhr request id necessary
 
-                modal.hide().empty();
-
-                //lets IE bork opacity on second opening
-                //dim.fadeOut('fast', typeof callback == 'function' ? callback : function() {});
-
+                modal.hide()
                 dim.hide();
+                content.empty();
                 typeof callback == 'function' && callback();
 
                 // remove keyboard event handler
@@ -146,7 +171,7 @@
 
             function buildTitle(title) {
                 if (title) {
-                    $('#' + TITLE_BAR_ID).prepend('<h2>' + title + '</h2>');
+                    content.prepend('<h2 id="' + TB_ID.TITLE + '">' + title + '</h2>');
                 }
             }
 
@@ -175,6 +200,7 @@
                 }, settings);
 
                 return this.each(function() {
+
                     // Opera 9 incorrectly includes port in hostname property, thus it needs to be removed
                     // Safari 2 reports '#' for an undefined hash, thus it needs to be sanitized as well
                     var $$ = $(this), hostname = this.hostname && this.hostname.replace(/:\d*$/, ''), port = this.port || 80, hash = this.hash && this.hash.replace('#', '') || '';
@@ -184,12 +210,12 @@
                     var isAjax = hostname == location.hostname && port == (location.port || 80) && !isInline;
                     var isExternal = isLink && (hostname != location.hostname || port != (location.port || 80));
                     var isForm = $$.is('form');
-                    var type = isImage && IMAGE || isInline && INLINE || isAjax && AJAX || isExternal && EXTERNAL || isForm && CONFIRM;
+                    var type = isImage && TB_TYPE.IMAGE || isInline && TB_TYPE.INLINE || isAjax && TB_TYPE.AJAX || isExternal && TB_TYPE.EXTERNAL || isForm && TB_TYPE.CONFIRM;
 
                     // switch type of Thickbox to be bound to element
                     var builder;
                     switch (type) {
-                        case IMAGE:
+                        case TB_TYPE.IMAGE:
                             builder = function() {
                                 var caption = $$.attr('title'), rel = $$.attr('rel');
 
@@ -199,10 +225,9 @@
                                     function buildShowFunc(el) {
                                         return function() {
                                             unbindPager();
-                                            modal.fadeOut('fast', function() {
-                                                modal.empty();
-                                                $(el).trigger('click');
-                                            });
+                                            modal.hide()
+                                            content.empty();
+                                            $(el).trigger('click');
                                             return false;
                                         };
                                     }
@@ -216,11 +241,11 @@
                                             count = defaultValues.i18n.count.text.replace(/#\{image\}/, i + 1);
                                             count = count.replace(/#\{count\}/, k);
                                             if (group[i + 1]) { // if there is a next image
-                                                next = '<strong id="' + NEXT_ID + '"><a href="#" title="' + defaultValues.i18n.next.title + '">' + defaultValues.i18n.next.text + '</a></strong>';
+                                                next = '<strong id="' + TB_ID.NEXT + '"><a href="#" title="' + defaultValues.i18n.next.title + '">' + defaultValues.i18n.next.text + '</a></strong>';
                                                 showNext = buildShowFunc(group[i + 1]);
                                             }
                                             if (group[i - 1]) { // if there is a previous image
-                                                prev = '<strong id="' + PREV_ID + '"><a href="#" title="' + defaultValues.i18n.prev.title + '">' + defaultValues.i18n.prev.text + '</a></strong>';
+                                                prev = '<strong id="' + TB_ID.PREV + '"><a href="#" title="' + defaultValues.i18n.prev.title + '">' + defaultValues.i18n.prev.text + '</a></strong>';
                                                 showPrev = buildShowFunc(group[i - 1]);
                                             }
                                             break; // stop searching
@@ -249,7 +274,7 @@
                                     };
                                     $(document).bind('keydown', pager);
                                     dim.one('click', unbindPager);
-                                    $('#' + TITLE_BAR_ID + ' a').bind('click', unbindPager);
+                                    $('#' + TB_ID.TITLE_BAR + ' a').bind('click', unbindPager);
 
                                 }
 
@@ -286,56 +311,54 @@
                                     if (caption || count) {
                                         var html = [];
                                         if (caption) {
-                                            html.push('<p id="' + CAPTION_ID + '">', caption, '</p>');
+                                            html.push('<p id="' + TB_ID.CAPTION + '">', caption, '</p>');
                                         }
                                         if (count) {
-                                            html.push('<p id="' + BROWSE_ID + '">', count, prev, next, '</p>');
+                                            html.push('<p id="' + TB_ID.BROWSE + '">', count, prev, next, '</p>');
                                         }
-                                        $(html.join('')).appendTo(modal);
-                                        $('#' + NEXT_ID + ' a').bind('click', showNext);
-                                        $('#' + PREV_ID + ' a').bind('click', showPrev);
+                                        $(html.join('')).appendTo(content);
+                                        $('#' + TB_ID.NEXT + ' a').bind('click', showNext);
+                                        $('#' + TB_ID.PREV + ' a').bind('click', showPrev);
                                     }
                                     show(imgWidth + 30, imgHeight + 60, settings.top, settings.left, settings.animate, callback);
                                 };
                                 img.src = $$.attr('href');
                             };
                             break;
-                        case INLINE:
-                            var content = $($$[0].hash); // preserve content via closure
+                        case TB_TYPE.INLINE:
+                            var inlineContent = $($$[0].hash); // preserve content via closure
                             builder = function() {
                                 buildTitle($$.attr('title'));
-                                $('<div id="' + CONTENT_ID + '"></div>').append(content).appendTo(modal);
-                                content.css('display', 'block'); // in case itself is hidden and not its parent element, WTF: show() fails in Opera
+                                inlineContent.css('display', 'block').appendTo(content); // in case inline content itself is hidden and not its parent element, WTF: show() fails in Opera
                                 show(settings.width, settings.height, settings.top, settings.left, settings.animate, callback);
                             };
                             break;
-                        case AJAX:
+                        case TB_TYPE.AJAX:
                             builder = function() {
                                 buildTitle($$.attr('title'));
-                                $('<div id="' + CONTENT_ID + '"></div>').appendTo(modal).load($$.attr('href'), function() {
+                                content.load($$.attr('href'), function() {
                                     show(settings.width, settings.height, settings.top, settings.left, settings.animate, callback);
                                 });
                             };
                             break;
-                        case EXTERNAL:
+                        case TB_TYPE.EXTERNAL:
                             builder = function() {
                                 buildTitle($$.attr('title'));
-                                $('<iframe id="' + CONTENT_ID + '" src="' +  $$.attr('href') + '" frameborder="0"></iframe>').appendTo(modal);
+                                $('<iframe id="' + TB_ID.CONTENT + '" src="' +  $$.attr('href') + '" frameborder="0"></iframe>').appendTo(content);
                                 show(settings.width, settings.height, settings.top, settings.left, settings.animate, callback);
                             };
                             break;
-                        case CONFIRM:
+                        case TB_TYPE.CONFIRM:
                             builder = function() {
                                 buildTitle($('*[@type="submit"][@title]', $$).attr('title') || defaultValues.i18n.confirm.what);
-                                var p = $('<p id="' + CONTENT_ID + '"></p>').appendTo(modal);
-                                $('<a id="tb-confirm" href="#">' + defaultValues.i18n.confirm.confirm + '</a>').appendTo(p).click(function() {
+                                $('<a id="tb-confirm" href="#">' + defaultValues.i18n.confirm.confirm + '</a>').appendTo(content).click(function() {
                                     // pass confirm as callback to hide
                                     hide(settings.onConfirm || function() {
                                         $$[0].submit();
                                     });
                                     return false;
                                 });
-                                $('<a id="tb-cancel" href="#">' + defaultValues.i18n.confirm.cancel + '</a> ').appendTo(p).click(function() {
+                                $('<a id="tb-cancel" href="#">' + defaultValues.i18n.confirm.cancel + '</a> ').appendTo(content).click(function() {
                                     hide();
                                     return false;
                                 });
@@ -349,7 +372,7 @@
 
                     // bind event
                     if (builder) {
-                        $$.bind((type == CONFIRM ? 'submit' : 'click'), function() {
+                        $$.bind((type == TB_TYPE.CONFIRM ? 'submit' : 'click'), function() {
                             setup(type, builder);
                             this.blur(); // remove focus from active element
                             return false;

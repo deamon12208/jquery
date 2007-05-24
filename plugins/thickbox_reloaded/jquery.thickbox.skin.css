@@ -2,6 +2,7 @@
 
 /* All types */
 
+/* building blocks */
 #tb-dim {
     background: #000;
     opacity: .6;
@@ -10,112 +11,105 @@
     background: url(jquery.thickbox.spinner.gif) no-repeat 50% 50%;
 }
 #tb-modal {
-    border: 2px solid #525252;
+    border: solid #d4dbdf;
+    border-width: 0 1px;
     background: #fff;
-    color: #333;
 }
-#tb-title-bar *, #tb-caption, #tb-browse {
-    font: 12px/1.3 Arial, Helvetica, Geneva, "sans-serif";
-    margin: 0;
+#tb-content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: auto;
+    padding: 13px 18px 0;
 }
-#tb-title-bar a { /* image replacement */
+#tb-content * {
+	font: 12px/1.3 Arial, Helvetica, Geneva, "sans-serif";
+}
+#tb-title {
+    padding: 0 10px 13px 0;
+}
+#tb-close a { /* image replacement */
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    z-index: 999;
     overflow: hidden;
-    width: 19px;
-    height: 18px;
-    background: url(jquery.thickbox.close.gif) no-repeat 50% 50%;
+    width: 26px;
+    height: 26px;
+    background: url(/images/button_close.png) no-repeat 5px 5px;
     line-height: 30px;
     text-indent: 1000px;
+}
+/* round corners */
+#tb-modal .tl, #tb-modal .tr, #tb-modal .br, #tb-modal .bl {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: no-repeat;
+}
+#tb-modal .tl, #tb-modal .tr {
+    top: 0;
+}
+#tb-modal .br, #tb-modal .bl {
+    top: 100%;
+    margin-top: -3px;
+    /*bottom: 0;*/ /* stupid IE 6 borks on that one */
+}
+#tb-modal .tl, #tb-modal .bl {
+    left: -1px;
+}
+#tb-modal .tr, #tb-modal .br {
+    right: -1px;
+}
+#tb-modal .tl {
+    background-image: url(corner_thickbox_tl.png);
+}
+#tb-modal .tr {
+    background-image: url(corner_thickbox_tr.png);
+}
+#tb-modal .br {
+    background-image: url(corner_thickbox_br.png);
+}
+#tb-modal .bl {
+    background-image: url(corner_thickbox_bl.png);
 }
 
 /* Specific types: image, inline, ajax, external, confirm. The modal window has these types set as class attribute for some extra styling. */
 
 /* image */
-#tb-modal.image img, #tb-caption, #tb-browse {
+.image #tb-content img, #tb-caption, #tb-browse {
     margin: 0 15px;
 }
-#tb-modal.image img {
+.image #tb-content img {
     display: block;
     margin-top: 15px;
     margin-bottom: 5px;
     border: 1px solid #ccc;
 }
-.image #tb-title-bar {
-    position: absolute;
-    top: 14px;
-    right: 13px;
-    padding: 0;
-    height: auto;
-    background: transparent;
-}
-.image #tb-title-bar a {
-    display: block;
-    float: none;
-    margin: 0;
-    background-color: #fff;
-    opacity: .7;
-}
-.image #tb-title-bar a:hover, .image #tb-title-bar a:focus, .image #tb-title-bar a:active {
-    opacity: 1;
-}
 #tb-browse, #tb-browse a {
-    color: #666;
-    font-size: 10px;
+    font-size: 10px !important;
 }
 #tb-browse a {
     margin: 0 0 0 1em;
 }
-#tb-browse a:hover, #tb-browse a:focus, #tb-browse a:active {
-    color: #000;
-}
-
-/* inline, ajax, external, confirm */
-#tb-title-bar {
-    overflow: hidden; /* containing floats */
-    padding: 0 0 0 6px;
-    height: 1.5em;
-    background: #e8e8e8;
-}
-#tb-title-bar h2 {
-    float: left;
-    margin: 4px 0 0;
-}
-#tb-title-bar a {
-    float: right;
-    margin: 3px 0 0;
-}
-#tb-content {
-    position: absolute;
-    top: 1.5em; /* #tb-title-bar::height */
-    right: 0;
-    bottom: 0;
-    left: 0;
-    overflow: auto;
-    padding: 15px 15px 0;
-}
 
 /* external */
-iframe#tb-content {
+.external #tb-content iframe {
     padding: 0;
     width: 100%;
 }
 
 /* confirm */
-.confirm #tb-content {
-    margin: 0;
-    text-align: right;
-}
 .confirm #tb-content a {
     color: #666;
-    font: 12px/1.3 Arial, Helvetica, Geneva, "sans-serif";
-}
-.confirm #tb-content a:hover, .confirm #tb-content a:focus, .confirm #tb-content a:active {
-    color: #000;
 }
 #tb-confirm {
     float: left;
 }
 #tb-cancel {
-    display: block;
+    float: right;
 }
 
 /* IE fixes - WARNING: do not group selectors, otherwise IE 6 will ignore complete rule (because of the + combinator) */
