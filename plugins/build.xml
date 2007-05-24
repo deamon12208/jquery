@@ -164,4 +164,10 @@
         </antcall>
     </target>
 
+	<target name="fxqueue" description="Build fxqueue plugin.">
+        <antcall target="minandpack">
+            <param name="name" value="fxqueue" />
+        </antcall>
+    </target>
+
 </project>
