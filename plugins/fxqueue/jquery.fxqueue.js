@@ -33,7 +33,7 @@ $.fxqueue = {
 	next: function() {
 		// if no more fx or not playing, return
 		if (!$.fxqueue.queue[0] || !$.fxqueue.playing) return;
-		var args  = $.fxqueue.queue.shift();
+		var args  = $.fxqueue.queue.shift(),
 			$this = $( args.shift() );
 		$.fn.animate.apply($this, args);
 	},
