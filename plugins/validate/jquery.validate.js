@@ -19,12 +19,14 @@ TODO
  - fix packed version
  - stop Firefox password manager on invalid forms, maybe stopping the click event on submit buttons
  - modify build to add plugin header to packed bundle
+ - make required optional while validating individual elements, only check required on submit
  
  Examples:
  - masked input plugin integration
  - onblur/keypress ajax-validation (eg. username, email), (optionally) focus the input field on error
  - ajaxForm() integration
- - custom password validation
+ - overlabel integration, eg. with http://scott.sauyet.com/Javascript/Demo/Overlabel/
+ - custom password validation, eg. 6 chars min, and at least 1 number and at least 1 alpha or Must not use 123, abc, asdf or your username or your domain in the password. 
 */
 
 /**
