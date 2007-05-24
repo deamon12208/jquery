@@ -2,7 +2,7 @@
  * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) 
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
  *
- * Version: TOTALLY ALPHA
+ * Version: 0.1
  *
  * $LastChangedDate$
  * $Rev$
@@ -11,32 +11,39 @@
 (function($){
 
 /**
- * Call just like Animate except all params are required.
+ * Queues fx to fire one after the other no matter
+ * what element they are running on.
+ * It should be called just as you would call animate.
  *
  * @name fxqueue
+ * @author Brandon Aaron (http://brandonaaron.net || brandon.aaron@gmail.com)
  */
 $.fn.fxqueue = function(prop, speed, easing, callback) {
+	var args = $.makeArray(arguments);
 	return this.each(function() {
-		var fn = function() { $.fxqueue.next(); if (callback) callback(); }
-		$.fxqueue.queue.push([this, prop, speed, easing, fn]);
+		var fn = args[args.length-1];
+		args[args.length-1] = function() { $.fxqueue.next(); if (fn) fn.apply(this); };
+		$.fxqueue.queue.push( [this].concat( args ) );
 		$.fxqueue.play();
 	});
 };
 
 $.fxqueue = {
 	queue: [],
-	current: 0,
 	next: function() {
-		if (!$.fxqueue.queue[$.fxqueue.current]) return;
-		var $this = $( $.fxqueue.queue[$.fxqueue.current].shift() ),
-		    args = $.fxqueue.queue[$.fxqueue.current];
+		// if no more fx or not playing, return
+		if (!$.fxqueue.queue[0] || !$.fxqueue.playing) return;
+		var args  = $.fxqueue.queue.shift();
+			$this = $( args.shift() );
 		$.fn.animate.apply($this, args);
-		$.fxqueue.current++;
 	},
 	play: function() {
 		if ($.fxqueue.playing) return;
 		else $.fxqueue.playing = true;
 		$.fxqueue.next();
+	},
+	pause: function() {
+		$.fxqueue.playing = false;
 	}
 };
 	
