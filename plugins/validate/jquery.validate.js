@@ -19,6 +19,12 @@ TODO
  - fix packed version
  - stop Firefox password manager on invalid forms, maybe stopping the click event on submit buttons
  - modify build to add plugin header to packed bundle
+ 
+ Examples:
+ - masked input plugin integration
+ - onblur/keypress ajax-validation (eg. username, email), (optionally) focus the input field on error
+ - ajaxForm() integration
+ - custom password validation
 */
 
 /**
