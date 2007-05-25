@@ -664,3 +664,10 @@ test("success option3", function() {
 	ok( labels.eq(0).is(".valid") );
 	ok( !labels.eq(1).is(".valid") );
 });
+
+test("successlist", function() {
+	var v = $("#form").validate({ success: "xyz" });
+	v.form();
+	console.log(v, v.successList);
+	equals(0, v.successList.length);
+});

@@ -12,7 +12,6 @@
 
 /*
 TODO
- - exclude hidden fields from success-processing
  - accept Functions as messages, providing runtime-custom-messages
  - fix packed version
  - stop Firefox password manager on invalid forms, maybe stopping the click event on submit buttons
@@ -32,6 +31,7 @@ TODO
 Recent changes:
 <li>Fixed custom-method-demo, replaced the alert with message displaying the number of errors</li>
 <li>Fixed form-submit-prevention when using submitHandler</li>
+<li>Fixed exclusion of elements without rules from successList</li>
 */
 
 /**
@@ -595,7 +595,7 @@ jQuery.extend(jQuery.validator, {
 				}
 			}
 			// show the label for valid elements if success callback is configured
-			if ( this.settings.success )
+			if ( rules.length && this.settings.success )
 				this.successList.push(element);
 			return true;
 		},
