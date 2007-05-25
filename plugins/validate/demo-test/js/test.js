@@ -488,6 +488,17 @@ test("validator.formatAndAdd", function() {
 	equals( "Please enter a value between 0 and 4.", v.errorList[2].message );
 });
 
+test("validator.formatAndAdd2", function() {
+	expect(1);
+	var v = $("#form").validate();
+	var fakeElement = { form: { id: "foo" }, name: "bar" };
+	jQuery.validator.messages.test1 = function(element, validator) {
+		return "element " + element.name + " is not valid";
+	};
+	v.formatAndAdd({method: "test1", parameters: 0}, fakeElement)
+	equals( "element bar is not valid", v.errorList[0].message );
+});
+
 test("error containers, simple", function() {
 	expect(12);
 	var container = $("#simplecontainer");
@@ -668,6 +679,5 @@ test("success option3", function() {
 test("successlist", function() {
 	var v = $("#form").validate({ success: "xyz" });
 	v.form();
-	console.log(v, v.successList);
 	equals(0, v.successList.length);
 });

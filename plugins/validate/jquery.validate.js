@@ -12,7 +12,6 @@
 
 /*
 TODO
- - accept Functions as messages, providing runtime-custom-messages
  - fix packed version
  - stop Firefox password manager on invalid forms, maybe stopping the click event on submit buttons
  - modify build to add plugin header to packed bundle
@@ -29,9 +28,10 @@ TODO
  - milk example
  
 Recent changes:
+<li>Accept Functions as messages, providing runtime-custom-messages</li>
+<li>Fixed exclusion of elements without rules from successList</li>
 <li>Fixed custom-method-demo, replaced the alert with message displaying the number of errors</li>
 <li>Fixed form-submit-prevention when using submitHandler</li>
-<li>Fixed exclusion of elements without rules from successList</li>
 */
 
 /**
@@ -83,7 +83,9 @@ Recent changes:
  * 	},
  *  messages {
  * 		password: {
- * 			required: "Your password is required because you are not yet 18 years or older."
+ * 			required: function(element, validator) {
+ * 				return "Your password is required because with " + $("#age").val() + ", you are not old enough yet."
+ * 			},
  * 			minLength: "Please enter a password at least 5 characters long.",
  * 			maxLength: "Please enter a password no longer then 32 characters long."
  * 		},
@@ -96,6 +98,7 @@ Recent changes:
  * then 18. The age is only required when the firstname is blank. Note that "first-name" is quoted, because
  * it isn't a valid javascript identifier. "first-name": "required" also uses a shortcut replacement for
  * { required: true }. That works for all trivial validations that expect no more then a boolean-true argument.
+ * The required-message for password is specified as a function to use runtime customization.
  *
  * @example $("#myform").validate({
  *   errorClass: "invalid",
@@ -212,14 +215,15 @@ Recent changes:
  * @option Boolean focusInvalid Focus the last active or first invalid element on submit or via validator.focusInvalid(). Default: true
  * @option Function submitHandler Callback for handling the actual
  *		submit when the form is valid. Gets the form as the only argmument. Default: normal form submit
- * @option Map messages Key/value pairs defining custom messages.
- *		Key is the ID or name (for radio/checkbox inputs) of an element,
- *		value the message to display for that element. Instead of a plain message
- *		another map with specific messages for each rule can be used.
- *		Can be specified for one or more elements. Can be overriden by
- *		specifying the title attribute on the element.
+ * @option Map<String, Object> messages Key/value pairs defining custom messages.
+ *		Key is the name of an element, value the message to display for that element. Instead of
+ *		a plain message	another map with specific messages for each rule can be used.
+ *		Can be specified for one or more elements. Overrides the title attribute of an element.
+ *		Each message can be a String or a Function. The Function is called with the element
+ * 		as the first and the validator as the second argument and must return a String to display as the message
+ * 		for that element.
  *      Default: none, the default message for the method is used.
- * @option Map rules Key/value pairs defining custom rules.
+ * @option Map<String, Object> rules Key/value pairs defining custom rules.
  *		Key is the ID or name (for radio/checkbox inputs) of an element,
  *		value is an object consisting of rule/parameter pairs, eg. {required: true, min: 3}.
  *   	Once specified, metadata rules are completely ignored.
@@ -609,14 +613,15 @@ jQuery.extend(jQuery.validator, {
 		
 		formatAndAdd: function( rule, element) {
 			var param = rule.parameters;
+			var message = 
+				this.message(element.name, rule)
+				|| element.title
+				|| jQuery.validator.messages[rule.method]
+				|| "<strong>Warning: No message defined for " + element.name + "</strong>";
+			if ( typeof message == "function" ) 
+				message = message(element, this);
 			this.errorList.push({
-				message: (
-						this.message(element.name, rule)
-						|| element.title
-						|| jQuery.validator.messages[rule.method]
-						|| "<strong>Warning: No message defined for " + element.name + "</strong>"
-					)
-					.replace( "{0}", (param.constructor == Array
+				message: message.replace( "{0}", (param.constructor == Array
 						? "" + param[0]
 						: "" + param) || "" )
 					.replace( "{1}", "" + param[1] || "" ),
