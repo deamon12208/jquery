@@ -33,22 +33,14 @@
 		});
 		
 		var validator = $("#texttests").validate({
-			// important: combining focus with validation on blur can crash browsers
 			errorContainer: $("#warning"),
 			showErrors: function(errors, validator) {
-				if ( errors.length ) {
-					var message = "";
-					$.each(errors, function(i, n) {
-						message += n + "\n";
-					});
-					alert(message);
-				}
+				$("#summary").html("Your form contains " + validator.errorList.length + " errors, see details below.");
 				validator.defaultShowErrors();
 			},
 			errorPlacement: function(error, element) {
 				error.appendTo( element.parent("td").next("td") );
 			},
-			//success: "success"
 			success: function(label) {
 				label.text("ok!").addClass("success");
 			}
@@ -86,6 +78,8 @@ em.error { color: black; }
 <body>
 
 <form class="cmxform" id="texttests" method="get" action="foo.html">
+	<h2 id="summary"></h2>
+
 	<fieldset>
 		<legend>Example with custom methods and heavily customized error display</legend>
 		<table>

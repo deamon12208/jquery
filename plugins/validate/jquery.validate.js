@@ -12,7 +12,6 @@
 
 /*
 TODO
- - fix custom-method-demo: Replace alert with "6 errors occured please fix"
  - exclude hidden fields from success-processing
  - accept Functions as messages, providing runtime-custom-messages
  - fix packed version
@@ -31,6 +30,7 @@ TODO
  - milk example
  
 Recent changes:
+<li>Fixed custom-method-demo, replaced the alert with message displaying the number of errors</li>
 <li>Fixed form-submit-prevention when using submitHandler</li>
 */
 
