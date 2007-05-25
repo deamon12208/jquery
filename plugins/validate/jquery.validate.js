@@ -27,6 +27,8 @@ TODO
  - ajaxForm() integration
  - overlabel integration, eg. with http://scott.sauyet.com/Javascript/Demo/Overlabel/
  - custom password validation, eg. 6 chars min, and at least 1 number and at least 1 alpha or Must not use 123, abc, asdf or your username or your domain in the password. 
+ - datepicker integration (see dobis)
+ - milk example
 */
 
 /**

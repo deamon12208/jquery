@@ -17,6 +17,7 @@ TODO
 - provide a nice approach to show URLs only for external links
 - change p.body and p.url to div.body and div.url
 - finally: release 2.0, being as backwards compatible as possible
+- build example similar to http://codylindley.com/blogstuff/js/tooltip/tooltip.htm
 */
 
 /**
