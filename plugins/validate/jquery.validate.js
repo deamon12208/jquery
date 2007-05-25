@@ -15,7 +15,6 @@ TODO
  - fix custom-method-demo: Replace alert with "6 errors occured please fix"
  - exclude hidden fields from success-processing
  - accept Functions as messages, providing runtime-custom-messages
- - fix form-submit-prevention when using submitHandler
  - fix packed version
  - stop Firefox password manager on invalid forms, maybe stopping the click event on submit buttons
  - modify build to add plugin header to packed bundle
@@ -29,6 +28,9 @@ TODO
  - custom password validation, eg. 6 chars min, and at least 1 number and at least 1 alpha or Must not use 123, abc, asdf or your username or your domain in the password. 
  - datepicker integration (see dobis)
  - milk example
+ 
+Recent changes:
+<li>Fixed form-submit-prevention when using submitHandler</li>
 */
 
 /**
