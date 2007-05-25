@@ -12,11 +12,14 @@
 
 /*
 TODO
- - fix packed version
- - stop Firefox password manager on invalid forms, maybe stopping the click event on submit buttons
- - modify build to add plugin header to packed bundle
- - make required optional while validating individual elements, only check required on submit
+ - improve general validation behaviour, set these defaults and make them configurable:
+   - validate invalid elements on keypress, removing the error as soon as possible
+   - don't validate valid elements on keypress/focus, giving the user the chance to enter the correct value before complaining
+   - validate elements on blur but make required optional. if required would pass, check other rules
+   - validate everything on submit
  - add ignore-option, eg. ignore: "[@type=hidden]", using that expression to exclude elements to validate. Default: none, though submit and reset buttons are always ignored
+ - modify build to add plugin header to packed bundle
+ - stop Firefox password manager on invalid forms, maybe stopping the click event on submit buttons
  
  Examples:
  - masked input plugin integration
@@ -276,6 +279,9 @@ jQuery.extend(jQuery.fn, {
 					// prevent form submit to be able to see console output
 					event.preventDefault();
 					
+				validator.setEvent(event);
+				var result;
+					
 				// prevent submit for invalid forms or custom submit handlers
 				if ( this.cancel || validator.form() ) {
 					this.cancel = false;
@@ -283,18 +289,23 @@ jQuery.extend(jQuery.fn, {
 						validator.settings.submitHandler( validator.currentForm );
 						return false;
 					}
-					return true;
+					result = true;
 				} else {
 					validator.focusInvalid();
-					return false;
+					result = false;
 				}
+				
+				validator.setEvent();
+				return result;
 			});
 		}
 		
 		if ( validator.settings.event ) {
 			// validate all elements on some other event like blur or keypress
-			validator.elements.bind( validator.settings.event, function() {
+			validator.elements.bind( validator.settings.event, function(event) {
+				validator.setEvent(event);
 				validator.element(this);
+				validator.setEvent();
 			} );
 		}
 		
@@ -492,6 +503,12 @@ jQuery.extend(jQuery.validator, {
 			return result;
 		},
 		
+		setEvent: function(event) {
+			this.eventType = event
+				? event.type
+				: null;
+		},
+		
 		/**
 		 * Resets the controlled form, including resetting input fields
 		 * to their original value (requires form plugin), removing classes
@@ -578,13 +595,13 @@ jQuery.extend(jQuery.validator, {
 			this.toHide = this.errors().forId( this.clean( element ).name );
 		},
 	
-		check: function( element ) {
+		check: function( element, type ) {
 			element = this.clean( element );
 			jQuery( element ).add( jQuery(element).parent() ).removeClass( this.settings.errorClass );
 			var rules = this.rules( element );
 			for( var i = 0, rule; rule = rules[i++]; ) {
 				try {
-					var result = jQuery.validator.methods[rule.method]( jQuery.trim(element.value), element, rule.parameters );
+					var result = jQuery.validator.methods[rule.method]( jQuery.trim(element.value), element, rule.parameters, this );
 					if( result === -1 )
 						break;
 					if( !result ) {
@@ -841,7 +858,9 @@ jQuery.extend(jQuery.validator, {
 		 * @type Boolean
 		 * @cat Plugins/Validate/Methods
 		 */
-		required: function(value, element, param) {
+		required: function(value, element, param, validator) {
+			//if ( validator && validator.eventType && validator.eventType != "submit" )
+				//return;
 			// check if dependency is met
 			if ( !jQuery.validator.depend(param, element) )
 				return -1;
