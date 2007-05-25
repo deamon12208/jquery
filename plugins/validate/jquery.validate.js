@@ -19,6 +19,7 @@ TODO
  - stop Firefox password manager on invalid forms, maybe stopping the click event on submit buttons
  - modify build to add plugin header to packed bundle
  - make required optional while validating individual elements, only check required on submit
+ - add ignore-option, eg. ignore: "[@type=hidden]", using that expression to exclude elements to validate. Default: none, though submit and reset buttons are always ignored
  
  Examples:
  - masked input plugin integration
