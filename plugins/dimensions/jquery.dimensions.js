@@ -5,7 +5,7 @@
  * $LastChangedDate$
  * $Rev$
  *
- * Version: 1.0a
+ * Version: 1.0b
  */
 
 (function($){
@@ -412,9 +412,9 @@ var handleOffsetReturn = function(elem, options, x, y, sl, st) {
 		x += num(elem, 'paddingLeft');
 		y += num(elem, 'paddingTop');
 	}
-
-	// Opera thinks offset is scroll offset for display: inline elements
-	if ($.browser.opera && options.scroll && $.css(elem, 'display') == 'inline') {
+	
+	// do not include scroll offset on the element
+	if ( options.scroll ) {
 		sl -= elem.scrollLeft;
 		st -= elem.scrollTop;
 	}

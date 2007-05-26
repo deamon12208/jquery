@@ -8,8 +8,8 @@
 		<!-- load latest build of jquery.js -->
 		<script type="text/javascript" src="../../../jquery/dist/jquery.js"></script>
 		
-		<!-- load firebug lite -->
-		<script type="text/javascript" src="../../../firebuglite/firebug.js"></script>
+		<!-- load firebug lite
+		<script type="text/javascript" src="../../../../firebug/firebug.js"></script> -->
 
 		<!-- load dimensions.js (this is what we're testing! -->
 		<script type="text/javascript" src="../jquery.dimensions.js"></script>
@@ -31,12 +31,12 @@
 					var offset = {};
 					var time = (new Date()).getTime();
 					$(id).offset(options, offset);
-					console.log(((new Date()).getTime() - time) + ' milliseconds');
+					//console.log(((new Date()).getTime() - time) + ' milliseconds');
 					$('#moveable').css(offset);
 					var props = '';
 					for (prop in offset)
 						props += prop + ': ' + offset[prop] + '\n';
-					console.log(props);
+					//console.log(props);
 					return false;
 				});
 			});
