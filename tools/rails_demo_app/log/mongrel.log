@@ -1,0 +1,756 @@
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3000
+/opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/tcphack.rb:12:in `initialize_without_backlog': Address already in use - bind(2) (Errno::EADDRINUSE)
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/tcphack.rb:12:in `initialize'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:560:in `initialize'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:128:in `listener'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:98:in `cloaker_'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:51:in `initialize'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:83:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+	from /opt/local/bin/mongrel_rails:18
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+/opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require': /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20: parse error, unexpected tASSOC (SyntaxError)
+    html = content_tag("div", {class => "tab_container" + prefs.to_camelized_json}.merge(html_options)) do
+                                       ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20: parse error, unexpected '}', expecting kEND
+    html = content_tag("div", {class => "tab_container" + prefs.to_camelized_json}.merge(html_options)) do
+                                                                                  ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20: parse error, unexpected ')', expecting kEND
+    html = content_tag("div", {class => "tab_container" + prefs.to_camelized_json}.merge(html_options)) do
+                                                                                                       ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:37: parse error, unexpected kEND, expecting $	from /opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/init.rb:5:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/core_ext/kernel/reporting.rb:11:in `silence_warnings'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	 ... 10 levels...
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:51:in `initialize'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:83:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3000
+/opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/tcphack.rb:12:in `initialize_without_backlog': Address already in use - bind(2) (Errno::EADDRINUSE)
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/tcphack.rb:12:in `initialize'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:560:in `initialize'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:128:in `listener'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:98:in `cloaker_'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:51:in `initialize'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:83:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+	from /opt/local/bin/mongrel_rails:18
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+/opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require': /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20: parse error, unexpected tASSOC (SyntaxError)
+    html = content_tag("div", {class => "tab_container" + prefs.to_camelized_json}.merge(html_options)) do
+                                       ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20: parse error, unexpected '}', expecting kEND
+    html = content_tag("div", {class => "tab_container" + prefs.to_camelized_json}.merge(html_options)) do
+                                                                                  ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20: parse error, unexpected ')', expecting kEND
+    html = content_tag("div", {class => "tab_container" + prefs.to_camelized_json}.merge(html_options)) do
+                                                                                                       ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:37: parse error, unexpected kEND, expecting $	from /opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/init.rb:5:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/core_ext/kernel/reporting.rb:11:in `silence_warnings'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	 ... 11 levels...
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:83:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+	from /opt/local/bin/mongrel_rails:18
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+/opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require': /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20: parse error, unexpected tASSOC (SyntaxError)
+    html = content_tag "div", {class => "tab_container" + prefs.to_camelized_json}.merge(html_options) do
+                                       ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20: parse error, unexpected '}', expecting kEND
+    html = content_tag "div", {class => "tab_container" + prefs.to_camelized_json}.merge(html_options) do
+                                                                                  ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20: parse error, unexpected kDO_BLOCK, expecting kEND
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:22: parse error, unexpected kDO_BLOCK, expecting kEND
+        options.each do |k,v|
+                       ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:22: parse error, unexpected '|', expecting '='
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:30: parse error, unexpected kEND, expecting $	from /opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/init.rb:5:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/core_ext/kernel/reporting.rb:11:in `silence_warnings'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	 ... 11 levels...
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:83:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+	from /opt/local/bin/mongrel_rails:18
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+/opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require': /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20: parse error, unexpected tASSOC (SyntaxError)
+    html = content_tag "div", {class => "tab_container" + prefs.to_camelized_json}.merge(html_options) do
+                                       ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20: parse error, unexpected '}', expecting kEND
+    html = content_tag "div", {class => "tab_container" + prefs.to_camelized_json}.merge(html_options) do
+                                                                                  ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20: parse error, unexpected kDO_BLOCK, expecting kEND
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:27: parse error, unexpected '+', expecting kEND
+      end + capture(&block)
+           ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:36: parse error, unexpected kEND, expecting $	from /opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/init.rb:5:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/core_ext/kernel/reporting.rb:11:in `silence_warnings'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	 ... 11 levels...
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:83:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+	from /opt/local/bin/mongrel_rails:18
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+/opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require': /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20: parse error, unexpected tASSOC (SyntaxError)
+    html = content_tag "div", {class => "tab_container" + prefs.to_camelized_json}.merge(html_options) do
+                                       ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20: parse error, unexpected '}', expecting kEND
+    html = content_tag "div", {class => "tab_container" + prefs.to_camelized_json}.merge(html_options) do
+                                                                                  ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20: parse error, unexpected kDO_BLOCK, expecting kEND
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:36: parse error, unexpected kEND, expecting $	from /opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/init.rb:5:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/core_ext/kernel/reporting.rb:11:in `silence_warnings'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	 ... 11 levels...
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:83:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+	from /opt/local/bin/mongrel_rails:18
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+/opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require': /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:21: parse error, unexpected kDO_BLOCK, expecting tASSOC (SyntaxError)
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:23: parse error, unexpected kDO_BLOCK, expecting kEND
+        options.each do |k,v|
+                       ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:23: parse error, unexpected '|', expecting '='
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:24: parse error, unexpected kDO_BLOCK, expecting kEND
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:25: parse error, unexpected ':', expecting '='
+            html.a, v :href => "##{k}"
+                       ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:28: parse error, unexpected kEND, expecting $	from /opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/init.rb:5:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/core_ext/kernel/reporting.rb:11:in `silence_warnings'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	 ... 10 levels...
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:51:in `initialize'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:83:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+/opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require': /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:21: parse error, unexpected kDO_BLOCK, expecting tASSOC (SyntaxError)
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:23: parse error, unexpected kDO_BLOCK, expecting kEND
+        options.each do |k,v|
+                       ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:23: parse error, unexpected '|', expecting '='
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:24: parse error, unexpected kDO_BLOCK, expecting kEND
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:25: parse error, unexpected tASSOC, expecting tCOLON2 or '[' or '.'
+            html.a, v, :href => "##{k}"
+                               ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:28: parse error, unexpected kEND, expecting $	from /opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/init.rb:5:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/core_ext/kernel/reporting.rb:11:in `silence_warnings'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	 ... 11 levels...
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:83:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+	from /opt/local/bin/mongrel_rails:18
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+/opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require': /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:21: parse error, unexpected kDO_BLOCK, expecting tASSOC (SyntaxError)
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:23: parse error, unexpected kDO_BLOCK, expecting kEND
+        options.each do |k,v|
+                       ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:23: parse error, unexpected '|', expecting '='
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:24: parse error, unexpected kDO_BLOCK, expecting kEND
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:28: parse error, unexpected kEND, expecting $	from /opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/init.rb:5:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/core_ext/kernel/reporting.rb:11:in `silence_warnings'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	 ... 11 levels...
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:83:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+	from /opt/local/bin/mongrel_rails:18
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+/opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require': /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:21: parse error, unexpected kDO_BLOCK, expecting tASSOC (SyntaxError)
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:22: parse error, unexpected kDO_BLOCK, expecting kEND
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:23: parse error, unexpected kDO_BLOCK, expecting kEND
+        options.each do |k,v|
+                       ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:23: parse error, unexpected '|', expecting '='
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:24: parse error, unexpected kDO_BLOCK, expecting kEND
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:28: parse error, unexpected kEND, expecting $	from /opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/init.rb:5:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/core_ext/kernel/reporting.rb:11:in `silence_warnings'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	 ... 11 levels...
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:83:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+	from /opt/local/bin/mongrel_rails:18
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+/opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require': /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20: parse error, unexpected kDO_BLOCK, expecting tASSOC (SyntaxError)
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:21: parse error, unexpected kDO_BLOCK, expecting kEND
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:30: parse error, unexpected kEND, expecting $	from /opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/init.rb:5:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/core_ext/kernel/reporting.rb:11:in `silence_warnings'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	 ... 11 levels...
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:83:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+	from /opt/local/bin/mongrel_rails:18
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+/opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require': /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20: parse error, unexpected kDO_BLOCK, expecting tASSOC (SyntaxError)
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:21: parse error, unexpected kDO_BLOCK, expecting kEND
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:30: parse error, unexpected kEND, expecting $	from /opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/init.rb:5:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/core_ext/kernel/reporting.rb:11:in `silence_warnings'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	 ... 11 levels...
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:83:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+	from /opt/local/bin/mongrel_rails:18
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+/opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require': /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20: parse error, unexpected tASSOC, expecting '}' (SyntaxError)
+    html.div {:class => "tab_container " + prefs.to_camelized_json}.merge(html_options).merge(:id => id) do
+                       ^	from /opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/init.rb:5:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/core_ext/kernel/reporting.rb:11:in `silence_warnings'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	 ... 11 levels...
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:83:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+	from /opt/local/bin/mongrel_rails:18
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+/opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require': /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20: parse error, unexpected tASSOC, expecting '}' (SyntaxError)
+    html.div {:class => ("tab_container " + prefs.to_camelized_json)}.merge(html_options).merge(:id => id) do
+                       ^	from /opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/init.rb:5:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/core_ext/kernel/reporting.rb:11:in `silence_warnings'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	 ... 11 levels...
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:83:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+	from /opt/local/bin/mongrel_rails:18
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+(irb):3: warning: don't put space before argument parentheses
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+/opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require': /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:24: parse error, unexpected '{', expecting kEND (SyntaxError)
+            html.a :href => "##{fragment[0]}" { >> fragments.inspect }
+                                               ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:24: parse error, unexpected '}', expecting kEND
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:37: parse error, unexpected kEND, expecting '}'
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:39: class definition in method body
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:45: parse error, unexpected $, expecting '}'	from /opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/init.rb:5:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/core_ext/kernel/reporting.rb:11:in `silence_warnings'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	 ... 10 levels...
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:51:in `initialize'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:83:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+/opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `gem_original_require': /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:24: parse error, unexpected '{', expecting kEND (SyntaxError)
+            html.a :href => "##{fragment[0]}" { fragments.inspect }
+                                               ^
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:24: parse error, unexpected '}', expecting kEND
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:37: parse error, unexpected kEND, expecting '}'
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:39: class definition in method body
+/Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:45: parse error, unexpected $, expecting '}'	from /opt/local/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:342:in `new_constants_in'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/dependencies.rb:495:in `require'
+	from /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/init.rb:5:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	from /opt/local/lib/ruby/gems/1.8/gems/activesupport-1.4.2/lib/active_support/core_ext/kernel/reporting.rb:11:in `silence_warnings'
+	from /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/initializer.rb:401:in `load_plugin'
+	 ... 11 levels...
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:83:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+	from /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+	from /opt/local/bin/mongrel_rails:18
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid
+** USR2 signal received.
+** Restarting with arguments:  ruby /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails start -d -p 3001
+** Daemonized, any open files are closed.  Look at log/mongrel.pid and log/mongrel.log for info.
+** Starting Mongrel listening at 0.0.0.0:3001
+** Starting Rails with development environment...
+** Rails loaded.
+** Loading any Rails specific GemPlugins
+** Signals ready.  TERM => stop.  USR2 => restart.  INT => stop (no restart).
+** Rails signals registered.  HUP => reload (without restart).  It might not work well.
+** Mongrel available at 0.0.0.0:3001
+** Writing PID file to log/mongrel.pid

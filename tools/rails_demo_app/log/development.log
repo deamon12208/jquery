@@ -1,0 +1,2368 @@
+JQueryController: missing default helper path j_query_helper
+JQueryController: missing default helper path j_query_helper
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2007-05-25 16:19:42) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {}
+
+
+ActionController::RoutingError (no route found to match "/jquery_demo" with {:method=>:get}):
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1292:in `recognize_path'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1282:in `recognize'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:40:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+    /opt/local/bin/mongrel_rails:18
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (404 Page Not Found)
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 16:20:12) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.02874 (34 reqs/sec) | Rendering: 0.01853 (64%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2007-05-25 16:20:13) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {}
+
+
+ActionController::RoutingError (no route found to match "/javascripts/metadata.js" with {:method=>:get}):
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1292:in `recognize_path'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1282:in `recognize'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:40:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+    /opt/local/bin/mongrel_rails:18
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (404 Page Not Found)
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 16:20:13) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"c0d04f05331c8d8a54aa64144acb1ac3"=>nil, "action"=>"app_jquery", "controller"=>"j_query"}
+Completed in 0.00093 (1075 reqs/sec) | Rendering: 0.00028 (30%) | 200 OK [http://localhost/j_query/app_jquery?c0d04f05331c8d8a54aa64144acb1ac3]
+JQueryController: missing default helper path j_query_helper
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 16:25:10) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00645 (155 reqs/sec) | Rendering: 0.00367 (56%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2007-05-25 16:25:11) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {}
+
+
+ActionController::RoutingError (no route found to match "/javascripts/metadata.js" with {:method=>:get}):
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1292:in `recognize_path'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1282:in `recognize'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:40:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (404 Page Not Found)
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 16:25:11) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "98c3400c791fb4ca53546e203213bd9e"=>nil}
+Completed in 0.00102 (976 reqs/sec) | Rendering: 0.00032 (31%) | 200 OK [http://localhost/j_query/app_jquery?98c3400c791fb4ca53546e203213bd9e]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 16:28:04) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00466 (214 reqs/sec) | Rendering: 0.00184 (39%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 16:28:04) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "98c3400c791fb4ca53546e203213bd9e"=>nil}
+
+
+Errno::ENOENT (No such file or directory - /Users/yehuda/textmate/jqor_test/config/../public/javascripts/sortable_tables.js):
+    /vendor/plugins/jquery_on_rails/lib/jqor_control.rb:6:in `read'
+    /vendor/plugins/jquery_on_rails/lib/jqor_control.rb:6:in `app_jquery'
+    /vendor/plugins/jquery_on_rails/lib/jqor_control.rb:5:in `app_jquery'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:1095:in `perform_action_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:632:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:619:in `perform_action_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/rescue.rb:83:in `perform_action'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:430:in `process_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:624:in `process_without_session_management_support'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/session_management.rb:114:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:330:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:41:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 16:28:51) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00474 (210 reqs/sec) | Rendering: 0.00185 (38%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 16:28:51) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "98c3400c791fb4ca53546e203213bd9e"=>nil}
+
+
+Errno::ENOENT (No such file or directory - /Users/yehuda/textmate/jqor_test/config/../public/javascripts/sortable_tables.js):
+    /vendor/plugins/jquery_on_rails/lib/jqor_control.rb:6:in `read'
+    /vendor/plugins/jquery_on_rails/lib/jqor_control.rb:6:in `app_jquery'
+    /vendor/plugins/jquery_on_rails/lib/jqor_control.rb:5:in `app_jquery'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:1095:in `perform_action_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:632:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:619:in `perform_action_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/rescue.rb:83:in `perform_action'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:430:in `process_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:624:in `process_without_session_management_support'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/session_management.rb:114:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:330:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:41:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 16:29:13) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00641 (156 reqs/sec) | Rendering: 0.00347 (54%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 16:29:13) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "98c3400c791fb4ca53546e203213bd9e"=>nil}
+Completed in 0.00113 (885 reqs/sec) | Rendering: 0.00044 (38%) | 200 OK [http://localhost/j_query/app_jquery?98c3400c791fb4ca53546e203213bd9e]
+JQueryController: missing default helper path j_query_helper
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 16:52:44) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+ERROR: compiling _run_rhtml_47app47views47rails_demo47index46rhtml RAISED compile error
+/Users/yehuda/textmate/jqor_test/config/../app/views/rails_demo/index.rhtml:55: parse error, unexpected kEND, expecting $
+Function body: def _run_rhtml_47app47views47rails_demo47index46rhtml(local_assigns)
+_erbout = ''; _erbout.concat "<style>\n"
+_erbout.concat "  table.sortable_table {\n"
+_erbout.concat "    border: 1px solid #000;\n"
+_erbout.concat "    border-collapse: collapse;\n"
+_erbout.concat "  }\n"
+_erbout.concat "  \n"
+_erbout.concat "  table.sortable_table th {\n"
+_erbout.concat "    border-bottom: 1px solid #ccc;\n"
+_erbout.concat "  }\n"
+_erbout.concat "  \n"
+_erbout.concat "  table.sortable_table th, table.sortable_table td {\n"
+_erbout.concat "    padding: 5px;\n"
+_erbout.concat "  }\n"
+_erbout.concat "  \n"
+_erbout.concat "  table.sortable_table tr.even {\n"
+_erbout.concat "    background-color: #fcc;\n"
+_erbout.concat "  }\n"
+_erbout.concat "  \n"
+_erbout.concat "  table.sortable_table tr.odd {\n"
+_erbout.concat "    background-color: #ffc;\n"
+_erbout.concat "  }  \n"
+_erbout.concat "</style>\n"
+_erbout.concat "\n"
+ sortable_table :sort_class_asc => "ascending", :sort_class_desc => "descending", 
+    :striping_row_class => ["even", "odd"], :stripe_rows_on_start_up => true do ; _erbout.concat "\n"
+_erbout.concat "  <thead>\n"
+_erbout.concat "    <tr>\n"
+_erbout.concat "      <th>Col 1</th>\n"
+_erbout.concat "      <th>Col 2</th>\n"
+_erbout.concat "    </tr>\n"
+_erbout.concat "  </thead>\n"
+_erbout.concat "  <tbody>\n"
+_erbout.concat "    <tr>\n"
+_erbout.concat "      <td>Yehuda Katz</td>\n"
+_erbout.concat "      <td>$55.22</td>\n"
+_erbout.concat "    </tr>\n"
+_erbout.concat "    <tr>\n"
+_erbout.concat "      <td>Leah Silber</td>\n"
+_erbout.concat "      <td>$62.50</td>\n"
+_erbout.concat "    </tr>    \n"
+_erbout.concat "  </tbody>\n"
+ end ; _erbout.concat "\n"
+_erbout.concat "\n"
+ tab_container "my_container", "fragment-1" => "One", "fragment-2" => "Two", "fragment-3" => "Three", :prefs => { :fx_slide => true, :start => 2 } ; _erbout.concat "\n"
+_erbout.concat "  ";  tab_contents "fragment-1" do ; _erbout.concat "\n"
+_erbout.concat "  \n"
+_erbout.concat "  ";  end ; _erbout.concat "\n"
+_erbout.concat "  ";  tab_contents "fragment-2" do ; _erbout.concat "\n"
+_erbout.concat "  \n"
+_erbout.concat "  ";  end ; _erbout.concat "\n"
+_erbout.concat "  ";  tab_contents "fragment-3" do ; _erbout.concat "\n"
+_erbout.concat "  \n"
+_erbout.concat "  ";  end ; _erbout.concat "\n"
+ end ; _erbout
+end
+Backtrace: /Users/yehuda/textmate/jqor_test/config/../app/views/rails_demo/index.rhtml:55:in `compile_template'
+/opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:319:in `compile_and_render_template'
+/opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:301:in `render_template'
+/opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:260:in `render_file'
+/opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:806:in `render_file'
+/opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:711:in `render_with_no_layout'
+/opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/layout.rb:247:in `render_without_benchmark'
+/opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+/opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+/opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+/opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:1101:in `perform_action_without_filters'
+/opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:632:in `call_filter'
+/opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:638:in `call_filter'
+/opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:449:in `call'
+/opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:637:in `call_filter'
+/opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:619:in `perform_action_without_benchmark'
+/opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+/opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+/opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+/opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/rescue.rb:83:in `perform_action'
+/opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:430:in `process_without_filters'
+/opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:624:in `process_without_session_management_support'
+/opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/session_management.rb:114:in `process'
+/opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:330:in `process'
+/opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:41:in `dispatch'
+/opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+/opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+/opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+/opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+/opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+/opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+/opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+/opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+/opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+/opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+/opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+/opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+ActionView::TemplateError (compile error
+/Users/yehuda/textmate/jqor_test/config/../app/views/rails_demo/index.rhtml:55: parse error, unexpected kEND, expecting $) on line #55 of app/views/rails_demo/index.rhtml:
+52:   
+53:   <% end %>
+54: <% end %>
+    #{RAILS_ROOT}/app/views/rails_demo/index.rhtml:55:in `compile_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:319:in `compile_and_render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:301:in `render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:260:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:806:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:711:in `render_with_no_layout'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/layout.rb:247:in `render_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:1101:in `perform_action_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:632:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:638:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:449:in `call'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:637:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:619:in `perform_action_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/rescue.rb:83:in `perform_action'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:430:in `process_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:624:in `process_without_session_management_support'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/session_management.rb:114:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:330:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:41:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 16:53:08) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+
+
+ActionView::TemplateError (wrong number of arguments (2 for 1)) on line #44 of app/views/rails_demo/index.rhtml:
+41:   </tbody>
+42: <% end %>
+43: 
+44: <% tab_container "my_container", "fragment-1" => "One", "fragment-2" => "Two", "fragment-3" => "Three", :prefs => { :fx_slide => true, :start => 2 } do %>
+45:   <% tab_contents "fragment-1" do %>
+46:   
+47:   <% end %>
+
+    #{RAILS_ROOT}/app/views/rails_demo/index.rhtml:44:in `tab_container'
+    #{RAILS_ROOT}/app/views/rails_demo/index.rhtml:44:in `_run_rhtml_47app47views47rails_demo47index46rhtml'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:326:in `compile_and_render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:301:in `render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:260:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:806:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:711:in `render_with_no_layout'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/layout.rb:247:in `render_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:1101:in `perform_action_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:632:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:638:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:449:in `call'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:637:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:619:in `perform_action_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/rescue.rb:83:in `perform_action'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:430:in `process_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:624:in `process_without_session_management_support'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/session_management.rb:114:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:330:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:41:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 16:53:40) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+
+
+ActionView::TemplateError (wrong number of arguments (2 for 1)) on line #44 of app/views/rails_demo/index.rhtml:
+41:   </tbody>
+42: <% end %>
+43: 
+44: <% tab_container "my_container", "fragment-1" => "One", "fragment-2" => "Two", "fragment-3" => "Three", :prefs => { :fx_slide => true, :start => 2 } do %>
+45:   <% tab_contents "fragment-1" do %>
+46:   
+47:   <% end %>
+
+    #{RAILS_ROOT}/app/views/rails_demo/index.rhtml:44:in `tab_container'
+    #{RAILS_ROOT}/app/views/rails_demo/index.rhtml:44:in `_run_rhtml_47app47views47rails_demo47index46rhtml'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:326:in `compile_and_render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:301:in `render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:260:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:806:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:711:in `render_with_no_layout'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/layout.rb:247:in `render_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:1101:in `perform_action_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:632:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:638:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:449:in `call'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:637:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:619:in `perform_action_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/rescue.rb:83:in `perform_action'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:430:in `process_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:624:in `process_without_session_management_support'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/session_management.rb:114:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:330:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:41:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 16:53:47) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+
+
+ActionView::TemplateError (undefined local variable or method `_erbout' for #<#<Class:0x36e7874>:0x36e784c>) on line #44 of app/views/rails_demo/index.rhtml:
+41:   </tbody>
+42: <% end %>
+43: 
+44: <% tab_container "my_container", "fragment-1" => "One", "fragment-2" => "Two", "fragment-3" => "Three", :prefs => { :fx_slide => true, :start => 2 } do %>
+45:   <% tab_contents "fragment-1" do %>
+46:   
+47:   <% end %>
+
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:24:in `tab_container'
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:24:in `each'
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:23:in `tab_container'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/helpers/capture_helper.rb:98:in `capture_block'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/helpers/capture_helper.rb:65:in `capture'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/helpers/tag_helper.rb:50:in `content_tag'
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:22:in `tab_container'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/helpers/capture_helper.rb:98:in `capture_block'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/helpers/capture_helper.rb:65:in `capture'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/helpers/tag_helper.rb:50:in `content_tag'
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:21:in `tab_container'
+    #{RAILS_ROOT}/app/views/rails_demo/index.rhtml:44:in `_run_rhtml_47app47views47rails_demo47index46rhtml'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:326:in `compile_and_render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:301:in `render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:260:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:806:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:711:in `render_with_no_layout'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/layout.rb:247:in `render_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:1101:in `perform_action_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:632:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:638:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:449:in `call'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:637:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:619:in `perform_action_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/rescue.rb:83:in `perform_action'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:430:in `process_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:624:in `process_without_session_management_support'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/session_management.rb:114:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:330:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:41:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:07:20) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+
+
+ActionView::TemplateError (undefined local variable or method `html' for #<#<Class:0x36d4db4>:0x36d4d8c>) on line #44 of app/views/rails_demo/index.rhtml:
+41:   </tbody>
+42: <% end %>
+43: 
+44: <% tab_container "my_container", "fragment-1" => "One", "fragment-2" => "Two", "fragment-3" => "Three", :prefs => { :fx_slide => true, :start => 2 } do %>
+45:   <% tab_contents "fragment-1" do %>
+46:   
+47:   <% end %>
+
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20:in `tab_container'
+    #{RAILS_ROOT}/app/views/rails_demo/index.rhtml:44:in `_run_rhtml_47app47views47rails_demo47index46rhtml'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:326:in `compile_and_render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:301:in `render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:260:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:806:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:711:in `render_with_no_layout'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/layout.rb:247:in `render_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:1101:in `perform_action_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:632:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:638:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:449:in `call'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:637:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:619:in `perform_action_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/rescue.rb:83:in `perform_action'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:430:in `process_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:624:in `process_without_session_management_support'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/session_management.rb:114:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:330:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:41:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+    /opt/local/bin/mongrel_rails:18
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:08:08) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+
+
+ActionView::TemplateError (undefined local variable or method `html' for #<#<Class:0x360512c>:0x3605104>) on line #44 of app/views/rails_demo/index.rhtml:
+41:   </tbody>
+42: <% end %>
+43: 
+44: <% tab_container "my_container", "fragment-1" => "One", "fragment-2" => "Two", "fragment-3" => "Three", :prefs => { :fx_slide => true, :start => 2 } do %>
+45:   <% tab_contents "fragment-1" do %>
+46:   
+47:   <% end %>
+
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20:in `tab_container'
+    #{RAILS_ROOT}/app/views/rails_demo/index.rhtml:44:in `_run_rhtml_47app47views47rails_demo47index46rhtml'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:326:in `compile_and_render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:301:in `render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:260:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:806:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:711:in `render_with_no_layout'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/layout.rb:247:in `render_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:1101:in `perform_action_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:632:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:638:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:449:in `call'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:637:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:619:in `perform_action_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/rescue.rb:83:in `perform_action'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:430:in `process_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:624:in `process_without_session_management_support'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/session_management.rb:114:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:330:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:41:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+    /opt/local/bin/mongrel_rails:18
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:08:22) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+
+
+ActionView::TemplateError (undefined local variable or method `html' for #<#<Class:0x36e78c4>:0x36e789c>) on line #44 of app/views/rails_demo/index.rhtml:
+41:   </tbody>
+42: <% end %>
+43: 
+44: <% tab_container "my_container", "fragment-1" => "One", "fragment-2" => "Two", "fragment-3" => "Three", :prefs => { :fx_slide => true, :start => 2 } do %>
+45:   <% tab_contents "fragment-1" do %>
+46:   
+47:   <% end %>
+
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:21:in `tab_container'
+    #{RAILS_ROOT}/app/views/rails_demo/index.rhtml:44:in `_run_rhtml_47app47views47rails_demo47index46rhtml'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:326:in `compile_and_render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:301:in `render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:260:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:806:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:711:in `render_with_no_layout'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/layout.rb:247:in `render_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:1101:in `perform_action_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:632:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:638:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:449:in `call'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:637:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:619:in `perform_action_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/rescue.rb:83:in `perform_action'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:430:in `process_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:624:in `process_without_session_management_support'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/session_management.rb:114:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:330:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:41:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:09:08) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+
+
+ActionView::TemplateError (undefined local variable or method `html' for #<#<Class:0x3588dd4>:0x3588dac>) on line #44 of app/views/rails_demo/index.rhtml:
+41:   </tbody>
+42: <% end %>
+43: 
+44: <% tab_container "my_container", "fragment-1" => "One", "fragment-2" => "Two", "fragment-3" => "Three", :prefs => { :fx_slide => true, :start => 2 } do %>
+45:   <% tab_contents "fragment-1" do %>
+46:   
+47:   <% end %>
+
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:21:in `tab_container'
+    #{RAILS_ROOT}/app/views/rails_demo/index.rhtml:44:in `_run_rhtml_47app47views47rails_demo47index46rhtml'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:326:in `compile_and_render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:301:in `render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:260:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:806:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:711:in `render_with_no_layout'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/layout.rb:247:in `render_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:1101:in `perform_action_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:632:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:638:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:449:in `call'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:637:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:619:in `perform_action_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/rescue.rb:83:in `perform_action'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:430:in `process_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:624:in `process_without_session_management_support'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/session_management.rb:114:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:330:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:41:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:09:16) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+
+
+ActionView::TemplateError (undefined local variable or method `html' for #<#<Class:0x36e8aa8>:0x36e8a80>) on line #44 of app/views/rails_demo/index.rhtml:
+41:   </tbody>
+42: <% end %>
+43: 
+44: <% tab_container "my_container", "fragment-1" => "One", "fragment-2" => "Two", "fragment-3" => "Three", :prefs => { :fx_slide => true, :start => 2 } do %>
+45:   <% tab_contents "fragment-1" do %>
+46:   
+47:   <% end %>
+
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20:in `tab_container'
+    #{RAILS_ROOT}/app/views/rails_demo/index.rhtml:44:in `_run_rhtml_47app47views47rails_demo47index46rhtml'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:326:in `compile_and_render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:301:in `render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:260:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:806:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:711:in `render_with_no_layout'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/layout.rb:247:in `render_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:1101:in `perform_action_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:632:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:638:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:449:in `call'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:637:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:619:in `perform_action_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/rescue.rb:83:in `perform_action'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:430:in `process_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:624:in `process_without_session_management_support'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/session_management.rb:114:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:330:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:41:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:09:50) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+
+
+ActionView::TemplateError (undefined local variable or method `html' for #<#<Class:0x361a4f0>:0x361a4c8>) on line #44 of app/views/rails_demo/index.rhtml:
+41:   </tbody>
+42: <% end %>
+43: 
+44: <% tab_container "my_container", "fragment-1" => "One", "fragment-2" => "Two", "fragment-3" => "Three", :prefs => { :fx_slide => true, :start => 2 } do %>
+45:   <% tab_contents "fragment-1" do %>
+46:   
+47:   <% end %>
+
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20:in `tab_container'
+    #{RAILS_ROOT}/app/views/rails_demo/index.rhtml:44:in `_run_rhtml_47app47views47rails_demo47index46rhtml'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:326:in `compile_and_render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:301:in `render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:260:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:806:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:711:in `render_with_no_layout'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/layout.rb:247:in `render_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:1101:in `perform_action_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:632:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:638:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:449:in `call'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:637:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:619:in `perform_action_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/rescue.rb:83:in `perform_action'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:430:in `process_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:624:in `process_without_session_management_support'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/session_management.rb:114:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:330:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:41:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:09:56) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+
+
+ActionView::TemplateError (undefined local variable or method `html' for #<#<Class:0x36e7978>:0x36e7950>) on line #44 of app/views/rails_demo/index.rhtml:
+41:   </tbody>
+42: <% end %>
+43: 
+44: <% tab_container "my_container", "fragment-1" => "One", "fragment-2" => "Two", "fragment-3" => "Three", :prefs => { :fx_slide => true, :start => 2 } do %>
+45:   <% tab_contents "fragment-1" do %>
+46:   
+47:   <% end %>
+
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:20:in `tab_container'
+    #{RAILS_ROOT}/app/views/rails_demo/index.rhtml:44:in `_run_rhtml_47app47views47rails_demo47index46rhtml'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:326:in `compile_and_render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:301:in `render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:260:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:806:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:711:in `render_with_no_layout'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/layout.rb:247:in `render_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:1101:in `perform_action_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:632:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:638:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:449:in `call'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:637:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:619:in `perform_action_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/rescue.rb:83:in `perform_action'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:430:in `process_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:624:in `process_without_session_management_support'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/session_management.rb:114:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:330:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:41:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:10:47) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+
+
+ActionView::TemplateError (undefined local variable or method `_erbout' for #<#<Class:0x36e7838>:0x36e7810>) on line #44 of app/views/rails_demo/index.rhtml:
+41:   </tbody>
+42: <% end %>
+43: 
+44: <% tab_container "my_container", "fragment-1" => "One", "fragment-2" => "Two", "fragment-3" => "Three", :prefs => { :fx_slide => true, :start => 2 } do %>
+45:   <% tab_contents "fragment-1" do %>
+46:   
+47:   <% end %>
+
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:30:in `tab_container'
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:30:in `tab_container'
+    #{RAILS_ROOT}/app/views/rails_demo/index.rhtml:44:in `_run_rhtml_47app47views47rails_demo47index46rhtml'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:326:in `compile_and_render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:301:in `render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:260:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:806:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:711:in `render_with_no_layout'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/layout.rb:247:in `render_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:1101:in `perform_action_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:632:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:638:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:449:in `call'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:637:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:619:in `perform_action_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/rescue.rb:83:in `perform_action'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:430:in `process_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:624:in `process_without_session_management_support'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/session_management.rb:114:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:330:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:41:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:11:06) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+
+
+ActionView::TemplateError (undefined local variable or method `_erbout' for #<#<Class:0x3613b00>:0x3613ad8>) on line #44 of app/views/rails_demo/index.rhtml:
+41:   </tbody>
+42: <% end %>
+43: 
+44: <% tab_container "my_container", "fragment-1" => "One", "fragment-2" => "Two", "fragment-3" => "Three", :prefs => { :fx_slide => true, :start => 2 } do %>
+45:   <% tab_contents "fragment-1" do %>
+46:   
+47:   <% end %>
+
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:30:in `tab_container'
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:30:in `tab_container'
+    #{RAILS_ROOT}/app/views/rails_demo/index.rhtml:44:in `_run_rhtml_47app47views47rails_demo47index46rhtml'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:326:in `compile_and_render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:301:in `render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:260:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:806:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:711:in `render_with_no_layout'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/layout.rb:247:in `render_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:1101:in `perform_action_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:632:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:638:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:449:in `call'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:637:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:619:in `perform_action_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/rescue.rb:83:in `perform_action'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:430:in `process_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:624:in `process_without_session_management_support'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/session_management.rb:114:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:330:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:41:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:11:13) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+
+
+ActionView::TemplateError (undefined local variable or method `_erbout' for #<#<Class:0x36e7914>:0x36e78ec>) on line #44 of app/views/rails_demo/index.rhtml:
+41:   </tbody>
+42: <% end %>
+43: 
+44: <% tab_container "my_container", "fragment-1" => "One", "fragment-2" => "Two", "fragment-3" => "Three", :prefs => { :fx_slide => true, :start => 2 } do %>
+45:   <% tab_contents "fragment-1" do %>
+46:   
+47:   <% end %>
+
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:30:in `tab_container'
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:30:in `tab_container'
+    #{RAILS_ROOT}/app/views/rails_demo/index.rhtml:44:in `_run_rhtml_47app47views47rails_demo47index46rhtml'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:326:in `compile_and_render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:301:in `render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:260:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:806:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:711:in `render_with_no_layout'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/layout.rb:247:in `render_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:1101:in `perform_action_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:632:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:638:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:449:in `call'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:637:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:619:in `perform_action_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/rescue.rb:83:in `perform_action'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:430:in `process_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:624:in `process_without_session_management_support'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/session_management.rb:114:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:330:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:41:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:12:16) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+
+
+ActionView::TemplateError (undefined local variable or method `_erbout' for #<#<Class:0x3614ac8>:0x3614aa0>) on line #44 of app/views/rails_demo/index.rhtml:
+41:   </tbody>
+42: <% end %>
+43: 
+44: <% tab_container "my_container", "fragment-1" => "One", "fragment-2" => "Two", "fragment-3" => "Three", :prefs => { :fx_slide => true, :start => 2 } do %>
+45:   <% tab_contents "fragment-1" do %>
+46:   
+47:   <% end %>
+
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:30:in `tab_container'
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:30:in `tab_container'
+    #{RAILS_ROOT}/app/views/rails_demo/index.rhtml:44:in `_run_rhtml_47app47views47rails_demo47index46rhtml'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:326:in `compile_and_render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:301:in `render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:260:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:806:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:711:in `render_with_no_layout'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/layout.rb:247:in `render_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:1101:in `perform_action_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:632:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:638:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:449:in `call'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:637:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:619:in `perform_action_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/rescue.rb:83:in `perform_action'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:430:in `process_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:624:in `process_without_session_management_support'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/session_management.rb:114:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:330:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:41:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:12:32) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+
+
+ActionView::TemplateError (undefined local variable or method `_erbout' for #<#<Class:0x35685ac>:0x3568584>) on line #44 of app/views/rails_demo/index.rhtml:
+41:   </tbody>
+42: <% end %>
+43: 
+44: <% tab_container "my_container", "fragment-1" => "One", "fragment-2" => "Two", "fragment-3" => "Three", :prefs => { :fx_slide => true, :start => 2 } do %>
+45:   <% tab_contents "fragment-1" do %>
+46:   
+47:   <% end %>
+
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:30:in `tab_container'
+    #{RAILS_ROOT}/vendor/plugins/jquery_on_rails/lib/jquery_helpers.rb:30:in `tab_container'
+    #{RAILS_ROOT}/app/views/rails_demo/index.rhtml:44:in `_run_rhtml_47app47views47rails_demo47index46rhtml'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:326:in `compile_and_render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:301:in `render_template'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_view/base.rb:260:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:806:in `render_file'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:711:in `render_with_no_layout'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/layout.rb:247:in `render_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:50:in `render'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:1101:in `perform_action_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:632:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:638:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:449:in `call'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:637:in `call_filter'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:619:in `perform_action_without_benchmark'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/benchmarking.rb:66:in `perform_action_without_rescue'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/rescue.rb:83:in `perform_action'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:430:in `process_without_filters'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/filters.rb:624:in `process_without_session_management_support'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/session_management.rb:114:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/base.rb:330:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:41:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:12:36) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00835 (119 reqs/sec) | Rendering: 0.00505 (60%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:12:37) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"9f1cba2f981a173b313c6680d345f515"=>nil, "action"=>"app_jquery", "controller"=>"j_query"}
+Completed in 0.00116 (862 reqs/sec) | Rendering: 0.00044 (38%) | 200 OK [http://localhost/j_query/app_jquery?9f1cba2f981a173b313c6680d345f515]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:13:07) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00639 (156 reqs/sec) | Rendering: 0.00316 (49%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:13:07) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"9f1cba2f981a173b313c6680d345f515"=>nil, "action"=>"app_jquery", "controller"=>"j_query"}
+Completed in 0.00032 (3116 reqs/sec) | Rendering: 0.00019 (59%) | 200 OK [http://localhost/j_query/app_jquery?9f1cba2f981a173b313c6680d345f515]
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:14:53) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00844 (118 reqs/sec) | Rendering: 0.00513 (60%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:14:54) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "528ea1badefbfb0031ebc8162edbc67f"=>nil}
+Completed in 0.00114 (874 reqs/sec) | Rendering: 0.00044 (38%) | 200 OK [http://localhost/j_query/app_jquery?528ea1badefbfb0031ebc8162edbc67f]
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:15:26) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00856 (116 reqs/sec) | Rendering: 0.00513 (59%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:15:26) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "528ea1badefbfb0031ebc8162edbc67f"=>nil}
+Completed in 0.00115 (866 reqs/sec) | Rendering: 0.00043 (37%) | 200 OK [http://localhost/j_query/app_jquery?528ea1badefbfb0031ebc8162edbc67f]
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:16:19) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00877 (114 reqs/sec) | Rendering: 0.00538 (61%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:16:19) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "3aa1fdf6e56d54e53fba646b822834ac"=>nil, "controller"=>"j_query"}
+Completed in 0.00117 (856 reqs/sec) | Rendering: 0.00044 (37%) | 200 OK [http://localhost/j_query/app_jquery?3aa1fdf6e56d54e53fba646b822834ac]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:16:38) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00634 (157 reqs/sec) | Rendering: 0.00303 (47%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:16:38) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "3aa1fdf6e56d54e53fba646b822834ac"=>nil, "controller"=>"j_query"}
+Completed in 0.00032 (3104 reqs/sec) | Rendering: 0.00019 (59%) | 200 OK [http://localhost/j_query/app_jquery?3aa1fdf6e56d54e53fba646b822834ac]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:16:48) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00602 (166 reqs/sec) | Rendering: 0.00283 (47%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:16:48) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "3aa1fdf6e56d54e53fba646b822834ac"=>nil, "controller"=>"j_query"}
+Completed in 0.00032 (3134 reqs/sec) | Rendering: 0.00019 (59%) | 200 OK [http://localhost/j_query/app_jquery?3aa1fdf6e56d54e53fba646b822834ac]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:17:13) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00654 (152 reqs/sec) | Rendering: 0.00312 (47%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:17:13) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "3aa1fdf6e56d54e53fba646b822834ac"=>nil, "controller"=>"j_query"}
+Completed in 0.00035 (2841 reqs/sec) | Rendering: 0.00022 (62%) | 200 OK [http://localhost/j_query/app_jquery?3aa1fdf6e56d54e53fba646b822834ac]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:17:20) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00643 (155 reqs/sec) | Rendering: 0.00310 (48%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:17:20) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "3aa1fdf6e56d54e53fba646b822834ac"=>nil, "controller"=>"j_query"}
+Completed in 0.00035 (2872 reqs/sec) | Rendering: 0.00020 (56%) | 200 OK [http://localhost/j_query/app_jquery?3aa1fdf6e56d54e53fba646b822834ac]
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:18:14) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00880 (113 reqs/sec) | Rendering: 0.00544 (61%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:18:14) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "b318e9bd0da8f1678b4aad64144d2321"=>nil}
+Completed in 0.00116 (862 reqs/sec) | Rendering: 0.00044 (37%) | 200 OK [http://localhost/j_query/app_jquery?b318e9bd0da8f1678b4aad64144d2321]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:18:52) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00687 (145 reqs/sec) | Rendering: 0.00348 (50%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:18:53) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "b318e9bd0da8f1678b4aad64144d2321"=>nil}
+Completed in 0.00034 (2906 reqs/sec) | Rendering: 0.00021 (60%) | 200 OK [http://localhost/j_query/app_jquery?b318e9bd0da8f1678b4aad64144d2321]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:18:57) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00630 (158 reqs/sec) | Rendering: 0.00314 (49%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:18:57) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "b318e9bd0da8f1678b4aad64144d2321"=>nil}
+Completed in 0.00037 (2739 reqs/sec) | Rendering: 0.00020 (55%) | 200 OK [http://localhost/j_query/app_jquery?b318e9bd0da8f1678b4aad64144d2321]
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:19:06) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00847 (118 reqs/sec) | Rendering: 0.00518 (61%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:19:07) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "528ea1badefbfb0031ebc8162edbc67f"=>nil}
+Completed in 0.00119 (843 reqs/sec) | Rendering: 0.00045 (37%) | 200 OK [http://localhost/j_query/app_jquery?528ea1badefbfb0031ebc8162edbc67f]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:19:25) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00639 (156 reqs/sec) | Rendering: 0.00320 (50%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:19:25) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "528ea1badefbfb0031ebc8162edbc67f"=>nil}
+Completed in 0.00032 (3144 reqs/sec) | Rendering: 0.00019 (59%) | 200 OK [http://localhost/j_query/app_jquery?528ea1badefbfb0031ebc8162edbc67f]
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:19:29) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00854 (117 reqs/sec) | Rendering: 0.00524 (61%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:19:29) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "528ea1badefbfb0031ebc8162edbc67f"=>nil}
+Completed in 0.00121 (829 reqs/sec) | Rendering: 0.00046 (38%) | 200 OK [http://localhost/j_query/app_jquery?528ea1badefbfb0031ebc8162edbc67f]
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:19:45) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00850 (117 reqs/sec) | Rendering: 0.00516 (60%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:19:46) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "528ea1badefbfb0031ebc8162edbc67f"=>nil}
+Completed in 0.00117 (852 reqs/sec) | Rendering: 0.00044 (37%) | 200 OK [http://localhost/j_query/app_jquery?528ea1badefbfb0031ebc8162edbc67f]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:20:31) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00636 (157 reqs/sec) | Rendering: 0.00311 (48%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:20:32) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "528ea1badefbfb0031ebc8162edbc67f"=>nil}
+Completed in 0.00032 (3134 reqs/sec) | Rendering: 0.00019 (60%) | 200 OK [http://localhost/j_query/app_jquery?528ea1badefbfb0031ebc8162edbc67f]
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:20:35) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00811 (123 reqs/sec) | Rendering: 0.00484 (59%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:20:36) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "a29876794e70a3e39750e44f78e62537"=>nil}
+Completed in 0.00129 (774 reqs/sec) | Rendering: 0.00052 (40%) | 200 OK [http://localhost/j_query/app_jquery?a29876794e70a3e39750e44f78e62537]
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:20:44) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00830 (120 reqs/sec) | Rendering: 0.00504 (60%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:20:44) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "df430c735537c6469cc5ef11d8582fcf"=>nil}
+Completed in 0.00116 (859 reqs/sec) | Rendering: 0.00045 (39%) | 200 OK [http://localhost/j_query/app_jquery?df430c735537c6469cc5ef11d8582fcf]
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:21:16) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00823 (121 reqs/sec) | Rendering: 0.00493 (59%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:21:17) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "df430c735537c6469cc5ef11d8582fcf"=>nil}
+Completed in 0.00122 (819 reqs/sec) | Rendering: 0.00049 (39%) | 200 OK [http://localhost/j_query/app_jquery?df430c735537c6469cc5ef11d8582fcf]
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:21:51) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00836 (119 reqs/sec) | Rendering: 0.00499 (59%) | 200 OK [http://localhost/rails_demo]
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:22:10) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00887 (112 reqs/sec) | Rendering: 0.00536 (60%) | 200 OK [http://localhost/rails_demo]
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:22:45) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00852 (117 reqs/sec) | Rendering: 0.00513 (60%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:22:45) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"34a409f02ba56ad849555ffdd2784685"=>nil, "action"=>"app_jquery", "controller"=>"j_query"}
+Completed in 0.00121 (823 reqs/sec) | Rendering: 0.00047 (39%) | 200 OK [http://localhost/j_query/app_jquery?34a409f02ba56ad849555ffdd2784685]
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2007-05-25 17:22:48) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {}
+
+
+ActionController::RoutingError (no route found to match "/fragment-1" with {:method=>:get}):
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1292:in `recognize_path'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1282:in `recognize'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:40:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (404 Page Not Found)
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:23:18) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00873 (114 reqs/sec) | Rendering: 0.00534 (61%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:23:18) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"34a409f02ba56ad849555ffdd2784685"=>nil, "action"=>"app_jquery", "controller"=>"j_query"}
+Completed in 0.00116 (859 reqs/sec) | Rendering: 0.00044 (37%) | 200 OK [http://localhost/j_query/app_jquery?34a409f02ba56ad849555ffdd2784685]
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:24:29) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00905 (110 reqs/sec) | Rendering: 0.00515 (56%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:24:30) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"34a409f02ba56ad849555ffdd2784685"=>nil, "action"=>"app_jquery", "controller"=>"j_query"}
+Completed in 0.00138 (724 reqs/sec) | Rendering: 0.00058 (42%) | 200 OK [http://localhost/j_query/app_jquery?34a409f02ba56ad849555ffdd2784685]
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:25:10) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00984 (101 reqs/sec) | Rendering: 0.00595 (60%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:25:10) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"0dae221d7c3a325e9470ea3519fb6389"=>nil, "action"=>"app_jquery", "controller"=>"j_query"}
+Completed in 0.00134 (746 reqs/sec) | Rendering: 0.00060 (44%) | 200 OK [http://localhost/j_query/app_jquery?0dae221d7c3a325e9470ea3519fb6389]
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:26:15) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00971 (103 reqs/sec) | Rendering: 0.00560 (57%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:26:15) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"6abe4e36a189746bd4ccb26c6768b724"=>nil, "action"=>"app_jquery", "controller"=>"j_query"}
+Completed in 0.00136 (732 reqs/sec) | Rendering: 0.00059 (42%) | 200 OK [http://localhost/j_query/app_jquery?6abe4e36a189746bd4ccb26c6768b724]
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:28:19) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00996 (100 reqs/sec) | Rendering: 0.00585 (58%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:28:19) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"81da8b5505f4fee6426c77d7711dede5"=>nil, "action"=>"app_jquery", "controller"=>"j_query"}
+Completed in 0.00132 (756 reqs/sec) | Rendering: 0.00058 (43%) | 200 OK [http://localhost/j_query/app_jquery?81da8b5505f4fee6426c77d7711dede5]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:30:31) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00759 (131 reqs/sec) | Rendering: 0.00355 (46%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:30:31) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"81da8b5505f4fee6426c77d7711dede5"=>nil, "action"=>"app_jquery", "controller"=>"j_query"}
+Completed in 0.00081 (1237 reqs/sec) | Rendering: 0.00063 (77%) | 200 OK [http://localhost/j_query/app_jquery?81da8b5505f4fee6426c77d7711dede5]
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:30:40) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00958 (104 reqs/sec) | Rendering: 0.00551 (57%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:30:41) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"81da8b5505f4fee6426c77d7711dede5"=>nil, "action"=>"app_jquery", "controller"=>"j_query"}
+Completed in 0.00139 (721 reqs/sec) | Rendering: 0.00063 (45%) | 200 OK [http://localhost/j_query/app_jquery?81da8b5505f4fee6426c77d7711dede5]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:31:43) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00914 (109 reqs/sec) | Rendering: 0.00512 (56%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:31:44) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "fd4fcb9579e64a17eb02669c07e0a535"=>nil, "controller"=>"j_query"}
+Completed in 0.00037 (2674 reqs/sec) | Rendering: 0.00019 (51%) | 200 OK [http://localhost/j_query/app_jquery?fd4fcb9579e64a17eb02669c07e0a535]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:32:30) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00751 (133 reqs/sec) | Rendering: 0.00354 (47%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:32:30) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "fd4fcb9579e64a17eb02669c07e0a535"=>nil, "controller"=>"j_query"}
+Completed in 0.00039 (2597 reqs/sec) | Rendering: 0.00021 (53%) | 200 OK [http://localhost/j_query/app_jquery?fd4fcb9579e64a17eb02669c07e0a535]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:33:01) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00957 (104 reqs/sec) | Rendering: 0.00538 (56%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:33:01) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "fd4fcb9579e64a17eb02669c07e0a535"=>nil, "controller"=>"j_query"}
+Completed in 0.00040 (2511 reqs/sec) | Rendering: 0.00021 (51%) | 200 OK [http://localhost/j_query/app_jquery?fd4fcb9579e64a17eb02669c07e0a535]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:33:09) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00978 (102 reqs/sec) | Rendering: 0.00540 (55%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:33:10) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "fd45e6bf665bdafcb0d1dfe1d8e8a3f2"=>nil}
+Completed in 0.00048 (2083 reqs/sec) | Rendering: 0.00022 (45%) | 200 OK [http://localhost/j_query/app_jquery?fd45e6bf665bdafcb0d1dfe1d8e8a3f2]
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2007-05-25 17:33:10) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {}
+
+
+ActionController::RoutingError (no route found to match "/stylesheets/tab.png" with {:method=>:get}):
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1292:in `recognize_path'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1282:in `recognize'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:40:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (404 Page Not Found)
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:34:08) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00993 (100 reqs/sec) | Rendering: 0.00573 (57%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:34:09) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"5c586d5d8950b8d552bd36b4c455852c"=>nil, "action"=>"app_jquery", "controller"=>"j_query"}
+Completed in 0.00141 (710 reqs/sec) | Rendering: 0.00064 (45%) | 200 OK [http://localhost/j_query/app_jquery?5c586d5d8950b8d552bd36b4c455852c]
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2007-05-25 17:34:09) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {}
+
+
+ActionController::RoutingError (no route found to match "/stylesheets/tab.png" with {:method=>:get}):
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1292:in `recognize_path'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1282:in `recognize'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:40:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (404 Page Not Found)
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:34:35) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00757 (132 reqs/sec) | Rendering: 0.00348 (45%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:34:36) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"5c586d5d8950b8d552bd36b4c455852c"=>nil, "action"=>"app_jquery", "controller"=>"j_query"}
+Completed in 0.00039 (2557 reqs/sec) | Rendering: 0.00021 (52%) | 200 OK [http://localhost/j_query/app_jquery?5c586d5d8950b8d552bd36b4c455852c]
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2007-05-25 17:34:36) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {}
+
+
+ActionController::RoutingError (no route found to match "/stylesheets/tab.png" with {:method=>:get}):
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1292:in `recognize_path'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1282:in `recognize'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:40:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (404 Page Not Found)
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:35:16) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.01015 (98 reqs/sec) | Rendering: 0.00577 (56%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:35:17) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"9e8b383cec645632908ad8b05253e0bb"=>nil, "action"=>"app_jquery", "controller"=>"j_query"}
+Completed in 0.00142 (702 reqs/sec) | Rendering: 0.00066 (46%) | 200 OK [http://localhost/j_query/app_jquery?9e8b383cec645632908ad8b05253e0bb]
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2007-05-25 17:35:17) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {}
+
+
+ActionController::RoutingError (no route found to match "/stylesheets/tab.png" with {:method=>:get}):
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1292:in `recognize_path'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1282:in `recognize'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:40:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (404 Page Not Found)
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2007-05-25 17:35:42) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {}
+
+
+ActionController::RoutingError (no route found to match "/stylesheets/tab.png" with {:method=>:get}):
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1292:in `recognize_path'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1282:in `recognize'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:40:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (404 Page Not Found)
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2007-05-25 17:35:42) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {}
+
+
+ActionController::RoutingError (no route found to match "/stylesheets/tab.png" with {:method=>:get}):
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1292:in `recognize_path'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1282:in `recognize'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:40:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (404 Page Not Found)
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:37:58) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00795 (125 reqs/sec) | Rendering: 0.00355 (44%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:37:59) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"9e8b383cec645632908ad8b05253e0bb"=>nil, "action"=>"app_jquery", "controller"=>"j_query"}
+Completed in 0.00038 (2644 reqs/sec) | Rendering: 0.00020 (52%) | 200 OK [http://localhost/j_query/app_jquery?9e8b383cec645632908ad8b05253e0bb]
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2007-05-25 17:37:59) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {}
+
+
+ActionController::RoutingError (no route found to match "/stylesheets/tab.png" with {:method=>:get}):
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1292:in `recognize_path'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1282:in `recognize'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:40:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (404 Page Not Found)
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2007-05-25 17:38:10) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {}
+
+
+ActionController::RoutingError (no route found to match "/stylesheets/tab.png" with {:method=>:get}):
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1292:in `recognize_path'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1282:in `recognize'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:40:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (404 Page Not Found)
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:38:22) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00808 (123 reqs/sec) | Rendering: 0.00389 (48%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:38:23) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"9e8b383cec645632908ad8b05253e0bb"=>nil, "action"=>"app_jquery", "controller"=>"j_query"}
+Completed in 0.00039 (2549 reqs/sec) | Rendering: 0.00021 (53%) | 200 OK [http://localhost/j_query/app_jquery?9e8b383cec645632908ad8b05253e0bb]
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2007-05-25 17:38:23) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {}
+
+
+ActionController::RoutingError (no route found to match "/stylesheets/tab.png" with {:method=>:get}):
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1292:in `recognize_path'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1282:in `recognize'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:40:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (404 Page Not Found)
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2007-05-25 17:38:25) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {}
+
+
+ActionController::RoutingError (no route found to match "/stylesheets/tab.png" with {:method=>:get}):
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1292:in `recognize_path'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1282:in `recognize'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:40:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (404 Page Not Found)
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:38:27) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00752 (132 reqs/sec) | Rendering: 0.00354 (47%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:38:28) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"9e8b383cec645632908ad8b05253e0bb"=>nil, "action"=>"app_jquery", "controller"=>"j_query"}
+Completed in 0.00039 (2557 reqs/sec) | Rendering: 0.00020 (51%) | 200 OK [http://localhost/j_query/app_jquery?9e8b383cec645632908ad8b05253e0bb]
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2007-05-25 17:38:28) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {}
+
+
+ActionController::RoutingError (no route found to match "/stylesheets/tab.png" with {:method=>:get}):
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1292:in `recognize_path'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1282:in `recognize'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:40:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (404 Page Not Found)
+
+
+Processing ApplicationController#index (for 127.0.0.1 at 2007-05-25 17:38:30) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {}
+
+
+ActionController::RoutingError (no route found to match "/stylesheets/tab.png" with {:method=>:get}):
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1292:in `recognize_path'
+    /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/routing.rb:1282:in `recognize'
+    /opt/local/lib/ruby/gems/1.8/gems/rails-1.2.3/lib/dispatcher.rb:40:in `dispatch'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:78:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/rails.rb:76:in `process'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:618:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:617:in `process_client'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:736:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel.rb:720:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:271:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/configurator.rb:270:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:127:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/lib/mongrel/command.rb:211:in `run'
+    /opt/local/lib/ruby/gems/1.8/gems/mongrel-1.0.1/bin/mongrel_rails:243
+
+
+Rendering /opt/local/lib/ruby/gems/1.8/gems/actionpack-1.13.3/lib/action_controller/templates/rescues/layout.rhtml (404 Page Not Found)
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:38:50) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00813 (122 reqs/sec) | Rendering: 0.00404 (49%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:38:51) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"ecd3b817f38d0f18e2068fa5d2975160"=>nil, "action"=>"app_jquery", "controller"=>"j_query"}
+Completed in 0.00039 (2576 reqs/sec) | Rendering: 0.00020 (50%) | 200 OK [http://localhost/j_query/app_jquery?ecd3b817f38d0f18e2068fa5d2975160]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:39:48) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00753 (132 reqs/sec) | Rendering: 0.00346 (45%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:39:48) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"ecd3b817f38d0f18e2068fa5d2975160"=>nil, "action"=>"app_jquery", "controller"=>"j_query"}
+Completed in 0.00040 (2499 reqs/sec) | Rendering: 0.00022 (53%) | 200 OK [http://localhost/j_query/app_jquery?ecd3b817f38d0f18e2068fa5d2975160]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:41:08) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00758 (131 reqs/sec) | Rendering: 0.00352 (46%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:41:09) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"ecd3b817f38d0f18e2068fa5d2975160"=>nil, "action"=>"app_jquery", "controller"=>"j_query"}
+Completed in 0.00039 (2584 reqs/sec) | Rendering: 0.00020 (52%) | 200 OK [http://localhost/j_query/app_jquery?ecd3b817f38d0f18e2068fa5d2975160]
+JQueryController: missing default helper path j_query_helper
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:41:14) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.01054 (94 reqs/sec) | Rendering: 0.00611 (57%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:41:15) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "4241e2a95d3050041236ee6216cba0ef"=>nil}
+Completed in 0.00144 (693 reqs/sec) | Rendering: 0.00066 (45%) | 200 OK [http://localhost/j_query/app_jquery?4241e2a95d3050041236ee6216cba0ef]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:42:19) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00967 (103 reqs/sec) | Rendering: 0.00540 (55%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:42:20) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "fcd4d66e32bd49b9e1e5879f2a81cecd"=>nil}
+Completed in 0.00038 (2644 reqs/sec) | Rendering: 0.00020 (51%) | 200 OK [http://localhost/j_query/app_jquery?fcd4d66e32bd49b9e1e5879f2a81cecd]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:43:18) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.00938 (106 reqs/sec) | Rendering: 0.00525 (55%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:43:19) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "925181f07d18e27c976a9b5f016568aa"=>nil}
+Completed in 0.00039 (2557 reqs/sec) | Rendering: 0.00020 (51%) | 200 OK [http://localhost/j_query/app_jquery?925181f07d18e27c976a9b5f016568aa]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:43:38) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.01029 (97 reqs/sec) | Rendering: 0.00586 (57%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:43:39) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "d6a642b846a48317ba22445e2dce0ef8"=>nil}
+Completed in 0.00039 (2565 reqs/sec) | Rendering: 0.00021 (52%) | 200 OK [http://localhost/j_query/app_jquery?d6a642b846a48317ba22445e2dce0ef8]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:45:27) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.07508 (13 reqs/sec) | Rendering: 0.00815 (10%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:45:27) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "975b8aa94fd566c5845cc6b5cb0a65da"=>nil}
+Completed in 0.00038 (2616 reqs/sec) | Rendering: 0.00020 (51%) | 200 OK [http://localhost/j_query/app_jquery?975b8aa94fd566c5845cc6b5cb0a65da]
+
+
+Processing RailsDemoController#index (for 127.0.0.1 at 2007-05-25 17:47:00) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"index", "controller"=>"rails_demo"}
+Rendering  within layouts/application
+Rendering rails_demo/index
+DEPRECATION WARNING: @response is deprecated! Call response.body instead of @response.body. Args: []  See http://www.rubyonrails.org/deprecation for details. (called from get_jquery_files at /Users/yehuda/textmate/jqor_test/config/../vendor/plugins/jquery_on_rails/lib/jqor_control.rb:16)
+Completed in 0.01334 (74 reqs/sec) | Rendering: 0.00759 (56%) | 200 OK [http://localhost/rails_demo]
+
+
+Processing JQueryController#app_jquery (for 127.0.0.1 at 2007-05-25 17:47:00) [GET]
+  Session ID: 26cb8e00785e11ea53824ac1811f570d
+  Parameters: {"action"=>"app_jquery", "controller"=>"j_query", "0ecfaf374cad9a6d1bb04683cbc7b284"=>nil}
+Completed in 0.00038 (2631 reqs/sec) | Rendering: 0.00020 (52%) | 200 OK [http://localhost/j_query/app_jquery?0ecfaf374cad9a6d1bb04683cbc7b284]
