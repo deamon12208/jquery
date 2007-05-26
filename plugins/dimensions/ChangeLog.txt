@@ -1,5 +1,8 @@
 == New and Noteworthy ==
 
+== 1.0b ==
+* Element's scroll offsets no longer included in calculations
+
 == 1.0a ==
 
 * Added new test suite
