@@ -475,24 +475,24 @@ test("validator.formatAndAdd", function() {
 	expect(4);
 	var v = $("#form").validate();
 	var fakeElement = { form: { id: "foo" }, name: "bar" };
-	jQuery.validator.messages.test1 = "Please enter a value no longer then {0} characters.";
-	jQuery.validator.messages.test2 = "Please enter a value between {0} and {1}.";
-	v.formatAndAdd({method: "test1", parameters: 2}, fakeElement)
+	v.formatAndAdd({method: "maxLength", parameters: 2}, fakeElement)
 	equals( "Please enter a value no longer then 2 characters.", v.errorList[0].message );
 	equals( "bar", v.errorList[0].element.name );
 	
-	v.formatAndAdd({method: "test2", parameters:[2,4]}, fakeElement)
+	v.formatAndAdd({method: "rangeValue", parameters:[2,4]}, fakeElement)
 	equals( "Please enter a value between 2 and 4.", v.errorList[1].message );
 	
-	v.formatAndAdd({method: "test2", parameters:[0,4]}, fakeElement)
+	v.formatAndAdd({method: "rangeValue", parameters:[0,4]}, fakeElement)
 	equals( "Please enter a value between 0 and 4.", v.errorList[2].message );
 });
 
 test("validator.formatAndAdd2", function() {
-	expect(1);
+	expect(3);
 	var v = $("#form").validate();
 	var fakeElement = { form: { id: "foo" }, name: "bar" };
-	jQuery.validator.messages.test1 = function(element, validator) {
+	jQuery.validator.messages.test1 = function(param, element) {
+		equals( v, this );
+		equals( 0, param );
 		return "element " + element.name + " is not valid";
 	};
 	v.formatAndAdd({method: "test1", parameters: 0}, fakeElement)
@@ -680,4 +680,18 @@ test("successlist", function() {
 	var v = $("#form").validate({ success: "xyz" });
 	v.form();
 	equals(0, v.successList.length);
+});
+
+test("messages", function() {
+	var m = jQuery.validator.messages;
+	equals( "Please enter a value no longer then 0 characters.", m.maxLength(0) );
+	equals( "Please enter a value of at least 1 characters.", m.minLength(1) );
+	equals( "Please enter a value between 1 and 2 characters long.", m.rangeLength([1, 2]) );
+	equals( "Please enter a value less than or equal to 1.", m.maxValue(1) );
+	equals( "Please enter a value greater than or equal to 0.", m.minValue(0) );
+	equals( "Please enter a value between 1 and 2.", m.rangeValue([1, 2]) );
+});
+
+test("String.format", function() {
+	equals( "Please enter a value between 0 and 1.", String.format("Please enter a value between {0} and {1}.", 0, 1) );
 });

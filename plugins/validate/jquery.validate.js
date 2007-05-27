@@ -12,6 +12,8 @@
 
 /*
 TODO
+ - replace min/max number replacement with message-functions containing the accurate replace-logic, using some String.format implementation (move format plugin to methods and copy the MessageFormat-formatting to this plugin)
+ use call/apply when calling validation methods, setting context to the validator object, avoiding the need to pass it around
  - improve general validation behaviour, set these defaults and make them configurable:
    - validate invalid elements on keypress, removing the error as soon as possible
    - don't validate valid elements on keypress/focus, giving the user the chance to enter the correct value before complaining
@@ -350,6 +352,51 @@ jQuery.extend(jQuery.expr[":"], {
 	filled: "!!jQuery.trim(a.value)"
 });
 
+/**
+ * Simple string-templating, similar to Java's MessageFormat.
+ *
+ * Accepts a string template as the first argument. The second is optional:
+ * If specified, it is used to replace placeholders in the first argument.
+ *
+ * It can be an Array of values or any other type, in which case only one value
+ * is replaced.
+ *
+ * If the second argument is ommited, a function is returned that expects the value-argument
+ * to return the formatted value (see example).
+ *
+ * @example String.format("Please enter a value no longer then {0} characters.", 0)
+ * @result "Please enter a value no longer then 0 characters."
+ * @desc Formats a string with a single argument.
+ *
+ * @example String.format("Please enter a value between {0} and {1}.", 0, 1)
+ * @result "Please enter a value between 0 and 1."
+ * @desc Formats a string with two arguments. Same as String.format("...", [0, 1]);
+ *
+ * @example String.format("Please enter a value no longer then {0} characters.")(0);
+ * @result "Please enter a value no longer then 0 characters."
+ * @desc String.format is called at first without the second argument, returning a function that is called immediately
+ * 		 with the value argument. Useful to defer the actual formatting to a later point without explicitly 
+ *		 writing the function.
+ *
+ * @type String
+ * @name String.format
+ * @cat Plugins/Validate
+ */
+String.format = function(source, params) {
+	if ( arguments.length == 1 ) 
+		return function( param ) {
+			return String.format( source, param );
+		}
+	if ( arguments.length > 2 )
+		params = jQuery.makeArray(arguments).slice(1);
+	if ( params.constructor != Array )
+		params = [ params ];
+	jQuery.each(params, function(i, n) {
+		source = source.replace(new RegExp("\\{" + i + "\\}"), n);
+	});
+	return source;
+}
+
 // constructor for validator
 jQuery.validator = function( options, form ) {
 	this.settings = jQuery.extend( {}, jQuery.validator.defaults, options );
@@ -406,9 +453,6 @@ jQuery.extend(jQuery.validator, {
 	 */
 	messages: {
 		required: "This field is required.",
-		maxLength: "Please enter a value no longer then {0} characters.",
-		minLength: "Please enter a value of at least {0} characters.",
-		rangeLength: "Please enter a value between {0} and {1} characters long.",
 		email: "Please enter a valid email address.",
 		url: "Please enter a valid URL.",
 		date: "Please enter a valid date.",
@@ -418,11 +462,21 @@ jQuery.extend(jQuery.validator, {
 		numberDE: "Bitte geben Sie eine Nummer ein.",
 		digits: "Please enter only digits",
 		equalTo: "Please enter the same value again.",
-		rangeValue: "Please enter a value between {0} and {1}.",
-		maxValue: "Please enter a value less than or equal to {0}.",
-		minValue: "Please enter a value greater than or equal to {0}.",
-		accept: "Please enter a value with a valid extension."
+		accept: "Please enter a value with a valid extension.",
+		maxLength: String.format("Please enter a value no longer then {0} characters."),
+		minLength: String.format("Please enter a value of at least {0} characters."),
+		rangeLength: String.format("Please enter a value between {0} and {1} characters long."),
+		rangeValue: String.format("Please enter a value between {0} and {1}."),
+		maxValue: String.format("Please enter a value less than or equal to {0}."),
+		minValue: String.format("Please enter a value greater than or equal to {0}.")
 	},
+	
+	/*
+	.replace( "{0}", (param.constructor == Array
+						? "" + param[0]
+						: "" + param) || "" )
+					.replace( "{1}", "" + param[1] || "" )
+					*/
 
 	prototype: {
 
@@ -629,19 +683,15 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		formatAndAdd: function( rule, element) {
-			var param = rule.parameters;
 			var message = 
 				this.message(element.name, rule)
 				|| element.title
 				|| jQuery.validator.messages[rule.method]
 				|| "<strong>Warning: No message defined for " + element.name + "</strong>";
 			if ( typeof message == "function" ) 
-				message = message(element, this);
+				message = message.call(this, rule.parameters, element);
 			this.errorList.push({
-				message: message.replace( "{0}", (param.constructor == Array
-						? "" + param[0]
-						: "" + param) || "" )
-					.replace( "{1}", "" + param[1] || "" ),
+				message: message,
 				element: element
 			});
 					
