@@ -471,13 +471,6 @@ jQuery.extend(jQuery.validator, {
 		minValue: String.format("Please enter a value greater than or equal to {0}.")
 	},
 	
-	/*
-	.replace( "{0}", (param.constructor == Array
-						? "" + param[0]
-						: "" + param) || "" )
-					.replace( "{1}", "" + param[1] || "" )
-					*/
-
 	prototype: {
 
 		/**
