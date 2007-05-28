@@ -793,5 +793,81 @@ test("validate on keypress", function() {
 	}
 	var e = $("#firstname");
 	var v = $("#testForm1").validate();
-	// Validate on keypress only when the element is marked as invalid, mark as valid as soon as possible. Redisplay error when user keeps editing
+	e.keypress();
+	errors(0, "No value, no errors");
+	e.val("a");
+	e.keypress();
+	errors(0, "Value, but not invalid");
+	e.val("");
+	v.form();
+	errors(2, "Both invalid");
+	e.keypress();
+	errors(1, "Only one field validated, still invalid");
+	e.val("hh");
+	e.keypress();
+	errors(0, "Not invalid anymore");
+	e.val("h");
+	e.keypress();
+	errors(1, "Field didn't loose focus, so validate again, invalid");
+	e.val("hh");
+	e.keypress();
+	errors(0, "Valid");
+});
+
+test("validate on keypress and blur", function() {
+	function errors(expected, message) {
+		equals(expected, v.errorList.length, message );
+	}
+	var e = $("#firstname");
+	var v = $("#testForm1").validate();
+	e.focus();
+	errors(0);
+	e.val("a");
+	e.keypress();
+	errors(0);
+	e.blur();
+	errors(1);
+});
+
+test("validate email on keypress and blur", function() {
+	function errors(expected, message) {
+		equals(expected, v.errorList.length, message );
+	}
+	var e = $("#firstname");
+	var v = $("#testForm1").validate({
+		rules: {
+			firstname: {
+				required: true,
+				email: true
+			}
+		}
+	});
+	e.focus();
+	errors(0);
+	e.val("a");
+	e.keypress();
+	errors(0);
+	e.blur();
+	errors(1);
+	e.focus();
+	e.val("peter@pan.net");
+	e.keypress();
+	errors(0);
+	e.val("peter@pan.nettt");
+	e.keypress();
+	errors(1);
+	e.val("peter@pan.nett");
+	e.keypress();
+	errors(0);
+	e.val("peter@pan.nettt");
+	e.keypress();
+	e.blur();
+	errors(1);
+	e.focus();
+	e.val("peter@pan.nett");
+	e.keypress();
+	errors(0);
+	e.val("peter@pan.nettt");
+	e.keypress();
+	errors(1);
 });

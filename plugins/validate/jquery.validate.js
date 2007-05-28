@@ -311,6 +311,10 @@ jQuery.extend(jQuery.fn, {
 			validator.elementOnBlur(this);
 		});
 		
+		validator.settings.onkeypress && validator.elements.keypress(function() {
+			validator.elementOnKeypress(this);
+		});
+		/*
 		if ( validator.settings.event ) {
 			// validate all elements on some other event like blur or keypress
 			validator.elements.bind( validator.settings.event, function(event) {
@@ -319,7 +323,7 @@ jQuery.extend(jQuery.fn, {
 				validator.setEvent();
 			} );
 		}
-		
+		*/
 		return validator;
 	},
 	// destructive add
@@ -430,7 +434,8 @@ jQuery.extend(jQuery.validator, {
 		errorLabelContainer: jQuery( [] ),
 		onsubmit: true,
 		ignore: [],
-		onblur: true
+		onblur: true,
+		onkeypress: true
 	},
 
 	/**
@@ -515,6 +520,8 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate
 		 */
 		element: function( element ) {
+			element = this.clean( element );
+			this.lastElement = element;
 			this.prepareElement( element );
 			var result = this.check( element );
 			this.showErrors();
@@ -576,6 +583,12 @@ jQuery.extend(jQuery.validator, {
 		
 		elementOnBlur: function(element) {
 			if ( element.name in this.errorMap || !this.required(element) ) {
+				this.element(element);
+			}
+		},
+		
+		elementOnKeypress: function(element) {
+			if ( element.name in this.errorMap || element == this.lastElement ) {
 				this.element(element);
 			}
 		},
