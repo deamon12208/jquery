@@ -12,14 +12,11 @@
 
 /*
 TODO
- - replace min/max number replacement with message-functions containing the accurate replace-logic, using some String.format implementation (move format plugin to methods and copy the MessageFormat-formatting to this plugin)
- use call/apply when calling validation methods, setting context to the validator object, avoiding the need to pass it around
  - improve general validation behaviour, set these defaults and make them configurable:
    - validate invalid elements on keypress, removing the error as soon as possible
    - don't validate valid elements on keypress/focus, giving the user the chance to enter the correct value before complaining
    - validate elements on blur but make required optional. if required would pass, check other rules
    - validate everything on submit
- - add ignore-option, eg. ignore: "[@type=hidden]", using that expression to exclude elements to validate. Default: none, though submit and reset buttons are always ignored
  - modify build to add plugin header to packed bundle
  - stop Firefox password manager on invalid forms, maybe stopping the click event on submit buttons
  
@@ -31,8 +28,11 @@ TODO
  - custom password validation, eg. 6 chars min, and at least 1 number and at least 1 alpha or Must not use 123, abc, asdf or your username or your domain in the password. 
  - datepicker integration (see dobis)
  - milk example
+ - one example for each option
  
 Recent changes:
+<li>Added ignore-option, eg. ignore: "[@type=hidden]", using that expression to exclude elements to validate. Default: none, though submit and reset buttons are always ignored</li>
+<li>Heavily enhanced Functions-as-messages by providing a flexible String.format helper</li>
 <li>Accept Functions as messages, providing runtime-custom-messages</li>
 <li>Fixed exclusion of elements without rules from successList</li>
 <li>Fixed custom-method-demo, replaced the alert with message displaying the number of errors</li>
@@ -258,6 +258,9 @@ Recent changes:
  *		Default: none
  * @option Boolean focusCleanup If enabled, removes the errorClass from the invalid elements and hides
  * 		all errors messages whenever the element is focused. Avoid combination with focusInvalid. Default: false
+ * @option String|Element ignore Elements to ignore when validating, simply filtering them out. jQuery's not-method
+ * 		is used, there everything that is accepted by not() can be passed as this option. Default: None, though inputs of type
+ *		submit and reset are always ignored.
  *
  * @name validate
  * @type $.validator
@@ -419,7 +422,8 @@ jQuery.extend(jQuery.validator, {
 		focusInvalid: true,
 		errorContainer: jQuery( [] ),
 		errorLabelContainer: jQuery( [] ),
-		onsubmit: true
+		onsubmit: true,
+		ignore: []
 	},
 
 	/**
@@ -596,7 +600,12 @@ jQuery.extend(jQuery.validator, {
 			
 			// select all valid inputs inside the form (no submit or reset buttons)
 			var names = {};
-			this.elements = jQuery(this.currentForm).find("input, select, textarea, button").not(":submit").not(":reset").filter(function() {
+			this.elements = jQuery(this.currentForm)
+				.find("input, select, textarea, button")
+				.not(":submit")
+				.not(":reset")
+				.not( this.settings.ignore )
+				.filter(function() {
 				
 				!this.name && validator.settings.debug && window.console && console.error( "%o has no name assigned", this);
 			
@@ -648,7 +657,7 @@ jQuery.extend(jQuery.validator, {
 			var rules = this.rules( element );
 			for( var i = 0, rule; rule = rules[i++]; ) {
 				try {
-					var result = jQuery.validator.methods[rule.method]( jQuery.trim(element.value), element, rule.parameters, this );
+					var result = jQuery.validator.methods[rule.method].call( this, jQuery.trim(element.value), element, rule.parameters );
 					if( result === -1 )
 						break;
 					if( !result ) {
@@ -786,37 +795,41 @@ jQuery.extend(jQuery.validator, {
 				: this.settings.meta
 					? jQuery(element).data()[ this.settings.meta ]
 					: jQuery(element).data();
+		},
+		
+		getLength: function(value, element) {
+			switch( element.nodeName.toLowerCase() ) {
+			case 'select':
+				return jQuery("option:selected", element).length;
+			case 'input':
+				if( /radio|checkbox/i.test(element.type) )
+					return jQuery(element.form || document).find('[@name="' + element.name + '"]:checked').length;
+			}
+			return value.length;
+		},
+	
+		depend: function(param, element) {
+			return this.dependTypes[typeof param]
+				? this.dependTypes[typeof param](param, element)
+				: true;
+		},
+	
+		dependTypes: {
+			"boolean": function(param, element) {
+				return param;
+			},
+			"string": function(param, element) {
+				return !!jQuery(param, element.form).length;
+			},
+			"function": function(param, element) {
+				return param(element);
+			}
+		},
+		
+		required: function(value, element) {
+			return !jQuery.validator.methods.required.call(this, value, element);
 		}
 		
-	},
-
-	getLength: function(value, element) {
-		switch( element.nodeName.toLowerCase() ) {
-		case 'select':
-			return jQuery("option:selected", element).length;
-		case 'input':
-			if( /radio|checkbox/i.test(element.type) )
-				return jQuery(element.form || document).find('[@name="' + element.name + '"]:checked').length;
-		}
-		return value.length;
-	},
-
-	depend: function(param, element) {
-		return this.dependTypes[typeof param]
-			? this.dependTypes[typeof param](param, element)
-			: true;
-	},
-
-	dependTypes: {
-		"boolean": function(param, element) {
-			return param;
-		},
-		"string": function(param, element) {
-			return !!jQuery(param, element.form).length;
-		},
-		"function": function(param, element) {
-			return param(element);
-		}
 	},
 
 	/**
@@ -868,7 +881,7 @@ jQuery.extend(jQuery.validator, {
 		 * 	<input id="other2" type="checkbox" />
 		 * 	<input name="details" />
 		 * </form>
-		 * @desc Declares an input element "details", required, but only if two other fields
+		 * @desc Declares an input element "details" required, but only if two other fields
 		 * are checked.
 		 *
 		 * @example <fieldset>
@@ -901,11 +914,11 @@ jQuery.extend(jQuery.validator, {
 		 * @type Boolean
 		 * @cat Plugins/Validate/Methods
 		 */
-		required: function(value, element, param, validator) {
+		required: function(value, element, param) {
 			//if ( validator && validator.eventType && validator.eventType != "submit" )
 				//return;
 			// check if dependency is met
-			if ( !jQuery.validator.depend(param, element) )
+			if ( !this.depend(param, element) )
 				return -1;
 			switch( element.nodeName.toLowerCase() ) {
 			case 'select':
@@ -913,7 +926,7 @@ jQuery.extend(jQuery.validator, {
 				return options.length > 0 && ( element.type == "select-multiple" || (jQuery.browser.msie && !(options[0].attributes['value'].specified) ? options[0].text : options[0].value).length > 0);
 			case 'input':
 				if ( /radio|checkbox/i.test(element.type) )
-					return jQuery.validator.getLength(value, element) > 0;
+					return this.getLength(value, element) > 0;
 			default:
 				return value.length > 0;
 			}
@@ -960,8 +973,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		minLength: function(value, element, param) {
-			var length = jQuery.validator.getLength(value, element);
-			return !jQuery.validator.methods.required(value, element) || length >= param;
+			return this.required(value, element) || this.getLength(value, element) >= param;
 		},
 	
 		/**
@@ -987,8 +999,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		maxLength: function(value, element, param) {
-			var length = jQuery.validator.getLength(value, element);
-			return !jQuery.validator.methods.required(value, element) || length <= param;
+			return this.required(value, element) || this.getLength(value, element) <= param;
 		},
 		
 		/**
@@ -1022,8 +1033,8 @@ jQuery.extend(jQuery.validator, {
 	     * @cat Plugins/Validate/Methods
 	     */
 		rangeLength: function(value, element, param) {
-			var length = jQuery.validator.getLength(value, element);
-			return !jQuery.validator.methods.required(value, element) || ( length >= param[0] && length <= param[1] );
+			var length = this.getLength(value, element);
+			return this.required(value, element) || ( length >= param[0] && length <= param[1] );
 		},
 	
 		/**
@@ -1043,7 +1054,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		minValue: function( value, element, param ) {
-			return !jQuery.validator.methods.required(value, element) || value >= param;
+			return this.required(value, element) || value >= param;
 		},
 		
 		/**
@@ -1063,7 +1074,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		maxValue: function( value, element, param ) {
-			return !jQuery.validator.methods.required(value, element) || value <= param;
+			return this.required(value, element) || value <= param;
 		},
 		
 		/**
@@ -1083,7 +1094,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		rangeValue: function( value, element, param ) {
-			return !jQuery.validator.methods.required(value, element) || ( value >= param[0] && value <= param[1] );
+			return this.required(value, element) || ( value >= param[0] && value <= param[1] );
 		},
 		
 		/**
@@ -1102,7 +1113,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		email: function(value, element) {
-			return !jQuery.validator.methods.required(value, element) || /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i.test(value);
+			return this.required(value, element) || /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i.test(value);
 		},
 	
 		/**
@@ -1123,7 +1134,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		url: function(value, element) {
-			return !jQuery.validator.methods.required(value, element) || /^(https?|ftp):\/\/[A-Z0-9](\.?[A-Z0-9ÄÜÖ][A-Z0-9_\-ÄÜÖ]*)*(\/([A-Z0-9ÄÜÖ][A-Z0-9_\-\.ÄÜÖ]*)?)*(\?([A-Z0-9ÄÜÖ][A-Z0-9_\-\.%\+=&ÄÜÖ]*)?)?$/i.test(value);
+			return this.required(value, element) || /^(https?|ftp):\/\/[A-Z0-9](\.?[A-Z0-9ÄÜÖ][A-Z0-9_\-ÄÜÖ]*)*(\/([A-Z0-9ÄÜÖ][A-Z0-9_\-\.ÄÜÖ]*)?)*(\?([A-Z0-9ÄÜÖ][A-Z0-9_\-\.%\+=&ÄÜÖ]*)?)?$/i.test(value);
 		},
         
 		/**
@@ -1143,7 +1154,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		date: function(value, element) {
-			return !jQuery.validator.methods.required(value, element) || !/Invalid|NaN/.test(new Date(value));
+			return this.required(value, element) || !/Invalid|NaN/.test(new Date(value));
 		},
 	
 		/**
@@ -1168,7 +1179,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		dateISO: function(value, element) {
-			return !jQuery.validator.methods.required(value, element) || /^\d{4}[/-]\d{1,2}[/-]\d{1,2}$/.test(value);
+			return this.required(value, element) || /^\d{4}[/-]\d{1,2}[/-]\d{1,2}$/.test(value);
 		},
 	
 		/**
@@ -1194,7 +1205,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		dateDE: function(value, element) {
-			return !jQuery.validator.methods.required(value, element) || /^\d\d?\.\d\d?\.\d\d\d?\d?$/.test(value);
+			return this.required(value, element) || /^\d\d?\.\d\d?\.\d\d\d?\d?$/.test(value);
 		},
 	
 		/**
@@ -1211,7 +1222,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		number: function(value, element) {
-			return !jQuery.validator.methods.required(value, element) || /^-?[,0-9]+(\.\d+)?$/.test(value); 
+			return this.required(value, element) || /^-?[,0-9]+(\.\d+)?$/.test(value); 
 		},
 	
 		/**
@@ -1229,7 +1240,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		numberDE: function(value, element) {
-			return !jQuery.validator.methods.required(value, element) || /^-?[\.0-9]+(,\d+)?$/.test(value);
+			return this.required(value, element) || /^-?[\.0-9]+(,\d+)?$/.test(value);
 		},
 	
 		/**
@@ -1245,7 +1256,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		digits: function(value, element) {
-			return !jQuery.validator.methods.required(value, element) || /^\d+$/.test(value);
+			return this.required(value, element) || /^\d+$/.test(value);
 		},
 		
 		/**
@@ -1266,7 +1277,7 @@ jQuery.extend(jQuery.validator, {
 		 */
 		accept: function(value, element, param) {
 			param = typeof param == "string" ? param : "png|jpe?g|gif";
-			return !jQuery.validator.methods.required(value, element) || value.match(new RegExp(".(" + param + ")$")); 
+			return this.required(value, element) || value.match(new RegExp(".(" + param + ")$")); 
 		},
 		
 		/**
@@ -1311,8 +1322,9 @@ jQuery.extend(jQuery.validator, {
 	 * @desc Adds a method that checks if the value starts with http://mycorporatedomain.com
 	 *
 	 * @example jQuery.validator.addMethod("math", function(value, element, params) {
-	 *  return value == params[0] + params[1];
+	 *  return this.required(value, element) || value == params[0] + params[1];
 	 * }, "Please enter the correct value for this simple question.");
+	 * @desc Adds a not-required method...
 	 *
 	 * @see jQuery.validator.methods
 	 *

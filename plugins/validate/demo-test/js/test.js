@@ -1,227 +1,244 @@
 test("rule: digit", function() {
+	var v = jQuery("#form").validate();
 	var rule = $.validator.methods.digits;
 	var element = $("#firstname")[0];
-	ok( rule("123", element), "Valid digits" );
-	ok(!rule("123.000", element), "Invalid digits" );
-	ok(!rule("123.000,00", element), "Invalid digits" );
-	ok(!rule("123.0.0,0", element), "Invalid digits" );
-	ok(!rule("x123", element), "Invalid digits" );
-	ok(!rule("100.100,0,0", element), "Invalid digits" );
+	ok( rule.call( v, "123", element), "Valid digits" );
+	ok(!rule.call( v, "123.000", element), "Invalid digits" );
+	ok(!rule.call( v, "123.000,00", element), "Invalid digits" );
+	ok(!rule.call( v, "123.0.0,0", element), "Invalid digits" );
+	ok(!rule.call( v, "x123", element), "Invalid digits" );
+	ok(!rule.call( v, "100.100,0,0", element), "Invalid digits" );
 });
 
 test("rule: url", function() {
+	var v = jQuery("#form").validate();
 	var rule = $.validator.methods.url;
 	var element = $("#firstname")[0];
-	ok( rule("http://bassistance.de/jquery/plugin.php?bla=blu", element), "Valid url" );
-	ok( rule("https://bassistance.de/jquery/plugin.php?bla=blu", element), "Valid url" );
-	ok( rule("ftp://bassistance.de/jquery/plugin.php?bla=blu", element), "Valid url" );
-	ok( rule("http://bassistance", element), "Valid url" );
-	ok(!rule("http://bassistance.", element), "Invalid url" );
-	ok(!rule("bassistance.de", element), "Invalid url" );
+	ok( rule.call( v, "http://bassistance.de/jquery/plugin.php?bla=blu", element), "Valid url" );
+	ok( rule.call( v, "https://bassistance.de/jquery/plugin.php?bla=blu", element), "Valid url" );
+	ok( rule.call( v, "ftp://bassistance.de/jquery/plugin.php?bla=blu", element), "Valid url" );
+	ok( rule.call( v, "http://bassistance", element), "Valid url" );
+	ok(!rule.call( v, "http://bassistance.", element), "Invalid url" );
+	ok(!rule.call( v, "bassistance.de", element), "Invalid url" );
 });
 
 test("rule: email", function() {
+	var v = jQuery("#form").validate();
 	var rule = $.validator.methods.email;
 	var element = $("#firstname")[0];
-	ok( rule("name@domain.tld", element), "Valid email" );
-	ok( rule("name@domain.tl", element), "Valid email" );
-	ok( rule("n@d.tld", element), "Valid email" );
-	ok(!rule("name", element), "Invalid email" );
-	ok(!rule("name@", element), "Invalid email" );
-	ok(!rule("name@domain", element), "Invalid email" );
-	ok(!rule("name@domain.t", element), "Invalid email" );
-	ok(!rule("name@domain.tldef", element), "Invalid email" );
+	ok( rule.call( v, "name@domain.tld", element), "Valid email" );
+	ok( rule.call( v, "name@domain.tl", element), "Valid email" );
+	ok( rule.call( v, "n@d.tld", element), "Valid email" );
+	ok(!rule.call( v, "name", element), "Invalid email" );
+	ok(!rule.call( v, "name@", element), "Invalid email" );
+	ok(!rule.call( v, "name@domain", element), "Invalid email" );
+	ok(!rule.call( v, "name@domain.t", element), "Invalid email" );
+	ok(!rule.call( v, "name@domain.tldef", element), "Invalid email" );
 });
 
 test("rule: number", function() {
+	var v = jQuery("#form").validate();
 	var rule = $.validator.methods.number;
 	var element = $("#firstname")[0];
-	ok( rule("123", element), "Valid number" );
-	ok( rule("-123", element), "Valid number" );
-	ok( rule("123,000", element), "Valid number" );
-	ok( rule("-123,000", element), "Valid number" );
-	ok( rule("123,000.00", element), "Valid number" );
-	ok( rule("-123,000.00", element), "Valid number" );
-	ok(!rule("123.000,00", element), "Invalid number" );
-	ok(!rule("123.0.0,0", element), "Invalid number" );
-	ok(!rule("x123", element), "Invalid number" );
-	ok(!rule("100.100,0,0", element), "Invalid number" );
+	ok( rule.call( v, "123", element), "Valid number" );
+	ok( rule.call( v, "-123", element), "Valid number" );
+	ok( rule.call( v, "123,000", element), "Valid number" );
+	ok( rule.call( v, "-123,000", element), "Valid number" );
+	ok( rule.call( v, "123,000.00", element), "Valid number" );
+	ok( rule.call( v, "-123,000.00", element), "Valid number" );
+	ok(!rule.call( v, "123.000,00", element), "Invalid number" );
+	ok(!rule.call( v, "123.0.0,0", element), "Invalid number" );
+	ok(!rule.call( v, "x123", element), "Invalid number" );
+	ok(!rule.call( v, "100.100,0,0", element), "Invalid number" );
 });
 
 test("rule: numberDE", function() {
+	var v = jQuery("#form").validate();
 	var rule = $.validator.methods.numberDE;
 	var element = $("#firstname")[0];
-	ok( rule("123", element), "Valid numberDE" );
-	ok( rule("-123", element), "Valid numberDE" );
-	ok( rule("123.000", element), "Valid numberDE" );
-	ok( rule("-123.000", element), "Valid numberDE" );
-	ok( rule("123.000,00", element), "Valid numberDE" );
-	ok( rule("-123.000,00", element), "Valid numberDE" );
-	ok(!rule("123,000.00", element), "Invalid numberDE" );
-	ok(!rule("123,0,0.0", element), "Invalid numberDE" );
-	ok(!rule("x123", element), "Invalid numberDE" );
-	ok(!rule("100,100.0.0", element), "Invalid numberDE" );
+	ok( rule.call( v, "123", element), "Valid numberDE" );
+	ok( rule.call( v, "-123", element), "Valid numberDE" );
+	ok( rule.call( v, "123.000", element), "Valid numberDE" );
+	ok( rule.call( v, "-123.000", element), "Valid numberDE" );
+	ok( rule.call( v, "123.000,00", element), "Valid numberDE" );
+	ok( rule.call( v, "-123.000,00", element), "Valid numberDE" );
+	ok(!rule.call( v, "123,000.00", element), "Invalid numberDE" );
+	ok(!rule.call( v, "123,0,0.0", element), "Invalid numberDE" );
+	ok(!rule.call( v, "x123", element), "Invalid numberDE" );
+	ok(!rule.call( v, "100,100.0.0", element), "Invalid numberDE" );
 });
 
 test("rule: date", function() {
+	var v = jQuery("#form").validate();
 	var rule = $.validator.methods.date;
 	var element = $("#firstname")[0];
-	ok( rule("06/06/1990", element), "Valid date" );
-	ok( rule("6/6/06", element), "Valid date" );
-	ok(!rule("1990x-06-06", element), "Invalid date" );
+	ok( rule.call( v, "06/06/1990", element), "Valid date" );
+	ok( rule.call( v, "6/6/06", element), "Valid date" );
+	ok(!rule.call( v, "1990x-06-06", element), "Invalid date" );
 });
 
 test("rule: dateISO", function() {
+	var v = jQuery("#form").validate();
 	var rule = $.validator.methods.dateISO;
 	var element = $("#firstname")[0];
-	ok( rule("1990-06-06", element), "Valid date" );
-	ok( rule("1990/06/06", element), "Valid date" );
-	ok( rule("1990-6-6", element), "Valid date" );
-	ok( rule("1990/6/6", element), "Valid date" );
-	ok(!rule("1990-106-06", element), "Invalid date" );
-	ok(!rule("190-06-06", element), "Invalid date" );
+	ok( rule.call( v, "1990-06-06", element), "Valid date" );
+	ok( rule.call( v, "1990/06/06", element), "Valid date" );
+	ok( rule.call( v, "1990-6-6", element), "Valid date" );
+	ok( rule.call( v, "1990/6/6", element), "Valid date" );
+	ok(!rule.call( v, "1990-106-06", element), "Invalid date" );
+	ok(!rule.call( v, "190-06-06", element), "Invalid date" );
 });
 
 test("rule: dateDE", function() {
+	var v = jQuery("#form").validate();
 	var rule = $.validator.methods.dateDE;
 	var element = $("#firstname")[0];
-	ok( rule("03.06.1984", element), "Valid dateDE" );
-	ok( rule("3.6.84", element), "Valid dateDE" );
-	ok(!rule("6-6-06", element), "Invalid dateDE" );
-	ok(!rule("1990-06-06", element), "Invalid dateDE" );
-	ok(!rule("06/06/1990", element), "Invalid dateDE" );
-	ok(!rule("6/6/06", element), "Invalid dateDE" );
+	ok( rule.call( v, "03.06.1984", element), "Valid dateDE" );
+	ok( rule.call( v, "3.6.84", element), "Valid dateDE" );
+	ok(!rule.call( v, "6-6-06", element), "Invalid dateDE" );
+	ok(!rule.call( v, "1990-06-06", element), "Invalid dateDE" );
+	ok(!rule.call( v, "06/06/1990", element), "Invalid dateDE" );
+	ok(!rule.call( v, "6/6/06", element), "Invalid dateDE" );
 });
 
 test("rule: required", function() {
+	var v = jQuery("#form").validate();
 	var rule = $.validator.methods.required;
 		e = $('#text1, #hidden2, #select1, #select2');
-	ok( rule(e[0].value, e[0]), "Valid text input" );
-	ok(!rule(e[1].value, e[1]), "Invalid text input" );
-	ok(!rule(e[2].value, e[2]), "Invalid select" );
-	ok( rule(e[3].value, e[3]), "Valid select" );
+	ok( rule.call( v, e[0].value, e[0]), "Valid text input" );
+	ok(!rule.call( v, e[1].value, e[1]), "Invalid text input" );
+	ok(!rule.call( v, e[2].value, e[2]), "Invalid select" );
+	ok( rule.call( v, e[3].value, e[3]), "Valid select" );
 	
 	e = $('#area1, #area2, #pw1, #pw2');
-	ok( rule(e[0].value, e[0]), "Valid textarea" );
-	ok(!rule(e[1].value, e[1]), "Invalid textarea" );
-	ok( rule(e[2].value, e[2]), "Valid password input" );
-	ok(!rule(e[3].value, e[3]), "Invalid password input" );
+	ok( rule.call( v, e[0].value, e[0]), "Valid textarea" );
+	ok(!rule.call( v, e[1].value, e[1]), "Invalid textarea" );
+	ok( rule.call( v, e[2].value, e[2]), "Valid password input" );
+	ok(!rule.call( v, e[3].value, e[3]), "Invalid password input" );
 	
 	e = $('#radio1, #radio2, #radio3');
-	ok(!rule(e[0].value, e[0]), "Invalid radio" );
-	ok( rule(e[1].value, e[1]), "Valid radio" );
-	ok( rule(e[2].value, e[2]), "Valid radio" );
+	ok(!rule.call( v, e[0].value, e[0]), "Invalid radio" );
+	ok( rule.call( v, e[1].value, e[1]), "Valid radio" );
+	ok( rule.call( v, e[2].value, e[2]), "Valid radio" );
 	
 	e = $('#check1, #check2');
-	ok( rule(e[0].value, e[0]), "Valid checkbox" );
-	ok(!rule(e[1].value, e[1]), "Invalid checkbox" );
+	ok( rule.call( v, e[0].value, e[0]), "Valid checkbox" );
+	ok(!rule.call( v, e[1].value, e[1]), "Invalid checkbox" );
 	
 	e = $('#select1, #select2, #select3, #select4');
-	ok(!rule(e[0].value, e[0]), "Invalid select" );
-	ok( rule(e[1].value, e[1]), "Valid select" );
-	ok( rule(e[2].value, e[2]), "Valid select" );
-	ok( rule(e[3].value, e[3]), "Valid select" );
+	ok(!rule.call( v, e[0].value, e[0]), "Invalid select" );
+	ok( rule.call( v, e[1].value, e[1]), "Valid select" );
+	ok( rule.call( v, e[2].value, e[2]), "Valid select" );
+	ok( rule.call( v, e[3].value, e[3]), "Valid select" );
 });
 
 test("rule: required with dependencies", function() {
+	var v = jQuery("#form").validate();
 	var rule = $.validator.methods.required;
     	e = $('#hidden2, #select1, #area2, #radio1, #check2');
-	ok( rule(e[0].value, e[0], "asffsaa"), "Valid text input due to depencie not met" );
-	ok(!rule(e[0].value, e[0], "input"), "Invalid text input" );
-	ok( rule(e[0].value, e[0], function() { return false; }), "Valid text input due to depencie not met" );
-	ok(!rule(e[0].value, e[0], function() { return true; }), "Invalid text input" );
-	ok( rule(e[1].value, e[1], "asfsfa"), "Valid select due to dependency not met" );
-	ok(!rule(e[1].value, e[1], "input"), "Invalid select" );
-	ok( rule(e[2].value, e[2], "asfsafsfa"), "Valid textarea due to dependency not met" );
-	ok(!rule(e[2].value, e[2], "input"), "Invalid textarea" );
-	ok( rule(e[3].value, e[3], "asfsafsfa"), "Valid radio due to dependency not met" );
-	ok(!rule(e[3].value, e[3], "input"), "Invalid radio" );
-	ok( rule(e[4].value, e[4], "asfsafsfa"), "Valid checkbox due to dependency not met" );
-	ok(!rule(e[4].value, e[4], "input"), "Invalid checkbox" );
+	ok( rule.call( v, e[0].value, e[0], "asffsaa"), "Valid text input due to depencie not met" );
+	ok(!rule.call( v, e[0].value, e[0], "input"), "Invalid text input" );
+	ok( rule.call( v, e[0].value, e[0], function() { return false; }), "Valid text input due to depencie not met" );
+	ok(!rule.call( v, e[0].value, e[0], function() { return true; }), "Invalid text input" );
+	ok( rule.call( v, e[1].value, e[1], "asfsfa"), "Valid select due to dependency not met" );
+	ok(!rule.call( v, e[1].value, e[1], "input"), "Invalid select" );
+	ok( rule.call( v, e[2].value, e[2], "asfsafsfa"), "Valid textarea due to dependency not met" );
+	ok(!rule.call( v, e[2].value, e[2], "input"), "Invalid textarea" );
+	ok( rule.call( v, e[3].value, e[3], "asfsafsfa"), "Valid radio due to dependency not met" );
+	ok(!rule.call( v, e[3].value, e[3], "input"), "Invalid radio" );
+	ok( rule.call( v, e[4].value, e[4], "asfsafsfa"), "Valid checkbox due to dependency not met" );
+	ok(!rule.call( v, e[4].value, e[4], "input"), "Invalid checkbox" );
 });
 
 test("rule: minLength", function() {
+	var v = jQuery("#form").validate();
 	var rule = $.validator.methods.minLength,
 		param = 2,
 		e = $('#text1, #text2, #text3');
-	ok( rule(e[0].value, e[0], param), "Valid text input" );
-	ok(!rule(e[1].value, e[1], param), "Invalid text input" );
-	ok( rule(e[2].value, e[2], param), "Valid text input" );
+	ok( rule.call( v, e[0].value, e[0], param), "Valid text input" );
+	ok(!rule.call( v, e[1].value, e[1], param), "Invalid text input" );
+	ok( rule.call( v, e[2].value, e[2], param), "Valid text input" );
 	
 	e = $('#check1, #check2, #check3');
-	ok(!rule(e[0].value, e[0], param), "Valid checkbox" );
-	ok( rule(e[1].value, e[1], param), "Valid checkbox" );
-	ok( rule(e[2].value, e[2], param), "Invalid checkbox" );
+	ok(!rule.call( v, e[0].value, e[0], param), "Valid checkbox" );
+	ok( rule.call( v, e[1].value, e[1], param), "Valid checkbox" );
+	ok( rule.call( v, e[2].value, e[2], param), "Invalid checkbox" );
 	
 	e = $('#select1, #select2, #select3, #select4, #select5');
-	ok(rule(e[0].value, e[0], param), "Valid select" );
-	ok(!rule(e[1].value, e[1], param), "Invalid select" );
-	ok( rule(e[2].value, e[2], param), "Valid select" );
-	ok( rule(e[3].value, e[3], param), "Valid select" );
-	ok( rule(e[3].value, e[3], param), "Valid select" );
+	ok(rule.call( v, e[0].value, e[0], param), "Valid select" );
+	ok(!rule.call( v, e[1].value, e[1], param), "Invalid select" );
+	ok( rule.call( v, e[2].value, e[2], param), "Valid select" );
+	ok( rule.call( v, e[3].value, e[3], param), "Valid select" );
+	ok( rule.call( v, e[3].value, e[3], param), "Valid select" );
 });
 
 test("rule: maxLength", function() {
+	var v = jQuery("#form").validate();
 	var rule = $.validator.methods.maxLength,
 		param = 4,
 		e = $('#text1, #text2, #text3');
-	ok( rule(e[0].value, e[0], param), "Valid text input" );
-	ok( rule(e[1].value, e[1], param), "Valid text input" );
-	ok(!rule(e[2].value, e[2], param), "Invalid text input" );
+	ok( rule.call( v, e[0].value, e[0], param), "Valid text input" );
+	ok( rule.call( v, e[1].value, e[1], param), "Valid text input" );
+	ok(!rule.call( v, e[2].value, e[2], param), "Invalid text input" );
 	
 	e = $('#check1, #check2, #check3');
-	ok( rule(e[0].value, e[0], param), "Valid checkbox" );
-	ok( rule(e[1].value, e[1], param), "Invalid checkbox" );
-	ok(!rule(e[2].value, e[2], param), "Invalid checkbox" );
+	ok( rule.call( v, e[0].value, e[0], param), "Valid checkbox" );
+	ok( rule.call( v, e[1].value, e[1], param), "Invalid checkbox" );
+	ok(!rule.call( v, e[2].value, e[2], param), "Invalid checkbox" );
 	
 	e = $('#select1, #select2, #select3, #select4');
-	ok( rule(e[0].value, e[0], param), "Valid select" );
-	ok( rule(e[1].value, e[1], param), "Valid select" );
-	ok( rule(e[2].value, e[2], param), "Valid select" );
-	ok(!rule(e[3].value, e[3], param), "Invalid select" );
+	ok( rule.call( v, e[0].value, e[0], param), "Valid select" );
+	ok( rule.call( v, e[1].value, e[1], param), "Valid select" );
+	ok( rule.call( v, e[2].value, e[2], param), "Valid select" );
+	ok(!rule.call( v, e[3].value, e[3], param), "Invalid select" );
 });
 
 test("rule: rangeLength", function() {
+	var v = jQuery("#form").validate();
 	var rule = $.validator.methods.rangeLength,
 		param = [2, 4],
 		e = $('#text1, #text2, #text3');
-	ok( rule(e[0].value, e[0], param), "Valid text input" );
-	ok(!rule(e[1].value, e[1], param), "Invalid text input" );
-	ok(!rule(e[2].value, e[2], param), "Invalid text input" );
+	ok( rule.call( v, e[0].value, e[0], param), "Valid text input" );
+	ok(!rule.call( v, e[1].value, e[1], param), "Invalid text input" );
+	ok(!rule.call( v, e[2].value, e[2], param), "Invalid text input" );
 });
 
 test("rule: minValue", function() {
+	var v = jQuery("#form").validate();
 	var rule = $.validator.methods.minValue,
 		param = 8,
 		e = $('#value1, #value2, #value3');
-	ok(!rule(e[0].value, e[0], param), "Invalid text input" );
-	ok( rule(e[1].value, e[1], param), "Valid text input" );
-	ok( rule(e[2].value, e[2], param), "Valid text input" );
+	ok(!rule.call( v, e[0].value, e[0], param), "Invalid text input" );
+	ok( rule.call( v, e[1].value, e[1], param), "Valid text input" );
+	ok( rule.call( v, e[2].value, e[2], param), "Valid text input" );
 });
 
 test("rule: maxValue", function() {
+	var v = jQuery("#form").validate();
 	var rule = $.validator.methods.maxValue,
 		param = 12,
 		e = $('#value1, #value2, #value3');
-	ok( rule(e[0].value, e[0], param), "Valid text input" );
-	ok( rule(e[1].value, e[1], param), "Valid text input" );
-	ok(!rule(e[2].value, e[2], param), "Invalid text input" );
+	ok( rule.call( v, e[0].value, e[0], param), "Valid text input" );
+	ok( rule.call( v, e[1].value, e[1], param), "Valid text input" );
+	ok(!rule.call( v, e[2].value, e[2], param), "Invalid text input" );
 });
 
 test("rule: rangeValue", function() {
+	var v = jQuery("#form").validate();
 	var rule = $.validator.methods.rangeValue,
 		param = [4,12],
 		e = $('#value1, #value2, #value3');
-	ok(!rule(e[0].value, e[0], param), "Invalid text input" );
-	ok( rule(e[1].value, e[1], param), "Valid text input" );
-	ok(!rule(e[2].value, e[2], param), "Invalid text input" );
+	ok(!rule.call( v, e[0].value, e[0], param), "Invalid text input" );
+	ok( rule.call( v, e[1].value, e[1], param), "Valid text input" );
+	ok(!rule.call( v, e[2].value, e[2], param), "Invalid text input" );
 });
 
 test("rule: equalTo", function() {
+	var v = jQuery("#form").validate();
 	var rule = $.validator.methods.equalTo,
 		e = $('#text1, #text2');
-	ok( rule("Test", e[0], "#text1"), "Text input" );
-	ok( rule("T", e[1], "#text2"), "Another one" );
+	ok( rule.call( v, "Test", e[0], "#text1"), "Text input" );
+	ok( rule.call( v, "T", e[1], "#text2"), "Another one" );
 });
 
 
@@ -243,6 +260,28 @@ test("$.validator.addMethod", function() {
 	e.value = "hi";
 	ok( rule(e.value, e), "Invalid" );
 	ok( jQuery.validator.messages.hi == "hi me too", "Check custom message" );
+});
+
+test("$.validator.addMethod2", function() {
+	expect( 5 );
+	$.validator.addMethod("complicatedPassword", function(value, element, param) {
+		return this.required(value, element) || !!value.match(new RegExp("[" + param + "]"));
+	}, String.format("Your password must contain one the following characters: {0}"));
+	var v = jQuery("#form").validate({
+		rules: {
+			action: { complicatedPassword: "abcde1234$%&" }
+		}
+	});
+	var rule = $.validator.methods.complicatedPassword,
+		e = $('#text1')[0];
+	e.value = "";
+	ok( v.element(e), "Rule is optional, valid" );
+	equals( 0, v.errorList.length );
+	e.value = "ko";
+	ok( !v.element(e), "Invalid, doesn't contain one of the required characters" );
+	equals( "Your password must contain one the following characters: abcde1234$%&", v.errorList[0].message );
+	e.value = "ko$";
+	ok( v.element(e) );
 });
 
 test("validator.form(): simple", function() {
@@ -694,4 +733,12 @@ test("messages", function() {
 
 test("String.format", function() {
 	equals( "Please enter a value between 0 and 1.", String.format("Please enter a value between {0} and {1}.", 0, 1) );
+});
+
+test("option: ignore", function() {
+	var v = $("#testForm1").validate({
+		ignore: "[@name=lastname]"
+	});
+	v.form();
+	equals( 1, v.errorList.length );
 });
