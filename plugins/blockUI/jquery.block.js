@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.13  (05/01/2007)
+ * Version 1.14  (05/28/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -196,7 +196,7 @@ $.blockUI.impl = {
                     if (fixT) s.setExpression('top', fixT);
                 }
                 else {
-                    if (full) s.setExpression('top','(document.documentElement.clientHeight || document.body.clientHeight) / 2 - (this.offsetHeight / 2) + (blah = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop) + "px"')
+                    if (full) s.setExpression('top','(document.documentElement.clientHeight || document.body.clientHeight) / 2 - (this.offsetHeight / 2) + (blah = document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop) + "px"');
                     s.marginTop = 0;
                 }
             });
