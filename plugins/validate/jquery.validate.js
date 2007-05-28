@@ -19,6 +19,7 @@ TODO
    - validate everything on submit
  - modify build to add plugin header to packed bundle
  - stop Firefox password manager on invalid forms, maybe stopping the click event on submit buttons
+ - add hint that dependency expression are evaluated in the context of the element's containing form
  
  Examples:
  - masked input plugin integration
