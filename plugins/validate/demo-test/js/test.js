@@ -744,3 +744,25 @@ test("option: ignore", function() {
 	v.form();
 	equals( 1, v.errorList.length );
 });
+
+test("expression: :blank", function() {
+	var e = $("#lastname")[0];
+	equals( 1, $(e).filter(":blank").length );
+	e.value = " ";
+	equals( 1, $(e).filter(":blank").length );
+	e.value = "   "
+	equals( 1, $(e).filter(":blank").length );
+	e.value= " a ";
+	equals( 0, $(e).filter(":blank").length );
+});
+
+test("expression: :filled", function() {
+	var e = $("#lastname")[0];
+	equals( 0, $(e).filter(":filled").length );
+	e.value = " ";
+	equals( 0, $(e).filter(":filled").length );
+	e.value = "   "
+	equals( 0, $(e).filter(":filled").length );
+	e.value= " a ";
+	equals( 1, $(e).filter(":filled").length );
+});
