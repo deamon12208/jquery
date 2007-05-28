@@ -433,12 +433,14 @@ test("validator.showErrors() - external messages", function() {
 });
 
 test("validator.showErrors() - custom handler", function() {
-	expect(3);
+	expect(5);
 	var v = $('#testForm1').validate({
-		showErrors: function(errors, validator) {
-			equals( v, validator );
-			equals( "buga", errors.firstname );
-			equals( "buga", errors.lastname );
+		showErrors: function(errorMap, errorList) {
+			equals( v, this );
+			equals( v.errorList, errorList );
+			equals( v.errorMap, errorMap );
+			equals( "buga", errorMap.firstname );
+			equals( "buga", errorMap.lastname );
 		}
 	});
 	v.form();

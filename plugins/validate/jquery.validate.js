@@ -528,30 +528,17 @@ jQuery.extend(jQuery.validator, {
 		 */
 		showErrors: function(errors) {
 			if(errors) {
-				this.deserializeErrorList(errors);
+				jQuery.extend( this.errorMap, errors );
+				for ( name in errors ) {
+					this.errorList.push({
+						message: errors[name],
+						element: jQuery("[@name=" + name + "]:first", this.currentForm)[0]
+					});
+				}
 			}
 			this.settings.showErrors
-				? this.settings.showErrors( this.serializeErrorList(), this )
+				? this.settings.showErrors.call( this, this.errorMap, this.errorList )
 				: this.defaultShowErrors();
-		},
-		
-		deserializeErrorList: function(list) {
-			for ( name in list ) {
-				this.errorList.push({
-					message: list[name],
-					element: jQuery("[@name=" + name + "]:first", this.currentForm)[0]
-				});
-			}
-		},
-		
-		serializeErrorList: function() {
-			var result = {};
-			jQuery.each(this.errorList, function(i, n) {
-				if ( !n.message )
-					return;
-				result[n.element.name] = n.message;
-			});
-			return result;
 		},
 		
 		setEvent: function(event) {
@@ -637,6 +624,7 @@ jQuery.extend(jQuery.validator, {
 		reset: function( element ) {
 			this.successList = [];
 			this.errorList = [];
+			this.errorMap = {};
 			this.toShow = jQuery( [] );
 			this.toHide = jQuery( [] );
 		},
@@ -696,7 +684,7 @@ jQuery.extend(jQuery.validator, {
 				message: message,
 				element: element
 			});
-					
+			this.errorMap[element.name] = message;
 		},
 		
 		valid: function() {
