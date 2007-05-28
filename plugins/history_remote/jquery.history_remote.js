@@ -10,7 +10,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  *
- * Version: 0.2.2
+ * Version: 0.2.3
  */
 
 (function($) { // block scope
@@ -252,10 +252,11 @@ $.ajaxHistory = new function() {
  */
 $.fn.remote = function(output, settings, callback) {
 
+    callback = callback || function() {};
     if (typeof settings == 'function') { // shift arguments
         callback = settings;
-        settings = {};
     }
+    
     settings = $.extend({
         hashPrefix: 'remote-'
     }, settings || {});
@@ -264,17 +265,21 @@ $.fn.remote = function(output, settings, callback) {
     target.addClass('remote-output');
 
     return this.each(function(i) {
-        var remoteURL = this.href;
-        var hash = '#' + settings.hashPrefix + (i + 1);
+        var href = this.href;
+        var hash = '#' + (this.title && this.title.replace(/\s/g, '_') || settings.hashPrefix + (i + 1));
         this.href = hash;
         $(this).click(function(e) {
-            var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
-            target.load(remoteURL, function() {
-                if (trueClick) {
+            // lock target to prevent double loading in Firefox
+            if (!target['locked']) {
+                // add to history only if true click occured, not a triggered click
+                if (e.clientX) {
                     $.ajaxHistory.update(hash); // setting hash in callback is required to make it work in Safari
                 }
-                typeof callback == 'function' && callback();
-            });
+                target.load(href, function() {
+                    target['locked'] = null;
+                    callback();
+                });
+            }
         });
     });
 
@@ -283,8 +288,8 @@ $.fn.remote = function(output, settings, callback) {
 // Internal, used to enable history for the Tabs plugin.
 $.fn.history = function() {
     return this.click(function(e) {
-        var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
-        if (trueClick) { // add to history only if true click occured, not a triggered click
+        // add to history only if true click occured, not a triggered click
+        if (e.clientX) { // add to history only if true click occured, not a triggered click
             $.ajaxHistory.update(this.hash);
         }
     });
