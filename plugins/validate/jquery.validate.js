@@ -261,6 +261,8 @@ Recent changes:
  * @option String|Element ignore Elements to ignore when validating, simply filtering them out. jQuery's not-method
  * 		is used, there everything that is accepted by not() can be passed as this option. Default: None, though inputs of type
  *		submit and reset are always ignored.
+ * @opton Boolean onblur Validate elements on blur. If nothing is entered, all rules are skipped, 
+ * 		except when the field was already marked as invalid. Default: true
  *
  * @name validate
  * @type $.validator
@@ -304,6 +306,10 @@ jQuery.extend(jQuery.fn, {
 				return result;
 			});
 		}
+		
+		validator.settings.onblur && validator.elements.blur( function() {
+			validator.elementOnBlur(this);
+		});
 		
 		if ( validator.settings.event ) {
 			// validate all elements on some other event like blur or keypress
@@ -423,7 +429,8 @@ jQuery.extend(jQuery.validator, {
 		errorContainer: jQuery( [] ),
 		errorLabelContainer: jQuery( [] ),
 		onsubmit: true,
-		ignore: []
+		ignore: [],
+		onblur: true
 	},
 
 	/**
@@ -567,6 +574,12 @@ jQuery.extend(jQuery.validator, {
 			this.elements.removeClass( this.settings.errorClass );
 		},
 		
+		elementOnBlur: function(element) {
+			if ( element.name in this.errorMap || !this.required(element) ) {
+				this.element(element);
+			}
+		},
+		
 		focusInvalid: function() {
 			if( this.settings.focusInvalid ) {
 				try {
@@ -636,7 +649,7 @@ jQuery.extend(jQuery.validator, {
 		
 		prepareElement: function( element ) {
 			this.reset();
-			this.toHide = this.errors().forId( this.clean( element ).name );
+			this.toHide = this.errors().forId( this.idOrName( this.clean(element) ) );
 		},
 	
 		check: function( element, type ) {
@@ -814,8 +827,8 @@ jQuery.extend(jQuery.validator, {
 			}
 		},
 		
-		required: function(value, element) {
-			return !jQuery.validator.methods.required.call(this, value, element);
+		required: function(element) {
+			return !jQuery.validator.methods.required.call(this, jQuery.trim(element.value), element);
 		}
 		
 	},
@@ -961,7 +974,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		minLength: function(value, element, param) {
-			return this.required(value, element) || this.getLength(value, element) >= param;
+			return this.required(element) || this.getLength(value, element) >= param;
 		},
 	
 		/**
@@ -987,7 +1000,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		maxLength: function(value, element, param) {
-			return this.required(value, element) || this.getLength(value, element) <= param;
+			return this.required(element) || this.getLength(value, element) <= param;
 		},
 		
 		/**
@@ -1022,7 +1035,7 @@ jQuery.extend(jQuery.validator, {
 	     */
 		rangeLength: function(value, element, param) {
 			var length = this.getLength(value, element);
-			return this.required(value, element) || ( length >= param[0] && length <= param[1] );
+			return this.required(element) || ( length >= param[0] && length <= param[1] );
 		},
 	
 		/**
@@ -1042,7 +1055,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		minValue: function( value, element, param ) {
-			return this.required(value, element) || value >= param;
+			return this.required(element) || value >= param;
 		},
 		
 		/**
@@ -1062,7 +1075,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		maxValue: function( value, element, param ) {
-			return this.required(value, element) || value <= param;
+			return this.required(element) || value <= param;
 		},
 		
 		/**
@@ -1082,7 +1095,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		rangeValue: function( value, element, param ) {
-			return this.required(value, element) || ( value >= param[0] && value <= param[1] );
+			return this.required(element) || ( value >= param[0] && value <= param[1] );
 		},
 		
 		/**
@@ -1101,7 +1114,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		email: function(value, element) {
-			return this.required(value, element) || /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i.test(value);
+			return this.required(element) || /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i.test(value);
 		},
 	
 		/**
@@ -1122,7 +1135,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		url: function(value, element) {
-			return this.required(value, element) || /^(https?|ftp):\/\/[A-Z0-9](\.?[A-Z0-9ÄÜÖ][A-Z0-9_\-ÄÜÖ]*)*(\/([A-Z0-9ÄÜÖ][A-Z0-9_\-\.ÄÜÖ]*)?)*(\?([A-Z0-9ÄÜÖ][A-Z0-9_\-\.%\+=&ÄÜÖ]*)?)?$/i.test(value);
+			return this.required(element) || /^(https?|ftp):\/\/[A-Z0-9](\.?[A-Z0-9ÄÜÖ][A-Z0-9_\-ÄÜÖ]*)*(\/([A-Z0-9ÄÜÖ][A-Z0-9_\-\.ÄÜÖ]*)?)*(\?([A-Z0-9ÄÜÖ][A-Z0-9_\-\.%\+=&ÄÜÖ]*)?)?$/i.test(value);
 		},
         
 		/**
@@ -1142,7 +1155,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		date: function(value, element) {
-			return this.required(value, element) || !/Invalid|NaN/.test(new Date(value));
+			return this.required(element) || !/Invalid|NaN/.test(new Date(value));
 		},
 	
 		/**
@@ -1167,7 +1180,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		dateISO: function(value, element) {
-			return this.required(value, element) || /^\d{4}[/-]\d{1,2}[/-]\d{1,2}$/.test(value);
+			return this.required(element) || /^\d{4}[/-]\d{1,2}[/-]\d{1,2}$/.test(value);
 		},
 	
 		/**
@@ -1193,7 +1206,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		dateDE: function(value, element) {
-			return this.required(value, element) || /^\d\d?\.\d\d?\.\d\d\d?\d?$/.test(value);
+			return this.required(element) || /^\d\d?\.\d\d?\.\d\d\d?\d?$/.test(value);
 		},
 	
 		/**
@@ -1210,7 +1223,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		number: function(value, element) {
-			return this.required(value, element) || /^-?[,0-9]+(\.\d+)?$/.test(value); 
+			return this.required(element) || /^-?[,0-9]+(\.\d+)?$/.test(value); 
 		},
 	
 		/**
@@ -1228,7 +1241,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		numberDE: function(value, element) {
-			return this.required(value, element) || /^-?[\.0-9]+(,\d+)?$/.test(value);
+			return this.required(element) || /^-?[\.0-9]+(,\d+)?$/.test(value);
 		},
 	
 		/**
@@ -1244,7 +1257,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		digits: function(value, element) {
-			return this.required(value, element) || /^\d+$/.test(value);
+			return this.required(element) || /^\d+$/.test(value);
 		},
 		
 		/**
@@ -1265,7 +1278,7 @@ jQuery.extend(jQuery.validator, {
 		 */
 		accept: function(value, element, param) {
 			param = typeof param == "string" ? param : "png|jpe?g|gif";
-			return this.required(value, element) || value.match(new RegExp(".(" + param + ")$")); 
+			return this.required(element) || value.match(new RegExp(".(" + param + ")$")); 
 		},
 		
 		/**
