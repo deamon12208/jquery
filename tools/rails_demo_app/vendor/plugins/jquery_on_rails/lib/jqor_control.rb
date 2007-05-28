@@ -2,7 +2,7 @@ class JQueryController < ActionController::Base
   
   def app_jquery
     headers['Content-Type'] = "text/javascript; charset=UTF-8"
-    render :inline => (JQueryOnRails::files || []).map {|f| 
+    render :inline => (session[:jquery_on_rails_files] || []).map {|f| 
       File.read("#{ RAILS_ROOT }/public/javascripts/jquery_modules/#{ f }") }.join("\n")
   end
   
@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
     files_to_include = JQueryOnRails.selectors_per_js.select do |file,sels|
       sels.any? {|sel| !doc[sel].empty? }
     end.map {|k,v| k}
-    JQueryOnRails.files = files_to_include
+    session[:jquery_on_rails_files] = files_to_include
   end
 
 end

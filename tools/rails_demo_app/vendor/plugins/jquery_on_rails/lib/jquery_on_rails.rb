@@ -11,14 +11,6 @@ module JQueryOnRails
         s.merge(x[0] => x[1]) }
   end
   
-  def self.files
-    @@files
-  end
-  
-  def self.files=j_files
-    @@files = j_files
-  end
-
   module Routes
   
     def jquery
