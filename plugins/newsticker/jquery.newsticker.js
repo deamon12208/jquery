@@ -34,23 +34,23 @@ $.fn.newsTicker = $.fn.newsticker = function(delay)
 		// current item
 		el.currentitem = 0;
 		startTicker(el);
-	}
+	};
 	startTicker = function(el)
 	{
 		el.tickfn = setInterval(function() { doTick(el) }, delay)
-	}
+	};
 	stopTicker = function(el)
 	{
 		clearInterval(el.tickfn);
-	}
+	};
 	pauseTicker = function(el)
 	{
 		el.pause = true;
-	}
+	};
 	resumeTicker = function(el)
 	{
 		el.pause = false;
-	}
+	};
 	doTick = function(el)
 	{
 		// don't run if paused
@@ -72,7 +72,7 @@ $.fn.newsTicker = $.fn.newsticker = function(delay)
 				);
 			}
 		);
-	}
+	};
 	this.each(
 		function()
 		{
@@ -94,6 +94,6 @@ $.fn.newsTicker = $.fn.newsticker = function(delay)
 		}
 	);
 	return this;
-}
+};
 
 })(jQuery);

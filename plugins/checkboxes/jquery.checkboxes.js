@@ -41,13 +41,13 @@ jQuery.fn.toggleCheckboxes = function(filter, returnChecked)
 			).filter(":checked");
 			returnWhat = checked;
 		}
-	)
+	);
 	if(!returnChecked)
 	{
 		returnWhat = this;
 	}
 	return returnWhat;
-}
+};
 
 /*
  * Check all checkboxes contained within a form
@@ -78,13 +78,13 @@ jQuery.fn.checkCheckboxes = function(filter, returnChecked)
 			).filter(":checked");
 			returnWhat = checked;
 		}
-	)
+	);
 	if(!returnChecked)
 	{
 		returnWhat = this;
 	}
 	return returnWhat;
-}
+};
 
 /*
  * UnCheck all checkboxes contained within a form
@@ -115,13 +115,13 @@ jQuery.fn.unCheckCheckboxes = function(filter, returnUnChecked)
 			).filter(":not(:checked)");
 			returnWhat = unChecked;
 		}
-	)
+	);
 	if(!returnUnChecked)
 	{
 		returnWhat = this;
 	}
 	return returnWhat;
-}
+};
 
 /*
  * Makes checkboxes behave like a radio button group
@@ -157,4 +157,4 @@ jQuery.radioCheckboxGroup = function(name, filter)
 			).end();
 		}
 	);
-}
+};

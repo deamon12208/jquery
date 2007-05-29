@@ -64,9 +64,8 @@ $.fn.focusFields = $.fn.focusfields = function(oColour, oWidth, bgColour, textCo
 						$(this.parentNode).css(this.parentNode.borderCss.off);
 						$(this).css({backgroundColor: this.oldbgcolour, color: this.oldtextcolour});
 					}
-				)
-				outlineElement.borderCss =
-				{
+				);
+				outlineElement.borderCss = {
 					off:
 					{
 						backgroundColor: $this.parent().css("background-color") || "#fff",
@@ -76,7 +75,7 @@ $.fn.focusFields = $.fn.focusfields = function(oColour, oWidth, bgColour, textCo
 					{
 						backgroundColor: oColour
 					}
-				}
+				};
 				$(outlineElement).css(outlineElement.borderCss.off);
 				// remove existing wrapper if reapplied
 				if($this.parent()[0].className == "outline")
@@ -91,8 +90,7 @@ $.fn.focusFields = $.fn.focusfields = function(oColour, oWidth, bgColour, textCo
 			{
 				// apply a margin equal to the width of the outline (to prevent overlap)
 				$this.css({margin: oWidth + "px"});
-				this.outlineCss =
-				{
+				this.outlineCss = {
 					off:
 					{
 						outlineStyle: "solid",
@@ -102,7 +100,7 @@ $.fn.focusFields = $.fn.focusfields = function(oColour, oWidth, bgColour, textCo
 					{
 						outlineColor: oColour
 					}
-				}
+				};
 				var $parent = $this.parent(), parentBG;
 				do
 				{
@@ -125,10 +123,10 @@ $.fn.focusFields = $.fn.focusfields = function(oColour, oWidth, bgColour, textCo
 					{
 						$(this).css(this.outlineCss.off).css({backgroundColor: this.oldbgcolour, color: this.oldtextcolour});
 					}
-				)
+				);
 			}	
 		}
-	)
+	);
 	return this;
 }
 

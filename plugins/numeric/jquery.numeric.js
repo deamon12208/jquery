@@ -122,6 +122,6 @@ jQuery.fn.numeric = function(decimal, callback)
 				}
 			}
 		}
-	)
+	);
 	return this;
 }
