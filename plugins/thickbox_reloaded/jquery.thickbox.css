@@ -33,6 +33,14 @@ html>body #tb-dim, html>body #tb-loading, html>body #tb-modal { /* IE 7 should a
     display: none;
     z-index: 10000;
 }
+#tb-content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: auto;
+}
 
 /* IE 6 specific */
 * html #tb-dim, * html #tb-loading, * html #tb-modal {
