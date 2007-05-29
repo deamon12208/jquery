@@ -78,7 +78,10 @@
                 modal.attr('class', type);
 
                 // close button
-                $('<div id="' + TB_ID.CLOSE + '"><a href="#" title="' + defaultValues.i18n.close.title + '">' + defaultValues.i18n.close.text + '</a></div>').appendTo(modal).find('a').bind('click', hide);
+                var close = $('#' + TB_ID.CLOSE);
+                if (!close.size()) {
+                    $('<div id="' + TB_ID.CLOSE + '"><a href="#" title="' + defaultValues.i18n.close.title + '">' + defaultValues.i18n.close.text + '</a></div>').appendTo(modal).find('a').bind('click', hide);
+                }
 
                 // reveal stuff
                 dim.unbind('click').one('click', hide); // unbind should be unnecessary - WTF?
