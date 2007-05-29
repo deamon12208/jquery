@@ -235,8 +235,6 @@ Recent changes:
  *		value is an object consisting of rule/parameter pairs, eg. {required: true, min: 3}.
  *   	Once specified, metadata rules are completely ignored.
  *		Default: none, rules are read from metadata via metadata plugin
- * @option String event The event on which to validate. If anything is specified, like
- *		blur or keyup, each element is validated on that event. Default: none
  * @option Boolean onsubmit Validate the form on submit. Set to false to use only other
  *		events for validation (option event). Default: true
  * @option String meta In case you use metadata for other plugins, too, you
@@ -288,9 +286,6 @@ jQuery.extend(jQuery.fn, {
 					// prevent form submit to be able to see console output
 					event.preventDefault();
 					
-				validator.setEvent(event);
-				var result;
-					
 				// prevent submit for invalid forms or custom submit handlers
 				if ( this.cancel || validator.form() ) {
 					this.cancel = false;
@@ -298,14 +293,11 @@ jQuery.extend(jQuery.fn, {
 						validator.settings.submitHandler( validator.currentForm );
 						return false;
 					}
-					result = true;
+					return true;
 				} else {
 					validator.focusInvalid();
-					result = false;
+					return false;
 				}
-				
-				validator.setEvent();
-				return result;
 			});
 		}
 		
@@ -316,16 +308,7 @@ jQuery.extend(jQuery.fn, {
 		validator.settings.onkeyup && validator.elements.keyup(function() {
 			validator.elementOnKeyup(this);
 		});
-		/*
-		if ( validator.settings.event ) {
-			// validate all elements on some other event like blur or keyup
-			validator.elements.bind( validator.settings.event, function(event) {
-				validator.setEvent(event);
-				validator.element(this);
-				validator.setEvent();
-			} );
-		}
-		*/
+		
 		return validator;
 	},
 	// destructive add
@@ -557,12 +540,6 @@ jQuery.extend(jQuery.validator, {
 			this.settings.showErrors
 				? this.settings.showErrors.call( this, this.errorMap, this.errorList )
 				: this.defaultShowErrors();
-		},
-		
-		setEvent: function(event) {
-			this.eventType = event
-				? event.type
-				: null;
 		},
 		
 		/**
@@ -930,8 +907,6 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		required: function(value, element, param) {
-			//if ( validator && validator.eventType && validator.eventType != "submit" )
-				//return;
 			// check if dependency is met
 			if ( !this.depend(param, element) )
 				return -1;

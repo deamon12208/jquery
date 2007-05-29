@@ -17,11 +17,10 @@
 	
 	$().ready(function() {
 		// validate the comment form when it is submitted
-		vx = $("#commentForm").validate();
+		$("#commentForm").validate();
 		
 		// validate signup form on keyup and submit
 		$("#signupForm").validate({
-			event: "keyup",
 			rules: {
 				firstname: "required",
 				lastname: "required",
