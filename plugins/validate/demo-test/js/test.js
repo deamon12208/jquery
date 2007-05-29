@@ -787,34 +787,34 @@ test("validate on blur", function() {
 	errors(0, "Both required and minLength are met, no errors left");
 });
 
-test("validate on keypress", function() {
+test("validate on keyup", function() {
 	function errors(expected, message) {
 		equals(expected, v.errorList.length, message );
 	}
 	var e = $("#firstname");
 	var v = $("#testForm1").validate();
-	e.keypress();
+	e.keyup();
 	errors(0, "No value, no errors");
 	e.val("a");
-	e.keypress();
+	e.keyup();
 	errors(0, "Value, but not invalid");
 	e.val("");
 	v.form();
 	errors(2, "Both invalid");
-	e.keypress();
+	e.keyup();
 	errors(1, "Only one field validated, still invalid");
 	e.val("hh");
-	e.keypress();
+	e.keyup();
 	errors(0, "Not invalid anymore");
 	e.val("h");
-	e.keypress();
+	e.keyup();
 	errors(1, "Field didn't loose focus, so validate again, invalid");
 	e.val("hh");
-	e.keypress();
+	e.keyup();
 	errors(0, "Valid");
 });
 
-test("validate on keypress and blur", function() {
+test("validate on keyup and blur", function() {
 	function errors(expected, message) {
 		equals(expected, v.errorList.length, message );
 	}
@@ -823,51 +823,25 @@ test("validate on keypress and blur", function() {
 	e.focus();
 	errors(0);
 	e.val("a");
-	e.keypress();
+	e.keyup();
 	errors(0);
 	e.blur();
 	errors(1);
 });
 
-test("validate email on keypress and blur", function() {
+test("validate email on keyup and blur", function() {
 	function errors(expected, message) {
 		equals(expected, v.errorList.length, message );
 	}
 	var e = $("#firstname");
-	var v = $("#testForm1").validate({
-		rules: {
-			firstname: {
-				required: true,
-				email: true
-			}
-		}
-	});
+	var v = $("#testForm1").validate();
+	v.form();
+	errors(2);
 	e.focus();
-	errors(0);
 	e.val("a");
-	e.keypress();
-	errors(0);
-	e.blur();
+	e.keyup();
 	errors(1);
-	e.focus();
-	e.val("peter@pan.net");
-	e.keypress();
+	e.val("aa");
+	e.keyup();
 	errors(0);
-	e.val("peter@pan.nettt");
-	e.keypress();
-	errors(1);
-	e.val("peter@pan.nett");
-	e.keypress();
-	errors(0);
-	e.val("peter@pan.nettt");
-	e.keypress();
-	e.blur();
-	errors(1);
-	e.focus();
-	e.val("peter@pan.nett");
-	e.keypress();
-	errors(0);
-	e.val("peter@pan.nettt");
-	e.keypress();
-	errors(1);
 });

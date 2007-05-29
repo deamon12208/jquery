@@ -17,7 +17,7 @@
 	
 	$().ready(function() {
 		// validate the comment form when it is submitted
-		$("#commentForm").validate();
+		vx = $("#commentForm").validate();
 		
 		// validate signup form on keyup and submit
 		$("#signupForm").validate({
@@ -129,7 +129,7 @@
 		</p>
 		<p>
 			<label for="ccomment">Your comment (required)</label>
-			<textarea id="ccomment" name="comment class="{required:true}"></textarea>
+			<textarea id="ccomment" name="comment" class="{required:true}"></textarea>
 		</p>
 		<p>
 			<input class="submit" type="submit" value="Submit"/>

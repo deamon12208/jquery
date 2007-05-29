@@ -13,8 +13,8 @@
 /*
 TODO
  - improve general validation behaviour, set these defaults and make them configurable:
-   - validate invalid elements on keypress, removing the error as soon as possible
-   - don't validate valid elements on keypress/focus, giving the user the chance to enter the correct value before complaining
+   - validate invalid elements on keyup, removing the error as soon as possible
+   - don't validate valid elements on keyup/focus, giving the user the chance to enter the correct value before complaining
    - validate elements on blur but make required optional. if required would pass, check other rules
    - validate everything on submit
  - modify build to add plugin header to packed bundle
@@ -23,7 +23,7 @@ TODO
  
  Examples:
  - masked input plugin integration
- - onblur/keypress ajax-validation (eg. username, email), (optionally) focus the input field on error
+ - onblur/keyup ajax-validation (eg. username, email), (optionally) focus the input field on error
  - ajaxForm() integration
  - overlabel integration, eg. with http://scott.sauyet.com/Javascript/Demo/Overlabel/
  - custom password validation, eg. 6 chars min, and at least 1 number and at least 1 alpha or Must not use 123, abc, asdf or your username or your domain in the password. 
@@ -313,12 +313,12 @@ jQuery.extend(jQuery.fn, {
 			validator.elementOnBlur(this);
 		});
 		
-		validator.settings.onkeypress && validator.elements.keypress(function() {
-			validator.elementOnKeypress(this);
+		validator.settings.onkeyup && validator.elements.keyup(function() {
+			validator.elementOnKeyup(this);
 		});
 		/*
 		if ( validator.settings.event ) {
-			// validate all elements on some other event like blur or keypress
+			// validate all elements on some other event like blur or keyup
 			validator.elements.bind( validator.settings.event, function(event) {
 				validator.setEvent(event);
 				validator.element(this);
@@ -420,7 +420,7 @@ jQuery.validator = function( options, form ) {
 	this.labelContainer = this.settings.errorLabelContainer;
 	this.errorContext = this.labelContainer.length && this.labelContainer || jQuery(form);
 	this.containers = this.settings.errorContainer.add( this.settings.errorLabelContainer );
-
+	this.submitMap = {};
 	this.reset();
 	this.refresh();
 };
@@ -437,7 +437,7 @@ jQuery.extend(jQuery.validator, {
 		onsubmit: true,
 		ignore: [],
 		onblur: true,
-		onkeypress: true
+		onkeyup: true
 	},
 
 	/**
@@ -506,7 +506,9 @@ jQuery.extend(jQuery.validator, {
 			for ( var i = 0, element; element = this.elements[i]; i++ ) {
 				this.check( element );
 			}
-			return this.valid();
+			this.showErrors();
+			jQuery.extend(this.submitMap, this.errorMap);
+			return this.errorList.length == 0;
 		},
 
 		/**
@@ -584,13 +586,13 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		elementOnBlur: function(element) {
-			if ( element.name in this.errorMap || !this.required(element) ) {
+			if ( element.name in this.submitMap || !this.required(element) ) {
 				this.element(element);
 			}
 		},
 		
-		elementOnKeypress: function(element) {
-			if ( element.name in this.errorMap || element == this.lastElement ) {
+		elementOnKeyup: function(element) {
+			if ( element.name in this.submitMap || element == this.lastElement ) {
 				this.element(element);
 			}
 		},
@@ -659,6 +661,7 @@ jQuery.extend(jQuery.validator, {
 		
 		prepareForm: function() {
 			this.reset();
+			this.submitMap = {};
 			this.toHide = this.errors().push( this.containers );
 		},
 		
@@ -669,7 +672,7 @@ jQuery.extend(jQuery.validator, {
 	
 		check: function( element, type ) {
 			element = this.clean( element );
-			jQuery( element ).add( jQuery(element).parent() ).removeClass( this.settings.errorClass );
+			jQuery( element ).add( jQuery( element ).parent() ).removeClass( this.settings.errorClass );
 			var rules = this.rules( element );
 			for( var i = 0, rule; rule = rules[i++]; ) {
 				try {
@@ -677,7 +680,7 @@ jQuery.extend(jQuery.validator, {
 					if( result === -1 )
 						break;
 					if( !result ) {
-						jQuery(element).add( jQuery(element).parent() ).addClass( this.settings.errorClass );
+						jQuery( element ).add( jQuery( element ).parent().not( "label" ) ).addClass( this.settings.errorClass );
 						this.formatAndAdd( rule, element);
 						return false;
 					}
@@ -713,11 +716,7 @@ jQuery.extend(jQuery.validator, {
 				element: element
 			});
 			this.errorMap[element.name] = message;
-		},
-		
-		valid: function() {
-			this.showErrors();
-			return this.errorList.length == 0;
+			this.submitMap[element.name] = message;
 		},
 		
 		toggle: function(that) {
