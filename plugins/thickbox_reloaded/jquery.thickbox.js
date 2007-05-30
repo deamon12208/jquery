@@ -206,7 +206,8 @@
 
                     // Opera 9 incorrectly includes port in hostname property, thus it needs to be removed
                     // Safari 2 reports '#' for an undefined hash, thus it needs to be sanitized as well
-                    var $$ = $(this), hostname = this.hostname && this.hostname.replace(/:\d*$/, ''), port = this.port || 80, hash = this.hash && this.hash.replace('#', '') || '';
+                    // Safari 2 reports '0' for an undefined port, thus needing to use parseInt
+                    var $$ = $(this), hostname = this.hostname && this.hostname.replace(/:\d*$/, ''), port = parseInt(this.port) || 80, hash = this.hash && this.hash.replace('#', '') || '';
                     var isLink = $$.is('a') && this.href;
                     var isImage = isLink && this.href.match(/\.(bmp|gif|jpe?g|png)/gi);
                     var isInline = !!hash;
