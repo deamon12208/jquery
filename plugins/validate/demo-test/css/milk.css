@@ -433,22 +433,16 @@ div.navtabs_grey a:hover span { background-position: 100% -150px; }
   width: 150px;
 }
 
-#signupform .error {
-  background:url("http://static.rememberthemilk.com/img/ico/ico_cross_org.gif") no-repeat 0px 0px;
-  padding-right: 15px;
-  padding-bottom: 15px;
-}
-
-#signupform .error_msg {
+#signupform label.error {
+  background:url("../images/unchecked.gif") no-repeat 0px 0px;
+  padding-left: 16px;
+  padding-bottom: 2px;
   font-weight: bold;
   color: #EA5200;
-  margin-left: 19px;
 }
 
-#signupform .success {
-  background:url("http://static.rememberthemilk.com/img/ico/ico_check_blu.gif") no-repeat 0px 0px;
-  padding-right: 15px;
-  padding-bottom: 15px;
+#signupform label.success {
+  background:url("../images/checked.gif") no-repeat 0px 0px;
 }
 
 #signupform .success_msg {

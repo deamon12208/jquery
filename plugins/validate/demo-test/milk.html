@@ -16,6 +16,11 @@
 	
 	$().ready(function() {
 		
+		TODO
+		validierung der beiden radios und der checkbox korrigieren
+		- radio schon auf focus (nicht erst blur)
+		- checkbox hängt bei click nach submit, ansonsten wirds nicht invalid
+		
 		// validate signup form on keyup and submit
 		$("#signupform").validate({
 			rules: {
@@ -38,36 +43,41 @@
 					required: true,
 					email: true
 				},
-				topic: {
-					required: "#newsletter:checked",
-					minLength: 2
-				},
-				agree: "required"
+				dateformat: "required",
+				terms: "required"
 			},
 			messages: {
-				firstname: "Please enter your firstname",
-				lastname: "Please enter your lastname",
+				firstname: "Enter your firstname",
+				lastname: "Enter your lastname",
 				username: {
-					required: "Please enter a username",
-					minLength: "Your username must consist of at least 2 characters"
+					required: "Enter a username",
+					minLength: "Enter at least 2 characters"
 				},
 				password: {
-					required: "Please provide a password",
-					minLength: "Your password must be at least 5 characters long"
+					required: "Provide a password",
+					minLength: "Enter at least 5 characters"
 				},
 				password_confirm: {
-					required: "Please provide a password",
-					minLength: "Your password must be at least 5 characters long",
-					equalTo: "Please enter the same password as above"
+					required: "Repeat your password",
+					minLength: "Enter at least 5 characters",
+					equalTo: "Enter the same password as above"
 				},
 				email: "Please enter a valid email address",
-				agree: "Please accept our policy"
+				dateformat: "Choose your preferred dateformat",
+				terms: "&nbsp;"
 			},
 			errorPlacement: function(error, element) {
-				error.addClass("error_msg").appendTo( element.parent("td").next("td").find("span").addClass("error") );
+				if ( element.is(":radio") )
+					error.appendTo( element.parent().next().next() );
+				else if ( element.is(":checkbox") )
+					error.appendTo ( element.next() );
+				else
+					error.appendTo( element.parent().next() );
 			},
-			errorElement: "span",
-			errorClass: "x"
+			submitHandler: function() {
+				alert("submitted!");
+			},
+			success: "success"
 		});
 		
 		// propose username by combining first- and lastname
@@ -87,7 +97,7 @@
 <div id="content">
 
 <div id="header">
-  <div id="headerlogo"><a href="/"><img src="http://static.rememberthemilk.com/img/logo.png" alt="Remember The Milk" /></a></div>
+  <div id="headerlogo"><a href="/"><img src="images/milk.png" alt="Remember The Milk" /></a></div>
 </div>
 <div style="clear: both;"><div></div></div>
 
@@ -109,35 +119,32 @@
 	  		  <tr>
 	  		  	<td class="label"><label id="lfirstname" for="firstname">First Name</label></td>
 	  		  	<td class="field"><input id="firstname" name="firstname" type="text" class="textfield" value="" maxlength="100" /></td>
-	  		  	<td class="status"><span id="firstnameStatus" ></span></td>
+	  		  	<td class="status"></td>
 	  		  </tr>
 	  		  <tr>
 	  			<td class="label"><label id="llastname" for="lastname">Last Name</label></td>
 	  			<td class="field"><input id="lastname" name="lastname" type="text" class="textfield" value="" maxlength="100" /></td>
-	  			<td class="status"><span id="lastnameStatus" ></span></td>
+	  			<td class="status"></td>
 	  		  </tr>
 	  		  <tr>
-
 	  			<td class="label"><label id="lusername" for="username">Username</label></td>
 	  			<td class="field"><input id="username" name="username" type="text" class="textfield" value="" maxlength="50" /></td>
-	  			<td class="status"><span id="usernameStatus" ></span></td>
+	  			<td class="status"></span></td>
 	  		  </tr>
 	  		  <tr>
 	  			<td class="label"><label id="lpassword" for="password">Password</label></td>
 	  			<td class="field"><input id="password" name="password" type="password" class="textfield" maxlength="50" value="" /></td>
-	  			<td class="status"><span id="firstPasswordStatus" ></span></td>
-
+	  			<td class="status"></td>
 	  		  </tr>
 	  		  <tr>
 	  			<td class="label"><label id="lpassword_confirm" for="password_confirm">Confirm Password</label></td>
 	  			<td class="field"><input id="password_confirm" name="password_confirm" type="password" class="textfield" maxlength="50" value="" /></td>
-	  			<td class="status"><span id="passwordStatus" ></span></td>
+	  			<td class="status"></td>
 	  		  </tr>
 	  		  <tr>
 	  			<td class="label"><label id="lemail" for="email">Email Address</label></td>
-
 	  			<td class="field"><input id="email" name="email" type="text" value="" class="textfield" maxlength="150" /></td>
-	  			<td class="status"><span id="emailStatus" ></span></td>
+	  			<td class="status"></td>
 	  		  </tr>
               	  		  <tr>
 	  			<td class="label"><label>Which Looks Right</label></td>
@@ -147,16 +154,14 @@
 
 	  			<tr>
 	  				<td style="padding-right: 5px;">
-	  				<input id="dateformat_eu" name="dateformat" type="radio" value="0"  />
-		            <label id="ldateformat_eu" for="dateformat_eu">14/02/07</label>
+		  				<input id="dateformat_eu" name="dateformat" type="radio" value="0"  />
+			            <label id="ldateformat_eu" for="dateformat_eu">14/02/07</label>
 	  				</td>
 	  				<td style="padding-left: 5px;">
-	  				<input id="dateformat_am" name="dateformat" type="radio" value="1"  />
-		            <label id="ldateformat_am" for="dateformat_am">02/14/07</label>
-
+		  				<input id="dateformat_am" name="dateformat" type="radio" value="1"  />
+			            <label id="ldateformat_am" for="dateformat_am">02/14/07</label>
 	  				</td>
 	  				<td>
-	  				<span id="dateformatStatus" ></span>
 	  				</td>
 	  			</tr>
 	  			</tbody>
@@ -167,11 +172,10 @@
 	  		  <tr>
 	  			<td class="label">&nbsp;</td>
 	  			<td class="field" colspan="2">
-	  			<div id="termswrap">
-	  			<input id="terms" type="checkbox" name="terms"  />
-	            <label id="lterms" for="terms">I have read and accept the <a onclick="window.open('/help/terms.rtm','TOS','status=yes,scrollbars=yes,resizable=yes,width=800,height=480'); return false;" href="/help/terms.rtm">Terms of Use</a>.<span id="termsStatus" ></span></label>
-	            </div> <!-- /termswrap -->
-
+		  			<div id="termswrap">
+			  			<input id="terms" type="checkbox" name="terms"  />
+			            <label id="lterms" for="terms">I have read and accept the Terms of Use.</label>
+		            </div> <!-- /termswrap -->
 	  			</td>
 	  		  </tr>
 	  		  <tr>
@@ -182,23 +186,10 @@
 	  		  </tr>
 
 	  		  </table>
-                    <input type="hidden" name="language" id="language" value="en-GB" />
-                  </form>
+          </form>
       </div> <!-- /signupwrap -->
     </div> <!-- /signupbox -->
-    <script type="text/javascript"><!--
-    var emailInUse = null;
-    var errorField = null;
-    if (errorField !== null)
-    {
-        document.getElementById(errorField).focus();
-    }
- --></script>
-<div style="clear: both;"><div></div></div>
-
 </div>
-
-
 
 </div> <!-- /content -->
 
