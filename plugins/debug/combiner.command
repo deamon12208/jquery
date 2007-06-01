@@ -1,2 +1,2 @@
 cd /usr/local/apache2/htdocs/plugins/debug/
-combiner < debug.html >debug-for-googlecode.html 
+combiner < debug.html >debug-all-in-one.html 
