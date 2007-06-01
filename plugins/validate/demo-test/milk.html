@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>Test for jQuery validate() plugin</title>
+
+<link rel="stylesheet" type="text/css" media="screen" href="css/milk.css" />
+<script src="js/jquery.js" type="text/javascript"></script>
+<script src="../jquery.metadata.js" type="text/javascript"></script>
+<script src="../jquery.validate.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+	$.validator.setDefaults({
+		debug: true
+	});
+	
+	$().ready(function() {
+		
+		// validate signup form on keyup and submit
+		$("#signupform").validate({
+			rules: {
+				firstname: "required",
+				lastname: "required",
+				username: {
+					required: true,
+					minLength: 2
+				},
+				password: {
+					required: true,
+					minLength: 5
+				},
+				password_confirm: {
+					required: true,
+					minLength: 5,
+					equalTo: "#password"
+				},
+				email: {
+					required: true,
+					email: true
+				},
+				topic: {
+					required: "#newsletter:checked",
+					minLength: 2
+				},
+				agree: "required"
+			},
+			messages: {
+				firstname: "Please enter your firstname",
+				lastname: "Please enter your lastname",
+				username: {
+					required: "Please enter a username",
+					minLength: "Your username must consist of at least 2 characters"
+				},
+				password: {
+					required: "Please provide a password",
+					minLength: "Your password must be at least 5 characters long"
+				},
+				password_confirm: {
+					required: "Please provide a password",
+					minLength: "Your password must be at least 5 characters long",
+					equalTo: "Please enter the same password as above"
+				},
+				email: "Please enter a valid email address",
+				agree: "Please accept our policy"
+			},
+			errorPlacement: function(error, element) {
+				error.addClass("error_msg").appendTo( element.parent("td").next("td").find("span").addClass("error") );
+			},
+			errorElement: "span",
+			errorClass: "x"
+		});
+		
+		// propose username by combining first- and lastname
+		$("#username").focus(function() {
+			var firstname = $("#firstname").val();
+			var lastname = $("#lastname").val();
+			if(firstname && lastname && !this.value) {
+				this.value = firstname + "." + lastname;
+			}
+		});
+
+	});
+</script>
+
+</head>
+<body>
+<div id="content">
+
+<div id="header">
+  <div id="headerlogo"><a href="/"><img src="http://static.rememberthemilk.com/img/logo.png" alt="Remember The Milk" /></a></div>
+</div>
+<div style="clear: both;"><div></div></div>
+
+
+<div class="content">
+
+
+    <div id="signupbox">
+      <!--br /-->
+            <div id="signuptab">
+        <ul>
+          <li id="signupcurrent"><a href=" ">Signup</a></li>
+
+        </ul>
+      </div> <!-- /signuptab -->
+      <div id="signupwrap">
+      		<form id="signupform" autocomplete="off" method="post" action="">
+	  		  <table>
+	  		  <tr>
+	  		  	<td class="label"><label id="lfirstname" for="firstname">First Name</label></td>
+	  		  	<td class="field"><input id="firstname" name="firstname" type="text" class="textfield" value="" maxlength="100" /></td>
+	  		  	<td class="status"><span id="firstnameStatus" ></span></td>
+	  		  </tr>
+	  		  <tr>
+	  			<td class="label"><label id="llastname" for="lastname">Last Name</label></td>
+	  			<td class="field"><input id="lastname" name="lastname" type="text" class="textfield" value="" maxlength="100" /></td>
+	  			<td class="status"><span id="lastnameStatus" ></span></td>
+	  		  </tr>
+	  		  <tr>
+
+	  			<td class="label"><label id="lusername" for="username">Username</label></td>
+	  			<td class="field"><input id="username" name="username" type="text" class="textfield" value="" maxlength="50" /></td>
+	  			<td class="status"><span id="usernameStatus" ></span></td>
+	  		  </tr>
+	  		  <tr>
+	  			<td class="label"><label id="lpassword" for="password">Password</label></td>
+	  			<td class="field"><input id="password" name="password" type="password" class="textfield" maxlength="50" value="" /></td>
+	  			<td class="status"><span id="firstPasswordStatus" ></span></td>
+
+	  		  </tr>
+	  		  <tr>
+	  			<td class="label"><label id="lpassword_confirm" for="password_confirm">Confirm Password</label></td>
+	  			<td class="field"><input id="password_confirm" name="password_confirm" type="password" class="textfield" maxlength="50" value="" /></td>
+	  			<td class="status"><span id="passwordStatus" ></span></td>
+	  		  </tr>
+	  		  <tr>
+	  			<td class="label"><label id="lemail" for="email">Email Address</label></td>
+
+	  			<td class="field"><input id="email" name="email" type="text" value="" class="textfield" maxlength="150" /></td>
+	  			<td class="status"><span id="emailStatus" ></span></td>
+	  		  </tr>
+              	  		  <tr>
+	  			<td class="label"><label>Which Looks Right</label></td>
+	  			<td class="field" colspan="2" style="vertical-align: top; padding-top: 2px;">
+	  			<table>
+	  			<tbody>
+
+	  			<tr>
+	  				<td style="padding-right: 5px;">
+	  				<input id="dateformat_eu" name="dateformat" type="radio" value="0"  />
+		            <label id="ldateformat_eu" for="dateformat_eu">14/02/07</label>
+	  				</td>
+	  				<td style="padding-left: 5px;">
+	  				<input id="dateformat_am" name="dateformat" type="radio" value="1"  />
+		            <label id="ldateformat_am" for="dateformat_am">02/14/07</label>
+
+	  				</td>
+	  				<td>
+	  				<span id="dateformatStatus" ></span>
+	  				</td>
+	  			</tr>
+	  			</tbody>
+	  			</table>
+	  			</td>
+	  		  </tr>
+
+	  		  <tr>
+	  			<td class="label">&nbsp;</td>
+	  			<td class="field" colspan="2">
+	  			<div id="termswrap">
+	  			<input id="terms" type="checkbox" name="terms"  />
+	            <label id="lterms" for="terms">I have read and accept the <a onclick="window.open('/help/terms.rtm','TOS','status=yes,scrollbars=yes,resizable=yes,width=800,height=480'); return false;" href="/help/terms.rtm">Terms of Use</a>.<span id="termsStatus" ></span></label>
+	            </div> <!-- /termswrap -->
+
+	  			</td>
+	  		  </tr>
+	  		  <tr>
+	  			<td class="label"><label id="lsignupsubmit" for="signupsubmit">Signup</label></td>
+	  			<td class="field" colspan="2">
+	            <input id="signupsubmit" name="signup" type="submit" value="Signup" />
+	  			</td>
+	  		  </tr>
+
+	  		  </table>
+                    <input type="hidden" name="language" id="language" value="en-GB" />
+                  </form>
+      </div> <!-- /signupwrap -->
+    </div> <!-- /signupbox -->
+    <script type="text/javascript"><!--
+    var emailInUse = null;
+    var errorField = null;
+    if (errorField !== null)
+    {
+        document.getElementById(errorField).focus();
+    }
+ --></script>
+<div style="clear: both;"><div></div></div>
+
+</div>
+
+
+
+</div> <!-- /content -->
+
+<a href="index.html">Back to validation plugin main page</a>
+
+</body>
+</html>

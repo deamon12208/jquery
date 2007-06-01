@@ -1,0 +1,504 @@
+/* GENERAL ELEMENTS */
+
+* { margin: 0; padding: 0; }
+
+body, input, select, textarea { font-family: verdana, arial, helvetica, sans-serif; font-size: 11px; }
+body { color: #333;  background-color: #fff; text-align: center; }
+
+a:link { color:#0060BF; text-decoration: underline; }
+a:visited { color:#0060BF; text-decoration: underline; }
+a:active { color:#0060BF; text-decoration: underline; }
+a:hover { color:#000000; text-decoration: underline; }
+	
+h1, h2, h3, h4, h5, h6 { font-family: "Lucida Grande", "Lucida Sans Unicode", geneva, verdana, arial, helvetica, sans-serif; font-weight: bold; color: #666; }
+h1 { font-size: 1.8em; margin: 0em 0em 0.6em 0em; color: #EC5800; }
+h2 { font-size: 1.5em; margin: 1.2em 0em 0.4em 0em; }
+h3 { font-size: 1.4em; margin: 1.2em 0em 0.4em 0em; color: #EC5800; }
+h4 { font-size: 1.2em; margin: 1.2em 0em 0.4em 0em; }
+h5 { font-size: 1.0em; margin: 1.2em 0em 0.4em 0em; }
+h6 { font-size: 0.8em; margin: 1.2em 0em 0.4em 0em; }
+
+img { border: 0px; }
+
+p { font-size: 1.0em; line-height: 1.3em; margin: 1.2em 0em 1.2em 0em; }
+li > p { margin-top: 0.2em; }
+pre { font-family: monospace; font-size: 1.0em; }
+strong, b { font-weight: bold; }
+
+/* PAGE ELEMENTS */
+
+/* Content */
+
+#content { margin: 0em auto; width: 765px; padding: 10px 0 10px 0; text-align: left; /* Win IE5 */ }
+.content { margin-left: 4.5em; margin-right: 4.5em; }
+.content ol, .content ul, .content li { font-size: 1.0em; line-height: 1.3em; margin: 0.2em 0 0.1em 1.5em; }
+.content ol.terms li { margin-bottom: 1em; }
+
+/* Header */
+
+#header { padding-bottom: 10em; }
+#headerlogo { float: left; }
+#headerlogo img { width: 188px; height: 83px;  }
+#headernav { float: right; }
+
+/* Footer */
+
+#footer { padding-top: 3em; padding-bottom: 2em; }
+#footercontent { float: left; display: inline; color: #959595; }
+#footerfeedback { float: right; display: inline; margin: 0; padding: 0; }
+#footerfeedbackimg { padding-top: 0.2em; }
+.footerfeedbacktext { vertical-align: top; }
+
+/* Top right navigation */
+
+#navlist { float: right; margin-top: -50px; margin-bottom: 10px; margin-right: -20px; width: 150px; }
+#navlist ul { list-style: none; margin: 0; padding: 0; }
+#navlist ul li { background-image: url("/img/ico/ico_check_med_lbl.gif"); background-repeat: no-repeat; background-position: 0em 0.2em; padding-left: 22px; padding-bottom: 0.4em; font-size: 1.0em; font-weight: bold; }
+
+.greyborder { border-style: solid; border-width: 1px; border-color: #CACACA; margin-top: 8px; margin-bottom: 8px; margin-left: 25px; }
+
+.statusmsgbox { padding-bottom: 20px; }
+
+.narrow1{ width: 50%; line-height: 1.3em; }
+.narrow2{ width: 50%; line-height: 1.5em; }
+
+#detailstabs ul, #listtabs ul, #detailstabs li, #listtabs li, #signuptab ul, #signuptab li,
+#logintab ul, #logintab li, #forgottab ul, #forgottab li, #passwordtab ul, #passwordtab li,
+#verifytab ul, #verifytab li { line-height: 1.8em; }
+
+label { font-weight: bold; }
+#reminders label { font-weight: normal; }
+
+table.tabbedtable { padding-left: 3em; }
+table.tabbedtable td { padding-bottom: 5px; }
+table.tabbedtable label { text-align: right; padding-right: 9px; }
+.hiddenlabel { visibility: hidden; }
+.largelink { border: 1px solid #cacaca; padding: 10px; background-color: #E8EEF7; font-size: 1.2em; font-weight: bold; }
+.largelinkwrap { padding-top: 10px; padding-bottom: 10px; }
+
+/* Tables */
+
+.tblbasic { border-spacing: 0px; border: 1px solid #CACACA; border-bottom: 0; border-collapse: collapse; }
+.tblbasic thead { background-color: #F9F9F9; font-weight: bold; }
+.tblbasic th { background-color: #F9F9F9; font-weight: bold; padding: 9px; border-bottom: 1px solid #CACACA; }
+.tblbasic td { padding: 9px; border-bottom: 1px solid #CACACA; }
+.tblbasic td+td, .tblbasic th+th { border-left: 1px solid #CACACA; }
+
+/* CONTENT PAGES */
+
+/* About */
+
+#about div.service h2 { margin: 0px; }
+#about div.serviceimg { padding-top: 2px; position: absolute; }
+#about div.servicetxt { padding-top: 5px; padding-left: 297px; position: relative; }
+#about div.profiles { padding-top: 5px; }
+#about div.profiles h2 { margin: 0px; }
+#about div.profileimg { padding-top: 2px; position: absolute; }
+#about div.profileimg img { border: 1px solid #000; }
+#about div.profiletxt { padding-left: 61px; position: relative; }
+
+/* About - Press */
+
+#press { padding-top: 10px; }
+#press a { font-weight: bold; }
+#press .article { padding-bottom: 15px; }
+
+/* API */
+
+#api { width: 100%; margin-top: -10px; }
+#api .col1 { float: left; width: 32%; padding-right: 1%; }
+#api .col2 { float: left; width: 32%; padding-right: 1%; }
+#api .col3 { float: left; width: 32%; }
+#api li { margin-bottom: 0.3em; }
+#api dd { padding-left: 20px; }
+#api dd, dt { line-height: 1.7em; }
+#api code { font-weight: bold; }
+.boxhighlight { width: 100%; border: 1px solid #cacaca; background-color: #E8EEF7; padding: 10px; }
+#requestkey { padding-top: 10px; }
+#requestkey .label { width: 130px; text-align: right; padding-right: 4px; vertical-align: top; }
+#requestkey label { display: block; margin-bottom: 10px; }
+#requestkey .field { vertical-align: top; }
+#requestkey .inputfield { margin-bottom: 10px; }
+#requestkey .instruct { width: 450px; margin-bottom: 10px; }
+
+/* Help */
+
+#help { width: 100%; margin-top: -10px; }
+#help .col1 { float: left; width: 49%; padding-right: 2%; }
+#help .col2 { float: left; width: 49%; }
+#help li { margin-bottom: 0.3em; }
+
+/* Help - Feedback */
+
+#feedback label { display: block; width: 100px; float: left; text-align: right; padding-right: 10px; }
+#feedback input, #feedback textarea { margin-bottom: 10px; }
+
+/* Help - Forums */
+
+#forum .forumtblbasic { width: 100%; border-spacing: 0px; border-collapse: collapse; }
+#forum .forumtblbasic thead { color: #6F6F6F; font-size: 10px; }
+#forum .forumtblbasic td { padding: 8px; border-bottom: 1px solid #E2E2E2; }
+#forum .replies { text-align: center; }
+#forum .latestpost { color: #999; }
+#forumsearch { }
+#forumnewtopic { float: right; font-size: 0.95em; }
+#forumfeed { float: right; }
+#forumpages { font-size: 1.2em; }
+.forumtopics { font-size: 0.95em; }
+#forumpost label { display: block; width: 80px; float: left; text-align: right; padding-right: 10px; }
+#forumpost input, #forumpost textarea {   margin-bottom: 10px; }
+.forumatomicon { vertical-align: bottom; padding-right: 3px }
+.forumpostreply { padding-left: 20px }
+.forumpostdate { font-size: 0.95em; color: #999; margin-top: -10px; }
+.forumnewpost { padding-right: 5px; vertical-align: bottom; }
+.rtmperson { font-weight: bold; color: #0060BF; }
+.latestpost { white-space: nowrap; }
+
+/* Translation */
+
+#translate .languagebox { padding: 10px 20px 10px 20px; margin-bottom: 20px; }
+#translate .languagebox h2 { margin-top: 0.2em }
+#translate .languagebox a { font-weight: bold; }
+#translate .addeditbox { padding: 5px 20px 5px 20px; }
+#translate .mostcomplete td { padding: 6px; }
+#translate .mostcomplete { float: right; padding-left: 17px; }
+#translate .mostcomplete h2 { margin-top: 0em; margin-bottom: 0.8em; }
+#translate .startlink { padding-top: 5px; font-size: 1.3em; font-weight: bold; }
+#translatestatus { width: 100%; margin-top: -15px; }
+#translatestatus .col1 { float: left; padding-right: 4%; }
+#translatestatus .col2 { float: left; }
+#translatestatus h2 { padding-bottom: 5px; }
+#translatestatus td { padding: 6px; }
+#translatesetup { padding-top: 10px; }
+#translatesetup .label { display: block; width: 140px; float: left; text-align: right; padding-right: 10px; }
+#translatesetup .emaillabel { width: auto; padding: 0; float: none; display: block; }
+#translatesetup input, #translatesetup select, #translatesetup textarea { margin-bottom: 10px; }
+#translatephrase table td.col1 { background-color: #F9F9F9; font-weight: bold; width: 120px; }
+#translatephrase .tbltranslate { width: 100%; margin-top: 15px; margin-bottom: 10px; }
+#translatephrase textarea { font-family: monospace, serif; font-size: 13px; width: 505px; height: 120px; }
+#translatephrase h2 { margin-bottom: 0em; }
+#translatephrase hr { margin-top: 30px; margin-bottom: -5px; border: none; border-top: 1px solid #CACACA; height: 1px; width: 100%; }
+.translationplch { color: #EC5800; }
+
+/* SPECIAL ELEMENTS */
+
+/* App Continue */
+
+#cont { padding-top: 20px; }
+#conttbl { padding: 0; margin: 0em auto; }
+#conttbl1 { padding-right: 20px; }
+#conttbl1 img { width: 188px; height: 83px; }
+#conttbl2 { text-align: left; white-space: nowrap; }
+#conttbl2 h2 { margin-top: 38px; padding-left: 20px; border-left: 1px solid #cacaca; }
+
+/* COMMON ELEMENTS */
+
+/* Rounded corner boxes */
+
+/* Orange box (Old) */
+
+.orange_rbroundbox { background: url(/img/orangebox_back.gif) repeat; }
+.orange_rbtop div { background: url(/img/orangebox_tl.gif) no-repeat top left; }
+.orange_rbtop { background: url(/img/orangebox_tr.gif) no-repeat top right; }
+.orange_rbbot div { background: url(/img/orangebox_bl.gif) no-repeat bottom left; }
+.orange_rbbot { background: url(/img/orangebox_br.gif) no-repeat bottom right; }
+.orange_rbtop div, .orange_rbtop, .orange_rbbot div, .orange_rbbot { width: 100%; height: 7px; font-size: 1px; }
+.orange_rbcontent { margin: 0 7px; }
+
+/* Blue box */
+
+.blue_rb { display: block; }
+.blue_rb * { display: block; height: 1px; overflow: hidden; background:#0060BF; }
+.blue_rb1 { border-right: 1px solid #91bae3; padding-right: 1px; margin-right: 3px; border-left: 1px solid #91bae3; padding-left: 1px; margin-left: 3px; background: #3f87cf; }
+.blue_rb2 { border-right: 1px solid #e5eff8; border-left: 1px solid #e5eff8; padding: 0px 1px; background: #307ecb; margin: 0px 1px; }
+.blue_rb3 { border-right: 1px solid #307ecb; border-left: 1px solid #307ecb; margin: 0px 1px; }
+.blue_rb4 { border-right: 1px solid #91bae3; border-left: 1px solid #91bae3; }
+.blue_rb5 { border-right: 1px solid #3f87cf; border-left: 1px solid #3f87cf; }
+.blue_rbcontent { padding: 2px 5px; background: #0060BF; text-align: center; }
+
+/* Grey box (Old) */
+
+.grey_rbroundbox { background: url(/img/whitebox_back.gif) repeat; }
+.grey_rbtop { background: url(/img/whitebox_t.gif) repeat-x; }
+.grey_rbtop div { background: url(/img/whitebox_tl.gif) no-repeat top left; }
+.grey_rbtop div div { background: url(/img/whitebox_tr.gif) no-repeat top right; }
+.grey_rbbot { background: url(/img/whitebox_b.gif) repeat-x; }
+.grey_rbbot div { background: url(/img/whitebox_bl.gif) no-repeat top left; }
+.grey_rbbot div div { background: url(/img/whitebox_br.gif) no-repeat top right; }
+.grey_rbcontentwrap { background: url(/img/whitebox_l.gif) repeat-y; }
+.grey_rbcontent { background: url(/img/whitebox_r.gif) repeat-y right; }
+.grey_rbtop div, .grey_rbtop, .grey_rbbot div, .grey_rbbot { width: 100%; height: 7px; font-size: 1px; }
+.grey_rbcontent { padding: 1px 0; margin: 0; }
+
+/* White box (Old) */
+
+.white_rbroundbox { background: url(/img/whitebox_back.gif) repeat; }
+.white_rbtop { background: url(/img/whitebox_t.gif) repeat-x; }
+.white_rbtop div { background: url(/img/whitebox_tl.gif) no-repeat top left; }
+.white_rbtop div div { background: url(/img/whitebox_tr.gif) no-repeat top right; }
+.white_rbbot { background: url(/img/whitebox_b.gif) repeat-x; }
+.white_rbbot div { background: url(/img/whitebox_bl.gif) no-repeat top left; }
+.white_rbbot div div { background: url(/img/whitebox_br.gif) no-repeat top right; }
+.white_rbcontentwrap { background: url(/img/whitebox_l.gif) repeat-y; }
+.white_rbcontent { background: url(/img/whitebox_r.gif) repeat-y right; }
+.white_rbtop div, .white_rbtop, .white_rbbot div, .white_rbbot { width: 100%; height: 7px; font-size: 1px; }
+.white_rbcontent { padding: 1px 0; margin: 0; }
+
+/* Content Box */
+
+div.contentbox { width: 85%; text-align: center; margin: 0em auto; }
+div.contentboxwrap { border: 1px solid #CACACA; border-top: 0px; text-align: left; padding: 30px 30px 20px 30px; clear: both; }
+
+/* Content Box Form */
+
+div.contentboxwrap table { border-spacing: 0px; border-collapse: collapse; empty-cells: show; }
+div.contentboxwrap td.label { padding-right: 10px; padding-bottom: 11px; white-space: nowrap; text-align: right; width: 125px; }
+div.contentboxwrap .hiddenlabel { visibility: hidden; }
+div.contentboxwrap td.field { padding-bottom: 11px; white-space: nowrap; }
+div.contentboxwrap td.status { padding-left: 8px; padding-bottom: 11px; white-space: nowrap; }
+div.contentboxwrap input.textfield { width: 150px; }
+
+/* Status Messages */
+
+div.contentboxwrap .error_msg, div.contentboxwrap .success_msg { font-weight: bold; margin-left: 19px; }
+div.contentboxwrap .error_msg { color: #EA5200; }
+div.contentboxwrap .success_msg { color: #0060BF; }
+div.contentboxwrap .error, div.contentboxwrap .success { padding-right: 15px; padding-bottom: 15px; }
+div.contentboxwrap .error { background: url("/img/ico/ico_cross_org.gif") no-repeat 0px 0px; }
+div.contentboxwrap .success { background: url("/img/ico/ico_check_blu.gif") no-repeat 0px 0px; }
+
+/* Navigation Tabs */
+
+div.navtabs { float: left; width: 100%; background: #fff url("/img/navtab_bg.gif") repeat-x bottom; line-height: normal; }
+div.navtabs ul { margin: 0px; padding: 10px 10px 0px 10px; list-style: none; }
+div.navtabs li { display: inline; margin: 0px; padding: 0px; }
+div.navtabs a { float: left; background: url("/img/navtab_l.png") 0px -300px no-repeat; margin: 0px; padding: 0px 2px 0px 9px; border-bottom: 1px solid #CACACA; text-decoration: none; }
+div.navtabs a span { float: left; display: block; background: url("/img/navtab_r.png") 100% -300px no-repeat; padding: 5px 11px 4px 2px; font-weight: bold; color: #fff; }
+/* Commented Backslash Hack hides rule from IE5-Mac \*/
+div.navtabs a span { float:none; }
+/* End IE5-Mac hack */
+div.navtabs li a:link, div.navtabs li a:visited, div.navtabs li a:active { text-decoration: none; }
+div.navtabs a:hover span { color: #000; }
+div.navtabs li.navtab_current a { background-position: 0% 0px; border-width: 0px; }
+div.navtabs li.navtab_current a span { background-position: 100% 0px; padding-bottom: 5px; color: #000; }
+div.navtabs a:hover { background-position: 0% 0px; }
+div.navtabs a:hover span { background-position: 100% 0px; }
+
+/* Smart Lists */
+
+div.navtabs li.navtab_smart a { background-position: 0px -450px; }
+div.navtabs li.navtab_smart a span { background-position: 100% -450px; color:#fff; }
+div.navtabs li.navtab_smart a:hover { background-position: 0% 0px; }
+div.navtabs li.navtab_smart a:hover span { background-position: 100% 0px; color: #000; }
+
+/* Grey Tabs */
+
+div.navtabs_grey a { background: url("/img/navtab_l.png") 0px -300px no-repeat; }
+div.navtabs_grey a span { background: url("/img/navtab_r.png") 100% -300px no-repeat; }
+div.navtabs_grey li.navtab_current a { background-position: 0% -150px; border-width: 0px; }
+div.navtabs_grey li.navtab_current a span { background-position: 100% -150px; padding-bottom: 5px; color: #000; }
+div.navtabs_grey a:hover { background-position: 0% -150px; }
+div.navtabs_grey a:hover span { background-position: 100% -150px; }
+
+/* Status Message Box */
+
+.smb { padding-bottom: 12px; }
+.smb_rb { display: block; }
+.smb_rb * { display: block; height: 1px; overflow: hidden; background: #FFCC66; }
+.smb_rb1 { border-right: 1px solid #ffe9bd; padding-right: 1px; margin-right: 3px; border-left: 1px solid #ffe9bd; padding-left: 1px; margin-left: 3px; background: #ffd88c; }
+.smb_rb2 { border-right: 1px solid #fff9ef; border-left: 1px solid #fff9ef; padding: 0px 1px; background: #ffd583; margin: 0px 1px; }
+.smb_rb3 { border-right: 1px solid #ffd583; border-left: 1px solid #ffd583; margin: 0px 1px; }
+.smb_rb4 { border-right: 1px solid #ffe9bd; border-left: 1px solid #ffe9bd; }
+.smb_rb5 { border-right: 1px solid #ffd88c; border-left: 1px solid #ffd88c; }
+.smb_rbcontent { padding: 5px 15px; background: #FFCC66; text-align: left; }
+.smb_rbcontent table { border-spacing: 0px; border-collapse: collapse; empty-cells: show; }
+.smb_rbcontent table td.smb_ico img { vertical-align: bottom; width: 14px; height: 14px; }
+.smb_rbcontent table td.smb_msg { padding-left: 7px; font-weight: bold; }
+
+#signuptab {
+  float:left;
+  width:100%;
+  background:#fff url("http://static.rememberthemilk.com/img/bg.gif") repeat-x bottom;
+  font-size: 1.0em;
+  line-height: normal;
+}
+#signuptab ul {
+  margin:0;
+  padding: 0px 10px 0px 10px;
+  list-style:none;
+}
+#signuptab li {
+  float:left;
+  background:url("http://static.rememberthemilk.com/img/left_white.png") no-repeat left top;
+  margin:0;
+  padding:0 3px 0 9px;
+  border-bottom:1px solid #CACACA;
+}
+#signuptab a {
+  float:left;
+  display:block;
+  width:.1em;
+  background:url("http://static.rememberthemilk.com/img/right_white.png") no-repeat right top;
+  padding:2px 15px 0px 6px;
+  text-decoration:none;
+  font-weight:bold;
+  color:#fff;
+  white-space: nowrap;
+}
+#signuptab > ul a {width:auto;}
+/* Commented Backslash Hack hides rule from IE5-Mac \*/
+#signuptab a {float:none;}
+/* End IE5-Mac hack */
+#signuptab a:hover {
+  color:#333;
+}
+#signuptab #signupcurrent {
+  background-position:0 -150px;
+  border-width:0;
+}
+#signuptab #signupcurrent a {
+  background-position:100% -150px;
+  padding-bottom:1px;
+  color:#000;
+}
+#signuptab li:hover, #signuptab li:hover a {
+  background-position:0% -150px;
+  color:#000;
+}
+#signuptab li:hover a {
+  background-position:100% -150px;
+}
+
+/* Signup box */
+
+#signupbox {
+  width: 100%;
+  text-align: center;
+  margin: 0em auto;
+}
+
+#signupwrap {
+  border: 1px solid #CACACA;
+  border-top: 0;
+  text-align: left;
+  padding: 35px 10px 20px 30px;
+  clear: both;
+}
+
+/* Unsupported browsers */
+
+.orange_rbcontent { padding: 0.4em; }
+.orange_rbroundbox { width: 100%; }
+
+#unsupported {
+  font-weight: bold;
+  text-align: left;
+}
+
+/*#content {
+  padding-top: 15px;
+}*/
+
+/* Signup form */
+
+#signupform table {
+  border-spacing: 0px;
+  border-collapse: collapse;
+  empty-cells: show;
+}
+
+#signupform .label {
+  padding-top: 2px;
+  padding-right: 8px;
+  vertical-align: top;
+  text-align: right;
+  width: 125px;
+  white-space: nowrap;
+}
+
+#signupform .field {
+  padding-bottom: 10px;
+  white-space: nowrap;
+}
+
+#signupform .status {
+  padding-top: 2px;
+  padding-left: 8px;
+  vertical-align: top;
+  width: 246px;
+  white-space: nowrap;
+}
+
+#signupform .textfield {
+  width: 150px;
+}
+
+#signupform .error {
+  background:url("http://static.rememberthemilk.com/img/ico/ico_cross_org.gif") no-repeat 0px 0px;
+  padding-right: 15px;
+  padding-bottom: 15px;
+}
+
+#signupform .error_msg {
+  font-weight: bold;
+  color: #EA5200;
+  margin-left: 19px;
+}
+
+#signupform .success {
+  background:url("http://static.rememberthemilk.com/img/ico/ico_check_blu.gif") no-repeat 0px 0px;
+  padding-right: 15px;
+  padding-bottom: 15px;
+}
+
+#signupform .success_msg {
+  font-weight: bold;
+  color: #0060BF;
+  margin-left: 19px;
+}
+
+#signupform #dateformatStatus, #signupform #termsStatus {
+  margin-left: 6px;
+}
+
+#signupform #dateformat_eu {
+ vertical-align: middle;
+}
+
+#signupform #ldateformat_eu {
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+#signupform #dateformat_am {
+  vertical-align: middle;
+}
+
+#signupform #ldateformat_am {
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+#signupform #termswrap {
+  float: left;
+}
+
+#signupform #terms {
+  vertical-align: middle;
+  float: left;
+  display: block;
+  margin-right: 5px;
+}
+
+#signupform #lterms {
+  font-weight: normal;
+  vertical-align: middle;
+  float: left;
+  display: block;
+  width: 350px;
+  white-space: normal;
+}
+
+#signupform #lsignupsubmit {
+  visibility: hidden;
+}
