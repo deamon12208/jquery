@@ -820,7 +820,6 @@ test("validate on keyup and blur", function() {
 	}
 	var e = $("#firstname");
 	var v = $("#testForm1").validate();
-	e.focus();
 	errors(0);
 	e.val("a");
 	e.keyup();
@@ -837,7 +836,6 @@ test("validate email on keyup and blur", function() {
 	var v = $("#testForm1").validate();
 	v.form();
 	errors(2);
-	e.focus();
 	e.val("a");
 	e.keyup();
 	errors(1);
