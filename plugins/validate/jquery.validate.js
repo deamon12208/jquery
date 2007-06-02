@@ -462,6 +462,7 @@ jQuery.extend(jQuery.validator, {
 		number: "Please enter a valid number.",
 		numberDE: "Bitte geben Sie eine Nummer ein.",
 		digits: "Please enter only digits",
+		creditcard: "Please enter a valid credit card.",
 		equalTo: "Please enter the same value again.",
 		accept: "Please enter a value with a valid extension.",
 		maxLength: String.format("Please enter a value no longer then {0} characters."),
@@ -1251,6 +1252,44 @@ jQuery.extend(jQuery.validator, {
 		 */
 		digits: function(value, element) {
 			return this.required(element) || /^\d+$/.test(value);
+		},
+		
+		 /**
+         * Return true, if the value is a valid credit card number.
+         *
+         * Works with all kind of text inputs.
+         *
+         * @example <input name="cc1" class="{required:true,creditcard:true}" />
+         * @desc Declares a required input element whose value must be a valid credit card number (ignoring any non-digts).
+         *
+         * @example <input name="cc2" class="{required:true,digits:true,creditcard:true}" />
+         * @desc Declares a required input element whose value must be a valid credit card number.  No spaces or dashes allowed.
+         *
+         * @name jQuery.validator.methods.creditcard
+         * @type Boolean
+         * @cat Plugins/Validate/Methods
+         */
+		creditcard: function(value, element) {
+			if ( this.required(element) )
+				return true;
+			var nCheck = 0,
+				nDigit = 0,
+				bEven = false;
+
+			value = value.replace(/\D/g, "");
+
+			for (n = value.length - 1; n >= 0; n--) {
+				var cDigit = value.charAt(n);
+				var nDigit = parseInt(cDigit, 10);
+				if (bEven) {
+					if ((nDigit *= 2) > 9)
+						nDigit -= 9;
+				}
+				nCheck += nDigit;
+				bEven = !bEven;
+			}
+
+			return (nCheck % 10) == 0;
 		},
 		
 		/**
