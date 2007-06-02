@@ -33,6 +33,7 @@ TODO
  - one example for each option
  
 Recent changes:
+<li>Added creditcard number method (thanks to Brian Klug)</li>
 <li>Added ignore-option, eg. ignore: "[@type=hidden]", using that expression to exclude elements to validate. Default: none, though submit and reset buttons are always ignored</li>
 <li>Heavily enhanced Functions-as-messages by providing a flexible String.format helper</li>
 <li>Accept Functions as messages, providing runtime-custom-messages</li>
