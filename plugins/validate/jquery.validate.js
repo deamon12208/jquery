@@ -489,9 +489,8 @@ jQuery.extend(jQuery.validator, {
 			for ( var i = 0, element; element = this.elements[i]; i++ ) {
 				this.check( element );
 			}
-			this.showErrors();
 			jQuery.extend(this.submitMap, this.errorMap);
-			return this.errorList.length == 0;
+			return this.valid();
 		},
 
 		/**
@@ -560,6 +559,11 @@ jQuery.extend(jQuery.validator, {
 			this.prepareForm();
 			this.hideErrors();
 			this.elements.removeClass( this.settings.errorClass );
+		},
+		
+		valid: function() {
+			this.showErrors();
+			return this.errorList.length == 0;
 		},
 		
 		elementOnBlur: function(element) {
