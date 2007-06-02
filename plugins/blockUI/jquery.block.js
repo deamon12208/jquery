@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.14  (05/28/2007)
+ * Version 1.20  (06/02/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -122,6 +122,40 @@ $.fn.unblock = function() {
     });
 };
 
+/**
+ * displays the first matched element in a "display box" above a page overlay.
+ *
+ * @example  $('#myImage').displayBox();
+ * @desc displays "myImage" element in a box
+ *
+ * @name displayBox
+ * @type jQuery
+ * @cat Plugins/blockUI
+ */
+$.fn.displayBox = function(css, fn) {
+    var msg = this[0];
+    if (!msg) return;
+    var $msg = $(msg);
+    css = css || {};
+
+    var w = $msg.width()  || $msg.attr('width')  || css.width  || $.blockUI.defaults.displayBoxCSS.width;
+    var h = $msg.height() || $msg.attr('height') || css.height || $.blockUI.defaults.displayBoxCSS.height ;
+    if (w[w.length-1] == '%') {
+        var ww = document.documentElement.clientWidth || document.body.clientWidth;
+        w = (w * ww) / 100;
+    }
+    if (h[h.length-1] == '%') {
+        var hh = document.documentElement.clientHeight || document.body.clientHeight;
+        h = (h * hh) / 100;
+    }
+    
+    var ml = '-' + parseInt(w)/2 + 'px';
+    var mt = '-' + parseInt(h)/2 + 'px';
+
+    $.blockUI.impl.install(window, msg, { width: w, height: h, marginTop: mt, marginLeft: ml }, fn || 1);
+};
+
+
 // override these in your code to change the default messages and styles
 $.blockUI.defaults = {
     // the message displayed when blocking the entire page
@@ -134,17 +168,27 @@ $.blockUI.defaults = {
     pageMessageCSS:    { width:'250px', margin:'-50px 0 0 -125px', top:'50%', left:'50%', textAlign:'center', color:'#000', backgroundColor:'#fff', border:'3px solid #aaa' },
     // styles for the message when blocking an element
     elementMessageCSS: { width:'250px', padding:'10px', textAlign:'center', backgroundColor:'#fff'},
+    // styles for the displayBox
+    displayBoxCSS: { width: '400px', height: '400px', top:'50%', left:'50%' },
     // allow body element to be stetched in ie6
-    ie6Stretch: 1
+    ie6Stretch: 1,
+    // supress tab nav from leaving blocking content?
+    allowTabToLeave: 1,
+    // Title attribute for overlay when using displayBox
+    closeMessage: 'Click to close'
 };
 
 // the gory details
 $.blockUI.impl = {
+    box: null,
+    boxCallback: null,
     pageBlock: null,
     op8: window.opera && window.opera.version() < 9,
     ffLinux: $.browser.mozilla && /Linux/.test(navigator.platform),
     ie6: $.browser.msie && typeof XMLHttpRequest == 'function',
-    install: function(el, msg, css) {
+    install: function(el, msg, css, displayMode) {
+        this.boxCallback = typeof displayMode == 'function' ? displayMode : null;
+        this.box = displayMode ? msg : null;
         var full = (el == window), noalpha = this.op8 || this.ffLinux;
         if (full && this.pageBlock) this.remove(window);
         // check to see if we were only passed the css object (a literal)
@@ -153,10 +197,13 @@ $.blockUI.impl = {
             msg = null;
         }
         msg = msg ? (msg.nodeType ? $(msg) : msg) : full ? $.blockUI.defaults.pageMessage : $.blockUI.defaults.elementMessage;
-        var basecss = jQuery.extend({}, full ? $.blockUI.defaults.pageMessageCSS : $.blockUI.defaults.elementMessageCSS);
+        if (displayMode)
+            var basecss = jQuery.extend({}, $.blockUI.defaults.displayBoxCSS);
+        else
+            var basecss = jQuery.extend({}, full ? $.blockUI.defaults.pageMessageCSS : $.blockUI.defaults.elementMessageCSS);
         css = jQuery.extend(basecss, css || {});
         var f = ($.browser.msie) ? $('<iframe class="blockUI" style="z-index:1000;border:none;margin:0;padding:0;position:absolute;width:100%;height:100%;top:0;left:0" src="javascript:false;document.write(\'\');"></iframe>')
-                           : $('<div class="blockUI" style="display:none"></div>');
+                                 : $('<div class="blockUI" style="display:none"></div>');
         var w = $('<div class="blockUI" style="z-index:1001;cursor:wait;border:none;margin:0;padding:0;width:100%;height:100%;top:0;left:0"></div>');
         var m = full ? $('<div class="blockUI blockMsg" style="z-index:1002;cursor:wait;padding:0;position:fixed"></div>')
                      : $('<div class="blockUI" style="display:none;z-index:1002;cursor:wait;position:absolute"></div>');
@@ -201,9 +248,17 @@ $.blockUI.impl = {
                 }
             });
         }
-        this.bind(1, el);
+        if (displayMode) {
+            w.css('cursor','default').attr('title', $.blockUI.defaults.closeMessage);
+            m.css('cursor','default'); 
+            $([f[0],w[0],m[0]]).removeClass('blockUI').addClass('displayBox');
+            $().click($.blockUI.impl.boxHandler).bind('keypress', $.blockUI.impl.boxHandler);
+        }
+        else
+            this.bind(1, el);
         m.append(msg).show();
         if (msg.jquery) msg.show();
+        if (displayMode) return;
         full ? setTimeout(this.focus, 200): this.center(m[0]);
     },
     remove: function(el) {
@@ -215,12 +270,23 @@ $.blockUI.impl = {
         }
         else $('.blockUI', el).remove();
     },
+    boxRemove: function(el) {
+        $().unbind('click',$.blockUI.impl.boxHandler).unbind('keypress', $.blockUI.impl.boxHandler);
+        if (this.boxCallback)
+            this.boxCallback(this.box);
+        $('body .displayBox').hide().remove();
+    },
     // event handler to suppress keyboard/mouse events when blocking
     handler: function(e) {
-        if (e.keyCode && e.keyCode == 9) return true;
+        if (e.keyCode && e.keyCode == 9 && $.blockUI.defaults.allowTabToLeave) return true;
         if ($(e.target).parents('div.blockMsg').length > 0)
             return true;
         return $(e.target).parents().children().filter('div.blockUI').length == 0;
+    },
+    boxHandler: function(e) {
+        if ((e.keyCode && e.keyCode == 27) || e.type == 'click')
+            $.blockUI.impl.boxRemove();
+        return true;
     },
     // bind/unbind the handler
     bind: function(b, el) {
