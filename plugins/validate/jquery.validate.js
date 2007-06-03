@@ -385,7 +385,7 @@ String.format = function(source, params) {
 	if ( arguments.length == 1 ) 
 		return function( param ) {
 			return String.format( source, param );
-		}
+		};
 	if ( arguments.length > 2 )
 		params = jQuery.makeArray(arguments).slice(1);
 	if ( params.constructor != Array )
@@ -394,7 +394,7 @@ String.format = function(source, params) {
 		source = source.replace(new RegExp("\\{" + i + "\\}"), n);
 	});
 	return source;
-}
+};
 
 // constructor for validator
 jQuery.validator = function( options, form ) {
@@ -1175,7 +1175,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		dateISO: function(value, element) {
-			return this.required(element) || /^\d{4}[/-]\d{1,2}[/-]\d{1,2}$/.test(value);
+			return this.required(element) || /^\d{4}[\/-]\d{1,2}[\/-]\d{1,2}$/.test(value);
 		},
 	
 		/**
