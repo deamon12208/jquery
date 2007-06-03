@@ -20,6 +20,9 @@ TODO
  - modify build to add plugin header to packed bundle
  - stop Firefox password manager on invalid forms, maybe stopping the click event on submit buttons
  - add hint that dependency expression are evaluated in the context of the element's containing form
+ - merge forId into idOrName
+ - rename submitMap (submitted? submittedElements? validatedOnSubmit?)
+ - rename rulesMap (cacheMap? cache? rulesCache?)
  
  Examples:
  - masked input plugin integration
@@ -33,6 +36,7 @@ TODO
  - one example for each option
  
 Recent changes:
+<li>Only elements that have rules are checked (otherwise success-option is applied to all elements)</li>
 <li>Added creditcard number method (thanks to Brian Klug)</li>
 <li>Added ignore-option, eg. ignore: "[@type=hidden]", using that expression to exclude elements to validate. Default: none, though submit and reset buttons are always ignored</li>
 <li>Heavily enhanced Functions-as-messages by providing a flexible String.format helper</li>
@@ -303,11 +307,10 @@ jQuery.extend(jQuery.fn, {
 		}
 		
 		validator.settings.onblur && validator.elements.blur( function() {
-			validator.elementOnBlur(this);
+			validator.settings.onblur.call( validator, this );
 		});
-		
 		validator.settings.onkeyup && validator.elements.keyup(function() {
-			validator.elementOnKeyup(this);
+			validator.settings.onkeyup.call( validator, this );
 		});
 		
 		return validator;
@@ -405,6 +408,7 @@ jQuery.validator = function( options, form ) {
 	this.errorContext = this.labelContainer.length && this.labelContainer || jQuery(form);
 	this.containers = this.settings.errorContainer.add( this.settings.errorLabelContainer );
 	this.submitMap = {};
+	this.rulesMap = {};
 	this.reset();
 	this.refresh();
 };
@@ -420,8 +424,16 @@ jQuery.extend(jQuery.validator, {
 		errorLabelContainer: jQuery( [] ),
 		onsubmit: true,
 		ignore: [],
-		onblur: true,
-		onkeyup: true
+		onblur: function(element) {
+			if ( element.name in this.submitMap || !this.required(element) ) {
+				this.element(element);
+			}
+		},
+		onkeyup: function(element) {
+			if ( element.name in this.submitMap || element == this.lastElement ) {
+				this.element(element);
+			}
+		}
 	},
 
 	/**
@@ -568,18 +580,6 @@ jQuery.extend(jQuery.validator, {
 			return this.errorList.length == 0;
 		},
 		
-		elementOnBlur: function(element) {
-			if ( element.name in this.submitMap || !this.required(element) ) {
-				this.element(element);
-			}
-		},
-		
-		elementOnKeyup: function(element) {
-			if ( element.name in this.submitMap || element == this.lastElement ) {
-				this.element(element);
-			}
-		},
-		
 		focusInvalid: function() {
 			if( this.settings.focusInvalid ) {
 				try {
@@ -599,23 +599,24 @@ jQuery.extend(jQuery.validator, {
 			var validator = this;
 			
 			// select all valid inputs inside the form (no submit or reset buttons)
-			var names = {};
 			this.elements = jQuery(this.currentForm)
-				.find("input, select, textarea, button")
-				.not(":submit")
-				.not(":reset")
-				.not( this.settings.ignore )
-				.filter(function() {
-				
+			.find("input, select, textarea, button")
+			.not(":submit")
+			.not(":reset")
+			.not( this.settings.ignore )
+			.filter(function() {
 				!this.name && validator.settings.debug && window.console && console.error( "%o has no name assigned", this);
 			
-				// select only the first element for each name
-				if ( this.name in names )
+				// select only the first element for each name, and only those with rules specified
+				if ( this.name in validator.rulesMap || !validator.rules(this).length )
 					return false;
-				names[this.name] = true;
+				
+				validator.rulesMap[this.name] = validator.rules(this);
 				return true;
+			})
+			
 			// and listen for focus events to save reference to last focused element
-			}).focus(function() {
+			this.elements.focus(function() {
 				validator.lastActive = this;
 				
 				// hide error label and remove error class on focus if enabled
@@ -653,17 +654,18 @@ jQuery.extend(jQuery.validator, {
 			this.toHide = this.errors().forId( this.idOrName( this.clean(element) ) );
 		},
 	
-		check: function( element, type ) {
+		check: function( element ) {
 			element = this.clean( element );
 			jQuery( element ).add( jQuery( element ).parent() ).removeClass( this.settings.errorClass );
-			var rules = this.rules( element );
+			//var rules = this.rules( element );
+			var rules = this.rulesMap[ element.name ];
 			for( var i = 0, rule; rule = rules[i++]; ) {
 				try {
 					var result = jQuery.validator.methods[rule.method].call( this, jQuery.trim(element.value), element, rule.parameters );
 					if( result === -1 )
 						break;
 					if( !result ) {
-						jQuery( element ).add( jQuery( element ).parent().not( "label" ) ).addClass( this.settings.errorClass );
+						jQuery( element ).add( jQuery( element ).parent().not( "label, form" ) ).addClass( this.settings.errorClass );
 						this.formatAndAdd( rule, element);
 						return false;
 					}
