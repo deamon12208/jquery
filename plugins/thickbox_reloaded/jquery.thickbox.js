@@ -40,7 +40,7 @@
             };
 
             // building blocks
-            var dim, loading, modal, content;
+            var dim, loading, modal, content, close;
 
             // default values
             var defaultValues = {
@@ -51,7 +51,7 @@
                 animate: null,
                 i18n: {
                     close: { text: 'Close', title: 'Close this window' },
-                    count: { text: 'Image #{image} of #{count}' },
+                    count: { text: 'Image #{image} / #{count}' },
                     next: { text: 'Next', title: 'Show next image' },
                     prev: { text: 'Previous', title: 'Show previous image' },
                     confirm: { what: 'Are you sure?', confirm: 'Yes', cancel: 'No' }
@@ -71,17 +71,16 @@
                 modal = $('#' + TB_ID.MODAL);
                 modal = modal.size() && modal || $('<div id="' + TB_ID.MODAL + '"></div>').append('<b class="tl"></b><b class="tr"></b><b class="br"></b><b class="bl"></b>').appendTo(document.body);
 
-                content = $('#' + TB_ID.CONTENT);
-                content = content.size() && content || $('<div id="' + TB_ID.CONTENT + '"></div>').appendTo(modal);
-
                 // set type class
                 modal.attr('class', type);
 
+                content = $('#' + TB_ID.CONTENT);
+                content = content.size() && content || $('<div id="' + TB_ID.CONTENT + '"></div>').appendTo(modal);
+
                 // close button
-                var close = $('#' + TB_ID.CLOSE);
-                if (!close.size()) {
-                    $('<div id="' + TB_ID.CLOSE + '"><a href="#" title="' + defaultValues.i18n.close.title + '">' + defaultValues.i18n.close.text + '</a></div>').appendTo(modal).find('a').bind('click', hide);
-                }
+                close = $('#' + TB_ID.CLOSE);
+                close = close.size() && close || $('<div id="' + TB_ID.CLOSE + '"><a href="#" title="' + defaultValues.i18n.close.title + '">' + defaultValues.i18n.close.text + '</a></div>').appendTo(modal);
+                $('a', close).bind('click', hide);
 
                 // reveal stuff
                 dim.unbind('click').one('click', hide); // unbind should be unnecessary - WTF?
@@ -221,12 +220,16 @@
                     switch (type) {
                         case TB_TYPE.IMAGE:
                             builder = function() {
-                                var caption = $$.attr('title'), rel = $$.attr('rel');
+                                var title = $$.attr('title') || '', rel = $$.attr('rel');
 
                                 // if an image group is given
                                 if (rel) {
 
-                                    function buildShowFunc(el) {
+                                    // find the anchors that are part of the the group
+                                    var group = $('a[@rel="' + rel + '"]');
+
+                                    // previous/next handler
+                                    var buildShowFunc = function(el) {
                                         return function() {
                                             unbindPager();
                                             modal.hide()
@@ -234,51 +237,40 @@
                                             $(el).trigger('click');
                                             return false;
                                         };
-                                    }
+                                    };
 
-                                    // find the anchors that are part of the the group
-                                    var group = $('a[@rel="' + rel + '"]').get(), count = '', next = '', prev = '', showNext = function() {}, showPrev = function() {};
+                                    var i = group.index($$[0]);
 
-                                    // loop through the anchors, looking for ourself, saving information about previous and next image
-                                    for (var i = 0, k = group.length; i < k; i++) {
-                                        if (group[i] == $$[0]) { // look for ourself
-                                            count = defaultValues.i18n.count.text.replace(/#\{image\}/, i + 1);
-                                            count = count.replace(/#\{count\}/, k);
-                                            if (group[i + 1]) { // if there is a next image
-                                                next = '<strong id="' + TB_ID.NEXT + '"><a href="#" title="' + defaultValues.i18n.next.title + '">' + defaultValues.i18n.next.text + '</a></strong>';
-                                                showNext = buildShowFunc(group[i + 1]);
-                                            }
-                                            if (group[i - 1]) { // if there is a previous image
-                                                prev = '<strong id="' + TB_ID.PREV + '"><a href="#" title="' + defaultValues.i18n.prev.title + '">' + defaultValues.i18n.prev.text + '</a></strong>';
-                                                showPrev = buildShowFunc(group[i - 1]);
-                                            }
-                                            break; // stop searching
-                                        }
-                                    }
+                                    var next = '<strong id="' + TB_ID.NEXT + '"><a href="#" title="' + defaultValues.i18n.next.title + '">' + defaultValues.i18n.next.text + '</a></strong>';
+                                    var showNext = buildShowFunc(group[i + 1] || group[0]);
 
-                                    // add additional key handler
+                                    var prev = '<strong id="' + TB_ID.PREV + '"><a href="#" title="' + defaultValues.i18n.prev.title + '">' + defaultValues.i18n.prev.text + '</a></strong>';
+                                    var showPrev = buildShowFunc(group[i - 1] || group[group.size() - 1]);
+
+                                    var count = '<em>' + defaultValues.i18n.count.text.replace(/#\{image\}/, i + 1).replace(/#\{count\}/, group.size()) + '</em>';
+
+                                    // additional key handler
                                     var pager = function(e) {
-                                        var key = e.which || e.keyCode || null;
-                                        if (typeof key == 'number') {
-                                            switch (key) {
-                                                case 27:
-                                                    $(document).unbind(e); // remove this event handler
-                                                    break;
-                                                case 37: // TODO 188?
-                                                    showPrev();
-                                                    break;
-                                                case 39: // TODO 190?
-                                                    showNext();
-                                                    break;
-                                            }
+                                        var key = e.which || e.keyCode || -1;
+                                        switch (key) {
+                                            case 27:
+                                                $(document).unbind(e); // remove this event handler
+                                                break;
+                                            case 37: // TODO 188?
+                                                showPrev();
+                                                break;
+                                            case 39: // TODO 190?
+                                                showNext();
+                                                break;
                                         }
                                     };
+                                    $(document).bind('keydown', pager);
+
                                     var unbindPager = function() {
                                         $(document).unbind('keydown', pager);
                                     };
-                                    $(document).bind('keydown', pager);
                                     dim.one('click', unbindPager);
-                                    $('#' + TB_ID.TITLE_BAR + ' a').bind('click', unbindPager);
+                                    $('a', close).one('click', unbindPager);
 
                                 }
 
@@ -311,21 +303,16 @@
                                     imgWidth= parseInt(imgWidth);
                                     imgHeight = parseInt(imgHeight);
 
-                                    $('<img src="' +  $$.attr('href') + '" alt="Image" width="' + imgWidth + '" height="' + imgHeight + '" title="' + caption + '" />').appendTo(modal);
-                                    if (caption || count) {
-                                        var html = [];
-                                        if (caption) {
-                                            html.push('<p id="' + TB_ID.CAPTION + '">', caption, '</p>');
-                                        }
-                                        if (count) {
-                                            html.push('<p id="' + TB_ID.BROWSE + '">', count, prev, next, '</p>');
-                                        }
-                                        $(html.join('')).appendTo(content);
-                                        $('#' + TB_ID.NEXT + ' a').bind('click', showNext);
-                                        $('#' + TB_ID.PREV + ' a').bind('click', showPrev);
-                                    }
-                                    show(imgWidth + 30, imgHeight + 60, settings.top, settings.left, settings.animate, callback);
+                                    buildTitle(title);
+                                    $('<img src="' +  $$.attr('href') + '" alt="Image" width="' + imgWidth + '" height="' + imgHeight + '" title="' + title + '" />').appendTo(content);
+                                    $(['<p id="' + TB_ID.BROWSE + '">', prev, next, count, '</p>'].join('')).appendTo(content);
+                                    $('#' + TB_ID.NEXT + ' a').bind('click', showNext);
+                                    $('#' + TB_ID.PREV + ' a').bind('click', showPrev);
+
+                                    show(imgWidth + 38, imgHeight + 100, settings.top, settings.left, settings.animate, callback);
                                 };
+
+                                // initiate img loading
                                 img.src = $$.attr('href');
                             };
                             break;
