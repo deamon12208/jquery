@@ -42,6 +42,9 @@
             // building blocks
             var dim, loading, modal, content, close;
 
+            // store request to be able to abort it
+            var request;
+
             // default values
             var defaultValues = {
                 top: '',
@@ -133,11 +136,14 @@
 
             // remove everything
             function hide(callback) {
+
+                if (request) {
+                    request.abort();
+                    request = null;
+                }
+
                 // hide stuff
                 loading.hide();
-
-                // TODO abort xhr request id necessary
-
                 modal.hide()
                 dim.hide();
                 content.empty();
@@ -329,8 +335,13 @@
                         case TB_TYPE.AJAX:
                             builder = function() {
                                 buildTitle($$.attr('title'));
-                                content.load($$.attr('href'), function() {
-                                    show(settings.width, settings.height, settings.top, settings.left, settings.animate, callback);
+                                request = $.ajax({
+                                    url: $$.attr('href'),
+                                    dataType: 'html',
+                                    success: function(r) {
+                                        content.append(r);
+                                        show(settings.width, settings.height, settings.top, settings.left, settings.animate, callback);
+                                    }
                                 });
                             };
                             break;
