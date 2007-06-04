@@ -25,10 +25,10 @@ TODO
  - extend testsuite to allow execution of single tests by passing the test-name as an argument to the same page and reading that argument
  
  Examples:
- - masked input plugin integration
- - onblur/keyup ajax-validation (eg. username, email), (optionally) focus the input field on error
+ - masked input plugin integration http://digitalbush.com/projects/masked-input-plugin
  - ajaxForm() integration
- - overlabel integration, eg. with http://scott.sauyet.com/Javascript/Demo/Overlabel/
+ - ajaxSubmit with rules-option, more/less options to ajaxSubmit
+ - watermark integration http://digitalbush.com/projects/watermark-input-plugin
  - custom password validation, eg. 6 chars min, and at least 1 number and at least 1 alpha or Must not use 123, abc, asdf or your username or your domain in the password. 
  - datepicker integration (see dobis)
  - timepicker integration ( http://labs.perifer.se/timedatepicker/ ) 
