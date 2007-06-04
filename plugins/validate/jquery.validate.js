@@ -20,9 +20,9 @@ TODO
  - modify build to add plugin header to packed bundle
  - stop Firefox password manager on invalid forms, maybe stopping the click event on submit buttons
  - add hint that dependency expression are evaluated in the context of the element's containing form
- - merge forId into idOrName
  - rename submitMap (submitted? submittedElements? validatedOnSubmit?)
- - rename rulesMap (cacheMap? cache? rulesCache?)
+ - add rule "contains", combine several "contains" to specify complex password requirements (eg. at least one number, one character)
+ - extend testsuite to allow execution of single tests by passing the test-name as an argument to the same page and reading that argument
  
  Examples:
  - masked input plugin integration
@@ -318,9 +318,6 @@ jQuery.extend(jQuery.fn, {
 	// destructive add
 	push: function( t ) {
 		return this.setArray( jQuery.merge( this.get(), t ) );
-	},
-	forId: function( id ) {
-		return this.filter( "[@for='" + id + "']" );
 	}
 });
 
@@ -408,7 +405,7 @@ jQuery.validator = function( options, form ) {
 	this.errorContext = this.labelContainer.length && this.labelContainer || jQuery(form);
 	this.containers = this.settings.errorContainer.add( this.settings.errorLabelContainer );
 	this.submitMap = {};
-	this.rulesMap = {};
+	this.rulesCache = {};
 	this.reset();
 	this.refresh();
 };
@@ -608,10 +605,10 @@ jQuery.extend(jQuery.validator, {
 				!this.name && validator.settings.debug && window.console && console.error( "%o has no name assigned", this);
 			
 				// select only the first element for each name, and only those with rules specified
-				if ( this.name in validator.rulesMap || !validator.rules(this).length )
+				if ( this.name in validator.rulesCache || !validator.rules(this).length )
 					return false;
 				
-				validator.rulesMap[this.name] = validator.rules(this);
+				validator.rulesCache[this.name] = validator.rules(this);
 				return true;
 			})
 			
@@ -622,7 +619,7 @@ jQuery.extend(jQuery.validator, {
 				// hide error label and remove error class on focus if enabled
 				if ( validator.settings.focusCleanup ) {
 					$(this).removeClass( validator.settings.errorClass );
-					validator.errors().forId( validator.idOrName(this) ).hide();
+					validator.errorsFor(this).hide();
 				}
 			});
 		},
@@ -651,14 +648,14 @@ jQuery.extend(jQuery.validator, {
 		
 		prepareElement: function( element ) {
 			this.reset();
-			this.toHide = this.errors().forId( this.idOrName( this.clean(element) ) );
+			this.toHide = this.errorsFor( this.clean(element) );
 		},
 	
 		check: function( element ) {
 			element = this.clean( element );
 			jQuery( element ).add( jQuery( element ).parent() ).removeClass( this.settings.errorClass );
 			//var rules = this.rules( element );
-			var rules = this.rulesMap[ element.name ];
+			var rules = this.rulesCache[ element.name ];
 			for( var i = 0, rule; rule = rules[i++]; ) {
 				try {
 					var result = jQuery.validator.methods[rule.method].call( this, jQuery.trim(element.value), element, rule.parameters );
@@ -704,16 +701,10 @@ jQuery.extend(jQuery.validator, {
 			this.submitMap[element.name] = message;
 		},
 		
-		toggle: function(that) {
-			var self = this;
-			function which() {
-				return self["to" + that];
-			}
-			if ( this.settings.wrapper ) {
-				which().push( which().parents( this.settings.wrapper ) );
-			}
-			which()[that.toLowerCase()]();
-			return this;
+		addWrapper: function(toToggle) {
+			if ( this.settings.wrapper )
+				toToggle.push( toToggle.parents( this.settings.wrapper ) );
+			return toToggle;
 		},
 		
 		defaultShowErrors: function() {
@@ -727,11 +718,12 @@ jQuery.extend(jQuery.validator, {
 				this.showLabel( element );
 			}
 			this.toHide = this.toHide.not( this.toShow );
-			this.toggle( "Hide" ).toggle( "Show" );
+			this.addWrapper( this.toHide ).hide();
+			this.addWrapper( this.toShow ).show();
 		},
 		
 		showLabel: function(element, message) {
-			var label = this.errors().forId( this.idOrName(element) );
+			var label = this.errorsFor( element );
 			if ( label.length ) {
 				// refresh error/success class
 				label.removeClass().addClass( this.settings.errorClass );
@@ -763,6 +755,10 @@ jQuery.extend(jQuery.validator, {
 					: this.settings.success( label );
 			}
 			this.toShow.push(label);
+		},
+		
+		errorsFor: function(element) {
+			return this.errors().filter("[@for=" + this.idOrName(element) + "]");
 		},
 		
 		idOrName: function(element) {
