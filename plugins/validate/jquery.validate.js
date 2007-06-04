@@ -312,6 +312,9 @@ jQuery.extend(jQuery.fn, {
 		validator.settings.onkeyup && validator.elements.keyup(function() {
 			validator.settings.onkeyup.call( validator, this );
 		});
+		validator.settings.onclick && validator.elements.click(function() {
+			validator.settings.onclick.call( validator, this );
+		});
 		
 		return validator;
 	},
@@ -430,6 +433,10 @@ jQuery.extend(jQuery.validator, {
 			if ( element.name in this.submitMap || element == this.lastElement ) {
 				this.element(element);
 			}
+		},
+		onclick: function(element) {
+			if ( element.name in this.submitMap && element.type == "radio" )
+				this.element(element);
 		}
 	},
 

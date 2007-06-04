@@ -843,3 +843,30 @@ test("validate email on keyup and blur", function() {
 	e.keyup();
 	errors(0);
 });
+
+test("validate checkbox on click", function() {
+	function errors(expected, message) {
+		equals(expected, v.errorList.length, message );
+	}
+	var e = $("#radio1");
+	var v = $("#form").validate({
+		rules: {
+			radio1: "required"
+		}
+	});
+	e.attr("checked", true);
+	e.click();
+	errors(0);
+	e.attr("checked", false);
+	e.click();
+	errors(0);
+	equals( false, v.form() );
+	console.log(v);
+	errors(1);
+	e.attr("checked", true);
+	e.click();
+	errors(0);
+	e.attr("checked", false);
+	e.click();
+	errors(1);
+});
