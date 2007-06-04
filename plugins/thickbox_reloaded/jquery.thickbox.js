@@ -65,6 +65,8 @@
                 dim = $('#' + TB_ID.DIM);
                 dim = dim.size() && dim || $('<div id="' + TB_ID.DIM + '">' + ($.browser.msie6 ? '<iframe src="about:blank" frameborder="0"></iframe>' : '') + '</div>').appendTo(document.body).hide();
 
+                $('iframe', dim).bind('focus', hide);
+
                 loading = $('#' + TB_ID.LOADING);
                 loading = loading.size() && loading || $('<div id="' + TB_ID.LOADING + '"></div>').appendTo(document.body);
 

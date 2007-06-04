@@ -15,6 +15,10 @@
     border-width: 0 1px;
     background: #fff;
 }
+#tb-modal * {
+    margin: 0;
+    padding: 0;
+}
 #tb-content {
     padding: 13px 19px 0;
 }
@@ -36,6 +40,7 @@
     line-height: 30px;
     text-indent: 1000px;
 }
+
 /* round corners */
 #tb-modal .tl, #tb-modal .tr, #tb-modal .br, #tb-modal .bl {
     position: absolute;
@@ -115,3 +120,4 @@
 *:first-child+html #tb-dim { /* @ IE 7 Standards Mode */
     filter: Alpha(Opacity=60);
 }
+
