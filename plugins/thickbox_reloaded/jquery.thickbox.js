@@ -77,7 +77,7 @@
                 modal = modal.size() && modal || $('<div id="' + TB_ID.MODAL + '"></div>').append('<b class="tl"></b><b class="tr"></b><b class="br"></b><b class="bl"></b>').appendTo(document.body);
 
                 // set type class
-                modal.attr('class', type);
+                modal.attr('class', 'tb-' + type);
 
                 content = $('#' + TB_ID.CONTENT);
                 content = content.size() && content || $('<div id="' + TB_ID.CONTENT + '"></div>').appendTo(modal);
