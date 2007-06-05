@@ -1,5 +1,10 @@
 == New and Noteworthy ==
 
+== 2.1.1 ==
+
+* Updated to work with jQuery 1.1.3
+* Used one instead of bind to do unload event for clean up.
+
 == 2.1 ==
 
 * Fixed an issue with the unload handler
