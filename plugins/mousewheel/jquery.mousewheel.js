@@ -65,7 +65,7 @@ $.fn.extend({
 				if ($.browser.mozilla) this.addEventListener('DOMMouseScroll', this._mwHandler, false);
 				else                   this.addEventListener('mousewheel',     this._mwHandler, false);
 			else
-				$.event.add(this, 'mousewheel', this._mwHandler);
+				this.onmousewheel = this._mwHandler;
 			
 			$.event._mwCache.push( $(this) );
 		});
@@ -93,7 +93,7 @@ $.fn.extend({
 					if ($.browser.mozilla) this.removeEventListener('DOMMouseScroll', this._mwHandler, false);
 					else                   this.removeEventListener('mousewheel',     this._mwHandler, false);
 				else
-					$.event.remove(this, 'mousewheel', this._mwHandler);
+					this.onmousewheel = null;
 					
 				this._mwHandlers = this._mwHandler = null;
 			}
@@ -103,7 +103,7 @@ $.fn.extend({
 
 // clean-up
 $(window)
-	.bind('unload', function() {
+	.one('unload', function() {
 		var els = $.event._mwCache || [];
 		for (var i=0; i<els.length; i++)
 			els[i].unmousewheel();
