@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.20  (06/02/2007)
+ * Version 1.21  (06/05/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -284,7 +284,7 @@ $.blockUI.impl = {
         return $(e.target).parents().children().filter('div.blockUI').length == 0;
     },
     boxHandler: function(e) {
-        if ((e.keyCode && e.keyCode == 27) || e.type == 'click')
+        if ((e.keyCode && e.keyCode == 27) || (e.type == 'click' && $(e.target).parents('div.blockMsg').length == 0))
             $.blockUI.impl.boxRemove();
         return true;
     },
