@@ -170,4 +170,10 @@
         </antcall>
     </target>
 
+	<target name="multiple_events" description="Build multiple_events plugin.">
+        <antcall target="minandpack">
+            <param name="name" value="multiple_events" />
+        </antcall>
+    </target>
+
 </project>
