@@ -171,8 +171,8 @@
             }
 
             function keydown(e) {
-                var key = e.which || e.keyCode || null;
-                if (key && key == 27) {
+                var key = e.which || e.keyCode || -1;
+                if (key == 27) {
                     hide();
                 } else {
                     blockKeys(e);
@@ -243,7 +243,6 @@
                                         // previous/next handler
                                         var buildShowFunc = function(el) {
                                             return function() {
-                                                unbindPager();
                                                 modal.hide()
                                                 content.empty();
                                                 $(el).trigger('click');
@@ -257,28 +256,30 @@
                                         var prev = '<strong id="' + TB_ID.PREV + '"><a href="#" title="' + defaultValues.i18n.prev.title + '">' + defaultValues.i18n.prev.text + '</a></strong>';
                                         var showPrev = buildShowFunc(group[i - 1] || group[size - 1]);
 
-                                        // additional key handler
-                                        var pager = function(e) {
+                                        // overwrite keydown handler
+                                        keydown = function(e) {
                                             var key = e.which || e.keyCode || -1;
-                                            switch (key) {
-                                                case 27:
-                                                    $(document).unbind(e); // remove this event handler
-                                                    break;
-                                                case 37: // TODO 188?
-                                                    showPrev();
-                                                    break;
-                                                case 39: // TODO 190?
-                                                    showNext();
-                                                    break;
-                                            }
+                                            // IE requires "timeout", I assume somehow due to this being added on
+                                            // the existing keydown handler, that's ugly, find a way to avoid
+                                            // duplicate code
+                                            // WARNING: without timeout IE freezes occasionally when using keyboard arrows
+                                            setTimeout(function() {
+                                                switch (key) {
+                                                    case 27: // esc
+                                                        hide();
+                                                        break;
+                                                    case 37: // arrow left
+                                                        showPrev();
+                                                        break;
+                                                    case 39: // arrow right
+                                                        showNext();
+                                                        break;
+                                                    default:
+                                                        blockKeys(e);
+                                                }
+                                            }, 0);
                                         };
-                                        $(document).bind('keydown', pager);
-
-                                        var unbindPager = function() {
-                                            $(document).unbind('keydown', pager);
-                                        };
-                                        dim.one('click', unbindPager);
-                                        $('a', close).one('click', unbindPager);
+                                        $(document).unbind('keydown').bind('keydown', keydown);
 
                                     }
 
