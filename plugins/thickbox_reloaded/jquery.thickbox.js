@@ -234,51 +234,53 @@
                                 if (rel) {
 
                                     // find the anchors that are part of the the group
-                                    var group = $('a[@rel="' + rel + '"]');
+                                    var group = $('a[@rel="' + rel + '"]'), size = group.size(), i = group.index($$[0]);
 
-                                    // previous/next handler
-                                    var buildShowFunc = function(el) {
-                                        return function() {
-                                            unbindPager();
-                                            modal.hide()
-                                            content.empty();
-                                            $(el).trigger('click');
-                                            return false;
+                                    var count = '<em>' + defaultValues.i18n.count.text.replace(/#\{image\}/, i + 1).replace(/#\{count\}/, size) + '</em>';
+
+                                    if (size > 1) {
+
+                                        // previous/next handler
+                                        var buildShowFunc = function(el) {
+                                            return function() {
+                                                unbindPager();
+                                                modal.hide()
+                                                content.empty();
+                                                $(el).trigger('click');
+                                                return false;
+                                            };
                                         };
-                                    };
 
-                                    var i = group.index($$[0]);
+                                        var next = '<strong id="' + TB_ID.NEXT + '"><a href="#" title="' + defaultValues.i18n.next.title + '">' + defaultValues.i18n.next.text + '</a></strong>';
+                                        var showNext = buildShowFunc(group[i + 1] || group[0]);
 
-                                    var next = '<strong id="' + TB_ID.NEXT + '"><a href="#" title="' + defaultValues.i18n.next.title + '">' + defaultValues.i18n.next.text + '</a></strong>';
-                                    var showNext = buildShowFunc(group[i + 1] || group[0]);
+                                        var prev = '<strong id="' + TB_ID.PREV + '"><a href="#" title="' + defaultValues.i18n.prev.title + '">' + defaultValues.i18n.prev.text + '</a></strong>';
+                                        var showPrev = buildShowFunc(group[i - 1] || group[size - 1]);
 
-                                    var prev = '<strong id="' + TB_ID.PREV + '"><a href="#" title="' + defaultValues.i18n.prev.title + '">' + defaultValues.i18n.prev.text + '</a></strong>';
-                                    var showPrev = buildShowFunc(group[i - 1] || group[group.size() - 1]);
+                                        // additional key handler
+                                        var pager = function(e) {
+                                            var key = e.which || e.keyCode || -1;
+                                            switch (key) {
+                                                case 27:
+                                                    $(document).unbind(e); // remove this event handler
+                                                    break;
+                                                case 37: // TODO 188?
+                                                    showPrev();
+                                                    break;
+                                                case 39: // TODO 190?
+                                                    showNext();
+                                                    break;
+                                            }
+                                        };
+                                        $(document).bind('keydown', pager);
 
-                                    var count = '<em>' + defaultValues.i18n.count.text.replace(/#\{image\}/, i + 1).replace(/#\{count\}/, group.size()) + '</em>';
+                                        var unbindPager = function() {
+                                            $(document).unbind('keydown', pager);
+                                        };
+                                        dim.one('click', unbindPager);
+                                        $('a', close).one('click', unbindPager);
 
-                                    // additional key handler
-                                    var pager = function(e) {
-                                        var key = e.which || e.keyCode || -1;
-                                        switch (key) {
-                                            case 27:
-                                                $(document).unbind(e); // remove this event handler
-                                                break;
-                                            case 37: // TODO 188?
-                                                showPrev();
-                                                break;
-                                            case 39: // TODO 190?
-                                                showNext();
-                                                break;
-                                        }
-                                    };
-                                    $(document).bind('keydown', pager);
-
-                                    var unbindPager = function() {
-                                        $(document).unbind('keydown', pager);
-                                    };
-                                    dim.one('click', unbindPager);
-                                    $('a', close).one('click', unbindPager);
+                                    }
 
                                 }
 
@@ -313,11 +315,15 @@
 
                                     buildTitle(title);
                                     $('<img src="' +  $$.attr('href') + '" alt="Image" width="' + imgWidth + '" height="' + imgHeight + '" title="' + title + '" />').appendTo(content);
-                                    $(['<p id="' + TB_ID.BROWSE + '">', prev, next, count, '</p>'].join('')).appendTo(content);
-                                    $('#' + TB_ID.NEXT + ' a').bind('click', showNext);
-                                    $('#' + TB_ID.PREV + ' a').bind('click', showPrev);
+                                    if (rel) {
+                                        $(['<p id="' + TB_ID.BROWSE + '">', (prev || ''), (next || ''), count, '</p>'].join('')).appendTo(content);
+                                        if (size > 1) {
+                                            $('#' + TB_ID.NEXT + ' a').bind('click', showNext);
+                                            $('#' + TB_ID.PREV + ' a').bind('click', showPrev);
+                                        }
+                                    }
 
-                                    show(imgWidth + 38, imgHeight + 100, settings.top, settings.left, settings.animate, callback);
+                                    show(imgWidth + 38, imgHeight + (rel ? 90 : 75), settings.top, settings.left, settings.animate, callback);
                                 };
 
                                 // initiate img loading
