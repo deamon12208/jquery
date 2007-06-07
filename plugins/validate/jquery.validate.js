@@ -23,6 +23,12 @@ TODO
  - rename submitMap (submitted? submittedElements? validatedOnSubmit?)
  - add rule "contains", combine several "contains" to specify complex password requirements (eg. at least one number, one character)
  - extend testsuite to allow execution of single tests by passing the test-name as an argument to the same page and reading that argument
+ - adding inputs using refresh() works, removing does not
+ - add methods for decimal (3,500.05) and decimalDE (3.500,05), combine with min/max/rangeValue
+ - The error messages say “then”, when they should say “than”.
+ - add ":unchecked" expression
+ - check on checkbox-wrapper-labels being hidden (checkbox/radio example)
+ 
  
  Examples:
  - masked input plugin integration http://digitalbush.com/projects/masked-input-plugin
@@ -34,6 +40,16 @@ TODO
  - timepicker integration ( http://labs.perifer.se/timedatepicker/ ) 
  - milk example
  - one example for each option
+ - intergration with rich-text-editors (FCKEditor, TinyMCE, Codepress)
+ 
+ -> In simple terms, you need to "move" the content from the TinyMCE
+control to the textarea for validation.
+
+$('button.save').click(function(){
+	if (tinyMCE) tinyMCE.triggerSave();
+});
+http://wiki.moxiecode.com/index.php/TinyMCE:Functions#tinyMCE.triggerSave
+ 
  
 Recent changes:
 <li>Only elements that have rules are checked (otherwise success-option is applied to all elements)</li>
@@ -93,7 +109,7 @@ Recent changes:
  * 			maxLength: 32
  * 		}
  * 	},
- *  messages {
+ *  messages: {
  * 		password: {
  * 			required: function(element, validator) {
  * 				return "Your password is required because with " + $("#age").val() + ", you are not old enough yet."

@@ -19,6 +19,7 @@ TODO
 - allow modification of not-last value in multiple-fields
 @option Number size Limit the number of items to show at once. Default: 
 @option Function parse - TEST AND DOCUMENT ME
+- add option to display selectbox on focus
 */
 
 /**
