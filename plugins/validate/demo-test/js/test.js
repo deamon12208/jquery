@@ -511,7 +511,7 @@ test("validator.formatAndAdd", function() {
 	var v = $("#form").validate();
 	var fakeElement = { form: { id: "foo" }, name: "bar" };
 	v.formatAndAdd({method: "maxLength", parameters: 2}, fakeElement)
-	equals( "Please enter a value no longer then 2 characters.", v.errorList[0].message );
+	equals( "Please enter a value no longer than 2 characters.", v.errorList[0].message );
 	equals( "bar", v.errorList[0].element.name );
 	
 	v.formatAndAdd({method: "rangeValue", parameters:[2,4]}, fakeElement)
@@ -719,7 +719,7 @@ test("successlist", function() {
 
 test("messages", function() {
 	var m = jQuery.validator.messages;
-	equals( "Please enter a value no longer then 0 characters.", m.maxLength(0) );
+	equals( "Please enter a value no longer than 0 characters.", m.maxLength(0) );
 	equals( "Please enter a value of at least 1 characters.", m.minLength(1) );
 	equals( "Please enter a value between 1 and 2 characters long.", m.rangeLength([1, 2]) );
 	equals( "Please enter a value less than or equal to 1.", m.maxValue(1) );
@@ -759,6 +759,15 @@ test("expression: :filled", function() {
 	equals( 0, $(e).filter(":filled").length );
 	e.value= " a ";
 	equals( 1, $(e).filter(":filled").length );
+});
+
+test("expression: :unchecked", function() {
+	var e = $("#check2")[0];
+	equals( 1, $(e).filter(":unchecked").length );
+	e.checked = true;
+	equals( 0, $(e).filter(":unchecked").length );
+	e.checked = false;
+	equals( 1, $(e).filter(":unchecked").length );
 });
 
 test("validate on blur", function() {
@@ -848,25 +857,40 @@ test("validate checkbox on click", function() {
 	function errors(expected, message) {
 		equals(expected, v.errorList.length, message );
 	}
-	var e = $("#radio1");
+	var e = $("#check2");
+	var v = $("#form").validate({
+		rules: {
+			check2: "required"
+		}
+	});
+	e.click();
+	errors(0);
+	e.click();
+	errors(1);
+	equals( false, v.form() );
+	errors(1);
+	e.click();
+	errors(0);
+	e.click();
+	errors(1);
+});
+
+test("validate radio on click", function() {
+	function errors(expected, message) {
+		equals(expected, v.errorList.length, message );
+	}
+	var e1 = $("#radio1");
+	var e2 = $("#radio1a");
 	var v = $("#form").validate({
 		rules: {
 			radio1: "required"
 		}
 	});
-	e.attr("checked", true);
-	e.click();
-	errors(0);
-	e.attr("checked", false);
-	e.click();
 	errors(0);
 	equals( false, v.form() );
-	console.log(v);
 	errors(1);
-	e.attr("checked", true);
-	e.click();
+	e2.click();
 	errors(0);
-	e.attr("checked", false);
-	e.click();
-	errors(1);
+	e1.click();
+	errors(0);
 });

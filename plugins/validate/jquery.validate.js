@@ -25,7 +25,6 @@ TODO
  - extend testsuite to allow execution of single tests by passing the test-name as an argument to the same page and reading that argument
  - adding inputs using refresh() works, removing does not
  - add methods for decimal (3,500.05) and decimalDE (3.500,05), combine with min/max/rangeValue
- - The error messages say “then”, when they should say “than”.
  - add ":unchecked" expression
  - check on checkbox-wrapper-labels being hidden (checkbox/radio example)
  
@@ -328,8 +327,13 @@ jQuery.extend(jQuery.fn, {
 		validator.settings.onkeyup && validator.elements.keyup(function() {
 			validator.settings.onkeyup.call( validator, this );
 		});
-		validator.settings.onclick && validator.elements.click(function() {
-			validator.settings.onclick.call( validator, this );
+		var checkables = jQuery([]);
+		validator.elements.each(function() {
+			if ( validator.checkable( this ) )
+				checkables.push( validator.checkableGroup( this ) );
+		});
+		validator.settings.onchange && checkables.change(function() {
+			validator.settings.onchange.call( validator, this );
 		});
 		
 		return validator;
@@ -341,7 +345,7 @@ jQuery.extend(jQuery.fn, {
 });
 
 /**
- * Custom expression to filter for blank fields.
+ * Expression to filter for blank fields.
  *
  * @example jQuery("input:blank").length
  * @before <input value="" /><input value="  " /><input value="abc" />
@@ -354,7 +358,7 @@ jQuery.extend(jQuery.fn, {
  */
  
 /**
- * Custom expression to filter for filled fields.
+ * Expression to filter for filled fields.
  *
  * @example jQuery("input:filled").length
  * @before <input value="" /><input value="  " /><input value="abc" />
@@ -365,9 +369,23 @@ jQuery.extend(jQuery.fn, {
  * @name :filled
  * @cat Plugins/Validate
  */
+ 
+/**
+ * Expression to filter unchecked checkboxes or radio buttons.
+ *
+ * @example jQuery("input:unchecked").length
+ * @before <input type="checkbox" /><input type="checkbox" checked="checked" />
+ * @result 1
+ *
+ * @property
+ * @type String
+ * @name :unchecked
+ * @cat Plugins/Validate
+ */
 jQuery.extend(jQuery.expr[":"], {
 	blank: "!jQuery.trim(a.value)",
-	filled: "!!jQuery.trim(a.value)"
+	filled: "!!jQuery.trim(a.value)",
+	unchecked: "!a.checked"
 });
 
 /**
@@ -450,9 +468,8 @@ jQuery.extend(jQuery.validator, {
 				this.element(element);
 			}
 		},
-		onclick: function(element) {
-			if ( element.name in this.submitMap && element.type == "radio" )
-				this.element(element);
+		onchange: function(element) {
+			this.element(element);
 		}
 	},
 
@@ -498,7 +515,7 @@ jQuery.extend(jQuery.validator, {
 		creditcard: "Please enter a valid credit card.",
 		equalTo: "Please enter the same value again.",
 		accept: "Please enter a value with a valid extension.",
-		maxLength: String.format("Please enter a value no longer then {0} characters."),
+		maxLength: String.format("Please enter a value no longer than {0} characters."),
 		minLength: String.format("Please enter a value of at least {0} characters."),
 		rangeLength: String.format("Please enter a value between {0} and {1} characters long."),
 		rangeValue: String.format("Please enter a value between {0} and {1}."),
@@ -785,7 +802,7 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		idOrName: function(element) {
-			return /radio|checkbox/i.test(element.type) ? element.name : element.id || element.name;
+			return this.checkable(element) ? element.name : element.id || element.name;
 		},
 
 		rules: function( element ) {
@@ -816,13 +833,21 @@ jQuery.extend(jQuery.validator, {
 					: jQuery(element).data();
 		},
 		
+		checkable: function( element ) {
+			return /radio|checkbox/i.test(element.type);
+		},
+		
+		checkableGroup: function( element ) {
+			return jQuery(element.form || document).find('[@name="' + element.name + '"]');
+		},
+		
 		getLength: function(value, element) {
 			switch( element.nodeName.toLowerCase() ) {
 			case 'select':
 				return jQuery("option:selected", element).length;
 			case 'input':
-				if( /radio|checkbox/i.test(element.type) )
-					return jQuery(element.form || document).find('[@name="' + element.name + '"]:checked').length;
+				if( this.checkable( element) )
+					return this.checkableGroup( element).filter(':checked').length;
 			}
 			return value.length;
 		},
@@ -942,7 +967,7 @@ jQuery.extend(jQuery.validator, {
 				var options = jQuery("option:selected", element);
 				return options.length > 0 && ( element.type == "select-multiple" || (jQuery.browser.msie && !(options[0].attributes['value'].specified) ? options[0].text : options[0].value).length > 0);
 			case 'input':
-				if ( /radio|checkbox/i.test(element.type) )
+				if ( this.checkable(element) )
 					return this.getLength(value, element) > 0;
 			default:
 				return value.length > 0;
