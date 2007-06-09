@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.21  (06/05/2007)
+ * Version 1.22  (06/08/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -142,10 +142,12 @@ $.fn.displayBox = function(css, fn) {
     var h = $msg.height() || $msg.attr('height') || css.height || $.blockUI.defaults.displayBoxCSS.height ;
     if (w[w.length-1] == '%') {
         var ww = document.documentElement.clientWidth || document.body.clientWidth;
+        w = parseInt(w) || 100;
         w = (w * ww) / 100;
     }
     if (h[h.length-1] == '%') {
         var hh = document.documentElement.clientHeight || document.body.clientHeight;
+        h = parseInt(h) || 100;
         h = (h * hh) / 100;
     }
     
