@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+		<title>
+			textNodes &amp; span &amp; replace
+		</title>
+		<script type="text/javascript" src="/js/jquery.js"></script>
+		<script type="text/javascript" src="/plugins/debug/jquery.debug.js"></script>
+		<script type="text/javascript" src="/plugins/textNodes/jquery.textNodes.js"></script>
+		<script type="text/javascript">
+			var typeOf = function (o){return (/\[object *(.*)\]/.exec(Object.prototype.toString.apply(o))[1])};
+			$(function(){
+				var pat = $.browser.safari ? /\b/ : /(\s+)/;
+				$('#div1')
+				.debug('div')
+				.textNodes()
+					.replace(/later/g,"never")
+						.split(pat)
+							.filter(function(){return this.nodeValue == 'then'})
+								.span()
+									.css('color','red')
+								.end()
+								.debug('a')
+							.end()
+							.debug('b')
+						.end()
+						.debug('c')
+					.end()
+				.end()
+				.debug('div');
+				$('#div2').debug('2').textNodes(true).replace(/and/g,"or").debug('2 d')
+			});
+		</script>
+	</head>
+	<body>
+		<h3>Original</h3>
+		<div>Now<i> and </i>then or maybe later</div>
+		<hr/>
+		<h3>silly replace #1</h3>
+		<div id="div1">Now<i> and </i>then or maybe later</div>
+		<h4>should be the same as </h4>
+		<div>Now<i> and </i><span style="color: red;">then</span> or maybe never</div>
+		<hr/>
+		<h3>silly replace #2</h3>
+		<div id="div2">Now<i> and </i>then or maybe later</div>
+		<h4>should be the same as </h4>
+		<div>Now<i> or </i>then or maybe later</div>
+	</body>
+</html>

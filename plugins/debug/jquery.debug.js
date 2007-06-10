@@ -3,7 +3,7 @@ var DEBUG = true;
 	$(function(){ // ready code
 		if (!("console" in window) || !("firebug" in console)){
 			if (DEBUG)
-				$('<div id="DEBUG" style ="background-color:#c1ebeb;position: fixed;left: 0px;height: 0px;overflow: auto;bottom: 0px;z-index: 1000;width: 100%;border-top: 5px solid #0000FF"><ol></ol></div>')
+				$('<div id="DEBUG" style ="background-color:#c1ebeb;position: fixed;left: 0px;height: 0px;overflow: scroll;bottom: 0px;z-index: 1000;width: 100%;border-top: 5px solid #0000FF"><ol></ol></div>')
 				.attr('title','Click to show more, shift click to show less, command(or alt or meta) click to clear')
 				.click(clicker)
 				.appendTo(document.body);
@@ -105,22 +105,26 @@ var DEBUG = true;
 		var s = o.toString().replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 		if (bare) 
 			return s;
-		if (s.length>8)
-			return qw(s.substr(0,8) + "…");
+		if (s.length>25)
+			return qw(s.substr(0,25) + "…");
 		return  qw(s)
 	};
 	var tiv = function(obj,title,pop) {
 		var $obj = $(obj);
-		var res = $obj[0].tagName.toLowerCase();
-		if ($obj.attr('id')) res+="#" + $obj.attr('id').bold();
-		if ($obj.is(":input")) res+= " " +abbr($obj.val(),true).italics();
-		if ($obj.attr('className')) res+="." + $obj.attr('className').fontcolor('red');
+		try{
+			var res = $obj[0].tagName.toLowerCase();
+			if ($obj.attr('id')) res+="#" + $obj.attr('id').bold();
+			if ($obj.is(":input")) res+= " " +abbr($obj.val(),true).italics();
+			if ($obj.attr('className')) res+="." + $obj.attr('className').fontcolor('red');
+		}catch(e){
+			var res = obj.nodeValue||obj
+		}
 		return "<span title=" + qw(pop) + ">" +res + "</span>"
 	};
 	var typeOf = function (o){return (/\[object *(.*)\]/.exec(Object.prototype.toString.apply(o))[1])};
 	var jsO = function(obj,bare) {
 			if (typeof obj != "object")
-				return bare || typeof obj != "string" ? obj : qw(obj.toString());
+				return bare || typeof obj != "string" ? obj : abbr(obj,false);
 			if (obj.nodeName)
 				return $.xhtml(obj).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 			if (obj.jquery )
