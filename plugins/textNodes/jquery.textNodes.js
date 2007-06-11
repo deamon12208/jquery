@@ -2,7 +2,7 @@
 jQuery.fn.span = function() {return this.wrap('<span/>').parent()};
 jQuery.fn.split = function(re) {
 	var text=[];
-	var re = re || $.browser.opera ? /(\s+)/ :  /\b/ ;
+	var re = re || $.browser.opera ? /(\W+)/ :  /\b/ ;
 	this.each(function(){
 		var tnp = this.parentNode;
 		var splits = this.nodeValue.split(re);
@@ -30,7 +30,7 @@ jQuery.fn.replace  = function(re,f) {
 	});
 	return this.pushStack(tNodes ? text : this)
 };
-jQuery.fn.textNodes = function(deep,dontPushStack) {
+jQuery.fn.textNodes = function(deep) {
 	var text=[];
 	this.each(function(){
 		var children =this.childNodes;
@@ -44,5 +44,12 @@ jQuery.fn.textNodes = function(deep,dontPushStack) {
 			}
 		}
 	});
-	return dontPushStack ? text : this.pushStack(text);
+	return arguments[1] ? text : this.pushStack(text);
+};
+jQuery.fn.acronyms = function(acronyms) {
+	this.textNodes(true).split().each(function(){
+		if (this.nodeValue in acronyms)
+			$(this).wrap('<acronym/>').parent().attr('title',acronyms[this.nodeValue])
+	});
+	return this;
 };
