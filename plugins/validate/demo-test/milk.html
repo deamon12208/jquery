@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-<title>Test for jQuery validate() plugin</title>
+<title>Remember The Milk signup form - jQuery Validate plugin demo</title>
 
 <link rel="stylesheet" type="text/css" media="screen" href="css/milk.css" />
 <script src="js/jquery.js" type="text/javascript"></script>
@@ -92,7 +92,6 @@ $(document).ready(function() {
 		if(firstname && lastname && !this.value) {
 			this.value = firstname + "." + lastname;
 		}
-		validator.element( this );
 	});
 
 });
@@ -103,7 +102,7 @@ $(document).ready(function() {
 <div id="content">
 
 <div id="header">
-  <div id="headerlogo"><a href="/"><img src="images/milk.png" alt="Remember The Milk" /></a></div>
+  <div id="headerlogo"><img src="images/milk.png" alt="Remember The Milk" /></div>
 </div>
 <div style="clear: both;"><div></div></div>
 
@@ -135,7 +134,7 @@ $(document).ready(function() {
 	  		  <tr>
 	  			<td class="label"><label id="lusername" for="username">Username</label></td>
 	  			<td class="field"><input id="username" name="username" type="text" class="textfield" value="" maxlength="50" /></td>
-	  			<td class="status"></span></td>
+	  			<td class="status"></td>
 	  		  </tr>
 	  		  <tr>
 	  			<td class="label"><label id="lpassword" for="password">Password</label></td>
@@ -198,8 +197,6 @@ $(document).ready(function() {
 </div>
 
 </div> <!-- /content -->
-
-<a href="index.html">Back to validation plugin main page</a>
 
 </body>
 </html>
