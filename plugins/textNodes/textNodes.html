@@ -11,7 +11,9 @@
 			text-decoration: none;
 			border-bottom: 1px dotted #0D2B9B;
 			cursor: help;
-			}
+		}
+		th{text-align:left}
+		.green { color:green}
 		</style>
 		<script type="text/javascript" src="/js/jquery.js"></script>
 		<script type="text/javascript" src="/plugins/debug/jquery.debug.js"></script>
@@ -19,7 +21,7 @@
 		<script type="text/javascript">
 			$(function(){
 				$('#div1')
-				.debug('1')
+		//		.debug('1')
 				.textNodes()
 					.replace(/later/g,"never")
 						.split()
@@ -27,31 +29,46 @@
 								.span()
 									.css('color','red')
 								.end()
-								.debug('a')
+		//						.debug('a')
 							.end()
-							.debug('b')
+		//					.debug('b')
 						.end()
-						.debug('c')
+		//				.debug('c')
 					.end()
 				.end()
-				.debug('1 end');
-				$('#div2').debug('2').textNodes(true).replace(/and/g,"or").end().end().debug('2 end')
-				$('#div2a').debug('2a').textNodes(true).replace(/and/g,"or").end().end().debug('2a end')
-				$('#div3').debug('3').replace(/and/g,"or").end().debug('3 end')
-				$('#div4a').debug('3a').replace(/and/g,"or").end().debug('3a end')
-				$('#text').prepend("<h1>"+document.title+"</h1>").acronyms({
+		//		.debug('1 end');
+				$('#div2')
+		//			.debug('2')
+					.textNodes(true).replace(/and/g,"or").end().end()
+		//			.debug('2 end')
+		//		$('#div2a').debug('2a').textNodes(true).replace(/and/g,"or").end().end().debug('2a end')
+				$('#div3')
+		//			.debug('3')
+					.replace(/and/g,"or").end()
+		//			.debug('3 end')
+		//		$('#div3a').debug('3a').replace(/and/g,"or").end().debug('3a end')
+				$('#text').prepend(jQuery("<h1/>").text(document.title))
+				.acronyms({
 					 textNodes:"bastard jQuery text children"
 					,jQuery:"magical JavaScript"
 					,deep:"keep traversing the dom, just children"
 					,acronyms:"the method that adds acronyms to a jQuery"
 					,sometext:"any text from the hash"
+					,OptionalRegularExpression:"use with care, the default is a nice word split"
+				})
+				.links({
+					 jQuery:'http://jQuery.com'
+					,plugins:"http://jqueryjs.googlecode.com/svn/trunk/plugins/textNodes/"
 				});
-					
+				var greenWords = {green:'green',hooked:'green',words:'green'}
+				$('#green').classes(greenWords)
 			});
 		</script>
 	</head>
 	<body>
 		<div id="text">
+			<p>A collection of little plugins to make text manipulation easier in jQuery.This code is beta, and has been tested in IE 7, FF 2, Safari 2, and Opera 9.
+			</p>
 			<h2>textNodes(deep)</h2>
 			<p>returns each of the text nodes of a jQuery as a jQuery object of the textNodes. 
 			Searching deeply or the default shallow.
@@ -71,27 +88,40 @@
 			<h2>acronyms(acronymsHash)</h2>
 			<p>runs through the jQuery wrapping some words with &lt;acronym title="sometext"&gt;
 			</p>
-			<hr size="12" />
 		</div>
-		<h2> results below:</h2>
-		<h3>Original</h3>
-		<div>Now<i> and </i>then or maybe later</div>
-		<hr/>
-
-		<h3>silly replace #1</h3>
-		<div id="div1">Now<i> and </i>then or maybe later</div>
-		<h4>should be the same as </h4>
-		<div>Now<i> and </i><span style="color: red;">then</span> or maybe never</div>
-		<hr/>
-
-		<h3>silly replace #2</h3>
-		<div id="div2">Now<i> and </i>then or maybe later</div>
-		<h4>should be the same as </h4>
-		<div>Now<i> or </i>then or maybe later</div>
-
-		<h3>silly replace #3</h3>
-		<div id="div3">Now<i> and </i>then or maybe later</div>
-		<h4>should be the same as </h4>
-		<div>Now<i> or </i>then or maybe later</div>
+		<hr width="80%" />
+		<table>
+			<tr>
+			<th>Original</th>
+			<td><span id="div0">Now<i> and </i>then or maybe later</span></td>
+			</tr>
+			<tr>
+			<th>silly replace #1 <br/> then made red, and later changed to never</th>
+			<td><span id="div1">Now<i> and </i>then or maybe later</span></td>
+			</tr>
+			<tr>
+			<th>should be the same as </th>
+			<td><span>Now<i> and </i><span style="color: red;">then</span> or maybe never</span></td>
+			</tr>
+			<tr>
+			<th>silly replace #2 <br/> or inside &lt;i&gt; changed to and </th>
+			<td><span id="div2">Now<i> and </i>then or maybe later</span></td>
+			</tr>
+			<tr>
+			<th>should be the same as </th>
+			<td><div>Now<i> or </i>then or maybe later</div></td>
+			</tr>
+			<tr>
+			<th>silly replace #3 <br/> or inside &lt;i&gt; changed to and . simpler</th>
+			<td><span id="div3">Now<i> and </i>then or maybe later</span></td>
+			</tr>
+			<tr>
+			<th>should be the same as </th>
+			<td><span>Now<i> or </i>then or maybe later</span></td>
+			</tr>
+		</table>
+		<h3>green room <br/> green,hooked, and words become green</h3>
+		<div id="green">Certain words are made green, they have been hooked!</div>
+		<hr width="80%" />
 	</body>
 </html>
