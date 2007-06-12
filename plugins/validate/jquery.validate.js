@@ -1278,7 +1278,7 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		decimal: function(value, element) {
-			return this.required(element) || /(?n:(^?(?!0,?\d)\d{1,3}(?=(?<1>,)|(?<1>))(\k<1>\d{3})*(\.\d+)?)$)/.test(value);
+			//return this.required(element) || /(?n:(^?(?!0,?\d)\d{1,3}(?=(?<1>,)|(?<1>))(\k<1>\d{3})*(\.\d+)?)$)/.test(value);
 		},
 		
 		decimalDE: function(value, element) {
