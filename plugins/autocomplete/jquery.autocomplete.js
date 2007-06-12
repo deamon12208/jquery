@@ -20,6 +20,12 @@ TODO
 @option Number size Limit the number of items to show at once. Default: 
 @option Function parse - TEST AND DOCUMENT ME
 - add option to display selectbox on focus
+
+$input.bind("show", function() {
+	if ( !select.visible() ) {
+		onChange(0, true);
+	}
+});
 */
 
 /**
