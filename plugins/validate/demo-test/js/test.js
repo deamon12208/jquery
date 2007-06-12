@@ -682,7 +682,6 @@ test("refresh()", function() {
 	function add() {
 		$("<input class='{required:true}' name='list" + counter++ + "' />").appendTo("#testForm2");
 		v.refresh();
-		console.log(v.elements)
 	}
 	function errors(expected, message) {
 		equals(expected, v.errorList.length, message );
