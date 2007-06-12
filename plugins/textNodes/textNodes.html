@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 	<head>
 		<title>
-			textNodes() &amp; replace() &amp; split() &amp; span() &amp; acronyms()
+			textNodes() &amp; replace() &amp; split() &amp; span() &amp; acronyms()  &amp; match()
 		</title>
 		<style type="text/css">
 		acronym {
@@ -62,6 +62,7 @@
 				});
 				var greenWords = {green:'green',hooked:'green',words:'green'}
 				$('#green').classes(greenWords)
+				$('#italics').match(/\b[A-Z]\w*\b/g).wrap('<i/>')
 			});
 		</script>
 	</head>
@@ -87,6 +88,9 @@
 			</p>
 			<h2>acronyms(acronymsHash)</h2>
 			<p>runs through the jQuery wrapping some words with &lt;acronym title="sometext"&gt;
+			</p>
+			<h2>match(regularExpression)</h2>
+			<p>runs through the jQuery returning the portions of the text nodes that match the regularExpression.
 			</p>
 		</div>
 		<hr width="80%" />
@@ -120,8 +124,11 @@
 			<td><span>Now<i> or </i>then or maybe later</span></td>
 			</tr>
 		</table>
-		<h3>green room <br/> green,hooked, and words become green</h3>
+		<h3>green room <br/> 'green', 'hooked', and 'words' become green</h3>
 		<div id="green">Certain words are made green, they have been hooked!</div>
+		<hr width="80%" />
+		<h3>italic caps <br/> capital letters become italicized!</h3>
+		<div id="italics">Certain words, that start with a Capital letter are made italic. As in my name Jake Wolpert.</div>
 		<hr width="80%" />
 	</body>
 </html>

@@ -1,11 +1,38 @@
-/* Beta 0.1  Send comments to jakecigar@gmail.com */
+/* Beta 0.2  Send comments to jakecigar@gmail.com */
 
 // span wraps a textNode into a normal jQuery span node
 jQuery.fn.span = function() {return this.wrap('<span/>').parent()};
 
+jQuery.fn.match = function(re) {
+	var texts=[];
+	this.textNodes(true).each(function(){
+		var res,val = this.nodeValue;
+		var ranges=[0];
+		while (res = re.exec(val)){
+			var lastMatch = res[0];
+			ranges.push(res.index,res.index+res[0].length);
+			if (!re.global) break
+		};
+		ranges.push(val.length)
+		if (ranges.length>2){
+			if (val == lastMatch)
+				texts.push(this);
+			else{
+				var tpn = this.parentNode;
+				for (var i=0;i<ranges.length -1;i++){
+					var t = document.createTextNode(val.substring(ranges[i],ranges[i+1]));
+					tpn.insertBefore(t,this);
+					if (i % 2)texts.push(t)
+				};
+				tpn.removeChild(this)
+			}
+		}
+	});
+	return this.pushStack( texts );
+};
 
 jQuery.fn.split = function(re) {
-	var text=[];
+	var texts=[];
 	var re = re || $.browser.opera ? /(\W+)/ :  /\b/ ;
 	this.each(function(){
 		var tpn = this.parentNode;
@@ -13,41 +40,41 @@ jQuery.fn.split = function(re) {
 		for (var i=0;i<splits.length;i++){
 			var t = document.createTextNode(splits[i]);
 			tpn.insertBefore(t,this);
-			text.push(t)
+			texts.push(t)
 		};
 		tpn.removeChild(this)
 	});
-	return this.pushStack( text );
+	return this.pushStack( texts );
 };
 
 jQuery.fn.replace  = function(re,f) {
-	var text=[], tNodes=false;
+	var texts=[], tNodes=false;
 	this.each(function(){
 		var $this = jQuery(this);
 		if (this.nodeType == 3){
 			tNodes=true;
-			text.push(this.parentNode.insertBefore(document.createTextNode(this.nodeValue.replace(re,f)),this));
+			texts.push(this.parentNode.insertBefore(document.createTextNode(this.nodeValue.replace(re,f)),this));
 			this.parentNode.removeChild(this)
 		}else
-			text.push($this.textNodes(true).replace(re,f).end().end())
+			texts.push($this.textNodes(true).replace(re,f).end().end())
 	});
-	return this.pushStack(tNodes ? text : this)
+	return this.pushStack(tNodes ? texts : this)
 };
 
 jQuery.fn.textNode = function(s) {return jQuery(document.createTextNode(s))};
 jQuery.fn.textNodes = function(deep) {
-	var text=[];
+	var texts=[];
 	this.each(function(){
 		var children =this.childNodes;
 		for (var i = 0; i < children.length; i++){
 			var child = children[i];
 			if (child.nodeType == 3) 
-				text.push(child);
+				texts.push(child);
 			else if (deep && child.nodeType == 1)
-				Array.prototype.push.apply(text,jQuery(child).textNodes(deep,true));
+				Array.prototype.push.apply(texts,jQuery(child).textNodes(deep,true));
 		}
 	});
-	return arguments[1] ? text : this.pushStack(text);
+	return arguments[1] ? texts : this.pushStack(texts);
 };
 
 jQuery.fn.maketags = function(hash,tag,attr) {
