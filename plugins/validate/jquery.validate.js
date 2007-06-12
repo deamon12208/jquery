@@ -18,6 +18,7 @@ TODO
  - add methods for decimal (3,500.05) and decimalDE (3.500,05), combine with min/max/rangeValue
  - add ":unchecked" expression
  - check on checkbox-wrapper-labels being hidden (checkbox/radio example)
+ - try to improve performance by optimizing filtering inside refresh, after some more profiling
  
  Examples:
  - masked input plugin integration http://digitalbush.com/projects/masked-input-plugin
