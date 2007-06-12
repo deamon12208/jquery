@@ -12,29 +12,19 @@
 
 /*
 TODO
- - improve general validation behaviour, set these defaults and make them configurable:
-   - validate invalid elements on keyup, removing the error as soon as possible
-   - don't validate valid elements on keyup/focus, giving the user the chance to enter the correct value before complaining
-   - validate elements on blur but make required optional. if required would pass, check other rules
-   - validate everything on submit
  - modify build to add plugin header to packed bundle
  - stop Firefox password manager on invalid forms, maybe stopping the click event on submit buttons
- - add hint that dependency expression are evaluated in the context of the element's containing form
- - rename submitMap (submitted? submittedElements? validatedOnSubmit?)
- - add rule "contains", combine several "contains" to specify complex password requirements (eg. at least one number, one character)
  - extend testsuite to allow execution of single tests by passing the test-name as an argument to the same page and reading that argument
- - adding inputs using refresh() works, removing does not
  - add methods for decimal (3,500.05) and decimalDE (3.500,05), combine with min/max/rangeValue
  - add ":unchecked" expression
  - check on checkbox-wrapper-labels being hidden (checkbox/radio example)
- 
  
  Examples:
  - masked input plugin integration http://digitalbush.com/projects/masked-input-plugin
  - ajaxForm() integration
  - ajaxSubmit with rules-option, more/less options to ajaxSubmit
  - watermark integration http://digitalbush.com/projects/watermark-input-plugin
- - custom password validation, eg. 6 chars min, and at least 1 number and at least 1 alpha or Must not use 123, abc, asdf or your username or your domain in the password. 
+ - custom password validation, eg. 6 chars min, and at least 1 number and at least 1 alpha or Must not use 123, abc, asdf or your username or your domain in the password, see addMethod2 test
  - datepicker integration (see dobis)
  - timepicker integration ( http://labs.perifer.se/timedatepicker/ ) 
  - milk example
@@ -441,7 +431,7 @@ jQuery.validator = function( options, form ) {
 	this.labelContainer = this.settings.errorLabelContainer;
 	this.errorContext = this.labelContainer.length && this.labelContainer || jQuery(form);
 	this.containers = this.settings.errorContainer.add( this.settings.errorLabelContainer );
-	this.submitMap = {};
+	this.submitted = {};
 	this.rulesCache = {};
 	this.reset();
 	this.refresh();
@@ -459,12 +449,12 @@ jQuery.extend(jQuery.validator, {
 		onsubmit: true,
 		ignore: [],
 		onblur: function(element) {
-			if ( element.name in this.submitMap || !this.required(element) ) {
+			if ( element.name in this.submitted || !this.required(element) ) {
 				this.element(element);
 			}
 		},
 		onkeyup: function(element) {
-			if ( element.name in this.submitMap || element == this.lastElement ) {
+			if ( element.name in this.submitted || element == this.lastElement ) {
 				this.element(element);
 			}
 		},
@@ -540,7 +530,7 @@ jQuery.extend(jQuery.validator, {
 			for ( var i = 0, element; element = this.elements[i]; i++ ) {
 				this.check( element );
 			}
-			jQuery.extend(this.submitMap, this.errorMap);
+			jQuery.extend(this.submitted, this.errorMap);
 			return this.valid();
 		},
 
@@ -634,6 +624,7 @@ jQuery.extend(jQuery.validator, {
 		
 		refresh: function() {
 			var validator = this;
+			validator.rulesCache = {};
 			
 			// select all valid inputs inside the form (no submit or reset buttons)
 			this.elements = jQuery(this.currentForm)
@@ -682,7 +673,7 @@ jQuery.extend(jQuery.validator, {
 		
 		prepareForm: function() {
 			this.reset();
-			this.submitMap = {};
+			this.submitted = {};
 			this.toHide = this.errors().push( this.containers );
 		},
 		
@@ -738,7 +729,7 @@ jQuery.extend(jQuery.validator, {
 				element: element
 			});
 			this.errorMap[element.name] = message;
-			this.submitMap[element.name] = message;
+			this.submitted[element.name] = message;
 		},
 		
 		addWrapper: function(toToggle) {
@@ -907,9 +898,10 @@ jQuery.extend(jQuery.validator, {
 		 * @desc Declares an input element that is required.
 		 *
 		 * @example <input id="other" type="radio" />
-		 * <input name="details" class="{required:'#other:checked'}" />
-		 * @desc Declares an input element required, but only if a radio button with id "other" is checked.
-		 * In other words: As long the "#other" isn't checked, the details field is valid.
+		 * <input name="details" class="{required:'input[@name=other]:checked'}" />
+		 * @desc Declares an input element required, but only if a checkbox with name 'other' is checked.
+		 * In other words: As long 'other' isn't checked, the details field is valid.
+		 * Note: The expression is evaluated in the context of the current form. 
 		 *
 		 * @example jQuery("#myform").validate({
 		 * 	rules: {
@@ -1284,6 +1276,14 @@ jQuery.extend(jQuery.validator, {
 		numberDE: function(value, element) {
 			return this.required(element) || /^-?[\.0-9]+(,\d+)?$/.test(value);
 		},
+		
+		decimal: function(value, element) {
+			return this.required(element) || /(?n:(^?(?!0,?\d)\d{1,3}(?=(?<1>,)|(?<1>))(\k<1>\d{3})*(\.\d+)?)$)/.test(value);
+		},
+		
+		decimalDE: function(value, element) {
+			return this.required(element) || /^-?[\.0-9]+(,\d+)?$/.test(value);
+		},
 	
 		/**
 		 * Returns true if the value contains only digits.
@@ -1382,6 +1382,7 @@ jQuery.extend(jQuery.validator, {
 		equalTo: function(value, element, param) {
 			return value == jQuery(param).val();
 		}
+		
 	},
 	
 	/**

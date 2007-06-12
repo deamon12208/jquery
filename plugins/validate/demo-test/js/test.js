@@ -8,6 +8,32 @@ function ruleTest( rule ) {
 	};
 }
 
+test("rule: decimal", function() {
+	var rule = ruleTest("decimal");
+	ok( rule( "" ), "Blank is valid" );
+	ok( rule( "123" ), "Valid decimal" );
+	ok( rule( "123000" ), "Valid decimal" );
+	ok( rule( "123000.12" ), "Valid decimal" );
+	ok( rule( "123.000" ), "Valid decimal" );
+	ok( rule( "123.000,00" ), "Valid decimal" );
+	ok(!rule( "123.0.0,0" ), "Invalid decimal" );
+	ok(!rule( "x123" ), "Invalid decimal" );
+	ok(!rule( "100.100,0,0" ), "Invalid decimal" );
+});
+
+test("rule: decimalDE", function() {
+	var rule = ruleTest("decimalDE");
+	ok( rule( "" ), "Blank is valid" );
+	ok( rule( "123" ), "Valid decimalDE" );
+	ok( rule( "123000" ), "Valid decimalDE" );
+	ok( rule( "123000,12" ), "Valid decimalDE" );
+	ok( rule( "123.000" ), "Valid decimalDE" );
+	ok( rule( "123.000,00" ), "Valid decimalDE" );
+	ok(!rule( "123.0.0,0" ), "Invalid decimalDE" );
+	ok(!rule( "x123" ), "Invalid decimalDE" );
+	ok(!rule( "100,100.0.0" ), "Invalid decimalDE" );
+});
+
 test("rule: digit", function() {
 	var rule = ruleTest("digits");
 	ok( rule( "123" ), "Valid digits" );
@@ -257,13 +283,13 @@ test("$.validator.addMethod", function() {
 });
 
 test("$.validator.addMethod2", function() {
-	expect( 5 );
+	expect( 4 );
 	$.validator.addMethod("complicatedPassword", function(value, element, param) {
-		return this.required(element) || !!value.match(new RegExp("[" + param + "]"));
-	}, String.format("Your password must contain one the following characters: {0}"));
+		return this.required(element) || /\D/.test(value) && /\d/.test(value)
+	}, "Your password must contain at least one number and one letter");
 	var v = jQuery("#form").validate({
 		rules: {
-			action: { complicatedPassword: "abcde1234$%&" }
+			action: { complicatedPassword: true }
 		}
 	});
 	var rule = $.validator.methods.complicatedPassword,
@@ -273,8 +299,7 @@ test("$.validator.addMethod2", function() {
 	equals( 0, v.errorList.length );
 	e.value = "ko";
 	ok( !v.element(e), "Invalid, doesn't contain one of the required characters" );
-	equals( "Your password must contain one the following characters: abcde1234$%&", v.errorList[0].message );
-	e.value = "ko$";
+	e.value = "ko1";
 	ok( v.element(e) );
 });
 
@@ -636,7 +661,7 @@ test("findLastActive()", function() {
 	}
 });
 
-test("refresh() & validating multiple checkboxes with 'required'", function() {
+test("validating multiple checkboxes with 'required'", function() {
 	expect(3);
 	var checkboxes = $("#form input[@name=check3]").attr("checked", false);
 	equals(5, checkboxes.size());
@@ -650,6 +675,38 @@ test("refresh() & validating multiple checkboxes with 'required'", function() {
 	checkboxes.filter(":last").attr("checked", true);
 	v.form();
 	equals(0, v.errorList.length);
+});
+
+test("refresh()", function() {
+	var counter = 0;
+	function add() {
+		$("<input class='{required:true}' name='list" + counter++ + "' />").appendTo("#testForm2");
+		v.refresh();
+		console.log(v.elements)
+	}
+	function errors(expected, message) {
+		equals(expected, v.errorList.length, message );
+	}
+	var v = $("#testForm2").validate();
+	v.form();
+	errors(1);
+	add();
+	v.form();
+	errors(2);
+	add();
+	v.form();
+	errors(3);
+	$("#testForm2 input[@name=list1]").remove();
+	v.refresh();
+	v.form();
+	errors(2);
+	add();
+	v.form();
+	errors(3);
+	$("#testForm2 input[@name^=list]").remove();
+	v.refresh();
+	v.form();
+	errors(1);
 });
 
 test("idOrName()", function() {
