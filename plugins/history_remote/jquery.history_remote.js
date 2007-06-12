@@ -1,6 +1,5 @@
 /**
- * History/Remote - jQuery plugin for enabling history and bookmarking in Ajax driven
- *                  applications in an unobtrusive and accessible manner ("Hijax").
+ * History/Remote - jQuery plugin for enabling history support and bookmarking
  * @requires jQuery v1.0.3
  *
  * http://stilbuero.de/jquery/history/
@@ -16,22 +15,21 @@
 (function($) { // block scope
 
 /**
- * Initialize the history event listener. Subsequent calls will not result in additional listeners.
- * Should be called soonest when the DOM is ready, because it will add an iframe in IE to enable
- * history support.
+ * Initialize the history manager. Subsequent calls will not result in additional history state change 
+ * listeners. Should be called soonest when the DOM is ready, because in IE an iframe needs to be added
+ * to the body to enable history support.
  *
  * @example $.ajaxHistory.initialize();
  *
  * @param Function callback A single function that will be executed in case there is no fragment
- *                          identifier/hash in the URL, for example after using the back button.
+ *                          identifier in the URL, for example after navigating back to the initial
+ *                          state. Use to restore such an initial application state.
  *                          Optional. If specified it will overwrite the default action of 
- *                          emptying all containers that are used to load content into (without 
- *                          hash there cannot be any content loaded, like a page load without
- *                          hash in its URL).
+ *                          emptying all containers that are used to load content into.
  * @type undefined
  *
  * @name $.ajaxHistory.initialize()
- * @cat Plugins/Remote
+ * @cat Plugins/History
  * @author Klaus Hartl/klaus.hartl@stilbuero.de
  */
 $.ajaxHistory = new function() {
@@ -168,7 +166,7 @@ $.ajaxHistory = new function() {
         }
         // look for hash in current URL (not Safari)
         if (location.hash && typeof _addHistory == 'undefined') {
-            $('a.remote[@href$="' + location.hash + '"]').click();
+            $('a[@href$="' + location.hash + '"]').trigger('click');
         }
         // start observer
         if (_observeHistory && _intervalId == null) {
@@ -180,16 +178,17 @@ $.ajaxHistory = new function() {
 
 /**
  * Implement Ajax driven links in a completely unobtrusive and accessible manner (also known as "Hijax")
- * with support for important usability issues like the web browser's back and forward button and bookmarking.
+ * with support for the browser's back/forward navigation buttons and bookmarking.
  *
- * The link's href attribute is altered to a hash, such as "#remote-1", so that it updates the browser's
- * current URL with this anchor hash, whereas the former value of the attribute is used to load content via
- * XmlHttpRequest and update the specified element. If no target element is found, a new div element will be
- * created and appended to the body to load the content into. The link triggers a history event on click to
- * maintain the browsers history.
+ * The link's href attribute gets altered to a fragment identifier, such as "#remote-1", so that the browser's
+ * URL gets updated on each click, whereas the former value of that attribute is used to load content via
+ * XmlHttpRequest from and update the specified element. If no target element is found, a new div element will be
+ * created and appended to the body to load the content into. The link informs the history manager of the 
+ * state change on click and adds an entry to the browser's history.
  *
  * jQuery's Ajax implementation adds a custom request header of the form "X-Requested-With: XmlHttpRequest"
- * to any Ajax request so that the called page can distinguish between a standard and a XmlHttpRequest.
+ * to any Ajax request so that the called page can distinguish between a standard and an Ajax (XmlHttpRequest)
+ * request.
  *
  * @example $('a.remote').remote('#output');
  * @before <a class="remote" href="/path/to/content.html">Update</a>
@@ -217,16 +216,17 @@ $.ajaxHistory = new function() {
 
 /**
  * Implement Ajax driven links in a completely unobtrusive and accessible manner (also known as "Hijax")
- * with support for important usability issues like the web browser's back and forward button and bookmarking.
+ * with support for the browser's back/forward navigation buttons and bookmarking.
  *
- * The link's href attribute is altered to a hash, such as "#remote-1", so that it updates the browser's
- * current URL with this anchor hash, whereas the former value of the attribute is used to load content via
- * XmlHttpRequest and update the specified element. If no target element is found, a new div element will be
- * created and appended to the body to load the content into. The link triggers a history event on click to
- * maintain the browsers history.
+ * The link's href attribute gets altered to a fragment identifier, such as "#remote-1", so that the browser's
+ * URL gets updated on each click, whereas the former value of that attribute is used to load content via
+ * XmlHttpRequest from and update the specified element. If no target element is found, a new div element will be
+ * created and appended to the body to load the content into. The link informs the history manager of the 
+ * state change on click and adds an entry to the browser's history.
  *
  * jQuery's Ajax implementation adds a custom request header of the form "X-Requested-With: XmlHttpRequest"
- * to any Ajax request so that the called page can distinguish between a standard and a XmlHttpRequest.
+ * to any Ajax request so that the called page can distinguish between a standard and an Ajax (XmlHttpRequest)
+ * request.
  *
  * @example $('a.remote').remote( $('#output > div')[0] );
  * @before <a class="remote" href="/path/to/content.html">Update</a>
@@ -273,7 +273,7 @@ $.fn.remote = function(output, settings, callback) {
             if (!target['locked']) {
                 // add to history only if true click occured, not a triggered click
                 if (e.clientX) {
-                    $.ajaxHistory.update(hash); // setting hash in callback is required to make it work in Safari
+                    $.ajaxHistory.update(hash);
                 }
                 target.load(href, function() {
                     target['locked'] = null;
@@ -285,13 +285,34 @@ $.fn.remote = function(output, settings, callback) {
 
 };
 
-// Internal, used to enable history for the Tabs plugin.
-$.fn.history = function() {
-    return this.click(function(e) {
+/**
+ * Provides the ability to use the back/forward navigation buttons in a DHTML application.
+ * A change of the application state is reflected by a change of the URL fragment identifier.
+ *
+ * The link's href attribute needs to point to a fragment identifier within the same resource,
+ * although that fragment id does not need to exist. On click the link changes the URL fragment
+ * identifier, informs the history manager of the state change and adds an entry to the browser's
+ * history.
+ *
+ * @param Function callback A single function that will be executed as the click handler of the 
+ *                          matched element. It will be executed on click (adding an entry to 
+ *                          the history) as well as in case the history manager needs to trigger 
+ *                          it depending on the value of the URL fragment identifier, e.g. if its 
+ *                          current value matches the href attribute of the matched element.
+ *                           
+ * @type jQuery
+ *
+ * @name history
+ * @cat Plugins/History
+ * @author Klaus Hartl/klaus.hartl@stilbuero.de
+ */
+$.fn.history = function(callback) {
+    return this.click(function(e) {        
         // add to history only if true click occured, not a triggered click
-        if (e.clientX) { // add to history only if true click occured, not a triggered click
+        if (e.clientX) {
             $.ajaxHistory.update(this.hash);
         }
+        typeof callback == 'function' && callback();
     });
 };
 
