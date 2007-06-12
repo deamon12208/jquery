@@ -693,7 +693,7 @@ jQuery.extend(jQuery.validator, {
 	
 		check: function( element ) {
 			element = this.clean( element );
-			jQuery( element ).add( jQuery( element ).parent() ).removeClass( this.settings.errorClass );
+			jQuery( element ).removeClass( this.settings.errorClass );
 			//var rules = this.rules( element );
 			var rules = this.rulesCache[ element.name ];
 			for( var i = 0, rule; rule = rules[i++]; ) {
@@ -702,7 +702,7 @@ jQuery.extend(jQuery.validator, {
 					if( result === -1 )
 						break;
 					if( !result ) {
-						jQuery( element ).add( jQuery( element ).parent().not( "label, form" ) ).addClass( this.settings.errorClass );
+						jQuery( element ).addClass( this.settings.errorClass );
 						this.formatAndAdd( rule, element);
 						return false;
 					}
