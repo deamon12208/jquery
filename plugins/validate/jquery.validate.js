@@ -1,54 +1,16 @@
 /*
- * Form Validation: jQuery form validation plug-in v1.0 RC 1
+ * Form Validation: jQuery form validation plug-in v1.0 final
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-validation/
  *
  * Copyright (c) 2006 Jörn Zaefferer
  *
+ * $Id$
+ *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  */
-
-/*
-TODO
- - modify build to add plugin header to packed bundle
- - stop Firefox password manager on invalid forms, maybe stopping the click event on submit buttons
- - check on checkbox-wrapper-labels being hidden (checkbox/radio example)
- 
- Examples:
- - masked input plugin integration http://digitalbush.com/projects/masked-input-plugin
- - ajaxForm() integration
- - ajaxSubmit with rules-option, more/less options to ajaxSubmit
- - watermark integration http://digitalbush.com/projects/watermark-input-plugin
- - custom password validation, eg. 6 chars min, and at least 1 number and at least 1 alpha or Must not use 123, abc, asdf or your username or your domain in the password, see addMethod2 test
- - datepicker integration (see dobis)
- - timepicker integration ( http://labs.perifer.se/timedatepicker/ ) 
- - milk example
- - one example for each option
- - intergration with rich-text-editors (FCKEditor, TinyMCE, Codepress)
- - integration with CakePHP ( https://trac.cakephp.org/ticket/2359 )
- 
- -> In simple terms, you need to "move" the content from the TinyMCE
-control to the textarea for validation.
-
-$('button.save').click(function(){
-	if (tinyMCE) tinyMCE.triggerSave();
-});
-http://wiki.moxiecode.com/index.php/TinyMCE:Functions#tinyMCE.triggerSave
- 
- 
-Recent changes:
-<li>Improved number and numberDE methods to check for correct decimal numbers with delimiters</li>
-<li>Only elements that have rules are checked (otherwise success-option is applied to all elements)</li>
-<li>Added creditcard number method (thanks to Brian Klug)</li>
-<li>Added ignore-option, eg. ignore: "[@type=hidden]", using that expression to exclude elements to validate. Default: none, though submit and reset buttons are always ignored</li>
-<li>Heavily enhanced Functions-as-messages by providing a flexible String.format helper</li>
-<li>Accept Functions as messages, providing runtime-custom-messages</li>
-<li>Fixed exclusion of elements without rules from successList</li>
-<li>Fixed custom-method-demo, replaced the alert with message displaying the number of errors</li>
-<li>Fixed form-submit-prevention when using submitHandler</li>
-*/
 
 /**
  * Validates a single form.
@@ -310,21 +272,6 @@ jQuery.extend(jQuery.fn, {
 			});
 		}
 		
-		validator.settings.onblur && validator.elements.blur( function() {
-			validator.settings.onblur.call( validator, this );
-		});
-		validator.settings.onkeyup && validator.elements.keyup(function() {
-			validator.settings.onkeyup.call( validator, this );
-		});
-		var checkables = jQuery([]);
-		validator.elements.each(function() {
-			if ( validator.checkable( this ) )
-				checkables.push( validator.checkableGroup( this ) );
-		});
-		validator.settings.onchange && checkables.change(function() {
-			validator.settings.onchange.call( validator, this );
-		});
-		
 		return validator;
 	},
 	// destructive add
@@ -446,20 +393,7 @@ jQuery.extend(jQuery.validator, {
 		errorContainer: jQuery( [] ),
 		errorLabelContainer: jQuery( [] ),
 		onsubmit: true,
-		ignore: [],
-		onblur: function(element) {
-			if ( element.name in this.submitted || !this.required(element) ) {
-				this.element(element);
-			}
-		},
-		onkeyup: function(element) {
-			if ( element.name in this.submitted || element == this.lastElement ) {
-				this.element(element);
-			}
-		},
-		onchange: function(element) {
-			this.element(element);
-		}
+		ignore: []
 	},
 
 	/**
