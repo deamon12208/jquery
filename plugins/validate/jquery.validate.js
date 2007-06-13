@@ -14,11 +14,7 @@
 TODO
  - modify build to add plugin header to packed bundle
  - stop Firefox password manager on invalid forms, maybe stopping the click event on submit buttons
- - extend testsuite to allow execution of single tests by passing the test-name as an argument to the same page and reading that argument
- - add methods for decimal (3,500.05) and decimalDE (3.500,05), combine with min/max/rangeValue
- - add ":unchecked" expression
  - check on checkbox-wrapper-labels being hidden (checkbox/radio example)
- - try to improve performance by optimizing filtering inside refresh, after some more profiling
  
  Examples:
  - masked input plugin integration http://digitalbush.com/projects/masked-input-plugin
@@ -42,6 +38,7 @@ http://wiki.moxiecode.com/index.php/TinyMCE:Functions#tinyMCE.triggerSave
  
  
 Recent changes:
+<li>Improved number and numberDE methods to check for correct decimal numbers with delimiters</li>
 <li>Only elements that have rules are checked (otherwise success-option is applied to all elements)</li>
 <li>Added creditcard number method (thanks to Brian Klug)</li>
 <li>Added ignore-option, eg. ignore: "[@type=hidden]", using that expression to exclude elements to validate. Default: none, though submit and reset buttons are always ignored</li>
@@ -642,7 +639,8 @@ jQuery.extend(jQuery.validator, {
 				
 				validator.rulesCache[this.name] = validator.rules(this);
 				return true;
-			})
+			});
+			
 			
 			// and listen for focus events to save reference to last focused element
 			this.elements.focus(function() {
@@ -1257,7 +1255,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		number: function(value, element) {
-			return this.required(element) || /^-?[,0-9]+(\.\d+)?$/.test(value); 
+			return this.required(element) || /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/.test(value);
 		},
 	
 		/**
@@ -1275,17 +1273,9 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		numberDE: function(value, element) {
-			return this.required(element) || /^-?[\.0-9]+(,\d+)?$/.test(value);
+			return this.required(element) || /^-?(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d+)?$/.test(value);
 		},
 		
-		decimal: function(value, element) {
-			//return this.required(element) || /(?n:(^?(?!0,?\d)\d{1,3}(?=(?<1>,)|(?<1>))(\k<1>\d{3})*(\.\d+)?)$)/.test(value);
-		},
-		
-		decimalDE: function(value, element) {
-			return this.required(element) || /^-?[\.0-9]+(,\d+)?$/.test(value);
-		},
-	
 		/**
 		 * Returns true if the value contains only digits.
 		 *
