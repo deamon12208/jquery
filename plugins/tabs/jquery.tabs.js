@@ -217,12 +217,12 @@ $.fn.tabs = function(initial, settings) {
         var tabs = $('a', nav);
 
         // prepare remote tabs
-        if (settings.remote) {            
+        if (settings.remote) {
             tabs.each(function() {
                 var id = settings.hashPrefix + (++$.tabs.remoteCount), hash = '#' + id, url = this.href;
                 this.href = hash;
                 $('<div id="' + id + '" class="' + settings.containerClass + '"></div>').appendTo(container);
-                
+
                 $(this).bind('loadRemoteTab', function(e, callback) {
                     var $$ = $(this).addClass(settings.loadingClass), span = $('span', this)[0], tabTitle = span.innerHTML;
                     if (settings.spinner) {
@@ -237,9 +237,9 @@ $.fn.tabs = function(initial, settings) {
                             $$.removeClass(settings.loadingClass);
                             callback && callback();
                         });
-                    }, 0);   
+                    }, 0);
                 });
-                
+
             });
         }
 
@@ -476,9 +476,13 @@ $.fn.tabs = function(initial, settings) {
                         if (typeof onHide == 'function') {
                             onHide(clicked, toShow[0], toHide[0]);
                         }
-                        toHide.addClass(settings.hideClass).css({display: '', overflow: '', height: '', opacity: ''}); // maintain flexible height and accessibility in print etc.
+                        var resetCSS = { display: '', overflow: '', height: '' };
+                        if (!$.browser.msie) { // not in IE to prevent ClearType font issue
+                            resetCSS['opacity'] = '';
+                        }
+                        toHide.addClass(settings.hideClass).css(resetCSS); // maintain flexible height and accessibility in print etc.
                         toShow.removeClass(settings.hideClass).animate(showAnim, showSpeed, function() {
-                            toShow.css({overflow: '', height: '', opacity: ''}); // maintain flexible height and accessibility in print etc.
+                            toShow.css(resetCSS); // maintain flexible height and accessibility in print etc.
                             if ($.browser.msie) {
                                 toHide[0].style.filter = '';
                                 toShow[0].style.filter = '';

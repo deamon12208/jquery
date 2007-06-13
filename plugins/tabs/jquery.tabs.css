@@ -58,13 +58,13 @@
 }
 .tabs-nav a span {
     width: 64px; /* IE 6 treats width as min-width */
-    height: 18px; /* IE 6 treats height as min-width */
     min-width: 64px;
+    height: 18px; /* IE 6 treats height as min-height */
     min-height: 18px;
     padding-top: 6px;
     padding-right: 0;
 }
-*>.tabs-nav a span { /* hide from IE 6*/
+*>.tabs-nav a span { /* hide from IE 6 */
     width: auto;
     height: auto;
 }
