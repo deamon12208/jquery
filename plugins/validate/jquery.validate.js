@@ -936,7 +936,7 @@ jQuery.extend(jQuery.validator, {
 		 * @desc Specifies a group of checkboxes. To validate, at least two checkboxes must be selected.
 		 *
 		 * @param Number min
-		 * @name jQuery.validator.methods.min
+		 * @name jQuery.validator.methods.minLength
 		 * @type Boolean
 		 * @cat Plugins/Validate/Methods
 		 */
@@ -962,7 +962,7 @@ jQuery.extend(jQuery.validator, {
 		 * @desc Declares an input element that must have at least one and at most 5 characters.
 		 *
 		 * @param Number max
-		 * @name jQuery.validator.methods.max
+		 * @name jQuery.validator.methods.maxLength
 		 * @type Boolean
 		 * @cat Plugins/Validate/Methods
 		 */
