@@ -27,6 +27,7 @@ TODO
  - milk example
  - one example for each option
  - intergration with rich-text-editors (FCKEditor, TinyMCE, Codepress)
+ - integration with CakePHP ( https://trac.cakephp.org/ticket/2359 )
  
  -> In simple terms, you need to "move" the content from the TinyMCE
 control to the textarea for validation.
