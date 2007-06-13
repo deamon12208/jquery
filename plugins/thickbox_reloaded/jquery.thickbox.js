@@ -50,6 +50,7 @@
                 top: '',
                 left: '',
                 width: 300,
+                minWidth: 250, /* applies to image view with very small to prevent messed up layout */
                 height: 340,
                 animate: null,
                 i18n: {
@@ -324,7 +325,7 @@
                                         }
                                     }
 
-                                    show(imgWidth + 38, imgHeight + (rel ? 90 : 75), settings.top, settings.left, settings.animate, callback);
+                                    show(Math.max(imgWidth, defaultValues.minWidth) + 38, imgHeight + (rel ? 90 : 75), settings.top, settings.left, settings.animate, callback);
                                 };
 
                                 // initiate img loading
