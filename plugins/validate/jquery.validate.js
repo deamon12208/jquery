@@ -583,7 +583,7 @@ jQuery.extend(jQuery.validator, {
 				
 				// hide error label and remove error class on focus if enabled
 				if ( validator.settings.focusCleanup ) {
-					$(this).removeClass( validator.settings.errorClass );
+					jQuery(this).removeClass( validator.settings.errorClass );
 					validator.errorsFor(this).hide();
 				}
 			});
