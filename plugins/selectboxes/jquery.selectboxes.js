@@ -4,7 +4,7 @@
  * Licensed under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
  *
- * Version 2.0
+ * Version 2.0.1
  * Demo: http://www.texotela.co.uk/code/jquery/select/
  *
  * $LastChangedDate$
@@ -27,6 +27,32 @@
  */
 $.fn.addOption = function()
 {
+	var add = function(el, v, t, sO)
+	{
+		var option = document.createElement("option");
+		option.value = v, option.text = t;
+		// get options
+		var o = el.options;
+		// get number of options
+		var oL = o.length;
+		if(!el.cache)
+		{
+			el.cache = {};
+			// loop through existing options, adding to cache
+			for(var i = 0; i < oL; i++)
+			{
+				el.cache[o[i].value] = i;
+			}
+		}
+		// add to cache if it isn't already
+		if(!el.cache[v]) el.cache[v] = oL;
+		el.options[el.cache[v]] = option;
+		if(sO)
+		{
+			option.selected = true;
+		}
+	};
+	
 	var a = arguments;
 	if(a.length == 0) return this;
 	// select option when added? default is true
@@ -58,37 +84,12 @@ $.fn.addOption = function()
 			{
 				for(var item in items)
 				{
-					$(this).addOption(item, items[item], sO);
+					add(this, item, items[item], sO);
 				}
 			}
 			else
 			{
-				var option = document.createElement("option");
-				option.value = v, option.text = t;
-				// do replacement
-				var r = false;
-				// get options
-				var o = this.options;
-				// get number of options
-				var oL = o.length;
-				// define i, for deciding where the option should be added
-				var i;
-				// loop through existing options
-				for(i = 0; i < oL; i++)
-				{
-					// replace existing option
-					if(o[i].value == option.value)
-					{
-						r = true;
-						break;
-					}
-				}
-				if(i < oL && !r) i = oL;
-				this.options[i] = option;
-				if(sO)
-				{
-					o[i].selected = true;
-				}
+				add(this, v, t, sO);
 			}
 		}
 	);
