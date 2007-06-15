@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.22  (06/08/2007)
+ * Version 1.23  (06/15/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -175,7 +175,7 @@ $.blockUI.defaults = {
     // allow body element to be stetched in ie6
     ie6Stretch: 1,
     // supress tab nav from leaving blocking content?
-    allowTabToLeave: 1,
+    allowTabToLeave: 0,
     // Title attribute for overlay when using displayBox
     closeMessage: 'Click to close'
 };
@@ -185,6 +185,7 @@ $.blockUI.impl = {
     box: null,
     boxCallback: null,
     pageBlock: null,
+    pageBlockEls: [],
     op8: window.opera && window.opera.version() < 9,
     ffLinux: $.browser.mozilla && /Linux/.test(navigator.platform),
     ie6: $.browser.msie && typeof XMLHttpRequest == 'function',
@@ -216,7 +217,6 @@ $.blockUI.impl = {
         if ($.browser.msie) f.css('opacity','0.0');
 
         $([f[0],w[0],m[0]]).appendTo(full ? 'body' : el);
-        if (full) this.pageBlock = m[0];
 
         // ie7 must use absolute positioning in quirks mode and to account for activex issues (when scrolling)
         var expr = $.browser.msie && (!$.boxModel || $('object,embed', full ? null : el).length > 0);
@@ -261,14 +261,19 @@ $.blockUI.impl = {
         m.append(msg).show();
         if (msg.jquery) msg.show();
         if (displayMode) return;
-        full ? setTimeout(this.focus, 200): this.center(m[0]);
+        if (full) {
+            this.pageBlock = m[0];
+            this.pageBlockEls = $(':input:enabled:visible',this.pageBlock);
+            setTimeout(this.focus, 20);
+        }
+        else this.center(m[0]);
     },
     remove: function(el) {
         this.bind(0, el);
         var full = el == window;
         if (full) {
             $('body').children().filter('.blockUI').remove();
-            this.pageBlock = null;
+            this.pageBlock = this.pageBlockEls = null;
         }
         else $('.blockUI', el).remove();
     },
@@ -280,7 +285,17 @@ $.blockUI.impl = {
     },
     // event handler to suppress keyboard/mouse events when blocking
     handler: function(e) {
-        if (e.keyCode && e.keyCode == 9 && $.blockUI.defaults.allowTabToLeave) return true;
+        if (e.keyCode && e.keyCode == 9) {
+            if ($.blockUI.impl.pageBlock && !$.blockUI.defaults.allowTabToLeave) {
+                var els = $.blockUI.impl.pageBlockEls;
+                var fwd = !e.shiftKey && e.target == els[els.length-1];
+                var back = e.shiftKey && e.target == els[0];
+                if (fwd || back) {
+                    setTimeout(function(){$.blockUI.impl.focus(back)},10);
+                    return false;
+                }
+            }
+        }
         if ($(e.target).parents('div.blockMsg').length > 0)
             return true;
         return $(e.target).parents().children().filter('div.blockUI').length == 0;
@@ -297,14 +312,13 @@ $.blockUI.impl = {
         if (!b && (full && !this.pageBlock || !full && !el.$blocked)) return;
         if (!full) el.$blocked = b;
         var $e = full ? $() : $(el).find('a,:input');
-        $.each(['mousedown','mouseup','keydown','keypress','keyup','click'], function(i,o) {
+        $.each(['mousedown','mouseup','keydown','keypress','click'], function(i,o) {
             $e[b?'bind':'unbind'](o, $.blockUI.impl.handler);
         });
     },
-    focus: function() {
-        if (!$.blockUI.impl.pageBlock) return;
-        var v = $(':input:visible:enabled', $.blockUI.impl.pageBlock)[0];
-        if (v) v.focus();
+    focus: function(back) {
+        var e = $.blockUI.impl.pageBlockEls[back===true ? $.blockUI.impl.pageBlockEls.length-1 : 0];
+        if (e) e.focus();
     },
     center: function(el) {
 		var p = el.parentNode, s = el.style;
