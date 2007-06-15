@@ -45,7 +45,7 @@ $.fn.addOption = function()
 			}
 		}
 		// add to cache if it isn't already
-		if(!el.cache[v]) el.cache[v] = oL;
+		if(typeof el.cache[v] == "undefined") el.cache[v] = oL;
 		el.options[el.cache[v]] = option;
 		if(sO)
 		{
