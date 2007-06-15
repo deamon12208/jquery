@@ -1,0 +1,8 @@
+8 Sijawusz Pur Rahnama, 12:30: first of all, it would be handy to have some hideError(s) method
+8 Sijawusz Pur Rahnama, 12:31: the second thing is to provide some sort of ids not constrained only to DOM tree
+8 Sijawusz Pur Rahnama, 12:32: it can be achieved by sniffing some character on a front of id
+8 Sijawusz Pur Rahnama, 12:32: like # for example
+8 Sijawusz Pur Rahnama, 12:33: by this, we'll be able to set some custom errors not strictly related to our form
+8 Sijawusz Pur Rahnama, 12:33: for example
+8 Sijawusz Pur Rahnama, 12:34: validator.setErrors({ '#broken_connection': 'There was a problem with connection, try again later' });
+8 Sijawusz Pur Rahnama, 12:35: and later we could use validator.hideError('#broken_connection');
