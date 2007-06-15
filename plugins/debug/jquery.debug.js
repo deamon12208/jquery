@@ -1,5 +1,6 @@
 var DEBUG = true;
 (function($) { // main code
+	var version = 'v0.2';
 	$(function(){ // ready code
 		if (!("console" in window) || !("firebug" in console)){
 			if (DEBUG)
@@ -28,7 +29,6 @@ var DEBUG = true;
 		}
 		return this
 	};
-	$.fn.debug.version = '0.2';
 	$.log =$.fn.log = function() {
 		if(DEBUG )
 			if("console" in window && 'firebug' in console)
