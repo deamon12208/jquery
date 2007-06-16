@@ -834,3 +834,158 @@ test("expression: :unchecked", function() {
 	e.checked = false;
 	equals( 1, $(e).filter(":unchecked").length );
 });
+
+module("events");
+
+test("validate on blur", function() {
+	function errors(expected, message) {
+		equals(expected, v.errorList.length, message );
+	}
+	var e = $("#firstname");
+	var v = $("#testForm1").validate();
+	e.blur();
+	errors(0, "No value yet, required is skipped on blur");
+	e.val("h");
+	e.blur();
+	errors(1, "Required was ignored, but as something was entered, check other rules, minLength isn't met");
+	e.val("hh");
+	e.blur(0, "All is fine");
+	e.val("");
+	v.form();
+	errors(2, "Submit checks all rules, both fields invalid");
+	e.blur();
+	errors(1, "Blurring the field results in emptying the error list first, then checking the invalid field: its still invalid, don't remove the error" );
+	e.val("h");
+	e.blur();
+	errors(1, "Entering a single character fulfills required, but not minLength: 2, still invalid");
+	e.val("hh");
+	e.blur();
+	errors(0, "Both required and minLength are met, no errors left");
+});
+
+test("validate on keyup", function() {
+	function errors(expected, message) {
+		equals(expected, v.errorList.length, message );
+	}
+	var e = $("#firstname");
+	var v = $("#testForm1").validate();
+	e.keyup();
+	errors(0, "No value, no errors");
+	e.val("a");
+	e.keyup();
+	errors(0, "Value, but not invalid");
+	e.val("");
+	v.form();
+	errors(2, "Both invalid");
+	e.keyup();
+	errors(1, "Only one field validated, still invalid");
+	e.val("hh");
+	e.keyup();
+	errors(0, "Not invalid anymore");
+	e.val("h");
+	e.keyup();
+	errors(1, "Field didn't loose focus, so validate again, invalid");
+	e.val("hh");
+	e.keyup();
+	errors(0, "Valid");
+});
+
+test("validate on keyup and blur", function() {
+	function errors(expected, message) {
+		equals(expected, v.errorList.length, message );
+	}
+	var e = $("#firstname");
+	var v = $("#testForm1").validate();
+	errors(0);
+	e.val("a");
+	e.keyup();
+	errors(0);
+	e.blur();
+	errors(1);
+});
+
+test("validate email on keyup and blur", function() {
+	function errors(expected, message) {
+		equals(expected, v.errorList.length, message );
+	}
+	var e = $("#firstname");
+	var v = $("#testForm1").validate();
+	v.form();
+	errors(2);
+	e.val("a");
+	e.keyup();
+	errors(1);
+	e.val("aa");
+	e.keyup();
+	errors(0);
+});
+
+test("validate checkbox on click", function() {
+	function errors(expected, message) {
+		equals(expected, v.errorList.length, message );
+	}
+	var e = $("#check2");
+	var v = $("#form").validate({
+		rules: {
+			check2: "required"
+		}
+	});
+	e.click();
+	errors(0);
+	e.click();
+	equals( false, v.form() );
+	errors(1);
+	e.click();
+	errors(0);
+	e.click();
+	errors(1);
+});
+
+test("validate multiple checkbox on click", function() {
+	function errors(expected, message) {
+		equals(expected, v.errorList.length, message );
+	}
+	var e1 = $("#check1").attr("checked", false);
+	var e2 = $("#check1b");
+	var v = $("#form").validate({
+		rules: {
+			check: {
+				required: true,
+				minLength: 2
+			}
+		}
+	});
+	e1.click();
+	e1.blur();
+	errors(0, "Minlength must be skipped");
+	e2.click();
+	e2.blur();
+	errors(0);
+	e2.click();
+	equals( false, v.form() );
+	errors(1);
+	e2.click();
+	errors(0);
+	e2.click();
+	errors(1);
+});
+
+test("validate radio on click", function() {
+	function errors(expected, message) {
+		equals(expected, v.errorList.length, message );
+	}
+	var e1 = $("#radio1");
+	var e2 = $("#radio1a");
+	var v = $("#form").validate({
+		rules: {
+			radio1: "required"
+		}
+	});
+	errors(0);
+	equals( false, v.form() );
+	errors(1);
+	e2.click();
+	errors(0);
+	e1.click();
+	errors(0);
+});

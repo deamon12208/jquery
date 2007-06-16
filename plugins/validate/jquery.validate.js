@@ -272,6 +272,21 @@ jQuery.extend(jQuery.fn, {
 			});
 		}
 		
+		validator.settings.onblur && validator.elements.blur( function() {
+			validator.settings.onblur.call( validator, this );
+		});
+		validator.settings.onkeyup && validator.elements.keyup(function() {
+			validator.settings.onkeyup.call( validator, this );
+		});
+		var checkables = jQuery([]);
+		validator.elements.each(function() {
+			if ( validator.checkable( this ) )
+				checkables.push( validator.checkableGroup( this ) );
+		});
+		validator.settings.onchange && checkables.change(function() {
+			validator.settings.onchange.call( validator, this );
+		});
+		
 		return validator;
 	},
 	// destructive add
@@ -378,7 +393,6 @@ jQuery.validator = function( options, form ) {
 	this.errorContext = this.labelContainer.length && this.labelContainer || jQuery(form);
 	this.containers = this.settings.errorContainer.add( this.settings.errorLabelContainer );
 	this.submitted = {};
-	this.rulesCache = {};
 	this.reset();
 	this.refresh();
 };
@@ -393,7 +407,21 @@ jQuery.extend(jQuery.validator, {
 		errorContainer: jQuery( [] ),
 		errorLabelContainer: jQuery( [] ),
 		onsubmit: true,
-		ignore: []
+		ignore: [],
+		onblur: function(element) {
+			if ( !this.checkable(element) && (element.name in this.submitted || !this.required(element)) ) {
+				this.element(element);
+			}
+		},
+		onkeyup: function(element) {
+			if ( element.name in this.submitted || element == this.lastElement ) {
+				this.element(element);
+			}
+		},
+		onchange: function(element) {
+			if ( element.name in this.submitted )
+				this.element(element);
+		}
 	},
 
 	/**
