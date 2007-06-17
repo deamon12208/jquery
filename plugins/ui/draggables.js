@@ -28,7 +28,6 @@
 			dragPrevention: o.dragPrevention ? o.dragPrevention.toLowerCase().split(",") : ["input","textarea","button"],
 			cursorAt: { top: ((o.cursorAt && o.cursorAt.top) ? o.cursorAt.top : 0), left: ((o.cursorAt && o.cursorAt.left) ? o.cursorAt.left : 0), bottom: ((o.cursorAt && o.cursorAt.bottom) ? o.cursorAt.bottom : 0), right: ((o.cursorAt && o.cursorAt.right) ? o.cursorAt.right : 0) },
 			cursorAtIgnore: (!o.cursorAt) ? true : false, //Internal property
-			iframeFix: o.iframeFix != undefined ? o.iframeFix : true,
 			wrapHelper: o.wrapHelper != undefined ? o.wrapHelper : true,
 			scroll: o.scroll != undefined ? o.scroll : 20,
 			appendTo: o.appendTo ? o.appendTo : "parent",
@@ -78,6 +77,14 @@
 		timer: null,
 		slowMode: false,
 		element: null,
+		execPlugins: function(type) {
+			var o = this.options;
+			if(this.plugins[type]) {
+				for(var i=0;i<this.plugins[type].length;i++) {
+					this.plugins[type][i].apply(this.element, [this.helper, this.position, [o.curOffset.left - o.ppOffset.left,o.curOffset.top - o.ppOffset.top],this]);	
+				}	
+			}			
+		},
 		destroy: function() { // Destroy this draggable
 			
 		},
@@ -192,20 +199,6 @@
 			// Remap right/bottom properties for cursorAt to left/top
 			if(o.cursorAt.right && !o.cursorAt.left) o.cursorAt.left = o.helper.offsetWidth+o.margins.right+o.margins.left - o.cursorAt.right;
 			if(o.cursorAt.bottom && !o.cursorAt.top) o.cursorAt.top = o.helper.offsetHeight+o.margins.top+o.margins.bottom - o.cursorAt.bottom;
-
-			if(!this.slowMode && o.iframeFix) { // Make clones on top of iframes (only if we are not in slowMode)
-				if(o.iframeFix.constructor == Array) {
-					for(var i=0;i<o.iframeFix.length;i++) {
-						var curOffset = $(o.iframeFix[i]).offset({ border: false });
-						$("<div class='DragDropIframeFix' style='background: #fff;'></div>").css("width", $(o.iframeFix[i])[0].offsetWidth+"px").css("height", $(o.iframeFix[i])[0].offsetHeight+"px").css("position", "absolute").css("opacity", "0.001").css("z-index", "1000").css("top", curOffset.top+"px").css("left", curOffset.left+"px").appendTo("body");
-					}		
-				} else {
-					$("iframe").each(function() {					
-						var curOffset = $(this).offset({ border: false });
-						$("<div class='DragDropIframeFix' style='background: #fff;'></div>").css("width", this.offsetWidth+"px").css("height", this.offsetHeight+"px").css("position", "absolute").css("opacity", "0.001").css("z-index", "1000").css("top", curOffset.top+"px").css("left", curOffset.left+"px").appendTo("body");
-					});							
-				}		
-			}
 		
 			/* Only after we have appended the helper, we compute the offsets
 			 * for the slowMode! This is important, so the user aready see's
@@ -219,6 +212,7 @@
 			o.init = true;	
 
 			if(o.onStart) o.onStart.apply(this.element, [this.helper]); // Trigger the onStart callback
+			this.execPlugins("start");
 			return false;
 						
 		},
@@ -235,11 +229,7 @@
 			if(o.onStop) o.onStop.apply(this.element, [this.helper, this.position, [o.curOffset.left - o.ppOffset.left,o.curOffset.top - o.ppOffset.top],this]); //Trigger the onStop callback
 			
 			//Execute plugins
-			if(this.plugins["stop"]) {
-				for(var i=0;i<this.plugins["stop"].length;i++) {
-					this.plugins["stop"][i].apply(this.element, [this.helper, this.position, [o.curOffset.left - o.ppOffset.left,o.curOffset.top - o.ppOffset.top],this]);	
-				}	
-			}
+			this.execPlugins("stop");
 
 			if(this.slowMode && $.ui.droppable) { //If cursorAt is within the helper, we must use our drop manager
 				var m = d.manager;
@@ -252,7 +242,6 @@
 			}
 				
 			if(this.helper != this.element && !this.helper.keepMe) $(this.helper).remove();	// Remove helper, if it's not the real deal (the origin)
-			if(o.iframeFix) $("div.DragDropIframeFix").each(function() { this.parentNode.removeChild(this); }); //Remove frame helpers
 
 			o.init = false;
 			this.oldPosition = this.position = this.helper = null; // Clear temp variables
