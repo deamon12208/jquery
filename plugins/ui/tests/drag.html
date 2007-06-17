@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Draggables demo - Interface plugin for jQuery</title>
+<script type="text/javascript" src="../../../jquery/src/jquery/jquery.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx/fx.js"></script>
+<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+<script type="text/javascript" src="../ui.js"></script>
+<script type="text/javascript" src="../draggables.js"></script>
+<script type="text/javascript" src="../draggables.ext.js"></script>
+<style type="text/css" media="all">
+
+body
+{
+	background: #fff;
+	margin: 0;
+	padding: 0;
+	font-family: Arial;
+	font-size: 12px;
+}
+
+li {
+	position: relative;
+	border-bottom: 1px solid #999;
+	border-right: 1px solid #999;
+	margin: 10px;
+	padding: 10px;
+	height: 100px;
+	width: 500px;
+	float: left;
+	list-style-type: none;
+	
+}
+
+.draggable {
+	position: absolute;
+	width: 90px;
+	height: 90px;
+	top: 10px;
+	right: 10px;
+	background-color: #68BFEF;
+	border: 2px solid #0090DF;
+	padding: 5px;	
+}
+
+#drag7 div
+{
+	cursor: move;
+	background-color: #900;
+	height: 15px;
+}
+</style>
+</head>
+<body>
+	
+	<ul>
+	    <li>
+	    	Uses a proxy
+	    	<div id="drag1" class='draggable'><a href="index.php">Drag me</a><input type="text" value="select me" style="width: 90px; font-size: 10px;" /></div>
+	    </li>
+	    <li>
+	    	Reverting to original position
+	    	<div id="drag2" class='draggable'>Drag me</div>
+	    </li>
+	    <li>
+	    	Moves in grid [50,50]
+	    	<div id="drag4" class='draggable'>Drag me</div>
+	    </li>
+	    <li>
+	    	axis: 'x'
+	    	<div id="drag5" class='draggable'>Drag me</div>
+	    </li>
+	    <li>
+	    	axis: 'y'
+	    	<div id="drag6" class='draggable'>Drag me</div>
+	    </li>
+	    <li>
+	    	handle: 'div'
+	    	<div id="drag7" class='draggable'><div></div>Drag me</div>
+	    </li>
+	    <li>
+	    	containment: 'window'
+	    	<div id="drag9" class='draggable'>Drag me</div>
+	    </li>
+	    <li>
+	    	custom drag modifier (circle dragging)
+	    	<div id="drag8" class='draggable'>Drag me</div>
+	    </li>
+	    <li>
+	    	containment: 'parent'
+	    	<div id="drag10" class='draggable'>Drag me</div>
+	    </li>
+	    <li style='background: #eee; height: 300px; overflow: scroll;'>
+	    	cursorAt: { top: -16, left: -16 } and overflowing container
+	    	<div id="drag11" class='draggable'>Drag me</div>
+	    </li>
+	</ul>
+	
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	$('#drag1').draggable(
+		{
+			zIndex: 1,
+			dragPrevention: 'a,input,textarea',
+			preventionTimeout: false,
+			preventionDistance: 0,
+			helper: function() {
+				var myHelper = document.createElement("div");
+				$(myHelper).css({
+					background: 'yellow',
+					width: this.offsetWidth + 'px',
+					height: this.offsetHeight + 'px',
+					opacity: 0.6,
+					position: 'absolute'
+				});
+				return myHelper;
+			}
+		}
+	);
+
+	//Revert functionality
+	$('#drag2').draggable({
+		revert: true
+	});
+	
+	$('#drag4').draggable({ grid: [50,50] });
+
+	$('#drag5').draggable({axis:'y'});
+	$('#drag6').draggable({axis:'x'});
+	$('#drag7').draggable({handle:'div'});
+
+
+	
+	$('#drag9').draggable({containment: 'window'});
+
+	$('#drag8').draggable({
+		onDrag: function(helper,position) {
+			
+			var centerx = 600;
+			var centery = 400;
+			var angle = Math.atan((centery-position[1])/(centerx-position[0]));
+			if((centerx-position[0])>=0)
+				angle += Math.PI;
+			radius = 160;
+			return {
+				x: radius * Math.cos(angle) + centerx, 
+				y: radius * Math.sin(angle) + centery
+			}
+		}
+	});
+	
+	$('#drag10').draggable({containment: 'parent'});
+	
+	$('#drag11').draggable({
+		cursorAt: { top: -16, left: -16 }
+	});
+
+});
+</script>
+</body>
+</html>
