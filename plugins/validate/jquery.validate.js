@@ -530,6 +530,7 @@ jQuery.extend(jQuery.validator, {
 		 */
 		showErrors: function(errors) {
 			if(errors) {
+				// add items to error list and map
 				jQuery.extend( this.errorMap, errors );
 				for ( name in errors ) {
 					this.errorList.push({
@@ -537,6 +538,10 @@ jQuery.extend(jQuery.validator, {
 						element: jQuery("[@name=" + name + "]:first", this.currentForm)[0]
 					});
 				}
+				// remove items from success list
+				this.successList = jQuery.grep( this.successList, function(element) {
+					return !(element.name in errors);
+				});
 			}
 			this.settings.showErrors
 				? this.settings.showErrors.call( this, this.errorMap, this.errorList )
@@ -671,16 +676,16 @@ jQuery.extend(jQuery.validator, {
 			return true;
 		},
 		
-		message: function( id, rule ) {
+		message: function( id, method ) {
 			var m = this.settings.messages[id];
 			return m && (m.constructor == String
 				? m
-				: m[rule.method]);
+				: m[method]);
 		},
 		
 		formatAndAdd: function( rule, element) {
 			var message = 
-				this.message(element.name, rule)
+				this.message(element.name, rule.method)
 				|| element.title
 				|| jQuery.validator.messages[rule.method]
 				|| "<strong>Warning: No message defined for " + element.name + "</strong>";

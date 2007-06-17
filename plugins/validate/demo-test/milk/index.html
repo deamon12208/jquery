@@ -24,6 +24,26 @@ $(document).ready(function() {
 
 <script id="demo" type="text/javascript">
 $(document).ready(function() {
+	jQuery.validator.addMethod("ajax", function(value, element, param) {
+		if ( !this.required(element) ) {
+			if ( !element.oldvalue || element.oldvalue != value ) {
+				element.oldvalue = value;
+				var validator = this;
+				jQuery.getJSON(param, {value: value}, function(response) {
+					if ( response ) {
+						var errors = {};
+						var message = validator.message(element.name, "ajax");
+						if ( typeof message == "function" )
+							message = message.call(validator, value, element);
+						errors[element.name] =  message;
+						validator.showErrors(errors);
+					}
+				});
+			}
+		}
+		return true;
+	});
+
 	// validate signup form on keyup and submit
 	var validator = $("#signupform").validate({
 		rules: {
@@ -31,7 +51,8 @@ $(document).ready(function() {
 			lastname: "required",
 			username: {
 				required: true,
-				minLength: 2
+				minLength: 2,
+				ajax: "users.php"
 			},
 			password: {
 				required: true,
@@ -54,7 +75,8 @@ $(document).ready(function() {
 			lastname: "Enter your lastname",
 			username: {
 				required: "Enter a username",
-				minLength: String.format("Enter at least {0} characters")
+				minLength: String.format("Enter at least {0} characters"),
+				ajax: String.format("{0} is already in use")
 			},
 			password: {
 				required: "Provide a password",
