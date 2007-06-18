@@ -1,4 +1,9 @@
-stop firefox password manager to popup before validation
+- get testsuite to pass opera and ie6/7, consider copying triggerEvent from core testsuite
+- fix errorcontainer/cancel button (errorcontainer-demo.html), add appropiate tests for each failure
+- stop firefox password manager to popup before validation
+- validating several checkbox groups is inconsistent (radio-checkbox-select-demo.html), sometimes it marks a group invalid when unchecking it, sometimes not
+- resetForm is broken, testcase missing (ajaxSubmit-intergration-demo.html)
+- custom-methods-demo.html is broken and ugly: validator.errorList has no properties
 
 8 Sijawusz Pur Rahnama, 12:30: first of all, it would be handy to have some hideError(s) method
 8 Sijawusz Pur Rahnama, 12:31: the second thing is to provide some sort of ids not constrained only to DOM tree
