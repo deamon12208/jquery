@@ -1,4 +1,45 @@
 /*
+ * Provides the effect option
+ * effect: array
+ */
+$.ui.plugin("draggable","stop", function() {
+
+	if(this.options.effect && this.options.effect[1]) {
+		if(this.helper != this.element) {
+			this.helper.keepMe = true;
+			switch(this.options.effect[1]) {
+				case 'fade':
+					$(this.helper).fadeOut(300, function() { $(this).remove(); });
+					break;
+				default:
+					$(this.helper).remove();
+					break;	
+			}
+			
+		}
+	}
+	
+});
+
+/*
+ * Provides the effect option
+ * effect: array
+ */
+$.ui.plugin("draggable","start", function() {
+
+	if(this.options.effect && this.options.effect[0]) {
+
+		switch(this.options.effect[0]) {
+			case 'fade':
+				$(this.helper).hide().fadeIn(300);
+				break;
+		}
+
+	}
+	
+});
+
+/*
  * Provides the old-school option zIndex, as known from scriptaculous, Interface and many others
  * zIndex: int
  */
@@ -21,11 +62,11 @@ $.ui.plugin("draggable","stop", function() {
 $.ui.plugin("draggable","stop", function() {
 
 	if(this.options.revert) {
-		this.helper.keepMe = true;
+		if(this.helper != this.element) this.helper.keepMe = true;
 		$(this.helper).animate({
 			left: this.opos[0]-this.options.cursorAt.left,
 			top: this.opos[1]-this.options.cursorAt.top
-		}, 500, function(){$(this).remove()});
+		}, 500, function(){ if(this.helper != this.element) $(this).remove(); });
 	}
 	
 });

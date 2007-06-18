@@ -100,6 +100,14 @@ li {
 	    	cursorAt: { top: -16, left: -16 } and overflowing container
 	    	<div id="drag11" class='draggable'>Drag me</div>
 	    </li>
+	    <li>
+	    	helper: 'original' and revert: true
+	    	<div id="drag12" class='draggable'>Drag me</div>
+	    </li>
+	    <li>
+	    	helper: 'original' and appendTo 'body'
+	    	<div id="drag13" class='draggable'>Drag me</div>
+	    </li>
 	</ul>
 	
 <script type="text/javascript">
@@ -160,6 +168,17 @@ $(document).ready(function(){
 	
 	$('#drag11').draggable({
 		cursorAt: { top: -16, left: -16 }
+	});
+	
+	$('#drag12').draggable({
+		helper: 'original',
+		revert: true
+	});
+	
+	$('#drag13').draggable({
+		helper: 'clone',
+		appendTo: 'body',
+		effect: ['fade','fade']
 	});
 
 });
