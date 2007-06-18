@@ -153,7 +153,7 @@ TODO
 		fixPNG: IE ? function() {
 			return this.each(function () {
 				var image = $(this).css('backgroundImage');
-				if (image.match(/^url\(["'](.*\.png)["']\)$/i)) {
+				if (image.match(/^url\(["']?(.*\.png)["']?\)$/i)) {
 					image = RegExp.$1;
 					$(this).css({
 						'backgroundImage': 'none',
