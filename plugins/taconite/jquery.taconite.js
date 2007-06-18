@@ -10,7 +10,7 @@
  * Thanks to Kenton Simpson for contributing some good ideas!
  *
  * @author: M. Alsup
- * @version: 2.1.0 (5/05/2007)
+ * @version: 2.1.1 (6/17/2007)
  * @requires jQuery v1.0.4 or later
  */
 
@@ -28,18 +28,18 @@ if (typeof $.fn.replaceContent == 'undefined')
  *  @param Document|String command document
  */
 $.taconite = $.xmlExec = function(xml) { 
-    var status = true;
+    var status = true, ex;
     try {
         $.event.trigger('taconite.begin.notify', [xml])
         status = $.taconite.impl.process(xml); 
     } catch(e) {
-        status = e;
+        status = ex = e;
     }
     $.event.trigger('taconite.complete.notify', [xml, !!status, status === true ? null : status]);
     if (ex) throw ex;
 };
 
-$.taconite.version = [2,1,0]; // major,minor,point revision nums
+$.taconite.version = [2,1,1]; // major,minor,point revision nums
 $.taconite.debug = 0;    // set to true to enable debug logging to Firebug
 $.taconite.lastTime = 0; // processing time for most recent document
 $.taconite._httpData = $.httpData; // original jQuery httpData function
