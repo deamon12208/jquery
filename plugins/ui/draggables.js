@@ -29,11 +29,7 @@
 			cursorAt: { top: ((o.cursorAt && o.cursorAt.top) ? o.cursorAt.top : 0), left: ((o.cursorAt && o.cursorAt.left) ? o.cursorAt.left : 0), bottom: ((o.cursorAt && o.cursorAt.bottom) ? o.cursorAt.bottom : 0), right: ((o.cursorAt && o.cursorAt.right) ? o.cursorAt.right : 0) },
 			cursorAtIgnore: (!o.cursorAt) ? true : false, //Internal property
 			wrapHelper: o.wrapHelper != undefined ? o.wrapHelper : true,
-			scroll: o.scroll != undefined ? o.scroll : 20,
 			appendTo: o.appendTo ? o.appendTo : "parent",
-			axis: o.axis ? o.axis : null,
-			grid: o.grid ? o.grid : null,
-			containment: o.containment ? (o.containment == "parent" ? el.parentNode : o.containment) : null,
 			init: false //Internal property
 		});
 		var o2 = this.options; //Just Lazyness
@@ -81,7 +77,7 @@
 			var o = this.options;
 			if(this.plugins[type]) {
 				for(var i=0;i<this.plugins[type].length;i++) {
-					this.plugins[type][i].apply(this.element, [this.helper, this.position, [o.curOffset.left - o.ppOffset.left,o.curOffset.top - o.ppOffset.top],this]);	
+					this.plugins[type][i].apply(this.element, [this.helper, this.position, [o.curOffset.left - o.po.left,o.curOffset.top - o.po.top],this]);	
 				}	
 			}			
 		},
@@ -140,14 +136,14 @@
 				while (curParent) {
 					if(curParent.style && ($(curParent).css("position") == "relative" || $(curParent).css("position") == "absolute")) {
 						o.pp = curParent;
-						o.ppOffset = $(curParent).offset({ border: false });
+						o.po = $(curParent).offset({ border: false });
 						o.ppOverflow = !!($(o.pp).css("overflow") == "auto" || $(o.pp).css("overflow") == "scroll"); //TODO!
 						break;	
 					}
 					curParent = curParent.parentNode ? curParent.parentNode : null;
 				};
 				
-				if(!o.pp) o.ppOffset = { top: 0, left: 0 };
+				if(!o.pp) o.po = { top: 0, left: 0 };
 			}
 			
 			this.position = this.oldPosition; //Use the actual clicked position
@@ -161,35 +157,8 @@
 			this.realPosition = [this.position[0],this.position[1]];
 			
 			if(o.pp) { // If we have a positioned parent, we pick the draggable relative to it
-				this.position[0] -= o.ppOffset.left;
-				this.position[1] -= o.ppOffset.top;	
-			}
-			
-			if(o.containment && o.cursorAtIgnore) { //Get the containment
-				if(o.containment.left == undefined) {
-					
-					if(o.containment == 'window') {
-						o.containment = {
-							top: 0-o.margins.top-o.ppOffset.top,
-							left: 0-o.margins.left-o.ppOffset.left,
-							right: $(window).width()-o.margins.right-o.ppOffset.left,
-							bottom: $(window).height()-o.margins.bottom-o.ppOffset.top
-						}	
-					} else { //I'm a node, so compute top/left/right/bottom
-						
-						var conEl = $(o.containment)[0];
-						var conOffset = $(o.containment).offset({ border: false });
-	
-						o.containment = {
-							top: conOffset.top-o.ppOffset.top-o.margins.top,
-							left: conOffset.left-o.ppOffset.left-o.margins.left,
-							right: conOffset.left-o.ppOffset.left+(conEl.offsetWidth || conEl.scrollWidth)-o.margins.right,
-							bottom: conOffset.top-o.ppOffset.top+(conEl.offsetHeight || conEl.scrollHeight)-o.margins.bottom
-						}	
-					
-					}
-					
-				}
+				this.position[0] -= o.po.left;
+				this.position[1] -= o.po.top;	
 			}
 			
 			this.slowMode = (o.cursorAt && (o.cursorAt.top-o.margins.top > 0 || o.cursorAt.bottom-o.margins.bottom > 0) && (o.cursorAt.left-o.margins.left > 0 || o.cursorAt.right-o.margins.right > 0)) ? true : false; //If cursorAt is within the helper, set slowMode to true
@@ -226,7 +195,7 @@
 
 			if(o.init == false) return this.oldPosition = this.position = null; // If init is false, just set properties to null
 			
-			if(o.onStop) o.onStop.apply(this.element, [this.helper, this.position, [o.curOffset.left - o.ppOffset.left,o.curOffset.top - o.ppOffset.top],this]); //Trigger the onStop callback
+			if(o.onStop) o.onStop.apply(this.element, [this.helper, this.position, [o.curOffset.left - o.po.left,o.curOffset.top - o.po.top],this]); //Trigger the onStop callback
 			
 			//Execute plugins
 			this.execPlugins("stop");
@@ -260,8 +229,8 @@
 			this.realPosition = [this.position[0],this.position[1]];
 			
 			if(o.pp) { //If we have a positioned parent, use a relative position
-				this.position[0] -= o.ppOffset.left;
-				this.position[1] -= o.ppOffset.top;	
+				this.position[0] -= o.po.left;
+				this.position[1] -= o.po.top;	
 			}
 
 			if( (Math.abs(this.position[0]-this.oldPosition[0]) > o.preventionDistance || Math.abs(this.position[1]-this.oldPosition[1]) > o.preventionDistance) && o.init == false) //If position is more than x pixels from original position, start dragging
@@ -288,72 +257,14 @@
 					}
 				}
 			}
-			
-			/* If wrapHelper is set to true (and we have a defined cursorAt),
-			 * wrap the helper when coming to a side of the screen.
-			 */
-			if(o.wrapHelper && !o.cursorAtIgnore) {
-				
-				if(!o.pp || !o.ppOverflow) {
-					var wx = $(window).width() - ($.browser.mozilla ? 20 : 0);
-					var sx = $(document).scrollLeft();
-					
-					var wy = $(window).height();
-					var sy = $(document).scrollTop();	
-				} else {
-					var wx = o.pp.offsetWidth + o.ppOffset.left - 20;
-					var sx = o.pp.scrollLeft;
-					
-					var wy = o.pp.offsetHeight + o.ppOffset.top - 20;
-					var sy = o.pp.scrollTop;						
-				}
-				
-				var xOffset = ((this.realPosition[0]-o.cursorAt.left - wx + this.helper.offsetWidth+o.margins.right) - sx > 0 || (this.realPosition[0]-o.cursorAt.left+o.margins.left) - sx < 0) ? (this.helper.offsetWidth+o.margins.left+o.margins.right - o.cursorAt.left * 2) : 0;
-				
-				var yOffset = ((this.realPosition[1]-o.cursorAt.top - wy + this.helper.offsetHeight+o.margins.bottom) - sy > 0 || (this.realPosition[1]-o.cursorAt.top+o.margins.top) - sy < 0) ? (this.helper.offsetHeight+o.margins.top+o.margins.bottom - o.cursorAt.top * 2) : 0;
-				
-			} else {
-				var xOffset = 0;
-				var yOffset = 0;	
-			}
-			
-			if(o.scroll) { // Auto scrolling
-				if(o.pp && o.ppOverflow) { // If we have a positioned parent, we only scroll in this one
-					// TODO: Extremely strange issues are waiting here..handle with care
-				} else {
-					if((this.realPosition[1] - $(window).height()) - $(document).scrollTop() > -10) window.scrollBy(0,o.scroll);
-					if(this.realPosition[1] - $(document).scrollTop() < 10) window.scrollBy(0,-o.scroll);
-					if((this.realPosition[0] - $(window).width()) - $(document).scrollLeft() > -10) window.scrollBy(o.scroll,0);
-					if(this.realPosition[0] - $(document).scrollLeft() < 10) window.scrollBy(-o.scroll,0);
-				}
-			}
 
 			/* map new helper left/top values to temp vars */
-			var nt = this.position[1]-yOffset-(o.cursorAt.top ? o.cursorAt.top : 0);
-			var nl = this.position[0]-xOffset-(o.cursorAt.left ? o.cursorAt.left : 0);
-
-			if(o.axis && o.cursorAtIgnore) { // If we have a axis or containment, use it. Cannot be used with cursorAt.
-				switch(o.axis) {
-					case "y":
-						nt = o.curOffset.top - o.margins.top - o.ppOffset.top; break;
-					case "x":
-						nl = o.curOffset.left - o.margins.left - o.ppOffset.left; break;
-				}					
-			}
+			o.nt = this.position[1]-(o.cursorAt.top ? o.cursorAt.top : 0);
+			o.nl = this.position[0]-(o.cursorAt.left ? o.cursorAt.left : 0);
 			
-			if(o.grid && o.cursorAtIgnore) { //Let's use the grid if we have one. Cannot be used with cursorAt.
-				nl = o.curOffset.left + o.margins.left - o.ppOffset.left + Math.round((nl - o.curOffset.left - o.margins.left + o.ppOffset.left) / o.grid[0]) * o.grid[0];
-				nt = o.curOffset.top + o.margins.top - o.ppOffset.top + Math.round((nt - o.curOffset.top - o.margins.top + o.ppOffset.top) / o.grid[1]) * o.grid[1];
-			}
-			
-			if(o.containment && o.cursorAtIgnore) { // Stick to a defined containment. Cannot be used with cursorAt.
-				if((nl < o.containment.left)) nl = o.containment.left;
-				if((nt < o.containment.top)) nt = o.containment.top;
-				if(nl+$(this.helper)[0].offsetWidth > o.containment.right) nl = o.containment.right-$(this.helper)[0].offsetWidth;
-				if(nt+$(this.helper)[0].offsetHeight > o.containment.bottom) nt = o.containment.bottom-$(this.helper)[0].offsetHeight;
-			}
+			this.execPlugins("drag");
 
-			$(this.helper).css("left", nl+"px").css("top", nt+"px"); // Stick the helper to the cursor
+			$(this.helper).css("left", o.nl+"px").css("top", o.nt+"px"); // Stick the helper to the cursor
 			return false;
 			
 		}
