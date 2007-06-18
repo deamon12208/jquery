@@ -2,20 +2,30 @@
  * Provides the old-school option zIndex, as known from scriptaculous, Interface and many others
  * zIndex: int
  */
-$.ui.plugin("draggable","start", function(h, p, op, cla) {
-	if(cla.options.zIndex)
-		$(h).css('zIndex', cla.options.zIndex);
+$.ui.plugin("draggable","start", function() {
+	if(this.options.zIndex) {
+		if($(this.helper).css("zIndex")) this.options.ozIndex = $(this.helper).css("zIndex");
+		$(this.helper).css('zIndex', this.options.zIndex);
+	}
+});
+
+$.ui.plugin("draggable","stop", function() {
+	if(this.options.ozIndex)
+		$(this.helper).css('zIndex', this.options.ozIndex);
 });
 
 /*
  * Provides the revert option
  * revert: true
  */
-$.ui.plugin("draggable","stop", function(h, p, op, cla) {
+$.ui.plugin("draggable","stop", function() {
 
-	if(cla.options.revert) {
-		h.keepMe = true;
-		$(h).animate({left: op[0], top: op[1]}, 500, function(){$(this).remove()});	
+	if(this.options.revert) {
+		this.helper.keepMe = true;
+		$(this.helper).animate({
+			left: this.opos[0]-this.options.cursorAt.left,
+			top: this.opos[1]-this.options.cursorAt.top
+		}, 500, function(){$(this).remove()});
 	}
 	
 });
@@ -24,13 +34,13 @@ $.ui.plugin("draggable","stop", function(h, p, op, cla) {
  * Provides the iframeFix option
  * iframeFix: true | NodeSet
  */
-$.ui.plugin("draggable","start", function(h, p, op, cla) {
+$.ui.plugin("draggable","start", function() {
 
-	if(!cla.slowMode && cla.options.iframeFix) { // Make clones on top of iframes (only if we are not in slowMode)
-		if(o.iframeFix.constructor == Array) {
-			for(var i=0;i<o.iframeFix.length;i++) {
-				var curOffset = $(o.iframeFix[i]).offset({ border: false });
-				$("<div class='DragDropIframeFix' style='background: #fff;'></div>").css("width", $(o.iframeFix[i])[0].offsetWidth+"px").css("height", $(o.iframeFix[i])[0].offsetHeight+"px").css("position", "absolute").css("opacity", "0.001").css("z-index", "1000").css("top", curOffset.top+"px").css("left", curOffset.left+"px").appendTo("body");
+	if(!this.slowMode && this.options.iframeFix) { // Make clones on top of iframes (only if we are not in slowMode)
+		if(this.options.iframeFix.constructor == Array) {
+			for(var i=0;i<this.options.iframeFix.length;i++) {
+				var curOffset = $(this.options.iframeFix[i]).offset({ border: false });
+				$("<div class='DragDropIframeFix' style='background: #fff;'></div>").css("width", $(this.options.iframeFix[i])[0].offsetWidth+"px").css("height", $(this.options.iframeFix[i])[0].offsetHeight+"px").css("position", "absolute").css("opacity", "0.001").css("z-index", "1000").css("top", curOffset.top+"px").css("left", curOffset.left+"px").appendTo("body");
 			}		
 		} else {
 			$("iframe").each(function() {					
@@ -42,8 +52,8 @@ $.ui.plugin("draggable","start", function(h, p, op, cla) {
 	
 });
 
-$.ui.plugin("draggable","stop", function(h, p, op, cla) {
-	if(cla.options.iframeFix) $("div.DragDropIframeFix").each(function() { this.parentNode.removeChild(this); }); //Remove frame helpers	
+$.ui.plugin("draggable","stop", function() {
+	if(this.options.iframeFix) $("div.DragDropIframeFix").each(function() { this.parentNode.removeChild(this); }); //Remove frame helpers	
 });
 
 
@@ -51,10 +61,10 @@ $.ui.plugin("draggable","stop", function(h, p, op, cla) {
  * Provides the containment option
  * containment: 'document' || node
  */
-$.ui.plugin("draggable","start", function(h, p, op, cla) {
+$.ui.plugin("draggable","start", function() {
 
-	var o = cla.options;
-	if(o.containment == 'parent') o.containment = this.parentNode;
+	var o = this.options;
+	if(o.containment == 'parent') o.containment = this.element.parentNode;
 	
 	if(o.containment && o.cursorAtIgnore) { //Get the containment
 		if(o.containment.left == undefined) {
@@ -85,14 +95,14 @@ $.ui.plugin("draggable","start", function(h, p, op, cla) {
 	
 });
 
-$.ui.plugin("draggable","drag", function(h, p, op, cla) {
+$.ui.plugin("draggable","drag", function() {
 	
-	var o = cla.options;
+	var o = this.options;
 	if(o.containment && o.cursorAtIgnore) { // Stick to a defined containment. Cannot be used with cursorAt.
-		if((o.nl < o.containment.left-o.po.left)) o.nl = o.containment.left-o.po.left;
-		if((o.nt < o.containment.top-o.po.top)) o.nt = o.containment.top-o.po.top;
-		if(o.nl+$(cla.helper)[0].offsetWidth > o.containment.right-o.po.left) o.nl = o.containment.right-o.po.left-$(cla.helper)[0].offsetWidth;
-		if(o.nt+$(cla.helper)[0].offsetHeight > o.containment.bottom-o.po.top) o.nt = o.containment.bottom-o.po.top-$(cla.helper)[0].offsetHeight;
+		if((this.pos[0] < o.containment.left-o.po.left)) this.pos[0] = o.containment.left-o.po.left;
+		if((this.pos[1] < o.containment.top-o.po.top)) this.pos[1] = o.containment.top-o.po.top;
+		if(this.pos[0]+$(this.helper)[0].offsetWidth > o.containment.right-o.po.left) this.pos[0] = o.containment.right-o.po.left-$(this.helper)[0].offsetWidth;
+		if(this.pos[1]+$(this.helper)[0].offsetHeight > o.containment.bottom-o.po.top) this.pos[1] = o.containment.bottom-o.po.top-$(this.helper)[0].offsetHeight;
 	}
 	
 });
@@ -101,12 +111,12 @@ $.ui.plugin("draggable","drag", function(h, p, op, cla) {
  * Provides the grid option
  * grid: [int,int]
  */
-$.ui.plugin("draggable","drag", function(h, p, op, cla) {
+$.ui.plugin("draggable","drag", function() {
 	
-	var o = cla.options;
+	var o = this.options;
 	if(o.grid && o.cursorAtIgnore) { //Let's use the grid if we have one. Cannot be used with cursorAt.
-		o.nl = o.curOffset.left + o.margins.left - o.po.left + Math.round((o.nl - o.curOffset.left - o.margins.left + o.po.left) / o.grid[0]) * o.grid[0];
-		o.nt = o.curOffset.top + o.margins.top - o.po.top + Math.round((o.nt - o.curOffset.top - o.margins.top + o.po.top) / o.grid[1]) * o.grid[1];
+		this.pos[0] = o.curOffset.left + o.margins.left - o.po.left + Math.round((this.pos[0] - o.curOffset.left - o.margins.left + o.po.left) / o.grid[0]) * o.grid[0];
+		this.pos[1] = o.curOffset.top + o.margins.top - o.po.top + Math.round((this.pos[1] - o.curOffset.top - o.margins.top + o.po.top) / o.grid[1]) * o.grid[1];
 	}
 	
 });
@@ -115,15 +125,15 @@ $.ui.plugin("draggable","drag", function(h, p, op, cla) {
  * Provides the axis option
  * axis: 'y' | 'x'
  */
-$.ui.plugin("draggable","drag", function(h, p, op, cla) {
+$.ui.plugin("draggable","drag", function() {
 	
-	var o = cla.options;
+	var o = this.options;
 	if(o.axis && o.cursorAtIgnore) { // If we have a axis, use it. Cannot be used with cursorAt.
 		switch(o.axis) {
 			case "y":
-				o.nt = o.curOffset.top - o.margins.top - o.po.top; break;
+				this.pos[1] = o.curOffset.top - o.margins.top - o.po.top; break;
 			case "x":
-				o.nl = o.curOffset.left - o.margins.left - o.po.left; break;
+				this.pos[0] = o.curOffset.left - o.margins.left - o.po.left; break;
 		}
 	}
 	
@@ -133,18 +143,18 @@ $.ui.plugin("draggable","drag", function(h, p, op, cla) {
  * Provides the auto-scrolling option
  * scroll: int
  */
-$.ui.plugin("draggable","drag", function(h, p, op, cla) {
+$.ui.plugin("draggable","drag", function() {
 	
-	var o = cla.options;
+	var o = this.options;
 	o.scroll = o.scroll != undefined ? o.scroll : 20;
 	if(o.scroll) { // Auto scrolling
 		if(o.pp && o.ppOverflow) { // If we have a positioned parent, we only scroll in this one
 			// TODO: Extremely strange issues are waiting here..handle with care
 		} else {
-			if((cla.realPosition[1] - $(window).height()) - $(document).scrollTop() > -10) window.scrollBy(0,o.scroll);
-			if(cla.realPosition[1] - $(document).scrollTop() < 10) window.scrollBy(0,-o.scroll);
-			if((cla.realPosition[0] - $(window).width()) - $(document).scrollLeft() > -10) window.scrollBy(o.scroll,0);
-			if(cla.realPosition[0] - $(document).scrollLeft() < 10) window.scrollBy(-o.scroll,0);
+			if((this.rpos[1] - $(window).height()) - $(document).scrollTop() > -10) window.scrollBy(0,o.scroll);
+			if(this.rpos[1] - $(document).scrollTop() < 10) window.scrollBy(0,-o.scroll);
+			if((this.rpos[0] - $(window).width()) - $(document).scrollLeft() > -10) window.scrollBy(o.scroll,0);
+			if(this.rpos[0] - $(document).scrollLeft() < 10) window.scrollBy(-o.scroll,0);
 		}
 	}
 	
@@ -154,9 +164,9 @@ $.ui.plugin("draggable","drag", function(h, p, op, cla) {
  * Provides the wrap helper option
  * wrapHelper: Boolean
  */
-$.ui.plugin("draggable","drag", function(h, p, op, cla) {
+$.ui.plugin("draggable","drag", function() {
 	
-	var o = cla.options;
+	var o = this.options;
 	/* If wrapHelper is set to true (and we have a defined cursorAt),
 	 * wrap the helper when coming to a side of the screen.
 	 */
@@ -176,9 +186,9 @@ $.ui.plugin("draggable","drag", function(h, p, op, cla) {
 			var sy = o.pp.scrollTop;						
 		}
 		
-		o.nl -= ((cla.realPosition[0]-o.cursorAt.left - wx + cla.helper.offsetWidth+o.margins.right) - sx > 0 || (cla.realPosition[0]-o.cursorAt.left+o.margins.left) - sx < 0) ? (cla.helper.offsetWidth+o.margins.left+o.margins.right - o.cursorAt.left * 2) : 0;
+		this.pos[0] -= ((this.rpos[0]-o.cursorAt.left - wx + this.helper.offsetWidth+o.margins.right) - sx > 0 || (this.rpos[0]-o.cursorAt.left+o.margins.left) - sx < 0) ? (this.helper.offsetWidth+o.margins.left+o.margins.right - o.cursorAt.left * 2) : 0;
 		
-		o.nt -= ((cla.realPosition[1]-o.cursorAt.top - wy + cla.helper.offsetHeight+o.margins.bottom) - sy > 0 || (cla.realPosition[1]-o.cursorAt.top+o.margins.top) - sy < 0) ? (cla.helper.offsetHeight+o.margins.top+o.margins.bottom - o.cursorAt.top * 2) : 0;
+		this.pos[1] -= ((this.rpos[1]-o.cursorAt.top - wy + this.helper.offsetHeight+o.margins.bottom) - sy > 0 || (this.rpos[1]-o.cursorAt.top+o.margins.top) - sy < 0) ? (this.helper.offsetHeight+o.margins.top+o.margins.bottom - o.cursorAt.top * 2) : 0;
 		
 	}
 	
