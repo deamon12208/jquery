@@ -4,6 +4,11 @@
 		return parseInt($.css(el.jquery?el[0]:el,prop))||0;
 	};
 	
+	$.ui.ddmanager = {
+		current: null,
+		droppables: []
+	};
+	
 	$.fn.draggable = function(o) {
 		this.each(function() {
 			new $.ui.draggable(this,o);	
@@ -172,11 +177,12 @@
 			 * something going on.
 			 */
 			if(this.slowMode && $.ui.droppable) {
-				var m = d.manager;
-				for(var i=0;i<m.length;i++) { m[i].offset = $(m[i].item).offset({ border: false }); }
+				var m = $.ui.ddmanager.droppables;
+				for(var i=0;i<m.length;i++) { m[i].offset = $(m[i].item.element).offset({ border: false }); }
 			}
 		
-			this.init = true;	
+			this.init = true;
+			$.ui.ddmanager.current = this;	
 
 			if(o.onStart) o.onStart.apply(this.element, [this.helper]); // Trigger the onStart callback
 			this.execPlugins('start');
@@ -198,11 +204,11 @@
 			this.execPlugins('stop');
 
 			if(this.slowMode && $.ui.droppable) { //If cursorAt is within the helper, we must use our drop manager
-				var m = d.manager;
+				var m = $.ui.ddmanager.droppables;
 				for(var i=0;i<m.length;i++) {
 					var cO = m[i].offset;
-					if((this.pos[0] > cO.left && this.pos[0] < cO.left + m[i].item.offsetWidth) && (this.pos[1] > cO.top && this.pos[1] < cO.top + m[i].item.offsetHeight)) {
-						d.evDrop.apply(m[i].item);
+					if((this.pos[0] > cO.left && this.pos[0] < cO.left + m[i].item.element.offsetWidth) && (this.pos[1] > cO.top && this.pos[1] < cO.top + m[i].item.element.offsetHeight)) {
+						m[i].item.drop.call(m[i].item);
 					}
 				}
 			}
@@ -211,6 +217,7 @@
 				$(this.helper).remove();
 
 			this.init = false;
+			$.ui.ddmanager.current = null;	
 			this.opos = this.pos = this.helper = null; // Clear temp variables
 			
 			return false;
@@ -243,13 +250,13 @@
 			
 			
 			if(this.slowMode && $.ui.droppable) { // If cursorAt is within the helper, we must use our drop manager to look where we are
-				var m = d.manager;
+				var m = $.ui.ddmanager.droppables;
 				for(var i=0;i<m.length;i++) {
 					var cO = m[i].offset;
-					if((this.pos[0] > cO.left && this.pos[0] < cO.left + m[i].item.offsetWidth) && (this.pos[1] > cO.top && this.pos[1] < cO.top + m[i].item.offsetHeight)) {
-						if(m[i].over == 0) { m[i].out = 0; m[i].over = 1; d.evHover.apply(m[i].item); }
+					if((this.pos[0] > cO.left && this.pos[0] < cO.left + m[i].item.element.offsetWidth) && (this.pos[1] > cO.top && this.pos[1] < cO.top + m[i].item.element.offsetHeight)) {
+						if(m[i].over == 0) { m[i].out = 0; m[i].over = 1; m[i].item.hover.call(m[i].item); }
 					} else {
-						if(m[i].out == 0) { m[i].out = 1; m[i].over = 0; d.evOut.apply(m[i].item); }
+						if(m[i].out == 0) { m[i].out = 1; m[i].over = 0; m[i].item.out.call(m[i].item); }
 					}
 				}
 			}
