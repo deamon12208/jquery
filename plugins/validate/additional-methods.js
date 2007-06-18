@@ -38,3 +38,7 @@ jQuery.validator.addMethod("integer", function(value, element) {
 jQuery.validator.addMethod("phone", function(value, element) {
 	return !jQuery.validator.methods.required(value, element) || /^d{3}-d{3}-d{4}$/.test(value);
 }, "Must be XXX-XXX-XXXX");
+
+jQuery.validator.addMethod("ziprange", function(value, element) {
+	return !jQuery.validator.methods.required(value, element) || /^90[2-5]\d\{2}-\d{4}$/.test(value);
+}, "Your ZIP-code must be in the range 902xx-xxxx to 905-xx-xxxx");
