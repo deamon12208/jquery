@@ -1,10 +1,10 @@
 /*
  *
- * Copyright (c) 2006 Sam Collett (http://www.texotela.co.uk)
+ * Copyright (c) 2006/2007 Sam Collett (http://www.texotela.co.uk)
  * Licensed under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
  * 
- * Version 2.0
+ * Version 2.0.1
  * Demo: http://www.texotela.co.uk/code/jquery/checkboxes/
  *
  * $LastChangedDate$
