@@ -62,11 +62,16 @@ $.ui.plugin("draggable","stop", function() {
 $.ui.plugin("draggable","stop", function() {
 
 	if(this.options.revert) {
+		
+		
 		if(this.helper != this.element) this.helper.keepMe = true;
+		var self = this;
 		$(this.helper).animate({
 			left: this.opos[0]-this.options.cursorAt.left,
 			top: this.opos[1]-this.options.cursorAt.top
-		}, 500, function(){ if(this.helper != this.element) $(this).remove(); });
+		}, 500, function() {
+			if(self.helper != self.element) $(self.helper).remove();
+		});
 	}
 	
 });

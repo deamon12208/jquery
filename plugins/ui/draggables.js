@@ -213,12 +213,13 @@
 				}
 			}
 				
-			if(this.helper != this.element && !this.helper.keepMe) // Remove helper, if it's not the original node
+			if(this.helper != this.element && !this.helper.keepMe) { // Remove helper, if it's not the original node
 				$(this.helper).remove();
+				this.helper = null;
+			}
 
 			this.init = false;
-			$.ui.ddmanager.current = null;	
-			this.opos = this.pos = this.helper = null; // Clear temp variables
+			this.opos = this.pos = $.ui.ddmanager.current = null; // Clear temp variables
 			
 			return false;
 			
