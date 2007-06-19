@@ -271,8 +271,8 @@
 				.find("div." + CLASSES.hitarea)
 				// apply styles to hitarea
 				.css(hitareaCSS)
-				// apply toggle event to hitarea
-				.toggle( toggler, toggler );
+				// apply click event to hitarea
+				.click( toggler );
 				
 			// if control option is set, create the treecontroller
 			if ( settings.control )
