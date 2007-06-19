@@ -4,9 +4,11 @@
  * Licensed under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
  * 
+ * Version 1.0
+ * Demo: http://www.texotela.co.uk/code/jquery/focusfields/
+ *
  * $LastChangedDate$
  * $Rev$
- * Demo: http://www.texotela.co.uk/code/jquery/focusfields/
  */
 
 (function($) {
