@@ -244,7 +244,7 @@
                                         // previous/next handler
                                         var buildShowFunc = function(el) {
                                             return function() {
-                                                modal.hide()
+                                                modal.hide();
                                                 content.empty();
                                                 $(el).trigger('click');
                                                 return false;
