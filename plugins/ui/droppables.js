@@ -13,8 +13,7 @@
 	$.ui.droppable = function(el,o) {
 
 		if(!o) var o = {};			
-		this.element = el;
-		if($.browser.msie) el.droppable = 1;
+		this.element = el; if($.browser.msie) el.droppable = 1;
 		
 		this.options = {};
 		$.extend(this.options, o);
@@ -28,22 +27,22 @@
 		});
 		o = this.options;
 
-		/* Add the reference and positions to the manager */
-		$.ui.ddmanager.droppables.push({ item: this, over: 0, out: 1 });
+		
+		$.ui.ddmanager.droppables.push({ item: this, over: 0, out: 1 }); // Add the reference and positions to the manager
 	
 		
 		var self = this;
-		$(this.element).hover(function(e) { //bind the hovering events
+		$(this.element).hover(function(e) {
 			return self.hover.apply(self, [e]);	
 		},function(e) {
 			return self.out.apply(self, [e]);	
 		});
 		
-		$(this.element).bind("mousemove", function(e) { //bind the mouseover event
+		$(this.element).bind("mousemove", function(e) {
 			return self.move.apply(self, [e]);	
 		});
 		
-		$(this.element).bind("mouseup", function(e) { //bind the drop event
+		$(this.element).bind("mouseup", function(e) {
 			return self.drop.apply(self, [e]);	
 		});
 			
@@ -79,28 +78,21 @@
 
 			if(!$.ui.ddmanager.current) return;
 			
-			var o = this.options;
-			var c = $.ui.ddmanager.current;			
-
-			/* Fire the callback if we are dragging and the accept function returns true */
-			if(o.onHover && o.accept(c)) o.onHover.apply(this, [c.element, c.helper, c]);
+			var o = this.options; var c = $.ui.ddmanager.current;
+			if(o.onHover && o.accept(c)) o.onHover.apply(this, [c.element, c.helper, c]); //Fire callback
 			
 		},
 		out: function(e) {
 
-			var o = this.options;
-			var c = $.ui.ddmanager.current;
-		
-			/* Fire the callback if we are dragging and the accept function returns true */
-			if(c && o.onOut && o.accept(c)) o.onOut.apply(this, [c.element, c.helper, c]);	
+			var o = this.options; var c = $.ui.ddmanager.current;
+			if(c && o.onOut && o.accept(c)) o.onOut.apply(this, [c.element, c.helper, c]); //Fire callback
 			
 		},
 		drop: function(e) {
 
-			var o = this.options;
-			var c = $.ui.ddmanager.current;
+			var o = this.options; var c = $.ui.ddmanager.current;
 			
-			if(c && o.onDrop && o.accept(c)) { // Fire the callback if we are dragging and the accept function returns true
+			if(c && o.onDrop && o.accept(c)) { // Fire callback
 				if(o.greedy && !c.slowMode) {
 					if(c.currentTarget == this.element) o.onDrop.apply(this, [c.element, c.helper, c]);
 				} else {
@@ -108,7 +100,19 @@
 				}
 			}
 			
-		}	
+		},
+		activate: function(e) {
+
+			var o = this.options; var c = $.ui.ddmanager.current;
+			if(c && o.onActivate) o.onActivate.apply(this, [c.element, c.helper, c]); //Fire callback
+			
+		},
+		deactivate: function(e) {
+
+			var o = this.options; var c = $.ui.ddmanager.current;
+			if(c && o.onDeactivate) o.onDeactivate.apply(this, [c.element, c.helper, c]); //Fire callback	
+			
+		}
 	});
 	
 	$.ui.intersect = function(t, mi, o) {

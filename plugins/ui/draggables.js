@@ -9,14 +9,26 @@
 		droppables: []
 	};
 	
-	$.fn.draggable = function(o) {
-		this.each(function() {
-			new $.ui.draggable(this,o);	
-		});
-	}
+	$.ui.dragset = function() {
+		this.items = [];
+	};
+	$.extend($.ui.dragset.prototype, {
+		destroy: function() {
+			for(var i=0;i<this.items.length;i++) {
+				this.items[i].destroy.call(this.items[i]);	
+			}
+		}
+	});
 	
-	$.fn.undraggable = function() {
+	$.fn.draggable = function(o) {
 		
+		var set = new $.ui.dragset();
+		
+		this.each(function() {
+			set.items.push(new $.ui.draggable(this,o));	
+		});
+		
+		return set;
 	}
 	
 	$.ui.draggable = function(el,o) {
@@ -59,9 +71,13 @@
 		}
 		
 		var self = this;
-		o.handle.bind('mousedown', function(e) { // Bind the mousedown event
+		this.mousedownfunc = function(e) { // Bind the mousedown event
 			return self.click.apply(self, [e]);	
-		});
+		}
+		o.handle.bind('mousedown', this.mousedownfunc);
+		
+		//Prevent selection of different stuff in IE
+		$(this.element).attr('unselectable', 'on');
 		
 	}
 	
@@ -85,7 +101,7 @@
 			}			
 		},
 		destroy: function() { // Destroy this draggable
-			
+			this.options.handle.unbind('mousedown', this.mousedownfunc);
 		},
 		click: function(e) {
 			
@@ -172,17 +188,21 @@
 			if(o.cursorAt.right && !o.cursorAt.left) o.cursorAt.left = o.helper.offsetWidth+o.margins.right+o.margins.left - o.cursorAt.right;
 			if(o.cursorAt.bottom && !o.cursorAt.top) o.cursorAt.top = o.helper.offsetHeight+o.margins.top+o.margins.bottom - o.cursorAt.bottom;
 		
+			$.ui.ddmanager.current = this;
+
 			/* Only after we have appended the helper, we compute the offsets
 			 * for the slowMode! This is important, so the user aready see's
 			 * something going on.
 			 */
 			if(this.slowMode && $.ui.droppable) {
 				var m = $.ui.ddmanager.droppables;
-				for(var i=0;i<m.length;i++) { m[i].offset = $(m[i].item.element).offset({ border: false }); }
+				for(var i=0;i<m.length;i++) {
+					m[i].offset = $(m[i].item.element).offset({ border: false });
+					if(m[i].item.options.accept(this)) m[i].item.activate.call(m[i].item);
+				}
 			}
 		
-			this.init = true;
-			$.ui.ddmanager.current = this;	
+			this.init = true;	
 
 			if(o.onStart) o.onStart.apply(this, [this.element,this.helper]); // Trigger the onStart callback
 			this.execPlugins('start');
@@ -210,6 +230,7 @@
 					if($.ui.intersect(this, m[i], m[i].item.options.tolerance)) {
 						m[i].item.drop.call(m[i].item);
 					}
+					if(m[i].item.options.accept(this)) m[i].item.deactivate.call(m[i].item);
 				}
 			}
 				

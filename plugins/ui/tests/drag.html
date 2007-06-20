@@ -113,7 +113,7 @@ li {
 <script type="text/javascript">
 $(document).ready(function(){
 	
-	$('#drag1').draggable(
+	var bla = $('#drag1').draggable(
 		{
 			zIndex: 1000,
 			dragPrevention: 'a,input,textarea',
@@ -132,6 +132,8 @@ $(document).ready(function(){
 			}
 		}
 	);
+
+	
 
 	//Revert functionality
 	$('#drag2').draggable({

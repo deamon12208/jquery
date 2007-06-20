@@ -113,6 +113,12 @@ $(document).ready(function(){
 		onOut: function() {
 			$(this.element).css("background-color", "green");
 		},
+		onActivate: function() {
+			$(this.element).css('outline', '5px solid black');	
+		},
+		onDeactivate: function() {
+			$(this.element).css('outline', '0px solid black');	
+		},
 		tolerance: 'touch'
 	});
 	
