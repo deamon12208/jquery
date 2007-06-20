@@ -27,36 +27,36 @@
 				var options = {};
 				
 				$('body').offset(options, offset);
-				equals( 12, offset.top, "$('body').offset().top" );
-				equals( 12, offset.left, "$('body').offset().left" );
+				equals( 10, offset.top, "$('body').offset().top" );
+				equals( 10, offset.left, "$('body').offset().left" );
 				
 				// yes padding
 				options = { padding: true };
 				
 				$('body').offset(options, offset);
-				equals( 17, offset.top, "$('body').offset({padding:true}).top" );
-				equals( 17, offset.left, "$('body').offset({padding:true}).left" );
+				equals( 15, offset.top, "$('body').offset({padding:true}).top" );
+				equals( 15, offset.left, "$('body').offset({padding:true}).left" );
 				
-				// no border
-				options = { border: false };
+				// yes border
+				options = { border: true };
 				
 				$('body').offset(options, offset);
-				equals( 10, offset.top, "$('body').offset({border:false}).top" );
-				equals( 10, offset.left, "$('body').offset({border:false}).left" );
+				equals( 12, offset.top, "$('body').offset({border:false}).top" );
+				equals( 12, offset.left, "$('body').offset({border:false}).left" );
 				
 				// no margin
 				options = { margin: false };
 				
 				$('body').offset(options, offset);
-				equals( 2, offset.top, "$('body').offset({margin:false}).top" );
-				equals( 2, offset.left, "$('body').offset({margin:false}).left" );
+				equals( 0, offset.top, "$('body').offset({margin:false}).top" );
+				equals( 0, offset.left, "$('body').offset({margin:false}).left" );
 				
-				// no margin or border
-				options = { margin: false, border: false };
+				// no margin, yes border
+				options = { margin: false, border: true };
 				
 				$('body').offset(options, offset);
-				equals( 0, offset.top, "$('body').offset({margin:false,border:false}).top" );
-				equals( 0, offset.left, "$('body').offset({margin:false,border:false}).left" );
+				equals( 2, offset.top, "$('body').offset({margin:false,border:false}).top" );
+				equals( 2, offset.left, "$('body').offset({margin:false,border:false}).left" );
 				
 				// set margin, border and padding to 0
 				$('body').css({

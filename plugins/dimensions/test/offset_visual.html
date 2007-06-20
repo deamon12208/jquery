@@ -26,7 +26,8 @@
 						margin:  parseInt( $('#margin').val()  ),
 						border:  parseInt( $('#border').val()  ),
 						padding: parseInt( $('#padding').val() ),
-						scroll:  parseInt( $('#scroll').val()  )
+						scroll:  parseInt( $('#scroll').val()  ),
+						lite:    parseInt( $('#lite').val()    )
 					};
 					var offset = {};
 					var time = (new Date()).getTime();
@@ -46,7 +47,7 @@
 		
 		<style>
 			p, fieldset { margin-left: 20px; }
-			fieldset { width: 500px; }
+			fieldset { width: 540px; }
 			#moveable{ position: absolute; top: 110px; left: 250px; width: 30px; height: 30px; border: 2px solid #000; background-color: #ccc; }
 			
 			#forceScroll { height: 500px; }
@@ -82,9 +83,10 @@
 		<fieldset>
 			<legend>Select Options: <small><em>(Include which properties in the calculations?)</em></small></legend>
 			margin: <select name="margin" id="margin"><option value="0">false</option><option value="1" selected="selected">true</option></select>
-			border: <select name="border" id="border"><option value="0">false</option><option value="1" selected="selected">true</option></select>
+			border: <select name="border" id="border"><option value="0" selected="selected">false</option><option value="1">true</option></select>
 			padding: <select name="padding" id="padding"><option value="0" selected="selected">false</option><option value="1">true</option></select>
 			scroll: <select name="scroll" id="scroll"><option value="0">false</option><option value="1" selected="selected">true</option></select>
+			lite: <select name="lite" id="lite"><option value="0" selected="selected">false</option><option value="1">true</option></select>
 		</fieldset>
 		<ul>
 			<li><a href="#static">Move to static 1</a></li>
