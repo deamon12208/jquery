@@ -1,6 +1,6 @@
 {
 	"name": "jQuery-bgiframe",
-	"version": 2.0,
+	"version": 2.1,
 	"author": [
 		"Brandon Aaron <brandon.aaron@gmail.com>"
 	],
@@ -11,12 +11,8 @@
 		"jQuery": ">=1.0.3"
 	},
 	"provides": {
-		"jQuery.bgIframe": {
-			"version": 2.0,
-			"file": "jquery.bgiframe.js"
-		},
 		"jQuery.bgiframe": {
-			"version": 2.0,
+			"version": 2.1,
 			"file": "jquery.bgiframe.js"
 		}
 	},
