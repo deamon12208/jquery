@@ -1,5 +1,6 @@
 - get testsuite to pass opera and ie6/7, consider copying triggerEvent from core testsuite
 - a combination of focus, click and change is necessary for crossbrowser change event; change for FF, focus for IE
+- add link to changelog on plugin page, remove "recent changes"
 
 scheduled for 1.2:
 - custom-methods-demo.html enable summary container, currently broken, is updated too often
