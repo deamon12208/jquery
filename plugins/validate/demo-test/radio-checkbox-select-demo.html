@@ -12,20 +12,20 @@
 <script src="../jquery.validate.js" type="text/javascript"></script>
 
 <script type="text/javascript">
-	$.meta.setType("attr", "validate");
-	$(document).ready(function() {
-		$.validator.setDefaults({
-			debug: true
-		});
-		
-		// validate selects on button click
-		$("#validateSelects").click(function() {
-			$("#selecttest").validate().form();
-		});
-		
-		// validate radio and checkbox buttons on form submit
-		$("#form1").validate();
+$.meta.setType("attr", "validate");
+$(document).ready(function() {
+	$.validator.setDefaults({
+		submitHandler: function() { alert("submitted!"); }
 	});
+	
+	// validate selects on button click
+	$("#validateSelects").click(function() {
+		$("#selecttest").validate().form();
+	});
+	
+	// validate radio and checkbox buttons on form submit
+	$("#form1").validate();
+});
 </script>
 
 </head>

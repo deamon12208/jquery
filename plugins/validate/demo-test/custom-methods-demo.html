@@ -27,15 +27,12 @@
 	$.meta.setType("attr", "test");
 
 	$().ready(function() {
-		$.validator.setDefaults({
-			debug: true,
-			errorElement: "em"
-		});
-		
 		var validator = $("#texttests").validate({
+			debug: true,
+			errorElement: "em",
 			errorContainer: $("#warning"),
-			showErrors: function(errors, validator) {
-				$("#summary").html("Your form contains " + validator.errorList.length + " errors, see details below.");
+			showErrors: function(errors, errorList) {
+				//$("#summary").html("Your form contains " + errorList.length + " errors, see details below.");
 				validator.defaultShowErrors();
 			},
 			errorPlacement: function(error, element) {

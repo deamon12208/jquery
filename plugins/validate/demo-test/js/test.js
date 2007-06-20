@@ -718,8 +718,19 @@ test("idOrName()", function() {
 	equals( "check", v.idOrName( $("#form6check1")[0] ) );
 	equals( "agree", v.idOrName( $("#agb")[0] ) );
 	equals( "button", v.idOrName( $("#form :button")[0] ) );
-	
 });
+
+test("resetForm()", function() {
+	function errors(expected, message) {
+		equals(expected, v.errorList.length, message );
+	}
+	var v = $("#testForm1").validate();
+	v.form();
+	errors(2);
+	v.resetForm();
+	errors(0);
+});
+
 
 module("misc");
 
@@ -777,8 +788,6 @@ test("successlist", function() {
 	v.form();
 	equals(0, v.successList.length);
 });
-
-
 
 test("messages", function() {
 	var m = jQuery.validator.messages;
@@ -924,26 +933,32 @@ test("validate checkbox on click", function() {
 	function errors(expected, message) {
 		equals(expected, v.errorList.length, message );
 	}
+	function trigger(e) {
+		e.click(); //e.change(); e.blur();
+	}
 	var e = $("#check2");
 	var v = $("#form").validate({
 		rules: {
 			check2: "required"
 		}
 	});
-	e.click();
+	trigger(e);
 	errors(0);
-	e.click();
+	trigger(e);
 	equals( false, v.form() );
 	errors(1);
-	e.click();
+	trigger(e);
 	errors(0);
-	e.click();
+	trigger(e);
 	errors(1);
 });
 
 test("validate multiple checkbox on click", function() {
 	function errors(expected, message) {
 		equals(expected, v.errorList.length, message );
+	}
+	function trigger(e) {
+		e.click(); //e.change(); e.blur();
 	}
 	var e1 = $("#check1").attr("checked", false);
 	var e2 = $("#check1b");
@@ -955,24 +970,25 @@ test("validate multiple checkbox on click", function() {
 			}
 		}
 	});
-	e1.click();
-	e1.blur();
+	trigger(e1);
 	errors(0, "Minlength must be skipped");
-	e2.click();
-	e2.blur();
+	trigger(e2);
 	errors(0);
-	e2.click();
+	trigger(e2);
 	equals( false, v.form() );
 	errors(1);
-	e2.click();
+	trigger(e2);
 	errors(0);
-	e2.click();
+	trigger(e2);
 	errors(1);
 });
 
 test("validate radio on click", function() {
 	function errors(expected, message) {
 		equals(expected, v.errorList.length, message );
+	}
+	function trigger(e) {
+		e.click(); //e.change(); e.blur();
 	}
 	var e1 = $("#radio1");
 	var e2 = $("#radio1a");
@@ -984,8 +1000,8 @@ test("validate radio on click", function() {
 	errors(0);
 	equals( false, v.form() );
 	errors(1);
-	e2.click();
+	trigger(e2);
 	errors(0);
-	e1.click();
+	trigger(e1);
 	errors(0);
 });

@@ -568,6 +568,10 @@ jQuery.extend(jQuery.validator, {
 			this.elements.removeClass( this.settings.errorClass );
 		},
 		
+		hideErrors: function() {
+			this.addWrapper( this.toHide ).hide();
+		},
+		
 		valid: function() {
 			this.showErrors();
 			return this.errorList.length == 0;
@@ -640,7 +644,7 @@ jQuery.extend(jQuery.validator, {
 		
 		prepareForm: function() {
 			this.reset();
-			this.submitted = {};
+			//this.submitted = {};
 			this.toHide = this.errors().push( this.containers );
 		},
 		
@@ -716,7 +720,7 @@ jQuery.extend(jQuery.validator, {
 				this.showLabel( element );
 			}
 			this.toHide = this.toHide.not( this.toShow );
-			this.addWrapper( this.toHide ).hide();
+			this.hideErrors();
 			this.addWrapper( this.toShow ).show();
 		},
 		
