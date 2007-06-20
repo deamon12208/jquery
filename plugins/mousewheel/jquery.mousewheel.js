@@ -6,16 +6,22 @@
  *
  * $LastChangedDate$
  * $Rev$
+ *
+ * Version: 2.2
  */
 
 (function($) {
-
+	
 $.fn.extend({
+	
 	/**
 	 * Apply the mousewheel event to the elements in the jQuery object.
 	 * The handler function should be prepared to take the event object
 	 * and a param called 'delta'. The 'delta' param is a number
 	 * either > 0 or < 0. > 0 = up and < 0 = down.
+	 *
+	 * The pageX, pageY, clientX and clientY event properties
+	 * are fixed in Firefox.
 	 *
 	 * @example $("p").mousewheel(function(event, delta){
 	 *   if (delta > 0)
@@ -44,6 +50,7 @@ $.fn.extend({
 			
 			this._mwHandler = function(e) {
 				e = $.event.fix(e || window.event);
+				$.extend(e, this._mwCursorPos || {});
 				var delta = 0, returnValue = true;
 				
 				if (e.wheelDelta)  delta = e.wheelDelta/120;
@@ -60,6 +67,19 @@ $.fn.extend({
 				
 				return returnValue;
 			};
+			
+			if ($.browser.mozilla && !this._mwFixCursorPos) {
+				// fix pageX, pageY, clientX and clientY for mozilla
+				this._mwFixCursorPos = function(e) {
+					this._mwCursorPos = {
+						pageX: e.pageX,
+						pageY: e.pageY,
+						clientX: e.clientX,
+						clientY: e.clientY
+					};
+				};
+				$(this).bind('mousemove', this._mwFixCursorPos);
+			}
 			
 			if (this.addEventListener)
 				if ($.browser.mozilla) this.addEventListener('DOMMouseScroll', this._mwHandler, false);
@@ -89,13 +109,16 @@ $.fn.extend({
 					if (this._mwHandlers[i] && this._mwHandlers[i].guid == f.guid)
 						delete this._mwHandlers[i];
 			} else {
+				if ($.browser.mozilla && !this._mwFixCursorPos)
+					$(this).unbind('mousemove', this._mwFixCursorPos);
+					
 				if (this.addEventListener)
 					if ($.browser.mozilla) this.removeEventListener('DOMMouseScroll', this._mwHandler, false);
 					else                   this.removeEventListener('mousewheel',     this._mwHandler, false);
 				else
 					this.onmousewheel = null;
 					
-				this._mwHandlers = this._mwHandler = null;
+				this._mwHandlers = this._mwHandler = this._mwFixCursorPos = this._mwCursorPos = null;
 			}
 		});
 	}

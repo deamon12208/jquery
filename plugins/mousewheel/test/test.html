@@ -90,6 +90,8 @@
 							console.log('#test1: up ('+delta+')');
 						else if (delta < 0)
 							console.log('#test1: down ('+delta+')');
+						
+						console.log('pageX: ' + event.pageX + ' pageY: ' + event.pageY );
 					});
 				
 				$('#test2')
@@ -169,7 +171,7 @@
 		<h2 id="userAgent"></h2>
 		
 		<ul>
-			<li><strong>Test1</strong> is just using the plain on mousewheel() with a function passed in and does not prevent default.</li>
+			<li><strong>Test1</strong> is just using the plain on mousewheel() with a function passed in and does not prevent default. (Also logs the value of pageX and pageY event properties.)</li>
 			<li><strong>Test2</strong> should prevent the default action.</li>
 			<li><strong>Test3</strong> should only log a mouseover and mouseout event. Testing unmousewheel().</li>
 			<li><strong>Test4</strong> has two handlers.</li>
