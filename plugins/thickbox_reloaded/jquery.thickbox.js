@@ -145,7 +145,7 @@
 
                 // hide stuff
                 loading.hide();
-                modal.hide()
+                modal.hide();
                 dim.hide();
                 content.empty();
                 typeof callback == 'function' && callback();
