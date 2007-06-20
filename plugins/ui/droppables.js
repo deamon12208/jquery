@@ -23,7 +23,8 @@
 		$.extend(this.options, {
 			accept: o.accept && o.accept.constructor == Function ? o.accept : function(d) {
 				return $(d.element).is(accept);	
-			}
+			},
+			tolerance: o.tolerance ? o.tolerance : 'intersect'
 		});
 		o = this.options;
 
@@ -82,7 +83,7 @@
 			var c = $.ui.ddmanager.current;			
 
 			/* Fire the callback if we are dragging and the accept function returns true */
-			if(o.onHover && o.accept(c)) o.onHover.apply(this, [c.element, c.helper]);
+			if(o.onHover && o.accept(c)) o.onHover.apply(this, [c.element, c.helper, c]);
 			
 		},
 		out: function(e) {
@@ -91,7 +92,7 @@
 			var c = $.ui.ddmanager.current;
 		
 			/* Fire the callback if we are dragging and the accept function returns true */
-			if(c && o.onOut && o.accept(c)) o.onOut.apply(this, [c.element, c.helper]);	
+			if(c && o.onOut && o.accept(c)) o.onOut.apply(this, [c.element, c.helper, c]);	
 			
 		},
 		drop: function(e) {
@@ -101,13 +102,44 @@
 			
 			if(c && o.onDrop && o.accept(c)) { // Fire the callback if we are dragging and the accept function returns true
 				if(o.greedy && !c.slowMode) {
-					if(c.currentTarget == this.element) o.onDrop.apply(this, [c.element, c.helper]);
+					if(c.currentTarget == this.element) o.onDrop.apply(this, [c.element, c.helper, c]);
 				} else {
-					o.onDrop.apply(this, [c.element, c.helper]);	
+					o.onDrop.apply(this, [c.element, c.helper, c]);	
 				}
 			}
 			
 		}	
 	});
+	
+	$.ui.intersect = function(t, mi, o) {
+		
+		var cO = mi.offset;
+		var add = [0,0];
+		switch(o) {
+			case 'pointer':
+				return (t.pos[0] > cO.left && t.pos[0] < cO.left + mi.item.element.offsetWidth) && (t.pos[1] > cO.top && t.pos[1] < cO.top + mi.item.element.offsetHeight);
+				break;
+			case 'intersect':
+				add = [t.element.offsetWidth/2,t.element.offsetHeight/2];
+				break;
+			case 'fit':
+				add = [0,0];
+				break;
+			case 'touch':
+				add = [t.element.offsetWidth,t.element.offsetHeight];
+				break;
+			default:
+				return false;
+				break;
+		}
+		
+		return (
+			   cO.left < t.rpos[0]-t.options.cursorAt.left + add[0]
+			&& cO.left + mi.item.element.offsetWidth > t.rpos[0]-t.options.cursorAt.left + t.element.offsetWidth - add[0]
+			&& cO.top < t.rpos[1]-t.options.cursorAt.top + add[1]
+			&& cO.top + mi.item.element.offsetHeight > t.rpos[1]-t.options.cursorAt.top + t.element.offsetHeight - add[1]
+		);
+							
+	}
 	
  })($);

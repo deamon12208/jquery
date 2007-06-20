@@ -184,7 +184,7 @@
 			this.init = true;
 			$.ui.ddmanager.current = this;	
 
-			if(o.onStart) o.onStart.apply(this.element, [this.helper]); // Trigger the onStart callback
+			if(o.onStart) o.onStart.apply(this, [this.element,this.helper]); // Trigger the onStart callback
 			this.execPlugins('start');
 			return false;
 						
@@ -200,14 +200,14 @@
 			if(this.init == false)
 				return this.opos = this.pos = null;
 			
-			if(o.onStop) o.onStop.apply(this.element, [this.helper, this.pos, [o.curOffset.left - o.po.left,o.curOffset.top - o.po.top],this]);
+			if(o.onStop) o.onStop.apply(this, [this.element, this.helper, this.pos, [o.curOffset.left - o.po.left,o.curOffset.top - o.po.top],this]);
 			this.execPlugins('stop');
 
 			if(this.slowMode && $.ui.droppable) { //If cursorAt is within the helper, we must use our drop manager
 				var m = $.ui.ddmanager.droppables;
+				
 				for(var i=0;i<m.length;i++) {
-					var cO = m[i].offset;
-					if((this.pos[0] > cO.left && this.pos[0] < cO.left + m[i].item.element.offsetWidth) && (this.pos[1] > cO.top && this.pos[1] < cO.top + m[i].item.element.offsetHeight)) {
+					if($.ui.intersect(this, m[i], m[i].item.options.tolerance)) {
 						m[i].item.drop.call(m[i].item);
 					}
 				}
@@ -243,7 +243,7 @@
 				if(this.init == false) return false;
 			}
 		
-			if(o.onDrag) var retPos = o.onDrag.apply(this.element, [this.helper,this.pos,this.opos,o.cursorAt]);
+			if(o.onDrag) var retPos = o.onDrag.apply(this, [this.element, this.helper, this.pos, this.opos, o.cursorAt]);
 			if(retPos) { // If something came back from our callback, use it as modified position
 				if(retPos.x) this.pos[0] = retPos.x;
 				if(retPos.y) this.pos[1] = retPos.y;	
@@ -251,10 +251,10 @@
 			
 			
 			if(this.slowMode && $.ui.droppable) { // If cursorAt is within the helper, we must use our drop manager to look where we are
-				var m = $.ui.ddmanager.droppables;
+				var m = $.ui.ddmanager.droppables;		
+				
 				for(var i=0;i<m.length;i++) {
-					var cO = m[i].offset;
-					if((this.pos[0] > cO.left && this.pos[0] < cO.left + m[i].item.element.offsetWidth) && (this.pos[1] > cO.top && this.pos[1] < cO.top + m[i].item.element.offsetHeight)) {
+					if($.ui.intersect(this, m[i], m[i].item.options.tolerance)) {
 						if(m[i].over == 0) { m[i].out = 0; m[i].over = 1; m[i].item.hover.call(m[i].item); }
 					} else {
 						if(m[i].out == 0) { m[i].out = 1; m[i].over = 0; m[i].item.out.call(m[i].item); }

@@ -56,6 +56,22 @@ $.ui.plugin("draggable","stop", function() {
 });
 
 /*
+ * Provides the old-school option opacity, as known from scriptaculous, Interface and many others
+ * opacity: float
+ */
+$.ui.plugin("draggable","start", function() {
+	if(this.options.opacity) {
+		if($(this.helper).css("opacity")) this.options.oopacity = $(this.helper).css("opacity");
+		$(this.helper).css('opacity', this.options.opacity);
+	}
+});
+
+$.ui.plugin("draggable","stop", function() {
+	if(this.options.oopacity)
+		$(this.helper).css('opacity', this.options.oopacity);
+});
+
+/*
  * Provides the revert option
  * revert: true
  */
@@ -63,12 +79,26 @@ $.ui.plugin("draggable","stop", function() {
 
 	if(this.options.revert) {
 		
+		var rpos = { left: 0, top: 0 };
+		if(this.helper != this.element) {
+			this.helper.keepMe = true;
+			
+
+			rpos = $(this.sorthelper || this.element).offset({ border: false });
+
+			var nl = rpos.left-this.options.po.left;
+			var nt = rpos.top-this.options.po.top;
+
+		} else {
+			var nl = this.opos[0]-this.options.cursorAt.left;
+			var nt = this.opos[1]-this.options.cursorAt.top;
+		}
 		
-		if(this.helper != this.element) this.helper.keepMe = true;
 		var self = this;
+
 		$(this.helper).animate({
-			left: this.opos[0]-this.options.cursorAt.left,
-			top: this.opos[1]-this.options.cursorAt.top
+			left: nl,
+			top: nt
 		}, 500, function() {
 			if(self.helper != self.element) $(self.helper).remove();
 		});
