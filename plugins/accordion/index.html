@@ -47,7 +47,7 @@
 		
 		// second simple Accordion with special markup
 		jQuery('#list4').Accordion({
-			active: '.selected',
+			active: '[@href="' + location.hash + '"]',
 			header: '.head',
 			showSpeed: 'fast',
 			alwaysOpen: false,
@@ -143,7 +143,10 @@
 			</div>
 		</div>
 		
-		<h2>Navigation - Unordered List with anchors and nested lists</h2>
+		<h2>Navigation - Unordered List with anchors and nested lists.</h2>
+		<p>The first item is cloned to allow the user to select it. The
+		active element is choosen based on location.hash: Open Drums and click
+		the first item ('Drums'), then reload the page.</p>
 
 		<ul id="list4">
 			<li>

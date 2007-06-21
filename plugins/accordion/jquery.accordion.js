@@ -226,9 +226,6 @@ jQuery.fn.extend({
 			// count elements to animate
 			running = toHide.size() + toShow.size();
 			
-			// TODO if hideSpeed is set to zero, animations are crappy
-			// workaround: use hide instead
-			// solution: animate should check for speed of 0 and do something about it
 			if ( settings.animated ) {
 				if ( !settings.alwaysOpen && clickedActive ) {
 					toShow.slideToggle(settings.showSpeed);
