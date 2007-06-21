@@ -1005,3 +1005,69 @@ test("validate radio on click", function() {
 	trigger(e1);
 	errors(0);
 });
+
+module("ajax");
+
+test("check the serverside script works", function() {
+	stop();
+	$.getJSON("milk/users.php", {value: 'asdf'}, function(response) {
+		ok( response, "already taken" );
+		$.getJSON("milk/users.php", {value: "asd"}, function(response) {
+			ok( !response, "yet available" );
+			start();
+		});
+	});
+});
+
+test("validate via remote method", function() {
+	expect(4);
+	stop();
+	var e = $("#firstname");
+	var v = $("#testForm1").validate({
+		rules: {
+			firstname: {
+				required: true,
+				remote: "milk/users.php"
+			}
+		}
+	});
+	$().ajaxStop(function() {
+		ok( true, "There needs to be exactly one request." );
+		equals( 1, v.errorList.length, "There must be one error" );
+		start();
+	});
+	ok( !v.element(e) );
+	e.val("asdf");
+	ok( v.element(e) );
+});
+
+test("validate ajax form", function() {
+	expect(6);
+	stop();
+	var e = $("#firstname");
+	var f = $("#testForm1");
+	var v = f.validate({
+		rules: {
+			firstname: {
+				required: true,
+				remote: "milk/users.php"
+			}
+		},
+		submitHandler: function() {
+			ok( true, "May be called only once" );
+		},
+		showErrors: function() {
+			ok( true, "Called each time a form is validated" );
+			this.defaultShowErrors();
+		}
+	});
+	ok( !v.form(), "no value yet, invalid" );
+	e.val("asdf");
+	ok( v.form(), "even though remote will fail, local validation must pass");
+	f.submit();
+	e.val("asd");
+	f.submit(function() {
+		start();
+	});
+	f.submit();
+});

@@ -1,3 +1,10 @@
+1.2
+---
+
+* Added remember-the-milk-demo
+* Added marketo-demo
+* Added support for for ajax-validation
+
 1.1
 ---
 

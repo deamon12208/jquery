@@ -52,6 +52,7 @@ function runTest() {
 	_config.blocking = false;
 	var time = new Date();
 	_config.fixture = document.getElementById('main').innerHTML;
+	reset();
 	synchronize(function() {
 		time = new Date() - time;
 		$("<div>").html(['<p class="result">Tests completed in ',
@@ -82,6 +83,7 @@ function test(name, callback, nowait) {
 				console.warn(callback.toString());
 			}
 			_config.Test.push( [ false, "Died on test #" + (_config.Test.length+1) + ": " + e ] );
+			throw e;
 		}
 	});
 	synchronize(function() {

@@ -65,7 +65,7 @@
  * 				return "Your password is required because with " + $("#age").val() + ", you are not old enough yet."
  * 			},
  * 			minLength: "Please enter a password at least 5 characters long.",
- * 			maxLength: "Please enter a password no longer then 32 characters long."
+ * 			maxLength: "Please enter a password no longer than 32 characters long."
  * 		},
  *		age: "Please specify your age as a number (at least 3)."
  * 	}
@@ -73,9 +73,9 @@
  * @desc Validate a form on submit and each element on keyup. Rules are specified
  * for three elements, and a message is customized for the "password" and the
  * "age" elements. Inline rules are ignored. The password is only required when the age is lower
- * then 18. The age is only required when the firstname is blank. Note that "first-name" is quoted, because
+ * than 18. The age is only required when the firstname is blank. Note that "first-name" is quoted, because
  * it isn't a valid javascript identifier. "first-name": "required" also uses a shortcut replacement for
- * { required: true }. That works for all trivial validations that expect no more then a boolean-true argument.
+ * { required: true }. That works for all trivial validations that expect no more than a boolean-true argument.
  * The required-message for password is specified as a function to use runtime customization.
  *
  * @example $("#myform").validate({
@@ -257,14 +257,25 @@ jQuery.extend(jQuery.fn, {
 					// prevent form submit to be able to see console output
 					event.preventDefault();
 					
-				// prevent submit for invalid forms or custom submit handlers
-				if ( this.cancel || validator.form() ) {
-					this.cancel = false;
+				function handle() {
 					if ( validator.settings.submitHandler ) {
 						validator.settings.submitHandler( validator.currentForm );
 						return false;
 					}
 					return true;
+				}
+					
+				// prevent submit for invalid forms or custom submit handlers
+				if ( this.cancel ) {
+					this.cancel = false;
+					return handle();
+				}
+				if ( validator.form() ) {
+					if ( this.pendingRequest ) {
+						this.submitted = true;
+						return false;
+					}
+					return handle();
 				} else {
 					validator.focusInvalid();
 					return false;
@@ -351,16 +362,16 @@ jQuery.extend(jQuery.expr[":"], {
  * If the second argument is ommited, a function is returned that expects the value-argument
  * to return the formatted value (see example).
  *
- * @example String.format("Please enter a value no longer then {0} characters.", 0)
- * @result "Please enter a value no longer then 0 characters."
+ * @example String.format("Please enter a value no longer than {0} characters.", 0)
+ * @result "Please enter a value no longer than 0 characters."
  * @desc Formats a string with a single argument.
  *
  * @example String.format("Please enter a value between {0} and {1}.", 0, 1)
  * @result "Please enter a value between 0 and 1."
  * @desc Formats a string with two arguments. Same as String.format("...", [0, 1]);
  *
- * @example String.format("Please enter a value no longer then {0} characters.")(0);
- * @result "Please enter a value no longer then 0 characters."
+ * @example String.format("Please enter a value no longer than {0} characters.")(0);
+ * @result "Please enter a value no longer than 0 characters."
  * @desc String.format is called at first without the second argument, returning a function that is called immediately
  * 		 with the value argument. Useful to defer the actual formatting to a later point without explicitly 
  *		 writing the function.
@@ -393,6 +404,8 @@ jQuery.validator = function( options, form ) {
 	this.errorContext = this.labelContainer.length && this.labelContainer || jQuery(form);
 	this.containers = this.settings.errorContainer.add( this.settings.errorLabelContainer );
 	this.submitted = {};
+	this.valueCache = {};
+	this.pendingRequest = 0;
 	this.reset();
 	this.refresh();
 };
@@ -455,6 +468,7 @@ jQuery.extend(jQuery.validator, {
 	 */
 	messages: {
 		required: "This field is required.",
+		remote: "Please fix this field.",
 		email: "Please enter a valid email address.",
 		url: "Please enter a valid URL.",
 		date: "Please enter a valid date.",
@@ -680,19 +694,22 @@ jQuery.extend(jQuery.validator, {
 			return true;
 		},
 		
-		message: function( id, method ) {
+		settingMessage: function( id, method ) {
 			var m = this.settings.messages[id];
 			return m && (m.constructor == String
 				? m
 				: m[method]);
 		},
 		
-		formatAndAdd: function( rule, element) {
-			var message = 
-				this.message(element.name, rule.method)
+		defaultMessage: function( element, method) {
+			return this.settingMessage( element.name, method )
 				|| element.title
-				|| jQuery.validator.messages[rule.method]
+				|| jQuery.validator.messages[method]
 				|| "<strong>Warning: No message defined for " + element.name + "</strong>";
+		},
+		
+		formatAndAdd: function( rule, element) {
+			var message = this.defaultMessage( element, rule.method );
 			if ( typeof message == "function" ) 
 				message = message.call(this, rule.parameters, element);
 			this.errorList.push({
@@ -834,6 +851,17 @@ jQuery.extend(jQuery.validator, {
 		
 		required: function(element) {
 			return !jQuery.validator.methods.required.call(this, jQuery.trim(element.value), element);
+		},
+		
+		startRequest: function() {
+			this.pendingRequest++;
+		},
+		
+		stopRequest: function() {
+			this.pendingRequest--;
+			if ( this.pendingRequest == 0 && this.submitted && this.form() ) {
+				jQuery(this.currentForm).submit();
+			}
 		}
 		
 	},
@@ -847,7 +875,7 @@ jQuery.extend(jQuery.validator, {
 	 * it refers to input elements of type text, password and file and textareas.
 	 *
 	 * @param String value The trimmed value of the element, eg. the text of a text input (trimmed: whitespace removed at start and end)
-	 * @param Element element the input element itself, to check for content of attributes other then value
+	 * @param Element element the input element itself, to check for content of attributes other than value
 	 * @param Object paramater Some parameter, like a number for min/max rules
 	 *
 	 * @property
@@ -914,7 +942,7 @@ jQuery.extend(jQuery.validator, {
 		 * @param Element element The element to check
 		 * @param Boolean|String|Function param A boolean "true" makes a field always required; An expression (String)
 		 * is evaluated in the context of the element's form, making the field required only if the expression returns
-		 * more then one element. The function is executed with the element as it's only argument: If it returns true,
+		 * more than one element. The function is executed with the element as it's only argument: If it returns true,
 		 * the element is required.
 		 *
 		 * @name jQuery.validator.methods.required
@@ -935,6 +963,37 @@ jQuery.extend(jQuery.validator, {
 			default:
 				return value.length > 0;
 			}
+		},
+		
+		remote: function(value, element, param) {
+			if ( !this.required(element) ) {
+				var cached = this.valueCache[element.name];
+				if(!cached) {
+					this.valueCache[element.name] = cached = {
+						old: null,
+						valid: true,
+						message: this.defaultMessage( element, "ajax" )
+					};
+				}
+				this.settings.messages[element.name] = typeof cached.message == "function" ? cached.message(value) : cached.message;
+				if ( cached.old !== value ) {
+					cached.old = value;
+					var validator = this;
+					this.startRequest();
+					jQuery.getJSON(param, {value: value}, function(response) {
+						if ( !response ) {
+							cached.valid = false;
+							var errors = {};
+							errors[element.name] =  validator.defaultMessage( element, "ajax" );
+							validator.showErrors(errors);
+						} else
+							cached.valid = true;
+						this.stopRequest();
+					});
+				}
+				return cached.valid;
+			} else
+				return true;
 		},
 
 		/**
@@ -1030,7 +1089,7 @@ jQuery.extend(jQuery.validator, {
 		 * 	<option value="vw_p">VW Polo</option>
 		 * 	<option value="t_s">Titanic Skoda</option>
 		 * </select>
-		 * @desc Specifies a select that must have at least two but no more then three options selected.
+		 * @desc Specifies a select that must have at least two but no more than three options selected.
 		 *
 	     * @param Array<Number> min/max
 	     * @name jQuery.validator.methods.rangeLength
