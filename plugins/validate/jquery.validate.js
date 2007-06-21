@@ -1,5 +1,5 @@
 /*
- * Form Validation: jQuery form validation plug-in v1.0 final
+ * Form Validation: jQuery form validation plug-in v1.1
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-validation/
  *

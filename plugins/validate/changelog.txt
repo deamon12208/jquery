@@ -1,14 +1,7 @@
-1.2 (coming soon)
----
-
-* Added remember-the-milk-demo
-* Added marketo-demo
-* Added support for for ajax-validation
-
 1.1
 ---
 
-* Added validation on blur, keyup and change.
+* Added validation on blur, keyup and click (for checkboxes and radiobutton). Replaces event-option.
 * fixed resetForm
 * fixed custom-methods-demo
 
