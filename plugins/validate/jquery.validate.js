@@ -283,7 +283,7 @@ jQuery.extend(jQuery.fn, {
 			if ( validator.checkable( this ) )
 				checkables.push( validator.checkableGroup( this ) );
 		});
-		validator.settings.onchange && checkables.change(function() {
+		validator.settings.onchange && checkables.click(function() {
 			validator.settings.onchange.call( validator, this );
 		});
 		

@@ -933,8 +933,8 @@ test("validate checkbox on click", function() {
 	function errors(expected, message) {
 		equals(expected, v.errorList.length, message );
 	}
-	function trigger(e) {
-		e.click(); //e.change(); e.blur();
+	function trigger(element) {
+		element[0].click();
 	}
 	var e = $("#check2");
 	var v = $("#form").validate({
@@ -957,8 +957,8 @@ test("validate multiple checkbox on click", function() {
 	function errors(expected, message) {
 		equals(expected, v.errorList.length, message );
 	}
-	function trigger(e) {
-		e.click(); //e.change(); e.blur();
+	function trigger(element) {
+		element[0].click();
 	}
 	var e1 = $("#check1").attr("checked", false);
 	var e2 = $("#check1b");
@@ -987,8 +987,8 @@ test("validate radio on click", function() {
 	function errors(expected, message) {
 		equals(expected, v.errorList.length, message );
 	}
-	function trigger(e) {
-		e.click(); //e.change(); e.blur();
+	function trigger(element) {
+		element[0].click();
 	}
 	var e1 = $("#radio1");
 	var e2 = $("#radio1a");
