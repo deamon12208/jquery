@@ -254,12 +254,9 @@ $.fn.extend({
 	 * 
 	 * @name position
 	 * @param Map options Optional settings to configure the way the offset is calculated.
-	 * @option Boolean margin Should the margin of the element be included in the calculations? True by default.
+	 * @option Boolean margin Should the margin of the element be included in the calculations? False by default.
 	 * @option Boolean border Should the border of the element be included in the calculations? False by default.
 	 * @option Boolean padding Should the padding of the element be included in the calculations? False by default.
-	 * @option Boolean scroll Should the scroll offsets of the parent elements be included in the calculations? True by default.
-	 *                        When true it adds the totla scroll offets of all parents to the total offset and also adds two properties
-	 *                        to the returned object, scrollTop and scrollLeft.
 	 * @param Object returnObject An object to store the return value in, so as not to break the chain. If passed in the
 	 *                            chain will not be broken and the result will be assigned to this object.
 	 * @type Object
@@ -267,7 +264,7 @@ $.fn.extend({
 	 */
 	position: function(options, returnObject) {
 		var elem = this[0], parent = elem.parentNode, op = elem.offsetParent,
-		    options = $.extend({ margin: true, border: false, padding: false, scroll: true }, options || {}),
+		    options = $.extend({ margin: false, border: false, padding: false, scroll: false }, options || {}),
 			x = elem.offsetLeft,
 			y = elem.offsetTop, 
 			sl = elem.scrollLeft, 
@@ -280,14 +277,8 @@ $.fn.extend({
 			y += num(elem, 'borderTopWidth');
 		}
 
-		if (options.scroll || $.browser.mozilla) {
+		if ($.browser.mozilla) {
 			do {
-				if (options.scroll) {
-					// get scroll offsets
-					sl += parent.scrollLeft;
-					st += parent.scrollTop;
-				}
-
 				// Mozilla does not add the border for a parent that has overflow set to anything but visible
 				if ($.browser.mozilla && parent != elem && $.css(parent, 'overflow') != 'visible') {
 					x += num(parent, 'borderLeftWidth');
@@ -295,8 +286,7 @@ $.fn.extend({
 				}
 
 				if (parent == op) break; // break if we are already at the offestParent
-				parent = parent.parentNode;
-			} while (op && (parent.tagName.toLowerCase() != 'body' || parent.tagName.toLowerCase() != 'html'));
+			} while ((parent = parent.parentNode) && (parent.tagName.toLowerCase() != 'body' || parent.tagName.toLowerCase() != 'html'));
 		}
 		
 		var returnValue = handleOffsetReturn(elem, options, x, y, sl, st);
