@@ -240,17 +240,10 @@ $.fn.extend({
 	/** 
 	 * Returns the top and left positioned offset in pixels.
 	 * The positioned offset is the offset between a positioned
-	 * parent (absolute, relative or fixed) and the element itself.
+	 * parent and the element itself.
 	 *
 	 * @example $("#testdiv").position()
-	 * @result { top: 100, left: 100, scrollTop: 10, scrollLeft: 10 }
-	 *
-	 * @example $("#testdiv").position({ scroll: false })
-	 * @result { top: 90, left: 90 }
-	 *
-	 * @example var position = {}
-	 * $("#testdiv").position({ scroll: false }, position)
-	 * @result position = { top: 90, left: 90 }
+	 * @result { top: 100, left: 100 }
 	 * 
 	 * @name position
 	 * @param Map options Optional settings to configure the way the offset is calculated.
