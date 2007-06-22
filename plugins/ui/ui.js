@@ -7,5 +7,5 @@ $.ui = {
 	plugin: function(what,calltime,plugin) {
 		if(!$.ui[what].prototype.plugins[calltime]) $.ui[what].prototype.plugins[calltime] = [];
 		$.ui[what].prototype.plugins[calltime].push(plugin);
-	}	
+	}
 }
