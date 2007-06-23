@@ -248,7 +248,7 @@ jQuery.extend(jQuery.fn, {
 		
 			// allow suppresing validation by adding a cancel class to the submit button
 			this.find("input.cancel:submit").click(function() {
-				this.form.cancel = true;
+				validator.cancelSubmit = true;
 			});
 		
 			// validate the form on submit
@@ -266,8 +266,8 @@ jQuery.extend(jQuery.fn, {
 				}
 					
 				// prevent submit for invalid forms or custom submit handlers
-				if ( this.cancel ) {
-					this.cancel = false;
+				if ( validator.cancelSubmit ) {
+					validator.cancelSubmit = false;
 					return handle();
 				}
 				if ( validator.form() ) {
@@ -613,8 +613,7 @@ jQuery.extend(jQuery.validator, {
 			// select all valid inputs inside the form (no submit or reset buttons)
 			this.elements = jQuery(this.currentForm)
 			.find("input, select, textarea, button")
-			.not(":submit")
-			.not(":reset")
+			.not(":submit, :reset, :button")
 			.not( this.settings.ignore )
 			.filter(function() {
 				!this.name && validator.settings.debug && window.console && console.error( "%o has no name assigned", this);
@@ -857,9 +856,9 @@ jQuery.extend(jQuery.validator, {
 			this.pendingRequest++;
 		},
 		
-		stopRequest: function() {
+		stopRequest: function(valid) {
 			this.pendingRequest--;
-			if ( this.pendingRequest == 0 && this.submitted && this.form() ) {
+			if ( valid && this.pendingRequest == 0 && this.submitted && this.form() ) {
 				jQuery(this.currentForm).submit();
 			}
 		}
@@ -972,24 +971,24 @@ jQuery.extend(jQuery.validator, {
 					this.valueCache[element.name] = cached = {
 						old: null,
 						valid: true,
-						message: this.defaultMessage( element, "ajax" )
+						message: this.defaultMessage( element, "remote" )
 					};
 				}
-				this.settings.messages[element.name] = typeof cached.message == "function" ? cached.message(value) : cached.message;
+				this.settings.messages[element.name].remote = typeof cached.message == "function" ? cached.message(value) : cached.message;
 				if ( cached.old !== value ) {
 					cached.old = value;
 					var validator = this;
 					this.startRequest();
 					jQuery.getJSON(param, {value: value}, function(response) {
 						if ( !response ) {
-							cached.valid = false;
 							var errors = {};
-							errors[element.name] =  validator.defaultMessage( element, "ajax" );
+							errors[element.name] =  validator.defaultMessage( element, "remote" );
 							validator.showErrors(errors);
-						} else
-							cached.valid = true;
-						this.stopRequest();
+						}
+						cached.valid = response;
+						this.stopRequest(response);
 					});
+					return true;
 				}
 				return cached.valid;
 			} else

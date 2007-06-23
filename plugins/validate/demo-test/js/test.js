@@ -1010,17 +1010,17 @@ module("ajax");
 
 test("check the serverside script works", function() {
 	stop();
-	$.getJSON("milk/users.php", {value: 'asdf'}, function(response) {
-		ok( response, "already taken" );
-		$.getJSON("milk/users.php", {value: "asd"}, function(response) {
-			ok( !response, "yet available" );
+	$.getJSON("milk/users.php", {value: 'asd'}, function(response) {
+		ok( response, "yet available" );
+		$.getJSON("milk/users.php", {value: "asdf"}, function(response) {
+			ok( !response, "already taken" );
 			start();
 		});
 	});
 });
 
 test("validate via remote method", function() {
-	expect(4);
+	expect(5);
 	stop();
 	var e = $("#firstname");
 	var v = $("#testForm1").validate({
@@ -1029,18 +1029,25 @@ test("validate via remote method", function() {
 				required: true,
 				remote: "milk/users.php"
 			}
+		},
+		messages: {
+			firstname: {
+				required: "Please",
+				remote: String.format("{0} in use")
+			}
 		}
 	});
 	$().ajaxStop(function() {
 		ok( true, "There needs to be exactly one request." );
 		equals( 1, v.errorList.length, "There must be one error" );
+		equals( "asdf in use", v.errorList[0].message );
 		start();
 	});
 	ok( !v.element(e) );
 	e.val("asdf");
 	ok( v.element(e) );
 });
-
+/*
 test("validate ajax form", function() {
 	expect(6);
 	stop();
@@ -1071,3 +1078,4 @@ test("validate ajax form", function() {
 	});
 	f.submit();
 });
+*/
