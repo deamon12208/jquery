@@ -11,11 +11,20 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	$("<a href='#'>Show script used on this page</a>").appendTo("body").click(function() {
+	$("<a href='#'>Show script used on this page</a><br/>").appendTo("body").click(function() {
 		script.toggle();
 		return false;
 	});
+	$("<a href='#'>Show serverside script</a>").appendTo("body").click(function() {
+			serverscript.toggle();
+			return false;
+		});
 	var script = $("<pre>").html( $("#demo").html() ).hide().appendTo("body");
+	var serverscript;
+	$.get("users.phps", function(response) {
+		serverscript = $("<pre>").html( response ).hide().appendTo("body");
+	})
+	
 });
 </script>
 <style type="text/css">
