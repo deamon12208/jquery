@@ -6,7 +6,41 @@
 	
 	$.ui.ddmanager = {
 		current: null,
-		droppables: []
+		droppables: [],
+		prepareOffsets: function(that) {
+			
+			var m = $.ui.ddmanager.droppables;
+			for(var i=0;i<m.length;i++) {
+				m[i].offset = $(m[i].item.element).offset({ border: false });
+				if(that) { //Activate the droppable if used directly from draggables
+					if(m[i].item.options.accept(this)) m[i].item.activate.call(m[i].item);
+				}
+			}
+						
+		},
+		fire: function(that) {
+			
+			var m = $.ui.ddmanager.droppables;
+			for(var i=0;i<m.length;i++) {
+				if($.ui.intersect(that, m[i], m[i].item.options.tolerance)) {
+					m[i].item.drop.call(m[i].item);
+				}
+				if(m[i].item.options.accept(that)) m[i].item.deactivate.call(m[i].item);
+			}
+						
+		},
+		update: function(that) {
+			
+			var m = $.ui.ddmanager.droppables;
+			for(var i=0;i<m.length;i++) {
+				if($.ui.intersect(that, m[i], m[i].item.options.tolerance)) {
+					if(m[i].over == 0) { m[i].out = 0; m[i].over = 1; m[i].item.hover.call(m[i].item); }
+				} else {
+					if(m[i].out == 0) { m[i].out = 1; m[i].over = 0; m[i].item.out.call(m[i].item); }
+				}
+			}
+						
+		}
 	};
 	
 	$.ui.dragset = function() {
@@ -77,7 +111,7 @@
 		o.handle.bind('mousedown', this.mousedownfunc);
 		
 		//Prevent selection of different stuff in IE
-		$(this.element).attr('unselectable', 'on');
+		if($.browser.msie) $(this.element).attr('unselectable', 'on');
 		
 	}
 	
@@ -104,6 +138,8 @@
 			this.options.handle.unbind('mousedown', this.mousedownfunc);
 		},
 		click: function(e) {
+			
+			window.focus();
 			
 			// Prevent execution on defined elements
 			var targetName = (e.target) ? e.target.nodeName.toLowerCase() : e.srcElement.nodeName.toLowerCase();
@@ -185,22 +221,13 @@
 			$(this.helper).css('left', o.curOffset.left+'px').css('top', o.curOffset.top+'px').css('position', 'absolute').appendTo((o.appendTo == 'parent' ? this.element.parentNode : o.appendTo)); // Append the helper
 
 			// Remap right/bottom properties for cursorAt to left/top
-			if(o.cursorAt.right && !o.cursorAt.left) o.cursorAt.left = o.helper.offsetWidth+o.margins.right+o.margins.left - o.cursorAt.right;
-			if(o.cursorAt.bottom && !o.cursorAt.top) o.cursorAt.top = o.helper.offsetHeight+o.margins.top+o.margins.bottom - o.cursorAt.bottom;
+			if(o.cursorAt.right && !o.cursorAt.left) o.cursorAt.left = this.helper.offsetWidth+o.margins.right+o.margins.left - o.cursorAt.right;
+			if(o.cursorAt.bottom && !o.cursorAt.top) o.cursorAt.top = this.helper.offsetHeight+o.margins.top+o.margins.bottom - o.cursorAt.bottom;
 		
 			$.ui.ddmanager.current = this;
 
-			/* Only after we have appended the helper, we compute the offsets
-			 * for the slowMode! This is important, so the user aready see's
-			 * something going on.
-			 */
-			if(this.slowMode && $.ui.droppable) {
-				var m = $.ui.ddmanager.droppables;
-				for(var i=0;i<m.length;i++) {
-					m[i].offset = $(m[i].item.element).offset({ border: false });
-					if(m[i].item.options.accept(this)) m[i].item.activate.call(m[i].item);
-				}
-			}
+			if(this.slowMode && $.ui.droppable)
+				$.ui.ddmanager.prepareOffsets(this);
 		
 			this.init = true;	
 
@@ -223,16 +250,8 @@
 			if(o.onStop) o.onStop.apply(this, [this.element, this.helper, this.pos, [o.curOffset.left - o.po.left,o.curOffset.top - o.po.top],this]);
 			this.execPlugins('stop');
 
-			if(this.slowMode && $.ui.droppable) { //If cursorAt is within the helper, we must use our drop manager
-				var m = $.ui.ddmanager.droppables;
-				
-				for(var i=0;i<m.length;i++) {
-					if($.ui.intersect(this, m[i], m[i].item.options.tolerance)) {
-						m[i].item.drop.call(m[i].item);
-					}
-					if(m[i].item.options.accept(this)) m[i].item.deactivate.call(m[i].item);
-				}
-			}
+			if(this.slowMode && $.ui.droppable) //If cursorAt is within the helper, we must use our drop manager
+				$.ui.ddmanager.fire(this);
 				
 			if(this.helper != this.element && !this.helper.keepMe) { // Remove helper, if it's not the original node
 				$(this.helper).remove();
@@ -269,19 +288,9 @@
 				if(retPos.x) this.pos[0] = retPos.x;
 				if(retPos.y) this.pos[1] = retPos.y;	
 			}
-			
-			
-			if(this.slowMode && $.ui.droppable) { // If cursorAt is within the helper, we must use our drop manager to look where we are
-				var m = $.ui.ddmanager.droppables;		
-				
-				for(var i=0;i<m.length;i++) {
-					if($.ui.intersect(this, m[i], m[i].item.options.tolerance)) {
-						if(m[i].over == 0) { m[i].out = 0; m[i].over = 1; m[i].item.hover.call(m[i].item); }
-					} else {
-						if(m[i].out == 0) { m[i].out = 1; m[i].over = 0; m[i].item.out.call(m[i].item); }
-					}
-				}
-			}
+
+			if(this.slowMode && $.ui.droppable) // If cursorAt is within the helper, we must use our drop manager to look where we are
+				$.ui.ddmanager.update(this);
 
 			this.pos = [this.pos[0]-(o.cursorAt.left ? o.cursorAt.left : 0), this.pos[1]-(o.cursorAt.top ? o.cursorAt.top : 0)];
 			this.execPlugins('drag');

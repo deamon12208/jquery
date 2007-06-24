@@ -49,6 +49,15 @@
 	};
 	
 	$.extend($.ui.droppable.prototype, {
+		plugins: {},
+		execPlugins: function(type) {
+			var o = this.options;
+			if(this.plugins[type]) {
+				for(var i=0;i<this.plugins[type].length;i++) {
+					this.plugins[type][i].call(this);	
+				}	
+			}			
+		},
 		destroy: function() {
 			
 		},
@@ -79,12 +88,14 @@
 			if(!$.ui.ddmanager.current) return;
 			
 			var o = this.options; var c = $.ui.ddmanager.current;
+			this.execPlugins('hover');
 			if(o.onHover && o.accept(c)) o.onHover.apply(this, [c.element, c.helper, c]); //Fire callback
 			
 		},
 		out: function(e) {
 
 			var o = this.options; var c = $.ui.ddmanager.current;
+			this.execPlugins('out');
 			if(c && o.onOut && o.accept(c)) o.onOut.apply(this, [c.element, c.helper, c]); //Fire callback
 			
 		},
@@ -92,11 +103,15 @@
 
 			var o = this.options; var c = $.ui.ddmanager.current;
 			
-			if(c && o.onDrop && o.accept(c)) { // Fire callback
+			if(c && o.accept(c)) { // Fire callback
 				if(o.greedy && !c.slowMode) {
-					if(c.currentTarget == this.element) o.onDrop.apply(this, [c.element, c.helper, c]);
+					if(c.currentTarget == this.element) {
+						this.execPlugins('drop');
+						if(o.onDrop) o.onDrop.apply(this, [c.element, c.helper, c]);
+					}
 				} else {
-					o.onDrop.apply(this, [c.element, c.helper, c]);	
+					this.execPlugins('drop');
+					if(o.onDrop) o.onDrop.apply(this, [c.element, c.helper, c]);	
 				}
 			}
 			
@@ -104,12 +119,14 @@
 		activate: function(e) {
 
 			var o = this.options; var c = $.ui.ddmanager.current;
+			this.execPlugins('activate');
 			if(c && o.onActivate) o.onActivate.apply(this, [c.element, c.helper, c]); //Fire callback
 			
 		},
 		deactivate: function(e) {
 
 			var o = this.options; var c = $.ui.ddmanager.current;
+			this.execPlugins('deactivate');
 			if(c && o.onDeactivate) o.onDeactivate.apply(this, [c.element, c.helper, c]); //Fire callback	
 			
 		}

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Draggables demo - Interface plugin for jQuery</title>
+<script type="text/javascript" src="../../../jquery/src/jquery/jquery.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx/fx.js"></script>
+<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+<script type="text/javascript" src="../ui.js"></script>
+<script type="text/javascript" src="../draggables.js"></script>
+<script type="text/javascript" src="../draggables.ext.js"></script>
+<script type="text/javascript" src="../droppables.js"></script>
+<script type="text/javascript" src="../droppables.ext.js"></script>
+<style type="text/css" media="all">
+
+body
+{
+	background: #fff;
+	margin: 0;
+	padding: 0;
+	font-family: Arial;
+	font-size: 12px;
+}
+
+.draggable {
+	width: 50px;
+	height: 50px;
+	background-color: #68BFEF;
+	border: 2px solid #0090DF;
+	padding: 5px;
+	margin: 5px;
+	float: left;	
+}
+
+.hover {
+	outline: 2px solid red;	
+}
+
+</style>
+</head>
+<body>
+	
+<div class='draggable'>Should not be moved</div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+<div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div><div class='draggable'></div>
+	
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	var curdate = (new Date()).getTime();
+	$('.draggable').draggable(
+		{
+			zIndex: 1000,
+			dragPrevention: 'a,input,textarea',
+			preventionTimeout: false,
+			preventionDistance: 0,
+			helper: function() {
+				var myHelper = document.createElement("div");
+				$(myHelper).css({
+					background: 'yellow',
+					width: this.offsetWidth + 'px',
+					height: this.offsetHeight + 'px',
+					opacity: 0.6,
+					position: 'absolute'
+				});
+				return myHelper;
+			},
+			cursorAt: { top: -10, left: -10 }
+		}
+	);
+	var newDate = (new Date()).getTime()-curdate;
+	document.title = newDate;
+	
+	var curdate = (new Date()).getTime();
+	$('.draggable').droppable({
+		accept: 'div.draggable',
+		hoverclass: 'hover'
+	});
+	var newDate = (new Date()).getTime()-curdate;
+	document.title = newDate;
+});
+</script>
+</body>
+</html>

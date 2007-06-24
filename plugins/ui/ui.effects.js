@@ -17,7 +17,7 @@ $.ui.effects['transfer'] = function(o) {
 		var npos = target.offset({ border: false, margin: false });
 	} else {
 		var npos = $(this).offset({ border: false, margin: false });
-		var opos = target.offset({ border: false, margin: false });		
+		var opos = target.offset({ border: false, margin: false });
 	}
 	
 	var el = $(this).clone().appendTo('body').css({
