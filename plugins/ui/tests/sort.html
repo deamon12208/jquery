@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Draggables demo - Interface plugin for jQuery</title>
+<script type="text/javascript" src="../../../jquery/src/jquery/jquery.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx/fx.js"></script>
+<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+<script type="text/javascript" src="../ui.js"></script>
+<script type="text/javascript" src="../draggables.js"></script>
+<script type="text/javascript" src="../draggables.ext.js"></script>
+<script type="text/javascript" src="../droppables.js"></script>
+<script type="text/javascript" src="../droppables.ext.js"></script>
+<script type="text/javascript" src="../ui.sortables.js"></script>
+<style type="text/css" media="all">
+
+body
+{
+	background: #fff;
+	margin: 0;
+	padding: 0;
+	font-family: Arial;
+	font-size: 12px;
+}
+
+.draggable {
+	width: 90px;
+	height: 90px;
+	background-color: #68BFEF;
+	border: 2px solid #0090DF;
+	padding: 3px;
+	float: left;	
+}
+
+ul li {
+ list-style-type: square;
+ border: 1px solid #999;
+ margin: 5px; padding: 5px;
+ width: 200px;	
+}
+
+.hover {
+	outline: 2px solid green;	
+}
+
+</style>
+</head>
+<body>
+	
+	<div id='container' style='border: 2px solid #999; background: #eee; height: 300px; width: 300px;'>
+		<div class='draggable'>1</div>
+		<div class='draggable'>2</div>
+		<div class='draggable'>3</div>
+		<div class='draggable'>4</div>
+		<div class='draggable'>5</div>
+		<div class='draggable'>6</div>
+		<div class='draggable'>7</div>
+		<div class='draggable'>8</div>
+		<div class='draggable'>9</div>
+	</div>
+	<br />
+	
+	<ul id='myul'>
+	    <li>Item 1</li>
+	    <li>Item 2</li>
+	    <li>Item 3</li>
+	    <li>Item 4</li>
+	    <li>Item 5</li>
+	</ul>
+	
+	<br />
+	<br />
+	<div  id='drop' style='background: #999; width: 600px; height: 400px;'></div>
+	<div  id='drag' style='background: green; width: 100px; height: 100px;'></div>
+
+	
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	$('#myul').sortable();
+
+});
+</script>
+</body>
+</html>

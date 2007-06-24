@@ -8,7 +8,7 @@
 	
 		if(this.options.effect && this.options.effect[1]) {
 			if(this.helper != this.element) {
-				this.helper.keepMe = true;
+				this.options.beQuietAtEnd = true;
 				switch(this.options.effect[1]) {
 					case 'fade':
 						$(this.helper).fadeOut(300, function() { $(this).remove(); });
@@ -82,10 +82,9 @@
 		if(this.options.revert) {
 			
 			var rpos = { left: 0, top: 0 };
+			this.options.beQuietAtEnd = true;
 			if(this.helper != this.element) {
-				this.helper.keepMe = true;
 				
-	
 				rpos = $(this.sorthelper || this.element).offset({ border: false });
 	
 				var nl = rpos.left-this.options.po.left;
@@ -103,6 +102,10 @@
 				top: nt
 			}, 500, function() {
 				if(self.helper != self.element) $(self.helper).remove();
+				
+				if(self.options.wasPositioned)
+					$(self.element).css('position', self.options.wasPositioned);
+				
 			});
 		}
 		
@@ -206,6 +209,7 @@
 	$.ui.plugin("draggable","drag", function() {
 		
 		var o = this.options;
+		if(o.constraint) o.axis = o.constraint; //Legacy check
 		if(o.axis && o.cursorAtIgnore) { // If we have a axis, use it. Cannot be used with cursorAt.
 			switch(o.axis) {
 				case "y":
@@ -224,15 +228,18 @@
 	$.ui.plugin("draggable","drag", function() {
 		
 		var o = this.options;
-		o.scroll = o.scroll != undefined ? o.scroll : 20;
+		o.scroll		= o.scroll != undefined ? o.scroll : true; //Default to true
+		o.scrollSensitivity	= o.scrollSensitivity != undefined ? o.scrollSensitivity : 20;
+		o.scrollSpeed		= o.scrollSpeed != undefined ? o.scrollSpeed : 20;
+		
 		if(o.scroll) { // Auto scrolling
 			if(o.pp && o.ppOverflow) { // If we have a positioned parent, we only scroll in this one
 				// TODO: Extremely strange issues are waiting here..handle with care
 			} else {
-				if((this.rpos[1] - $(window).height()) - $(document).scrollTop() > -10) window.scrollBy(0,o.scroll);
-				if(this.rpos[1] - $(document).scrollTop() < 10) window.scrollBy(0,-o.scroll);
-				if((this.rpos[0] - $(window).width()) - $(document).scrollLeft() > -10) window.scrollBy(o.scroll,0);
-				if(this.rpos[0] - $(document).scrollLeft() < 10) window.scrollBy(-o.scroll,0);
+				if((this.rpos[1] - $(window).height()) - $(document).scrollTop() > -o.scrollSensitivity) window.scrollBy(0,o.scrollSpeed);
+				if(this.rpos[1] - $(document).scrollTop() < o.scrollSensitivity) window.scrollBy(0,-o.scrollSpeed);
+				if((this.rpos[0] - $(window).width()) - $(document).scrollLeft() > -o.scrollSensitivity) window.scrollBy(o.scrollSpeed,0);
+				if(this.rpos[0] - $(document).scrollLeft() < o.scrollSensitivity) window.scrollBy(-o.scrollSpeed,0);
 			}
 		}
 		

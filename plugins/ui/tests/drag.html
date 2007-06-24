@@ -139,7 +139,8 @@ $(document).ready(function(){
 
 	//Revert functionality
 	$('#drag2').draggable({
-		revert: true
+		revert: true,
+		ghosting: true
 	});
 	
 	$('#drag4').draggable({ grid: [50,50] });
@@ -153,14 +154,16 @@ $(document).ready(function(){
 	$('#drag9').draggable({containment: 'document'});
 
 	$('#drag8').draggable({
-		onDrag: function(helper,position) {
+		revert: true,
+		onDrag: function(el,helper,position) {
 			
-			var centerx = 600;
-			var centery = 400;
+			var centerx = 291;
+			var centery = 100;
 			var angle = Math.atan((centery-position[1])/(centerx-position[0]));
 			if((centerx-position[0])>=0)
 				angle += Math.PI;
 			radius = 160;
+
 			return {
 				x: radius * Math.cos(angle) + centerx, 
 				y: radius * Math.sin(angle) + centery

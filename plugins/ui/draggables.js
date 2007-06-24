@@ -33,11 +33,13 @@
 			
 			var m = $.ui.ddmanager.droppables;
 			for(var i=0;i<m.length;i++) {
+				
 				if($.ui.intersect(that, m[i], m[i].item.options.tolerance)) {
 					if(m[i].over == 0) { m[i].out = 0; m[i].over = 1; m[i].item.hover.call(m[i].item); }
 				} else {
 					if(m[i].out == 0) { m[i].out = 1; m[i].over = 0; m[i].item.out.call(m[i].item); }
 				}
+				
 			}
 						
 		}
@@ -74,15 +76,16 @@
 		$.extend(this.options, o);
 		$.extend(this.options, {
 			handle : o.handle ? ($(o.handle, el)[0] ? $(o.handle, el) : $(el)) : $(el),
-			helper: o.helper ? o.helper : 'clone',
+			helper: o.helper ? o.helper : 'original',
 			preventionDistance: o.preventionDistance ? o.preventionDistance : 0,
-			dragPrevention: o.dragPrevention ? o.dragPrevention.toLowerCase().split(',') : ['input','textarea','button'],
+			dragPrevention: o.dragPrevention ? o.dragPrevention.toLowerCase().split(',') : ['input','textarea','button','select','option'],
 			cursorAt: { top: ((o.cursorAt && o.cursorAt.top) ? o.cursorAt.top : 0), left: ((o.cursorAt && o.cursorAt.left) ? o.cursorAt.left : 0), bottom: ((o.cursorAt && o.cursorAt.bottom) ? o.cursorAt.bottom : 0), right: ((o.cursorAt && o.cursorAt.right) ? o.cursorAt.right : 0) },
 			cursorAtIgnore: (!o.cursorAt) ? true : false, //Internal property
 			wrapHelper: o.wrapHelper != undefined ? o.wrapHelper : true,
 			appendTo: o.appendTo ? o.appendTo : 'parent'
 		});
 		o = this.options; //Just Lazyness
+		if(o.ghosting == true) o.helper = 'clone'; //legacy option check
 		
 		if(o.helper == 'clone' || o.helper == 'original') {
 
@@ -99,6 +102,9 @@
 			if(o.cursorAt.left != 0) o.cursorAt.left += o.margins.left;
 			if(o.cursorAt.bottom != 0) o.cursorAt.bottom += o.margins.bottom;
 			if(o.cursorAt.right != 0) o.cursorAt.right += o.margins.right;
+			
+			if(o.helper == 'original')
+				o.wasPositioned = $(el).css('position');
 			
 		} else {
 			o.margins = { top: 0, left: 0, right: 0, bottom: 0 };
@@ -140,6 +146,7 @@
 		click: function(e) {
 			
 			window.focus();
+			if(e.button != 0) return true; //only left click
 			
 			// Prevent execution on defined elements
 			var targetName = (e.target) ? e.target.nodeName.toLowerCase() : e.srcElement.nodeName.toLowerCase();
@@ -218,21 +225,23 @@
 			
 			this.slowMode = (o.cursorAt && (o.cursorAt.top-o.margins.top > 0 || o.cursorAt.bottom-o.margins.bottom > 0) && (o.cursorAt.left-o.margins.left > 0 || o.cursorAt.right-o.margins.right > 0)) ? true : false; //If cursorAt is within the helper, set slowMode to true
 
-			$(this.helper).css('left', o.curOffset.left+'px').css('top', o.curOffset.top+'px').css('position', 'absolute').appendTo((o.appendTo == 'parent' ? this.element.parentNode : o.appendTo)); // Append the helper
+			$(this.helper).css('left', o.curOffset.left+'px').css('top', o.curOffset.top+'px').css('position', 'absolute');
+			if(o.helper != 'original') $(this.helper).appendTo((o.appendTo == 'parent' ? this.element.parentNode : o.appendTo));
 
 			// Remap right/bottom properties for cursorAt to left/top
 			if(o.cursorAt.right && !o.cursorAt.left) o.cursorAt.left = this.helper.offsetWidth+o.margins.right+o.margins.left - o.cursorAt.right;
 			if(o.cursorAt.bottom && !o.cursorAt.top) o.cursorAt.top = this.helper.offsetHeight+o.margins.top+o.margins.bottom - o.cursorAt.bottom;
 		
 			$.ui.ddmanager.current = this;
-
-			if(this.slowMode && $.ui.droppable)
-				$.ui.ddmanager.prepareOffsets(this);
 		
 			this.init = true;	
 
 			if(o.onStart) o.onStart.apply(this, [this.element,this.helper]); // Trigger the onStart callback
 			this.execPlugins('start');
+			
+			if(this.slowMode && $.ui.droppable)
+				$.ui.ddmanager.prepareOffsets(this);
+			
 			return false;
 						
 		},
@@ -253,10 +262,13 @@
 			if(this.slowMode && $.ui.droppable) //If cursorAt is within the helper, we must use our drop manager
 				$.ui.ddmanager.fire(this);
 				
-			if(this.helper != this.element && !this.helper.keepMe) { // Remove helper, if it's not the original node
+			if(this.helper != this.element && !o.beQuietAtEnd) { // Remove helper, if it's not the original node
 				$(this.helper).remove();
 				this.helper = null;
 			}
+			
+			if(!o.beQuietAtEnd && o.wasPositioned)
+				$(this.element).css('position', o.wasPositioned);
 
 			this.init = false;
 			this.opos = this.pos = $.ui.ddmanager.current = null; // Clear temp variables
