@@ -1,3 +1,4 @@
+- animations!!
 - ajax validation:
 	- add hint about not-available usernames to milk demo (though thats obvious by viewing source for users.php)
 	- in combination with autocomplete (mustmatch company name, fill out address details, validate required)
