@@ -29,7 +29,6 @@
 
 		
 		$.ui.ddmanager.droppables.push({ item: this, over: 0, out: 1 }); // Add the reference and positions to the manager
-	
 		
 		var self = this;
 		$(this.element).hover(function(e) {

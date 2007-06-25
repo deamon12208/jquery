@@ -18,10 +18,32 @@
 			}
 						
 		},
+		prepareOffsetsAsync: function(that) {
+
+			var m = $.ui.ddmanager.droppables; var ml = m.length; var j = 0; var i= 0;
+			
+			var func = (function() {
+				for(;i<ml;i++) {
+					m[i].offset = $(m[i].item.element).offsetLite({ border: false });
+					if(that) { //Activate the droppable if used directly from draggables
+						if(m[i].item.options.onActivate && m[i].item.options.accept(this)) m[i].item.activate.call(m[i].item);
+					}
+					
+					if(i == j*20+19) { //Call the next block of 20
+						j++;
+						var c = arguments.callee;
+						window.setTimeout(function() { c(); }, 0);
+						break;
+					}
+				}
+			})();
+
+		},
 		fire: function(that) {
 			
 			var m = $.ui.ddmanager.droppables;
 			for(var i=0;i<m.length;i++) {
+				if(!m[i].offset) continue;
 				if($.ui.intersect(that, m[i], m[i].item.options.tolerance)) {
 					m[i].item.drop.call(m[i].item);
 				}
@@ -33,7 +55,7 @@
 			
 			var m = $.ui.ddmanager.droppables;
 			for(var i=0;i<m.length;i++) {
-				
+				if(!m[i].offset) continue;
 				if($.ui.intersect(that, m[i], m[i].item.options.tolerance)) {
 					if(m[i].over == 0) { m[i].out = 0; m[i].over = 1; m[i].item.hover.call(m[i].item); }
 				} else {
