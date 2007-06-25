@@ -19,11 +19,6 @@ $('#right2 a').Tooltip({ showURL: false });
 
 $("map *").Tooltip();
 
-$("#extended a").Foottip({
-	delay: 0,
-	track: true
-}).filter(":first").Modaltip();
-
 // modify global settings
 $.extend($.Tooltip.defaults, {
 	track: true,
@@ -77,11 +72,6 @@ mouse track:</p>
 	<a title="Yahoo doo2 - wohooo" href="http://yahoo.com">Link to yahoo1</a>
 	<a title="Yahoo doo3" href="http://yahoo.com">Link to yahoo2</a>
 	<a title="Yahoo doo4 - buga!" href="http://yahoo.com">Link to yahoo3</a>
-</div>
-
-<div id="extended">
-	<a title="see footnote" href="#abc-footnote">ABC</a>
-	<a title="see footnote" href="#xyz-footnote">XYZ</a>
 </div>
 
 <br/>
@@ -139,27 +129,6 @@ Some worthless text below.
 	<a title="Short title" href="http://goggle">Google me!</a><br/>
 	<a title="Rather a very very long title with no meaning but yet quite long long long" href="http://goggle">Google me!</a>
 </p>
-
-<div class="footnote" id="abc-footnote">
-	<h3>Blatooltip data</h3>
-	<table border="1">
-		<tr>
-			<td>Wohoo</td>
-			<td>Waa</td>
-		</tr>
-		<tr>
-			<td>Bla</td>
-			<td>Blu</td>
-		</tr>
-	</table>
-</div>
-<div class="footnote" id="xyz-footnote">
-	<h3>Another footnote</h3>
-	<dl>
-		<dt>Yeah</dt>
-		<dd>No way!</dd>
-	</dl>
-</div>
 
 </body>
 </html>
