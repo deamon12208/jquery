@@ -1,3 +1,11 @@
+- ajax validation:
+	- add hint about not-available usernames to milk demo (though thats obvious by viewing source for users.php)
+	- in combination with autocomplete (mustmatch company name, fill out address details, validate required)
+	- validate zip code in comparison to address, if match and state is missing, fill out state
+- strong password check/integration: http://www.microsoft.com/protect/yourself/password/checker.mspx
+- fix milk demo in IE6, (success) messages for radio/checkbox doesn't show up, none at all for checkbox
+- add/modify onkeyup option: true - immediate, false - none
+
 - validate on paste:
 
 I'm going to assume that you have some validate function
