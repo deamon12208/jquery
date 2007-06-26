@@ -4,7 +4,7 @@ jQuery.validator.addMethod('maxWords', function(value, element, params) {
  
 jQuery.validator.addMethod('minWords', function(value, element, params) { 
     return !$(element).val() || $(element).val().match(/bw+b/g).length >= params; 
-}, ‘Please enter at least {0} words.’); 
+}, 'Please enter at least {0} words.'); 
  
 jQuery.validator.addMethod(’rangeWords’, function(value, element, params) { 
     return !$(element).val() || ($(element).val().match(/bw+b/g).length >= params[0] && $(element).val().match(/bw+b/g).length < params[1]); 
