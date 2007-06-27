@@ -1,8 +1,8 @@
 /*
  * jQuery clueTip plugin
  * Version 0.2  (05/16/2007)
- * @requires jQuery v1.1.1
- * @requires Dimensions plugin 
+ * @depends jQuery v1.1.1
+ * @depends Dimensions plugin 
  *
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
@@ -16,15 +16,14 @@
  * @credit Thanks to Jonathan Chaffer, as always, for help with the hard parts. :-)
  */
  
- /*
- TODO
- - more testing 
- - get pngFix working for IE
- - finish writing inline documentation!
- */
- 
+
+ // TODO: more testing needed
+ // TODO: finish writing inline documentation!
+ // TODO: get pngFix working for IE
+ // TODO: prevent multiple AJAX requests
+ // CHANGED: added hoverIntent option 
  /**
- * DESCRIBE PLUGIN
+ * @example $('#tip).cluetip();
  *
  * @example $('a.clue').cluetip({
  *  hoverClass: 'highlight',
@@ -36,6 +35,8 @@
  *    type: 'POST'
  *  }
  * });
+ *
+ * TODO: DESCRIBE PLUGIN
  * @desc 
  *
  *
@@ -47,14 +48,14 @@
  * @option String attribute The attribute to be used for the URL of the ajaxed content, default is 'rel'
  * @option String titleAttribute 'title
  * @option String splitTitle A character used to split the title attribute into the clueTip title and divs within the clueTip body; if used, the clueTip will be populated only by the title attribute, default is ''
- * @option String hoverClass: ''
- * @option String waitImage: 'wait.gif'
- * @option Boolean sticky: false
- * @option String activation: 'hover'
- * @option String closePosition: 'top'
- * @option String closeText: 'Close'
- * @option Number truncate: 0
- * @option Boolean pngFix: false
+ * @option String hoverClass: default is empty string, so no class''
+ * @option String waitImage: default is 'wait.gif'
+ * @option Boolean sticky: default is false
+ * @option String activation: default is 'hover'
+ * @option String closePosition: default is 'top'
+ * @option String closeText: default is 'Close'
+ * @option Number truncate: default is 0
+ * @option Boolean pngFix: default is false
  * @option Object ajaxProcess
  * @option Object ajaxSettings
  *
@@ -76,6 +77,7 @@
     var defaults = {
       width: 275,
       local: false,
+      hideLocal: true,
       attribute: 'rel',
       titleAttribute: 'title',
       splitTitle: '',
@@ -118,6 +120,7 @@
         .appendTo('body')
         .hide();
       }
+      // FIXME: pngFix is broken ;) possible get Jörn's version from toolt
       if (defaults.pngFix) {
         $('#cluetip').pngfix();
       }
@@ -125,15 +128,16 @@
       var tipAttribute = $this.attr(defaults.attribute);
       if (!tipAttribute) return true;
       
-      // vertical measurements
+      // vertical measurement variables
       var tipHeight, wHeight;
       var sTop, offTop, posY;
 
-      // horizontal measurements
+      // horizontal measurement variables
       var tipWidth = parseInt(defaults.width, 10);
       var offWidth = this.offsetWidth;
       var offLeft, posX, docWidth;
       
+      // parse the title
       var tipParts,
        tipTitle = (defaults.attribute != 'title') ? $this.attr(defaults.titleAttribute) : '';
       if (defaults.splitTitle) {
@@ -142,7 +146,7 @@
       }
       var localContent;
       
-      // close cluetip and reset title attribute if one exists
+// close cluetip and reset title attribute if one exists
       var cluetipClose = function() {
         $cluetipOuter.css('backgroundImage', 'url(' + defaults.waitImage + ')');
         $cluetipInner.empty().parent().parent().hide();
@@ -151,6 +155,7 @@
         }
       };
 
+// get dimensions and options for cluetip and prepare it to be shown
       var cluetipShow = function(bpY) {
         tipHeight = $cluetip.outerHeight();
 
@@ -186,8 +191,9 @@
         $cluetipOuter.css('backgroundImage', 'none');         
       };
 
-      
-// ACTIVATION ...
+/***************************************      
+* ACTIVATION ...
+****************************************/
 
 // activate by click
     if (defaults.activation == 'click'||defaults.activation == 'toggle') {
@@ -209,12 +215,13 @@
         }
       });
     
-      $this.hover(function(event) {
+      $this[($.fn.hoverIntent) ? 'hoverIntent' : 'hover'](function(event) {
         activate(event);
       }, function(event) {
         inactivate(event);
       });
     }
+    
 //activate clueTip      
       var activate = function(event) {
         if (tipAttribute == $this.attr('href')) {
@@ -250,9 +257,11 @@
         }
         wHeight = $(window).height();
 
-// load the title attribute only (or user-selected attribute). 
-// clueTip title is the string before the first delimiter
-// subsequent delimiters place clueTip body text on separate lines
+/***************************************
+* load the title attribute only (or user-selected attribute). 
+* clueTip title is the string before the first delimiter
+* subsequent delimiters place clueTip body text on separate lines
+***************************************/
         if (tipParts) {
           for (var i=0; i < tipParts.length; i++){
             if (i == 0) {

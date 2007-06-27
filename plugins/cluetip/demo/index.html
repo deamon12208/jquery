@@ -7,31 +7,9 @@
 
   <script src="../jquery.js" type="text/javascript"></script>
   <script src="../dimensions.js" type="text/javascript"></script>
-  <script src="scripts/jquery.iepnghack.js" type="text/javascript"></script>
+  <script src="../jquery.hoverIntent.js" type="text/javascript"></script>
   <script src="../jquery.cluetip.js" type="text/javascript"></script>
-  <script type="text/javascript" charset="utf-8">
-    $(document).ready(function() {
-      $('a.basic').cluetip();
-      $('a.custom-width').cluetip({width: '200px'});
-      $('h4').cluetip({attribute: 'id', hoverClass: 'highlight'});
-      $('#sticky').cluetip({'sticky': true});
-      $('#examples a:eq(4)').cluetip({
-        hoverClass: 'highlight',
-        sticky: true,
-        closePosition: 'bottom',
-        closeText: '<img src="cross.png" alt="close" />',
-        truncate: 60,
-        ajaxSettings: {
-          type: 'POST'
-        }
-      });
-      $('a.load-local').cluetip({local:true});
-      $('#clickme').cluetip({activation: 'click'});
-    //unrelated to clueTip -- just for this page...
-    $('h3:gt(0)').before('<a href="#top">back to top</a>');
-    
-    });
-  </script>
+  <script src="demo.js" type="text/javascript"></script>
   <link rel="stylesheet" href="../jquery.cluetip.css" type="text/css" />
   <link rel="stylesheet" href="main.css" type="text/css" />
 </head>
@@ -55,7 +33,7 @@
     <p>The clueTip plug-in allows you to easily set a link to show a "tooltip" of sorts when the user's mouse hovers over the link. If the link includes a <code>title</code> attribute, its text becomes the heading of the clueTip. The contents of the clueTip can come from one of these sources:</p>
     <ol>
       <li>a separate file, via AJAX</li>
-      <li>an element on the same page, typically hidden <span class="highlighter">now working!</span></li>
+      <li>an element on the same page, typically hidden</li>
       <li>the title attribute, parsed by a user-defined delimiter (if the "splitTitle" option is set). The text before the first delimiter becomes the clueTip title, and the rest of the text parts are placed in &lt;div class="split-body"&gt;&lt;/div&gt; elements and appended to the clueTip body </li>
     </ol>
     <p>The clueTip offers smart positioning:</p>
@@ -64,22 +42,27 @@
       <li>moves up until the whole clueTip is visible, if the link is too close close to the bottom edge of the browser window.</li>
       <li>sits to the right or left of the mouse position, if the link is a block-level element or if the link is so wide that the clueTip can't completely fit to the left or the right of it.</li>
     </ul>
+    <p>The clueTip takes advantage of Brian Cherne's fantastic <a href="http://cherne.net/brian/resources/jquery.hoverIntent.html" title="hoverIntent jQuery Plug-in">hoverIntent plugin</a> if it's available. (Just include it in a &lt;script&gt; tag if you want the clueTip to use it.)</p>
     <p>The clueTip comes with the following options: </p>
     <ul>
-      <li><code>width</code>: default is <code>275</code>;</li>
-      <li><code>attribute</code>: default is <code>'rel'</code>; set it to some other attribute of the link to designate that attribute as the one that refers to the clueTip's content</li>
-      <li><code>titleAttribute</code>: default is <code>'title'</code>; set it to another attribute to use its text for the clueTip's title</li>
-      <li><code>sticky</code>: default is <code>false</code>; set to <code>true</code> if you want the clueTip to remain open when you "mouse out" of the link. This option also places a "close" link on the clueTip itself. </li>
-      <li><code>closePosition</code>: default is <code>'top'</code>; set to <code>'bottom'</code> to put the 'close' link at the bottom of the clueTip. Additional formatting can be applied to <code>a#cluetip-close</code> in the style sheet.</li>
-      <li><code>closeText</code>: default is <code>'Close'</code>; set it to something else if you want to</li>
-      <li><code>hoverClass</code>: default is an empty string; set to the name of the class to add that class to the link on hover</li>
-      <li><code>loadImage</code>: default is <code>'wait.gif'</code>; <em>not implemented yet</em></li>
-      <li><code>truncate</code>: default is <code>0</code>, which means there will be no truncation; set it to some number to truncate the clueTip's contents to <code>n</code> characters</li>
-      <li><code>dataType</code>: default is <code>'html'</code></li>
-      <li><code>ajaxProcess</code>: default is <code>function(data) {return data;}</code>. This is going to be re-worked.</li>
-      <li><code>local</code>: default is <code>false</code>; set to <code>true</code> to use an element on the current page for the contents of the clueTip. (<span class="highlighter">Now working!</span>)
+      <li><strong><code>width</code></strong>: default is <code>275</code>;</li>
+      <li><strong><code>attribute</code></strong>: default is <code>'rel'</code>; set it to some other attribute of the link to designate that attribute as the one that refers to the clueTip's content</li>
+      <li><strong><code>titleAttribute</code></strong>: default is <code>'title'</code>; set it to another attribute to use its text for the clueTip's title</li>
+      <li><strong><code>sticky</code></strong>: default is <code>false</code>; set to <code>true</code> if you want the clueTip to remain open when you "mouse out" of the link. This option also places a "close" link on the clueTip itself. </li>
+      <li><strong><code>closePosition</code></strong>: default is <code>'top'</code>; set to <code>'bottom'</code> to put the 'close' link at the bottom of the clueTip. Additional formatting can be applied to <code>a#cluetip-close</code> in the style sheet.</li>
+      <li><strong><code>closeText</code></strong>: default is <code>'Close'</code>; set it to something else if you want to</li>
+      <li><strong><code>hoverClass</code></strong>: default is an empty string; set to the name of the class to add that class to the link on hover</li>
+      <li><strong><code>loadImage</code></strong>: default is <code>'wait.gif'</code>; <em>not implemented yet</em></li>
+      <li><strong><code>truncate</code></strong>: default is <code>0</code>, which means there will be no truncation; set it to some number to truncate the clueTip's contents to <code>n</code> characters</li>
+      <li><strong><code>ajaxProcess</code></strong>: default is:
+  <pre><code>function(data) {data = $(data).not('style, meta, link, script, title');
+  return data;
+}</code></pre>
+This default value strips out tags from the &lt;head&gt; of an HTML page that is being pulled into a clueTip via "AHAH."</li>
+      <li><strong><code>ajaxSettings</code></strong>: default is <code> {dataType: 'html'}</code>. You can use any argument here that you would use in <code>$.ajax()</code>. </li>
+      <li><strong><code>local</code></strong>: default is <code>false</code>; set to <code>true</code> to use an element on the current page for the contents of the clueTip.
       </li>
-      
+      <li><strong><code>splitTitle</code></strong>: default is an empty string; set to a character such as "|" to split the title attribute of a link into the clueTip heading (the first string, before the first delimiter character) and individual clueTip body divs (subsequent strings).</li>
     </ul>
     <h3 id="setup">Setup</h3>
     <p>To use the plug-in, you'll need to include 4 JavaScript files in your web page's &lt;head&gt;, like so: </p>
@@ -100,7 +83,7 @@
     
     <h3 id="examplesection">Examples</h3>
     <p>Here are some examples of how you can add a clueTip to your page:</p>
-    <ul id="examples">
+    <ol id="examples">
       <li><strong>basic, no title</strong>: <code>$('a.basic').cluetip();</code>. This is the simplest example there is: <a class="basic" href="ajax.htm" rel="ajax.htm">&lt;a class="basic" href="ajax.htm" rel="ajax.htm"&gt;</a></li>
       <li><strong>custom width and title</strong>: <code>$('a.custom-width').cluetip({width: '200px'});</code> This tip has a custom width and title: <a class="custom-width" href="ajax3.htm" title="Fancy Title!" rel="ajax3.htm">&lt;a class="custom-width" href="ajax3.htm" title="Fancy Title!" rel="ajax3.htm"&gt;</a></li>
 
@@ -118,8 +101,8 @@
   truncate: 60
 });</code></pre>
 If you click this link &mdash; <a href="http://www.learningjquery.com" title="about this link:" rel="ajax6.htm">&lt;a href="http://www.learningjquery.com" title="about this link:" rel="ajax6.htm"&gt;</a> &mdash; you'll be directed to learningjquery.com</li>
-  <li><strong><ins>new!</ins> click to activate</strong>: <code>$('#clickme').cluetip({activation: 'click'});</code> This one won't show the clueTip unless you click it <a id="clickme" href="ajax6.htm" rel="ajax6.htm" title="active ingredients">&lt;a href="ajax6.htm" rel="ajax6.htm" title="active ingredients"&gt;</a></li>
-    </ul>
+  <li><strong><ins>new!</ins> click to activate</strong>: <code>$('#clickme').cluetip({activation: 'click'});</code> This one won't show the clueTip unless you click it <a id="clickme" href="ajax5.htm" rel="ajax5.htm" title="active ingredients">&lt;a href="ajax5.htm" rel="ajax5.htm" title="active ingredients"&gt;</a></li>
+    </ol>
     <h3 id="default-styles">Default Styles</h3>
     <p>You can style your clueTips any way you want. Here are the default styles: </p>
 <pre><code>#cluetip {
