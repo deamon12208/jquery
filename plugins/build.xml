@@ -176,4 +176,10 @@
         </antcall>
     </target>
 
+	<target name="gradient" description="Build gradient plugin.">
+        <antcall target="minandpack">
+            <param name="name" value="gradient" />
+        </antcall>
+    </target>
+
 </project>
