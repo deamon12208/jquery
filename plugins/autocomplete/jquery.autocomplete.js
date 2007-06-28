@@ -26,6 +26,10 @@ $input.bind("show", function() {
 		onChange(0, true);
 	}
 });
+
+- reference: http://capxous.com/
+  - add "try ..." hints to demo
+  - check out demos
 */
 
 /**
