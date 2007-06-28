@@ -177,10 +177,10 @@
 			this.options.handle.unbind('mousedown', this.mousedownfunc);
 		},
 		click: function(e) {
-			
+
 			window.focus();
-			if(e.button != 0) return true; //only left click
-			
+			if(e.which != 1) return true; //only left click
+		
 			// Prevent execution on defined elements
 			var targetName = (e.target) ? e.target.nodeName.toLowerCase() : e.srcElement.nodeName.toLowerCase();
 			for(var i=0;i<this.options.dragPrevention.length;i++) {
