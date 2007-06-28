@@ -17,6 +17,7 @@ TODO
 - change p.body and p.url to div.body and div.url
 - finally: release 2.0, being as backwards compatible as possible
 - build example similar to http://codylindley.com/blogstuff/js/tooltip/tooltip.htm or http://g-academy.tweak.se/
+- use bgiframe plugin if available: check if its need to be applied each time the tooltip is shown or only once on creation
 */
 
 /**
