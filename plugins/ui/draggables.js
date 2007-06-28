@@ -15,12 +15,12 @@
 		},
 		add: function() {
 			for(var i=0;i<this.items.length;i++) {
-				if(this.items[i].add) this.items[i].add.call(this.items[i]);	
+				if(this.items[i].add) this.items[i].add.apply(this.items[i], arguments);	
 			}
 		},
 		refresh: function() {
 			for(var i=0;i<this.items.length;i++) {
-				if(this.items[i].refresh) this.items[i].refresh.call(this.items[i]);	
+				if(this.items[i].refresh) this.items[i].refresh.apply(this.items[i], arguments);	
 			}
 		}
 	});
@@ -341,14 +341,16 @@
 				if(retPos.y) this.pos[1] = retPos.y;	
 			}
 
+
+
 			if(this.slowMode && $.ui.droppable && !o.dropBehaviour) // If cursorAt is within the helper, we must use our drop manager to look where we are
 				$.ui.ddmanager.update(this);
-				
-			//If we want to use a custom dropBehaviour, use it
-			if(o.dropBehaviour) { o.dropBehaviour.apply(this, ['drag']); }
 
 			this.pos = [this.pos[0]-(o.cursorAt.left ? o.cursorAt.left : 0), this.pos[1]-(o.cursorAt.top ? o.cursorAt.top : 0)];
 			this.execPlugins('drag');
+				
+			//If we want to use a custom dropBehaviour, use it
+			if(o.dropBehaviour) { o.dropBehaviour.apply(this, ['drag']); }
 
 			$(this.helper).css('left', this.pos[0]+'px').css('top', this.pos[1]+'px'); // Stick the helper to the cursor
 			return false;

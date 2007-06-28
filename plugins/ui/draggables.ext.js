@@ -217,9 +217,9 @@
 		if(o.constraint) o.axis = o.constraint; //Legacy check
 		if(o.axis && o.cursorAtIgnore) { // If we have a axis, use it. Cannot be used with cursorAt.
 			switch(o.axis) {
-				case "y":
-					this.pos[1] = o.curOffset.top - o.margins.top - o.po.top; break;
 				case "x":
+					this.pos[1] = o.curOffset.top - o.margins.top - o.po.top; break;
+				case "y":
 					this.pos[0] = o.curOffset.left - o.margins.left - o.po.left; break;
 			}
 		}

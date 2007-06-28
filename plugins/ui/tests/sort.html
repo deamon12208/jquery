@@ -38,7 +38,8 @@ body
 }
 
 #myul {
-	width: 600px;	
+	width: 600px;
+	height: 400px;	
 }
 
 #myul li {
@@ -51,10 +52,27 @@ body
 }
 
 #myul2 {
-	width: 600px;	
+	width: 300px;
+	border: 1px solid blue;
+	float: left;
+	position: relative;
 }
 
 #myul2 li {
+ list-style-type: none;
+ border: 1px solid #999;
+ margin: 5px; padding: 5px;
+ background: #fff;
+ width: 100px;
+}
+
+#myul3 {
+	width: 300px;
+	border: 1px solid blue;
+	float: left;
+}
+
+#myul3 li {
  list-style-type: none;
  border: 1px solid #999;
  margin: 5px; padding: 10px;
@@ -63,7 +81,7 @@ body
 }
 
 .hover {
-	border: 5px solid red;	
+	background: #eee;	
 }
 
 </style>
@@ -92,6 +110,25 @@ body
 	    <li>Item 1</li>
 	    <li>Item 2</li>
 	    <li>Item 3</li>
+	    <li>Item 4
+	    	<ul>
+	    		<li>Sub Item 1</li>
+	    		<li>Sub Item 2</li>
+	    		<li>Sub Item 3</li>
+	    	</ul>	
+	    </li>
+	    <li>Item 5</li>
+	    <li>Item 6</li>
+	    <li>Item 7</li>
+	    <li>Item 8</li>
+	    <li>Item 9</li>
+	    <li>Item 10</li>
+	</ul>
+	
+	<ul id='myul3'>
+	    <li>Item 1</li>
+	    <li>Item 2</li>
+	    <li>Item 3</li>
 	    <li>Item 4</li>
 	    <li>Item 5</li>
 	    <li>Item 6</li>
@@ -105,7 +142,11 @@ body
 $(document).ready(function(){
 	
 	myset = $('#myul').sortable();
-	myset2 = $('#myul2').sortable();
+	myset2 = $('#myul2').sortable( { items: 'li', containment: 'sortable', hoverclass: 'hover' } );
+	myset3 = $('#myul3').sortable();
+	
+	myset2.add(myset3);
+	myset3.add(myset2);
 
 });
 </script>
