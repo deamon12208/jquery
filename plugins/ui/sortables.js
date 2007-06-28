@@ -65,8 +65,8 @@
 							var ci = $(m[i][0]); var cio = m[i][0];
 							var cO = ci.offsetLite({ border: false }); //TODO: Caching
 							
-							var mb = function(e) { if(o.lba != cio) { ci.before(e); o.lba = cio; } }
-							var ma = function(e) { if(o.laa != cio) { ci.after(e); o.laa = cio; } }
+							var mb = function(e) { if(true || o.lba != cio) { ci.before(e); o.lba = cio; } }
+							var ma = function(e) { if(true || o.laa != cio) { ci.after(e); o.laa = cio; } }
 							
 							if(o.floating) {
 								
