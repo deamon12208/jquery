@@ -4,6 +4,27 @@
 		return parseInt($.css(el.jquery?el[0]:el,prop))||0;
 	};
 	
+	$.ui.dragset = function() {
+		this.items = [];
+	};
+	$.extend($.ui.dragset.prototype, {
+		destroy: function() {
+			for(var i=0;i<this.items.length;i++) {
+				this.items[i].destroy.call(this.items[i]);	
+			}
+		},
+		add: function() {
+			for(var i=0;i<this.items.length;i++) {
+				if(this.items[i].add) this.items[i].add.call(this.items[i]);	
+			}
+		},
+		refresh: function() {
+			for(var i=0;i<this.items.length;i++) {
+				if(this.items[i].refresh) this.items[i].refresh.call(this.items[i]);	
+			}
+		}
+	});
+	
 	$.ui.ddmanager = {
 		current: null,
 		droppables: [],
@@ -66,17 +87,7 @@
 						
 		}
 	};
-	
-	$.ui.dragset = function() {
-		this.items = [];
-	};
-	$.extend($.ui.dragset.prototype, {
-		destroy: function() {
-			for(var i=0;i<this.items.length;i++) {
-				this.items[i].destroy.call(this.items[i]);	
-			}
-		}
-	});
+
 	
 	$.fn.draggable = function(o) {
 		
@@ -261,8 +272,11 @@
 			if(o.onStart) o.onStart.apply(this, [this.element,this.helper]); // Trigger the onStart callback
 			this.execPlugins('start');
 			
-			if(this.slowMode && $.ui.droppable)
+			if(this.slowMode && $.ui.droppable && !o.dropBehaviour)
 				$.ui.ddmanager.prepareOffsets(this);
+				
+			//If we want to use a custom dropBehaviour, use it
+			if(o.dropBehaviour) { o.dropBehaviour.apply(this, ['start']); }
 			
 			return false;
 						
@@ -278,11 +292,13 @@
 			if(this.init == false)
 				return this.opos = this.pos = null;
 			
-			if(o.onStop) o.onStop.apply(this, [this.element, this.helper, this.pos, [o.curOffset.left - o.po.left,o.curOffset.top - o.po.top],this]);
 			this.execPlugins('stop');
 
-			if(this.slowMode && $.ui.droppable) //If cursorAt is within the helper, we must use our drop manager
+			if(this.slowMode && $.ui.droppable && !o.dropBehaviour) //If cursorAt is within the helper, we must use our drop manager
 				$.ui.ddmanager.fire(this);
+				
+			//If we want to use a custom dropBehaviour, use it
+			if(o.dropBehaviour) { o.dropBehaviour.apply(this, ['stop']); }
 				
 			if(this.helper != this.element && !o.beQuietAtEnd) { // Remove helper, if it's not the original node
 				$(this.helper).remove();
@@ -291,6 +307,8 @@
 			
 			if(!o.beQuietAtEnd && o.wasPositioned)
 				$(this.element).css('position', o.wasPositioned);
+				
+			if(!o.beQuietAtEnd && o.onStop) o.onStop.apply(this, [this.element, this.helper, this.pos, [o.curOffset.left - o.po.left,o.curOffset.top - o.po.top],this]);
 
 			this.init = false;
 			this.opos = this.pos = $.ui.ddmanager.current = null; // Clear temp variables
@@ -323,8 +341,11 @@
 				if(retPos.y) this.pos[1] = retPos.y;	
 			}
 
-			if(this.slowMode && $.ui.droppable) // If cursorAt is within the helper, we must use our drop manager to look where we are
+			if(this.slowMode && $.ui.droppable && !o.dropBehaviour) // If cursorAt is within the helper, we must use our drop manager to look where we are
 				$.ui.ddmanager.update(this);
+				
+			//If we want to use a custom dropBehaviour, use it
+			if(o.dropBehaviour) { o.dropBehaviour.apply(this, ['drag']); }
 
 			this.pos = [this.pos[0]-(o.cursorAt.left ? o.cursorAt.left : 0), this.pos[1]-(o.cursorAt.top ? o.cursorAt.top : 0)];
 			this.execPlugins('drag');

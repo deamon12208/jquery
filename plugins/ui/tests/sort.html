@@ -40,30 +40,18 @@ body
 ul li {
  list-style-type: square;
  border: 1px solid #999;
- margin: 5px; padding: 5px;
+ margin: 5px; padding: 20px;
+ background: #fff;
  width: 200px;	
 }
 
 .hover {
-	outline: 2px solid green;	
+	border: 5px solid red;	
 }
 
 </style>
 </head>
 <body>
-	
-	<div id='container' style='border: 2px solid #999; background: #eee; height: 300px; width: 300px;'>
-		<div class='draggable'>1</div>
-		<div class='draggable'>2</div>
-		<div class='draggable'>3</div>
-		<div class='draggable'>4</div>
-		<div class='draggable'>5</div>
-		<div class='draggable'>6</div>
-		<div class='draggable'>7</div>
-		<div class='draggable'>8</div>
-		<div class='draggable'>9</div>
-	</div>
-	<br />
 	
 	<ul id='myul'>
 	    <li>Item 1</li>
@@ -75,14 +63,14 @@ ul li {
 	
 	<br />
 	<br />
-	<div  id='drop' style='background: #999; width: 600px; height: 400px;'></div>
-	<div  id='drag' style='background: green; width: 100px; height: 100px;'></div>
+	<input type='button' value='Append new node' onclick="$('#myul').append('<li>'+(new Date())+'</li>');"/>
+	<input type='button' value='Refresh sortable' onclick="myset.refresh()"/>
 
 	
 <script type="text/javascript">
 $(document).ready(function(){
 	
-	$('#myul').sortable();
+	myset = $('#myul').sortable();
 
 });
 </script>

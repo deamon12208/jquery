@@ -82,17 +82,18 @@
 		if(this.options.revert) {
 			
 			var rpos = { left: 0, top: 0 };
-			this.options.beQuietAtEnd = true;
+			var o = this.options;
+			o.beQuietAtEnd = true;
 			if(this.helper != this.element) {
 				
 				rpos = $(this.sorthelper || this.element).offset({ border: false });
 	
-				var nl = rpos.left-this.options.po.left;
-				var nt = rpos.top-this.options.po.top;
+				var nl = rpos.left-o.po.left-o.margins.left;
+				var nt = rpos.top-o.po.top-o.margins.top;
 	
 			} else {
-				var nl = this.opos[0]-this.options.cursorAt.left;
-				var nt = this.opos[1]-this.options.cursorAt.top;
+				var nl = this.opos[0]-o.cursorAt.left-o.margins.left;
+				var nt = this.opos[1]-o.cursorAt.top-o.margins.top;
 			}
 			
 			var self = this;
@@ -101,10 +102,14 @@
 				left: nl,
 				top: nt
 			}, 500, function() {
-				if(self.helper != self.element) $(self.helper).remove();
 				
-				if(self.options.wasPositioned)
-					$(self.element).css('position', self.options.wasPositioned);
+				if(o.wasPositioned)
+					$(self.element).css('position', o.wasPositioned);
+					
+				if(o.onStop) o.onStop.apply(self, [self.element, self.helper, self.pos, [o.curOffset.left - o.po.left,o.curOffset.top - o.po.top],self]);
+				
+				//Using setTimeout because of strange flickering in Firefox
+				if(self.helper != self.element) window.setTimeout(function() { $(self.helper).remove(); }, 0);
 				
 			});
 		}
