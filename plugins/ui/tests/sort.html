@@ -37,12 +37,29 @@ body
 	float: left;	
 }
 
-ul li {
- list-style-type: square;
+#myul {
+	width: 600px;	
+}
+
+#myul li {
+ list-style-type: none;
  border: 1px solid #999;
- margin: 5px; padding: 20px;
+ margin: 5px; padding: 10px;
  background: #fff;
- width: 200px;	
+ width: 100px;
+ float: left;
+}
+
+#myul2 {
+	width: 600px;	
+}
+
+#myul2 li {
+ list-style-type: none;
+ border: 1px solid #999;
+ margin: 5px; padding: 10px;
+ background: #fff;
+ width: 100px;
 }
 
 .hover {
@@ -59,18 +76,36 @@ ul li {
 	    <li>Item 3</li>
 	    <li>Item 4</li>
 	    <li>Item 5</li>
+	    <li>Item 6</li>
+	    <li>Item 7</li>
+	    <li>Item 8</li>
+	    <li>Item 9</li>
+	    <li>Item 10</li>
 	</ul>
 	
-	<br />
+	<br style='clear: both;' />
 	<br />
 	<input type='button' value='Append new node' onclick="$('#myul').append('<li>'+(new Date())+'</li>');"/>
 	<input type='button' value='Refresh sortable' onclick="myset.refresh()"/>
 
+	<ul id='myul2'>
+	    <li>Item 1</li>
+	    <li>Item 2</li>
+	    <li>Item 3</li>
+	    <li>Item 4</li>
+	    <li>Item 5</li>
+	    <li>Item 6</li>
+	    <li>Item 7</li>
+	    <li>Item 8</li>
+	    <li>Item 9</li>
+	    <li>Item 10</li>
+	</ul>
 	
 <script type="text/javascript">
 $(document).ready(function(){
 	
 	myset = $('#myul').sortable();
+	myset2 = $('#myul2').sortable();
 
 });
 </script>
