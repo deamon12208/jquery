@@ -295,7 +295,7 @@ $.fn.extend({
 	 * 
 	 * Known issues:
 	 *  - Issue: A div positioned relative or static without any content before it and its parent will report an offsetTop of 0 in Safari
-	 *    Workaround: Place content before the realtive div ... and set height and width to 0 and overflow to hidden
+	 *    Workaround: Place content before the relative div ... and set height and width to 0 and overflow to hidden
 	 *
 	 * @example $("#testdiv").offset()
 	 * @result { top: 100, left: 100, scrollTop: 10, scrollLeft: 10 }
