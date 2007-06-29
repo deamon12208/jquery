@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.23  (06/15/2007)
+ * Version 1.24  (06/28/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -317,6 +317,7 @@ $.blockUI.impl = {
         });
     },
     focus: function(back) {
+        if (!$.blockUI.impl.pageBlockEls) return;
         var e = $.blockUI.impl.pageBlockEls[back===true ? $.blockUI.impl.pageBlockEls.length-1 : 0];
         if (e) e.focus();
     },
