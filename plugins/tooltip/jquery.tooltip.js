@@ -13,8 +13,6 @@
 
 /*
 TODO
-- provide a nice approach to show URLs only for external links
-- change p.body and p.url to div.body and div.url
 - finally: release 2.0, being as backwards compatible as possible
 - build example similar to http://codylindley.com/blogstuff/js/tooltip/tooltip.htm or http://g-academy.tweak.se/
 */
@@ -33,9 +31,9 @@ TODO
  *
  * #tooltip h3 - The tooltip title
  *
- * #tooltip p.body - The tooltip body, shown when using showBody
+ * #tooltip div.body - The tooltip body, shown when using showBody
  *
- * #tooltip p.url - The tooltip url, shown when using showURL
+ * #tooltip div.url - The tooltip url, shown when using showURL
  *
  * @example $('a, input, img').Tooltip();
  * @desc Shows tooltips for anchors, inputs and images, if they have a title
@@ -66,7 +64,6 @@ TODO
  *
  * @param Object settings (optional) Customize your Tooltips
  * @option Number delay The number of milliseconds before a tooltip is display, default is 250
- * @option String event The event on which the tooltip is displayed, default is "mouseover", "click" works fine, too
  * @option Boolean track If true, let the tooltip track the mousemovement, default is false
  * @option Boolean showURL If true, shows the href or src attribute within p.url, default is true
  * @option String showBody If specified, uses the String to split the title, displaying the first part in the h3 tag, all following in the p.body tag, separated with <br/>s, default is null
@@ -92,18 +89,32 @@ TODO
 		// IE 5.5 or 6
 		IE = $.browser.msie && /MSIE\s(5\.5|6\.)/.test(navigator.userAgent),
 		// block all tooltips when one is transformed to a popup
-		blocked = false,
 		track = false;
-		
+	
+	$.Tooltip = {
+		blocked: false,
+		defaults: {
+			delay: 250,
+			event: "mouseover",
+			showURL: true,
+			extraClass: ""
+		}
+	};
+	
 	$.fn.extend({
 		Tooltip: function(settings) {
 			settings = $.extend({}, $.Tooltip.defaults, settings);
 			createHelper();
 			return this.each(function() {
 					this.tSettings = settings;
+					// copy tooltip into its own expando and remove the title
+					this.tooltipText = this.title;
+					$(this).removeAttr("title");
+					// also remove alt attribute to prevent default tooltip in IE
+					this.alt = "";
 				})
-				.bind("mouseover", save)
-				.bind(settings.event, handle);
+				.hover(save, hide)
+				.click(hide);
 		},
 		fixPNG: IE ? function() {
 			return this.each(function () {
@@ -126,11 +137,6 @@ TODO
 				$(this).css({'filter': '', backgroundImage: ''});
 			});
 		} : function() { return this; },
-		getAndSetAttr: function(name, value) {
-			var result = this.attr(name);
-			this.attr(name, value);
-			return result;
-		},
 		hideWhenEmpty: function() {
 			return this.each(function() {
 				$(this)[ $(this).html() ? "show" : "hide" ]();
@@ -146,7 +152,7 @@ TODO
 		if( helper.parent )
 			return;
 		// create the helper, h3 for title, div for url
-		helper.parent = $('<div id="tooltip"><h3></h3><p class="body"></p><p class="url"></p></div>')
+		helper.parent = $('<div id="tooltip"><h3></h3><div class="body"></div><div class="url"></div></div>')
 			// hide it at first
 			.hide()
 			// add to document
@@ -164,7 +170,7 @@ TODO
 	
 	// main event handler to start showing tooltips
 	function handle(event) {
-		if(blocked)
+		if($.Tooltip.blocked)
 			return;
 		// show helper, either with timeout or on instant
 		if( this.tSettings.delay )
@@ -180,22 +186,22 @@ TODO
 		update(event);
 		
 		// hide the helper when the mouse was clicked on the element
-		if (this.tSettings.event != "click")
+		//if (this.tSettings.event != "click")
 			//$(this).bind('click', hide);
 		
 		// hide the helper when the mouse moves out of the element
-		$(this).bind('mouseout', hide);
+		//$(this).bind('mouseout', hide);
 	}
 	
 	// save elements title before the tooltip is displayed
 	function save() {
 		// if this is the current source, or it has no title (occurs with click event), stop
-		if ( blocked || this == current || !this.title )
+		if ( $.Tooltip.blocked || this == current || !this.tooltipText )
 			return;
 
 		// save current
 		current = this;
-		title = $(this).getAndSetAttr('title', '');
+		title = this.tooltipText;
 		
 		if ( this.tSettings.bodyHandler ) {
 			helper.title.hide();
@@ -227,6 +233,8 @@ TODO
 		// fix PNG background for IE
 		if (this.tSettings.fixPNG )
 			helper.parent.fixPNG();
+			
+		handle.apply(this, arguments);
 	}
 	
 	// delete timeout and show helper
@@ -242,7 +250,7 @@ TODO
 	 * removes itself when no current element
 	 */
 	function update(event)	{
-		if(blocked)
+		if($.Tooltip.blocked)
 			return;
 		
 		// stop updating when tracking is disabled and the tooltip is visible
@@ -282,28 +290,17 @@ TODO
 	}
 	
 	function viewport() {
-		var e = document.documentElement || {},
-			b = document.body || {},
-			w = window;
-		function min() {
-			var v = Infinity;
-			for( var i = 0;  i < arguments.length;  i++ ) {
-				var n = arguments[i];
-				if( n && n < v ) v = n;
-			}
-			return v;
-		}
 		return {
-			x: w.pageXOffset || e.scrollLeft || b.scrollLeft || 0,
-			y: w.pageYOffset || e.scrollTop || b.scrollTop || 0,
-			cx: min( e.clientWidth, b.clientWidth, w.innerWidth ),
-			cy: min( e.clientHeight, b.clientHeight, w.innerHeight )
+			x: $(window).scrollLeft(),
+			y: $(window).scrollTop(),
+			cx: $(window).width(),
+			cy: $(window).height()
 		};
 	}
 	
 	// hide helper and restore added classes and the title
 	function hide(event) {
-		if(blocked)
+		if($.Tooltip.blocked)
 			return;
 		// clear timeout if possible
 		if(tID)
@@ -313,27 +310,8 @@ TODO
 		
 		helper.parent.hide().removeClass( this.tSettings.extraClass );
 		
-		// restore title and remove this listener
-		//if (event.type != "click") {
-			$(this)
-				.unbind('mouseout', hide)
-				.attr('title', title);
-		//}
-		if (this.tSettings.event != "click")
-			$(this).unbind('click', hide);
-			
 		if( this.tSettings.fixPNG )
 			helper.parent.unfixPNG();
 	}
 	
-	$.Tooltip = {};
-	
-	// define global defaults, editable by client
-	$.Tooltip.defaults = {
-		delay: 250,
-		event: "mouseover",
-		showURL: true,
-		extraClass: ""
-	};
-
 })(jQuery);

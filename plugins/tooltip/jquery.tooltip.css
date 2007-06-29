@@ -6,28 +6,7 @@
 	opacity: 0.85;
 	padding: 5px;
 }
-#tooltip h3, #tooltip p { margin: 0; }
-
-#tooltip span.resize, #tooltip span.close {
-	position: absolute;
-	right: 0;
-	height: 16px;
-	width: 16px;
-}
-
-#tooltip.modal h3 {
-	cursor: move;
-}
-
-#tooltip.modal span.resize {
-	bottom: 0;
-	background: transparent url('resize.gif') no-repeat;
-	cursor: se-resize;
-}
-#tooltip.modal span.close {
-	top: 0;
-	background: transparent url('close.gif') no-repeat;
-}
+#tooltip h3, #tooltip div { margin: 0; }
 
 #tooltip.fancy {
 	opacity: 0.95;
@@ -44,4 +23,4 @@
 	width: 220px;
 	text-align: center;
 }
-#tooltip.fancy p { width: 220px; text-align: left; }
+#tooltip.fancy div { width: 220px; text-align: left; }

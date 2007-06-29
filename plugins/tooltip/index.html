@@ -7,14 +7,14 @@
 <link rel="stylesheet" href="jquery.tooltip.css" />
 <script src="jquery.js" type="text/javascript"></script>
 <script src="jquery.bgiframe.js" type="text/javascript"></script>
+<script src="jquery.dimensions.js" type="text/javascript"></script>
 <script src="jquery.tooltip.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(function() {
 $('#form *').Tooltip();
 
 $('img').Tooltip({
-	delay: 0,
-	event: "click"
+	delay: 0
 });
 $('#right2 a').Tooltip({ showURL: false });
 
@@ -35,6 +35,10 @@ $('#pretty').Tooltip({
 });
 
 $('#right a').Tooltip({ extraClass: "right" });
+
+$("#block").click(function() {
+	$.Tooltip.blocked = !$.Tooltip.blocked;
+});
 
 });
 </script>
@@ -63,9 +67,10 @@ mouse track:</p>
 	</fieldset>
 </form>
 <br/>
-<p>This image has a no delay and tooltip is shown on click:</p>
+<p>This image has a tooltip with no delay</p>
 <img src="image.png" height="80" title="Crazy stuff" />
-(Click image to show tooltip)
+
+<button id="block">Click this button to block/unblock all tooltips</button>
 <br/>
 <p>The next four links have no delay with tracking, with extra content:</p>
 <div id="yahoo">
