@@ -13,6 +13,7 @@
 
 /*
 TODO
+- allow users to keep their incomplete value when pressing tab, just mimic the default-browser-autocomplete: tab doesn't select any proposed value
 - small bug in your autocomplete,  When setting autoFill:true I would expect formatResult to be called on autofill, it seems not to be the case.
 - add a callback to allow decoding the response
 - add scrollbars and page down/up, option for height or number of items to be visible without scrolling
