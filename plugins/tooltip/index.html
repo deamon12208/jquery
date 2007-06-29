@@ -25,13 +25,15 @@ $.extend($.Tooltip.defaults, {
 	track: true,
 	delay: 0,
 	showURL: false,
-	showBody: " - "
+	showBody: " - ",
+	opacity: 0.85
 });
 $('#yahoo a').Tooltip();
 
 $('#pretty').Tooltip({
 	extraClass: "fancy",
-	fixPNG: true
+	fixPNG: true,
+	opacity: 0.95
 });
 
 $('#right a').Tooltip({ extraClass: "right" });

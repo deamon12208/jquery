@@ -3,13 +3,11 @@
 	z-index: 3000;
 	border: 1px solid #111;
 	background-color: #eee;
-	opacity: 0.85;
 	padding: 5px;
 }
 #tooltip h3, #tooltip div { margin: 0; }
 
 #tooltip.fancy {
-	opacity: 0.95;
 	font-family: Arial;
 	border: none;
 	width: 210px;

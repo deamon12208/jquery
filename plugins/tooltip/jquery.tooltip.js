@@ -95,7 +95,6 @@ TODO
 		blocked: false,
 		defaults: {
 			delay: 250,
-			event: "mouseover",
 			showURL: true,
 			extraClass: ""
 		}
@@ -170,8 +169,6 @@ TODO
 	
 	// main event handler to start showing tooltips
 	function handle(event) {
-		if($.Tooltip.blocked)
-			return;
 		// show helper, either with timeout or on instant
 		if( this.tSettings.delay )
 			tID = setTimeout(show, this.tSettings.delay);
@@ -229,6 +226,9 @@ TODO
 		
 		// add an optional class for this tip
 		helper.parent.addClass(this.tSettings.extraClass);
+		
+		if ( this.tSettings.opacity != undefined )
+			helper.parent.css("opacity", 0.85);
 		
 		// fix PNG background for IE
 		if (this.tSettings.fixPNG )
@@ -309,6 +309,9 @@ TODO
 		current = null;
 		
 		helper.parent.hide().removeClass( this.tSettings.extraClass );
+		
+		if ( this.tSettings.opacity != undefined )
+			helper.parent.css("opacity", 1);
 		
 		if( this.tSettings.fixPNG )
 			helper.parent.unfixPNG();
