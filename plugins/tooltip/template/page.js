@@ -1,34 +1,36 @@
-$(function() {
-    // initialize the tabs
-   // var tab = location.hash == '#options-object' ? 2 : 1;
-    var main = $('#main').tabs();
-    //$('#samples').tabs( { selectedClass: 'sample-tab-selected', bookmarkable: false });
+$.fn.wrapAll = function() {
+    // There needs to be at least one matched element for this to work
+    if ( !this.length ) return this;
 
-});
+    // Find the element that we're wrapping with
+    var b = jQuery.clean(arguments)[0];
 
-// helper
-function objToString(o) {
-    var s = '{\n';
-    for (var p in o)
-        s += '    ' + p + ': ' + o[p] + '\n';
-    return s + '}';
-}
+    // Make sure that its in the right position in the DOM
+    this[0].parentNode.insertBefore( b, this[0] );
 
-// helper
-function elementToString(n, useRefs) {
-    var attr = "", nest = "", a = n.attributes;
-    for (var i=0; a && i < a.length; i++)
-        attr += ' ' + a[i].nodeName + '="' + a[i].nodeValue + '"';
+    // Find its lowest point
+    while ( b.firstChild ) b = b.firstChild;
 
-    if (n.hasChildNodes == false)
-        return "<" + n.nodeName + "\/>";
-
-    for (var i=0; i < n.childNodes.length; i++) {
-        var c = n.childNodes.item(i);
-        if (c.nodeType == 1)       nest += elementToString(c);
-        else if (c.nodeType == 2)  attr += " " + c.nodeName + "=\"" + c.nodeValue + "\" ";
-        else if (c.nodeType == 3)  nest += c.nodeValue;
-    }
-    var s = "<" + n.nodeName + attr + ">" + nest + "<\/" + n.nodeName + ">";
-    return useRefs ? s.replace(/</g,'&lt;').replace(/>/g,'&gt;') : s;
+    // And add all the elements there
+    return this.appendTo(b);
 };
+
+$(function() {
+    $('#main').tabs();
+    $('#navigation a').Tooltip();
+    $(".escape").each(function() {
+    	$(this).text($(this).html());
+    });
+    $('#samples').tabs( { selectedClass: 'sample-tab-selected', bookmarkable: false });
+    
+    $("div.example[+script]").each(function() {
+    	var content = $.trim($(this).html());
+    	var script = $(this).next().html().replace(/^\s*\$\(function\(\)\s*\{|\s*\}\);\s*$/g, "");
+    	$("<h3>Markup:</h3>").appendTo(this);
+    	$("<code class='mix'>").text(content).wrap("<pre></pre>").parent().appendTo(this);
+    	$("<h3>Script:</h3>").appendTo(this);
+    	$("<code class='mix'>").html(script).wrap("<pre></pre>").parent().appendTo(this);
+    });
+    //var script = $("script.example").html().replace(/^\s*\$\(function\(\)\s*\{|\s*\}\);\s*$/g, "");
+    //$("<code class='mix'>").html(script).wrap("<pre></pre>").parent().appendTo("#code-samples");
+});

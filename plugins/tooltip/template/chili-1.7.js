@@ -305,7 +305,7 @@ ChiliBook.recipes[ "mix.js" ] = {
 		  jscom   : { exp: /\/\*[^*]*\*+(?:[^\/][^*]*\*+)*\// }
 		, htcom   : { exp: /\<!--(?:.|\n)*?--\>/ }
 		, com     : { exp: /\/\/.*/ }
-        , plugin  : { exp: /silverlight|blockUI|unblockUI|block|unblock|ajaxForm|ajaxSubmit|fieldSerialize|formSerialize|fieldValue|resetForm|clearForm|clearFields|taconite|replace-content/ }
+        , plugin  : { exp: /Tooltip/ }
 		, regexp  : { exp: /\/[^\/\\\n]*(?:\\.[^\/\\\n]*)*\/[gim]*/ }
 		, string  : { exp: /(?:\'[^\'\\\n]*(?:\\.[^\'\\\n]*)*\')|(?:\"[^\"\\\n]*(?:\\.[^\"\\\n]*)*\")/ }
 		, numbers : { exp: /\b[+-]?(?:\d*\.?\d+|\d+\.?\d*)(?:[eE][+-]?\d+)?\b/ }

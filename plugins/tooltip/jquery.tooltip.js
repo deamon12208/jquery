@@ -1,5 +1,7 @@
 /*
- * Tooltip 1.1 alpha - jQuery plugin for styled tooltips
+ * jQuery Tooltip plugin 1.1 alpha
+ *
+ * http://bassistance.de/jquery-plugins/jquery-plugin-tooltip/
  *
  * Copyright (c) 2006 Jörn Zaefferer, Stefan Petre
  *
@@ -35,6 +37,8 @@ TODO
  *
  * #tooltip div.url - The tooltip url, shown when using showURL
  *
+ * When used on a page with select elements, include the bgiframe plugin. It is used if present.
+ *
  * @example $('a, input, img').Tooltip();
  * @desc Shows tooltips for anchors, inputs and images, if they have a title
  *
@@ -69,12 +73,41 @@ TODO
  * @option String showBody If specified, uses the String to split the title, displaying the first part in the h3 tag, all following in the p.body tag, separated with <br/>s, default is null
  * @option String extraClass If specified, adds the class to the tooltip helper, default is null
  * @option Boolean fixPNG If true, fixes transparent PNGs in IE, default is false
- * @option Function bodyHandler TODO document me
+ * @option Function bodyHandler If specified its called to format the tooltip-body, hiding the title-part
  *
  * @name Tooltip
  * @type jQuery
  * @cat Plugins/Tooltip
  * @author Jörn Zaefferer (http://bassistance.de)
+ */
+ 
+/**
+ * A global flag to disable all tooltips.
+ *
+ * @example $("button.openModal").click(function() {
+ *   $.Tooltip.blocked = true;
+ *   // do some other stuff, eg. showing a modal dialog
+ *   $.Tooltip.blocked = false;
+ * });
+ * 
+ * @property
+ * @name $.Tooltip.blocked
+ * @type Boolean
+ * @cat Plugins/Tooltip
+ */
+ 
+/**
+ * Global defaults for tooltips. Apply to all calls to the Tooltip plugin after modifying  the defaults.
+ *
+ * @example $.extend($.Tooltip.defaults, {
+ *   track: true,
+ *   delay: 0
+ * });
+ * 
+ * @property
+ * @name $.Tooltip.defaults
+ * @type Map
+ * @cat Plugins/Tooltip
  */
 (function($) {
 	
