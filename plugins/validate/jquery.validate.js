@@ -506,6 +506,7 @@ jQuery.extend(jQuery.validator, {
 				this.check( element );
 			}
 			jQuery.extend(this.submitted, this.errorMap);
+			this.showErrors();
 			return this.valid();
 		},
 
@@ -587,8 +588,11 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		valid: function() {
-			this.showErrors();
-			return this.errorList.length == 0;
+			return this.size() == 0;
+		},
+		
+		size: function() {
+			return this.errorList.length;
 		},
 		
 		focusInvalid: function() {

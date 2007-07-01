@@ -299,7 +299,7 @@ test("addMethod2", function() {
 		e = $('#text1')[0];
 	e.value = "";
 	ok( v.element(e), "Rule is optional, valid" );
-	equals( 0, v.errorList.length );
+	equals( 0, v.size() );
 	e.value = "ko";
 	ok( !v.element(e), "Invalid, doesn't contain one of the required characters" );
 	e.value = "ko1";
@@ -350,13 +350,13 @@ test("check(): simple", function() {
 	expect( 3 );
 	var element = $('#firstname')[0];
 	var v = $('#testForm1').validate();
-	ok( v.errorList.length == 0, 'No errors yet' );
+	ok( v.size() == 0, 'No errors yet' );
 	v.check(element);
-	ok( v.errorList.length == 1, 'error exists' );
+	ok( v.size() == 1, 'error exists' );
 	v.errorList = [];
 	$('#firstname').val("hi");
 	v.check(element);
-	ok( !v.errorList.length == 1, 'No more errors' );
+	ok( !v.size() == 1, 'No more errors' );
 });
 
 test("hide(): input", function() {
@@ -576,6 +576,7 @@ test("error containers, simple", function() {
 	v.prepareForm();
 	v.errorList = [{message:"bar", element: {name:"foo"}}, {message: "necessary", element: {name:"required"}}];
 	ok( !v.valid(), "form is not valid after adding errors manually" );
+	v.showErrors();
 	equals( 2, container.find("label").length, "There should be two error labels" );
 	ok( container.is(":visible"), "Check that the container is visible" );
 	container.find("label").each(function() {
@@ -584,6 +585,7 @@ test("error containers, simple", function() {
 	
 	v.prepareForm();
 	ok( v.valid(), "form is not valid after adding errors manually" );
+	v.showErrors();
 	equals( 2, container.find("label").length, "There should still be two error labels" );
 	ok( container.is(":hidden"), "Check that the container is hidden" );
 	container.find("label").each(function() {
@@ -610,6 +612,7 @@ test("error containers, with labelcontainer", function() {
 	v.prepareForm();
 	v.errorList = [{message:"bar", element: {name:"foo"}}, {name: "required", message: "necessary", element: {name:"required"}}];
 	ok( !v.valid(), "form is not valid after adding errors manually" );
+	v.showErrors();
 	equals( 0, container.find("label").length, "There should be no error label in the container" );
 	equals( 2, labelcontainer.find("label").length, "There should be two error labels in the labelcontainer" );
 	equals( 2, labelcontainer.find("li").length, "There should be two error lis in the labelcontainer" );
@@ -624,6 +627,7 @@ test("error containers, with labelcontainer", function() {
 	
 	v.prepareForm();
 	ok( v.valid(), "form is not valid after adding errors manually" );
+	v.showErrors();
 	equals( 0, container.find("label").length, "There should be no error label in the container" );
 	equals( 2, labelcontainer.find("label").length, "There should be two error labels in the labelcontainer" );
 	equals( 2, labelcontainer.find("li").length, "There should be two error lis in the labelcontainer" );
@@ -674,10 +678,10 @@ test("validating multiple checkboxes with 'required'", function() {
 		}
 	});
 	v.form();
-	equals(1, v.errorList.length);
+	equals(1, v.size());
 	checkboxes.filter(":last").attr("checked", true);
 	v.form();
-	equals(0, v.errorList.length);
+	equals(0, v.size());
 });
 
 test("refresh()", function() {
@@ -687,7 +691,7 @@ test("refresh()", function() {
 		v.refresh();
 	}
 	function errors(expected, message) {
-		equals(expected, v.errorList.length, message );
+		equals(expected, v.size(), message );
 	}
 	var v = $("#testForm2").validate();
 	v.form();
@@ -722,7 +726,7 @@ test("idOrName()", function() {
 
 test("resetForm()", function() {
 	function errors(expected, message) {
-		equals(expected, v.errorList.length, message );
+		equals(expected, v.size(), message );
 	}
 	var v = $("#testForm1").validate();
 	v.form();
@@ -808,7 +812,7 @@ test("option: ignore", function() {
 		ignore: "[@name=lastname]"
 	});
 	v.form();
-	equals( 1, v.errorList.length );
+	equals( 1, v.size() );
 });
 
 module("expressions");
@@ -848,7 +852,7 @@ module("events");
 
 test("validate on blur", function() {
 	function errors(expected, message) {
-		equals(expected, v.errorList.length, message );
+		equals(expected, v.size(), message );
 	}
 	var e = $("#firstname");
 	var v = $("#testForm1").validate();
@@ -874,7 +878,7 @@ test("validate on blur", function() {
 
 test("validate on keyup", function() {
 	function errors(expected, message) {
-		equals(expected, v.errorList.length, message );
+		equals(expected, v.size(), message );
 	}
 	var e = $("#firstname");
 	var v = $("#testForm1").validate();
@@ -901,7 +905,7 @@ test("validate on keyup", function() {
 
 test("validate on keyup and blur", function() {
 	function errors(expected, message) {
-		equals(expected, v.errorList.length, message );
+		equals(expected, v.size(), message );
 	}
 	var e = $("#firstname");
 	var v = $("#testForm1").validate();
@@ -915,7 +919,7 @@ test("validate on keyup and blur", function() {
 
 test("validate email on keyup and blur", function() {
 	function errors(expected, message) {
-		equals(expected, v.errorList.length, message );
+		equals(expected, v.size(), message );
 	}
 	var e = $("#firstname");
 	var v = $("#testForm1").validate();
@@ -931,7 +935,7 @@ test("validate email on keyup and blur", function() {
 
 test("validate checkbox on click", function() {
 	function errors(expected, message) {
-		equals(expected, v.errorList.length, message );
+		equals(expected, v.size(), message );
 	}
 	function trigger(element) {
 		element[0].click();
@@ -955,7 +959,7 @@ test("validate checkbox on click", function() {
 
 test("validate multiple checkbox on click", function() {
 	function errors(expected, message) {
-		equals(expected, v.errorList.length, message );
+		equals(expected, v.size(), message );
 	}
 	function trigger(element) {
 		element[0].click();
@@ -985,7 +989,7 @@ test("validate multiple checkbox on click", function() {
 
 test("validate radio on click", function() {
 	function errors(expected, message) {
-		equals(expected, v.errorList.length, message );
+		equals(expected, v.size(), message );
 	}
 	function trigger(element) {
 		element[0].click();
@@ -1039,7 +1043,7 @@ test("validate via remote method", function() {
 	});
 	$().ajaxStop(function() {
 		ok( true, "There needs to be exactly one request." );
-		equals( 1, v.errorList.length, "There must be one error" );
+		equals( 1, v.size(), "There must be one error" );
 		equals( "asdf in use", v.errorList[0].message );
 		start();
 	});
