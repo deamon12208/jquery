@@ -28,15 +28,6 @@ body
 	font-size: 12px;
 }
 
-.draggable {
-	width: 90px;
-	height: 90px;
-	background-color: #68BFEF;
-	border: 2px solid #0090DF;
-	padding: 3px;
-	float: left;	
-}
-
 #myul {
 	width: 600px;
 	height: 400px;	
@@ -45,9 +36,9 @@ body
 #myul li {
  list-style-type: none;
  border: 1px solid #999;
- margin: 5px; padding: 10px;
+ margin: 5px; padding: 5px;
  background: #fff;
- width: 100px;
+ width: 90px;
  float: left;
 }
 
@@ -99,6 +90,36 @@ body
 	    <li>Item 8</li>
 	    <li>Item 9</li>
 	    <li>Item 10</li>
+	    <li>Item 11</li>
+	    <li>Item 12</li>
+	    <li>Item 13</li>
+	    <li>Item 14</li>
+	    <li>Item 15</li>
+	    <li>Item 16</li>
+	    <li>Item 17</li>
+	    <li>Item 18</li>
+	    <li>Item 19</li>
+	    <li>Item 20</li>
+	    <li>Item 21</li>
+	    <li>Item 22</li>
+	    <li>Item 23</li>
+	    <li>Item 24</li>
+	    <li>Item 25</li>
+	    <li>Item 26</li>
+	    <li>Item 27</li>
+	    <li>Item 28</li>
+	    <li>Item 29</li>
+	    <li>Item 30</li>
+	    <li>Item 31</li>
+	    <li>Item 32</li>
+	    <li>Item 33</li>
+	    <li>Item 34</li>
+	    <li>Item 35</li>
+	    <li>Item 36</li>
+	    <li>Item 37</li>
+	    <li>Item 38</li>
+	    <li>Item 39</li>
+	    <li>Item 40</li>
 	</ul>
 	
 	<br style='clear: both;' />
@@ -141,12 +162,12 @@ body
 <script type="text/javascript">
 $(document).ready(function(){
 	
-	myset = $('#myul').sortable();
+	myset = $('#myul').sortable({
+		//onChange: function() { console.log('Position change during drag'); },
+		//onUpdate: function() { console.log('Position changed'); }
+	});
 	myset2 = $('#myul2').sortable( { items: 'li', containment: 'sortable', hoverclass: 'hover' } );
 	myset3 = $('#myul3').sortable();
-	
-	myset2.add(myset3);
-	myset3.add(myset2);
 
 });
 </script>

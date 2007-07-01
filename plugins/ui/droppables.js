@@ -1,8 +1,8 @@
 (function($) {
 
 	$.fn.droppable = function(o) {
-		this.each(function() {
-			new $.ui.droppable(this,o);	
+		return this.each(function() {
+			new $.ui.droppable(this,o);
 		});
 	}
 	

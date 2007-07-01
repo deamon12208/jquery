@@ -1,15 +1,11 @@
 (function($) {
 
 	$.fn.sortable = function(o) {
-
-		//Initialize new container that gets returned to the user
-		var set = new $.ui.dragset();
 		
-		this.each(function() {
-			set.items.push(new $.ui.sortable(this,o));	
+		return this.each(function() {
+			new $.ui.sortable(this,o);	
 		});
 		
-		return set;
 	}
 
 	$.ui.sortable = function(el,o) {
@@ -54,6 +50,8 @@
 								position: 'absolute'	
 							});
 						}
+						
+						self.firstSibling = $(this.element).prev()[0];
 						break;
 					case 'drag':
 
@@ -91,9 +89,15 @@
 							}
 
 						}
+						
+						//Let's see if the position in DOM has changed
+						if($(this.element).prev()[0] != self.lastSibling) {
+							if(o.onChange) o.onChange.apply(self, [this.element, this.helper, this]);
+							self.lastSibling = $(this.element).prev()[0];	
+						}
 
 						if(self.helper) { //reposition helper if available
-							var to = $(this.element).offset({ border: false });
+							var to = $(this.element).offsetLite({ border: false });
 							self.helper.css({
 								top: to.top+'px',
 								left: to.left+'px'	
@@ -105,6 +109,12 @@
 					case 'stop':
 						if(self.helper)
 							self.helper.remove();
+							
+							
+						//Let's see if the position in DOM has changed
+						if($(this.element).prev()[0] != self.firstSibling) {
+							if(o.onUpdate) o.onUpdate.apply(self, [this.element, this.helper, this]);
+						}						
 						break;	
 				}
 			},

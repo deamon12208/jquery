@@ -4,27 +4,6 @@
 		return parseInt($.css(el.jquery?el[0]:el,prop))||0;
 	};
 	
-	$.ui.dragset = function() {
-		this.items = [];
-	};
-	$.extend($.ui.dragset.prototype, {
-		destroy: function() {
-			for(var i=0;i<this.items.length;i++) {
-				this.items[i].destroy.call(this.items[i]);	
-			}
-		},
-		add: function() {
-			for(var i=0;i<this.items.length;i++) {
-				if(this.items[i].add) this.items[i].add.apply(this.items[i], arguments);	
-			}
-		},
-		refresh: function() {
-			for(var i=0;i<this.items.length;i++) {
-				if(this.items[i].refresh) this.items[i].refresh.apply(this.items[i], arguments);	
-			}
-		}
-	});
-	
 	$.ui.ddmanager = {
 		current: null,
 		droppables: [],
@@ -91,13 +70,10 @@
 	
 	$.fn.draggable = function(o) {
 		
-		var set = new $.ui.dragset();
-		
-		this.each(function() {
-			set.items.push(new $.ui.draggable(this,o));	
+		return this.each(function() {
+			new $.ui.draggable(this,o);	
 		});
 		
-		return set;
 	}
 	
 	$.ui.draggable = function(el,o) {
