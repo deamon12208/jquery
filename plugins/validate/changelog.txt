@@ -6,6 +6,7 @@
 * Added support for ajax-validation, see method "remote"
 * Added validator.size(): returns the number of current errors
 * Moved showErrors() from valid() to form()
+* Fixed selectors for form-element-names containing brackets etc.
 
 1.1
 ---

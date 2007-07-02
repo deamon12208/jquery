@@ -550,7 +550,7 @@ jQuery.extend(jQuery.validator, {
 				for ( name in errors ) {
 					this.errorList.push({
 						message: errors[name],
-						element: jQuery("[@name=" + name + "]:first", this.currentForm)[0]
+						element: jQuery("[@name='" + name + "']:first", this.currentForm)[0]
 					});
 				}
 				// remove items from success list
@@ -780,7 +780,7 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		errorsFor: function(element) {
-			return this.errors().filter("[@for=" + this.idOrName(element) + "]");
+			return this.errors().filter("[@for='" + this.idOrName(element) + "']");
 		},
 		
 		idOrName: function(element) {
