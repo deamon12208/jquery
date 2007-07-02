@@ -5,7 +5,7 @@
  * $LastChangedDate$
  * $Rev$
  *
- * Version: 1.0b2
+ * Version: 1.0rc1
  */
 
 (function($){
@@ -16,8 +16,8 @@ var height = $.fn.height,
 
 $.fn.extend({
 	/**
-	 * If used on document, returns the document's height (innerHeight)
-	 * If used on window, returns the viewport's (window) height
+	 * If used on document, returns the document's height (innerHeight).
+	 * If used on window, returns the viewport's (window) height.
 	 * See core docs on height() to see what happens when used on an element.
 	 *
 	 * @example $("#testdiv").height()
@@ -30,7 +30,7 @@ $.fn.extend({
 	 * @result 400
 	 *
 	 * @name height
-	 * @type Object
+	 * @type Number
 	 * @cat Plugins/Dimensions
 	 */
 	height: function() {
@@ -46,9 +46,9 @@ $.fn.extend({
 	},
 	
 	/**
-	 * If used on document, returns the document's width (innerWidth)
-	 * If used on window, returns the viewport's (window) width
-	 * See core docs on height() to see what happens when used on an element.
+	 * If used on document, returns the document's width (innerWidth).
+	 * If used on window, returns the viewport's (window) width.
+	 * See core docs on width() to see what happens when used on an element.
 	 *
 	 * @example $("#testdiv").width()
 	 * @result 200
@@ -60,7 +60,7 @@ $.fn.extend({
 	 * @result 400
 	 *
 	 * @name width
-	 * @type Object
+	 * @type Number
 	 * @cat Plugins/Dimensions
 	 */
 	width: function() {
@@ -76,12 +76,12 @@ $.fn.extend({
 	},
 	
 	/**
-	 * Returns the inner height value (without border) for the first matched element.
-	 * If used on document, returns the document's height (innerHeight)
-	 * If used on window, returns the viewport's (window) height
+	 * Returns the inner height value (without the border) for the first matched element.
+	 * If used on document, returns the document's height (innerHeight).
+	 * If used on window, returns the viewport's (window) height.
 	 *
 	 * @example $("#testdiv").innerHeight()
-	 * @result 800
+	 * @result 210
 	 *
 	 * @name innerHeight
 	 * @type Number
@@ -96,12 +96,12 @@ $.fn.extend({
 	},
 	
 	/**
-	 * Returns the inner width value (without border) for the first matched element.
-	 * If used on document, returns the document's Width (innerWidth)
-	 * If used on window, returns the viewport's (window) width
+	 * Returns the inner width value (without the border) for the first matched element.
+	 * If used on document, returns the document's width (innerWidth).
+	 * If used on window, returns the viewport's (window) width.
 	 *
 	 * @example $("#testdiv").innerWidth()
-	 * @result 1000
+	 * @result 210
 	 *
 	 * @name innerWidth
 	 * @type Number
@@ -116,11 +116,12 @@ $.fn.extend({
 	},
 	
 	/**
-	 * Returns the outer height value (including border) for the first matched element.
-	 * Cannot be used on document or window.
+	 * Returns the outer height value (including the border) for the first matched element.
+	 * If used on document, returns the document's height (innerHeight).
+	 * If used on window, returns the viewport's (window) height.
 	 *
 	 * @example $("#testdiv").outerHeight()
-	 * @result 1000
+	 * @result 220
 	 *
 	 * @name outerHeight
 	 * @type Number
@@ -135,8 +136,9 @@ $.fn.extend({
 	},
 	
 	/**
-	 * Returns the outer width value (including border) for the first matched element.
-	 * Cannot be used on document or window.
+	 * Returns the outer width value (including the border) for the first matched element.
+	 * If used on document, returns the document's width (innerWidth).
+	 * If used on window, returns the viewport's (window) width.
 	 *
 	 * @example $("#testdiv").outerHeight()
 	 * @result 1000
@@ -157,6 +159,12 @@ $.fn.extend({
 	 * Returns how many pixels the user has scrolled to the right (scrollLeft).
 	 * Works on containers with overflow: auto and window/document.
 	 *
+	 * @example $(window).scrollLeft()
+	 * @result 100
+	 *
+	 * @example $(document).scrollLeft()
+	 * @result 100
+	 * 
 	 * @example $("#testdiv").scrollLeft()
 	 * @result 100
 	 *
@@ -165,11 +173,17 @@ $.fn.extend({
 	 * @cat Plugins/Dimensions
 	 */
 	/**
-	 * Sets the scrollLeft property and continues the chain.
+	 * Sets the scrollLeft property for each element and continues the chain.
 	 * Works on containers with overflow: auto and window/document.
 	 *
-	 * @example $("#testdiv").scrollLeft(10).scrollLeft()
-	 * @result 10
+	 * @example $(window).scrollLeft(100).scrollLeft()
+	 * @result 100
+	 * 
+	 * @example $(document).scrollLeft(100).scrollLeft()
+	 * @result 100
+	 *
+	 * @example $("#testdiv").scrollLeft(100).scrollLeft()
+	 * @result 100
 	 *
 	 * @name scrollLeft
 	 * @param Number value A positive number representing the desired scrollLeft.
@@ -199,6 +213,12 @@ $.fn.extend({
 	 * Returns how many pixels the user has scrolled to the bottom (scrollTop).
 	 * Works on containers with overflow: auto and window/document.
 	 *
+	 * @example $(window).scrollTop()
+	 * @result 100
+	 *
+	 * @example $(document).scrollTop()
+	 * @result 100
+	 * 
 	 * @example $("#testdiv").scrollTop()
 	 * @result 100
 	 *
@@ -207,11 +227,17 @@ $.fn.extend({
 	 * @cat Plugins/Dimensions
 	 */
 	/**
-	 * Sets the scrollTop property and continues the chain.
+	 * Sets the scrollTop property for each element and continues the chain.
 	 * Works on containers with overflow: auto and window/document.
 	 *
-	 * @example $("#testdiv").scrollTop(10).scrollTop()
-	 * @result 10
+	 * @example $(window).scrollTop(100).scrollTop()
+	 * @result 100
+	 * 
+	 * @example $(document).scrollTop(100).scrollTop()
+	 * @result 100
+	 *
+	 * @example $("#testdiv").scrollTop(100).scrollTop()
+	 * @result 100
 	 *
 	 * @name scrollTop
 	 * @param Number value A positive number representing the desired scrollTop.
@@ -240,17 +266,35 @@ $.fn.extend({
 	/** 
 	 * Returns the top and left positioned offset in pixels.
 	 * The positioned offset is the offset between a positioned
-	 * parent and the element itself.
+	 * parent and the element itself. The position method takes
+	 * an optional map of key value pairs to configure the way
+	 * the offset is calculated. Here are the different options.
+	 *
+	 * (Boolean) margin - Should the margin of the element be included in the calculations? False by default.
+	 * (Boolean) border - Should the border of the element be included in the calculations? False by default. 
+	 * (Boolean) padding - Should the padding of the element be included in the calcuations? False by default.
+	 * (Boolean) scroll - Sould the scroll offsets of the parent elements be included int he calculations? False by default.
+	 *                    When true it adds the total scroll offsets of all parents to the total offset and also adds two
+	 *                    properties to the returned object, scrollTop and scrollLeft.
+	 *
+	 * Also an object can be passed as the second paramater to
+	 * catch the value of the return and continue the chain.
+	 *
+	 * For accurate readings make sure to use pixel values for margins, borders and padding.
 	 *
 	 * @example $("#testdiv").position()
 	 * @result { top: 100, left: 100 }
+	 *
+	 * @example $("#testdiv").position({ margin: true, border: true, padding: true })
+	 * @result { top: 90, left: 90 }
+	 *
+	 * @example var position = {};
+	 * $("#testdiv").position({}, position)
+	 * @result position = { top: 100, left: 100 }
 	 * 
 	 * @name position
 	 * @param Map options Optional settings to configure the way the offset is calculated.
-	 * @option Boolean margin Should the margin of the element be included in the calculations? False by default.
-	 * @option Boolean border Should the border of the element be included in the calculations? False by default.
-	 * @option Boolean padding Should the padding of the element be included in the calculations? False by default.
-	 * @param Object returnObject An object to store the return value in, so as not to break the chain. If passed in the
+	 * @param Object returnObject Optional An object to store the return value in, so as not to break the chain. If passed in the
 	 *                            chain will not be broken and the result will be assigned to this object.
 	 * @type Object
 	 * @cat Plugins/Dimensions
@@ -269,17 +313,33 @@ $.fn.extend({
 			x += num(elem, 'borderLeftWidth');
 			y += num(elem, 'borderTopWidth');
 		}
+		
+		// Safari and opera includes border on positioned parents
+		if (($.browser.safari || $.browser.opera) && $.css(op, 'position') != 'static') {
+			x -= num(op, 'borderLeftWidth');
+			y -= num(op, 'borderTopWidth');
+		}
 
 		if ($.browser.mozilla) {
 			do {
 				// Mozilla does not add the border for a parent that has overflow set to anything but visible
-				if ($.browser.mozilla && parent != elem && $.css(parent, 'overflow') != 'visible') {
+				if (parent != elem && $.css(parent, 'overflow') != 'visible') {
 					x += num(parent, 'borderLeftWidth');
 					y += num(parent, 'borderTopWidth');
 				}
 
 				if (parent == op) break; // break if we are already at the offestParent
-			} while ((parent = parent.parentNode) && (parent.tagName.toLowerCase() != 'body' || parent.tagName.toLowerCase() != 'html'));
+			} while ((parent = parent.parentNode) && parent.tagName != 'BODY');
+		}
+		
+		if ($.browser.msie && (op.tagName != 'BODY' && $.css(op, 'position') == 'static')) {
+			do {
+				x += op.offsetLeft;
+				y += op.offsetTop;
+				// add borders to offset
+				x += num(op, 'borderLeftWidth');
+				y += num(op, 'borderTopWidth');
+			} while ((op = op.offsetParent) && (op.tagName != 'BODY' && $.css(op, 'position') == 'static'));
 		}
 		
 		var returnValue = handleOffsetReturn(elem, options, x, y, sl, st);
@@ -290,6 +350,20 @@ $.fn.extend({
 	
 	/**
 	 * Returns the location of the element in pixels from the top left corner of the viewport.
+	 * The offset method takes an optional map of key value pairs to configure the way
+	 * the offset is calculated. Here are the different options.
+	 *
+	 * (Boolean) margin - Should the margin of the element be included in the calculations? True by default.
+	 * (Boolean) border - Should the border of the element be included in the calculations? False by default. 
+	 * (Boolean) padding - Should the padding of the element be included in the calcuations? False by default. 
+	 * (Boolean) scroll - Sould the scroll offsets of the parent elements be included int he calculations? True by default.
+	 *                    When true it adds the total scroll offsets of all parents to the total offset and also adds two
+	 *                    properties to the returned object, scrollTop and scrollLeft.
+	 * (Boolean) lite - When true it will use the offsetLite method instead of the full-blown, slower offset method. False by default.
+	 *                  Only use this when margins, borders and padding calculations don't matter.
+	 *
+	 * Also an object can be passed as the second paramater to
+	 * catch the value of the return and continue the chain.
 	 *
 	 * For accurate readings make sure to use pixel values for margins, borders and padding.
 	 * 
@@ -309,13 +383,6 @@ $.fn.extend({
 	 *
 	 * @name offset
 	 * @param Map options Optional settings to configure the way the offset is calculated.
-	 * @option Boolean margin Should the margin of the element be included in the calculations? True by default.
-	 * @option Boolean border Should the border of the element be included in the calculations? False by default.
-	 * @option Boolean padding Should the padding of the element be included in the calculations? False by default.
-	 * @option Boolean scroll Should the scroll offsets of the parent elements be included in the calculations? True by default.
-	 *                        When true it adds the totla scroll offets of all parents to the total offset and also adds two properties
-	 *                        to the returned object, scrollTop and scrollLeft. 
-	 * @options Boolean lite Will use offsetLite instead of offset when set to true. False by default.
 	 * @param Object returnObject An object to store the return value in, so as not to break the chain. If passed in the
 	 *                            chain will not be broken and the result will be assigned to this object.
 	 * @type Object
@@ -331,7 +398,7 @@ $.fn.extend({
 		// Use offsetLite if lite option is true
 		if (options.lite) return this.offsetLite(options, returnObject);
 		
-		if (elem.tagName.toLowerCase() == 'body') {
+		if (elem.tagName == 'BODY') {
 			// Safari is the only one to get offsetLeft and offsetTop properties of the body "correct"
 			// Except they all mess up when the body is positioned absolute or relative
 			x = elem.offsetLeft;
@@ -390,7 +457,7 @@ $.fn.extend({
 				}
 				parent = op;
 
-				if (parent.tagName.toLowerCase() == 'body' || parent.tagName.toLowerCase() == 'html') {
+				if (parent.tagName == 'BODY' || parent.tagName == 'HTML') {
 					// Safari and IE Standards Mode doesn't add the body margin for elments positioned with static or relative
 					if ((sf || (ie && $.boxModel)) && elemPos != 'absolute' && elemPos != 'fixed') {
 						x += num(parent, 'marginLeft');
@@ -418,15 +485,18 @@ $.fn.extend({
 	 * Returns the location of the element in pixels from the top left corner of the viewport.
 	 * This method is much faster than offset but not as accurate. This method can be invoked
 	 * by setting the lite option to true in the offset method.
+	 * The offsetLite method takes an optional map of key value pairs to configure the way
+	 * the offset is calculated. Here are the different options.
+	 *
+	 * (Boolean) margin - Should the margin of the element be included in the calculations? True by default.
+	 * (Boolean) border - Should the border of the element be included in the calculations? False by default. 
+	 * (Boolean) padding - Should the padding of the element be included in the calcuations? False by default. 
+	 * (Boolean) scroll - Sould the scroll offsets of the parent elements be included int he calculations? True by default.
+	 *                    When true it adds the total scroll offsets of all parents to the total offset and also adds two
+	 *                    properties to the returned object, scrollTop and scrollLeft.
 	 *
 	 * @name offsetLite
 	 * @param Map options Optional settings to configure the way the offset is calculated.
-	 * @option Boolean margin Should the margin of the element be included in the calculations? True by default.
-	 * @option Boolean border Should the border of the element be included in the calculations? False by default.
-	 * @option Boolean padding Should the padding of the element be included in the calculations? False by default.
-	 * @option Boolean scroll Should the scroll offsets of the parent elements be included in the calculations? True by default.
-	 *                        When true it adds the totla scroll offets of all parents to the total offset and also adds two properties
-	 *                        to the returned object, scrollTop and scrollLeft. 
 	 * @param Object returnObject An object to store the return value in, so as not to break the chain. If passed in the
 	 *                            chain will not be broken and the result will be assigned to this object.
 	 * @type Object
@@ -450,7 +520,7 @@ $.fn.extend({
 				} while(parent != op);
 			}
 			parent = op;
-		} while (parent && parent.tagName.toLowerCase() != 'body' && parent.tagName.toLowerCase() != 'html');
+		} while (parent && parent.tagName != 'BODY' && parent.tagName != 'HTML');
 
 		var returnValue = handleOffsetReturn(this[0], options, x, y, sl, st);
 

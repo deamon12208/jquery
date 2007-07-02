@@ -1,11 +1,19 @@
 == New and Noteworthy ==
 
+== 1.0rc1 ==
+
+* Various fixes for position method
+* Added tests for position method
+* Updated inline docs
+
 == 1.0b2 ==
+
 * API CHANGE: The border option is now defaulted to 'false'
 * Added a new method called position. It gets the elements positioned offset.
 * Added lite option to visual offset test/example
 
 == 1.0b ==
+
 * Element's scroll offsets no longer included in calculations
 
 == 1.0a ==
