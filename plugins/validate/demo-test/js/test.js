@@ -38,8 +38,6 @@ test("email", function() {
 	ok(!method( "name" ), "Invalid email" );
 	ok(!method( "name@" ), "Invalid email" );
 	ok(!method( "name@domain" ), "Invalid email" );
-	ok(!method( "name@domain.t" ), "Invalid email" );
-	ok(!method( "name@domain.tldef" ), "Invalid email" );
 });
 
 test("number", function() {

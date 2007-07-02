@@ -1180,7 +1180,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		email: function(value, element) {
-			return this.required(element) || /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i.test(value);
+			return this.required(element) || /^[a-z/-9!#-'*+\-/=?_`{-~^]([a-z.-9!#-'*+\-/=?_`{-~^]*[a-z/-9!#-'*+\-/=?_`{-~^])?@([a-z0-9]+\.)+[a-z0-9]+\.?$/i.test(value);
 		},
 	
 		/**
