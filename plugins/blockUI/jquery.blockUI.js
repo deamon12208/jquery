@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.24  (06/28/2007)
+ * Version 1.25  (07/02/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -188,7 +188,7 @@ $.blockUI.impl = {
     pageBlockEls: [],
     op8: window.opera && window.opera.version() < 9,
     ffLinux: $.browser.mozilla && /Linux/.test(navigator.platform),
-    ie6: $.browser.msie && typeof XMLHttpRequest == 'function',
+    ie6: $.browser.msie && /6.0/.test(navigator.userAgent),
     install: function(el, msg, css, displayMode) {
         this.boxCallback = typeof displayMode == 'function' ? displayMode : null;
         this.box = displayMode ? msg : null;
