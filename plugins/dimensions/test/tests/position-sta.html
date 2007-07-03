@@ -25,70 +25,24 @@
 				});
 			});
 			test('position(): Static positioning', function() {
-				var position  = {};
-				var options = {};
+				var position = {};
 				
-				$('#sta1').position(options, position);
+				$('#sta1').position(position);
 				equals( 0, position.top, "$('#sta1').position().top" );
 				equals( 0, position.left, "$('#sta1').position().left" );
 				
-				$('#sta2').position(options, position);
+				$('#sta2').position(position);
 				equals( 17, position.top, "$('#sta2').position().top" );
 				equals( 17, position.left, "$('#sta2').position().left" );
 				
-				$('#sta3').position(options, position);
+				$('#sta3').position(position);
 				equals( 34, position.top, "$('#sta3').position().top" );
 				equals( 34, position.left, "$('#sta3').position().left" );
-				
-				// yes padding
-				options = { padding: true };
-				
-				$('#sta1').position(options, position);
-				equals( 5, position.top, "$('#sta1').position().top" );
-				equals( 5, position.left, "$('#sta1').position().left" );
-				
-				$('#sta2').position(options, position);
-				equals( 22, position.top, "$('#sta2').position().top" );
-				equals( 22, position.left, "$('#sta2').position().left" );
-				
-				$('#sta3').position(options, position);
-				equals( 39, position.top, "$('#sta3').position().top" );
-				equals( 39, position.left, "$('#sta3').position().left" );
-				
-				// yes border
-				options = { border: true };
-				
-				$('#sta1').position(options, position);
-				equals( 2, position.top, "$('#sta1').position().top" );
-				equals( 2, position.left, "$('#sta1').position().left" );
-				
-				$('#sta2').position(options, position);
-				equals( 19, position.top, "$('#sta2').position().top" );
-				equals( 19, position.left, "$('#sta2').position().left" );
-				
-				$('#sta3').position(options, position);
-				equals( 36, position.top, "$('#sta3').position().top" );
-				equals( 36, position.left, "$('#sta3').position().left" );
-				
-				// yes margin
-				options = { margin: true };
-				
-				$('#sta1').position(options, position);
-				equals( 10, position.top, "$('#sta1').position().top" );
-				equals( 10, position.left, "$('#sta1').position().left" );
-				
-				$('#sta2').position(options, position);
-				equals( 27, position.top, "$('#sta2').position().top" );
-				equals( 27, position.left, "$('#sta2').position().left" );
-				
-				$('#sta3').position(options, position);
-				equals( 44, position.top, "$('#sta3').position().top" );
-				equals( 44, position.left, "$('#sta3').position().left" );
 				
 				// testing scroll offset
 				$('#sta2')[0].scrollTop  = 10;
 				$('#sta2')[0].scrollLeft = 10;
-				$('#sta3').position({}, position);
+				$('#sta3').position(position);
 				equals( 34, position.top, "Scroll offset of parent by 10 => $('#sta3').position().top" );
 				equals( 34, position.left, "Scroll offset of parent by 10 => $('#sta3').position().left" );
 				$('#sta2')[0].scrollTop  = 0;
