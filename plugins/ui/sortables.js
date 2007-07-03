@@ -30,6 +30,10 @@
 		//Let's determine the floating mode
 		o.floating = items.css('float') == 'left' || items.css('float') == 'right' ? true : false;
 		
+		//Let's determine the parent's offset
+		if($(this.element).css('position') == 'static') $(this.element).css('position', 'relative');
+		o.offset = $(this.element).offset({ border: false }); //TODO: Caching
+		
 		//Make draggable
 		items.draggable({
 			revert: true,
@@ -61,7 +65,8 @@
 						for(var i=0;i<m.length;i++) {
 							
 							var ci = $(m[i][0]); var cio = m[i][0];
-							var cO = ci.offsetLite({ border: false }); //TODO: Caching
+							var cO = ci.offset({ border: false, relativeTo: self.element }); //TODO: Caching
+							cO = { top: o.offset.top+cO.top, left: o.offset.left+cO.left };
 							
 							var mb = function(e) { if(true || o.lba != cio) { ci.before(e); o.lba = cio; } }
 							var ma = function(e) { if(true || o.laa != cio) { ci.after(e); o.laa = cio; } }
