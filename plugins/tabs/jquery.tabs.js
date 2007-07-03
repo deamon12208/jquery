@@ -9,7 +9,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  *
- * Version: 2.7.3
+ * Version: 2.7.4
  */
 
 (function($) { // block scope
@@ -198,7 +198,7 @@ $.fn.tabs = function(initial, settings) {
         tabStruct: 'div'
     }, settings || {});
 
-    $.browser.msie6 = $.browser.msie6 || $.browser.msie && typeof XMLHttpRequest == 'function';
+    $.browser.msie6 = $.browser.msie && ($.browser.version && $.browser.version < 7 || /6.0/.test(navigator.userAgent));    
 
     // helper to prevent scroll to fragment
     function unFocus() {
@@ -355,13 +355,13 @@ $.fn.tabs = function(initial, settings) {
                 showAnim = settings.fxShow;
             } else { // use some kind of animation to prevent browser scrolling to the tab
                 showAnim['min-width'] = 0; // avoid opacity, causes flicker in Firefox
-                showSpeed = settings.bookmarkable ? 50 : 1; // as little as 50 is sufficient
+                showSpeed = 1; // as little as 1 is sufficient
             }
             if (settings.fxHide) {
                 hideAnim = settings.fxHide;
             } else { // use some kind of animation to prevent browser scrolling to the tab
                 hideAnim['min-width'] = 0; // avoid opacity, causes flicker in Firefox
-                hideSpeed = settings.bookmarkable ? 50 : 1; // as little as 50 is sufficient
+                hideSpeed = 1; // as little as 1 is sufficient
             }
         }
 
@@ -412,7 +412,7 @@ $.fn.tabs = function(initial, settings) {
         // attach disable event, required for disabling a tab
         tabs.bind('disableTab', function() {
             var li = $(this).parents('li:eq(0)');
-            if ($.browser.safari) { /* Fix opacity of tab after disabling in Safari... */
+            if ($.browser.safari) { /* fix opacity of tab after disabling in Safari... */
                 li.animate({ opacity: 0 }, 1, function() {
                    li.css({opacity: ''});
                 });
@@ -432,7 +432,7 @@ $.fn.tabs = function(initial, settings) {
         tabs.bind('enableTab', function() {
             var li = $(this).parents('li:eq(0)');
             li.removeClass(settings.disabledClass);
-            if ($.browser.safari) { /* Fix disappearing tab after enabling in Safari... */
+            if ($.browser.safari) { /* fix disappearing tab after enabling in Safari... */
                 li.animate({ opacity: 1 }, 1, function() {
                     li.css({opacity: ''});
                 });
@@ -466,6 +466,11 @@ $.fn.tabs = function(initial, settings) {
                     }, 0);
                 }
 
+                var resetCSS = { display: '', overflow: '', height: '' };
+                if (!$.browser.msie) { // not in IE to prevent ClearType font issue
+                    resetCSS['opacity'] = '';
+                }
+                
                 // switch tab, animation prevents browser scrolling to the fragment
                 function switchTab() {
                     if (settings.bookmarkable && trueClick) { // add to history only if true click occured, not a triggered click
@@ -473,16 +478,15 @@ $.fn.tabs = function(initial, settings) {
                     }
                     toHide.animate(hideAnim, hideSpeed, function() { //
                         $(clicked).parents('li:eq(0)').addClass(settings.selectedClass).siblings().removeClass(settings.selectedClass);
+                        toHide.addClass(settings.hideClass).css(resetCSS); // maintain flexible height and accessibility in print etc.                        
                         if (typeof onHide == 'function') {
                             onHide(clicked, toShow[0], toHide[0]);
                         }
-                        var resetCSS = { display: '', overflow: '', height: '' };
-                        if (!$.browser.msie) { // not in IE to prevent ClearType font issue
-                            resetCSS['opacity'] = '';
+                        if (!(settings.fxSlide || settings.fxFade || settings.fxShow)) {
+                            toShow.css('display', 'block'); // prevent occasionally occuring flicker in Firefox cause by gap between showing and hiding the tab containers
                         }
-                        toHide.addClass(settings.hideClass).css(resetCSS); // maintain flexible height and accessibility in print etc.
-                        toShow.removeClass(settings.hideClass).animate(showAnim, showSpeed, function() {
-                            toShow.css(resetCSS); // maintain flexible height and accessibility in print etc.
+                        toShow.animate(showAnim, showSpeed, function() {
+                            toShow.removeClass(settings.hideClass).css(resetCSS); // maintain flexible height and accessibility in print etc.
                             if ($.browser.msie) {
                                 toHide[0].style.filter = '';
                                 toShow[0].style.filter = '';
