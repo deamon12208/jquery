@@ -7,15 +7,15 @@ if(typeof window.jQuery == "undefined") {
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * $Date: 2007-05-23 14:48:15 +0200 (Mi, 23 Mai 2007) $
- * $Rev: 1961 $
+ * $Date: 2007-07-03 15:19:09 +0200 (Di, 03 Jul 2007) $
+ * $Rev: 2217 $
  */
 
 // Global undefined variable
 window.undefined = window.undefined;
 var jQuery = function(a,c) {
 	// If the context is global, return a new object
-	if ( window == this )
+	if ( window == this || !this.init )
 		return new jQuery(a,c);
 	
 	return this.init(a,c);
@@ -188,9 +188,9 @@ jQuery.fn = jQuery.prototype = {
 		return this.prevObject || jQuery([]);
 	},
 	find: function(t) {
-		return this.pushStack( jQuery.unique( jQuery.map( this, function(a){
-			return jQuery.find(t,a);
-		}) ), t );
+		var data = jQuery.map(this, function(a){ return jQuery.find(t,a); });
+		return this.pushStack( /[^+>] [^+>]/.test( t ) || t.indexOf("..") > -1 ?
+			jQuery.unique( data ) : data );
 	},
 	clone: function(deep) {
 		// Need to remove events on the element and its descendants
@@ -435,7 +435,7 @@ jQuery.extend({
 		}
 		
 		if (prop.match(/float/i))
-			prop = jQuery.browser.msie ? "styleFloat" : "cssFloat";
+			prop = jQuery.styleFloat;
 
 		if (!force && elem.style[prop])
 			ret = elem.style[prop];
@@ -531,7 +531,7 @@ jQuery.extend({
 				arg = jQuery.makeArray( div.childNodes );
 			}
 
-			if ( 0 === arg.length && !jQuery(arg).is("form, select") )
+			if ( 0 === arg.length && (!jQuery.nodeName(arg, "form") && !jQuery.nodeName(arg, "select")) )
 				return;
 
 			if ( arg[0] == undefined || jQuery.nodeName(arg, "form") || arg.options )
@@ -545,37 +545,7 @@ jQuery.extend({
 	},
 	
 	attr: function(elem, name, value){
-		var fix = jQuery.isXMLDoc(elem) ? {} : {
-			"for": "htmlFor",
-			"class": "className",
-			"float": jQuery.browser.msie ? "styleFloat" : "cssFloat",
-			cssFloat: jQuery.browser.msie ? "styleFloat" : "cssFloat",
-			styleFloat: jQuery.browser.msie ? "styleFloat" : "cssFloat",
-			innerHTML: "innerHTML",
-			className: "className",
-			value: "value",
-			disabled: "disabled",
-			checked: "checked",
-			readonly: "readOnly",
-			selected: "selected",
-			maxlength: "maxLength"
-		};
-		
-		// IE actually uses filters for opacity ... elem is actually elem.style
-		if ( name == "opacity" && jQuery.browser.msie ) {
-			if ( value != undefined ) {
-				// IE has trouble with opacity if it does not have layout
-				// Force it by setting the zoom level
-				elem.zoom = 1; 
-
-				// Set the alpha filter to set the opacity
-				elem.filter = (elem.filter || "").replace(/alpha\([^)]*\)/,"") +
-					(parseFloat(value).toString() == "NaN" ? "" : "alpha(opacity=" + value * 100 + ")");
-			}
-
-			return elem.filter ? 
-				(parseFloat( elem.filter.match(/opacity=([^)]*)/)[1] ) / 100).toString() : "";
-		}
+		var fix = jQuery.isXMLDoc(elem) ? {} : jQuery.props;
 		
 		// Certain attributes only work when accessed via the old DOM 0 way
 		if ( fix[name] ) {
@@ -587,6 +557,8 @@ jQuery.extend({
 
 		// IE elem.getAttribute passes even for style
 		else if ( elem.tagName ) {
+			
+
 			if ( value != undefined ) elem.setAttribute( name, value );
 			if ( jQuery.browser.msie && /href|src/.test(name) && !jQuery.isXMLDoc(elem) ) 
 				return elem.getAttribute( name, 2 );
@@ -594,6 +566,21 @@ jQuery.extend({
 
 		// elem is actually elem.style ... set the style
 		} else {
+			// IE actually uses filters for opacity
+			if ( name == "opacity" && jQuery.browser.msie ) {
+				if ( value != undefined ) {
+					// IE has trouble with opacity if it does not have layout
+					// Force it by setting the zoom level
+					elem.zoom = 1; 
+	
+					// Set the alpha filter to set the opacity
+					elem.filter = (elem.filter || "").replace(/alpha\([^)]*\)/,"") +
+						(parseFloat(value).toString() == "NaN" ? "" : "alpha(opacity=" + value * 100 + ")");
+				}
+	
+				return elem.filter ? 
+					(parseFloat( elem.filter.match(/opacity=([^)]*)/)[1] ) / 100).toString() : "";
+			}
 			name = name.replace(/-([a-z])/ig,function(z,b){return b.toUpperCase();});
 			if ( value != undefined ) elem[name] = value;
 			return elem[name];
@@ -694,7 +681,7 @@ new function() {
 
 	// Figure out what browser is being used
 	jQuery.browser = {
-		version: b.match(/.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/)[1],
+		version: (b.match(/.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/) || [])[1],
 		safari: /webkit/.test(b),
 		opera: /opera/.test(b),
 		msie: /msie/.test(b) && !/opera/.test(b),
@@ -703,6 +690,24 @@ new function() {
 
 	// Check to see if the W3C box model is being used
 	jQuery.boxModel = !jQuery.browser.msie || document.compatMode == "CSS1Compat";
+
+	jQuery.styleFloat = jQuery.browser.msie ? "styleFloat" : "cssFloat",
+
+	jQuery.props = {
+		"for": "htmlFor",
+		"class": "className",
+		"float": jQuery.styleFloat,
+		cssFloat: jQuery.styleFloat,
+		styleFloat: jQuery.styleFloat,
+		innerHTML: "innerHTML",
+		className: "className",
+		value: "value",
+		disabled: "disabled",
+		checked: "checked",
+		readonly: "readOnly",
+		selected: "selected",
+		maxlength: "maxLength"
+	};
 };
 
 jQuery.each({
@@ -793,17 +798,16 @@ jQuery.extend({
 			odd: "i%2",
 
 			// Child Checks
-			"nth-child": "jQuery.nth(a.parentNode.firstChild,m[3],'nextSibling',a)==a",
-			"first-child": "jQuery.nth(a.parentNode.firstChild,1,'nextSibling')==a",
+			"first-child": "a.parentNode.getElementsByTagName('*')[0]==a",
 			"last-child": "jQuery.nth(a.parentNode.lastChild,1,'previousSibling')==a",
-			"only-child": "jQuery.sibling(a.parentNode.firstChild).length==1",
+			"only-child": "!jQuery.nth(a.parentNode.lastChild,2,'previousSibling')",
 
 			// Parent Checks
 			parent: "a.firstChild",
 			empty: "!a.firstChild",
 
 			// Text Check
-			contains: "jQuery.fn.text.apply([a]).indexOf(m[3])>=0",
+			contains: "(a.textContent||a.innerText||'').indexOf(m[3])>=0",
 
 			// Visibility
 			visible: '"hidden"!=a.type&&jQuery.css(a,"display")!="none"&&jQuery.css(a,"visibility")!="hidden"',
@@ -827,26 +831,13 @@ jQuery.extend({
 			button: '"button"==a.type||jQuery.nodeName(a,"button")',
 			input: "/input|select|textarea|button/i.test(a.nodeName)"
 		},
-		".": "jQuery.className.has(a,m[2])",
-		"@": {
-			"=": "z==m[4]",
-			"!=": "z!=m[4]",
-			"^=": "z&&!z.indexOf(m[4])",
-			"$=": "z&&z.substr(z.length - m[4].length,m[4].length)==m[4]",
-			"*=": "z&&z.indexOf(m[4])>=0",
-			"": "z",
-			_resort: function(m){
-				return ["", m[1], m[3], m[2], m[5]];
-			},
-			_prefix: "var z=a[m[3]];if(!z||/href|src/.test(m[3]))z=jQuery.attr(a,m[3]);"
-		},
 		"[": "jQuery.find(m[2],a).length"
 	},
 	
 	// The regular expressions that power the parsing engine
 	parse: [
 		// Match: [@value='test'], [@foo]
-		/^\[ *(@)([\w-]+) *([!*$^=]*) *('?"?)(.*?)\4 *\]/,
+		/^\[ *(@)([\w-]+) *([!*$^~=]*) *('?"?)(.*?)\4 *\]/,
 
 		// Match: [div], [div p]
 		/^(\[)\s*(.*?(\[.*?\])?[^[]*?)\s*\]/,
@@ -857,16 +848,6 @@ jQuery.extend({
 		// Match: :even, :last-chlid, #id, .class
 		new RegExp("^([:.#]*)(" + 
 			( jQuery.chars = "(?:[\\w\u0128-\uFFFF*_-]|\\\\.)" ) + "+)")
-	],
-
-	token: [
-		/^(\/?\.\.)/, "a.parentNode",
-		/^(>|\/)/, "jQuery.sibling(a.firstChild)",
-		/^(\+)/, "jQuery.nth(a,2,'nextSibling')",
-		/^(~)/, function(a){
-			var s = jQuery.sibling(a.parentNode.firstChild);
-			return s.slice(jQuery.inArray(a,s) + 1);
-		}
 	],
 
 	multiFilter: function( expr, elems, not ) {
@@ -925,10 +906,12 @@ jQuery.extend({
 			var m = re.exec(t);
 
 			if ( m ) {
+				var nodeName = m[1].toUpperCase();
+
 				// Perform our own iteration and filter
 				for ( var i = 0; ret[i]; i++ )
 					for ( var c = ret[i].firstChild; c; c = c.nextSibling )
-						if ( c.nodeType == 1 && ( m[1] == "*" || jQuery.nodeName(c, m[1]) ) )
+						if ( c.nodeType == 1 && (nodeName == "*" || c.nodeName == nodeName.toUpperCase()) )
 							r.push( c );
 
 				ret = r;
@@ -936,24 +919,36 @@ jQuery.extend({
 				if ( t.indexOf(" ") == 0 ) continue;
 				foundToken = true;
 			} else {
-				// Look for pre-defined expression tokens
-				for ( var i = 0, tl = jQuery.token.length; i < tl; i += 2 ) {
-					// Attempt to match each, individual, token in
-					// the specified order
-					var re = jQuery.token[i], fn = jQuery.token[i+1];
-					var m = re.exec(t);
+				re = /^((\/?\.\.)|([>\/+~]))\s*([a-z]*)/i;
 
-					// If the token match was found
-					if ( m ) {
-						// Map it against the token's handler
-						r = ret = jQuery.map( ret, jQuery.isFunction( fn ) ?
-							fn : new Function( "a", "return " + fn ) );
+				if ( (m = re.exec(t)) != null ) {
+					r = [];
 
-						// And remove the token
-						t = jQuery.trim( t.replace( re, "" ) );
-						foundToken = true;
-						break;
-					}
+					var nodeName = m[4], mergeNum = jQuery.mergeNum++;
+					m = m[1];
+
+					for ( var j = 0, rl = ret.length; j < rl; j++ )
+						if ( m.indexOf("..") < 0 ) {
+							var n = m == "~" || m == "+" ? ret[j].nextSibling : ret[j].firstChild;
+							for ( ; n; n = n.nextSibling )
+								if ( n.nodeType == 1 ) {
+									if ( m == "~" && n.mergeNum == mergeNum ) break;
+									
+									if (!nodeName || n.nodeName == nodeName.toUpperCase() ) {
+										if ( m == "~" ) n.mergeNum = mergeNum;
+										r.push( n );
+									}
+									
+									if ( m == "+" ) break;
+								}
+						} else
+							r.push( ret[j].parentNode );
+
+					ret = r;
+
+					// And remove the token
+					t = jQuery.trim( t.replace( re, "" ) );
+					foundToken = true;
 				}
 			}
 
@@ -1098,12 +1093,7 @@ jQuery.extend({
 					// Remove what we just matched
 					t = t.substring( m[0].length );
 
-					// Re-organize the first match
-					if ( jQuery.expr[ m[1] ]._resort )
-						m = jQuery.expr[ m[1] ]._resort( m );
-
 					m[2] = m[2].replace(/\\/g, "");
-
 					break;
 				}
 			}
@@ -1120,16 +1110,69 @@ jQuery.extend({
 			else if ( m[1] == "." )
 				r = jQuery.classFilter(r, m[2], not);
 
+			else if ( m[1] == "@" ) {
+				var tmp = [], type = m[3];
+				
+				for ( var i = 0, rl = r.length; i < rl; i++ ) {
+					var a = r[i], z = a[ jQuery.props[m[2]] || m[2] ];
+					
+					if ( z == null || /href|src/.test(m[2]) )
+						z = jQuery.attr(a,m[2]);
+
+					if ( (type == "" && !!z ||
+						 type == "=" && z == m[5] ||
+						 type == "!=" && z != m[5] ||
+						 type == "^=" && z && !z.indexOf(m[5]) ||
+						 type == "$=" && z.substr(z.length - m[5].length) == m[5] ||
+						 (type == "*=" || type == "~=") && z.indexOf(m[5]) >= 0) ^ not )
+							tmp.push( a );
+				}
+				
+				r = tmp;
+
+			// We can get a speed boost by handling nth-child here
+			} else if ( m[1] == ":" && m[2] == "nth-child" ) {
+				var num = jQuery.mergeNum++, tmp = [],
+					test = /(\d*)n\+?(\d*)/.exec(
+						m[3] == "even" && "2n" || m[3] == "odd" && "2n+1" ||
+						!/\D/.test(m[3]) && "n+" + m[3] || m[3]),
+					first = (test[1] || 1) - 0, last = test[2] - 0;
+
+				for ( var i = 0, rl = r.length; i < rl; i++ ) {
+					var node = r[i], parentNode = node.parentNode;
+
+					if ( num != parentNode.mergeNum ) {
+						var c = 1;
+
+						for ( var n = parentNode.firstChild; n; n = n.nextSibling )
+							if ( n.nodeType == 1 )
+								n.nodeIndex = c++;
+
+						parentNode.mergeNum = num;
+					}
+
+					var add = false;
+
+					if ( first == 1 ) {
+						if ( last == 0 || node.nodeIndex == last )
+							add = true;
+					} else if ( (node.nodeIndex + last) % first == 0 )
+						add = true;
+
+					if ( add ^ not )
+						tmp.push( node );
+				}
+
+				r = tmp;
+
 			// Otherwise, find the expression to execute
-			else {
+			} else {
 				var f = jQuery.expr[m[1]];
 				if ( typeof f != "string" )
 					f = jQuery.expr[m[1]][m[2]];
 
 				// Build a custom macro to enclose it
-				eval("f = function(a,i){" +
-					( jQuery.expr[ m[1] ]._prefix || "" ) +
-					"return " + f + "}");
+				eval("f = function(a,i){return " + f + "}");
 
 				// Execute it against the current filter
 				r = jQuery.grep( r, f, not );
@@ -1152,11 +1195,11 @@ jQuery.extend({
 	nth: function(cur,result,dir,elem){
 		result = result || 1;
 		var num = 0;
-		for ( ; cur; cur = cur[dir] ) {
-			if ( cur.nodeType == 1 ) num++;
-			if ( num == result || result == "even" && num % 2 == 0 && num > 1 && cur == elem ||
-				result == "odd" && num % 2 == 1 && cur == elem ) break;
-		}
+
+		for ( ; cur; cur = cur[dir] )
+			if ( cur.nodeType == 1 && ++num == result )
+				break;
+
 		return cur;
 	},
 	sibling: function( n, elem ) {
@@ -1236,7 +1279,7 @@ jQuery.event = {
 			// And bind the global event handler to the element
 			if (element.addEventListener)
 				element.addEventListener(type, element.$handle, false);
-			else if (element.attachEvent)
+			else
 				element.attachEvent("on" + type, element.$handle);
 		}
 
@@ -1284,7 +1327,7 @@ jQuery.event = {
 				if ( !ret ) {
 					if (element.removeEventListener)
 						element.removeEventListener(type, element.$handle, false);
-					else if (element.detachEvent)
+					else
 						element.detachEvent("on" + type, element.$handle);
 					ret = null;
 					delete events[type];
@@ -1398,9 +1441,9 @@ jQuery.event = {
 
 		// Calculate pageX/Y if missing and clientX/Y available
 		if ( event.pageX == null && event.clientX != null ) {
-			var e = document.documentElement || document.body;
-			event.pageX = event.clientX + e.scrollLeft;
-			event.pageY = event.clientY + e.scrollTop;
+			var e = document.documentElement, b = document.body;
+			event.pageX = event.clientX + (e && e.scrollLeft || b.scrollLeft);
+			event.pageY = event.clientY + (e && e.scrollTop || b.scrollTop);
 		}
 			
 		// Add which for key events
@@ -1486,10 +1529,9 @@ jQuery.fn.extend({
 			f.apply( document, [jQuery] );
 			
 		// Otherwise, remember the function for later
-		else {
+		else
 			// Add the function to the wait list
 			jQuery.readyList.push( function() { return f.apply(this, [jQuery]) } );
-		}
 	
 		return this;
 	}

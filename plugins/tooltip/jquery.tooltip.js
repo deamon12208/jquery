@@ -13,12 +13,6 @@
  *
  */
 
-/*
-TODO
-- finally: release 2.0, being as backwards compatible as possible
-- build example similar to http://codylindley.com/blogstuff/js/tooltip/tooltip.htm or http://g-academy.tweak.se/
-*/
-
 /**
  * Display a customized tooltip instead of the default one
  * for every selected element. The tooltip behaviour mimics
@@ -67,13 +61,15 @@ TODO
  * @desc This example starts with modifying the global settings, applying them to all following Tooltips; Afterwards, Tooltips for anchors with class pretty are created with an extra class for the Tooltip: "fancy" for anchors, "fancy-img" for images
  *
  * @param Object settings (optional) Customize your Tooltips
- * @option Number delay The number of milliseconds before a tooltip is display, default is 250
- * @option Boolean track If true, let the tooltip track the mousemovement, default is false
- * @option Boolean showURL If true, shows the href or src attribute within p.url, default is true
- * @option String showBody If specified, uses the String to split the title, displaying the first part in the h3 tag, all following in the p.body tag, separated with <br/>s, default is null
- * @option String extraClass If specified, adds the class to the tooltip helper, default is null
- * @option Boolean fixPNG If true, fixes transparent PNGs in IE, default is false
- * @option Function bodyHandler If specified its called to format the tooltip-body, hiding the title-part
+ * @option Number delay The number of milliseconds before a tooltip is display. Default: 250
+ * @option Boolean track If true, let the tooltip track the mousemovement. Default: false
+ * @option Boolean showURL If true, shows the href or src attribute within p.url. Defaul: true
+ * @option String showBody If specified, uses the String to split the title, displaying the first part in the h3 tag, all following in the p.body tag, separated with <br/>s. Default: null
+ * @option String extraClass If specified, adds the class to the tooltip helper. Default: null
+ * @option Boolean fixPNG If true, fixes transparent PNGs in IE. Default: false
+ * @option Function bodyHandler If specified its called to format the tooltip-body, hiding the title-part. Default: none
+ * @option Number top The top-offset for the tooltip position. Default: 15
+ * @option Number left The left-offset for the tooltip position. Default: 15
  *
  * @name Tooltip
  * @type jQuery
@@ -121,15 +117,18 @@ TODO
 		tID,
 		// IE 5.5 or 6
 		IE = $.browser.msie && /MSIE\s(5\.5|6\.)/.test(navigator.userAgent),
-		// block all tooltips when one is transformed to a popup
+		// flag for mouse tracking
 		track = false;
 	
 	$.Tooltip = {
 		blocked: false,
 		defaults: {
-			delay: 250,
+			delay: 200,
 			showURL: true,
-			extraClass: ""
+			extraClass: "",
+			top: 15,
+			left: 15,
+			opacity: 1
 		}
 	};
 	
@@ -196,8 +195,8 @@ TODO
 		
 		// save references to title and url elements
 		helper.title = $('h3', helper.parent);
-		helper.body = $('p.body', helper.parent);
-		helper.url = $('p.url', helper.parent);
+		helper.body = $('div.body', helper.parent);
+		helper.url = $('div.url', helper.parent);
 	}
 	
 	// main event handler to start showing tooltips
@@ -214,13 +213,6 @@ TODO
 			
 		// update at least once
 		update(event);
-		
-		// hide the helper when the mouse was clicked on the element
-		//if (this.tSettings.event != "click")
-			//$(this).bind('click', hide);
-		
-		// hide the helper when the mouse moves out of the element
-		//$(this).bind('mouseout', hide);
 	}
 	
 	// save elements title before the tooltip is displayed
@@ -260,8 +252,7 @@ TODO
 		// add an optional class for this tip
 		helper.parent.addClass(this.tSettings.extraClass);
 		
-		if ( this.tSettings.opacity != undefined )
-			helper.parent.css("opacity", 0.85);
+		helper.parent.css("opacity", this.tSettings.opacity);
 		
 		// fix PNG background for IE
 		if (this.tSettings.fixPNG )
@@ -296,13 +287,12 @@ TODO
 			$('body').unbind('mousemove', update);
 			return;	
 		}
-
 		var left = helper.parent[0].offsetLeft;
 		var top = helper.parent[0].offsetTop;
 		if(event) {
 			// position the helper 15 pixel to bottom right, starting from mouse position
-			left = event.pageX + 15;
-			top = event.pageY + 15;
+			left = event.pageX + current.tSettings.left;
+			top = event.pageY + current.tSettings.top;
 			helper.parent.css({
 				left: left + 'px',
 				top: top + 'px'
@@ -342,9 +332,6 @@ TODO
 		current = null;
 		
 		helper.parent.hide().removeClass( this.tSettings.extraClass );
-		
-		if ( this.tSettings.opacity != undefined )
-			helper.parent.css("opacity", 1);
 		
 		if( this.tSettings.fixPNG )
 			helper.parent.unfixPNG();

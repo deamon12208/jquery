@@ -31,9 +31,17 @@ $.extend($.Tooltip.defaults, {
 $('#yahoo a').Tooltip();
 
 $('#pretty').Tooltip({
-	extraClass: "fancy",
+	extraClass: "pretty",
 	fixPNG: true,
 	opacity: 0.95
+});
+
+$("#fancy").Tooltip({
+	opacity: 1,
+	fixPNG: true,
+	extraClass: "pretty fancy",
+	top: -15,
+	left: 5
 });
 
 $('#right a').Tooltip({ extraClass: "right" });
@@ -55,90 +63,95 @@ $("#block").click(function() {
 
 </head>
 <body>
-<p>The following three elements have default settings (mouseover, 250 milliseconds delay, no
-mouse track:</p>
-<br/>
-<form id="form" action="formaction">
-	<fieldset>
-		<legend>Tooltip demo</legend>
-		<a title="Go away, fast!" href="http://google.de">Link to google</a>
-		<br/>
-		<label title="Do as they say!" for="text1">Input something please!</label>
-		<br/>
-		<input title="We need your input!" type="text" value="Test" name="action" id="text1"/>
-	</fieldset>
-</form>
-<br/>
-<p>This image has a tooltip with no delay</p>
-<img src="image.png" height="80" title="Crazy stuff" />
-
-<button id="block">Click this button to block/unblock all tooltips</button>
-<br/>
-<p>The next four links have no delay with tracking, with extra content:</p>
-<div id="yahoo">
-	<a title="Yahoo doo - more content" href="http://yahoo.com">Link to yahoo</a>
-	<a title="Yahoo doo2 - wohooo" href="http://yahoo.com">Link to yahoo1</a>
-	<a title="Yahoo doo3" href="http://yahoo.com">Link to yahoo2</a>
-	<a title="Yahoo doo4 - buga!" href="http://yahoo.com">Link to yahoo3</a>
+<h1 id="banner">jQuery Tooltip Plugin</h1>
+<div id="main">
+	<p>The following three elements have default settings (mouseover, 250 milliseconds delay, no
+	mouse track:</p>
+	<br/>
+	<form id="form" action="formaction">
+		<fieldset>
+			<legend>Tooltip demo</legend>
+			<a title="Go away, fast!" href="http://google.de">Link to google</a>
+			<br/>
+			<label title="Do as they say!" for="text1">Input something please!</label>
+			<br/>
+			<input title="We need your input!" type="text" value="Test" name="action" id="text1"/>
+		</fieldset>
+	</form>
+	<br/>
+	<p>This image has a tooltip with no delay</p>
+	<img src="image.png" height="80" title="Crazy stuff" />
+	
+	<button id="block">Click this button to block/unblock all tooltips</button>
+	<br/>
+	<p>The next four links have no delay with tracking, with extra content:</p>
+	<div id="yahoo">
+		<a title="Yahoo doo - more content" href="http://yahoo.com">Link to yahoo</a>
+		<a title="Yahoo doo2 - wohooo" href="http://yahoo.com">Link to yahoo1</a>
+		<a title="Yahoo doo3" href="http://yahoo.com">Link to yahoo2</a>
+		<a title="Yahoo doo4 - buga!" href="http://yahoo.com">Link to yahoo3</a>
+	</div>
+	<select><option>bgiframe test</option></select>
+	
+	<p>
+	<span id="fancy" title="You are dead, this is hell. - Please note the custom positioning here!">A fancy tooltip, now with some custom positioning.</span>
+	</p>
+	
+	<img id="map" src="karte.png" width="345" height="312" border="0" alt="Karte" usemap="#Landkarte">
+	  <map name="Landkarte">
+	    <area shape="rect" coords="11,10,59,29"
+	          href="http://www.koblenz.de/" alt="Koblenz" title="Koblenz">
+	    <area shape="rect" coords="42,36,96,57"
+	          href="http://www.wiesbaden.de/" alt="Wiesbaden" title="Wiesbaden">
+	    <area shape="rect" coords="42,59,78,80"
+	          href="http://www.mainz.de/" alt="Mainz" title="Mainz">
+	    <area shape="rect" coords="100,26,152,58"
+	          href="http://www.frankfurt.de/" alt="Frankfurt" title="Frankfurt">
+	    <area shape="rect" coords="27,113,93,134"
+	          href="http://www.mannheim.de/" alt="Mannheim" title="Mannheim">
+	    <area shape="rect" coords="100,138,163,159"
+	          href="http://www.heidelberg.de/" alt="Heidelberg" title="Heidelberg">
+	    <area shape="rect" coords="207,77,266,101"
+	          href="http://www.wuerzburg.de/" alt="W&uuml;rzburg" title="W&uuml;rzburg">
+	    <area shape="rect" coords="282,62,344,85"
+	          href="http://www.bamberg.de/" alt="Bamberg" title="Bamberg">
+	    <area shape="rect" coords="255,132,316,150"
+	          href="http://www.nuernberg.de/" alt="N&uuml;rnberg" title="N&uuml;rnberg">
+	    <area shape="rect" coords="78,182,132,200"
+	          href="http://www.karlsruhe.de/" alt="Karlsruhe" title="Karlsruhe">
+	    <area shape="rect" coords="142,169,200,193"
+	          href="http://www.heilbronn.de/" alt="Heilbronn" title="Heilbronn">
+	    <area shape="rect" coords="140,209,198,230"
+	          href="http://www.stuttgart.de/" alt="Stuttgart" title="Stuttgart">
+	    <area shape="rect" coords="187,263,222,281"
+	          href="http://www.ulm.de/" alt="Ulm" title="Ulm">
+	    <area shape="rect" coords="249,278,304,297"
+	          href="http://www.augsburg.de/" alt="Augsburg" title="Augsburg">
+	    <area shape="poly" coords="48,311,105,248,96,210,75,205,38,234,8,310"
+	          href="http://www.baden-aktuell.de/" alt="Baden" title="Baden">
+	  </map>
+	Image map with tooltips.
+	
+	<p>And now, for the fancy stuff, a tooltip with an extra class for nice shadows, and some extra content</p>
+	<a id="pretty" href="#" title="I am pretty! - I am a very pretty tooltip, I need lot's of attention from buggers like you! Yes!">Hover me, please</a>
+	<br/>
+	Some worthless text below.
+	<br/>
+	<select><option>bgiframe test</option></select>
+	Some worthless text below.<br/>
+	Some worthless text below.<br/>
+	Some worthless text below.
+	
+	<p id="right">
+		Tooltip with fixed width<br/>
+		<a title="Short title" href="http://goggle">Google me!</a><br/>
+		<a title="Rather a very very long title with no meaning but yet quite long long long" href="http://goggle">Google me!</a>
+	</p>
+	<p id="right2">
+		Tooltip width auto width<br/>
+		<a title="Short title" href="http://goggle">Google me!</a><br/>
+		<a title="Rather a very very long title with no meaning but yet quite long long long" href="http://goggle">Google me!</a>
+	</p>
 </div>
-<select><option>bgiframe test</option></select>
-
-<br/>
-
-<img id="map" src="karte.png" width="345" height="312" border="0" alt="Karte" usemap="#Landkarte">
-  <map name="Landkarte">
-    <area shape="rect" coords="11,10,59,29"
-          href="http://www.koblenz.de/" alt="Koblenz" title="Koblenz">
-    <area shape="rect" coords="42,36,96,57"
-          href="http://www.wiesbaden.de/" alt="Wiesbaden" title="Wiesbaden">
-    <area shape="rect" coords="42,59,78,80"
-          href="http://www.mainz.de/" alt="Mainz" title="Mainz">
-    <area shape="rect" coords="100,26,152,58"
-          href="http://www.frankfurt.de/" alt="Frankfurt" title="Frankfurt">
-    <area shape="rect" coords="27,113,93,134"
-          href="http://www.mannheim.de/" alt="Mannheim" title="Mannheim">
-    <area shape="rect" coords="100,138,163,159"
-          href="http://www.heidelberg.de/" alt="Heidelberg" title="Heidelberg">
-    <area shape="rect" coords="207,77,266,101"
-          href="http://www.wuerzburg.de/" alt="W&uuml;rzburg" title="W&uuml;rzburg">
-    <area shape="rect" coords="282,62,344,85"
-          href="http://www.bamberg.de/" alt="Bamberg" title="Bamberg">
-    <area shape="rect" coords="255,132,316,150"
-          href="http://www.nuernberg.de/" alt="N&uuml;rnberg" title="N&uuml;rnberg">
-    <area shape="rect" coords="78,182,132,200"
-          href="http://www.karlsruhe.de/" alt="Karlsruhe" title="Karlsruhe">
-    <area shape="rect" coords="142,169,200,193"
-          href="http://www.heilbronn.de/" alt="Heilbronn" title="Heilbronn">
-    <area shape="rect" coords="140,209,198,230"
-          href="http://www.stuttgart.de/" alt="Stuttgart" title="Stuttgart">
-    <area shape="rect" coords="187,263,222,281"
-          href="http://www.ulm.de/" alt="Ulm" title="Ulm">
-    <area shape="rect" coords="249,278,304,297"
-          href="http://www.augsburg.de/" alt="Augsburg" title="Augsburg">
-    <area shape="poly" coords="48,311,105,248,96,210,75,205,38,234,8,310"
-          href="http://www.baden-aktuell.de/" alt="Baden" title="Baden">
-  </map>
-Image map with tooltips.
-
-<p>And now, for the fancy stuff, a tooltip with an extra class for nice shadows, and some extra content</p>
-<a id="pretty" href="#" title="I am pretty! - I am a very pretty tooltip, I need lot's of attention from buggers like you! Yes!">Hover me, please</a>
-<br/>
-Some worthless text below.
-<br/>
-<select><option>bgiframe test</option></select>
-Some worthless text below.<br/>
-Some worthless text below.<br/>
-Some worthless text below.
-<p id="right">
-	Tooltip with fixed width<br/>
-	<a title="Short title" href="http://goggle">Google me!</a><br/>
-	<a title="Rather a very very long title with no meaning but yet quite long long long" href="http://goggle">Google me!</a>
-</p>
-<p id="right2">
-	Tooltip width auto width<br/>
-	<a title="Short title" href="http://goggle">Google me!</a><br/>
-	<a title="Rather a very very long title with no meaning but yet quite long long long" href="http://goggle">Google me!</a>
-</p>
-
 </body>
 </html>

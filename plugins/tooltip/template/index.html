@@ -27,61 +27,68 @@
 	    <li><a href="#download">Download &amp; Support</a></li>
     </ul>
     <div id="getting-started" class="tabContent">
-
-        <h1>Overview</h1>
-        <p>The jQuery Tooltip Plugin allows you to easily and unobtrusively upgrade tooltips on your page
-        with stylesheets and behaviour. The title-attribute of any element is used to display an overlay
-        above the element. The default behaviour mimicks the default behaviour of the browser:<br/>
-        A short delay before showing the tooltip and no mouse tracking. That behaviour along with different
-        formatting options can be customized.</p>
-        
-        <p>The plugin provides a single plugin-method, <code class="inline">Tooltip</code>. You can call it
-        without any options for the default behaviour, or pass a JavaScript to customize behaviour and formatting.</p>
-        
-        <h1>Quick Start Guide</h1>
-		<div class="step-one">Add one or more elements with a title
-		attribute to your page. Lets start with some anchors in a navigation
-		list:</div>
+    	<div id=getting-started-main">
+			<ul id="getting-started-nav" class="sampleAnchors">
+				<li><a href="#overview">Overview</a></li>
+				<li><a href="#quickstart">Quick Start Guide</a></li>
+			</ul>
+			<div id="overview" class="sampleTabContent">
+		        <p>The jQuery Tooltip Plugin allows you to easily and unobtrusively upgrade tooltips on your page
+		        with stylesheets and behaviour. The title-attribute of any element is used to display an overlay
+		        above the element. The default behaviour mimicks the default behaviour of the browser:<br/>
+		        A short delay before showing the tooltip and no mouse tracking. That behaviour along with different
+		        formatting options can be customized.</p>
+		        
+		        <p>The plugin provides a single plugin-method, <code class="inline">Tooltip</code>. You can call it
+		        without any options for the default behaviour, or pass a JavaScript to customize behaviour and formatting.</p>
+		    </div>
+	        
+	        <div id="quickstart" class="sampleTabContent">
+				<div class="step-one">Add one or more elements with a title
+				attribute to your page. Lets start with some anchors in a navigation
+				list:</div>
+				
+				<pre><code class="mix">&lt;ul id="navigation"&gt;
+			&lt;li&gt;&lt;a href="?overview" title="Here we present our products"&gt;Overview&lt;/a&gt;&lt;/li&gt;
+			&lt;li&gt;&lt;a href="?catalog" title="Browse through all our products"&gt;Catalog&lt;/a&gt;&lt;/li&gt;
+			&lt;li&gt;&lt;a href="?contact" title="Contact us via mail or phone"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+		&lt;/ul&gt;</code></pre>
 		
-		<pre><code class="mix">&lt;ul id="navigation"&gt;
-	&lt;li&gt;&lt;a href="?overview" title="Here we present our products"&gt;Overview&lt;/a&gt;&lt;/li&gt;
-	&lt;li&gt;&lt;a href="?catalog" title="Browse through all our products"&gt;Catalog&lt;/a&gt;&lt;/li&gt;
-	&lt;li&gt;&lt;a href="?contact" title="Contact us via mail or phone"&gt;Contact&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</code></pre>
-
-        <div class="step-two">Add a bit CSS and include jQuery and the Tooltip Plugin as external script files and a short script to
-        initialize the tooltips when the <abbr title="Document Object Model">DOM</abbr> is ready:</div>
-        <pre><code class="mix">&lt;head&gt;
-    &lt;style type="text/css"&gt;
-    	#tooltip {
-			position: absolute;
-			z-index: 3000;
-			border: 1px solid #111;
-			background-color: #eee;
-			opacity: 0.85;
-			padding: 5px;
-		}
-		#tooltip h3, #tooltip div { margin: 0; }
-    &lt;/style&gt;
-    &lt;script type="text/javascript" src="path/to/jquery.js"&gt;&lt;/script&gt;
-    &lt;script type="text/javascript" src="path/to/jquery.tooltip.js"&gt;&lt;/script&gt;
-
-    &lt;script type="text/javascript"&gt;
-        // wait for the DOM to be loaded
-        $(document).ready(function() {
-            // find all anchors inside 'navigation' and apply Tooltips
-            $('#navigation a').Tooltip();
-        });
-    &lt;/script&gt;
-&lt;/head&gt;</code></pre>
-
-	    <strong>That's it!</strong> When hovering one of the anchors in the list, a nicely formatted tooltip is displayed:
-	    
-	    <ul id="navigation">
-			<li><a href="?overview" title="Here we present our products">Overview</a></li>
-			<li><a href="?catalog" title="Browse through all our products">Catalog</a></li>
-			<li><a href="?contact" title="Contact us via mail or phone">Contact</a></li>
-		</ul>
+		        <div class="step-two">Add a bit CSS and include jQuery and the Tooltip Plugin as external script files and a short script to
+		        initialize the tooltips when the <abbr title="Document Object Model">DOM</abbr> is ready:</div>
+		        <pre><code class="mix">&lt;head&gt;
+		    &lt;style type="text/css"&gt;
+		    	#tooltip {
+					position: absolute;
+					z-index: 3000;
+					border: 1px solid #111;
+					background-color: #eee;
+					opacity: 0.85;
+					padding: 5px;
+				}
+				#tooltip h3, #tooltip div { margin: 0; }
+		    &lt;/style&gt;
+		    &lt;script type="text/javascript" src="path/to/jquery.js"&gt;&lt;/script&gt;
+		    &lt;script type="text/javascript" src="path/to/jquery.tooltip.js"&gt;&lt;/script&gt;
+		
+		    &lt;script type="text/javascript"&gt;
+		        // wait for the DOM to be loaded
+		        $(document).ready(function() {
+		            // find all anchors inside 'navigation' and apply Tooltips
+		            $('#navigation a').Tooltip();
+		        });
+		    &lt;/script&gt;
+		&lt;/head&gt;</code></pre>
+		
+			    <strong>That's it!</strong> When hovering one of the anchors in the list, a nicely formatted tooltip is displayed:
+			    
+			    <ul id="navigation">
+					<li><a href="?overview" title="Here we present our products">Overview</a></li>
+					<li><a href="?catalog" title="Browse through all our products">Catalog</a></li>
+					<li><a href="?contact" title="Contact us via mail or phone">Contact</a></li>
+				</ul>
+			</div>
+		</div>
     </div>
     
     <div id="api" class="tabContent">
@@ -117,7 +124,6 @@ $('a.pretty').Tooltip({
     </div>
     
 	<div id="code-samples" class="tabContent">
-		<h1>Code Samples</h1>
 		<div id="samples">
 			<ul class="sampleAnchors">
 				<li><a href="#sample1">Basics</a></li>
