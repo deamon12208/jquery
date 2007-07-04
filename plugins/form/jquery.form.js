@@ -8,7 +8,7 @@
  *   http://www.gnu.org/licenses/gpl.html
  *
  * Revision: $Id$
- * Version: .98
+ * Version: .99  Jul-04-2007
  */
  (function($) {
 /**
@@ -415,32 +415,42 @@ $.fn.ajaxSubmit.counter = 0; // used to create unique iframe ids
  * @type   jQuery
  */
 $.fn.ajaxForm = function(options) {
-    return this.each(function() {
-        $(":submit,input:image", this).click(function(ev) {
-            var $form = this.form;
-            $form.clk = this;
-            if (this.type == 'image') {
-                if (ev.offsetX != undefined) {
-                    $form.clk_x = ev.offsetX;
-                    $form.clk_y = ev.offsetY;
-                } else if (typeof $.fn.offset == 'function') { // try to use dimensions plugin
-                    var offset = $(this).offset();
-                    $form.clk_x = ev.pageX - offset.left;
-                    $form.clk_y = ev.pageY - offset.top;
-                } else {
-                    $form.clk_x = ev.pageX - this.offsetLeft;
-                    $form.clk_y = ev.pageY - this.offsetTop;
-                }
-            }
-            // clear form vars
-            setTimeout(function() {
-                $form.clk = $form.clk_x = $form.clk_y = null;
-                }, 10);
-        })
-    }).submit(function(e) {
-        $(this).ajaxSubmit(options);
-        return false;
+    this.each(function() {
+        this.formPluginId = $.fn.ajaxForm.counter++;
+        $.fn.ajaxForm.optionHash[this.formPluginId] = options;
+        $(":submit,input:image", this).unbind('click',clickHandler).click(clickHandler);
     });
+    return this.unbind('submit',submitHandler).submit(submitHandler);
+};
+
+$.fn.ajaxForm.counter = 1;
+$.fn.ajaxForm.optionHash = {};
+
+function clickHandler(e) {
+    var $form = this.form;
+    $form.clk = this;
+    if (this.type == 'image') {
+        if (e.offsetX != undefined) {
+            $form.clk_x = e.offsetX;
+            $form.clk_y = e.offsetY;
+        } else if (typeof $.fn.offset == 'function') { // try to use dimensions plugin
+            var offset = $(this).offset();
+            $form.clk_x = e.pageX - offset.left;
+            $form.clk_y = e.pageY - offset.top;
+        } else {
+            $form.clk_x = e.pageX - this.offsetLeft;
+            $form.clk_y = e.pageY - this.offsetTop;
+        }
+    }
+    // clear form vars
+    setTimeout(function() { $form.clk = $form.clk_x = $form.clk_y = null; }, 10);
+};
+
+function submitHandler() {
+    var id = this.formPluginId;
+    var options = $.fn.ajaxForm.optionHash[id];
+    $(this).ajaxSubmit(options);
+    return false;
 };
 
 /**
