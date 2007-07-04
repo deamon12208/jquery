@@ -305,12 +305,12 @@
 			h = helper.parent[0];
 		// check horizontal position
 		if(v.x + v.cx < h.offsetLeft + h.offsetWidth) {
-			left -= h.offsetWidth + 20;
+			left -= h.offsetWidth + 20 + current.tSettings.left;
 			helper.parent.css({left: left + 'px'});
 		}
 		// check vertical position
 		if(v.y + v.cy < h.offsetTop + h.offsetHeight) {
-			top -= h.offsetHeight + 20;
+			top -= h.offsetHeight + 20 + current.tSettings.top;
 			helper.parent.css({top: top + 'px'});
 		}
 	}

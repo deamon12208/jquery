@@ -847,7 +847,7 @@ jQuery.extend({
 
 		// Match: :even, :last-chlid, #id, .class
 		new RegExp("^([:.#]*)(" + 
-			( jQuery.chars = "(?:[\\w\u0128-\uFFFF*_-]|\\\\.)" ) + "+)")
+			( jQuery.chars = jQuery.browser.safari && jQuery.browser.version < "3.0.0" ? "\\w" : "(?:[\\w\u0128-\uFFFF*_-]|\\\\.)" ) + "+)")
 	],
 
 	multiFilter: function( expr, elems, not ) {
@@ -1117,7 +1117,7 @@ jQuery.extend({
 					var a = r[i], z = a[ jQuery.props[m[2]] || m[2] ];
 					
 					if ( z == null || /href|src/.test(m[2]) )
-						z = jQuery.attr(a,m[2]);
+						z = jQuery.attr(a,m[2]) || '';
 
 					if ( (type == "" && !!z ||
 						 type == "=" && z == m[5] ||
