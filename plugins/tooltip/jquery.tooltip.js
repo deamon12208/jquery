@@ -127,8 +127,7 @@
 			showURL: true,
 			extraClass: "",
 			top: 15,
-			left: 15,
-			opacity: 1
+			left: 15
 		},
 		block: function() {
 			$.Tooltip.blocked = !$.Tooltip.blocked;
@@ -255,8 +254,6 @@
 		// add an optional class for this tip
 		helper.parent.addClass(this.tSettings.extraClass);
 
-		helper.parent.css("opacity", this.tSettings.opacity);
-		
 		// fix PNG background for IE
 		if (this.tSettings.fixPNG )
 			helper.parent.fixPNG();

@@ -4,6 +4,7 @@
 	border: 1px solid #111;
 	background-color: #eee;
 	padding: 5px;
+	opacity: 0.85;
 }
 #tooltip h3, #tooltip div { margin: 0; }
 
@@ -13,6 +14,7 @@
 	width: 210px;
 	padding:20px;
 	height: 135px;
+	opacity: 0.8;
 	background: url('shadow.png');
 }
 #tooltip.pretty h3 {
@@ -36,6 +38,7 @@ h1 { font-size: large }
 #main { padding: 1em; }
 #banner { padding: 15px; background-color: #06b; color: white; font-size: large; border-bottom: 1px solid #ccc;
     background: url(bg.gif) repeat-x; text-align: center }
+fieldset { padding: 8px; }
 legend { font-weight: bold; }
     
 .jscom, .mix htcom   { color: #4040c2; }
