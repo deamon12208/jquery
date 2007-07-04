@@ -8,7 +8,7 @@
  *   http://www.gnu.org/licenses/gpl.html
  *
  * Revision: $Id$
- * Version: .99  Jul-04-2007
+ * Version: 1.0  Jul-04-2007
  */
  (function($) {
 /**
@@ -415,12 +415,12 @@ $.fn.ajaxSubmit.counter = 0; // used to create unique iframe ids
  * @type   jQuery
  */
 $.fn.ajaxForm = function(options) {
-    this.each(function() {
+    return this.ajaxFormUnbind().submit(submitHandler).each(function() {
+        // store options in hash
         this.formPluginId = $.fn.ajaxForm.counter++;
         $.fn.ajaxForm.optionHash[this.formPluginId] = options;
-        $(":submit,input:image", this).unbind('click',clickHandler).click(clickHandler);
+        $(":submit,input:image", this).click(clickHandler);
     });
-    return this.unbind('submit',submitHandler).submit(submitHandler);
 };
 
 $.fn.ajaxForm.counter = 1;
@@ -447,6 +447,7 @@ function clickHandler(e) {
 };
 
 function submitHandler() {
+    // retrieve options from hash
     var id = this.formPluginId;
     var options = $.fn.ajaxForm.optionHash[id];
     $(this).ajaxSubmit(options);
@@ -462,9 +463,9 @@ function submitHandler() {
  * @type   jQuery
  */
 $.fn.ajaxFormUnbind = function() {
-    this.unbind('submit');
+    this.unbind('submit', submitHandler);
     return this.each(function() {
-        $(":submit,input:image", this).unbind('click');
+        $(":submit,input:image", this).unbind('click', clickHandler);
     });
 
 };

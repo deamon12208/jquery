@@ -748,6 +748,50 @@ test("fieldSerialize(false) :radio", function() {
 });
 
 
+test("ajaxForm - auto unbind", function() {
+    $('#targetDiv').empty();
+    stop();
+
+    var opts = {
+        target: '#targetDiv',
+        beforeSubmit: function(a, jq) { // pre-callback
+            ok( true, 'pre-callback');
+        },
+        success: function() {
+            ok( true, 'post-callback');
+            start();
+        }
+    };
+
+    expect(2);
+    // multiple binds
+    $("#form8").ajaxForm(opts).ajaxForm(opts).ajaxForm(opts);
+    $('#submitForm8')[0].click();
+});
+
+test("ajaxFormUnbind", function() {
+    $('#targetDiv').empty();
+    stop();
+
+    var opts = {
+        target: '#targetDiv',
+        beforeSubmit: function(a, jq) { // pre-callback
+            ok( true, 'pre-callback');
+        },
+        success: function() {
+            ok( true, 'post-callback');
+            start();
+        }
+    };
+
+    expect(0);
+    // multiple binds
+    $("#form9").ajaxForm(opts).submit(function(){return false;});
+    $("#form9").ajaxFormUnbind(opts);
+    $('#submitForm9')[0].click();
+    
+    setTimeout(start, 500);
+});
 
 // helper method
 function arrayCount(arr, key) {
@@ -874,6 +918,16 @@ function arrayValue(arr, key) {
         <!-- form7, 'enctype' testing -->
         <form id="form7" action="text.php" method="post" enctype="text/css"><div>
             <textarea name="doc">body { padding: 0}</textarea>
+        </div></form>
+
+        <form id="form8" action="text.php" method="post"><div>
+            <textarea name="ta">blah</textarea>
+            <input type="submit" id="submitForm8" />
+        </div></form>
+
+        <form id="form9" action="text.php" method="post"><div>
+            <textarea name="ta">blah</textarea>
+            <input type="submit" id="submitForm9" />
         </div></form>
 
         <!-- pseudo-form -->
