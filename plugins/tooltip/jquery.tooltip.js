@@ -1,5 +1,5 @@
 /*
- * jQuery Tooltip plugin 1.1 alpha
+ * jQuery Tooltip plugin 1.1
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-tooltip/
  *
@@ -17,10 +17,13 @@
  * Display a customized tooltip instead of the default one
  * for every selected element. The tooltip behaviour mimics
  * the default one, but lets you style the tooltip and
- * specify the delay before displaying it.
+ * specify the delay before displaying it. In addition, it displays the
+ * href value, if it is available.
  *
- * In addition, it displays the href value, if it is available.
- * 
+ * Requires dimensions plugin. 
+ *
+ * When used on a page with select elements, include the bgiframe plugin. It is used if present.
+ *
  * To style the tooltip, use these selectors in your stylesheet:
  *
  * #tooltip - The tooltip container
@@ -31,7 +34,6 @@
  *
  * #tooltip div.url - The tooltip url, shown when using showURL
  *
- * When used on a page with select elements, include the bgiframe plugin. It is used if present.
  *
  * @example $('a, input, img').Tooltip();
  * @desc Shows tooltips for anchors, inputs and images, if they have a title
