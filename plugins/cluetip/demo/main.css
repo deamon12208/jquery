@@ -35,9 +35,9 @@ pre, code {
 .highlighter {
   background: #ff3;
 }
-#loadme {
+/*#loadme {
   display: none;
-}
+}*/
 
 .float-left {
   float: left;
