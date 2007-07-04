@@ -254,7 +254,7 @@
 		
 		// add an optional class for this tip
 		helper.parent.addClass(this.tSettings.extraClass);
-		
+
 		helper.parent.css("opacity", this.tSettings.opacity);
 		
 		// fix PNG background for IE
