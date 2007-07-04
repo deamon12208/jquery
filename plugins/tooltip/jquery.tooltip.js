@@ -129,6 +129,9 @@
 			top: 15,
 			left: 15,
 			opacity: 1
+		},
+		block: function() {
+			$.Tooltip.blocked = !$.Tooltip.blocked;
 		}
 	};
 	
