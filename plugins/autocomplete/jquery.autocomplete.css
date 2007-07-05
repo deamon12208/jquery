@@ -3,6 +3,7 @@
 	border: 1px solid WindowFrame;
 	background-color: Window;
 	overflow: hidden;
+	z-index: 99999;
 }
 
 .ac_results ul {
