@@ -4,9 +4,17 @@
 		tablesorter: new function() {
 			
 			var config = {
-				
-				findAllRowsExp: '/tbody:first/tr',
-				findAllCellsExp: 'td',
+				css: {
+					header: 'header',
+					orderAsc: 'headerSortUp',
+					orderDesc: 'headerSortDown'
+				},	
+				sorting: {
+					initialOrder: 'asc'
+				},
+				xpath: {
+					findAllHeaders: '/thead:first/tr/th'
+				},
 				debug: true
 				
 			};
@@ -49,53 +57,7 @@
 			
 			function getElementText(node) {
 				return node.innerHTML;
-			}
-			
-			/* sorting methods */
-			
-			function multisort(sortList,cache) {
-				
-				if(config.debug) { var sortTime = new Date(); }
-				var sortWrapper = '';
-				var dynamicExp = "sortWrapper = function(a,b) {";
-					
-					for(var i=0; i < sortList.length; i++) {
-						
-						var s = (getCachedSortType(i) == 'text') ? 'sortText' : 'sortNumeric';
-
-						var c = 'exp' + i;
-						dynamicExp += 'var ' + c + ' = ' + s + '(a[' + sortList[i] + '],b[' + sortList[i] + ']);';
-						dynamicExp += 'if(' + c + ') { return ' + c + ' }';
-						dynamicExp += ' else {';
-						
-						
-					}
-						
-					for(var i=0; i < sortList.length; i++) {
-						dynamicExp += '}';
-					}
-				dynamicExp += 'return 0'	
-				dynamicExp += '};'	
-				
-				eval(dynamicExp);
-				cache.normalized.sort(sortWrapper);
-				
-				if(config.debug) { benchmark('Sorting on ' + sortList.length + ' columns:', sortTime); }
-				
-				return cache;
-			}
-			
-			function sortText(a,b) {
-				return ((a < b) ? -1 : ((a > b) ? 1 : 0));
-	 		}
-			
-	 		function sortNumeric(a,b) {
-				return a-b;
-			}
-			
-			function getCachedSortType(c) {
-				return 'text';
-			}
+			};
 			
 			function appendToTable(table,cache) {
 				
@@ -115,7 +77,112 @@
 				}	
 				
 				if(config.debug) { benchmark('Rebuilt table:', appendTime); }
+			};
+			
+			function buildHeaders(table) {
+				
+				if(config.debug) { var time = new Date(); }
+				
+				var headers = $(config.xpath.findAllHeaders,table).each(function(i) {
+					
+					
+					this.column = i;
+					this.order = formatSortingOrder(config.sorting.initialOrder);
+					
+					
+					
+				}).addClass(config.css.header); 
+				
+				
+				if(config.debug) { benchmark('Built headers:', time); }
+				
+				return headers;
+				
+			};
+			
+			function formatSortingOrder(val) {
+				
+				if(typeof val != "Number") {
+					i = (val.toLowerCase() == "desc") ? 1 : 0;
+				} else {
+					i = (val == (0 || 1)) ? val : 0;
+				}
+				return i;
 			}
+			
+			function isValueInArray(val, arr) {
+				for(var i=0; i < arr.length; i++) {
+					if(arr[i] == val) {
+						return true;	
+					}
+				}
+				return false;
+			}
+			
+			function getConfig(settings) {
+				return $.extend(config, settings);
+				
+			};
+			
+			function resetHeadersCss(list,o,c) {
+				for(var i=0; i < list.length; i++) {
+					$('th:eq(' + list[i] + ')', o.parent()).removeClass(c[0]).removeClass(c[1]);
+				}
+			}
+			
+			/* sorting methods */
+			function multisort(sortList,order,cache) {
+				
+				if(config.debug) { var sortTime = new Date(); }
+				
+				var sortWrapper;
+				var dynamicExp = "sortWrapper = function(a,b) {";
+					
+				for(var i=0; i < sortList.length; i++) {
+					var s = (getCachedSortType(i) == 'text') ? ((order == 0) ? 'sortText' : 'sortTextDesc') : ((order == 0) ? 'sortNumeric' : 'sortNumericDesc');
+					var c = sortList[i];
+					var e = 'e' + i;
+					dynamicExp += 'var ' + e + ' = ' + s + '(a[' + c + '],b[' + c + ']);';
+					dynamicExp += 'if(' + e + ') { return ' + e + ' }';
+					dynamicExp += ' else {';
+				}
+					
+				for(var i=0; i < sortList.length; i++) {
+					dynamicExp += '}';
+				}
+				
+				dynamicExp += 'return 0'	
+				dynamicExp += '};'	
+				
+				eval(dynamicExp);
+				
+				cache.normalized.sort(sortWrapper);
+				
+				if(config.debug) { benchmark('Sorting on ' + sortList.length + ' columns and dir ' + order+ ' time:', sortTime); }
+				
+				return cache;
+			};
+			
+			function sortText(a,b) {
+				return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+			};
+			
+			function sortTextDesc(a,b) {
+				return ((b < a) ? -1 : ((b > a) ? 1 : 0))
+			};	
+			
+	 		function sortNumeric(a,b) {
+				return a-b;
+			};
+			
+			function sortNumericDesc(a,b) {
+				return b-a;
+			};
+			
+			function getCachedSortType(c) {
+				return 'text';
+			};
+			
 			
 			/* public methods */
 		
@@ -123,19 +190,105 @@
 				
 				return this.each(function() {
 					
+					// 
+					var $this, $document,$headers, cache, config, shiftDown, sortOrder, sortList = [];
+					
+					config = getConfig(settings);
+										
+					$this = $(this);
+					
+					$document = $(document);
+					
+					//
+					shiftDown = 0;
+					
 					// build the cache for the tbody cells
-					var cache = buildCache(this);
+					cache = buildCache(this);
+					
+					// build headers
+					$headers = buildHeaders(this);
+					
+					// apply event handling to headers
+					$headers.click(function(e) {
+						
+						var i = this.column;
+						var d = this.order % 2;
+						var css = [config.css.orderAsc,config.css.orderDesc];
+						var $cell = $(this);
+						if(!shiftDown) {
+							
+							resetHeadersCss(sortList,$cell, css); 
+							
+							sortList = [];
+							
+							sortList.push(i);
+							
+						} else {
+							// value exists
+							if(isValueInArray(i,sortList)) {
+								sortOrder++; 	
+								
+								// apply css class for all selected elements
+								
+								
+								
+								
+							} else {
+								
+								sortList.push(i);
+							}
+							
+							d = sortOrder % 2;
+							
+							
+							
+							if(sortList.length > 1) {
+								for(var i=0; i < sortList.length; i++) {
+										$('th:eq(' + sortList[i] + ')', $cell.parent()).addClass(css[d]).removeClass(css[(d == 0) ? 1 : 0]);	
+										
+								};
+							};
+							
+						
+						}
+						
+						if(sortList.length == 1) {
+							sortOrder = this.order;
+							$cell.addClass(css[d]).removeClass(css[(d == 0) ? 1 : 0]);
+							
+						}
+						
+						
+						
+						
+						
+						
+								
+						$this.sorton(sortList,d);
+						
+						// update order (desc or asc)
+						this.order++;
+						
+						
+					});
+					
+					$document.keydown(function(e) {
+						shiftDown = 1;
+						
+					}).keyup(function(e) {
+						shiftDown = 0;
+					});
 					
 					
 					// apply easy methods that trigger binded events
-					$(this).bind('update',function() {
+					$this.bind('update',function() {
 
 						cache = buildCache(this);
 					
-					}).bind('sorton',function(e,sortList) {
+					}).bind('sorton',function(e,sortList,direction) {
 						
 						
-						appendToTable(this,multisort(sortList,cache));
+						appendToTable(this,multisort(sortList,direction,cache));
 						
 					});
 					
@@ -148,9 +301,9 @@
 				});
 			};
 			
-			this.sorton = function(sortList) {
+			this.sorton = function(sortList,direction) {
 				return this.each(function() {
-					$(this).trigger('sorton',[sortList]);
+					$(this).trigger('sorton',[sortList,direction]);
 				});
 			};
 		}
