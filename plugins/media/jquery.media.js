@@ -8,7 +8,7 @@
  * http://www.gnu.org/licenses/gpl.html
  *
  * @author: M. Alsup
- * @version: 0.66 (6/08/2007)
+ * @version: 0.70 (7/05/2007)
  * @requires jQuery v1.1.2 or later
  *
  * Supported Media Players:
@@ -25,7 +25,7 @@
  *     Audio: aif, aac, au, gsm, mid, midi, mov, mp3, m4a, snd, rm, wav, wma
  *     Other: bmp, html, pdf, psd, qif, qtif, qti, tif, tiff, xaml
  *
- * Thanks to Mark Hicken for helping me debug this on Safari!
+ * Thanks to Mark Hicken and Brent Pedersen for helping me debug this on the Mac!
  */
 (function($) {
 
@@ -69,7 +69,7 @@ $.fn.media = function(options, f1, f2) {
             $div.css('backgroundColor', o.bgColor).width(o.width);
             
             // post-conversion callback, passes original element, new div element and fully populated options
-            if (typeof f2 == 'function') f2(this, $div[0], o);
+            if (typeof f2 == 'function') f2(this, $div[0], o, player.name);
             break;
         }
     });
@@ -86,18 +86,19 @@ $.fn.media = function(options, f1, f2) {
  */
 $.fn.mediabox = function(options, css) {
     return this.click(function() {
-        if (typeof $.blockUI == 'undefined' || typeof $.fn.displayBox == 'undefined') {
+        if (typeof $.blockUI == 'undefined' || typeof $.blockUI.version == 'undefined' || $.blockUI.version < 1.26) {
             if (typeof $.fn.mediabox.warning != 'undefined') return this; // one warning is enough
             $.fn.mediabox.warning = 1;
-            alert('The mediabox method requires blockUI v1.20 or later.');
+            alert('The mediabox method requires blockUI v1.26 or later.');
             return false;
         }
-        var o, div=0, $e = $(this).clone();
+        var o, p, div=0, $e = $(this).clone();
         $e.appendTo('body').hide().css({margin: 0});
         options = $.extend({}, options, { autoplay: 1 }); // force autoplay in box mode
-        $e.media(options, function(){}, function(origEl, newEl, opts) {
+        $e.media(options, function(){}, function(origEl, newEl, opts, player) {
             div = newEl;
             o = opts;
+            p = player;
         });
         if (!div) return false;
         // don't pull element from the dom on Safari
@@ -116,12 +117,12 @@ $.fn.mediabox = function(options, css) {
 
         $div.displayBox( { width: o.width, height: o.height }, function(el) {
             // quirkiness; sometimes media doesn't stop when removed from the DOM (especially in IE)
-            $(el).find('object,embed').each(function() {
+            $('object,embed', el).each(function() {
                 try { this.Stop();   } catch(e) {}  // quicktime
                 try { this.DoStop(); } catch(e) {}  // real
                 try { this.controls.stop(); } catch(e) {} // windows media player
             });
-        });
+        }, p == 'flash'); // <-- mac/ff workaround
         return false;
     });
 };
@@ -177,6 +178,7 @@ $.fn.media.defaults = {
 // Media Players; think twice before overriding
 $.fn.media.defaults.players = {
     flash: {
+        name:         'flash',
         types:        'flv,mp3,swf',
         oAttrs:   {
             classid:  'clsid:d27cdb6e-ae6d-11cf-96b8-444553540000',
@@ -189,6 +191,7 @@ $.fn.media.defaults.players = {
         }        
     },
     quicktime: {
+        name:         'quicktime',
         types:        'aif,aiff,aac,au,bmp,gsm,mov,mid,midi,mpg,mpeg,mp4,m4a,psd,qt,qtif,qif,qti,snd,tif,tiff,wav,3g2,3gp',
         oAttrs:   {
             classid:  'clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B',
@@ -199,6 +202,7 @@ $.fn.media.defaults.players = {
         }
     },
     realplayer: {
+        name:         'real',
         types:        'ra,ram,rm,rpm,rv,smi,smil',
         autoplayAttr: 'autostart',
         oAttrs:   {
@@ -210,6 +214,7 @@ $.fn.media.defaults.players = {
         }
     },
     winmedia: {
+        name:         'winmedia',
         types:        'asf,avi,wma,wmv',
         autoplayAttr: 'autostart',
         oUrl:         'url',
@@ -224,9 +229,11 @@ $.fn.media.defaults.players = {
     },
     // special cases
     iframe: {
+        name:  'iframe',
         types: 'html,pdf'
     },
     silverlight: {
+        name:  'silverlight',
         types: 'xaml'
     }
 };
