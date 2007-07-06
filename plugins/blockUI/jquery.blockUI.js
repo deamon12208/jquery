@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.25  (07/02/2007)
+ * Version 1.26  (07/05/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -62,6 +62,9 @@
 $.blockUI = function(msg, css) {
     $.blockUI.impl.install(window, msg, css);
 };
+
+// expose version number so other plugins can interogate
+$.blockUI.version = 1.26;
 
 /**
  * unblockUI removes the UI block that was put in place by blockUI
@@ -132,7 +135,7 @@ $.fn.unblock = function() {
  * @type jQuery
  * @cat Plugins/blockUI
  */
-$.fn.displayBox = function(css, fn) {
+$.fn.displayBox = function(css, fn, isFlash) {
     var msg = this[0];
     if (!msg) return;
     var $msg = $(msg);
@@ -153,8 +156,12 @@ $.fn.displayBox = function(css, fn) {
     
     var ml = '-' + parseInt(w)/2 + 'px';
     var mt = '-' + parseInt(h)/2 + 'px';
+    
+    // supress opacity on overlay if displaying flash content on mac/ff platform
+    var ua = navigator.userAgent.toLowerCase();
+    var noalpha = isFlash && /mac/.test(ua) && /firefox/.test(ua);
 
-    $.blockUI.impl.install(window, msg, { width: w, height: h, marginTop: mt, marginLeft: ml }, fn || 1);
+    $.blockUI.impl.install(window, msg, { width: w, height: h, marginTop: mt, marginLeft: ml }, fn || 1, noalpha);
 };
 
 
@@ -189,10 +196,11 @@ $.blockUI.impl = {
     op8: window.opera && window.opera.version() < 9,
     ffLinux: $.browser.mozilla && /Linux/.test(navigator.platform),
     ie6: $.browser.msie && /6.0/.test(navigator.userAgent),
-    install: function(el, msg, css, displayMode) {
+    install: function(el, msg, css, displayMode, noalpha) {
         this.boxCallback = typeof displayMode == 'function' ? displayMode : null;
         this.box = displayMode ? msg : null;
-        var full = (el == window), noalpha = this.op8 || this.ffLinux;
+        var full = (el == window);
+        noalpha = noalpha || this.op8 || this.ffLinux;
         if (full && this.pageBlock) this.remove(window);
         // check to see if we were only passed the css object (a literal)
         if (msg && typeof msg == 'object' && !msg.jquery && !msg.nodeType) {
