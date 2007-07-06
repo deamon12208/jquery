@@ -1326,7 +1326,7 @@ jQuery.extend(jQuery.validator, {
 			return this.required(element) || /^\d+$/.test(value);
 		},
 		
-		 /**
+		/**
          * Return true, if the value is a valid credit card number.
          *
          * Works with all kind of text inputs.
