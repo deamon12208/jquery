@@ -8,7 +8,7 @@
  *   http://www.gnu.org/licenses/gpl.html
  *
  * Revision: $Id$
- * Version: 1.0  Jul-04-2007
+ * Version: 1.0.1  Jul-07-2007
  */
  (function($) {
 /**
@@ -251,10 +251,6 @@ $.fn.ajaxSubmit = function(options) {
         if ($.browser.msie || op8) io.src = 'javascript:false;document.write("");';
         $io.css({ position: 'absolute', top: '-1000px', left: '-1000px' });
 
-        // make sure form attrs are set
-        form.method = 'POST';
-        form.encoding ? form.encoding = 'multipart/form-data' : form.enctype = 'multipart/form-data';
-
         var xhr = { // mock object
             responseText: null,
             responseXML: null,
@@ -278,16 +274,23 @@ $.fn.ajaxSubmit = function(options) {
             $io.appendTo('body');
             // jQuery's event binding doesn't work for iframe events in IE
             io.attachEvent ? io.attachEvent('onload', cb) : io.addEventListener('load', cb, false);
-            form.action = opts.url;
-            var t = form.target;
-            form.target = id;
+            
+            // make sure form attrs are set
+            var encAttr = form.encoding ? 'encoding' : 'enctype';
+            var t = $form.attr('target');
+            $form.attr({
+                target:   id,
+                method:  'POST',
+                encAttr: 'multipart/form-data',
+                action:   opts.url
+            });
 
             // support timout
             if (opts.timeout)
                 setTimeout(function() { timedOut = true; cb(); }, opts.timeout);
 
             form.submit();
-            form.target = t; // reset
+            $form.attr('target', t); // reset target
         }, 10);
         
         function cb() {
@@ -351,7 +354,7 @@ $.fn.ajaxSubmit = function(options) {
             else
                 doc = (new DOMParser()).parseFromString(s, 'text/xml');
             return (doc && doc.documentElement && doc.documentElement.tagName != 'parsererror') ? doc : null;
-        }
+        };
     };
 };
 $.fn.ajaxSubmit.counter = 0; // used to create unique iframe ids
