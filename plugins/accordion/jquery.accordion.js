@@ -1,7 +1,9 @@
 /*
- * Accordion 1.5 - jQuery menu widget
+ * Accordion 1.4 - jQuery menu widget
  *
  * Copyright (c) 2007 Jörn Zaefferer, Frank Marcia
+ *
+ * http://bassistance.de/jquery-plugins/jquery-plugin-accordion/
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -13,9 +15,6 @@
 
 /**
  * Make the selected elements Accordion widgets.
- *
- * This is very similar to the Squeezebox widget, only that there
- * can be only one open element.
  *
  * Semantic requirements:
  *
@@ -60,8 +59,9 @@
  *
  * @example jQuery('#nav').Accordion({
  *   header: '.head',
- *	 cloneFirst: true
+ * 	 navigation: true
  * });
+ * location.href == "somedomain.com/movies/fantasy/"
  * @before <ul id="nav">
  *   <li>
  *     <a class="head" href="books/">Books</a>
@@ -81,8 +81,7 @@
  * @after <ul id="nav">
  *   <li>
  *     <a class="head" href="">Books</a>
- *     <ul>
- *       <li><a href="books/">Books</a></li>
+ *     <ul style="display: none">
  *       <li><a href="books/fantasy/">Fantasy</a></li>
  *       <li><a href="books/programming/">Programming</a></li>
  *     </ul>
@@ -90,15 +89,15 @@
  *   <li>
  *     <a class="head" href="">Movies</a>
  *     <ul>
- *       <li><a href="movies/">Movies</a>
- *       <li><a href="movies/fantasy/">Fantasy</a></li>
+ *       <li><a class="current" href="movies/fantasy/">Fantasy</a></li>
  *       <li><a href="movies/programming/">Programming</a></li>
  *     </ul>
  *   </li>
  * </ul>
- * @desc Creates an Accordion from the given navigation list, cloning the header element to produce a clickable
- * link. The class as specified in the header selector is removed from the cloned element. Currently this works
- * only with the above structure, the header must be an anchor followed by a list.
+ * @desc Creates an Accordion from the given navigation list, activating those accordion parts
+ * that match the current location.href. Assuming the user clicked on "Fantasy" in the "Movies" section,
+ * the accordion displayed after loading the page with the "Movies" section open and the "Fantasy" link highlighted
+ * with a class "current".
  *
  * @example jQuery('#accordion').Accordion().change(function(event, newHeader, oldHeader, newContent, oldContent) {
  *   jQuery('#status').html(newHeader.text());
@@ -106,15 +105,15 @@
  * @desc Updates the element with id status with the text of the selected header every time the accordion changes
  *
  * @param Map options key/value pairs of optional settings.
- * @option String|Element|jQuery|Boolean active Selector for the active element, default is the first child, set to false to display none at start
- * @option String|Element|jQuery header Selector for the header element, eg. div.title, a.head, default is the first child's tagname
- * @option String|Number showSpeed Speed for the slideIn, default is 'normal' (for numbers: smaller = faster)
- * @option String|Number hideSpeed Speed for the slideOut, default is 'normal' (for numbers: smaller = faster)
- * @option String selectedClass Class for active header elements, default is 'selected'
- * @option Boolean alwaysOpen Whether there must be one content element open, default is true.
+ * @option String|Element|jQuery|Boolean active Selector for the active element. Set to false to display none at start. Default: first child
+ * @option String|Element|jQuery header Selector for the header element, eg. 'div.title', 'a.head'. Default: first child's tagname
+ * @option String|Number showSpeed Speed (for numbers: smaller = faster) for the slideIn. Default: 'normal' 
+ * @option String|Number hideSpeed Speed (for numbers: smaller = faster) for the slideOut. Default: 'normal'
+ * @option String selectedClass Class for active header elements. Default: 'selected'
+ * @option Boolean alwaysOpen Whether there must be one content element open. Default: true
  * @option Boolean animated Set to false to disable animations. Default: true
  * @option String event The event on which to trigger the accordion, eg. "mouseover". Default: "click"
- * @option Boolean cloneFirst Use this for a navigation menu where the header element must be available as a selectable target, see related example for more details
+ * @option Boolean navigation If set, looks for the anchor that matches location.href and activates it. Great for href-based pseudo-state-saving. Default: false
  *
  * @type jQuery
  * @see activate(Number)
@@ -145,21 +144,6 @@
  * @cat Plugins/Accordion
  */
  
-/**
- * Override the default settings of the Accordion. Affects only following plugin calls.
- *
- * @example jQuery.Accordion.setDefaults({
- * 	showSpeed: 1000,
- * 	hideSpeed: 150
- * });
- *
- * @param Map options key/value pairs of optional settings, see Accordion() for details
- *
- * @type jQuery
- * @name jQuery.Accordion.setDefaults
- * @cat Plugins/Accordion
- */
-
 jQuery.fn.extend({
 	// nextUntil is necessary, would be nice to have this in jQuery core
 	nextUntil: function(expr) {
@@ -189,6 +173,14 @@ jQuery.fn.extend({
 			// define context defaults
 			header: jQuery(':first-child', this)[0].tagName // take first childs tagName as header
 		}, settings);
+		
+		if ( settings.navigation ) {
+			var current = this.find("a").filter(function() { return this.href == location.href; });
+			if ( current.length ) {
+				settings.active = current.parent().parent().prev();
+				current.addClass("current");
+			}
+		}
 
 		// calculate active if not specified, using the first header
 		var container = this,
@@ -200,12 +192,6 @@ jQuery.fn.extend({
 			running = 0;
 
 		var headers = container.find(settings.header);
-
-		if ( settings.cloneFirst ) {
-			headers.each(function() {
-				jQuery(this).clone().removeClass( settings.header.replace(/\./, '') ).prependTo( jQuery(this).next() ).wrap("<li>");
-			}).attr("href", "");
-		}
 
 		headers
 			.not(active || "")
@@ -310,13 +296,10 @@ jQuery.Accordion = {};
 jQuery.extend(jQuery.Accordion, {
 	defaults: {
 		selectedClass: "selected",
-		showSpeed: 'normal',
-		hideSpeed: 'normal',
+		showSpeed: 'fast',
+		hideSpeed: 'fast',
 		alwaysOpen: true,
 		animated: true,
 		event: "click"
-	},
-	setDefaults: function(settings) {
-		jQuery.extend(jQuery.Accordion.defaults, settings);
 	}
 });

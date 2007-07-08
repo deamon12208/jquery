@@ -1,14 +1,42 @@
 * { margin: 0; padding: 0; }
+/*
 body { padding-left: 1em; margin-bottom: 8em; font: normal normal 100% verdana; }
 h1, h2, h3 { font-size: 1em; }
 h1 { font-size: 1.2em; margin-top: 1em; }
 h2 { margin-top: .8em; margin-bottom: .2em; }
+*/
+body, div { font-family: 'lucida grande', helvetica, verdana, arial, sans-serif }
+body { margin: 0; padding: 0; font-size: small; color: #333 }
+h1, h2 { font-family: 'trebuchet ms', verdana, arial; padding: 10px; margin: 0 }
+h1 { font-size: large }
+h3 { margin-top: .5em; }
+#main { padding: 1em; }
+#banner { padding: 15px; background-color: #06b; color: white; font-size: large; border-bottom: 1px solid #ccc;
+    background: url(bg.gif) repeat-x; text-align: center }
+fieldset { padding: 8px; }
+legend { font-weight: bold; }
+    
+.jscom, .mix htcom   { color: #4040c2; }
+.com      { color: green; }
+.regexp   { color: maroon; }
+.string   { color: teal; }
+.keywords { color: blue; }
+.global   { color: #008; }
+.numbers  { color: #880; }
+.comm     { color: green; }
+.tag      { color: blue; }
+.entity   { color: blue; }
+.string   { color: teal; }
+.aname    { color: maroon; }
+.avalue   { color: maroon; }
+.jquery   { color: #00a; }
+.plugin   { color: red; }
 
 li { list-style-type: none; }
-#list1, #list2, #list3, #list4 { width:20em; }
+#list1, #list2, #list3, #navigation { width:20em; }
 
-#log { position:absolute; top:0; right:1em; text-align:right; }
-#switch { position: absolute; top: 0; right: 15em; }
+#log { position:fixed; bottom: 0; right:1em; text-align:right; }
+#switch { position: fixed; bottom: 0; right: 15em; }
 
 #list1  {
 	width: 260px;
@@ -80,7 +108,7 @@ li { list-style-type: none; }
 	border-bottom: none;
 }
 
-#list4 {
+#navigation {
 	border:1px solid #5263AB;
 	margin:0px;
 	padding:0px;
@@ -88,7 +116,7 @@ li { list-style-type: none; }
 	background-color:#E2E2E2;
 	width:200px;
 }
-#list4 a.head {
+#navigation a.head {
 	cursor:pointer;
 	border:1px solid #CCCCCC;
 	background:#5263AB url(collapsed.gif) no-repeat scroll 3px 4px;
@@ -100,28 +128,31 @@ li { list-style-type: none; }
 	text-indent:14px;
 	text-decoration: none;
 }
-#list4 a.head:hover {
+#navigation a.head:hover {
 	color:#FFFF99;
 }
-#list4 a.selected {
+#navigation a.selected {
 	background-image: url(expanded.gif);
 }
-#list4 ul {
+#navigation a.current {
+	background-color:#FFFF99;
+}
+#navigation ul {
 	border-width:0px;
 	margin:0px;
 	padding:0px;
 	text-indent:0px;
 }
-#list4 li {
+#navigation li {
 	list-style:none outside none; display:inline;
 }
-#list4 li li a {
+#navigation li li a {
 	color:#000000;
 	display:block;
 	text-indent:10px;
 	text-decoration: none;
 }
-#list4 li li a:hover {
+#navigation li li a:hover {
 	background-color:#FFFF99;
 	color:#FF0000;
 }
