@@ -259,7 +259,7 @@ jQuery.extend(jQuery.fn, {
 					
 				function handle() {
 					if ( validator.settings.submitHandler ) {
-						validator.settings.submitHandler( validator.currentForm );
+						validator.settings.submitHandler.call( validator, validator.currentForm );
 						return false;
 					}
 					return true;

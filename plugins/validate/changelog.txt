@@ -8,6 +8,7 @@
 * Moved showErrors() from valid() to form()
 * Fixed selectors for form-element-names containing brackets etc.
 * Improved email method (according to http://blogs.nonado.net/diamond/2006/02/08/email-address-validation/ )
+* Call submitHandler with validator as scope for easier access of it's methods, eg. to find error labels using errorsFor(Element)
 
 1.1
 ---
