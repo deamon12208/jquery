@@ -43,6 +43,18 @@ jQuery.validator.addMethod("ziprange", function(value, element) {
 	return !jQuery.validator.methods.required(value, element) || /^90[2-5]\d\{2}-\d{4}$/.test(value);
 }, "Your ZIP-code must be in the range 902xx-xxxx to 905-xx-xxxx");
 
+/**
+* Return true, if the value is a valid vehicle identification number (VIN).
+*
+* Works with all kind of text inputs.
+*
+* @example <input type="text" size="20" name="VehicleID" class="{required:true,VIN:true}" />
+* @desc Declares a required input element whose value must be a valid vehicle identification number.
+*
+* @name jQuery.validator.methods.vinUS
+* @type Boolean
+* @cat Plugins/Validate/Methods
+*/ 
 jQuery.validator.addMethod(
 	"vinUS",
 	function(v){
