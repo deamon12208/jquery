@@ -6,7 +6,7 @@
 	
 	<link rel="stylesheet" href="accordion.css" />
 	
-	<script type="text/javascript" src="../../jquery/dist/jquery.js"></script>
+	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="chili-1.7.pack.js"></script>
 	<script type="text/javascript" src="jquery.accordion.js"></script>
 
@@ -49,13 +49,13 @@
 		// bind to change event of select to control first and seconds accordion
 		// similar to tab's plugin triggerTab(), without an extra method
 		jQuery('#switch select').change(function() {
-			jQuery('#list1, #list2, #list3, #list4').activate( this.selectedIndex-1 );
+			jQuery('#list1, #list2, #list3, #navigation').activate( this.selectedIndex-1 );
 		});
 		jQuery('#close').click(function() {
-			jQuery('#list1, #list2, #list3, #list4').activate();
+			jQuery('#list1, #list2, #list3, #navigation').activate();
 		});
 		jQuery('#switch2').change(function() {
-			jQuery('#list1, #list2, #list3, #list4').activate(this.value);
+			jQuery('#list1, #list2, #list3, #navigation').activate(this.value);
 		});
 	});
 	</script>
