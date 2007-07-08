@@ -23,8 +23,13 @@ pre, code {
   background: #009;
   padding: 5px;
   text-decoration: none;
+  border: 1px solid #fff;
 }
-
+#navigation a.active {
+  color: #009;
+  background: #fff;
+  border: 1px solid #009;
+}
 #container {
   clear: left;
 }
@@ -35,9 +40,11 @@ pre, code {
 .highlighter {
   background: #ff3;
 }
-/*#loadme {
-  display: none;
-}*/
+.back-to-top {
+  display: block;
+  margin-top: 1em;
+  width: 7em;
+}
 
 .float-left {
   float: left;
@@ -52,7 +59,10 @@ pre, code {
 h2 {
   font-size: 1.1em;
 }
-
+h3 {
+  margin-top: 0;
+  padding-top: 1em;
+}
 a {
   font-size: .9em;
 }

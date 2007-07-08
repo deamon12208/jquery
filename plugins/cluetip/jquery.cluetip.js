@@ -1,6 +1,6 @@
 /*
  * jQuery clueTip plugin
- * Version 0.4  (07/04/2007)
+ * Version 0.5  (07/07/2007)
  * @depends jQuery v1.1.1
  * @depends Dimensions plugin 
  *
@@ -21,13 +21,6 @@
  * @credit Thanks to Shelane Enos and Glen Lipka for the feature ideas 
  * @credit Thanks to Jonathan Chaffer, as always, for help with the hard parts. :-)
  */
- 
-
- // TODO: more testing needed
- // TODO: finish writing inline documentation!
- // TODO: get pngFix working for IE
- // CHANGED: preventing multiple AJAX requests
- // CHANGED: added hoverIntent option 
  
  /**
  * 
@@ -62,30 +55,30 @@
  *
  *
  * @param Object defaults (optional) Customize your clueTips
- * @option Number delay The number of milliseconds before a tooltip is display, default is 250
- * @option Number width The width of the clueTip, default is 275,
- * @option Boolean local Whether to use content from the same page (using ID) for clueTip body, default is false,
- * @option Boolean hoverIntent Whether to use the hoverIntent plugin to determine when a clueTip is to be displayed, default is false,
- * @option String attribute The attribute to be used for the URL of the ajaxed content, default is 'rel'
- * @option String titleAttribute 'title
- * @option String splitTitle A character used to split the title attribute into the clueTip title and divs within the clueTip body; if used, the clueTip will be populated only by the title attribute, default is ''
- * @option String hoverClass: default is empty string, so no class
+ * @option Number width: default is 275. The width of the clueTip
+ * @option Boolean local: default is false. Whether to use content from the same page (using ID) for clueTip body
+ * @option Boolean hideLocal: default is true. If local option is set to true, determine whether local content to be shown in clueTip should be hidden at its original location. 
+ * @option String attribute default is 'rel'. The attribute to be used for the URL of the ajaxed content
+ * @option String titleAttribute: default is 'title'. The attribute to be used for the clueTip's heading, if the attribute exists for the hovered element.
+ * @option String splitTitle: default is '' (empty string). A character used to split the title attribute into the clueTip title and divs within the clueTip body; if used, the clueTip will be populated only by the title attribute, 
+ * @option String hoverClass: default is empty string. designate one to apply to the hovered element
  * @option String waitImage: default is 'wait.gif'
- * @option Boolean sticky: default is false
- * @option String activation: default is 'hover'
- * @option String closePosition: default is 'top'
- * @option String closeText: default is 'Close'
- * @option Number truncate: default is 0
- * @option Boolean pngFix: default is false FIXME: pngFix is not working yet.
- * @option Object ajaxProcess: when getting clueTip content via ajax, allows processing of it before it's displayed. Default is function(data) { data = $(data).not('style, meta, link, script, title); return data; } . This strips out elements typically found in the <head> that might interfere with current page.
+ * @option Boolean sticky: default is false. Set to true to keep the clueTip visible until the user either closes it manually by clicking on the CloseText or display another clueTip.
+ * @option String activation: default is 'hover'. Set to 'toggle' to force the user to click the element in order to activate the clueTip.
+ * @option String closePosition: default is 'top'. Set to 'bottom' to put the closeText at the bottom of the clueTip body
+ * @option String closeText: default is 'Close'. This determines the text to be clicked to close a clueTip when sticky is set to true.
+ * @option Number truncate: default is 0. Set to some number greater than 0 to truncate the text in the body of the clueTip. This also removes all HTML/images from the clueTip body.
+ * @option Boolean pngFix: default is true. Fixes png transparency for the clueTip in IE<=6. change to false to disable it.
+ * @option Boolean hoverIntent: default is true. If jquery.hoverintent.js plugin is included in <head>, hoverIntent() will be used instead of hover()
+ * @option Object ajaxProcess: Default is function(data) { data = $(data).not('style, meta, link, script, title); return data; } . When getting clueTip content via ajax, allows processing of it before it's displayed. The default value strips out elements typically found in the <head> that might interfere with current page.
  * @option Object ajaxSettings: allows you to pass in standard $.ajax() parameters for specifying dataType, error, success, etc. Default is { dataType: 'html'}
  *
-
  */
 
 (function($) { 
     
   var $cluetip, $cluetipInner, $cluetipOuter;
+  var msie6 = $.browser.msie && ($.browser.version && $.browser.version < 7 || (/5\.5|6.0/).test(navigator.userAgent));
 
   $.fn.cluetip = function(options) {
     
@@ -104,7 +97,8 @@
       closePosition: 'top',
       closeText: 'Close',
       truncate: 0,
-      pngFix: false,
+      pngFix: true,
+      hoverIntent: true,
       ajaxProcess: function(data) {
         data = $(data).not('style, meta, link, script, title');
         return data;
@@ -138,8 +132,15 @@
         .hide();
       }
       // FIXME: pngFix is broken ;) possibly get Jörn's version from toolt
-      if (defaults.pngFix) {
-        $('#cluetip').pngfix();
+      if (defaults.pngFix && msie6) {
+				var image = $(this).css('backgroundImage');
+				if (image.match(/^url\(["']?(.*\.png)["']?\)$/i)) {
+					image = RegExp.$1;
+					$cluetip.css({
+						'backgroundImage': 'none',
+						'filter': "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled=true, sizingMethod=crop, src='" + image + "')"
+					});
+				}
       }
       var $this = $(this);      
       var tipAttribute = $this.attr(defaults.attribute);
@@ -192,9 +193,12 @@
           var $truncloaded = $cluetipInner.text().slice(0,defaults.truncate) + '...';
           $cluetipInner.html($truncloaded);
         }
-
         if ( posY + tipHeight > sTop + wHeight ) {
-          $cluetip.css({top: (sTop + wHeight - tipHeight - 10) + 'px'});
+          if (tipHeight >= wHeight) {
+            $cluetip.css({top: (sTop) + 'px'});            
+          } else {
+            $cluetip.css({top: (sTop + wHeight - tipHeight - 10) + 'px'});
+          }
         } 
 
         if (defaults.sticky) {
@@ -236,7 +240,7 @@
         }
       });
     
-      $this[($.fn.hoverIntent) ? 'hoverIntent' : 'hover'](function(event) {
+      $this[($.fn.hoverIntent) && defaults.hoverIntent ? 'hoverIntent' : 'hover'](function(event) {
         activate(event);
       }, function(event) {
         inactivate(event);

@@ -6,7 +6,7 @@
   <title>clueTip : A jQuery Plugin</title>
 
   <script src="../jquery.js" type="text/javascript"></script>
-  <script src="../dimensions.js" type="text/javascript"></script>
+  <script src="../jquery.dimensions.js" type="text/javascript"></script>
   <script src="../jquery.hoverIntent.js" type="text/javascript"></script>
   <script src="../jquery.cluetip.js" type="text/javascript"></script>
   <script src="demo.js" type="text/javascript"></script>
@@ -23,13 +23,13 @@
     <li><a href="#examplesection">Examples</a></li>
     <li><a href="#default-styles">Default Styles</a></li>
     <li><a href="#known-issues">Known Issues</a></li>
-    <li><a href="#files">Source Files</a></li>
+    <li><a href="#files">Downloads</a></li>
   </ul>
   <div id="container">
 
-    <p>This is a demo page for the new clueTip &mdash; a jQuery-based, AJAX-powered tooltip. The clueTip plug-in was inspired by <a href="http://www.codylindley.com">Cody Lindley</a>'s jTip script.</p>
-    
-    <h3 id="features">Features</h3>
+    <p>This is a demo page for the new clueTip &mdash; a jQuery-based, AJAX-powered tooltip developed by <a href="http://www.learningjquery.com/">Karl Swedberg</a>. The clueTip plug-in was inspired by <a href="http://www.codylindley.com">Cody Lindley</a>'s jTip script. Many feature ideas were provided by Shelane Enos and Glen Lipka. <a href="http://www.tweaktheviking.com">Jonathan Chaffer</a> helped a lot, but eschewed the co-author designation out of sheer modesty. </p>
+    <div id="features">
+    <h3>Features</h3>
     <p>The clueTip plug-in allows you to easily set a link to show a "tooltip" of sorts when the user's mouse hovers over the link. If the link includes a <code>title</code> attribute, its text becomes the heading of the clueTip. The contents of the clueTip can come from one of these sources:</p>
     <ol>
       <li>a separate file, via AJAX</li>
@@ -64,24 +64,30 @@ This default value strips out tags from the &lt;head&gt; of an HTML page that is
       </li>
       <li><strong><code>splitTitle</code></strong>: default is an empty string; set to a character such as "|" to split the title attribute of a link into the clueTip heading (the first string, before the first delimiter character) and individual clueTip body divs (subsequent strings).</li>
     </ul>
-    <h3 id="setup">Setup</h3>
+    </div>
+    <div id="setup">
+    <h3>Setup</h3>
     <p>To use the plug-in, you'll need to include 4 JavaScript files in your web page's &lt;head&gt;, like so: </p>
-<pre><code>    &lt;script src=&quot;scripts/jquery.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
-    &lt;script src=&quot;scripts/dimensions.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
-    &lt;script src=&quot;scripts/jquery.cluetip.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
-    &lt;script src=&quot;scripts/your-custom-file.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+<pre><code>    &lt;script src="scripts/jquery.js" type="text/javascript"&gt;&lt;/script&gt;
+    &lt;script src="scripts/jquery.dimensions.js" type="text/javascript"&gt;&lt;/script&gt;
+    &lt;script src="scripts/jquery.cluetip.js" type="text/javascript"&gt;&lt;/script&gt;
+    &lt;script src="scripts/your-custom-file.js" type="text/javascript"&gt;&lt;/script&gt;
 </code></pre>
-  <p>As you can see, the clueTip depends on jquery.js and dimensions.js to function properly.</p>
-    <h3 id="link-prep">Link Prep</h3>
+  <p>As you can see, the clueTip depends on jquery.js and jquery.dimensions.js to function properly.</p>
+  <p>If you would like to use clueTip in conjunction with the hoverIntent plugin, you will need to reference that plugin as well.</p>
+    </div>
+    <div id="link-prep">
+    <h3>Link Prep</h3>
     <p>When you want to add a clueTip to a link, type the content's location in an attribute:</p> 
-<pre><code>   &lt;a href=&quot;foo.htm&quot; <strong>rel=&quot;bar.htm&quot;</strong>&gt;Link to foo.htm; show bar.htm in the clueTip&lt;/a&gt;</code></pre> 
-    <p>The <code>rel</code> attribute is used by default, but you can change it to any other attribute you wish like so: <code>$('a').cluetip({attribute: 'name'})</code>. Now you can write the HTML like this:</p>
-<pre><code>   &lt;a href=&quot;foo.htm&quot; <strong>name=&quot;bar.htm&quot;</strong>&gt;Link to foo.htm; show bar.htm in the clueTip&lt;/a&gt;</code></pre>
+<pre><code>   &lt;a href="foo.htm" <strong>rel="bar.htm"</strong>&gt;Link to foo.htm; show bar.htm in the clueTip&lt;/a&gt;</code></pre> 
+    <p>The <code>rel</code> attribute is used by default, but you can change it to any other attribute you wish, like so: <code>$('a').cluetip({attribute: 'name'})</code>. Now you can write the HTML like this:</p>
+<pre><code>   &lt;a href="foo.htm" <strong>name="bar.htm"</strong>&gt;Link to foo.htm; show bar.htm in the clueTip&lt;/a&gt;</code></pre>
       <p>The <code>href</code> attribute is used for the actual link. If the <code>rel</code> (or your custom) attribute is the same as the <code>href</code> attribute, hovering over the link will turn the cursor into a question mark. Also, the link will become "dead," meaning that nothing will happen if the user clicks it:</p>
-<pre><code>   &lt;a <strong>href=&quot;foo.htm&quot; rel=&quot;foo.htm&quot;</strong>&gt;Clicking me will get you nowhere&lt;/a&gt;</code></pre>
+<pre><code>   &lt;a <strong>href="foo.htm" rel="foo.htm"</strong>&gt;Clicking me will get you nowhere&lt;/a&gt;</code></pre>
        <p>Otherwise, clicking on the link will take the user to the URL in the <code>href</code>, as expected.</p>
-    
-    <h3 id="examplesection">Examples</h3>
+    </div>
+    <div id="examplesection">
+    <h3>Examples</h3>
     <p>Here are some examples of how you can add a clueTip to your page:</p>
     <ol id="examples">
       <li><strong>basic, no title</strong>: <code>$('a.basic').cluetip();</code>. This is the simplest example there is: <a class="basic" href="ajax.htm" rel="ajax.htm">&lt;a class="basic" href="ajax.htm" rel="ajax.htm"&gt;</a></li>
@@ -90,20 +96,22 @@ This default value strips out tags from the &lt;head&gt; of an HTML page that is
       <li><strong>non-link element, custom attribute</strong>: <code>$('h4').cluetip({attribute: 'id', hoverClass: 'highlight'});</code>
         <h4 id="ajax3.htm">&lt;h4 id="ajax3.htm"&gt;Hover over me&lt;/h4&gt;</h4>
       </li>
-      <li><strong>sticky</strong>: <code>$('#sticky').cluetip({sticky: true});</code> This is a sticky clueTip: <a id="sticky" href="ajax6.htm" rel="ajax6.htm">&lt;a id="sticky" href="ajax6.htm" rel="ajax6.htm"&gt;</a>. It won't close until you close it. Or until you hover over another j-tipped link.</li>
-      <li><strong>local</strong>: <code>$('a.load-local').cluetip({local:true});</code> This one uses local content from a hidden <code>div</code> element: <a class="load-local" href="#loadme" rel="#loadme">&lt;a class=&quot;load-local&quot; href=&quot;#loadme&quot; rel=&quot;#loadme&quot;&gt;</a></li>
+      <li><strong>sticky</strong>: <code>$('#sticky').cluetip({sticky: true});</code> This is a sticky clueTip: <a id="sticky" href="ajax6.htm" rel="ajax6.htm">&lt;a id="sticky" href="ajax6.htm" rel="ajax6.htm"&gt;</a>. It won't close until you close it. Or until you hover over another clue-tipped link.</li>
+      <li><strong>local</strong>: <code>$('a.load-local').cluetip({local:true});</code> This one uses local content from a hidden <code>div</code> element: <a class="load-local" href="#loadme" rel="#loadme">&lt;a class="load-local" href="#loadme" rel="#loadme"&gt;</a></li>
       <li><strong>sticky, truncated clueTip with custom hover class, close position, and close text</strong> (it also has a title): 
 <pre><code>$('#examples a:eq(4)').cluetip({
   hoverClass: 'highlight',
   sticky: true,
   closePosition: 'bottom',
-  closeText: '&lt;img src=&quot;styles/cross.png&quot; alt=&quot;&quot; /&gt;'
+  closeText: '&lt;img src="styles/cross.png" alt="" /&gt;'
   truncate: 60
 });</code></pre>
 If you click this link &mdash; <a href="http://www.learningjquery.com" title="about this link:" rel="ajax6.htm">&lt;a href="http://www.learningjquery.com" title="about this link:" rel="ajax6.htm"&gt;</a> &mdash; you'll be directed to learningjquery.com</li>
   <li><strong><ins>new!</ins> click to activate</strong>: <code>$('#clickme').cluetip({activation: 'click'});</code> This one won't show the clueTip unless you click it <a id="clickme" href="ajax5.htm" rel="ajax5.htm" title="active ingredients">&lt;a href="ajax5.htm" rel="ajax5.htm" title="active ingredients"&gt;</a></li>
     </ol>
-    <h3 id="default-styles">Default Styles</h3>
+    </div>
+    <div id="default-styles">
+    <h3>Default Styles</h3>
     <p>You can style your clueTips any way you want. Here are the default styles: </p>
 <pre><code>#cluetip {
   background: transparent url(shadow2.png) no-repeat right bottom;
@@ -146,7 +154,9 @@ h3#cluetip-title {
 /* end backslash hack */
 </code></pre>    
   <p id="loadme">this is the local content to load when the 'local' parameter is set to true. Currently it only works with an <code>id</code> selector.</p>
-    <h3 id="known-issues">Known Issues and To Do</h3>
+    </div>
+    <div id="known-issues">
+    <h3>Known Issues and To Do</h3>
     <ul>
       <li><del>Allow clueTips to load content from same page.</del> Done!</li>
       <li><del>Re-work the ajax options so they can be set as they would be with a regular <code>$.ajax()</code>.</del> Done!</li>
@@ -154,15 +164,21 @@ h3#cluetip-title {
       <li><del>Allow clueTips to take advantage of Brian Cherne's hoverIntent plugin</del> Done!</li>
       <li>Include some kind of .png alpha transparency fix for IE 6 and under. </li>
     </ul>
-    <h3 id="files">Source Files</h3>
-    <!-- <ul>
-          <li><a href="http://examples.learningjquery.com/62/cluetip.zip">cluetip.zip</a> : <strong>full zipped archived</strong> of this demo page and all associated files</li>
-          <li><a href="http://examples.learningjquery.com/62/scripts/jquery.cluetip.js">jquery.cluetip.js</a></li>
-          <li><a href="http://examples.learningjquery.com/62/scripts/dimensions.js">dimensions.js</a></li>
-          <li><a href="http://examples.learningjquery.com/62/styles/cluetip.css">cluetip.css</a></li>
-          <li><a href="http://jquery.com/src/jquery-latest.js">jquery.js</a> : latest stable release</li>
-
-        </ul> -->
+    </div>
+    <div id="files">
+    <h3>Downloads</h3>
+    <p>ClueTip</p>
+    <ul>
+      <li><a href="http://jqueryjs.googlecode.com/svn/trunk/plugins/cluetip/">clueTip files</a> in jQuery's SVN repository : includes <a href="http://jqueryjs.googlecode.com/svn/trunk/plugins/cluetip/" title="Revision 2262: /trunk/plugins/cluetip/jquery.cluetip.js">jquery.cluetip.js</a>, demo files, and all dependencies.</li>
+      <li><a href="http://examples.learningjquery.com/62/demo/">clueTip demo</a> on learningjquery.com</li>
+    </ul>
+    <p>Dependencies</p>
+    <ul>
+      <li><a href="http://jqueryjs.googlecode.com/svn/trunk/plugins/dimensions/">Dimensions Plugin</a> Dimensions file in jQuery's SVN repository : includes <a href="http://jqueryjs.googlecode.com/svn/trunk/plugins/dimensions/" title="Revision 2262: /trunk/plugins/dimensions">jquery.dimensions.js</a>, as well as minified and packed versions. </li>
+      <li><a href="http://jquery.com/src/jquery-latest.js">jquery.js</a> : latest stable release</li>
+      <li><a href="http://cherne.net/brian/resources/jquery.hoverIntent.html" title="hoverIntent jQuery Plug-in">hoverIntent Plugin</a> (optional) on Brian Cherne's web site : includes demos and source file.</li>
+    </ul>
+    </div>
   </div>
 </body>
 </html>
