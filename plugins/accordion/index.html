@@ -52,7 +52,7 @@
 			jQuery('#list1, #list2, #list3, #navigation').activate( this.selectedIndex-1 );
 		});
 		jQuery('#close').click(function() {
-			jQuery('#list1, #list2, #list3, #navigation').activate();
+			jQuery('#list1, #list2, #list3, #navigation').activate(-1);
 		});
 		jQuery('#switch2').change(function() {
 			jQuery('#list1, #list2, #list3, #navigation').activate(this.value);

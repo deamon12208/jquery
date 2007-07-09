@@ -125,7 +125,7 @@
  * Activate a content part of the Accordion programmatically.
  *
  * The index can be a zero-indexed number to match the position of the header to close
- * or a string expression matching an element.
+ * or a string expression matching an element. Pass -1 to close all (only possible with alwaysOpen:false).
  *
  * @example jQuery('#accordion').activate(1);
  * @desc Activate the second content of the Accordion contained in <div id="accordion">.
@@ -133,11 +133,11 @@
  * @example jQuery('#accordion').activate("a:first");
  * @desc Activate the first element matching the given expression.
  *
- * @example jQuery('#nav').activate();
+ * @example jQuery('#nav').activate(-1);
  * @desc Close all content parts of the accordion.
  *
- * @param String|Number index (optional) An Integer specifying the zero-based index of the content to be
- *				 activated or an expression specifying the element to close. Default: closes all.
+ * @param String|Number index An Integer specifying the zero-based index of the content to be
+ *				 activated or an expression specifying the element to close.
  *
  * @type jQuery
  * @name activate
@@ -272,6 +272,8 @@ jQuery.fn.extend({
 			return !toShow.length;
 		};
 		function activateHandler(event, index) {
+			if ( index == null )
+				return;
 			// call clickHandler with custom event
 			clickHandler({
 				target: index >= 0
@@ -282,8 +284,7 @@ jQuery.fn.extend({
 			});
 		};
 
-		if (!settings.navigation)
-			container.bind("activate", activateHandler);
+		container.bind("activate", activateHandler);
 		return container.bind(settings.event, clickHandler)
 	},
 	// programmatic triggering
