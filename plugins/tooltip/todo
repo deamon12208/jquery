@@ -2,3 +2,4 @@
 * add delay on hide
 * add stick on hover of tooltip (with track:false)
 * Add and test Footip
+* Add stop-queue stuff for fadein/out without nasty queues
