@@ -13,7 +13,7 @@
 			for(var i=0;i<m.length;i++) {
 				m[i].offset = $(m[i].item.element).offset({ border: false });
 				if(that) { //Activate the droppable if used directly from draggables
-					if(m[i].item.options.accept(this)) m[i].item.activate.call(m[i].item);
+					if(m[i].item.options.accept(that)) m[i].item.activate.call(m[i].item);
 				}
 			}
 						
@@ -26,7 +26,7 @@
 				for(;i<ml;i++) {
 					m[i].offset = $(m[i].item.element).offsetLite({ border: false });
 					if(that) { //Activate the droppable if used directly from draggables
-						if(m[i].item.options.onActivate && m[i].item.options.accept(this)) m[i].item.activate.call(m[i].item);
+						if(m[i].item.options.onActivate && m[i].item.options.accept(that)) m[i].item.activate.call(m[i].item);
 					}
 					
 					if(i == j*20+19) { //Call the next block of 20
