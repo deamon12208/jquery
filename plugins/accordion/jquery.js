@@ -7,8 +7,8 @@ if(typeof window.jQuery == "undefined") {
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * $Date: 2007-07-03 15:19:09 +0200 (Di, 03 Jul 2007) $
- * $Rev: 2217 $
+ * $Date: 2007-07-05 10:19:18 +0200 (Do, 05 Jul 2007) $
+ * $Rev: 2248 $
  */
 
 // Global undefined variable
@@ -847,7 +847,7 @@ jQuery.extend({
 
 		// Match: :even, :last-chlid, #id, .class
 		new RegExp("^([:.#]*)(" + 
-			( jQuery.chars = jQuery.browser.safari && jQuery.browser.version < "3.0.0" ? "\\w" : "(?:[\\w\u0128-\uFFFF*_-]|\\\\.)" ) + "+)")
+			( jQuery.chars = jQuery.browser.safari && parseInt(jQuery.browser.version) < 417 ? "(?:[\\w*_-]|\\\\.)" : "(?:[\\w\u0128-\uFFFF*_-]|\\\\.)" ) + "+)")
 	],
 
 	multiFilter: function( expr, elems, not ) {
@@ -911,7 +911,7 @@ jQuery.extend({
 				// Perform our own iteration and filter
 				for ( var i = 0; ret[i]; i++ )
 					for ( var c = ret[i].firstChild; c; c = c.nextSibling )
-						if ( c.nodeType == 1 && (nodeName == "*" || c.nodeName == nodeName.toUpperCase()) )
+						if ( c.nodeType == 1 && (nodeName == "*" || c.nodeName.toUpperCase() == nodeName.toUpperCase()) )
 							r.push( c );
 
 				ret = r;
@@ -934,7 +934,7 @@ jQuery.extend({
 								if ( n.nodeType == 1 ) {
 									if ( m == "~" && n.mergeNum == mergeNum ) break;
 									
-									if (!nodeName || n.nodeName == nodeName.toUpperCase() ) {
+									if (!nodeName || n.nodeName.toUpperCase() == nodeName.toUpperCase() ) {
 										if ( m == "~" ) n.mergeNum = mergeNum;
 										r.push( n );
 									}
@@ -970,7 +970,7 @@ jQuery.extend({
 					t = " " + t.substr(1,t.length);
 
 				} else {
-					// Optomize for the case nodeName#idName
+					// Optimize for the case nodeName#idName
 					var re2 = new RegExp("^(" + jQuery.chars + "+)(#)(" + jQuery.chars + "+)");
 					var m = re2.exec(t);
 					
@@ -1711,9 +1711,21 @@ jQuery.fn.extend({
 				opt = jQuery.speed(speed, easing, callback),
 				self = this;
 			
-			for ( var p in prop )
+			for ( var p in prop ) {
 				if ( prop[p] == "hide" && hidden || prop[p] == "show" && !hidden )
 					return jQuery.isFunction(opt.complete) && opt.complete.apply(this);
+
+				if ( p == "height" || p == "width" ) {
+					// Store display property
+					opt.display = jQuery.css(this, "display");
+
+					// Make sure that nothing sneaks out
+					opt.overflow = this.style.overflow;
+				}
+			}
+
+			if ( opt.overflow != null )
+				this.style.overflow = "hidden";
 
 			this.curAnim = jQuery.extend({}, prop);
 			
@@ -1813,15 +1825,6 @@ jQuery.extend({
 		// The styles
 		var y = elem.style;
 		
-		if ( prop == "height" || prop == "width" ) {
-			// Store display property
-			var oldDisplay = jQuery.css(elem, "display");
-
-			// Make sure that nothing sneaks out
-			var oldOverflow = y.overflow;
-			y.overflow = "hidden";
-		}
-
 		// Simple function for setting a style value
 		z.a = function(){
 			if ( options.step )
@@ -1920,12 +1923,12 @@ jQuery.extend({
 						done = false;
 
 				if ( done ) {
-					if ( oldDisplay != null ) {
+					if ( options.display != null ) {
 						// Reset the overflow
-						y.overflow = oldOverflow;
+						y.overflow = options.overflow;
 					
 						// Reset the display
-						y.display = oldDisplay;
+						y.display = options.display;
 						if ( jQuery.css(elem, "display") == "none" )
 							y.display = "block";
 					}

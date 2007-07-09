@@ -282,9 +282,9 @@ jQuery.fn.extend({
 			});
 		};
 
-		return container
-			.bind(settings.event, clickHandler)
-			.bind("activate", activateHandler);
+		if (!settings.navigation)
+			container.bind("activate", activateHandler);
+		return container.bind(settings.event, clickHandler)
 	},
 	// programmatic triggering
 	activate: function(index) {
