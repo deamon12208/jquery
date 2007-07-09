@@ -1,3 +1,24 @@
+- make it easy to validate only a subform, example implementation:
+
+
+Hello. I came across the need to validate only part of a form, that is, the form elements which were currently visible on a tabbed page. I come up with this, based on validator.prototype.form():
+
+jQuery.validator.prototype.validatePartialForm = function(parentstr) {
+this.prepareForm();
+
+var oks = $(parentstr).find(”input, select, textarea, button”); //modified line
+for ( var i = 0, element; element = this.elements[i]; i++ ) {
+if (oks.index(element) != -1) { //modified line
+this.check(element);
+}
+}
+jQuery.extend(this.submitted, this.errorMap);
+return this.valid();
+}
+
+use it like validator.validatePartialForm(’#container1′)
+
+
 - ajax: captcha validation ( http://psyrens.com/captcha/ )
 - allow to ignore a default value for onblur-validation
 - performance tuning: add about 100 fields to custom-method-demo and profile IE
