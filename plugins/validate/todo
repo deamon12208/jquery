@@ -1,3 +1,4 @@
+- allow to ignore a default value for onblur-validation
 - performance tuning: add about 100 fields to custom-method-demo and profile IE
 - oninvalid/invalidSubmitHandler: called after a form is validated on submit and its invalid
 - removing messages by specifying null or an empty string doesn't work as it defaults to the default message. improve that check
