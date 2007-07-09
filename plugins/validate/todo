@@ -1,3 +1,4 @@
+- ajax: captcha validation ( http://psyrens.com/captcha/ )
 - allow to ignore a default value for onblur-validation
 - performance tuning: add about 100 fields to custom-method-demo and profile IE
 - oninvalid/invalidSubmitHandler: called after a form is validated on submit and its invalid
