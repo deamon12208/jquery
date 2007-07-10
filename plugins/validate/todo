@@ -61,7 +61,7 @@ else if ($.browser.mozilla)
 8 Sijawusz Pur Rahnama, 12:35: and later we could use validator.hideError('#broken_connection');
 
  Examples:
- - masked input plugin integration http://digitalbush.com/projects/masked-input-plugin
+ - masked input plugin integration http://digitalbush.com/projects/masked-input-plugin -> marketo
  - ajaxForm() integration
  - ajaxSubmit with rules-option, more/less options to ajaxSubmit
  - watermark integration http://digitalbush.com/projects/watermark-input-plugin
