@@ -46,7 +46,7 @@
 
   div.innerLayout {
     position: relative;
-    margin: 10px;
+    margin: 5px;
   }
   
   </style>
@@ -77,7 +77,8 @@
         options = $.extend({
             containment: [200, 400],
             start: 250, 
-            navOnRight: false
+            navOnRight: false,
+            border: 10
           }, 
           options);
         var nav = $(this[0]);
@@ -94,14 +95,14 @@
           if($.splitPane.resized == nav) return;
           if(!options.navOnRight) {
             var pos = pos || parseInt($("#" + scrollerName).css("left"));
-            content.width(navParent.width() - pos - 10);
+            content.width(navParent.width() - pos - options.border);
             nav.width(pos);  
-            content.css("left", pos + 10 + "px");
+            content.css("left", pos + options.border + "px");
           } else {
             var pos = pos || navParent.width() - nav.width() - 10;
             $("#" + scrollerName).css("left", pos);
-            nav.width(navParent.width() - pos - 10);
-            nav.css("left", pos + 10 + "px");
+            nav.width(navParent.width() - pos - options.border);
+            nav.css("left", pos + options.border + "px");
             content.width(pos);
           }
         };
@@ -113,7 +114,7 @@
         $("div.element").css({top: 0, position: "absolute"});
         resizeLayout(null, nav.width())
         $("<div id='" + scrollerName + "'>&nbsp;</div>").appendTo(navParent)
-          .css({left: options.start, backgroundColor: "#ccc", width: "10px", height: "100%", position: "absolute", top: "0"})
+          .css({left: options.start, backgroundColor: "#ccc", width: options.border + "px", height: "100%", position: "absolute", top: "0"})
           .draggable({
             axis: 'x',
             containment: {left: options.containment[0], right: options.containment[1]},
@@ -142,7 +143,7 @@
         $(rightNav).parent().children().appendTo(rightNav.parentNode.parentNode).end().remove();
       }
       
-      $("#leftNav, #contents, #rightNav").triplePane({containment: [250, 500], start: 350}, {containment: [50, 1000], start: 150});
+      $("#leftNav, #contents, #rightNav").triplePane({containment: [250, 500], start: 350, border: 5}, {containment: [50, 1000], start: 150, border: 5});
       // $("#nav, #content").splitPane({containment: [250, 500], start: 350});
       // $("#innerRight, #innerLeft").splitPane({containment: [50, 1000], start: 150, navOnRight: true});
     });
