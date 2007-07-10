@@ -36,16 +36,6 @@
     margin: 10px;
   }
   
-  div.absolute {
-    position: absolute;
-  }
-  
-  div#scroller {
-    background-color: #ccc;
-    width: 10px;
-    height: 100%;
-  }
-  
   </style>
   <script type="text/javascript" src="../../../jquery/src/jquery/jquery.js"></script>
   <script type="text/javascript" src="../../../jquery/src/selector/selector.js"></script>
@@ -59,34 +49,40 @@
   <script>
     jQuery(function($) {
       
-      var screenWidth = $(document).width();
-      $("div.element").each(function() {
-        $(this).width($(this).width() - 7);
-      }).each(function() {
-        $(this).addClass("absolute");
-      })
-      $("#content").css("left",
-        $("#nav").width() + 8 + "px"
-      )
+      $.fn.splitPane = function(options) {
+        var resizeLayout = function(e,pos) {
+          pos = pos || $("#nav").width() - 2;
+          nav.width(pos + 2);
+          content.css({left: pos + 10 + "px", width: $(window).width() - pos - 10 + "px"})
+        }        
+        options = $.extend({
+            containment: [200, 400],
+            start: 250
+          }, 
+          options);
+        console.log(options);
+        var nav = $(this[0]);
+        var content = $(this[1]);
+        nav.width(options.start);
+        resizeLayout(null, options.start)
+        $("div.element").css("position", "absolute");
+        content.css("left", $("#nav").width() + 10 + "px");
+        $("<div id='scroller'>&nbsp;</div>").appendTo("body")
+          .css({left: options.start, backgroundColor: "#ccc", width: "10px", height: "100%", position: "absolute"})
+          .draggable({
+            axis: 'x',
+            containment: {left: options.containment[0], right: options.containment[1]},
+            helper: "clone",
+            onStop: function(e,h,stopPos) {
+              newWidth = stopPos[0];
+              resizeLayout(null, newWidth);
+              $("#scroller").css("left", newWidth)
+            }
+        });
+        $(window).resize(resizeLayout);
+      }
       
-      $("<div id='scroller' class='absolute'>&nbsp;</div>").appendTo("body")
-        .css({left: "212px"})
-        .draggable({
-          axis: 'x',
-          containment: {left: 200, right: 400},
-          helper: 'clone',
-          onStop: function(e, h, stopPos) {
-            newWidth = stopPos[0];
-            resizeLayout(null, newWidth);
-            $("#scroller").css("left", newWidth);
-          }
-      })
-      var resizeLayout = function(e, pos) {
-        pos = pos || $("#nav").width() - 2;
-        $("#nav").width(pos + 2);
-        $("#content").css({left: pos + 8 + "px", width: $(window).width() - pos + "px"});
-      };
-      $(window).resize(resizeLayout);
+      $("#nav, #content").splitPane({containment: [250, 500], start: 350});
     });
   </script>
 </head>
