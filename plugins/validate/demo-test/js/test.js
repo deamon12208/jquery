@@ -561,15 +561,20 @@ test("formatAndAdd2", function() {
 });
 
 test("error containers, simple", function() {
-	expect(12);
+	expect(14);
 	var container = $("#simplecontainer");
 	var v = $("#form").validate({
-		errorLabelContainer: container
+		errorLabelContainer: container,
+		showErrors: function() {
+			container.find("h3").html( String.format("There are {0} errors in your form.", this.size()) );
+			this.defaultShowErrors();
+		}
 	});
 	
 	v.prepareForm();
 	ok( v.valid(), "form is valid" );
 	equals( 0, container.find("label").length, "There should be no error labels" );
+	equals( "", container.find("h3").html() );
 	
 	v.prepareForm();
 	v.errorList = [{message:"bar", element: {name:"foo"}}, {message: "necessary", element: {name:"required"}}];
@@ -580,9 +585,10 @@ test("error containers, simple", function() {
 	container.find("label").each(function() {
 		ok( $(this).is(":visible"), "Check that each label is visible" );
 	});
+	equals( "There are 2 errors in your form.", container.find("h3").html() );
 	
 	v.prepareForm();
-	ok( v.valid(), "form is not valid after adding errors manually" );
+	ok( v.valid(), "form is valid after a reset" );
 	v.showErrors();
 	equals( 2, container.find("label").length, "There should still be two error labels" );
 	ok( container.is(":hidden"), "Check that the container is hidden" );
@@ -636,6 +642,37 @@ test("error containers, with labelcontainer", function() {
 		equals( "li", $(this).parent()[0].tagName.toLowerCase(), "Check that each label is wrapped in an li" );
 		ok( $(this).parent("li").is(":hidden"), "Check that each parent li is visible" );
 	});
+});
+
+test("errorcontainer, show/hide only on submit", function() {
+	//expect(4);
+	var container = $("#container");
+	var labelContainer = $("#labelcontainer");
+	var v = $("#testForm1").validate({
+		errorContainer: container,
+		errorLabelContainer: labelContainer,
+		invalidHandler: function() {
+			ok( true, "invalidHandler called" );
+			container.html( String.format("There are {0} errors in your form.", this.size()) );
+		},
+		showErrors: function() {
+			ok( true, "showErrors called" );
+			this.defaultShowErrors();
+		}
+	});
+	equals( "", container.html(), "must be empty" );
+	equals( "", labelContainer.html(), "must be empty" );
+	// validate whole form, both showErrors and invalidHandler must be called once, preferably invalidHandler first, showErrors second
+	ok( !v.form(), "invalid form" );
+	equals( 2, labelContainer.find("label").length );
+	equals( "There are 2 errors in your form.", container.html() );
+	ok( labelContainer.is(":visible"), "must be visible" );
+	ok( container.is(":visible"), "must be visible" );
+	
+	$("#firstname").val("hix").keyup();
+	//equals( 1, labelContainer.find("label").length );
+	equals( "There are 1 errors in your form.", container.html() );
+	//console.log(v);
 });
 
 test("focusInvalid()", function() {
@@ -733,6 +770,9 @@ test("resetForm()", function() {
 	errors(0);
 });
 
+test("option: invalidHandler", function() {
+	
+});
 
 module("misc");
 
@@ -1049,35 +1089,3 @@ test("validate via remote method", function() {
 	e.val("asdf");
 	ok( v.element(e) );
 });
-/*
-test("validate ajax form", function() {
-	expect(6);
-	stop();
-	var e = $("#firstname");
-	var f = $("#testForm1");
-	var v = f.validate({
-		rules: {
-			firstname: {
-				required: true,
-				remote: "milk/users.php"
-			}
-		},
-		submitHandler: function() {
-			ok( true, "May be called only once" );
-		},
-		showErrors: function() {
-			ok( true, "Called each time a form is validated" );
-			this.defaultShowErrors();
-		}
-	});
-	ok( !v.form(), "no value yet, invalid" );
-	e.val("asdf");
-	ok( v.form(), "even though remote will fail, local validation must pass");
-	f.submit();
-	e.val("asd");
-	f.submit(function() {
-		start();
-	});
-	f.submit();
-});
-*/

@@ -1,3 +1,9 @@
+- show number of errors and update on blur/keyup: ugly ugly ugly ->
+  * can't use invalidHander, only called on submit
+  * can't use showErrors, size() matches only the current element, not all elements
+  -> need to keep track about which elements are valid and update that on both events
+
+
 - rename onchange to onclick, document all those event options
 - is that element == lastElement check in the onblur handler really useful?
 - make it easy to validate only a subform, example implementation:

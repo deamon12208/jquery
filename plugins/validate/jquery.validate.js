@@ -506,6 +506,7 @@ jQuery.extend(jQuery.validator, {
 				this.check( element );
 			}
 			jQuery.extend(this.submitted, this.errorMap);
+			this.settings.invalidHandler.call(this);
 			this.showErrors();
 			return this.valid();
 		},
