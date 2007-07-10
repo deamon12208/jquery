@@ -21,7 +21,7 @@
     overflow: hidden;
   }
 
-  #nav {
+  #nav, #innerLeft {
   	width: 220px;
   	float: left;
   	margin-left: -1px;
@@ -33,7 +33,7 @@
   }
 
   div.inner {
-    margin: 10px;
+    position: relative;
   }
   
   </style>
@@ -50,39 +50,64 @@
     jQuery(function($) {
       
       $.fn.splitPane = function(options) {
-        var resizeLayout = function(e,pos) {
-          pos = pos || $("#nav").width() - 2;
-          nav.width(pos + 2);
-          content.css({left: pos + 10 + "px", width: $(window).width() - pos - 10 + "px"})
-        }        
         options = $.extend({
             containment: [200, 400],
-            start: 250
+            start: 250, 
+            flip: false
           }, 
           options);
-        console.log(options);
         var nav = $(this[0]);
         var content = $(this[1]);
+        $.splitPane = $.splitPane || {};
+        $.splitPane.uid = ($.splitPane.uid || 0) + 1;
+        var scrollerName = "scroller" + $.splitPane.uid;
+        var resizeLayout = function(e,pos) {
+          if($.splitPane.resized == nav) return;
+          var navSize = null;
+          if(!options.flip) {
+            pos = pos || parseInt($("#" + scrollerName).css("left"));
+            content.width(nav.parent().width() - pos - 10);
+            nav.width(pos + 2);  
+            content.css("left", pos + 12 + "px");
+          } else {
+            if(pos) {
+              nav.width(nav.parent().width() - pos - 12);
+              nav.css("left", pos + 10 + "px");
+              content.width(pos);
+            } else {
+              pos = nav.parent().width() - nav.width() - 12;
+              content.width(pos);
+              $("#" + scrollerName).css("left", pos);
+              nav.css("left", pos + 10 + "px")
+            }
+          }
+        };
+        console.log(options);
         nav.width(options.start);
-        resizeLayout(null, options.start)
+        resizeLayout(null, options.start);
+        nav.parent().height($(window).height()).css("position", "relative")
         $("div.element").css("position", "absolute");
-        content.css("left", $("#nav").width() + 10 + "px");
-        $("<div id='scroller'>&nbsp;</div>").appendTo("body")
-          .css({left: options.start, backgroundColor: "#ccc", width: "10px", height: "100%", position: "absolute"})
+        resizeLayout(null, nav.width())
+        $("<div id='" + scrollerName + "'>&nbsp;</div>").appendTo(nav.parent())
+          .css({left: options.start, backgroundColor: "#ccc", width: "10px", height: "100%", position: "absolute", top: "0"})
           .draggable({
             axis: 'x',
             containment: {left: options.containment[0], right: options.containment[1]},
             helper: "clone",
             onStop: function(e,h,stopPos) {
               newWidth = stopPos[0];
+              $.splitPane.resized = null;              
               resizeLayout(null, newWidth);
-              $("#scroller").css("left", newWidth)
+              $.splitPane.resized = nav;
+              $(window).resize();
+              $("#" + scrollerName).css("left", newWidth)
             }
         });
-        $(window).resize(resizeLayout);
+        $(window).resize(resizeLayout).resize();
       }
       
       $("#nav, #content").splitPane({containment: [250, 500], start: 350});
+      $("#innerRight, #innerLeft").splitPane({containment: [0, 1000], start: 100, flip: true});
     });
   </script>
 </head>
@@ -102,7 +127,12 @@
 
 <div id="content" class="element">
   <div class="inner">
+    <div id="innerLeft" class="element">
     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </div>
+    <div id="innerRight" class="element">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </div>
   </div>
 </div>
 
