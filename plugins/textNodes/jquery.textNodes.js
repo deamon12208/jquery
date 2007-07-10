@@ -123,7 +123,7 @@ Others are
 		},
 		acronyms: function(hash) { return this.maketags(hash,'<acronym/>','title')},
 		links: function(hash) { return this.maketags(hash,'<a/>','href')},
-		classes: function(hash) { return this.maketags(hash,'<span/>','class')}
+		classes: function(hash) { return this.maketags(hash,'<span/>','class')},
 		span: function() {return this.wrap('<span/>').parent()},
 		// span wraps a textNode into a normal $ span node. span is an ender
 		childNodes: function() {return this.pushStack( $.map( this, "$.makeArray(a.childNodes)"))}, // requires an ender
