@@ -661,7 +661,6 @@ jQuery.extend(jQuery.validator, {
 		
 		prepareForm: function() {
 			this.reset();
-			//this.submitted = {};
 			this.toHide = this.errors().push( this.containers );
 		},
 		

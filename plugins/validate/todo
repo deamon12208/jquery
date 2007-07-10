@@ -1,3 +1,5 @@
+- rename onchange to onclick, document all those event options
+- is that element == lastElement check in the onblur handler really useful?
 - make it easy to validate only a subform, example implementation:
 
 
