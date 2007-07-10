@@ -1,11 +1,9 @@
  $(document).ready(function(){
 
+  $(".resize").vjustify();
+  $("div.buttonSubmit").hoverClass("buttonSubmitHover");
 
-
-
-  hideOverlay();
-
-
+  // tooltip
   $(".tooltip").hoverIntent(
     function() {
       $(this).siblings("div.tooltip").show("medium");
@@ -14,42 +12,11 @@
       $(this).siblings("div.tooltip").hide("medium");
     }
   );
-
   $(".tooltip").click(
     function() {
       $(this).siblings("div.tooltip").show();
       $(this).unbind('mouseover');
       $(this).unbind('mouseout');
-    }
-  );
-
-  $("div.action-container").click(
-    function() {
-      location.href = $(this).attr("rel");
-    }
-  );
-
-  $("div.action-container").hover(
-    function() {
-      $(this).addClass("hover");
-      var currentTop = parseInt($(this).find("img.action-icon").css("top"),10);
-      newTop = currentTop + 300;
-      $(this).find("img.action-icon").css("top",newTop)
-    },
-    function(){
-      $(this).removeClass("hover");
-      var currentTop = parseInt($(this).find("img.action-icon").css("top"),10);
-      newTop = currentTop + -300;
-      $(this).find("img.action-icon").css("top",newTop)
-    }
-  );
-
-  $("div.buttonSubmit").hover(
-    function(){
-      $(this).addClass("buttonSubmitHover");
-    },
-    function(){
-      $(this).removeClass("buttonSubmitHover");
     }
   );
 
@@ -98,12 +65,11 @@
 
         // Need to focus via setTimeout after blur returns
         var self = $(this);
-        setTimeout(function(){ self.parents("tr:first").addClass("errorRow"); hideOverlay() }, 100);
+        setTimeout(function(){ self.parents("tr:first").addClass("errorRow"); }, 100);
         setTimeout(function(){ self.focus() }, 0);
       }
       else {
         $(this).parents("tr").removeClass("errorRow");
-        hideOverlay();
       }
     }
   );
@@ -143,12 +109,11 @@
 
         // Need to focus via setTimeout after blur returns
         var self = $(this);
-        setTimeout(function(){ self.parents("tr:first").addClass("errorRow"); hideOverlay() }, 100);
+        setTimeout(function(){ self.parents("tr:first").addClass("errorRow"); }, 100);
         setTimeout(function(){ self.focus() }, 0);
       }
       else {
         $(this).parents("tr:first").removeClass("errorRow");
-        hideOverlay();
       }
     }
   );
@@ -251,12 +216,6 @@
 
 });
 
-
-function hideOverlay() {
-	$(".resize").vjustify();
-	$("#page-container:hidden").css("visibility","visible");
-}
-
 jQuery.fn.vjustify=function() {
     var maxHeight=0;
     $(".resize").css("height","auto");
@@ -271,4 +230,12 @@ jQuery.fn.vjustify=function() {
             $(this).height((maxHeight-(this.offsetHeight-maxHeight))+"px");
         }
     });
+};
+
+$.fn.hoverClass = function(classname) {
+	return this.hover(function() {
+		$(this).addClass(classname);
+	}, function() {
+		$(this).removeClass(classname);
+	});
 };
