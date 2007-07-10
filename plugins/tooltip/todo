@@ -3,3 +3,5 @@
 * add stick on hover of tooltip (with track:false)
 * Add and test Footip
 * Add stop-queue stuff for fadein/out without nasty queues
+* Seperate plugin and demo styles into their own files
+* Expose id="tooltip" as an option?
