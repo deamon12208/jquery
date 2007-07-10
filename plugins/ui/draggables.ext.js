@@ -1,12 +1,8 @@
 (function($) {
+
+	$.ui.plugin("draggable", "stop", "effect", function() {
 	
-	/*
-	 * Provides the effect option
-	 * effect: array
-	 */
-	$.ui.plugin("draggable","stop", function() {
-	
-		if(this.options.effect && this.options.effect[1]) {
+		if(this.options.effect[1]) {
 			if(this.helper != this.element) {
 				this.options.beQuietAtEnd = true;
 				switch(this.options.effect[1]) {
@@ -23,106 +19,87 @@
 		
 	});
 	
-	/*
-	 * Provides the effect option
-	 * effect: array
-	 */
-	$.ui.plugin("draggable","start", function() {
+	$.ui.plugin("draggable", "start", "effect", function() {
 	
-		if(this.options.effect && this.options.effect[0]) {
-	
+		if(this.options.effect[0]) {
+
 			switch(this.options.effect[0]) {
 				case 'fade':
 					$(this.helper).hide().fadeIn(300);
 					break;
 			}
-	
+
 		}
 		
 	});
-	
-	/*
-	 * Provides the old-school option zIndex, as known from scriptaculous, Interface and many others
-	 * zIndex: int
-	 */
-	$.ui.plugin("draggable","start", function() {
-		if(this.options.zIndex) {
-			if($(this.helper).css("zIndex")) this.options.ozIndex = $(this.helper).css("zIndex");
-			$(this.helper).css('zIndex', this.options.zIndex);
-		}
+
+//----------------------------------------------------------------
+
+	$.ui.plugin("draggable", "start", "zIndex", function() {
+		if($(this.helper).css("zIndex")) this.options.ozIndex = $(this.helper).css("zIndex");
+		$(this.helper).css('zIndex', this.options.zIndex);
 	});
 	
-	$.ui.plugin("draggable","stop", function() {
+	$.ui.plugin("draggable", "stop", "zIndex", function() {
 		if(this.options.ozIndex)
 			$(this.helper).css('zIndex', this.options.ozIndex);
 	});
 	
-	/*
-	 * Provides the old-school option opacity, as known from scriptaculous, Interface and many others
-	 * opacity: float
-	 */
-	$.ui.plugin("draggable","start", function() {
-		if(this.options.opacity) {
-			if($(this.helper).css("opacity")) this.options.oopacity = $(this.helper).css("opacity");
-			$(this.helper).css('opacity', this.options.opacity);
-		}
+//----------------------------------------------------------------
+
+	$.ui.plugin("draggable", "start", "opacity", function() {
+		if($(this.helper).css("opacity")) this.options.oopacity = $(this.helper).css("opacity");
+		$(this.helper).css('opacity', this.options.opacity);
 	});
 	
-	$.ui.plugin("draggable","stop", function() {
+	$.ui.plugin("draggable", "stop", "opacity", function() {
 		if(this.options.oopacity)
 			$(this.helper).css('opacity', this.options.oopacity);
 	});
 	
-	/*
-	 * Provides the revert option
-	 * revert: true
-	 */
-	$.ui.plugin("draggable","stop", function() {
+//----------------------------------------------------------------
+
+	$.ui.plugin("draggable", "stop", "revert", function() {
 	
-		if(this.options.revert) {
+		var rpos = { left: 0, top: 0 };
+		var o = this.options;
+		o.beQuietAtEnd = true;
+		if(this.helper != this.element) {
 			
-			var rpos = { left: 0, top: 0 };
-			var o = this.options;
-			o.beQuietAtEnd = true;
-			if(this.helper != this.element) {
-				
-				rpos = $(this.sorthelper || this.element).offset({ border: false });
-	
-				var nl = rpos.left-o.po.left-o.margins.left;
-				var nt = rpos.top-o.po.top-o.margins.top;
-	
-			} else {
-				var nl = this.opos[0]-o.cursorAt.left-o.margins.left;
-				var nt = this.opos[1]-o.cursorAt.top-o.margins.top;
-			}
-			
-			var self = this;
-	
-			$(this.helper).animate({
-				left: nl,
-				top: nt
-			}, 500, function() {
-				
-				if(o.wasPositioned)
-					$(self.element).css('position', o.wasPositioned);
-					
-				if(o.onStop) o.onStop.apply(self, [self.element, self.helper, self.pos, [o.curOffset.left - o.po.left,o.curOffset.top - o.po.top],self]);
-				
-				//Using setTimeout because of strange flickering in Firefox
-				if(self.helper != self.element) window.setTimeout(function() { $(self.helper).remove(); }, 0);
-				
-			});
+			rpos = $(this.sorthelper || this.element).offset({ border: false });
+
+			var nl = rpos.left-o.po.left-o.margins.left;
+			var nt = rpos.top-o.po.top-o.margins.top;
+
+		} else {
+			var nl = this.opos[0]-o.cursorAt.left-o.margins.left;
+			var nt = this.opos[1]-o.cursorAt.top-o.margins.top;
 		}
+		
+		var self = this;
+
+		$(this.helper).animate({
+			left: nl,
+			top: nt
+		}, 500, function() {
+			
+			if(o.wasPositioned)
+				$(self.element).css('position', o.wasPositioned);
+				
+			if(o.onStop) o.onStop.apply(self, [self.element, self.helper, self.pos, [o.curOffset.left - o.po.left,o.curOffset.top - o.po.top],self]);
+			
+			//Using setTimeout because of strange flickering in Firefox
+			if(self.helper != self.element) window.setTimeout(function() { $(self.helper).remove(); }, 0);
+			
+		});
 		
 	});
 	
-	/*
-	 * Provides the iframeFix option
-	 * iframeFix: true | NodeSet
-	 */
-	$.ui.plugin("draggable","start", function() {
-	
-		if(!this.slowMode && this.options.iframeFix) { // Make clones on top of iframes (only if we are not in slowMode)
+//----------------------------------------------------------------
+
+	$.ui.plugin("draggable", "start", "iframeFix", function() {
+
+		if(!this.slowMode) { // Make clones on top of iframes (only if we are not in slowMode)
 			if(this.options.iframeFix.constructor == Array) {
 				for(var i=0;i<this.options.iframeFix.length;i++) {
 					var curOffset = $(this.options.iframeFix[i]).offset({ border: false });
@@ -135,24 +112,21 @@
 				});							
 			}		
 		}
-		
+
 	});
 	
-	$.ui.plugin("draggable","stop", function() {
+	$.ui.plugin("draggable","stop", "iframeFix", function() {
 		if(this.options.iframeFix) $("div.DragDropIframeFix").each(function() { this.parentNode.removeChild(this); }); //Remove frame helpers	
 	});
 	
-	
-	/*
-	 * Provides the containment option
-	 * containment: 'document' || node
-	 */
-	$.ui.plugin("draggable","start", function() {
-	
+//----------------------------------------------------------------
+
+	$.ui.plugin("draggable", "start", "containment", function() {
+
 		var o = this.options;
 		if(o.containment == 'parent') o.containment = this.element.parentNode;
-		
-		if(o.containment && o.cursorAtIgnore) { //Get the containment
+
+		if(o.cursorAtIgnore) { //Get the containment
 			if(o.containment.left == undefined) {
 				
 				if(o.containment == 'document') {
@@ -178,13 +152,13 @@
 				
 			}
 		}
-		
+
 	});
 	
-	$.ui.plugin("draggable","drag", function() {
+	$.ui.plugin("draggable", "drag", "containment", function() {
 		
 		var o = this.options;
-		if(o.containment && o.cursorAtIgnore) { // Stick to a defined containment. Cannot be used with cursorAt.
+		if(o.cursorAtIgnore) {
 			if((this.pos[0] < o.containment.left-o.po.left)) this.pos[0] = o.containment.left-o.po.left;
 			if((this.pos[1] < o.containment.top-o.po.top)) this.pos[1] = o.containment.top-o.po.top;
 			if(this.pos[0]+$(this.helper)[0].offsetWidth > o.containment.right-o.po.left) this.pos[0] = o.containment.right-o.po.left-$(this.helper)[0].offsetWidth;
@@ -193,29 +167,25 @@
 		
 	});
 	
-	/*
-	 * Provides the grid option
-	 * grid: [int,int]
-	 */
-	$.ui.plugin("draggable","drag", function() {
-		
+//----------------------------------------------------------------
+
+	$.ui.plugin("draggable", "drag", "grid", function() {
+
 		var o = this.options;
-		if(o.grid && o.cursorAtIgnore) { //Let's use the grid if we have one. Cannot be used with cursorAt.
+		if(o.cursorAtIgnore) {
 			this.pos[0] = o.curOffset.left + o.margins.left - o.po.left + Math.round((this.pos[0] - o.curOffset.left - o.margins.left + o.po.left) / o.grid[0]) * o.grid[0];
 			this.pos[1] = o.curOffset.top + o.margins.top - o.po.top + Math.round((this.pos[1] - o.curOffset.top - o.margins.top + o.po.top) / o.grid[1]) * o.grid[1];
 		}
-		
+
 	});
-	
-	/*
-	 * Provides the axis option
-	 * axis: 'y' | 'x'
-	 */
-	$.ui.plugin("draggable","drag", function() {
+
+//----------------------------------------------------------------
+
+	$.ui.plugin("draggable", "drag", "axis", function() {
 		
 		var o = this.options;
 		if(o.constraint) o.axis = o.constraint; //Legacy check
-		if(o.axis && o.cursorAtIgnore) { // If we have a axis, use it. Cannot be used with cursorAt.
+		if(o.cursorAtIgnore) {
 			switch(o.axis) {
 				case "x":
 					this.pos[1] = o.curOffset.top - o.margins.top - o.po.top; break;
@@ -225,43 +195,33 @@
 		}
 		
 	});
-	
-	/*
-	 * Provides the auto-scrolling option
-	 * scroll: int
-	 */
-	$.ui.plugin("draggable","drag", function() {
+
+//----------------------------------------------------------------
+
+	$.ui.plugin("draggable", "drag", "scroll", function() {
 		
 		var o = this.options;
-		o.scroll		= o.scroll != undefined ? o.scroll : true; //Default to true
 		o.scrollSensitivity	= o.scrollSensitivity != undefined ? o.scrollSensitivity : 20;
 		o.scrollSpeed		= o.scrollSpeed != undefined ? o.scrollSpeed : 20;
-		
-		if(o.scroll) { // Auto scrolling
-			if(o.pp && o.ppOverflow) { // If we have a positioned parent, we only scroll in this one
-				// TODO: Extremely strange issues are waiting here..handle with care
-			} else {
-				if((this.rpos[1] - $(window).height()) - $(document).scrollTop() > -o.scrollSensitivity) window.scrollBy(0,o.scrollSpeed);
-				if(this.rpos[1] - $(document).scrollTop() < o.scrollSensitivity) window.scrollBy(0,-o.scrollSpeed);
-				if((this.rpos[0] - $(window).width()) - $(document).scrollLeft() > -o.scrollSensitivity) window.scrollBy(o.scrollSpeed,0);
-				if(this.rpos[0] - $(document).scrollLeft() < o.scrollSensitivity) window.scrollBy(-o.scrollSpeed,0);
-			}
+
+		if(o.pp && o.ppOverflow) { // If we have a positioned parent, we only scroll in this one
+			// TODO: Extremely strange issues are waiting here..handle with care
+		} else {
+			if((this.rpos[1] - $(window).height()) - $(document).scrollTop() > -o.scrollSensitivity) window.scrollBy(0,o.scrollSpeed);
+			if(this.rpos[1] - $(document).scrollTop() < o.scrollSensitivity) window.scrollBy(0,-o.scrollSpeed);
+			if((this.rpos[0] - $(window).width()) - $(document).scrollLeft() > -o.scrollSensitivity) window.scrollBy(o.scrollSpeed,0);
+			if(this.rpos[0] - $(document).scrollLeft() < o.scrollSensitivity) window.scrollBy(-o.scrollSpeed,0);
 		}
 		
 	});
-	
-	/*
-	 * Provides the wrap helper option
-	 * wrapHelper: Boolean
-	 */
-	$.ui.plugin("draggable","drag", function() {
-		
+
+//----------------------------------------------------------------
+
+	$.ui.plugin("draggable", "drag", "wrapHelper", function() {
+
 		var o = this.options;
-		/* If wrapHelper is set to true (and we have a defined cursorAt),
-		 * wrap the helper when coming to a side of the screen.
-		 */
-		if(o.wrapHelper && !o.cursorAtIgnore) {
-			
+		if(!o.cursorAtIgnore) {
+
 			if(!o.pp || !o.ppOverflow) {
 				var wx = $(window).width() - ($.browser.mozilla ? 20 : 0);
 				var sx = $(document).scrollLeft();
@@ -275,13 +235,13 @@
 				var wy = o.pp.offsetHeight + o.po.top - 20;
 				var sy = o.pp.scrollTop;						
 			}
-			
+
 			this.pos[0] -= ((this.rpos[0]-o.cursorAt.left - wx + this.helper.offsetWidth+o.margins.right) - sx > 0 || (this.rpos[0]-o.cursorAt.left+o.margins.left) - sx < 0) ? (this.helper.offsetWidth+o.margins.left+o.margins.right - o.cursorAt.left * 2) : 0;
 			
 			this.pos[1] -= ((this.rpos[1]-o.cursorAt.top - wy + this.helper.offsetHeight+o.margins.bottom) - sy > 0 || (this.rpos[1]-o.cursorAt.top+o.margins.top) - sy < 0) ? (this.helper.offsetHeight+o.margins.top+o.margins.bottom - o.cursorAt.top * 2) : 0;
-			
+
 		}
-		
+
 	});
 
 })(jQuery);

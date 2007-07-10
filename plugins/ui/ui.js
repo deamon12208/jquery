@@ -4,8 +4,8 @@ $.ui = {
 		var y = e.pageY || (e.clientY + (document.documentElement.scrollTop || document.body.scrollTop)) || 0;
 		return [x,y];
 	},
-	plugin: function(what,calltime,plugin) {
+	plugin: function(what, calltime, option, plugin) {
 		if(!$.ui[what].prototype.plugins[calltime]) $.ui[what].prototype.plugins[calltime] = [];
-		$.ui[what].prototype.plugins[calltime].push(plugin);
+		$.ui[what].prototype.plugins[calltime].push([option,plugin]);
 	}
 }
