@@ -145,7 +145,6 @@
           $(".error span").html('You missed ' + trArray.length + ' fields.  They have been highlighted below');
         }
 
-        hideOverlay();
         return false;
       }
 
@@ -203,12 +202,10 @@
       if (this.checked == true) {
         $(this).parents("tr").next("tr.subTable").find("div").slideUp("medium");
         $(".resize").animate({ height: 450}, 500);
-        hideOverlay();
       }
       else {
         $(this).parents("tr").next("tr.subTable").find("div").slideDown("medium");
         $(".resize").animate({ height: 800}, 400);
-        hideOverlay();
       }
     }
   );
