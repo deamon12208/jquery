@@ -27,10 +27,6 @@
   	margin-left: -1px;
   	}
 
-  #content {
-  	border-left: 1px solid #006;
-  	}
-
   div.element {
   	overflow: auto;
     height: 100%;
@@ -77,13 +73,20 @@
         .css({left: "212px"})
         .draggable({
           axis: 'x',
-          containment: 'parent',
+          containment: {left: 200, right: 400},
+          helper: 'clone',
           onStop: function(e, h, stopPos) {
             newWidth = stopPos[0];
-            $("#nav").width(newWidth + 2);
-            $("#content").css({left: newWidth + 8 + "px", width: $(window).width() - newWidth + "px"})
+            resizeLayout(null, newWidth);
+            $("#scroller").css("left", newWidth);
           }
-        })
+      })
+      var resizeLayout = function(e, pos) {
+        pos = pos || $("#nav").width() - 2;
+        $("#nav").width(pos + 2);
+        $("#content").css({left: pos + 8 + "px", width: $(window).width() - pos + "px"});
+      };
+      $(window).resize(resizeLayout);
     });
   </script>
 </head>
