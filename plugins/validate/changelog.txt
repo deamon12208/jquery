@@ -1,8 +1,8 @@
 1.2
 ---
 
-* Added remember-the-milk-demo
-* Added marketo-demo
+* Added remember-the-milk-demo (thanks RTM team for the permission!)
+* Added marketo-demo (thanks Glen Lipka!)
 * Added support for ajax-validation, see method "remote"
 * Added validator.size(): returns the number of current errors
 * Moved showErrors() from valid() to form()
