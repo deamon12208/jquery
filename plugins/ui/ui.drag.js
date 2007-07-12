@@ -91,10 +91,10 @@
 		});
 		var self = this;
 		
-		if(o.ghosting == true) o.helper = 'clone'; //legacy option check
+		if(options.ghosting == true) options.helper = 'clone'; //legacy option check
 		this.interaction = new $.ui.mouseInteraction(el,options);
 		
-		if(o.name) $.ui.add(o.name, 'draggable', this); //Append to UI manager if a name exists as option
+		if(options.name) $.ui.add(options.name, 'draggable', this); //Append to UI manager if a name exists as option
 		
 	}
 	
@@ -119,9 +119,6 @@
 							
 				}	
 			}			
-		},
-		destroy: function() {
-			this.options.handle.unbind('mousedown', this.mousedownfunc);
 		},
 		start: function(that) {
 			

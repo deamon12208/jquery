@@ -18,7 +18,7 @@
 		})
 		o = this.options; //Just Lazyness
 		
-		if(o.helper == 'clone' || o.helper == 'original') {
+		if(!this.options.nonDestructive && (o.helper == 'clone' || o.helper == 'original')) {
 
 			// Let's save the margins for better reference
 			o.margins = {
@@ -76,6 +76,11 @@
 			for(var i=0;i<this.options.dragPrevention.length;i++) {
 				if(targetName == this.options.dragPrevention[i]) return true;
 			}
+			
+			//Prevent execution on condition
+			if(this.options.startCondition && !this.options.startCondition.apply(this, [e])) {
+				return true;
+			}
 
 			var self = this;
 			this.mouseup = function(e) {
@@ -110,7 +115,7 @@
 			o.curOffset = $(this.element).offset({ border: false }); //get the current offset
 				
 			if(typeof o.helper == 'function') { //If helper is a function, use the node returned by it
-				this.helper = o.helper.apply(this.element, [e]);
+				this.helper = o.helper.apply(this.element, [e,this]);
 			} else { //No custom helper
 				if(o.helper == 'clone') this.helper = $(this.element).clone()[0];
 				if(o.helper == 'original') this.helper = this.element;
@@ -147,7 +152,8 @@
 			}
 			
 			this.slowMode = (o.cursorAt && (o.cursorAt.top-o.margins.top > 0 || o.cursorAt.bottom-o.margins.bottom > 0) && (o.cursorAt.left-o.margins.left > 0 || o.cursorAt.right-o.margins.right > 0)) ? true : false; //If cursorAt is within the helper, set slowMode to true
-			$(this.helper).css('left', o.curOffset.left+'px').css('top', o.curOffset.top+'px').css('position', 'absolute');
+			
+			if(!o.nonDestructive) $(this.helper).css('position', 'absolute');
 			if(o.helper != 'original') $(this.helper).appendTo((o.appendTo == 'parent' ? this.element.parentNode : o.appendTo));
 
 

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Draggables demo - Interface plugin for jQuery</title>
+<script type="text/javascript" src="../../../jquery/src/jquery/jquery.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx/fx.js"></script>
+<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+<script type="text/javascript" src="../ui.js"></script>
+<script type="text/javascript" src="../ui.mouse.js"></script>
+<script type="text/javascript" src="../ui.resize.js"></script>
+<style type="text/css" media="all">
+
+body
+{
+	background: #fff;
+	margin: 0;
+	padding: 0;
+	font-family: Arial;
+	font-size: 12px;
+}
+
+.proxy {
+	border: 1px dotted black;	
+}
+</style>
+</head>
+<body>
+	
+	<div id="drag1" style=' border: 1px solid black; height: 300px; width: 400px; margin: 20px;'><a href="index.php">Drag me</a><input type="text" value="select me" style="width: 90px; font-size: 10px;" /></div>
+	
+	<textarea id="drag2" style=' border: 1px solid black; height: 300px; width: 400px; margin: 20px;'>
+	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+	</textarea>
+
+	
+<script type="text/javascript">
+if(!window.console) {
+ window.console = {
+ 	log: function() {
+ 		alert(arguments[0]);	
+ 	}	
+ }	
+}
+
+$(document).ready(function(){
+	
+
+$('#drag1').resizable({
+	proxy: "proxy",
+	minWidth: 100,
+	minHeight: 100,
+	maxWidth: 500,
+	maxHeight: 300	
+});
+
+$('#drag2').resizable({
+	minWidth: 100,
+	minHeight: 100,
+	maxWidth: 500,
+	maxHeight: 300	
+});
+
+
+});
+</script>
+</body>
+</html>
