@@ -71,7 +71,7 @@
  */
 $.fn.bgIframe = $.fn.bgiframe = function(s) {
 	// This is only for IE6
-	if ( $.browser.msie && parseInt($.browser.version) <= 6 ) {
+	if ( $.browser.msie && /6.0/.test(navigator.userAgent) ) {
 		s = $.extend({
 			top     : 'auto', // auto == .currentStyle.borderTopWidth
 			left    : 'auto', // auto == .currentStyle.borderLeftWidth
@@ -96,9 +96,5 @@ $.fn.bgIframe = $.fn.bgiframe = function(s) {
 	}
 	return this;
 };
-
-// Add browser.version if it doesn't exist
-if (!$.browser.version)
-	$.browser.version = navigator.userAgent.toLowerCase().match(/.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/)[1];
 
 })(jQuery);
