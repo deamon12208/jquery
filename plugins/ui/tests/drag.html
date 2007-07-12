@@ -26,6 +26,11 @@ body
 	font-size: 12px;
 }
 
+fieldset
+{
+	margin: 20px;
+}
+
 li {
 	position: relative;
 	border-bottom: 1px solid #999;
@@ -76,104 +81,72 @@ div.todo div.todo-desc
 </style>
 </head>
 <body>
-
+	<fieldset>
+	<legend>options</legend>
 	<ul>
 	    <li>
 	    	axis: 'x'
-	    	<div id="drag-axis-x" class='draggable'>Drag me</div>
+	    	<div id="draggable-axis-x" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
 	    	axis: 'y'
-	    	<div id="drag-axis-y" class='draggable'>Drag me</div>
+	    	<div id="draggable-axis-y" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
 	    	containment: 'document'
-	    	<div id="drag-containment-document" class='draggable'>Drag me</div>
+	    	<div id="draggable-containment-document" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
 	    	containment: 'parent'
-	    	<div id="drag-containment-parent" class='draggable'>Drag me</div>
+	    	<div id="draggable-containment-parent" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
 	    	cursorAt: {top: 2, left: 2}
-	    	<div id="drag-cursorAt-top2-left2" class='draggable'>Drag me</div>
+	    	<div id="draggable-cursorAt-top2-left2" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
 	    	cursorAt: {bottom: 20, right: 14}
-	    	<div id="drag-cursorAt-bottom20-right14" class='draggable'>Drag me</div>
+	    	<div id="draggable-cursorAt-bottom20-right14" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
 	    	dragPrevention: 'a,input,textarea'
-	    	<div id="drag-dragPrevention" class='draggable'><a href="index.php">Drag me</a><input type="text" value="select me" style="width: 90px; font-size: 10px;" /></div>
+	    	<div id="draggable-dragPrevention" class='draggable'><a href="index.php">Drag me</a><input type="text" value="select me" style="width: 90px; font-size: 10px;" /></div>
 	    </li>
 	    <li>
 	    	effect: ['fade', '']
-	    	<div id="drag-effect-fade-none" class='draggable'>Drag me</div>
+	    	<div id="draggable-effect-fade-none" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
 	    	effect: ['', 'fade']
-	    	<div id="drag-effect-none-fade" class='draggable'>Drag me</div>
+	    	<div id="draggable-effect-none-fade" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
 	    	effect: ['fade', 'fade']
-	    	<div id="drag-effect-fade-fade" class='draggable'>Drag me</div>
+	    	<div id="draggable-effect-fade-fade" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
 	    	grid: [50, 50]
-	    	<div id="drag-grid-50-50" class='draggable'>Drag me</div>
+	    	<div id="draggable-grid-50-50" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
 	    	handle: 'div'
-	    	<div id="drag-handle-div" class='draggable'><div class="drag-handle"></div>Drag me</div>
+	    	<div id="draggable-handle-div" class='draggable'><div class="drag-handle"></div>Drag me</div>
 	    </li>
 	    <li>
 	    	helper: 'clone'
-	    	<div id="drag-helper-clone" class='draggable'>Drag me</div>
+	    	<div id="draggable-helper-clone" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
 	    	helper: function() { return divHelper; }
-	    	<div id="drag-helper-function" class='draggable'>Drag me</div>
-	    </li>
-	    <li>
-		onDrag<br/>
-	    	custom drag modifier (circle dragging)
-	    	<div id="drag-onDrag-function-circle" class='draggable'>Drag me</div>
-	    </li>
-	    <li>
-		onStart
-	    	<div id="drag-onStart" class='draggable'>Drag me</div>
-		<div class="todo">
-			fix scroll bug
-			<div class="todo-desc">draggable jumps down when first dragged after page refresh</div>
-		</div>
-	    </li>
-	    <li>
-		onStop
-	    	<div id="drag-onStop" class='draggable'>Drag me</div>
-		<div class="todo">
-			fix scroll bug
-			<div class="todo-desc">draggable jumps down when first dragged after page refresh</div>
-		</div>
+	    	<div id="draggable-helper-function" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
 		opacity: 0.40
-	    	<div id="drag-opacity-40percent" class='draggable'>Drag me</div>
-		<div class="todo">
-			fix scroll bug
-			<div class="todo-desc">draggable jumps down when first dragged after page refresh</div>
-		</div>
+	    	<div id="draggable-opacity-40percent" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
-		preventionDistance: 20
-	    	<div id="drag-preventionDistance-20" class='draggable'>Drag me</div>
-		<div class="todo">
-			fix scroll bug
-			<div class="todo-desc">draggable jumps down when first dragged after page refresh</div>
-		</div>
-		<div class="todo">
-			fix preventionDistance bug
-			<div class="todo-desc">preventionDistance only works on the first drag</div>
-		</div>
+		preventionDistance: 40
+	    	<div id="draggable-preventionDistance-40" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
 		preventionTimeout
@@ -182,32 +155,20 @@ div.todo div.todo-desc
 	    <li>
 	    	revert: true<br/>
 		helper: 'clone'
-	    	<div id="drag-revert-helperClone" class='draggable'>Drag me</div>
-		<div class="todo">
-			fix scroll bug
-			<div class="todo-desc">draggable jumps down when first dragged after page refresh</div>
-		</div>
+	    	<div id="draggable-revert-helperClone" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
 	    	revert: true<br/>
 		helper: 'original'
-	    	<div id="drag-revert-helperOriginal" class='draggable'>Drag me</div>
-		<div class="todo">
-			fix scroll bug
-			<div class="todo-desc">draggable jumps down when first dragged after page refresh</div>
-		</div>
+	    	<div id="draggable-revert-helperOriginal" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
 		scroll: true
-	    	<div id="drag-scroll-true" class='draggable'>Drag me</div>
-		<div class="todo">
-			fix scroll bug
-			<div class="todo-desc">draggable jumps down when first dragged after page refresh</div>
-		</div>
+	    	<div id="draggable-scroll-true" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
 		scroll: false
-	    	<div id="drag-scroll-false" class='draggable'>Drag me</div>
+	    	<div id="draggable-scroll-false" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
 		wrapHelper
@@ -215,29 +176,37 @@ div.todo div.todo-desc
 	    </li>
 	    <li style='background: #eee; height: 300px; overflow: scroll;'>
 	    	cursorAt: { top: -16, left: -16 } and overflowing container
-	    	<div id="drag-overflowingContainer" class='draggable'>Drag me</div>
+	    	<div id="draggable-overflowingContainer" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
 	    	helper: 'clone'<br/>
 		appendTo: 'body'
-	    	<div id="drag-helperClone-withAppendTo" class='draggable'>Drag me</div>
+	    	<div id="draggable-helperClone-withAppendTo" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
 	    	helper: 'clone'
-	    	<div id="drag-helperClone-withoutAppendTo" class='draggable'>Drag me</div>
-		<div class="todo">
-			fix scroll bug
-			<div class="todo-desc">draggable jumps down when first dragged after page refresh. Compare above (with AppendTo: 'body')</div>
-		</div>
+	    	<div id="draggable-helperClone-withoutAppendTo" class='draggable'>Drag me</div>
+	    </li>
+	  </ul>
+	</fieldset>
+	<fieldset>
+	<legend>Callbacks</legend>
+	  <ul>
+	    <li>
+		start
+	    	<div id="draggable-start" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
-		known issues
-		<div class="todo">
-			fix right column bug
-			<div class="todo-desc">Page jumps on drag start (hor. scrollbar appears and dissapears) when list is two columns wide and a right-column draggable is dragged.</div>
-		</div>
+		drag<br/>
+	    	custom drag modifier (circle dragging)
+	    	<div id="draggable-drag-function-circle" class='draggable'>Drag me</div>
 	    </li>
-	</ul>
+	    <li>
+		stop
+	    	<div id="draggable-stop" class='draggable'>Drag me</div>
+	    </li>
+	  </ul>
+	</fieldset>
 
 <script type="text/javascript">
 $(document).ready(function(){
@@ -248,63 +217,63 @@ $(document).ready(function(){
 			.text('TODO: ')
 	);
 
-	$('#drag-axis-x').draggable({
+	$('#draggable-axis-x').draggable({
 		axis:'x',
 		name: 'axis-x'
 	});
 
-	$('#drag-axis-y').draggable({
+	$('#draggable-axis-y').draggable({
 		axis:'y'
 	});
 	
-	$('#drag-containment-document').draggable({
+	$('#draggable-containment-document').draggable({
 		containment: 'document'
 	});
 
-	$('#drag-containment-parent').draggable({
+	$('#draggable-containment-parent').draggable({
 		containment: 'parent'
 	});
 
-	$('#drag-cursorAt-top2-left2').draggable({
+	$('#draggable-cursorAt-top2-left2').draggable({
 		cursorAt: {top: 2, left: 2}
 	});
 
-	$('#drag-cursorAt-bottom20-right14').draggable({
+	$('#draggable-cursorAt-bottom20-right14').draggable({
 		cursorAt: {bottom: 20, right: 14}
 	});
 
-	$('#drag-dragPrevention').draggable({
+	$('#draggable-dragPrevention').draggable({
 		dragPrevention: 'a,input,textarea'
 	});
 
-	$('#drag-effect-fade-none').draggable({
+	$('#draggable-effect-fade-none').draggable({
 		effect: ['fade', ''],
 		helper: 'clone'
 	});
 
-	$('#drag-effect-none-fade').draggable({
+	$('#draggable-effect-none-fade').draggable({
 		effect: ['', 'fade'],
 		helper: 'clone'
 	});
 
-	$('#drag-effect-fade-fade').draggable({
+	$('#draggable-effect-fade-fade').draggable({
 		effect: ['fade', 'fade'],
 		helper: 'clone'
 	});
 
-	$('#drag-grid-50-50').draggable({
+	$('#draggable-grid-50-50').draggable({
 		grid: [50, 50]
 	});
 
-	$('#drag-handle-div').draggable({
+	$('#draggable-handle-div').draggable({
 		handle:'div'
 	});
 
-	$('#drag-helper-clone').draggable({
+	$('#draggable-helper-clone').draggable({
 		helper:'clone'
 	});
 
-	$('#drag-helper-function').draggable({
+	$('#draggable-helper-function').draggable({
 		zIndex: 1000,
 		helper: function() {
 			var myHelper = document.createElement("div");
@@ -320,7 +289,56 @@ $(document).ready(function(){
 		cursorAt: { bottom: -30, left: -30 }
 	});
 
-	$('#drag-onDrag-function-circle').draggable({
+	$('#draggable-opacity-40percent').draggable({
+		opacity: 0.40
+	});
+
+	$('#draggable-preventionDistance-40').draggable({
+		preventionDistance: 40
+	});
+
+	$('#draggable-revert-helperClone').draggable({
+		revert: true,
+		helper: 'clone'
+	});
+
+	$('#draggable-revert-helperOriginal').draggable({
+		revert: true,
+		helper: 'original'
+	});
+
+	$('#draggable-scroll-true').draggable({
+		scroll: true
+	});
+
+	$('#draggable-scroll-false').draggable({
+		scroll: false
+	});
+
+	$('#draggable-overflowingContainer').draggable({
+		cursorAt: { top: -16, left: -16 }
+	});
+	
+	$('#draggable-helperClone-withAppendTo').draggable({
+		helper: 'clone',
+		appendTo: 'body',
+		effect: ['fade', 'fade']
+	});
+
+	$('#draggable-helperClone-withoutAppendTo').draggable({
+		helper: 'clone',
+		effect: ['fade', 'fade']
+	});
+
+	// Callbacks
+
+	$('#draggable-start').draggable({
+		start: function(dragging) {
+			$(dragging).css('background', '#4e9a06');
+		}
+	});
+
+	$('#draggable-drag-function-circle').draggable({
 		revert: true,
 		drag: function(helper, position) {
 			
@@ -337,58 +355,12 @@ $(document).ready(function(){
 		}
 	});
 
-	$('#drag-onStart').draggable({
-		start: function(dragging) {
-			$(dragging).css('background', '#4e9a06');
-		}
-	});
-
-	$('#drag-onStop').draggable({
+	$('#draggable-stop').draggable({
 		stop: function(dragging) {
 			$(dragging).css('background', '#cc0000');
 		}
 	});
 
-	$('#drag-opacity-40percent').draggable({
-		opacity: 0.40
-	});
-
-	$('#drag-preventionDistance-20').draggable({
-		preventionDistance: 20
-	});
-
-	$('#drag-revert-helperClone').draggable({
-		revert: true,
-		helper: 'clone'
-	});
-
-	$('#drag-revert-helperOriginal').draggable({
-		revert: true,
-		helper: 'original'
-	});
-
-	$('#drag-scroll-true').draggable({
-		scroll: true
-	});
-
-	$('#drag-scroll-false').draggable({
-		scroll: false
-	});
-
-	$('#drag-overflowingContainer').draggable({
-		cursorAt: { top: -16, left: -16 }
-	});
-	
-	$('#drag-helperClone-withAppendTo').draggable({
-		helper: 'clone',
-		appendTo: 'body',
-		effect: ['fade', 'fade']
-	});
-
-	$('#drag-helperClone-withoutAppendTo').draggable({
-		helper: 'clone',
-		effect: ['fade', 'fade']
-	});
 
 });
 </script>
