@@ -72,8 +72,8 @@
 			var nt = rpos.top-o.po.top-o.margins.top;
 
 		} else {
-			var nl = this.opos[0]-o.cursorAt.left-o.margins.left;
-			var nt = this.opos[1]-o.cursorAt.top-o.margins.top;
+			var nl = o.curOffset.left - (o.po ? o.po.left : 0);
+			var nt = o.curOffset.top - (o.po ? o.po.top : 0);
 		}
 		
 		var self = this;
@@ -181,7 +181,7 @@
 
 //----------------------------------------------------------------
 
-	$.ui.plugin("draggable", "drag", "axis", function() {
+	$.ui.plugin("draggable", "drag", "axis", function(d) {
 		
 		var o = this.options;
 		if(o.constraint) o.axis = o.constraint; //Legacy check

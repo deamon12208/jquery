@@ -11,6 +11,15 @@
 		
 		this.options = {};
 		$.extend(this.options, o);
+		$.extend(this.options, {
+			handle : o.handle ? ($(o.handle, el)[0] ? $(o.handle, el) : $(el)) : $(el),
+			helper: o.helper ? o.helper : 'original',
+			preventionDistance: o.preventionDistance ? o.preventionDistance : 0,
+			dragPrevention: o.dragPrevention ? o.dragPrevention.toLowerCase().split(',') : ['input','textarea','button','select','option'],
+			cursorAt: { top: ((o.cursorAt && o.cursorAt.top) ? o.cursorAt.top : 0), left: ((o.cursorAt && o.cursorAt.left) ? o.cursorAt.left : 0), bottom: ((o.cursorAt && o.cursorAt.bottom) ? o.cursorAt.bottom : 0), right: ((o.cursorAt && o.cursorAt.right) ? o.cursorAt.right : 0) },
+			cursorAtIgnore: (!o.cursorAt) ? true : false, //Internal property
+			appendTo: o.appendTo ? o.appendTo : 'parent'			
+		})
 		o = this.options; //Just Lazyness
 		
 		if(o.helper == 'clone' || o.helper == 'original') {
@@ -152,7 +161,7 @@
 		
 			this.init = true;	
 
-			if(o.onStart) o.onStart.apply(this.element, [this.helper, this.pos, o.cursorAt, this]); // Trigger the onStart callback
+			if(o._start) o._start.apply(this.element, [this.helper, this.pos, o.cursorAt, this]); // Trigger the onStart callback
 			return false;
 						
 		},
@@ -167,7 +176,7 @@
 			if(this.init == false)
 				return this.opos = this.pos = null;
 			
-			if(o.beforeStop) o.onStop.apply(this.element, [this.helper, this.pos, o.cursorAt, this]);
+			if(o._beforeStop) o._beforeStop.apply(this.element, [this.helper, this.pos, o.cursorAt, this]);
 
 				
 			if(this.helper != this.element && !o.beQuietAtEnd) { // Remove helper, if it's not the original node
@@ -178,7 +187,7 @@
 			if(!o.beQuietAtEnd && o.wasPositioned)
 				$(this.element).css('position', o.wasPositioned);
 				
-			if(!o.beQuietAtEnd && o.onStop) o.onStop.apply(this.element, [this.helper, this.pos, o.cursorAt, this]);
+			if(!o.beQuietAtEnd && o._stop) o._stop.apply(this.element, [this.helper, this.pos, o.cursorAt, this]);
 
 			this.init = false;
 			this.opos = this.pos = $.ui.ddmanager.current = null; // Clear temp variables
@@ -206,7 +215,7 @@
 				if(this.init == false) return false;
 			}
 		
-			if(o.onDrag) o.onDrag.apply(this.element, [this.helper, this.pos, o.cursorAt, this]);
+			if(o._drag) o._drag.apply(this.element, [this.helper, this.pos, o.cursorAt, this]);
 			return false;
 			
 		}

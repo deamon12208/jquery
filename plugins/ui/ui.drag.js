@@ -79,32 +79,27 @@
 	$.ui.draggable = function(el,o) {
 	
 		
-		this.options = {};
-		$.extend(this.options, o);
+		var options = {};
+		$.extend(options, o);
+		$.extend(options, {
+			_start: function(h,p,c,t) {
+				self.start.apply(t, [self]); // Trigger the onStart callback				
+			},
+			_beforeStop: function(h,p,c,t) {
+				self.stop.apply(t, [self]); // Trigger the onStart callback
+			},
+			_stop: function(h,p,c,t) {
+				var o = t.options;
+				if(o.stop) o.stop.apply(t.element, [t.helper, t.pos, o.cursorAt, t]);
+			},
+			_drag: function(h,p,c,t) {
+				self.drag.apply(t, [self]); // Trigger the onStart callback
+			}			
+		});
 		var self = this;
 		
 		if(o.ghosting == true) o.helper = 'clone'; //legacy option check
-		this.interaction = new $.ui.mouseInteraction(el,{
-			handle : o.handle ? ($(o.handle, el)[0] ? $(o.handle, el) : $(el)) : $(el),
-			helper: o.helper ? o.helper : 'original',
-			preventionDistance: o.preventionDistance ? o.preventionDistance : 0,
-			dragPrevention: o.dragPrevention ? o.dragPrevention.toLowerCase().split(',') : ['input','textarea','button','select','option'],
-			cursorAt: { top: ((o.cursorAt && o.cursorAt.top) ? o.cursorAt.top : 0), left: ((o.cursorAt && o.cursorAt.left) ? o.cursorAt.left : 0), bottom: ((o.cursorAt && o.cursorAt.bottom) ? o.cursorAt.bottom : 0), right: ((o.cursorAt && o.cursorAt.right) ? o.cursorAt.right : 0) },
-			cursorAtIgnore: (!o.cursorAt) ? true : false, //Internal property
-			appendTo: o.appendTo ? o.appendTo : 'parent',
-			onStart: function(h,p,c,t) {
-				self.start.apply(t, [null]); // Trigger the onStart callback				
-			},
-			beforeStop: function(h,p,c,t) {
-				self.stop.apply(t, [null]); // Trigger the onStart callback
-			},
-			onStop: function(h,p,c,t) {
-				//self.start.apply(t, [null]); // Trigger the onStart callback
-			},
-			onDrag: function(h,p,c,t) {
-				self.drag.apply(t, [null]); // Trigger the onStart callback
-			}
-		});
+		this.interaction = new $.ui.mouseInteraction(el,options);
 		
 	}
 	
@@ -119,36 +114,40 @@
 		slowMode: false,
 		element: null,
 		init: false,
-		execPlugins: function(type) {
-			var o = this.options;
+		execPlugins: function(type,self) {
+			var o = self.options;
 			if(this.plugins[type]) {
 				for(var i=0;i<this.plugins[type].length;i++) {
-					if(this.options[this.plugins[type][i][0]])
-						this.plugins[type][i][1].call(this);	
+					if(self.options[this.plugins[type][i][0]]) {
+						this.plugins[type][i][1].call(self, this);
+					}
+							
 				}	
 			}			
 		},
 		destroy: function() {
 			this.options.handle.unbind('mousedown', this.mousedownfunc);
 		},
-		start: function(e) {
+		start: function(that) {
 			
 			var o = this.options;
 			$.ui.ddmanager.current = this;
 			
-			//this.execPlugins('start');
+			that.execPlugins('start', this);
 			
 			if(this.slowMode && $.ui.droppable && !o.dropBehaviour)
 				$.ui.ddmanager.prepareOffsets(this);
+				
+			if(o.start) o.start.apply(this.element, [this.helper, this.pos, o.cursorAt, this]);
 			
 			return false;
 						
 		},
-		stop: function(e) {			
+		stop: function(that) {			
 			
 			var o = this.options;
 			
-			//this.execPlugins('stop');
+			that.execPlugins('stop', this);
 
 			if(this.slowMode && $.ui.droppable && !o.dropBehaviour) //If cursorAt is within the helper, we must use our drop manager
 				$.ui.ddmanager.fire(this);
@@ -156,7 +155,7 @@
 			return false;
 			
 		},
-		drag: function(e) {
+		drag: function(that) {
 
 			var o = this.options;
 
@@ -164,9 +163,13 @@
 				$.ui.ddmanager.update(this);
 
 			this.pos = [this.pos[0]-(o.cursorAt.left ? o.cursorAt.left : 0), this.pos[1]-(o.cursorAt.top ? o.cursorAt.top : 0)];
-			//this.execPlugins('drag');
+			that.execPlugins('drag', this);
 
-			$(this.helper).css('left', this.pos[0]+'px').css('top', this.pos[1]+'px'); // Stick the helper to the cursor
+			if(o.drag) var nv = o.drag.apply(this.element, [this.helper, this.pos, o.cursorAt, this]);
+			var nl = (nv && nv.x) ? nv.x :  this.pos[0];
+			var nt = (nv && nv.y) ? nv.y :  this.pos[1];
+			
+			$(this.helper).css('left', nl+'px').css('top', nt+'px'); // Stick the helper to the cursor
 			return false;
 			
 		}

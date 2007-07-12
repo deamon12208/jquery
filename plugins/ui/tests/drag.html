@@ -12,9 +12,9 @@
 <script type="text/javascript" src="../../../jquery/src/fx/fx.js"></script>
 <script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
 <script type="text/javascript" src="../ui.js"></script>
-<script type="text/javascript" src="../mouseInteraction.js"></script>
-<script type="text/javascript" src="../draggables.js"></script>
-<script type="text/javascript" src="../draggables.ext.js"></script>
+<script type="text/javascript" src="../ui.mouse.js"></script>
+<script type="text/javascript" src="../ui.drag.js"></script>
+<script type="text/javascript" src="../ui.drag.ext.js"></script>
 <style type="text/css" media="all">
 
 body
@@ -321,7 +321,7 @@ $(document).ready(function(){
 
 	$('#drag-onDrag-function-circle').draggable({
 		revert: true,
-		onDrag: function(el, helper, position) {
+		drag: function(helper, position) {
 			
 			var centerx = 291, centery = 100;
 			var angle = Math.atan((centery-position[1])/(centerx-position[0]));
@@ -337,13 +337,13 @@ $(document).ready(function(){
 	});
 
 	$('#drag-onStart').draggable({
-		onStart: function(dragging) {
+		start: function(dragging) {
 			$(dragging).css('background', '#4e9a06');
 		}
 	});
 
 	$('#drag-onStop').draggable({
-		onStop: function(dragging) {
+		stop: function(dragging) {
 			$(dragging).css('background', '#cc0000');
 		}
 	});
