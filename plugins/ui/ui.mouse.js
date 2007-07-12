@@ -1,9 +1,5 @@
 (function($) {
 	
-	var num = function(el, prop) {
-		return parseInt($.css(el.jquery?el[0]:el,prop))||0;
-	};
-	
 	$.ui.mouseInteraction = function(el,o) {
 	
 		if(!o) var o = {};
@@ -26,10 +22,10 @@
 
 			// Let's save the margins for better reference
 			o.margins = {
-				top: num(el,'marginTop'),
-				left: num(el,'marginLeft'),
-				bottom: num(el,'marginBottom'),
-				right: num(el,'marginRight')
+				top: $.ui.num(el,'marginTop'),
+				left: $.ui.num(el,'marginLeft'),
+				bottom: $.ui.num(el,'marginBottom'),
+				right: $.ui.num(el,'marginRight')
 			};
 
 			// We have to add margins to our cursorAt
@@ -151,9 +147,9 @@
 			}
 			
 			this.slowMode = (o.cursorAt && (o.cursorAt.top-o.margins.top > 0 || o.cursorAt.bottom-o.margins.bottom > 0) && (o.cursorAt.left-o.margins.left > 0 || o.cursorAt.right-o.margins.right > 0)) ? true : false; //If cursorAt is within the helper, set slowMode to true
-
 			$(this.helper).css('left', o.curOffset.left+'px').css('top', o.curOffset.top+'px').css('position', 'absolute');
 			if(o.helper != 'original') $(this.helper).appendTo((o.appendTo == 'parent' ? this.element.parentNode : o.appendTo));
+
 
 			// Remap right/bottom properties for cursorAt to left/top
 			if(o.cursorAt.right && !o.cursorAt.left) o.cursorAt.left = this.helper.offsetWidth+o.margins.right+o.margins.left - o.cursorAt.right;
@@ -190,7 +186,7 @@
 			if(!o.beQuietAtEnd && o._stop) o._stop.apply(this.element, [this.helper, this.pos, o.cursorAt, this]);
 
 			this.init = false;
-			this.opos = this.pos = $.ui.ddmanager.current = null; // Clear temp variables
+			this.opos = this.pos = null; // Clear temp variables
 			return false;
 			
 		},

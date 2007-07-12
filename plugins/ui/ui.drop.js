@@ -44,6 +44,8 @@
 		$(this.element).bind("mouseup", function(e) {
 			return self.drop.apply(self, [e]);	
 		});
+		
+		if(o.name) $.ui.add(o.name, 'droppable', this); //Append to UI manager if a name exists as option
 			
 	};
 	

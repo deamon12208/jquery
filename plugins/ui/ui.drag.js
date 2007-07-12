@@ -1,8 +1,10 @@
 (function($) {
-	
-	var num = function(el, prop) {
-		return parseInt($.css(el.jquery?el[0]:el,prop))||0;
-	};
+
+	$.fn.draggable = function(o) {
+		return this.each(function() {
+			new $.ui.draggable(this,o);	
+		});
+	}
 	
 	$.ui.ddmanager = {
 		current: null,
@@ -66,18 +68,9 @@
 						
 		}
 	};
-
 	
-	$.fn.draggable = function(o) {
-		
-		return this.each(function() {
-			new $.ui.draggable(this,o);	
-		});
-		
-	}
 	
 	$.ui.draggable = function(el,o) {
-	
 		
 		var options = {};
 		$.extend(options, o);
@@ -100,6 +93,8 @@
 		
 		if(o.ghosting == true) o.helper = 'clone'; //legacy option check
 		this.interaction = new $.ui.mouseInteraction(el,options);
+		
+		if(o.name) $.ui.add(o.name, 'draggable', this); //Append to UI manager if a name exists as option
 		
 	}
 	
