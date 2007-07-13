@@ -15,11 +15,13 @@ $(document).ready(function() {
   });
   $('a.load-local').cluetip({local:true});
   $('#clickme').cluetip({activation: 'click'});
+  $('span[@title]').css('background', 'yellow').cluetip({splitTitle: '|'});
+  
 });
 
 
 
-//unrelated to clueTip -- just for this page...
+//unrelated to clueTip -- just for the demo page...
 $(document).ready(function() {
   $('#container > div').hide().append('<a class="back-to-top" href="#top">back to top</a>');
   $('#navigation a').click(function() {
@@ -29,6 +31,7 @@ $(document).ready(function() {
     $(hash).slideDown('fast');
     $('#navigation a').removeClass('active');
     $this.addClass('active');
+    return false;
   });
 });
   

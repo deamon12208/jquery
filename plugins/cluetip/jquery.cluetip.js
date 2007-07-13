@@ -1,6 +1,6 @@
 /*
  * jQuery clueTip plugin
- * Version 0.5  (07/07/2007)
+ * Version 0.6  (07/12/2007)
  * @depends jQuery v1.1.1
  * @depends Dimensions plugin 
  *
@@ -62,7 +62,7 @@
  * @option String titleAttribute: default is 'title'. The attribute to be used for the clueTip's heading, if the attribute exists for the hovered element.
  * @option String splitTitle: default is '' (empty string). A character used to split the title attribute into the clueTip title and divs within the clueTip body; if used, the clueTip will be populated only by the title attribute, 
  * @option String hoverClass: default is empty string. designate one to apply to the hovered element
- * @option String waitImage: default is 'wait.gif'
+ * @option String FIXME: waitImage: default is 'wait.gif'
  * @option Boolean sticky: default is false. Set to true to keep the clueTip visible until the user either closes it manually by clicking on the CloseText or display another clueTip.
  * @option String activation: default is 'hover'. Set to 'toggle' to force the user to click the element in order to activate the clueTip.
  * @option String closePosition: default is 'top'. Set to 'bottom' to put the closeText at the bottom of the clueTip body
@@ -144,7 +144,7 @@
       }
       var $this = $(this);      
       var tipAttribute = $this.attr(defaults.attribute);
-      if (!tipAttribute) return true;
+      if (!tipAttribute && !defaults.splitTitle) return true;
       
       // if hideLocal is set to true, initially hide the local content that will be displayed in the clueTip
       if (defaults.local && defaults.hideLocal) {
@@ -296,7 +296,6 @@
             }            
           };
           cluetipShow(pY);
-
 
 /***************************************
 * load external file via ajax          
