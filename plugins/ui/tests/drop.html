@@ -108,16 +108,16 @@ $(document).ready(function(){
 	
 	$('#drop1').droppable({
 		accept: 'div.draggable',
-		onHover: function() {
+		over: function() {
 			$(this.element).css("background-color", "red");
 		},
-		onOut: function() {
+		out: function() {
 			$(this.element).css("background-color", "green");
 		},
-		onActivate: function() {
+		activate: function() {
 			$(this.element).css('outline', '5px solid black');	
 		},
-		onDeactivate: function() {
+		deactivate: function() {
 			$(this.element).css('outline', '0px solid black');	
 		},
 		tolerance: 'touch'
@@ -125,13 +125,13 @@ $(document).ready(function(){
 	
 	$('#drop2').droppable({
 		accept: 'div.draggable',
-		onHover: function() {
+		over: function() {
 			$(this.element).css("background-color", "red");	
 		},
-		onOut: function() {
+		out: function() {
 			$(this.element).css("background-color", "green");
 		},
-		onDrop: function() {
+		drop: function() {
 			console.log("Dropped on ",this.element);	
 		},
 		greedy: true
@@ -139,13 +139,13 @@ $(document).ready(function(){
 	
 	$('#drop3').droppable({
 		accept: 'div.draggable',
-		onHover: function() {
+		over: function() {
 			$(this.element).css("background-color", "red");	
 		},
-		onOut: function() {
+		out: function() {
 			$(this.element).css("background-color", "white");
 		},
-		onDrop: function() {
+		drop: function() {
 			console.log("Dropped on ",this.element);
 		},
 		greedy: false

@@ -28,7 +28,7 @@
 				for(;i<ml;i++) {
 					m[i].offset = $(m[i].item.element).offsetLite({ border: false });
 					if(that) { //Activate the droppable if used directly from draggables
-						if(m[i].item.options.onActivate && m[i].item.options.accept(that)) m[i].item.activate.call(m[i].item);
+						if(m[i].item.options.activate && m[i].item.options.accept(that)) m[i].item.activate.call(m[i].item);
 					}
 					
 					if(i == j*20+19) { //Call the next block of 20
@@ -59,7 +59,7 @@
 			for(var i=0;i<m.length;i++) {
 				if(!m[i].offset) continue;
 				if($.ui.intersect(that, m[i], m[i].item.options.tolerance)) {
-					if(m[i].over == 0) { m[i].out = 0; m[i].over = 1; m[i].item.hover.call(m[i].item); }
+					if(m[i].over == 0) { m[i].out = 0; m[i].over = 1; m[i].item.over.call(m[i].item); }
 				} else {
 					if(m[i].out == 0) { m[i].out = 1; m[i].over = 0; m[i].item.out.call(m[i].item); }
 				}

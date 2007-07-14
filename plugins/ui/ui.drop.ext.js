@@ -4,19 +4,19 @@
 	 * Provides the old-school option zIndex, as known from scriptaculous, Interface and many others
 	 * zIndex: int
 	 */
-	$.ui.plugin("droppable", "hover", function() {
-		if(this.options.hoverclass)
-			$(this.element).addClass(this.options.hoverclass);
+	$.ui.plugin("droppable", "over", function() {
+		if(this.options.hoverClass)
+			$(this.element).addClass(this.options.hoverClass);
 	});
 	
 	$.ui.plugin("droppable", "out", function() {
-		if(this.options.hoverclass)
-			$(this.element).removeClass(this.options.hoverclass);
+		if(this.options.hoverClass)
+			$(this.element).removeClass(this.options.hoverClass);
 	});
 	
 	$.ui.plugin("droppable", "drop", function() {
-		if(this.options.hoverclass)
-			$(this.element).removeClass(this.options.hoverclass);
+		if(this.options.hoverClass)
+			$(this.element).removeClass(this.options.hoverClass);
 	});
 
 })(jQuery);

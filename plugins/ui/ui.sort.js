@@ -87,8 +87,8 @@
 			var o = this.options;
 			that.execPlugins('start', this);
 
-			if(o.hoverclass) {
-				that.helper = $('<div class="'+o.hoverclass+'"></div>').appendTo('body').css({
+			if(o.hoverClass) {
+				that.helper = $('<div class="'+o.hoverClass+'"></div>').appendTo('body').css({
 					height: this.element.offsetHeight+'px',
 					width: this.element.offsetWidth+'px',
 					position: 'absolute'	

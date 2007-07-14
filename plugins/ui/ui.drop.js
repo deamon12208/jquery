@@ -32,7 +32,7 @@
 		
 		var self = this;
 		$(this.element).hover(function(e) {
-			return self.hover.apply(self, [e]);	
+			return self.over.apply(self, [e]);	
 		},function(e) {
 			return self.out.apply(self, [e]);	
 		});
@@ -84,20 +84,20 @@
 			e.stopPropagation ? e.stopPropagation() : e.cancelBubble = true;
 			
 		},
-		hover: function(e) {
+		over: function(e) {
 
 			if(!$.ui.ddmanager.current) return;
 			
 			var o = this.options; var c = $.ui.ddmanager.current;
-			this.execPlugins('hover');
-			if(o.onHover && o.accept(c)) o.onHover.apply(this, [c.element, c.helper, c]); //Fire callback
+			this.execPlugins('over');
+			if(o.over && o.accept(c)) o.over.apply(this, [c.element, c.helper, c]); //Fire callback
 			
 		},
 		out: function(e) {
 
 			var o = this.options; var c = $.ui.ddmanager.current;
 			this.execPlugins('out');
-			if(c && o.onOut && o.accept(c)) o.onOut.apply(this, [c.element, c.helper, c]); //Fire callback
+			if(c && o.out && o.accept(c)) o.out.apply(this, [c.element, c.helper, c]); //Fire callback
 			
 		},
 		drop: function(e) {
@@ -108,11 +108,11 @@
 				if(o.greedy && !c.slowMode) {
 					if(c.currentTarget == this.element) {
 						this.execPlugins('drop');
-						if(o.onDrop) o.onDrop.apply(this, [c.element, c.helper, c]);
+						if(o.drop) o.drop.apply(this, [c.element, c.helper, c]);
 					}
 				} else {
 					this.execPlugins('drop');
-					if(o.onDrop) o.onDrop.apply(this, [c.element, c.helper, c]);	
+					if(o.drop) o.drop.apply(this, [c.element, c.helper, c]);	
 				}
 			}
 			
@@ -121,14 +121,14 @@
 
 			var o = this.options; var c = $.ui.ddmanager.current;
 			this.execPlugins('activate');
-			if(c && o.onActivate) o.onActivate.apply(this, [c.element, c.helper, c]); //Fire callback
+			if(c && o.activate) o.activate.apply(this, [c.element, c.helper, c]); //Fire callback
 			
 		},
 		deactivate: function(e) {
 
 			var o = this.options; var c = $.ui.ddmanager.current;
 			this.execPlugins('deactivate');
-			if(c && o.onDeactivate) o.onDeactivate.apply(this, [c.element, c.helper, c]); //Fire callback	
+			if(c && o.deactivate) o.deactivate.apply(this, [c.element, c.helper, c]); //Fire callback	
 			
 		}
 	});
