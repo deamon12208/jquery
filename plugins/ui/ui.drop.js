@@ -55,7 +55,9 @@
 			var o = this.options;
 			if(this.plugins[type]) {
 				for(var i=0;i<this.plugins[type].length;i++) {
-					this.plugins[type][i].call(this);	
+					if(this.options[this.plugins[type][i][0]]) {
+						this.plugins[type][i].call(this);	
+					}
 				}	
 			}			
 		},

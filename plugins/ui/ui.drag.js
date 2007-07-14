@@ -144,6 +144,8 @@
 			if(this.slowMode && $.ui.droppable && !o.dropBehaviour) //If cursorAt is within the helper, we must use our drop manager
 				$.ui.ddmanager.fire(this);
 
+			$.ui.ddmanager.current = null;
+
 			return false;
 			
 		},
