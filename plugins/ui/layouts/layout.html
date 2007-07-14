@@ -115,7 +115,7 @@
         $("div.element").css({top: 0, position: "absolute"});
         resizeLayout(null, nav.width())
         $("<div id='" + scrollerName + "'>&nbsp;</div>").appendTo(navParent)
-          .css({left: options.start, backgroundColor: "#ccc", width: options.border + "px", height: "100%", position: "absolute", top: "0"})
+          .css({left: options.start, backgroundColor: "#ccc", width: options.border + "px", height: "100%", position: "absolute", top: "0", cursor: 'col-resize'})
           .draggable({
             axis: 'x',
             containment: {left: options.containment[0], right: options.containment[1]},
