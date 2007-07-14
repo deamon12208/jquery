@@ -15,7 +15,7 @@
 			for (var i = 0; i < m.length; i++) {
 				m[i].offset = $(m[i].item.element).offset({ border: false });
 				if (that) { //Activate the droppable if used directly from draggables
-					if (m[i].item.options.accept(that))
+					if (m[i].item.options.accept(that.element))
 						m[i].item.activate.call(m[i].item);
 				}
 			}
@@ -31,7 +31,7 @@
 				for (; i < ml; i++) {
 					m[i].offset = $(m[i].item.element).offsetLite({ border: false });
 					if (that) { //Activate the droppable if used directly from draggables
-						if (m[i].item.options.activate && m[i].item.options.accept(that))
+						if (m[i].item.options.activate && m[i].item.options.accept(that.element))
 							m[i].item.activate.call(m[i].item);
 					}
 					
@@ -54,7 +54,7 @@
 				if ($.ui.intersect(that, m[i], m[i].item.options.tolerance)) {
 					m[i].item.drop.call(m[i].item);
 				}
-				if (m[i].item.options.accept(that)) {
+				if (m[i].item.options.accept(that.element)) {
 					m[i].item.deactivate.call(m[i].item);
 				}
 			}

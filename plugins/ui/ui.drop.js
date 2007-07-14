@@ -21,7 +21,7 @@
 		var accept = o.accept;
 		$.extend(this.options, {
 			accept: o.accept && o.accept.constructor == Function ? o.accept : function(d) {
-				return $(d.element).is(accept);	
+				return $(d).is(accept);	
 			},
 			tolerance: o.tolerance ? o.tolerance : 'intersect'
 		});
@@ -80,7 +80,7 @@
 					element = element.parentNode;
 				} while (element);
 			}
-			if(c && o.accept(c)) c.currentTarget = findCurrentTarget(e);
+			if(c && o.accept(c.element)) c.currentTarget = findCurrentTarget(e);
 			
 			c.drag.apply(c, [e]);
 			e.stopPropagation ? e.stopPropagation() : e.cancelBubble = true;
@@ -92,45 +92,47 @@
 			
 			var o = this.options; var c = $.ui.ddmanager.current;
 			this.execPlugins('over');
-			if(o.over && o.accept(c)) o.over.apply(this, [c.element, c.helper, c]); //Fire callback
+			if(o.over && o.accept(c.element)) o.over.apply(this.element, [c.element, c.helper, c]); //Fire callback
 			
 		},
 		out: function(e) {
 
 			var o = this.options; var c = $.ui.ddmanager.current;
 			this.execPlugins('out');
-			if(c && o.out && o.accept(c)) o.out.apply(this, [c.element, c.helper, c]); //Fire callback
+			if(c && o.out && o.accept(c.element)) o.out.apply(this.element, [c.element, c.helper, c]); //Fire callback
 			
 		},
 		drop: function(e) {
 
 			var o = this.options; var c = $.ui.ddmanager.current;
 			
-			if(c && o.accept(c)) { // Fire callback
+			if(c && o.accept(c.element)) { // Fire callback
 				if(o.greedy && !c.slowMode) {
 					if(c.currentTarget == this.element) {
 						this.execPlugins('drop');
-						if(o.drop) o.drop.apply(this, [c.element, c.helper, c]);
+						if(o.drop) o.drop.apply(this.element, [c.element, c.helper, c]);
 					}
 				} else {
 					this.execPlugins('drop');
-					if(o.drop) o.drop.apply(this, [c.element, c.helper, c]);	
+					if(o.drop) o.drop.apply(this.element, [c.element, c.helper, c]);	
 				}
 			}
 			
 		},
 		activate: function(e) {
 
-			var o = this.options; var c = $.ui.ddmanager.current;
+			var o = this.options;
+			var c = $.ui.ddmanager.current;
 			this.execPlugins('activate');
-			if(c && o.activate) o.activate.apply(this, [c.element, c.helper, c]); //Fire callback
+			if(c && o.activate) o.activate.apply(this.element, [c.element, c.helper, c]); //Fire callback
 			
 		},
 		deactivate: function(e) {
 
-			var o = this.options; var c = $.ui.ddmanager.current;
+			var o = this.options;
+			var c = $.ui.ddmanager.current;
 			this.execPlugins('deactivate');
-			if(c && o.deactivate) o.deactivate.apply(this, [c.element, c.helper, c]); //Fire callback	
+			if(c && o.deactivate) o.deactivate.apply(this.element, [c.element, c.helper, c]); //Fire callback	
 			
 		}
 	});
@@ -166,4 +168,5 @@
 							
 	}
 	
- })($);
+})($);
+

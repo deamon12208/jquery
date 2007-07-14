@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Language" content="en" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Droppables demo - Interface plugin for jQuery</title>
+<title>Droppables Test Page</title>
 <script type="text/javascript" src="../../../jquery/src/jquery/jquery.js"></script>
 <script type="text/javascript" src="../../../jquery/src/selector/selector.js"></script>
 <script type="text/javascript" src="../../../jquery/src/ajax/ajax.js"></script>
@@ -14,8 +14,9 @@
 <script type="text/javascript" src="../ui.js"></script>
 <script type="text/javascript" src="../ui.mouse.js"></script>
 <script type="text/javascript" src="../ui.drag.js"></script>
-<script type="text/javascript" src="../ui.drop.js"></script>
 <script type="text/javascript" src="../ui.drag.ext.js"></script>
+<script type="text/javascript" src="../ui.drop.js"></script>
+<script type="text/javascript" src="../ui.drop.ext.js"></script>
 <style type="text/css" media="all">
 
 body
@@ -27,134 +28,170 @@ body
 	font-size: 12px;
 }
 
+fieldset
+{
+	margin: 20px;
+}
+
 li {
 	position: relative;
 	border-bottom: 1px solid #999;
 	border-right: 1px solid #999;
 	margin: 10px;
 	padding: 10px;
-	height: 100px;
 	width: 500px;
 	float: left;
 	list-style-type: none;
-	
+	font-size: 10pt;
 }
 
 .draggable {
-	position: absolute;
-	width: 90px;
-	height: 90px;
-	top: 10px;
-	right: 10px;
+	width: 100px;
+	height: 40px;
 	background-color: #68BFEF;
 	border: 2px solid #0090DF;
 	padding: 5px;	
+	text-align: center;
+	margin: 10px;
+	cursor: pointer;
+	z-index: 100;
+}
+
+.draggable.little {
+	width: 80px;
+	height: 30px;
+}
+
+.draggable.big {
+	width: 120px;
+	height: 60px;
+}
+
+.draggable.green {
+	background-color: #73d216;
+	border-color: #4e9a06;
+}
+
+.draggable.red {
+	background-color: #ef2929;
+	border-color: #cc0000;
 }
 
 .droppable {
-	position: absolute;
+	float: right;
 	width: 200px;
 	height: 200px;
-	background-color: green;
-	border: 2px solid black;
-	padding: 5px;	
+	background-color: #e9b96e;
+	border: 3px double #c17d11;
+	padding: 5px;
+	text-align: center;
+	overflow: auto;
 }
+
+.droppable-inactive {
+	opacity: 0.7;
+}
+
+.droppable-active {
+
+}
+
+.droppable-over {
+	outline: 1px dotted black;
+}
+
 </style>
 </head>
 <body>
-	
-	<div id="drag1" class='draggable'><a href="index.php">Drag me</a><input type="text" value="select me" style="width: 90px; font-size: 10px;" /></div>
-	<div id="drag2" class='draggable' style='top: 200px;'><a href="index.php">Drag me</a><input type="text" value="select me" style="width: 90px; font-size: 10px;" /></div>
-	
-	<div id="drop1" class='droppable' style='top: 100px; left: 100px;'><a href="index.php">Drop on me</a><input type="text" value="select me" style="width: 90px; font-size: 10px;" /></div>
-	
-	<div id="drop2" class='droppable' style='top: 400px; left: 100px;'><a href="index.php">Drop on me</a>
-		<div id="drop3" class='droppable' style='top: 50px; left: 50px; background: white; height: 100px; width: 100px;'></div>
-	</div>
 
+	<fieldset>
+	<legend>options</legend>
+
+	<ul>
+
+	<li>
+		<div id="droppable-accept-function" class="droppable">droppable<br/></div>
+		accept: function()
+		<div class="draggable red">
+			draggable
+			<div class="className">.red</div>
+		</div>
+		<div class="draggable green">
+			draggable
+			<div class="className">.green</div>
+		</div>
+	</li>
+	<li>
+		<div id="droppable-accept-string-little" class="droppable">droppable<br/></div>
+		accept: '.little'
+		<div class="draggable little">
+			draggable
+			<div class="className">.little</div>
+		</div>
+		<div class="draggable big">
+			draggable
+			<div class="className">.big</div>
+		</div>
+	</li>
+
+	</ul>
+
+	</fieldset>
 	
 <script type="text/javascript">
-if(!window.console) {
- window.console = {
- 	log: function() {
- 		alert(arguments[0]);	
- 	}	
- }	
-}
 
 $(document).ready(function(){
-	
-	$('#drag1').draggable({
-		zIndex: 1000,
-		dragPrevention: 'a,input,textarea',
-		preventionTimeout: false,
-		preventionDistance: 0,
-		helper: function() {
-			var myHelper = document.createElement("div");
-			$(myHelper).css({
-				background: 'yellow',
-				width: this.offsetWidth + 'px',
-				height: this.offsetHeight + 'px',
-				opacity: 0.6,
-				position: 'absolute'
-			});
-			return myHelper;
-		}
-	});
-	
-	$('#drag2').draggable({
-		cursorAt: { top: -16, left: -16 }
-	});
-	
-	$('#drop1').droppable({
-		accept: 'div.draggable',
-		over: function() {
-			$(this.element).css("background-color", "red");
-		},
-		out: function() {
-			$(this.element).css("background-color", "green");
-		},
-		activate: function() {
-			$(this.element).css('outline', '5px solid black');	
-		},
-		deactivate: function() {
-			$(this.element).css('outline', '0px solid black');	
-		},
-		tolerance: 'touch'
-	});
-	
-	$('#drop2').droppable({
-		accept: 'div.draggable',
-		over: function() {
-			$(this.element).css("background-color", "red");	
-		},
-		out: function() {
-			$(this.element).css("background-color", "green");
-		},
-		drop: function() {
-			console.log("Dropped on ",this.element);	
-		},
-		greedy: true
-	});
-	
-	$('#drop3').droppable({
-		accept: 'div.draggable',
-		over: function() {
-			$(this.element).css("background-color", "red");	
-		},
-		out: function() {
-			$(this.element).css("background-color", "white");
-		},
-		drop: function() {
-			console.log("Dropped on ",this.element);
-		},
-		greedy: false
+
+	$('.draggable').draggable({
+		helper:'clone'
 	});
 
-	
+	$('#droppable-accept-function')
+		.addClass('droppable-inactive')
+		.droppable({
+			accept: function(draggable) {
+				return $(draggable).is('.green');
+			},
+			activate: function() {
+				$(this).removeClass('droppable-inactive').addClass('droppable-active');
+			},
+			deactivate: function() {
+				$(this).addClass('droppable-inactive').removeClass('droppable-active');
+			},
+			drop: function(dragging) {
+				$(this).append($(document.createElement('div')).text($(dragging).text())).removeClass('droppable-over');
+			},
+			over: function() {
+				$(this).addClass('droppable-over');
+			},
+			out: function() {
+				$(this).removeClass('droppable-over');
+			}
+		});
 
+	$('#droppable-accept-string-little')
+		.addClass('droppable-inactive')
+		.droppable({
+			accept: '.little',
+			activate: function() {
+				$(this).removeClass('droppable-inactive');
+			},
+			deactivate: function() {
+				$(this).addClass('droppable-inactive');
+			},
+			drop: function(dragging) {
+				$(this).append($(document.createElement('div')).text($(dragging).text())).removeClass('droppable-over');
+			},
+			over: function() {
+				$(this).addClass('droppable-over');
+			},
+			out: function() {
+				$(this).removeClass('droppable-over');
+			}
+		});
 
 });
 </script>
 </body>
 </html>
+
