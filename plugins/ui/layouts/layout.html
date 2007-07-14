@@ -57,8 +57,9 @@
   <script type="text/javascript" src="../../../jquery/src/fx/fx.js"></script>
   <script src="../../dimensions/jquery.dimensions.pack.js"></script>
   <script src="../ui.js"></script>
-  <script src="../draggables.js"></script>
-  <script src="../draggables.ext.js"></script>
+  <script src="../ui.drag.js"></script>
+  <script src="../ui.drag.ext.js"></script>
+  <script src="../ui.mouse.js"></script>  
   <script>
     (function($) {
       $.fn.contents = function() {
@@ -119,7 +120,7 @@
             axis: 'x',
             containment: {left: options.containment[0], right: options.containment[1]},
             helper: "clone",
-            onStop: function(e,h,stopPos) {
+            stop: function(h, stopPos, c) {
               var newWidth = stopPos[0];
               $.splitPane.resized = null;              
               resizeLayout(null, newWidth);
