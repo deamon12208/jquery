@@ -96,7 +96,7 @@ li {
 
 }
 
-.droppable-over {
+.droppable-hover {
 	outline: 1px dotted black;
 }
 
@@ -136,8 +136,6 @@ li {
 
 	</ul>
 
-	<div class="draggable droppable" id="dragdrop">draggable droppable</div>
-
 	</fieldset>
 	
 <script type="text/javascript">
@@ -145,10 +143,8 @@ li {
 $(document).ready(function(){
 
 	$('.draggable').draggable({
-		helper:'clone'
+		helper: 'clone'
 	});
-
-	$('#dragdrop').droppable();
 
 	$('#droppable-accept-function')
 		.addClass('droppable-inactive')
@@ -156,6 +152,7 @@ $(document).ready(function(){
 			accept: function(draggable) {
 				return $(draggable).is('.green');
 			},
+			hoverClass: 'droppable-hover',
 			activate: function() {
 				$(this).removeClass('droppable-inactive').addClass('droppable-active');
 			},
@@ -163,13 +160,7 @@ $(document).ready(function(){
 				$(this).addClass('droppable-inactive').removeClass('droppable-active');
 			},
 			drop: function(dragging) {
-				$(this).append($(document.createElement('div')).text($(dragging).text())).removeClass('droppable-over');
-			},
-			over: function() {
-				$(this).addClass('droppable-over');
-			},
-			out: function() {
-				$(this).removeClass('droppable-over');
+				$(this).append($(document.createElement('div')).text($(dragging).text()));
 			}
 		});
 
@@ -177,6 +168,7 @@ $(document).ready(function(){
 		.addClass('droppable-inactive')
 		.droppable({
 			accept: '.little',
+			hoverClass: 'droppable-hover',
 			activate: function() {
 				$(this).removeClass('droppable-inactive');
 			},
@@ -184,13 +176,7 @@ $(document).ready(function(){
 				$(this).addClass('droppable-inactive');
 			},
 			drop: function(dragging) {
-				$(this).append($(document.createElement('div')).text($(dragging).text())).removeClass('droppable-over');
-			},
-			over: function() {
-				$(this).addClass('droppable-over');
-			},
-			out: function() {
-				$(this).removeClass('droppable-over');
+				$(this).append($(document.createElement('div')).text($(dragging).text()));
 			}
 		});
 

@@ -88,23 +88,32 @@
 		},
 		over: function(e) {
 
-			if(!$.ui.ddmanager.current) return;
+			var c = $.ui.ddmanager.current;
+			if (!c || c.element == this.element) return; // Bail if draggable and droppable are same element
 			
-			var o = this.options; var c = $.ui.ddmanager.current;
-			this.execPlugins('over');
-			if(o.over && o.accept(c.element)) o.over.apply(this.element, [c.element, c.helper, c]); //Fire callback
+			var o = this.options;
+			if (o.accept(c.element)) {
+				this.execPlugins('over');
+				if (o.over) o.over.apply(this.element, [c.element, c.helper, c]); //Fire callback
+			}
 			
 		},
 		out: function(e) {
 
-			var o = this.options; var c = $.ui.ddmanager.current;
-			this.execPlugins('out');
-			if(c && o.out && o.accept(c.element)) o.out.apply(this.element, [c.element, c.helper, c]); //Fire callback
+			var c = $.ui.ddmanager.current;
+			if (!c || c.element == this.element) return; // Bail if draggable and droppable are same element
+
+			var o = this.options;
+			if (o.accept(c.element)) {
+				this.execPlugins('out');
+				if (o.out) o.out.apply(this.element, [c.element, c.helper, c]); //Fire callback
+			}
 			
 		},
 		drop: function(e) {
 
-			var o = this.options; var c = $.ui.ddmanager.current;
+			var o = this.options;
+			var c = $.ui.ddmanager.current;
 			
 			if(c && o.accept(c.element)) { // Fire callback
 				if(o.greedy && !c.slowMode) {
