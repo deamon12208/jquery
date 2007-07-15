@@ -136,6 +136,8 @@ li {
 
 	</ul>
 
+	<div class="draggable droppable" id="dragdrop">draggable droppable</div>
+
 	</fieldset>
 	
 <script type="text/javascript">
@@ -145,6 +147,8 @@ $(document).ready(function(){
 	$('.draggable').draggable({
 		helper:'clone'
 	});
+
+	$('#dragdrop').droppable();
 
 	$('#droppable-accept-function')
 		.addClass('droppable-inactive')
