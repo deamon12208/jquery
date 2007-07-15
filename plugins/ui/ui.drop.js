@@ -56,7 +56,7 @@
 			if(this.plugins[type]) {
 				for(var i=0;i<this.plugins[type].length;i++) {
 					if(this.options[this.plugins[type][i][0]]) {
-						this.plugins[type][i].call(this);	
+						this.plugins[type][i][1].call(this);	
 					}
 				}	
 			}			

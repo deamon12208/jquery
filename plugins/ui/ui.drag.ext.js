@@ -84,7 +84,7 @@
 		}, 500, function() {
 			
 			if(o.wasPositioned)
-				$(self.element).css('position', o.wasPositioned);
+				$(self.element).css({'position': o.wasPositioned, display: ''});
 				
 			if(o.onStop) o.onStop.apply(self, [self.element, self.helper, self.pos, [o.curOffset.left - o.po.left,o.curOffset.top - o.po.top],self]);
 			
