@@ -66,6 +66,9 @@
 		destroy: function() {
 			this.options.handle.unbind('mousedown', this.mousedownfunc);
 		},
+		trigger: function(e) {
+			return this.click.apply(this, arguments);
+		},
 		click: function(e) {
 
 			window.focus();

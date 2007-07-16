@@ -32,27 +32,8 @@
 			nonDestructive: true,
 			dragPrevention: 'input,button,select',
 			startCondition: function(e) {
-				var p = $.ui.getPointer(e);
-				var co = $(this.element).offset({ border: false });
-				var leftArea = (p[0] - co.left - $(this.element).width());
-				var rightArea = (p[1] - co.top - $(this.element).height());
-				
-				
-				if(rightArea > -20 && leftArea > -20) {
-					this.options.axis = null;
-					return true;	
-				}
-				
-				if(rightArea > -20) {
-					this.options.axis = 'y';
-					return true;	
-				}
-				
-				if(leftArea > -20) {
-					this.options.axis = 'x';
-					return true;	
-				}
-	
+				var tp = $(e.target).parents().add(e.target);
+				return true;	
 			},
 			_start: function(h,p,c,t) {
 				self.start.apply(t, [self]); // Trigger the onStart callback				
@@ -69,6 +50,13 @@
 			}			
 		});
 		var self = this;
+		
+		if(options.handles) {
+			if(options.handles.s)
+				$(options.handles.s).bind('mousedown', function(e) { self.interaction.options.axis = 's'; return self.interaction.trigger(e); });
+			if(options.handles.o)
+				$(options.handles.o).bind('mousedown', function(e) { self.interaction.options.axis = 'o'; return self.interaction.trigger(e); });
+		}
 		
 		this.interaction = new $.ui.mouseInteraction(el,options);
 		if(options.name) $.ui.add(options.name, 'resizable', this); //Append to UI manager if a name exists as option
@@ -104,7 +92,7 @@
 			var o = this.options;
 
 
-			this.pos = [this.pos[0]-(o.cursorAt.left ? o.cursorAt.left : 0), this.pos[1]-(o.cursorAt.top ? o.cursorAt.top : 0)];
+			this.pos = [this.rpos[0]-(o.cursorAt.left ? o.cursorAt.left : 0), this.rpos[1]-(o.cursorAt.top ? o.cursorAt.top : 0)];
 
 			var nw = o.oWidth + (this.pos[0] - o.curOffset.left);
 			var nh = o.oHeight + (this.pos[1] - o.curOffset.top);
@@ -117,10 +105,10 @@
 			
 			if(o.axis) {
 				switch(o.axis) {
-					case 'x':
+					case 'o':
 						nh = o.oHeight;
 						break;
-					case 'y':
+					case 's':
 						nw = o.oWidth;
 						break;	
 				}	
