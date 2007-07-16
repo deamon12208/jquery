@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Draggables demo - Interface plugin for jQuery</title>
+<script type="text/javascript" src="../../../jquery/src/jquery/jquery.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx/fx.js"></script>
+<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+<script type="text/javascript" src="../ui.js"></script>
+<script type="text/javascript" src="../ui.mouse.js"></script>
+<script type="text/javascript" src="../ui.drag.js"></script>
+<script type="text/javascript" src="../ui.drag.ext.js"></script>
+<style type="text/css" media="all">
+
+body
+{
+	background: #fff;
+	margin: 0;
+	padding: 0;
+	font-family: Arial;
+	font-size: 12px;
+}
+
+.proxy {
+	border: 1px dotted black;	
+}
+</style>
+</head>
+<body>
+<div style='background: #eee; height: 500px; width: 1000px; position: absolute; right: 10px; top: 10px; overflow: auto;'>	
+<div id='drag2' style='border: 1px solid black; position: absolute; top: 10px; left: 500px;'>
+<div class='ui-n-resize' style='background: green; height: 5px;'></div>
+	<textarea style=' border: 1px solid black; height: 200px; width: 300px; margin: 20px;'>
+	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+	</textarea>
+<div class='ui-s-resize' style='background: green; height: 5px;'></div>
+<div class='ui-o-resize' style='background: blue; width: 5px; height: 100%; position: absolute; right: 0px; top: 0px;'></div>
+</div>
+</div>
+	
+<script type="text/javascript">
+if(!window.console) {
+ window.console = {
+ 	log: function() {
+ 		alert(arguments[0]);	
+ 	}	
+ }	
+}
+
+$(document).ready(function(){
+
+$('#drag2').draggable({ containment: { left: 50 } });
+
+
+});
+</script>
+</body>
+</html>
