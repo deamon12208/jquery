@@ -129,36 +129,31 @@
 		if(o.cursorAtIgnore) { //Get the containment
 			if(o.containment.left == undefined) {
 				
-				if(o.containment == 'document') {
-					o.containment = {
-						top: 0-o.margins.top,
-						left: 0-o.margins.left,
-						right: $(document).width()-o.margins.right,
-						bottom: ($(document).height() || document.body.parentNode.scrollHeight)-o.margins.bottom
-					}	
-				} else { //I'm a node, so compute top/left/right/bottom
+				if(o.containment.constructor != Array) {
+				
+					if(o.containment == 'document') {
+						o.containment = [
+							0-o.margins.left,
+							0-o.margins.top,
+							$(document).width()-o.margins.right,
+							($(document).height() || document.body.parentNode.scrollHeight)-o.margins.bottom
+						];
+					} else { //I'm a node, so compute top/left/right/bottom
+						
+						var conEl = $(o.containment)[0];
+						var conOffset = $(o.containment).offset({ border: false });
+		
+						o.containment = [
+							conOffset.left-o.margins.left,
+							conOffset.top-o.margins.top,
+							conOffset.left+(conEl.offsetWidth || conEl.scrollWidth)-o.margins.right,
+							conOffset.top+(conEl.offsetHeight || conEl.scrollHeight)-o.margins.bottom
+						];
 					
-					var conEl = $(o.containment)[0];
-					var conOffset = $(o.containment).offset({ border: false });
-	
-					o.containment = {
-						top: conOffset.top-o.margins.top,
-						left: conOffset.left-o.margins.left,
-						right: conOffset.left+(conEl.offsetWidth || conEl.scrollWidth)-o.margins.right,
-						bottom: conOffset.top+(conEl.offsetHeight || conEl.scrollHeight)-o.margins.bottom
-					}	
+					}
 				
 				}
 				
-			} else {
-				//We deal with numbers...people who use it will suppose they are relative like the rest can be
-				if(!o.containmentModified) {
-					if(o.containment.left) o.containment.left = o.containment.left + o.po.left;
-					if(o.containment.top) o.containment.top = o.containment.top + o.po.top;
-					if(o.containment.bottom) o.containment.bottom = o.containment.bottom + o.po.top;
-					if(o.containment.right) o.containment.right = o.containment.right + o.po.left;
-					o.containmentModified = true;
-				}
 			}
 		}
 
@@ -168,10 +163,26 @@
 		
 		var o = this.options;
 		if(o.cursorAtIgnore) {
-			if((this.pos[0] < o.containment.left-o.po.left)) this.pos[0] = o.containment.left-o.po.left;
-			if((this.pos[1] < o.containment.top-o.po.top)) this.pos[1] = o.containment.top-o.po.top;
-			if(this.pos[0]+$(this.helper)[0].offsetWidth > o.containment.right-o.po.left) this.pos[0] = o.containment.right-o.po.left-$(this.helper)[0].offsetWidth;
-			if(this.pos[1]+$(this.helper)[0].offsetHeight > o.containment.bottom-o.po.top) this.pos[1] = o.containment.bottom-o.po.top-$(this.helper)[0].offsetHeight;
+			
+			if(o.containment.constructor == Array) {
+				
+				if((this.pos[0] < o.containment[0]-o.po.left)) this.pos[0] = o.containment[0]-o.po.left;
+				if((this.pos[1] < o.containment[1]-o.po.top)) this.pos[1] = o.containment[1]-o.po.top;
+				if(this.pos[0]+$(this.helper)[0].offsetWidth > o.containment[2]-o.po.left) this.pos[0] = o.containment[2]-o.po.left-$(this.helper)[0].offsetWidth;
+				if(this.pos[1]+$(this.helper)[0].offsetHeight > o.containment[3]-o.po.top) this.pos[1] = o.containment[3]-o.po.top-$(this.helper)[0].offsetHeight;
+				
+			} else {
+
+				if(o.containment.left && (this.pos[0] < o.containment.left)) this.pos[0] = o.containment.left;
+				if(o.containment.top && (this.pos[1] < o.containment.top)) this.pos[1] = o.containment.top;
+
+				var p = $(o.pp);
+				var h = $(this.helper);
+				if(o.containment.right && this.pos[0]+h[0].offsetWidth > p[0].offsetWidth-o.containment.right) this.pos[0] = (p[0].offsetWidth-o.containment.right)-h[0].offsetWidth;
+				if(o.containment.bottom && this.pos[1]+h[0].offsetHeight > p[0].offsetHeight-o.containment.bottom) this.pos[1] = (p[0].offsetHeight-o.containment.bottom)-h[0].offsetHeight;
+				
+			}
+			
 		}
 		
 	});
