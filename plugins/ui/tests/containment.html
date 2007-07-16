@@ -62,11 +62,11 @@ $('#drag2').draggable({ axis: 'x', drag: function(helper,p,cursorAt,obj) {
 	
 	/*
 	//The positioned parent is here (smart tipp)
-	var parent = obj.options.pp;
+  var parent = obj.options.pp;
 	
 	//The following to lines contain it to the overall parent in any case
-	if(pos[0] <= 0) pos[0] = 0; //If coming to left side
-	if(pos[0] - parent.offsetWidth + helper.offsetWidth >= 0) pos[0] = parent.offsetWidth-helper.offsetWidth; //If coming to right side
+  if(pos[0] <= 0) pos[0] = 0; //If coming to left side
+  if(pos[0] - parent.offsetWidth + helper.offsetWidth >= 0) pos[0] = parent.offsetWidth-helper.offsetWidth; //If coming to right side
 	
 	//Here comes the limitation to 0-300 from right
 	if(pos[0] - parent.offsetWidth + helper.offsetWidth <= -300) pos[0] = parent.offsetWidth-helper.offsetWidth-300;
@@ -78,9 +78,11 @@ $('#drag2').draggable({ axis: 'x', drag: function(helper,p,cursorAt,obj) {
 	*/
 	
 	var v = 300; //My value to the right
-	var w = [obj.options.pp.offsetWidth-helper.offsetWidth];
+	var r = 100; //My value to the left
+	var w = obj.options.pp.offsetWidth-helper.offsetWidth;
 	p[0] = p[0] <= 0 ? 0 : (p[0] - w >= 0 ? w : p[0]);
-	
+
+  p[0] = p[0] - w >= -r ? w-r : p[0];	
 	p[0] = p[0] - w <= -v ? w-v : p[0];
 		
 } });
