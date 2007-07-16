@@ -1229,13 +1229,13 @@ jQuery.extend(jQuery.validator, {
 		 *
 		 * Works with all kind of text inputs.
 		 *
-		 * @example jQuery.validator.methods.date("1990/01/01")
+		 * @example jQuery.validator.methods.dateISO("1990/01/01")
 		 * @result true
 		 *
-		 * @example jQuery.validator.methods.date("1990-01-01")
+		 * @example jQuery.validator.methods.dateISO("1990-01-01")
 		 * @result true
 		 *
-		 * @example jQuery.validator.methods.date("01.01.1990")
+		 * @example jQuery.validator.methods.dateISO("01.01.1990")
 		 * @result false
 		 *
 		 * @example <input name="birthdate" class="{dateISO:true}" />
@@ -1255,13 +1255,13 @@ jQuery.extend(jQuery.validator, {
 		 *
 		 * Works with all kind of text inputs.
 		 *
-		 * @example jQuery.validator.methods.date("1990/01/01")
+		 * @example jQuery.validator.methods.dateDE("1990/01/01")
 		 * @result false
 		 *
-		 * @example jQuery.validator.methods.date("01.01.1990")
+		 * @example jQuery.validator.methods.dateDE("01.01.1990")
 		 * @result true
 		 *
-		 * @example jQuery.validator.methods.date("0.1.2345")
+		 * @example jQuery.validator.methods.dateDE("0.1.2345")
 		 * @result true
 		 *
 		 * @example <input name="geburtstag" class="{dateDE:true}" />
@@ -1400,7 +1400,7 @@ jQuery.extend(jQuery.validator, {
 		 * expression used via jQuery to select the element.
 		 *
 		 * @param String selection A jQuery expression
-		 * @name jQuery.validator.methods.digits
+		 * @name jQuery.validator.methods.equalTo
 		 * @type Boolean
 		 * @cat Plugins/Validate/Methods
 		 */
