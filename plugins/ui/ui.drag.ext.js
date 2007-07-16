@@ -152,10 +152,13 @@
 				
 			} else {
 				//We deal with numbers...people who use it will suppose they are relative like the rest can be
-				if(o.containment.left) o.containment.left = o.containment.left + o.po.left;
-				if(o.containment.top) o.containment.top = o.containment.top + o.po.top;
-				if(o.containment.bottom) o.containment.bottom = o.containment.bottom + o.po.top;
-				if(o.containment.right) o.containment.right = o.containment.right + o.po.left;
+				if(!o.containmentModified) {
+					if(o.containment.left) o.containment.left = o.containment.left + o.po.left;
+					if(o.containment.top) o.containment.top = o.containment.top + o.po.top;
+					if(o.containment.bottom) o.containment.bottom = o.containment.bottom + o.po.top;
+					if(o.containment.right) o.containment.right = o.containment.right + o.po.left;
+					o.containmentModified = true;
+				}
 			}
 		}
 
