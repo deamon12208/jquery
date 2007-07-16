@@ -62,6 +62,7 @@
   <script src="../ui.mouse.js"></script>  
   <script>
     (function($) {
+      // The following functions will be in jQuery 1.2 and can be removed after it is released
       $.fn.contents = function() {
         return this.pushStack( jQuery.map( this, "jQuery.makeArray(a.childNodes)" ) );
       };
@@ -73,13 +74,12 @@
          while ( b.firstChild ) b = b.firstChild;
          return this.appendTo(b);
       };
+      // END
   
       $.fn.splitPane = function(options) {
         options = $.extend({
-            containment: [200, 400],
             start: 250, 
-            navOnRight: false,
-            border: 10
+            border: 5
           }, 
           options);
         var nav = $(this[0]);
@@ -90,30 +90,29 @@
         $.splitPane = $.splitPane || {};
         $.splitPane.uid = ($.splitPane.uid || 0) + 1;
         var scrollerName = "scroller" + $.splitPane.uid;
-        var resizeLayout = function(e,pos) {
+        var resizeLayout = function(pos) {
           $("html, body").height($(window).height());
           navParent.css("position", "absolute")
           if($.splitPane.resized == nav) return;
           if(!options.navOnRight) {
             var pos = pos || parseInt($("#" + scrollerName).css("left"));
-            content.width(navParent.width() - pos - options.border);
-            nav.width(pos);  
-            content.css("left", pos + options.border + "px");
+            var left = nav, right = content;
           } else {
             var pos = pos || navParent.width() - nav.width() - 10;
+            var left = content, right = nav;
             $("#" + scrollerName).css("left", pos);
-            nav.width(navParent.width() - pos - options.border);
-            nav.css("left", pos + options.border + "px");
-            content.width(pos);
           }
+          right.width(navParent.width() - pos - (options.border * 2));
+          right.css("left", pos + options.border + "px");
+          left.width(pos);
         };
         nav.width(options.start);
         var height = navParent.height();
         nav.height(height);
         content.height(height);
-        resizeLayout(null, options.start);
+        resizeLayout(options.start);
         $("div.element").css({top: 0, position: "absolute"});
-        resizeLayout(null, nav.width())
+        resizeLayout(nav.width())
         $("<div id='" + scrollerName + "'>&nbsp;</div>").appendTo(navParent)
           .css({left: options.start, backgroundColor: "#ccc", width: options.border + "px", height: "100%", position: "absolute", top: "0", cursor: 'col-resize'})
           .draggable({
@@ -122,15 +121,15 @@
             helper: "clone",
             stop: function(h, stopPos, c) {
               var newWidth = stopPos[0];
-              $.splitPane.resized = null;              
-              resizeLayout(null, newWidth);
+              $.splitPane.resized = null;
+              resizeLayout(newWidth);
               $.splitPane.resized = nav;
               $(window).resize();
               $.splitPane.resized = null;              
               $("#" + scrollerName).css("left", newWidth)
             }
         });
-        $(window).resize(resizeLayout).resize();
+        $(window).resize(function() { resizeLayout() }).resize();
       };
     })(jQuery);
 
@@ -144,7 +143,7 @@
         $(rightNav).parent().children().appendTo(rightNav.parentNode.parentNode).end().remove();
       }
       
-      $("#leftNav, #contents, #rightNav").triplePane({containment: [250, 500], start: 350, border: 5}, {containment: [50, 1000], start: 150, border: 5});
+      $("#leftNav, #contents, #rightNav").triplePane({containment: {left: 250, right: 500}, start: 200}, {containment: {left: 100, right: 100}, start: 150});
       // $("#nav, #content").splitPane({containment: [250, 500], start: 350});
       // $("#innerRight, #innerLeft").splitPane({containment: [50, 1000], start: 150, navOnRight: true});
     });
