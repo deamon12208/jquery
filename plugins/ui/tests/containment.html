@@ -57,9 +57,10 @@ if(!window.console) {
 
 $(document).ready(function(){
 
-$('#drag2').draggable({ axis: 'x', drag: function(helper,pos,cursorAt,obj) {
+$('#drag2').draggable({ axis: 'x', drag: function(helper,p,cursorAt,obj) {
 	
 	
+	/*
 	//The positioned parent is here (smart tipp)
 	var parent = obj.options.pp;
 	
@@ -73,7 +74,15 @@ $('#drag2').draggable({ axis: 'x', drag: function(helper,pos,cursorAt,obj) {
 	return {
 		left: pos[0],
 		top: pos[1]	
-	};	
+	};
+	*/
+	
+	var v = 300; //My value to the right
+	var w = [obj.options.pp.offsetWidth-helper.offsetWidth];
+	p[0] = p[0] <= 0 ? 0 : (p[0] - w >= 0 ? w : p[0]);
+	
+	p[0] = p[0] - w <= -v ? w-v : p[0];
+		
 } });
 
 
