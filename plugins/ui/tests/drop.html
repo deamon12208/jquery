@@ -162,7 +162,7 @@ li {
 	<li>
 		<div id="droppable-activeClass" class="droppable">droppable<br/></div>
 		activeClass: 'silver'
-		<div class="draggable gray">
+		<div class="draggable activeClass gray">
 			draggable
 			<div class="className">.gray</div>
 		</div>
@@ -190,7 +190,7 @@ li {
 	<li>
 		<div id="droppable-hoverClass" class="droppable">droppable<br/></div>
 		hoverClass: 'silver'
-		<div class="draggable gray">
+		<div class="draggable hoverClass gray">
 			draggable
 			<div class="className">.gray</div>
 		</div>
@@ -198,21 +198,42 @@ li {
 
 	</ul>
 
-	<div id="dragdrop">draggable droppable</div>
-
 	</fieldset>
 	
+	<fieldset>
+	<legend>other tests</legen>
+	<ul>
+	<li style="height:200px;">
+		draggable and droppable (same element)
+		<div id="droponself" class="draggable">draggable droppable</div>
+	</li>
+	</ul>
+
+	<div id="simpledraggable">simple draggable</div>
+	<div id="simpledraggable-withclone">simple draggable - with clone</div>
+
+	</fieldset>
+
 <script type="text/javascript">
 
 $(document).ready(function(){
 
 	$('.draggable').draggable({
-		helper:'clone'
+		helper: 'clone'
 	});
 
-	$('#dragdrop').draggable({
-		helper:'clone'
+	$('#simpledraggable').draggable();
+	$('#simpledraggable-withclone').draggable({
+		helper: 'clone'
+	});
+
+	$('#droponself').draggable({
+		
 	}).droppable({
+		accept: '#droponself',
+		drop: function() {
+			$(this).parent('li').css('background', 'red');
+		}
 	});
 
 	$('#droppable-accept-function')
@@ -239,7 +260,7 @@ $(document).ready(function(){
 
 	$('#droppable-activeClass').addClass('droppable-active')
 		.droppable({
-			accept: '.gray',
+			accept: '.gray.activeClass',
 			activeClass: 'silver',
 			drop: function(dragging) {
 				$(this).append($(document.createElement('div')).text($(dragging).text()));
@@ -292,7 +313,7 @@ $(document).ready(function(){
 
 	$('#droppable-hoverClass').addClass('droppable-active')
 		.droppable({
-			accept: '.gray',
+			accept: '.gray.hoverClass',
 			hoverClass: 'silver',
 			drop: function(dragging) {
 				$(this).append($(document.createElement('div')).text($(dragging).text()));
