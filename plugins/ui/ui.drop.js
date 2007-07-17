@@ -116,7 +116,7 @@
 			if (!c || c.element == this.element) return; // Bail if draggable and droppable are same element
 			
 			var o = this.options;
-			if(c && o.accept(c.element)) { // Fire callback
+			if(o.accept(c.element)) { // Fire callback
 				if(o.greedy && !c.slowMode) {
 					if(c.currentTarget == this.element) {
 						this.execPlugins('drop');
