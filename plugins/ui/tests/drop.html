@@ -345,7 +345,7 @@ $(document).ready(function(){
 			accept: '.purple',
 			activeClass: 'droppable-active',
 			hoverClass: 'droppable-hover',
-			greedy: false,
+			greedy: true,
 			drop: function(dragging) {
 				$(this).append($(document.createElement('div')).text($(dragging).text()));
 			}
