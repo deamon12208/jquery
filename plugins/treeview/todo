@@ -1,0 +1,7 @@
+* Animations in IE are not perfectly smooth
+* Last tree icon flickers in Opera when used with animations, together with some rendering issues, but all is functional
+* Treecontrol may be a bit unflexible. Need more usecases to improve that.
+* Plugin has (very limited) dependencies on images and stylesheets (see first example)
+* Expand/collapse of branches is limited to clickevent on hitarea, add option to use the entire line - see work/comments by Thomas on plugin page
+* Modifying the tree works only for branches without childs that are not last
+* Add events when opening/closing branches works only when using animations
