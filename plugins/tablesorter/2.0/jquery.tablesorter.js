@@ -1,3 +1,15 @@
+/*
+ *
+ * TableSorter 2.0 - Client-side table sorting with ease!
+ *
+ * Copyright (c) 2007 Christian Bach (http://lovepeacenukes.com)
+ * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
+ * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
+ *
+ * jQueryDate: 
+ * jQueryAuthor: Christian jQuery
+ *
+ */
 (function($) {
 
 	$.extend({
@@ -40,9 +52,17 @@
 			/* debuging utils */
 			function benchmark(label,stamp) {
 				if (typeof console != "undefined" && typeof console.debug != "undefined") {
-					console.log(label,(new Date().getTime() - stamp.getTime()) + 'ms');
+					log(label + ' ' + (new Date().getTime() - stamp.getTime()) + 'ms');
 				} else {
 					//alert(label + ',' + (new Date().getTime() - stamp.getTime()) + 'ms');
+				}
+			}
+			
+			function log(s) {
+				if (typeof console != "undefined" && typeof console.debug != "undefined") {
+					console.log(s);
+				} else {
+					alert(s);
 				}
 			}
 						
@@ -259,17 +279,14 @@
 				// remove all header information
 				$headers.removeClass(css[0]).removeClass(css[1]);
 				
-				
 				var h = [];
 				$headers.each(function(offset) {
-					
-						h[this.column] = $(this);
-					//}
+						h[this.column] = $(this);					
 				});
-				console.log(h,list);	
+				
 				var l = list.length; 
 				for(var i=0; i < l; i++) {
-					h[i].addClass(css[list[i][1]]);
+					h[list[i][0]].addClass(css[list[i][1]]);
 				}
 			}
 			
@@ -285,8 +302,6 @@
 					var c = sortList[i][0];
 					var order = sortList[i][1];
 					var s = (getCachedSortType(table.config.parsers,c) == 'text') ? ((order == 0) ? 'sortText' : 'sortTextDesc') : ((order == 0) ? 'sortNumeric' : 'sortNumericDesc');
-					
-					
 					
 					var e = 'e' + i;
 					
@@ -342,22 +357,12 @@
 				
 				return this.each(function() {
 					
-					// override default settings
-					
 					var $this, $document,$headers, cache, config, shiftDown = 0, sortOrder, sortList = [];
 					this.config = {};
 					config = $.extend(this.config, $.tablesorter.defaults, settings);
-				
-					// 
-					
-					
-					// add settings to table object, expandos...
-					//this.config = config;
-					
 					
 					// store common expression for speed					
 					$this = $(this);
-					$document = $(document);
 					
 					// build headers
 					$headers = buildHeaders(this);
@@ -371,12 +376,8 @@
 					// get the css class names, could be done else where.
 					var sortCSS = [config.css.orderAsc,config.css.orderDesc];
 					
-					
-					
-					
 					// apply filters
 					applyWidget(this);
-					
 					
 					// apply event handling to headers
 					// this is to big, perhaps break it out?
@@ -392,7 +393,7 @@
 							var d = this.order % 2;
 							
 							// user only whants to sort on one column
-							if(!shiftDown) {
+							if(!e[config.sorting.multisortKey]) {
 								
 								// reset all headers in case we want to reset from a multi column sort
 								//resetHeadersCss($headers,sortList,sortCSS); 
@@ -433,8 +434,6 @@
 							this.order++;
 						//}
 						
-						
-						
 						// stop normal event by returning false
 						return false;
 					
@@ -447,22 +446,14 @@
 						}
 					});
 					
-					$document.keydown(function(e) {
-						// enable multi sorting if key matches config 
-						shiftDown = e[config.sorting.multisortKey];
-					}).keyup(function(e) {
-						// disable multi sorting
-						shiftDown = 0;
-					});
-					
 					// apply easy methods that trigger binded events
 					$this.bind('update',function() {
 						// rebuild the cache map
 						cache = buildCache(this);
+						
 					}).bind('sorton',function(e,sortList) {
 						//set css for headers
 						setHeadersCss(this,$headers,sortList,sortCSS);
-						
 						// sort the table and append it to the dom
 						appendToTable(this,multisort(this,sortList,cache));
 					});
@@ -495,8 +486,6 @@
 		}
 	});
 	
-	
-		
 	// extend plugin scope
 	$.fn.extend({
         tablesorter: $.tablesorter.construct
@@ -525,6 +514,7 @@
 		type: 'numeric'
 	});
 	
+	// add widgets
 	$.tablesorter.addWidget({
 		id: 'zebra',
 		format: function(table) {
@@ -533,5 +523,4 @@
 		}
 	});
 	
-					
 })(jQuery);	

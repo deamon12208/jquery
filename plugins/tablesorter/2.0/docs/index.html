@@ -17,9 +17,7 @@
 
 <script type="text/javascript">
 /* Stop IE flicker */
-if ($.browser.msie == true) {
-document.execCommand('BackgroundImageCache', false, true);
-}
+if ($.browser.msie == true) document.execCommand('BackgroundImageCache', false, true);
 ChiliBook.recipeFolder     = "js/chili/";
 ChiliBook.stylesheetFolder = "js/chili/";
 </script>
@@ -43,8 +41,13 @@ ChiliBook.stylesheetFolder = "js/chili/";
 </div>
 
 <div class="info">
-<i>To select more then one column to sort by, hold down your shift key and press the "headers". Pressing a all ready sorted column while holding down shift will reverse the order.</i>
-<i>Releasing the shift key and pressing a column will result in a one column sort.</i>
+To select more then one column to sort by, hold down your shift key and press the "headers".<br/>
+Pressing a all ready sorted column while holding down shift will reverse the order.
+<br/>
+
+<br/>
+
+Releasing the shift key and pressing a column will result in a one column sort.
 </div>
 
 <div id="simple-example" class="section">
@@ -186,7 +189,7 @@ $(document).ready(function() {
 		</tr>
 	</tbody>
 </table>
-<a href="#" id="simple-bind-link">Sort the third and fitfh column order
+<a href="#" id="simple-bind-link">Sort the third and fifth column order
 asc</a></div>
 <div class="js"></div>
 <div class="html"></div>
