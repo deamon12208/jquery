@@ -5,3 +5,4 @@
 * Expand/collapse of branches is limited to clickevent on hitarea, add option to use the entire line - see work/comments by Thomas on plugin page
 * Modifying the tree works only for branches without childs that are not last
 * Add events when opening/closing branches works only when using animations
+* Allow blocking/disabling of certain nodes
