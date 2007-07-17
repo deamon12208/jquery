@@ -91,7 +91,7 @@
 			function detectParserForColumn(node) {
 				var l = parsers.length;
 				for(var i=1; i < l; i++) {
-					if(parsers[i].is(getElementText(node))) {
+					if(parsers[i].is($.trim(getElementText(node).toLowerCase()))) {
 						return parsers[i];
 					}
 				}
