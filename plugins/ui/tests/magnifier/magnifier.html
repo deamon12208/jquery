@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>UI Magnifier Plugin</title>
+<script type="text/javascript" src="../../../../jquery/src/jquery/jquery.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/selector/selector.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/ajax/ajax.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/event/event.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/fx/fx.js"></script>
+<script type="text/javascript" src="../../../dimensions/jquery.dimensions.js"></script>
+<script type="text/javascript" src="../../ui.js"></script>
+<script type="text/javascript" src="../../ui.magnifier.js"></script>
+<script type="text/javascript" charset="utf-8">
+	$(document).ready(function() {
+		$('#mag1').magnify({
+			distance: 100,
+			magnification: 2,
+			baseline: 0,
+			overlap: true	
+		});
+	});
+	
+</script>
+</head>
+<body>
+<div id='mag1' style='position: absolute; top: 100px; left: 100px;'>
+	<img src="clock.png" style='position: relative; float: left; width: 64px;' />
+	<img src="clock.png" style='position: relative; float: left; width: 64px;' />
+	<img src="clock.png" style='position: relative; float: left; width: 64px;' />
+	<img src="clock.png" style='position: relative; float: left; width: 64px;' />
+	<img src="clock.png" style='position: relative; float: left; width: 64px;' />
+	<img src="clock.png" style='position: relative; float: left; width: 64px;' />
+	<img src="clock.png" style='position: relative; float: left; width: 64px;' />
+	<img src="clock.png" style='position: relative; float: left; width: 64px;' />
+
+</div>	
+
+</body>
+</html>
