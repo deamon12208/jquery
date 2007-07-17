@@ -11,28 +11,6 @@
  *
  */
 
-/*
-TODO
-- allow users to keep their incomplete value when pressing tab, just mimic the default-browser-autocomplete: tab doesn't select any proposed value
-- small bug in your autocomplete,  When setting autoFill:true I would expect formatResult to be called on autofill, it seems not to be the case.
-- add a callback to allow decoding the response
-- add scrollbars and page down/up, option for height or number of items to be visible without scrolling
-- allow modification of not-last value in multiple-fields
-@option Number size Limit the number of items to show at once. Default: 
-@option Function parse - TEST AND DOCUMENT ME
-- add option to display selectbox on focus
-
-$input.bind("show", function() {
-	if ( !select.visible() ) {
-		onChange(0, true);
-	}
-});
-
-- reference: http://capxous.com/
-  - add "try ..." hints to demo
-  - check out demos
-*/
-
 /**
  * Provide autocomplete for text-inputs or textareas.
  *
