@@ -260,9 +260,6 @@ li {
 	</li>
 	</ul>
 
-	<div id="simpledraggable">simple draggable</div>
-	<div id="simpledraggable-withclone">simple draggable - with clone</div>
-
 	</fieldset>
 
 <script type="text/javascript">
@@ -270,11 +267,6 @@ li {
 $(document).ready(function(){
 
 	$('.draggable').draggable({
-		helper: 'clone'
-	});
-
-	$('#simpledraggable').draggable();
-	$('#simpledraggable-withclone').draggable({
 		helper: 'clone'
 	});
 

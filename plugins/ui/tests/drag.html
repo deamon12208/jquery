@@ -190,6 +190,8 @@ div.todo div.todo-desc
 	    	<div id="draggable-helperClone-withoutAppendTo" class='draggable'>Drag me</div>
 	    </li>
 	  </ul>
+	  <div id="simpledraggable">simple draggable</div>
+	  <div id="simpledraggable-withclone">simple draggable - with clone</div>
 	</fieldset>
 	<fieldset>
 	<legend>Callbacks</legend>
@@ -210,8 +212,15 @@ div.todo div.todo-desc
 	  </ul>
 	</fieldset>
 
+
+
 <script type="text/javascript">
 $(document).ready(function(){
+
+	$('#simpledraggable').draggable();
+	$('#simpledraggable-withclone').draggable({
+		helper: 'clone'
+	});
 
 	$('.todo').prepend(
 		$(document.createElement('span'))
@@ -361,7 +370,6 @@ $(document).ready(function(){
 			$(this).css('background', '#cc0000');
 		}
 	});
-
 
 });
 </script>
