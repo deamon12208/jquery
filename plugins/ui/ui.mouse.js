@@ -166,7 +166,7 @@
 		
 			this.init = true;	
 
-			if(o._start) o._start.apply(this.element, [this.helper, this.pos, o.cursorAt, this]); // Trigger the onStart callback
+			if(o._start) o._start.apply(this.element, [this.helper, this.pos, o.cursorAt, this]); // Trigger the start callback
 			return false;
 						
 		},
