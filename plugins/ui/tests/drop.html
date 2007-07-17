@@ -201,6 +201,57 @@ li {
 	</fieldset>
 	
 	<fieldset>
+	<legend>callbacks</legen>
+	<ul>
+	<li>
+		<div id="droppable-activate" class="droppable">droppable<br/></div>
+		activate: function()
+		<div class="draggable activate">
+			draggable
+		</div>
+	</li>
+	<li>
+		<div id="droppable-deactivate" class="droppable">droppable<br/></div>
+		deactivate: function()
+		<div class="draggable deactivate">
+			draggable
+		</div>
+	</li>
+	<li>
+		<div id="droppable-over" class="droppable">droppable<br/></div>
+		over: function()
+		<div class="draggable over">
+			draggable
+		</div>
+	</li>
+	<li>
+		<div id="droppable-out" class="droppable">droppable<br/></div>
+		out: function()
+		<div class="draggable out">
+			draggable
+		</div>
+	</li>
+	<li>
+		<div id="droppable-tenfour" class="droppable">droppable<br/></div>
+		10-4 (over and out)
+		<div class="draggable tenfour">
+			draggable
+		</div>
+	</li>
+	<li>
+		<div id="droppable-drop" class="droppable">droppable<br/></div>
+		drop: function()
+		<div class="draggable drop">
+			draggable
+		</div>
+	</li>
+	</ul>
+
+	</fieldset>
+
+	</fieldset>
+	
+	<fieldset>
 	<legend>other tests</legen>
 	<ul>
 	<li style="height:200px;">
@@ -317,6 +368,63 @@ $(document).ready(function(){
 			hoverClass: 'silver',
 			drop: function(dragging) {
 				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			}
+		});
+
+	$('#droppable-activate')
+		.droppable({
+			accept: '.activate',
+			activeClass: 'droppable-active',
+			activate: function(dragging) {
+				$(this).append($(document.createElement('div')).text('activate'));
+			}
+		});
+
+	$('#droppable-deactivate')
+		.droppable({
+			accept: '.deactivate',
+			activeClass: 'droppable-active',
+			deactivate: function(dragging) {
+				$(this).append($(document.createElement('div')).text('deactivate'));
+			}
+		});
+
+	$('#droppable-over')
+		.droppable({
+			accept: '.over',
+			activeClass: 'droppable-active',
+			over: function(dragging) {
+				$(this).append($(document.createElement('div')).text('over'));
+			}
+		});
+
+	$('#droppable-out')
+		.droppable({
+			accept: '.out',
+			activeClass: 'droppable-active',
+			out: function(dragging) {
+				$(this).append($(document.createElement('div')).text('out'));
+			}
+		});
+
+	$('#droppable-tenfour')
+		.droppable({
+			accept: '.tenfour',
+			activeClass: 'droppable-active',
+			over: function(dragging) {
+				$(this).append($(document.createElement('div')).text('over'));
+			},
+			out: function(dragging) {
+				$(this).append($(document.createElement('div')).text('out'));
+			}
+		});
+
+	$('#droppable-drop')
+		.droppable({
+			accept: '.drop',
+			activeClass: 'droppable-active',
+			drop: function(dragging) {
+				$(this).append($(document.createElement('div')).text('drop'));
 			}
 		});
 
