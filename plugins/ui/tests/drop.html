@@ -46,8 +46,8 @@ li {
 }
 
 .draggable {
-	width: 100px;
-	height: 40px;
+	width: 80px;
+	height: 35px;
 	background-color: #68BFEF;
 	border: 2px solid #0090DF;
 	padding: 5px;	
@@ -77,6 +77,21 @@ li {
 	border-color: #cc0000;
 }
 
+.draggable.orange {
+	background-color: #fcaf3e;
+	border-color: #f57900;
+}
+
+.draggable.purple {
+	background-color: #ad7fa8;
+	border-color: #75507b;
+}
+
+.draggable.gray {
+	background-color: silver;
+	border-color: gray;
+}
+
 .droppable {
 	float: right;
 	width: 200px;
@@ -86,18 +101,29 @@ li {
 	padding: 5px;
 	text-align: center;
 	overflow: auto;
-}
-
-.droppable-inactive {
 	opacity: 0.7;
 }
 
-.droppable-active {
+.droppable.nested {
+	width: 120px;
+	height: 80px;
+	margin-top:20px;
+	margin-right:30px;
+	background-color: #f9c97e;
+	border: 3px double #c17d11;
+}
 
+.droppable-active {
+	opacity: 1.0;
 }
 
 .droppable-hover {
 	outline: 1px dotted black;
+}
+
+.silver {
+	background-color: #fafafa;
+	border-color: silver;
 }
 
 </style>
@@ -133,8 +159,46 @@ li {
 			<div class="className">.big</div>
 		</div>
 	</li>
+	<li>
+		<div id="droppable-activeClass" class="droppable">droppable<br/></div>
+		activeClass: 'silver'
+		<div class="draggable gray">
+			draggable
+			<div class="className">.gray</div>
+		</div>
+	</li>
+	<li>
+		<div id="droppable-greedy-false" class="droppable">droppable<br/>
+			<div id="droppable-greedy-false-nested" class="droppable nested">droppable<br/></div>
+		</div>
+		greedy: false
+		<div class="draggable orange">
+			draggable
+			<div class="className">.orange</div>
+		</div>
+	</li>
+	<li>
+		<div id="droppable-greedy-true" class="droppable">droppable<br/>
+			<div id="droppable-greedy-true-nested" class="droppable nested">droppable<br/></div>
+		</div>
+		greedy: true
+		<div class="draggable purple">
+			draggable
+			<div class="className">.purple</div>
+		</div>
+	</li>
+	<li>
+		<div id="droppable-hoverClass" class="droppable">droppable<br/></div>
+		hoverClass: 'silver'
+		<div class="draggable gray">
+			draggable
+			<div class="className">.gray</div>
+		</div>
+	</li>
 
 	</ul>
+
+	<div id="dragdrop">draggable droppable</div>
 
 	</fieldset>
 	
@@ -143,38 +207,93 @@ li {
 $(document).ready(function(){
 
 	$('.draggable').draggable({
-		helper: 'clone'
+		helper:'clone'
+	});
+
+	$('#dragdrop').draggable({
+		helper:'clone'
+	}).droppable({
 	});
 
 	$('#droppable-accept-function')
-		.addClass('droppable-inactive')
 		.droppable({
 			accept: function(draggable) {
 				return $(draggable).is('.green');
 			},
+			activeClass: 'droppable-active',
 			hoverClass: 'droppable-hover',
-			activate: function() {
-				$(this).removeClass('droppable-inactive').addClass('droppable-active');
+			drop: function(dragging) {
+				$(this).append($(document.createElement('div')).text($(dragging).text()));
 			},
-			deactivate: function() {
-				$(this).addClass('droppable-inactive').removeClass('droppable-active');
-			},
+		});
+
+	$('#droppable-accept-string-little')
+		.droppable({
+			accept: '.little',
+			activeClass: 'droppable-active',
+			hoverClass: 'droppable-hover',
 			drop: function(dragging) {
 				$(this).append($(document.createElement('div')).text($(dragging).text()));
 			}
 		});
 
-	$('#droppable-accept-string-little')
-		.addClass('droppable-inactive')
+	$('#droppable-activeClass').addClass('droppable-active')
 		.droppable({
-			accept: '.little',
+			accept: '.gray',
+			activeClass: 'silver',
+			drop: function(dragging) {
+				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			}
+		});
+
+	$('#droppable-greedy-false')
+		.droppable({
+			accept: '.orange',
+			activeClass: 'droppable-active',
 			hoverClass: 'droppable-hover',
-			activate: function() {
-				$(this).removeClass('droppable-inactive');
-			},
-			deactivate: function() {
-				$(this).addClass('droppable-inactive');
-			},
+			greedy: false,
+			drop: function(dragging) {
+				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			}
+		});
+
+	$('#droppable-greedy-false-nested')
+		.droppable({
+			accept: '.orange',
+			activeClass: 'droppable-active',
+			hoverClass: 'droppable-hover',
+			greedy: false,
+			drop: function(dragging) {
+				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			}
+		});
+
+	$('#droppable-greedy-true')
+		.droppable({
+			accept: '.purple',
+			activeClass: 'droppable-active',
+			hoverClass: 'droppable-hover',
+			greedy: false,
+			drop: function(dragging) {
+				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			}
+		});
+
+	$('#droppable-greedy-true-nested')
+		.droppable({
+			accept: '.purple',
+			activeClass: 'droppable-active',
+			hoverClass: 'droppable-hover',
+			greedy: true,
+			drop: function(dragging) {
+				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			}
+		});
+
+	$('#droppable-hoverClass').addClass('droppable-active')
+		.droppable({
+			accept: '.gray',
+			hoverClass: 'silver',
 			drop: function(dragging) {
 				$(this).append($(document.createElement('div')).text($(dragging).text()));
 			}
