@@ -1,14 +1,14 @@
 // prevent execution of jQuery if included more than once
 if(typeof window.jQuery == "undefined") {
 /*
- * jQuery 1.1.3 - New Wave Javascript
+ * jQuery 1.1.3.1 - New Wave Javascript
  *
  * Copyright (c) 2007 John Resig (jquery.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * $Date: 2007-07-01 08:54:38 -0400 (Sun, 01 Jul 2007) $
- * $Rev: 2200 $
+ * $Date: 2007-07-05 00:43:24 -0400 (Thu, 05 Jul 2007) $
+ * $Rev: 2243 $
  */
 
 // Global undefined variable
@@ -61,7 +61,7 @@ jQuery.fn = jQuery.prototype = {
 			// HANDLE: $(*)
 			[ a ] );
 	},
-	jquery: "1.1.3",
+	jquery: "1.1.3.1",
 
 	size: function() {
 		return this.length;
@@ -557,7 +557,16 @@ jQuery.extend({
 
 		// IE elem.getAttribute passes even for style
 		else if ( elem.tagName ) {
-			// IE actually uses filters for opacity ... elem is actually elem.style
+			
+
+			if ( value != undefined ) elem.setAttribute( name, value );
+			if ( jQuery.browser.msie && /href|src/.test(name) && !jQuery.isXMLDoc(elem) ) 
+				return elem.getAttribute( name, 2 );
+			return elem.getAttribute( name );
+
+		// elem is actually elem.style ... set the style
+		} else {
+			// IE actually uses filters for opacity
 			if ( name == "opacity" && jQuery.browser.msie ) {
 				if ( value != undefined ) {
 					// IE has trouble with opacity if it does not have layout
@@ -572,14 +581,6 @@ jQuery.extend({
 				return elem.filter ? 
 					(parseFloat( elem.filter.match(/opacity=([^)]*)/)[1] ) / 100).toString() : "";
 			}
-
-			if ( value != undefined ) elem.setAttribute( name, value );
-			if ( jQuery.browser.msie && /href|src/.test(name) && !jQuery.isXMLDoc(elem) ) 
-				return elem.getAttribute( name, 2 );
-			return elem.getAttribute( name );
-
-		// elem is actually elem.style ... set the style
-		} else {
 			name = name.replace(/-([a-z])/ig,function(z,b){return b.toUpperCase();});
 			if ( value != undefined ) elem[name] = value;
 			return elem[name];
@@ -680,7 +681,7 @@ new function() {
 
 	// Figure out what browser is being used
 	jQuery.browser = {
-		version: b.match(/.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/)[1],
+		version: (b.match(/.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/) || [])[1],
 		safari: /webkit/.test(b),
 		opera: /opera/.test(b),
 		msie: /msie/.test(b) && !/opera/.test(b),
@@ -846,7 +847,7 @@ jQuery.extend({
 
 		// Match: :even, :last-chlid, #id, .class
 		new RegExp("^([:.#]*)(" + 
-			( jQuery.chars = "(?:[\\w\u0128-\uFFFF*_-]|\\\\.)" ) + "+)")
+			( jQuery.chars = jQuery.browser.safari && jQuery.browser.version < "3.0.0" ? "\\w" : "(?:[\\w\u0128-\uFFFF*_-]|\\\\.)" ) + "+)")
 	],
 
 	multiFilter: function( expr, elems, not ) {
@@ -910,7 +911,7 @@ jQuery.extend({
 				// Perform our own iteration and filter
 				for ( var i = 0; ret[i]; i++ )
 					for ( var c = ret[i].firstChild; c; c = c.nextSibling )
-						if ( c.nodeType == 1 && (nodeName == "*" || c.nodeName == nodeName.toUpperCase()) )
+						if ( c.nodeType == 1 && (nodeName == "*" || c.nodeName.toUpperCase() == nodeName.toUpperCase()) )
 							r.push( c );
 
 				ret = r;
@@ -933,7 +934,7 @@ jQuery.extend({
 								if ( n.nodeType == 1 ) {
 									if ( m == "~" && n.mergeNum == mergeNum ) break;
 									
-									if (!nodeName || n.nodeName == nodeName.toUpperCase() ) {
+									if (!nodeName || n.nodeName.toUpperCase() == nodeName.toUpperCase() ) {
 										if ( m == "~" ) n.mergeNum = mergeNum;
 										r.push( n );
 									}
@@ -1116,7 +1117,7 @@ jQuery.extend({
 					var a = r[i], z = a[ jQuery.props[m[2]] || m[2] ];
 					
 					if ( z == null || /href|src/.test(m[2]) )
-						z = jQuery.attr(a,m[2]);
+						z = jQuery.attr(a,m[2]) || '';
 
 					if ( (type == "" && !!z ||
 						 type == "=" && z == m[5] ||
@@ -2085,9 +2086,21 @@ jQuery.fn.extend({
 				opt = jQuery.speed(speed, easing, callback),
 				self = this;
 			
-			for ( var p in prop )
+			for ( var p in prop ) {
 				if ( prop[p] == "hide" && hidden || prop[p] == "show" && !hidden )
 					return jQuery.isFunction(opt.complete) && opt.complete.apply(this);
+
+				if ( p == "height" || p == "width" ) {
+					// Store display property
+					opt.display = jQuery.css(this, "display");
+
+					// Make sure that nothing sneaks out
+					opt.overflow = this.style.overflow;
+				}
+			}
+
+			if ( opt.overflow != null )
+				this.style.overflow = "hidden";
 
 			this.curAnim = jQuery.extend({}, prop);
 			
@@ -2187,15 +2200,6 @@ jQuery.extend({
 		// The styles
 		var y = elem.style;
 		
-		if ( prop == "height" || prop == "width" ) {
-			// Store display property
-			var oldDisplay = jQuery.css(elem, "display");
-
-			// Make sure that nothing sneaks out
-			var oldOverflow = y.overflow;
-			y.overflow = "hidden";
-		}
-
 		// Simple function for setting a style value
 		z.a = function(){
 			if ( options.step )
@@ -2294,12 +2298,12 @@ jQuery.extend({
 						done = false;
 
 				if ( done ) {
-					if ( oldDisplay != null ) {
+					if ( options.display != null ) {
 						// Reset the overflow
-						y.overflow = oldOverflow;
+						y.overflow = options.overflow;
 					
 						// Reset the display
-						y.display = oldDisplay;
+						y.display = options.display;
 						if ( jQuery.css(elem, "display") == "none" )
 							y.display = "block";
 					}

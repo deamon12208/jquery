@@ -3,7 +3,7 @@
 	$.extend({
 		tablesorter: new function() {
 			
-			var config = {
+			this.defaults = {
 				css: {
 					header: 'header',
 					orderAsc: 'headerSortUp',
@@ -20,16 +20,21 @@
 				parsers: {
 				
 				},
-				filters: {
+				widgets: {
+				},
+				zebra: {
+					css: ['even','odd']
 				},
 				meta: true,
+				headers: {},
+				cancelSelection: true,
 				debug: true
 				
 				
 			};
 			
 			var parsers = [];
-			var filters = [];
+			var widgets = [];
 			
 			
 			/* debuging utils */
@@ -49,8 +54,11 @@
 				
 				for (var i=0;i < l; i++) {
 					var p = false;
-					if($headers[i] && $headers[i].sorter) {
+					if( ($headers[i] && $headers[i].sorter)) {
 						p = getParserById($headers[i].sorter);
+					} else if((table.config.headers[i] && table.config.headers[i].sorter)) {
+
+						p = getParserById(table.config.headers[i].sorter);
 					}
 					if(!p) {
 						p = detectParserForColumn(cells[i]);
@@ -139,6 +147,10 @@
 				}
 				tableBody.html(h);
 				h = null;
+				
+				
+				//apply table widgets
+				applyWidget(table);
 				if(table.config.debug) { benchmark('Rebuilt table:', appendTime); }
 			};
 			
@@ -149,27 +161,12 @@
 				
 				if(table.config.debug) { var time = new Date(); }
 				
-				var meta = ($.meta && table.config.meta) ? true : false, tableHeadersRows = [], order = formatSortingOrder(table.config.sorting.initialOrder);
+				var meta = ($.meta && table.config.meta) ? true : false, tableHeadersRows = [];
 			
 				for(var i = 0; i < table.tHead.rows.length; i++) { tableHeadersRows[i]=0; };
 				
 				$tableHeaders = $(checkCellColSpan(table, tableHeadersRows, 0,table.tHead.rows[0].cells.length));
-				
-				$tableHeaders.each(function(i) {
-					
-					$this = $(this);
-					this.column = i;
-					this.order = order;
-					if($.meta && $this.data().sorter) {
-						this.sorter = $this.data().sorter;
-						//this.direction = $this.data().direction; 
-					}
-					$this.addClass(table.config.css.header);
-				
-				});
-				
 
-				
 				if(table.config.debug) { benchmark('Built headers:', time); }
 				
 				return $tableHeaders;
@@ -179,30 +176,64 @@
 		   function checkCellColSpan(table, headerArr, row, until) {
                 var arr = [];
 				var cells = table.tHead.rows[row].cells;
+				var offset = 0;
 				until += headerArr[row];
 				
 				for(var i=headerArr[row]; i < until; i++) {
-					if ( cells[i].colSpan >  1 ) { 
-						arr = arr.concat(checkCellColSpan(table, headerArr, row+cells[i].rowSpan, cells[i].colSpan));
+					var cell = cells[i];
+					if ( cell.colSpan >  1 ) { 
+						arr = arr.concat(checkCellColSpan(table, headerArr, row+cell.rowSpan, cell.colSpan));
 					} else {
 						// check so header is not disable by the meta plugin
-						if(!$.meta || ($(cells[i]).data() && $(cells[i]).data().sorter != 'none')) {
-							arr.push(cells[i]);
+						if(!checkHeaderMetadata(cell) && !checkHeaderOptions(table,i)) {
+							
+							cell.column = i;
+							cell.order = formatSortingOrder(table.config.sorting.initialOrder);
+							
+							if($.meta && $(cell).data().sorter) {
+								this.sorter = $(cell).data().sorter;
+								//this.direction = $this.data().direction; 
+							}
+							$(cell).addClass(table.config.css.header);
+				
+							arr.push(cell);
+							
 						}
 						headerArr[row] = i+1;
 					}
 				}
 				return arr;
 			};
-
-			function applyFilters(table) {
-				var c = table.config;
-				/*
-				for(var i=0; i < filters.length; i++) {
-
-				}
-				*/
+			
+			
+			function checkHeaderMetadata(cell) {
+				if(($.meta) && ($(cell).data().sorter === false)) { return true; };
+				return false;
 			}
+			
+			function checkHeaderOptions(table,i) {	
+				if((table.config.headers[i]) && (table.config.headers[i].sorter === false)) { return true; };
+				return false;
+			}
+			
+			function applyWidget(table) {
+				var c = table.config.widgets;
+				var l = c.length;
+				for(var i=0; i < l; i++) {
+					
+					getWidgetById(c[i]).format(table);
+				}
+				
+			}
+			function getWidgetById(name) {
+				var l = widgets.length;
+				for(var i=0; i < l; i++) {
+					if(widgets[i].id.toLowerCase() == name.toLowerCase() ) {
+						return widgets[i]; 
+					}
+				}
+			};
+			
 			
 			function formatSortingOrder(v) {
 				
@@ -223,18 +254,22 @@
 				}
 				return false;
 			}
-			
-			function mergeConfig(settings) {
-				return $.extend(config, settings);
 				
-			};
-			
-			function setHeadersCss($headers, list, css) {
+			function setHeadersCss(table,$headers, list, css) {
 				// remove all header information
 				$headers.removeClass(css[0]).removeClass(css[1]);
+				
+				
+				var h = [];
+				$headers.each(function(offset) {
+					
+						h[this.column] = $(this);
+					//}
+				});
+				console.log(h,list);	
 				var l = list.length; 
 				for(var i=0; i < l; i++) {
-					$($headers[list[i][0]]).addClass(css[list[i][1]]);
+					h[i].addClass(css[list[i][1]]);
 				}
 			}
 			
@@ -304,16 +339,20 @@
 		
 			this.construct = function(settings) {
 				
-				// override default settings
-				var config = mergeConfig(settings);
 				
 				return this.each(function() {
 					
+					// override default settings
+					
+					var $this, $document,$headers, cache, config, shiftDown = 0, sortOrder, sortList = [];
+					this.config = {};
+					config = $.extend(this.config, $.tablesorter.defaults, settings);
+				
 					// 
-					var $this, $document,$headers, cache, shiftDown = 0, sortOrder, sortList = [];
+					
 					
 					// add settings to table object, expandos...
-					this.config = config;
+					//this.config = config;
 					
 					
 					// store common expression for speed					
@@ -336,7 +375,7 @@
 					
 					
 					// apply filters
-					applyFilters(this);
+					applyWidget(this);
 					
 					
 					// apply event handling to headers
@@ -345,14 +384,12 @@
 						// store exp, for speed
 						var $cell = $(this);
 						// check to see so the header has sorting class active.
-						if($cell.is("." + config.css.header)) {
+						//if($cell.is("." + config.css.header)) {
 							// get current column index
 							var i = this.column;
 							
 							// get current column sort order
 							var d = this.order % 2;
-							
-							
 							
 							// user only whants to sort on one column
 							if(!shiftDown) {
@@ -394,10 +431,20 @@
 							
 							// update order (desc or asc)
 							this.order++;
-						}
+						//}
+						
+						
+						
 						// stop normal event by returning false
 						return false;
-						
+					
+					// cancel selection	
+					}).mousedown(function() {
+						if(config.cancelSelection) {
+							this.onselectstart = function() {return false};
+							//alert(this.onselectstart);
+							return false;
+						}
 					});
 					
 					$document.keydown(function(e) {
@@ -414,7 +461,7 @@
 						cache = buildCache(this);
 					}).bind('sorton',function(e,sortList) {
 						//set css for headers
-						setHeadersCss($headers,sortList,sortCSS);
+						setHeadersCss(this,$headers,sortList,sortCSS);
 						
 						// sort the table and append it to the dom
 						appendToTable(this,multisort(this,sortList,cache));
@@ -423,11 +470,17 @@
 			};
 			
 			this.addParser = function(parser) {
-				parsers.push(parser);
+				var l = parsers.length, a = true;
+				for(var i=0; i < l; i++) {
+					if(parsers[i].id.toLowerCase() == parser.id.toLowerCase()) {
+						a = false;
+					}
+				}
+				if(a) { parsers.push(parser); };
 			};
 			
-			this.addFilter = function(filter) {
-				filters.push(filter);
+			this.addWidget = function(widget) {
+				widgets.push(widget);
 			};
 			
 			this.formatFloat = function(s) {
@@ -441,12 +494,12 @@
 			
 		}
 	});
+	
+	
 		
 	// extend plugin scope
 	$.fn.extend({
-        tablesorter: $.tablesorter.construct,
-		update: $.tablesorter.update,
-		sorton: $.tablesorter.sorton
+        tablesorter: $.tablesorter.construct
 	});
 	
 	// add parsers
@@ -472,11 +525,11 @@
 		type: 'numeric'
 	});
 	
-	$.tablesorter.addFilter({
+	$.tablesorter.addWidget({
 		id: 'zebra',
-		format: function(config,table) {
-			$("> tbody:first/tr:visible:even",table).addClass(defaults.stripingRowClass[0]);
-			$("> tbody:first/tr:visible:odd",table).addClass(defaults.stripingRowClass[1]);
+		format: function(table) {
+			$("> tbody:first/tr:visible:even",table).addClass(table.config.zebra.css[0]);
+			$("> tbody:first/tr:visible:odd",table).addClass(table.config.zebra.css[1]);
 		}
 	});
 	
