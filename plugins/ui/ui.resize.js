@@ -36,17 +36,17 @@
 				return true;	
 			},
 			_start: function(h,p,c,t) {
-				self.start.apply(t, [self]); // Trigger the onStart callback				
+				self.start.apply(t, [self]); // Trigger the start callback				
 			},
 			_beforeStop: function(h,p,c,t) {
-				self.stop.apply(t, [self]); // Trigger the onStart callback
+				self.stop.apply(t, [self]); // Trigger the start callback
 			},
 			_stop: function(h,p,c,t) {
 				var o = t.options;
 				if(o.stop) o.stop.apply(t.element, [t.helper, t.pos, o.cursorAt, t]);
 			},
 			_drag: function(h,p,c,t) {
-				self.drag.apply(t, [self]); // Trigger the onStart callback
+				self.drag.apply(t, [self]); // Trigger the start callback
 			}			
 		});
 		var self = this;

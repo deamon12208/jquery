@@ -357,8 +357,8 @@ $(document).ready(function(){
 	});
 
 	$('#draggable-stop').draggable({
-		stop: function(dragging) {
-			$(dragging).css('background', '#cc0000');
+		stop: function() {
+			$(this).css('background', '#cc0000');
 		}
 	});
 

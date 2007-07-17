@@ -86,7 +86,7 @@
 			if(o.wasPositioned)
 				$(self.element).css('position', o.wasPositioned);
 				
-			if(o.stop) o.stop.apply(self, [self.element, self.helper, self.pos, [o.curOffset.left - o.po.left,o.curOffset.top - o.po.top],self]);
+			if(o.stop) o.stop.apply(self.element, [self.helper, self.pos, [o.curOffset.left - o.po.left,o.curOffset.top - o.po.top],self]);
 			
 			//Using setTimeout because of strange flickering in Firefox
 			if(self.helper != self.element) window.setTimeout(function() { $(self.helper).remove(); }, 0);
