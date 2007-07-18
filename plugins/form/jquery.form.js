@@ -8,7 +8,7 @@
  *   http://www.gnu.org/licenses/gpl.html
  *
  * Revision: $Id$
- * Version: 1.0.1  Jul-07-2007
+ * Version: 1.0.2  Jul-18-2007
  */
  (function($) {
 /**
@@ -64,10 +64,10 @@
  * The dataType option provides a means for specifying how the server response should be handled.
  * This maps directly to the jQuery.httpData method.  The following values are supported:
  *
- *      'xml':    if dataType == 'xml' the server response is treated as XML and the 'after'
+ *      'xml':    if dataType == 'xml' the server response is treated as XML and the 'success'
  *                   callback method, if specified, will be passed the responseXML value
  *      'json':   if dataType == 'json' the server response will be evaluted and passed to
- *                   the 'after' callback, if specified
+ *                   the 'success' callback, if specified
  *      'script': if dataType == 'script' the server response is evaluated in the global context
  *
  *
@@ -517,13 +517,13 @@ $.fn.formToArray = function(semantic) {
                 a.push({name: n+'.x', value: form.clk_x}, {name: n+'.y', value: form.clk_y});
             continue;
         }
+
         var v = $.fieldValue(el, true);
-        if (v === null) continue;
-        if (v.constructor == Array) {
+        if (v && v.constructor == Array) {
             for(var j=0, jmax=v.length; j < jmax; j++)
                 a.push({name: n, value: v[j]});
         }
-        else
+        else if (v !== null && typeof v != 'undefined')
             a.push({name: n, value: v});
     }
 
