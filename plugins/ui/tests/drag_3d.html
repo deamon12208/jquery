@@ -80,15 +80,31 @@ $(document).ready(function(){
 	$('#demo1').draggable({
 	 start: function(helper, pos, cursorAt, that) {
 
-	 		//$(this).css({ left: pos[0]-20, top: pos[1]-20 });
-	 		$(".original",this).animate({ top: -20, left: -20 }, 1000);
- 			//that.options.cursorAt = { left: that.options.cursorAt.left+20, top: that.options.cursorAt.top+20, bottom: 0, right: 0 };
+ 	 		var w = $(window).width();
+ 	 		var h = $(window).height();
+ 	 		var l = ((that.rpos[0] + this.offsetWidth/2) - w/2) / w;
+ 	 		var t = ((that.rpos[1] + this.offsetHeight/2) - h/2) / h;
+
+	 		$(".original",this).animate({ top: t * 40, left: l * 40 }, 500);
+	 		
  	 },
  	 stop: function(helper, pos, cursorAt, that) {
+	
+ 	 		$(".original",this).animate({ top: 0, left: 0 }, 500);
+ 	 },
+ 	 drag: function(helper, pos, cursorAt, that) {
 
-	 		//$(this).css({ left: pos[0]+20, top: pos[1]+20 }); 	
- 	 		$(".original",this).animate({ top: 0, left: 0 }, 1000);
- 	 }	
+ 	 		var w = $(window).width();
+ 	 		var h = $(window).height();
+ 	 		var l = ((that.rpos[0] + this.offsetWidth/2) - w/2) / w;
+ 	 		var t = ((that.rpos[1] + this.offsetHeight/2) - h/2) / h;
+ 	 		
+ 	 		$(".original",this).css({
+ 	 			left: l * 40,
+ 	 			top:  t * 40	
+ 	 		});	
+
+ 	 }
 	});
 
 });
