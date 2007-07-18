@@ -295,27 +295,27 @@
 				
 				if(table.config.debug) { var sortTime = new Date(); }
 				
-				var sortWrapper, dynamicExp = "sortWrapper = function(a,b) {", l = sortList.length;
+				var dynamicExp = "var sortWrapper = function(a,b) {", l = sortList.length;
 					
 				for(var i=0; i < l; i++) {
 					
 					var c = sortList[i][0];
 					var order = sortList[i][1];
-					var s = (getCachedSortType(table.config.parsers,c) == 'text') ? ((order == 0) ? 'sortText' : 'sortTextDesc') : ((order == 0) ? 'sortNumeric' : 'sortNumericDesc');
+					var s = (getCachedSortType(table.config.parsers,c) == "text") ? ((order == 0) ? "sortText" : "sortTextDesc") : ((order == 0) ? "sortNumeric" : "sortNumericDesc");
 					
-					var e = 'e' + i;
+					var e = "e" + i;
 					
-					dynamicExp += 'var ' + e + ' = ' + s + '(a[' + c + '],b[' + c + ']);';
-					dynamicExp += 'if(' + e + ') { return ' + e + ' }';
-					dynamicExp += ' else {';
+					dynamicExp += "var " + e + " = " + s + "(a[" + c + "],b[" + c + "]); ";
+					dynamicExp += "if(" + e + ") { return " + e + " } ";
+					dynamicExp += "else { ";
 				}
 					
 				for(var i=0; i < l; i++) {
-					dynamicExp += '}';
+					dynamicExp += "}; ";
 				}
 				
-				dynamicExp += 'return 0'	
-				dynamicExp += '};'	
+				dynamicExp += "return 0";	
+				dynamicExp += "};";	
 				
 				eval(dynamicExp);
 				
