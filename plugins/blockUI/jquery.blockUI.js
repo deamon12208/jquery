@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.26  (07/05/2007)
+ * Version 1.27  (07/18/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -59,12 +59,12 @@
  * @param Object css Style object to control look of the message
  * @cat Plugins/blockUI
  */
-$.blockUI = function(msg, css) {
-    $.blockUI.impl.install(window, msg, css);
+$.blockUI = function(msg, css, opts) {
+    $.blockUI.impl.install(window, msg, css, opts);
 };
 
 // expose version number so other plugins can interogate
-$.blockUI.version = 1.26;
+$.blockUI.version = 1.27;
 
 /**
  * unblockUI removes the UI block that was put in place by blockUI
@@ -97,7 +97,7 @@ $.unblockUI = function() {
  * @param Object css Style object to control look of the message
  * @cat Plugins/blockUI
  */
-$.fn.block = function(msg, css) {
+$.fn.block = function(msg, css, opts) {
     return this.each(function() {
 		if (!this.$pos_checked) {
             if ($.css(this,"position") == 'static')
@@ -105,7 +105,7 @@ $.fn.block = function(msg, css) {
             if ($.browser.msie) this.style.zoom = 1; // force 'hasLayout' in IE
             this.$pos_checked = 1;
         }
-        $.blockUI.impl.install(this, msg, css);
+        $.blockUI.impl.install(this, msg, css, opts);
     });
 };
 
@@ -159,9 +159,12 @@ $.fn.displayBox = function(css, fn, isFlash) {
     
     // supress opacity on overlay if displaying flash content on mac/ff platform
     var ua = navigator.userAgent.toLowerCase();
-    var noalpha = isFlash && /mac/.test(ua) && /firefox/.test(ua);
+    var opts = {
+        displayMode: fn || 1,
+        noalpha: isFlash && /mac/.test(ua) && /firefox/.test(ua)
+    };
 
-    $.blockUI.impl.install(window, msg, { width: w, height: h, marginTop: mt, marginLeft: ml }, fn || 1, noalpha);
+    $.blockUI.impl.install(window, msg, { width: w, height: h, marginTop: mt, marginLeft: ml }, opts);
 };
 
 
@@ -194,13 +197,18 @@ $.blockUI.impl = {
     pageBlock: null,
     pageBlockEls: [],
     op8: window.opera && window.opera.version() < 9,
-    ffLinux: $.browser.mozilla && /Linux/.test(navigator.platform),
     ie6: $.browser.msie && /6.0/.test(navigator.userAgent),
-    install: function(el, msg, css, displayMode, noalpha) {
-        this.boxCallback = typeof displayMode == 'function' ? displayMode : null;
-        this.box = displayMode ? msg : null;
+    install: function(el, msg, css, opts) {
+        opts = opts || {};
+        this.boxCallback = typeof opts.displayMode == 'function' ? opts.displayMode : null;
+        this.box = opts.displayMode ? msg : null;
         var full = (el == window);
-        noalpha = noalpha || this.op8 || this.ffLinux;
+        
+        // use logical settings for opacity support based on browser but allow overrides via opts arg
+        var noalpha = this.op8 || $.browser.mozilla && /Linux/.test(navigator.platform);
+        if (typeof opts.opacity != 'undefined')
+            noalpha = opts.opacity == 0 ? 1 : 0;
+        
         if (full && this.pageBlock) this.remove(window);
         // check to see if we were only passed the css object (a literal)
         if (msg && typeof msg == 'object' && !msg.jquery && !msg.nodeType) {
@@ -208,7 +216,7 @@ $.blockUI.impl = {
             msg = null;
         }
         msg = msg ? (msg.nodeType ? $(msg) : msg) : full ? $.blockUI.defaults.pageMessage : $.blockUI.defaults.elementMessage;
-        if (displayMode)
+        if (opts.displayMode)
             var basecss = jQuery.extend({}, $.blockUI.defaults.displayBoxCSS);
         else
             var basecss = jQuery.extend({}, full ? $.blockUI.defaults.pageMessageCSS : $.blockUI.defaults.elementMessageCSS);
@@ -258,7 +266,7 @@ $.blockUI.impl = {
                 }
             });
         }
-        if (displayMode) {
+        if (opts.displayMode) {
             w.css('cursor','default').attr('title', $.blockUI.defaults.closeMessage);
             m.css('cursor','default'); 
             $([f[0],w[0],m[0]]).removeClass('blockUI').addClass('displayBox');
@@ -268,7 +276,7 @@ $.blockUI.impl = {
             this.bind(1, el);
         m.append(msg).show();
         if (msg.jquery) msg.show();
-        if (displayMode) return;
+        if (opts.displayMode) return;
         if (full) {
             this.pageBlock = m[0];
             this.pageBlockEls = $(':input:enabled:visible',this.pageBlock);
