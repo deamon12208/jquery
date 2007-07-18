@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Draggables Test Page</title>
+<script type="text/javascript" src="../../../jquery/src/jquery/jquery.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx/fx.js"></script>
+<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+<script type="text/javascript" src="../ui.js"></script>
+<script type="text/javascript" src="../ui.mouse.js"></script>
+<script type="text/javascript" src="../ui.drag.js"></script>
+<script type="text/javascript" src="../ui.drag.ext.js"></script>
+
+
+<style type="text/css" media="all">
+
+body
+{
+	background: #fff;
+	margin: 0;
+	padding: 0;
+	font-family: Arial;
+	font-size: 12px;
+}
+
+fieldset
+{
+	margin: 20px;
+}
+
+li {
+	position: relative;
+	border-bottom: 1px solid #999;
+	border-right: 1px solid #999;
+	margin: 10px;
+	padding: 10px;
+	height: 150px;
+	width: 500px;
+	float: left;
+	list-style-type: none;
+	
+}
+
+.draggable {
+	position: absolute;
+	width: 90px;
+	height: 90px;
+	top: 10px;
+	right: 10px;
+	padding: 5px;	
+}
+</style>
+</head>
+<body>
+	<fieldset>
+	<legend>3D Dragging</legend>
+	<ul>
+	    <li>
+	    	Demo
+	    	<div id="demo1" class='draggable'>
+	    	<div style='width: 180px; height: 180px; background: green; z-index: 2; position: absolute; top: 0px; left: 0px;'></div>
+	    	<div class="shadow" style='display: none; width: 180px; height: 180px; background: black; opacity: 0.3; z-index: 1; position: absolute; top: 20px; left: 20px;'></div>	
+	    	</div>
+	    </li>
+	    <li>
+	    	Demo
+	    	<div id="demo2" class='draggable'>Drag me</div>
+	    </li>
+	</fieldset>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+	$('#demo1').draggable({
+	 start: function(helper, pos, cursorAt, that) {
+
+	 		$(this).css({ left: pos[0]-20, top: pos[1]-20 });
+	 		$(".shadow",this).show();
+ 			that.options.cursorAt = { left: that.options.cursorAt.left+20, top: that.options.cursorAt.top+20, bottom: 0, right: 0 };
+ 	 },
+ 	 stop: function(helper, pos, cursorAt, that) {
+
+	 		$(this).css({ left: pos[0]+20, top: pos[1]+20 }); 	
+ 	 		$(".shadow",this).hide();
+ 	 }	
+	});
+
+});
+</script>
+
+</body>
+</html>
+
