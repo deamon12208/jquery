@@ -48,8 +48,8 @@ li {
 
 .draggable {
 	position: absolute;
-	width: 90px;
-	height: 90px;
+	width: 10px;
+	height: 10px;
 	top: 10px;
 	right: 10px;
 	padding: 5px;	
@@ -63,8 +63,8 @@ li {
 	    <li>
 	    	Demo
 	    	<div id="demo1" class='draggable'>
-	    	<div style='width: 180px; height: 180px; background: green; z-index: 2; position: absolute; top: 0px; left: 0px;'></div>
-	    	<div class="shadow" style='display: none; width: 180px; height: 180px; background: black; opacity: 0.3; z-index: 1; position: absolute; top: 0px; left: 0px;'></div>	
+	    	<div style='width: 180px; height: 80px; background: green; z-index: 2; position: absolute; top: 0px; left: 0px;'></div>
+	    	<div class="shadow" style='display: none; width: 180px; height: 80px; background: black; opacity: 0.3; z-index: 1; position: absolute; top: 0px; left: 0px;'></div>	
 	    	</div>
 	    </li>
 	    <li>
@@ -87,7 +87,7 @@ $(document).ready(function(){
  	 stop: function(helper, pos, cursorAt, that) {
 
 	 		//$(this).css({ left: pos[0]+20, top: pos[1]+20 }); 	
- 	 		$(".shadow",this).hide().css({ top: 0, left: 0 });
+ 	 		$(".shadow",this).hide().animate({ top: 0, left: 0 }, 1000);
  	 }	
 	});
 
