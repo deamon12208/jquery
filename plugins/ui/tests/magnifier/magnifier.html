@@ -16,27 +16,127 @@
 <script type="text/javascript" charset="utf-8">
 	$(document).ready(function() {
 		$('#mag1').magnify({
-			distance: 100,
+			distance: 50,
 			magnification: 2,
+			opacity: { min: 0.6, max: 1 },
 			baseline: 0,
-			overlap: true	
+			overlap: true,
+			zIndex: 1000,
+			click: function(e,ui) {
+				console.log(ui.current);
+			}
 		});
+		
+
+		$('#mag2').magnify({
+			distance: 100,
+			magnification: 3,
+			opacity: { min: 0.4, max: 1 },
+			baseline: 0,
+			overlap: true,
+			zIndex: 1000,
+			click: function(e,ui) {
+				console.log(ui.current);
+			}
+		});
+
+		
+		$('#mag1 img').bind('click', function() {
+			$(this).animate({}, 1000);
+		});
+		
+		$('#mag1 img').hover(function() {
+			var cp = $(this).offset();
+			$('#pfeil').css({
+				left: cp.left+this.offsetWidth/2,
+				top: 0
+			});
+		}, function() {	});
+		
 	});
 	
 </script>
 </head>
 <body>
-<div id='mag1' style='position: absolute; top: 100px; left: 100px;'>
-	<img src="clock.png" style='position: relative; float: left; width: 64px;' />
-	<img src="clock.png" style='position: relative; float: left; width: 64px;' />
-	<img src="clock.png" style='position: relative; float: left; width: 64px;' />
-	<img src="clock.png" style='position: relative; float: left; width: 64px;' />
-	<img src="clock.png" style='position: relative; float: left; width: 64px;' />
-	<img src="clock.png" style='position: relative; float: left; width: 64px;' />
-	<img src="clock.png" style='position: relative; float: left; width: 64px;' />
-	<img src="clock.png" style='position: relative; float: left; width: 64px;' />
+<div id='mag1' style='position: absolute; top: 30px; left: 30px; background: #eee; width: 300px; height: 35px; padding: 5px; padding-right: 0px;'>
+	<img src="clock.png" style='position: relative; float: left; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; float: left; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; float: left; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; float: left; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; float: left; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; float: left; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; float: left; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; float: left; width: 32px; margin-right: 5px;' />
+</div>
 
-</div>	
+<div id='mag2' style='position: absolute; top: 30px; right: 30px; width: 325px; background: #eee; height: 290px; padding: 5px; padding-right: 0px;'>
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+</div>
+
+<div id='pfeil' style='position: absolute; width: 4px; height: 8px; background: black;'></div>
 
 </body>
 </html>
