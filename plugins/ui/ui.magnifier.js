@@ -19,7 +19,7 @@ $.ui.magnifier = function(el,options) {
 	this.pp = $(el).offset({ border: false });
 	
 	$('> *', el).each(function() {
-		var co = $(this).offset({ border: false });
+		var co = $(this).offsetLite({ border: false });
 		if(self.options.overlap) var cp = $(this).position();
 		self.items.push([this, co, [$(this).width(),$(this).height()], (cp ? cp : null)]);
 		
@@ -78,6 +78,7 @@ $.extend($.ui.magnifier.prototype, {
 
 				$(c[0]).css({
 					width: c[2][0]+ (c[2][0] * (o.magnification-1)) - (((distance/o.distance)*c[2][0]) * (o.magnification-1)),
+					height: c[2][1]+ (c[2][1] * (o.magnification-1)) - (((distance/o.distance)*c[2][1]) * (o.magnification-1)),
 					top: (c[3] ? c[3].top : 0) + (o.baseline-0.5) * ((c[2][0] * (o.magnification-1)) - (((distance/o.distance)*c[2][0]) * (o.magnification-1))),
 					left: (c[3] ? (c[3].left + -0.5 * ((c[2][1] * (o.magnification-1)) - (((distance/o.distance)*c[2][1]) * (o.magnification-1)))) : 0)
 				});
@@ -89,6 +90,7 @@ $.extend($.ui.magnifier.prototype, {
 				
 				$(c[0]).css({
 					width: c[2][0],
+					height: c[2][0],
 					top: (c[3] ? c[3].top : 0),
 					left: (c[3] ? c[3].left : 0)
 				});

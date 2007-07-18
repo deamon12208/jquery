@@ -13,36 +13,85 @@
 <script type="text/javascript" src="../../../dimensions/jquery.dimensions.js"></script>
 <script type="text/javascript" src="../../ui.js"></script>
 <script type="text/javascript" src="../../ui.magnifier.js"></script>
+
+<style type="text/css" media="screen">
+body {
+	font-size: 10px;
+	font-family: Arial;	
+}
+
+.container {
+	position: absolute;
+	top: 30px;
+	left: 30px;
+	background: #eee;
+	width: 300px;
+	height: 35px;
+	padding: 5px;
+	padding-right: 0px;	
+}
+.container img {
+	position: relative;
+	float: left;
+	width: 32px;
+	margin-right: 5px;	
+}
+
+.extreme div {
+	width: 1px;
+	height: 1px;
+	background: black;
+	float: left;
+}
+</style>
+
+
 <script type="text/javascript" charset="utf-8">
 	$(document).ready(function() {
 		$('#mag1').magnify({
 			distance: 50,
-			magnification: 2,
+			overlap: true,
+			zIndex: 1000
+		});
+
+		$('#mag3').magnify({
+			distance: 50,
+			zIndex: 1000
+		});
+		
+		$('#mag4').magnify({
+			distance: 50,
 			opacity: { min: 0.6, max: 1 },
 			baseline: 0,
-			overlap: true,
 			zIndex: 1000,
-			click: function(e,ui) {
-				console.log(ui.current);
-			}
+			overlap: true
+		});
+		
+		$('#mag5').magnify({
+			distance: 50,
+			baseline: -1,
+			zIndex: 1000,
+			overlap: true
+		});
+		
+		$('#mag6').magnify({
+			distance: 50,
+			magnification: 4,
+			zIndex: 1000,
+			overlap: true
 		});
 		
 
+		/* This really hurts, but you'll get a nice dot!
 		$('#mag2').magnify({
-			distance: 100,
-			magnification: 3,
+			distance: 20,
+			magnification: 1,
 			opacity: { min: 0.4, max: 1 },
 			baseline: 0,
-			overlap: true,
-			click: function(e,ui) {
-				console.log(ui.current);
-			}
+			overlap: true
 		});
+		*/
 
-		
-		$('#mag1 img').bind('click', function() {
-			$(this).animate({}, 1000);
-		});
 		
 		$('#mag1 img').hover(function() {
 			var cp = $(this).offset();
@@ -57,7 +106,21 @@
 </script>
 </head>
 <body>
-<div id='mag1' style='position: absolute; top: 30px; left: 30px; background: #eee; width: 300px; height: 35px; padding: 5px; padding-right: 0px;'>
+<div id='mag1' class='container'>
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+</div>
+<div style='position: absolute; top: 30px; left: 500px;'>
+	overlapping set to true
+</div>
+
+<div id='mag3' style='position: absolute; top: 130px; left: 30px; background: #eee; width: 350px; height: 35px; padding: 5px; padding-right: 0px;'>
 	<img src="clock.png" style='position: relative; float: left; width: 32px; margin-right: 5px;' />
 	<img src="clock.png" style='position: relative; float: left; width: 32px; margin-right: 5px;' />
 	<img src="clock.png" style='position: relative; float: left; width: 32px; margin-right: 5px;' />
@@ -67,72 +130,216 @@
 	<img src="clock.png" style='position: relative; float: left; width: 32px; margin-right: 5px;' />
 	<img src="clock.png" style='position: relative; float: left; width: 32px; margin-right: 5px;' />
 </div>
+<div style='position: absolute; top: 130px; left: 500px;'>
+	overlapping set to false
+</div>
 
-<div id='mag2' style='position: absolute; top: 30px; right: 30px; width: 325px; background: #eee; height: 290px; padding: 5px; padding-right: 0px;'>
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
-	<img src="clock.png" style='position: relative; width: 32px; margin-right: 5px;' />
+<div id='mag4' class='container' style='top: 230px;'>
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+</div>
+<div style='position: absolute; top: 230px; left: 500px;'>
+	opacity option
+</div>
+
+<div id='mag5' class='container' style='top: 330px;'>
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+</div>
+<div style='position: absolute; top: 330px; left: 500px;'>
+	custom baseline
+</div>
+
+<div id='mag6' class='container' style='top: 430px;'>
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+	<img src="clock.png" />
+</div>
+<div style='position: absolute; top: 430px; left: 500px;'>
+	custom magnification
+</div>
+
+<div id='mag2' class='container extreme' style='position: absolute; top: 570px; height: 40px; width: 40px;'>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+	<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+</div>
+<div style='position: absolute; top: 570px; left: 500px;'>
+	Fun example ;-) (must be enabled first)
 </div>
 
 <div id='pfeil' style='position: absolute; width: 4px; height: 8px; background: black;'></div>
