@@ -63,7 +63,7 @@ li {
 	    <li>
 	    	Demo
 	    	<div id="demo1" class='draggable'>
-	    	<div style='width: 180px; height: 80px; background: green; z-index: 2; position: absolute; top: 0px; left: 0px;'></div>
+	    	<div class="original" style='width: 180px; height: 80px; background: green; z-index: 2; position: absolute; top: 0px; left: 0px;'></div>
 	    	<div class="shadow" style='width: 180px; height: 80px; background: black; opacity: 0.3; z-index: 1; position: absolute; top: 0px; left: 0px;'></div>	
 	    	</div>
 	    </li>
@@ -81,13 +81,13 @@ $(document).ready(function(){
 	 start: function(helper, pos, cursorAt, that) {
 
 	 		//$(this).css({ left: pos[0]-20, top: pos[1]-20 });
-	 		$(".shadow",this).animate({ top: 20, left: 20 }, 1000);
+	 		$(".original",this).animate({ top: -20, left: -20 }, 1000);
  			//that.options.cursorAt = { left: that.options.cursorAt.left+20, top: that.options.cursorAt.top+20, bottom: 0, right: 0 };
  	 },
  	 stop: function(helper, pos, cursorAt, that) {
 
 	 		//$(this).css({ left: pos[0]+20, top: pos[1]+20 }); 	
- 	 		$(".shadow",this).animate({ top: 0, left: 0 }, 1000);
+ 	 		$(".original",this).animate({ top: 0, left: 0 }, 1000);
  	 }	
 	});
 
