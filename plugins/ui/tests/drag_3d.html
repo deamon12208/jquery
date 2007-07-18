@@ -85,7 +85,10 @@ $(document).ready(function(){
  	 		var l = ((that.rpos[0] + this.offsetWidth/2) - w/2) / w;
  	 		var t = ((that.rpos[1] + this.offsetHeight/2) - h/2) / h;
 
-	 		$(".original",this).animate({ top: t * 40, left: l * 40 }, 500);
+	 		that.isBeingAnimated = true;
+	 		$(".original",this).animate({ top: t * 40, left: l * 40 }, 500, function() {
+	 			that.isBeingAnimated = false;	
+	 		});
 	 		
  	 },
  	 stop: function(helper, pos, cursorAt, that) {
@@ -94,6 +97,8 @@ $(document).ready(function(){
  	 },
  	 drag: function(helper, pos, cursorAt, that) {
 
+ 	 		if(that.isBeingAnimated) return false;
+ 	 		
  	 		var w = $(window).width();
  	 		var h = $(window).height();
  	 		var l = ((that.rpos[0] + this.offsetWidth/2) - w/2) / w;
