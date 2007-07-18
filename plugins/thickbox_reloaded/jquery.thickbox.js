@@ -9,7 +9,7 @@
 
 (function($) { // simulate block scope
 
-    $.browser.msie6 = $.browser.msie6 || $.browser.msie && typeof XMLHttpRequest == 'function';
+    $.browser.msie6 = $.browser.msie && ($.browser.version && $.browser.version < 7 || /6.0/.test(navigator.userAgent));
 
     $.extend({
         thickbox: new function() {
