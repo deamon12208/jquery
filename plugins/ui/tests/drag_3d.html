@@ -77,6 +77,9 @@ li {
 <script type="text/javascript">
 $(document).ready(function(){
 
+	var maxTop = 20;
+	var maxLeft = 20;
+	
 	$('#demo1').draggable({
 	 start: function(helper, pos, cursorAt, that) {
 
@@ -86,7 +89,11 @@ $(document).ready(function(){
  	 		var t = ((that.rpos[1] + this.offsetHeight/2) - h/2) / h;
 
 	 		that.isBeingAnimated = true;
-	 		$(".original",this).animate({ top: t * 40, left: l * 40 }, 500, function() {
+	 		$(".original",this).animate({ top: t * maxTop*2, left: l * maxLeft*2 }, 500, function() {
+	 			that.isBeingAnimated = false;	
+	 		});
+	 		
+	 		$(".shadow",this).animate({ top: -t * maxTop*2, left: -l * maxLeft*2 }, 500, function() {
 	 			that.isBeingAnimated = false;	
 	 		});
 	 		
@@ -94,6 +101,7 @@ $(document).ready(function(){
  	 stop: function(helper, pos, cursorAt, that) {
 	
  	 		$(".original",this).animate({ top: 0, left: 0 }, 500);
+ 	 		$(".shadow",this).animate({ top: 0, left: 0 }, 500);
  	 },
  	 drag: function(helper, pos, cursorAt, that) {
 
@@ -105,8 +113,13 @@ $(document).ready(function(){
  	 		var t = ((that.rpos[1] + this.offsetHeight/2) - h/2) / h;
  	 		
  	 		$(".original",this).css({
- 	 			left: l * 40,
- 	 			top:  t * 40	
+ 	 			left: l * maxLeft*2,
+ 	 			top:  t * maxTop*2	
+ 	 		});
+ 	 		
+  	 		$(".shadow",this).css({
+ 	 			left: -l * maxLeft*2,
+ 	 			top:  -t * maxTop*2	
  	 		});	
 
  	 }
