@@ -64,7 +64,7 @@ li {
 	    	Demo
 	    	<div id="demo1" class='draggable'>
 	    	<div style='width: 180px; height: 180px; background: green; z-index: 2; position: absolute; top: 0px; left: 0px;'></div>
-	    	<div class="shadow" style='display: none; width: 180px; height: 180px; background: black; opacity: 0.3; z-index: 1; position: absolute; top: 20px; left: 20px;'></div>	
+	    	<div class="shadow" style='display: none; width: 180px; height: 180px; background: black; opacity: 0.3; z-index: 1; position: absolute; top: 0px; left: 0px;'></div>	
 	    	</div>
 	    </li>
 	    <li>
@@ -80,14 +80,14 @@ $(document).ready(function(){
 	$('#demo1').draggable({
 	 start: function(helper, pos, cursorAt, that) {
 
-	 		$(this).css({ left: pos[0]-20, top: pos[1]-20 });
-	 		$(".shadow",this).show();
- 			that.options.cursorAt = { left: that.options.cursorAt.left+20, top: that.options.cursorAt.top+20, bottom: 0, right: 0 };
+	 		//$(this).css({ left: pos[0]-20, top: pos[1]-20 });
+	 		$(".shadow",this).show().animate({ top: 20, left: 20 }, 1000);
+ 			//that.options.cursorAt = { left: that.options.cursorAt.left+20, top: that.options.cursorAt.top+20, bottom: 0, right: 0 };
  	 },
  	 stop: function(helper, pos, cursorAt, that) {
 
-	 		$(this).css({ left: pos[0]+20, top: pos[1]+20 }); 	
- 	 		$(".shadow",this).hide();
+	 		//$(this).css({ left: pos[0]+20, top: pos[1]+20 }); 	
+ 	 		$(".shadow",this).hide().css({ top: 0, left: 0 });
  	 }	
 	});
 
