@@ -195,6 +195,37 @@ li {
 			<div class="className">.gray</div>
 		</div>
 	</li>
+	<li>
+		<div id="droppable-tolerance-fit" class="droppable">droppable<br/>fit<br/></div>
+		tolerance: 'fit'
+		<div class="draggable tolerance-fit">
+			draggable
+		</div>
+	</li>
+	<li>
+		<div id="droppable-tolerance-intersect" class="droppable">droppable<br/>intersect<br/></div>
+		tolerance: 'intersect'
+		<div class="draggable tolerance-intersect">
+			draggable
+		</div>
+	</li>
+	<li>
+		<div id="droppable-tolerance-pointer" class="droppable">droppable<br/>pointer<br/></div>
+		tolerance: 'pointer'
+		<div id="draggable-tolerance-pointer-center" class="tolerance-pointer">
+			draggable
+		</div>
+		<div id="draggable-tolerance-pointer-outside" class="tolerance-pointer">
+			draggable
+		</div>
+	</li>
+	<li>
+		<div id="droppable-tolerance-touch" class="droppable">droppable<br/>touch<br/></div>
+		tolerance: 'touch'
+		<div class="draggable tolerance-touch">
+			draggable
+		</div>
+	</li>
 
 	</ul>
 
@@ -358,6 +389,58 @@ $(document).ready(function(){
 		.droppable({
 			accept: '.gray.hoverClass',
 			hoverClass: 'silver',
+			drop: function(dragging) {
+				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			}
+		});
+
+	$('#droppable-tolerance-fit').addClass('droppable-active')
+		.droppable({
+			accept: '.tolerance-fit',
+			hoverClass: 'silver',
+			tolerance: 'fit',
+			drop: function(dragging) {
+				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			}
+		});
+
+	$('#droppable-tolerance-intersect').addClass('droppable-active')
+		.droppable({
+			accept: '.tolerance-intersect',
+			hoverClass: 'silver',
+			tolerance: 'intersect',
+			drop: function(dragging) {
+				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			}
+		});
+
+	$('#draggable-tolerance-pointer-center').addClass('draggable')
+		.draggable({
+			cursorAt: {top:15, left:50},
+			helper: 'clone'
+		});
+
+	$('#draggable-tolerance-pointer-outside').addClass('draggable')
+		.draggable({
+			cursorAt: {top:-10, left:-10},
+			helper: 'clone'
+		});
+
+	$('#droppable-tolerance-pointer').addClass('droppable-active')
+		.droppable({
+			accept: '.tolerance-pointer',
+			hoverClass: 'silver',
+			tolerance: 'pointer',
+			drop: function(dragging) {
+				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			}
+		});
+
+	$('#droppable-tolerance-touch').addClass('droppable-active')
+		.droppable({
+			accept: '.tolerance-touch',
+			hoverClass: 'silver',
+			tolerance: 'touch',
 			drop: function(dragging) {
 				$(this).append($(document.createElement('div')).text($(dragging).text()));
 			}
