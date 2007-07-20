@@ -1,18 +1,20 @@
 $(document).ready(function() {
-  $('a.basic').cluetip();
-  $('a.custom-width').cluetip({width: '200px'});
-  $('h4').cluetip({attribute: 'id', hoverClass: 'highlight'});
-  $('#sticky').cluetip({'sticky': true});
+  $('a.basic').cluetip({arrows:true, dropShadow: false});
+  $('a.custom-width').cluetip({width: '200px', arrows:true, dropShadow: false});
+  $('h4').cluetip({attribute: 'id', hoverClass: 'highlight', arrows:true, dropShadow: false});
+  $('#sticky').cluetip({'sticky': true, arrows:true, dropShadow: false});
   $('#examples a:eq(4)').cluetip({
     hoverClass: 'highlight',
     sticky: true,
     closePosition: 'bottom',
     closeText: '<img src="cross.png" alt="close" />',
-    truncate: 60
+    truncate: 60,
+    arrows:true, 
+    dropShadow: false
   });
-  $('a.load-local').cluetip({local:true});
-  $('#clickme').cluetip({activation: 'click'});
-  $('span[@title]').css('background', 'yellow').cluetip({splitTitle: '|'});
+  $('a.load-local').cluetip({local:true, arrows:true, sticky: true, dropShadow: false});
+  $('#clickme').cluetip({activation: 'click', arrows:true, dropShadow: false});
+  $('span[@title]').css('background', 'yellow').cluetip({splitTitle: '|', arrows:true, dropShadow: false});
   
 });
 

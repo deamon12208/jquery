@@ -1,0 +1,38 @@
+.clue-right {
+  background-image: url(arrowleft.gif);
+  background-repeat: no-repeat;
+  padding-left: 10px;
+}
+.clue-left {
+  background-image: url(arrowright.gif);
+  background-repeat: no-repeat;
+  padding-right: 10px;
+}
+
+#cluetip-outer {
+  border: 2px solid #ccc;
+  position: relative;
+  background: #fff;
+}
+
+h3#cluetip-title {
+  margin: 0 0 5px;
+  padding: 2px 5px;
+  font-size: 16px;
+  font-weight: normal;
+  background-color: #ccc;
+  color: #333;
+}
+
+#cluetip-inner {
+  padding: 0 5px 5px;
+  display: inline-block;
+}
+span#cluetip-close { 
+  text-align: right;
+  margin: 0 5px 5px;
+  color: #900;
+}
+#cluetip-close img {
+  border: 0;
+}

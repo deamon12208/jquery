@@ -1,45 +1,27 @@
-
-
 #cluetip {
-  background: transparent url(shadow.png) no-repeat right bottom;
-  float:right;
-  clear: right;
+  z-index: 1001;
 }
 #cluetip-outer {
-  margin: -5px 10px 13px -5px;
-  background: #d9d9c2 url(wait.gif) no-repeat 50% 40%;
-
-}
-a#cluetip-close { 
-  float: right;
-  margin: 0 5px 5px;
-  color: #900;
-}
-a#cluetip-close img {
-  border: 0;
+  position: relative;
+  margin: 0;
+  background: #d9d9c2;
 }
 h3#cluetip-title {
-  margin: -5px -5px 5px;
-  padding: 5px;
+  margin: 0 0 5px;
+  padding: 8px 10px 4px;
   font-size: 1.1em;
   font-weight: normal;
   background-color: #87876a;
   color: #fff;
 }
-
-#cluetip-inner:after {
-  content: ".";
-  display: block;
-  height: 0;
-  clear: both;
-  visibility: hidden;
-  }
 #cluetip-inner {
-  padding: 5px;
-  display: inline-block;
+  padding: 10px;
 }
-/* backslash hack hides from IE Mac \*/
-	* html #cluetip-inner {height: 1%;}
-	#cluetip-inner {display: block;}
-/* end backslash hack */
-
+span#cluetip-close { 
+  text-align: right;
+  margin: 0 5px 5px;
+  color: #900;
+}
+#cluetip-close img {
+  border: 0;
+}
