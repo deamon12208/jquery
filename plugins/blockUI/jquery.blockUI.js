@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.27  (07/18/2007)
+ * Version 1.28  (07/20/2007)
  * @requires jQuery v1.1.1
  *
  * Examples at: http://malsup.com/jquery/block/
@@ -64,7 +64,7 @@ $.blockUI = function(msg, css, opts) {
 };
 
 // expose version number so other plugins can interogate
-$.blockUI.version = 1.27;
+$.blockUI.version = 1.28;
 
 /**
  * unblockUI removes the UI block that was put in place by blockUI
@@ -206,8 +206,8 @@ $.blockUI.impl = {
         
         // use logical settings for opacity support based on browser but allow overrides via opts arg
         var noalpha = this.op8 || $.browser.mozilla && /Linux/.test(navigator.platform);
-        if (typeof opts.opacity != 'undefined')
-            noalpha = opts.opacity == 0 ? 1 : 0;
+        if (typeof opts.alphaOverride != 'undefined')
+            noalpha = opts.alphaOverride == 0 ? 1 : 0;
         
         if (full && this.pageBlock) this.remove(window);
         // check to see if we were only passed the css object (a literal)
