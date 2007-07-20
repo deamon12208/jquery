@@ -281,7 +281,7 @@
         posY = offTop;
  
         $cluetip.css({width: defaults.width});
-        if ($this.css('display') != 'block' && posX >=0) {
+        if ($this.css('display') != 'block' && posX >=0 && $this[0].tagName.toLowerCase() != 'area') {
           $cluetip.css({left: posX + 'px'});
           posX < offLeft ? $cluetip.addClass('clue-left').removeClass('clue-right')
           : $cluetip.addClass('clue-right').removeClass('clue-left');
