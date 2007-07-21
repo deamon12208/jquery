@@ -30,10 +30,9 @@
 		var validator = $("#texttests").validate({
 			debug: true,
 			errorElement: "em",
-			errorContainer: $("#warning"),
-			showErrors: function(errors, errorList) {
-				//$("#summary").html("Your form contains " + errorList.length + " errors, see details below.");
-				validator.defaultShowErrors();
+			errorContainer: $("#warning, #summary"),
+			invalidHandler: function() {
+				$("#summary").html("Your form contains " + this.size() + " errors, see details below.");
 			},
 			errorPlacement: function(error, element) {
 				error.appendTo( element.parent("td").next("td") );

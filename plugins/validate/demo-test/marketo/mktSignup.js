@@ -36,6 +36,11 @@
       $(this).parents("tr").removeClass("errorRow")
     }
   );
+  
+  $("input.phone").maskedinput("(999) 999-9999");
+  $("input.zipcode").maskedinput("99999");
+  $("input.ccDefault").maskedinput("9999 9999 9999 9999");
+  $("input.ccAmex").maskedinput("9999 999999 99999");
 
   //email validation
   $("input[@uitype=email]").blur(
@@ -119,55 +124,77 @@
   );
 
   // check for required Fields
-  $("form .formButton").click(
-    function() {
+  if (false)
+	  $("form .formButton").click(
+	    function() {
+	
+	      $("tr.errorRow").removeClass("errorRow");
+	
+	      var inputArrayEmpty = $("tr.required input[@value='']");
+	      inputArrayEmpty = inputArrayEmpty.not($("div.subTableDiv:hidden input"));
+	      inputArrayEmpty = inputArrayEmpty.not($(".hidden"));
+	
+	      inputArrayEmpty = inputArrayEmpty.add($("select option:selected[@value='']").parent("select"));
+	      inputArrayEmpty = inputArrayEmpty.not($("div.subTableDiv:hidden select"));
+	
+	      var trArray = $(inputArrayEmpty).parents("tr").not(".subTable");
+	
+	      if (trArray.length > 0) {
+	        $(trArray).addClass("errorRow");
+	        scrollTo(0,0);
+	        $(".error").show();
+	
+	        if (trArray.length < 2) {
+	          $(".error span").html('You missed ' + trArray.length + ' field.  It has been highlighted below');
+	        }
+	        else {
+	          $(".error span").html('You missed ' + trArray.length + ' fields.  They have been highlighted below');
+	        }
+	
+	        return false;
+	      }
+	
+	      else {
+	        startWait(this);
+	
+	        var formKey = '';
+	        var extractRE = /([^\/]+)$/i;
+	        var found = extractRE.exec(this.form.action);
+	
+	        if (found != null) {
+	          formKey = found[1];
+	        }
+	        $.historyLoad(formKey);
+	        return false;
+	      }
+	    }
+	  );
 
-      $("tr.errorRow").removeClass("errorRow");
+	//if(false)
+	{
+		// custom metadata parsing - each required input has a parent tr.required
+		var rules = {};
+		jQuery.validator.messages.required = " ";
+		$("tr.required :input").each(function() {
+			rules[this.name] = "required";
+		});
+		$("form").validate({
+			rules: rules,
+			focusInvalid: false,
+			focusCleanup: true,
+			errorContainer: $("div.error"),
+			invalidHandler: function() {
+				var errors = this.numberOfInvalids();
+				if (errors < 2) {
+					$("div.error span").html('You missed 1 field. It has been highlighted below');
+				} else {
+					$("div.error span").html('You missed ' + errors + ' fields.  They have been highlighted below');
+				}
+			}
+		});
+	}
 
-      var inputArrayEmpty = $("tr.required input[@value='']");
-      inputArrayEmpty = inputArrayEmpty.not($("div.subTableDiv:hidden input"));
-      inputArrayEmpty = inputArrayEmpty.not($(".hidden"));
-
-      inputArrayEmpty = inputArrayEmpty.add($("select option:selected[@value='']").parent("select"));
-      inputArrayEmpty = inputArrayEmpty.not($("div.subTableDiv:hidden select"));
-
-      var trArray = $(inputArrayEmpty).parents("tr").not(".subTable");
-
-      if (trArray.length > 0) {
-        $(trArray).addClass("errorRow");
-        scrollTo(0,0);
-        $(".error").show();
-
-        if (trArray.length < 2) {
-          $(".error span").html('You missed ' + trArray.length + ' field.  It has been highlighted below');
-        }
-        else {
-          $(".error span").html('You missed ' + trArray.length + ' fields.  They have been highlighted below');
-        }
-
-        return false;
-      }
-
-      else {
-        startWait(this);
-
-        var formKey = '';
-        var extractRE = /([^\/]+)$/i;
-        var found = extractRE.exec(this.form.action);
-
-        if (found != null) {
-          formKey = found[1];
-        }
-        $.historyLoad(formKey);
-        return false;
-      }
-    }
-  );
-
-  $("input.phone").maskedinput("(999) 999-9999");
-  $("input.zipcode").maskedinput("99999");
-  $("input.ccDefault").maskedinput("9999 9999 9999 9999");
-  $("input.ccAmex").maskedinput("9999 999999 99999");
+  
 
   $("form select.creditCardType").change(
     function() {

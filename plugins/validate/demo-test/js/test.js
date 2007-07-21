@@ -645,7 +645,7 @@ test("error containers, with labelcontainer", function() {
 });
 
 test("errorcontainer, show/hide only on submit", function() {
-	//expect(4);
+	expect(12);
 	var container = $("#container");
 	var labelContainer = $("#labelcontainer");
 	var v = $("#testForm1").validate({
@@ -653,16 +653,17 @@ test("errorcontainer, show/hide only on submit", function() {
 		errorLabelContainer: labelContainer,
 		invalidHandler: function() {
 			ok( true, "invalidHandler called" );
-			container.html( String.format("There are {0} errors in your form.", this.size()) );
 		},
 		showErrors: function() {
+			container.html( String.format("There are {0} errors in your form.", this.numberOfInvalids()) );
 			ok( true, "showErrors called" );
 			this.defaultShowErrors();
 		}
 	});
 	equals( "", container.html(), "must be empty" );
 	equals( "", labelContainer.html(), "must be empty" );
-	// validate whole form, both showErrors and invalidHandler must be called once, preferably invalidHandler first, showErrors second
+	// validate whole form, both showErrors and invalidHandler must be called once
+	// preferably invalidHandler first, showErrors second
 	ok( !v.form(), "invalid form" );
 	equals( 2, labelContainer.find("label").length );
 	equals( "There are 2 errors in your form.", container.html() );
@@ -670,9 +671,8 @@ test("errorcontainer, show/hide only on submit", function() {
 	ok( container.is(":visible"), "must be visible" );
 	
 	$("#firstname").val("hix").keyup();
-	//equals( 1, labelContainer.find("label").length );
+	equals( 1, labelContainer.find("label:visible").length );
 	equals( "There are 1 errors in your form.", container.html() );
-	//console.log(v);
 });
 
 test("focusInvalid()", function() {
@@ -843,6 +843,7 @@ test("messages", function() {
 
 test("String.format", function() {
 	equals( "Please enter a value between 0 and 1.", String.format("Please enter a value between {0} and {1}.", 0, 1) );
+	equals( "0 is too fast! Enter a value smaller then 0 and at least -15", String.format("{0} is too fast! Enter a value smaller then {0} and at least {1}", 0, -15) );
 });
 
 test("option: ignore", function() {

@@ -390,7 +390,7 @@ String.format = function(source, params) {
 	if ( params.constructor != Array )
 		params = [ params ];
 	jQuery.each(params, function(i, n) {
-		source = source.replace(new RegExp("\\{" + i + "\\}"), n);
+		source = source.replace(new RegExp("\\{" + i + "\\}", "g"), n);
 	});
 	return source;
 };
@@ -406,6 +406,7 @@ jQuery.validator = function( options, form ) {
 	this.submitted = {};
 	this.valueCache = {};
 	this.pendingRequest = 0;
+	this.invalid = {};
 	this.reset();
 	this.refresh();
 };
@@ -506,11 +507,12 @@ jQuery.extend(jQuery.validator, {
 				this.check( element );
 			}
 			jQuery.extend(this.submitted, this.errorMap);
-			this.settings.invalidHandler.call(this);
+			this.invalid = jQuery.extend({}, this.errorMap);
+			this.settings.invalidHandler && this.settings.invalidHandler.call(this);
 			this.showErrors();
 			return this.valid();
 		},
-
+		
 		/**
 		 * Validate on instant a single element.
 		 *
@@ -528,6 +530,11 @@ jQuery.extend(jQuery.validator, {
 			this.lastElement = element;
 			this.prepareElement( element );
 			var result = this.check( element );
+			if ( result ) {
+				delete this.invalid[element.name];
+			} else {
+				this.invalid[element.name] = true;
+			}
 			this.showErrors();
 			return result;
 		},
@@ -577,13 +584,47 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate
 		 */
 		resetForm: function() {
-			if( jQuery.fn.resetForm )
+			if ( jQuery.fn.resetForm )
 				jQuery( this.currentForm ).resetForm();
 			this.prepareForm();
 			this.hideErrors();
 			this.elements.removeClass( this.settings.errorClass );
 		},
 		
+		/**
+		 * Returns the number of invalid elements in the form.
+		 * 
+		 * @example $("#myform").validate({
+		 * 	showErrors: function() {
+		 * 		$("#summary").html("Your form contains " + this.numberOfInvalids() + " errors, see details below.");
+		 * 		this.defaultShowErrors();
+		 * 	}
+		 * });
+		 * @desc Specifies a custom showErrors callback that updates the number of invalid elements each
+		 * time the form or a single element is validated.
+		 * 
+		 * @name jQuery.validator.prototype.numberOfInvalids
+		 * @type Number
+		 */
+		numberOfInvalids: function() {
+			var count = 0;
+			for ( i in this.invalid )
+				count++;
+			return count;
+		},
+		
+		/**
+		 * Hides all error messages in this form.
+		 * 
+		 * @example var validator = $("#myform").validate();
+		 * $(".cancel").click(function() {
+		 * 	validator.hideErrors();
+		 * });
+		 * @desc Specifies a custom showErrors callback that updates the number of invalid elements each
+		 * time the form or a single element is validated.
+		 * 
+		 * @name jQuery.validator.prototype.hideErrors
+		 */
 		hideErrors: function() {
 			this.addWrapper( this.toHide ).hide();
 		},
