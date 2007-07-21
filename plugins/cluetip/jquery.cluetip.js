@@ -99,6 +99,12 @@
       closePosition: 'top',
       closeText: 'Close',
       truncate: 0,
+      fx: {
+        open: 'fadeIn',
+        openSpeed: 'fast',
+        close: 'hide',
+        closeSpeed: ''
+      },
       arrows: false, // CHANGE THIS TO true IF YOU WANT jTip-STYLE ARROWS FOR ALL clueTips
       dropShadow: true,
       hoverIntent: true,
@@ -129,15 +135,16 @@
         $cluetipOuter = $('<div id="cluetip-outer"></div>').append($cluetipInner).prepend($cluetipTitle);
         $cluetip = $('<div></div>')
           .attr({'id': 'cluetip'})
+          .css({zIndex: 1002})
         .append($cluetipOuter)
         .appendTo('body')
         .hide();
         $('<img src="' + defaults.waitImage + '" />')
           .attr({'id': 'cluetip-waitimage'})
-          .css({position: 'absolute', zIndex: '1001'})
+          .css({position: 'absolute', zIndex: 1001})
         .appendTo('body')
         .hide();
-        var cluezIndex = $cluetip.css('zIndex') != 'auto' ? $cluetip.css('zIndex') : '1002';
+        var cluezIndex = $cluetip.css('zIndex') != 'auto' ? parseInt($cluetip.css('zIndex'), 10) : 1002;
         $cluetip.css({position: 'absolute', zIndex: cluezIndex});
         $cluetipOuter.css({position: 'relative', zIndex: +cluezIndex+1});
       }
@@ -148,8 +155,9 @@
           $dropShadow = $dropShadow.add($('<div></div>').css({zIndex: +cluezIndex-i-1, opacity:.1, top: 1+i, left: 1+i}));
         };
         $dropShadow.css({position: 'absolute', backgroundColor: '#000'})
-          .appendTo($cluetip);
+          .prependTo($cluetip);
       }
+
       var $this = $(this);      
       var tipAttribute = $this.attr(defaults.attribute);
       if (!tipAttribute && !defaults.splitTitle) return true;
@@ -175,8 +183,8 @@
 // close cluetip and reset title attribute if one exists
       var cluetipClose = function() {
         $cluetipOuter 
-        .children().empty().end()
-        .parent().hide();
+        .parent()[defaults.fx.close](defaults.fx.closeSpeed).end()
+        .children().empty();
         if (tipTitle) {
           $this.attr('title', tipTitle);
         }
@@ -223,8 +231,8 @@
           }
           $cluetip.css({backgroundPosition: bgPos});
         }
-        
-        $cluetip.show();       
+       
+        $cluetip.hide()[defaults.fx.open](defaults.fx.openSpeed);
       };
 
 /***************************************      
@@ -269,18 +277,19 @@
         if (defaults.hoverClass) {
           $this.addClass(defaults.hoverClass);
         }
-        
-        sTop = $(document).scrollTop();
-        offTop = $this.offset().top;
-        offLeft = $this.offset().left;
-        winWidth = $(window).width();
-        posX = (offWidth > offLeft && offLeft > tipWidth)
-          || offLeft + offWidth + tipWidth > winWidth 
-          ? offLeft - tipWidth - 15 
-          : offWidth + offLeft + 15;
-        posY = offTop;
- 
+        if ($this[0].tagName.toLowerCase() != 'area') {
+          sTop = $(document).scrollTop();
+          offTop = $this.offset().top;
+          offLeft = $this.offset().left;
+          winWidth = $(window).width();
+          posX = (offWidth > offLeft && offLeft > tipWidth)
+            || offLeft + offWidth + tipWidth > winWidth 
+            ? offLeft - tipWidth - 15 
+            : offWidth + offLeft + 15;
+          posY = offTop;
+        }
         $cluetip.css({width: defaults.width});
+
         if ($this.css('display') != 'block' && posX >=0 && $this[0].tagName.toLowerCase() != 'area') {
           $cluetip.css({left: posX + 'px'});
           posX < offLeft ? $cluetip.addClass('clue-left').removeClass('clue-right')

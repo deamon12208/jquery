@@ -1,5 +1,7 @@
 #cluetip {
-  z-index: 1001;
+  position: absolute;
+/*  z-index: 1001;*/
+  background: #d9d9c2;
 }
 #cluetip-outer {
   position: relative;
