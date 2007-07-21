@@ -26,10 +26,6 @@
 			tolerance: o.tolerance ? o.tolerance : 'intersect'
 		});
 		o = this.options;
-
-		
-		$.ui.ddmanager.droppables.push({ item: this, over: 0, out: 1 }); // Add the reference and positions to the manager
-		
 		var self = this;
 		
 		$(this.element).bind("mousemove", function(e) {
@@ -40,24 +36,23 @@
 			return self.drop.apply(self, [e]);	
 		});
 		
+		$.ui.ddmanager.droppables.push({ item: this, over: 0, out: 1 }); // Add the reference and positions to the manager
 		if(o.name) $.ui.add(o.name, 'droppable', this); //Append to UI manager if a name exists as option
 			
 	};
 	
 	$.extend($.ui.droppable.prototype, {
 		plugins: {},
-		execPlugins: function(type) {
-			var o = this.options;
-			if(this.plugins[type]) {
-				for(var i=0;i<this.plugins[type].length;i++) {
-					if(this.options[this.plugins[type][i][0]]) {
-						this.plugins[type][i][1].call(this);	
-					}
-				}	
+		prepareCallbackObj: function(c) {
+			return {
+				draggable: c,
+				droppable: this,
+				element: c.element,
+				helper: c.helper	
 			}			
 		},
 		destroy: function() {
-			
+		
 		},
 		move: function(e) {
 
@@ -88,8 +83,8 @@
 			
 			var o = this.options;
 			if (o.accept(c.element)) {
-				this.execPlugins('over');
-				if (o.over) o.over.apply(this.element, [c.element, c.helper, c]); //Fire callback
+				$.ui.plugin.call('over', this);
+				$.ui.trigger('over', this, e, this.prepareCallbackObj(c));
 			}
 			
 		},
@@ -100,8 +95,8 @@
 
 			var o = this.options;
 			if (o.accept(c.element)) {
-				this.execPlugins('out');
-				if (o.out) o.out.apply(this.element, [c.element, c.helper, c]); //Fire callback
+				$.ui.plugin.call('out', this);
+				$.ui.trigger('out', this, e, this.prepareCallbackObj(c));
 			}
 			
 		},
@@ -114,12 +109,17 @@
 			if(o.accept(c.element)) { // Fire callback
 				if(o.greedy && !c.slowMode) {
 					if(c.currentTarget == this.element) {
-						this.execPlugins('drop');
-						if(o.drop) o.drop.apply(this.element, [c.element, c.helper, c]);
+						$.ui.plugin.call('drop', this);
+						$.ui.trigger('drop', this, e, {
+							draggable: c,
+							droppable: this,
+							element: c.element,
+							helper: c.helper	
+						});
 					}
 				} else {
-					this.execPlugins('drop');
-					if(o.drop) o.drop.apply(this.element, [c.element, c.helper, c]);	
+					$.ui.plugin.call('drop', this);
+					$.ui.trigger('drop', this, e, this.prepareCallbackObj(c));	
 				}
 			}
 			
@@ -129,8 +129,10 @@
 			var c = $.ui.ddmanager.current;
 
 			var o = this.options;
-			this.execPlugins('activate');
-			if(c && o.activate) o.activate.apply(this.element, [c.element, c.helper, c]); //Fire callback
+			$.ui.plugin.call('activate', this);
+			if(c) {
+				$.ui.trigger('activate', this, e, this.prepareCallbackObj(c));	
+			}
 			
 		},
 		deactivate: function(e) {
@@ -138,8 +140,10 @@
 			var c = $.ui.ddmanager.current;
 
 			var o = this.options;
-			this.execPlugins('deactivate');
-			if(c && o.deactivate) o.deactivate.apply(this.element, [c.element, c.helper, c]); //Fire callback	
+			$.ui.plugin.call('deactivate', this);
+			if(c) {
+				$.ui.trigger('deactivate', this, e, this.prepareCallbackObj(c));
+			}	
 			
 		}
 	});

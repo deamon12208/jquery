@@ -6,6 +6,10 @@
 		});
 	}
 	
+	$.fn.undraggable = function() {
+		
+	}
+	
 	$.ui.ddmanager = {
 		current: null,
 		droppables: [],
@@ -89,20 +93,14 @@
 		var options = {};
 		$.extend(options, o);
 		$.extend(options, {
-			_start: function(h, p, c, t) {
-				self.start.apply(t, [self]); // Trigger the start callback				
+			_start: function(h, p, c, t, e) {
+				self.start.apply(t, [self, e]); // Trigger the start callback				
 			},
-			_beforeStop: function(h, p, c, t) {
-				self.stop.apply(t, [self]); // Trigger the start callback
+			_beforeStop: function(h, p, c, t, e) {
+				self.stop.apply(t, [self, e]); // Trigger the start callback
 			},
-			_stop: function(h, p, c, t) {
-				var o = t.options;
-				if (o.stop) {
-					o.stop.apply(t.element, [t.helper, t.pos, o.cursorAt, t]);
-				}
-			},
-			_drag: function(h, p, c, t) {
-				self.drag.apply(t, [self]); // Trigger the start callback
+			_drag: function(h, p, c, t, e) {
+				self.drag.apply(t, [self, e]); // Trigger the start callback
 			}			
 		});
 		var self = this;
@@ -119,47 +117,36 @@
 	
 	$.extend($.ui.draggable.prototype, {
 		plugins: {},
-		pos: null,
-		opos: null,
 		currentTarget: null,
 		lastTarget: null,
-		helper: null,
-		timer: null,
-		slowMode: false,
-		element: null,
-		init: false,
-		execPlugins: function(type, self) {
-			var o = self.options;
-			if (this.plugins[type]) {
-				for (var i = 0; i < this.plugins[type].length; i++) {
-					if (self.options[this.plugins[type][i][0]]) {
-						this.plugins[type][i][1].call(self, this);
-					}
-							
-				}	
+		prepareCallbackObj: function(self) {
+			return {
+				helper: self.helper,
+				position: { left: self.pos[0], top: self.pos[1] },
+				offset: self.options.cursorAt,
+				draggable: self	
 			}			
 		},
-		start: function(that) {
+		start: function(that, e) {
 			
 			var o = this.options;
 			$.ui.ddmanager.current = this;
 			
-			that.execPlugins('start', this);
+			$.ui.plugin.call('start', that, this);
+			$.ui.trigger('start', this, e, that.prepareCallbackObj(this));
 			
 			if (this.slowMode && $.ui.droppable && !o.dropBehaviour)
 				$.ui.ddmanager.prepareOffsets(this);
-				
-			if (o.start)
-				o.start.apply(this.element, [this.helper, this.pos, o.cursorAt, this]);
 			
 			return false;
 						
 		},
-		stop: function(that) {			
+		stop: function(that, e) {			
 			
 			var o = this.options;
 			
-			that.execPlugins('stop', this);
+			$.ui.plugin.call('stop', that, this);
+			$.ui.trigger('stop', this, e, that.prepareCallbackObj(this));
 
 			if (this.slowMode && $.ui.droppable && !o.dropBehaviour) //If cursorAt is within the helper, we must use our drop manager
 				$.ui.ddmanager.fire(this);
@@ -169,19 +156,19 @@
 			return false;
 			
 		},
-		drag: function(that) {
+		drag: function(that, e) {
 
 			var o = this.options;
 
 			$.ui.ddmanager.update(this);
 
 			this.pos = [this.pos[0]-(o.cursorAt.left ? o.cursorAt.left : 0), this.pos[1]-(o.cursorAt.top ? o.cursorAt.top : 0)];
-			that.execPlugins('drag', this);
 
-			if (o.drag)
-				var nv = o.drag.apply(this.element, [this.helper, this.pos, o.cursorAt, this]);
-			var nl = (nv && nv.x) ? nv.x : this.pos[0];
-			var nt = (nv && nv.y) ? nv.y : this.pos[1];
+			$.ui.plugin.call('drag', that, this);
+			var nv = $.ui.trigger('drag', this, e, that.prepareCallbackObj(this));
+
+			var nl = (nv && nv.left) ? nv.left : this.pos[0];
+			var nt = (nv && nv.top) ? nv.top : this.pos[1];
 			
 			$(this.helper).css('left', nl+'px').css('top', nt+'px'); // Stick the helper to the cursor
 			return false;

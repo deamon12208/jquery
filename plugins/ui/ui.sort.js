@@ -1,3 +1,9 @@
+if (window.Node && Node.prototype && !Node.prototype.contains) {
+	Node.prototype.contains = function (arg) {
+		return !!(this.compareDocumentPosition(arg) & 16)
+	}
+}
+
 (function($) {
 
 	$.fn.sortable = function(o) {
@@ -19,18 +25,14 @@
 			helper: 'clone',
 			containment: options.containment ? (options.containment == 'sortable' ? el : options.containment) : null,
 			zIndex: options.zIndex ? options.zIndex : 1000,
-			_start: function(h,p,c,t) {
-				self.start.apply(t, [self]); // Trigger the onStart callback				
+			_start: function(h,p,c,t,e) {
+				self.start.apply(t, [self, e]); // Trigger the onStart callback				
 			},
-			_beforeStop: function(h,p,c,t) {
-				self.stop.apply(t, [self]); // Trigger the onStart callback
+			_beforeStop: function(h,p,c,t,e) {
+				self.stop.apply(t, [self, e]); // Trigger the onStart callback
 			},
-			_stop: function(h,p,c,t) {
-				var o = t.options;
-				if(o.stop) o.stop.apply(t.element, [t.helper, t.pos, o.cursorAt, t]);
-			},
-			_drag: function(h,p,c,t) {
-				self.drag.apply(t, [self]); // Trigger the onStart callback
+			_drag: function(h,p,c,t,e) {
+				self.drag.apply(t, [self, e]); // Trigger the onStart callback
 			}			
 		});
 		
@@ -68,24 +70,22 @@
 		slowMode: false,
 		element: null,
 		init: false,
-		execPlugins: function(type,self) {
-			var o = self.options;
-			if(this.plugins[type]) {
-				for(var i=0;i<this.plugins[type].length;i++) {
-					if(self.options[this.plugins[type][i][0]]) {
-						this.plugins[type][i][1].call(self, this);
-					}
-							
-				}	
+		prepareCallbackObj: function(self, that) {
+			return {
+				helper: self.helper,
+				position: { left: self.pos[0], top: self.pos[1] },
+				offset: self.options.cursorAt,
+				draggable: self,
+				current: that
 			}			
 		},
 		destroy: function() {
 			this.options.handle.unbind('mousedown', this.mousedownfunc);
 		},
-		start: function(that) {
+		start: function(that, e) {
 			
 			var o = this.options;
-			that.execPlugins('start', this);
+			$.ui.plugin.call('start', this);
 
 			if(o.hoverClass) {
 				that.helper = $('<div class="'+o.hoverClass+'"></div>').appendTo('body').css({
@@ -103,16 +103,17 @@
 			that.firstSibling = $(this.element).prev()[0];
 				
 			if(o.start) o.start.apply(this.element, [this.helper, this.pos, o.cursorAt, this]);
+			$.ui.trigger('start', this, e, that.prepareCallbackObj(this));
 			$(this.element).css('visibility', 'hidden');
 			
 			return false;
 						
 		},
-		stop: function(that) {			
+		stop: function(that, e) {			
 			
 			var o = this.options;
 			
-			that.execPlugins('stop', this);
+			$.ui.plugin.call('stop', this);
 			$(this.element).css('visibility', 'visible');
 			
 			if(that.helper)
@@ -124,21 +125,21 @@
 				
 			//Let's see if the position in DOM has changed
 			if($(this.element).prev()[0] != that.firstSibling) {
-				if(o.update) o.update.apply(that, [this.element, this.helper, this]);
+				$.ui.trigger('update', this, e, that.prepareCallbackObj(this, that));
 			}
 			return false;
 			
 		},
-		drag: function(that) {
+		drag: function(that, e) {
 
 			var o = this.options;
 
 			this.pos = [this.pos[0]-(o.cursorAt.left ? o.cursorAt.left : 0), this.pos[1]-(o.cursorAt.top ? o.cursorAt.top : 0)];
-			that.execPlugins('drag', this);
+			$.ui.plugin.call('drag', this);
 
-			if(o.drag) var nv = o.drag.apply(this.element, [this.helper, this.pos, o.cursorAt, this]);
-			var nl = (nv && nv.x) ? nv.x :  this.pos[0];
-			var nt = (nv && nv.y) ? nv.y :  this.pos[1];
+			var nv = $.ui.trigger('drag', this, e, that.prepareCallbackObj(this));
+			var nl = (nv && nv.left) ? nv.left :  this.pos[0];
+			var nt = (nv && nv.top) ? nv.top :  this.pos[1];
 			
 
 			var m = that.set;
@@ -147,6 +148,7 @@
 			for(var i=0;i<m.length;i++) {
 				
 				var ci = $(m[i][0]); var cio = m[i][0];
+				if(this.element.contains(cio)) continue;
 				var cO = ci.offset({ border: false, relativeTo: that.element }); //TODO: Caching
 				cO = { top: o.offset.top+cO.top, left: o.offset.left+cO.left };
 				
@@ -179,7 +181,7 @@
 			
 			//Let's see if the position in DOM has changed
 			if($(this.element).prev()[0] != that.lastSibling) {
-				if(o.change) o.change.apply(that, [this.element, this.helper, this]);
+				$.ui.trigger('change', this, e, that.prepareCallbackObj(this, that));
 				that.lastSibling = $(this.element).prev()[0];	
 			}
 

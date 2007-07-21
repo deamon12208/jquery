@@ -39,17 +39,16 @@ li {
 	border-right: 1px solid #999;
 	margin: 10px;
 	padding: 10px;
-	height: 150px;
+	height: 70px;
 	width: 500px;
 	float: left;
 	list-style-type: none;
-	
 }
 
 .draggable {
 	position: absolute;
-	width: 90px;
-	height: 90px;
+	width: 100px;
+	height: 40px;
 	top: 10px;
 	right: 10px;
 	background-color: #68BFEF;
@@ -343,24 +342,24 @@ $(document).ready(function(){
 	// Callbacks
 
 	$('#draggable-start').draggable({
-		start: function(dragging) {
-			$(dragging).css('background', '#4e9a06');
+		start: function(e, ui) {
+			$(ui.helper).css('background', '#4e9a06');
 		}
 	});
 
 	$('#draggable-drag-function-circle').draggable({
 		revert: true,
-		drag: function(helper, position) {
+		drag: function(e, ui) {
 			
 			var centerx = 291, centery = 100;
-			var angle = Math.atan((centery-position[1])/(centerx-position[0]));
-			if((centerx-position[0])>=0)
+			var angle = Math.atan((centery-ui.position.top)/(centerx-ui.position.left));
+			if((centerx-ui.position.left)>=0)
 				angle += Math.PI;
 			var radius = 160;
 
 			return {
-				x: radius * Math.cos(angle) + centerx, 
-				y: radius * Math.sin(angle) + centery
+				left: radius * Math.cos(angle) + centerx, 
+				top: radius * Math.sin(angle) + centery
 			}
 		}
 	});

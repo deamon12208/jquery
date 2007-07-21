@@ -1,6 +1,6 @@
 (function($) {
 
-	$.ui.plugin("draggable", "stop", "effect", function() {
+	$.ui.plugin.add("draggable", "stop", "effect", function() {
 	
 		if(this.options.effect[1]) {
 			if(this.helper != this.element) {
@@ -19,7 +19,7 @@
 		
 	});
 	
-	$.ui.plugin("draggable", "start", "effect", function() {
+	$.ui.plugin.add("draggable", "start", "effect", function() {
 	
 		if(this.options.effect[0]) {
 
@@ -35,31 +35,31 @@
 
 //----------------------------------------------------------------
 
-	$.ui.plugin("draggable", "start", "zIndex", function() {
+	$.ui.plugin.add("draggable", "start", "zIndex", function() {
 		if($(this.helper).css("zIndex")) this.options.ozIndex = $(this.helper).css("zIndex");
 		$(this.helper).css('zIndex', this.options.zIndex);
 	});
 	
-	$.ui.plugin("draggable", "stop", "zIndex", function() {
+	$.ui.plugin.add("draggable", "stop", "zIndex", function() {
 		if(this.options.ozIndex)
 			$(this.helper).css('zIndex', this.options.ozIndex);
 	});
 	
 //----------------------------------------------------------------
 
-	$.ui.plugin("draggable", "start", "opacity", function() {
+	$.ui.plugin.add("draggable", "start", "opacity", function() {
 		if($(this.helper).css("opacity")) this.options.oopacity = $(this.helper).css("opacity");
 		$(this.helper).css('opacity', this.options.opacity);
 	});
 	
-	$.ui.plugin("draggable", "stop", "opacity", function() {
+	$.ui.plugin.add("draggable", "stop", "opacity", function() {
 		if(this.options.oopacity)
 			$(this.helper).css('opacity', this.options.oopacity);
 	});
 	
 //----------------------------------------------------------------
 
-	$.ui.plugin("draggable", "stop", "revert", function() {
+	$.ui.plugin.add("draggable", "stop", "revert", function() {
 	
 		var rpos = { left: 0, top: 0 };
 		var o = this.options;
@@ -97,7 +97,7 @@
 	
 //----------------------------------------------------------------
 
-	$.ui.plugin("draggable", "start", "iframeFix", function() {
+	$.ui.plugin.add("draggable", "start", "iframeFix", function() {
 
 		if(!this.slowMode) { // Make clones on top of iframes (only if we are not in slowMode)
 			if(this.options.iframeFix.constructor == Array) {
@@ -115,13 +115,13 @@
 
 	});
 	
-	$.ui.plugin("draggable","stop", "iframeFix", function() {
+	$.ui.plugin.add("draggable","stop", "iframeFix", function() {
 		if(this.options.iframeFix) $("div.DragDropIframeFix").each(function() { this.parentNode.removeChild(this); }); //Remove frame helpers	
 	});
 	
 //----------------------------------------------------------------
 
-	$.ui.plugin("draggable", "start", "containment", function() {
+	$.ui.plugin.add("draggable", "start", "containment", function() {
 
 		var o = this.options;
 		if(o.containment == 'parent') o.containment = this.element.parentNode;
@@ -159,7 +159,7 @@
 
 	});
 	
-	$.ui.plugin("draggable", "drag", "containment", function() {
+	$.ui.plugin.add("draggable", "drag", "containment", function() {
 		
 		var o = this.options;
 		if(o.cursorAtIgnore) {
@@ -189,7 +189,7 @@
 	
 //----------------------------------------------------------------
 
-	$.ui.plugin("draggable", "drag", "grid", function() {
+	$.ui.plugin.add("draggable", "drag", "grid", function() {
 
 		var o = this.options;
 		if(o.cursorAtIgnore) {
@@ -201,7 +201,7 @@
 
 //----------------------------------------------------------------
 
-	$.ui.plugin("draggable", "drag", "axis", function(d) {
+	$.ui.plugin.add("draggable", "drag", "axis", function(d) {
 		
 		var o = this.options;
 		if(o.constraint) o.axis = o.constraint; //Legacy check
@@ -218,7 +218,7 @@
 
 //----------------------------------------------------------------
 
-	$.ui.plugin("draggable", "drag", "scroll", function() {
+	$.ui.plugin.add("draggable", "drag", "scroll", function() {
 		
 		var o = this.options;
 		o.scrollSensitivity	= o.scrollSensitivity != undefined ? o.scrollSensitivity : 20;
@@ -237,7 +237,7 @@
 
 //----------------------------------------------------------------
 
-	$.ui.plugin("draggable", "drag", "wrapHelper", function() {
+	$.ui.plugin.add("draggable", "drag", "wrapHelper", function() {
 
 		var o = this.options;
 		if(!o.cursorAtIgnore) {

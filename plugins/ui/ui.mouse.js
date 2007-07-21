@@ -170,7 +170,7 @@
 		
 			this.init = true;	
 
-			if(o._start) o._start.apply(this.element, [this.helper, this.pos, o.cursorAt, this]); // Trigger the start callback
+			if(o._start) o._start.apply(this.element, [this.helper, this.pos, o.cursorAt, this, e]); // Trigger the start callback
 			return false;
 						
 		},
@@ -185,7 +185,7 @@
 			if(this.init == false)
 				return this.opos = this.pos = null;
 			
-			if(o._beforeStop) o._beforeStop.apply(this.element, [this.helper, this.pos, o.cursorAt, this]);
+			if(o._beforeStop) o._beforeStop.apply(this.element, [this.helper, this.pos, o.cursorAt, this, e]);
 
 				
 			if(this.helper != this.element && !o.beQuietAtEnd) { // Remove helper, if it's not the original node
@@ -196,7 +196,7 @@
 			if(!o.beQuietAtEnd && o.wasPositioned)
 				$(this.element).css('position', o.wasPositioned);
 				
-			if(!o.beQuietAtEnd && o._stop) o._stop.apply(this.element, [this.helper, this.pos, o.cursorAt, this]);
+			if(!o.beQuietAtEnd && o._stop) o._stop.apply(this.element, [this.helper, this.pos, o.cursorAt, this, e]);
 
 			this.init = false;
 			this.opos = this.pos = null; // Clear temp variables
@@ -224,7 +224,7 @@
 				if(this.init == false) return false;
 			}
 		
-			if(o._drag) o._drag.apply(this.element, [this.helper, this.pos, o.cursorAt, this]);
+			if(o._drag) o._drag.apply(this.element, [this.helper, this.pos, o.cursorAt, this, e]);
 			return false;
 			
 		}
