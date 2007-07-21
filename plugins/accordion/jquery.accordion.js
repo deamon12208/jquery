@@ -217,8 +217,12 @@ jQuery.fn.extend({
 					toShow.slideToggle(settings.showSpeed);
 					finished(true);
 				} else {
-					toHide.filter(":hidden").each(finished).end().filter(":visible").slideUp(settings.hideSpeed, finished);
-					toShow.slideDown(settings.showSpeed, finished);
+					toHide.filter(":hidden").each(finished).end().filter(":visible")
+						//.slideUp(settings.hideSpeed, finished);
+						.animate({height: "hide"}, settings.hideSpeed, "linear", finished);
+					toShow
+						//.slideDown(settings.showSpeed, finished);
+						.animate({height: "show"}, settings.showSpeed, "linear", finished);
 				}
 			} else {
 				if ( !settings.alwaysOpen && clickedActive ) {

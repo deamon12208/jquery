@@ -78,6 +78,10 @@ li { list-style-type: none; }
 	border-bottom: 1px solid black;
 }
 
+#list2 {
+	height: 178px;
+	border: 1px solid #eee;
+}
 #list2 .red {
 	color: red;
 	background-color: red;
@@ -90,7 +94,7 @@ li { list-style-type: none; }
 	color: blue;
 	background-color: blue;
 }
-#list2 dd { height: 10em; }
+#list2 dd { height: 130px; }
 
 #list3 { border: 1px solid #111; }
 #list3 div.selected { font-weight: bold; }

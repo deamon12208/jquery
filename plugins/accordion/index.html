@@ -24,8 +24,7 @@
 			active: 'dt.selected',
 			selectedClass: "active"
 		}).change(function(event, newHeader, oldHeader, newContent, oldContent) {
-			simpleLog(oldHeader.text() + ' hidden');
-			simpleLog(newHeader.text() + ' shown');
+			simpleLog(oldHeader.text() + ' hidden, ' + newHeader.text() + ' shown');
 		});
 		
 		// first simple Accordion with special markup
