@@ -5,14 +5,14 @@
  * $LastChangedDate$
  * $Rev$
  *
- * Version 2.1
+ * Version 2.1.1
  */
 
 (function($){
 
 /**
  * The bgiframe is chainable and applies the iframe hack to get 
- * around zIndex issues in IE6. It will only apply itself in IE 
+ * around zIndex issues in IE6. It will only apply itself in IE6 
  * and adds a class to the iframe called 'bgiframe'. The iframe
  * is appeneded as the first child of the matched element(s) 
  * with a tabIndex and zIndex of -1.
