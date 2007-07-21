@@ -28,30 +28,12 @@ body
 	font-size: 12px;
 }
 
-fieldset
-{
-	margin: 20px;
-}
-
-li {
-	position: relative;
-	border-bottom: 1px solid #999;
-	border-right: 1px solid #999;
-	margin: 10px;
-	padding: 10px;
-	height: 150px;
-	width: 500px;
-	float: left;
-	list-style-type: none;
-	
-}
-
 .draggable {
 	position: absolute;
 	width: 10px;
 	height: 10px;
-	top: 10px;
-	right: 10px;
+	top: 100px;
+	left: 100px;
 	padding: 5px;	
 }
 
@@ -67,20 +49,14 @@ li {
 </style>
 </head>
 <body>
-	<fieldset>
+	<fieldset style='height: 500px;'>
 	<legend>3D Dragging</legend>
-	<ul>
-	    <li>
+
 	    	Demo
 	    	<div id="demo1" class='draggable'>
 	    	<div class="original" style='width: 180px; height: 80px; background: green; z-index: 2; position: absolute; top: 0px; left: 0px;'></div>
 	    	<div class="shadow" style='width: 180px; height: 80px; background: black; opacity: 0.3; z-index: 1; position: absolute; top: 0px; left: 0px;'></div>	
 	    	</div>
-	    </li>
-	    <li>
-	    	Demo
-	    	<div id="demo2" class='draggable'>Drag me</div>
-	    </li>
 	</fieldset>
 
 
@@ -105,11 +81,11 @@ $(".shadow").addClass("uiShadow")
  	 		var t = ((that.rpos[1] + this.offsetHeight/2) - h/2) / h;
 
 	 		that.isBeingAnimated = true;
-	 		$(".original",this).animate({ top: t * maxTop*2, left: l * maxLeft*2 }, 500, function() {
+	 		$(".original",this).animate({ top: -t * maxTop*2, left: -l * maxLeft*2 }, 500, function() {
 	 			that.isBeingAnimated = false;	
 	 		});
 	 		
-	 		$(".shadow",this).animate({ top: -t * maxTop*2, left: -l * maxLeft*2 }, 500, function() {
+	 		$(".shadow",this).animate({ top: t * maxTop*2, left: l * maxLeft*2 }, 500, function() {
 	 			that.isBeingAnimated = false;	
 	 		});
 	 		
@@ -129,13 +105,13 @@ $(".shadow").addClass("uiShadow")
  	 		var t = ((that.rpos[1] + this.offsetHeight/2) - h/2) / h;
  	 		
  	 		$(".original",this).css({
- 	 			left: l * maxLeft*2,
- 	 			top:  t * maxTop*2	
+ 	 			left: -l * maxLeft*2,
+ 	 			top:  -t * maxTop*2	
  	 		});
  	 		
   	 		$(".shadow",this).css({
- 	 			left: -l * maxLeft*2,
- 	 			top:  -t * maxTop*2	
+ 	 			left: l * maxLeft*2,
+ 	 			top:  t * maxTop*2	
  	 		});	
 
  	 }
