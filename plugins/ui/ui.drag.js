@@ -10,7 +10,8 @@
 		current: null,
 		droppables: [],
 		prepareOffsets: function(that) {
-			
+			var dropTop = $.ui.ddmanager.dropTop = [];
+			var dropLeft = $.ui.ddmanager.dropLeft;
 			var m = $.ui.ddmanager.droppables;
 			for (var i = 0; i < m.length; i++) {
 				m[i].offset = $(m[i].item.element).offset({ border: false });
@@ -45,46 +46,43 @@
 			})();
 
 		},
-		fire: function(that) {
-			
-			var m = $.ui.ddmanager.droppables;
-			for (var i = 0; i < m.length; i++) {
-				if (!m[i].offset)
-					continue;
-				if ($.ui.intersect(that, m[i], m[i].item.options.tolerance)) {
-					m[i].item.drop.call(m[i].item);
+		fire: function(oDrag) {
+			var oDrops = $.ui.ddmanager.droppables;
+			var oOvers = $.grep(oDrops, function(oDrop) {
+				var toleranceMode = oDrop.item.options.tolerance;
+				var isOver = $.ui.intersect(oDrag, oDrop, toleranceMode)
+				if (isOver)
+					oDrop.item.drop.call(oDrop.item);
+			});
+			$.each(oDrops, function(i, oDrop) {
+				if (oDrop.item.options.accept(oDrag.element)) {
+					oDrop.out = 1;
+					oDrop.over = 0;
+					oDrop.item.deactivate.call(oDrop.item);
 				}
-				if (m[i].item.options.accept(that.element)) {
-					m[i].item.deactivate.call(m[i].item);
-				}
-			}
-						
+			});
 		},
-		update: function(that) {
-			
-			var m = $.ui.ddmanager.droppables;
-			for (var i = 0; i < m.length; i++) {
-				if (!m[i].offset)
-					continue;
-				if ($.ui.intersect(that, m[i], m[i].item.options.tolerance)) {
-					if (m[i].over == 0) {
-						m[i].out = 0;
-						m[i].over = 1;
-						m[i].item.over.call(m[i].item);
-					}
-				} else {
-					if (m[i].out == 0) {
-						m[i].out = 1;
-						m[i].over = 0;
-						m[i].item.out.call(m[i].item);
-					}
+		update: function(oDrag) {
+			var oDrops = $.ui.ddmanager.droppables;
+			var oOvers = $.grep(oDrops, function(oDrop) {
+				var toleranceMode = oDrop.item.options.tolerance;
+				var isOver = $.ui.intersect(oDrag, oDrop, toleranceMode)
+				if (!isOver && oDrop.over == 1) {
+					oDrop.out = 1;
+					oDrop.over = 0;
+					oDrop.item.out.call(oDrop.item);
 				}
-				
-			}
-						
+				return isOver;
+			});
+			$.each(oOvers, function(i, oOver) {
+				if (oOver.over == 0) {
+					oOver.out = 0;
+					oOver.over = 1;
+					oOver.item.over.call(oOver.item);
+				}
+			});
 		}
 	};
-	
 	
 	$.ui.draggable = function(el, o) {
 		
@@ -175,8 +173,7 @@
 
 			var o = this.options;
 
-			if (this.slowMode && $.ui.droppable && !o.dropBehaviour) // If cursorAt is within the helper, we must use our drop manager to look where we are
-				$.ui.ddmanager.update(this);
+			$.ui.ddmanager.update(this);
 
 			this.pos = [this.pos[0]-(o.cursorAt.left ? o.cursorAt.left : 0), this.pos[1]-(o.cursorAt.top ? o.cursorAt.top : 0)];
 			that.execPlugins('drag', this);

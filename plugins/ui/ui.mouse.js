@@ -157,8 +157,12 @@
 			this.slowMode = (o.cursorAt && (o.cursorAt.top-o.margins.top > 0 || o.cursorAt.bottom-o.margins.bottom > 0) && (o.cursorAt.left-o.margins.left > 0 || o.cursorAt.right-o.margins.right > 0)) ? true : false; //If cursorAt is within the helper, set slowMode to true
 			
 			if(!o.nonDestructive) $(this.helper).css('position', 'absolute');
-			if(o.helper != 'original') $(this.helper).appendTo((o.appendTo == 'parent' ? this.element.parentNode : o.appendTo));
-
+			if(o.helper != 'original') {
+				$(this.helper).hide() //position helper before showing
+					.appendTo((o.appendTo == 'parent' ? this.element.parentNode : o.appendTo))
+					.css({left:this.pos[0], top:this.pos[1]})
+					.show();
+			}
 
 			// Remap right/bottom properties for cursorAt to left/top
 			if(o.cursorAt.right && !o.cursorAt.left) o.cursorAt.left = this.helper.offsetWidth+o.margins.right+o.margins.left - o.cursorAt.right;

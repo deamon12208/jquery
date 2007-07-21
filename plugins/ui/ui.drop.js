@@ -31,11 +31,6 @@
 		$.ui.ddmanager.droppables.push({ item: this, over: 0, out: 1 }); // Add the reference and positions to the manager
 		
 		var self = this;
-		$(this.element).hover(function(e) {
-			return self.over.apply(self, [e]);	
-		},function(e) {
-			return self.out.apply(self, [e]);	
-		});
 		
 		$(this.element).bind("mousemove", function(e) {
 			return self.move.apply(self, [e]);	
@@ -149,35 +144,38 @@
 		}
 	});
 	
-	$.ui.intersect = function(t, mi, o) {
-		
-		var cO = mi.offset;
-		var add = [0,0];
-		switch(o) {
-			case 'pointer':
-				return (t.pos[0] > cO.left && t.pos[0] < cO.left + mi.item.element.offsetWidth) && (t.pos[1] > cO.top && t.pos[1] < cO.top + mi.item.element.offsetHeight);
+	$.ui.intersect = function(oDrag, oDrop, toleranceMode) {
+		if (!oDrop.offset)
+			return false;
+		var x1 = oDrag.rpos[0] - oDrag.options.cursorAt.left, x2 = x1 + oDrag.helper.offsetWidth,
+		    y1 = oDrag.rpos[1] - oDrag.options.cursorAt.top , y2 = y1 + oDrag.helper.offsetHeight;
+		var l = oDrop.offset.left, r = l + oDrop.item.element.offsetWidth, 
+		    t = oDrop.offset.top,  b = t + oDrop.item.element.offsetHeight;
+		switch (toleranceMode) {
+			case 'fit':
+				return (   l < x1 && x2 < r
+					&& t < y1 && y2 < b);
 				break;
 			case 'intersect':
-				add = [t.element.offsetWidth/2,t.element.offsetHeight/2];
+				return (   l < x1 + (oDrag.helper.offsetWidth  / 2)        // Right Half
+					&&     x2 - (oDrag.helper.offsetWidth  / 2) < r    // Left Half
+					&& t < y1 + (oDrag.helper.offsetHeight / 2)        // Bottom Half
+					&&     y2 - (oDrag.helper.offsetHeight / 2) < b ); // Top Half
 				break;
-			case 'fit':
-				add = [0,0];
+			case 'pointer':
+				return (   l < oDrag.rpos[0] && oDrag.rpos[0] < r
+					&& t < oDrag.rpos[1] && oDrag.rpos[1] < b);
 				break;
 			case 'touch':
-				add = [t.element.offsetWidth,t.element.offsetHeight];
+				return (   (l < x1 && x1 < r && t < y1 && y1 < b)    // Top-Left Corner
+					|| (l < x1 && x1 < r && t < y2 && y2 < b)    // Bottom-Left Corner
+					|| (l < x2 && x2 < r && t < y1 && y1 < b)    // Top-Right Corner
+					|| (l < x2 && x2 < r && t < y2 && y2 < b) ); // Bottom-Right Corner
 				break;
 			default:
 				return false;
 				break;
 		}
-		
-		return (
-			   cO.left < t.rpos[0]-t.options.cursorAt.left + add[0]
-			&& cO.left + mi.item.element.offsetWidth > t.rpos[0]-t.options.cursorAt.left + t.element.offsetWidth - add[0]
-			&& cO.top < t.rpos[1]-t.options.cursorAt.top + add[1]
-			&& cO.top + mi.item.element.offsetHeight > t.rpos[1]-t.options.cursorAt.top + t.element.offsetHeight - add[1]
-		);
-							
 	}
 	
 })($);
