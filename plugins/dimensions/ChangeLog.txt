@@ -1,28 +1,22 @@
 == New and Noteworthy ==
 
-== 1.0rc1 ==
+== 1.0 ==
 
-* Various fixes for position method
-* Added tests for position method
-* Updated inline docs
-
-== 1.0b2 ==
-
-* API CHANGE: The border option is now defaulted to 'false'
-* Added a new method called position. It gets the elements positioned offset.
-* Added lite option to visual offset test/example
-
-== 1.0b ==
-
-* Element's scroll offsets no longer included in calculations
-
-== 1.0a ==
-
-* Added new test suite
-* Added offsetLite method
+* New position method
+* New offsetParent method
+* New lite option for offset
+* New relativeTo option for offset
+* API CHANGE: The border option is now defaulted to 'false' for offset
 * scrollTop and scrollLeft are now setters and getters
+* New test suite
+* Updated inline docs and added lite option to visual offset text/example
+* Throw meaningful error when the jQuery collection is empty
+* Normalized window width and height for Firefox and Opera
+* Element's scroll offsets no longer included in calculations for offset
 * Added support for Body element in offset
 * Change file name and format to better follow plugin standards
+* Lots of minor bug fixes
+
 
 == Pre 1.0 ==
 

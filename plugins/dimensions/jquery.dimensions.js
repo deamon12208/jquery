@@ -34,6 +34,7 @@ $.fn.extend({
 	 * @cat Plugins/Dimensions
 	 */
 	height: function() {
+		if (!this[0]) error();
 		if ( this[0] == window )
 			if ( ($.browser.mozilla || $.browser.opera) && $(document).width() > self.innerWidth)
 				// mozilla and opera both return width + scrollbar width
@@ -68,6 +69,7 @@ $.fn.extend({
 	 * @cat Plugins/Dimensions
 	 */
 	width: function() {
+		if (!this[0]) error();
 		if ( this[0] == window )
 			if (($.browser.mozilla || $.browser.opera) && $(document).height() > self.innerHeight)
 				// mozilla and opera both return width + scrollbar width
@@ -105,6 +107,7 @@ $.fn.extend({
 	 * @cat Plugins/Dimensions
 	 */
 	innerHeight: function() {
+		if (!this[0]) error();
 		return this[0] == window || this[0] == document ?
 			this.height() :
 			this.is(':visible') ?
@@ -125,6 +128,7 @@ $.fn.extend({
 	 * @cat Plugins/Dimensions
 	 */
 	innerWidth: function() {
+		if (!this[0]) error();
 		return this[0] == window || this[0] == document ?
 			this.width() :
 			this.is(':visible') ?
@@ -145,6 +149,7 @@ $.fn.extend({
 	 * @cat Plugins/Dimensions
 	 */
 	outerHeight: function() {
+		if (!this[0]) error();
 		return this[0] == window || this[0] == document ?
 			this.height() :
 			this.is(':visible') ?
@@ -165,6 +170,7 @@ $.fn.extend({
 	 * @cat Plugins/Dimensions
 	 */
 	outerWidth: function() {
+		if (!this[0]) error();
 		return this[0] == window || this[0] == document ?
 			this.width() :
 			this.is(':visible') ?
@@ -208,6 +214,7 @@ $.fn.extend({
 	 * @cat Plugins/Dimensions
 	 */
 	scrollLeft: function(val) {
+		if (!this[0]) error();
 		if ( val != undefined )
 			// set the scroll left
 			return this.each(function() {
@@ -262,6 +269,7 @@ $.fn.extend({
 	 * @cat Plugins/Dimensions
 	 */
 	scrollTop: function(val) {
+		if (!this[0]) error();
 		if ( val != undefined )
 			// set the scroll top
 			return this.each(function() {
@@ -301,13 +309,7 @@ $.fn.extend({
 	 * @cat Plugins/Dimensions
 	 */
 	position: function(returnObject) {
-		var offsetParent = this[0].offsetParent;
-		if ($.browser.msie && (offsetParent.tagName != 'BODY' && $.css(offsetParent, 'position') == 'static')) {
-			do {
-				offsetParent = offsetParent.offsetParent;
-			} while (offsetParent && (offsetParent.tagName != 'BODY' && $.css(offsetParent, 'position') == 'static'));
-		}
-		return this.offset({ margin: false, scroll: false, relativeTo: offsetParent }, returnObject);
+		return this.offset({ margin: false, scroll: false, relativeTo: this.offsetParent() }, returnObject);
 	},
 	
 	/**
@@ -353,6 +355,7 @@ $.fn.extend({
 	 * @cat Plugins/Dimensions
 	 */
 	offset: function(options, returnObject) {
+		if (!this[0]) error();
 		var x = 0, y = 0, sl = 0, st = 0,
 		    elem = this[0], parent = this[0], op, parPos, elemPos = $.css(elem, 'position'),
 		    mo = $.browser.mozilla, ie = $.browser.msie, sf = $.browser.safari, oa = $.browser.opera,
@@ -361,6 +364,8 @@ $.fn.extend({
 		
 		// Use offsetLite if lite option is true
 		if (options.lite) return this.offsetLite(options, returnObject);
+		// Get the HTMLElement if relativeTo is a jquery collection
+		if (options.relativeTo.jquery) options.relativeTo = options.relativeTo[0];
 		
 		if (elem.tagName == 'BODY') {
 			// Safari is the only one to get offsetLeft and offsetTop properties of the body "correct"
@@ -484,9 +489,13 @@ $.fn.extend({
 	 * @cat Plugins/Dimensions
 	 */
 	offsetLite: function(options, returnObject) {
+		if (!this[0]) error();
 		var x = 0, y = 0, sl = 0, st = 0, parent = this[0], offsetParent, 
 		    options = $.extend({ margin: true, border: false, padding: false, scroll: true, relativeTo: document.body }, options || {});
 				
+		// Get the HTMLElement if relativeTo is a jquery collection
+		if (options.relativeTo.jquery) options.relativeTo = options.relativeTo[0];
+		
 		do {
 			x += parent.offsetLeft;
 			y += parent.offsetTop;
@@ -507,8 +516,33 @@ $.fn.extend({
 
 		if (returnObject) { $.extend(returnObject, returnValue); return this; }
 		else              { return returnValue; }
+	},
+	
+	/**
+	 * Returns a jQuery collection with the positioned parent of 
+	 * the first matched element. This is the first parent of 
+	 * the element that has position (as in relative or absolute).
+	 *
+	 * @name offsetParent
+	 * @type jQuery
+	 * @cat Plugins/Dimensions
+	 */
+	offsetParent: function() {
+		if (!this[0]) error();
+		var offsetParent = this[0].offsetParent;
+		while ( offsetParent && (offsetParent.tagName != 'BODY' && $.css(offsetParent, 'position') == 'static') )
+			offsetParent = offsetParent.offsetParent;
+		return $(offsetParent);
 	}
 });
+
+/**
+ * Throws an error message when no elements are in the jQuery collection
+ * @private
+ */
+var error = function() {
+	throw "Dimensions: jQuery collection is empty";
+};
 
 /**
  * Handles converting a CSS Style into an Integer.
