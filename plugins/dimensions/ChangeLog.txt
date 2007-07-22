@@ -15,7 +15,8 @@
 * Element's scroll offsets no longer included in calculations for offset
 * Added support for Body element in offset
 * Change file name and format to better follow plugin standards
-* Lots of minor bug fixes
+* Fixed Opera issue where the scroll offsets are reported as the actual offset
+* Various other minor bug fixes
 
 
 == Pre 1.0 ==

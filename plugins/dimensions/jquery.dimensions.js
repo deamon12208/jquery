@@ -414,6 +414,12 @@ $.fn.extend({
 							sl += parent.scrollLeft;
 							st += parent.scrollTop;
 						}
+						
+						// opera sometimes incorrectly reports scroll offset for elements with display set to table-row or inline
+						if (oa && $(parent).css('display').match(/table-row|inline/)) {
+							sl = sl - ((parent.scrollLeft == parent.offsetLeft) ? parent.scrollLeft : 0);
+							st = st - ((parent.scrollTop == parent.offsetTop) ? parent.scrollTop : 0);
+						}
 				
 						// Mozilla does not add the border for a parent that has overflow set to anything but visible
 						if (mo && parent != elem && $.css(parent, 'overflow') != 'visible') {
@@ -425,7 +431,7 @@ $.fn.extend({
 					} while (parent != op);
 				}
 				parent = op;
-
+				
 				// exit the loop if we are at the relativeTo option but not if it is the body or html tag
 				if (parent == options.relativeTo && !(parent.tagName == 'BODY' || parent.tagName == 'HTML'))  {
 					// Mozilla does not add the border for a parent that has overflow set to anything but visible
@@ -576,8 +582,8 @@ var handleOffsetReturn = function(elem, options, x, y, sl, st) {
 		y += num(elem, 'paddingTop');
 	}
 	
-	// do not include scroll offset on the element
-	if ( options.scroll ) {
+	// do not include scroll offset on the element ... opera sometimes reports scroll offset as actual offset
+	if ( options.scroll && ($.browser.opera && elem.offsetLeft != elem.scrollLeft && elem.offsetTop != elem.scrollLeft) ) {
 		sl -= elem.scrollLeft;
 		st -= elem.scrollTop;
 	}
