@@ -10,11 +10,14 @@
  * Thanks to Kenton Simpson for contributing some good ideas!
  *
  * @author: M. Alsup
- * @version: 2.1.1 (6/17/2007)
+ * Revision: $Id$
+ * @version: 2.1.3 (7/22/2007)
  * @requires jQuery v1.0.4 or later
  */
 
 (function($) {
+
+$.expr[':'].taconiteTag = 'a.taconiteTag';
 
 // add 'replace' and 'replaceContent' plugins (conditionally)
 if (typeof $.fn.replace == 'undefined')
@@ -39,7 +42,7 @@ $.taconite = $.xmlExec = function(xml) {
     if (ex) throw ex;
 };
 
-$.taconite.version = [2,1,1]; // major,minor,point revision nums
+$.taconite.version = [2,1,3]; // major,minor,point revision nums
 $.taconite.debug = 0;    // set to true to enable debug logging to Firebug
 $.taconite.lastTime = 0; // processing time for most recent document
 $.taconite._httpData = $.httpData; // original jQuery httpData function
@@ -47,7 +50,11 @@ $.taconite._httpData = $.httpData; // original jQuery httpData function
 // auto-detection method (replaces jQuery's httpData method when auto-detection is enabled)
 $.httpData = $.taconite.detect = function(xhr, type) {
     var ct = xhr.getResponseHeader('content-type');
-    $.taconite.log('[AJAX response] content-type: ', ct, ';  status: ', xhr.status, ' ', xhr.statusText, ';  has responseXML: ', xhr.responseXML != null);
+    if ($.taconite.debug) {
+        $.taconite.log('[AJAX response] content-type: ', ct, ';  status: ', xhr.status, ' ', xhr.statusText, ';  has responseXML: ', xhr.responseXML != null);
+        $.taconite.log('type: ' + type);
+        $.taconite.log('responseXML: ' + xhr.responseXML);
+    }
     var data = $.taconite._httpData(xhr, type); // call original method
     if (data && data.documentElement) {
         var root = data.documentElement.tagName;
@@ -57,7 +64,10 @@ $.httpData = $.taconite.detect = function(xhr, type) {
             $.taconite(data);
         }
     }
-    else $.taconite.log('httpData: response is not XML (or not "valid" XML)');
+    else { 
+        $.taconite.log('jQuery core httpData returned: ' + data);
+        $.taconite.log('httpData: response is not XML (or not "valid" XML)');
+    }
     return data;
 };
 
@@ -122,6 +132,7 @@ $.taconite.impl = {
         return true;
     },
     process1: function(commands) {
+        var doPostProcess = 0;
         for(var i=0; i < commands.length; i++) {
             if (commands[i].nodeType != 1)
                 continue; // commands are elements
@@ -141,6 +152,7 @@ $.taconite.impl = {
 
             var a = [];
             if (cmdNode.childNodes.length > 0) {
+                doPostProcess = 1;
                 for (var j=0,els=[]; j < cmdNode.childNodes.length; j++)
                     els[j] = this.createNode(cmdNode.childNodes[j]);
                 a.push(this.trimHash[cmd] ? this.cleanse(els) : els);
@@ -167,6 +179,20 @@ $.taconite.impl = {
             }
             jq[cmd].apply(jq,a);
         }
+        // apply dynamic fixes
+        if (doPostProcess) this.postProcess();
+    },
+    postProcess: function() {
+        if (!$.browser.opera && !$.browser.msie) return; 
+        // post processing fixes go here; currently there is only one:
+        // fix1: opera and IE6 don't maintain selected options in all cases (thanks to Karel Fučík for this!)
+        $('select:taconiteTag').each(function() {
+            $('option:taconiteTag', this).each(function() {
+                this.setAttribute('selected','selected');
+                delete this.taconiteTag;
+            });
+            delete this.taconiteTag;
+        });
     },
     cleanse: function(els) {
         for (var i=0, a=[]; i < els.length; i++)
@@ -208,6 +234,10 @@ $.taconite.impl = {
                 var child = this.createNode (node.childNodes[i]);
                 if(child) e.appendChild(child);
             }
+        }
+        if ($.browser.msie || $.browser.opera) {
+            if (tag == 'select' || (tag == 'option' && node.getAttribute('selected')))
+                e.taconiteTag = 1;
         }
         return e;
     },
