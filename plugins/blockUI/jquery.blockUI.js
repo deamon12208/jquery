@@ -3,7 +3,7 @@
  * Version 1.29  (07/22/2007)
  * @requires jQuery v1.1.1
  *
- * $Id
+ * $Id$
  *
  * Examples at: http://malsup.com/jquery/block/
  * Copyright (c) 2007 M. Alsup
