@@ -22,7 +22,7 @@ $(document).ready(function() {
 
 //unrelated to clueTip -- just for the demo page...
 $(document).ready(function() {
-  $('#container > div').hide().append('<a class="back-to-top" href="#top">back to top</a>');
+  $('#container > div:gt(0)').hide().append('<a class="back-to-top" href="#top">back to top</a>');
   $('#navigation a').click(function() {
     var $this = $(this);
     var hash = $this.attr('href');

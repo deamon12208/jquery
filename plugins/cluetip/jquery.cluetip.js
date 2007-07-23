@@ -108,6 +108,7 @@
       arrows: false, // CHANGE THIS TO true IF YOU WANT jTip-STYLE ARROWS FOR ALL clueTips
       dropShadow: true,
       hoverIntent: true,
+      onShow: function (ct, c){},      
       ajaxProcess: function(data) {
         data = $(data).not('style, meta, link, script, title');
         return data;
@@ -168,9 +169,10 @@
       var sTop, offTop, posY;
       // horizontal measurement variables
       var tipWidth = parseInt(defaults.width, 10);
+      if( isNaN(tipWidth) ) tipWidth = 275;
       var offWidth = this.offsetWidth;
       var offLeft, posX, winWidth;
-      
+            
       // parse the title
       var tipParts,
        tipTitle = (defaults.attribute != 'title') ? $this.attr(defaults.titleAttribute) : '';
@@ -223,16 +225,18 @@
         } 
         if (defaults.arrows) {
           var bgPos = '0 0';
-          var bgY = (posY - parseInt($cluetip.css('top'), 10)) + 'px';
+          var bgY = (posY - parseInt($cluetip.css('top'), 10));
           if ($cluetip.is('.clue-left')) {
-            bgPos = $this.css('display') != 'block' && posX >=0 ? '100% ' + bgY : '100% 0';
+            bgPos = posX >=0 ? '100% ' + bgY + 'px' : '100% 0';
           } else if ($cluetip.is('.clue-right')) {
-            bgPos = $this.css('display') != 'block' && posX >=0 ? '0 ' + bgY : '0 0';
+            bgPos = (posX >=0 && bgY > 0) ? '0 ' + bgY + 'px' : '0 0';
           }
           $cluetip.css({backgroundPosition: bgPos});
         }
-       
+
         $cluetip.hide()[defaults.fx.open](defaults.fx.openSpeed);
+        // trigger the onShow
+        defaults.onShow($cluetip, $cluetipInner);
       };
 
 /***************************************      
