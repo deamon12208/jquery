@@ -844,6 +844,10 @@ test("messages", function() {
 test("String.format", function() {
 	equals( "Please enter a value between 0 and 1.", String.format("Please enter a value between {0} and {1}.", 0, 1) );
 	equals( "0 is too fast! Enter a value smaller then 0 and at least -15", String.format("{0} is too fast! Enter a value smaller then {0} and at least {1}", 0, -15) );
+	var template = String.format("{0} is too fast! Enter a value smaller then {0} and at least {1}");
+	equals( "0 is too fast! Enter a value smaller then 0 and at least -15", template(0, -15) );
+	template = String.format("Please enter a value between {0} and {1}.");
+	equals( "Please enter a value between 1 and 2.", template([1, 2]) );
 });
 
 test("option: ignore", function() {

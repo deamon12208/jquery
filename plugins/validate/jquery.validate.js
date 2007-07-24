@@ -382,13 +382,17 @@ jQuery.extend(jQuery.expr[":"], {
  */
 String.format = function(source, params) {
 	if ( arguments.length == 1 ) 
-		return function( param ) {
-			return String.format( source, param );
+		return function() {
+			var args = jQuery.makeArray(arguments);
+			args.unshift(source)
+			return String.format.apply( this, args );
 		};
-	if ( arguments.length > 2 )
+	if ( arguments.length > 2 && params.constructor != Array  ) {
 		params = jQuery.makeArray(arguments).slice(1);
-	if ( params.constructor != Array )
+	}
+	if ( params.constructor != Array ) {
 		params = [ params ];
+	}
 	jQuery.each(params, function(i, n) {
 		source = source.replace(new RegExp("\\{" + i + "\\}", "g"), n);
 	});
