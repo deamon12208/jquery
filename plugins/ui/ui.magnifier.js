@@ -4,6 +4,7 @@ $.fn.magnify = function(options) {
 	});
 };
 
+
 $.ui.magnifier = function(el,options) {
 	
 	var self = this;
@@ -15,11 +16,12 @@ $.ui.magnifier = function(el,options) {
 	o.distance = o.distance ? o.distance : 150;
 	o.magnification = o.magnification ? o.magnification : 2;
 	o.baseline = o.baseline ? o.baseline : 0;
+	o.verticalLine =  o.verticalLine != undefined ? o.verticalLine : -0.5;
 	
 	this.pp = $(el).offset({ border: false });
 	
 	$('> *', el).each(function() {
-		var co = $(this).offsetLite({ border: false });
+		var co = $(this).offset({ border: false });
 		if(self.options.overlap) var cp = $(this).position();
 		self.items.push([this, co, [$(this).width(),$(this).height()], (cp ? cp : null)]);
 		
@@ -44,13 +46,42 @@ $.ui.magnifier = function(el,options) {
 	
 	if(o.click) { //If onclick callback is available
 		$(el).bind('click', function(e) {
-			o.click.apply(this, [e, { options: self.options, current: self.current[0] }]);	
+			o.click.apply(this, [e, { options: self.options, current: self.current[0], currentOffset: self.current[1] }]);	
 		})
 	}
+	
+	if (o.name)
+		$.ui.add(o.name, 'magnifier', this); //Append to UI manager if a name exists as option
 	
 }
 
 $.extend($.ui.magnifier.prototype, {
+	reset: function(e) {
+		
+		var o = this.options;
+		var c;
+		var distance = 1;
+		
+		for(var i=0;i<this.items.length;i++) {
+
+			c = this.items[i];
+			
+			$(c[0]).css({
+				width: c[2][0],
+				height: c[2][1],
+				top: (c[3] ? c[3].top : 0),
+				left: (c[3] ? c[3].left : 0)
+			});
+			
+			if(o.opacity)
+				$(c[0]).css('opacity', o.opacity.min);
+				
+			if(o.zIndex)
+				$(c[0]).css("z-index", "");
+			
+		}
+				
+	},
 	magnify: function(e) {
 		var p = $.ui.getPointer(e);
 		var o = this.options;
@@ -68,20 +99,35 @@ $.extend($.ui.magnifier.prototype, {
 			c = this.items[i];
 			
 			var olddistance = distance;
-			distance = Math.sqrt(
-				  Math.pow(p[0] - ((c[3] ? this.pp.left : c[1].left) + parseInt(c[0].style.left)) - (c[0].offsetWidth/2), 2)
-				+ Math.pow(p[1] - ((c[3] ? this.pp.top  : c[1].top ) + parseInt(c[0].style.top )) - (c[0].offsetHeight/2), 2)
-			);
+			if(!o.axis) {
+				distance = Math.sqrt(
+					  Math.pow(p[0] - ((c[3] ? this.pp.left : c[1].left) + parseInt(c[0].style.left)) - (c[0].offsetWidth/2), 2)
+					+ Math.pow(p[1] - ((c[3] ? this.pp.top  : c[1].top ) + parseInt(c[0].style.top )) - (c[0].offsetHeight/2), 2)
+				);
+			} else {
+				if(o.axis == "y") {
+					distance = Math.abs(p[1] - ((c[3] ? this.pp.top  : c[1].top ) + parseInt(c[0].style.top )) - (c[0].offsetHeight/2));
+				} else {
+					distance = Math.abs(p[0] - ((c[3] ? this.pp.left : c[1].left) + parseInt(c[0].style.left)) - (c[0].offsetWidth/2));
+				}			
+			}
 			this.current = distance < olddistance ? this.items[i] : this.current;
 			
 			if(distance < o.distance) {
 
-				$(c[0]).css({
-					width: c[2][0]+ (c[2][0] * (o.magnification-1)) - (((distance/o.distance)*c[2][0]) * (o.magnification-1)),
-					height: c[2][1]+ (c[2][1] * (o.magnification-1)) - (((distance/o.distance)*c[2][1]) * (o.magnification-1)),
-					top: (c[3] ? c[3].top : 0) + (o.baseline-0.5) * ((c[2][0] * (o.magnification-1)) - (((distance/o.distance)*c[2][0]) * (o.magnification-1))),
-					left: (c[3] ? (c[3].left + -0.5 * ((c[2][1] * (o.magnification-1)) - (((distance/o.distance)*c[2][1]) * (o.magnification-1)))) : 0)
-				});
+				if(!o.axis || o.axis != "y") {
+					$(c[0]).css({
+						width: c[2][0]+ (c[2][0] * (o.magnification-1)) - (((distance/o.distance)*c[2][0]) * (o.magnification-1)),
+						left: (c[3] ? (c[3].left + o.verticalLine * ((c[2][1] * (o.magnification-1)) - (((distance/o.distance)*c[2][1]) * (o.magnification-1)))) : 0)
+					});
+				}
+				
+				if(!o.axis || o.axis != "x") {
+					$(c[0]).css({
+						height: c[2][1]+ (c[2][1] * (o.magnification-1)) - (((distance/o.distance)*c[2][1]) * (o.magnification-1)),
+						top: (c[3] ? c[3].top : 0) + (o.baseline-0.5) * ((c[2][0] * (o.magnification-1)) - (((distance/o.distance)*c[2][0]) * (o.magnification-1)))
+					});					
+				}
 				
 				if(o.opacity)
 					$(c[0]).css('opacity', o.opacity.max-(distance/o.distance) < o.opacity.min ? o.opacity.min : o.opacity.max-(distance/o.distance));
@@ -90,7 +136,7 @@ $.extend($.ui.magnifier.prototype, {
 				
 				$(c[0]).css({
 					width: c[2][0],
-					height: c[2][0],
+					height: c[2][1],
 					top: (c[3] ? c[3].top : 0),
 					left: (c[3] ? c[3].left : 0)
 				});
