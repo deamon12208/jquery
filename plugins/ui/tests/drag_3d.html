@@ -73,8 +73,9 @@ $(".shadow").addClass("uiShadow")
 	var maxLeft = 20;
 	
 	$('#demo1').draggable({
-	 start: function(helper, pos, cursorAt, that) {
+	 start: function(e,ui) {
 
+ 	 		var that = ui.draggable;
  	 		var w = $(window).width();
  	 		var h = $(window).height();
  	 		var l = ((that.rpos[0] + this.offsetWidth/2) - w/2) / w;
@@ -90,13 +91,14 @@ $(".shadow").addClass("uiShadow")
 	 		});
 	 		
  	 },
- 	 stop: function(helper, pos, cursorAt, that) {
+ 	 stop: function(e,ui) {
 	
  	 		$(".original",this).animate({ top: 0, left: 0 }, 500);
  	 		$(".shadow",this).animate({ top: 0, left: 0 }, 500);
  	 },
- 	 drag: function(helper, pos, cursorAt, that) {
+ 	 drag: function(e,ui) {
 
+ 	 		var that = ui.draggable;
  	 		if(that.isBeingAnimated) return false;
  	 		
  	 		var w = $(window).width();
