@@ -27,8 +27,20 @@
 			var helper = "original";	
 		}
 		
-		options.handles = options.handles ? options.handles : {};
+		options.handles = {};
+		if(!o.handles) o.handles= {};
+		for(var i in o.handles) { options.handles[i] = o.handles[i]; } //Copying the object
 		
+		for(var i in options.handles) {
+			
+			if(options.handles[i].constructor == String)
+				options.handles[i] = $(options.handles[i], el);
+				
+			$(options.handles[i]).bind('mousedown', function(e) {
+				self.interaction.options.axis = this.resizeAxis; return self.interaction.trigger(e);
+			})[0].resizeAxis = i;
+		}
+
 		$.extend(options, {
 			helper: helper,
 			nonDestructive: true,
@@ -39,28 +51,17 @@
 				}
 				return false;
 			},
-			_start: function(h,p,c,t) {
-				self.start.apply(t, [self]); // Trigger the start callback				
+			_start: function(h,p,c,t,e) {
+				self.start.apply(t, [self, e]); // Trigger the start callback				
 			},
-			_beforeStop: function(h,p,c,t) {
-				self.stop.apply(t, [self]); // Trigger the start callback
+			_beforeStop: function(h,p,c,t,e) {
+				self.stop.apply(t, [self, e]); // Trigger the start callback
 			},
-			_stop: function(h,p,c,t) {
-				var o = t.options;
-				if(o.stop) o.stop.apply(t.element, [t.helper, t.pos, o.cursorAt, t]);
-			},
-			_drag: function(h,p,c,t) {
-				self.drag.apply(t, [self]); // Trigger the start callback
+			_drag: function(h,p,c,t,e) {
+				self.drag.apply(t, [self, e]); // Trigger the start callback
 			}			
 		});
 		var self = this;
-		
-
-		for(var i in options.handles) {
-			$(options.handles[i]).bind('mousedown', function(e) {
-				self.interaction.options.axis = this.resizeAxis; return self.interaction.trigger(e);
-			})[0].resizeAxis = i;
-		}
 		
 		this.interaction = new $.ui.mouseInteraction(el,options);
 		if(options.name) $.ui.add(options.name, 'resizable', this); //Append to UI manager if a name exists as option
@@ -68,23 +69,45 @@
 	}
 	
 	$.extend($.ui.resizable.prototype, {
-		start: function(that) {
-			this.options.originalSize = [$(this.element).width(),$(this.element).height()];			
+		plugins: {},
+		prepareCallbackObj: function(self) {
+			return {
+				helper: self.helper,
+				resizable: self,
+				axis: self.options.axis
+			}			
+		},
+		start: function(that, e) {
+			this.options.originalSize = [$(this.element).width(),$(this.element).height()];
+			this.options.originalPosition = $(this.element).css("position");
+			$.ui.plugin.call('start', that, this);
+			$.ui.trigger('start', this, e, that.prepareCallbackObj(this));			
 			return false;
 		},
-		stop: function(that) {			
+		stop: function(that, e) {			
 			
 			var o = this.options;
+
+			$.ui.plugin.call('stop', that, this);
+			$.ui.trigger('stop', this, e, that.prepareCallbackObj(this));
+
 			if(o.proxy) {
 				$(this.element).css({
 					width: $(this.helper).width(),
 					height: $(this.helper).height()
 				});
+				
+				if(o.originalPosition == "absolute" || o.originalPosition == "fixed") {
+					$(this.element).css({
+						top: $(this.helper).css("top"),
+						left: $(this.helper).css("left")
+					});					
+				}
 			}
 			return false;
 			
 		},
-		drag: function(that) {
+		drag: function(that, e) {
 
 			var o = this.options;
 			var co = o.curOffset;
@@ -105,6 +128,9 @@
 						break;
 					case 'n':
 					case 'ne':
+
+						if(!o.proxy && (o.originalPosition != "absolute" && o.originalPosition != "fixed"))
+							return false;
 						
 						if(o.axis == 'n') nw = p[0];
 						var mod = (this.pos[1] - co.top); nh = nh - (mod*2);
@@ -114,6 +140,9 @@
 						
 					case 'w':
 					case 'sw':
+
+						if(!o.proxy && (o.originalPosition != "absolute" && o.originalPosition != "fixed"))
+							return false;
 						
 						if(o.axis == 'w') nh = p[1];
 						var mod = (this.pos[0] - co.left); nw = nw - (mod*2);
@@ -123,6 +152,9 @@
 						
 					case 'nw':
 						
+						if(!o.proxy && (o.originalPosition != "absolute" && o.originalPosition != "fixed"))
+							return false;
+	
 						var modx = (this.pos[0] - co.left); nw = nw - (modx*2);
 						modx = nw <= o.minWidth ? p[0] - o.minWidth : (nw >= o.maxWidth ? 0-(o.maxWidth-p[0]) : modx);
 						
@@ -133,6 +165,7 @@
 							left: co.left + modx,
 							top: co.top + mody
 						});
+						
 						break;
 				}	
 			}
@@ -143,10 +176,13 @@
 			if(o.maxWidth) nw = nw >= o.maxWidth ? o.maxWidth : nw;
 			if(o.maxHeight) nh = nh >= o.maxHeight ? o.maxHeight : nh;
 
+			$.ui.plugin.call('resize', that, this);
+			var modifier = $.ui.trigger('resize', this, e, that.prepareCallbackObj(this));
+			if(!modifier) modifier = {};
 			
 			$(this.helper).css({
-				width: nw,
-				height: nh
+				width: modifier.width ? modifier.width : nw,
+				height: modifier.height ? modifier.height: nh
 			});
 			return false;
 			

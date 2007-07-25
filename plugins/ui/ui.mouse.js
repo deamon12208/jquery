@@ -54,14 +54,10 @@
 	
 	$.extend($.ui.mouseInteraction.prototype, {
 		plugins: {},
-		pos: null,
-		opos: null,
 		currentTarget: null,
 		lastTarget: null,
-		helper: null,
 		timer: null,
 		slowMode: false,
-		element: null,
 		init: false,
 		destroy: function() {
 			this.options.handle.unbind('mousedown', this.mousedownfunc);
