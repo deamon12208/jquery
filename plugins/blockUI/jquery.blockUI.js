@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.29  (07/22/2007)
+ * Version 1.30  (07/24/2007)
  * @requires jQuery v1.1.1
  *
  * $Id$
@@ -66,7 +66,7 @@ $.blockUI = function(msg, css, opts) {
 };
 
 // expose version number so other plugins can interogate
-$.blockUI.version = 1.28;
+$.blockUI.version = 1.30;
 
 /**
  * unblockUI removes the UI block that was put in place by blockUI
@@ -189,7 +189,10 @@ $.blockUI.defaults = {
     // supress tab nav from leaving blocking content?
     allowTabToLeave: 0,
     // Title attribute for overlay when using displayBox
-    closeMessage: 'Click to close'
+    closeMessage: 'Click to close',
+    
+    fadeOut:  1,  // true for fadeOut unblocking
+    fadeTime: 400 
 };
 
 // the gory details
@@ -289,11 +292,16 @@ $.blockUI.impl = {
     remove: function(el) {
         this.bind(0, el);
         var full = el == window;
-        if (full) {
-            $('body').children().filter('.blockUI').remove();
-            this.pageBlock = this.pageBlockEls = null;
+        var els = full ? $('body').children().filter('.blockUI') : $('.blockUI', el);
+        var count = els.length;
+        if (full) this.pageBlock = this.pageBlockEls = null;
+        
+        if ($.blockUI.defaults.fadeOut) {
+            els.fadeOut($.blockUI.defaults.fadeTime, function() {
+                if (--count <= 0) els.remove();
+            });
         }
-        else $('.blockUI', el).remove();
+        else els.remove();
     },
     boxRemove: function(el) {
         $().unbind('click',$.blockUI.impl.boxHandler).unbind('keypress', $.blockUI.impl.boxHandler);
