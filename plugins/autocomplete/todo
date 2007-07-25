@@ -32,3 +32,5 @@ antiCache: new Date().getTime()
 }, options.extraParams),
 
 Otherwise especially Internet Explorer will generally reuse a cached page rather than accessing the query script, which albeit can make sense unless the data in question is frequently updated.
+
+- Add option to pass through additional arguments to $.ajax, like type to use POST instead of GET
