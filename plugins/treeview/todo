@@ -6,3 +6,5 @@
 * Modifying the tree works only for branches without childs that are not last
 * Add events when opening/closing branches works only when using animations
 * Allow blocking/disabling of certain nodes
+
+* Defect: 1.1.3 broke background-image of non-root nodes!
