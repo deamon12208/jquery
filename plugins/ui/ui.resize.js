@@ -104,15 +104,36 @@
 						nw = p[0];
 						break;
 					case 'n':
-						nw = p[0]; var mod = (this.pos[1] - co.top); nh = nh - (mod*2);
+					case 'ne':
+						
+						if(o.axis == 'n') nw = p[0];
+						var mod = (this.pos[1] - co.top); nh = nh - (mod*2);
 						mod = nh <= o.minHeight ? p[1] - o.minHeight : (nh >= o.maxHeight ? 0-(o.maxHeight-p[1]) : mod);
 						$(this.helper).css('top', co.top + mod);
 						break;
+						
 					case 'w':
-						nh = p[1]; var mod = (this.pos[0] - co.left); nw = nw - (mod*2);
+					case 'sw':
+						
+						if(o.axis == 'w') nh = p[1];
+						var mod = (this.pos[0] - co.left); nw = nw - (mod*2);
 						mod = nw <= o.minWidth ? p[0] - o.minWidth : (nw >= o.maxWidth ? 0-(o.maxWidth-p[0]) : mod);
 						$(this.helper).css('left', co.left + mod);
-						break;						
+						break;
+						
+					case 'nw':
+						
+						var modx = (this.pos[0] - co.left); nw = nw - (modx*2);
+						modx = nw <= o.minWidth ? p[0] - o.minWidth : (nw >= o.maxWidth ? 0-(o.maxWidth-p[0]) : modx);
+						
+						var mody = (this.pos[1] - co.top); nh = nh - (mody*2);
+						mody = nh <= o.minHeight ? p[1] - o.minHeight : (nh >= o.maxHeight ? 0-(o.maxHeight-p[1]) : mody);
+
+						$(this.helper).css({
+							left: co.left + modx,
+							top: co.top + mody
+						});
+						break;
 				}	
 			}
 			
