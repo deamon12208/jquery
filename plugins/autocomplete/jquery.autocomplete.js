@@ -415,7 +415,7 @@ jQuery.Autocompleter = function(input, options) {
 		} else {
 			failure(term);
 		}
-	}
+	};
 	
 	function parse(data) {
 		var parsed = [];
@@ -432,13 +432,13 @@ jQuery.Autocompleter = function(input, options) {
 			}
 		}
 		return parsed;
-	}
+	};
 
 	function stopLoading() {
 		$input.removeClass(options.loadingClass);
-	}
+	};
 
-}
+};
 
 jQuery.Autocompleter.defaults = {
 	inputClass: "ac_input",
@@ -520,7 +520,7 @@ jQuery.Autocompleter.Cache = function(options) {
 				value: value,
 				data: rawValue,
 				result: options.formatResult && options.formatResult(rawValue) || value
-			}
+			};
 			
 			// push the current match into the set list
 			stMatchSets[firstChar].push(row);
@@ -720,7 +720,7 @@ jQuery.Autocompleter.Select = function (options, input, select) {
 			return data && data[ listItems.filter("." + CLASSES.ACTIVE)[0].index ];
 		}
 	};
-}
+};
 
 jQuery.Autocompleter.Selection = function(field, start, end) {
 	if( field.createTextRange ){

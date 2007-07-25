@@ -7,18 +7,9 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- * Revision: $Id: jquery.autocomplete.js 1870 2007-05-05 17:01:31Z dan $
+ * Revision: $Id: jquery.autocomplete.js 2384 2007-07-17 18:49:56Z joern.zaefferer $
  *
  */
-
-/*
-TODO
-- add a callback to allow decoding the response
-- add scrollbars and page down/up, option for height or number of items to be visible without scrolling
-- allow modification of not-last value in multiple-fields
-@option Number size Limit the number of items to show at once. Default: 
-@option Function parse - TEST AND DOCUMENT ME
-*/
 
 /**
  * Provide autocomplete for text-inputs or textareas.
@@ -424,7 +415,7 @@ jQuery.Autocompleter = function(input, options) {
 		} else {
 			failure(term);
 		}
-	}
+	};
 	
 	function parse(data) {
 		var parsed = [];
@@ -441,13 +432,13 @@ jQuery.Autocompleter = function(input, options) {
 			}
 		}
 		return parsed;
-	}
+	};
 
 	function stopLoading() {
 		$input.removeClass(options.loadingClass);
-	}
+	};
 
-}
+};
 
 jQuery.Autocompleter.defaults = {
 	inputClass: "ac_input",
@@ -529,7 +520,7 @@ jQuery.Autocompleter.Cache = function(options) {
 				value: value,
 				data: rawValue,
 				result: options.formatResult && options.formatResult(rawValue) || value
-			}
+			};
 			
 			// push the current match into the set list
 			stMatchSets[firstChar].push(row);
@@ -565,7 +556,7 @@ jQuery.Autocompleter.Cache = function(options) {
 			if (!options.cacheLength || !length)
 				return null;
 			/* 
-			 * if dealing w/local data and matchContains then we must make sure
+			 * if dealing w/local data and matchContains than we must make sure
 			 * to loop through all the data collections looking for matches
 			 */
 			if( !options.url && options.matchContains ){
@@ -729,7 +720,7 @@ jQuery.Autocompleter.Select = function (options, input, select) {
 			return data && data[ listItems.filter("." + CLASSES.ACTIVE)[0].index ];
 		}
 	};
-}
+};
 
 jQuery.Autocompleter.Selection = function(field, start, end) {
 	if( field.createTextRange ){
