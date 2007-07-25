@@ -32,15 +32,13 @@ body
 </head>
 <body>
 	
-	<div id="drag1" style=' border: 1px solid black; height: 300px; width: 400px; margin: 20px;'><a href="index.php">Drag me</a><input type="text" value="select me" style="width: 90px; font-size: 10px;" /></div>
-	
-<div style='border: 1px solid black; position: absolute; top: 10px; left: 500px;'>
-<div class='ui-n-resize' style='background: green; height: 5px;'></div>
-	<textarea id="drag2" style=' border: 1px solid black; height: 300px; width: 400px; margin: 20px;'>
-	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-	</textarea>
-<div class='ui-s-resize' style='background: green; height: 5px;'></div>
-<div class='ui-o-resize' style='background: blue; width: 5px; height: 100%; position: absolute; right: 0px; top: 0px;'></div>
+<div id='resizeme' style='width: 200px; height: 200px; border: 1px solid black; margin: 20px; position: relative;'>
+<div class='ui-n-resize' style='position: absolute; background: #ddd; height: 10px; top: 0px; left: 30px; right: 30px;'></div>
+<div class='ui-e-resize' style='position: absolute; background: #ddd; width: 10px; bottom: 30px; right: 0px; top: 30px;'></div>	
+<div class='ui-s-resize' style='position: absolute; background: #ddd; height: 10px; bottom: 0px; left: 30px; right: 30px;'></div>
+<div class='ui-w-resize' style='position: absolute; background: #ddd; width: 10px; bottom: 30px; left: 0px; top: 30px;'></div>
+
+<div class='ui-se-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; bottom: 0px; right: 0px;'></div>
 </div>
 	
 <script type="text/javascript">
@@ -53,24 +51,19 @@ if(!window.console) {
 }
 
 $(document).ready(function(){
-	
 
-$('#drag1').resizable({
+$('#resizeme').resizable({
 	proxy: "proxy",
-	minWidth: 100,
-	minHeight: 100,
-	maxWidth: 500,
-	maxHeight: 300	
-});
-
-$('#drag2').resizable({
 	minWidth: 100,
 	minHeight: 100,
 	maxWidth: 500,
 	maxHeight: 300,
 	handles: {
+		n: $('.ui-n-resize'),
+		e: $('.ui-e-resize'),
 		s: $('.ui-s-resize'),
-		o: $('.ui-o-resize')	
+		w: $('.ui-w-resize'),
+		se: $('.ui-se-resize')	
 	}	
 });
 

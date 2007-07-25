@@ -27,13 +27,17 @@
 			var helper = "original";	
 		}
 		
+		options.handles = options.handles ? options.handles : {};
+		
 		$.extend(options, {
 			helper: helper,
 			nonDestructive: true,
 			dragPrevention: 'input,button,select',
 			startCondition: function(e) {
-				var tp = $(e.target).parents().add(e.target);
-				return true;	
+				for(var i in options.handles) {
+					if($(options.handles[i])[0] == e.target) return true;
+				}
+				return false;
 			},
 			_start: function(h,p,c,t) {
 				self.start.apply(t, [self]); // Trigger the start callback				
@@ -51,11 +55,11 @@
 		});
 		var self = this;
 		
-		if(options.handles) {
-			if(options.handles.s)
-				$(options.handles.s).bind('mousedown', function(e) { self.interaction.options.axis = 's'; return self.interaction.trigger(e); });
-			if(options.handles.o)
-				$(options.handles.o).bind('mousedown', function(e) { self.interaction.options.axis = 'o'; return self.interaction.trigger(e); });
+
+		for(var i in options.handles) {
+			$(options.handles[i]).bind('mousedown', function(e) {
+				self.interaction.options.axis = this.resizeAxis; return self.interaction.trigger(e);
+			})[0].resizeAxis = i;
 		}
 		
 		this.interaction = new $.ui.mouseInteraction(el,options);
@@ -65,15 +69,8 @@
 	
 	$.extend($.ui.resizable.prototype, {
 		start: function(that) {
-			
-			var o = this.options;
-			if(o.start) o.start.apply(this.element, [this.helper, this.pos, o.cursorAt, this]);
-			
-			o.oWidth = $(this.element).width();
-			o.oHeight = $(this.element).height();
-			
+			this.options.originalSize = [$(this.element).width(),$(this.element).height()];			
 			return false;
-						
 		},
 		stop: function(that) {			
 			
@@ -90,34 +87,41 @@
 		drag: function(that) {
 
 			var o = this.options;
-
+			var co = o.curOffset;
+			var p = o.originalSize;
 
 			this.pos = [this.rpos[0]-(o.cursorAt.left ? o.cursorAt.left : 0), this.rpos[1]-(o.cursorAt.top ? o.cursorAt.top : 0)];
 
-			var nw = o.oWidth + (this.pos[0] - o.curOffset.left);
-			var nh = o.oHeight + (this.pos[1] - o.curOffset.top);
-			
-			if(o.minWidth) var nw = nw <= o.minWidth ? o.minWidth : nw;
-			if(o.minHeight) var nh = nh <= o.minHeight ? o.minHeight : nh;
-			
-			if(o.maxWidth) var nw = nw >= o.maxWidth ? o.maxWidth : nw;
-			if(o.maxHeight) var nh = nh >= o.maxHeight ? o.maxHeight : nh;
+			var nw = p[0] + (this.pos[0] - co.left);
+			var nh = p[1] + (this.pos[1] - co.top);
 			
 			if(o.axis) {
 				switch(o.axis) {
-					case 'o':
-						nh = o.oHeight;
+					case 'e':
+						nh = p[1];
 						break;
 					case 's':
-						nw = o.oWidth;
-						break;	
+						nw = p[0];
+						break;
+					case 'n':
+						nw = p[0]; var mod = (this.pos[1] - co.top); nh = nh - (mod*2);
+						mod = nh <= o.minHeight ? p[1] - o.minHeight : (nh >= o.maxHeight ? 0-(o.maxHeight-p[1]) : mod);
+						$(this.helper).css('top', co.top + mod);
+						break;
+					case 'w':
+						nh = p[1]; var mod = (this.pos[0] - co.left); nw = nw - (mod*2);
+						mod = nw <= o.minWidth ? p[0] - o.minWidth : (nw >= o.maxWidth ? 0-(o.maxWidth-p[0]) : mod);
+						$(this.helper).css('left', co.left + mod);
+						break;						
 				}	
 			}
 			
+			if(o.minWidth) nw = nw <= o.minWidth ? o.minWidth : nw;
+			if(o.minHeight) nh = nh <= o.minHeight ? o.minHeight : nh;
 			
-			if(o.drag) var nv = o.drag.apply(this.element, [this.helper, this.pos, o.cursorAt, this]);
-			var nl = (nv && nv.x) ? nv.x :  this.pos[0];
-			var nt = (nv && nv.y) ? nv.y :  this.pos[1];
+			if(o.maxWidth) nw = nw >= o.maxWidth ? o.maxWidth : nw;
+			if(o.maxHeight) nh = nh >= o.maxHeight ? o.maxHeight : nh;
+
 			
 			$(this.helper).css({
 				width: nw,

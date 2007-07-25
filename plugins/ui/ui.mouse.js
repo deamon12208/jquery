@@ -160,7 +160,6 @@
 			if(o.helper != 'original') {
 				$(this.helper).hide() //position helper before showing
 					.appendTo((o.appendTo == 'parent' ? this.element.parentNode : o.appendTo))
-					.css({left:this.pos[0], top:this.pos[1]})
 					.show();
 			}
 
