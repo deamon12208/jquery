@@ -6,7 +6,7 @@
 		<title>jQuery dimensions.js - Test Suite</title>
 		
 		<!-- load latest build of jquery.js -->
-		<script type="text/javascript" src="../../../jquery/dist/jquery.js"></script>
+		<script type="text/javascript" src="tests/jquery.js"></script>
 		<!-- load firebug lite 
 		<script type="text/javascript" src="http://brandon.jquery.com/firebuglite/firebug.js"></script>-->
 		<!-- load dimensions.js (this is what we're testing! -->
@@ -18,8 +18,8 @@
 				$('#userAgent').html(navigator.userAgent);
 				$('iframe').attr('src', 'tests/'+tests[current++]+'.html');
 			});
-			tests = ['height','width','scroll','position-abs','position-rel','position-sta','absolute','relative','static','float','body'];
-			//tests = ['position-sta'];
+			tests = ['height','width','scroll','position-abs','position-rel','position-sta','absolute','relative','static','fixed','float','body'];
+			//tests = ['fixed'];
 			current = 0;
 			click = function() {
 				var ol = $('~ol',this);

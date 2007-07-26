@@ -5,7 +5,7 @@
  * $LastChangedDate$
  * $Rev$
  *
- * Version: 1.0
+ * Version: 1.0.1
  */
 
 (function($){
@@ -406,7 +406,7 @@ $.fn.extend({
 					if (ie && parPos == 'relative') relparent = true;
 				}
 
-				op = parent.offsetParent;
+				op = parent.offsetParent || document.body;
 				if (options.scroll || mo) {
 					do {
 						if (options.scroll) {
@@ -415,8 +415,8 @@ $.fn.extend({
 							st += parent.scrollTop;
 						}
 						
-						// opera sometimes incorrectly reports scroll offset for elements with display set to table-row or inline
-						if (oa && $(parent).css('display').match(/table-row|inline/)) {
+						// Opera sometimes incorrectly reports scroll offset for elements with display set to table-row or inline
+						if (oa && ($.css(parent, 'display') || '').match(/table-row|inline/)) {
 							sl = sl - ((parent.scrollLeft == parent.offsetLeft) ? parent.scrollLeft : 0);
 							st = st - ((parent.scrollTop == parent.offsetTop) ? parent.scrollTop : 0);
 						}
@@ -506,7 +506,7 @@ $.fn.extend({
 			x += parent.offsetLeft;
 			y += parent.offsetTop;
 
-			offsetParent = parent.offsetParent;
+			offsetParent = parent.offsetParent || document.body;
 			if (options.scroll) {
 				// get scroll offsets
 				do {
