@@ -35,8 +35,7 @@
  *
  */
 $.fn.delicious = function(user,options,tOptions,cbFnc){
-	//options.instance = $.delicious.these.length;
-	//$.delicious(user,options,tOptions,fName);
+	$.defineTag('script');
 	var opts = $.extend({'user':user},$.delicious.opts,options),
 		$self = this,
 		fn = cbFnc || jQuery.delicious.parsers[opts.type],
@@ -48,13 +47,7 @@ $.fn.delicious = function(user,options,tOptions,cbFnc){
 	opts.itemTag = opts.itemTag.toUpperCase();
 	opts.wrapTag = opts.wrapTag.toUpperCase();
 	url += $.param(rOpts);
-	if(document.createElement){
-		var oScript = document.createElement("script");
-		oScript.src = url;
-		document.body.appendChild(oScript);
-	}
-	else $('body').append('<scr'+'ipt type="text/javascript" src="'+url+'"><\/script>');
-	
+	$('head').append($.SCRIPT({src:url,type:'text/javascript'}));
 	return $self;
 	
 	// Ingenious name() closure function from Michael Geary
