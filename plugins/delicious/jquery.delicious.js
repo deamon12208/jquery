@@ -20,8 +20,8 @@
  * @param String user The del.icio.us user who's bookmarks you want to load.
  * @param Map options key/value pairs of optional settings for the list display.
  * @option String type (posts|tags|network|fans) The type of information you wish to retrieve. Default: 'posts'
- * @option String itemTag The type of HTML element you wish to surround every item in the list. Default: '<li>'
- * @option String wrapTag The type of HTML element you wish to surround the entire list. Default: '<ul>'
+ * @option String itemTag The type of HTML element you wish to surround every item in the list. Default: 'li'
+ * @option String wrapTag The type of HTML element you wish to surround the entire list. Default: 'ul'
  * @option Boolean append If true, this will cause the new list to be appended to the selected elements, if false it will replace it's contents with the list. Default: false
  * @option Boolean favicon If true and the type option is posts, this will attempt to load the favicon.ico file from the domain of each bookmark. Default: true
  * @param Map tOptions key/value pairs of optional settings for the list itself.
