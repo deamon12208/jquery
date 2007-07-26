@@ -14,6 +14,7 @@
 <script type="text/javascript" src="../ui.js"></script>
 <script type="text/javascript" src="../ui.mouse.js"></script>
 <script type="text/javascript" src="../ui.resize.js"></script>
+<script type="text/javascript" src="../ui.drag.js"></script>
 <style type="text/css" media="all">
 
 body
@@ -32,7 +33,7 @@ body
 </head>
 <body>
 	
-<div id='resizeme' style='width: 200px; height: 200px; border: 1px solid black; margin: 20px; position: relative;'>
+<div id='resizeme' style='width: 300px; height: 200px; border: 1px solid black; margin: 20px; position: relative;'>
 <div class='ui-n-resize' style='position: absolute; background: #ddd; height: 10px; top: 0px; left: 30px; right: 30px;'></div>
 <div class='ui-e-resize' style='position: absolute; background: #ddd; width: 10px; bottom: 30px; right: 0px; top: 30px;'></div>	
 <div class='ui-s-resize' style='position: absolute; background: #ddd; height: 10px; bottom: 0px; left: 30px; right: 30px;'></div>
@@ -42,9 +43,11 @@ body
 <div class='ui-sw-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; bottom: 0px; left: 0px;'></div>
 <div class='ui-ne-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; top: 0px; right: 0px;'></div>
 <div class='ui-nw-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; top: 0px; left: 0px;'></div>
+
+<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Relative position without proxy (w,nw,n automatically disabled)</div>
 </div>
 
-<div id='resizeme2' style='width: 200px; height: 200px; border: 1px solid black; position: relative; position: absolute; top: 200px; left: 500px;'>
+<div id='resizeme4' style='width: 300px; height: 200px; border: 1px solid black; margin: 20px; position: relative;'>
 <div class='ui-n-resize' style='position: absolute; background: #ddd; height: 10px; top: 0px; left: 30px; right: 30px;'></div>
 <div class='ui-e-resize' style='position: absolute; background: #ddd; width: 10px; bottom: 30px; right: 0px; top: 30px;'></div>	
 <div class='ui-s-resize' style='position: absolute; background: #ddd; height: 10px; bottom: 0px; left: 30px; right: 30px;'></div>
@@ -54,6 +57,40 @@ body
 <div class='ui-sw-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; bottom: 0px; left: 0px;'></div>
 <div class='ui-ne-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; top: 0px; right: 0px;'></div>
 <div class='ui-nw-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; top: 0px; left: 0px;'></div>
+
+<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Relative position with proxy (all directions enabled)</div>
+</div>
+
+
+
+
+
+<div id='resizeme2' style='width: 300px; height: 200px; border: 1px solid black; position: relative; position: absolute; top: 20px; right: 20px;'>
+<div class='ui-n-resize' style='position: absolute; background: #ddd; height: 10px; top: 0px; left: 30px; right: 30px;'></div>
+<div class='ui-e-resize' style='position: absolute; background: #ddd; width: 10px; bottom: 30px; right: 0px; top: 30px;'></div>	
+<div class='ui-s-resize' style='position: absolute; background: #ddd; height: 10px; bottom: 0px; left: 30px; right: 30px;'></div>
+<div class='ui-w-resize' style='position: absolute; background: #ddd; width: 10px; bottom: 30px; left: 0px; top: 30px;'></div>
+
+<div class='ui-se-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; bottom: 0px; right: 0px;'></div>
+<div class='ui-sw-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; bottom: 0px; left: 0px;'></div>
+<div class='ui-ne-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; top: 0px; right: 0px;'></div>
+<div class='ui-nw-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; top: 0px; left: 0px;'></div>
+
+<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Absolute position without proxy (all directions enabled)</div>
+</div>
+
+<div id='resizeme3' style='width: 300px; height: 200px; border: 1px solid black; position: relative; position: absolute; bottom: 20px; right: 20px;'>
+<div class='ui-n-resize' style='position: absolute; background: #ddd; height: 10px; top: 0px; left: 30px; right: 30px;'></div>
+<div class='ui-e-resize' style='position: absolute; background: #ddd; width: 10px; bottom: 30px; right: 0px; top: 30px;'></div>	
+<div class='ui-s-resize' style='position: absolute; background: #ddd; height: 10px; bottom: 0px; left: 30px; right: 30px;'></div>
+<div class='ui-w-resize' style='position: absolute; background: #ddd; width: 10px; bottom: 30px; left: 0px; top: 30px;'></div>
+
+<div class='ui-se-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; bottom: 0px; right: 0px;'></div>
+<div class='ui-sw-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; bottom: 0px; left: 0px;'></div>
+<div class='ui-ne-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; top: 0px; right: 0px;'></div>
+<div class='ui-nw-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; top: 0px; left: 0px;'></div>
+
+<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Absolute position with proxy (all directions enabled), ah, and I'm draggable, too!</div>
 </div>
 	
 <script type="text/javascript">
@@ -69,7 +106,7 @@ $(document).ready(function(){
 
 $('#resizeme, #resizeme2').resizable({
 	//proxy: "proxy",
-	minWidth: 100,
+	minWidth: 200,
 	minHeight: 100,
 	maxWidth: 500,
 	maxHeight: 300,
@@ -93,6 +130,36 @@ $('#resizeme, #resizeme2').resizable({
 		//console.log(e);	
 	}		
 });
+
+
+$('#resizeme3,#resizeme4').resizable({
+	proxy: "proxy",
+	minWidth: 200,
+	minHeight: 100,
+	maxWidth: 500,
+	maxHeight: 300,
+	handles: {
+		n: '.ui-n-resize',
+		e: '.ui-e-resize',
+		s: '.ui-s-resize',
+		w: '.ui-w-resize',
+		se: '.ui-se-resize',
+		sw: '.ui-sw-resize',
+		ne: '.ui-ne-resize',
+		nw: '.ui-nw-resize'
+	},
+	start: function(e,ui) {
+		//console.log('start ', ui);	
+	},
+	stop: function(e,ui) {
+		//console.log('stop ', ui);	
+	},
+	resize: function(e,ui) {
+		//console.log(e);	
+	}		
+});
+
+$('#resizeme3').draggable();
 
 
 });

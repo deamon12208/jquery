@@ -37,7 +37,8 @@
 				options.handles[i] = $(options.handles[i], el);
 				
 			$(options.handles[i]).bind('mousedown', function(e) {
-				self.interaction.options.axis = this.resizeAxis; return self.interaction.trigger(e);
+				self.interaction.options.axis = this.resizeAxis;
+				return self.interaction.trigger(e);
 			})[0].resizeAxis = i;
 		}
 
