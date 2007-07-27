@@ -4,41 +4,32 @@ $.ui = {
 		return $.ui.manager[t] ? $.ui.manager[t][n] : null;	
 	},
 	add: function(n, t, w) {
-		if(!$.ui.manager[t]) $.ui.manager[t] = {};
-
-		if($.ui.manager[t][n])
-			$.ui.manager[t][n].push(w);
-		else
-			$.ui.manager[t][n] = [w];
+		var a = $.ui.manager; if(!a[t]) a[t] = {};
+		a[t][n] ? a[t][n].push(w) : a[t][n] = [w];
 	},
 	plugin: {
-		add: function(what, calltime, option, plugin) {
-			if(!$.ui[what].prototype.plugins[calltime]) $.ui[what].prototype.plugins[calltime] = [];
-			$.ui[what].prototype.plugins[calltime].push([option,plugin]);
+		add: function(w, c, o, p) {
+			var a = $.ui[w].prototype; if(!a.plugins[c]) a.plugins[c] = [];
+			a.plugins[c].push([o,p]);
 		},
-		call: function(type, self, self2) {
-			if(!self2) self2 = self;
-			if (self.plugins[type]) {
-				for (var i = 0; i < self.plugins[type].length; i++) {
-					if (self2.options[self.plugins[type][i][0]]) {
-						self.plugins[type][i][1].call(self2, self);
-					}
-							
-				}	
-			}		
+		call: function(t, a, b) {
+			var c = a.plugins[t]; if(!b) b = a;
+			if(!c) return;
+			
+			for (var i = 0; i < c.length; i++) {
+				if (b.options[c[i][0]]) c[i][1].call(b, a);
+			}	
 		}	
 	},
-	trigger: function(name, self, e, obj) {
-		var o = self.options;
-		if(!o[name]) return false;
+	trigger: function(n, s, e, p) {
+		var o = s.options;
+		if(!o[n]) return false;
 		
-		var nobj = { options: self.options }
-		$.extend(nobj, obj);
-		
-		return o[name].apply(self.element, [e, nobj]);
+		var a = { options: s.options }; $.extend(a, p);
+		return o[n].apply(s.element, [e, a]);
 	},
-	num: function(el, prop) {
-		return parseInt($.css(el.jquery?el[0]:el,prop))||0;
+	num: function(e, p) {
+		return parseInt($.css(e.jquery?e[0]:e,p))||0;
 	},
 	getPointer: function(e) {
 		var x = e.pageX || (e.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft)) || 0;
