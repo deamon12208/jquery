@@ -67,40 +67,33 @@
 		},
 		click: function(e) {
 
+			var o = this.options;
+			
 			window.focus();
 			if(e.which != 1) return true; //only left click starts dragging
 		
 			// Prevent execution on defined elements
 			var targetName = (e.target) ? e.target.nodeName.toLowerCase() : e.srcElement.nodeName.toLowerCase();
-			for(var i=0;i<this.options.dragPrevention.length;i++) {
-				if(targetName == this.options.dragPrevention[i]) return true;
+			for(var i=0;i<o.dragPrevention.length;i++) {
+				if(targetName == o.dragPrevention[i]) return true;
 			}
-			
+
 			//Prevent execution on condition
-			if(this.options.startCondition && !this.options.startCondition.apply(this, [e])) {
-				return true;
-			}
+			if(o.startCondition && !o.startCondition.apply(this, [e])) return true;
 
 			var self = this;
-			this.mouseup = function(e) {
-					return self.stop.apply(self, [e]);
-			}
-			this.mousemove = function(e) {
-					return self.drag.apply(self, [e]);
-			}
-			
+			this.mouseup = function(e) { return self.stop.apply(self, [e]); }
+			this.mousemove = function(e) { return self.drag.apply(self, [e]); }
+
 			var initFunc = function() { //This function get's called at bottom or after timeout
-	
 				$(document).bind('mouseup', self.mouseup);
 				$(document).bind('mousemove', self.mousemove);
-
 				self.opos = $.ui.getPointer(e); // Get the original mouse position
-
 			}
 			
-			if(this.options.preventionTimeout) { //use prevention timeout
+			if(o.preventionTimeout) { //use prevention timeout
 				if(this.timer) clearInterval(this.timer);
-				this.timer = setTimeout(function() { initFunc(); }, this.options.preventionTimeout);
+				this.timer = setTimeout(function() { initFunc(); }, o.preventionTimeout);
 				return false;
 			}
 		
@@ -110,41 +103,38 @@
 		},
 		start: function(e) {
 			
-			var o = this.options;
-			o.curOffset = $(this.element).offset({ border: false }); //get the current offset
+			var o = this.options; var a = this.element;
+			o.co = $(a).offset({ border: false }); //get the current offset
 				
-			if(typeof o.helper == 'function') { //If helper is a function, use the node returned by it
-				this.helper = o.helper.apply(this.element, [e,this]);
-			} else { //No custom helper
-				if(o.helper == 'clone') this.helper = $(this.element).clone()[0];
-				if(o.helper == 'original') this.helper = this.element;
-			}
-			
+			this.helper = typeof o.helper == 'function' ? o.helper.apply(a, [e,this]) : (o.helper == 'clone' ? $(a).clone()[0] : a);
+
+
+
 			if(o.appendTo == 'parent') { // Let's see if we have a positioned parent
-				var curParent = this.element.parentNode;
-				while (curParent) {
-					if(curParent.style && ($(curParent).css('position') == 'relative' || $(curParent).css('position') == 'absolute')) {
-						o.pp = curParent;
-						o.po = $(curParent).offset({ border: false });
+				var cp = a.parentNode;
+				while (cp) {
+					if(cp.style && ($(cp).css('position') == 'relative' || $(cp).css('position') == 'absolute')) {
+						o.pp = cp;
+						o.po = $(cp).offset({ border: false });
 						o.ppOverflow = !!($(o.pp).css('overflow') == 'auto' || $(o.pp).css('overflow') == 'scroll'); //TODO!
 						break;	
 					}
-					curParent = curParent.parentNode ? curParent.parentNode : null;
+					cp = cp.parentNode ? cp.parentNode : null;
 				};
 				
 				if(!o.pp) o.po = { top: 0, left: 0 };
 			}
 			
-			this.pos = [this.opos[0],this.opos[1]]; //Use the actual clicked position
+			this.pos = [this.opos[0],this.opos[1]]; //Use the relative position
+			this.rpos = [this.pos[0],this.pos[1]]; //Save the absolute position
 			
 			if(o.cursorAtIgnore) { // If we want to pick the element where we clicked, we borrow cursorAt and add margins
-				o.cursorAt.left = this.pos[0] - o.curOffset.left + o.margins.left;
-				o.cursorAt.top = this.pos[1] - o.curOffset.top + o.margins.top;
+				o.cursorAt.left = this.pos[0] - o.co.left + o.margins.left;
+				o.cursorAt.top = this.pos[1] - o.co.top + o.margins.top;
 			}
 
-			//Save the real mouse position
-			this.rpos = [this.pos[0],this.pos[1]];
-			
+
+
 			if(o.pp) { // If we have a positioned parent, we pick the draggable relative to it
 				this.pos[0] -= o.po.left;
 				this.pos[1] -= o.po.top;
@@ -153,11 +143,7 @@
 			this.slowMode = (o.cursorAt && (o.cursorAt.top-o.margins.top > 0 || o.cursorAt.bottom-o.margins.bottom > 0) && (o.cursorAt.left-o.margins.left > 0 || o.cursorAt.right-o.margins.right > 0)) ? true : false; //If cursorAt is within the helper, set slowMode to true
 			
 			if(!o.nonDestructive) $(this.helper).css('position', 'absolute');
-			if(o.helper != 'original') {
-				$(this.helper).hide() //position helper before showing
-					.appendTo((o.appendTo == 'parent' ? this.element.parentNode : o.appendTo))
-					.show();
-			}
+			if(o.helper != 'original') $(this.helper).appendTo((o.appendTo == 'parent' ? a.parentNode : o.appendTo)).show();
 
 			// Remap right/bottom properties for cursorAt to left/top
 			if(o.cursorAt.right && !o.cursorAt.left) o.cursorAt.left = this.helper.offsetWidth+o.margins.right+o.margins.left - o.cursorAt.right;
@@ -165,36 +151,30 @@
 		
 			this.init = true;	
 
-			if(o._start) o._start.apply(this.element, [this.helper, this.pos, o.cursorAt, this, e]); // Trigger the start callback
+			if(o._start) o._start.apply(a, [this.helper, this.pos, o.cursorAt, this, e]); // Trigger the start callback
 			return false;
 						
 		},
 		stop: function(e) {			
 			
-			var o = this.options;
-			
-			var self = this;
+			var o = this.options; var a = this.element; var self = this;
 			$(document).unbind('mouseup', self.mouseup);
 			$(document).unbind('mousemove', self.mousemove);
 
-			if(this.init == false)
-				return this.opos = this.pos = null;
-			
-			if(o._beforeStop) o._beforeStop.apply(this.element, [this.helper, this.pos, o.cursorAt, this, e]);
+			if(this.init == false) return this.opos = this.pos = null;
+			if(o._beforeStop) o._beforeStop.apply(a, [this.helper, this.pos, o.cursorAt, this, e]);
 
-				
-			if(this.helper != this.element && !o.beQuietAtEnd) { // Remove helper, if it's not the original node
-				$(this.helper).remove();
-				this.helper = null;
+			if(this.helper != a && !o.beQuietAtEnd) { // Remove helper, if it's not the original node
+				$(this.helper).remove(); this.helper = null;
 			}
 			
-			if(!o.beQuietAtEnd && o.wasPositioned)
-				$(this.element).css('position', o.wasPositioned);
-				
-			if(!o.beQuietAtEnd && o._stop) o._stop.apply(this.element, [this.helper, this.pos, o.cursorAt, this, e]);
+			if(!o.beQuietAtEnd) {
+				if(o.wasPositioned)	$(a).css('position', o.wasPositioned);
+				if(o._stop) o._stop.apply(a, [this.helper, this.pos, o.cursorAt, this, e]);
+			}
 
 			this.init = false;
-			this.opos = this.pos = null; // Clear temp variables
+			this.opos = this.pos = null;
 			return false;
 			
 		},
@@ -204,7 +184,6 @@
 			var o = this.options;
 			
 			this.pos = $.ui.getPointer(e); //relative mouse position
-			//We can stop here if it's not a actual new position (FF issue)
 			if(this.rpos && this.rpos[0] == this.pos[0] && this.rpos[1] == this.pos[1]) return false;
 			this.rpos = [this.pos[0],this.pos[1]]; //absolute mouse position
 			

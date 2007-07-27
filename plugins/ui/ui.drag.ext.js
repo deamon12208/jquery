@@ -72,8 +72,8 @@
 			var nt = rpos.top-o.po.top-o.margins.top;
 
 		} else {
-			var nl = o.curOffset.left - (o.po ? o.po.left : 0);
-			var nt = o.curOffset.top - (o.po ? o.po.top : 0);
+			var nl = o.co.left - (o.po ? o.po.left : 0);
+			var nt = o.co.top - (o.po ? o.po.top : 0);
 		}
 		
 		var self = this;
@@ -86,7 +86,7 @@
 			if(o.wasPositioned)
 				$(self.element).css('position', o.wasPositioned);
 				
-			if(o.stop) o.stop.apply(self.element, [self.helper, self.pos, [o.curOffset.left - o.po.left,o.curOffset.top - o.po.top],self]);
+			if(o.stop) o.stop.apply(self.element, [self.helper, self.pos, [o.co.left - o.po.left,o.co.top - o.po.top],self]);
 			
 			//Using setTimeout because of strange flickering in Firefox
 			if(self.helper != self.element) window.setTimeout(function() { $(self.helper).remove(); }, 0);
@@ -102,13 +102,13 @@
 		if(!this.slowMode) { // Make clones on top of iframes (only if we are not in slowMode)
 			if(this.options.iframeFix.constructor == Array) {
 				for(var i=0;i<this.options.iframeFix.length;i++) {
-					var curOffset = $(this.options.iframeFix[i]).offset({ border: false });
-					$("<div class='DragDropIframeFix' style='background: #fff;'></div>").css("width", $(this.options.iframeFix[i])[0].offsetWidth+"px").css("height", $(this.options.iframeFix[i])[0].offsetHeight+"px").css("position", "absolute").css("opacity", "0.001").css("z-index", "1000").css("top", curOffset.top+"px").css("left", curOffset.left+"px").appendTo("body");
+					var co = $(this.options.iframeFix[i]).offset({ border: false });
+					$("<div class='DragDropIframeFix' style='background: #fff;'></div>").css("width", $(this.options.iframeFix[i])[0].offsetWidth+"px").css("height", $(this.options.iframeFix[i])[0].offsetHeight+"px").css("position", "absolute").css("opacity", "0.001").css("z-index", "1000").css("top", co.top+"px").css("left", co.left+"px").appendTo("body");
 				}		
 			} else {
 				$("iframe").each(function() {					
-					var curOffset = $(this).offset({ border: false });
-					$("<div class='DragDropIframeFix' style='background: #fff;'></div>").css("width", this.offsetWidth+"px").css("height", this.offsetHeight+"px").css("position", "absolute").css("opacity", "0.001").css("z-index", "1000").css("top", curOffset.top+"px").css("left", curOffset.left+"px").appendTo("body");
+					var co = $(this).offset({ border: false });
+					$("<div class='DragDropIframeFix' style='background: #fff;'></div>").css("width", this.offsetWidth+"px").css("height", this.offsetHeight+"px").css("position", "absolute").css("opacity", "0.001").css("z-index", "1000").css("top", co.top+"px").css("left", co.left+"px").appendTo("body");
 				});							
 			}		
 		}
@@ -193,8 +193,8 @@
 
 		var o = this.options;
 		if(o.cursorAtIgnore) {
-			this.pos[0] = o.curOffset.left + o.margins.left - o.po.left + Math.round((this.pos[0] - o.curOffset.left - o.margins.left + o.po.left) / o.grid[0]) * o.grid[0];
-			this.pos[1] = o.curOffset.top + o.margins.top - o.po.top + Math.round((this.pos[1] - o.curOffset.top - o.margins.top + o.po.top) / o.grid[1]) * o.grid[1];
+			this.pos[0] = o.co.left + o.margins.left - o.po.left + Math.round((this.pos[0] - o.co.left - o.margins.left + o.po.left) / o.grid[0]) * o.grid[0];
+			this.pos[1] = o.co.top + o.margins.top - o.po.top + Math.round((this.pos[1] - o.co.top - o.margins.top + o.po.top) / o.grid[1]) * o.grid[1];
 		}
 
 	});
@@ -208,9 +208,9 @@
 		if(o.cursorAtIgnore) {
 			switch(o.axis) {
 				case "x":
-					this.pos[1] = o.curOffset.top - o.margins.top - o.po.top; break;
+					this.pos[1] = o.co.top - o.margins.top - o.po.top; break;
 				case "y":
-					this.pos[0] = o.curOffset.left - o.margins.left - o.po.left; break;
+					this.pos[0] = o.co.left - o.margins.left - o.po.left; break;
 			}
 		}
 		

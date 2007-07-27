@@ -18,8 +18,8 @@
 					width: $(this).width(),
 					height: $(this).height(),
 					position: 'absolute',
-					left: that.options.curOffset.left,
-					top: that.options.curOffset.top
+					left: that.options.co.left,
+					top: that.options.co.top
 				}).addClass(that.options.proxy);
 				return helper;
 			}	
@@ -111,7 +111,7 @@
 		drag: function(that, e) {
 
 			var o = this.options;
-			var co = o.curOffset;
+			var co = o.co;
 			var p = o.originalSize;
 
 			this.pos = [this.rpos[0]-(o.cursorAt.left ? o.cursorAt.left : 0), this.rpos[1]-(o.cursorAt.top ? o.cursorAt.top : 0)];
