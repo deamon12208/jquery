@@ -13,55 +13,25 @@
 	$.ui.ddmanager = {
 		current: null,
 		droppables: [],
-		prepareOffsets: function(that) {
+		prepareOffsets: function(t) {
 			var dropTop = $.ui.ddmanager.dropTop = [];
 			var dropLeft = $.ui.ddmanager.dropLeft;
 			var m = $.ui.ddmanager.droppables;
 			for (var i = 0; i < m.length; i++) {
 				m[i].offset = $(m[i].item.element).offset({ border: false });
-				if (that) { //Activate the droppable if used directly from draggables
-					if (m[i].item.options.accept(that.element))
-						m[i].item.activate.call(m[i].item);
-				}
+				if (t && m[i].item.options.accept(t.element)) //Activate the droppable if used directly from draggables
+					m[i].item.activate.call(m[i].item);
 			}
-						
-		},
-		prepareOffsetsAsync: function(that) {
-
-			var m = $.ui.ddmanager.droppables;
-			var ml = m.length;
-			var j = 0; var i= 0;
-			
-			var func = (function() {
-				for (; i < ml; i++) {
-					m[i].offset = $(m[i].item.element).offsetLite({ border: false });
-					if (that) { //Activate the droppable if used directly from draggables
-						if (m[i].item.options.activate && m[i].item.options.accept(that.element))
-							m[i].item.activate.call(m[i].item);
-					}
-					
-					if (i == j * 20 + 19) { //Call the next block of 20
-						j++;
-						var c = arguments.callee;
-						window.setTimeout(function() { c(); }, 0);
-						break;
-					}
-				}
-			})();
-
 		},
 		fire: function(oDrag) {
 			var oDrops = $.ui.ddmanager.droppables;
 			var oOvers = $.grep(oDrops, function(oDrop) {
-				var toleranceMode = oDrop.item.options.tolerance;
-				var isOver = $.ui.intersect(oDrag, oDrop, toleranceMode)
-				if (isOver)
+				if ($.ui.intersect(oDrag, oDrop, oDrop.item.options.tolerance))
 					oDrop.item.drop.call(oDrop.item);
 			});
 			$.each(oDrops, function(i, oDrop) {
 				if (oDrop.item.options.accept(oDrag.element)) {
-					oDrop.out = 1;
-					oDrop.over = 0;
+					oDrop.out = 1; oDrop.over = 0;
 					oDrop.item.deactivate.call(oDrop.item);
 				}
 			});
@@ -69,19 +39,16 @@
 		update: function(oDrag) {
 			var oDrops = $.ui.ddmanager.droppables;
 			var oOvers = $.grep(oDrops, function(oDrop) {
-				var toleranceMode = oDrop.item.options.tolerance;
-				var isOver = $.ui.intersect(oDrag, oDrop, toleranceMode)
+				var isOver = $.ui.intersect(oDrag, oDrop, oDrop.item.options.tolerance)
 				if (!isOver && oDrop.over == 1) {
-					oDrop.out = 1;
-					oDrop.over = 0;
+					oDrop.out = 1; oDrop.over = 0;
 					oDrop.item.out.call(oDrop.item);
 				}
 				return isOver;
 			});
 			$.each(oOvers, function(i, oOver) {
 				if (oOver.over == 0) {
-					oOver.out = 0;
-					oOver.over = 1;
+					oOver.out = 0; oOver.over = 1;
 					oOver.item.over.call(oOver.item);
 				}
 			});
@@ -105,9 +72,7 @@
 		});
 		var self = this;
 		
-		if (options.ghosting == true)
-			options.helper = 'clone'; //legacy option check
-
+		if (options.ghosting == true) options.helper = 'clone'; //legacy option check
 		this.interaction = new $.ui.mouseInteraction(el, options);
 		
 		if (options.name)

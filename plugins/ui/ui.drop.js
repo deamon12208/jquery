@@ -28,13 +28,8 @@
 		o = this.options;
 		var self = this;
 		
-		$(this.element).bind("mousemove", function(e) {
-			return self.move.apply(self, [e]);	
-		});
-		
-		$(this.element).bind("mouseup", function(e) {
-			return self.drop.apply(self, [e]);	
-		});
+		$(this.element).bind("mousemove", function(e) { return self.move.apply(self, [e]); });
+		$(this.element).bind("mouseup", function(e) { return self.drop.apply(self, [e]); });
 		
 		$.ui.ddmanager.droppables.push({ item: this, over: 0, out: 1 }); // Add the reference and positions to the manager
 		if(o.name) $.ui.add(o.name, 'droppable', this); //Append to UI manager if a name exists as option
@@ -64,11 +59,8 @@
 			/* Save current target, if no last target given */
 			var findCurrentTarget = function(e) {
 				if(e.currentTarget) return e.currentTarget;
-				var element = e.srcElement;
-				do {
-					if(element.droppable) return element; //This is only used in IE! references in DOM are evil!
-					element = element.parentNode;
-				} while (element);
+				var el = e.srcElement; 
+				do { if(el.droppable) return el; el = el.parentNode; } while (el); //This is only used in IE! references in DOM are evil!
 			}
 			if(c && o.accept(c.element)) c.currentTarget = findCurrentTarget(e);
 			
@@ -125,26 +117,14 @@
 			
 		},
 		activate: function(e) {
-
 			var c = $.ui.ddmanager.current;
-
-			var o = this.options;
 			$.ui.plugin.call('activate', this);
-			if(c) {
-				$.ui.trigger('activate', this, e, this.prepareCallbackObj(c));	
-			}
-			
+			if(c) $.ui.trigger('activate', this, e, this.prepareCallbackObj(c));	
 		},
 		deactivate: function(e) {
-
 			var c = $.ui.ddmanager.current;
-
-			var o = this.options;
 			$.ui.plugin.call('deactivate', this);
-			if(c) {
-				$.ui.trigger('deactivate', this, e, this.prepareCallbackObj(c));
-			}	
-			
+			if(c) $.ui.trigger('deactivate', this, e, this.prepareCallbackObj(c));
 		}
 	});
 	
