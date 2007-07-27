@@ -17,7 +17,7 @@ $.ui = {
 			if(!c) return;
 			
 			for (var i = 0; i < c.length; i++) {
-				if (b.options[c[i][0]]) c[i][1].call(b, a);
+				if (b.options[c[i][0]]) c[i][1].call(b, a, b.options);
 			}	
 		}	
 	},
