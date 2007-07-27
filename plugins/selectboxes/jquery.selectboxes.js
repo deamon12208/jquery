@@ -4,7 +4,7 @@
  * Licensed under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
  *
- * Version 2.0.1
+ * Version 2.1
  * Demo: http://www.texotela.co.uk/code/jquery/select/
  *
  * $LastChangedDate$
@@ -151,9 +151,11 @@ $.fn.ajaxAddOption = function(url, params, select, fn, args)
  * @author   Sam Collett (http://www.texotela.co.uk)
  * @type     jQuery
  * @param    String|RegExp|Number what  Option to remove
+ * @param    Boolean selectedOnly       (optional) Remove only if it has been selected (default false)   
  * @example  $("#myselect").removeOption("Value"); // remove by value
  * @example  $("#myselect").removeOption(/^val/i); // remove options with a value starting with 'val'
  * @example  $("#myselect").removeOption(/./); // remove all options
+ * @example  $("#myselect").removeOption(/./, true); // remove all options that have been selected
  * @example  $("#myselect").removeOption(0); // remove by index
  *
  */
@@ -171,10 +173,14 @@ $.fn.removeOption = function()
 		function()
 		{
 			if(this.nodeName.toLowerCase() != "select") return;
+			// clear cache
+			if(this.cache) this.cache = null;
+			// does the option need to be removed?
+			var remove = false;
+			// get options
+			var o = this.options;
 			if(!!v)
 			{
-				// get options
-				var o = this.options;
 				// get number of options
 				var oL = o.length;
 				for(var i=oL-1; i>=0; i--)
@@ -183,18 +189,29 @@ $.fn.removeOption = function()
 					{
 						if(o[i].value.match(v))
 						{
-							o[i] = null;
+							remove = true;
 						}
 					}
 					else if(o[i].value == v)
 					{
+						remove = true;
+					}
+					// if the option is only to be removed if selected
+					if(remove && a[1] === true) remove = o[i].selected;
+					if(remove)
+					{
 						o[i] = null;
 					}
+					remove = false;
 				}
 			}
 			else
 			{
-				this.remove(i);
+				if(remove && a[1] === true) remove = o[i].selected;
+				if(remove)
+				{
+					this.remove(i);
+				}
 			}
 		}
 	);

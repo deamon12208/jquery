@@ -1,3 +1,10 @@
+Select box manipulation ChangeLog
+
+27 July 2007
+  cache (created when adding an option) is removed when removing options
+  if you supply a second parameter to removeOption and it is true, then the option will only be removed
+    if it is selected as well
+
 15 June 2007
   addOption is now much faster when adding many options (no longer causing an 'unresponsive script' dialog box)
 
@@ -6,7 +13,7 @@
 
 5 April 2007
   ajaxAddOption takes two additional arguments - fn (function to call when after the options have been added)
-  and args (arguments to pass on to the function)
+    and args (arguments to pass on to the function)
   New containsOption plugin, for checking if an option is within the select list
 
 20 February 2007
