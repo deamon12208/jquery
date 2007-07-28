@@ -8,7 +8,7 @@
  *   http://www.gnu.org/licenses/gpl.html
  *
  * Revision: $Id$
- * Version: 1.0.2  Jul-18-2007
+ * Version: 1.0.3
  */
  (function($) {
 /**
@@ -210,8 +210,8 @@ $.fn.ajaxSubmit = function(options) {
     // perform a load on the target only if dataType is not provided
     if (!options.dataType && options.target) {
         var oldSuccess = options.success;// || function(){};
-        callbacks.push(function(data, status) {
-            $(options.target).attr("innerHTML", data).evalScripts().each(oldSuccess, [data, status]);
+        callbacks.push(function(data) {
+            $(options.target).attr("innerHTML", data).evalScripts().each(oldSuccess, arguments);
         });
     }
     else if (options.success)
@@ -219,7 +219,7 @@ $.fn.ajaxSubmit = function(options) {
 
     options.success = function(data, status) {
         for (var i=0, max=callbacks.length; i < max; i++)
-            callbacks[i](data, status);
+            callbacks[i](data, status, $form);
     };
 
     // are there files to upload?
