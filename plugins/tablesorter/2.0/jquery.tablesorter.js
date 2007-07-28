@@ -11,7 +11,6 @@
  *
  * TODO: 
  * 		  
- * 		tr appending,
  * 		click three no  sort 
  * 		 
  * 		add parsers.
@@ -40,6 +39,7 @@
 					css: ['even','odd']
 				},
 				headers: {},
+				widthFixed: true,
 				cancelSelection: true,
 				debug: false //TODO: set this to false before release.
 				
@@ -133,7 +133,9 @@
 						var c = table.tBodies[0].rows[i],
 							cols = [];
 						
-						cache.row.push(c);
+						
+						
+						cache.row.push($(c));
 						
 						for(var j=0; j < totalCells; ++j) {
 							cols.push(parsers[j].format(getElementText(table.config,c.cells[j])));	
@@ -183,15 +185,20 @@
 							
 				//for (var i = 0; i < totalRows; ++i) {
 				for (var i=0;i < totalRows; ++i) {
-					
-					 rows.push('<tr>' + r[n[i][checkCell]].innerHTML + '</tr>');
+						//log(r[n[i][checkCell]]);
+					 	rows.push(r[n[i][checkCell]]);
+						
 				}
 				
 				if(table.config.appender != null) {
 					table.config.appender(table,rows);	
 				} else {
-					tableBody.html(rows.join(""));
+					//tableBody.append(rows);
+					for(var i=0; i < totalRows; i++) {
+						tableBody.append(r[n[i][checkCell]]);
+					}
 				}
+				
 				rows = null;
 				
 				//apply table widgets
@@ -317,6 +324,13 @@
 				}
 			}
 			
+			function fixColumnWidth(table,$headers) {
+				
+				$headers.each(function(offset) {
+											
+				});
+			}
+			
 			/* sorting methods */
 			function multisort(table,sortList,cache) {
 				
@@ -418,8 +432,6 @@
 						
 						// get current column sort order
 						var d = this.order % 2;
-						
-						console.log(d);
 						
 						// user only whants to sort on one column
 						if(!e[config.sortMultisortKey]) {
