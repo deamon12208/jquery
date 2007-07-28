@@ -9,7 +9,7 @@
 									$("<input type=button value='<'>").addClass("prev")
 								)
 								.append(
-									$("<input type=text value=1' >").addClass("page")
+									$("<input type=text value=1 >").addClass("page")
 								).append(
 									$("<span>").addClass("seperator").html("/")
 								).append(
@@ -46,12 +46,20 @@
 			function renderTable(table,rows) {
 				
 				var c = table.config;
+				var l = rows.length;
 				var s = c.page * c.size;
 				var e = (s + c.size);
 				if(e > rows.length ) {
 					e = rows.length;
 				}
-				$('tbody:first',table).html(rows.slice(s,e).join(""));
+				var tableBody = $('tbody:first',table).empty();
+				
+				for(var i = s; i < e; i++) {
+					tableBody.append(rows[i]);
+				}
+				
+				
+				//$('tbody:first',table).html(rows.slice(s,e).join(""));
 			}
 			
 			
