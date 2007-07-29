@@ -16,7 +16,9 @@
 		$.extend(options, o);
 		$.extend(options, {
 			axis: o.axis ? o.axis : (el.offsetWidth < el.offsetHeight ? 'vertical' : 'horizontal'),
-			percent: 0,
+			maxValue: o.maxValue ? o.maxValue : 100,
+			minValue: o.minValue ? o.minValue : 0,
+			curValue: o.startValue ? o.startValue : 0,
 			_start: function(h, p, c, t, e) {
 				self.start.apply(t, [self, e]); // Trigger the start callback				
 			},
@@ -27,13 +29,17 @@
 				self.drag.apply(t, [self, e]); // Trigger the start callback
 			}			
 		});
+
 		var self = this;
 		var o = options;
+		o.stepping = o.stepping ? o.stepping : (o.steps ? o.maxValue/o.steps : 0);
+		o.realValue = (o.maxValue - o.minValue);
+
 
 		this.handle = options.handle ? $(options.handle, el)[0] : $('.ui-slider-handle', el)[0];
 		this.interaction = new $.ui.mouseInteraction(this.handle, options);
 		this.element = el;
-
+		
 		
 		if(o.axis == 'horizontal') {
 			this.parentSize = $(this.element).outerWidth() - $(this.handle).outerWidth();
@@ -44,6 +50,8 @@
 			this.parentSize = $(this.element).outerHeight() - $(this.handle).outerHeight();
 			this.prop = 'top';
 		}
+		
+		$(el).bind('click', function(e) { self.click.apply(self, [e]); });
 		
 		if (options.name)
 			$.ui.add(options.name, 'slider', this); //Append to UI manager if a name exists as option
@@ -57,9 +65,18 @@
 			return {
 				handle: self.helper,
 				position: { left: self.pos[0], top: self.pos[1] },
-				percent: self.percent,
+				value: self.options.curValue+self.options.minValue,
 				slider: self	
 			}			
+		},
+		click: function(e) {
+			var o = this.interaction.options;
+			var pointer = $.ui.getPointer(e);
+			var offset = $(this.interaction.element).offsetParent().offset({ border: false });
+			if(this.interaction.element == e.target) return;
+			
+			this.drag.apply(this.interaction, [this, e, [pointer[0]-offset.left,pointer[1]-offset.top]]);
+				
 		},
 		start: function(that, e) {
 			
@@ -77,10 +94,10 @@
 			return false;
 			
 		},
-		drag: function(that, e) {
+		drag: function(that, e, pos) {
 
 			var o = this.options;
-			this.pos = [this.pos[0]-(o.cursorAt.left ? o.cursorAt.left : 0), this.pos[1]-(o.cursorAt.top ? o.cursorAt.top : 0)];
+			this.pos = pos ? pos : [this.pos[0]-(o.cursorAt.left ? o.cursorAt.left : 0), this.pos[1]-(o.cursorAt.top ? o.cursorAt.top : 0)];
 			
 			if(o.axis == 'horizontal') var m = this.pos[0];
 			if(o.axis == 'vertical')   var m = this.pos[1];
@@ -92,10 +109,10 @@
 			if(m < 0) m = 0;
 			if(m > p) m = p;
 
-			this.percent = (Math.round((m/p)*100));
+			o.curValue = (Math.round((m/p)*o.realValue));
 			if(o.stepping) {
-				this.percent = Math.round(this.percent/o.stepping)*o.stepping;
-				m = ((this.percent)/100) * p;
+				o.curValue = Math.round(o.curValue/o.stepping)*o.stepping;
+				m = ((o.curValue)/o.realValue) * p;
 			}
 			
 			$(this.element).css(prop, m+'px');
@@ -104,13 +121,14 @@
 			return false;
 			
 		},
-		goto: function(percent) {
+		goto: function(value,scale) {
 			var o = this.interaction.options;
+			var modifier = scale ? scale : o.realValue;
 			
 			var p = this.parentSize;
 			var prop = this.prop;
 			
-			m = ((percent)/100) * p;
+			m = ((value)/modifier) * p;
 			
 			$(this.interaction.element).css(prop, m+'px');
 
