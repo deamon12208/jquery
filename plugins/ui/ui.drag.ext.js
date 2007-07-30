@@ -29,6 +29,18 @@
 
 //----------------------------------------------------------------
 
+	$.ui.plugin.add("draggable", "start", "cursor", function(a,o) {
+		var t = $(this.helper);
+		if (t.css("cursor")) o.ocursor = t.css("cursor");
+		t.css("cursor", o.cursor);
+	});
+
+	$.ui.plugin.add("draggable", "stop", "cursor", function(a,o) {
+		if (o.ocursor) $(this.helper).css("cursor", o.ocursor);
+	});
+
+//----------------------------------------------------------------
+
 	$.ui.plugin.add("draggable", "start", "zIndex", function(a,o) {
 		var t = $(this.helper);
 		if(t.css("zIndex")) o.ozIndex = t.css("zIndex");
