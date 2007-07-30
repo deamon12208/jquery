@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Tree Test Page</title>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.1.2.js"></script>
+<script type="text/javascript" src="../ui.js"></script>
+<script type="text/javascript" src="../ui.tree.js"></script>
+
+<style type="text/css" media="all">
+
+.ui-tree-nodes {
+    position:relative;
+    list-style: none;
+    margin:0;
+    padding:0;
+    margin-left:0;
+    padding-left:1em;
+}
+
+.ui-tree-node {
+    margin:0;
+    padding:0;
+    cursor: default;
+}
+
+.ui-tree-node-selected > .ui-tree-node-text {
+    background: #82afdf;
+}
+
+.ui-tree-node-button {
+    border: 1px solid silver;
+    color: black;
+    font-family: monospace;
+    margin-top: 0.3em;
+    position: absolute;
+    left: 0.2em;
+    width: 0.7em;
+    height: 0.8em;
+    line-height: 0.8em;
+    text-decoration: none;
+}
+
+.ui-tree-node-expanded > .ui-tree-node-button {
+    background: #729fcf;
+}
+
+.ui-tree-node-collapsed > .ui-tree-node-button {
+    background: #729fcf;
+}
+
+.ui-tree-node-moving > .ui-tree-node-button {
+    background: #7ad214;
+}
+
+.ui-tree-node-moving > .ui-tree-node-text {
+    background: #7ad214;
+}
+
+</style>
+
+</head>
+<body>
+
+<ul id="tree">
+  <li>Lorem ipsum dolor
+    <ul>
+      <li>sit amet, consectetur</li>
+      <li>adipisicing elit, sed
+        <ul>
+          <li>do eiusmod</li>
+          <li>tempor incididunt</li>
+        </ul>
+      </li>
+      <li>ut labore et dolore magna aliqua.</li>
+    </ul>
+  </li>
+  <li>Ut enim ad minim veniam,
+    <ul>
+      <li>quis nostrud exercitation</li>
+      <li>ullamco laboris nisi ut</li>
+      <li>aliquip ex ea commodo consequat.</li>
+      <li>quis nostrud exercitation</li>
+      <li>ullamco laboris nisi ut</li>
+      <li>aliquip ex ea commodo consequat.</li>
+      <li>quis nostrud exercitation</li>
+      <li>ullamco laboris nisi ut</li>
+      <li>aliquip ex ea commodo consequat.</li>
+    </ul>
+  </li>
+  <li>Duis aute irure dolor in reprehenderit in
+    <ul>
+      <li>voluptate velit</li>
+      <li>esse cillum dolore eu</li>
+      <li>fugiat nulla pariatur.</li>
+      <li>voluptate velit</li>
+      <li>esse cillum dolore eu</li>
+      <li>fugiat nulla pariatur.</li>
+    </ul>
+  </li>
+  <li>Excepteur sint occaecat cupidatat
+    <ul>
+      <li>non proident,
+        <ul>
+          <li>sunt in</li>
+          <li>culpa qui officia</li>
+          <li>deserunt mollit</li>
+          <li>anim id est</li>
+          <li>laborum</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<script type="text/javascript">
+
+$(function() {
+
+	$('#tree').tree();
+	
+});
+
+</script>
+
+</body>
+
+</html>
+
