@@ -1,0 +1,354 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<title>jQuery Calendar</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+		<meta name="description" content="jQuery calendar is a popup calendar / date picker built on the jQuery javascript library." />
+		<meta name="author" content="Marc Grabanski" />
+		<meta name="copyright" content="Copyright (c) 2005 Marc Grabanski" />
+		<meta name="keywords" content="jquery calendar, jquery popup calendar, javascript calendar, jquery date picker" />
+		<script type="text/javascript" src="jquery.pack.js"></script>
+		<!--script type="text/javascript" src="jquery.blockUI.js"></script-->
+		<script type="text/javascript" src="jquery-calendar.js"></script> 
+		<script type="text/javascript" src="jquery-calendar-demo.js"></script>
+		<style type="text/css">
+			@import url(http://marcgrabanski.com/css/style.css);
+			#header a {	color: #eee; }
+			#keystrokes { float: right; background-color: #cdf; border: 1px solid #008; padding: 10px; width: 18em; font-size: .9em; }
+			h2 { font-weight: normal; }
+			code { font-size: 1em; overflow: hidden; }
+			ol li { padding: 0.5em 0; }
+			.comments, .comment_form { font-size: 90%; }
+			form label { width: 450px; }
+			.calLabel { float: left; width: 15em; }
+			.ar_day { color: white !important; background: #eee url(img/ar.gif) no-repeat center !important; }
+			.au_day { color: blue !important; background: #eee url(img/au.gif) no-repeat center !important; }
+			.br_day { color: green !important; background: #eee url(img/br.gif) no-repeat center !important; }
+			.cn_day { color: red !important; background: #eee url(img/cn.gif) no-repeat center !important; }
+			.id_day { color: white !important; background: #eee url(img/id.gif) no-repeat center !important; }
+			.ie_day { color: white !important; background: #eee url(img/ie.gif) no-repeat center !important; }
+			.ke_day { color: red !important; background: #eee url(img/ke.gif) no-repeat center !important; }
+			.lb_day { color: white !important; background: #eee url(img/lb.gif) no-repeat center !important; }
+			.nz_day { color: blue !important; background: #eee url(img/nz.gif) no-repeat center !important; }
+			.se_day { color: blue !important; background: #eee url(img/se.gif) no-repeat center !important; }
+			.us_day { color: white !important; background: #eee url(img/us.gif) no-repeat center !important; }
+			.za_day { color: green !important; background: #eee url(img/za.gif) no-repeat center !important; }
+		</style>
+		<link rel="stylesheet" type="text/css" href="jquery-calendar.css" title="default" />
+		<link rel="alternate stylesheet" type="text/css" href="jquery-calendar-alt.css" title="alt" />
+		<!--[if lt IE 7]>
+		<link rel="stylesheet" type="text/css" href="@import url(http://marcgrabanski.com/css/ie6.css);" />
+		<![endif]--> 
+	</head>
+	<body>
+		<div id="wrap">
+			<ul id="menu">
+				<li id="blog"><a href="/">Blog</a></li>
+                <li id="code" class="on"><a href="../../code.html" title="Original XHTML, CSS and Javascript Code by Marc Grabanski">Code</a></li>
+				<li id="projects"><a href="../../projects.html" title="Portfolio of Projects and Development Roles">Projects</a></li>
+                <li id="tutorials"><a href="../../code-tutorials/xhtml.html" title="Tutorials on XHTML, CSS and Javascript">Tutorials</a></li>
+                <li id="hardware"><a href="../../computer-hardware.html" title="Marc was a Computer Hardware Guru Years Ago">Hardware</a></li>
+				<li id="skills"><a href="../../skills.html">Skills</a></li>
+                <li id="testimonials"><a href="../../testimonials.html" title="People Said Good things about Marc Grabanski">Testimonials</a></li>
+                <li id="mailto"><a href="mailto:&#109;&#64;marcgrabanski.com" title="Email Marc Grabanski">Email Me</a></li>
+            </ul>
+			<div id="header">
+				<div>
+					<h1>jQuery Calendar</h1>
+					<p class="caption">Written by <a href="/">Marc Grabanski</a> and extended by Keith Wood (kbwood@iprimus.com.au).</p>
+				</div>
+			</div>
+			<ul id="menu2" style="clear: left;">
+				<li id="beyond-flash"><a href="../beyond-flash/">BeyondFlash</a></li>
+				<li id="ajax-calendar" class="on"><a href="../jquery-calendar/">jQueryCalendar</a></li>
+				<li id="clean-form-validation"><a href="../clean-form-validation/">CleanFormValidation</a></li>
+				<li id="ajax-messages"><a href="../ajax-messages/">AjaxMessages</a></li>
+				<li id="clean-calendar"><a href="../clean-calendar/">CleanCalendar</a></li>
+				<li id="fisheye-menu"><a href="../fisheye-menu/">FisheyeMenu</a></li>
+			</ul>
+			<div id="content">
+				<h2>jQuery Calendar Examples</h2>
+				<div class="container" style="width: 95%;">
+					<div id="keystrokes">
+						<h3 style="font-weight:bold;">Keystrokes</h3>
+						<p>The calendar can also be driven via the keyboard:</p>
+						<dl>
+							<dt>page down/up</dt><dd>previous/next month</dd>
+							<dt>ctrl+page down/up</dt><dd>previous/next year</dd>
+							<dt>ctrl+home</dt><dd>current month or open when closed</dd>
+							<dt>ctrl+left/right</dt><dd>previous/next day</dd>
+							<dt>ctrl+down/up</dt><dd>previous/next week</dd>
+							<dt>enter</dt><dd>accept the selected date</dd>
+							<dt>ctrl+end</dt><dd>close and erase the date</dd>
+							<dt>escape</dt><dd>close the calendar without selection</dd>
+						</dl>
+					</div>
+					<p><div class="calLabel">Choose a set of options:</div> 
+						<select onChange="setOptions(this);">
+							<option value="0">Defaults</option>
+							<option value="1">Date restricted to 26-Jan-2005 to 26-Jan-2007</option>
+							<option value="2">Calendar starts on Monday and can't be changed</option>
+							<option value="3">Month and year are not directly selectable</option>
+							<option value="4">Date in US format (mm/dd/yyyy)</option>
+							<option value="5">Show days in other months</option>
+							<option value="6">Move clear/close controls to bottom</option>
+							<option value="7">Can't select weekends</option>
+							<option value="8">Highlight (selected) national days</option>
+							<option value="9">Calendar in French</option>
+							<option value="10">Change Calendar style sheet</option>
+						</select></p>
+					<p><div class="calLabel">Display speed:</div> <select onChange="setSpeed(this);"><option value="">immediate</option>
+						<option value="slow">slow</option><option value="medium" selected="selected">medium</option>
+						<option value="fast">fast</option></select></p>
+					<p><div class="calLabel">&nbsp;</div> <button onClick="popUpCal.showFor($('.calendarFocus')[0]);">Activate calendar externally</button></p>
+					<p><div class="calLabel">Calendar appears on focus:</div> <input type="text" size="10" class="calendarFocus"/> <input type="button" id="enableFocus" value="Disable"/></p>
+					<p><div class="calLabel">Calendar appears via button:</div> <input type="text" size="10" class="calendarButton"/> <input type="button" id="enableButton" value="Disable"/></p>
+					<p><div class="calLabel">Calendar appears both ways:</div> <input type="text" size="10" class="calendarBoth"/> <input type="button" id="enableBoth" value="Disable"/></p>
+					<p><div class="calLabel">Date range:</div> <input type="text" size="10" class="calendarRange" id="dFrom"/> to <input type="text" size="10" class="calendarRange" id="dTo"/></p>
+					<p><div class="calLabel">IE select problem:</div> <select><option>Show how the calendar floats over a select box</option></select></p>
+					<p><div class="calLabel">Calendar dialog:</div> <input type="text" size="10" readonly="readonly" id="popUpDate"/> <button onClick="getPopUpDate();">Update</button></p>
+					<div id="more">
+						<p>Attach the calendar to one or more input fields with the following:</p>
+						<pre><code style="width: 500px;">$('input selector').calendar();</code></pre>
+						<p>or with initial settings:</p>
+						<pre><code style="width: 500px;">$('input selector').calendar({autoPopUp: 'button'});
+$('input selector').calendar({autoPopUp: 'both', 
+	buttonImageOnly: true, buttonImage: 'calendar.gif', 
+	buttonText: 'Calendar'});</code></pre>
+						<div id="more0">
+							<p>The defaults are:</p>
+							<ul>
+								<li>English</li>
+								<li>Date format dd/mm/yyyy</li>
+								<li>Month and year are selectable directly</li>
+								<li>Calendar starts on Sunday</li>
+								<li>Don't display days in other months</li>
+								<li>Day names are clickable to change the first day of the week</li>
+								<li>Clear/close controls show at the top</li>
+								<li>No date restrictions</li>
+							</ul>
+							<p>Note that the available year range changes for each field. This is achieved with the following:</p>
+							<pre>popUpCal.fieldSettings = customSettings;
+		
+function customSettings(input) {
+	range = (input.className == 'calendarFocus' ? 5 : 
+		(input.className == 'calendarButton' ? 7 : 10));
+	return {yearRange: '-' + range + ':+' + range, 
+		minDate: (input.id == 'dTo' ? getDate($('#dFrom')) : defaultMinDate), 
+		maxDate: (input.id == 'dFrom' ? getDate($('#dTo')) : defaultMaxDate)};
+}</pre>
+							<p>The date range restrictions are also set in this custom function.</p>
+						</div>
+						<div id="more1">
+							<p>Restrict the dates as follows:</p>
+							<pre><code>popUpCal.minDate = new Date(2005, 1 - 1, 26);
+popUpCal.maxDate = new Date(2007, 1 - 1, 26);</code></pre>
+						</div>
+						<div id="more2">
+							<p>Change the first day of the month as follows (0 = Sunday, 1 = Monday, ...):</p>
+							<pre><code>popUpCal.firstDay = 1;
+popUpCal.changeFirstDay = false;</code></pre>
+						</div>
+						<div id="more3">
+							<p>Don't allow the month or year to be selected directly with:</p>
+							<pre>popUpCal.changeMonth = false;
+popUpCal.changeYear = false;</pre>
+						</div>
+						<div id="more4">
+							<p>Change the date format as follows:</p>
+							<pre><code>popUpCal.dateFormat = 'MDY/';</code></pre>
+							<p>The first three characters indicate the day/month/year order, while the last is the separator character.</p>
+						</div>
+						<div id="more5">
+							<p>Change dates in other months as follows:</p>
+							<pre><code>popUpCal.showOtherMonths = true;</code></pre>
+						</div>
+						<div id="more6">
+							<p>Move the clear/close controls as follows:</p>
+							<pre><code>popUpCal.closeAtTop = false;</code></pre>
+						</div>
+						<div id="more7">
+							<p>Don't allow weekends to be selected as follows:</p>
+							<pre><code>popUpCal.customDate = popUpCal.noWeekends;</code></pre>
+						</div>
+						<div id="more8">
+							<p>Highlight (selected) national days as follows:</p>
+							<pre><code>popUpCal.customDate = nationalDays;
+natDays = [[1, 26, 'au'], [2, 6, 'nz'], [3, 17, 'ie'], [4, 27, 'za'], [5, 25, 'ar'], [6, 6, 'se'],
+	[7, 4, 'us'], [8, 17, 'id'], [9, 7, 'br'], [10, 1, 'cn'], [11, 22, 'lb'], [12, 12, 'ke']];
+function nationalDays(date) {
+	for (i = 0; i < natDays.length; i++) {
+		if (date.getMonth() == natDays[i][0] - 1 && date.getDate() == natDays[i][1]) {
+			return [false, natDays[i][2] + '_day'];
+		}
+	}
+	return [true, ''];
+}</code></pre>
+							<p>With CSS like the following:</p>
+							<pre><code>.au_day { color: blue !important; background: #eee url(au.gif) no-repeat center !important; }</code></pre>
+						</div>
+						<div id="more9">
+							<p>Change the display text as follows:</p>
+							<pre><code>popUpCal.clearText = 'Enlevez';
+popUpCal.closeText = 'Fermez';
+popUpCal.prevText = '&amp;lt;Préc';
+popUpCal.nextText = 'Proch&amp;gt;';
+popUpCal.currentText = 'En cours';
+popUpCal.dayNames = new Array('Di','Lu','Ma','Me','Je','Ve','Sa');
+popUpCal.monthNames = new Array('Janvier','Février','Mars','Avril','Mai','Juin',
+	'Juillet','Août','Septembre','Octobre','Novembre','Décembre');</code></pre>
+							<p>or include the appropriate localisation package:</p>
+							<pre><code>&lt;script type="text/javascript" src="jquery-calendar-fr.js">&lt;/script></code></pre>
+						</div>
+						<div id="more10">
+							<p>Change the display text as follows:</p>
+							<pre><code>popUpCal.clearText = 'Enlevez';
+popUpCal.closeText = 'Fermez';
+popUpCal.prevText = '&amp;lt;Préc';
+popUpCal.nextText = 'Proch&amp;gt;';
+popUpCal.currentText = 'En cours';
+popUpCal.dayNames = ['Di','Lu','Ma','Me','Je','Ve','Sa'];
+popUpCal.monthNames = ['Janvier','Février','Mars','Avril','Mai','Juin',
+'Juillet','Août','Septembre','Octobre','Novembre','Décembre'];</code></pre>
+							<p>or include the appropriate localisation package:</p>
+							<pre>&lt;script type="text/javascript" src="jquery-calendar-fr.js">&lt;/script></pre>
+						</div>
+						<div id="more10">
+							<p>A demo of how easy it is to change the look of the calendar!</p>
+							<p class="zip"><a href="stylepack.zip">Download the stylepack.zip</a></p>
+						</div>
+					</div>
+				</div>
+				<div class="container">
+					<p>View the calendar inline: <a href="inline.html">Inline Calendar Demo</a></p>
+				</div>
+				<h2>Use the jQuery Calendar</h2>
+				<div class="container">
+					<ol>
+						<li>Include the jQuery library in the head section of your page.
+							<pre><code>&lt;script type=&quot;text/javascript&quot; src=&quot;http://code.jquery.com/jquery-latest.pack.js&quot;&gt;&lt;/script&gt;</code></pre></li>
+						<li>Download and include the <a href="jquery-calendar.css">jQuery Calendar CSS</a> and the <a href="jquery-calendar.js">jQuery Calendar Javascript</a> in the head section of your page.
+							<pre><code>&lt;style type=&quot;text/css&quot;&gt;@import url(jquery-calendar.css);&lt;/style&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;jquery-calendar.js&quot;&gt;&lt;/script&gt;</code></pre>
+Packed version (8KB) <a href="jquery-calendar.pack.js">jquery-calendar.pack.js</a></li>
+						<li>Configure calendar (if necessary) using the <a href="../jquery-calendar/api/">settings documentation</a>. Here is an example:
+							<pre><code>popUpCal.autoPopUp = 'button';</code></pre></li>
+						<li>Initialize the calendar using the jQuery selector followed by the calendar function.
+							<pre><code>$('input selector').calendar();</code></pre></li>
+					</ol>
+				</div>
+				<h2>Need more help?</h2>
+				<div class="container">
+					<p>Try grabbing the code from the <a href="../jquery-calendar/demo.html">demo page</a>.</p>
+					<p><a href="mailto:&#109;&#64;marcgrabanski.com">Email Me</a> or Keith (kbwood@iprimus.com.au) with the subject "jQuery Calendar Support" as the subject.</p>
+				</div>
+				<h2>jQuery Calendar Settings</h2>
+				<div class="container">
+					<p class="exe"><a href="../jquery-calendar/api/">jQuery Calendar Settings Documentation</a></p>
+					<p>French localization package <a href="jquery-calendar-fr.js">jquery-calendar-fr.js</a></p>
+					<p>Spanish package out of date <span style="text-decoration: line-through;">Spanish localization package <a href="jquery-calendar-es.js">jquery-calendar-es.js</a> (Thanks to Vester from Buenos Aires, Argentina)</span></p>
+					<p>The custom images used for this demo and alternate stylesheet are in the <a href="stylepack.zip">stylepack</a>.</p>
+				</div>
+				<h2>Rate jQuery Calendar</h2>
+				<div class="container">
+					<p>Rate this plugin on the <a href="http://jquery.com/plugins/project/jquery-calendar">jquery calendar plugins</a> page.</p>
+				</div>
+				<h2>Comments</h2>
+				<?php include '../../include/global.php'; $linkID='0'; $id='0'; include '../../include/module.comments.php'; ?>			
+				<script type="text/javascript" src="../../include/script.comments.js"></script>
+				<a name="recent-updates"></a>
+				<h2>jQuery Calendar Recent Updates</h2>
+				<div class="container" style="font-size: 0.8em;">
+					<h3 style="font-weight:bold">07/18/2007</h3>
+					<ul>
+						<li>Fixed IE select bug - needed to wait for show to complete before you got the size. Still doesn't do the borders quite right though.</li>
+						<li>Remove/disable prev/next links if not applicable - driven by hideIfNoPrevNext attribute.
+						<li>Remove current link if not applicable.</li>
+						<li>Added showStandalone function that displays the calendar in a "popup dialog", complete with heading prompt and callback routine. If blockUI plugin is available it'll use that to make it modal.</li>
+						See the Update button on the demo.
+						<li>Moved setupActions method inline in HTML as this provided a render performance increase - I guess it didn't have to search for the controls to connect actions to, nor create new functions every time.</li>
+					</ul>
+					<h3 style="font-weight:bold">07/12/2007</h3>
+					<ul>
+						<li>Added basic support for an <a href="inline.html">inline calendar</a>. Set popUpCal.inline to true (NOTICE: This doesn't work with other calendar instances yet.)</li>
+						<li>Added support for a customEvent that has this.date as the selected date.</li>
+						<li>Fixed Bug where button caused the form to be submitted.</li>
+						<li>The 'change' event now fires when the input is filled in with a date. (Thanks SekYo)</li>
+						<li>Added Marc R's fix for when dateFormat has no separator. (example: "YMD")</li>
+						<li>Added exact height and width for calendar cover. (Thanks hjr)</li>
+					</ul>
+					<h3 style="font-weight:bold">07/01/2007</h3>
+					<ul>
+						<li>Added a new attribute, fieldSettings, which can be a function that takes an input field and returns a settings(anonymous) object to update the calendar with.</li>
+						<li>Added functionality that allows you to click on the day names to have the week start on that day. You can disable this feature by setting the changeFirstDay attribute to false.</li>
+						<li>Handling of disabling/enabling an input field and any trigger button/image - see enableFor() and disableFor().</li>
+						<li>Can make the month/year lists unavailable with changeMonth and changeYear.</li>
+						<li>Triggering function renamed to showFor(). This can be used externally (as one correspondent wanted - Ronald) by passing in the appropriate input field.</li>
+						<li>Removed getDayName() and getMonthName() as they served no real purpose.</li>
+						<li>Minor bugs fixes and tidy up.</li>
+					</ul>
+
+					<h3 style="font-weight:bold">06/17/2007</h3>
+					<ul>
+						<li>Calendar now displays full day names, so you gain more control over the display - names reduced accordingly (will need to update the Spanish version).</li>
+						<li>Added Clear link to close the calendar and erase the date value.</li>
+						<li>Added clearText property to set the text for the Clear link (will need to update the Spanish version).</li>
+						<li>Handle ctrl+end key to activate the Clear link.</li>
+						<li>Added buttonImageOnly property (true/false) to place an image after the field without a button.</li>
+						<li>Added closeAtTop property (true/false) to position the clear/close links at the top or bottom.</li>
+						<li>Added showOtherMonths property (true/false) to display dates in other months (non-selectable).</li>
+						<li>Changed autoPopUp property to be focus/button/both to allow for the combination.</li>
+						<li>Calendar now closes when clicking on the page outside of it.</li>
+						<li>Keyboard navigation continues to work after clicking a link.</li>
+						<li>Constructor function (calendar()) now accepts parameters to allow setting of attributes in one go (see demo for examples).</li>
+						<li>Custom date functionality added.</li>
+						<li>Bug fix SSL conection and iframe.</li>
+						<li>Updated demo page
+							<ul>
+								<li>to allow setting of opening speed</li>
+								<li>to demonstrate focus/button/both and buttonImageOnly properties</li>
+								<li>to show days in other months and clear/close at bottom as options</li>
+								<li>to show how constructor functions works with parameters</li>
+							</ul></li>
+					</ul>
+			  </div>
+			  <h2>Make a Donation</h2>
+			  <div class="container">
+				<p>I wasn't planning to ask people for donations, but since the community asked I put this up. Thanks for your great feedback.</p>
+				<p><form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+				<div>
+					<input type="hidden" name="cmd" value="_s-xclick">
+					<input type="image" src="https://www.paypal.com/en_US/i/btn/x-click-but21.gif" border="0" name="submit" alt="Make a donation to my Open Source Fund.">
+					<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+					<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+">
+</div>
+</form></p>
+			  </div>
+				<h2>Version 1 Comments / Rating Archive</h2>
+				<div class="container">
+					<p><a href="jquery-calendar-archive.html">jQuery Calendar version 1 archive</a> of comments and rating.</p>
+				</div>
+				<div class="container">
+					<script type="text/javascript">
+						if (typeof window.Delicious == "undefined") window.Delicious = {};
+						Delicious.BLOGBADGE_DEFAULT_CLASS = 'delicious-blogbadge-line';
+					</script>
+					<script src="http://images.del.icio.us/static/js/blogbadge.js"  type="text/javascript"></script>
+				</div>
+			</div>
+			<div id="footer">
+				<div>
+                	<p class="caption">Copyright 2007 &copy; Marc Grabanski</p>
+				</div>
+            </div>
+		</div>
+		<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+		</script>
+		<script type="text/javascript">
+		_uacct = "UA-963303-2";
+		urchinTracker();
+		</script>
+    </body>
+</html>
