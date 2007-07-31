@@ -142,7 +142,7 @@ jQuery.fn.jScrollPane = function(settings)
 								.html('Scroll up')
 								.bind('mousedown', function()
 								{
-									currentArrowButton = $(this);
+									currentArrowButton = jQuery(this);
 									currentArrowDirection = -1;
 									onArrowMouseDown();
 									this.blur();
@@ -154,7 +154,7 @@ jQuery.fn.jScrollPane = function(settings)
 								.html('Scroll down')
 								.bind('mousedown', function()
 								{
-									currentArrowButton = $(this);
+									currentArrowButton = jQuery(this);
 									currentArrowDirection = 1;
 									onArrowMouseDown();
 									this.blur();
