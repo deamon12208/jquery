@@ -11,10 +11,11 @@
 			$('div').behavior(function() {
 				$(this).append('<a href="#">Test</a>');
 			});
-			$('a', 'div').behavior('click', function() {
+			var click = function() {
 				alert('Applied via a behavior rule');
 				return false;
-			});
+			};
+			$('a', 'div').behavior('click', click);
 			$(function() {
 				var fn = function() { $(this).addClass('link'); };
 				$('div a').behavior(fn);
@@ -25,6 +26,8 @@
 				
 				$('<div>New Div</div>').appendTo('body');
 				$('<div>New Div</div>').prependTo('body');
+				
+				$('<span>').appendTo('body').load('load_test.html');
 			});
 		</script>
 		<style type="text/css" media="screen">

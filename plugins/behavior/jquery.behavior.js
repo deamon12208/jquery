@@ -1,4 +1,4 @@
-/* Copyright (c) 2007 Brandon Aaron (http://brandonaaron.net)
+/* Copyright (c) 2007 Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
  * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) 
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
  *
@@ -10,6 +10,7 @@
  */
 
 (function($) {
+
 
 $.extend($.fn, {
 	
@@ -29,16 +30,20 @@ $.extend($.fn, {
 	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
 	 */
 	behavior: function(type, fn) {
-		if ($.isFunction(type)) {
-			// type is function
-			fn = type;
-			type = undefined;
+		if (!arguments.length)
+			$.behavior.run();
+		else {
+			if ($.isFunction(type)) {
+				// type is function
+				fn = type;
+				type = undefined;
+			}
+			// create a new behavior
+			$.behavior(this.selector, this.context, type, fn);
+			// Run the behavior if document is ready
+			 if ($.isReady)
+			 	$.behavior.run($.behavior.behaviors.length-1);
 		}
-		// create a new behavior
-		$.behavior(this.selector, this.context, type, fn);
-		// Run the behavior if document is ready
-		 if ($.isReady)
-		 	$.behavior.run($.behavior.behaviors.length-1);
 		// continue the chain
 		return this;
 	},
@@ -144,7 +149,6 @@ $.extend( $.behavior, {
 	 * @example $.behavior.registerMethod("myMethod1");
 	 * @example $.behavior.registerMethod("myMethod1", "myMethod2", "myMethod3");
 	 *
-	 * @private
 	 * @name $.behavior.registerMethod
 	 * @param String name The name of the method to register with behavior
 	 * @type Undefined
@@ -173,10 +177,16 @@ $.extend( $.behavior, {
 	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
 	 */
 	remove: function(id) {
-		if (id != undefined)
+		if (id != undefined) {
+			$.behavior._unbindEvents(id);
 			delete $.behavior.behaviors[id];
-		else
+		}
+		else {
+			$.each( $.behavior.behaviors, function(i) {
+				$.behavior._unbindEvents(i);
+			});
 			$.behavior.behaviors = [];
+		}
 	},
 	
 	/**
@@ -186,7 +196,6 @@ $.extend( $.behavior, {
 	 * @name $.behavior.find
 	 * @type Number
 	 * @cat Plugins/behavior
-	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
 	 */
 	find: function(selector, context, type, fn) {
 		var id, args = arguments;
@@ -206,9 +215,17 @@ $.extend( $.behavior, {
 		return id;
 	},
 	
+	_unbindEvents: function(id) {
+		var behavior = $.behavior.behaviors[id];
+		if (behavior[3])
+			behavior[0].unbind(behavior[3], behavior[4]);
+	},
+	
 	/**
 	 * Runs an individual behavior.
+	 *
 	 * @private
+	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
 	 */
 	_run: function(id) {
 		var behavior = $.behavior.behaviors[id];
@@ -220,9 +237,15 @@ $.extend( $.behavior, {
 		behavior[0] = $(behavior[1], behavior[2]);
 		newEls = $(behavior[0]).not(oldEls);
 		
-		if (type != undefined) 
+		if (type != undefined) {
+			// unbind previous matched elements that weren't matched this time
+			$.each(oldEls, function(i, el) {
+				if ($.inArray(el, behavior[0]) == -1)
+					$.event.remove(el, type, fn);
+			});
+			// bind the event to the new elements
 			newEls.bind(type, fn);
-		else
+		} else
 			newEls.each(function() {
 				fn.apply(this, []);
 			});
