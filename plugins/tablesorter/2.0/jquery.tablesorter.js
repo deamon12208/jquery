@@ -79,9 +79,12 @@
  * 
  * @author Christian Bach/christian.bach@polyester.se
  */
+
 (function($) {
 	$.extend({
 		tablesorter: new function() {
+			
+			var parsers = [], widgets = [];
 			
 			this.defaults = {
 				cssHeader: "header",
@@ -91,27 +94,17 @@
 				sortMultisortKey: "shiftKey",
 				sortForce: null,
 				textExtraction: "simple",
-				parsers: {
-				
-				},
-				widgets: {
-				},		
-				widgetZebra: {
-					css: ["even","odd"]
-				},
+				parsers: {},
+				widgets: {},		
+				widgetZebra: {css: ["even","odd"]},
 				headers: {},
 				widthFixed: true,
 				cancelSelection: true,
 				sortList: [],
 				headerList: [],
 				dateFormat: "mm/dd/yyyy",
-				debug: false //TODO: set this to false before release.
-				
-				
+				debug: false //TODO: set this to false before release
 			};
-			
-			var parsers = [];
-			var widgets = [];
 			
 			/* debuging utils */
 			function benchmark(label,stamp) {
@@ -190,11 +183,8 @@
 					for (var i=0;i < totalRows; ++i) {
 					
 						/** Add the table data to main data array */
-						var c = table.tBodies[0].rows[i],
-							cols = [];
-						
-						
-						
+						var c = table.tBodies[0].rows[i], cols = [];
+					
 						cache.row.push($(c));
 						
 						for(var j=0; j < totalCells; ++j) {
@@ -241,12 +231,8 @@
 					tableBody = $("tbody:first",table).empty();
 					rows = [];
 				
-							
-				//for (var i = 0; i < totalRows; ++i) {
-				for (var i=0;i < totalRows; ++i) {
-						//log(r[n[i][checkCell]]);
+				for (var i=0;i < totalRows; i++) {
 					 	rows.push(r[n[i][checkCell]]);
-						
 				}
 				
 				if(table.config.appender != null) {
@@ -387,9 +373,7 @@
 			
 			function fixColumnWidth(table,$headers) {
 				
-				$headers.each(function(offset) {
-											
-				});
+				//$headers.each(function(offset) {});
 			}
 			
 			function updateHeaderSortCount(table,sortList) {
@@ -458,14 +442,13 @@
 			};
 			
 			/* public methods */
-		
 			this.construct = function(settings) {
-				
-				
+
 				return this.each(function() {
 					
 					var $this, $document,$headers, cache, config, shiftDown = 0, sortOrder;
 					this.config = {};
+					
 					config = $.extend(this.config, $.tablesorter.defaults, settings);
 					
 					// store common expression for speed					
@@ -488,10 +471,10 @@
 					// apply event handling to headers
 					// this is to big, perhaps break it out?
 					$headers.click(function(e) {
+
 						// store exp, for speed
 						var $cell = $(this);
-						// check to see so the header has sorting class active.
-	
+
 						// get current column index
 						var i = this.column;
 						
@@ -607,7 +590,7 @@
         tablesorter: $.tablesorter.construct
 	});
 	
-	// add parsers
+	// add default parsers
 	$.tablesorter.addParser({
 		id: "text",
 		is: function(s) {
@@ -749,7 +732,7 @@
 	  type: "numeric"
 	});
 	
-	// add widgets
+	// add default widgets
 	$.tablesorter.addWidget({
 		id: "zebra",
 		format: function(table) {
