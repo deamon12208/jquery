@@ -32,7 +32,7 @@ jQuery.fn.wrapText = function(html){
 		var node = $('li',tree).addClass('ui-tree-node')
 			.css('MozUserSelect', 'none').attr('unselectable', 'on');
 
-		$("<a href='#' class='ui-tree-node-button' style='margin-right:0.4em;font-family:monospace'>&bull;</a>")
+		$("<a href='#' class='ui-tree-node-button'>&bull;</a>")
 			.prependTo(node);
 		$('.ui-tree-node-button')
 			.click(function() {
@@ -46,7 +46,7 @@ jQuery.fn.wrapText = function(html){
 			})
 	
 		node
-			.wrapText("<a href='#' class='ui-tree-node-text' style='text-decoration:none;color:black;'></a>")
+			.wrapText("<a href='#' class='ui-tree-node-text'></a>")
 			.each(function() {
 				var node = $(this);
 				if (node.children('.ui-tree-nodes').length) {

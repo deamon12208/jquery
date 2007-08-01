@@ -12,61 +12,21 @@
 <script type="text/javascript" src="../../../jquery/src/fx/fx.js"></script>
 <script type="text/javascript" src="../ui.js"></script>
 <script type="text/javascript" src="../ui.tree.js"></script>
-
-<style type="text/css" media="all">
-
-.ui-tree-nodes {
-    position:relative;
-    list-style: none;
-    margin:0;
-    padding:0;
-    margin-left:0;
-    padding-left:1em;
-}
-
-.ui-tree-node {
-    margin:0;
-    padding:0;
-    cursor: default;
-}
-
-.ui-tree-node-selected > .ui-tree-node-text {
-    background: #82afdf;
-}
-
-.ui-tree-node-button {
-    border: 1px solid silver;
-    color: black;
-    font-family: monospace;
-    margin-top: 0.3em;
-    position: absolute;
-    left: 0.2em;
-    width: 0.7em;
-    height: 0.8em;
-    line-height: 0.8em;
-    text-decoration: none;
-}
-
-.ui-tree-node-expanded > .ui-tree-node-button {
-    background: #729fcf;
-}
-
-.ui-tree-node-collapsed > .ui-tree-node-button {
-    background: #729fcf;
-}
-
-.ui-tree-node-moving > .ui-tree-node-button {
-    background: #7ad214;
-}
-
-.ui-tree-node-moving > .ui-tree-node-text {
-    background: #7ad214;
-}
-
+<style type="text/css">
+  @import url(css/light/light.tree.css);
+  @import url(css/dark/dark.tree.css);
+  .light a.theme { float:right; color:#222; }
+  .dark  a.theme { float:right; color:snow; }
 </style>
-
 </head>
-<body>
+
+<body class="light">
+<a class="theme" href="#">Toggle Theme</a>
+<script type="text/javascript">
+  $("a.theme").toggle(
+    function(){ $("body").removeClass("light").addClass("dark"); },
+    function(){ $("body").removeClass("dark").addClass("light"); });
+</script>
 
 <ul id="tree">
   <li>Lorem ipsum dolor
@@ -128,8 +88,6 @@ $(function() {
 });
 
 </script>
-
 </body>
-
 </html>
 
