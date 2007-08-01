@@ -13,6 +13,7 @@
 	$.ui.slider = function(el, o) {
 		
 		var options = {};
+		o = o ? o : {};
 		$.extend(options, o);
 		$.extend(options, {
 			axis: o.axis ? o.axis : (el.offsetWidth < el.offsetHeight ? 'vertical' : 'horizontal'),
@@ -61,10 +62,10 @@
 	$.extend($.ui.slider.prototype, {
 		currentTarget: null,
 		lastTarget: null,
-		prepareCallbackObj: function(self) {
+		prepareCallbackObj: function(self,m) {
 			return {
 				handle: self.helper,
-				position: { left: self.pos[0], top: self.pos[1] },
+				pixel: m,
 				value: self.options.curValue+self.options.minValue,
 				slider: self	
 			}			
@@ -75,13 +76,16 @@
 			var offset = $(this.interaction.element).offsetParent().offset({ border: false });
 			if(this.interaction.element == e.target) return;
 			
+			o.pickValue = o.curValue;
 			this.drag.apply(this.interaction, [this, e, [pointer[0]-offset.left,pointer[1]-offset.top]]);
+			if(o.pickValue != o.curValue) $.ui.trigger('change', this.interaction, e, this.prepareCallbackObj(this.interaction));
 				
 		},
 		start: function(that, e) {
 			
 			var o = this.options;
 			$.ui.trigger('start', this, e, that.prepareCallbackObj(this));
+			o.pickValue = o.curValue;
 			
 			return false;
 						
@@ -90,6 +94,7 @@
 			
 			var o = this.options;
 			$.ui.trigger('stop', this, e, that.prepareCallbackObj(this));
+			if(o.pickValue != o.curValue) $.ui.trigger('change', this, e, that.prepareCallbackObj(this));
 
 			return false;
 			
@@ -117,20 +122,34 @@
 			
 			$(this.element).css(prop, m+'px');
 			
-			$.ui.trigger('slide', this, e, that.prepareCallbackObj(this));
+			$.ui.trigger('slide', this, e, that.prepareCallbackObj(this,m));
 			return false;
 			
 		},
-		goto: function(value,scale) {
+		goto: function(value,scale,changeslide) {
 			var o = this.interaction.options;
+			var offset = $(this.interaction.element).offsetParent().offset({ border: false });
+			o.pickValue = o.curValue;
+			
 			var modifier = scale ? scale : o.realValue;
 			
 			var p = this.parentSize;
 			var prop = this.prop;
 			
-			m = ((value)/modifier) * p;
+			m = Math.round(((value)/modifier) * p);
+
+			if(m < 0) m = 0;
+			if(m > p) m = p;
 			
+			o.curValue = (Math.round((m/p)*o.realValue));
+			if(o.stepping) {
+				o.curValue = Math.round(o.curValue/o.stepping)*o.stepping;
+				m = ((o.curValue)/o.realValue) * p;
+			}
+
 			$(this.interaction.element).css(prop, m+'px');
+			if(!changeslide && o.pickValue != o.curValue) $.ui.trigger('change', this.interaction, null, this.prepareCallbackObj(this.interaction));
+			if(changeslide) $.ui.trigger('slide', this.interaction, null, this.prepareCallbackObj(this.interaction));
 
 		}
 	});

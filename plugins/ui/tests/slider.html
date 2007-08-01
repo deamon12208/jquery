@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Language" content="en" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Resizables Test Page</title>
+<title>Slider Test Page</title>
 <script type="text/javascript" src="../../../jquery/src/jquery/jquery.js"></script>
 <script type="text/javascript" src="../../../jquery/src/selector/selector.js"></script>
 <script type="text/javascript" src="../../../jquery/src/ajax/ajax.js"></script>
@@ -24,17 +24,32 @@ body
 	font-family: Arial;
 	font-size: 12px;
 }
+label {
+	width: 100px;
+	display: block;
+	float: left;	
+}
+
+input {
+	border: 1px solid #999;
+	padding: 2px;	
+}
 </style>
 </head>
 <body>
 
-<input type="text" value='0' id='slider1_value' />
+<div style="margin: 10px;"><label for="slider1_value">current value:</label> <input type="text" value='0' id='slider1_value' /></div>
+<div style="margin: 10px;"><label for="slider1_realvalue">pixel value:</label> <input type="text" value='0' id='slider1_realvalue' /></div>
 
-<div id='slider1' style="position: relative; margin: 40px; width: 218px; height: 26px; background: url(http://developer.yahoo.com/yui/examples/slider/img/horizBg.png);">
-<div class='ui-slider-handle' style='position: absolute; height: 20px; left: 0px; bottom: 0px; width: 18px; background-image: url(http://developer.yahoo.com/yui/examples/slider/img/horizSlider.png);'></div>	
+<div id='slider1' style="position: relative; margin: 40px; width: 217px; height: 28px; background: url(http://developer.yahoo.com/yui/examples/slider/assets/bg-fader.gif) no-repeat scroll 5px 0px;">
+<div class='ui-slider-handle' style='position: absolute; height: 21px; left: 0px; bottom: 0px; width: 17px; background-image: url(http://developer.yahoo.com/yui/examples/slider/assets/thumb-n.gif);'></div>	
 </div>
 
-<div id='slider2' style="position: relative; margin: 20px; height: 400px; width: 20px; background: #ccc;">
+<div id='slider3' style="position: relative; margin: 40px; width: 217px; height: 28px; background: url(http://developer.yahoo.com/yui/examples/slider/assets/bg-fader.gif) no-repeat scroll 5px 0px;">
+<div class='ui-slider-handle' style='position: absolute; height: 21px; left: 0px; bottom: 0px; width: 17px; background-image: url(http://developer.yahoo.com/yui/examples/slider/assets/thumb-n.gif);'></div>	
+</div>
+
+<div id='slider2' style="position: absolute; top: 0px; right: 0px; margin: 20px; height: 400px; width: 20px; background: #ccc;">
 <div class='ui-slider-handle' style='position: absolute; top: 0px; left: 0px; right: 0px; height: 20px; background: #888;'></div>	
 </div>
 	
@@ -51,16 +66,27 @@ var slider1;
 var slider2;
 $(document).ready(function(){
 
-
-$('#slider1').slider({ stepping: 25, maxValue: 100, minValue: -100, name: 'slider1', slide: function(e,ui) {
-	$('#slider1_value')[0].value = ui.value;	
-} });
-$('#slider2').slider({ name: 'slider2', slide: function(e,ui) {
-	slider1.goto(ui.value,ui.slider.options.realValue);
-} });
-
-slider1 = $.ui.get('slider1', 'slider')[0];
-slider2 = $.ui.get('slider2', 'slider')[0];
+	//Now is that easy or what?
+	$('#slider3').slider();
+	
+	$('#slider1').slider({ stepping: 20, maxValue: 100, minValue: -100, name: 'slider1', change: function() {
+	
+		console.log('changed!');	
+	
+	}, slide: function(e,ui) {
+		
+		$('#slider1_value')[0].value = ui.value;
+		$('#slider1_realvalue')[0].value = ui.pixel;
+		
+		slider2.goto(ui.value,ui.slider.options.realValue);
+			
+	} });
+	$('#slider2').slider({ name: 'slider2', slide: function(e,ui) {
+		slider1.goto(ui.value,ui.slider.options.realValue);
+	} });
+	
+	slider1 = $.ui.get('slider1', 'slider')[0];
+	slider2 = $.ui.get('slider2', 'slider')[0];
 
 });
 </script>
