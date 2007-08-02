@@ -1,0 +1,40 @@
+== New and Noteworthy ==
+
+== 0.8 ==
+
+Additional features/enhancements
+
+* added fx options: open, openSpeed, close, closeSpeed. open and close can take one of the jQuery core effects (fadeIn/fadeOut, show/hide, slideDown/slideUp); openSpeed and close Speed take, well, a speed. 
+* added positionBy option. Default is "auto". When set to "mouse" will position the clueTip by the mouse position, not the element position
+* added cluezIndex option. Default is 97. Sets the z-index property of the clueTip
+* added cluetipClass option. Default is 'default'. This option adds a class to the #cluetip div for applying colors, backgrounds, etc.
+* added cursor option. Default is 'help'. This cursor type is used, when the tip attribute and the href are the same.
+* added dropShadowSteps option. Default is 6. This determines how big the drop shadow is (i.e. how many drop-shadow divs are created for the clueTip). Each "step" correlates to 1 pixel of drop shadow.
+* added positionBy option. Default is 'auto'. Change this to 'mouse' to force the clueTip to be positioned according to where the mouse is.
+* added brand-new rounded-corners theme. To use this, create a clueTip with at least these options .cluetip(){cluetipClass: 'rounded', dropShadow: false})
+* enhanced positioning logic. If there isn't enough horizontal space for the clueTip to appear, either to the left or to the right, without intruding on the mouse position (and thus causing the clueTip to flicker on and off repeatedly), then its top is positioned 10 pixels below the mouse. However, if the clueTip would get partially cut off at the bottom of the viewable area, and if there is enough room for it between the top of the viewable area and the mouse position, then its bottom will be positioned 10 pixels above the mouse.
+
+Bug fixes
+
+* dealt with AJAX race condition, reported by to.rben: http://www.learningjquery.com/2007/07/cluetip-plugin-beta-2#comment-8786
+
+* fixed problem with activation by click. Before, if a user clicked to show the clueTip, and then closed the clueTip by some other means than clicking the same link element, the user had to click twice to show the clueTip the next time.
+
+* general cleaning up and re-ordering of code 
+== 0.7 ==
+
+Additional features/enhancements
+
+* the waitImage feature/option is now implemented for ajax-loaded clueTips
+* the drop-shadow effect is now created with dynamically generated div elements with decreasing level of opacity. This allows for cross-browser compatibility without having to deal with png hacks.
+* added a dropShadow option that adds a drop shadow to the clueTip. Default is true
+* the clueTip heading (<h3>) now comes before <div id="cluetip-inner">, not inside it. This should make it much easier to apply sane CSS.
+* added alternate theme based on Cody Lindley’s jTip, and created demo files to show it (alt-demo.html, et. al.)
+* added an arrows option that sets the vertical background position to line up an image with the hovered element. Default is false. This option should be set to true for the alternate jTip theme.
+* <div id="cluetip"> now gets class="clue-left" if positioned to the left of the hovered element and class="clue-right" if positioned to the right. Useful for styling the clueTip differently based on where it displays, as is done in the jTip theme.
+
+Bug fixes
+
+* changed $(document).width() to the more appropriate $(window).width() for positioning the clueTip’s x coordinate.
+* changed the clueTip’s height calculation to occur after truncate and tipTitle options are considered so that positioning will be more accurate and drop shadows will be applied correctly.
+* fixed positioning glitch when applying clueTip to an area element; now it positions the clueTip relative to the mouse position.
