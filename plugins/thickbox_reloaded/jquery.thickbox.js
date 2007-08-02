@@ -33,7 +33,6 @@
                 TITLE: 'tb-title',
                 CLOSE: 'tb-close',
                 CONTENT: 'tb-content',
-                CAPTION: 'tb-caption',
                 BROWSE: 'tb-browse',
                 NEXT: 'tb-next',
                 PREV: 'tb-prev'

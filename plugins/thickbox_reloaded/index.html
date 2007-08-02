@@ -1,12 +1,12 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-        <meta http-equiv="Content-Style-Type" content="text/css" />
-        <meta http-equiv="Content-Script-Type" content="text/javascript" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta http-equiv="Content-Style-Type" content="text/css">
+        <meta http-equiv="Content-Script-Type" content="text/javascript">
         <title>jQuery Thickbox Reloaded plugin demo and test page</title>
-        <link rel="stylesheet" href="jquery.thickbox.css" type="text/css" media="screen, projection" />
+        <link rel="stylesheet" href="jquery.thickbox.css" type="text/css" media="screen, projection">
         <script type="text/javascript" src="jquery-1.1.3.1.pack.js"></script>
         <script type="text/javascript" src="jquery.thickbox.js"></script>
 
@@ -63,26 +63,26 @@
 
         <div id="demo-single">
             <h2>Single Image</h2>
-            <p><a href="single.jpg" title="add a title to title attribute (or leave blank)"><img src="single_t.jpg" alt="Show image" width="100" height="75" /></a></p>
+            <p><a href="single.jpg" title="add a title to title attribute (or leave blank)"><img src="single_t.jpg" alt="Show image" width="100" height="75"></a></p>
         </div>
 
         <div id="demo-gallery">
             <h2>Image Gallery</h2>
             <ul>
-                <li><a href="plant1.jpg" rel="gallery" title="add a title to title attribute (or leave blank)"><img src="plant1_t.jpg" alt="Show image" width="100" height="75" /></a></li>
-                <li><a href="plant2.jpg" rel="gallery" title="add a title to title attribute (or leave blank)"><img src="plant2_t.jpg" alt="Show image" width="100" height="75" /></a></li>
-                <li><a href="plant3.jpg" rel="gallery" title="add a title to title attribute (or leave blank)"><img src="plant3_t.jpg" alt="Show image" width="100" height="75" /></a></li>
-                <li><a href="plant4.jpg" rel="gallery" title="add a title to title attribute (or leave blank)"><img src="plant4_t.jpg" alt="Show image" width="100" height="75" /></a></li>
+                <li><a href="plant1.jpg" rel="gallery" title="add a title to title attribute (or leave blank)"><img src="plant1_t.jpg" alt="Show image" width="100" height="75"></a></li>
+                <li><a href="plant2.jpg" rel="gallery" title="add a title to title attribute (or leave blank)"><img src="plant2_t.jpg" alt="Show image" width="100" height="75"></a></li>
+                <li><a href="plant3.jpg" rel="gallery" title="add a title to title attribute (or leave blank)"><img src="plant3_t.jpg" alt="Show image" width="100" height="75"></a></li>
+                <li><a href="plant4.jpg" rel="gallery" title="add a title to title attribute (or leave blank)"><img src="plant4_t.jpg" alt="Show image" width="100" height="75"></a></li>
             </ul>
         </div>
         
         <h2>Select control for testing</h2>
-        <form action="#">
-            <fieldset>
+        <form action="">
+            <div>
                 <select>
                     <option>Testing IE 6 covering this control</option>
                 </select>
-            </fieldset>
+            </div>
         </form>
 
         <div id="demo-inline">
@@ -109,22 +109,8 @@
             <form action="">
                 <fieldset>
                     <legend>Confirmation</legend>
-                    <input type="hidden" name="was" value="submitted" />
+                    <input type="hidden" name="was" value="submitted">
                     <div>Defer form to Thickbox confirm dialog: <input type="submit" value="Go" title="Are you sure?" /></div>
-                </fieldset>
-            </form>
-            <form action="">
-                <fieldset>
-                    <legend>Confirmation</legend>
-                    <input type="hidden" name="was" value="submitted" />
-                    <div>Defer form to Thickbox confirm dialog: <input type="submit" value="Go" title="Really?" /></div>
-                </fieldset>
-            </form>
-            <form action="">
-                <fieldset>
-                    <legend>Confirmation</legend>
-                    <input type="hidden" name="was" value="submitted" />
-                    <div>Defer form to Thickbox confirm dialog: <input type="submit" value="Go" /></div>
                 </fieldset>
             </form>
         </div>
