@@ -117,6 +117,7 @@
 				$.ui.ddmanager.fire(this);
 
 			$.ui.ddmanager.current = null;
+			$.ui.ddmanager.last = this;
 
 			return false;
 			
