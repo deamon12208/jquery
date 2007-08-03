@@ -94,7 +94,7 @@
 				sortMultisortKey: "shiftKey",
 				sortForce: null,
 				textExtraction: "simple",
-				parsers: {},
+				parsers: {}, 
 				widgets: {},		
 				widgetZebra: {css: ["even","odd"]},
 				headers: {},
@@ -103,7 +103,7 @@
 				sortList: [],
 				headerList: [],
 				dateFormat: "mm/dd/yyyy",
-				debug: false //TODO: set this to false before release
+				debug: true //TODO: set this to false before release
 			};
 			
 			/* debuging utils */
@@ -128,8 +128,11 @@
 				
 				for (var i=0;i < l; i++) {
 					var p = false;
-					if( ($headers[i] && $headers[i].sorter)) {
-						p = getParserById($headers[i].sorter);
+					
+					if($.meta && $($headers[i]).data().sorter  ) {
+					
+						p = getParserById($($headers[i]).data().sorter);	
+					
 					} else if((table.config.headers[i] && table.config.headers[i].sorter)) {
 
 						p = getParserById(table.config.headers[i].sorter);
@@ -188,7 +191,7 @@
 						cache.row.push($(c));
 						
 						for(var j=0; j < totalCells; ++j) {
-							cols.push(parsers[j].format(getElementText(table.config,c.cells[j]),table));	
+							cols.push(parsers[j].format(getElementText(table.config,c.cells[j]),table,c.cells[j]));	
 						}
 												
 						cols.push(i); // add position for rowCache
@@ -233,15 +236,13 @@
 				
 				for (var i=0;i < totalRows; i++) {
 					 	rows.push(r[n[i][checkCell]]);
-				}
-				
+						if(table.config.appender == null) {
+							tableBody.append(r[n[i][checkCell]]);
+						}
+				}	
+
 				if(table.config.appender != null) {
 					table.config.appender(table,rows);	
-				} else {
-					//tableBody.append(rows);
-					for(var i=0; i < totalRows; i++) {
-						tableBody.append(r[n[i][checkCell]]);
-					}
 				}
 				
 				rows = null;
@@ -292,10 +293,7 @@
 							// add cell to headerList
 							table.config.headerList[i] = cell;
 							
-							if($.meta && $cell.data().sorter) {
-								this.sorter = $cell.data().sorter;
-								//this.direction = $this.data().direction; 
-							}
+							
 							$cell.addClass(table.config.cssHeader);
 				
 							arr.push(cell);
@@ -729,6 +727,19 @@
 	    },
 	    format: function(s) {
 	        return $.tablesorter.formatFloat(new Date("2000/01/01 " + s).getTime());
+	    },
+	  type: "numeric"
+	});
+	
+	
+	$.tablesorter.addParser({
+	    id: "metadata",
+	    is: function(s) {
+	        return false;
+	    },
+	    format: function(s,table,cell) {
+			var c = table.config, p = (!c.parserMetadataName) ? 'sortValue' : c.parserMetadataName;
+	        return $(cell).data()[p];
 	    },
 	  type: "numeric"
 	});
