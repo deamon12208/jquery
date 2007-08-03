@@ -25,8 +25,9 @@ function showBack(event){
 	}
 	$('#front').toggle();
 	$('#back').toggle();
-	if (window.widget)
+	if (window.widget){
 		setTimeout('widget.performTransition();', 0);
+	}
 }
 function showFront(event){
 	if (window.widget)
@@ -37,23 +38,24 @@ function showFront(event){
 		setTimeout('widget.performTransition();', 0);
 }
 var data, jVer;
+
 function setData(){
-	jVer = widget.preferenceForKey('useVersion') || '1.1.2';
-	data = eval(jQuery.ajax({type: "GET", url: "Parts/jquery/jquery-"+jVer+".release/docs/data/jquery-docs-json.js", dataType: "json", async: false}).responseText);
+	jVer = widget.preferenceForKey('useVersion') || '1.1.3.1';
+	data = eval(jQuery.ajax({'type':'GET', 'url':'Parts/jquery/jquery-'+jVer+'.release/docs/data/jquery-docs-json.js', 'dataType': 'json', 'async': false}).responseText);
 	$('#ver').html(jVer);
 	$('#src').attr('href','http://code.jquery.com/jquery-'+jVer+'.js');
 	var types = {
-			jQuery: "A jQuery object.",
-			Object: "A simple Javascript object. For example, it could be a String or a Number.",
-			String: "A string of characters.",
-			Number: "A numeric valid.",
-			Element: "The Javascript object representation of a DOM Element.",
-			Map: "A Javascript object that contains key/value pairs in the form of properties and values.",
-			"Array&lt;Element&gt;": "An Array of DOM Elements.",
-			"Array&lt;String&gt;": "An Array of strings.",
-			Function: "A reference to a Javascript function.",
-			XMLHttpRequest: "An XMLHttpRequest object (referencing a HTTP request).",
-			"&lt;Content&gt;": "A String (to generate HTML on-the-fly), a DOM Element, an Array of DOM Elements or a jQuery object"
+			'jQuery': 'A jQuery object.',
+			'Object': 'A simple Javascript object. For example, it could be a String or a Number.',
+			'String': 'A string of characters.',
+			'Number': 'A numeric valid.',
+			'Element': 'The Javascript object representation of a DOM Element.',
+			'Map': 'A Javascript object that contains key/value pairs in the form of properties and values.',
+			'Array&lt;Element&gt;': 'An Array of DOM Elements.',
+			'Array&lt;String&gt;': 'An Array of strings.',
+			'Function': 'A reference to a Javascript function.',
+			'XMLHttpRequest': 'An XMLHttpRequest object (referencing a HTTP request).',
+			'&lt;Content&gt;': 'A String (to generate HTML on-the-fly), a DOM Element, an Array of DOM Elements or a jQuery object'
 		},
 		type,
 		title;
@@ -145,8 +147,9 @@ function setVersion(elm){
 function createIt(o){
 	var html = '<div class="func">';
 	html += '<p class="title"><strong>'+o['name']+'</strong>';
-	if(!o['property'])
+	if(!o['property']){
 		html += '( '+getParams(o['params'])+' )';
+	}
 	html += ' returns '+o['type']+'</p>';
 	html += '<p class="short">'+o['short']+'</p>';
 	html += '<div class="more">';
@@ -164,7 +167,7 @@ if (window.widget) {
 
 function onshow() {
     if (timerInterval == null) {
-        timerInterval = setInterval("updateTime(true);", 1000);
+        timerInterval = setInterval('updateTime(true);', 1000);
     }
 }
 
