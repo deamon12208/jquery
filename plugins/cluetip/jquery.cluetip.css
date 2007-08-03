@@ -79,23 +79,23 @@
 -------------------------------------- */
 
 .cluetip-rounded {
-  background: transparent url(demo/bl.gif) no-repeat 0 100%;
+  background: transparent url(bl.gif) no-repeat 0 100%;
   margin-top: 10px;
 }
 
 .cluetip-rounded #cluetip-outer {
-  background: transparent url(demo/tl.gif) no-repeat 0 0;
+  background: transparent url(tl.gif) no-repeat 0 0;
   margin-top: -12px;
 }
 
 .cluetip-rounded #cluetip-title {
-  background: transparent url(demo/tr.gif) no-repeat 100% 0;
+  background: transparent url(tr.gif) no-repeat 100% 0;
   padding: 12px 12px 0;
   margin: 0 -12px 0 0;
   position: relative;
 }
 .cluetip-rounded #cluetip-inner {
-  background: url(demo/br.gif) no-repeat 100% 100%;
+  background: url(br.gif) no-repeat 100% 100%;
   padding: 5px 12px 12px;
   margin: 0 -12px 0 0;
   position: relative;

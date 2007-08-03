@@ -1,4 +1,6 @@
 $(document).ready(function() {
+
+//default theme
   $('a.basic').cluetip();
   $('a.custom-width').cluetip({width: '200px', showTitle: false,sticky: true});
   $('h4').cluetip({attribute: 'id', hoverClass: 'highlight'});

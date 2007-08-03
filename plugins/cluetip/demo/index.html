@@ -93,6 +93,8 @@ This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML
     &lt;script src="scripts/your-custom-file.js" type="text/javascript"&gt;&lt;/script&gt;
 </code></pre>
   <p>As you can see, the clueTip depends on jquery.js and jquery.dimensions.js to function properly.</p>
+  <p>You should also include the stylesheet:</p>
+<pre><code>  &lt;link rel="stylesheet" href="jquery.cluetip.css" type="text/css" /&gt;</code></pre>  
   <p>If you would like to use clueTip in conjunction with the <a href="http://cherne.net/brian/resources/jquery.hoverIntent.html" title="hoverIntent jQuery Plug-in">hoverIntent plugin</a>, you will need to reference that plugin as well.</p>
     </div>
     <div id="link-prep">
@@ -142,7 +144,7 @@ This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML
           <div class="jquery">View the jQuery</div>
           <pre><code>$('a.load-local').cluetip({local:true, cursor: 'pointer'});</code></pre>  
         </li>
-        <li><strong>sticky, truncated clueTip with custom hover class, close position, and close text</strong> (it also has a title). Its <code>href</code> is different from its <code>rel</code>, so if you <em>click</em> it, you'll go to the linked page <a href="http://www.learningjquery.com" title="about this link:" rel="ajax6.htm">hover for cluetip, click to visit URL</a> 
+        <li><strong>sticky, truncated clueTip</strong> with custom hover class, close position, and close text (it also has a title). Its <code>href</code> is different from its <code>rel</code>, so if you <em>click</em> it, you'll go to the linked page <a href="http://www.learningjquery.com" title="about this link:" rel="ajax6.htm">hover for cluetip, click to visit URL</a> 
           <div class="html">View the HTML</div>
           <pre><code>&lt;a href="http://www.learningjquery.com" title="about this link:" rel="ajax6.htm"&gt;</code></pre>
           <div class="jquery">View the jQuery</div>
@@ -154,9 +156,9 @@ This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML
   truncate: 60
 });</code></pre>
         </li>
-        <li><strong>click to activate</strong>:  This one won't show the clueTip unless you click it: <a id="clickme" href="ajax5.htm" rel="ajax5.htm" title="active ingredients">click me</a>
+        <li><strong>click to activate</strong>:  This one won't show the clueTip unless you click it: <a id="clickme" href="ajaxclick.htm" rel="ajaxclick.htm" title="active ingredients">click me</a>
           <div class="html">View the HTML</div>
-          <pre><code>&lt;a href="ajax5.htm" rel="ajax5.htm" title="active ingredients"&gt;</code></pre>
+          <pre><code>&lt;a href="ajaxclick.htm" rel="ajax5.htm" title="active ingredients"&gt;</code></pre>
           <div class="jquery">View the jQuery</div>
           <pre><code>$('#clickme').cluetip({activation: 'click'});</code></pre>
         </li>
@@ -165,7 +167,7 @@ This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML
       <ol>
         <li><a class="jt" href="ajax5.htm" rel="ajax5.htm" title="jTip Style!">jTip Style clueTip</a>. Here is the code for this one: 
           <div class="html">View the HTML</div>
-          <pre><code>&lt; class="jt" href="ajax5.htm" rel="ajax5.htm" title="jTip Style!"&gt;</code></pre>
+          <pre><code>&lt; class="jt" href="ajax5.htm" rel="ajaxclick.htm" title="jTip Style!"&gt;</code></pre>
           <div class="jquery">View the jQuery</div>
           <pre><code>$('.jt').cluetip({<b>cluetipClass: 'jtip'</b>, arrows: true, dropShadow: false});</code></pre>
         </li>
@@ -287,7 +289,6 @@ This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML
     <ul>
       <li><a href="http://jqueryjs.googlecode.com/svn/trunk/plugins/cluetip/">clueTip files</a> in jQuery's SVN repository : includes <a href="http://jqueryjs.googlecode.com/svn/trunk/plugins/cluetip/">jquery.cluetip.js</a>, demo files, and all dependencies.</li>
       <li><a href="http://examples.learningjquery.com/62/demo/">clueTip demo</a> on learningjquery.com</li>
-      <li><a href="http://examples.learningjquery.com/62/demo/alt-demo.html">alternate jTip-style demo</a> on learningjquery.com</li>    
     </ul>
     <p>Dependencies</p>
     <ul>
