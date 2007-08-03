@@ -177,8 +177,12 @@ jQuery.fn.extend({
 		if ( settings.navigation ) {
 			var current = this.find("a").filter(function() { return this.href == location.href; });
 			if ( current.length ) {
-				settings.active = current.parent().parent().prev();
-				current.addClass("current");
+				if ( current.filter(settings.header).length ) {
+					settings.active = current;
+				} else {
+					settings.active = current.parent().parent().prev();
+					current.addClass("current");
+				}
 			}
 		}
 
