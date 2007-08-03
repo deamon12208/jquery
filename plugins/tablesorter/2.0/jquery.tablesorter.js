@@ -716,7 +716,7 @@
 			} else if(c.dateFormat == "dd/mm/yy" || c.dateFormat == "dd-mm-yy") {
 				s = s.replace(new RegExp(/(\d{1,2})[\/-](\d{1,2})[\/-](\d{2})/), "$1/$2/$3");	
 			}
-			return $.tableSorter.utils.formatFloat((new Date(s)).getTime());
+			return $.tablesorter.formatFloat(new Date(s).getTime());
 		},
 		type: "numeric"
 	});
@@ -727,7 +727,7 @@
 	        return /^(([0-2]?[0-9]:[0-5][0-9])|([0-1]?[0-9]:[0-5][0-9]\s(am|pm)))$/.test(s);
 	    },
 	    format: function(s) {
-	        return $.tableSorter.utils.formatFloat((new Date("2000/01/01 " + s)).getTime());
+	        return $.tablesorter.formatFloat(new Date("2000/01/01 " + s).getTime());
 	    },
 	  type: "numeric"
 	});
