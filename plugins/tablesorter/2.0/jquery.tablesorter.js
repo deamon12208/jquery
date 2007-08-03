@@ -103,7 +103,7 @@
 				sortList: [],
 				headerList: [],
 				dateFormat: "mm/dd/yyyy",
-				debug: true //TODO: set this to false before release
+				debug: false //TODO: set this to false before release
 			};
 			
 			/* debuging utils */
