@@ -574,6 +574,7 @@
 			};
 			
 			this.formatFloat = function(s) {
+
 				var i = parseFloat(s);
 				return (isNaN(i)) ? 0 : i;
 			};
