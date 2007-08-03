@@ -1,3 +1,15 @@
+I don’t know if it’s already a known bug, but the remote-check in this demo
+http://jquery.bassistance.de/ajax-validation/demo-test/milk/
+isnt working correctly:
+If you input a username that begings with a invalid one (like Peterr) and the onkey-check is active, you just need the right timing to display the error-message for a valid username: “Peterr is already in use”. If you now move the cursor or blur the field it becomes valid again.
+
+You can reproduce the bug as follows:
+enter something in the username field
+defocus it
+delete it (so now the onkey-check is active)
+enter “Pete” and then really quickly “rr”, you’ll see that the error message keeps displaying “Peterr is already in use”. Now move the cursor or defocus the field: Peterr is now valid ;-) 
+
+
 - show number of errors and update on blur/keyup: ugly ugly ugly ->
   * can't use invalidHander, only called on submit
   * can't use showErrors, size() matches only the current element, not all elements
