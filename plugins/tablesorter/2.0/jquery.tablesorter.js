@@ -129,7 +129,7 @@
 				for (var i=0;i < l; i++) {
 					var p = false;
 					
-					if($.meta && $($headers[i]).data().sorter  ) {
+					if($.meta && ($($headers[i]).data() && $($headers[i]).data().sorter)  ) {
 					
 						p = getParserById($($headers[i]).data().sorter);	
 					
