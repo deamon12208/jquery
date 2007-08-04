@@ -486,7 +486,7 @@
 							config.sortList = [];
 							
 							if(config.sortForce != null) {
-								sortList.push(config.sortForce);	
+								config.sortList.push(config.sortForce);	
 							}
 							
 							// add column to sort list
