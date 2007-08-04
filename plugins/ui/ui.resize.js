@@ -10,6 +10,7 @@
 	$.ui.resizable = function(el,o) {
 		
 		var options = {};
+		o = o ? o : {};
 		$.extend(options, o);
 		
 		if(options.proxy) {
@@ -27,14 +28,57 @@
 			var helper = "original";	
 		}
 		
+		//Destructive mode wraps the original element
+		if(el.nodeName.match(/textarea|input|select|button/i)) options.destructive = true;
+		if(options.destructive) {
+			$(el).wrap('<div class="ui-wrapper"  style="position: relative; border: 1px solid black; width: '+$(el).outerWidth()+'px; height: '+$(el).outerHeight()+';"></div>');
+			var oel = el;
+			el = el.parentNode;
+
+			$(el).append("<div class='ui-n-resize' style='position: absolute; height: 10px; top: 0px; left: 30px; right: 30px;'></div>");
+			$(el).append("<div class='ui-e-resize' style='position: absolute; width: 10px; bottom: 30px; right: 0px; top: 30px;'></div>");	
+			$(el).append("<div class='ui-s-resize' style='position: absolute; height: 10px; bottom: 0px; left: 30px; right: 30px;'></div>");
+			$(el).append("<div class='ui-w-resize' style='position: absolute; width: 10px; bottom: 30px; left: 0px; top: 30px;'></div>");
+			$(el).append("<div class='ui-se-resize' style='position: absolute; width: 10px; height: 10px; bottom: 0px; right: 0px;'></div>");
+			$(el).append("<div class='ui-sw-resize' style='position: absolute; width: 10px; height: 10px; bottom: 0px; left: 0px;'></div>");
+			$(el).append("<div class='ui-ne-resize' style='position: absolute; width: 10px; height: 10px; top: 0px; right: 0px;'></div>");
+			$(el).append("<div class='ui-nw-resize' style='position: absolute; width: 10px; height: 10px; top: 0px; left: 0px;'></div>");
+			
+			o.proportionallyResize = o.proportionallyResize ? o.proportionallyResize : [];
+			o.proportionallyResize.push(oel);
+		}
+		
+		//If other elements should be modified, we have to copy that array
+		options.modifyThese = [];
+		if(o.proportionallyResize) {
+			options.proportionallyResize = o.proportionallyResize.slice(0);
+			var propRes = options.proportionallyResize;
+
+			for(var i in propRes) {
+				
+				if(propRes[i].constructor == String)
+					propRes[i] = $(propRes[i], el);
+				
+				if(!$(propRes[i]).length) continue;
+				
+				var x = $(propRes[i]).outerWidth() - $(el).outerWidth() - parseInt($(propRes[i]).css('paddingLeft')) - parseInt($(propRes[i]).css('paddingRight'));
+				var y = $(propRes[i]).outerHeight() - $(el).outerHeight() - parseInt($(propRes[i]).css('paddingTop')) - parseInt($(propRes[i]).css('paddingBottom'));
+				options.modifyThese.push([$(propRes[i]),x,y]);
+			}
+
+		}
+		
 		options.handles = {};
-		if(!o.handles) o.handles= {};
+		if(!o.handles) o.handles = { n: '.ui-n-resize', e: '.ui-e-resize', s: '.ui-s-resize', w: '.ui-w-resize', se: '.ui-se-resize', sw: '.ui-sw-resize', ne: '.ui-ne-resize', nw: '.ui-nw-resize' };
+		
 		for(var i in o.handles) { options.handles[i] = o.handles[i]; } //Copying the object
 		
 		for(var i in options.handles) {
 			
 			if(options.handles[i].constructor == String)
 				options.handles[i] = $(options.handles[i], el);
+			
+			if(!$(options.handles[i]).length) continue;
 				
 			$(options.handles[i]).bind('mousedown', function(e) {
 				self.interaction.options.axis = this.resizeAxis;
@@ -81,6 +125,9 @@
 		start: function(that, e) {
 			this.options.originalSize = [$(this.element).width(),$(this.element).height()];
 			this.options.originalPosition = $(this.element).css("position");
+			
+			this.options.modifyThese.push([$(this.helper),0,0]);
+			
 			$.ui.plugin.call('start', that, this);
 			$.ui.trigger('start', this, e, that.prepareCallbackObj(this));			
 			return false;
@@ -181,10 +228,13 @@
 			var modifier = $.ui.trigger('resize', this, e, that.prepareCallbackObj(this));
 			if(!modifier) modifier = {};
 			
-			$(this.helper).css({
-				width: modifier.width ? modifier.width : nw,
-				height: modifier.height ? modifier.height: nh
-			});
+			for(var i in this.options.modifyThese) {
+				var c = this.options.modifyThese[i];
+				c[0].css({
+					width: modifier.width ? modifier.width+c[1] : nw+c[1],
+					height: modifier.height ? modifier.height+c[2] : nh+c[2]
+				});
+			}
 			return false;
 			
 		}

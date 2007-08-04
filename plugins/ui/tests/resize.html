@@ -32,18 +32,20 @@ body
 </style>
 </head>
 <body>
+
+<textarea id='textarea' style='width: 400px; height: 200px; border: 2px solid red; margin: 0px; padding: 10px;'>I was made resizable with this code only: $('#textarea').resizable();</textarea>
 	
 <div id='resizeme' style='width: 300px; height: 200px; border: 1px solid black; margin: 20px; position: relative;'>
 <div class='ui-n-resize' style='position: absolute; background: #ddd; height: 10px; top: 0px; left: 30px; right: 30px;'></div>
 <div class='ui-e-resize' style='position: absolute; background: #ddd; width: 10px; bottom: 30px; right: 0px; top: 30px;'></div>	
 <div class='ui-s-resize' style='position: absolute; background: #ddd; height: 10px; bottom: 0px; left: 30px; right: 30px;'></div>
 <div class='ui-w-resize' style='position: absolute; background: #ddd; width: 10px; bottom: 30px; left: 0px; top: 30px;'></div>
-
+<!--
 <div class='ui-se-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; bottom: 0px; right: 0px;'></div>
 <div class='ui-sw-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; bottom: 0px; left: 0px;'></div>
 <div class='ui-ne-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; top: 0px; right: 0px;'></div>
 <div class='ui-nw-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; top: 0px; left: 0px;'></div>
-
+-->
 <div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Relative position without proxy (w,nw,n automatically disabled)</div>
 </div>
 
@@ -104,22 +106,14 @@ if(!window.console) {
 
 $(document).ready(function(){
 
+$('#textarea').resizable();
+
 $('#resizeme, #resizeme2').resizable({
 	//proxy: "proxy",
 	minWidth: 200,
 	minHeight: 100,
 	maxWidth: 500,
 	maxHeight: 300,
-	handles: {
-		n: '.ui-n-resize',
-		e: '.ui-e-resize',
-		s: '.ui-s-resize',
-		w: '.ui-w-resize',
-		se: '.ui-se-resize',
-		sw: '.ui-sw-resize',
-		ne: '.ui-ne-resize',
-		nw: '.ui-nw-resize'
-	},
 	start: function(e,ui) {
 		//console.log('start ', ui);	
 	},
@@ -128,7 +122,8 @@ $('#resizeme, #resizeme2').resizable({
 	},
 	resize: function(e,ui) {
 		//console.log(e);	
-	}		
+	},
+	alsoResize: [ "#resizeme3" ] 		
 });
 
 
