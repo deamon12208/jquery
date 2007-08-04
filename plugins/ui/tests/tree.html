@@ -15,18 +15,67 @@
 <style type="text/css">
   @import url(css/light/light.tree.css);
   @import url(css/dark/dark.tree.css);
-  .light a.theme { float:right; color:#222; }
-  .dark  a.theme { float:right; color:snow; }
+  @import url(css/tango/tango.tree.css);
+  .light .toggle a { color:#222; }
+  .dark  .toggle a { color:snow; }
+  #tree { margin-right: 6em; }
+
+body { margin:10px; padding:10px; }
+.toggle { margin:0; padding: 0; clear:right; float: right; }
+.toggle li { font:11pt Verdana; margin:0; padding: 0; width: 5em; display: block; margin-bottom: 0.3em; }
+.toggle li a { color: black; display: block; border: 1px solid gray; font:11pt Verdana; text-align:center; }
+.toggle li a.selected { background: gray; color: white; }
+
 </style>
+
+<script type="text/javascript">
+
+$(function() {
+
+  $('#tree').tree();
+
+  $('#toggle-theme-none').click(function() {
+    $('.toggle a').removeClass('selected');
+    $(this).addClass('selected');
+    $("body").removeClass("dark").removeClass("tango").removeClass("light");
+    return false;
+  });
+
+  $('#toggle-theme-light').click(function() {
+    $('.toggle a').removeClass('selected');
+    $(this).addClass('selected');
+    $("body").removeClass("dark").removeClass("tango").addClass("light");
+    return false;
+  });
+
+  $('#toggle-theme-dark').click(function() {
+    $('.toggle a').removeClass('selected');
+    $(this).addClass('selected');
+    $("body").removeClass("light").removeClass("tango").addClass("dark");
+    return false;
+  });
+
+  $('#toggle-theme-tango').click(function() {
+    $('.toggle a').removeClass('selected');
+    $(this).addClass('selected');
+    $("body").removeClass("light").removeClass("dark").addClass("tango");
+    return false;
+  }).click();
+
+});
+
+</script>
+
 </head>
 
-<body class="light">
-<a class="theme" href="#">Toggle Theme</a>
-<script type="text/javascript">
-  $("a.theme").toggle(
-    function(){ $("body").removeClass("light").addClass("dark"); },
-    function(){ $("body").removeClass("dark").addClass("light"); });
-</script>
+<body>
+
+<ul class="toggle">
+  <li><a href="#" id="toggle-theme-none">none</a></li>
+  <li><a href="#" id="toggle-theme-light">light</a></li>
+  <li><a href="#" id="toggle-theme-dark">dark</a></li>
+  <li><a href="#" id="toggle-theme-tango">tango</a></li>
+</ul>
 
 <ul id="tree">
   <li>Lorem ipsum dolor
@@ -79,15 +128,6 @@
   </li>
 </ul>
 
-<script type="text/javascript">
-
-$(function() {
-
-	$('#tree').tree();
-	
-});
-
-</script>
 </body>
 </html>
 
