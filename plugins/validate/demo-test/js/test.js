@@ -286,7 +286,7 @@ test("addMethod", function() {
 test("addMethod2", function() {
 	expect( 4 );
 	$.validator.addMethod("complicatedPassword", function(value, element, param) {
-		return this.required(element) || /\D/.test(value) && /\d/.test(value)
+		return this.optional(element) || /\D/.test(value) && /\d/.test(value)
 	}, "Your password must contain at least one number and one letter");
 	var v = jQuery("#form").validate({
 		rules: {

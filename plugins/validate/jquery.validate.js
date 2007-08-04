@@ -427,7 +427,7 @@ jQuery.extend(jQuery.validator, {
 		onsubmit: true,
 		ignore: [],
 		onblur: function(element) {
-			if ( !this.checkable(element) && (element.name in this.submitted || !this.required(element)) ) {
+			if ( !this.checkable(element) && (element.name in this.submitted || !this.optional(element)) ) {
 				this.element(element);
 			}
 		},
@@ -742,7 +742,7 @@ jQuery.extend(jQuery.validator, {
 			return true;
 		},
 		
-		settingMessage: function( id, method ) {
+		configuredMessage: function( id, method ) {
 			var m = this.settings.messages[id];
 			return m && (m.constructor == String
 				? m
@@ -750,7 +750,7 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		defaultMessage: function( element, method) {
-			return this.settingMessage( element.name, method )
+			return this.configuredMessage( element.name, method )
 				|| element.title
 				|| jQuery.validator.messages[method]
 				|| "<strong>Warning: No message defined for " + element.name + "</strong>";
@@ -897,7 +897,7 @@ jQuery.extend(jQuery.validator, {
 			}
 		},
 		
-		required: function(element) {
+		optional: function(element) {
 			return !jQuery.validator.methods.required.call(this, jQuery.trim(element.value), element);
 		},
 		
@@ -1014,34 +1014,34 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		remote: function(value, element, param) {
-			if ( !this.required(element) ) {
-				var cached = this.valueCache[element.name];
-				if(!cached) {
-					this.valueCache[element.name] = cached = {
-						old: null,
-						valid: true,
-						message: this.defaultMessage( element, "remote" )
-					};
-				}
-				this.settings.messages[element.name].remote = typeof cached.message == "function" ? cached.message(value) : cached.message;
-				if ( cached.old !== value ) {
-					cached.old = value;
-					var validator = this;
-					this.startRequest();
-					jQuery.getJSON(param, {value: value}, function(response) {
-						if ( !response ) {
-							var errors = {};
-							errors[element.name] =  validator.defaultMessage( element, "remote" );
-							validator.showErrors(errors);
-						}
-						cached.valid = response;
-						this.stopRequest(response);
-					});
-					return true;
-				}
-				return cached.valid;
-			} else
+			if ( this.optional(element) )
 				return true;
+				
+			var cached = this.valueCache[element.name];
+			if(!cached) {
+				this.valueCache[element.name] = cached = {
+					old: null,
+					valid: true,
+					message: this.defaultMessage( element, "remote" )
+				};
+			}
+			this.settings.messages[element.name].remote = typeof cached.message == "function" ? cached.message(value) : cached.message;
+			if ( cached.old !== value ) {
+				cached.old = value;
+				var validator = this;
+				this.startRequest();
+				jQuery.getJSON(param, {value: value}, function(response) {
+					if ( !response ) {
+						var errors = {};
+						errors[element.name] =  validator.defaultMessage( element, "remote" );
+						validator.showErrors(errors);
+					}
+					cached.valid = response;
+					this.stopRequest(response);
+				});
+				return true;
+			}
+			return cached.valid;
 		},
 
 		/**
@@ -1085,7 +1085,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		minLength: function(value, element, param) {
-			return this.required(element) || this.getLength(value, element) >= param;
+			return this.optional(element) || this.getLength(value, element) >= param;
 		},
 	
 		/**
@@ -1111,7 +1111,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		maxLength: function(value, element, param) {
-			return this.required(element) || this.getLength(value, element) <= param;
+			return this.optional(element) || this.getLength(value, element) <= param;
 		},
 		
 		/**
@@ -1146,7 +1146,7 @@ jQuery.extend(jQuery.validator, {
 	     */
 		rangeLength: function(value, element, param) {
 			var length = this.getLength(value, element);
-			return this.required(element) || ( length >= param[0] && length <= param[1] );
+			return this.optional(element) || ( length >= param[0] && length <= param[1] );
 		},
 	
 		/**
@@ -1166,7 +1166,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		minValue: function( value, element, param ) {
-			return this.required(element) || value >= param;
+			return this.optional(element) || value >= param;
 		},
 		
 		/**
@@ -1186,7 +1186,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		maxValue: function( value, element, param ) {
-			return this.required(element) || value <= param;
+			return this.optional(element) || value <= param;
 		},
 		
 		/**
@@ -1206,7 +1206,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		rangeValue: function( value, element, param ) {
-			return this.required(element) || ( value >= param[0] && value <= param[1] );
+			return this.optional(element) || ( value >= param[0] && value <= param[1] );
 		},
 		
 		/**
@@ -1225,7 +1225,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		email: function(value, element) {
-			return this.required(element) || /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i.test(value);
+			return this.optional(element) || /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i.test(value);
 		},
 	
 		/**
@@ -1246,7 +1246,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		url: function(value, element) {
-			return this.required(element) || /^(https?|ftp):\/\/[A-Z0-9](\.?[A-Z0-9ÄÜÖ][A-Z0-9_\-ÄÜÖ]*)*(\/([A-Z0-9ÄÜÖ][A-Z0-9_\-\.ÄÜÖ]*)?)*(\?([A-Z0-9ÄÜÖ][A-Z0-9_\-\.%\+=&ÄÜÖ]*)?)?$/i.test(value);
+			return this.optional(element) || /^(https?|ftp):\/\/[A-Z0-9](\.?[A-Z0-9ÄÜÖ][A-Z0-9_\-ÄÜÖ]*)*(\/([A-Z0-9ÄÜÖ][A-Z0-9_\-\.ÄÜÖ]*)?)*(\?([A-Z0-9ÄÜÖ][A-Z0-9_\-\.%\+=&ÄÜÖ]*)?)?$/i.test(value);
 		},
         
 		/**
@@ -1266,7 +1266,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		date: function(value, element) {
-			return this.required(element) || !/Invalid|NaN/.test(new Date(value));
+			return this.optional(element) || !/Invalid|NaN/.test(new Date(value));
 		},
 	
 		/**
@@ -1291,7 +1291,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		dateISO: function(value, element) {
-			return this.required(element) || /^\d{4}[\/-]\d{1,2}[\/-]\d{1,2}$/.test(value);
+			return this.optional(element) || /^\d{4}[\/-]\d{1,2}[\/-]\d{1,2}$/.test(value);
 		},
 	
 		/**
@@ -1317,7 +1317,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		dateDE: function(value, element) {
-			return this.required(element) || /^\d\d?\.\d\d?\.\d\d\d?\d?$/.test(value);
+			return this.optional(element) || /^\d\d?\.\d\d?\.\d\d\d?\d?$/.test(value);
 		},
 	
 		/**
@@ -1334,7 +1334,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		number: function(value, element) {
-			return this.required(element) || /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/.test(value);
+			return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/.test(value);
 		},
 	
 		/**
@@ -1352,7 +1352,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		numberDE: function(value, element) {
-			return this.required(element) || /^-?(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d+)?$/.test(value);
+			return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d+)?$/.test(value);
 		},
 		
 		/**
@@ -1368,7 +1368,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		digits: function(value, element) {
-			return this.required(element) || /^\d+$/.test(value);
+			return this.optional(element) || /^\d+$/.test(value);
 		},
 		
 		/**
@@ -1387,7 +1387,7 @@ jQuery.extend(jQuery.validator, {
          * @cat Plugins/Validate/Methods
          */
 		creditcard: function(value, element) {
-			if ( this.required(element) )
+			if ( this.optional(element) )
 				return true;
 			var nCheck = 0,
 				nDigit = 0,
@@ -1427,7 +1427,7 @@ jQuery.extend(jQuery.validator, {
 		 */
 		accept: function(value, element, param) {
 			param = typeof param == "string" ? param : "png|jpe?g|gif";
-			return this.required(element) || value.match(new RegExp(".(" + param + ")$")); 
+			return this.optional(element) || value.match(new RegExp(".(" + param + ")$")); 
 		},
 		
 		/**
@@ -1473,7 +1473,7 @@ jQuery.extend(jQuery.validator, {
 	 * @desc Adds a method that checks if the value starts with http://mycorporatedomain.com
 	 *
 	 * @example jQuery.validator.addMethod("math", function(value, element, params) {
-	 *  return this.required(value, element) || value == params[0] + params[1];
+	 *  return this.optional(value, element) || value == params[0] + params[1];
 	 * }, "Please enter the correct value for this simple question.");
 	 * @desc Adds a not-required method...
 	 *
