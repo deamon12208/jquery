@@ -10,6 +10,8 @@ delete it (so now the onkey-check is active)
 enter “Pete” and then really quickly “rr”, you’ll see that the error message keeps displaying “Peterr is already in use”. Now move the cursor or defocus the field: Peterr is now valid ;-) 
 
 
+I gave the ajax validation on http://jquery.bassistance.de/ajax-validation/demo-test/milk/ a testdrive but somehow it doesn’t work smoothly in IE6 when the required is set dependent on wether another field is filled. The form is submitted in IE anyway. In firefox it works fine. If I change the required to true than it works fine in both browsers.
+
 - show number of errors and update on blur/keyup: ugly ugly ugly ->
   * can't use invalidHander, only called on submit
   * can't use showErrors, size() matches only the current element, not all elements
