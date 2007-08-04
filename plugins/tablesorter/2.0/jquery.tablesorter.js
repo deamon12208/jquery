@@ -464,7 +464,7 @@
 					cache = buildCache(this);
 					
 					// get the css class names, could be done else where.
-					var sortCSS = [config.cssAsc,config.cssDesc];
+					var sortCSS = [config.cssDesc,config.cssAsc];
 				
 					// apply event handling to headers
 					// this is to big, perhaps break it out?
@@ -478,6 +478,8 @@
 						
 						// get current column sort order
 						this.order = this.count++ % 2;
+						
+						
 						
 						// user only whants to sort on one column
 						if(!e[config.sortMultisortKey]) {
@@ -499,10 +501,12 @@
 								
 								// revers the sorting direction for all tables.
 								for(var j=0; j < config.sortList.length; j++) {
-									var s = config.sortList[j], c = config.headerList[s[0]];
+									var s = config.sortList[j], o = config.headerList[s[0]];
 									if(s[0] == i) {
-										s[1] = c.order;
-									}				
+										o.count = s[1];
+										o.count++;
+										s[1] = o.count % 2;
+									}
 								}	
 							} else {
 								// add column to sort list array
