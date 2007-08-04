@@ -34,3 +34,6 @@ antiCache: new Date().getTime()
 Otherwise especially Internet Explorer will generally reuse a cached page rather than accessing the query script, which albeit can make sense unless the data in question is frequently updated.
 
 - Add option to pass through additional arguments to $.ajax, like type to use POST instead of GET
+
+ - I found out that the problem with UTF-8 not being correctly sent can be solved on the server side by applying (PHP) rawurldecode() function, which decodes the Unicode characters sent by GET method and therefore URL-encoded.
+-> add that hint to docs and examples
