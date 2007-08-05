@@ -7,6 +7,10 @@ If you now move the cursor or blur the field it becomes valid again.
  -> The request for the invalid value is sent, meanwhile the user enters another character and the message for that
     field is changed for that value
     -> The request returns and displays that overwritten message - WRONG
+    
+    -> Adding a sleep(1) to users.php helps a lot to reproduce the problem
+    -> Moving the message-creation into the AJAX callback show the correct message, but displays it also for valid values
+       -> We need the AjaxQueue plugin to cancel previous requests and display only the result for the most recent one
 
 You can reproduce the bug as follows:
 enter something in the username field

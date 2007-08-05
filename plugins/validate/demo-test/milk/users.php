@@ -1,5 +1,6 @@
 <?php
 $request = trim(strtolower($_REQUEST['value']));
+//sleep(1);
 $users = array('asdf', 'Peter', 'Peter2', 'George');
 $valid = 'true';
 foreach($users as $user) {
