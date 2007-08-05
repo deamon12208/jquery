@@ -2,67 +2,26 @@
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-	<title>jQuery Accordion</title>
+	<title>jQuery Accordion Test Suite</title>
 	
-	<link rel="stylesheet" href="accordion.css" />
-	
-	<script type="text/javascript" src="jquery.js"></script>
-	<script type="text/javascript" src="chili-1.7.pack.js"></script>
-	<script type="text/javascript" src="jquery.accordion.js"></script>
-
-	<script type="text/javascript">
-	jQuery().ready(function(){
-		// simple Accordion
-		jQuery('#list1').Accordion();
-		
-		// highly customized Accordion
-		function simpleLog(message) {
-			jQuery('<div>' + message + '</div>').appendTo('#log');
-		}
-		jQuery('#list2').Accordion({
-			event: "mouseover",
-			active: 'dt.selected',
-			selectedClass: "active"
-		}).change(function(event, newHeader, oldHeader, newContent, oldContent) {
-			simpleLog(oldHeader.text() + ' hidden, ' + newHeader.text() + ' shown');
-		});
-		
-		// first simple Accordion with special markup
-		jQuery('#list3').Accordion({
-			speed: 1000,
-			header: 'div.title',
-			active: false,
-			alwaysOpen: false,
-			animated: false
-		});
-		
-		// second simple Accordion with special markup
-		jQuery('#navigation').Accordion({
-			active: false,
-			header: '.head',
-			navigation: true,
-			event: "mouseover"
-		});
-		
-		// bind to change event of select to control first and seconds accordion
-		// similar to tab's plugin triggerTab(), without an extra method
-		jQuery('#switch select').change(function() {
-			jQuery('#list1, #list2, #list3, #navigation').activate( this.selectedIndex-1 );
-		});
-		jQuery('#close').click(function() {
-			jQuery('#list1, #list2, #list3, #navigation').activate(-1);
-		});
-		jQuery('#switch2').change(function() {
-			jQuery('#list1, #list2, #list3, #navigation').activate(this.value);
-		});
-	});
-	</script>
+	<link rel="stylesheet" href="testsuite.css"/>
+	<script type="text/javascript" src="../jquery.js"></script>
+	<script type="text/javascript" src="../jquery.accordion.js"></script>
+	<script type="text/javascript" src="testrunner.js"></script>
+	<script type="text/javascript" src="test.js"></script>
+	<style type="text/css">
+		.xerror, .error { display: none }
+	</style>
 
 </head>
 <body>
+	<h1>jQuery - Form Validation Test Suite</h1>
+	<h2 id="banner"></h2>
+	<h2 id="userAgent"></h2>
 
-<h1 id="banner">jQuery Accordion Demo</h1>
-<div id="main">
+	<ol id="tests"></ol>
+
+<div id="main" style="display:none;">
 
 	<fieldset>
 		<legend>Standard, container is a div, header is h3 and content p</legend>	

@@ -105,10 +105,9 @@
  * @desc Updates the element with id status with the text of the selected header every time the accordion changes
  *
  * @param Map options key/value pairs of optional settings.
- * @option String|Element|jQuery|Boolean active Selector for the active element. Set to false to display none at start. Default: first child
+ * @option String|Element|jQuery|Boolean|Number active Selector for the active element. Set to false to display none at start. Default: first child
  * @option String|Element|jQuery header Selector for the header element, eg. 'div.title', 'a.head'. Default: first child's tagname
- * @option String|Number showSpeed Speed (for numbers: smaller = faster) for the slideIn. Default: 'normal' 
- * @option String|Number hideSpeed Speed (for numbers: smaller = faster) for the slideOut. Default: 'normal'
+ * @option String|Number speed Speed for animations (for numbers: smaller = faster, for strings: 'fast', 'normal' or 'slow'). Default: 'fast' 
  * @option String selectedClass Class for active header elements. Default: 'selected'
  * @option Boolean alwaysOpen Whether there must be one content element open. Default: true
  * @option Boolean animated Set to false to disable animations. Default: true
@@ -133,11 +132,11 @@
  * @example jQuery('#accordion').activate("a:first");
  * @desc Activate the first element matching the given expression.
  *
- * @example jQuery('#nav').activate(-1);
+ * @example jQuery('#nav').activate(false);
  * @desc Close all content parts of the accordion.
  *
- * @param String|Number index An Integer specifying the zero-based index of the content to be
- *				 activated or an expression specifying the element to close.
+ * @param String|Element|jQuery|Boolean|Number index An Integer specifying the zero-based index of the content to be
+ *				 activated or an expression specifying the element, or an element/jQuery object, or a boolean false to close all.
  *
  * @type jQuery
  * @name activate
@@ -185,14 +184,20 @@ jQuery.fn.extend({
 				}
 			}
 		}
+		
+		function findActive(selector) {
+			return selector != undefined
+				? typeof selector == "number"
+					? jQuery(settings.header, this).eq(selector)
+					: jQuery(selector, this)
+				: selector === false
+					? jQuery("<div>")
+					: jQuery(settings.header, this).eq(0)
+		}
 
 		// calculate active if not specified, using the first header
 		var container = this,
-			active = settings.active
-				? jQuery(settings.active, this)
-				: settings.active === false
-					? jQuery("<div>")
-					: jQuery(settings.header, this).eq(0),
+			active = findActive(settings.active),
 			running = 0;
 
 		var headers = container.find(settings.header);
@@ -218,15 +223,13 @@ jQuery.fn.extend({
 			
 			if ( settings.animated ) {
 				if ( !settings.alwaysOpen && clickedActive ) {
-					toShow.slideToggle(settings.showSpeed);
+					toShow.slideToggle(settings.speed);
 					finished(true);
 				} else {
 					toHide.filter(":hidden").each(finished).end().filter(":visible")
-						//.slideUp(settings.hideSpeed, finished);
-						.animate({height: "hide"}, settings.hideSpeed, "linear", finished);
+						.animate({height: "hide"}, settings.speed, "linear", finished);
 					toShow
-						//.slideDown(settings.showSpeed, finished);
-						.animate({height: "show"}, settings.showSpeed, "linear", finished);
+						.animate({height: "show"}, settings.speed, "linear", finished);
 				}
 			} else {
 				if ( !settings.alwaysOpen && clickedActive ) {
@@ -280,15 +283,12 @@ jQuery.fn.extend({
 			return !toShow.length;
 		};
 		function activateHandler(event, index) {
+			// IE manages to call activateHandler on normal clicks
 			if ( index == null )
 				return;
 			// call clickHandler with custom event
 			clickHandler({
-				target: index >= 0
-					? jQuery(settings.header, this)[index]
-					: typeof index == "string"
-						? jQuery(index, this)[0]
-						: null
+				target: findActive(index)
 			});
 		};
 
@@ -305,8 +305,7 @@ jQuery.Accordion = {};
 jQuery.extend(jQuery.Accordion, {
 	defaults: {
 		selectedClass: "selected",
-		showSpeed: 'fast',
-		hideSpeed: 'fast',
+		speed: 'fast',
 		alwaysOpen: true,
 		animated: true,
 		event: "click"
