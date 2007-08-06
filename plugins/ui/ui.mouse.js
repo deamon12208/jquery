@@ -180,7 +180,7 @@
 		},
 		drag: function(e) {
 
-			if ($.browser.msie && !e.button) return this.stop.apply(this, [e]); // check for IE mouseup when moving into the document again
+			if (!this.opos || ($.browser.msie && !e.button)) return this.stop.apply(this, [e]); // check for IE mouseup when moving into the document again
 			var o = this.options;
 			
 			this.pos = $.ui.getPointer(e); //relative mouse position
