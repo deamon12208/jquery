@@ -1,3 +1,5 @@
+jQuery.Accordion.defaults.animated = false;
+
 test("basics", function() {
 	$('#list1').Accordion();
 	ok( $('#list1 h3:last').is(':visible'), 'Last h3 inside accordion must be hidden' );
