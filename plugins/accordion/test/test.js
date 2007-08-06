@@ -1,5 +1,7 @@
 jQuery.Accordion.defaults.animated = false;
 
+// TODO refactor to define a single assertion method that checks the accordion state, eg. 0, 1, 0 expects the second part to be open, others closed
+
 test("basics", function() {
 	$('#list1').Accordion();
 	ok( $('#list1 h3:last').is(':visible'), 'Last h3 inside accordion must be hidden' );
