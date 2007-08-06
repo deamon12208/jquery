@@ -51,7 +51,6 @@
       position: absolute;
       top: 105px;
       bottom: 105px;
-      height: expression((this.parentNode.clientHeight - 210) + "px");
       width: 100%;
     }
     
@@ -84,7 +83,6 @@
       top: 50px;
       bottom: 0;
       height: auto;
-      height: expression(this.parentNode.clientHeight - 50 + "px");
     }
     
     div.uiToolbar {
@@ -143,7 +141,6 @@
       top: 0;
       bottom: 50px;
       height: auto;
-      height: expression(this.parentNode.clientHeight - 52 + "px");      
     }
     
     div.uiInnerContent {
@@ -156,6 +153,21 @@
     }
       
   </style>
+  <--[if lt IE7]>
+  <style>
+    div.uiRightNav {
+      height: expression(this.parentNode.clientHeight - 52 + "px");      
+    }
+    
+    div.uiLeftNav {
+      height: expression(this.parentNode.clientHeight - 50 + "px");
+    }
+    
+    div.uiLayoutContainer {
+      height: expression((this.parentNode.clientHeight - 210) + "px");
+    }
+  </style>
+  <![endif]-->
   <script type="text/javascript" src="../../../jquery/src/jquery/jquery.js"></script>
   <script type="text/javascript" src="../../../jquery/src/selector/selector.js"></script>
   <script type="text/javascript" src="../../../jquery/src/ajax/ajax.js"></script>
