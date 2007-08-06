@@ -180,47 +180,17 @@
   <script src="../ui.mouse.js"></script>  
 <script>
 jQuery(function($) {
-      
-      // Cross-browser mechanism for setting left/right
-      $.fn.leftRight = function(left, right) {
-        // If IE6
-        if($.browser.msie && $.browser.msie.version < 7) {
-          this.each(function() {
-            // Only reset left if we actually passed one in
-            if(left) $(this).css("left", left + "px");
-            // If we didn't, get the current left
-            left = left || $(this).position().left;
-            // The width should be the size of the positioning context minus the left, minus the "right" passed in
-            this.style.width = $(this).offsetParent().width() - left - right + "px";
-          });
-        } else {
-          // If not IE6, do it the standards/correct way
-          if(left) this.css("left", left + "px");
-          if(right) this.css("right", right + "px");
-        }
-      };
-      
-      // Given a width (and an optional left), set the "right" via leftRight()
-      $.fn.leftRightByWidth = function(width, left) {
-        this.each(function() {
-          // left is optional
-          left = left || $(this).position().left;
-          // right is the positioning context's width minus the left minus the width you want
-          var right = $(this).offsetParent().width() - left - width;
-          $(this).leftRight(left, right);
-        })
-      }
-      
-      $("div.uiLeftBar").each(function() {
-        this.ui = this.ui || {};
-        this.ui.navSide = "Left";
-      });
-      
-      $("div.uiRightBar").each(function() {
-        this.ui = this.ui || {};
-        this.ui.navSide = "Right";
-      });
-      
+	
+
+	$("div.uiLeftBar").each(function() {
+		this.ui = this.ui || {};
+		this.ui.navSide = "Left";
+	});
+	
+	$("div.uiRightBar").each(function() {
+		this.ui = this.ui || {};
+		this.ui.navSide = "Right";
+	});
 
 
 
@@ -232,9 +202,6 @@ jQuery(function($) {
 
 
 	//THE COOL STUFF STARTS HERE!
-
-     
-      
 	$.fn.makePanes = function(o) {
 		new $.ui.pane(this, o); //create a new instance of 'pane'
 		return this; //Return the chain
@@ -242,10 +209,14 @@ jQuery(function($) {
 
 	$.ui.pane = function(jq, options) {
 
-        var leftNav = $(jq[0]), contents = $(jq[1]), rightNav = $(jq[2]);
-        var container = jq.parents("div.uiLayoutContainer:first");
-        var leftNavToolbar = $("div.uiLeftNavToolbar", container);
-        var rightNavToolbar = $("div.uiRightNavToolbar", container);        
+        var self = this;
+        
+        var leftNav = $(jq[0]),rightNav = $(jq[2]);
+        this.contents = $(jq[1]);
+        this.container = jq.parents("div.uiLayoutContainer:first");
+        
+        var leftNavToolbar = $("div.uiLeftNavToolbar", self.container);
+        var rightNavToolbar = $("div.uiRightNavToolbar", self.container);        
         var leftBar = leftNav.next()
         if(rightNav[0]) rightBar = rightNav.prev();
 
@@ -265,27 +236,18 @@ jQuery(function($) {
 			axis: "x",
 			helper: "clone",
 			start: function(e,o) {
-				var side = this.ui.navSide;
-				var contentsInfo = {left: (p = contents.position()).left, width: (w = contents.width()), right: p.left + w};
-				if(side == "Left") {
-					this.minLeft = Math.min(contentsInfo.left, leftMin);
-					this.maxLeft = Math.min(contentsInfo.right - contentsMin - border, leftMax);
-				} else if(side == "Right") {
-					this.minLeft = Math.max(contentsInfo.left + contentsMin, container.width() - rightMax);
-					this.maxLeft = Math.max(contentsInfo.right, container.width() - rightMin);
-				}
-				document.body.style.cursor = "col-resize";
+				self.start.apply(self, [this,e,o]);
 			},
 			stop: function(e,o) {
 				var pos = parseInt(o.helper.style.left);
 				var side = this.ui.navSide;
-				var position = (side == "Left" ? pos : container.width() - pos - border);
+				var position = (side == "Left" ? pos : self.container.width() - pos - border);
 				if(side == "Left") {
-					contents.leftRight(position + border);
+					self.leftRight(self.contents, position + border);
 					leftNav.width(position + "px");
 					$(this).css("left", position + "px");
 				} else {
-					contents.leftRight(null, position + border);
+					self.leftRight(self.contents, null, position + border);
 					rightNav.width(position + "px");
 					$(this).css("right", position + "px")
 				}
@@ -302,15 +264,15 @@ jQuery(function($) {
 
 
         $(window).resize(function() {
-			var contentsLeft = contents.position().left;
-			var contentsWidth = contents.width();
-			if(contentsWidth < contentsMin) contents.leftRightByWidth(contentsMin, contentsLeft);
+			var contentsLeft = self.contents.position().left;
+			var contentsWidth = self.contents.width();
+			if(contentsWidth < contentsMin) self.leftRightByWidth(self.contents, contentsMin, contentsLeft);
 			
-			var contentsRight = contentsLeft + contents.width();
-			var rightWidth = container.width() - contentsRight - border;
+			var contentsRight = contentsLeft + self.contents.width();
+			var rightWidth = self.container.width() - contentsRight - border;
 			
 			if(rightBar[0]) {
-				rightBar.css("right", container.width() - contentsRight - border + "px");
+				rightBar.css("right", self.container.width() - contentsRight - border + "px");
 				try { rightNav.css("width", rightWidth + "px"); } catch(e) {}
 			}
 			if(leftNavToolbar[0]) leftNavToolbar.css("width", contentsLeft - 10 + "px");
@@ -318,6 +280,51 @@ jQuery(function($) {
         }).resize();
         
 	}
+	
+	$.extend($.ui.pane.prototype, {
+		start: function(el,e,o) {
+			
+			var side = el.ui.navSide;
+			var contentsInfo = {left: (p = this.contents.position()).left, width: (w = this.contents.width()), right: p.left + w};
+			if(side == "Left") {
+				el.minLeft = Math.min(contentsInfo.left, this.options.leftMin);
+				el.maxLeft = Math.min(contentsInfo.right - this.options.contentsMin - this.options.border, this.options.leftMax);
+			} else if(side == "Right") {
+				el.minLeft = Math.max(contentsInfo.left + this.options.contentsMin, this.container.width() - this.options.rightMax);
+				el.maxLeft = Math.max(contentsInfo.right, this.container.width() - this.options.rightMin);
+			}
+			document.body.style.cursor = "col-resize";
+			
+		},
+		leftRight: function(jq, left, right) {
+	        // If IE6
+	        if($.browser.msie && $.browser.msie.version < 7) {
+	          jq.each(function() {
+	            // Only reset left if we actually passed one in
+	            if(left) $(this).css("left", left + "px");
+	            // If we didn't, get the current left
+	            left = left || $(this).position().left;
+	            // The width should be the size of the positioning context minus the left, minus the "right" passed in
+	            this.style.width = $(this).offsetParent().width() - left - right + "px";
+	          });
+	        } else {
+	          // If not IE6, do it the standards/correct way
+	          if(left) jq.css("left", left + "px");
+	          if(right) jq.css("right", right + "px");
+	        }
+    	},
+    	leftRightByWidth: function(jq, width, left) {
+	        jq.each(function() {
+	          // left is optional
+	          left = left || $(this).position().left;
+	          // right is the positioning context's width minus the left minus the width you want
+	          var right = $(this).offsetParent().width() - left - width;
+	          $(this).leftRight(left, right);
+	        })
+		}
+	})
+	
+	
  
     $("div.uiLeftNav, div.uiContents, div.uiContentsDouble, div.uiRightNav").makePanes({leftMin: 200, leftMax: 600});
 
