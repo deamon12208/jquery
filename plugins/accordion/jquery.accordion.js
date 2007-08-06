@@ -107,10 +107,10 @@
  * @param Map options key/value pairs of optional settings.
  * @option String|Element|jQuery|Boolean|Number active Selector for the active element. Set to false to display none at start. Default: first child
  * @option String|Element|jQuery header Selector for the header element, eg. 'div.title', 'a.head'. Default: first child's tagname
- * @option String|Number speed Speed for animations (for numbers: smaller = faster, for strings: 'fast', 'normal' or 'slow'). Default: 'fast' 
+ * @option String|Number speed 
  * @option String selectedClass Class for active header elements. Default: 'selected'
  * @option Boolean alwaysOpen Whether there must be one content element open. Default: true
- * @option Boolean animated Set to false to disable animations. Default: true
+ * @option Boolean animated Speed for animations (for numbers: smaller = faster, for strings: 'fast', 'normal' or 'slow'). Set to false to disable animations. Default: 'fast'
  * @option String event The event on which to trigger the accordion, eg. "mouseover". Default: "click"
  * @option Boolean navigation If set, looks for the anchor that matches location.href and activates it. Great for href-based pseudo-state-saving. Default: false
  *
@@ -185,28 +185,28 @@ jQuery.fn.extend({
 			}
 		}
 		
-		function findActive(selector) {
-			return selector != undefined
-				? typeof selector == "number"
-					? jQuery(settings.header, this).eq(selector)
-					: jQuery(selector, this)
-				: selector === false
-					? jQuery("<div>")
-					: jQuery(settings.header, this).eq(0)
-		}
-
 		// calculate active if not specified, using the first header
 		var container = this,
+			headers = container.find(settings.header),
 			active = findActive(settings.active),
 			running = 0;
 
-		var headers = container.find(settings.header);
 
 		headers
 			.not(active || "")
 			.nextUntil(settings.header)
 			.hide();
 		active.addClass(settings.selectedClass);
+		
+		function findActive(selector) {
+			return selector != undefined
+				? typeof selector == "number"
+					? headers.eq(selector)
+					: headers.not(headers.not(selector))
+				: selector === false
+					? jQuery("<div>")
+					: headers.eq(0)
+		}
 		
 		function toggle(toShow, toHide, data, clickedActive) {
 			var finished = function(cancel) {
@@ -223,13 +223,13 @@ jQuery.fn.extend({
 			
 			if ( settings.animated ) {
 				if ( !settings.alwaysOpen && clickedActive ) {
-					toShow.slideToggle(settings.speed);
+					toShow.slideToggle(settings.animated);
 					finished(true);
 				} else {
 					toHide.filter(":hidden").each(finished).end().filter(":visible")
-						.animate({height: "hide"}, settings.speed, "linear", finished);
+						.animate({height: "hide"}, settings.animated, "linear", finished);
 					toShow
-						.animate({height: "show"}, settings.speed, "linear", finished);
+						.animate({height: "show"}, settings.animated, "linear", finished);
 				}
 			} else {
 				if ( !settings.alwaysOpen && clickedActive ) {
@@ -284,18 +284,18 @@ jQuery.fn.extend({
 		};
 		function activateHandler(event, index) {
 			// IE manages to call activateHandler on normal clicks
-			if ( index == null )
+			if ( arguments.length == 1 )
 				return;
 			// call clickHandler with custom event
 			clickHandler({
-				target: findActive(index)
+				target: findActive(index)[0]
 			});
 		};
 
-		container.bind("activate", activateHandler);
-		return container.bind(settings.event, clickHandler)
+		return container
+			.bind(settings.event, clickHandler)
+			.bind("activate", activateHandler);
 	},
-	// programmatic triggering
 	activate: function(index) {
 		return this.trigger('activate', [index]);
 	}
@@ -305,9 +305,8 @@ jQuery.Accordion = {};
 jQuery.extend(jQuery.Accordion, {
 	defaults: {
 		selectedClass: "selected",
-		speed: 'fast',
 		alwaysOpen: true,
-		animated: true,
+		animated: 'fast',
 		event: "click"
 	}
 });

@@ -20,16 +20,16 @@
 			jQuery('<div>' + message + '</div>').appendTo('#log');
 		}
 		jQuery('#list2').Accordion({
-			event: "mouseover",
-			active: 'dt.selected',
-			selectedClass: "active"
+			event: 'mouseover',
+			active: '.selected',
+			selectedClass: 'active',
+			animated: 300
 		}).change(function(event, newHeader, oldHeader, newContent, oldContent) {
 			simpleLog(oldHeader.text() + ' hidden, ' + newHeader.text() + ' shown');
 		});
 		
 		// first simple Accordion with special markup
 		jQuery('#list3').Accordion({
-			speed: 1000,
 			header: 'div.title',
 			active: false,
 			alwaysOpen: false,
@@ -41,7 +41,7 @@
 			active: false,
 			header: '.head',
 			navigation: true,
-			event: "mouseover"
+			event: 'mouseover'
 		});
 		
 		// bind to change event of select to control first and seconds accordion
@@ -138,8 +138,8 @@
 		<pre><code class="mix">jQuery('#navigation').Accordion({
 	active: false,
 	header: '.head',
-	alwaysOpen: false,
-	navigation: true
+	navigation: true,
+	event: "mouseover"
 });</code></pre>
 	</fieldset>
 
@@ -167,11 +167,11 @@
 }
 jQuery('#list2').Accordion({
 	event: "mouseover",
-	active: 'dt.selected',
-	selectedClass: "active"
+	active: '.selected',
+	selectedClass: "active",
+	animated: 300
 }).change(function(event, newHeader, oldHeader, newContent, oldContent) {
-	simpleLog(oldHeader.text() + ' hidden');
-	simpleLog(newHeader.text() + ' shown');
+	simpleLog(oldHeader.text() + ' hidden, ' + newHeader.text() + ' shown');
 });</code></pre>
 	</fieldset>
 
@@ -206,13 +206,11 @@ jQuery('#list2').Accordion({
 		
 		<h3>Code</h3>
 		<pre><code class="mix">jQuery('#list3').Accordion({
-	showSpeed: 1000,
-	hideSpeed: 150,
-	header: 'div.title',
-	active: false,
-	alwaysOpen: false,
-	animated: false
-});</code></pre>
+			header: 'div.title',
+			active: false,
+			alwaysOpen: false,
+			animated: false
+		});</code></pre>
 	</fieldset>
 		
 		<div id="switch">
@@ -223,7 +221,7 @@ jQuery('#list2').Accordion({
 				<option value="3">3</option>
 			</select>
 			<button id="close">Close all</button>
-			Activate via selector, eg. ':first' or 'a:first': <input id="switch2" />
+			Activate via selector, eg. ':first' or ':eq(1)': <input id="switch2" />
 		</div>
 
 		<div id="log"><div><strong>Log of the 2nd accordion</strong></div></div>
