@@ -75,6 +75,44 @@ body
 </style>
 </head>
 <body>
+
+	<input type='button' value='Append new node' onclick="$('#myul2').append('<li>'+(new Date())+'</li>');"/>
+	<input type='button' value='Refresh sortable' onclick="myul.refresh()"/>
+
+	<ul id='myul2'>
+	    <li>Item 1</li>
+	    <li>Item 2</li>
+	    <li>Item 3</li>
+	    <li>Item 4
+	    	<ul>
+	    		<li>Sub Item 1</li>
+	    		<li>Sub Item 2</li>
+	    		<li>Sub Item 3</li>
+	    	</ul>	
+	    </li>
+	    <li>Item 5</li>
+	    <li>Item 6</li>
+	    <li>Item 7</li>
+	    <li>Item 8</li>
+	    <li>Item 9</li>
+	    <li>Item 10</li>
+	</ul>
+	
+	<ul id='myul3'>
+	    <li>Item 1</li>
+	    <li>Item 2</li>
+	    <li>Item 3</li>
+	    <li>Item 4</li>
+	    <li>Item 5</li>
+	    <li>Item 6</li>
+	    <li>Item 7</li>
+	    <li>Item 8</li>
+	    <li>Item 9</li>
+	    <li>Item 10</li>
+	</ul>
+
+	<br style='clear: both;' />
+	<br />
 	
 	<ul id='myul'>
 	    <li>Item 1</li>
@@ -119,52 +157,17 @@ body
 	    <li>Item 40</li>
 	</ul>
 	
-	<br style='clear: both;' />
-	<br />
-	<input type='button' value='Append new node' onclick="$('#myul').append('<li>'+(new Date())+'</li>');"/>
-	<input type='button' value='Refresh sortable' onclick="myset.refresh()"/>
-
-	<ul id='myul2'>
-	    <li>Item 1</li>
-	    <li>Item 2</li>
-	    <li>Item 3</li>
-	    <li>Item 4
-	    	<ul>
-	    		<li>Sub Item 1</li>
-	    		<li>Sub Item 2</li>
-	    		<li>Sub Item 3</li>
-	    	</ul>	
-	    </li>
-	    <li>Item 5</li>
-	    <li>Item 6</li>
-	    <li>Item 7</li>
-	    <li>Item 8</li>
-	    <li>Item 9</li>
-	    <li>Item 10</li>
-	</ul>
-	
-	<ul id='myul3'>
-	    <li>Item 1</li>
-	    <li>Item 2</li>
-	    <li>Item 3</li>
-	    <li>Item 4</li>
-	    <li>Item 5</li>
-	    <li>Item 6</li>
-	    <li>Item 7</li>
-	    <li>Item 8</li>
-	    <li>Item 9</li>
-	    <li>Item 10</li>
-	</ul>
-	
 <script type="text/javascript">
 $(document).ready(function(){
 	
-	myset = $('#myul').sortable({
+	$('#myul').sortable({
 		//onChange: function() { console.log('Position change during drag'); },
 		//onUpdate: function() { console.log('Position changed'); }
 	});
-	myset2 = $('#myul2').sortable( { items: 'li', containment: 'sortable', hoverClass: 'hover' } );
-	myset3 = $('#myul3').sortable();
+	$('#myul2').sortable( { items: 'li', containment: 'sortable', hoverClass: 'hover', name: 'myul' } );
+	$('#myul3').sortable();
+	
+	myul = $.ui.get('myul', 'sortable')[0];
 
 });
 </script>

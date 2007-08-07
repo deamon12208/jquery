@@ -56,7 +56,7 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 		});
 		
 		if(options.name) $.ui.add(options.name, 'sortable', this); //Append to UI manager if a name exists as option
-		
+		this.options = options;
 	}
 	
 	$.extend($.ui.sortable.prototype, {
@@ -79,8 +79,32 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 				current: that
 			}			
 		},
+		refresh: function() {
+
+			//Get the items
+			var self = this;
+			var items = $(this.options.items, this.element);
+
+			var unique = [];
+			items.each(function() {
+				old = false;
+				for(var i=0;i<self.set.length;i++) { if(self.set[i][0] == this) old = true;	}
+				if(!old) unique.push(this);
+			});
+			
+			for(var i=0;i<unique.length;i++) {
+				new $.ui.mouseInteraction(unique[i],self.options);
+			}
+			
+			//Add current items to the set
+			this.set = [];
+			items.each(function() {
+				self.set.push([this,null]);
+			});
+			
+		},
 		destroy: function() {
-			this.options.handle.unbind('mousedown', this.mousedownfunc);
+			
 		},
 		start: function(that, e) {
 			
