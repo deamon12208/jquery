@@ -31,18 +31,20 @@
 		//Destructive mode wraps the original element
 		if(el.nodeName.match(/textarea|input|select|button/i)) options.destructive = true;
 		if(options.destructive) {
-			$(el).wrap('<div class="ui-wrapper"  style="position: relative; border: 1px solid black; width: '+$(el).outerWidth()+'px; height: '+$(el).outerHeight()+';"></div>');
+			$(el).wrap('<div class="ui-wrapper"  style="position: relative; border: 0; margin: 0; padding: 0; width: '+$(el).outerWidth()+'px; height: '+$(el).outerHeight()+';"></div>');
 			var oel = el;
 			el = el.parentNode;
 
-			$(el).append("<div class='ui-n-resize' style='position: absolute; height: 10px; top: 0px; left: 30px; right: 30px;'></div>");
-			$(el).append("<div class='ui-e-resize' style='position: absolute; width: 10px; bottom: 30px; right: 0px; top: 30px;'></div>");	
-			$(el).append("<div class='ui-s-resize' style='position: absolute; height: 10px; bottom: 0px; left: 30px; right: 30px;'></div>");
-			$(el).append("<div class='ui-w-resize' style='position: absolute; width: 10px; bottom: 30px; left: 0px; top: 30px;'></div>");
-			$(el).append("<div class='ui-se-resize' style='position: absolute; width: 10px; height: 10px; bottom: 0px; right: 0px;'></div>");
-			$(el).append("<div class='ui-sw-resize' style='position: absolute; width: 10px; height: 10px; bottom: 0px; left: 0px;'></div>");
-			$(el).append("<div class='ui-ne-resize' style='position: absolute; width: 10px; height: 10px; top: 0px; right: 0px;'></div>");
-			$(el).append("<div class='ui-nw-resize' style='position: absolute; width: 10px; height: 10px; top: 0px; left: 0px;'></div>");
+			var t = function(a,b) { $(el).append("<div class='ui-"+a+"-resize ui-resize-handler' style='position: absolute; "+b+"'></div>"); };
+			var b = [parseInt($(oel).css('borderTopWidth')),parseInt($(oel).css('borderRightWidth')),parseInt($(oel).css('borderBottomWidth')),parseInt($(oel).css('borderLeftWidth'))];
+			t('n','top: '+b[0]+'px;');
+			t('e','right: '+b[1]+'px;');
+			t('s','bottom: '+b[1]+'px;');
+			t('w','left: '+b[3]+'px;');
+			t('se','bottom: '+b[2]+'px; right: '+b[1]+'px;');
+			t('sw','bottom: '+b[2]+'px; left: '+b[3]+'px;');
+			t('ne','top: '+b[0]+'px; right: '+b[1]+'px;');
+			t('nw','top: '+b[0]+'px; left: '+b[3]+'px;');
 			
 			o.proportionallyResize = o.proportionallyResize ? o.proportionallyResize : [];
 			o.proportionallyResize.push(oel);
@@ -61,8 +63,9 @@
 				
 				if(!$(propRes[i]).length) continue;
 				
-				var x = $(propRes[i]).outerWidth() - $(el).outerWidth() - parseInt($(propRes[i]).css('paddingLeft')) - parseInt($(propRes[i]).css('paddingRight'));
-				var y = $(propRes[i]).outerHeight() - $(el).outerHeight() - parseInt($(propRes[i]).css('paddingTop')) - parseInt($(propRes[i]).css('paddingBottom'));
+				
+				var x = $(propRes[i]).width() - $(el).width();
+				var y = $(propRes[i]).height() - $(el).height();
 				options.modifyThese.push([$(propRes[i]),x,y]);
 			}
 
@@ -80,7 +83,7 @@
 			
 			if(!$(options.handles[i]).length) continue;
 				
-			$(options.handles[i]).bind('mousedown', function(e) {
+			$(options.handles[i]).show().bind('mousedown', function(e) {
 				self.interaction.options.axis = this.resizeAxis;
 				return self.interaction.trigger(e);
 			})[0].resizeAxis = i;

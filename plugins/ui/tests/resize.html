@@ -29,36 +29,48 @@ body
 .proxy {
 	border: 1px dotted black;	
 }
+
+
+.ui-resize-handler { position: absolute; background: #ddd; display: none; }
+.ui-n-resize { height: 10px; left: 30px; right: 30px; }
+.ui-e-resize { width: 10px; top: 30px; bottom: 30px; }
+.ui-s-resize { height: 10px; left: 30px; right: 30px; }
+.ui-w-resize { width: 10px; top: 30px; bottom: 30px; }
+
+.ui-se-resize { width: 10px; height: 10px; }
+.ui-sw-resize { width: 10px; height: 10px; }
+.ui-ne-resize { width: 10px; height: 10px; }
+.ui-nw-resize { width: 10px; height: 10px; }
 </style>
 </head>
 <body>
 
-<textarea id='textarea' style='width: 400px; height: 200px; border: 2px solid red; margin: 0px; padding: 10px;'>I was made resizable with this code only: $('#textarea').resizable();</textarea>
+<textarea id='textarea' style='width: 400px; height: 200px; border: 2px solid blue; margin: 0px; padding: 10px;'>I was made resizable with this code only: $('#textarea').resizable();</textarea>
 	
 <div id='resizeme' style='width: 300px; height: 200px; border: 1px solid black; margin: 20px; position: relative;'>
-<div class='ui-n-resize' style='position: absolute; background: #ddd; height: 10px; top: 0px; left: 30px; right: 30px;'></div>
-<div class='ui-e-resize' style='position: absolute; background: #ddd; width: 10px; bottom: 30px; right: 0px; top: 30px;'></div>	
-<div class='ui-s-resize' style='position: absolute; background: #ddd; height: 10px; bottom: 0px; left: 30px; right: 30px;'></div>
-<div class='ui-w-resize' style='position: absolute; background: #ddd; width: 10px; bottom: 30px; left: 0px; top: 30px;'></div>
-<!--
-<div class='ui-se-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; bottom: 0px; right: 0px;'></div>
-<div class='ui-sw-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; bottom: 0px; left: 0px;'></div>
-<div class='ui-ne-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; top: 0px; right: 0px;'></div>
-<div class='ui-nw-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; top: 0px; left: 0px;'></div>
--->
+<div class='ui-n-resize ui-resize-handler' style='height: 10px; top: 0px; left: 30px; right: 30px;'></div>
+<div class='ui-e-resize ui-resize-handler' style='width: 10px; bottom: 30px; right: 0px; top: 30px;'></div>	
+<div class='ui-s-resize ui-resize-handler' style='height: 10px; bottom: 0px; left: 30px; right: 30px;'></div>
+<div class='ui-w-resize ui-resize-handler' style='width: 10px; bottom: 30px; left: 0px; top: 30px;'></div>
+
+<div class='ui-se-resize ui-resize-handler' style='width: 10px; height: 10px; bottom: 0px; right: 0px;'></div>
+<div class='ui-sw-resize ui-resize-handler' style='width: 10px; height: 10px; bottom: 0px; left: 0px;'></div>
+<div class='ui-ne-resize ui-resize-handler' style='width: 10px; height: 10px; top: 0px; right: 0px;'></div>
+<div class='ui-nw-resize ui-resize-handler' style='width: 10px; height: 10px; top: 0px; left: 0px;'></div>
+
 <div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Relative position without proxy (w,nw,n automatically disabled)</div>
 </div>
 
 <div id='resizeme4' style='width: 300px; height: 200px; border: 1px solid black; margin: 20px; position: relative;'>
-<div class='ui-n-resize' style='position: absolute; background: #ddd; height: 10px; top: 0px; left: 30px; right: 30px;'></div>
-<div class='ui-e-resize' style='position: absolute; background: #ddd; width: 10px; bottom: 30px; right: 0px; top: 30px;'></div>	
-<div class='ui-s-resize' style='position: absolute; background: #ddd; height: 10px; bottom: 0px; left: 30px; right: 30px;'></div>
-<div class='ui-w-resize' style='position: absolute; background: #ddd; width: 10px; bottom: 30px; left: 0px; top: 30px;'></div>
+<div class='ui-n-resize ui-resize-handler' style='height: 10px; top: 0px; left: 30px; right: 30px;'></div>
+<div class='ui-e-resize ui-resize-handler' style='width: 10px; bottom: 30px; right: 0px; top: 30px;'></div>	
+<div class='ui-s-resize ui-resize-handler' style='height: 10px; bottom: 0px; left: 30px; right: 30px;'></div>
+<div class='ui-w-resize ui-resize-handler' style='width: 10px; bottom: 30px; left: 0px; top: 30px;'></div>
 
-<div class='ui-se-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; bottom: 0px; right: 0px;'></div>
-<div class='ui-sw-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; bottom: 0px; left: 0px;'></div>
-<div class='ui-ne-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; top: 0px; right: 0px;'></div>
-<div class='ui-nw-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; top: 0px; left: 0px;'></div>
+<div class='ui-se-resize ui-resize-handler' style='width: 10px; height: 10px; bottom: 0px; right: 0px;'></div>
+<div class='ui-sw-resize ui-resize-handler' style='width: 10px; height: 10px; bottom: 0px; left: 0px;'></div>
+<div class='ui-ne-resize ui-resize-handler' style='width: 10px; height: 10px; top: 0px; right: 0px;'></div>
+<div class='ui-nw-resize ui-resize-handler' style='width: 10px; height: 10px; top: 0px; left: 0px;'></div>
 
 <div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Relative position with proxy (all directions enabled)</div>
 </div>
@@ -68,29 +80,29 @@ body
 
 
 <div id='resizeme2' style='width: 300px; height: 200px; border: 1px solid black; position: relative; position: absolute; top: 20px; right: 20px;'>
-<div class='ui-n-resize' style='position: absolute; background: #ddd; height: 10px; top: 0px; left: 30px; right: 30px;'></div>
-<div class='ui-e-resize' style='position: absolute; background: #ddd; width: 10px; bottom: 30px; right: 0px; top: 30px;'></div>	
-<div class='ui-s-resize' style='position: absolute; background: #ddd; height: 10px; bottom: 0px; left: 30px; right: 30px;'></div>
-<div class='ui-w-resize' style='position: absolute; background: #ddd; width: 10px; bottom: 30px; left: 0px; top: 30px;'></div>
+<div class='ui-n-resize ui-resize-handler' style='height: 10px; top: 0px; left: 30px; right: 30px;'></div>
+<div class='ui-e-resize ui-resize-handler' style='width: 10px; bottom: 30px; right: 0px; top: 30px;'></div>	
+<div class='ui-s-resize ui-resize-handler' style='height: 10px; bottom: 0px; left: 30px; right: 30px;'></div>
+<div class='ui-w-resize ui-resize-handler' style='width: 10px; bottom: 30px; left: 0px; top: 30px;'></div>
 
-<div class='ui-se-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; bottom: 0px; right: 0px;'></div>
-<div class='ui-sw-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; bottom: 0px; left: 0px;'></div>
-<div class='ui-ne-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; top: 0px; right: 0px;'></div>
-<div class='ui-nw-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; top: 0px; left: 0px;'></div>
+<div class='ui-se-resize ui-resize-handler' style='width: 10px; height: 10px; bottom: 0px; right: 0px;'></div>
+<div class='ui-sw-resize ui-resize-handler' style='width: 10px; height: 10px; bottom: 0px; left: 0px;'></div>
+<div class='ui-ne-resize ui-resize-handler' style='width: 10px; height: 10px; top: 0px; right: 0px;'></div>
+<div class='ui-nw-resize ui-resize-handler' style='width: 10px; height: 10px; top: 0px; left: 0px;'></div>
 
 <div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Absolute position without proxy (all directions enabled)</div>
 </div>
 
 <div id='resizeme3' style='width: 300px; height: 200px; border: 1px solid black; position: relative; position: absolute; bottom: 20px; right: 20px;'>
-<div class='ui-n-resize' style='position: absolute; background: #ddd; height: 10px; top: 0px; left: 30px; right: 30px;'></div>
-<div class='ui-e-resize' style='position: absolute; background: #ddd; width: 10px; bottom: 30px; right: 0px; top: 30px;'></div>	
-<div class='ui-s-resize' style='position: absolute; background: #ddd; height: 10px; bottom: 0px; left: 30px; right: 30px;'></div>
-<div class='ui-w-resize' style='position: absolute; background: #ddd; width: 10px; bottom: 30px; left: 0px; top: 30px;'></div>
+<div class='ui-n-resize ui-resize-handler' style='height: 10px; top: 0px; left: 30px; right: 30px;'></div>
+<div class='ui-e-resize ui-resize-handler' style='width: 10px; bottom: 30px; right: 0px; top: 30px;'></div>	
+<div class='ui-s-resize ui-resize-handler' style='height: 10px; bottom: 0px; left: 30px; right: 30px;'></div>
+<div class='ui-w-resize ui-resize-handler' style='width: 10px; bottom: 30px; left: 0px; top: 30px;'></div>
 
-<div class='ui-se-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; bottom: 0px; right: 0px;'></div>
-<div class='ui-sw-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; bottom: 0px; left: 0px;'></div>
-<div class='ui-ne-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; top: 0px; right: 0px;'></div>
-<div class='ui-nw-resize' style='position: absolute; background: #bbb; width: 10px; height: 10px; top: 0px; left: 0px;'></div>
+<div class='ui-se-resize ui-resize-handler' style='width: 10px; height: 10px; bottom: 0px; right: 0px;'></div>
+<div class='ui-sw-resize ui-resize-handler' style='width: 10px; height: 10px; bottom: 0px; left: 0px;'></div>
+<div class='ui-ne-resize ui-resize-handler' style='width: 10px; height: 10px; top: 0px; right: 0px;'></div>
+<div class='ui-nw-resize ui-resize-handler' style='width: 10px; height: 10px; top: 0px; left: 0px;'></div>
 
 <div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Absolute position with proxy (all directions enabled), ah, and I'm draggable, too!</div>
 </div>
