@@ -30,10 +30,5 @@ $.ui = {
 	},
 	num: function(e, p) {
 		return parseInt($.css(e.jquery?e[0]:e,p))||0;
-	},
-	getPointer: function(e) {
-		var x = e.pageX || (e.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft)) || 0;
-		var y = e.pageY || (e.clientY + (document.documentElement.scrollTop || document.body.scrollTop)) || 0;
-		return [x,y];
 	}
 }

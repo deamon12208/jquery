@@ -83,7 +83,7 @@ $.extend($.ui.magnifier.prototype, {
 				
 	},
 	magnify: function(e) {
-		var p = $.ui.getPointer(e);
+		var p = [e.pageX,e.pageY];
 		var o = this.options;
 		var c;
 		this.current = this.items[0];

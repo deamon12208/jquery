@@ -72,7 +72,7 @@
 		},
 		click: function(e) {
 			var o = this.interaction.options;
-			var pointer = $.ui.getPointer(e);
+			var pointer = [e.pageX,e.pageY];
 			var offset = $(this.interaction.element).offsetParent().offset({ border: false });
 			if(this.interaction.element == e.target) return;
 			

@@ -88,7 +88,7 @@
 			var initFunc = function() { //This function get's called at bottom or after timeout
 				$(document).bind('mouseup', self.mouseup);
 				$(document).bind('mousemove', self.mousemove);
-				self.opos = $.ui.getPointer(e); // Get the original mouse position
+				self.opos = [e.pageX,e.pageY]; // Get the original mouse position
 			}
 			
 			if(o.preventionTimeout) { //use prevention timeout
@@ -183,7 +183,7 @@
 			if (!this.opos || ($.browser.msie && !e.button)) return this.stop.apply(this, [e]); // check for IE mouseup when moving into the document again
 			var o = this.options;
 			
-			this.pos = $.ui.getPointer(e); //relative mouse position
+			this.pos = [e.pageX,e.pageY]; //relative mouse position
 			if(this.rpos && this.rpos[0] == this.pos[0] && this.rpos[1] == this.pos[1]) return false;
 			this.rpos = [this.pos[0],this.pos[1]]; //absolute mouse position
 			
