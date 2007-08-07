@@ -1,3 +1,6 @@
+- example showing how to validate new rows added to a table
+- custom validation: totals for a number of fields may not exceed a certain value
+
 I don’t know if it’s already a known bug, but the remote-check in this demo
 http://jquery.bassistance.de/ajax-validation/demo-test/milk/
 isnt working correctly:
@@ -112,3 +115,33 @@ $('button.save').click(function(){
 http://wiki.moxiecode.com/index.php/TinyMCE:Functions#tinyMCE.triggerSave
  
 http://www.fyneworks.com/jquery/FCKEditor/
+
+Examples for specifying validation rules via special classes:
+
+var classRules = {
+    required: "required",
+    requiredChecked: {
+        required: "#checked:checked"
+    },
+    requiredMail: {
+        required: true,
+        email: true
+    }
+};
+
+var rules = {};
+$(':input').each(function() {
+    var input = this;
+    if ( $(input).attr("class") ) {
+        $.each($(input).attr("class").split(" "), function(i, n) {
+            if ( n in classRules ) {
+                rules[ input.name] = classRules[n];
+            }
+        });
+    }
+});
+
+
+$("form").validate({
+    rules: rules
+});
