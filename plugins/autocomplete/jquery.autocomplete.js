@@ -400,12 +400,18 @@ jQuery.Autocompleter = function(input, options) {
 			success(term, data);
 		// if an AJAX url has been supplied, try loading the data now
 		} else if( (typeof options.url == "string") && (options.url.length > 0) ){
+			
+			var extraParams = {};
+			for(var i in options.extraParams) {
+				extraParams[i] = typeof options.extraParams[i] == "function" ? options.extraParams[i]() : options.extraParams[i] ;
+			}
+			
 			jQuery.ajax({
 				url: options.url,
 				data: jQuery.extend({
 					q: lastWord(term),
 					limit: options.max
-				}, options.extraParams),
+				}, extraParams),
 				success: function(data) {
 					var parsed = options.parse && options.parse(data) || parse(data);
 					cache.add(term, parsed);
