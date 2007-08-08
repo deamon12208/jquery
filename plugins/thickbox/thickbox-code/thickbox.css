@@ -30,12 +30,16 @@
 	z-index:100;
 	top: 0px;
 	left: 0px;
+	height:100%;
+	width:100%;
+}
+
+.TB_overlayMacFFBGHack {background: url(/thickbox/images/macFFBgHack.png) repeat;}
+.TB_overlayBG {
 	background-color:#000;
 	filter:alpha(opacity=75);
 	-moz-opacity: 0.75;
 	opacity: 0.75;
-	height:100%;
-	width:100%;
 }
 
 * html #TB_overlay { /* ie6 hack */
