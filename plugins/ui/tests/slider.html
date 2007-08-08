@@ -19,7 +19,7 @@
 body
 {
 	background: #fff;
-	margin: 0;
+	margin: 20px;
 	padding: 0;
 	font-family: Arial;
 	font-size: 12px;
@@ -34,9 +34,32 @@ input {
 	border: 1px solid #999;
 	padding: 2px;	
 }
+
+
+div.ui-slider {
+	border: 1px solid black;
+	position: relative;
+}
+
+div.ui-slider-handle {
+	background-image: url(http://developer.yahoo.com/yui/examples/slider/assets/thumb-n.gif);
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	width: 17px;
+}
+
 </style>
 </head>
 <body>
+
+<div style='background: #eee; width: 600px; height: 300px;'>
+
+<input type="range" step="10" max="200" min="-200" name="n" value="0"> I'm a range input!
+</div>
+
+<br /> <br />
+<hr />
 
 <div style="margin: 10px;"><label for="slider1_value">current value:</label> <input type="text" value='0' id='slider1_value' /></div>
 <div style="margin: 10px;"><label for="slider1_realvalue">pixel value:</label> <input type="text" value='0' id='slider1_realvalue' /></div>

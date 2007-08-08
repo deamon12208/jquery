@@ -1,5 +1,57 @@
 (function($) {
 
+	
+	//Web Forms 2.0
+	if($.ui.webforms) {
+		$(document).ready(function() {
+			
+			$("input").each(function() {
+				if(this.getAttribute("type") == "range") {
+					var cur = $(this);
+					var slider = $("<div class='ui-slider'></div>").css({ width: cur.innerWidth()+"px", height: cur.innerHeight()+"px" }).insertAfter(cur);
+					var handle = $("<div class='ui-slider-handle'></div>").appendTo(slider);
+
+
+					slider.css({
+						"position": cur.css("position") == "absolute" ? "absolute" : "relative",
+						"left": cur.css("left"),
+						"right": cur.css("right"),
+						"zIndex": cur.css("zIndex"),
+						"float": cur.css("float"),
+						"clear": cur.css("clear")
+					});
+					cur.css({ position: "absolute", opacity: 0, top: "-1000px", left: "-1000px" });
+					
+					var name = (new Date()).getTime()+Math.random();
+					slider.slider({
+						maxValue: cur.attr("max"),
+						minValue: cur.attr("min"),
+						startValue: this.getAttribute("value"),
+						stepping: cur.attr("step"),
+						change: function(e, ui) { cur[0].value = ui.value; cur[0].setAttribute("value", ui.value); },
+						name: name
+					});
+					slider = $.ui.get(name, "slider")[0];
+					
+					cur.bind("keydown", function(e) {
+						var o = slider.interaction.options;
+						switch(e.keyCode) {
+							case 37:
+								slider.goto(o.curValue+o.minValue-(o.stepping || 1));
+								break;
+							case 39:
+								slider.goto(o.curValue+o.minValue+(o.stepping || 1));
+								break;	
+						}
+						if(e.keyCode != 9) return false;
+					});
+					
+				};	
+			});
+				
+		});
+	}
+	
 	$.fn.slider = function(o) {
 		return this.each(function() {
 			new $.ui.slider(this, o);
@@ -17,9 +69,9 @@
 		$.extend(options, o);
 		$.extend(options, {
 			axis: o.axis ? o.axis : (el.offsetWidth < el.offsetHeight ? 'vertical' : 'horizontal'),
-			maxValue: o.maxValue ? o.maxValue : 100,
-			minValue: o.minValue ? o.minValue : 0,
-			curValue: o.startValue ? o.startValue : 0,
+			maxValue: parseInt(o.maxValue) ? parseInt(o.maxValue) : 100,
+			minValue: parseInt(o.minValue) ? parseInt(o.minValue) : 0,
+			curValue: parseInt(o.startValue) ? parseInt(o.startValue) : 0,
 			_start: function(h, p, c, t, e) {
 				self.start.apply(t, [self, e]); // Trigger the start callback				
 			},
@@ -33,7 +85,7 @@
 
 		var self = this;
 		var o = options;
-		o.stepping = o.stepping ? o.stepping : (o.steps ? o.maxValue/o.steps : 0);
+		o.stepping = parseInt(o.stepping) ? parseInt(o.stepping) : (o.steps ? o.maxValue/o.steps : 0);
 		o.realValue = (o.maxValue - o.minValue);
 
 
@@ -53,6 +105,7 @@
 		}
 		
 		$(el).bind('click', function(e) { self.click.apply(self, [e]); });
+		if(!isNaN(o.curValue)) this.goto(o.curValue,options.realValue, null, false);
 		
 		if (options.name)
 			$.ui.add(options.name, 'slider', this); //Append to UI manager if a name exists as option
@@ -126,10 +179,11 @@
 			return false;
 			
 		},
-		goto: function(value,scale,changeslide) {
+		goto: function(value,scale,changeslide,p) {
 			var o = this.interaction.options;
 			var offset = $(this.interaction.element).offsetParent().offset({ border: false });
 			o.pickValue = o.curValue;
+			value = value-o.minValue;
 			
 			var modifier = scale ? scale : o.realValue;
 			
@@ -148,7 +202,7 @@
 			}
 
 			$(this.interaction.element).css(prop, m+'px');
-			if(!changeslide && o.pickValue != o.curValue) $.ui.trigger('change', this.interaction, null, this.prepareCallbackObj(this.interaction));
+			if(!changeslide && o.pickValue != o.curValue && !p) $.ui.trigger('change', this.interaction, null, this.prepareCallbackObj(this.interaction));
 			if(changeslide) $.ui.trigger('slide', this.interaction, null, this.prepareCallbackObj(this.interaction));
 
 		}

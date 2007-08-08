@@ -30,5 +30,6 @@ $.ui = {
 	},
 	num: function(e, p) {
 		return parseInt($.css(e.jquery?e[0]:e,p))||0;
-	}
+	},
+	webforms: true
 }
