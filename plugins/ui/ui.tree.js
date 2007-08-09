@@ -66,7 +66,11 @@ jQuery.fn.wrapText = function(html){
 			.dblclick(function() {
 				toggle(parent($(this)));
 				return false;
-			});
+			})
+      .blur(function(){
+        $(".ui-tree-node-selected")
+        .removeClass("ui-tree-node-selected");
+      });
 					
 		select($('.ui-tree-node:first', tree));
 

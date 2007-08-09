@@ -1,4 +1,4 @@
-body.light { font:11pt Verdana; background:#FFF; color:#111; }
+body.light { font:10pt Verdana; background:#FFF; color:#111; }
 
 .light .ui-tree-nodes * { outline:none; }
 .light .ui-tree-nodes {
@@ -31,7 +31,7 @@ body.light { font:11pt Verdana; background:#FFF; color:#111; }
     padding-left:1px;
     color: #666;
     font:7pt Courier New,monospace;
-    margin-top: 0.5em;
+    margin-top: 0.4em;
     position: absolute;
     left: 0.2em;
     width: 0.7em;
@@ -58,6 +58,4 @@ body.light { font:11pt Verdana; background:#FFF; color:#111; }
 .light .ui-tree-node-moving > .ui-tree-node-text {
     background: #DDD;
 }
-
-
 
