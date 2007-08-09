@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>UI Menu Tests</title>
+		
+		<style type="text/css">
+			body { font:10pt Calibri, Arial, sans-serif; margin:10px 20px;}
+			.ui-toolbar {background:#222; z-index:500; font:10pt Verdana; }
+			.ui-menu-nodes {display:none; padding:0; background:#FFF; z-index:500; border:1px solid #CCC; list-style:none; padding:1px 4px; opacity:0.95; font:10pt Verdana; min-width:80px; *width:80px;}
+			.ui-toolbar-button {padding:4px 20px; border:1px solid #DDD; background:#FFF; cursor:pointer;}
+			.ui-toolbar-button:hover {border:1px solid #CCC; background:#EEE; }
+			.ui-toolbar-node:hover {background:#6699ff;}
+			.ui-toolbar-node:hover ul {background:transparent;}
+			.ui-toolbar-submenu {display:none;}
+			.ui-toolbar-menu a { color:#000; text-decoration:none;}
+			.ui-toolbar-menu a:hover { text-decoration:underline; }
+			.ui-toolbar-menu ul { padding-left:10px; list-style:none;}
+		</style>
+		
+		<script type="text/javascript" src="../jquery.js"></script>
+		<script type="text/javascript" src="../jquery.dimensions.js"></script>
+		<script type="text/javascript" src="../ui.js"></script>
+		<script type="text/javascript" src="../jquery.hoverIntent.js"></script>
+		<script type="text/javascript" src="../ui.menu.js"></script>
+	</head>
+	<body>
+		
+		<script type="text/javascript">
+			$('document').ready(function(){
+				$('#filemenu-parent').menu('#filemenu');
+				$('#editmenu-parent').menu('#editmenu', {context: 'hoverContext'})
+			});
+			
+			
+		</script>
+		<h2>Toolbar Test</h2>
+		<div id="mytoolbar" class="ui-toolbar">
+			<span id="filemenu-parent" class="ui-toolbar-button">File</span>
+			<span id="editmenu-parent" class="ui-toolbar-button">Edit</span>
+		</div>
+		
+		<ul id="filemenu">
+			<li id="filemenu-new"><a href="file-new">New</a>
+				<ul>
+					<li id="filemenu-newdoc"><a href="file-new-document">Document</a></li>
+					<li id="filemenu-newimg"><a href="file-new-image">Image</a></li>
+				</ul>
+			</li>
+			<li id="filemenu-open"><a href="file-open">Open</a></li>
+			<li id="filemenu-save"><a href="file-save">Save</a></li>
+			<li id="filemenu-exit"><a href="file-save">Exit</a></li>
+		</ul>
+		
+		<ul id="editmenu">
+			<li id="editmenu-cut"><a href="edit-cut">Cut</a></li>
+			<li id="editmenu-copy"><a href="edit-copy">Copy</a></li>
+			<li id="editmeni-paste"><a href="edit-pase">Paste</a></li>
+		</ul>
+		
+		<h2>Context Test</h2>
+		<table>
+			<caption>Test Table</caption>
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Profession</th>
+					<th>Salary ($)</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Tane Piper</td>
+					<td>Web Developer</td>
+					<td>1,000,000</td>
+				</tr>
+				<tr>
+					<td>John Smith</td>
+					<td>Gardener</td>
+					<td>20,000</td>
+				</tr>
+				<tr>
+					<td>Jane Doe</td>
+					<td>Session Musician</td>
+					<td>40,000</td>
+				</tr>
+			</tbody>
+			</thead>
+		</table>
+	</body>
+</html>
