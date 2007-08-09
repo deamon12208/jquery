@@ -1,89 +1,79 @@
-var defaultMinDate = null;
-var defaultMaxDate = null;
+var inlineRange = null;
+var inlineFrom = null;
+var inlineTo = null;
 
-function setOptions(select) {
-	popUpCal.hideCalendar();
-	// Set defaults
-	popUpCal.clearText = 'Clear';
-	popUpCal.closeText = 'Close';
-	popUpCal.prevText = '&lt; Prev';
-	popUpCal.nextText = 'Next &gt;';
-	popUpCal.currentText = 'Current';
-	popUpCal.dayNames = ['Su','Mo','Tu','We','Th','Fr','Sa'];
-	popUpCal.monthNames = ['January','February','March','April','May','June',
-		'July','August','September','October','November','December'];
-	popUpCal.dateFormat = 'DMY/';
-	popUpCal.showOtherMonths = false;
-	popUpCal.minDate = defaultMinDate = null;
-	popUpCal.maxDate = defaultMaxDate = null;
-	popUpCal.changeMonth = true;
-	popUpCal.changeYear = true;
-	popUpCal.firstDay = 0;
-	popUpCal.changeFirstDay = true;
-	popUpCal.closeAtTop = true;
-	popUpCal.hideIfNoPrevNext = true;
-	popUpCal.customDate = null;
-	popUpCal.enableFor($('.calendarRange'));
-	// Set selected options
-	option = select.options[select.selectedIndex].value;
-	setActiveStyleSheet('default');
-	switch (option) {
-		case '1':  
-			popUpCal.minDate = defaultMinDate = new Date(2005, 1 - 1, 26);
-			popUpCal.maxDate = defaultMaxDate = new Date(2007, 1 - 1, 26);
-			popUpCal.hideIfNoPrevNext = false;
-			popUpCal.disableFor($('.calendarRange'));
-			break;
-		case '2':
-			popUpCal.firstDay = 1;
-			popUpCal.changeFirstDay = false;
-			break;
-		case '3':
-			popUpCal.changeMonth = false;
-			popUpCal.changeYear = false;
-			break;
-		case '4':
-			popUpCal.dateFormat = 'MDY/';
-			break;
-		case '5':
-			popUpCal.showOtherMonths = true;
-			break;
-		case '6':
-			popUpCal.closeAtTop = false;
-			break;
-		case '7':
-			popUpCal.customDate = popUpCal.noWeekends;
-			break;
-		case '8':
-			popUpCal.customDate = nationalDays;
-			break;
-		case '9':
-			popUpCal.clearText = 'Enlevez';
-			popUpCal.closeText = 'Fermez';
-			popUpCal.prevText = '&lt;Préc';
-			popUpCal.nextText = 'Proch&gt;';
-			popUpCal.currentText = 'En cours';
-			popUpCal.dayNames = ['Di','Lu','Ma','Me','Je','Ve','Sa'];
-			popUpCal.monthNames = ['Janvier','Février','Mars','Avril','Mai','Juin',
-				'Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
-			break;
-		case '10':
-			setActiveStyleSheet('alt');
-			break;
-	}
-	$('.calendarFocus').val('');
-	$('.calendarButton').val('');
-	$('.calendarBoth').val('');
-	$('.calendarRange').val('');
-	$('#more div').hide();
-	$('#more' + option).show();
+$(document).ready(function () {
+	$('#tabs').tabs({onClick: updateTabs})
+	// Restore default language after loading French localisation
+	popUpCal.setDefaults(popUpCal.regional['']);
+	// Set calendar global defaults - invoke via focus and image button
+	popUpCal.setDefaults({autoPopUp: 'both', buttonImageOnly: true,
+		buttonImage: 'img/calendar.gif', buttonText: 'Calendar'});
+	// Defaults
+	$('#defaultFocus').calendar({autoPopUp: 'focus'});
+	// Invocation
+	$('#invokeFocus').calendar({autoPopUp: 'focus', yearRange: '-5:+5'});
+	$('#invokeButton').calendar({autoPopUp: 'button', buttonImageOnly: false,
+		buttonImage: '', buttonText: '...', yearRange: '-7:+7'});
+	$('.invokeBoth').calendar(); // Also Keystrokes
+	$('#enableFocus').toggle(
+		function () { this.value = 'Enable'; return popUpCal.disableFor($('#invokeFocus')); },
+		function () { this.value = 'Disable'; return popUpCal.enableFor($('#invokeFocus')); });
+	$('#enableButton').toggle(
+		function () { this.value = 'Enable'; return popUpCal.disableFor($('#invokeButton')); },
+		function () { this.value = 'Disable'; return popUpCal.enableFor($('#invokeButton')); });
+	$('#enableBoth').toggle(
+		function () { this.value = 'Enable'; return popUpCal.disableFor($('.invokeBoth')[0]); },
+		function () { this.value = 'Disable'; return popUpCal.enableFor($('.invokeBoth')[0]); });
+	// Restricting
+	$('#restrictControls').calendar({firstDay: 1, changeFirstDay: false,
+		changeMonth: false, changeYear: false});
+	$('#restrictDates').calendar({minDate: new Date(2005, 1 - 1, 26),
+		maxDate: new Date(2007, 1 - 1, 26)});
+	// Customise
+	$('#noWeekends').calendar({customDate: popUpCal.noWeekends});
+	$('#nationalDays').calendar({customDate: nationalDays});
+	// Localisation
+	$('#isoFormat').calendar({dateFormat: 'YMD-'});
+	$('#frenchCalendar').calendar(popUpCal.regional['fr']);
+	// Date range
+	$('.calendarRange').calendar({fieldSettings: customRange});
+	// Miscellaneous
+	$('#addSettings').calendar({closeAtTop: false,
+		showOtherMonths: true, onSelect: alertDate});
+	$('#reconfigureCal').calendar();
+	$('.inlineConfig').calendar();
+	// Inline
+	$('.calendarInline').calendar({onSelect: updateInlineRange});
+	inlineRange = $('#inlineRange');
+	inlineFrom = $('#inlineFrom');
+	inlineTo = $('#inlineTo');
+	updateInlineRange();
+	// Stylesheets
+	$('#altStyle').calendar();
+});
+
+function updateTabs(anchor, newDiv, oldDiv) {
+	var stylesheet = (newDiv.id == 'styles' ? 'alt' : 'default');
+	$('link').each(function() {
+		this.disabled = (this.title != '' && this.title != stylesheet);
+	});
 }
 
 function setSpeed(select) {
-	popUpCal.speed = select.options[select.selectedIndex].value;
+	popUpCal.reconfigureFor($('#reconfigureCal')[0],
+		{speed: select.options[select.selectedIndex].value});
 }
 
-natDays = [[1, 26, 'au'], [2, 6, 'nz'], [3, 17, 'ie'], [4, 27, 'za'], [5, 25, 'ar'], [6, 6, 'se'],
+function setDateFromDialog(date) {
+	$('#invokeDialog').val(date);
+}
+
+function setAltDateFromDialog(date) {
+	$('#altDialog').val(date);
+}
+
+var natDays = [[1, 26, 'au'], [2, 6, 'nz'], [3, 17, 'ie'], [4, 27, 'za'], [5, 25, 'ar'], [6, 6, 'se'],
 	[7, 4, 'us'], [8, 17, 'id'], [9, 7, 'br'], [10, 1, 'cn'], [11, 22, 'lb'], [12, 12, 'ke']];
 function nationalDays(date) {
 	for (i = 0; i < natDays.length; i++) {
@@ -94,57 +84,38 @@ function nationalDays(date) {
 	return [true, ''];
 }
 
-function customSettings(input) {
-	range = (input.className == 'calendarFocus' ? 5 : 
-		(input.className == 'calendarButton' ? 7 : 10));
-	return {yearRange: '-' + range + ':+' + range, 
-		minDate: (input.id == 'dTo' ? getDate($('#dFrom')) : defaultMinDate), 
-		maxDate: (input.id == 'dFrom' ? getDate($('#dTo')) : defaultMaxDate)};
+function customRange(input) {
+	return {minDate: (input.id == 'dTo' ? getDate($('#dFrom').val()) : null),
+		maxDate: (input.id == 'dFrom' ? getDate($('#dTo').val()) : null)};
 }
 
-function getDate(input) {
-	fields = input.val().split('/');
-	if (fields.length == 3) {
-		return new Date(parseInt(fields[2]), parseInt(fields[1]) - 1, parseInt(fields[0]));
-	} else {
-		return null;
-	}
+function getDate(value) {
+	fields = value.split('/');
+	return (fields.length < 3 ? null :
+		new Date(parseInt(fields[2]), parseInt(fields[1]) - 1, parseInt(fields[0])));
 }
 
-function getPopUpDate() {
-	popUpCal.showStandalone($('#popUpDate').val(), 'Choose a date', setPopUpDate);
+function alertDate(date) {
+	alert('The date is ' + date);
 }
 
-function setPopUpDate() {
-	$('#popUpDate').val(popUpCal.date);
+var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+function showDay(input) {
+	var date = getDate(input.value);
+	$('#inlineDay').empty().html(date ? days[date.getDay()] : 'blank');
 }
 
-$(document).ready(function () {
-	$('#more div').hide();
-	$('#more0').show();
-	popUpCal.fieldSettings = customSettings;
-	$('.calendarFocus').calendar({appendText: ' (default dd/mm/yyyy)'});
-	$('.calendarButton').calendar({appendText: ' ', autoPopUp: 'button'});
-	$('.calendarBoth').calendar({autoPopUp: 'both', buttonImageOnly: true, 
-		buttonImage: 'img/calendar.gif', buttonText: 'Calendar'});
-	$('.calendarRange').calendar(); // Same as above
-	$('#enableFocus').toggle(
-		function () { this.value = 'Enable'; return popUpCal.disableFor($('.calendarFocus')); }, 
-		function () { this.value = 'Disable'; return popUpCal.enableFor($('.calendarFocus')); });
-	$('#enableButton').toggle(
-		function () { this.value = 'Enable'; return popUpCal.disableFor($('.calendarButton')); }, 
-		function () { this.value = 'Disable'; return popUpCal.enableFor($('.calendarButton')); });
-	$('#enableBoth').toggle(
-		function () { this.value = 'Enable'; return popUpCal.disableFor($('.calendarBoth')); }, 
-		function () { this.value = 'Disable'; return popUpCal.enableFor($('.calendarBoth')); });
-});
+function updateInlineRange() {
+	var dateFrom = popUpCal.getDateFor(inlineFrom[0]);
+	var dateTo = popUpCal.getDateFor(inlineTo[0]);
+	inlineRange.val(formatDate(dateFrom) + ' to ' + formatDate(dateTo));
+	popUpCal.reconfigureFor(inlineFrom[0], {maxDate: dateTo});
+	popUpCal.reconfigureFor(inlineTo[0], {minDate: dateFrom});
+}
 
-function setActiveStyleSheet(title) {
-  var i, a, main;
-  for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
-    if(a.getAttribute("rel").indexOf("style") != -1 && a.getAttribute("title")) {
-      a.disabled = true;
-      if(a.getAttribute("title") == title) a.disabled = false;
-    }
-  }
+function formatDate(date) {
+	var day = date.getDate();
+	var month = date.getMonth() + 1;
+	return (day < 10 ? '0' : '') + day + '/' +
+		(month < 10 ? '0' : '') + month + '/' + date.getFullYear();
 }
