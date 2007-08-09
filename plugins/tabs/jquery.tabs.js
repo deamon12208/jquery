@@ -198,7 +198,7 @@ $.fn.tabs = function(initial, settings) {
         tabStruct: 'div'
     }, settings || {});
 
-    $.browser.msie6 = $.browser.msie && ($.browser.version && $.browser.version < 7 || /6.0/.test(navigator.userAgent));    
+    $.browser.msie6 = $.browser.msie && ($.browser.version && $.browser.version < 7 || /MSIE 6.0/.test(navigator.userAgent)); // do not check for 6.0 alone, userAgent in Windows Vista has "Windows NT 6.0"
 
     // helper to prevent scroll to fragment
     function unFocus() {
