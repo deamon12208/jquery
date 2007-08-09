@@ -7,39 +7,33 @@
 
 (function($){
 	
-	var menuItems = [];	// This is the array we will store the menu items in
-	
-	$.fn.menu = function(m,o,t) {	// Constructor for the clickContext method
+	$.fn.menu = function(m,o,t) {	// Constructor for the menu method
 		return this.each(function() {
 			new $.ui.menu(this, m, o, t);	
 		});
 	}	
 	
 	$.ui.menu = function(el, m, o, t) {
-		var attach = el;
-		var menu = m;
-		var shown = false;
-		
 		var options = $.extend({
 			timeout: 2000,
 			context: 'clickContext',
-			anim: 'slideDown',
+			show: 'slideDown',
+			hide: 'slideUp',
 			speed: 'slow'
 		}, o);
 		var buttons = $.extend({}, t);
-
+		console.log(buttons);
 		var ALT = false;
 		var CTRL = false;
 		var SHIFT = false;
 		
-		this.styleMenu(menu);
-		this[options.context](attach, menu, options);
+		this.styleMenu(m);	// Pass the menu in to recieve it's makeover
+		this[options.context](el, m, options);	// Based on contexted selected, attach to menu parent
 		
 	}
 	
 	$.extend($.ui.menu.prototype, {
 		styleMenu : function(m){
-			
 			$(m).addClass('ui-menu-nodes').children('li').addClass('ui-menu-node');
 			var nodes = $('ul',m).addClass('ui-menu-nodes')
 				.css('MozUserSelect', 'none').attr('unselectable', 'on');
@@ -54,14 +48,16 @@
 				elBottom = x.top + $(a).height();
 				elLeft = x.left;
 				$(m).css({position:'absolute', top:elBottom + 1, left: elLeft})
-				$(m)[o.anim](o.speed, function(){
+				$(m)[o.show](o.speed, function(){
 					console.log('Menu Shown');
+					self.showChild(m, o);
 					$(window).bind('click', function(){
 						self.hideMenu(m, o);
 						$(window).unbind('click');
 					})
 				});
 			});
+			return false;
 		},
 		hoverContext : function(a,m,o) {
 			var self = this;
@@ -70,29 +66,47 @@
 				elBottom = x.top + $(a).height();
 				elLeft = x.left;
 				$(m).css({position:'absolute', top:elBottom + 1, left: elLeft})
-				$(m)[o.anim](o.speed, function(){
+				$(m)[o.show](o.speed, function(){
 					console.log('Menu Shown');
+					self.showChild(m, o);
 					$(window).bind('click', function(){
 						self.hideMenu(m, o);
 						$(window).unbind('click');
 					})
 				});
 			});
+			return false;
+		},
+		context : function (a,m,o) {	// FIXME: Context click not working
+			var self = this;
+			$(a).bind('click', function(e){
+				if (e.button == 0 || e.button == 2 || e.button == 3) {
+					x = $(a).position();
+					elBottom = x.top + $(a).height();
+					elLeft = x.left;
+					$(m).css({position:'absolute', top:elBottom + 1, left: elLeft})
+					$(m)[o.show](o.speed, function(){
+						console.log('Menu Shown');
+						self.showChild(m, o);
+						$(window).bind('click', function(){
+							self.hideMenu(m, o);
+							$(window).unbind('click');
+						})
+					});
+				} else {
+					
+				}
+			});
+			return false;			
+		},
+		showChild : function(m, o) {
+			console.log ('this is fired');
+			$(m).bind('mouseover', function(e){
+				$('li.ui-menu-node > a').children('ul').show('fast');
+			});
 		},
 		hideMenu : function(m, o){
-			
-			switch (o.anim) {
-				case "show" :
-					var alt = "hide";
-					break;
-				case "slideDown":
-					var alt = "slideUp";
-					break;
-				case "fadeIn" :
-					var alt = "fadeOut";
-					break;
-			}
-			$(m)[alt](o.speed);
+			$(m)[o.hide](o.speed);
 			return false;
 		}
 		
