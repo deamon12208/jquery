@@ -1,0 +1,71 @@
+@media projection, screen { .tabs-hide { display:none; } }
+@media print { .tabs-nav { display: none; } }
+
+.light .tabs-nav,
+.light.tabs-nav {
+  padding-left:6px;
+  border-bottom:1px solid #444;
+  float:left;
+  width:99%;
+  margin:0;
+}
+.light .tabs-nav li,
+.light.tabs-nav li {
+  list-style:none;
+  float:left;
+}
+.light .tabs-nav a,
+.light.tabs-nav a {
+  display:block;
+  padding:2px 0 1px;
+  text-decoration:none!important;
+  border:1px solid #444;
+  margin:1px 1px 0 0;
+  font:9pt Verdana;
+  color:#FFF;
+  background:#444;
+}
+.light .tabs-nav span,
+.light.tabs-nav span {
+  padding:2px 13px 2px;
+  color:#FFF;
+  background:#444;
+}
+.light .tabs-nav a:hover,
+.light .tabs-nav a:hover span,
+.light.tabs-nav a:hover,
+.light.tabs-nav a:hover span {
+  border-color:#222;
+  color:#FFF;
+  background:#222;
+  }
+.light .tabs-nav .tabs-selected a,
+.light.tabs-nav .tabs-selected a {
+  background:#AAA;
+  border-color:#666;
+}
+.light .tabs-nav .tabs-selected a span,
+.light.tabs-nav .tabs-selected a span {
+  margin-bottom:0;
+  color:#000;
+  background:snow;
+  border-bottom:1px solid #FFF;
+  cursor:default;
+  }
+.light .tabs-nav .tabs-disabled a,
+.light .tabs-nav .tabs-disabled a span,
+.light.tabs-nav .tabs-disabled a,
+.light.tabs-nav .tabs-disabled a span {
+  background:#EEE;
+  color:#BBB;
+  border-color:#DDD;
+  cursor:default;
+}
+.light .tabs-container {
+  clear:both;
+  padding:10px 10px 8px 10px;
+  *padding-top:3px;
+  *margin-top:-24px;
+  clear:left;
+}
+

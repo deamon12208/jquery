@@ -1,0 +1,73 @@
+@media projection, screen { .tabs-hide { display:none; } }
+@media print { .tabs-nav { display: none; } }
+
+.dark .tabs-nav,
+.dark.tabs-nav {
+  padding-left:6px;
+  border-bottom:1px solid #333;
+  float:left;
+  width:99%;
+  margin:0;
+}
+.dark .tabs-nav li,
+.dark.tabs-nav li {
+  list-style:none;
+  float:left;
+ }
+.dark .tabs-nav a,
+.dark.tabs-nav a {
+  display:block;
+  padding:2px 0 1px;
+  text-decoration:none!important;
+  border:1px solid #444;
+  margin:1px 1px 0 0;
+  font:9pt Verdana;
+  color:#FFF;
+  background:#444;
+}
+.dark .tabs-nav span,
+.dark.tabs-nav span {
+  padding:2px 13px 2px;
+  color:#FFF;
+  background:#333;
+}
+.dark .tabs-nav a:hover,
+.dark .tabs-nav a:hover span,
+.dark.tabs-nav a:hover,
+.dark.tabs-nav a:hover span {
+  border-color:#181818;
+  color:#FFF;
+  background:#111;
+  }
+.dark .tabs-nav .tabs-selected a,
+.dark.tabs-nav .tabs-selected a {
+  background:#222;
+  border-color:#333;
+}
+.dark .tabs-nav .tabs-selected a span,
+.dark.tabs-nav .tabs-selected a span {
+  margin-bottom:0;
+  color:#FFF;
+  background:#181818;
+  border-bottom:1px solid #181818;
+  cursor:default;
+  }
+.dark .tabs-nav .tabs-disabled a,
+.dark .tabs-nav .tabs-disabled a span,
+.dark.tabs-nav .tabs-disabled a,
+.dark.tabs-nav .tabs-disabled a span {
+  background:#161616;
+  color:#333;
+  border-color:#161616;
+  cursor:default;
+}
+.dark .tabs-container {
+  background:#181818;
+  border-bottom:1px solid #222;
+  clear:both;
+  padding:10px 10px 8px 10px;
+  *padding-top:3px;
+  *margin-top:-24px;
+  clear:left;
+}
+
