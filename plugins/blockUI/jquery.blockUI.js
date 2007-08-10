@@ -203,7 +203,7 @@ $.blockUI.impl = {
     pageBlock: null,
     pageBlockEls: [],
     op8: window.opera && window.opera.version() < 9,
-    ie6: $.browser.msie && /6.0/.test(navigator.userAgent),
+    ie6: $.browser.msie && /MSIE 6.0/.test(navigator.userAgent),
     install: function(el, msg, css, opts) {
         opts = opts || {};
         this.boxCallback = typeof opts.displayMode == 'function' ? opts.displayMode : null;
