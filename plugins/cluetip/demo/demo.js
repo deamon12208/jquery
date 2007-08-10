@@ -4,7 +4,7 @@ $(document).ready(function() {
   $('a.basic').cluetip();
   $('a.custom-width').cluetip({width: '200px', showTitle: false,sticky: true});
   $('h4').cluetip({attribute: 'id', hoverClass: 'highlight'});
-  $('#sticky').cluetip({'sticky': true});
+  $('#sticky').cluetip({'sticky': true,'closePosition': 'title'});
   $('#examples a:eq(4)').cluetip({
     hoverClass: 'highlight',
     sticky: true,
@@ -13,16 +13,14 @@ $(document).ready(function() {
     truncate: 60
   });
   $('a.load-local').cluetip({local:true, cursor: 'pointer'});
-  $('#clickme').cluetip({activation: 'click'});
+  $('#clickme').cluetip({activation: 'click', width: 650});
   $('span[@title]').css('background', 'yellow').cluetip({splitTitle: '|'});
 
 // jTip theme
   $('.jt').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false,
     fx: {
       open: 'slideDown', 
-      openSpeed: 'slow',
-      close: 'fadeOut',
-      closeSpeed: 'fast'
+      openSpeed: 'slow'
     }
   });
 
@@ -42,7 +40,7 @@ $(document).ready(function() {
     $(hash).slideDown('fast');
     $('#navigation a').removeClass('active');
     $this.addClass('active');
-    // return false;
+    return false;
   }).filter(':first').addClass('active');
   $('div.html, div.jquery').next().css('display', 'none').end().click(function() {
     $(this).next().toggle('fast');

@@ -1,6 +1,6 @@
 /*
  * jQuery clueTip plugin
- * Version 0.8  (08/02/2007)
+ * Version 0.8.2  (08/09/2007)
  * @requires jQuery v1.1.1
  * @requires Dimensions plugin 
  *
@@ -96,6 +96,9 @@
       hoverClass: '',
       waitImage: 'wait.gif',
       cursor: 'help',
+      arrows: false, // CHANGE THIS TO true IF YOU WANT jTip-STYLE ARROWS FOR ALL clueTips
+      dropShadow: true,
+      dropShadowSteps: 6,
       sticky: false,
       activation: 'hover',
       closePosition: 'top',
@@ -109,9 +112,6 @@
         close: 'hide',
         closeSpeed: ''
       },
-      arrows: false, // CHANGE THIS TO true IF YOU WANT jTip-STYLE ARROWS FOR ALL clueTips
-      dropShadow: true,
-      dropShadowSteps: 6,
       hoverIntent: true,
       onShow: function (ct, c){},      
       ajaxProcess: function(data) {
@@ -126,6 +126,10 @@
     if (options && options.ajaxSettings) {
       $.extend(defaults.ajaxSettings, options.ajaxSettings);
       delete options.ajaxSettings;
+    }
+    if (options && options.fx) {
+      $.extend(defaults.fx, options.fx);
+      delete options.fx;
     }
     
     $.extend(defaults, options);
@@ -150,13 +154,14 @@
         $('<img src="' + defaults.waitImage + '" />')
           .attr({'id': 'cluetip-waitimage'})
           .css({position: 'absolute', zIndex: cluezIndex-1})
-        .appendTo('body')
+        .insertBefore('#cluetip')
         .hide();
         $cluetip.css({position: 'absolute', zIndex: cluezIndex});
         $cluetipOuter.css({position: 'relative', zIndex: cluezIndex+1});
       }
       var dropShadowSteps = (defaults.dropShadow) ? +defaults.dropShadowSteps : 0;
-      if (!$dropShadow && defaults.dropShadow) {
+      // if (!$dropShadow && defaults.dropShadow) {
+      if (!$dropShadow) {
         $dropShadow = $([]);
         for (var i=0; i < dropShadowSteps; i++) {
           $dropShadow = $dropShadow.add($('<div></div>').css({zIndex: cluezIndex-i-1, opacity:.1, top: 1+i, left: 1+i}));
@@ -181,8 +186,8 @@
       var linkLeft, posX, tipX, mouseX, winWidth;
             
       // parse the title
-      var tipParts,
-       tipTitle = (defaults.attribute != 'title') ? $this.attr(defaults.titleAttribute) : '';
+      var tipParts;
+      var tipTitle = (defaults.attribute != 'title') ? $this.attr(defaults.titleAttribute) : '';
       if (defaults.splitTitle) {
         tipParts = tipTitle.split(defaults.splitTitle);
         tipTitle = tipParts.shift();
@@ -199,9 +204,8 @@
       if (tipAttribute == $this.attr('href')) {
         $this.css('cursor', defaults.cursor);
       }
-      if (tipTitle) {
-        $this.removeAttr('title');          
-      }
+      //$this.removeAttr('title');
+      $this.attr('title','');
       if (defaults.hoverClass) {
         $this.addClass(defaults.hoverClass);
       }
@@ -263,7 +267,7 @@
           ajaxSettings.url = tipAttribute;
           ajaxSettings.beforeSend = function() {
             $('#cluetip-waitimage')
-              .css({top: posY, left: posX+(tipWidth/2)})
+              .css({top: posY, left: parseInt(posX+(tipWidth/2),10)})
             .show();
           };
           ajaxSettings.success = function(data) {
@@ -298,8 +302,8 @@
 
       tipTitle ? $cluetipTitle.show().html(tipTitle) : (defaults.showTitle) ? $cluetipTitle.show().html('&nbsp;') : $cluetipTitle.hide();
       if (defaults.sticky) {
-        var $closeLink = $('<span id="cluetip-close"><a href="#">' + defaults.closeText + '</a></span>');
-        (defaults.closePosition == 'bottom') ? $closeLink.css('display','block').appendTo($cluetipInner) : $closeLink.css('display','block').prependTo($cluetipInner);
+        var $closeLink = $('<div id="cluetip-close"><a href="#">' + defaults.closeText + '</a></div>');
+        (defaults.closePosition == 'bottom') ? $closeLink.appendTo($cluetipInner) : (defaults.closePosition == 'title') ? $closeLink.prependTo($cluetipTitle) : $closeLink.prependTo($cluetipInner);
         $closeLink.click(function() {
           cluetipClose();
           return false;
@@ -332,11 +336,12 @@
         bgPos = '0 100%';
       }
       $cluetip.css({backgroundPosition: bgPos});
+
+// (first hide, then) ***SHOW THE CLUETIP***
+      $cluetip.hide()[defaults.fx.open](defaults.fx.openSpeed);
       if ($dropShadow) {
         defaults.dropShadow ? $dropShadow.show().css({height: tipHeight, width: defaults.width}) : $dropShadow.hide();
       }
-// (first hide, then) ***SHOW THE CLUETIP***
-      $cluetip.hide()[defaults.fx.open](defaults.fx.openSpeed);
       // trigger the optional onShow function
       defaults.onShow($cluetip, $cluetipInner);
     };

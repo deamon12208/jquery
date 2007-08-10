@@ -1,9 +1,20 @@
+== To Do ==
+
+* I need non cached data in the tooltips. Perhaps you can add an option for this, attaching some random stuff to the ajax url like &amp;random=123456 (e.g. timestamp or milliseconds).
+* tried to use a "waitImage" named "clueTip_wait.gif" which did not work. Solution: I had to comment the underscore like "clueTip\\_wait.gif".
+? IE: Opening a clueTip in IE makes all my other images (logos, etc.) flicker (like beeing reloaded).
+* IE: The drop shadow is only shown below the tooltip, on the right there is no dropshadow. [CSS issue?]
+?? Someone asked for closing a tooltip when clicking anywhere outside the tooltip … additionally, I would like to have the same possibility for clicking ANYWHERE INSIDE the tooltip - this way I (we) don’t even need a “close” link/icon.
+
 == New and Noteworthy ==
 
+== 0.8.1 ==
+
+* for "closePosition" option, added ability to set it to "title" so that the close link can go in the clueTip's heading area.
 == 0.8 ==
 
 Additional features/enhancements
-
+* changed <span id="cluetip-close"> to <div id="cluetip-close"> because I was (stupidly) setting its "display" property to "block" anyway. So, also removed .css('display','block)
 * added fx options: open, openSpeed, close, closeSpeed. open and close can take one of the jQuery core effects (fadeIn/fadeOut, show/hide, slideDown/slideUp); openSpeed and close Speed take, well, a speed. 
 * added positionBy option. Default is "auto". When set to "mouse" will position the clueTip by the mouse position, not the element position
 * added cluezIndex option. Default is 97. Sets the z-index property of the clueTip
