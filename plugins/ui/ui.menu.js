@@ -100,9 +100,13 @@
 			return false;			
 		},
 		showChild : function(m, o) {
-			console.log ('this is fired');
-			$(m).bind('mouseover', function(e){
-				$('li.ui-menu-node > a').children('ul').show('fast');
+			self = this;
+			console.log(o);
+			$('li', m).bind('mouseover', function(){
+				x = $(this).position();
+				$(this).children('ul').css({position:'absolute', top:x.top, left: x.right + 1})[o.show](o.speed, function(){
+					self.hideMenu(this,o);
+				});
 			});
 		},
 		hideMenu : function(m, o){
