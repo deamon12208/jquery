@@ -22,7 +22,6 @@
 			speed: 'slow'
 		}, o);
 		var buttons = $.extend({}, t);
-		console.log(buttons);
 		var ALT = false;
 		var CTRL = false;
 		var SHIFT = false;
@@ -45,11 +44,9 @@
 			var self = this;
 			$(a).bind('click', function(){
 				x = $(a).position();
-				elBottom = x.top + $(a).height();
-				elLeft = x.left;
-				$(m).css({position:'absolute', top:elBottom + 1, left: elLeft})
+				y = x.top + ( $(a).height() + 1);
+				$(m).css({position:'absolute', top: y, left: x.left});
 				$(m)[o.show](o.speed, function(){
-					console.log('Menu Shown');
 					self.showChild(m, o);
 					$(window).bind('click', function(){
 						self.hideMenu(m, o);
@@ -63,11 +60,9 @@
 			var self = this;
 			$(a).bind('mouseover', function(){
 				x = $(a).position();
-				elBottom = x.top + $(a).height();
-				elLeft = x.left;
-				$(m).css({position:'absolute', top:elBottom + 1, left: elLeft})
+				y = x.top + ( $(a).height() + 1);
+				$(m).css({position:'absolute', top: y, left: x.left});
 				$(m)[o.show](o.speed, function(){
-					console.log('Menu Shown');
 					self.showChild(m, o);
 					$(window).bind('click', function(){
 						self.hideMenu(m, o);
@@ -77,16 +72,16 @@
 			});
 			return false;
 		},
-		context : function (a,m,o) {	// FIXME: Context click not working
+		context : function (a,m,o) {	
 			var self = this;
-			$(a).bind('click', function(e){
-				if (e.button == 0 || e.button == 2 || e.button == 3) {
+			$(a).bind('mouseup', function(e){
+				if (e.button == 2 || e.button == 3) {
+					e.preventDefault();	//FIXME: Not stopping right-click menu in FF
+					e.stopPropagation();
 					x = $(a).position();
 					elBottom = x.top + $(a).height();
-					elLeft = x.left;
-					$(m).css({position:'absolute', top:elBottom + 1, left: elLeft})
+					$(m).css({position:'absolute', top: e.clientY, left: e.clientX});
 					$(m)[o.show](o.speed, function(){
-						console.log('Menu Shown');
 						self.showChild(m, o);
 						$(window).bind('click', function(){
 							self.hideMenu(m, o);
@@ -101,7 +96,6 @@
 		},
 		showChild : function(m, o) {
 			self = this;
-			console.log(o);
 			$('li', m).bind('mouseover', function(){
 				x = $(this).position();
 				$(this).children('ul').css({position:'absolute', top:x.top, left: x.right + 1})[o.show](o.speed, function(){
