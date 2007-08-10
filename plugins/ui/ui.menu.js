@@ -19,7 +19,8 @@
 			context: 'clickContext',
 			show: 'slideDown',
 			hide: 'slideUp',
-			speed: 'slow'
+			speed: 'slow',
+			title: 'Context Menu'
 		}, o);
 		var buttons = $.extend({}, t);
 		var ALT = false;
@@ -81,6 +82,7 @@
 					x = $(a).position();
 					elBottom = x.top + $(a).height();
 					$(m).css({position:'absolute', top: e.clientY, left: e.clientX});
+					$(m).prepend('<span>' + o.title + '</span>');
 					$(m)[o.show](o.speed, function(){
 						self.showChild(m, o);
 						$(window).bind('click', function(){
