@@ -31,6 +31,11 @@
 		this.styleMenu(m);	// Pass the menu in to recieve it's makeover
 		this[options.context](el, m, options);	// Based on contexted selected, attach to menu parent
 		
+		$('a').click(function(){  // FIXME: Testing to see if button custom functions can be executed
+			console.log(this);
+			this.buttons.fileExit();
+		})
+		
 	}
 	
 	$.extend($.ui.menu.prototype, {
