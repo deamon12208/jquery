@@ -23,6 +23,7 @@
 			title: 'Context Menu'
 		}, o);
 		var buttons = $.extend({}, t);
+		console.log(buttons);
 		var ALT = false;
 		var CTRL = false;
 		var SHIFT = false;

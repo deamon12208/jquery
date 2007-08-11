@@ -31,7 +31,11 @@
 		
 		<script type="text/javascript">
 			$('document').ready(function(){
-				$('#filemenu-parent').menu('#filemenu');
+				$('#filemenu-parent').menu('#filemenu', {speed: 'fast'}, {buttons: {
+					fileExit : function(){
+						alert('Menu Fired');
+					}
+				}});
 				$('#editmenu-parent').menu('#editmenu', {context: 'hoverContext'})
 				$('body').menu('#editmenu', {context: 'context'});
 			});
@@ -53,7 +57,7 @@
 			</li>
 			<li id="filemenu-open"><a href="file-open">Open</a></li>
 			<li id="filemenu-save"><a href="file-save">Save</a></li>
-			<li id="filemenu-exit"><a href="file-save">Exit</a></li>
+			<li id="filemenu-exit"><a href="file-save" class="fileExit">Exit</a></li>
 		</ul>
 		
 		<ul id="editmenu">
