@@ -22,8 +22,7 @@
 			speed: 'slow',
 			title: 'Context Menu'
 		}, o);
-		//var buttons = $.extend({}, t);
-		console.log(t);
+
 		var ALT = false;
 		var CTRL = false;
 		var SHIFT = false;
@@ -31,9 +30,8 @@
 		this.styleMenu(m);	// Pass the menu in to recieve it's makeover
 		this[options.context](el, m, options);	// Based on contexted selected, attach to menu parent
 		
-		$('a').click(function(){  // FIXME: Testing to see if button custom functions can be executed
-			console.log(this);
-			t[this.className];
+		$('a').click(function(){  // FIXME: Tries to execute all defined menu buttons
+			t.buttons[this.className]();
 		})
 		
 	}
