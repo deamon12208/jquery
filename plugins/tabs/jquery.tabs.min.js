@@ -1,6 +1,6 @@
 /**
  * Tabs - jQuery plugin for accessible, unobtrusive tabs
- * @requires jQuery v1.0.3
+ * @requires jQuery v1.1.1
  *
  * http://stilbuero.de/tabs/
  *
