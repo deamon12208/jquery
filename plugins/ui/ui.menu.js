@@ -22,8 +22,8 @@
 			speed: 'slow',
 			title: 'Context Menu'
 		}, o);
-		var buttons = $.extend({}, t);
-		console.log(buttons);
+		//var buttons = $.extend({}, t);
+		console.log(t);
 		var ALT = false;
 		var CTRL = false;
 		var SHIFT = false;
@@ -33,7 +33,7 @@
 		
 		$('a').click(function(){  // FIXME: Testing to see if button custom functions can be executed
 			console.log(this);
-			this.buttons.fileExit();
+			t[this.className];
 		})
 		
 	}

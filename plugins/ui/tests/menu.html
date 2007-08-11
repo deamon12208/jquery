@@ -33,10 +33,14 @@
 			$('document').ready(function(){
 				$('#filemenu-parent').menu('#filemenu', {speed: 'fast'}, {buttons: {
 					fileExit : function(){
-						alert('Menu Fired');
+						alert('Exit Fired');
 					}
 				}});
-				$('#editmenu-parent').menu('#editmenu', {context: 'hoverContext'})
+				$('#editmenu-parent').menu('#editmenu', {context: 'hoverContext'}, {buttons: {
+					fileCopy : function(){
+						alert('Copy Fired')
+					}
+				}});
 				$('body').menu('#editmenu', {context: 'context'});
 			});
 			
