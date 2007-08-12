@@ -272,11 +272,14 @@
 					this.count = 0;
 					this.column = index;
 					this.order = formatSortingOrder(table.config.sortInitialOrder);
+					if(checkHeaderMetadata(this) || checkHeaderOptions(table,index)) this.disabled = true;
+					
+					if(!this.disabled) {
+						$(this).addClass(table.config.cssHeader);
+					}
 					
 					// add cell to headerList
 					table.config.headerList.push(this);
-			
-					$(this).addClass(table.config.cssHeader);
 				});
 				
 				if(table.config.debug) { benchmark("Built headers:", time); }
@@ -296,9 +299,9 @@
 						arr = arr.concat(checkCellColSpan(table, headerArr, row+cell.rowSpan, cell.colSpan));
 					} else {
 						// check so header is not disable by the meta plugin
-						if(!checkHeaderMetadata(cell) && !checkHeaderOptions(table,i)) {
+						//if(!checkHeaderMetadata(cell) && !checkHeaderOptions(table,i)) {
 							arr.push(cell);
-						}
+						//}
 						headerArr[row] = i+1;
 					}
 				}
@@ -360,7 +363,9 @@
 				
 				var h = [];
 				$headers.each(function(offset) {
-						h[this.column] = $(this);					
+						if(!this.disabled) {
+							h[this.column] = $(this);					
+						}
 				});
 
 				var l = list.length; 
@@ -469,60 +474,60 @@
 					// apply event handling to headers
 					// this is to big, perhaps break it out?
 					$headers.click(function(e) {
-
-						// store exp, for speed
-						var $cell = $(this);
-
-						// get current column index
-						var i = this.column;
-						
-						// get current column sort order
-						this.order = this.count++ % 2;
-						
-						
-						
-						// user only whants to sort on one column
-						if(!e[config.sortMultisortKey]) {
+						if(!this.disabled) {
+							// store exp, for speed
+							var $cell = $(this);
+	
+							// get current column index
+							var i = this.column;
 							
-							// flush the sort list
-							config.sortList = [];
+							// get current column sort order
+							this.order = this.count++ % 2;
 							
-							if(config.sortForce != null) {
-								config.sortList.push(config.sortForce);	
-							}
 							
-							// add column to sort list
-							config.sortList.push([i,this.order]);
-						
-						// multi column sorting	
-						} else {
-							// the user has clicked on an all ready sortet column.
-							if(isValueInArray(i,config.sortList)) {	 
+							
+							// user only whants to sort on one column
+							if(!e[config.sortMultisortKey]) {
 								
-								// revers the sorting direction for all tables.
-								for(var j=0; j < config.sortList.length; j++) {
-									var s = config.sortList[j], o = config.headerList[s[0]];
-									if(s[0] == i) {
-										o.count = s[1];
-										o.count++;
-										s[1] = o.count % 2;
-									}
-								}	
-							} else {
-								// add column to sort list array
+								// flush the sort list
+								config.sortList = [];
+								
+								if(config.sortForce != null) {
+									config.sortList.push(config.sortForce);	
+								}
+								
+								// add column to sort list
 								config.sortList.push([i,this.order]);
-							}
-						};
-						
-						//set css for headers
-						setHeadersCss($this[0],$headers,config.sortList,sortCSS);
-						
-						// sort the table and append it to the dom
-						appendToTable($this[0],multisort($this[0],config.sortList,cache));
-						
-						// stop normal event by returning false
-						return false;
-					
+							
+							// multi column sorting	
+							} else {
+								// the user has clicked on an all ready sortet column.
+								if(isValueInArray(i,config.sortList)) {	 
+									
+									// revers the sorting direction for all tables.
+									for(var j=0; j < config.sortList.length; j++) {
+										var s = config.sortList[j], o = config.headerList[s[0]];
+										if(s[0] == i) {
+											o.count = s[1];
+											o.count++;
+											s[1] = o.count % 2;
+										}
+									}	
+								} else {
+									// add column to sort list array
+									config.sortList.push([i,this.order]);
+								}
+							};
+							
+							//set css for headers
+							setHeadersCss($this[0],$headers,config.sortList,sortCSS);
+							
+							// sort the table and append it to the dom
+							appendToTable($this[0],multisort($this[0],config.sortList,cache));
+							
+							// stop normal event by returning false
+							return false;
+						}
 					// cancel selection	
 					}).mousedown(function() {
 						if(config.cancelSelection) {
