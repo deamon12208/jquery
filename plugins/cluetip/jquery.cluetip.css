@@ -26,6 +26,10 @@
   background-color: #87876a;
   color: #fff;
 }
+.cluetip-default #cluetip-title a {
+  color: #d9d9c2;
+  font-size: 0.95em;
+}  
 .cluetip-default #cluetip-inner {
   padding: 10px;
 }

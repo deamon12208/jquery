@@ -63,7 +63,7 @@
  * @option String titleAttribute: default is 'title'. The attribute to be used for the clueTip's heading, if the attribute exists for the hovered element.
  * @option String splitTitle: default is '' (empty string). A character used to split the title attribute into the clueTip title and divs within the clueTip body; if used, the clueTip will be populated only by the title attribute, 
  * @option String hoverClass: default is empty string. designate one to apply to the hovered element
- * @option String waitImage: default is 'wait.gif'
+ * @option String waitImage: default is 'wait.gif'. set it to '' or false to avoid having the plugin try to show/hide the image.
  * @option Boolean sticky: default is false. Set to true to keep the clueTip visible until the user either closes it manually by clicking on the CloseText or display another clueTip.
  * @option String activation: default is 'hover'. Set to 'toggle' to force the user to click the element in order to activate the clueTip.
  * @option String closePosition: default is 'top'. Set to 'bottom' to put the closeText at the bottom of the clueTip body
@@ -221,7 +221,6 @@
           || linkLeft + linkWidth + tipWidth > winWidth 
           ? linkLeft - tipWidth - 15 
           : linkWidth + linkLeft + 15;
-        //posY = linkTop;
       }
       $cluetip.removeClass().css({width: defaults.width});
       if ($this.css('display') == 'block' || $this[0].tagName.toLowerCase() == 'area' || defaults.positionBy == 'mouse') { // position by mouse
@@ -234,9 +233,8 @@
       }
 
       posX < linkLeft ? $cluetip.addClass('clue-left-' + ctClass).removeClass('clue-right-' + ctClass)
-      : $cluetip.addClass('clue-right-' + ctClass).removeClass('clue-left-' + ctClass);          
-      
-      $cluetip.css({left: (posX < 0 ? 0 : posX) + 'px'});
+      : $cluetip.addClass('clue-right-' + ctClass).removeClass('clue-left-' + ctClass);                
+      $cluetip.css({left: (posX > 0) ? posX :( mouseX + (tipWidth/2) > winWidth) ? winWidth/2 - tipWidth/2 : Math.max(mouseX - (tipWidth/2),0)});
       wHeight = $(window).height();
 
 /***************************************
@@ -266,9 +264,11 @@
           var ajaxSettings = defaults.ajaxSettings;
           ajaxSettings.url = tipAttribute;
           ajaxSettings.beforeSend = function() {
-            $('#cluetip-waitimage')
-              .css({top: posY, left: parseInt(posX+(tipWidth/2),10)})
-            .show();
+            if (defaults.waitImage) {
+              $('#cluetip-waitimage')
+              .css({top: mouseY-10, left: parseInt(posX+(tipWidth/2),10)})
+              .show();
+            }
           };
           ajaxSettings.success = function(data) {
             cluetipContents = defaults.ajaxProcess(data);
@@ -314,7 +314,6 @@
       tipY = posY;
       if ( posX < mouseX && Math.max(posX, 0) + tipWidth > mouseX ) {
         tipY = posY + tipHeight > sTop + wHeight && mouseY - sTop > tipHeight + 10 ? mouseY - tipHeight - 10 : mouseY + 20;
-        // tipY = mouseY + 20;
       } else if ( posY + tipHeight > sTop + wHeight ) {
         tipY = (tipHeight >= wHeight) ? sTop : sTop + wHeight - tipHeight - 10;
       } else if ($this.css('display') == 'block' || $this[0].tagName.toLowerCase() == 'area' || defaults.positionBy == "mouse") {

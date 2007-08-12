@@ -1,6 +1,6 @@
 == To Do ==
 
-* I need non cached data in the tooltips. Perhaps you can add an option for this, attaching some random stuff to the ajax url like &amp;random=123456 (e.g. timestamp or milliseconds).
+* Add some kind of "nocache" option for ajaxed clueTips, in case the loaded content is dynamic
 * tried to use a "waitImage" named "clueTip_wait.gif" which did not work. Solution: I had to comment the underscore like "clueTip\\_wait.gif".
 ? IE: Opening a clueTip in IE makes all my other images (logos, etc.) flicker (like beeing reloaded).
 * IE: The drop shadow is only shown below the tooltip, on the right there is no dropshadow. [CSS issue?]
@@ -8,9 +8,16 @@
 
 == New and Noteworthy ==
 
+== 0.8.2 and 0.8.3 ==
+
+* improved positioning of too-wide cluetips. 
+* don't show the loading image if waitImage is set to empty string or false
+* changed y-positioning of loading image to be based on mouse position, as I think it will fix the scroll-jump bug as reported by to.rben on http://www.learningjquery.com/2007/07/cluetip-plugin-beta-2
+
 == 0.8.1 ==
 
 * for "closePosition" option, added ability to set it to "title" so that the close link can go in the clueTip's heading area.
+
 == 0.8 ==
 
 Additional features/enhancements

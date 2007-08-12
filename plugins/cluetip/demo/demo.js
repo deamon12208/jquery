@@ -17,13 +17,21 @@ $(document).ready(function() {
   $('span[@title]').css('background', 'yellow').cluetip({splitTitle: '|'});
 
 // jTip theme
-  $('.jt').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false,
+  $('a.jt:eq(0)').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false,
+    fx: {
+      open: 'slideDown', 
+      openSpeed: 'slow'
+    },
+    sticky: true,
+    closePosition: 'title',
+    closeText: '<img src="cross.png" alt="close" />'
+  });
+  $('a.jt:eq(1)').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false,
     fx: {
       open: 'slideDown', 
       openSpeed: 'slow'
     }
   });
-
 // Rounded Corner theme
   $('ol.rounded a').cluetip({cluetipClass: 'rounded', dropShadow: false, sticky: true});
   

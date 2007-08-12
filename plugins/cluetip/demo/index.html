@@ -22,14 +22,13 @@
     <li><a href="#link-prep">Link Prep</a></li>
     <li><a href="#examplesection">Examples</a></li>
     <li><a href="#default-styles">Styles</a></li>
-    <li><a href="#known-issues">Known Issues</a></li>
     <li><a href="#files">Downloads</a></li>
   </ul>
   <div id="container">
     <div id="intro">
     <p>This is a demo page for the new clueTip &mdash; a jQuery-based, AJAX-powered tooltip developed by <a href="http://www.learningjquery.com/">Karl Swedberg</a>. </p>
     <p>Read the blog entries for <a href="http://www.learningjquery.com/2007/07/cluetip-plugin-beta" title="Learning jQuery  &raquo; clueTip Plugin Beta">Beta 1</a> and <a href="http://www.learningjquery.com/2007/07/cluetip-plugin-beta-2" title="Learning jQuery  &raquo; clueTip Plugin Beta 2">Beta 2</a> for more information and examples.</p>
-    <p>This version (0.8) includes some fairly major API changes, so if you're upgrading from a previous version, be sure to check out the inline documentation.</p>
+    <p>This version (0.8.x) includes some fairly major API changes, so if you're upgrading from a previous version, be sure to check out the inline documentation.</p>
     
     <h4>Credits</h4>
     <ul>
@@ -75,13 +74,13 @@
       <li><strong><code>attribute</code></strong>: default is <code>'rel'</code>; set it to some other attribute of the link to designate that attribute as the one that refers to the clueTip's content</li>
       <li><strong><code>titleAttribute</code></strong>: default is <code>'title'</code>; set it to another attribute to use its text for the clueTip's title</li>
       <li><strong><code>splitTitle</code></strong>: default is an empty string; set to a character such as "|" to split the title attribute of a link into the clueTip heading (the first string, before the first delimiter character) and individual clueTip body divs (subsequent strings).</li>
-      <li><strong><code>showtitle</code></strong>: default is <code>true</code>. Shows the title bar of the clueTip, whether a title attribute has been set or now. Change this to <code>false</code> to hide the title bar.</li>
+      <li><strong><code>showtitle</code></strong>: default is <code>true</code>. Shows the title bar of the clueTip, whether a title attribute has been set or not. Change this to <code>false</code> to hide the title bar.</li>
       <li><strong><code>cluetipClass</code></strong>: default is  <code>'default'</code>; this adds a class to the outermost clueTip div with a class name in the form of 'cluetip-' + clueTipClass. It also adds &quot;clue-left-<em>default</em>&quot; or &quot;clue-right-<em>default</em>&quot; to the same div, depending on whether the clueTip is to the left or to the right of the link element. This allows you to create your own clueTip theme in a separate CSS file or use one of the three pre-packaged themes: default, jtip, or rounded.</li>
       <li><strong><code>hoverClass</code></strong>: default is an empty string; set to the name of the class to add that class to the link on hover</li>
       <li><strong><code>closePosition</code></strong>: default is <code>'top'</code>; set to <code>'bottom'</code> to put the 'close' link at the bottom of the clueTip. Additional formatting can be applied to <code>a#cluetip-close</code> in the style sheet.</li>
       <li><strong><code>closeText</code></strong>: default is <code>'Close'</code>; set it to something else if you want to</li>
       <li><strong><code>truncate</code></strong>: default is <code>0</code>, which means there will be no truncation; set it to some number to truncate the clueTip's contents to <code>n</code> characters</li>
-      <li><strong><code>waitImage</code></strong>: default is <code>'wait.gif'</code>; this image will appear before an ajax-loaded clueTip retrieves the content and is shown</li>
+      <li><strong><code>waitImage</code></strong>: default is <code>'wait.gif'</code>; this image will appear before an ajax-loaded clueTip retrieves the content and is shown. Set to an empty string ('') or false to avoid showing the image</li>
       <li><strong><code>arrows</code></strong>: default is <code>false</code>; set it to <code>true</code> to calculate the positioning of the clueTip's background images for  .clue-right-<em>[theme]</em> and .clue-left-<em>[theme]</em> (where <em>[theme]</em> represents the cluetipClass indicated in the options).</li>
       <li><strong><code>dropShadow</code></strong>: default is <code>true</code>; set it to <code>false</code> if you do not want the drop-shadow effect on the clueTip</li>
       <li><strong><code>dropShadowSteps</code></strong>: default is <code>6</code>; change this number to adjust the size of the drop shadow</li>
@@ -181,15 +180,18 @@ This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML
       </ol>
       <h4>jTip Theme</h4>
       <ol>
-        <li><a class="jt" href="ajax5.htm" rel="ajax5.htm" title="jTip Style!">jTip Style clueTip</a>. Here is the code for this one: 
+        <li><a class="jt" href="ajax5.htm" rel="ajax5.htm" title="jTip Style!">jTip Style clueTip</a>, with slideDown effect and an image placed in the title for closing it, because it's sticky: 
           <div class="html">View the HTML</div>
           <pre><code>&lt; class="jt" href="ajax5.htm" rel="ajaxclick.htm" title="jTip Style!"&gt;</code></pre>
           <div class="jquery">View the jQuery</div>
-<pre><code>$('.jt').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false,
+<pre><code>$('a.jt:eq(0)').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false,
   fx: {
     open: 'slideDown', 
     openSpeed: 'slow'
-  }
+  },
+  sticky: true,
+  closePosition: 'title',
+  closeText: '&lt;img src="cross.png" alt="close" /&gt;'
 });
 </code></pre>
         </li>
@@ -197,7 +199,7 @@ This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML
           <div class="html">View the HTML</div>
           <pre><code>&lt;a class="jt" href="ajax6.htm" rel="ajax6.htm"&gt;</code></pre>
           <div class="jquery">View the jQuery</div>
-<pre><code>$('.jt').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false,
+<pre><code>$('a.jt:eq(1)').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false,
   fx: {
     open: 'slideDown', 
     openSpeed: 'slow'
