@@ -210,7 +210,10 @@
 								
 				var t = "";
 				
-				if(config.textExtraction == "complex") { 
+				
+				if(typeof(config.textExtraction) == "object") {
+					t = config.textExtraction(node);
+				} else if(config.textExtraction == "complex") { 
 					t = $(node).text();
 				} else {
 					if(node.childNodes[0] && node.childNodes[0].hasChildNodes()) {
@@ -263,7 +266,19 @@
 				for(var i = 0; i < table.tHead.rows.length; i++) { tableHeadersRows[i]=0; };
 				
 				$tableHeaders = $(checkCellColSpan(table, tableHeadersRows, 0,table.tHead.rows[0].cells.length));
-
+		
+				$tableHeaders.each(function(index) {
+							
+					this.count = 0;
+					this.column = index;
+					this.order = formatSortingOrder(table.config.sortInitialOrder);
+					
+					// add cell to headerList
+					table.config.headerList.push(this);
+			
+					$(this).addClass(table.config.cssHeader);
+				});
+				
 				if(table.config.debug) { benchmark("Built headers:", time); }
 				
 				return $tableHeaders;
@@ -271,9 +286,8 @@
 			};
 			
 		   	function checkCellColSpan(table, headerArr, row, until) {
-                var arr = [];
-				var cells = table.tHead.rows[row].cells;
-				var offset = 0;
+                var arr = [], cells = table.tHead.rows[row].cells;
+				
 				until += headerArr[row];
 				
 				for(var i=headerArr[row]; i < until; i++) {
@@ -283,21 +297,7 @@
 					} else {
 						// check so header is not disable by the meta plugin
 						if(!checkHeaderMetadata(cell) && !checkHeaderOptions(table,i)) {
-							
-							var $cell = $(cell);
-							
-							cell.count = 0;
-							cell.column = i;
-							cell.order = formatSortingOrder(table.config.sortInitialOrder);
-							
-							// add cell to headerList
-							table.config.headerList[i] = cell;
-							
-							
-							$cell.addClass(table.config.cssHeader);
-				
 							arr.push(cell);
-							
 						}
 						headerArr[row] = i+1;
 					}
@@ -414,7 +414,7 @@
 				
 				cache.normalized.sort(sortWrapper);
 				
-				if(table.config.debug) { benchmark("Sorting on " + sortList.length + " columns and dir " + order+ " time:", sortTime); }
+				if(table.config.debug) { benchmark("Sorting on " + sortList.toString() + " and dir " + order+ " time:", sortTime); }
 				
 				return cache;
 			};
@@ -687,6 +687,17 @@
 		},
 		format: function(s) {
 			return $.tablesorter.formatFloat((s != "") ? new Date(s.replace(new RegExp(/-/g),"/")).getTime() : "0");
+		},
+		type: "numeric"
+	});
+	
+	$.tablesorter.addParser({
+		id: "percent",
+		is: function(s) {
+			return /^\d{1,3}%$/.test(s);
+		},
+		format: function(s) {
+			return $.tablesorter.formatFloat(s.replace(new RegExp(/%/g),""));
 		},
 		type: "numeric"
 	});
