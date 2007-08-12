@@ -282,27 +282,25 @@
 					table.config.headerList.push(this);
 				});
 				
-				if(table.config.debug) { benchmark("Built headers:", time); }
+				if(table.config.debug) { benchmark("Built headers:", time); log($tableHeaders); }
 				
 				return $tableHeaders;
 				
 			};
-			
-		   	function checkCellColSpan(table, headerArr, row, until) {
-                var arr = [], cells = table.tHead.rows[row].cells;
+						
+		   	function checkCellColSpan(table, headerArr, row) {
+                var arr = [], r = table.tHead.rows, c = r[row].cells;
 				
-				until += headerArr[row];
-				
-				for(var i=headerArr[row]; i < until; i++) {
-					var cell = cells[i];
-					if ( cell.colSpan >  1 ) { 
-						arr = arr.concat(checkCellColSpan(table, headerArr, row+cell.rowSpan, cell.colSpan));
-					} else {
-						// check so header is not disable by the meta plugin
-						//if(!checkHeaderMetadata(cell) && !checkHeaderOptions(table,i)) {
+				for(var i=headerArr[row]; i < c.length; i++) {
+					var cell = c[i];
+					
+					if ( cell.colSpan > 1) { 
+						arr = arr.concat(checkCellColSpan(table, headerArr, (row+cell.rowSpan), cell.colSpan));
+					} else  {
+						if(table.tHead.length == 1 || (cell.rowSpan > 1 || !r[row+1])) {
 							arr.push(cell);
-						//}
-						headerArr[row] = i+1;
+						}
+						headerArr[row] = (i + 1);
 					}
 				}
 				return arr;
