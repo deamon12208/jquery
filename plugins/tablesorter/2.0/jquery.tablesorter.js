@@ -710,7 +710,7 @@
 	$.tablesorter.addParser({
 		id: "usLongDate",
 		is: function(s) {
-			return /^[A-Za-z]{3,10}\.? [0-9]{1,2}, ([0-9]{4}|'?[0-9]{2}) (([0-2]?[0-9]:[0-5][0-9])|([0-1]?[0-9]:[0-5][0-9]\s(AM|PM)))$/.test(s);
+			return /^[A-Za-z]{3,10}\.? [0-9]{1,2}, ([0-9]{4}|\'?[0-9]{2}) (([0-2]?[0-9]:[0-5][0-9])|([0-1]?[0-9]:[0-5][0-9]\s(AM|PM)))$/.test(s);
 		},
 		format: function(s) {
 			return $.tablesorter.formatFloat(new Date(s).getTime());
