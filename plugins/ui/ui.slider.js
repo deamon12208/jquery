@@ -71,7 +71,7 @@
 			axis: o.axis ? o.axis : (el.offsetWidth < el.offsetHeight ? 'vertical' : 'horizontal'),
 			maxValue: parseInt(o.maxValue) ? parseInt(o.maxValue) : 100,
 			minValue: parseInt(o.minValue) ? parseInt(o.minValue) : 0,
-			curValue: parseInt(o.startValue) ? parseInt(o.startValue) : 0,
+			startValue: parseInt(o.startValue) ? parseInt(o.startValue) : 0,
 			_start: function(h, p, c, t, e) {
 				self.start.apply(t, [self, e]); // Trigger the start callback				
 			},
@@ -89,23 +89,35 @@
 		o.realValue = (o.maxValue - o.minValue);
 
 
-		this.handle = options.handle ? $(options.handle, el)[0] : $('.ui-slider-handle', el)[0];
-		this.interaction = new $.ui.mouseInteraction(this.handle, options);
+		this.handle = options.handle ? $(options.handle, el) : $('.ui-slider-handle', el);
+		if(this.handle.length == 1) {
+			this.interaction = new $.ui.mouseInteraction(this.handle[0], options);
+			this.multipleHandles = false;
+		} else {
+			this.interactions = [];
+			this.handle.each(function() {
+				self.interactions.push(new $.ui.mouseInteraction(this, options));
+			});
+			this.multipleHandles = true;
+		}
+		
 		this.element = el;
 		
 		
 		if(o.axis == 'horizontal') {
-			this.parentSize = $(this.element).outerWidth() - $(this.handle).outerWidth();
+			this.parentSize = $(this.element).outerWidth() - this.handle.outerWidth();
 			this.prop = 'left';
 		}
 		
 		if(o.axis == 'vertical') {
-			this.parentSize = $(this.element).outerHeight() - $(this.handle).outerHeight();
+			this.parentSize = $(this.element).outerHeight() - this.handle.outerHeight();
 			this.prop = 'top';
 		}
 		
-		$(el).bind('click', function(e) { self.click.apply(self, [e]); });
-		if(!isNaN(o.curValue)) this.goto(o.curValue,options.realValue, null, false);
+		if(!this.multipleHandles) {
+			$(el).bind('click', function(e) { self.click.apply(self, [e]); });
+			if(!isNaN(o.startValue)) this.goto(o.startValue,options.realValue, null, false);
+		}
 		
 		if (options.name)
 			$.ui.add(options.name, 'slider', this); //Append to UI manager if a name exists as option
@@ -115,11 +127,39 @@
 	$.extend($.ui.slider.prototype, {
 		currentTarget: null,
 		lastTarget: null,
+		nonvalidRange: function(self) {
+
+			for(var i=0;i<this.interactions.length;i++) {
+				if(self == this.interactions[i]) {
+					if(this.interactions[i-1]) {
+						if(this.interactions[i-1].curValue > this.interactions[i].curValue) return this.interactions[i-1].curValue;
+					}
+					
+					if(this.interactions[i+1]) {
+						if(this.interactions[i+1].curValue < this.interactions[i].curValue) return this.interactions[i+1].curValue;
+					}
+				}
+			}
+			
+			return false;
+			
+		},
 		prepareCallbackObj: function(self,m) {
+			
+			var cur = this;
+			var func = function() {
+				var retVal = [];
+				for(var i=0;i<cur.interactions.length;i++) {
+					retVal.push((cur.interactions[i].curValue || 0)+self.options.minValue);
+				}
+				return retVal;
+			};
+			
 			return {
 				handle: self.helper,
 				pixel: m,
-				value: self.options.curValue+self.options.minValue,
+				value: self.curValue+self.options.minValue,
+				values: this.multipleHandles ? func() : self.curValue+self.options.minValue,
 				slider: self	
 			}			
 		},
@@ -129,16 +169,16 @@
 			var offset = $(this.interaction.element).offsetParent().offset({ border: false });
 			if(this.interaction.element == e.target) return;
 			
-			o.pickValue = o.curValue;
-			this.drag.apply(this.interaction, [this, e, [pointer[0]-offset.left,pointer[1]-offset.top]]);
-			if(o.pickValue != o.curValue) $.ui.trigger('change', this.interaction, e, this.prepareCallbackObj(this.interaction));
+			this.interaction.pickValue = this.interaction.curValue;
+			this.drag.apply(this.interaction, [this, e, [pointer[0]-offset.left-this.handle[0].offsetWidth/2,pointer[1]-offset.top-this.handle[0].offsetHeight/2]]);
+			if(this.interaction.pickValue != this.interaction.curValue) $.ui.trigger('change', this.interaction, e, this.prepareCallbackObj(this.interaction));
 				
 		},
 		start: function(that, e) {
 			
 			var o = this.options;
 			$.ui.trigger('start', this, e, that.prepareCallbackObj(this));
-			o.pickValue = o.curValue;
+			this.pickValue = this.curValue;
 			
 			return false;
 						
@@ -147,7 +187,7 @@
 			
 			var o = this.options;
 			$.ui.trigger('stop', this, e, that.prepareCallbackObj(this));
-			if(o.pickValue != o.curValue) $.ui.trigger('change', this, e, that.prepareCallbackObj(this));
+			if(this.pickValue != this.curValue) $.ui.trigger('change', this, e, that.prepareCallbackObj(this));
 
 			return false;
 			
@@ -155,7 +195,7 @@
 		drag: function(that, e, pos) {
 
 			var o = this.options;
-			this.pos = pos ? pos : [this.pos[0]-(o.cursorAt.left ? o.cursorAt.left : 0), this.pos[1]-(o.cursorAt.top ? o.cursorAt.top : 0)];
+			this.pos = pos ? pos : [this.pos[0]-this.element.offsetWidth/2, this.pos[1]-this.element.offsetHeight/2];
 			
 			if(o.axis == 'horizontal') var m = this.pos[0];
 			if(o.axis == 'vertical')   var m = this.pos[1];
@@ -167,10 +207,16 @@
 			if(m < 0) m = 0;
 			if(m > p) m = p;
 
-			o.curValue = (Math.round((m/p)*o.realValue));
+			this.curValue = (Math.round((m/p)*o.realValue));
 			if(o.stepping) {
-				o.curValue = Math.round(o.curValue/o.stepping)*o.stepping;
-				m = ((o.curValue)/o.realValue) * p;
+				this.curValue = Math.round(this.curValue/o.stepping)*o.stepping;
+				m = ((this.curValue)/o.realValue) * p;
+			}
+			
+			nonvalidRange = that.nonvalidRange(this);
+			if(nonvalidRange) {
+				this.curValue = nonvalidRange;
+				m = ((this.curValue)/o.realValue) * p;
 			}
 			
 			$(this.element).css(prop, m+'px');
@@ -180,9 +226,12 @@
 			
 		},
 		goto: function(value,scale,changeslide,p) {
+			
+			if(this.multipleHandles) return false; //TODO: Multiple handle goto function
+			
 			var o = this.interaction.options;
 			var offset = $(this.interaction.element).offsetParent().offset({ border: false });
-			o.pickValue = o.curValue;
+			this.interaction.pickValue = this.interaction.curValue;
 			value = value-o.minValue;
 			
 			var modifier = scale ? scale : o.realValue;
@@ -195,14 +244,14 @@
 			if(m < 0) m = 0;
 			if(m > p) m = p;
 			
-			o.curValue = (Math.round((m/p)*o.realValue));
+			this.interaction.curValue = (Math.round((m/p)*o.realValue));
 			if(o.stepping) {
-				o.curValue = Math.round(o.curValue/o.stepping)*o.stepping;
-				m = ((o.curValue)/o.realValue) * p;
+				this.interaction.curValue = Math.round(this.interaction.curValue/o.stepping)*o.stepping;
+				m = ((this.interaction.curValue)/o.realValue) * p;
 			}
 
 			$(this.interaction.element).css(prop, m+'px');
-			if(!changeslide && o.pickValue != o.curValue && !p) $.ui.trigger('change', this.interaction, null, this.prepareCallbackObj(this.interaction));
+			if(!changeslide && this.interaction.pickValue != this.interaction.curValue && !p) $.ui.trigger('change', this.interaction, null, this.prepareCallbackObj(this.interaction));
 			if(changeslide) $.ui.trigger('slide', this.interaction, null, this.prepareCallbackObj(this.interaction));
 
 		}
