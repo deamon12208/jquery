@@ -1,8 +1,10 @@
 == New and Noteworthy ==
 
-== SVN ==
+== 1.1 ==
 
+* Offset now works in Safari 3 / WebKit Nighlies
 * Added margin option to outerWidth and outerHeight
+* Fixed regression where element's scroll offsets where included in the calculations (introduced in 1.0.1)
 
 
 == 1.0.1 ==

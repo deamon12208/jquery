@@ -5,7 +5,9 @@
  * $LastChangedDate$
  * $Rev$
  *
- * Version: 1.0.1
+ * Version: 1.1
+ *
+ * Requires: jQuery 1.1.3+
  */
 
 (function($){
@@ -380,7 +382,8 @@ $.fn.extend({
 		if (!this[0]) error();
 		var x = 0, y = 0, sl = 0, st = 0,
 		    elem = this[0], parent = this[0], op, parPos, elemPos = $.css(elem, 'position'),
-		    mo = $.browser.mozilla, ie = $.browser.msie, sf = $.browser.safari, oa = $.browser.opera,
+		    mo = $.browser.mozilla, ie = $.browser.msie, oa = $.browser.opera,
+		    sf = $.browser.safari, sf3 = $.browser.safari && parseInt($.browser.version) > 520,
 		    absparent = false, relparent = false, 
 		    options = $.extend({ margin: true, border: false, padding: false, scroll: true, lite: false, relativeTo: document.body }, options || {});
 		
@@ -390,7 +393,7 @@ $.fn.extend({
 		if (options.relativeTo.jquery) options.relativeTo = options.relativeTo[0];
 		
 		if (elem.tagName == 'BODY') {
-			// Safari is the only one to get offsetLeft and offsetTop properties of the body "correct"
+			// Safari 2 is the only one to get offsetLeft and offsetTop properties of the body "correct"
 			// Except they all mess up when the body is positioned absolute or relative
 			x = elem.offsetLeft;
 			y = elem.offsetTop;
@@ -405,9 +408,14 @@ $.fn.extend({
 				y += num(elem, 'marginTop');
 			} else
 			// IE does not add the border in Standards Mode
-			if (ie && jQuery.boxModel) {
+			if ((ie && jQuery.boxModel)) {
 				x += num(elem, 'borderLeftWidth');
 				y += num(elem, 'borderTopWidth');
+			} else
+			// Safari 3 doesn't not include border or margin
+			if (sf3) {
+				x += num(elem, 'marginLeft') + num(elem, 'borderLeftWidth');
+				y += num(elem, 'marginTop')  + num(elem, 'borderTopWidth');
 			}
 		} else {
 			do {
@@ -417,7 +425,7 @@ $.fn.extend({
 				y += parent.offsetTop;
 
 				// Mozilla and IE do not add the border
-				if (mo || ie) {
+				if (mo || ie || sf3) {
 					// add borders to offset
 					x += num(parent, 'borderLeftWidth');
 					y += num(parent, 'borderTopWidth');
@@ -461,22 +469,23 @@ $.fn.extend({
 						x += num(parent, 'borderLeftWidth');
 						y += num(parent, 'borderTopWidth');
 					}
-					// Safari and opera includes border on positioned parents
-					if (($.browser.safari || $.browser.opera) && $.css(op, 'position') != 'static') {
+					// Safari 2 and opera includes border on positioned parents
+					if ( ((sf && !sf3) || oa) && parPos != 'static' ) {
 						x -= num(op, 'borderLeftWidth');
 						y -= num(op, 'borderTopWidth');
 					}
 					break;
 				}
 				if (parent.tagName == 'BODY' || parent.tagName == 'HTML') {
-					// Safari and IE Standards Mode doesn't add the body margin for elments positioned with static or relative
-					if ((sf || (ie && $.boxModel)) && elemPos != 'absolute' && elemPos != 'fixed') {
+					// Safari 2 and IE Standards Mode doesn't add the body margin for elments positioned with static or relative
+					if (((sf && !sf3) || (ie && $.boxModel)) && elemPos != 'absolute' && elemPos != 'fixed') {
 						x += num(parent, 'marginLeft');
 						y += num(parent, 'marginTop');
 					}
+					// Safari 3 does not include the border on body
 					// Mozilla does not include the border on body if an element isn't positioned absolute and is without an absolute parent
 					// IE does not include the border on the body if an element is positioned static and without an absolute or relative parent
-					if ( (mo && !absparent && elemPos != 'fixed') || 
+					if ( sf3 || (mo && !absparent && elemPos != 'fixed') || 
 					     (ie && elemPos == 'static' && !relparent) ) {
 						x += num(parent, 'borderLeftWidth');
 						y += num(parent, 'borderTopWidth');
@@ -591,10 +600,10 @@ var handleOffsetReturn = function(elem, options, x, y, sl, st) {
 	}
 
 	// Safari and Opera do not add the border for the element
-	if ( options.border && ($.browser.safari || $.browser.opera) ) {
+	if ( options.border && (($.browser.safari && parseInt($.browser.version) < 520) || $.browser.opera) ) {
 		x += num(elem, 'borderLeftWidth');
 		y += num(elem, 'borderTopWidth');
-	} else if ( !options.border && !($.browser.safari || $.browser.opera) ) {
+	} else if ( !options.border && !(($.browser.safari && parseInt($.browser.version) < 520) || $.browser.opera) ) {
 		x -= num(elem, 'borderLeftWidth');
 		y -= num(elem, 'borderTopWidth');
 	}
@@ -605,7 +614,7 @@ var handleOffsetReturn = function(elem, options, x, y, sl, st) {
 	}
 	
 	// do not include scroll offset on the element ... opera sometimes reports scroll offset as actual offset
-	if ( options.scroll && ($.browser.opera && elem.offsetLeft != elem.scrollLeft && elem.offsetTop != elem.scrollLeft) ) {
+	if ( options.scroll && (!$.browser.opera || elem.offsetLeft != elem.scrollLeft && elem.offsetTop != elem.scrollLeft) ) {
 		sl -= elem.scrollLeft;
 		st -= elem.scrollTop;
 	}
