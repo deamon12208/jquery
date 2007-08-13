@@ -1,6 +1,6 @@
 {
 	"name": "jQuery-dimensions",
-	"version": 1.0rc1,
+	"version": 1.1,
 	"author": [
 		"Paul Bakaus <paul.bakaus@googlemail.com>"
 		"Brandon Aaron <brandon.aaron@gmail.com>"
@@ -9,16 +9,17 @@
 	"license": "mit, gpl",
 	"distribution_type": "plugin",
 	"requires": {
-		"jQuery": ">=1.1.1"
+		"jQuery": ">=1.1.3"
 	},
 	"provides": {
 		"jQuery.Dimensions": {
-			"version": 1.0rc1,
+			"version": 1.1,
 			"file": "jquery.dimensions.js"
 		}
 	},
 	"keywords": [
 		"offset",
+		"position",
 		"width",
 		"height",
 		"scroll"
