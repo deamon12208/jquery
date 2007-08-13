@@ -98,7 +98,7 @@
 				widgets: {},		
 				widgetZebra: {css: ["even","odd"]},
 				headers: {},
-				widthFixed: true,
+				widthFixed: false,
 				cancelSelection: true,
 				sortList: [],
 				headerList: [],
@@ -373,8 +373,16 @@
 			}
 			
 			function fixColumnWidth(table,$headers) {
-				
-				//$headers.each(function(offset) {});
+				var c = table.config;
+				if(c.widthFixed) {
+					var colgroup = $('<colgroup>');
+					$("tbody:first tr:first td",table).each(function() {
+						
+						colgroup.append($('<col>').css('width',$(this).width()));
+					
+					});
+					$(table).prepend(colgroup);
+				};
 			}
 			
 			function updateHeaderSortCount(table,sortList) {
@@ -456,6 +464,7 @@
 					$this = $(this);
 					
 					
+					
 					// build headers
 					$headers = buildHeaders(this);
 					
@@ -468,7 +477,10 @@
 					
 					// get the css class names, could be done else where.
 					var sortCSS = [config.cssDesc,config.cssAsc];
-				
+					
+					// fixate columns if the users supplies the fixedWidth option
+					fixColumnWidth(this);
+					
 					// apply event handling to headers
 					// this is to big, perhaps break it out?
 					$headers.click(function(e) {
