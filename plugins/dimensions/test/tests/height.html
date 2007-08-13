@@ -46,6 +46,8 @@
 			test('outerHeight()', function() {
 				equals( 64, $('#h1').outerHeight(), "$('#h1').outerHeight()" );
 				equals( 64, $('#h1').hide().outerHeight(), "$('#h1').hide().outerHeight()" );
+				equals( 84, $('#h1').outerHeight({ margin: true }), "$('#h1').outerHeight({ margin: true })" );
+				equals( 84, $('#h1').hide().outerHeight({ margin: true }), "$('#h1').hide().outerHeight({ margin: true })" );
 				// equals( 64, $('#h2').hide().outerHeight(), "$('#h2').hide().outerHeight()" );
 				// equals( 64, $('#h3').hide().outerHeight(), "$('#h3').hide().outerHeight()" );
 			});

@@ -52,6 +52,8 @@
 			test('outerWidth()', function() {
 				equals( 64, $('#h1').outerWidth(), "$('#h1').outerWidth()" );
 				equals( 64, $('#h1').hide().outerWidth(), "$('#h1').hide().outerWidth()" );
+				equals( 84, $('#h1').outerWidth({ margin: true }), "$('#h1').outerWidth({ margin: true })" );
+				equals( 84, $('#h1').hide().outerWidth({ margin: true }), "$('#h1').outerWidth({ margin: true })" );
 				// $('#main').css('position', 'relative');
 				// equals( 64, $('#h1').hide().outerWidth(), "$('#h1').hide().outerWidth()" );
 				// $('#main').css('position', 'static');

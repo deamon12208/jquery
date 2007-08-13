@@ -141,20 +141,31 @@ $.fn.extend({
 	 * If used on document, returns the document's height (innerHeight).
 	 * If used on window, returns the viewport's (window) height.
 	 *
+	 * The margin can be included in the calculation by passing an options map with margin
+	 * set to true.
+	 *
 	 * @example $("#testdiv").outerHeight()
 	 * @result 220
 	 *
+	 * @example $("#testdiv").outerHeight({ margin: true })
+	 * @result 240
+	 *
 	 * @name outerHeight
 	 * @type Number
+	 * @param Map options Optional settings to configure the way the outer height is calculated.
 	 * @cat Plugins/Dimensions
 	 */
-	outerHeight: function() {
+	outerHeight: function(options) {
 		if (!this[0]) error();
+		options = $.extend({ margin: false }, options || {});
 		return this[0] == window || this[0] == document ?
 			this.height() :
 			this.is(':visible') ?
-				this[0].offsetHeight :
-				this.height() + num(this,'borderTopWidth') + num(this, 'borderBottomWidth') + num(this, 'paddingTop') + num(this, 'paddingBottom');
+				this[0].offsetHeight + (options.margin ? (num(this, 'marginTop') + num(this, 'marginBottom')) : 0) :
+				this.height() 
+					+ num(this,'borderTopWidth') + num(this, 'borderBottomWidth') 
+					+ num(this, 'paddingTop') + num(this, 'paddingBottom')
+					+ (options.margin ? (num(this, 'marginTop') + num(this, 'marginBottom')) : 0);
 	},
 	
 	/**
@@ -162,20 +173,31 @@ $.fn.extend({
 	 * If used on document, returns the document's width (innerWidth).
 	 * If used on window, returns the viewport's (window) width.
 	 *
-	 * @example $("#testdiv").outerHeight()
+	 * The margin can be included in the calculation by passing an options map with margin
+	 * set to true.
+	 *
+	 * @example $("#testdiv").outerWidth()
 	 * @result 1000
 	 *
+	 * @example $("#testdiv").outerWidth({ margin: true })
+	 * @result 1020
+	 * 
 	 * @name outerHeight
 	 * @type Number
+	 * @param Map options Optional settings to configure the way the outer width is calculated.
 	 * @cat Plugins/Dimensions
 	 */
-	outerWidth: function() {
+	outerWidth: function(options) {
 		if (!this[0]) error();
+		options = $.extend({ margin: false }, options || {});
 		return this[0] == window || this[0] == document ?
 			this.width() :
 			this.is(':visible') ?
-				this[0].offsetWidth :
-				this.width() + num(this, 'borderLeftWidth') + num(this, 'borderRightWidth') + num(this, 'paddingLeft') + num(this, 'paddingRight');
+				this[0].offsetWidth + (options.margin ? (num(this, 'marginLeft') + num(this, 'marginRight')) : 0) :
+				this.width() 
+					+ num(this, 'borderLeftWidth') + num(this, 'borderRightWidth') 
+					+ num(this, 'paddingLeft') + num(this, 'paddingRight')
+					+ (options.margin ? (num(this, 'marginLeft') + num(this, 'marginRight')) : 0);
 	},
 	
 	/**

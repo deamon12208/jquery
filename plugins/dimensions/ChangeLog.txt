@@ -1,5 +1,10 @@
 == New and Noteworthy ==
 
+== SVN ==
+
+* Added margin option to outerWidth and outerHeight
+
+
 == 1.0.1 ==
 
 * Fixed issue in Opera with fixed position
