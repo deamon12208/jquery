@@ -126,7 +126,7 @@ $.ui.modal = function(el, o) {
     resize: {
       handles: {
         s: 'div.bottom.pane',
-        se: 'div.bottom.pane span.se',
+        se: 'div.bottom.pane span.ui-modal-resize-se',
         e: 'div.right.pane' 
       }
     },
@@ -137,7 +137,7 @@ $.ui.modal = function(el, o) {
     // Allow overflow/scrolling
     overflow: true,
     // Override button markup optionally
-    buttonMarkup: '<a class="close">x</a>',
+    buttonMarkup: '<a class="ui-modal-button-close">x</a>',
     // Width of the modal
     width: 400,
     // Height
@@ -151,26 +151,40 @@ $.ui.modal = function(el, o) {
   };
   $.extend(options, o);
   var self = this;
+  // Ensure the options carry through
   self.options = options;
-  var bu = $("<span>").addClass('buttons').addClass(options.buttons).html(options.buttonMarkup);
-  var ti = $('<span>').addClass("title").html(options.title);
-  var t = $('<div>');
+  // Buttons
+  var bu = $("<span>").addClass('ui-modal-buttons').addClass('ui-modal-buttons-'+ options.buttons).html(options.buttonMarkup);
+  // Title
+  var ti = $('<span>').addClass('ui-modal-title').html(options.title);
+  // Title bar
+  var t = $('<div>').addClass('ui-modal-title-bar');
   if(options.buttons == 'left') {
+    // Append the buttons and then the title,
+    // because the buttons are on the left
     t.append(bu).append(ti);
   }
   else {
+    // Other way around
     t.append(ti).append(bu);
   }
-  t.find('.buttons a.close').click(function(e) {
+  // Attach close
+  t.find('.ui-modal-buttons a.ui-modal-button-close').click(function(e) {
+    // Trigger the close function
     $.ui.trigger('close', self, e, {options: self.options, modal: el});
   });
-  var b = $('<span>').html('').addClass("se");
+  // Resize item
+  var b = $('<span>').html('').addClass("ui-modal-resize-se");
+  // Open the modal
   $.ui.trigger('open', self, {}, {options: self.options, modal: el });
+  // Add a uibox
   $(el).uiBox({top:t,bottom:b})
-  .css({ position: "absolute", top: 20, left: 30, width: options.width, height: options.height })
+  .addClass('ui-modal')
+  .css({ position: "absolute", width: options.width, height: options.height })
   .resizable(options.resize)
   .draggable(options.drag)
   .appendTo("body");
+  // What to add to the manager
   var uiobj = {};
   uiobj.options = this.options;
   uiobj.el = $(el);
@@ -181,7 +195,6 @@ $.ui.modal = function(el, o) {
     this.options.open({}, {options: this.options, modal: this.el });
   }
   if(options.name != '') {
-    // Add it to $.ui.manager here
     $.ui.add(options.name, 'modal', uiobj);
   }
   return el;
