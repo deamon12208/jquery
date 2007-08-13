@@ -1,5 +1,5 @@
 body.light { background:#FFF; color:#111; }
-.light a, a.light { color:#46C; }
+.light a, a.light { color:#46C; outline:none; }
 .light a:visited, a.light:visited { color:#C44; }
 .light a:hover, a.light:hover { color:#000; }
 

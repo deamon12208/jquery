@@ -1,5 +1,5 @@
 body.dark { background:#111; color:snow; }
-.dark a, a.dark { color:#68D; }
+.dark a, a.dark { color:#68D; outline:none; }
 .dark a:visited, a.dark:visited { color:#D66; }
 .dark a:hover, a.dark:hover { color:#FFF; }
 

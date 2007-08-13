@@ -30,9 +30,10 @@
 		this.styleMenu(m);	// Pass the menu in to recieve it's makeover
 		this[options.context](el, m, options);	// Based on contexted selected, attach to menu parent
 		
-		$('a').click(function(){  // FIXME: Tries to execute all defined menu buttons
-			t.buttons[this.className]();
-		})
+    if(t&&t.buttons)
+      $('a',$(m)).click(function(){
+        t.buttons[this.className]();
+      })
 		
 	}
 	
