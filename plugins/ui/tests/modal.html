@@ -17,9 +17,11 @@
 <script type="text/javascript" src="../ui.drag.js"></script>
 <script type="text/javascript" src="../ui.modal.js"></script>
 <style type="text/css" media="screen">
+  @import url(css/warm/warm.css);
+  @import url(css/warm/warm.modal.css);
+  
   div.ui-modal .top.pane {
   	position: relative;
-  	padding: 3px;
   }
   
   div.ui-modal .top.pane .ui-modal-buttons-right {
@@ -75,7 +77,7 @@ $(function() {
 
 </head>
 
-<body>
+<body class="warm">
   <div class="modal">
     The code used to make this modal was this:
     <code>$(".modal").modal({title: "Hello, I'm a modal"});</code><br /><br />

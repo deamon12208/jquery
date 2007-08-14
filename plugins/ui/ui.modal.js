@@ -26,7 +26,8 @@ jQuery.fn.uiBox = function(arg){
     })) :
     this
       .addClass("uiBox")
-      .innerWrap("<div class='middle pane'><div class='center pane'></div></div>")
+      .innerWrap("<div class='center pane'></div>")
+      .innerWrap("<div class='middle pane'></div>")
       .prepend("<div class='top pane'></div>")
       .append("<div class='bottom pane'></div>")
       .uiBox("middle")
@@ -137,7 +138,7 @@ $.ui.modal = function(el, o) {
     // Allow overflow/scrolling
     overflow: true,
     // Override button markup optionally
-    buttonMarkup: '<a class="ui-modal-button-close">x</a>',
+    buttonMarkup: '<a class="ui-modal-button-close">X</a>',
     // Width of the modal
     width: 400,
     // Height
@@ -177,8 +178,15 @@ $.ui.modal = function(el, o) {
   var b = $('<span>').html('').addClass("ui-modal-resize-se");
   // Open the modal
   $.ui.trigger('open', self, {}, {options: self.options, modal: el });
+  $.extend(options, {
+    uiBox: {
+      top: t,
+      bottom: b,
+      left: '&nbsp;'
+    }
+  });
   // Add a uibox
-  $(el).uiBox({top:t,bottom:b})
+  $(el).uiBox(options.uiBox)
   .addClass('ui-modal')
   .css({ position: "absolute", width: options.width, height: options.height })
   .resizable(options.resize)
