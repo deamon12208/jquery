@@ -1,48 +1,39 @@
 /* tables */
 table.tablesorter {
 	font-family:arial;
+	background-color: #dad9c7;
 	margin:10px 0pt 15px;
 	font-size: 8pt;
-	border:1px solid #dad9c7;
 	width: 100%;
 	white-space:nowrap;
 	text-align: left;
-	padding: 1px;
-	background-color: #FFF;
 }
-table.tablesorter thead th {
+table.tablesorter thead tr th {
 	background-color: #e6EEEE;
-	border-bottom:2px solid #222;
-	padding: 8px;
-	height: 30px;
-	overflow:hidden;
-	padding:3px 5px;
-	position:relative;
-	cursor:default;
-	margin: 1px;
+	border: 1px solid #FFF;
+	font-size: 8pt;
+	padding: 4px;
 }
-table.tablesorter thead .header {
+table.tablesorter thead tr .header {
 	background-image: url(small.gif);
 	background-repeat: no-repeat;
 	background-position: center right;
-	font-weight: bold;
 	cursor: pointer;
 }
 table.tablesorter tbody td {
 	color: #3D3D3D;
-	overflow:hidden;
-	padding:3px 5px;
+	padding: 4px;
 	background-color: #FFF;
 }
-table.tablesorter tbody tr.even td {
-	background-color:#FCFAF6;
+table.tablesorter tbody tr.odd td {
+	background-color:#F0F0F6;
 }
-table.tablesorter thead .headerSortUp {
+table.tablesorter thead tr .headerSortUp {
 	background-image: url(small_asc.gif);
 }
-table.tablesorter thead .headerSortDown {
+table.tablesorter thead tr .headerSortDown {
 	background-image: url(small_desc.gif);
 }
-table.tablesorter thead .headerSortDown, table.tablesorter thead .headerSortUp {
+table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
 background-color: #8dbdd8;
 }

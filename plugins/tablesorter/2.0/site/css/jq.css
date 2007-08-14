@@ -7,36 +7,6 @@ pre.normal { background-color: transparent; border: none; border-left-width: 0; 
 
 #logo { background: url(images/jq.png); float: right; margin-top: 10px; margin-right: 10px; display: block; width: 110px; height: 31px }
 #main { padding: 0 15px; margin: 0pt 20px 20px; }
-
-
-table {
-	background-color: #eee;
-	color:#333;	
-	margin-bottom: 20px;
-}
-
-thead {
-	background-color: #ddd;
-}
-
-thead th {
-	border-bottom:1px dotted #444;
-	font-size:120%;
-	padding:1em 1em 0.5em;
-	text-align:left;
-}
-
-td {
-	padding:0.5em 1em;
-	vertical-align: top;
-	
-}
-tbody tr {background-color: #FFF;}
-tbody tr.even {
-	background-color: #bae0f6;
-	color: #484849;
-}
-
 #content { padding: 20px; }
 #busy { position: absolute; top: 7px; right: 7px; border: 1px ridge #ccc; background-color: #e95555; color: #eee; padding: 3px; display:none }
 hr { height: 1px }
@@ -89,35 +59,3 @@ a.external {
     background-position: center right;
     padding-right: 12px
 }
-
-/* syntax highlighting with Chili */
-.jscom, .mix htcom   { color: #4040c2; }
-.com      { color: green; }
-.regexp   { color: maroon; }
-.string   { color: teal; }
-.keywords { color: blue; }
-.global   { color: #008; }
-.numbers  { color: #880; }
-.comm     { color: green; }
-.tag      { color: blue; }
-.entity   { color: blue; }
-.string   { color: teal; }
-.aname    { color: maroon; }
-.avalue   { color: maroon; }
-.jquery   { color: #00a; }
-.plugin   { color: red; }
-
-.php .tag       { color: purple; }
-.php .com       { color: green; }
-.php .const1    { color: maroon; }
-.php .const2    { color: maroon; }
-.php .function  { color: #e17100; }
-.php .global    { color: maroon; }
-.php .keyword   { color: blue; }
-.php .mlcom     { color: gray; }
-.php .name      { color: maroon; }
-.php .number    { color: #880; }
-.php .string1   { color: teal; }
-.php .string2   { color: teal; }
-.php .value     { color: gray; }
-.php .variable  { color: #e15c03; }

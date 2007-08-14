@@ -17,9 +17,7 @@
 		$("#tablesorter-demo").tablesorter({sortList:[[0,0],[2,1]], widgets: ['zebra']});
 		$("pre.javascript").chili();
 		$("pre.html").chili();
-		$("pre.css").chili();
-		$("#options-table tbody tr:even").addClass("even");
-		
+		$("pre.css").chili();	
 	});	
 	</script>
 </head>
@@ -79,56 +77,63 @@
 		Something about the demo.
 	</p>
 	
-	<table id="tablesorter-demo" class="tablesorter" border="0" cellpadding="0" cellspacing="0">
+	<table id="tablesorter-demo" class="tablesorter" border="0" cellpadding="0" cellspacing="1">
 		<thead>
 			<tr>
-				<th>Name</th>
-				<th>Age</th>
-				<th>Total purchase</th>
+				<th colspan="2">Name</th>
+				<th rowspan="2">Age</th>
+				<th colspan="2">Purchase</th>
+				<th rowspan="2">Date</th>
+			</tr>
+			<tr>
+				<th>Firstname</th>
+				<th>lastname</th>
+				<th>Total</th>
 				<th>Discount</th>
-				<th>Email</th>
-				<th>Date</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
 				<td>Peter</td>
+				<td>Parker</td>
 				<td>28</td>
 				<td>$9.99</td>
 				<td>20%</td>
-				<td>peter.parker@marvel.com</td>
+				
 				<td>Jul 6, 2006 8:14 AM</td>
 			</tr>
 			<tr>
 				<td>John</td>
-				<td>32</td>
+				<td>Hood</td>
+				<td>33</td>
 				<td>$19.99</td>
 				<td>25%</td>
-				<td>john.hood@mit.com</td>
+				
 				<td>Dec 10, 2002 5:14 AM</td>
 			</tr>
 			<tr>
 				<td>Clark</td>
+				<td>Kent</td>
 				<td>18</td>
 				<td>$15.89</td>
 				<td>44%</td>
-				<td>clark.kent@gmail.com</td>
 				<td>Jan 12, 2003 11:14 AM</td>
 			</tr>
 			<tr>
 				<td>Bruce</td>
+				<td>Almighty</td>
 				<td>45</td>
 				<td>$153.19</td>
 				<td>44%</td>
-				<td>batman@gmail.com</td>
+				
 				<td>Jan 18, 2001 9:12 AM</td>
 			</tr>
 			<tr>
 				<td>Bruce</td>
+				<td>Evans</td>
 				<td>22</td>
 				<td>$13.19</td>
 				<td>11%</td>
-				<td>batman2@gmail.com</td>
 				<td>Jan 18, 2007 9:12 AM</td>
 			</tr>
 		</tbody>
@@ -270,7 +275,7 @@ $(document).ready(function()
 	
 
 
-  <table id="options-table" cellspacing="1">
+  <table id="options-table" class="tablesorter" border="0" cellpadding="0" cellspacing="1">
     <thead>
       <tr>
         <th>Property</th>
