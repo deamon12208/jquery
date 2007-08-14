@@ -5,17 +5,13 @@
 	<title>TableSorter Documentation</title>
 	<link rel="stylesheet" href="css/jq.css" type="text/css" media="print, projection, screen" />
 	<link rel="stylesheet" href="themes/blue/style.css" type="text/css" media="print, projection, screen" />
-	<script type="text/javascript" src="js/jquery-1.1.3.js"></script>
-	<script type="text/javascript" src="js/jquery.dimensions.pack.js"></script>
-	<script type="text/javascript" src="js/jquery.tablesorter.js"></script>
-	<script type="text/javascript" src="addons/pager/jquery.tablesorter.pager.js"></script>
+	<script type="text/javascript" src="../jquery-1.1.3.js"></script>
+	<script type="text/javascript" src="../jquery.dimensions.pack.js"></script>
+	<script type="text/javascript" src="../jquery.tablesorter.js"></script>
+	<script type="text/javascript" src="../addons/pager/jquery.tablesorter.pager.js"></script>
 	<script type="text/javascript" src="js/chili/chili-1.8b.js"></script>
+	<script type="text/javascript" src="js/docs.js"></script>
 	<script type="text/javascript">
-	/* Stop IE flicker */
-	if ($.browser.msie == true) document.execCommand('BackgroundImageCache', false, true);
-	ChiliBook.recipeFolder     = "js/chili/";
-	ChiliBook.stylesheetFolder = "js/chili/";
-	
 	$(function() {
 		$("table")
 			.tablesorter({widthFixed: true})
