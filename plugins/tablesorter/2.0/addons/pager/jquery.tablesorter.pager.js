@@ -11,6 +11,7 @@
 				c.size = size;
 				c.totalPages = Math.ceil(c.totalRows / c.size);
 				moveToPage(table);
+				fixPosition(table);
 			}
 			
 			function fixPosition(table) {

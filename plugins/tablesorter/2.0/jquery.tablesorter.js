@@ -279,7 +279,7 @@
 					}
 					
 					// add cell to headerList
-					table.config.headerList.push(this);
+					table.config.headerList[index]= this;
 				});
 				
 				if(table.config.debug) { benchmark("Built headers:", time); log($tableHeaders); }
@@ -570,6 +570,11 @@
 					}).bind("appendCache",function() {
 						appendToTable(this,cache);
 					});
+					
+					// if user has supplied a sort list to constructor.
+					if(config.sortList.length > 0) {
+						$this.trigger("sorton",[config.sortList]);	
+					}
 					
 					// apply widgets
 					applyWidget(this);

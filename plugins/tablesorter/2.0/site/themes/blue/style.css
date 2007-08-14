@@ -1,5 +1,5 @@
 /* tables */
-table {
+table.tablesorter {
 	font-family:arial;
 	margin:10px 0pt 15px;
 	font-size: 8pt;
@@ -7,36 +7,42 @@ table {
 	width: 100%;
 	white-space:nowrap;
 	text-align: left;
+	padding: 1px;
+	background-color: #FFF;
 }
-table thead th {
+table.tablesorter thead th {
 	background-color: #e6EEEE;
-	border-bottom:2px solid #D6D2C2;
+	border-bottom:2px solid #222;
 	padding: 8px;
 	height: 30px;
 	overflow:hidden;
 	padding:3px 5px;
 	position:relative;
 	cursor:default;
+	margin: 1px;
 }
-table thead .header {
-	background-image: url(../img/small.gif);
+table.tablesorter thead .header {
+	background-image: url(small.gif);
 	background-repeat: no-repeat;
-	background-position: center left;
+	background-position: center right;
 	font-weight: bold;
-	padding-left: 20px;
 	cursor: pointer;
 }
-table tbody td {
+table.tablesorter tbody td {
 	color: #3D3D3D;
 	overflow:hidden;
 	padding:3px 5px;
+	background-color: #FFF;
 }
-table tbody .even {
+table.tablesorter tbody tr.even td {
 	background-color:#FCFAF6;
 }
-table tbody .headerSortUp {
-	background-image: url(../img/small_asc.gif);
+table.tablesorter thead .headerSortUp {
+	background-image: url(small_asc.gif);
 }
-table tbody .headerSortDown {
-	background-image: url(../img/small_desc.gif);
+table.tablesorter thead .headerSortDown {
+	background-image: url(small_desc.gif);
+}
+table.tablesorter thead .headerSortDown, table.tablesorter thead .headerSortUp {
+background-color: #8dbdd8;
 }
