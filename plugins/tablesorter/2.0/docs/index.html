@@ -163,6 +163,11 @@
 	
 	<ul>
 		<li><a href="example-pager.html">Pager plugin</a></li>
+		<li><a href="example-ajax.html">Appending table data with ajax</a></li>
+		<li><a href="example-option-sort-force.html">Force a default sorting order</a></li>
+		<li><a href="example-option-text-extraction.html">Dealing with complicated cell structures</a></li>
+		<li><a href="example-option-sort-key.html">Change the default multi-sorting key</a></li>
+		<li><a href="example-options-headers.html">Disable header using plugin options</a></li>
 		<li><a href="example-widgets.html">Writing custom widgets</a></li>
 		<li><a href="example-parsers.html">Writing custom parsers</a></li>
 		
@@ -278,6 +283,7 @@ $(document).ready(function()
         <th>Type</th>
         <th>Default</th>
         <th>Description</th>
+        <th>Link</th>
       </tr>
     </thead>
     <tbody>
@@ -298,6 +304,8 @@ $(document).ready(function()
         <td>String</td>
         <td>shiftKey</td>
         <td>The key used to select more than one column for multi-column sorting.  Defaults to the shift key.  Other options might be ctrlKey, altKey. Ref: http://developer.mozilla.org/en/docs/DOM:event#Properties</td>
+      
+      	<td><a href="example-option-sort-key.html">Example</a></td>
       </tr>
       <tr>
         <td>textExtraction</td>
@@ -323,6 +331,7 @@ $(document).ready(function()
 
 			TableSorter will pass a jQuery object containing the contents of the current cell for you to parse and return.  Thanks to Josh Nathanson for the examples.
 		</td>
+		<td><a href="example-option-text-extraction.html">Example</a></td>
 	  </tr>
       <tr>
         <td>headers</td>
@@ -332,25 +341,21 @@ $(document).ready(function()
         	An object of instructions for per-column controls in the format: <code>headers: { 0: { option: setting }, ... }</code>  For example, to disable 
         	sorting on the first two columns of a table: <code>headers: { 0: { sorter: false}, 1: {sorter: false} }</code>
         </td>
+        <td><a href="example-options-headers.html">Example</a></td>
       </tr>
-      <tr>
-        <td>sorter</td>
-        <td>Boolean</td>
-        <td>true</td>
-        <td>Use to disable sorting on a column by passing <code>sorter: false</code> with the <code>headers</code> option.  (<span style="color:#f00">need input</span>)</td>
-      </tr>
-      
       <tr>
         <td>sortForce</td>
         <td>Array</td>
         <td>null</td>
         <td>Use to add an additional forced sort that will be appended to the dynamic selections by the user.  For example, can be used to sort people alphabetically after some other user-selected sort that results in rows with the same value like dates or money due.  It can help prevent data from appearing as though it has a random secondary sort.  (<span style="color:#f00">need input</span>)</td>
+        <td><a href="example-option-sort-force.html">Example</a></td>
       </tr>
       <tr>
         <td>widthFixed</td>
         <td>Boolean</td>
         <td>false</td>
         <td>Indicates if TableSorter should apply fixed widths to the table columns.  This is useful for the Pager companion.  Requires the jQuery dimension plugin to work.</td>
+        <td><a href="example-pager.html">Example</a></td>
       </tr>
       <tr>
         <td>cancelSelection</td>

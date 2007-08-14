@@ -42,7 +42,7 @@
  * @option String sortInitialOrder (optional) 	A string of the inital sorting order can be asc or desc. 
  * 												Default value: "asc"
  * 
- * @option String sortMultisortKey (optional) 	A string of the multi-column sort key. 
+ * @option String sortMultiSortKey (optional) 	A string of the multi-column sort key. 
  * 												Default value: "shiftKey"
  * 
  * @option String textExtraction (optional) 	A string of the text-extraction method to use. 
@@ -91,7 +91,7 @@
 				cssAsc: "headerSortUp",
 				cssDesc: "headerSortDown",
 				sortInitialOrder: "asc",
-				sortMultisortKey: "shiftKey",
+				sortMultiSortKey: "shiftKey",
 				sortForce: null,
 				textExtraction: "simple",
 				parsers: {}, 
@@ -211,7 +211,7 @@
 				var t = "";
 				
 				
-				if(typeof(config.textExtraction) == "object") {
+				if(typeof(config.textExtraction) == "function") {
 					t = config.textExtraction(node);
 				} else if(config.textExtraction == "complex") { 
 					t = $(node).text();
@@ -455,15 +455,19 @@
 
 				return this.each(function() {
 					
+					
+					
+					
 					var $this, $document,$headers, cache, config, shiftDown = 0, sortOrder;
+					
 					this.config = {};
 					
 					config = $.extend(this.config, $.tablesorter.defaults, settings);
 					
+					if(!this.tHead || !this.tBodies) return true;
+					
 					// store common expression for speed					
 					$this = $(this);
-					
-					
 					
 					// build headers
 					$headers = buildHeaders(this);
@@ -497,7 +501,7 @@
 							
 							
 							// user only whants to sort on one column
-							if(!e[config.sortMultisortKey]) {
+							if(!e[config.sortMultiSortKey]) {
 								
 								// flush the sort list
 								config.sortList = [];

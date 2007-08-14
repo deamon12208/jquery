@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us">
+<head>
+	<title>TableSorter Documentation</title>
+	<link rel="stylesheet" href="css/jq.css" type="text/css" media="print, projection, screen" />
+	<link rel="stylesheet" href="themes/blue/style.css" type="text/css" id="" media="print, projection, screen" />
+	<script type="text/javascript" src="../jquery-1.1.3.js"></script>
+	<script type="text/javascript" src="../jquery.dimensions.pack.js"></script>
+	<script type="text/javascript" src="../jquery.tablesorter.js"></script>
+	<script type="text/javascript" src="../addons/pager/jquery.tablesorter.pager.js"></script>
+	<script type="text/javascript" src="js/chili/chili-1.8b.js"></script>
+	<script type="text/javascript" src="js/docs.js"></script>
+	<script type="text/javascript">
+	window.tableFile="table-complex.html";
+	</script>
+	<script type="text/javascript" src="js/examples.js"></script>
+<script type="text/javascript" id="js">$(document).ready(function() {
+	
+	// call the tablesorter plugin
+	$("table").tablesorter({
+		// set forced sort on the fourth column and i decending order.
+		textExtraction: function(node) {
+			// extract data from markup and return it 
+			return node.childNodes[0].childNodes[0].innerHTML;
+		}
+	});
+}); </script>
+</head>
+<body>
+<div id="banner">	
+	<h1>table<em>sorter</em></h1>
+	<h2>Dealing with complicated cell structures</h2>
+	<h3>Flexible client-side table sorting</h3>
+	<a href="index.html">Back to documentation</a>
+</div>
+<div id="main">
+	<h1>Demo</h1>
+	<div id="demo">
+		<table cellspacing="1" class="tablesorter"></table>
+	</div>
+	<h1>Javascript</h1>
+	<div id="javascript">
+		<pre class="javascript"></pre>
+	</div>
+	<h1>HTML</h1>
+	<div id="html">
+		<pre class="html"></pre>
+	</div>
+</div>
+</html>
