@@ -111,10 +111,11 @@ $.extend($.ui.magnifier.prototype, {
 					distance = Math.abs(p[0] - ((c[3] ? this.pp.left : c[1].left) + parseInt(c[0].style.left)) - (c[0].offsetWidth/2));
 				}			
 			}
-			this.current = distance < olddistance ? this.items[i] : this.current;
 			
 			if(distance < o.distance) {
 
+				this.current = distance < olddistance ? this.items[i] : this.current;
+				
 				if(!o.axis || o.axis != "y") {
 					$(c[0]).css({
 						width: c[2][0]+ (c[2][0] * (o.magnification-1)) - (((distance/o.distance)*c[2][0]) * (o.magnification-1)),
