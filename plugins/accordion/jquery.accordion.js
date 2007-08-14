@@ -142,7 +142,17 @@
  * @name activate
  * @cat Plugins/Accordion
  */
- 
+ jQuery.easing.bounceout = function(x, t, b, c, d) {
+		if ((t/=d) < (1/2.75)) {
+			return c*(7.5625*t*t) + b;
+		} else if (t < (2/2.75)) {
+			return c*(7.5625*(t-=(1.5/2.75))*t + .75) + b;
+		} else if (t < (2.5/2.75)) {
+			return c*(7.5625*(t-=(2.25/2.75))*t + .9375) + b;
+		} else {
+			return c*(7.5625*(t-=(2.625/2.75))*t + .984375) + b;
+		}
+	};
 jQuery.fn.extend({
 	// nextUntil is necessary, would be nice to have this in jQuery core
 	nextUntil: function(expr) {
@@ -208,7 +218,7 @@ jQuery.fn.extend({
 					: headers.eq(0)
 		}
 		
-		function toggle(toShow, toHide, data, clickedActive) {
+		function toggle(toShow, toHide, data, clickedActive, down) {
 			var finished = function(cancel) {
 				running = cancel ? 0 : --running;
 				if ( running )
@@ -219,17 +229,50 @@ jQuery.fn.extend({
 			};
 			
 			// count elements to animate
-			running = toHide.size() + toShow.size();
+			running = toHide.size()// + toShow.size();
 			
 			if ( settings.animated ) {
 				if ( !settings.alwaysOpen && clickedActive ) {
 					toShow.slideToggle(settings.animated);
 					finished(true);
 				} else {
+					/*
+					var height = toHide.height()
+					toShow.height(0).show();
 					toHide.filter(":hidden").each(finished).end().filter(":visible")
-						.animate({height: "hide"}, settings.animated, "linear", finished);
+						//.animate({height: "hide"}, settings.animated, "linear", finished);
+						.animate({height:"hide"}, {
+							step: function(n) {
+								toShow.height(Math.ceil(height - (parseFloat(jQuery.fn.jquery) <= 1.1 ?
+									n : n * height)));
+							},
+							duration: 1000,
+							easing: "bounceout",
+							complete: finished
+						});
 					toShow
 						.animate({height: "show"}, settings.animated, "linear", finished);
+*/					
+					
+					//var all = $("dd"),
+						//visible = all.filter(":visible"),
+						var height = toHide.height()
+						//hidden = $(this).parent().next()
+						//down = all.index( visible[0] ) > all.index( hidden[0] );
+						//down = true
+		
+					//if ( !toShow.is(":visible") ) {
+						toShow.show();
+						toHide.filter(":hidden").each(finished).end().filter(":visible").animate({height:"hide"},{
+							step: function(n){
+								toShow.height(Math.ceil(height - (parseFloat(jQuery.fn.jquery) <= 1.1 ?
+									n : n * height)));
+							},
+							duration: down ? 1000 : 200,
+							easing: down ? "bounceout" : "swing",
+							complete: finished
+						});
+					//}
 				}
 			} else {
 				if ( !settings.alwaysOpen && clickedActive ) {
@@ -254,7 +297,6 @@ jQuery.fn.extend({
 			
 			// due to the event delegation model, we have to check if one
 			// of the parent elements is our actual header, and find that
-			// TODO replace with parentUntil!
 			if ( clicked.parents(settings.header).length )
 				while ( !clicked.is(settings.header) )
 					clicked = clicked.parent();
@@ -274,11 +316,11 @@ jQuery.fn.extend({
 			// find elements to show and hide
 			var toShow = clicked.nextUntil(settings.header),
 				toHide = active.nextUntil(settings.header),
-				data = [clicked, active, toShow, toHide];
-
-			active = clickedActive ? jQuery([]) : clicked;
+				data = [clicked, active, toShow, toHide],
+				down = headers.index( active[0] ) > headers.index( clicked[0] );
 			
-			toggle( toShow, toHide, data, clickedActive );
+			active = clickedActive ? jQuery([]) : clicked;
+			toggle( toShow, toHide, data, clickedActive, down );
 
 			return !toShow.length;
 		};

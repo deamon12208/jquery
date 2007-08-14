@@ -55,6 +55,7 @@ li { list-style-type: none; }
 	margin: 0px;
 	padding: 10px;
 	background-color: #80cfe2;
+	overflow: hidden;
 }
 #list1 h3 {
 	cursor:pointer;
@@ -81,6 +82,7 @@ li { list-style-type: none; }
 #list2 {
 	height: 178px;
 	border: 1px solid #eee;
+	overflow: hidden;
 }
 #list2 .red {
 	color: red;
@@ -94,7 +96,7 @@ li { list-style-type: none; }
 	color: blue;
 	background-color: blue;
 }
-#list2 dd { height: 130px; }
+#list2 dd { height: 130px; overflow: hidden; }
 
 #list3 { border: 1px solid #111; }
 #list3 div.selected { font-weight: bold; }
