@@ -5,10 +5,9 @@ table.tablesorter {
 	margin:10px 0pt 15px;
 	font-size: 8pt;
 	width: 100%;
-	white-space:nowrap;
 	text-align: left;
 }
-table.tablesorter thead tr th {
+table.tablesorter thead tr th, table.tablesorter tfoot tr th {
 	background-color: #e6EEEE;
 	border: 1px solid #FFF;
 	font-size: 8pt;
