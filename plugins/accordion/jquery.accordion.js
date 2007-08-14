@@ -177,6 +177,9 @@ jQuery.fn.extend({
 	},
 	// the plugin method itself
 	Accordion: function(settings) {
+		if ( !this.length )
+			return this;
+	
 		// setup configuration
 		settings = jQuery.extend({}, jQuery.Accordion.defaults, {
 			// define context defaults
@@ -223,7 +226,6 @@ jQuery.fn.extend({
 				running = cancel ? 0 : --running;
 				if ( running )
 					return;
-
 				// trigger custom change event
 				container.trigger("change", data);
 			};
@@ -236,43 +238,17 @@ jQuery.fn.extend({
 					toShow.slideToggle(settings.animated);
 					finished(true);
 				} else {
-					/*
 					var height = toHide.height()
 					toShow.height(0).show();
-					toHide.filter(":hidden").each(finished).end().filter(":visible")
-						//.animate({height: "hide"}, settings.animated, "linear", finished);
-						.animate({height:"hide"}, {
-							step: function(n) {
-								toShow.height(Math.ceil(height - (parseFloat(jQuery.fn.jquery) <= 1.1 ?
-									n : n * height)));
-							},
-							duration: 1000,
-							easing: "bounceout",
-							complete: finished
-						});
-					toShow
-						.animate({height: "show"}, settings.animated, "linear", finished);
-*/					
-					
-					//var all = $("dd"),
-						//visible = all.filter(":visible"),
-						var height = toHide.height()
-						//hidden = $(this).parent().next()
-						//down = all.index( visible[0] ) > all.index( hidden[0] );
-						//down = true
-		
-					//if ( !toShow.is(":visible") ) {
-						toShow.show();
-						toHide.filter(":hidden").each(finished).end().filter(":visible").animate({height:"hide"},{
-							step: function(n){
-								toShow.height(Math.ceil(height - (parseFloat(jQuery.fn.jquery) <= 1.1 ?
-									n : n * height)));
-							},
-							duration: down ? 1000 : 200,
-							easing: down ? "bounceout" : "swing",
-							complete: finished
-						});
-					//}
+					toHide.filter(":hidden").each(finished).end().filter(":visible").animate({height:"hide"},{
+						step: function(n){
+							toShow.height(Math.ceil(height - (parseFloat(jQuery.fn.jquery) <= 1.1 ?
+								n : n * height)));
+						},
+						duration: down ? 1000 : 200,
+						easing: down ? "bounceout" : "swing",
+						complete: finished
+					});
 				}
 			} else {
 				if ( !settings.alwaysOpen && clickedActive ) {
