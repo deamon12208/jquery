@@ -17,67 +17,63 @@
 <script type="text/javascript" src="../ui.drag.js"></script>
 <script type="text/javascript" src="../ui.modal.js"></script>
 <style type="text/css" media="screen">
-  @import url(css/warm/warm.css);
-  @import url(css/warm/warm.modal.css);
-  
-  div.ui-modal .top.pane {
-  	position: relative;
-  }
-  
-  div.ui-modal .top.pane .ui-modal-buttons-right {
-  	position: absolute;
-  	right: 0;
-  }
-
-  div.ui-modal .middle.pane {
-    overflow: auto;
-    height: 100%;
-  }
-  div.ui-modal.noOverflow .middle.pane {
-    overflow: visible;
-  }
-  div.ui-modal .middle.pane .left.pane {
-  	width: 2px;
-  	margin-left: -2px;
-  }
-
-  div.ui-modal .middle.pane .right.pane {
-  	width: 2px;
-  	margin-right: -2px;
-  }
-
-  div.ui-modal .bottom.pane {
-  	position: relative;
-  }
-
-  div.ui-modal .top.pane .right {
-  	position: absolute;
-  	top: 2px;
-  	right: 2px;
-  }
-
-  div.ui-modal .top.pane .left {
-  	padding: 2px 5px;
-  	display: block;
-  	position: absolute;
-  	top: 0px;
-  	left: 0px;
-  }
-
-  div.ui-modal .bottom.pane .ui-modal-resize-se {
-  	position: absolute;
-  	right: 0px;
-  }
+@import url(css/light/light.css);
+@import url(css/light/light.modal.css);
+@import url(css/dark/dark.css);
+@import url(css/dark/dark.modal.css);
+@import url(css/warm/warm.css);
+@import url(css/warm/warm.modal.css);
+body { font:10pt verdana; }
+.box {
+  position:fixed;
+  top:5px;
+  right:5px;
+  display:block;
+  width:20px;
+  height:20px;
+  border:1px solid #FFF;
+  text-indent:2000em;
+  cursor:pointer;
+}
+.dark a.box {
+  color:#FFF;
+  text-indent:-40px;
+  border-color:#000;
+  background:#FFF;
+}
+.light a.box {
+  color:#222;
+  text-indent:-35px;
+  border-color:#000;
+  background:#222;
+}
 </style>
 <script type="text/javascript">
 $(function() {
-  $(".modal").modal({title: "Hello, I'm a modal"});
-})
+  $(".modal").hide();
+  $("#spawn").click(function(){
+    $(".modal:first").clone().modal({title: "Hello, I'm a modal"});
+    return false;
+  }).click();
+});
+
+$(function(){
+  $("<a>").html("Dark").addClass("box").toggle(
+    function(){
+      $(this).html("Light");
+      $("body").removeClass("light").addClass("dark");
+    },function(){
+      $(this).html("Dark");
+      $("body").removeClass("dark").addClass("light");
+    }).prependTo("body");
+});
+
 </script>
 
 </head>
 
-<body class="warm">
+<body class="light">
+  <a href="#spawn" id="spawn">Spawn</a>
   <div class="modal">
     The code used to make this modal was this:
     <code>$(".modal").modal({title: "Hello, I'm a modal"});</code><br /><br />

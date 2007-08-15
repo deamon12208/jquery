@@ -142,7 +142,7 @@ $.ui.modal = function(el, o) {
     // Width of the modal
     width: 400,
     // Height
-    height: 400,
+    height: 350,
     // Animation.  Look at open above for possible values
     animation: 'none',
     // Animation speed
