@@ -11,6 +11,7 @@ pre.normal { background-color: transparent; border: none; border-left-width: 0; 
 #busy { position: absolute; top: 7px; right: 7px; border: 1px ridge #ccc; background-color: #e95555; color: #eee; padding: 3px; display:none }
 hr { height: 1px }
 code { padding: 0; font-size: 108%; font-style: normal; }
+ul {list-style: square;color: #333;}
 
 #banner { margin: 20px; padding-bottom: 10px; text-align: left;}
 
