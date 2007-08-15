@@ -118,8 +118,9 @@ $.extend(PopUpCal.prototype, {
 
 	/* Filter entered characters. */
 	_doKeyPress: function(e) {
+		var inst = popUpCal._getInst(this._calId);
 		var chr = String.fromCharCode(e.charCode == undefined ? e.keyCode : e.charCode);
-		return (chr < ' ' || chr == popUpCal.dateFormat.charAt(3) ||
+		return (chr < ' ' || chr == inst._get('dateFormat').charAt(3) ||
 			(chr >= '0' && chr <= '9')); // only allow numbers and separator
 	},
 
