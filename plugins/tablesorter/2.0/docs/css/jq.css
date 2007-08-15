@@ -62,3 +62,14 @@ a.external {
     background-position: center right;
     padding-right: 12px
 }
+
+form {
+	margin-bottom: 20px;
+	width: auto;
+	font-size: 10pt;
+}
+form fieldset {
+	width: 140px;
+	text-align: left;
+	padding: 10px;
+}
