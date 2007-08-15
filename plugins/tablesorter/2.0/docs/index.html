@@ -147,13 +147,14 @@
 	<ul>
 		<li><a class="external" href="http://docs.jquery.com/Downloading_jQuery#Download_jQuery">jQuery</a> (1.1.3 or higher)</li>
 		<li><a href="../jquery.tablesorter.pack.js">jquery.tablesorter.pack.js</a> (7,4kb, <a href="http://dean.edwards.name/packer/" class="external">packed</a> for production)</li>
-		<li><a class="external" href="http://jquery.com/dev/svn/trunk/plugins/metadata/lib/jQuery/metadata.js?format=txt">metadata.js</a> (x,xkb)</li>
 	</ul>  
 		
 	<strong>Optional/Add-Ons:</strong>
 	<ul>
+		<li><a class="external" href="http://jquery.com/dev/svn/trunk/plugins/metadata/lib/jQuery/metadata.js?format=raw">metadata.js</a> (3,7kb <strong>Required for setting <a href="#Examples">inline options</a></strong>)</li>
+		<li><a class="external" href="http://dev.jquery.com/browser/trunk/plugins/dimensions/jquery.dimensions.pack.js?format=raw">jquery.dimensions.pack.js</a> (5,1kb, <a href="http://dean.edwards.name/packer/" class="external">packed</a>, for production. <strong>Required: for the <a href="example-pager.html">tablesorter pagination plugin</a></strong>)</li>
 		<li><a href="../jquery.tablesorter.js">jquery.tablesorter.js</a> (17,7kb, unpacked for development)</li>
-		<li><a href="../addons/pager/jquery.tablesorter.pager.js">jquery.tablesorter.pager.js</a> (x,xkb, tablesorter pagination)</li>
+		<li><a href="../addons/pager/jquery.tablesorter.pager.js">jquery.tablesorter.pager.js</a> (3,6kb, <a href="example-pager.html">tablesorter pagination plugin</a>)</li>
 	</ul>  
 
 	<strong>Themes:</strong>
@@ -205,14 +206,13 @@
 	<a name="Getting-Started"></a>
 	<h1>Getting started</h1>
 	<p>
-		To use the TableSorter plugin, include the <a class="external" href="http://jquery.com">jQuery</a>
-		library, the MetaData plugin and the TableSorter plugin inside the <code>&lt;head&gt;</code> tag
+		To use the tablesorter plugin, include the <a class="external" href="http://jquery.com">jQuery</a>
+		library and the tablesorter plugin inside the <code>&lt;head&gt;</code> tag
 		of your HTML document:
 	</p>
 	
 <pre class="javascript">
 &lt;script type=&quot;text/javascript&quot; src=&quot;/path/to/jquery-1.1.3.js&quot;&gt;&lt;/script&gt;
-&lt;script type=&quot;text/javascript&quot; src=&quot;/path/to/jquery.metadata.pack.js&quot;&gt;&lt;/script&gt;
 &lt;script type=&quot;text/javascript&quot; src=&quot;/path/to/jquery.tablesorter.pack.js&quot;&gt;&lt;/script&gt;
 </pre>
 
@@ -459,7 +459,6 @@ th.headerSortDown {
   <p>
         Support is available through the
         <a class="external" href="http://jquery.com/discuss/">jQuery Mailing List</a>.  
-        This is a very active list to which many jQuery developers and users subscribe.
   </p>      
   <p>Access to the jQuery Mailing List is also available through <a class="external" href="http://www.nabble.com/JQuery-f15494.html">Nabble Forums</a>.</p>
   
