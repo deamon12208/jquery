@@ -2,7 +2,7 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us">
 <head>
-	<title>TableSorter Documentation</title>
+	<title>tablesorter Documentation</title>
 	<link rel="stylesheet" href="css/jq.css" type="text/css" media="print, projection, screen" />
 	<link rel="stylesheet" href="../themes/blue/style.css" type="text/css" media="print, projection, screen" />
 	<script type="text/javascript" src="../jquery-1.1.3.js"></script>
@@ -49,9 +49,9 @@
 	<a name="Introduction"></a>
 	<h1>Introduction</h1>
 	<p>
-		TableSorter is a <a class="external" href="http://jquery.com">jQuery</a> plugin for turning a
+		tablesorter is a <a class="external" href="http://jquery.com">jQuery</a> plugin for turning a
 	  	standard HTML table with THEAD and TBODY tags into a sortable table without page refreshes.  
-	  	TableSorter can successfully parse and sort many types of data including linked data in a cell.  	  	
+	  	tablesorter can successfully parse and sort many types of data including linked data in a cell.  	  	
 		It has many useful features including:
 	</p>
   	
@@ -67,10 +67,6 @@
 	<a name="Demo"></a>
 	<h1>Demo</h1>
 
-	<p>
-		Something about the demo.
-	</p>
-	
 	<table id="tablesorter-demo" class="tablesorter" border="0" cellpadding="0" cellspacing="1">
 		<thead>
 			<tr>
@@ -81,9 +77,8 @@
 				<th rowspan="2">Date</th>
 			</tr>
 			<tr>
-				<th>Firstname</th>
-				<th>lastname</th>
-				
+				<th>First Name</th>
+				<th>Last Name</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -133,7 +128,9 @@
 		</tbody>
 	</table>
 	
-	
+	<p class="tip">
+		<em>TIP:</em> Sort multiple columns simultaneously by holding down the shift key and clicking a second, third or even fourth column header!
+	</p>	
 
 	<a name="Download"></a>
 	<h1>Download</h1>
@@ -143,21 +140,26 @@
 	
 	<p><strong>Pick n choose</strong> - Place at least the required files in a directory on your webserver that is accessible to a web browser.  Record this location.</p>
 	
-	<strong>Required:</strong>
+	<strong id="Download-Required">Required:</strong>
 	<ul>
 		<li><a class="external" href="http://docs.jquery.com/Downloading_jQuery#Download_jQuery">jQuery</a> (1.1.3 or higher)</li>
 		<li><a href="../jquery.tablesorter.pack.js">jquery.tablesorter.pack.js</a> (7,4kb, <a href="http://dean.edwards.name/packer/" class="external">packed</a> for production)</li>
 	</ul>  
 		
-	<strong>Optional/Add-Ons:</strong>
+	<strong id="Download-Addons">Optional/Add-Ons:</strong>
 	<ul>
 		<li><a class="external" href="http://jquery.com/dev/svn/trunk/plugins/metadata/lib/jQuery/metadata.js?format=raw">metadata.js</a> (3,7kb <strong>Required for setting <a href="#Examples">inline options</a></strong>)</li>
 		<li><a class="external" href="http://dev.jquery.com/browser/trunk/plugins/dimensions/jquery.dimensions.pack.js?format=raw">jquery.dimensions.pack.js</a> (5,1kb, <a href="http://dean.edwards.name/packer/" class="external">packed</a>, for production. <strong>Required: for the <a href="example-pager.html">tablesorter pagination plugin</a></strong>)</li>
 		<li><a href="../jquery.tablesorter.js">jquery.tablesorter.js</a> (17,7kb, unpacked for development)</li>
 		<li><a href="../addons/pager/jquery.tablesorter.pager.js">jquery.tablesorter.pager.js</a> (3,6kb, <a href="example-pager.html">tablesorter pagination plugin</a>)</li>
 	</ul>  
-
-	<strong>Themes:</strong>
+	
+	<strong id="Download-Widgets">Widgets:</strong>
+	<ul>
+		<li><a class="external" href="http://www.jdempster.com/category/code/jquery/tablesortercookiewidget/">Cookie Widget</a>, By <a class="external" href="http://www.jdempster.com/">James Dempster</a></li>
+	</ul> 
+	
+	<strong id="Download-Themes">Themes:</strong>
 	<ul>
 		<li><a href="greenskin.zip">Green Skin</a> - Images and CSS styles for green themed headers</li>
 		<li><a href="blueskin.zip">Blue Skin</a> - Images and CSS styles for blue themed headers (as seen in the examples)</li>
@@ -168,14 +170,15 @@
 	<a name="Examples"></a>
     <h1>Examples</h1>
     <p>	
-		These examples will show what's possible with TableSorter.  You need Javascript enabled to 
-		run these samples, just like you and your users will need Javascript enabled to use TableSorter.
+		These examples will show what's possible with tablesorter.  You need Javascript enabled to 
+		run these samples, just like you and your users will need Javascript enabled to use tablesorter.
 	</p>
 	
     <strong>Basic</strong>
 	<ul>
 		<li><a href="example-option-sort-list.html">Set a initial sorting order using options</a></li>
-		<li><a href="example-options-headers.html">Disable header using options</a></li>	
+		<li><a href="example-options-headers.html">Disable header using options</a></li>
+		<li><a href="example-trigger-sort.html">Sort table using a link outside the table</a></li>	
 		<li><a href="example-option-sort-force.html">Force a default sorting order</a></li>
 		<li><a href="example-option-sort-key.html">Change the default multi-sorting key</a></li>
 	
@@ -217,7 +220,7 @@
 </pre>
 
 
-	<p>TableSorter works on standard HTML tables.  You must include THEAD and TBODY tags:</p>
+	<p>tablesorter works on standard HTML tables.  You must include THEAD and TBODY tags:</p>
 	
 	<pre class="html">
 &lt;table id="myTable"&gt;
@@ -264,7 +267,7 @@
 	</pre>
 
 
-	<p>Start by telling TableSorter to sort your table when the document is loaded:</p>
+	<p>Start by telling tablesorter to sort your table when the document is loaded:</p>
 
 
 	<pre class="javascript">
@@ -278,7 +281,7 @@ $(document).ready(function()
 	<p>
 		Click on the headers and you'll see that your table is now sortable!  You can 
 		also pass in configuration options when you initialize the table.  This tells
-		TableSorter to sort on the first and second column in ascending order.
+		tablesorter to sort on the first and second column in ascending order.
 	</p>
 
 	<pre class="javascript">
@@ -293,12 +296,12 @@ $(document).ready(function()
 	<h1>Configuration</h1>
 
 	<p>
-		TableSorter has many options you can pass in at initialization to achieve different effects:
+		tablesorter has many options you can pass in at initialization to achieve different effects:
 	</p>
 	
 
 
-  <table id="options-table" class="tablesorter" border="0" cellpadding="0" cellspacing="1">
+  <table id="options" class="tablesorter" border="0" cellpadding="0" cellspacing="1">
     <thead>
       <tr>
         <th>Property</th>
@@ -329,7 +332,7 @@ $(document).ready(function()
         <td>sortMultiSortKey</td>
         <td>String</td>
         <td>shiftKey</td>
-        <td>The key used to select more than one column for multi-column sorting.  Defaults to the shift key.  Other options might be ctrlKey, altKey. Ref: http://developer.mozilla.org/en/docs/DOM:event#Properties</td>
+        <td>The key used to select more than one column for multi-column sorting.  Defaults to the shift key.  Other options might be ctrlKey, altKey. <br/>Reference: <a class="external" href="http://developer.mozilla.org/en/docs/DOM:event#Properties">http://developer.mozilla.org/en/docs/DOM:event#Properties</a></td>
       
       	<td><a href="example-option-sort-key.html">Example</a></td>
       </tr>
@@ -342,7 +345,7 @@ $(document).ready(function()
         	Built-in options include "simple" and "complex".  Use complex if you have data marked up 
         	inside of a table cell like: <code>&lt;td&gt;&lt;strong&gt;&lt;em&gt;123 Main Street&lt;/em&gt;&lt;/strong&gt;&lt;/td&gt;</code>.  
         	Complex can be slow in large tables so consider writing your own text extraction function "myTextExtraction" which you define like:
-        	<pre class="javascript">
+<pre class="javascript">
 var myTextExtraction = function(node) 
 { 
 	// extract data from markup and return it 
@@ -353,9 +356,9 @@ $(document).ready(function()
 		$("#myTable").tableSorter( {textExtraction: myTextExtraction} );
 	}
 );
-			</pre>  
+</pre>  
 
-			TableSorter will pass a jQuery object containing the contents of the current cell for you to parse and return.  Thanks to Josh Nathanson for the examples.
+			tablesorter will pass a jQuery object containing the contents of the current cell for you to parse and return.  Thanks to Josh Nathanson for the examples.
 		</td>
 		<td><a href="example-option-text-extraction.html">Example</a></td>
 	  </tr>
@@ -373,21 +376,21 @@ $(document).ready(function()
         <td>sortForce</td>
         <td>Array</td>
         <td>null</td>
-        <td>Use to add an additional forced sort that will be appended to the dynamic selections by the user.  For example, can be used to sort people alphabetically after some other user-selected sort that results in rows with the same value like dates or money due.  It can help prevent data from appearing as though it has a random secondary sort.  (<span style="color:#f00">need input</span>)</td>
+        <td>Use to add an additional forced sort that will be appended to the dynamic selections by the user.  For example, can be used to sort people alphabetically after some other user-selected sort that results in rows with the same value like dates or money due.  It can help prevent data from appearing as though it has a random secondary sort.</td>
         <td><a href="example-option-sort-force.html">Example</a></td>
       </tr>
       <tr>
         <td>widthFixed</td>
         <td>Boolean</td>
         <td>false</td>
-        <td>Indicates if TableSorter should apply fixed widths to the table columns.  This is useful for the Pager companion.  Requires the jQuery dimension plugin to work.</td>
+        <td>Indicates if tablesorter should apply fixed widths to the table columns.  This is useful for the Pager companion.  Requires the <a href="#Download-Addons">jQuery dimension plugin</a> to work.</a></td>
         <td><a href="example-pager.html">Example</a></td>
       </tr>
       <tr>
         <td>cancelSelection</td>
         <td>Boolean</td>
         <td>true</td>
-        <td>Indicates if TableSorter should disable selection of text in the table header (TH).  Makes header behave more like a button.</td>
+        <td>Indicates if tablesorter should disable selection of text in the table header (TH).  Makes header behave more like a button.</td>
       </tr>
       <tr>
         <td>cssHeader</td>
@@ -440,7 +443,7 @@ th.headerSortDown {
   <a name="Compatibility"></a>
   <h1>Browser Compatibility</h1>
 
-    <p>TableSorter has been tested successfully in the following browsers with Javascript enabled:</p>
+    <p>tablesorter has been tested successfully in the following browsers with Javascript enabled:</p>
     <ul>
     	<li>Firefox 1.5+</li>
     	<li>Internet Explorer 6+</li>
@@ -471,25 +474,15 @@ th.headerSortDown {
 	<p>Yes, it's dual licensed under <a class="external" href="http://www.opensource.org/licenses/mit-license.php">MIT</a>
     and <a class="external" href="http://www.opensource.org/licenses/gpl-license.php">GPL</a> licenses. So you can do whatever you want with it even sell it.</p>
 	
-	<p>If you like tablesorter or just fell like it. A small donation is always appreciated.</p>
+	<p>If you like tablesorter or just feel like it. A small donation is always appreciated.</p>
 
-	<p>
-	<form action="https://www.paypal.com/cgi-bin/webscr" method="post" id="donate">
-		<fieldset>
-			<input name="cmd" value="_xclick" type="hidden">
-			<input name="business" value="christian.bach@polyester.se" type="hidden">
-			<input name="item_name" value="tablesorter Donation" type="hidden">
-			<input name="item_number" value="TABLESORTER-DONATE" type="hidden">
-			<input name="no_note" value="1" type="hidden">
-			<input name="currency_code" value="USD" type="hidden">
-			<input name="return" value="http://tablesorter.com/" type="hidden">
-			<input name="tax" value="0" type="hidden">
-			<input name="lc" value="US" type="hidden"> Amount in $<br>
-			<input name="amount" value="5.00" size="6" type="text">
-			<input name="submit" value="Donate" type="submit">
-		</fieldset>
+	<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+	<input type="hidden" name="cmd" value="_s-xclick">
+	<input type="image" src="https://www.paypal.com/en_US/i/btn/x-click-but04.gif" border="0" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
+	<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
+	<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
+	">
 	</form>
-	</p>
 
 
   <a name="Credits"></a>
@@ -499,7 +492,7 @@ th.headerSortDown {
   </p>
   <p>
 	Documentation written by <a class="external" href="http://www.ghidinelli.com">Brian Ghidinelli</a>, 
-  	based on <a class="external" href="http://sorgalla.com/projects/jcarousel/">jCarousel</a> docs and <a class="external" href="http://malsup.com/jquery/">Mike Alsup's</a> great documention.
+  	based on <a class="external" href="http://malsup.com/jquery/">Mike Alsup's</a> great documention.
   </p>
   <p>
 	<a class="external" href="http://ejohn.org">John Resig</a> for the fantastic <a class="external" href="http://jquery.com">jQuery</a>		

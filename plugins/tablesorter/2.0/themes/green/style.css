@@ -1,42 +1,39 @@
-/* tables */
-table {
-	font-family:arial;
-	margin:10px 0pt 15px;
-	font-size: 8pt;
-	border:1px solid #dad9c7;
-	width: 100%;
-	white-space:nowrap;
+table.tablesorter {
+	font-size: 12px;
+	background-color: #4D4D4D;
+	width: 1024px;
+	border: 1px solid #000;
+}
+table.tablesorter th {
 	text-align: left;
+	padding: 5px;
+	background-color: #6E6E6E;
 }
-table thead th {
-	background-color: #e6EEEE;
-	border-bottom:2px solid #D6D2C2;
-	padding: 8px;
-	height: 30px;
-	overflow:hidden;
-	padding:3px 5px;
-	position:relative;
-	cursor:default;
+table.tablesorter td {
+	color: #FFF;
+	padding: 5px;
 }
-table thead .header {
-	background-image: url(../img/small.gif);
+table.tablesorter .even {
+	background-color: #3D3D3D;
+}
+table.tablesorter .odd {
+	background-color: #6E6E6E;
+}
+table.tablesorter .header {
+	background-image: url(bg.png);
 	background-repeat: no-repeat;
-	background-position: center left;
-	font-weight: bold;
-	padding-left: 20px;
-	cursor: pointer;
+	border-left: 1px solid #FFF;
+	border-right: 1px solid #000;
+	border-top: 1px solid #FFF;
+	padding-left: 30px;
+	padding-top: 8px;
+	height: auto;
 }
-table tbody td {
-	color: #3D3D3D;
-	overflow:hidden;
-	padding:3px 5px;
+table.tablesorter .headerSortUp {
+	background-image: url(asc.png);
+	background-repeat: no-repeat;
 }
-table tbody .even {
-	background-color:#FCFAF6;
-}
-table tbody .headerSortUp {
-	background-image: url(../img/small_asc.gif);
-}
-table tbody .headerSortDown {
-	background-image: url(../img/small_desc.gif);
+table.tablesorter .headerSortDown {
+	background-image: url(desc.png);
+	background-repeat: no-repeat;
 }
