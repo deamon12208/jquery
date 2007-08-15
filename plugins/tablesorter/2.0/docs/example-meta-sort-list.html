@@ -7,40 +7,29 @@
 	<link rel="stylesheet" href="themes/blue/style.css" type="text/css" id="" media="print, projection, screen" />
 	<script type="text/javascript" src="../jquery-1.1.3.js"></script>
 	<script type="text/javascript" src="../jquery.dimensions.pack.js"></script>
+	<script type="text/javascript" src="../jquery.metadata.js"></script>
 	<script type="text/javascript" src="../jquery.tablesorter.js"></script>
 	<script type="text/javascript" src="../addons/pager/jquery.tablesorter.pager.js"></script>
 	<script type="text/javascript" src="js/chili/chili-1.8b.js"></script>
 	<script type="text/javascript" src="js/docs.js"></script>
 	<script type="text/javascript" src="js/examples.js"></script>
 <script type="text/javascript" id="js">$(document).ready(function() {
-	$("table").tablesorter({
-		// pass the headers argument and assing a object
-		headers: {
-			// assign the secound column (we start counting zero)
-			1: {
-				// disable it by setting the property sorter to false
-				sorter: false
-			},
-			// assign the third column (we start counting zero)
-			2: {
-				// disable it by setting the property sorter to false
-				sorter: false
-			}
-		}
-	});
-});</script>
+	// call the tablesorter plugin, the magic happens in the markup
+	$("table").tablesorter();
+}); </script>
 </head>
 <body>
 <div id="banner">	
 	<h1>table<em>sorter</em></h1>
-	<h2>Disable headers using options</h2>
+	<h2>Set a initial sorting order with metadata</h2>
 	<h3>Flexible client-side table sorting</h3>
 	<a href="index.html#Examples">Back to documentation</a>
 </div>
 <div id="main">
 	<h1>Demo</h1>
 	<div id="demo">
-		<table cellspacing="1" class="tablesorter"></table>
+		<!-- sortlist is appended to the table using the class attribute and is picked up by metadata plugin -->
+		<table cellspacing="1" class="tablesorter {sortlist: [[0,0],[4,0]]}"></table>
 	</div>
 	<h1>Javascript</h1>
 	<div id="javascript">

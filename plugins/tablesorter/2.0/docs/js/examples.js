@@ -31,7 +31,8 @@ $(function() {
 					.replace(/<\/thead>/g,'\n\t</thead>')
 					.replace(/<tbody/g,'\n\t<tbody')
 					.replace(/<\/tbody>/g,'\n\t</tbody>')
-					.replace(/<\/table>/g,'\n</table>');
+					.replace(/<\/table>/g,'\n</table>')
+					.replace(/-->/g,'-->\n');
 					
 		$("#html pre").text(html);
 		$table.tablesorter($table[0].config);

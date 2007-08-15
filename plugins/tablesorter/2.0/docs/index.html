@@ -76,14 +76,14 @@
 			<tr>
 				<th colspan="2">Name</th>
 				<th rowspan="2">Age</th>
-				<th colspan="2">Purchase</th>
+				<th rowspan="2">Total</th>
+				<th rowspan="2">Discount</th>
 				<th rowspan="2">Date</th>
 			</tr>
 			<tr>
 				<th>Firstname</th>
 				<th>lastname</th>
-				<th>Total</th>
-				<th>Discount</th>
+				
 			</tr>
 		</thead>
 		<tbody>
@@ -160,23 +160,38 @@
 
 	<a name="Examples"></a>
     <h1>Examples</h1>
-	
-	<ul>
-		<li><a href="example-pager.html">Pager plugin</a></li>
-		<li><a href="example-ajax.html">Appending table data with ajax</a></li>
-		<li><a href="example-option-sort-force.html">Force a default sorting order</a></li>
-		<li><a href="example-option-text-extraction.html">Dealing with complicated cell structures</a></li>
-		<li><a href="example-option-sort-key.html">Change the default multi-sorting key</a></li>
-		<li><a href="example-options-headers.html">Disable header using plugin options</a></li>
-		<li><a href="example-widgets.html">Writing custom widgets</a></li>
-		<li><a href="example-parsers.html">Writing custom parsers</a></li>
-		
-		<li><a href="example-pager.html">More examples</a></li>
-	</ul>
-	<p>	
+    <p>	
 		These examples will show what's possible with TableSorter.  You need Javascript enabled to 
 		run these samples, just like you and your users will need Javascript enabled to use TableSorter.
 	</p>
+	
+    <strong>Basic</strong>
+	<ul>
+		<li><a href="example-option-sort-list.html">Set a initial sorting order using options</a></li>
+		<li><a href="example-options-headers.html">Disable header using options</a></li>	
+		<li><a href="example-option-sort-force.html">Force a default sorting order</a></li>
+		<li><a href="example-option-sort-key.html">Change the default multi-sorting key</a></li>
+	
+	</ul>
+	<strong>Metadata - setting inline options</strong>
+	<ul>
+		<li><a href="example-meta-sort-list.html">Set a initial sorting order using metadata</a></li>
+		<li><a href="example-meta-headers.html">Disable header using metadata</a></li>
+	</ul>	
+	
+	<strong>Advanced</strong>
+	<ul>
+		<li><a href="example-option-text-extraction.html">Dealing with complicated cell structures</a></li>
+		<li><a href="example-ajax.html">Appending table data with ajax</a></li>
+		<li><a href="example-parsers.html">Parser, writing your own</a></li>
+		<li><a href="example-widgets.html">Widgets, writing your own</a></li>
+	</ul>
+	
+	<strong>Companion plugins</strong>
+	<ul>
+		<li><a href="example-pager.html">Pager plugin</a></li>
+	</ul>	
+	
 	
 
 
@@ -292,13 +307,17 @@ $(document).ready(function()
         <td>Array</td>
         <td>null</td>
         <td>An array of instructions for per-column sorting and direction in the format: <code>[[columnIndex, sortDirection], ... ]</code> where columnIndex is a zero-based index for your columns left-to-right and sortDirection is 0 for Ascending and 1 for Descending.  A valid argument that sorts ascending first by column 1 and then column 2 looks like: <code>[[0,0],[1,0]]</code></td>
+      	<td><a href="example-option-sort-list.html">Example</a></td>
       </tr>
+      <!-- 
       <tr>
         <td>sortInitialOrder</td>
         <td>String</td>
         <td>asc</td>
         <td>When clicking the header for the first time, the direction it sorts.  Valid arguments are "asc" for Ascending or "desc" for Descending.</td>
+        <td><a href="example-option-sort-order.html">Example</a></td>
       </tr>
+      -->
       <tr>
         <td>sortMultiSortKey</td>
         <td>String</td>

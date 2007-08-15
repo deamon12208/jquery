@@ -42,7 +42,7 @@
  * @option String sortInitialOrder (optional) 	A string of the inital sorting order can be asc or desc. 
  * 												Default value: "asc"
  * 
- * @option String sortMultiSortKey (optional) 	A string of the multi-column sort key. 
+ * @option String sortMultisortKey (optional) 	A string of the multi-column sort key. 
  * 												Default value: "shiftKey"
  * 
  * @option String textExtraction (optional) 	A string of the text-extraction method to use. 
@@ -103,7 +103,7 @@
 				sortList: [],
 				headerList: [],
 				dateFormat: "mm/dd/yyyy",
-				debug: false //TODO: set this to false before release
+				debug: false
 			};
 			
 			/* debuging utils */
@@ -272,6 +272,7 @@
 					this.count = 0;
 					this.column = index;
 					this.order = formatSortingOrder(table.config.sortInitialOrder);
+					
 					if(checkHeaderMetadata(this) || checkHeaderOptions(table,index)) this.disabled = true;
 					
 					if(!this.disabled) {
@@ -295,12 +296,12 @@
 					var cell = c[i];
 					
 					if ( cell.colSpan > 1) { 
-						arr = arr.concat(checkCellColSpan(table, headerArr, (row+cell.rowSpan), cell.colSpan));
+						arr = arr.concat(checkCellColSpan(table, headerArr,row+cell.rowSpan));
 					} else  {
 						if(table.tHead.length == 1 || (cell.rowSpan > 1 || !r[row+1])) {
 							arr.push(cell);
 						}
-						headerArr[row] = (i + 1);
+						headerArr[row] = (i+row);
 					}
 				}
 				return arr;
@@ -575,6 +576,9 @@
 						appendToTable(this,cache);
 					});
 					
+					if($.meta && ($(this).data() && $(this).data().sortlist)) {
+						config.sortList = $(this).data().sortlist;
+					}
 					// if user has supplied a sort list to constructor.
 					if(config.sortList.length > 0) {
 						$this.trigger("sorton",[config.sortList]);	
