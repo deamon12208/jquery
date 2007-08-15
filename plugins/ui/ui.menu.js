@@ -32,7 +32,8 @@
 		
     if(t&&t.buttons)
       $('a',$(m)).click(function(){
-        t.buttons[this.className]();
+	  	if (t.buttons[this.className])
+        	t.buttons[this.className]();
       })
 		
 	}
