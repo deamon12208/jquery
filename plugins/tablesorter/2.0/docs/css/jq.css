@@ -17,6 +17,7 @@ code { padding: 0; font-size: 108%; font-style: normal; }
 #banner * {
 	margin:0;
 	padding:0;
+	font-width: 0;
 	font-style: normal;
 	font-family: Georgia, Palatino, Times New Roman;
 	font-size: 30px;
@@ -31,11 +32,13 @@ code { padding: 0; font-size: 108%; font-style: normal; }
 }
 
 #banner h2 {
+	font-size: 26px;
 	float: right;
 	margin: 10px 10px -10px -10px;
 	
 }
 #banner h3 {
+	font-width: 0;
 	font-size: 12px;
 	display: block;
 	clear: both;
