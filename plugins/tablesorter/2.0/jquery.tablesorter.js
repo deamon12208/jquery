@@ -273,9 +273,9 @@
 					this.column = index;
 					this.order = formatSortingOrder(table.config.sortInitialOrder);
 					
-					if(checkHeaderMetadata(this) || checkHeaderOptions(table,index)) this.disabled = true;
+					if(checkHeaderMetadata(this) || checkHeaderOptions(table,index)) this.sortDisabled = true;
 					
-					if(!this.disabled) {
+					if(!this.sortDisabled) {
 						$(this).addClass(table.config.cssHeader);
 					}
 					
@@ -362,7 +362,7 @@
 				
 				var h = [];
 				$headers.each(function(offset) {
-						if(!this.disabled) {
+						if(!this.sortDisabled) {
 							h[this.column] = $(this);					
 						}
 				});
@@ -489,7 +489,7 @@
 					// apply event handling to headers
 					// this is to big, perhaps break it out?
 					$headers.click(function(e) {
-						if(!this.disabled) {
+						if(!this.sortDisabled) {
 							// store exp, for speed
 							var $cell = $(this);
 	
