@@ -189,7 +189,10 @@ jQuery.Autocompleter = function(input, options) {
 	var cache = jQuery.Autocompleter.Cache(options);
 	var hasFocus = 0;
 	var lastKeyPressCode;
-	var select = jQuery.Autocompleter.Select(options, input, selectCurrent);
+	var config = {
+		mouseDownOnSelect: false
+	};
+	var select = jQuery.Autocompleter.Select(options, input, selectCurrent, config);
 	
 	$input.keydown(function(event) {
 		// track last key pressed
@@ -243,7 +246,9 @@ jQuery.Autocompleter = function(input, options) {
 		hasFocus++;
 	}).blur(function() {
 		hasFocus = 0;
-		hideResults();
+		if (!config.mouseDownOnSelect) {
+			hideResults();
+		}
 	}).click(function() {
 		// show select when clicking in a focused field
 		if ( hasFocus++ > 1 && !select.visible() ) {
@@ -607,7 +612,7 @@ jQuery.Autocompleter.Cache = function(options) {
 	};
 };
 
-jQuery.Autocompleter.Select = function (options, input, select) {
+jQuery.Autocompleter.Select = function (options, input, select, config) {
 	var CLASSES = {
 		ACTIVE: "ac_over"
 	};
@@ -629,6 +634,10 @@ jQuery.Autocompleter.Select = function (options, input, select) {
 		select();
 		input.focus();
 		return false;
+	}).mousedown(function() {
+		config.mouseDownOnSelect = true;
+	}).mouseup(function() {
+		config.mouseDownOnSelect = false;
 	});
 	var listItems,
 		active = -1,
