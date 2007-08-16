@@ -86,6 +86,17 @@ jQuery.fn.jScrollPane = function(settings)
 						}
 					)
 				);
+				// deal with text size changes (if the jqem plugin is included)
+				// and re-initialise the scrollPane so the track maintains the
+				// correct size
+				if ($.jqem) {
+					$.jqem.bind(
+						function()
+						{
+							$this.jScrollPane(settings);
+						}
+					);
+				}
 			}
 			var p = this.originalSidePaddingTotal;
 			$this.css(
@@ -347,6 +358,7 @@ jQuery.fn.jScrollPane = function(settings)
 				);
 				// remove from active list?
 			}
+			
 		}
 	)
 };

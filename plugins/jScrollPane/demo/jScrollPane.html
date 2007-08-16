@@ -155,6 +155,9 @@ $(function()
 			<li><strong>animateTo</strong> [boolean] - whether to animate when calling <a href="scrollTo.html">scrollTo and scrollBy</a> (defaults to false)</li>
 			<li><strong>dragMinHeight</strong> [int] - the minimum height to allow the drag bar to be (defaults to 0)</li>
 			<li><strong>dragMaxHeight</strong> [int] - the maximum height to allow the drag bar to be (defaults to 99999!)</li>
+			<li><strong>animateInterval</strong> [int] - The interval in milliseconds to update an animating scrollPane (default 100)</li>
+			<li><strong>animateStep</strong> [int] - The amount to divide the remaining scroll distance by when animating (default 3)</li>
+			<li><strong>maintainPosition</strong> [boolean] - Whether you want the contents of the scroll pane to maintain it's position when you re-initialise it - so it doesn't scroll as you add more content (default true)</li>
 		</ul>
 		<h2>Downloads</h2>
 		<p>
@@ -172,6 +175,7 @@ $(function()
 			<li><a href="scrollTo.html">scrollTo functionality</a></li>
 			<li><a href="fullBodyScroll.html">fullpage scroll</a></li>
 			<li><a href="scrollToSpeed.html">scrollTo functionality with different speeds</a></li>
+			<li><a href="textSizeChange.html">using jScrollPane with jQEm so it works even when the user changes their text size in the browser</a></li>
 		</ul>
 		<div class="holder">
 			<h3>#pane1</h3>
