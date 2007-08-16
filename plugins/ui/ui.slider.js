@@ -213,10 +213,12 @@
 				m = ((this.curValue)/o.realValue) * p;
 			}
 			
-			nonvalidRange = that.nonvalidRange(this);
-			if(nonvalidRange) {
-				this.curValue = nonvalidRange;
-				m = ((this.curValue)/o.realValue) * p;
+			if(that.interactions) {
+				nonvalidRange = that.nonvalidRange(this);
+				if(nonvalidRange) {
+					this.curValue = nonvalidRange;
+					m = ((this.curValue)/o.realValue) * p;
+				}
 			}
 			
 			$(this.element).css(prop, m+'px');
