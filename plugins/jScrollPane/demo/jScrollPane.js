@@ -26,6 +26,8 @@
  *								animateTo		-	Whether to animate when calling scrollTo and scrollBy
  *								dragMinHeight	-	The minimum height to allow the drag bar to be
  *								dragMaxHeight	-	The maximum height to allow the drag bar to be
+ *								animateInterval	-	The interval in milliseconds to update an animating scrollPane (default 100)
+ *								animateStep		-	The amount to divide the remaining scroll distance by when animating (default 3)
  * @return jQuery
  * @cat Plugins/jScrollPane
  * @author Kelvin Luck (kelvin AT kelvinluck DOT com || http://www.kelvinluck.com)
@@ -44,7 +46,9 @@ jQuery.fn.jScrollPane = function(settings)
 			arrowSize : undefined,
 			animateTo : false,
 			dragMinHeight : 1,
-			dragMaxHeight : 99999
+			dragMaxHeight : 99999,
+			animateInterval : 100,
+			animateStep: 3
 		}, settings
 	);
 	return this.each(
@@ -284,7 +288,7 @@ jQuery.fn.jScrollPane = function(settings)
 				var _animateToInterval;
 				function animateToPosition()
 				{
-					var diff = (_animateToPosition - dragPosition) / 3;
+					var diff = (_animateToPosition - dragPosition) / settings.animateStep;
 					if (diff > 1 || diff < -1) {
 						positionDrag(dragPosition + diff);
 					} else {
@@ -310,7 +314,7 @@ jQuery.fn.jScrollPane = function(settings)
 					var destDragPosition = -pos/(paneHeight-contentHeight) * maxY;
 					if (settings.animateTo) {
 						_animateToPosition = destDragPosition;
-						_animateToInterval = setInterval(animateToPosition, 100);
+						_animateToInterval = setInterval(animateToPosition, settings.animateInterval);
 					} else {
 						positionDrag(destDragPosition);
 					}
