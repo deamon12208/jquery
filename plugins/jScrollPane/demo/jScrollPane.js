@@ -301,6 +301,11 @@ jQuery.fn.jScrollPane = function(settings)
 				};
 				var scrollTo = function(pos)
 				{
+					if (typeof pos == "string") {
+						$e = $(pos, this);
+						if (!$e.length) return;
+						pos = $e.offset({relativeTo:this}).top;
+					}
 					ceaseAnimation();
 					var destDragPosition = -pos/(paneHeight-contentHeight) * maxY;
 					if (settings.animateTo) {
