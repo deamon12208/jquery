@@ -44,7 +44,7 @@ jQuery.fn.jScrollPane = function(settings)
 			scrollbarMargin : 5,
 			wheelSpeed : 18,
 			showArrows : false,
-			arrowSize : undefined,
+			arrowSize : 0,
 			animateTo : false,
 			dragMinHeight : 1,
 			dragMaxHeight : 99999,
@@ -109,7 +109,7 @@ jQuery.fn.jScrollPane = function(settings)
 			var contentHeight = $this.outerHeight();
 			var percentInView = paneHeight / contentHeight;
 
-			if (percentInView < .98) {
+			if (percentInView < .99) {
 				var $container = $this.parent();
 				$container.append(
 					jQuery('<div>').attr({'className':'jScrollPaneTrack'}).css({'width':settings.scrollbarWidth+'px'}).append(
@@ -186,6 +186,7 @@ jQuery.fn.jScrollPane = function(settings)
 							.css({'height': trackHeight+'px', top:settings.arrowSize+'px'})
 					} else {
 						var topArrowHeight = jQuery('>.jScrollArrowUp', $container).height();
+						settings.arrowSize = topArrowHeight;
 						trackHeight = paneHeight - topArrowHeight - jQuery('>.jScrollArrowDown', $container).height();
 						$track
 							.css({'height': trackHeight+'px', top:topArrowHeight+'px'})
@@ -249,7 +250,8 @@ jQuery.fn.jScrollPane = function(settings)
 					positionDrag(getPos(e, 'Y') - currentOffset.top - dragMiddle);
 				};
 				
-				var dragH = Math.max(Math.min(percentInView*paneHeight, settings.dragMaxHeight), settings.dragMinHeight);
+				var dragH = Math.max(Math.min(percentInView*(paneHeight-settings.arrowSize*2), settings.dragMaxHeight), settings.dragMinHeight);
+				
 				$drag.css(
 					{'height':dragH+'px'}
 				).bind('mousedown', onStartDrag);
