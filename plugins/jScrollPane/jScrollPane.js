@@ -244,6 +244,7 @@ jQuery.fn.jScrollPane = function(settings)
 					$drag.css({'top':destY+'px'});
 					var p = destY / maxY;
 					$pane.css({'top':((paneHeight-contentHeight)*p) + 'px'});
+					$this.trigger('scroll');
 				};
 				var updateScroll = function(e)
 				{
