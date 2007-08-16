@@ -1,11 +1,5 @@
 $(function() {
 
-	if(!window.tableFile) {
-		window.tableFile = "table-small.html";
-	}
-	var url = "assets/" + window.tableFile;
-	var $container = $("#main");
-	
 	// get javascript source
 	$("#javascript pre").text($("#js").html());
 	
@@ -31,14 +25,4 @@ $(function() {
 	$("pre.javascript").chili();
 	$("pre.html").chili();
 	$("pre.css").chili();
-	
- 	
-	
-	
-	
-	
-	
-	
-	
-		
 });
