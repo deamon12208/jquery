@@ -1,6 +1,6 @@
 /*
  * jQuery clueTip plugin
- * Version 0.8.2  (08/09/2007)
+ * Version 0.8.4  (08/15/2007)
  * @requires jQuery v1.1.1
  * @requires Dimensions plugin 
  *
@@ -8,15 +8,16 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
  *
- *
+ */
+(function($) { 
+
+/*
  * @name clueTip
  * @type jQuery
  * @cat Plugins/tooltip
  * @return jQuery
  * @author Karl Swedberg
- */
- 
- /*
+ *
  * @credit Inspired by Cody Lindley's jTip (http://www.codylindley.com)
  * @credit Thanks to Shelane Enos for the feature ideas 
  * @credit Thanks to Glen Lipka, Jörn Zaefferer, and Dan G. Switzer for their expert advice
@@ -38,7 +39,7 @@
  * 
  * 
  * @example $('#tip).cluetip();
- * @desc This is the most basic clueTip. It displays a 275px-wide clueTip on mouseover of the element with an ID of "tip." On mouseout, the clueTip is hidden.
+ * @desc This is the most basic clueTip. It displays a 275px-wide clueTip on mouseover of the element with an ID of "tip." On mouseout of the element, the clueTip is hidden.
  *
  *
  * @example $('a.clue').cluetip({
@@ -60,27 +61,33 @@
  * @option Boolean local: default is false. Whether to use content from the same page (using ID) for clueTip body
  * @option Boolean hideLocal: default is true. If local option is set to true, determine whether local content to be shown in clueTip should be hidden at its original location. 
  * @option String attribute default is 'rel'. The attribute to be used for the URL of the ajaxed content
+ * @option Boolean showtitle: default is true. Shows the title bar of the clueTip, whether a title attribute has been set or not. Change this to false to hide the title bar.
+ * @option String cluetipClass: default is 'default'; this adds a class to the outermost clueTip div with a class name in the form of 'cluetip-' + clueTipClass. It also adds "clue-left-default" or "clue-right-default" to the same div, depending on whether the clueTip is to the left or to the right of the link element. This allows you to create your own clueTip theme in a separate CSS file or use one of the three pre-packaged themes: default, jtip, or rounded.
  * @option String titleAttribute: default is 'title'. The attribute to be used for the clueTip's heading, if the attribute exists for the hovered element.
  * @option String splitTitle: default is '' (empty string). A character used to split the title attribute into the clueTip title and divs within the clueTip body; if used, the clueTip will be populated only by the title attribute, 
  * @option String hoverClass: default is empty string. designate one to apply to the hovered element
- * @option String waitImage: default is 'wait.gif'. set it to '' or false to avoid having the plugin try to show/hide the image.
- * @option Boolean sticky: default is false. Set to true to keep the clueTip visible until the user either closes it manually by clicking on the CloseText or display another clueTip.
- * @option String activation: default is 'hover'. Set to 'toggle' to force the user to click the element in order to activate the clueTip.
  * @option String closePosition: default is 'top'. Set to 'bottom' to put the closeText at the bottom of the clueTip body
  * @option String closeText: default is 'Close'. This determines the text to be clicked to close a clueTip when sticky is set to true.
  * @option Number truncate: default is 0. Set to some number greater than 0 to truncate the text in the body of the clueTip. This also removes all HTML/images from the clueTip body.
- * @option Boolean hoverIntent: default is true. If jquery.hoverintent.js plugin is included in <head>, hoverIntent() will be used instead of hover()
+ * @option String waitImage: default is 'wait.gif'. set it to '' or false to avoid having the plugin try to show/hide the image.
  * @option Boolean arrows: Default is false. Sets background-position-y to line up an arrow background image with the hovered element.
- * @option Boolean dropShadow: Default is true. Adds a drop shadow to the clueTip. Default is true
+ * @option Boolean dropShadow: default is true; set it to false if you do not want the drop-shadow effect on the clueTip
+ * @option Integer dropShadowSteps: default is 6; change this number to adjust the size of the drop shadow
+ * @option Boolean sticky: default is false. Set to true to keep the clueTip visible until the user either closes it manually by clicking on the CloseText or display another clueTip.
+ * @option Integer cluezIndex: default is 97; sets the z-index style property of the clueTip.
+ * @option String positionBy: default is 'auto'. Change this to 'mouse' if you want to override the smart positioning and position the clueTip based on where the mouse is instead.
+ * @option Object fx: default is: {open: 'fadeIn', openSpeed: 'fast', close: 'hide', closeSpeed: ''}
+ * @option String activation: default is 'hover'. Set to 'toggle' to force the user to click the element in order to activate the clueTip.
+ * @option Boolean hoverIntent: default is true. If jquery.hoverintent.js plugin is included in <head>, hoverIntent() will be used instead of hover()
+ * @option Function onShow: default is function (ct, c){} ; allows you to pass in your own function once the clueTip has shown.
+ * @option Boolean ajaxCache: Default is true; caches the results of the ajax request to avoid unnecessary hits to the server. When set to false, the script will make an ajax request every time the clueTip is shown, which allows for dynamic content to be loaded.
  * @option Object ajaxProcess: Default is function(data) { data = $(data).not('style, meta, link, script, title); return data; } . When getting clueTip content via ajax, allows processing of it before it's displayed. The default value strips out elements typically found in the <head> that might interfere with current page.
  * @option Object ajaxSettings: allows you to pass in standard $.ajax() parameters for specifying dataType, error, success, etc. Default is { dataType: 'html'}
  *
  */
-
-(function($) { 
-    
   var $cluetip, $cluetipInner, $cluetipOuter, $cluetipTitle, $dropShadow;
   var msie6 = $.browser.msie && ($.browser.version && $.browser.version < 7 || (/5\.5|6.0/).test(navigator.userAgent));
+
   $.fn.cluetip = function(options) {
     
     // set up default options
@@ -100,6 +107,7 @@
       dropShadow: true,
       dropShadowSteps: 6,
       sticky: false,
+      mouseOutClose: false,
       activation: 'hover',
       closePosition: 'top',
       closeText: 'Close',
@@ -113,7 +121,8 @@
         closeSpeed: ''
       },
       hoverIntent: true,
-      onShow: function (ct, c){},      
+      onShow: function (ct, c){},
+      ajaxCache: true,  
       ajaxProcess: function(data) {
         data = $(data).not('style, meta, link, script, title');
         return data;
@@ -148,11 +157,9 @@
         $cluetip = $('<div></div>')
           .attr({'id': 'cluetip'})
           .css({zIndex: defaults.cluezIndex})
-        .append($cluetipOuter)
-        .appendTo('body')
+        .append($cluetipOuter)[insertionType](insertionElement)
         .hide();
-        $('<img src="' + defaults.waitImage + '" />')
-          .attr({'id': 'cluetip-waitimage'})
+        $('<div id="cluetip-waitimage"><img src="' + defaults.waitImage + '" alt="loading..." /></div>')
           .css({position: 'absolute', zIndex: cluezIndex-1})
         .insertBefore('#cluetip')
         .hide();
@@ -256,7 +263,7 @@
 * load external file via ajax          
 ***************************************/
       else if (!defaults.local && tipAttribute.indexOf('#') != 0) {
-        if (cluetipContents) {
+        if (cluetipContents && defaults.ajaxCache) {
           $cluetipInner.html(cluetipContents);
           cluetipShow(pY);
         }
@@ -270,13 +277,20 @@
               .show();
             }
           };
+         ajaxSettings.error = function() {
+            if (isActive) {
+              $cluetipInner.html('<i>sorry, the contents could not be loaded</i>');
+            }
+          };
           ajaxSettings.success = function(data) {
             cluetipContents = defaults.ajaxProcess(data);
             if (isActive) {
               $cluetipInner.html(cluetipContents);
-              cluetipShow(pY);
             }
-            $('#cluetip-waitimage').hide();
+          };
+          ajaxSettings.complete = function() {
+            $('#cluetip-waitimage').css('visibility','hidden');
+            cluetipShow(pY);            
           };
           $.ajax(ajaxSettings);
         }
@@ -308,6 +322,12 @@
           cluetipClose();
           return false;
         });
+        if (defaults.mouseOutClose) {
+          $cluetip.hover(function() {return true;}, 
+          function() {
+            $closeLink.trigger('click');
+          });
+        }
       }
 // now that content is loaded, finish the positioning      
       tipHeight = $cluetip.outerHeight();
@@ -363,7 +383,6 @@
       $cluetipOuter 
       .parent()[defaults.fx.close](defaults.fx.closeSpeed).removeClass().end()
       .children().empty();
-
       if (tipTitle) {
         $this.attr('title', tipTitle);
       }
@@ -400,4 +419,33 @@
       }
     });
   };
+  
+/*
+ * Global defaults for clueTips. Apply to all calls to the clueTip plugin.
+ *
+ * @example $.cluetip.setup({
+ *   insertionType: 'prependTo',
+ *   insertionElement: '#container'
+ * });
+ * 
+ * @property
+ * @name $.cluetip.setup
+ * @type Map
+ * @cat Plugins/tooltip
+ * @option String insertionType: Default is 'appendTo'. Determines to method to be used for inserting the clueTip into the DOM. Permitted values are 'appendTo', 'prependTo', 'insertBefore', and 'insertAfter'
+ * @option String insertionElement: Default is 'body'. Determines which element in the DOM the plugin will reference when inserting the clueTip.
+ *
+ */
+   
+  var insertionType = 'appendTo', insertionElement = 'body';
+  $.cluetip = {};
+  $.cluetip.setup = function(options) {
+    if (options && options.insertionType && (options.insertionType).match(/appendTo|prependTo|insertBefore|insertAfter/)) {
+      insertionType = options.insertionType;
+    }
+    if (options && options.insertionElement) {
+      insertionElement = options.insertionElement;
+    }
+  };
+  
 })(jQuery);

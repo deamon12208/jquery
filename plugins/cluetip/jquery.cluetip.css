@@ -6,6 +6,10 @@
   float: right;
   position: relative;
 }
+#cluetip-waitimage {
+  width: 43px;
+  height: 11px;
+}
 /***************************************
    =cluetipClass: 'default' 
 -------------------------------------- */

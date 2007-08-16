@@ -1,5 +1,7 @@
 $(document).ready(function() {
 
+ // $.cluetip.setup({insertionType: 'insertBefore', insertionElement: 'div:first'});
+
 //default theme
   $('a.basic').cluetip();
   $('a.custom-width').cluetip({width: '200px', showTitle: false,sticky: true});
@@ -14,7 +16,7 @@ $(document).ready(function() {
   });
   $('a.load-local').cluetip({local:true, cursor: 'pointer'});
   $('#clickme').cluetip({activation: 'click', width: 650});
-  $('span[@title]').css('background', 'yellow').cluetip({splitTitle: '|'});
+  $('span[@title]').css({borderBottom: '1px solid #900'}).cluetip({splitTitle: '|', arrows: true, dropShadow: false, cluetipClass: 'jtip'});
 
 // jTip theme
   $('a.jt:eq(0)').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false,
@@ -23,6 +25,7 @@ $(document).ready(function() {
       openSpeed: 'slow'
     },
     sticky: true,
+    mouseOutClose: true,
     closePosition: 'title',
     closeText: '<img src="cross.png" alt="close" />'
   });
@@ -32,9 +35,10 @@ $(document).ready(function() {
       openSpeed: 'slow'
     }
   });
+
 // Rounded Corner theme
-  $('ol.rounded a').cluetip({cluetipClass: 'rounded', dropShadow: false, sticky: true});
-  
+  $('ol.rounded a:eq(0)').cluetip({cluetipClass: 'rounded', dropShadow: false, sticky: true, ajaxCache: false});
+  $('ol.rounded a:eq(1)').cluetip({cluetipClass: 'rounded', dropShadow: false});  
 });
 
 //unrelated to clueTip -- just for the demo page...

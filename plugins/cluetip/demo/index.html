@@ -64,6 +64,8 @@
       <li>The clueTip takes advantage of Brian Cherne's fantastic <a href="http://cherne.net/brian/resources/jquery.hoverIntent.html" title="hoverIntent jQuery Plug-in">hoverIntent plugin</a> if it's available. (Just include it in a <code>&lt;script&gt;</code> tag if you want the clueTip to use it.)</li>
       <li>It can be activated on hover or on click.</li>
       <li>It can fade in, slide down, etc.</li>
+      <li>It can close when the link element is moused out or when the clueTip is moused out or when the user clicks the close link.</li>
+      <li>It can cache the results of ajax requests&mdash;or not.</li>
     </ul>
     <h4>Many, Many Options</h4>
     <p>Here is a list of the available. None of these are required.</p>
@@ -91,7 +93,8 @@
       <li><strong><code>activation</code></strong>: default is <code>'hover'</code>; set to 'toggle' to force the user to click the element in order to activate the clueTip.</li>
       <li><strong><code>hoverIntent</code></strong>: default is <code>true</code>; if jquery.hoverintent.js plugin is included in <code>&lt;head&gt;</code>, <code>.hoverIntent()</code> will be used instead of <code>.hover()</code></li>
       <li><strong><code>onShow</code></strong>: default is <code>function (ct, c){}</code> ; allows you to pass in your own function once the clueTip has shown.</li>
-      <li><strong><code>ajaxProcess</code></strong>: default is:
+      <li><strong><code>ajaxCache</code></strong>: default is <code>true</code>; caches the results of the ajax request to avoid unnecessary hits to the server. When set to <code>false</code>, the script will make an ajax request every time the clueTip is shown, which allows for dynamic content to be loaded.</li>
+<li><strong><code>ajaxProcess</code></strong>: default is:
   <pre><code>function(data) {data = $(data).not('style, meta, link, script, title');
   return data;
 }</code></pre>
@@ -180,9 +183,10 @@ This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML
       </ol>
       <h4>jTip Theme</h4>
       <ol>
-        <li><a class="jt" href="ajax5.htm" rel="ajax5.htm" title="jTip Style!">jTip Style clueTip</a>, with slideDown effect and an image placed in the title for closing it, because it's sticky: 
+        <li><a class="jt" href="ajax6.htm" rel="ajax6.htm" title="jTip Style!">jTip Style clueTip</a>, with slideDown effect and an image placed in the title for closing it, because it's sticky. <br />
+        <ins>New</ins>: The clueTip will close if you mouse out of it. 
           <div class="html">View the HTML</div>
-          <pre><code>&lt; class="jt" href="ajax5.htm" rel="ajaxclick.htm" title="jTip Style!"&gt;</code></pre>
+          <pre><code>&lt; class="jt" href="ajax6.htm" rel="ajax6.htm" title="jTip Style!"&gt;</code></pre>
           <div class="jquery">View the jQuery</div>
 <pre><code>$('a.jt:eq(0)').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false,
   fx: {
@@ -190,14 +194,15 @@ This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML
     openSpeed: 'slow'
   },
   sticky: true,
+  mouseOutClose: true,
   closePosition: 'title',
   closeText: '&lt;img src="cross.png" alt="close" /&gt;'
 });
 </code></pre>
         </li>
-        <li>look for the link floated right: <span style="float:right"><a class="jt" href="ajax6.htm" rel="ajax6.htm">jTip Style clueTip</a></span> 
+        <li>look for the link floated right: <span style="float:right"><a class="jt" href="ajax5.htm" rel="ajax5.htm">jTip Style clueTip</a></span> 
           <div class="html">View the HTML</div>
-          <pre><code>&lt;a class="jt" href="ajax6.htm" rel="ajax6.htm"&gt;</code></pre>
+          <pre><code>&lt;a class="jt" href="ajax5.htm" rel="ajax5.htm"&gt;</code></pre>
           <div class="jquery">View the jQuery</div>
 <pre><code>$('a.jt:eq(1)').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false,
   fx: {
@@ -207,15 +212,23 @@ This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML
 });
 </code></pre>  
         </li>
+        <li><span title="Split Title|This clueTip's contents were created directly from the title attribute|Nice for minimal info.">splitTitle clueTip</span></li>
       </ol>
       <h4>Rounded Corners Theme</h4>
       <ol class="rounded">
-        <li><a href="ajax4.htm" rel="ajax4.htm" title="rounded corners">Rounded Corners Style clueTip</a>. Here is the code for this one: 
+        <li><a href="ajax4.htm" rel="ajax4.htm" title="rounded corners">non-caching ajax clueTip with rounded corners</a>: 
           <div class="html">View the HTML</div>
           <pre><code>&lt;a href="ajax4.htm" rel="ajax4.htm" title="rounded corners"&gt;</code></pre>
           <div class="jquery">View the jQuery</div>
-          <pre><code>$('ol.rounded a').cluetip({cluetipClass: 'rounded', dropShadow: false});</code></pre>
+          <pre><code>$('ol.rounded a:eq(0)').cluetip({cluetipClass: 'rounded', dropShadow: false, sticky: true, ajaxCache: false});</code></pre>
         </li>
+        <li><a href="ajax404.htm" rel="ajax404.htm">ajax error</a>: This one points to a file that does not exist.
+          <div class="html">View the HTML</div>
+          <pre><code>&lt;a href="ajax404.htm" rel="ajax404.htm"&gt;</code></pre>
+          <div class="jquery">View the jQuery</div>
+          <pre><code>$('ol.rounded a:eq(1)').cluetip({cluetipClass: 'rounded', dropShadow: false});</code></pre>
+        </li>
+
       </ol>
     </div>  
 <p id="loadme">this is the local content to load when the 'local' parameter is set to true. Currently it only works with an <code>id</code> selector.</p>    
