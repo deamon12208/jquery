@@ -28,6 +28,7 @@
  *								dragMaxHeight	-	The maximum height to allow the drag bar to be
  *								animateInterval	-	The interval in milliseconds to update an animating scrollPane (default 100)
  *								animateStep		-	The amount to divide the remaining scroll distance by when animating (default 3)
+ *								maintainPosition-	Whether you want the contents of the scroll pane to maintain it's position when you re-initialise it - so it doesn't scroll as you add more content (default true)
  * @return jQuery
  * @cat Plugins/jScrollPane
  * @author Kelvin Luck (kelvin AT kelvinluck DOT com || http://www.kelvinluck.com)
@@ -48,7 +49,8 @@ jQuery.fn.jScrollPane = function(settings)
 			dragMinHeight : 1,
 			dragMaxHeight : 99999,
 			animateInterval : 100,
-			animateStep: 3
+			animateStep: 3,
+			maintainPosition: true
 		}, settings
 	);
 	return this.each(
@@ -57,6 +59,7 @@ jQuery.fn.jScrollPane = function(settings)
 			var $this = jQuery(this);
 			
 			if (jQuery(this).parent().is('.jScrollPaneContainer')) {
+				var currentScrollPosition = settings.maintainPosition ? $this.offset({relativeTo:jQuery(this).parent()[0]}).top : 0;
 				var $c = jQuery(this).parent();
 				var paneWidth = $c.innerWidth();
 				var paneHeight = $c.outerHeight();
@@ -67,6 +70,7 @@ jQuery.fn.jScrollPane = function(settings)
 				jQuery('>.jScrollPaneTrack, >.jScrollArrowUp, >.jScrollArrowDown', $c).remove();
 				$this.css({'top':0});
 			} else {
+				var currentScrollPosition = 0;
 				this.originalPadding = $this.css('paddingTop') + ' ' + $this.css('paddingRight') + ' ' + $this.css('paddingBottom') + ' ' + $this.css('paddingLeft');
 				this.originalSidePaddingTotal = (parseInt($this.css('paddingLeft')) || 0) + (parseInt($this.css('paddingRight')) || 0);
 				var paneWidth = $this.innerWidth();
@@ -303,7 +307,7 @@ jQuery.fn.jScrollPane = function(settings)
 						delete _animateToPosition;
 					}
 				};
-				var scrollTo = function(pos)
+				var scrollTo = function(pos, preventAni)
 				{
 					if (typeof pos == "string") {
 						$e = $(pos, this);
@@ -312,7 +316,7 @@ jQuery.fn.jScrollPane = function(settings)
 					}
 					ceaseAnimation();
 					var destDragPosition = -pos/(paneHeight-contentHeight) * maxY;
-					if (settings.animateTo) {
+					if (!preventAni || settings.animateTo) {
 						_animateToPosition = destDragPosition;
 						_animateToInterval = setInterval(animateToPosition, settings.animateInterval);
 					} else {
@@ -328,6 +332,8 @@ jQuery.fn.jScrollPane = function(settings)
 				};
 				
 				initDrag();
+				
+				scrollTo(-currentScrollPosition, true);
 				
 				jQuery.jScrollPane.active.push($this[0]);
 
