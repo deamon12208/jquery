@@ -419,7 +419,8 @@ $.fn.extend({
 				y += parent.offsetTop;
 
 				// Mozilla and IE do not add the border
-				if (mo || ie || sf3) {
+				// Mozilla adds the border for table cells
+				if ((mo && !parent.tagName.match(/^t[d|h]$/i)) || ie || sf3) {
 					// add borders to offset
 					x += num(parent, 'borderLeftWidth');
 					y += num(parent, 'borderTopWidth');

@@ -1,5 +1,9 @@
 == New and Noteworthy ==
 
+== SVN ==
+
+* Fixed offset calculation of table cells with borders in mozilla
+
 == 1.1.1 ==
 
 * Fixed issue in calculating document height and width when a large element is positioned absolute
