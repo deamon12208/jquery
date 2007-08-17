@@ -22,20 +22,16 @@
 			speed: 'slow',
 			title: 'Context Menu'
 		}, o);
-
-		var ALT = false;
-		var CTRL = false;
-		var SHIFT = false;
 		
+		$(m).appendTo(el);
 		this.styleMenu(m);	// Pass the menu in to recieve it's makeover
 		this[options.context](el, m, options);	// Based on contexted selected, attach to menu parent
 		
-    if(t&&t.buttons)
-      $('a',$(m)).click(function(){
-	  	if (t.buttons[this.className])
-        	t.buttons[this.className]();
-      })
-		
+    	if(t&&t.buttons)
+      		$('a',$(m)).click(function(){
+	  		if (t.buttons[this.className])
+        		t.buttons[this.className]();
+      	});
 	}
 	
 	$.extend($.ui.menu.prototype, {
@@ -65,7 +61,7 @@
 		},
 		hoverContext : function(a,m,o) {
 			var self = this;
-			$(a).bind('mouseover', function(){
+			$(a).hover(function(){
 				x = $(a).position();
 				y = x.top + ( $(a).height() + 1);
 				$(m).css({position:'absolute', top: y, left: x.left});
@@ -74,8 +70,11 @@
 					$(window).bind('click', function(){
 						self.hideMenu(m, o);
 						$(window).unbind('click');
-					})
+					});
 				});
+			},
+			function(){
+				self.hideMenu(m,o);
 			});
 			return false;
 		},
@@ -107,10 +106,8 @@
 			self = this;
 			$('li', m).bind('mouseover', function(){
 				x = $(this).position();
-				y = $(this).parent().width();
-				console.log(x);
+				y = $(this).width();
 				$(this).children('ul').css({position:'absolute', top:x.top, left:y})[o.show](o.speed, function(){
-					console.log(this);
 					$(this).bind('mouseout', function(){
 						self.hideMenu(this,o);
 						$(window).unbind('click');
