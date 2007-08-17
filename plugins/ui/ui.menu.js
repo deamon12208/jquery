@@ -107,8 +107,14 @@
 			self = this;
 			$('li', m).bind('mouseover', function(){
 				x = $(this).position();
-				$(this).children('ul').css({position:'absolute', top:x.top, left: x.right + 1})[o.show](o.speed, function(){
-					self.hideMenu(this,o);
+				y = $(this).parent().width();
+				console.log(x);
+				$(this).children('ul').css({position:'absolute', top:x.top, left:y})[o.show](o.speed, function(){
+					console.log(this);
+					$(this).bind('mouseout', function(){
+						self.hideMenu(this,o);
+						$(window).unbind('click');
+					});
 				});
 			});
 		},
