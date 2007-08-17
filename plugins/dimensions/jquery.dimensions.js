@@ -5,7 +5,7 @@
  * $LastChangedDate$
  * $Rev$
  *
- * Version: 1.1.1
+ * Version: 1.1.2
  *
  * Requires: jQuery 1.1.3+
  */
@@ -38,8 +38,10 @@ $.fn.extend({
 	height: function() {
 		if ( !this[0] ) error();
 		if ( this[0] == window )
-			if ( $.browser.opera )
+			if ( $.browser.opera || ($.browser.safari && parseInt($.browser.version) > 520) )
 				return self.innerHeight - (($(document).height() > self.innerHeight) ? getScrollbarWidth() : 0);
+			else if ( $.browser.safari )
+				return self.innerHeight;
 			else
                 return $.boxModel && document.documentElement.clientHeight || document.body.clientHeight;
 		
@@ -70,8 +72,10 @@ $.fn.extend({
 	width: function() {
 		if (!this[0]) error();
 		if ( this[0] == window )
-			if ( $.browser.opera )
+			if ( $.browser.opera || ($.browser.safari && parseInt($.browser.version) > 520) )
 				return self.innerWidth - (($(document).width() > self.innerWidth) ? getScrollbarWidth() : 0);
+			else if ( $.browser.safari )
+				return self.innerWidth;
 			else
                 return $.boxModel && document.documentElement.clientWidth || document.body.clientWidth;
 

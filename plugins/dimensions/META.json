@@ -1,6 +1,6 @@
 {
 	"name": "jQuery-dimensions",
-	"version": 1.1.1,
+	"version": 1.1.2,
 	"author": [
 		"Paul Bakaus <paul.bakaus@googlemail.com>"
 		"Brandon Aaron <brandon.aaron@gmail.com>"
@@ -13,7 +13,7 @@
 	},
 	"provides": {
 		"jQuery.Dimensions": {
-			"version": 1.1.1,
+			"version": 1.1.2,
 			"file": "jquery.dimensions.js"
 		}
 	},

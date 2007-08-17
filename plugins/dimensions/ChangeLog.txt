@@ -1,13 +1,16 @@
 == New and Noteworthy ==
 
-== SVN ==
+== 1.1.2 ==
 
 * Fixed offset calculation of table cells with borders in mozilla
+* Fixed an issue in calculating the width and height of the window in Safari/WebKit (introduced in 1.1.1) [Thanks Jerry Wang]
+
 
 == 1.1.1 ==
 
 * Fixed issue in calculating document height and width when a large element is positioned absolute
 * Cleaned up window height and width calculation
+
 
 == 1.1 ==
 
