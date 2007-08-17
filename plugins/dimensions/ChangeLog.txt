@@ -1,5 +1,10 @@
 == New and Noteworthy ==
 
+== 1.1.1 ==
+
+* Fixed issue in calculating document height and width when a large element is positioned absolute
+* Cleaned up window height and width calculation
+
 == 1.1 ==
 
 * Offset now works in Safari 3 / WebKit Nighlies

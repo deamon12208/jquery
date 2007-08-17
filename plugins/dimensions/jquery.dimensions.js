@@ -5,7 +5,7 @@
  * $LastChangedDate$
  * $Rev$
  *
- * Version: 1.1
+ * Version: 1.1.1
  *
  * Requires: jQuery 1.1.3+
  */
@@ -36,18 +36,15 @@ $.fn.extend({
 	 * @cat Plugins/Dimensions
 	 */
 	height: function() {
-		if (!this[0]) error();
+		if ( !this[0] ) error();
 		if ( this[0] == window )
-			if ( ($.browser.mozilla || $.browser.opera) && $(document).width() > self.innerWidth)
-				// mozilla and opera both return width + scrollbar width
-				return self.innerHeight - getScrollbarWidth();
+			if ( $.browser.opera )
+				return self.innerHeight - (($(document).height() > self.innerHeight) ? getScrollbarWidth() : 0);
 			else
-				return self.innerHeight ||
-					$.boxModel && document.documentElement.clientHeight || 
-					document.body.clientHeight;
+                return $.boxModel && document.documentElement.clientHeight || document.body.clientHeight;
 		
-		if ( this[0] == document )
-			return Math.max( document.body.scrollHeight, document.body.offsetHeight );
+		if ( this[0] == document ) 
+			return Math.max( ($.boxModel && document.documentElement.scrollHeight || document.body.scrollHeight), document.body.offsetHeight );
 		
 		return height.apply(this, arguments);
 	},
@@ -73,13 +70,10 @@ $.fn.extend({
 	width: function() {
 		if (!this[0]) error();
 		if ( this[0] == window )
-			if (($.browser.mozilla || $.browser.opera) && $(document).height() > self.innerHeight)
-				// mozilla and opera both return width + scrollbar width
-				return self.innerWidth - getScrollbarWidth();
+			if ( $.browser.opera )
+				return self.innerWidth - (($(document).width() > self.innerWidth) ? getScrollbarWidth() : 0);
 			else
-				return self.innerWidth ||
-					$.boxModel && document.documentElement.clientWidth ||
-					document.body.clientWidth;
+                return $.boxModel && document.documentElement.clientWidth || document.body.clientWidth;
 
 		if ( this[0] == document )
 			if ($.browser.mozilla) {
@@ -91,7 +85,7 @@ $.fn.extend({
 				return document.body.offsetWidth + scrollWidth;
 			}
 			else 
-				return Math.max( document.body.scrollWidth, document.body.offsetWidth );
+				return Math.max( (($.boxModel && !$.browser.safari) && document.documentElement.scrollWidth || document.body.scrollWidth), document.body.offsetWidth );
 
 		return width.apply(this, arguments);
 	},
