@@ -42,9 +42,9 @@
 		styleMenu : function(m){
 			$(m).addClass('ui-menu-nodes').children('li').addClass('ui-menu-node');
 			var nodes = $('ul',m).addClass('ui-menu-nodes')
-				.css('MozUserSelect', 'none').attr('unselectable', 'on');
+				.css('MozUserSelect', 'none');
 			var node = $('li',m).addClass('ui-menu-node')
-				.css('MozUserSelect', 'none').attr('unselectable', 'on');
+				.css('MozUserSelect', 'none');
 			return false;
 		},
 		clickContext : function(a,m,o) {
@@ -81,6 +81,7 @@
 		},
 		context : function (a,m,o) {	
 			var self = this;
+			$(m).prepend('<span>' + o.title + '</span>');
 			$(a).bind('mouseup', function(e){
 				if (e.button == 2 || e.button == 3) {
 					e.preventDefault();	//FIXME: Not stopping right-click menu in FF
@@ -88,7 +89,6 @@
 					x = $(a).position();
 					elBottom = x.top + $(a).height();
 					$(m).css({position:'absolute', top: e.clientY, left: e.clientX});
-					$(m).prepend('<span>' + o.title + '</span>');
 					$(m)[o.show](o.speed, function(){
 						self.showChild(m, o);
 						$(window).bind('click', function(){
@@ -96,6 +96,7 @@
 							$(window).unbind('click');
 						})
 					});
+					return false;
 				} else {
 					
 				}
