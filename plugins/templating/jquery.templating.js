@@ -32,14 +32,17 @@
     return new Function("_obj", "with(_obj) { return '" + str.replace(/\{\{(.*?)\}\}/g, "' + $1 + '") + "' }");
   };
   
-  $.fn.loadTemplate = function(href) {
+  $.fn.loadTemplate = function(href, callback) {
     return this.each(function() { 
       var self = this;
-      $.getJSON(href, function(json) {
-        var template = $.makeTemplate($(self).attr("template"));
-        console.log(template.toSource());
-        $(self).html(template(json));
-      });
+      $.getJSON(href, function(json) { $(self).updateTemplate(json); callback(json); });
+    });
+  };
+  
+  $.fn.updateTemplate = function(json) {
+    return this.each(function() {
+      var template = $.makeTemplate($(this).attr("template"));
+      $(this).html(template(json));
     });
   };
 
