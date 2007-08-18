@@ -115,7 +115,7 @@ jQuery(function($) {
     // Try to use Internet Explorer’s proprietary “setExpression” method…
     try {
         $.em.element.style.setExpression(
-            'width', 'jQuery.em.action(); "100em";' 
+            'width', 'function() {jQuery.em.action(); return "100em";}()' 
         );
     }
     // …otherwise fall back to polling for changes.
