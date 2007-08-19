@@ -43,11 +43,10 @@
 (function ($) {
     $.makeTemplate = function(template) {
         var code = "with (_context) { return \'" + template
-          .replace(/<!(--)?\[CDATA\[/, '')
-          .replace(/]]((--)?>|\&gt;)/, '')
           .replace(/\\/g, "\\\\")
           .replace(/'/g, "\\'")
           .replace(/\n/g, "\\n")
+          .replace(/<!(--)?\[CDATA\[(.*)]]((--)?>|\&gt;)/, '$2')          
           .replace(/\{\{(.*?)\}\}/g, "' + $1 + '")
         + "\' }";
         return new Function("_context", code);
