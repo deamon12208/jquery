@@ -13,13 +13,14 @@
             return false;
           });
           $("._template").templatize();
+          console.log($("._template")[0].$template.toString())
       });
     </script>
   </head>
   <body>
     <div class="_template" id="myTemplate">
       <![CDATA[
-        <{{tag}} href={{href}}>{{first}} {{last}}</{{tag}}>
+        <{{tag}} href="{{href}}">{{first}} {{last}}</{{tag}}>
         <p>Bar</p>
         <div>First Name: {{first}}</div>
         <div>Last Name: {{last}}</div>
