@@ -7,16 +7,24 @@
     <script src="../../jquery/dist/jquery.min.js"></script>
     <script src="jquery.templating.js"></script>
     <script>
-      jQuery(function($) {
-        $("a.loadTemplate").click(function() {
-          $(this.rel).loadTemplate(this.href);
-          return false;
-        })
+      jQuery(function ($) {
+          $("a.updateTemplate").click(function() {
+            $(this.rel).loadTemplate(this.href);
+            return false;
+          });
+          $("._template").templatize();
       });
     </script>
   </head>
   <body>
-    <div id="nameTemplate" template='My name is {{first}} {{last}} -- {{Math.sqrt(number)}}'></div>
-    <a href="foo" class="loadTemplate" rel="#nameTemplate">Load template</button>  
+    <div class="_template" id="myTemplate">
+      <![CDATA[
+        <{{tag}} href={{href}}>{{first}} {{last}}</{{tag}}>
+        <p>Bar</p>
+        <div>First Name: {{first}}</div>
+        <div>Last Name: {{last}}</div>
+      ]]>
+    </div>
+    <a href="foo" rel="#myTemplate" class="updateTemplate">Click</a>
   </body>
 </html>

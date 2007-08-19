@@ -1,49 +1,69 @@
 /*
 
-  <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/html4/loose.dtd">
-  <html>
-    <head>
-      <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-      <title>Templating</title>
-      <script src="../../jquery/dist/jquery.min.js"></script>
-      <script src="jquery.templating.js"></script>
-      <script>
-        jQuery(function($) {
-          $("a.loadTemplate").click(function() {
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Templating</title>
+    <script src="../../jquery/dist/jquery.min.js"></script>
+    <script src="jquery.templating.js"></script>
+    <script>
+      jQuery(function ($) {
+          $("a.updateTemplate").click(function() {
             $(this.rel).loadTemplate(this.href);
             return false;
-          })
-        });
-      </script>
-    </head>
-    <body>
-      <div id="nameTemplate" template='My name is {{first}} {{last}} -- {{parseInt(number)}}'></div>
-      <a href="foo" class="loadTemplate" rel="#nameTemplate">Load template</button>  
-    </body>
-  </html>
+          });
+          $("._template").templatize();
+      });
+    </script>
+  </head>
+  <body>
+    <div class="_template" id="myTemplate">
+      <![CDATA[
+        <{{tag}} href={{href}}>{{first}} {{last}}</{{tag}}>
+        <p>Bar</p>
+        <div>First Name: {{first}}</div>
+        <div>Last Name: {{last}}</div>
+      ]]>
+    </div>
+    <a href="foo" rel="#myTemplate" class="updateTemplate">Click</a>
+  </body>
+</html>
   
 */
 
-(function($) {
-  
-  $.makeTemplate = function(str) {
-    str = str.replace("'", "\\'"); 
-    return new Function("_obj", "with(_obj) { return '" + str.replace(/\{\{(.*?)\}\}/g, "' + $1 + '") + "' }");
-  };
-  
-  $.fn.loadTemplate = function(href, callback) {
-    return this.each(function() { 
-      var self = this;
-      $.getJSON(href, function(json) { $(self).updateTemplate(json); callback(json); });
-    });
-  };
-  
-  $.fn.updateTemplate = function(json) {
-    return this.each(function() {
-      var template = $.makeTemplate($(this).attr("template"));
-      $(this).html(template(json));
-    });
-  };
+(function ($) {
+    $.makeTemplate = function(template) {
+        var code = "with (_context) { return \'" + template
+            .replace(/\n/g, '\\n')
+            .replace(/'/g, "\\'")
+            .replace(/\{\{(.*?)\}\}/g, "' + $1 + '")
+        + "\' }";
+        return new Function("_context", code);
+    };
 
+    $.fn.updateTemplate = function (json) {
+      this.each(function () {
+        $(this).html(this.$template(json));
+      });
+    };
+    
+    $.fn.templatize = function() {
+      this.each(function () {
+        this.$template = $.makeTemplate($(this).html()
+          .replace(/^.*<!\-\-\[CDATA\[/gm, "")
+          .replace(/\]\]\-?\-?>\s*$/gm, ""));
+        $(this).empty();
+      });
+    };
+    
+    $.fn.loadTemplate = function(href) {
+      return this.each(function() { 
+        var self = this;
+        $.getJSON(href, function(json) {
+          $(self).html(self.$template(json));
+        });
+      });
+    };    
 })(jQuery);
