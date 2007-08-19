@@ -2,8 +2,8 @@
  * Copyright Yehuda Katz
  * with assistance by Jay Freeman
  * 
- * You may distribute this code under the same license as jQuery (BSD or GPL)
- */
+ * You may distribute this code under the same license as jQuery (BSD or GPL
+ **/
 
 /*
 
@@ -43,6 +43,8 @@
 (function ($) {
     $.makeTemplate = function(template) {
         var code = "with (_context) { return \'" + template
+            .replace(/^<!(--)?\[CDATA\[/, '')
+            .replace(/]](-->|\&gt;)$/, '')
             .replace(/\n/g, '\\n')
             .replace(/'/g, "\\'")
             .replace(/\{\{(.*?)\}\}/g, "' + $1 + '")
@@ -58,9 +60,7 @@
     
     $.fn.templatize = function() {
       this.each(function () {
-        this.$template = $.makeTemplate($(this).html()
-          .replace(/^.*<!\-\-\[CDATA\[/gm, "")
-          .replace(/\]\]\-?\-?>\s*$/gm, ""));
+        this.$template = $.makeTemplate($(this).html());
         $(this).empty();
       });
     };

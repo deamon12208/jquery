@@ -13,16 +13,16 @@
   	<h2 id="banner"></h2>
   	<h2 id="userAgent"></h2>    
       <div id="main" style="display: none">
-        <div id='testMe'>
-          <![CDATA[
-            {{first}} {{last}} {{parseInt(Math.sqrt(number))}}
-          ]]>
-        </div>
+        <div class="_template" id="testMe"><![CDATA[
+            WWW: <a href="http://www.{{first}}{{last}}.com/">{{last}}, {{first}}</a>
+            {{first}} {{last}}
+        ]]></div>
       </div>
       <ol id="tests"></ol>
     <script type="text/javascript">
+          
       module("Template");
-  
+        
       test("should make a correct function", function() {
         expect(2);
         var tmp = $.makeTemplate("Hello {{foo}} Goodbye");
@@ -37,7 +37,7 @@
         expect(1);
         $("#testMe").templatize();
         $("#testMe").updateTemplate({first: "Yehuda", last: "Katz", number: "17"});
-        ok($("#testMe").html().match(/Yehuda Katz 4/), "updateTemplate()");
+        ok($("#testMe").html().match(/Katz, Yehuda/), "updateTemplate()");
       });
       
       test("should be able to load template info via AJAX", function() {
@@ -45,7 +45,7 @@
         $("#testMe").templatize();
         stop();
         $("#testMe").loadTemplate("test.json", function(json) { 
-          ok($("#testMe").html().match(/Yehuda Katz 4/), "loadTemplate()");
+          ok($("#testMe").html().match(/Katz, Yehuda/), "loadTemplate()");
           start(); 
         });
       })
