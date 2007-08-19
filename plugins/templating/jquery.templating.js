@@ -58,11 +58,12 @@
       });
     };
     
-    $.fn.loadTemplate = function(href) {
+    $.fn.loadTemplate = function(href, callback) {
       return this.each(function() { 
         var self = this;
         $.getJSON(href, function(json) {
           $(self).html(self.$template(json));
+          callback(json);
         });
       });
     };    

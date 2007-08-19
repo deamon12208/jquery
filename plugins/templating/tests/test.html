@@ -13,7 +13,11 @@
   	<h2 id="banner"></h2>
   	<h2 id="userAgent"></h2>    
       <div id="main" style="display: none">
-        <div id='testMe' template='{{first}} {{last}} {{parseInt(Math.sqrt(number))}}'></div>
+        <div id='testMe'>
+          <![CDATA[
+            {{first}} {{last}} {{parseInt(Math.sqrt(number))}}
+          ]]>
+        </div>
       </div>
       <ol id="tests"></ol>
     <script type="text/javascript">
@@ -31,15 +35,17 @@
       
       test("should be able to handle being able to be templatified", function() {
         expect(1);
+        $("#testMe").templatize();
         $("#testMe").updateTemplate({first: "Yehuda", last: "Katz", number: "17"});
-        ok($("#testMe").html() == "Yehuda Katz 4", "updateTemplate()");
+        ok($("#testMe").html().match(/Yehuda Katz 4/), "updateTemplate()");
       });
       
       test("should be able to load template info via AJAX", function() {
         expect(1);
+        $("#testMe").templatize();
         stop();
         $("#testMe").loadTemplate("test.json", function(json) { 
-          ok($("#testMe").html() == "Yehuda Katz 4", "loadTemplate()");
+          ok($("#testMe").html().match(/Yehuda Katz 4/), "loadTemplate()");
           start(); 
         });
       })
