@@ -44,7 +44,7 @@
     $.makeTemplate = function(template) {
         var code = "with (_context) { return \'" + template
             .replace(/^<!(--)?\[CDATA\[/, '')
-            .replace(/]](-->|\&gt;)$/, '')
+            .replace(/]]((--)?>|\&gt;)$/, '')
             .replace(/\n/g, '\\n')
             .replace(/'/g, "\\'")
             .replace(/\{\{(.*?)\}\}/g, "' + $1 + '")
