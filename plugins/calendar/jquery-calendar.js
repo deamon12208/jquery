@@ -299,10 +299,10 @@ $.extend(PopUpCal.prototype, {
 		if (!inst._inline) {
 			var speed = inst._get('speed');
 			inst._calendarDiv.show(speed, function() {
-				popUpCal._coverSelects(inst);
+				popUpCal._afterShow(inst);
 			});
 			if (speed == '') {
-				this._coverSelects(inst);
+				this._afterShow(inst);
 			}
 			inst._input[0].focus();
 			this._curInst = inst;
@@ -317,11 +317,22 @@ $.extend(PopUpCal.prototype, {
 		}
 	},
 
-	/* Fix IE < 7 select problems. */
-	_coverSelects: function(inst) {
-		if ($.browser.msie) {
+	/* Tidy up after displaying the calendar. */
+	_afterShow: function(inst) {
+		if ($.browser.msie) { // fix IE < 7 select problems
 			$('#calendar_cover').css({width: inst._calendarDiv[0].offsetWidth + 4,
 				height: inst._calendarDiv[0].offsetHeight + 4});
+		}
+		// re-position on screen if necessary
+		var calDiv = inst._calendarDiv[0];
+		var pos = popUpCal._findPos(inst._input[0]);
+		if ((calDiv.offsetLeft + calDiv.offsetWidth) >
+				(document.body.clientWidth + document.body.scrollLeft)) {
+			inst._calendarDiv.css('left', (pos[0] + inst._input[0].offsetWidth - calDiv.offsetWidth) + 'px');
+		}
+		if ((calDiv.offsetTop + calDiv.offsetHeight) >
+				(document.body.clientHeight + document.body.scrollTop)) {
+			inst._calendarDiv.css('top', (pos[1] - calDiv.offsetHeight) + 'px');
 		}
 	},
 
@@ -522,9 +533,9 @@ $.extend(PopUpCalInstance.prototype, {
 		var dateFormat = this._get('dateFormat');
 		var currentDate = this._input.val().split(dateFormat.charAt(3));
 		if (currentDate.length == 3) {
-			this._currentDay = parseInt(this._trimNumber(currentDate[dateFormat.indexOf('D')]));
-			this._currentMonth = parseInt(this._trimNumber(currentDate[dateFormat.indexOf('M')])) - 1;
-			this._currentYear = parseInt(this._trimNumber(currentDate[dateFormat.indexOf('Y')]));
+			this._currentDay = parseInt(currentDate[dateFormat.indexOf('D')], 10);
+			this._currentMonth = parseInt(currentDate[dateFormat.indexOf('M')], 10) - 1;
+			this._currentYear = parseInt(currentDate[dateFormat.indexOf('Y')], 10);
 		}
 		else {
 			var date = new Date();
@@ -549,17 +560,6 @@ $.extend(PopUpCalInstance.prototype, {
 	/* Retrieve the date directly. */
 	_getDate: function() {
 		return new Date(this._currentYear, this._currentMonth, this._currentDay);
-	},
-
-	/* Ensure numbers are not treated as octal. */
-	_trimNumber: function(value) {
-		if (value == '') {
-			return '';
-		}
-		while (value.charAt(0) == '0') {
-			value = value.substring(1);
-		}
-		return value;
 	},
 
 	/* Generate the HTML for the current state of the calendar. */
@@ -624,12 +624,12 @@ $.extend(PopUpCalInstance.prototype, {
 				endYear = this._selectedYear + 10;
 			}
 			else if (years[0].charAt(0) == '+' || years[0].charAt(0) == '-') {
-				year = this._selectedYear + parseInt(years[0]);
-				endYear = this._selectedYear + parseInt(years[1]);
+				year = this._selectedYear + parseInt(years[0], 10);
+				endYear = this._selectedYear + parseInt(years[1], 10);
 			}
 			else {
-				year = parseInt(years[0]);
-				endYear = parseInt(years[1]);
+				year = parseInt(years[0], 10);
+				endYear = parseInt(years[1], 10);
 			}
 			year = (minDate ? Math.max(year, minDate.getFullYear()) : year);
 			endYear = (maxDate ? Math.min(endYear, maxDate.getFullYear()) : endYear);
