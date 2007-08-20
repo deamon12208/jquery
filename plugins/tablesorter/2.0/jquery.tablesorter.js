@@ -576,7 +576,13 @@
 						appendToTable(this,multisort(this,sortList,cache));
 						
 					}).bind("appendCache",function() {
+						
 						appendToTable(this,cache);
+					
+					}).bind("applyWidgetId",function(e,id) {
+						
+						getWidgetById(id).format(this);
+						
 					});
 					
 					if($.meta && ($(this).data() && $(this).data().sortlist)) {
