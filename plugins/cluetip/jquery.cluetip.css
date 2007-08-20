@@ -9,6 +9,8 @@
 #cluetip-waitimage {
   width: 43px;
   height: 11px;
+  position: absolute;
+  background-image: url(wait.gif);
 }
 /***************************************
    =cluetipClass: 'default' 

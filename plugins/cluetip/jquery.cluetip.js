@@ -1,6 +1,6 @@
 /*
  * jQuery clueTip plugin
- * Version 0.8.4  (08/15/2007)
+ * Version 0.8.4  (08/16/2007)
  * @requires jQuery v1.1.1
  * @requires Dimensions plugin 
  *
@@ -69,7 +69,7 @@
  * @option String closePosition: default is 'top'. Set to 'bottom' to put the closeText at the bottom of the clueTip body
  * @option String closeText: default is 'Close'. This determines the text to be clicked to close a clueTip when sticky is set to true.
  * @option Number truncate: default is 0. Set to some number greater than 0 to truncate the text in the body of the clueTip. This also removes all HTML/images from the clueTip body.
- * @option String waitImage: default is 'wait.gif'. set it to '' or false to avoid having the plugin try to show/hide the image.
+ * @option String waitImage: default is true. Set to false to avoid having the plugin try to show/hide the image.
  * @option Boolean arrows: Default is false. Sets background-position-y to line up an arrow background image with the hovered element.
  * @option Boolean dropShadow: default is true; set it to false if you do not want the drop-shadow effect on the clueTip
  * @option Integer dropShadowSteps: default is 6; change this number to adjust the size of the drop shadow
@@ -159,7 +159,7 @@
           .css({zIndex: defaults.cluezIndex})
         .append($cluetipOuter)[insertionType](insertionElement)
         .hide();
-        $('<div id="cluetip-waitimage"><img src="' + defaults.waitImage + '" alt="loading..." /></div>')
+        $('<div id="cluetip-waitimage"></div>')
           .css({position: 'absolute', zIndex: cluezIndex-1})
         .insertBefore('#cluetip')
         .hide();
@@ -289,7 +289,7 @@
             }
           };
           ajaxSettings.complete = function() {
-            $('#cluetip-waitimage').css('visibility','hidden');
+            $('#cluetip-waitimage').hide();
             cluetipShow(pY);            
           };
           $.ajax(ajaxSettings);
