@@ -95,7 +95,7 @@
 				sortForce: null,
 				textExtraction: "simple",
 				parsers: {}, 
-				widgets: {},		
+				widgets: [],		
 				widgetZebra: {css: ["even","odd"]},
 				headers: {},
 				widthFixed: false,
