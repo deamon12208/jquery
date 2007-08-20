@@ -9,7 +9,7 @@
 	<script src="http://code.jquery.com/jquery-latest.pack.js"></script>
 	<script>
     $.iframeContents = function(name) {
-      return $.msie ? document.frames[name].document : document.getElementById(name).contentDocument;
+      return $.browser.msie ? document.frames[name].document : document.getElementById(name).contentDocument;
     };
 	
 	  window.onload = function() {
