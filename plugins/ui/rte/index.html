@@ -8,6 +8,10 @@
 	<meta name="author" content="Yehuda Katz">
 	<script src="http://code.jquery.com/jquery-latest.pack.js"></script>
 	<script>
+    $.iframeContents = function(name) {
+      return $.msie ? document.frames[name].document : document.getElementById(name).contentDocument;
+    };
+	
 	  window.onload = function() {
 	    $.iframeContents("editor").designMode = "on";
 	    try { $.iframeContents("editor").execCommand('useCSS', false, false); } catch(ex) {}
@@ -19,10 +23,6 @@
 	      alert($.iframeContents("editor").body.innerHTML);
 	    });
 	  };
-
-    $.iframeContents = function(name) {
-      return $.msie ? document.frames[name].document : document.getElementById(name).contentDocument;
-    }
 	</script>
 </head>
 <body>
