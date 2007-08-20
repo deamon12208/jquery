@@ -89,16 +89,12 @@
 
                 // reveal stuff
                 dim.unbind('click').one('click', hide); // unbind should be unnecessary - WTF?
-                if (dim.is(':visible')) {
-                    loading.show();
-                    builder(); // build specific type
-                } else {
-                    //dim.fadeIn('fast', function() {
-                        dim.show();
-                        loading.show();
-                        builder(); // build specific type
-                    //});
+                if (!dim.is(':visible')) {
+                    dim.show();
                 }
+                loading.show();
+                builder(); // build specific type
+                
                 // attach keyboard event handler
                 $(document).bind('keydown', keydown).bind('keypress', blockKeys);
                 $(window).bind('scroll', blockScroll);
@@ -137,6 +133,7 @@
             // remove everything
             function hide(callback) {
 
+                // abort pending xhr request
                 if (request) {
                     request.abort();
                     request = null;
@@ -152,6 +149,7 @@
                 // remove keyboard event handler
                 $(document).unbind('keydown', keydown).unbind('keypress', blockKeys);
                 $(window).unbind('scroll', blockScroll);
+                next = previous = function() {};
                 return false;
             }
 
@@ -170,12 +168,21 @@
                 return false;
             }
 
+            var next = function() {}, previous = next;
             function keydown(e) {
                 var key = e.which || e.keyCode || -1;
-                if (key == 27) {
-                    hide();
-                } else {
-                    blockKeys(e);
+                switch (key) {
+                    case 27: // esc
+                        hide();
+                        break;
+                    case 37: // arrow left
+                        previous();
+                        break;
+                    case 39: // arrow right
+                        next();
+                        break;
+                    default:
+                        blockKeys(e);
                 }
             }
 
@@ -250,36 +257,11 @@
                                             };
                                         };
 
-                                        var next = '<strong id="' + TB_ID.NEXT + '"><a href="#" title="' + defaultValues.i18n.next.title + '">' + defaultValues.i18n.next.text + '</a></strong>';
-                                        var showNext = buildShowFunc(group[i + 1] || group[0]);
+                                        var nextHtml = '<strong id="' + TB_ID.NEXT + '"><a href="#" title="' + defaultValues.i18n.next.title + '">' + defaultValues.i18n.next.text + '</a></strong>';
+                                        next = buildShowFunc(group[i + 1] || group[0]);
 
-                                        var prev = '<strong id="' + TB_ID.PREV + '"><a href="#" title="' + defaultValues.i18n.prev.title + '">' + defaultValues.i18n.prev.text + '</a></strong>';
-                                        var showPrev = buildShowFunc(group[i - 1] || group[size - 1]);
-
-                                        // overwrite keydown handler
-                                        keydown = function(e) {
-                                            var key = e.which || e.keyCode || -1;
-                                            // IE requires "timeout", I assume somehow due to this being added on
-                                            // the existing keydown handler, that's ugly, find a way to avoid
-                                            // duplicate code
-                                            // WARNING: without timeout IE freezes occasionally when using keyboard arrows
-                                            setTimeout(function() {
-                                                switch (key) {
-                                                    case 27: // esc
-                                                        hide();
-                                                        break;
-                                                    case 37: // arrow left
-                                                        showPrev();
-                                                        break;
-                                                    case 39: // arrow right
-                                                        showNext();
-                                                        break;
-                                                    default:
-                                                        blockKeys(e);
-                                                }
-                                            }, 0);
-                                        };
-                                        $(document).unbind('keydown').bind('keydown', keydown);
+                                        var previousHtml = '<strong id="' + TB_ID.PREV + '"><a href="#" title="' + defaultValues.i18n.prev.title + '">' + defaultValues.i18n.prev.text + '</a></strong>';
+                                        previous = buildShowFunc(group[i - 1] || group[size - 1]);
 
                                     }
 
@@ -317,10 +299,10 @@
                                     buildTitle(title);
                                     $('<img src="' +  $$.attr('href') + '" alt="Image" width="' + imgWidth + '" height="' + imgHeight + '" title="' + title + '" />').appendTo(content);
                                     if (rel) {
-                                        $(['<p id="' + TB_ID.BROWSE + '">', (prev || ''), (next || ''), count, '</p>'].join('')).appendTo(content);
+                                        $(['<p id="' + TB_ID.BROWSE + '">', (previousHtml || ''), (nextHtml || ''), count, '</p>'].join('')).appendTo(content);
                                         if (size > 1) {
-                                            $('#' + TB_ID.NEXT + ' a').bind('click', showNext);
-                                            $('#' + TB_ID.PREV + ' a').bind('click', showPrev);
+                                            $('#' + TB_ID.NEXT + ' a').bind('click', next);
+                                            $('#' + TB_ID.PREV + ' a').bind('click', previous);
                                         }
                                     }
 
