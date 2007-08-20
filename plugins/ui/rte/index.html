@@ -9,7 +9,7 @@
 	<script src="http://code.jquery.com/jquery-latest.pack.js"></script>
 	<script>
 	  window.onload = function() {
-	    e = $("iframe")[0].contentDocument;
+	    e = $.browser.msie ? document.frames["editors"].document : $("iframe#editor")[0].contentDocument;
 	    e.designMode = "on";
 	    try { e.execCommand('useCSS', false, false); } catch(ex) {}
 	    try { e.execCommand('styleWithCSS', false, false); } catch(ex) {}	    
