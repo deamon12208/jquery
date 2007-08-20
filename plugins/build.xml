@@ -158,12 +158,6 @@
         </antcall>
     </target>
 
-	<target name="behavior" description="Build behavior plugin.">
-        <antcall target="minandpack">
-            <param name="name" value="behavior" />
-        </antcall>
-    </target>
-
 	<target name="fxqueue" description="Build fxqueue plugin.">
         <antcall target="minandpack">
             <param name="name" value="fxqueue" />
@@ -179,6 +173,12 @@
 	<target name="gradient" description="Build gradient plugin.">
         <antcall target="minandpack">
             <param name="name" value="gradient" />
+        </antcall>
+    </target>
+
+	<target name="livequery" description="Build Live Query plugin.">
+        <antcall target="minandpack">
+            <param name="name" value="livequery" />
         </antcall>
     </target>
 
