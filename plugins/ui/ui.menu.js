@@ -45,7 +45,7 @@
 		},
 		clickContext : function(a,m,o) {
 			var self = this;
-			$(a).bind('click', function(){
+			$(a).click(function(){
 				x = $(a).position();
 				y = x.top + ( $(a).height() + 1);
 				$(m).css({position:'absolute', top: y, left: x.left});
