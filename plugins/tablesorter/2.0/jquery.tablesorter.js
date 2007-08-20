@@ -5,7 +5,7 @@
  * @requires jQuery v1.1.3
  * 
  * Copyright (c) 2007 Christian Bach
- * Examples and docs at: http://lovepeacenukes.com/tablesorter/2.0/
+ * Examples and docs at: http://tablesorter.com
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
@@ -102,7 +102,7 @@
 				cancelSelection: true,
 				sortList: [],
 				headerList: [],
-				dateFormat: "mm/dd/yyyy",
+				dateFormat: "us",
 				debug: false
 			};
 			
@@ -508,7 +508,10 @@
 								config.sortList = [];
 								
 								if(config.sortForce != null) {
-									config.sortList.push(config.sortForce);	
+									var a = config.sortForce; 
+									for(var j=0; j < a.length; j++) { 	
+										config.sortList.push(a[j]);	
+									}
 								}
 								
 								// add column to sort list
@@ -749,10 +752,10 @@
 		format: function(s,table) {
 			var c = table.config;
 			s = s.replace(new RegExp(/-/g),"/");
-			if(c.dateFormat == "mm/dd/yyyy" || c.dateFormat == "mm-dd-yyyy") {
+			if(c.dateFormat == "us") {
 				/** reformat the string in ISO format */
 				s = s.replace(new RegExp(/(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})/), "$3/$1/$2");
-			} else if(c.dateFormat == "dd/mm/yyyy" || c.dateFormat == "dd-mm-yyyy") {
+			} else if(c.dateFormat == "uk") {
 				/** reformat the string in ISO format */
 				s = s.replace(new RegExp(/(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})/), "$3/$2/$1");
 			} else if(c.dateFormat == "dd/mm/yy" || c.dateFormat == "dd-mm-yy") {

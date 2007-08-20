@@ -16,7 +16,7 @@
 	
 	// call the tablesorter plugin
 	$("table").tablesorter({
-		// set forced sort on the fourth column and i decending order.
+		// define a custom text extraction function
 		textExtraction: function(node) {
 			// extract data from markup and return it 
 			return node.childNodes[0].childNodes[0].innerHTML;
