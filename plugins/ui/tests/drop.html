@@ -305,7 +305,7 @@ $(document).ready(function(){
 		
 	}).droppable({
 		accept: '#droponself',
-		drop: function() {
+		drop: function(ev, ui) {
 			$(this).parent('li').css('background', 'red');
 		}
 	});
@@ -317,8 +317,8 @@ $(document).ready(function(){
 			},
 			activeClass: 'droppable-active',
 			hoverClass: 'droppable-hover',
-			drop: function(dragging) {
-				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			drop: function(ev, ui) {
+				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
 			}
 		});
 
@@ -327,8 +327,8 @@ $(document).ready(function(){
 			accept: '.little',
 			activeClass: 'droppable-active',
 			hoverClass: 'droppable-hover',
-			drop: function(dragging) {
-				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			drop: function(ev, ui) {
+				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
 			}
 		});
 
@@ -336,8 +336,8 @@ $(document).ready(function(){
 		.droppable({
 			accept: '.gray.activeClass',
 			activeClass: 'silver',
-			drop: function(dragging) {
-				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			drop: function(ev, ui) {
+				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
 			}
 		});
 
@@ -347,8 +347,8 @@ $(document).ready(function(){
 			activeClass: 'droppable-active',
 			hoverClass: 'droppable-hover',
 			greedy: false,
-			drop: function(dragging) {
-				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			drop: function(ev, ui) {
+				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
 			}
 		});
 
@@ -358,8 +358,8 @@ $(document).ready(function(){
 			activeClass: 'droppable-active',
 			hoverClass: 'droppable-hover',
 			greedy: false,
-			drop: function(dragging) {
-				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			drop: function(ev, ui) {
+				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
 			}
 		});
 
@@ -369,8 +369,8 @@ $(document).ready(function(){
 			activeClass: 'droppable-active',
 			hoverClass: 'droppable-hover',
 			greedy: true,
-			drop: function(dragging) {
-				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			drop: function(ev, ui) {
+				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
 			}
 		});
 
@@ -380,8 +380,8 @@ $(document).ready(function(){
 			activeClass: 'droppable-active',
 			hoverClass: 'droppable-hover',
 			greedy: true,
-			drop: function(dragging) {
-				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			drop: function(ev, ui) {
+				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
 			}
 		});
 
@@ -389,8 +389,8 @@ $(document).ready(function(){
 		.droppable({
 			accept: '.gray.hoverClass',
 			hoverClass: 'silver',
-			drop: function(dragging) {
-				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			drop: function(ev, ui) {
+				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
 			}
 		});
 
@@ -399,8 +399,8 @@ $(document).ready(function(){
 			accept: '.tolerance-fit',
 			hoverClass: 'silver',
 			tolerance: 'fit',
-			drop: function(dragging) {
-				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			drop: function(ev, ui) {
+				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
 			}
 		});
 
@@ -409,8 +409,8 @@ $(document).ready(function(){
 			accept: '.tolerance-intersect',
 			hoverClass: 'silver',
 			tolerance: 'intersect',
-			drop: function(dragging) {
-				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			drop: function(ev, ui) {
+				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
 			}
 		});
 
@@ -431,8 +431,8 @@ $(document).ready(function(){
 			accept: '.tolerance-pointer',
 			hoverClass: 'silver',
 			tolerance: 'pointer',
-			drop: function(dragging) {
-				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			drop: function(ev, ui) {
+				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
 			}
 		});
 
@@ -441,8 +441,8 @@ $(document).ready(function(){
 			accept: '.tolerance-touch',
 			hoverClass: 'silver',
 			tolerance: 'touch',
-			drop: function(dragging) {
-				$(this).append($(document.createElement('div')).text($(dragging).text()));
+			drop: function(ev, ui) {
+				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
 			}
 		});
 
@@ -450,7 +450,7 @@ $(document).ready(function(){
 		.droppable({
 			accept: '.activate',
 			activeClass: 'droppable-active',
-			activate: function(dragging) {
+			activate: function(ev, ui) {
 				$(this).append($(document.createElement('div')).text('activate'));
 			}
 		});
@@ -459,7 +459,7 @@ $(document).ready(function(){
 		.droppable({
 			accept: '.deactivate',
 			activeClass: 'droppable-active',
-			deactivate: function(dragging) {
+			deactivate: function(ev, ui) {
 				$(this).append($(document.createElement('div')).text('deactivate'));
 			}
 		});
@@ -468,7 +468,7 @@ $(document).ready(function(){
 		.droppable({
 			accept: '.over',
 			activeClass: 'droppable-active',
-			over: function(dragging) {
+			over: function(ev, ui) {
 				$(this).append($(document.createElement('div')).text('over'));
 			}
 		});
@@ -477,7 +477,7 @@ $(document).ready(function(){
 		.droppable({
 			accept: '.out',
 			activeClass: 'droppable-active',
-			out: function(dragging) {
+			out: function(ev, ui) {
 				$(this).append($(document.createElement('div')).text('out'));
 			}
 		});
@@ -486,10 +486,10 @@ $(document).ready(function(){
 		.droppable({
 			accept: '.tenfour',
 			activeClass: 'droppable-active',
-			over: function(dragging) {
+			over: function(ev, ui) {
 				$(this).append($(document.createElement('div')).text('over'));
 			},
-			out: function(dragging) {
+			out: function(ev, ui) {
 				$(this).append($(document.createElement('div')).text('out'));
 			}
 		});
@@ -498,7 +498,7 @@ $(document).ready(function(){
 		.droppable({
 			accept: '.drop',
 			activeClass: 'droppable-active',
-			drop: function(dragging) {
+			drop: function(ev, ui) {
 				$(this).append($(document.createElement('div')).text('drop'));
 			}
 		});
