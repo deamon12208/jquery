@@ -56,7 +56,7 @@
       <li>moves up until the whole clueTip is visible, if the link is too close to the bottom edge of the browser window.</li>
       <li>moves back down until the clueTip's top is at the top edge of the browser window, if the clueTip is taller than the window (the viewable area)</li>
       <li>sits to the right or left of the <em>mouse</em> position, if the link is a block-level element or if the link is so wide that the clueTip can't completely fit to the left or the right of it.</li>
-      <li>drops below the mouse position, if the clueTip itself can't fit to the right or left of the mouse position. Moves above the mouse position only if (a) there isn't enough room below without beging cut off, and (b) there is enough room between the top of the viewable area and the mouse.</li>
+      <li>drops below the mouse position, if the clueTip itself can't fit to the right or left of the mouse position. Moves above the mouse position only if (a) there isn't enough room below without being cut off, and (b) there is enough room between the top of the viewable area and the mouse.</li>
     </ul>
     
     <h4>Flexible Behavior</h4>
@@ -82,7 +82,7 @@
       <li><strong><code>closePosition</code></strong>: default is <code>'top'</code>; set to <code>'bottom'</code> to put the 'close' link at the bottom of the clueTip. Additional formatting can be applied to <code>a#cluetip-close</code> in the style sheet.</li>
       <li><strong><code>closeText</code></strong>: default is <code>'Close'</code>; set it to something else if you want to</li>
       <li><strong><code>truncate</code></strong>: default is <code>0</code>, which means there will be no truncation; set it to some number to truncate the clueTip's contents to <code>n</code> characters</li>
-      <li><strong><code>waitImage</code></strong>: default is <code>'wait.gif'</code>; this image will appear before an ajax-loaded clueTip retrieves the content and is shown. Set to an empty string ('') or false to avoid showing the image</li>
+      <li><strong><code>waitImage</code></strong>: default is <code>true</code>; Determines whether the wait image will be shown while ajax clueTips are being loaded. Set to false to avoid showing the image</li>
       <li><strong><code>arrows</code></strong>: default is <code>false</code>; set it to <code>true</code> to calculate the positioning of the clueTip's background images for  .clue-right-<em>[theme]</em> and .clue-left-<em>[theme]</em> (where <em>[theme]</em> represents the cluetipClass indicated in the options).</li>
       <li><strong><code>dropShadow</code></strong>: default is <code>true</code>; set it to <code>false</code> if you do not want the drop-shadow effect on the clueTip</li>
       <li><strong><code>dropShadowSteps</code></strong>: default is <code>6</code>; change this number to adjust the size of the drop shadow</li>
@@ -99,7 +99,7 @@
   return data;
 }</code></pre>
 This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML page that is being pulled into a clueTip via "AHAH."</li>
-      <li><strong><code>ajaxSettings</code></strong>: default is <code> {dataType: 'html'}</code>. You can use any argument here that you would use in <code>$.ajax()</code>. </li>
+      <li><strong><code>ajaxSettings</code></strong>: default is <code> {dataType: 'html'}</code>. You can change the value of the dataType argument or set other arguments that <code>$.ajax()</code> uses: async, contentType, timeout, type, etc. These arguments can't be used, because they're already being used by the plugin: beforeSend, complete, error, success, url. I might in a future version try to allow for passing in custom stuff for these arguments.</li>
     </ul>
     </div>
     <div id="setup">

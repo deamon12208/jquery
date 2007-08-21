@@ -69,7 +69,7 @@
  * @option String closePosition: default is 'top'. Set to 'bottom' to put the closeText at the bottom of the clueTip body
  * @option String closeText: default is 'Close'. This determines the text to be clicked to close a clueTip when sticky is set to true.
  * @option Number truncate: default is 0. Set to some number greater than 0 to truncate the text in the body of the clueTip. This also removes all HTML/images from the clueTip body.
- * @option String waitImage: default is true. Set to false to avoid having the plugin try to show/hide the image.
+ * @option Boolean waitImage: default is true. Set to false to avoid having the plugin try to show/hide the image.
  * @option Boolean arrows: Default is false. Sets background-position-y to line up an arrow background image with the hovered element.
  * @option Boolean dropShadow: default is true; set it to false if you do not want the drop-shadow effect on the clueTip
  * @option Integer dropShadowSteps: default is 6; change this number to adjust the size of the drop shadow
@@ -101,7 +101,7 @@
       showTitle: true,
       cluetipClass: 'default',
       hoverClass: '',
-      waitImage: 'wait.gif',
+      waitImage: true,
       cursor: 'help',
       arrows: false, // CHANGE THIS TO true IF YOU WANT jTip-STYLE ARROWS FOR ALL clueTips
       dropShadow: true,
