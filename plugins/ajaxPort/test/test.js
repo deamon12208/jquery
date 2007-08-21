@@ -2,7 +2,8 @@ test("basics", function() {
 	expect(1);
 	stop();
 	for(var i=0; i < 3; i++) {
-		$.ajaxGate("test", {
+		$.ajax({
+			port: "test",
 			url: "test.php",
 			data: { x: i },
 			success: function(response) {
