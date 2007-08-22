@@ -1,52 +1,34 @@
 <html>
 <head>
-<title>jQuery Calendar Examples</title>
-<script type="text/javascript" src="jquery.pack.js"></script>
-<script type="text/javascript" src="jquery.debug.js"></script>
-<script type="text/javascript" src="jquery.tabs.js"></script>
-<!--script type="text/javascript" src="jquery.blockUI.js"></script-->
-<script type="text/javascript" src="jquery-calendar.js"></script>
-<script type="text/javascript" src="jquery-calendar-fr.js"></script>
-<script type="text/javascript" src="jquery-calendar-demo.js"></script>
-<link rel="stylesheet" type="text/css" href="jquery-calendar.css" title="default"/>
-<link rel="stylesheet" type="text/css" href="jquery-calendar-alt.css" title="alt"/>
-<style type="text/css">@import "jquery.tabs.css";</style>
-<style type="text/css">
-body { font-family: Arial, Helvetica, Sans-serif; }
-pre { margin: 5px 10px; }
-#tabs ul { width: 100%; }
-.feature { border: 1px solid #3c576c; }
-.calLabel { float: left; width: 15em; }
-.ar_day { color: white !important; background: #eee url(img/ar.gif) no-repeat center !important; }
-.au_day { color: blue !important; background: #eee url(img/au.gif) no-repeat center !important; }
-.br_day { color: green !important; background: #eee url(img/br.gif) no-repeat center !important; }
-.cn_day { color: red !important; background: #eee url(img/cn.gif) no-repeat center !important; }
-.id_day { color: white !important; background: #eee url(img/id.gif) no-repeat center !important; }
-.ie_day { color: white !important; background: #eee url(img/ie.gif) no-repeat center !important; }
-.ke_day { color: red !important; background: #eee url(img/ke.gif) no-repeat center !important; }
-.lb_day { color: white !important; background: #eee url(img/lb.gif) no-repeat center !important; }
-.nz_day { color: blue !important; background: #eee url(img/nz.gif) no-repeat center !important; }
-.se_day { color: blue !important; background: #eee url(img/se.gif) no-repeat center !important; }
-.us_day { color: white !important; background: #eee url(img/us.gif) no-repeat center !important; }
-.za_day { color: green !important; background: #eee url(img/za.gif) no-repeat center !important; }
-</style>
+	<title>jQuery Calendar Examples</title>
+	<script type="text/javascript" src="jquery.pack.js"></script>
+	<script type="text/javascript" src="jquery.debug.js"></script>
+	<script type="text/javascript" src="jquery-calendar.js"></script>
+	<script type="text/javascript" src="jquery-calendar-fr.js"></script>
+	<script type="text/javascript" src="jquery-calendar-demo.js"></script>
+	<link rel="stylesheet" type="text/css" href="jquery-calendar.css" title="default"/>
+	<link rel="stylesheet" type="text/css" href="jquery-calendar-alt.css" title="alt"/>
+	<link rel="stylesheet" type="text/css" href="jquery-calendar-demo.css" />
 </head>
 <body>
-<h1>jQuery Calendar Examples</h1>
-<div id="tabs">
-	<ul>
-		<li><a href="#default"><span>Defaults</span></a></li>
-		<li><a href="#invoke"><span>Invocation</span></a></li>
-		<li><a href="#keys"><span>Keystrokes</span></a></li>
-		<li><a href="#restrict"><span>Restricting</span></a></li>
-		<li><a href="#custom"><span>Customise</span></a></li>
-		<li><a href="#l10n"><span>Localisation</span></a></li>
-		<li><a href="#range"><span>Date range</span></a></li>
-		<li><a href="#misc"><span>Miscellaneous</span></a></li>
-		<li><a href="#inline"><span>Inline</span></a></li>
-		<li><a href="#styles"><span>Stylesheets</span></a></li>
+<div id="wrap">
+	<p><a href="http://docs.jquery.com/Plugins/Calendar">jQuery Calendar API</a></p>
+	<p><a href="http://docs.jquery.com/Plugins/Calendar/ChangeLog">jQuery Calendar Change Log</a></p>
+	<h1>jQuery Calendar Examples</h1>
+	<ul id="tabs">
+		<li><a href="#default">Defaults</a></li>
+		<li><a href="#invoke">Invocation</a></li>
+		<li><a href="#keys">Keystrokes</a></li>
+		<li><a href="#restrict">Restricting</a></li>
+		<li><a href="#custom">Customise</a></li>
+		<li><a href="#l10n">Localisation</a></li>
+		<li><a href="#range">Date range</a></li>
+		<li><a href="#misc">Miscellaneous</a></li>
+		<li><a href="#inline">Inline</a></li>
+		<li><a href="#styles">Stylesheets</a></li>
 	</ul>
 	<div id="default" class="feature">
+		<h2>Defaults</h2>
 		<p>The calendar can easily be added to an input field with appropriate default settings.</p>
 		<pre>$('#defaultFocus').calendar();</pre>
 		<p><span class="calLabel">Default calendar:</span>
@@ -69,6 +51,7 @@ pre { margin: 5px 10px; }
 		</ul>
 	</div>
 	<div id="invoke" class="feature">
+		<h2>Invocation</h2>
 		<p>The calendar can be invoked in a variety of ways, as shown below.
 			Also shown is the use of an image only trigger,
 			and how the controls and buttons appear when disabled.</p>
@@ -92,18 +75,19 @@ $('#invokeButton').calendar({autoPopUp: 'button', buttonImageOnly: false,
 $('.invokeBoth').calendar();</pre>
 		<p>The calendar can also be triggered externally for a particular input.</p>
 		<p><span class="calLabel">External trigger:</span>
-			<button onclick="popUpCal.showFor($('#invokeFocus')[0]);">Open calendar</button></p>
+			<button onClick="popUpCal.showFor($('#invokeFocus')[0]);">Open calendar</button></p>
 		<pre>popUpCal.showFor($('#invokeFocus')[0]);</pre>
 		<p>Or even opened as a "dialog". If the <em>blockUI</em> plugin is available,
 			it is used to create a modal dialog.</p>
 		<p><span class="calLabel">Calendar dialog:</span>
 			<input type="text" size="10" id="invokeDialog" readonly="readonly"/>
-			<button onclick="popUpCal.dialogCalendar($('#invokeDialog').val(),
+			<button onClick="popUpCal.dialogCalendar($('#invokeDialog').val(),
 				setDateFromDialog, {prompt: 'Choose a date', speed: ''});">Open dialog</button></p>
 		<pre>popUpCal.dialogCalendar($('#invokeDialog').val(), setDateFromDialog,
 	{prompt: 'Choose a date', speed: ''});</pre>
 	</div>
 	<div id="keys" class="feature">
+		<h2>Keystrokes</h2>
 		<p>The calendar also responds to keystrokes entered in the input field.</p>
 		<p><span class="calLabel">Keyboard driven:</span>
 			<input type="text" size="10" class="invokeBoth"/></p>
@@ -120,6 +104,7 @@ $('.invokeBoth').calendar();</pre>
 		</ul>
 	</div>
 	<div id="restrict" class="feature">
+		<h2>Restricting</h2>
 		<p>You can restrict the functionality of the calendar in various ways.
 			The first example sets the first day of the week to Monday and prevents it from being
 			changed, as well as preventing the month and year from being selected directly.</p>
@@ -140,6 +125,7 @@ $('.invokeBoth').calendar();</pre>
 	maxDate: new Date(2007, 1 - 1, 26)});</pre>
 	</div>
 	<div id="custom" class="feature">
+		<h2>Customise</h2>
 		<p>You can customise the selectability and/or appearance of individual days
 			by setting a callback function that accepts a date and returns an array
 			with the first entry being true/false for selectability and the second
@@ -168,6 +154,7 @@ function nationalDays(date) {
 		<pre>.au_day { color: blue !important; background: #eee url(au.gif) no-repeat center !important; }</pre>
 	</div>
 	<div id="l10n" class="feature">
+		<h2>Localisation</h2>
 		<p>You can localise the calendar for other languages and regional differences.
 			The calendar defaults to English with a date format of DD/MM/YYYY.
 			This is easily changed via the <code>dateFormat</code> setting. The first three
@@ -189,6 +176,7 @@ function nationalDays(date) {
 		<pre>$('#frenchCalendar').calendar(popUpCal.regional['fr']);</pre>
 	</div>
 	<div id="range" class="feature">
+		<h2>Date Range</h2>
 		<p>Use a custom field settings function to create a date range control:
 			two date fields, each restricting the other. The function takes an
 			input field as an argument and returns a settings object (anonymous).</p>
@@ -203,6 +191,7 @@ function customRange(input) {
 }</pre>
 	</div>
 	<div id="misc" class="feature">
+		<h2>Miscellaneous</h2>
 		<p>Additional settings let you move the <em>Clear</em>/<em>Close</em> controls
 			to the bottom and display the days in other months (non-selectable).
 			A callback function is also added to operate when a date is selected.
@@ -215,7 +204,7 @@ function customRange(input) {
 		<p>If necessary, the calendar for an input (or set of inputs) can be reconfigured
 			on the fly. As an example, here we change the speed at which the calendar appears.</p>
 		<p><span class="calLabel">Display speed:</span>
-			<select onchange="setSpeed(this);"><option value="">immediate</option>
+			<select onChange="setSpeed(this);"><option value="">immediate</option>
 			<option value="slow">slow</option><option value="medium" selected="selected">medium</option>
 			<option value="fast">fast</option></select></p>
 		<p><span class="calLabel">Reconfigured calendar:</span>
@@ -230,7 +219,7 @@ function customRange(input) {
 			corresponding to the calendar properties.
 			The attribute values are evaluated as JavaScript.</p>
 		<p><span class="calLabel">Inline configuration 1:</span>
-			<input type="text" size="10" class="inlineConfig" onchange="showDay(this);"
+			<input type="text" size="10" class="inlineConfig" onChange="showDay(this);"
 				cal:closeAtTop="false" cal:firstDay="1" cal:appendText="which is a"/>
 			<span id="inlineDay">blank</span></p>
 		<p><span class="calLabel">Inline configuration 2:</span>
@@ -245,6 +234,7 @@ function customRange(input) {
 $('.inlineConfig').calendar();</pre>
 	</div>
 	<div id="inline" class="feature">
+		<h2>Inline</h2>
 		<p>The calendar can be used inline rather than as a popup.</p>
 		<p><span class="calLabel">Inline date range:</span>
 			<span class="calendarInline" id="inlineFrom"></span>
@@ -269,6 +259,7 @@ function updateInlineRange() {
 }</pre>
 	</div>
 	<div id="styles" class="feature">
+		<h2>Stylesheets</h2>
 		<p>The calendar can be formatted through the use of a stylesheet.
 			The default stylesheet is used in the rest of this demo
 			with an alternate one used here.</p>
@@ -276,7 +267,7 @@ function updateInlineRange() {
 			<input type="text" size="10" id="altStyle"/></p>
 		<p><span class="calLabel">In a dialog:</span>
 			<input type="text" size="10" id="altDialog" readonly="readonly"/>
-			<button onclick="popUpCal.dialogCalendar($('#altDialog').val(),
+			<button onClick="popUpCal.dialogCalendar($('#altDialog').val(),
 				setAltDateFromDialog, {prompt: 'Choose a date', speed: ''});">Open dialog</button></p>
 		<p>The basic HTML structure of the calendar is shown below:</p>
 		<pre>&lt;div id="calendar_div">
@@ -314,8 +305,6 @@ function updateInlineRange() {
   &lt;div style="clear: both;">&lt;/div>
 &lt;/div></pre>
 	</div>
-	<p><a href="http://docs.jquery.com/Plugins/Calendar">jQuery Calendar API</a></p>
-	<p><a href="http://docs.jquery.com/Plugins/Calendar/ChangeLog">jQuery Calendar Change Log</a></p>
 </div>
 </body>
 </html>

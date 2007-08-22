@@ -3,7 +3,7 @@ var inlineFrom = null;
 var inlineTo = null;
 
 $(document).ready(function () {
-	$('#tabs').tabs({onClick: updateTabs})
+	tabs.init();
 	// Restore default language after loading French localisation
 	popUpCal.setDefaults(popUpCal.regional['']);
 	// Set calendar global defaults - invoke via focus and image button
@@ -52,13 +52,6 @@ $(document).ready(function () {
 	// Stylesheets
 	$('#altStyle').calendar();
 });
-
-function updateTabs(anchor, newDiv, oldDiv) {
-	var stylesheet = (newDiv.id == 'styles' ? 'alt' : 'default');
-	$('link').each(function() {
-		this.disabled = (this.title != '' && this.title != stylesheet);
-	});
-}
 
 function setSpeed(select) {
 	popUpCal.reconfigureFor($('#reconfigureCal')[0],
@@ -118,4 +111,56 @@ function formatDate(date) {
 	var month = date.getMonth() + 1;
 	return (day < 10 ? '0' : '') + day + '/' +
 		(month < 10 ? '0' : '') + month + '/' + date.getFullYear();
+}
+
+// Custom Tabs by Marc Grabanski
+var tabs = 
+{
+	init : function () 
+	{
+		// Setup tabs
+		var nextHTML = '<div class="nextFeature"><a>Continue to next section &gt;&gt;</a></div>';
+		//var backHTML
+		$(".feature").hide().append(nextHTML);
+		$(".feature:first").show().id;
+		var tabCount = $("#tabs a").size();
+		$("#tabs a:eq(0)").addClass('over');
+		
+		// Get all of the IDs from the hrefs
+		tabs.IDs = [];
+		for (var i=0;i<tabCount;i++) {
+			tabs.IDs[i] = $("#tabs a:eq(" + i + ")").attr("href").replace("#","");
+		}
+		
+		// Slide visible up and clicked one down
+		$("#tabs a").each(function(i){
+			$(this).click(function () {
+				$('.over').removeClass('over');
+				$(this).addClass('over');
+				$(".feature:visible").slideUp("fast", function() { 
+					$("#" + tabs.IDs[i]).slideDown();
+				});
+				tabs.stylesheet = (tabs.IDs[i] == 'styles') ? 'alt' : 'default';
+				$('link').each(function() {
+					this.disabled = (this.title != '' && this.title != tabs.stylesheet);
+				});
+			});
+		});
+		
+		$(".feature .nextFeature a").each(function(i){
+			$(this).click(function() { 
+				$(".feature:visible").slideUp("fast", function() { 
+					if (tabs.IDs.length > (i+1) ) {
+						$("#" + tabs.IDs[i+1]).slideDown();
+						$('.over').removeClass('over');
+						$("#tabs a:eq(" + (i+1) + ")").addClass('over');
+					} else {
+						$("#" + tabs.IDs[0]).slideDown();
+						$('.over').removeClass('over');
+						$("#tabs a:eq(0)").addClass('over');
+					}
+				});
+			});
+		});
+	}
 }

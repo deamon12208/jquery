@@ -1,0 +1,37 @@
+* { margin: 0; padding: 0; }
+body { font-family: Arial, Helvetica, Sans-serif; text-align:center; font-size: 13px }
+#wrap { width: 850px; margin: 0 auto; text-align: left}
+pre { margin: 5px 10px; }
+.feature { clear:left; }
+.calLabel { float: left; width: 15em; }
+.ar_day { color: white !important; background: #eee url(img/ar.gif) no-repeat center !important; }
+.au_day { color: blue !important; background: #eee url(img/au.gif) no-repeat center !important; }
+.br_day { color: green !important; background: #eee url(img/br.gif) no-repeat center !important; }
+.cn_day { color: red !important; background: #eee url(img/cn.gif) no-repeat center !important; }
+.id_day { color: white !important; background: #eee url(img/id.gif) no-repeat center !important; }
+.ie_day { color: white !important; background: #eee url(img/ie.gif) no-repeat center !important; }
+.ke_day { color: red !important; background: #eee url(img/ke.gif) no-repeat center !important; }
+.lb_day { color: white !important; background: #eee url(img/lb.gif) no-repeat center !important; }
+.nz_day { color: blue !important; background: #eee url(img/nz.gif) no-repeat center !important; }
+.se_day { color: blue !important; background: #eee url(img/se.gif) no-repeat center !important; }
+.us_day { color: white !important; background: #eee url(img/us.gif) no-repeat center !important; }
+.za_day { color: green !important; background: #eee url(img/za.gif) no-repeat center !important; }
+
+#tabs {
+	list-style: none;
+}
+#tabs li {
+	float: left;
+}
+#tabs li a, .nextFeature a {
+	display:block;
+	padding: 0.25em 0.5em;
+	cursor: pointer;
+	cursor: hand;
+	text-decoration: none;
+	background: #555;
+	color: #eee;
+}
+#tabs li a:hover, #tabs li a.over, .nextFeature a:hover {
+	background: #000 !important;
+}
