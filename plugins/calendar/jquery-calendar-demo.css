@@ -2,7 +2,7 @@
 body { font-family: Arial, Helvetica, Sans-serif; text-align:center; font-size: 13px }
 #wrap { width: 850px; margin: 0 auto; text-align: left}
 pre { margin: 5px 10px; }
-.feature { clear:left; }
+.tab_group1 { clear:left; }
 .calLabel { float: left; width: 15em; }
 .ar_day { color: white !important; background: #eee url(img/ar.gif) no-repeat center !important; }
 .au_day { color: blue !important; background: #eee url(img/au.gif) no-repeat center !important; }
@@ -17,13 +17,13 @@ pre { margin: 5px 10px; }
 .us_day { color: white !important; background: #eee url(img/us.gif) no-repeat center !important; }
 .za_day { color: green !important; background: #eee url(img/za.gif) no-repeat center !important; }
 
-#tabs {
+.tabs {
 	list-style: none;
 }
-#tabs li {
+.tabs li {
 	float: left;
 }
-#tabs li a, .nextFeature a {
+.tabs li a, .nextFeature a {
 	display:block;
 	padding: 0.25em 0.5em;
 	cursor: pointer;
@@ -32,6 +32,6 @@ pre { margin: 5px 10px; }
 	background: #555;
 	color: #eee;
 }
-#tabs li a:hover, #tabs li a.over, .nextFeature a:hover {
+.tabs li a:hover, .tabs li a.over, .nextFeature a:hover {
 	background: #000 !important;
 }

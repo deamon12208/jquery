@@ -121,23 +121,37 @@ var tabs =
 		// Setup tabs
 		var nextHTML = '<div class="nextFeature"><a>Continue to next section &gt;&gt;</a></div>';
 		//var backHTML
-		$(".feature").hide().append(nextHTML);
-		$(".feature:first").show().id;
-		var tabCount = $("#tabs a").size();
-		$("#tabs a:eq(0)").addClass('over');
+		$("div[@class^=tab_group]").hide().append(nextHTML);
+		var tabCount = $("ul[@id^=tab_menu] a").size();
 		
 		// Get all of the IDs from the hrefs
 		tabs.IDs = [];
 		for (var i=0;i<tabCount;i++) {
-			tabs.IDs[i] = $("#tabs a:eq(" + i + ")").attr("href").replace("#","");
+			tabs.IDs[i] = $("ul[@id^=tab_menu] a:eq(" + i + ")").attr("href").replace("#","");
+		}
+		
+		// Set starting content
+		var url = window.location.href;
+		var loc = url.indexOf("#");
+		var tabID = url.substr(loc+1);
+		if (loc != undefined) {
+			$("#" + tabID).show();
+			for (var i=0; i<tabs.IDs.length;i++) {
+				if (tabs.IDs[i] == tabID) {
+					$("ul[@id^=tab_menu] a:eq(" + i + ")").addClass('over');
+				}
+			}
+		} else {
+			$("div[@class^=tab_group]:first").show().id;
+			$("ul[@id^=tab_menu] a:eq(0)").addClass('over');
 		}
 		
 		// Slide visible up and clicked one down
-		$("#tabs a").each(function(i){
+		$("ul[@id^=tab_menu] a").each(function(i){
 			$(this).click(function () {
 				$('.over').removeClass('over');
 				$(this).addClass('over');
-				$(".feature:visible").slideUp("fast", function() { 
+				$("div[@class^=tab_group]:visible").slideUp("fast", function() { 
 					$("#" + tabs.IDs[i]).slideDown();
 				});
 				tabs.stylesheet = (tabs.IDs[i] == 'styles') ? 'alt' : 'default';
@@ -147,17 +161,17 @@ var tabs =
 			});
 		});
 		
-		$(".feature .nextFeature a").each(function(i){
+		$("div[@class^=tab_group] .nextFeature a").each(function(i){
 			$(this).click(function() { 
-				$(".feature:visible").slideUp("fast", function() { 
+				$("div[@class^=tab_group]:visible").slideUp("fast", function() { 
 					if (tabs.IDs.length > (i+1) ) {
 						$("#" + tabs.IDs[i+1]).slideDown();
 						$('.over').removeClass('over');
-						$("#tabs a:eq(" + (i+1) + ")").addClass('over');
+						$("ul[@id^=tab_menu] a:eq(" + (i+1) + ")").addClass('over');
 					} else {
 						$("#" + tabs.IDs[0]).slideDown();
 						$('.over').removeClass('over');
-						$("#tabs a:eq(0)").addClass('over');
+						$("ul[@id^=tab_menu] a:eq(0)").addClass('over');
 					}
 				});
 			});

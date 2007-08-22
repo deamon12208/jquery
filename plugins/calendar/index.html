@@ -15,7 +15,7 @@
 	<p><a href="http://docs.jquery.com/Plugins/Calendar">jQuery Calendar API</a></p>
 	<p><a href="http://docs.jquery.com/Plugins/Calendar/ChangeLog">jQuery Calendar Change Log</a></p>
 	<h1>jQuery Calendar Examples</h1>
-	<ul id="tabs">
+	<ul id="tab_menu1" class="tabs">
 		<li><a href="#default">Defaults</a></li>
 		<li><a href="#invoke">Invocation</a></li>
 		<li><a href="#keys">Keystrokes</a></li>
@@ -27,7 +27,7 @@
 		<li><a href="#inline">Inline</a></li>
 		<li><a href="#styles">Stylesheets</a></li>
 	</ul>
-	<div id="default" class="feature">
+	<div id="default" class="tab_group1">
 		<h2>Defaults</h2>
 		<p>The calendar can easily be added to an input field with appropriate default settings.</p>
 		<pre>$('#defaultFocus').calendar();</pre>
@@ -50,7 +50,7 @@
 			<li>Clicking elsewhere closes the calendar</li>
 		</ul>
 	</div>
-	<div id="invoke" class="feature">
+	<div id="invoke" class="tab_group1">
 		<h2>Invocation</h2>
 		<p>The calendar can be invoked in a variety of ways, as shown below.
 			Also shown is the use of an image only trigger,
@@ -86,7 +86,7 @@ $('.invokeBoth').calendar();</pre>
 		<pre>popUpCal.dialogCalendar($('#invokeDialog').val(), setDateFromDialog,
 	{prompt: 'Choose a date', speed: ''});</pre>
 	</div>
-	<div id="keys" class="feature">
+	<div id="keys" class="tab_group1">
 		<h2>Keystrokes</h2>
 		<p>The calendar also responds to keystrokes entered in the input field.</p>
 		<p><span class="calLabel">Keyboard driven:</span>
@@ -103,7 +103,7 @@ $('.invokeBoth').calendar();</pre>
 			<li><span class="calLabel">escape</span>close the calendar without selection</li>
 		</ul>
 	</div>
-	<div id="restrict" class="feature">
+	<div id="restrict" class="tab_group1">
 		<h2>Restricting</h2>
 		<p>You can restrict the functionality of the calendar in various ways.
 			The first example sets the first day of the week to Monday and prevents it from being
@@ -124,7 +124,7 @@ $('.invokeBoth').calendar();</pre>
 		<pre>$('#restrictDates').calendar({minDate: new Date(2005, 1 - 1, 26),
 	maxDate: new Date(2007, 1 - 1, 26)});</pre>
 	</div>
-	<div id="custom" class="feature">
+	<div id="custom" class="tab_group1">
 		<h2>Customise</h2>
 		<p>You can customise the selectability and/or appearance of individual days
 			by setting a callback function that accepts a date and returns an array
@@ -153,7 +153,7 @@ function nationalDays(date) {
 		<p>With CSS like the following:</p>
 		<pre>.au_day { color: blue !important; background: #eee url(au.gif) no-repeat center !important; }</pre>
 	</div>
-	<div id="l10n" class="feature">
+	<div id="l10n" class="tab_group1">
 		<h2>Localisation</h2>
 		<p>You can localise the calendar for other languages and regional differences.
 			The calendar defaults to English with a date format of DD/MM/YYYY.
@@ -175,7 +175,7 @@ function nationalDays(date) {
 		<p>And then configure the language per calendar instance.</p>
 		<pre>$('#frenchCalendar').calendar(popUpCal.regional['fr']);</pre>
 	</div>
-	<div id="range" class="feature">
+	<div id="range" class="tab_group1">
 		<h2>Date Range</h2>
 		<p>Use a custom field settings function to create a date range control:
 			two date fields, each restricting the other. The function takes an
@@ -190,7 +190,7 @@ function customRange(input) {
 		maxDate: (input.id == 'dFrom' ? getDate($('#dTo').val()) : null)};
 }</pre>
 	</div>
-	<div id="misc" class="feature">
+	<div id="misc" class="tab_group1">
 		<h2>Miscellaneous</h2>
 		<p>Additional settings let you move the <em>Clear</em>/<em>Close</em> controls
 			to the bottom and display the days in other months (non-selectable).
@@ -233,7 +233,7 @@ function customRange(input) {
 
 $('.inlineConfig').calendar();</pre>
 	</div>
-	<div id="inline" class="feature">
+	<div id="inline" class="tab_group1">
 		<h2>Inline</h2>
 		<p>The calendar can be used inline rather than as a popup.</p>
 		<p><span class="calLabel">Inline date range:</span>
@@ -258,7 +258,7 @@ function updateInlineRange() {
 	popUpCal.reconfigureFor(inlineTo[0], {minDate: dateFrom});
 }</pre>
 	</div>
-	<div id="styles" class="feature">
+	<div id="styles" class="tab_group1">
 		<h2>Stylesheets</h2>
 		<p>The calendar can be formatted through the use of a stylesheet.
 			The default stylesheet is used in the rest of this demo
