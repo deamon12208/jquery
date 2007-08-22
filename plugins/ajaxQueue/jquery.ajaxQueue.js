@@ -5,15 +5,6 @@
  * Documentation: http://docs.jquery.com/AjaxQueue
  */
 
-/*
-TODO
-
-- support ports for all queued/synced/xxxed requests 
-- offer queue/sync/xxx behaviour as mode-option
-
-
- */
-
 /**
 
 <script>
@@ -44,17 +35,6 @@ $(function(){
  * A new Ajax request won't be started until the previous queued 
  * request has finished.
  */
-jQuery.ajaxQueue = function(o){
-	var _old = o.complete;
-	o.complete = function(){
-		if ( _old ) _old.apply( this, arguments );
-		jQuery.dequeue( jQuery.ajaxQueue, "ajax" );
-	};
-
-	jQuery([ jQuery.ajaxQueue ]).queue("ajax", function(){
-		jQuery.ajax( o );
-	});
-};
 
 /*
  * Synced Ajax requests.
@@ -62,118 +42,70 @@ jQuery.ajaxQueue = function(o){
  * the callbacks (success/error/complete) won't fire until all previous
  * synced requests have been completed.
  */
-jQuery.ajaxSync = function(o){
-	var fn = jQuery.ajaxSync.fn, data = jQuery.ajaxSync.data, pos = fn.length;
-	
-	fn[ pos ] = {
-		error: o.error,
-		success: o.success,
-		complete: o.complete,
-		done: false
-	};
-
-	data[ pos ] = {
-		error: [],
-		success: [],
-		complete: []
-	};
-
-	o.error = function(){ data[ pos ].error = arguments; };
-	o.success = function(){ data[ pos ].success = arguments; };
-	o.complete = function(){
-		data[ pos ].complete = arguments;
-		fn[ pos ].done = true;
-
-		if ( pos == 0 || !fn[ pos-1 ] )
-			for ( var i = pos; i < fn.length && fn[i].done; i++ ) {
-				if ( fn[i].error ) fn[i].error.apply( jQuery, data[i].error );
-				if ( fn[i].success ) fn[i].success.apply( jQuery, data[i].success );
-				if ( fn[i].complete ) fn[i].complete.apply( jQuery, data[i].complete );
-
-				fn[i] = null;
-				data[i] = null;
-			}
-	};
-
-	return jQuery.ajax(o);
-};
-
-jQuery.ajaxSync.fn = [];
-jQuery.ajaxSync.data = [];
-
 
 
 (function($) {
 	
 	var ajax = $.ajax;
-	var portless;
-	var request = {};
+	
+	var pendingRequests = {};
+	
+	var synced = [];
+	var syncedData = [];
 	
 	$.ajax = function(settings) {
+		// create settings for compatibility with ajaxSetup
 		settings = jQuery.extend(settings, jQuery.extend({}, jQuery.ajaxSettings, settings));
+		
 		var port = settings.port;
-		var mode = settings.mode;
-		switch(mode) {
+		
+		switch(settings.mode) {
 		case "abort": 
-			if ( port ) {
-				if ( request[port] ) {
-					request[port].abort();
-				}
-			} else {
-				if ( portless ) {
-					portless.abort();
-				}
+			if ( pendingRequests[port] ) {
+				pendingRequests[port].abort();
 			}
-			var result = ajax.apply(this, arguments);
-			if ( port ) {
-				request[port] = result;
-			} else {
-				portless = result;
-			}
-			return result;
+			return pendingRequests[port] = ajax.apply(this, arguments);
 		case "queue": 
 			var _old = settings.complete;
 			settings.complete = function(){
 				if ( _old ) _old.apply( this, arguments );
-				jQuery.dequeue( ajax, "ajax" );
+				jQuery.dequeue( ajax, "ajax" + port );
 			};
 		
-			jQuery([ ajax ]).queue("ajax", function(){
+			jQuery([ ajax ]).queue("ajax" + port, function(){
 				ajax( settings );
 			});
 			return;
 		case "sync":
-			var fn = jQuery.ajaxSync.fn,
-				data = jQuery.ajaxSync.data,
-				pos = fn.length;
+			var pos = synced.length;
 	
-			fn[ pos ] = {
+			synced[ pos ] = {
 				error: settings.error,
 				success: settings.success,
 				complete: settings.complete,
 				done: false
 			};
 		
-			data[ pos ] = {
+			syncedData[ pos ] = {
 				error: [],
 				success: [],
 				complete: []
 			};
 		
-			settings.error = function(){ data[ pos ].error = arguments; };
-			settings.success = function(){ data[ pos ].success = arguments; };
+			settings.error = function(){ syncedData[ pos ].error = arguments; };
+			settings.success = function(){ syncedData[ pos ].success = arguments; };
 			settings.complete = function(){
-				data[ pos ].complete = arguments;
-				fn[ pos ].done = true;
+				syncedData[ pos ].complete = arguments;
+				synced[ pos ].done = true;
 		
-				if ( pos == 0 || !fn[ pos-1 ] )
-					for ( var i = pos; i < fn.length && fn[i].done; i++ ) {
-						if ( fn[i].error ) fn[i].error.apply( jQuery, data[i].error );
-						if ( fn[i].success ) fn[i].success.apply( jQuery, data[i].success );
-						if ( fn[i].complete ) fn[i].complete.apply( jQuery, data[i].complete );
+				if ( pos == 0 || !synced[ pos-1 ] )
+					for ( var i = pos; i < synced.length && synced[i].done; i++ ) {
+						if ( synced[i].error ) synced[i].error.apply( jQuery, syncedData[i].error );
+						if ( synced[i].success ) synced[i].success.apply( jQuery, syncedData[i].success );
+						if ( synced[i].complete ) synced[i].complete.apply( jQuery, syncedData[i].complete );
 		
-						fn[i] = null;
-						data[i] = null;
+						synced[i] = null;
+						syncedData[i] = null;
 					}
 			};
 		}

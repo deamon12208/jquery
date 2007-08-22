@@ -278,7 +278,7 @@ function url(value) {
  * @param Object actual
  * @param String message (optional)
  */
-function equals(expected, actual, message) {
+function equals(actual, expected, message) {
 	var result = expected == actual;
 	message = message || (result ? "okay" : "failed");
 	_config.Test.push( [ result, result ? message + ": " + expected : message + " expected: " + expected + " actual: " + actual ] );
