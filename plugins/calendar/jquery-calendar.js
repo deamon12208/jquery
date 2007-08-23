@@ -262,7 +262,7 @@ $.extend(PopUpCal.prototype, {
 	showFor: function(target) {
 		var input = (target.nodeName && target.nodeName.toLowerCase() == 'input' ? target : this);
 		if (input.nodeName.toLowerCase() != 'input') { // find from button/image trigger
-			input = $('../input', input)[0];
+			input = $('input', input.parentNode)[0];
 		}
 		if (popUpCal._lastInput == input) { // already here
 			return;
@@ -304,7 +304,9 @@ $.extend(PopUpCal.prototype, {
 			if (speed == '') {
 				this._afterShow(inst);
 			}
-			inst._input[0].focus();
+			if (inst._input[0].type != 'hidden') {
+				inst._input[0].focus();
+			}
 			this._curInst = inst;
 		}
 	},
@@ -312,7 +314,7 @@ $.extend(PopUpCal.prototype, {
 	/* Generate the calendar content. */
 	_updateCalendar: function(inst) {
 		inst._calendarDiv.empty().append(inst._generateCalendar());
-		if (inst._input) {
+		if (inst._input && inst._input != 'hidden') {
 			inst._input[0].focus();
 		}
 	},
@@ -483,6 +485,9 @@ $.extend(PopUpCal.prototype, {
 
 	/* Find an object's position on the screen. */
 	_findPos: function(obj) {
+		if (obj.type == 'hidden') {
+			obj = obj.nextSibling;
+		}
 		var curleft = curtop = 0;
 		if (obj.offsetParent) {
 			curleft = obj.offsetLeft;
