@@ -15,12 +15,12 @@
 	
 	$.ui.menu = function(el, m, o, t) {
 		var options = $.extend({
+			delay: 500,
 			timeout: 2000,
 			context: 'clickContext',
-			show: 'slideDown',
-			hide: 'slideUp',
-			speed: 'slow',
-			title: 'Context Menu'
+			show: {opacity:'show'},
+			hide: {opacity:'hide'},
+			speed: 'normal'
 		}, o);
 		
 		$(m).appendTo(el);
@@ -47,15 +47,10 @@
 			var self = this;
 			$(a).click(function(){
 				x = $(a).position();
-				y = x.top + ( $(a).height() + 1);
-				$(m).css({position:'absolute', top: y, left: x.left});
-				$(m)[o.show](o.speed, function(){
-					self.showChild(m, o);
-					$(window).bind('click', function(){
-						self.hideMenu(m, o);
-						$(window).unbind('click');
-					})
-				});
+				y = x.bottom + ( $(a).height() + 1);
+				$(m).css({position:'absolute', top: y, left: x.left})
+				.animate(o.show, o.speed);
+				$('a', m).hover(self.showChild(this,o), self.hideMenu(this, o));
 			});
 			return false;
 		},
@@ -64,14 +59,9 @@
 			$(a).hover(function(){
 				x = $(a).position();
 				y = x.top + ( $(a).height() + 1);
-				$(m).css({position:'absolute', top: y, left: x.left});
-				$(m)[o.show](o.speed, function(){
-					self.showChild(m, o);
-					$(window).bind('click', function(){
-						self.hideMenu(m, o);
-						$(window).unbind('click');
-					});
-				});
+				$(m).css({position:'absolute', top: y, left: x.left})
+				.animate(o.show, o.speed);
+				$('a', m).hover(self.showChild(this,o), self.hideMenu(this, o));
 			},
 			function(){
 				self.hideMenu(m,o);
@@ -107,16 +97,12 @@
 			$('li', m).bind('mouseover', function(){
 				x = $(this).position();
 				y = $(this).width();
-				$(this).children('ul').css({position:'absolute', top:x.top, left:y})[o.show](o.speed, function(){
-					$(this).bind('mouseout', function(){
-						self.hideMenu(this,o);
-						$(window).unbind('click');
-					});
-				});
+				$(this).children('ul').css({position:'absolute', top:x.top, left:y})
+				.animate(o.show,o.speed);
 			});
 		},
 		hideMenu : function(m, o){
-			$(m)[o.hide](o.speed);
+			$(m).animate(o.hide,o.speed);
 			return false;
 		}
 		
