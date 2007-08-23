@@ -14,7 +14,7 @@
 	}	
 	
 	$.ui.menu = function(el, m, o, t) {
-		var options = $.extend({
+		var o = $.extend({
 			delay: 500,
 			timeout: 2000,
 			context: 'clickContext',
@@ -25,7 +25,7 @@
 		
 		$(m).appendTo(el);
 		this.styleMenu(m);	// Pass the menu in to recieve it's makeover
-		this[options.context](el, m, options);	// Based on contexted selected, attach to menu parent
+		this[o.context](el, m, o);	// Based on contexted selected, attach to menu parent
 		
     	if(t&&t.buttons)
       		$('a',$(m)).click(function(){
@@ -56,7 +56,14 @@
 		},
 		hoverContext : function(a,m,o) {
 			var self = this;
-			$(a).hover(function(){
+			
+			if (typeof $.fn.hoverIntent != 'undefined') {
+				var htype = 'hoverIntent';
+			} else {
+				var htype = 'hover';
+			}
+			
+			$(a)[htype](function(){
 				x = $(a).position();
 				y = x.top + ( $(a).height() + 1);
 				$(m).css({position:'absolute', top: y, left: x.left})
