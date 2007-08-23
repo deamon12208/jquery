@@ -114,6 +114,9 @@ img.calendar_trigger {
 	color: #000;
 	border: 1px solid #ddd;
 }
+#calendar .calendar_daysCell a{
+	display: block;
+}
 .calendar .calendar_weekEndCell {
 	background: #ddd;
 }

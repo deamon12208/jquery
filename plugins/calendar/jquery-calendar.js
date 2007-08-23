@@ -202,7 +202,8 @@ $.extend(PopUpCal.prototype, {
 		inputs.each(function() {
 			this.disabled = false;
 			$('../button.calendar_trigger', this).each(function() { this.disabled = false; });
-			$('../img.calendar_trigger', this).css('opacity', '1.0');
+			$('../img.calendar_trigger',
+this).css({opacity:'1.0',cursor:''});
 			var $this = this;
 			popUpCal._disabledInputs = $.map(popUpCal._disabledInputs,
 				function(value) { return (value == $this ? null : value); }); // delete entry
@@ -217,7 +218,7 @@ $.extend(PopUpCal.prototype, {
 		inputs.each(function() {
 			this.disabled = true;
 			$('../button.calendar_trigger', this).each(function() { this.disabled = true; });
-			$('../img.calendar_trigger', this).css('opacity', '0.5');
+			$('../img.calendar_trigger', this).css({opacity:'0.5',cursor:'default'});
 			var $this = this;
 			popUpCal._disabledInputs = $.map(popUpCal._disabledInputs,
 				function(value) { return (value == $this ? null : value); }); // delete entry

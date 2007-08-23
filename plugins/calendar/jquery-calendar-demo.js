@@ -113,7 +113,7 @@ function formatDate(date) {
 		(month < 10 ? '0' : '') + month + '/' + date.getFullYear();
 }
 
-// Custom Tabs by Marc Grabanski
+// Custom Tabs written by Marc Grabanski
 var tabs = 
 {
 	init : function () 
@@ -134,7 +134,7 @@ var tabs =
 		var url = window.location.href;
 		var loc = url.indexOf("#");
 		var tabID = url.substr(loc+1);
-		if (loc != undefined) {
+		if (loc > -1) {
 			$("#" + tabID).show();
 			for (var i=0; i<tabs.IDs.length;i++) {
 				if (tabs.IDs[i] == tabID) {
