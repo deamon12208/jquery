@@ -1,0 +1,158 @@
+* {
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+}
+
+body {
+	padding: 1em;
+	color: #000000;
+	font-size: 0.75em;
+	line-height: 1.4em;
+	font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+}
+
+body * {
+	font-size: 1em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	padding: 0 0 3px 0;
+}
+
+h1 {
+	font-size: 1.4em;
+	margin: 0 0 2px 0;
+}
+
+h2 {
+	font-size: 1.2em;
+	margin: 0 0 2px 0;
+}
+
+fieldset {
+	border: 1px solid #666666;
+	background: #EFEFEF;
+	padding: 1em;
+}
+
+fieldset legend {
+	display: none;
+}
+
+div.inputWrapper {
+	background: #EEEEEE;
+	margin: 0 0 1em 0;
+	padding: 4px;
+}
+
+div.inputWrapper label,
+div.inputWrapper input {
+	display: block;
+}
+
+div.inputWrapper label {
+	font-weight: bold;
+}
+
+button {
+	width: 75px;
+	height: 30px;
+	border: 1px solid #333333;
+	padding: 2px 2px 2px 16px;
+}
+
+button#btnBrowse{
+	background: url('./img/browse.png') 4px center no-repeat;
+}
+
+button#btnUpload{
+	background: url('./img/upload.png') 4px center no-repeat;
+}
+
+button#btnCancel {
+	background: url('./img/cancel.png') 4px center no-repeat;
+}
+
+div.uiUpload {
+	display: none;
+}
+
+div.uiUploadQueue {
+	border-left: 1px solid #404040;
+	border-top: 1px solid #404040;
+	border-right: 1px solid #d4d0c8;
+	border-bottom: 1px solid #d4d0c8;
+	background: #FFFFFF;
+	height: 288px;
+	overflow-y: scroll;
+}
+
+div.uiUploadItem {
+	height: 40px;
+	margin: 0 0 0 0;
+	overflow: hidden;
+	background: url('./img/bgUpload.gif') left bottom repeat-x;
+}
+
+div.uiUploadItem.active {
+	background: url('./img/bgUploadActive.gif') left bottom repeat-x;
+}
+
+div.uiUploadItemWrapper {
+	padding: 12px;
+}
+
+div.uiUploadItemWrapper a {
+	padding: 0 0 0 20px;
+	text-decoration: none;
+	font-weight: bold;
+	color: #000000;
+}
+
+div.uiUploadItemWrapper a:hover {
+	color: #0000ff;
+}
+
+div.uiUploadItemWrapper a.uploadDelete {
+	background: url('./img/uploadDelete.png') left center no-repeat;
+}
+
+div.uiUploadItemWrapper a.uploadError {
+	background: url('./img/uploadError.png') left center no-repeat;
+}
+
+div.uiUploadItemWrapper a.uploadSuccess {
+	background: url('./img/uploadSuccess.png') left center no-repeat;
+}
+
+div.uiUploadProgress {
+	margin: 1em 0 0.25em 0;
+	border: 1px solid #999999;
+}
+
+div.uiUploadProgress div.uiUploadProgressBar {
+	overflow: hidden;
+	width: 0%;
+	color: #ffffff;
+	background: #000033;
+	text-align: right;
+	font-weight: bold;
+}
+
+ul, ol {
+	margin: 0 0 0 20px;
+}
+
+.blue {
+	color: #0000ff;
+}
+
+#notice {
+	border: 2px solid #ff0000;
+	color: #ffcc00;
+	background: #333333;
+	padding: 8px;
+	font-weight: bold;
+	text-align: center;
+	margin: 0 0 1em 0;
+}

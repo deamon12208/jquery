@@ -1,0 +1,223 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>uiUpload | Demo</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+	<!-- Stylesheet (core) -->
+	<link rel="stylesheet" type="text/css" href="../css/style.css" />
+
+	<!-- Javascript (core) -->
+	<script type="text/javascript" src="../js/jquery-svn.js"></script>
+	<script type="text/javascript">
+	// <![CDATA[
+		$.ui = {};
+	// ]]>
+	</script>
+	<script type="text/javascript" src="../_src/ui.upload.js"></script>
+
+	<!-- Javascript (demo) -->
+	<script type="text/javascript" src="../js/script.js"></script>
+	<script type="text/javascript">
+	// <![CDATA[
+		jQuery(document).ready(function() {
+				// Save reference to newly created object so we can override some of the callbacks
+				// since all 3 demos use thesame base callbacks, this was the easiest way.
+				// Normally, you would not do it this way.
+				oUpload = jQuery('.inputWrapper').upload({
+						bDebug: true,
+						oBrowse: jQuery('#btnBrowse'),
+						oUpload: jQuery('#btnSubmit'),
+						oReset: jQuery('#btnReset'),
+						sScript: '/demo2/backend.php',
+						sMovie: '/_src/ui.upload.swf',
+						dMaxSize: 5120000,
+						sFileFilters: [
+										'All files (*.*)|*.*',
+										'Images (*.gif,*.png,*.jpg)|*.gif;*.png;*.jpg'
+									],
+						aCallback: {
+									swfInitialized: function(oUI) {
+											// Flash movie succesfully created, now remove old file objects
+											jQuery('.inputWrapper').remove();
+
+											// And show the UI upload
+											jQuery('.uiUpload').show();
+										},
+									dialogPreShow: function(oUI) {
+											jQuery('.cbStatus').html('please choose some files (or show greybox)!');
+										},
+									dialogPostShow: function(oUI) {
+											jQuery('.cbStatus').html('you have hidden the dialog and you ' + ((oUI.success == true) ? 'DID' : 'DID NOT') + ' select files!!');
+										},
+									queueStarted: function(oUI) {
+											jQuery('.cbStatus').html('upload of current queue started!');
+										},
+									queueEmpty: function(oUI) {
+											jQuery('.cbStatus').html('current upload queue is empty!');
+										},
+									fileAdded: function(oUI) {
+											sHTML = '<div class="uiUploadItem" id="' + oUI.oFile.id + '">';
+											sHTML+= '<div class="uiUploadItemWrapper">';
+											sHTML+= '<a href="javascript://" title="Delete upload">' + oUI.oFile.name + '</a> <span class="cbInformation">(' + $.ui.upload.formatSize(oUI.oFile.size) + ')</span>';
+											sHTML+= '<div class="uiUploadProgress"><div class="uiUploadProgressBar"> 0% </div></div>';
+											sHTML+= '&#0187; <strong>Processed:</strong> <span class="cBytesProcessed">0 bytes</span> of <span class="cBytesTotal">' + $.ui.upload.formatSize(oUI.oFile.size) + '</span> <span class="cSpeedTime">&nbsp;</span>';
+											sHTML+= '</div>';
+											oHTML = jQuery(sHTML);
+											jQuery('.uiUploadQueue').append(oHTML);
+
+											// Add CSS class
+											jQuery('A', oHTML).attr('class', 'uploadDelete');
+
+											// Add handler
+											var _oUI = oUI;
+											jQuery('A', oHTML).click(function() {
+													// Callback to Flash to remove the file from the queue
+													jQuery('#' + _oUI.options.sName)[0].cancelFile(_oUI.oFile.id);
+
+													// If the file was succesfully removed, Flash calls back to Javascript
+													return false;
+												});
+										},
+									fileCancelled: function(oUI) {
+											jQuery('#' + oUI.oFile.id).remove();												
+											jQuery('.cbStatus').html('file (' + oUI.oFile.name + ') cancelled!');
+											alert('The file you\'ve selected (' + oUI.oFile.name + ') was removed from the queue');
+										},
+									fileRemoved: function(oUI) {
+											jQuery('#' + oUI.oFile.id).remove();
+											jQuery('.cbStatus').html('File (' + oUI.oFile.name + ') removed from queue');
+											alert('The file you\'ve selected (' + oUI.oFile.name + ') was removed from the queue');
+										},
+									queueCancelled: function(oUI) {
+											jQuery('.cbStatus').html('complete current queue cancelled!');
+
+											// DEMO2: Reset the form
+											alert('Queue was cancelled, so we\'re resetting the form');
+											jQuery(oUI.oReset[0].form).resetForm();
+										},
+									queueCompleted: function(oUI) {
+											sStatus = 'Upload queue: Uploaded ' + oUI.oProgress.qIndex + ' of ' + oUI.oProgress.qCount + ' files. ';
+											sStatus+= $.ui.upload.formatSize(oUI.oProgress.qbDone) + ' at ';
+											sStatus+= $.ui.upload.formatSize(oUI.oProgress.qbSpeed) + '/sec (' + oUI.oProgress.qProgress + '%)';
+											jQuery('h2.uiUploadStatus').html(sStatus);
+
+											jQuery('.cbStatus').html('complete current queue (' + oUI.oProgress.qCount + ' items) uploaded!');
+											alert('All done!');
+										},
+									fileStarted: function(oUI) {
+											jQuery('#' + oUI.oFile.id).addClass('active').animate({ height: 80 }, 200);
+											jQuery('span.cbInformation', '#' + oUI.oFile.id).html('&nbsp;');
+										},
+									fileProgress: function(oUI) {
+											sStatus = 'Upload queue: uploading ' + oUI.oProgress.qIndex + ' of ' + oUI.oProgress.qCount + ' files. ';
+											sStatus+= $.ui.upload.formatSize(oUI.oProgress.qbDone) + ' at ';
+											sStatus+= $.ui.upload.formatSize(oUI.oProgress.qbSpeed) + '/sec (' + oUI.oProgress.qProgress + '%) ';
+											sStatus+= $.ui.upload.formatTime(oUI.oProgress.qtRemain) + ' remaining...';
+											jQuery('h2.uiUploadStatus').html(sStatus);
+
+											// Other shite
+											jQuery('div.uiUploadProgressBar', '#' + oUI.oFile.id).css('width', oUI.oProgress.cProgress + '%').html('&nbsp;' + oUI.oProgress.cProgress + '%&nbsp;');
+											jQuery('span.cBytesProcessed', '#' + oUI.oFile.id).html($.ui.upload.formatSize(oUI.oProgress.cbDone));
+											jQuery('span.cSpeedTime', '#' + oUI.oFile.id).html('at ' + $.ui.upload.formatSize(oUI.oProgress.cbSpeed) + '/sec; ' + $.ui.upload.formatTime(oUI.oProgress.ctRemain));
+										},
+									fileCompleted: function(oUI) {
+											jQuery('#' + oUI.oFile.id).removeClass('active').animate({ height: 40 }, 200);
+											jQuery('span.cbInformation:eq(0)', '#' + oUI.oFile.id).html('(' + $.ui.upload.formatSize(oUI.oFile.size) + ' uploaded at ' + $.ui.upload.formatSize(oUI.oProgress.cbSpeed) + '/sec; ' + $.ui.upload.formatTime(oUI.oProgress.ctBusy) + ')');
+											jQuery('A', '#' + oUI.oFile.id).attr('class', 'uploadSuccess').unclick();
+										},
+									fileErrorSize: function(oUI) {
+											jQuery('.cbStatus').html('file error: size');
+											alert('Error: The file you\'ve selected (' + oUI.oFile.name + ') exceeds the maximum filesize of ' + (oUI.options.dMaxSize * 1024) + ' bytes.');
+										},
+									fileErrorIO: function(oUI) {
+											jQuery('.cbStatus').html('file error: I/O');
+											alert('Error: The file you\'ve selected (' + oUI.oFile.name + ') raised an I/O error.');
+										},
+									fileErrorSecurity: function(oUI) {
+											jQuery('.cbStatus').html('file error: security');
+											alert('Error: The file you\'ve selected (' + oUI.oFile.name + ') raised an security error.');
+										},
+									fileErrorHTTP: function(oUI) {
+											jQuery('.cbStatus').html('file error: HTTP error');
+											alert('Error: The file you\'ve selected (' + oUI.oFile.name + ') gave an HTTP error while uploading: HTTP 1.1/' + oUI.errCode);
+										}
+							}
+					});
+			});
+	// ]]>
+	</script>
+</head>
+<body>
+	<h1>uiUpload &quot;demo 2&quot;</h1>
+	<ul>
+		<li>Seperate script for uploading and seperate script for form processing.</li>
+		<li>First, the uploads are processed.</li>
+		<li>Second, the form is submitted.</li>
+		<li>Ideally, you would like to validate the form before uploading. You could do this with AJAX (see demo3)</li>
+	</ul>
+	<br />
+
+	<div class="blue">
+		<strong>Notes:</strong><br />
+		<ul>
+			<li>We use the default submit and reset buttons which where present in the form!</li>
+			<li>Changes to the default demo are tagged with the javascript commments: &quot;Demo 2&quot;</li>
+			<li style="color: #ff0000;">There is NO communication between the two scripts!!</li>
+		</ul>
+	</div>
+	<br />
+
+	<!-- uiUpload -->
+	<!-- Doesn't need to be inside the form tag -->
+	<div class="uiUpload">
+		<h2 class="uiUploadStatus">Upload queue:</h2>
+		Please choose one (or more :p) files with the Browse button.<br />
+		<div class="uiUploadQueue">
+		</div>
+		<br />
+
+		<button id="btnBrowse">Browse!</button><br />
+		<br />
+
+		<strong>LAST CALLBACK:</strong> <span class="cbStatus">(none)</span><br />
+		<br />
+	</div>
+
+	<!-- The actual form -->
+	<form action="/demo2/form.php" enctype="multipart/form-data" method="post" id="frmLogin">
+		<fieldset>
+			<legend>Some file upload fields</legend>
+			<input type="hidden" name="SomeHiddenField" value="Damn, you've seen me!" />
+
+
+			<div class="inputWrapper">
+				<label for="upload1">Upload field 1</label>
+				<input type="file" id="upload1" name="upload1" />
+			</div>
+
+			<div class="inputWrapper">
+				<label for="upload2">Upload field 2</label>
+				<input type="file" id="upload2" name="upload2" />
+			</div>
+
+			<div class="inputWrapper">
+				<label for="upload3">Upload field 3</label>
+				<input type="file" id="upload3" name="upload3" />
+			</div>
+
+			<div class="inputWrapper">
+				<label for="upload4">Upload field 4</label>
+				<input type="file" id="upload4" name="upload4" />
+			</div>
+
+			<div class="inputWrapper">
+				<label for="upload5">Upload field 5</label>
+				<input type="file" id="upload2" name="upload5" />
+			</div>
+
+			<input type="submit" id="btnSubmit" /> &nbsp; <input type="reset" id="btnReset" />
+		</fieldset>
+	</form>
+</body>
+</html>
