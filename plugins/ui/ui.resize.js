@@ -1,8 +1,8 @@
 (function($) {
-
+	
 	$.fn.resizable = function(o) {
 		return this.each(function() {
-			if(!$.ui.is(this,"resizable")) new $.ui.resizable(this,o);	
+			new $.ui.resizable(this,o);	
 		});
 	}
 	
@@ -125,6 +125,10 @@
 				axis: self.options.axis
 			}			
 		},
+		destroy: function() {
+			console.log(1);
+			this.interaction.destroy();
+		},
 		enable: function() { this.disabled = false; },
 		disable: function() { this.disabled = true; },
 		start: function(that, e) {
@@ -243,6 +247,12 @@
 			return false;
 			
 		}
+	});
+	
+	//Register the module
+	$.ui.register({
+		state: "resizable",
+		name: "resizable" //The name of your function: $.ui.resizable -> 'resizable'
 	});
 
  })($);

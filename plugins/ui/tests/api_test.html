@@ -88,16 +88,7 @@ $("#button1").bind("click",function(){
 		minWidth: 200,
 		minHeight: 100,
 		maxWidth: 500,
-		maxHeight: 300,
-		start: function(e,ui) {
-			//console.log('start ', ui);	
-		},
-		stop: function(e,ui) {
-			//console.log('stop ', ui);	
-		},
-		resize: function(e,ui) {
-			//console.log(e);	
-		}		
+		maxHeight: 300	
 	});
 
 	testInstance = $.ui.get("test", "resizable")[0];

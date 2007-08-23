@@ -4,16 +4,22 @@
 	var m = $.ui.manager;
 	
 	$.extend($.ui, {
-		is: function(e, t) {
-			return $(e).is(".ui-"+t);
+		register: function(o) {
+			if(o.state) { //if there is certain element state available, add a expression for selecting
+				var o2 = {}; o2[o.state] = "a.className.match(/(?:^|\s+)ui-"+o.name+"(?:\s+|$)/)";
+				$.extend($.expr[':'], o2);
+			}
 		},
-		get: function(n, t) {
-			return m[t] ? m[t][n] : [];	
+		is: function(el, type) {
+			return $(el).is(".ui-"+type);
 		},
-		add: function(n, t, w) {
-			if(!m[t]) m[t] = {};
-			m[t][n] ? m[t][n].push(w) : m[t][n] = [w];
-			$(w.element).addClass("ui-"+t);
+		get: function(name, type) {
+			return m[type] ? m[type][name] : [];	
+		},
+		add: function(name, type, instance) {
+			m[type] = m[type] || {}; 
+			m[type][name] ? m[type][name].push(instance) : m[type][name] = [instance];
+			$(instance.element).addClass("ui-"+type);
 		},
 		remove: function(n, t, w) {
 			if(!m[t] || !m[t][n]) return false;
@@ -24,29 +30,22 @@
 				return true;
 			}
 		},
-		destroy: function(n, t) {
-			if(!m[t] || !m[t][n]) return false;
-			for(var i=0;i<m[t][n].length;i++) {
-				if(m[t][n][i].destroy) m[t][n].destroy();
-				$.ui.remove(n, t, m[t][n][i]);
-			}
-			return true;	
+		destroy: function(name, type) {
+			return $.ui._execute(name, type, "destroy", function(e) { $.ui.remove(name, type, e); });
 		},
-		enable: function(n, t) {
-			if(!m[t] || !m[t][n]) return false;
-			for(var i=0;i<m[t][n].length;i++) {
-				if(m[t][n][i].enable) m[t][n][i].enable();
-				$(m[t][n][i].element).removeClass("ui-"+t+"-disabled");
-			}
-			return true;	
+		enable: function(name, type) {
+			return $.ui._execute(name, type, "enable", function(e) { $(e.element).removeClass("ui-"+type+"-disabled"); });	
 		},
-		disable: function(n, t) {
-			if(!m[t] || !m[t][n]) return false;
-			for(var i=0;i<m[t][n].length;i++) {
-				if(m[t][n][i].disable) m[t][n][i].disable();
-				$(m[t][n][i].element).addClass("ui-"+t+"-disabled");
+		disable: function(name, type) {
+			return $.ui._execute(name, type, "disable", function(e) { $(e.element).addClass("ui-"+type+"-disabled"); });
+		},
+		_execute: function(name, type, func, callback) {
+			if(!m[type] || !m[type][name]) return false;
+			for(var i=0;i<m[type][name].length;i++) {
+				if(m[type][name][i][func]) m[type][name][i][func]();
+				if(callback) callback(m[type][name][i]);
 			}
-			return true;	
+			return true;
 		},
 		plugin: {
 			add: function(w, c, o, p) {
@@ -62,12 +61,12 @@
 				}	
 			}	
 		},
-		trigger: function(n, s, e, p) {
+		trigger: function(name, s, e, p) {
 			var o = s.options;
-			if(!o[n]) return false;
+			if(!o[name]) return false;
 			
 			var a = { options: s.options }; $.extend(a, p);
-			return o[n].apply(s.element, [e, a]);
+			return o[name].apply(s.element, [e, a]);
 		},
 		num: function(e, p) {
 			return parseInt($.css(e.jquery?e[0]:e,p))||0;
