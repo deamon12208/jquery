@@ -50,7 +50,15 @@
 				y = x.bottom + ( $(a).height() + 1);
 				$(m).css({position:'absolute', top: y, left: x.left})
 				.animate(o.show, o.speed);
-				$('a', m).hover(self.showChild(this,o), self.hideMenu(this, o));
+				$('a', m).hover(
+					function(){
+						x = $(this).position();
+						$(this).parent('li').find('>ul').css({position:'absolute', top:x.top, left:$(m).width()})
+								.animate(o.show,o.speed);
+					},
+					function(){
+						$(this).parent('li').find('>ul').animate(o.hide,o.speed);
+					});
 			});
 			return false;
 		},
@@ -61,8 +69,17 @@
 				y = x.top + ( $(a).height() + 1);
 				$(m).css({position:'absolute', top: y, left: x.left})
 				.animate(o.show, o.speed);
-				$('a', m).hover(self.showChild(this,o), self.hideMenu(this, o));
-			},
+				$('a', m).hover(
+					function(x,y){
+						x = $('li', m).position();
+						y = x.bottom + ( $('li', m).height() + 1);
+						$(this).parent('li').find('>ul').css({position:'absolute', top:y, left:x.left})
+								.animate(o.show,o.speed);
+					},
+					function(){
+						$(this).parent('li').find('>ul').animate(o.hide,o.speed);
+					});
+				},
 			function(){
 				self.hideMenu(m,o);
 			});
@@ -94,12 +111,10 @@
 		},
 		showChild : function(m, o) {
 			self = this;
-			$('li', m).bind('mouseover', function(){
 				x = $(this).position();
 				y = $(this).width();
-				$(this).children('ul').css({position:'absolute', top:x.top, left:y})
+				$(m).children('ul').css({position:'absolute', top:x.top, left:y})
 				.animate(o.show,o.speed);
-			});
 		},
 		hideMenu : function(m, o){
 			$(m).animate(o.hide,o.speed);
