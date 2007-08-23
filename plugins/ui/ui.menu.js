@@ -50,15 +50,7 @@
 				y = x.bottom + ( $(a).height() + 1);
 				$(m).css({position:'absolute', top: y, left: x.left})
 				.animate(o.show, o.speed);
-				$('a', m).hover(
-					function(){
-						x = $(this).position();
-						$(this).parent('li').find('>ul').css({position:'absolute', top:x.top, left:$(m).width()})
-								.animate(o.show,o.speed);
-					},
-					function(){
-						$(this).parent('li').find('>ul').animate(o.hide,o.speed);
-					});
+				self.showChild(m,o);
 			});
 			return false;
 		},
@@ -68,20 +60,11 @@
 				x = $(a).position();
 				y = x.top + ( $(a).height() + 1);
 				$(m).css({position:'absolute', top: y, left: x.left})
-				.animate(o.show, o.speed);
-				$('a', m).hover(
-					function(x,y){
-						x = $('li', m).position();
-						y = x.bottom + ( $('li', m).height() + 1);
-						$(this).parent('li').find('>ul').css({position:'absolute', top:y, left:x.left})
-								.animate(o.show,o.speed);
-					},
-					function(){
-						$(this).parent('li').find('>ul').animate(o.hide,o.speed);
-					});
+					.animate(o.show, o.speed);
+				self.showChild(m,o);
 				},
 			function(){
-				self.hideMenu(m,o);
+				
 			});
 			return false;
 		},
@@ -92,16 +75,10 @@
 				if (e.button == 2 || e.button == 3) {
 					e.preventDefault();	//FIXME: Not stopping right-click menu in FF
 					e.stopPropagation();
-					x = $(a).position();
-					elBottom = x.top + $(a).height();
-					$(m).css({position:'absolute', top: e.clientY, left: e.clientX});
-					$(m)[o.show](o.speed, function(){
-						self.showChild(m, o);
-						$(window).bind('click', function(){
-							self.hideMenu(m, o);
-							$(window).unbind('click');
-						})
-					});
+					
+					$(m).css({position:'absolute', top: e.clientY, left: e.clientX})
+						.animate(o.show, o.speed);
+					self.showChild(m,o);
 					return false;
 				} else {
 					
@@ -110,11 +87,15 @@
 			return false;			
 		},
 		showChild : function(m, o) {
-			self = this;
-				x = $(this).position();
-				y = $(this).width();
-				$(m).children('ul').css({position:'absolute', top:x.top, left:y})
-				.animate(o.show,o.speed);
+			$('a', m).hover(
+				function(){
+					x = $(this).position();
+					$(this).parent('li').find('>ul').css({position:'absolute', top:x.top, left:$(m).width()})
+							.animate(o.show,o.speed);
+				},
+				function(){
+					$(this).parent('li').find('>ul').animate(o.hide,o.speed);
+			});
 		},
 		hideMenu : function(m, o){
 			$(m).animate(o.hide,o.speed);
