@@ -19,46 +19,49 @@ jQuery.fn.wrapText = function(html){
 	}
 	
 	
-	$.ui.tree = function(el,o) {
+	$.ui.tree = function(el, o) {
 		
 		var SHIFT = false;
 		var CTRL = false;
+		var ALT = false;
 		var CUT = false;
+		var shiftSelPos = 0;
 	
 		var tree = el;
-		$(tree).addClass('ui-tree-nodes').children('li').addClass('ui-tree-node');
+		var outline = $(document.createElement('a'));
+		outline.attr('href', '#').addClass('ui-tree-outline').css({display: 'block !important', 'text-decoration': 'none' });
+		$(tree).wrap(outline);
+		outline = $(tree).parent('a.ui-tree-outline');
+		$(tree).addClass('ui-tree').addClass('ui-tree-nodes').children('li').addClass('ui-tree-node');
+		outline.css('MozUserSelect', 'none').attr('unselectable', 'on');
 		var nodes = $('ul',tree).addClass('ui-tree-nodes')
 			.css('MozUserSelect', 'none').attr('unselectable', 'on');
 		var node = $('li',tree).addClass('ui-tree-node')
 			.css('MozUserSelect', 'none').attr('unselectable', 'on');
 
-		$("<a href='#' class='ui-tree-node-button'>&bull;</a>")
+		$("<span class='ui-tree-node-button'>&bull;&nbsp;</span>")
 			.prependTo(node);
 		$('.ui-tree-node-button')
 			.click(function() {
 				toggle(parent($(this)));
 				select($('.ui-tree-node-selected',tree));
 				return false;
-			})
-			.focus(function() {
-				select(parent($(this)));
-				return false;
-			})
+			});
 	
 		node
-			.wrapText("<a href='#' class='ui-tree-node-text'></a>")
+			.wrapText("<span class='ui-tree-node-text'></span>")
 			.each(function() {
 				var node = $(this);
 				if (node.children('.ui-tree-nodes').length) {
 					node.addClass('ui-tree-node-expanded');
-					node.children('.ui-tree-node-button').text('-');
+					node.children('.ui-tree-node-button').text('- ');
 				}
 			})
 			.click(function() {
 				return false;
 			});
 	
-		$("a.ui-tree-node-text",tree)
+		$(".ui-tree-node-text", tree)
 			.click(function() {
 				select(parent($(this)));
 				return false;
@@ -66,22 +69,22 @@ jQuery.fn.wrapText = function(html){
 			.dblclick(function() {
 				toggle(parent($(this)));
 				return false;
-			})
-      .blur(function(){
-        $(".ui-tree-node-selected")
-        .removeClass("ui-tree-node-selected");
-      });
+			});
 					
-		select($('.ui-tree-node:first', tree));
-
-		$(tree)
+		outline
 		.keydown(function(ev) {
 			if (ev.keyCode == 16) { SHIFT = true; }
-			if (ev.keyCode == 17) {
-				CTRL = true;
+			if (ev.keyCode == 17) { CTRL = true; }
+			if (ev.keyCode == 18) {
+				ALT = true;
 				$('.ui-tree-node-selected').addClass('ui-tree-node-moving');
 			}
-			var TAB = (ev.keyCode == 9), HOME = (ev.keyCode == 36), END = (ev.keyCode == 35);
+			if (ALT && !ev.altKey) {
+				ALT = false;
+				if (!CUT)
+					$('.ui-tree-node-moving').removeClass('ui-tree-node-moving');
+			}
+			var TAB = (ev.keyCode == 9), HOME = (ev.keyCode == 36), END = (ev.keyCode == 35); var SPACE = (ev.keyCode == 32);
 			var LEFT = (ev.keyCode == 37), UP = (ev.keyCode == 38), RIGHT = (ev.keyCode == 39), DOWN = (ev.keyCode == 40);
 			var X = (ev.charCode == 88 || ev.charCode == 120 || ev.keyCode == 88 || ev.keyCode == 120);
 			var V = (ev.charCode == 86 || ev.charCode == 118 || ev.keyCode == 86 || ev.keyCode == 118);
@@ -93,8 +96,28 @@ jQuery.fn.wrapText = function(html){
 			var lastNode = node.siblings('.ui-tree-node:last');
 			var isFirst = (prevNode.length == 0);
 			var isLast = (nextNode.length == 0);
-			var upNode = (isFirst) ? parentNode : (expanded(prevNode)) ? last(prevNode) : prevNode;
-			var downNode = (isLast && !expanded(node)) ? next(parentNode) : (expanded(node)) ? first(node) : nextNode ;
+			var upNode;// = (isFirst) ? parentNode : (expanded(prevNode)) ? last(prevNode) : prevNode;
+			if (isFirst) {
+				upNode = parentNode;
+			} else {
+				if (expanded(prevNode)) {
+					upNode = last(prevNode);
+					while (expanded(upNode)) {
+						upNode = last(upNode);
+					}
+				} else {
+					upNode = prevNode;
+				}
+			}
+			var downNode; // = (isLast && !expanded(node)) ? next(parentNode) : (expanded(node)) ? first(node) : nextNode ;
+			if (isLast && !expanded(node.filter(':last'))) {
+				var firstNonLastAncestor = node.filter(':last').parents('.ui-tree-node').filter(function() {
+					return (next($(this)).length);
+				}).eq(0);
+				downNode = next(firstNonLastAncestor);
+			} else {
+				downNode = (expanded(node.filter(':last'))) ? first(node.filter(':last')) : nextNode;
+			}
 
 			if (CTRL && X) {
 				CUT = true;
@@ -106,64 +129,84 @@ jQuery.fn.wrapText = function(html){
 				node.removeClass('ui-tree-node-moving');
 			}
 
-			if (TAB) {
-				if ((CUT || CTRL) && TAB) {
-					if (SHIFT) {
-						unindent(node);
-					} else {
-						indent(node);
-						return false;
-					}
-				} else if (SHIFT && TAB) {
-					if (!CTRL)
-						select(upNode);
-				}
-			}
-
-			if ((CUT || CTRL) && HOME) {
+			if ((CUT || ALT) && HOME) {
 				node.insertBefore(firstNode);
 				select(node);
 			} else if (HOME) {
-				select(firstNode);
+				if (!isFirst) select(firstNode);
 			}
 
-			if ((CUT || CTRL) && END) {
+			if ((CUT || ALT) && END) {
 				node.insertAfter(lastNode);
 				select(node);
 			} else if (END) {
-				select(lastNode);
+				if (!isLast) select(lastNode);
 			}
 
-			if ((CUT || CTRL) && LEFT) {
+			if ((CUT || ALT) && LEFT) {
 				unindent(node);
+			} else if (SHIFT && LEFT) {
+
 			} else if (LEFT) {
-				collapse(node);
+				if (expanded(node)) {
+					collapse(node);
+				} else {
+					select(parentNode);
+				}
 			}
 
-			if ((CUT || CTRL) && UP) {
+			if ((CUT || ALT) && UP) {
 				prevNode.insertAfter(node.filter(':last'));
 			} else if (SHIFT && UP) {
-				shiftSelect(prevNode);
+				if (!isFirst) {
+					shiftSelPos--;
+					if (shiftSelPos < 0) {
+						shiftSelect(prevNode);
+					} else {
+						unselect(node.filter(':last'));
+					}
+				}
 			} else if (UP) {
+				shiftSelPos = 0;
 				select(upNode.filter(':first'));
 			}
 
-			if ((CUT || CTRL) && RIGHT) {
+			if ((CUT || ALT) && RIGHT) {
 				indent(node);
+			} else if (SHIFT && RIGHT) {
+
 			} else if (RIGHT) {
-				expand(node);
+				if (expanded(node)) {
+					select(downNode)
+				} else {
+					expand(node);
+				}
 			}
 
-			if ((CUT || CTRL) && DOWN) {
+			if ((CUT || ALT) && DOWN) {
 				nextNode.insertBefore(node.filter(':first'));
 			} else if (SHIFT && DOWN) {
-				shiftSelect(nextNode);
+				if (!isLast) {
+					shiftSelPos++;
+					if (shiftSelPos > 0) {
+						shiftSelect(nextNode);
+					} else {
+						unselect(node.filter(':first'));
+					}
+				}
 			} else if (DOWN) {
+				shiftSelPos = 0;
 				select(downNode.filter(':last'));
 			}
 
 			if (UP || DOWN || HOME || END) { // Prevent Page/container scroll
 				return false;
+			}
+			if (SHIFT && LEFT || RIGHT) { // Prevent text selection
+				return false;
+			}
+			if (ALT && LEFT || RIGHT) { // Prevent forward and back navigation
+				ev.preventDefault();
 			}
 		})
 		.keyup(function(ev) {
@@ -172,9 +215,24 @@ jQuery.fn.wrapText = function(html){
 			}
 			if (ev.keyCode == 17) {
 				CTRL = false;
+			}
+			if (ev.keyCode == 18) {
+				ALT = false;
 				if (!CUT)
 					$('.ui-tree-node-moving').removeClass('ui-tree-node-moving');
+				return false;
 			}
+		})
+		.focus(function(ev) {
+			if ($('.ui-tree-node-selected', this).length == 0)
+				select($('.ui-tree-node:first', this));
+			$('.ui-tree', this).addClass('ui-tree-active');
+		})
+		.blur(function(ev) {
+			$('.ui-tree', this).removeClass('ui-tree-active');
+			$('.ui-tree-node-moving', this).removeClass('ui-tree-node-moving');
+			CUT = false;
+			SHIFT = false;
 		});
 
 		function collapse(node) {
@@ -182,7 +240,7 @@ jQuery.fn.wrapText = function(html){
 			if (nodes.length) {
 				node.removeClass('ui-tree-node-expanded').addClass('ui-tree-node-collapsed');
 				node.children('.ui-tree-nodes').hide();
-				node.children('.ui-tree-node-button').text('+');
+				node.children('.ui-tree-node-button').text('+ ');
 			}
 		}
 
@@ -191,7 +249,7 @@ jQuery.fn.wrapText = function(html){
 			if (nodes.length) {
 				node.removeClass('ui-tree-node-collapsed').addClass('ui-tree-node-expanded');
 				nodes.show();
-				node.children('.ui-tree-node-button').text('-');
+				node.children('.ui-tree-node-button').text('- ');
 			}
 		}
 
@@ -204,14 +262,17 @@ jQuery.fn.wrapText = function(html){
 			}
 			prevNode.children('.ui-tree-nodes').append(node);
 			update(prevNode);
-			select(node);
+			shiftSelect(node);
 		}
 
 		function unindent(node) {
 			var parentNode = parent(node.filter(':last'));
-			node.insertAfter(parentNode);
+			var dummy = $(document.createElement('li'));
+			dummy.insertAfter(parentNode);
+			node.insertBefore(dummy);
+			dummy.remove();
 			update(parentNode);
-			select(node);
+			//select(node);
 		}
 
 		function toggle(node) {
@@ -224,28 +285,32 @@ jQuery.fn.wrapText = function(html){
 
 		function unselect(node) {
 			node.removeClass('ui-tree-node-selected');
+			node.children('.ui-tree-node-text').css('outline', 'none');
 		}
 
 		function select(node) {
 			if (node.length) {
-				$('.ui-tree-node-selected').removeClass('ui-tree-node-selected');
+				$('.ui-tree-node-selected').removeClass('ui-tree-node-selected')
+					.children('.ui-tree-node-text').css('outline', 'none');
+				shiftSelPos = 0;
 				node.addClass('ui-tree-node-selected');
-				node.children('.ui-tree-node-text').focus();
+				node.children('.ui-tree-node-text').css('outline', '1px dotted black');
 			}
 		}
 
 		function shiftSelect(node) {
-			node.addClass('ui-tree-node-selected');
+			node.addClass('ui-tree-node-selected')
+				.children('.ui-tree-node-text').css('outline', '1px dotted black');
 		}
 
 		function update(node) {
 			var nodes = node.children('.ui-tree-nodes');
 			if (nodes.length && nodes.children('.ui-tree-node').length) { 
 				node.addClass('ui-tree-node-expanded');
-				node.children('.ui-tree-node-button').text('-');
+				node.children('.ui-tree-node-button').text('- ');
 			} else {
 				node.removeClass('ui-tree-node-expanded').removeClass('ui-tree-node-collapsed');
-				node.children('.ui-tree-node-button').html('&bull;');
+				node.children('.ui-tree-node-button').html('&bull;&nbsp;');
 				nodes.remove();
 			}
 		}

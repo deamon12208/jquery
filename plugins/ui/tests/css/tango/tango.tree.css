@@ -67,18 +67,29 @@ body.tango { font:11pt Verdana; background:#FFF; color:#111; }
 }
 
 .tango .ui-tree-node-selected > .ui-tree-node-button {
-    background: #82afdf;
+    background: #e2ecf5;
 }
 
 .tango .ui-tree-node-selected > .ui-tree-node-text {
+    background: #e2ecf5;
+}
+
+.tango .ui-tree-active .ui-tree-node-selected > .ui-tree-node-button {
     background: #82afdf;
 }
 
-.tango .ui-tree-node-moving > .ui-tree-node-button {
+.tango .ui-tree-active .ui-tree-node-selected > .ui-tree-node-text {
+    background: #82afdf;
+}
+
+.tango .ui-tree-active .ui-tree-node-moving > .ui-tree-node-button {
     background: #7ad214;
 }
 
-.tango .ui-tree-node-moving > .ui-tree-node-text {
+.tango .ui-tree-active .ui-tree-node-moving > .ui-tree-node-text {
     background: #7ad214;
 }
 
+.tango .ui-tree-node-selected > .ui-tree-node-text {
+    outline: none !important;
+}
