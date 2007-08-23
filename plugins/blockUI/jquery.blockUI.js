@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.31  (08/03/2007)
+ * Version 1.32  (08/23/2007)
  * @requires jQuery v1.1.1
  *
  * $Id$
@@ -66,7 +66,7 @@ $.blockUI = function(msg, css, opts) {
 };
 
 // expose version number so other plugins can interogate
-$.blockUI.version = 1.31;
+$.blockUI.version = 1.32;
 
 /**
  * unblockUI removes the UI block that was put in place by blockUI
@@ -227,7 +227,7 @@ $.blockUI.impl = {
         else
             var basecss = jQuery.extend({}, full ? $.blockUI.defaults.pageMessageCSS : $.blockUI.defaults.elementMessageCSS);
         css = jQuery.extend(basecss, css || {});
-        var f = ($.browser.msie) ? $('<iframe class="blockUI" style="z-index:1000;border:none;margin:0;padding:0;position:absolute;width:100%;height:100%;top:0;left:0" src="javascript:false;document.write(\'\');"></iframe>')
+        var f = ($.browser.msie) ? $('<iframe class="blockUI" style="z-index:1000;border:none;margin:0;padding:0;position:absolute;width:100%;height:100%;top:0;left:0" src="javascript:false;"></iframe>')
                                  : $('<div class="blockUI" style="display:none"></div>');
         var w = $('<div class="blockUI" style="z-index:1001;cursor:wait;border:none;margin:0;padding:0;width:100%;height:100%;top:0;left:0"></div>');
         var m = full ? $('<div class="blockUI blockMsg" style="z-index:1002;cursor:wait;padding:0;position:fixed"></div>')
