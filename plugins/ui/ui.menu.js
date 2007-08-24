@@ -37,33 +37,30 @@
 	$.extend($.ui.menu.prototype, {
 		styleMenu : function(m){
 			$(m).addClass('ui-menu-parent').children('li').addClass('ui-menu-node');
-			var parents = $('ul',m).addClass('ui-menu-parent')
-				.css('MozUserSelect', 'none');
-			var node = $('li',m).addClass('ui-menu-node')
-				.css('MozUserSelect', 'none');
-			var hassub = $('ul',m).parent('li').addClass('ui-menu-sub');
+			var parents = $('ul',m).addClass('ui-menu-parent').parent('li').addClass('ui-menu-sub')
+			var node = $('li',m).addClass('ui-menu-node');
 			return false;
 		},
 		clickContext : function(a,m,o) {
 			var self = this;
+			var htype = hoverType();
 			$(a).click(function(){
 				x = $(a).position();
 				y = x.bottom + ( $(a).height() + 1);
 				$(m).css({position:'absolute', top: y, left: x.left})
 				.animate(o.show, o.speed);
-				self.showChild(m,o);
+				$(m)[htype](function(){
+					self.showChild(m,o);	
+				}, function(){
+					self.hideMenu(m,o);
+				});
 			});
 			return false;
 		},
 		hoverContext : function(a,m,o) {
 			var self = this;
-			
-			if (typeof $.fn.hoverIntent != 'undefined') {
-				var htype = 'hoverIntent';
-			} else {
-				var htype = 'hover';
-			}
-			
+			var htype = hoverType();
+			console.log(htype);
 			$(a)[htype](function(){
 				x = $(a).position();
 				y = x.top + ( $(a).height() + 1);
@@ -72,7 +69,7 @@
 				self.showChild(m,o);
 				},
 			function(){
-				
+				self.hideMenu(m,o);
 			});
 			return false;
 		},
@@ -95,7 +92,8 @@
 			return false;			
 		},
 		showChild : function(m, o) {
-			$('li', m).hover(
+			var htype = hoverType();
+			$('li', m)[htype](
 				function(){
 					x = $(this).position();
 					$(this).find('>ul').css({position:'absolute', top:x.top, left:$(m).width()})
@@ -108,7 +106,15 @@
 		hideMenu : function(m, o){
 			$(m).animate(o.hide,o.speed);
 			return false;
-		}
-		
+		}		
 	});
+	
+	function hoverType() {	// Helper function, finds out if hoverIntent exists
+		if (typeof $.fn.hoverIntent != 'undefined') {
+			var htype = 'hoverIntent';
+		} else {
+			var htype = 'hover';
+		}
+		return htype;
+	}
 })($);
