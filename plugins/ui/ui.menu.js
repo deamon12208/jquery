@@ -36,11 +36,12 @@
 	
 	$.extend($.ui.menu.prototype, {
 		styleMenu : function(m){
-			$(m).addClass('ui-menu-nodes').children('li').addClass('ui-menu-node');
-			var nodes = $('ul',m).addClass('ui-menu-nodes')
+			$(m).addClass('ui-menu-parent').children('li').addClass('ui-menu-node');
+			var parents = $('ul',m).addClass('ui-menu-parent')
 				.css('MozUserSelect', 'none');
 			var node = $('li',m).addClass('ui-menu-node')
 				.css('MozUserSelect', 'none');
+			var hassub = $('ul',m).parent('li').addClass('ui-menu-sub');
 			return false;
 		},
 		clickContext : function(a,m,o) {
@@ -94,14 +95,14 @@
 			return false;			
 		},
 		showChild : function(m, o) {
-			$('a', m).hover(
+			$('li', m).hover(
 				function(){
 					x = $(this).position();
-					$(this).parent('li').find('>ul').css({position:'absolute', top:x.top, left:$(m).width()})
+					$(this).find('>ul').css({position:'absolute', top:x.top, left:$(m).width()})
 							.animate(o.show,o.speed);
 				},
 				function(){
-					$(this).parent('li').find('>ul').animate(o.hide,o.speed);
+					$(this).find('>ul').animate(o.hide,o.speed);
 			});
 		},
 		hideMenu : function(m, o){
