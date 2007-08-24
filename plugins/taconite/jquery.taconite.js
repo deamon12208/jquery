@@ -10,8 +10,8 @@
  * Thanks to Kenton Simpson for contributing some good ideas!
  *
  * $Id$
- * @version: 2.1.5
- * @requires jQuery v1.0.4 or later
+ * @version: 2.1.6
+ * @requires jQuery v1.1.2 or later
  */
 
 (function($) {
@@ -41,7 +41,7 @@ $.taconite = $.xmlExec = function(xml) {
     if (ex) throw ex;
 };
 
-$.taconite.version = [2,1,5]; // major,minor,point revision nums
+$.taconite.version = [2,1,6]; // major,minor,point revision nums
 $.taconite.debug = 0;    // set to true to enable debug logging to Firebug
 $.taconite.lastTime = 0; // processing time for most recent document
 $.taconite._httpData = $.httpData; // original jQuery httpData function
@@ -188,9 +188,9 @@ $.taconite.impl = {
         $('select:taconiteTag').each(function() {
             $('option:taconiteTag', this).each(function() {
                 this.setAttribute('selected','selected');
-                this.removeAttribute('taconiteTag');
+                this.taconiteTag = null;
             });
-            this.removeAttribute('taconiteTag');
+            this.taconiteTag = null;
         });
     },
     cleanse: function(els) {
@@ -206,8 +206,7 @@ $.taconite.impl = {
         return null;
     },
     handleCDATA: function(s) {
-        // this is not yet functional
-        var $div = $('<div>').append(s);
+        var $div = $('<div>').html(s);
         return $div[0];
     },
     fixTextNode: function(s) {
