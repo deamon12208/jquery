@@ -1,3 +1,5 @@
+important: support array elements!
+
 - example showing how to validate new rows added to a table
 - custom validation: totals for a number of fields may not exceed a certain value
 
