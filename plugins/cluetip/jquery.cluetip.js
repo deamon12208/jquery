@@ -76,7 +76,7 @@
  * @option Boolean sticky: default is false. Set to true to keep the clueTip visible until the user either closes it manually by clicking on the CloseText or display another clueTip.
  * @option Integer cluezIndex: default is 97; sets the z-index style property of the clueTip.
  * @option String positionBy: default is 'auto'. Change this to 'mouse' if you want to override the smart positioning and position the clueTip based on where the mouse is instead.
- * @option Object fx: default is: {open: 'fadeIn', openSpeed: 'fast', close: 'hide', closeSpeed: ''}
+ * @option Object fx: default is: {open: 'show', openSpeed: '', close: 'hide', closeSpeed: ''}. Change these to apply one of jQuery's effects when opening or closing the clueTip
  * @option String activation: default is 'hover'. Set to 'toggle' to force the user to click the element in order to activate the clueTip.
  * @option Boolean hoverIntent: default is true. If jquery.hoverintent.js plugin is included in <head>, hoverIntent() will be used instead of hover()
  * @option Function onShow: default is function (ct, c){} ; allows you to pass in your own function once the clueTip has shown.
@@ -85,7 +85,7 @@
  * @option Object ajaxSettings: allows you to pass in standard $.ajax() parameters for specifying dataType, error, success, etc. Default is { dataType: 'html'}
  *
  */
-  var $cluetip, $cluetipInner, $cluetipOuter, $cluetipTitle, $dropShadow;
+  var $cluetip, $cluetipInner, $cluetipOuter, $cluetipTitle, $dropShadow, imgCount;
   var msie6 = $.browser.msie && ($.browser.version && $.browser.version < 7 || (/5\.5|6.0/).test(navigator.userAgent));
 
   $.fn.cluetip = function(options) {
@@ -115,8 +115,8 @@
       cluezIndex: 97,
       positionBy: 'auto', // CHANGES THIS TO mouse TO FORCE CLUETIP TO BE POSITIONED NEXT TO THE MOUSE
       fx: {
-        open: 'fadeIn',
-        openSpeed: 'fast',
+        open: 'show',
+        openSpeed: '',
         close: 'hide',
         closeSpeed: ''
       },
@@ -289,8 +289,19 @@
             }
           };
           ajaxSettings.complete = function() {
-            $('#cluetip-waitimage').hide();
-            cluetipShow(pY);            
+          	imgCount = $('#cluetip-inner img').length;
+        		if (imgCount) {
+        		  $('#cluetip-inner img').load( function(){
+          			imgCount--;
+          			if (imgCount<1) {
+          				$('#cluetip-waitimage').hide();
+          			  cluetipShow(pY);
+          			}
+        		  }); 
+        		} else {
+      				$('#cluetip-waitimage').hide();
+        		  cluetipShow(pY);    
+        		} 
           };
           $.ajax(ajaxSettings);
         }
@@ -357,7 +368,7 @@
       $cluetip.css({backgroundPosition: bgPos});
 
 // (first hide, then) ***SHOW THE CLUETIP***
-      $cluetip.hide()[defaults.fx.open](defaults.fx.openSpeed);
+      $cluetip.hide()[defaults.fx.open](defaults.fx.open != 'show' && defaults.fx.openSpeed);
       if ($dropShadow) {
         defaults.dropShadow ? $dropShadow.show().css({height: tipHeight, width: defaults.width}) : $dropShadow.hide();
       }
@@ -432,7 +443,7 @@
  * @name $.cluetip.setup
  * @type Map
  * @cat Plugins/tooltip
- * @option String insertionType: Default is 'appendTo'. Determines to method to be used for inserting the clueTip into the DOM. Permitted values are 'appendTo', 'prependTo', 'insertBefore', and 'insertAfter'
+ * @option String insertionType: Default is 'appendTo'. Determines the method to be used for inserting the clueTip into the DOM. Permitted values are 'appendTo', 'prependTo', 'insertBefore', and 'insertAfter'
  * @option String insertionElement: Default is 'body'. Determines which element in the DOM the plugin will reference when inserting the clueTip.
  *
  */
@@ -447,5 +458,5 @@
       insertionElement = options.insertionElement;
     }
   };
-  
+
 })(jQuery);

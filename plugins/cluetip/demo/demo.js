@@ -11,7 +11,7 @@ $(document).ready(function() {
     hoverClass: 'highlight',
     sticky: true,
     closePosition: 'bottom',
-    closeText: '<img src="cross.png" alt="close" />',
+    closeText: '<img src="cross.png" alt="close" width="16" height="16" />',
     truncate: 60
   });
   $('a.load-local').cluetip({local:true, cursor: 'pointer'});
@@ -20,21 +20,12 @@ $(document).ready(function() {
 
 // jTip theme
   $('a.jt:eq(0)').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false,
-    fx: {
-      open: 'slideDown', 
-      openSpeed: 'slow'
-    },
     sticky: true,
     mouseOutClose: true,
     closePosition: 'title',
     closeText: '<img src="cross.png" alt="close" />'
   });
-  $('a.jt:eq(1)').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false,
-    fx: {
-      open: 'slideDown', 
-      openSpeed: 'slow'
-    }
-  });
+  $('a.jt:eq(1)').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false, hoverIntent: false});
 
 // Rounded Corner theme
   $('ol.rounded a:eq(0)').cluetip({cluetipClass: 'rounded', dropShadow: false, sticky: true, ajaxCache: false});

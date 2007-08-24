@@ -1,10 +1,17 @@
 == To Do ==
 
 * possibly allow for overriding ajaxSettings.error
+* add support for setting hoverIntent options
 
 == New and Noteworthy ==
 
+== 0.8.6 ==
+
+* changed fx.open default to 'show' and fx.openSpeed default to '' (empty string)
+* images now load before ajaxed contents are shown. Code generously provided by Torben Shreiter.
+ 
 == 0.8.5 ==
+
 * changed waitImage option to Boolean. Now the wait image comes from the stylesheet, jquery.cluetip.css, as a background image. This is all in an attempt to avoid the annoying scroll jumping (see not for 0.8.4).
 * reverted "changed the way the waitImage is hidden" from 0.8.4.
 
@@ -13,11 +20,14 @@
 * changed the way the waitImage is hidden, because of some bizarre scroll jumping that occurred on a couple sites.
 * added $.cluetip.setup() to allow for custom insertion type. appendTo is the default; other types are prependTo, insertBefore, and insertAfter. Also insertionElement allows user to determine where in the DOM the clueTip will be loaded
 
-== 0.8.2 and 0.8.3 ==
+== 0.8.3 ==
 
 * added ajaxCache option, which caches the results of the ajax request to avoid unnecessary hits to the server (caching was already being done, but now it's optional). When set to false, the script will make an ajax request every time the clueTip is shown, which allows for dynamic content to be loaded.
 * added mouseOutClose option. Now, when you set both the sticky and the mouseOutClose option to true, the clueTip will hide when you either click the close link or mouse out of the clueTip altogether.
 * added behavior for ajaxSettings.error and ajaxSettings.complete. Now, regardless of success or error, the clueTip will be shown and the waitImage will be hidden. If there is an error, the contents of the clueTip will read: "sorry, contents could not be loaded."
+
+== 0.8.2 ==
+
 * improved positioning of too-wide cluetips. 
 * don't show the loading image if waitImage is set to empty string or false
 * changed y-positioning of loading image to be based on mouse position, as I think it will fix the scroll-jump bug as reported by to.rben on http://www.learningjquery.com/2007/07/cluetip-plugin-beta-2

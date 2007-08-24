@@ -35,6 +35,7 @@
       <li>The clueTip plug-in was inspired by <a href="http://www.codylindley.com">Cody Lindley</a>'s jTip script. </li>
       <li>Many feature ideas were provided by Shelane Enos. </li>
       <li><a href="http://commadot.com/">Glen Lipka</a>, <a href="http://www.pengoworks.com/">Dan G. Switzer</a>, and <a href="http://bassistance.de/">Jörn Zaefferer</a> provided expert advice. </li>
+      <li><a href="http://blog.schreiter.info/">Torben Schreiter</a> helped squash some bugs and offered code for pre-loading images from ajaxed files</li>
       <li><a href="http://www.tweaktheviking.com">Jonathan Chaffer</a> helped a lot, but eschewed the co-author designation out of sheer modesty. </li>
     </ul>
     <p>If you like this plugin and you're feeling generous, perhaps you'd also like to visit my <a href="http://www.amazon.com/gp/registry/wishlist/1NLSYA46XTVG4/" title="Amazon.com: Wish List">amazon.com wish list</a>?</p>
@@ -89,7 +90,7 @@
       <li><strong><code>sticky</code></strong>: default is <code>false</code>; set to <code>true</code> if you want the clueTip to remain open when you "mouse out" of the link. This option also places a "close" link on the clueTip itself. </li>
       <li><strong><code>cluezIndex</code></strong>: default is <code>97</code>; sets the z-index style property of the clueTip. </li>
       <li><strong><code>positionBy</code></strong>: default is <code>'auto'</code>. Change this to <code>'mouse'</code> if you want to override the smart positioning and position the clueTip based on where the mouse is instead.</li>
-      <li><strong><code>fx</code></strong>: default is: <code>{open: 'fadeIn', openSpeed: 'fast', close: 'hide', closeSpeed: ''}</code></li>
+      <li><strong><code>fx</code></strong>: default is: <code>{open: 'show', openSpeed: '', close: 'hide', closeSpeed: ''}</code>; change these to apply one of jQuery's effects when opening or closing the clueTip</li>
       <li><strong><code>activation</code></strong>: default is <code>'hover'</code>; set to 'toggle' to force the user to click the element in order to activate the clueTip.</li>
       <li><strong><code>hoverIntent</code></strong>: default is <code>true</code>; if jquery.hoverintent.js plugin is included in <code>&lt;head&gt;</code>, <code>.hoverIntent()</code> will be used instead of <code>.hover()</code></li>
       <li><strong><code>onShow</code></strong>: default is <code>function (ct, c){}</code> ; allows you to pass in your own function once the clueTip has shown.</li>
@@ -101,6 +102,10 @@
 This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML page that is being pulled into a clueTip via "AHAH."</li>
       <li><strong><code>ajaxSettings</code></strong>: default is <code> {dataType: 'html'}</code>. You can change the value of the dataType argument or set other arguments that <code>$.ajax()</code> uses: async, contentType, timeout, type, etc. These arguments can't be used, because they're already being used by the plugin: beforeSend, complete, error, success, url. I might in a future version try to allow for passing in custom stuff for these arguments.</li>
     </ul>
+    <p><strong>$.cluetip.setup()</strong></p>
+    <p>Additionally there is a new <code>$.cluetip.setup()</code> method for setting global defaults applied to all clueTips. The options  for this method are insertionType and insertionElement.</p>
+    <p><code>insertionType</code>: determines the method to be used for inserting the clueTip into the DOM. Permitted values are 'appendTo', 'prependTo', 'insertBefore', and 'insertAfter'. Default is 'appendTo'.</p>
+    <p><code>insertionElement</code>: Determines where in the DOM the clueTip will be inserted. Default is 'body'.</p> 
     </div>
     <div id="setup">
     <h3>Setup</h3>
@@ -186,13 +191,13 @@ This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML
         <li><a class="jt" href="ajax6.htm" rel="ajax6.htm" title="jTip Style!">jTip Style clueTip</a>, with slideDown effect and an image placed in the title for closing it, because it's sticky. <br />
         <ins>New</ins>: The clueTip will close if you mouse out of it. 
           <div class="html">View the HTML</div>
-          <pre><code>&lt; class="jt" href="ajax6.htm" rel="ajax6.htm" title="jTip Style!"&gt;</code></pre>
+          <pre><code>&lt;a class="jt" href="ajax6.htm" rel="ajax6.htm" title="jTip Style!"&gt;</code></pre>
           <div class="jquery">View the jQuery</div>
-<pre><code>$('a.jt:eq(0)').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false,
-  fx: {
-    open: 'slideDown', 
-    openSpeed: 'slow'
-  },
+<pre><code>$('a.jt:eq(0)').cluetip({
+  cluetipClass: 'jtip', 
+  arrows: true, 
+  dropShadow: false,
+  hoverIntent: false,
   sticky: true,
   mouseOutClose: true,
   closePosition: 'title',
@@ -204,12 +209,7 @@ This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML
           <div class="html">View the HTML</div>
           <pre><code>&lt;a class="jt" href="ajax5.htm" rel="ajax5.htm"&gt;</code></pre>
           <div class="jquery">View the jQuery</div>
-<pre><code>$('a.jt:eq(1)').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false,
-  fx: {
-    open: 'slideDown', 
-    openSpeed: 'slow'
-  }
-});
+<pre><code>$('a.jt:eq(1)').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false, hoverIntent: false});
 </code></pre>  
         </li>
         <li><span title="Split Title|This clueTip's contents were created directly from the title attribute|Nice for minimum info.">splitTitle clueTip</span></li>
