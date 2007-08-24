@@ -160,6 +160,14 @@ $.extend($.Accordion, {
 				easing: "swing",
 				duration: 300
 			}, settings, additions);
+			if ( !settings.toHide.size() ) {
+				settings.toShow.animate({height: "show"}, {
+					duration: settings.duration,
+					easing: settings.easing,
+					complete: settings.finished
+				});
+				return;
+			}
 			var height = settings.toHide.height();
 			settings.toShow.css({ height: 0, overflow: 'hidden' }).show();
 			settings.toHide.filter(":hidden").each(settings.finished).end().filter(":visible").animate({height:"hide"},{
@@ -277,13 +285,6 @@ $.fn.extend({
 					toShow.slideToggle(settings.animated);
 					finished(true);
 				} else {
-					if ( !toHide.size() ) {
-						toShow.animate({height: "show"}, {
-							duration: 200,
-							complete: finished
-						});
-						return;
-					}
 					$.Accordion.Animations[settings.animated]({
 						toShow: toShow,
 						toHide: toHide,
