@@ -37,3 +37,48 @@ Otherwise especially Internet Explorer will generally reuse a cached page rather
 
  - I found out that the problem with UTF-8 not being correctly sent can be solved on the server side by applying (PHP) rawurldecode() function, which decodes the Unicode characters sent by GET method and therefore URL-encoded.
 -> add that hint to docs and examples
+
+But I am trying this with these three values: “foo bar”, “foo foo”, and “foo far”, and if I enter “b” (or “ba”) nothing matches, if I enter “f” all three do match, and if I enter “fa” the last one matches.
+The problem seems to be that the cache is implemented with a first-character hashtable, so only after matching the first character, the latter ones are searched for.
+
+xml example:
+<script type="text/javascript">
+      function parseXML(data) {
+        var results = [];
+        var branches = $(data).find('item');
+        $(branches).each(function() {
+          var text = $.trim($(this).find('text').text());
+          var value = $.trim($(this).find('value').text());
+          //console.log(text);
+          //console.log(value);
+          results[results.length] = {'data': this, 'result': value, 'value': text};
+        });
+        $(results).each(function() {
+          //console.log('value', this.value);
+          //console.log('text', this.text);
+        });
+        //console.log(results);
+        return results;
+      };
+    $(YourOojHere).autocomplete(SERVER_AJAX_URL, {parse: parseXML});
+  </script>
+<?xml version="1.0"?>
+<ajaxresponse>
+  <item>
+    <text>
+      <![CDATA[<b>FreeNode:</b> irc.freenode.net:6667]]>
+    </text>
+    <value><![CDATA[irc.freenode.net:6667]]></value>
+  </item><item>
+    <text>
+      <![CDATA[<b>irc.oftc.net</b>:6667]]>
+    </text>
+    <value><![CDATA[irc.oftc.net:6667]]></value>
+  </item><item>
+    <text>
+      <![CDATA[<b>irc.undernet.org</b>:6667]]>
+    </text>
+    <value><![CDATA[irc.undernet.org:6667]]></value>
+  </item>
+</ajaxresponse>
+  
