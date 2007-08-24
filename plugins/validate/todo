@@ -107,6 +107,7 @@ else if ($.browser.mozilla)
  - one example for each option
  - intergration with rich-text-editors (FCKEditor, TinyMCE, Codepress)
  - integration with CakePHP ( https://trac.cakephp.org/ticket/2359 )
+ - integration with tabs: http://www.netix.sk/forms/test.html
  
  -> In simple terms, you need to "move" the content from the TinyMCE
 control to the textarea for validation.
