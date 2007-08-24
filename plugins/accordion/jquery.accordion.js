@@ -43,7 +43,7 @@
  * @desc Creates an Accordion from the given definition list
  *
  * @example jQuery('#nav').Accordion({
- *   header: 'div.title'
+ *   header: '.title'
  * });
  * @before <div id="nav">
  *  <div>
@@ -61,7 +61,6 @@
  *   header: '.head',
  * 	 navigation: true
  * });
- * location.href == "somedomain.com/movies/fantasy/"
  * @before <ul id="nav">
  *   <li>
  *     <a class="head" href="books/">Books</a>
