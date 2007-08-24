@@ -9,6 +9,7 @@
 			.ui-toolbar {background:#222; z-index:500; font:10pt Verdana; list-style:none;}
 			.ui-toolbar-button {float:left; padding:4px 20px; border:1px solid #DDD; background:#FFF; cursor:pointer;}
 			.ui-toolbar-button:hover {border:1px solid #CCC; background:#EEE; }
+			.ui-toolbar-button a {text-decoration:none; color:#000;}
 			.ui-menu-parent {display:none; padding:0; background:#FFF; z-index:500; border:1px solid #CCC; list-style:none; padding:1px 4px; opacity:0.95; font:10pt Verdana; min-width:80px; *width:80px;}
 			.ui-menu-node a { color:#000; text-decoration:none;}
 			.ui-menu-sub { background: url('images/arrow_right.png') no-repeat center right; }
@@ -53,8 +54,33 @@
 		</script>
 		<h2>Toolbar Test</h2>
 		<ul id="mytoolbar" class="ui-toolbar">
-			<li id="filemenu-parent" class="ui-toolbar-button"><span>File</span></li>
-			<li id="editmenu-parent" class="ui-toolbar-button"><span>Edit</span></li>
+			<li id="filemenu-parent" class="ui-toolbar-button"><a href="#" class="toolbarFile">File</a>
+				<ul id="filemenu">
+					<li id="filemenu-new"><a href="#" class="fileNew">New</a>
+						<ul>
+							<li id="filemenu-newdoc"><a href="#" class="newDocument">Document</a></li>
+							<li id="filemenu-newimg"><a href="#" class="newImage">Image</a></li>
+						</ul>
+					</li>
+					<li id="filemenu-open"><a href="#" class="fileOpen">Open</a></li>
+					<li id="filemenu-save"><a href="#" class="fileSave">Save</a></li>
+					<li id="filemenu-print"><a href="#" class="filePrint">Print</a></li>
+					<li id="filemenu-properties"><a href="#" class="fileProperties">Properties</a>
+						<ul>
+							<li id="filemenu-properties-new"><a href="#" class="filePropertiesNew">New</a></li>
+							<li id="filemenu-properties-edit"><a href="#" class="filePropertiesEdit">Edit</a></li>
+						</ul>
+					</li>
+				<li id="filemenu-exit"><a href="#" class="fileExit">Exit</a></li>
+				</ul>
+			</li>
+			<li id="editmenu-parent" class="ui-toolbar-button"><a href="#" class="toolbarEdit">Edit</a>
+				<ul id="editmenu">
+					<li id="editmenu-cut"><a href="#" class="fileCut">Cut</a></li>
+					<li id="editmenu-copy"><a href="#" class="fileCopy">Copy</a></li>
+					<li id="editmeni-paste"><a href="#" class="filePaste">Paste</a></li>
+				</ul>
+			</li>
 		</ul>
 		<br style="clear:both;" />
 		
@@ -86,32 +112,6 @@
 				</tr>
 			</tbody>
 			</thead>
-		</table>
-		
-		<ul id="filemenu">
-			<li id="filemenu-new"><a href="file-new">New</a>
-				<ul>
-					<li id="filemenu-newdoc"><a href="#">Document</a></li>
-					<li id="filemenu-newimg"><a href="#">Image</a></li>
-				</ul>
-			</li>
-			<li id="filemenu-open"><a href="#">Open</a></li>
-			<li id="filemenu-save"><a href="#" class="fileSave">Save</a></li>
-			<li id="filemenu-print"><a href="#" class="filePrint">Print</a></li>
-			<li id="filemenu-properties"><a href="#" class="fileProperties">Properties</a>
-				<ul>
-					<li id="filemenu-properties-new"><a href="#" class="filePropertiesNew">New</a></li>
-					<li id="filemenu-properties-edit"><a href="#" class="filePropertiesEdit">Edit</a></li>
-				</ul>
-			</li>
-			<li id="filemenu-exit"><a href="#" class="fileExit">Exit</a></li>
-		</ul>
-		
-		<ul id="editmenu">
-			<li id="editmenu-cut"><a href="#">Cut</a></li>
-			<li id="editmenu-copy"><a href="#" class="fileCopy">Copy</a></li>
-			<li id="editmeni-paste"><a href="#">Paste</a></li>
-		</ul>
-		
+		</table>		
 	</body>
 </html>
