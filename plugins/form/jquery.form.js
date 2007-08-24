@@ -287,9 +287,9 @@ $.fn.ajaxSubmit = function(options) {
             $form.attr({
                 target:   id,
                 method:  'POST',
-                encAttr: 'multipart/form-data',
                 action:   opts.url
             });
+            form[encAttr] = 'multipart/form-data';
 
             // support timout
             if (opts.timeout)
