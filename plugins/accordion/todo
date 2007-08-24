@@ -1,2 +1,0 @@
-- detect presence of accordion-hide class and use it instead of display:none to help with printing
-- cookie-based state-saving
