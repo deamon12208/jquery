@@ -17,6 +17,8 @@
 			.ui-toolbar-menu a:hover { text-decoration:underline; }
 			.ui-toolbar-menu ul { padding-left:10px; list-style:none;}
 			.ui-menu-sub { background: url('images/arrow_right.png') no-repeat center right; }
+			
+			.filePrint {background: url('images/printer.png') no-repeat center left; padding-left: 16px;}
 		</style>
 		
     <script type="text/javascript" src="../../../jquery/src/jquery/jquery.js"></script>
@@ -35,7 +37,10 @@
 			$('document').ready(function(){
 				$('#filemenu-parent').menu('#filemenu', {speed: 'fast'}, {buttons: {
 					fileExit : function(){
-						alert('Exit Fired');
+						window.close();
+					},
+					filePrint : function(){
+						print();
 					}
 				}});
 				$('#editmenu-parent').menu('#editmenu', {context: 'hoverContext'}, {buttons: {
@@ -94,6 +99,7 @@
 			</li>
 			<li id="filemenu-open"><a href="#">Open</a></li>
 			<li id="filemenu-save"><a href="#" class="fileSave">Save</a></li>
+			<li id="filemenu-print"><a href="#" class="filePrint">Print</a></li>
 			<li id="filemenu-properties"><a href="#" class="fileProperties">Properties</a>
 				<ul>
 					<li id="filemenu-properties-new"><a href="#" class="filePropertiesNew">New</a></li>
