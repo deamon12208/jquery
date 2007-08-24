@@ -10,7 +10,7 @@
  * Thanks to Kenton Simpson for contributing some good ideas!
  *
  * $Id$
- * @version: 2.1.4
+ * @version: 2.1.5
  * @requires jQuery v1.0.4 or later
  */
 
@@ -41,7 +41,7 @@ $.taconite = $.xmlExec = function(xml) {
     if (ex) throw ex;
 };
 
-$.taconite.version = [2,1,3]; // major,minor,point revision nums
+$.taconite.version = [2,1,5]; // major,minor,point revision nums
 $.taconite.debug = 0;    // set to true to enable debug logging to Firebug
 $.taconite.lastTime = 0; // processing time for most recent document
 $.taconite._httpData = $.httpData; // original jQuery httpData function
@@ -188,9 +188,9 @@ $.taconite.impl = {
         $('select:taconiteTag').each(function() {
             $('option:taconiteTag', this).each(function() {
                 this.setAttribute('selected','selected');
-                delete this.taconiteTag;
+                this.removeAttribute('taconiteTag');
             });
-            delete this.taconiteTag;
+            this.removeAttribute('taconiteTag');
         });
     },
     cleanse: function(els) {
@@ -202,8 +202,13 @@ $.taconite.impl = {
         var type = node.nodeType;
         if (type == 1) return this.createElement(node);
         if (type == 3) return this.fixTextNode(node.nodeValue);
-        if (type == 4) return document.createTextNode(node.nodeValue);
+        if (type == 4) return this.handleCDATA(node.nodeValue);
         return null;
+    },
+    handleCDATA: function(s) {
+        // this is not yet functional
+        var $div = $('<div>').append(s);
+        return $div[0];
     },
     fixTextNode: function(s) {
         if ($.browser.msie) s = s.replace(/\n/g, '\r');
@@ -211,12 +216,13 @@ $.taconite.impl = {
     },
     createElement: function (node) {
         var e, tag = node.tagName.toLowerCase();
-        if ($.browser.msie && (tag == 'input' || tag == 'button')) {
+        // some elements in IE need to be created with attrs inline
+        if ($.browser.msie) {
             var type = node.getAttribute('type');
-            if (type == 'radio' || type == 'checkbox')
-                return document.createElement('<input ' + this.copyAttrs(null, node, true) + '>');
-            else if (tag == 'button')
-                e = document.createElement('<button ' + this.copyAttrs(null, node, true) + '>');
+            if (type == 'radio' || type == 'checkbox' || tag == 'button' || 
+                (tag == 'select' && node.getAttribute('multiple'))) {
+                e = document.createElement('<' + tag + ' ' + this.copyAttrs(null, node, true) + '>');
+            }
         }
         if (!e) {
             e = document.createElement(tag);
