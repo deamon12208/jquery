@@ -1,10 +1,5 @@
 * { margin: 0; padding: 0; }
-/*
-body { padding-left: 1em; margin-bottom: 8em; font: normal normal 100% verdana; }
-h1, h2, h3 { font-size: 1em; }
-h1 { font-size: 1.2em; margin-top: 1em; }
-h2 { margin-top: .8em; margin-bottom: .2em; }
-*/
+html, body, #main { height: 100% }
 body, div { font-family: 'lucida grande', helvetica, verdana, arial, sans-serif }
 body { margin: 0; padding: 0; font-size: small; color: #333 }
 h1, h2 { font-family: 'trebuchet ms', verdana, arial; padding: 10px; margin: 0 }
@@ -15,6 +10,8 @@ h3 { margin-top: .5em; }
     background: url(bg.gif) repeat-x; text-align: center }
 fieldset { padding: 8px; }
 legend { font-weight: bold; }
+
+pre { margin-bottom: 1em; }
     
 .jscom, .mix htcom   { color: #4040c2; }
 .com      { color: green; }
@@ -38,6 +35,15 @@ li { list-style-type: none; }
 #log { position:fixed; bottom: 0; right:1em; text-align:right; }
 #switch { position: fixed; bottom: 0; right: 15em; }
 
+#leftcol {
+	height: 100%;
+	float: left;
+	margin-right: 1em;
+}
+#leftcol fieldset {
+	height: 300px;	
+}
+
 #list1  {
 	width: 260px;
 	font-family: verdana;
@@ -56,6 +62,7 @@ li { list-style-type: none; }
 	padding: 10px;
 	background-color: #80cfe2;
 	overflow: hidden;
+	height: 10em;	
 }
 #list1 h3 {
 	cursor:pointer;
@@ -161,4 +168,8 @@ li { list-style-type: none; }
 #navigation li li a:hover {
 	background-color:#FFFF99;
 	color:#FF0000;
+}
+
+#wizard .title {
+	background-color:#DDDDDD;
 }

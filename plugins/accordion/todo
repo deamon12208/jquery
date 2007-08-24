@@ -1,0 +1,3 @@
+- detect presence of accordion-hide class and use it instead of display:none to help with printing
+- offer choice on animations: none, simple slide, complex (bounce, customizable)
+- cookie-based state-saving

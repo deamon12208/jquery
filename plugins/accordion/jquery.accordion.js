@@ -231,19 +231,25 @@ jQuery.fn.extend({
 			};
 			
 			// count elements to animate
-			running = toHide.size()// + toShow.size();
+			running = toHide.size() == 0 ? toShow.size() : toHide.size();
 			
 			if ( settings.animated ) {
 				if ( !settings.alwaysOpen && clickedActive ) {
 					toShow.slideToggle(settings.animated);
 					finished(true);
 				} else {
-					var height = toHide.height()
-					toShow.height(0).show();
+					var height = toHide.height();
+					if ( !toHide.size() ) {
+						toShow.animate({height: "show"}, {
+							duration: 200,
+							complete: finished
+						});
+						return;
+					}
+					toShow.css({ height: 0, overflow: 'hidden' }).show();
 					toHide.filter(":hidden").each(finished).end().filter(":visible").animate({height:"hide"},{
 						step: function(n){
-							toShow.height(Math.ceil(height - (parseFloat(jQuery.fn.jquery) <= 1.1 ?
-								n : n * height)));
+							toShow.height(Math.ceil(height - (jQuery.fn.stop ? n * height : n)));
 						},
 						duration: down ? 1000 : 200,
 						easing: down ? "bounceout" : "swing",
@@ -262,11 +268,13 @@ jQuery.fn.extend({
 		}
 		
 		function clickHandler(event) {
+			// called only when using activate(false) to close all parts programmatically
 			if ( !event.target && !settings.alwaysOpen ) {
 				active.toggleClass(settings.selectedClass);
 				var toHide = active.nextUntil(settings.header);
 				var toShow = active = jQuery([]);
 				toggle( toShow, toHide );
+				return;
 			}
 			// get the click target
 			var clicked = jQuery(event.target);
