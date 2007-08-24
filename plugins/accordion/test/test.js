@@ -11,6 +11,17 @@ test("basics", function() {
 	state($('#list1').Accordion(), 1, 0, 0, 0, 0);
 });
 
+test("autoheight", function() {
+	$('#navigation').Accordion({ header: '.head',autoheight: false });
+	equals( 90, $('#navigation ul:first').height() );
+	equals( 126, $('#navigation ul:eq(1)').height() );
+	equals( 54, $('#navigation ul:last').height() );
+	$('#navigation').unbind().find("*").unbind().end().Accordion({ header: '.head',autoheight: true });
+	equals( 126, $('#navigation ul:first').height() );
+	equals( 126, $('#navigation ul:eq(1)').height() );
+	equals( 126, $('#navigation ul:last').height() );
+});
+
 test("activate, numeric", function() {
 	var ac = $('#list1').Accordion({ active: 1 });
 	state(ac, 0, 1, 1, 0, 0);

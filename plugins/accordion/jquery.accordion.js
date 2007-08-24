@@ -110,9 +110,10 @@
  * @option String|Number speed 
  * @option String selectedClass Class for active header elements. Default: 'selected'
  * @option Boolean alwaysOpen Whether there must be one content element open. Default: true
- * @option Boolean animated Speed for animations (for numbers: smaller = faster, for strings: 'fast', 'normal' or 'slow'). Set to false to disable animations. Default: 'fast'
+ * @option Boolean|String animated Choose your favorite animation, or disable them (set to false). In addition to the default, "bounceslide" and "easeslide" are supported (both require the easing plugin). Default: 'slide'
  * @option String event The event on which to trigger the accordion, eg. "mouseover". Default: "click"
  * @option Boolean navigation If set, looks for the anchor that matches location.href and activates it. Great for href-based pseudo-state-saving. Default: false
+ * @option Boolean autoheight If set, the highest content part is used as height reference for all other parts. Provides more consistent animations. Default: false
  *
  * @type jQuery
  * @see activate(Number)
@@ -142,19 +143,50 @@
  * @name activate
  * @cat Plugins/Accordion
  */
- jQuery.easing.bounceout = function(x, t, b, c, d) {
-		if ((t/=d) < (1/2.75)) {
-			return c*(7.5625*t*t) + b;
-		} else if (t < (2/2.75)) {
-			return c*(7.5625*(t-=(1.5/2.75))*t + .75) + b;
-		} else if (t < (2.5/2.75)) {
-			return c*(7.5625*(t-=(2.25/2.75))*t + .9375) + b;
-		} else {
-			return c*(7.5625*(t-=(2.625/2.75))*t + .984375) + b;
+
+(function($) {
+
+$.Accordion = {};
+$.extend($.Accordion, {
+	defaults: {
+		selectedClass: "selected",
+		alwaysOpen: true,
+		animated: 'slide',
+		event: "click"
+	},
+	Animations: {
+		slide: function(settings, additions) {
+			settings = $.extend({
+				easing: "swing",
+				duration: 300
+			}, settings, additions);
+			var height = settings.toHide.height();
+			settings.toShow.css({ height: 0, overflow: 'hidden' }).show();
+			settings.toHide.filter(":hidden").each(settings.finished).end().filter(":visible").animate({height:"hide"},{
+				step: function(n){
+					settings.toShow.height(Math.ceil(height - ($.fn.stop ? n * height : n)));
+				},
+				duration: settings.duration,
+				easing: settings.easing,
+				complete: settings.finished
+			});
+		},
+		bounceslide: function(settings) {
+			this.slide(settings, {
+				easing: settings.down ? "bounceout" : "swing",
+				duration: settings.down ? 1000 : 200
+			});
+		},
+		easeslide: function(settings) {
+			this.slide(settings, {
+				easing: "easeinout",
+				duration: 700
+			})
 		}
-	};
-jQuery.fn.extend({
-	// nextUntil is necessary, would be nice to have this in jQuery core
+	}
+});
+
+$.fn.extend({
 	nextUntil: function(expr) {
 	    var match = [];
 	
@@ -166,7 +198,7 @@ jQuery.fn.extend({
 	            if ( i.nodeType != 1 ) continue;
 	
 	            // If we find a match then we need to stop
-	            if ( jQuery.filter( expr, [i] ).r.length ) break;
+	            if ( $.filter( expr, [i] ).r.length ) break;
 	
 	            // Otherwise, add it on to the stack
 	            match.push( i );
@@ -181,9 +213,9 @@ jQuery.fn.extend({
 			return this;
 	
 		// setup configuration
-		settings = jQuery.extend({}, jQuery.Accordion.defaults, {
+		settings = $.extend({}, $.Accordion.defaults, {
 			// define context defaults
-			header: jQuery(':first-child', this)[0].tagName // take first childs tagName as header
+			header: $(':first-child', this)[0].tagName // take first childs tagName as header
 		}, settings);
 		
 		if ( settings.navigation ) {
@@ -204,6 +236,12 @@ jQuery.fn.extend({
 			active = findActive(settings.active),
 			running = 0;
 
+		if ( settings.autoheight ) {
+			var maxHeight = 0;
+			headers.nextUntil(settings.header).each(function() {
+				maxHeight = Math.max(maxHeight, $(this).height());
+			}).height(maxHeight);
+		}
 
 		headers
 			.not(active || "")
@@ -211,13 +249,14 @@ jQuery.fn.extend({
 			.hide();
 		active.addClass(settings.selectedClass);
 		
+		
 		function findActive(selector) {
 			return selector != undefined
 				? typeof selector == "number"
 					? headers.eq(selector)
 					: headers.not(headers.not(selector))
 				: selector === false
-					? jQuery("<div>")
+					? $("<div>")
 					: headers.eq(0)
 		}
 		
@@ -238,7 +277,6 @@ jQuery.fn.extend({
 					toShow.slideToggle(settings.animated);
 					finished(true);
 				} else {
-					var height = toHide.height();
 					if ( !toHide.size() ) {
 						toShow.animate({height: "show"}, {
 							duration: 200,
@@ -246,14 +284,11 @@ jQuery.fn.extend({
 						});
 						return;
 					}
-					toShow.css({ height: 0, overflow: 'hidden' }).show();
-					toHide.filter(":hidden").each(finished).end().filter(":visible").animate({height:"hide"},{
-						step: function(n){
-							toShow.height(Math.ceil(height - (jQuery.fn.stop ? n * height : n)));
-						},
-						duration: down ? 1000 : 200,
-						easing: down ? "bounceout" : "swing",
-						complete: finished
+					$.Accordion.Animations[settings.animated]({
+						toShow: toShow,
+						toHide: toHide,
+						finished: finished,
+						down: down
 					});
 				}
 			} else {
@@ -272,12 +307,12 @@ jQuery.fn.extend({
 			if ( !event.target && !settings.alwaysOpen ) {
 				active.toggleClass(settings.selectedClass);
 				var toHide = active.nextUntil(settings.header);
-				var toShow = active = jQuery([]);
+				var toShow = active = $([]);
 				toggle( toShow, toHide );
 				return;
 			}
 			// get the click target
-			var clicked = jQuery(event.target);
+			var clicked = $(event.target);
 			
 			// due to the event delegation model, we have to check if one
 			// of the parent elements is our actual header, and find that
@@ -303,7 +338,7 @@ jQuery.fn.extend({
 				data = [clicked, active, toShow, toHide],
 				down = headers.index( active[0] ) > headers.index( clicked[0] );
 			
-			active = clickedActive ? jQuery([]) : clicked;
+			active = clickedActive ? $([]) : clicked;
 			toggle( toShow, toHide, data, clickedActive, down );
 
 			return !toShow.length;
@@ -327,12 +362,4 @@ jQuery.fn.extend({
 	}
 });
 
-jQuery.Accordion = {};
-jQuery.extend(jQuery.Accordion, {
-	defaults: {
-		selectedClass: "selected",
-		alwaysOpen: true,
-		animated: 'fast',
-		event: "click"
-	}
-});
+})(jQuery);

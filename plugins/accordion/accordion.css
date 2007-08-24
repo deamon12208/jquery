@@ -35,14 +35,6 @@ li { list-style-type: none; }
 #log { position:fixed; bottom: 0; right:1em; text-align:right; }
 #switch { position: fixed; bottom: 0; right: 15em; }
 
-#leftcol {
-	height: 100%;
-	float: left;
-	margin-right: 1em;
-}
-#leftcol fieldset {
-	height: 300px;	
-}
 
 #list1  {
 	width: 260px;
@@ -170,6 +162,10 @@ li { list-style-type: none; }
 	color:#FF0000;
 }
 
+#wizard {
+	width: 200px;
+	border: 1px solid black;
+}
 #wizard .title {
 	background-color:#DDDDDD;
 }

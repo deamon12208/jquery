@@ -8,6 +8,7 @@
 	
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="chili-1.7.pack.js"></script>
+	<script type="text/javascript" src="jquery.easing.js"></script>
 	<script type="text/javascript" src="jquery.accordion.js"></script>
 
 	<script type="text/javascript">
@@ -15,17 +16,24 @@
 		// simple Accordion
 		jQuery('#list1').Accordion();
 		
+		// second simple Accordion with special markup
+		jQuery('#navigation').Accordion({
+			active: false,
+			header: '.head',
+			navigation: true,
+			event: 'mouseover',
+			autoheight: true,
+			animated: 'easeslide'
+		});
+		
 		// highly customized Accordion
-		function simpleLog(message) {
-			jQuery('<div>' + message + '</div>').appendTo('#log');
-		}
 		jQuery('#list2').Accordion({
 			event: 'mouseover',
 			active: '.selected',
 			selectedClass: 'active',
-			animated: 300
+			animated: "bounceslide"
 		}).change(function(event, newHeader, oldHeader, newContent, oldContent) {
-			simpleLog(oldHeader.text() + ' hidden, ' + newHeader.text() + ' shown');
+			jQuery('<div>' + oldHeader.text() + ' hidden, ' + newHeader.text() + ' shown</div>').appendTo('#log');
 		});
 		
 		// first simple Accordion with special markup
@@ -36,22 +44,17 @@
 			animated: false
 		});
 		
-		// second simple Accordion with special markup
-		jQuery('#navigation').Accordion({
-			active: false,
-			header: '.head',
-			navigation: true,
-			event: 'mouseover'
-		});
-		
 		var wizard = $("#wizard").Accordion({
-			header: 'div.title',
-			event: false,
-			animated: 'slow'
+			header: '.title',
+			event: false
 		});
 		
 		$("div.title", wizard).each(function(index) {
-			$(this).next().children(":button").filter(".next, .previous").click(function() {
+			$(this)
+			.next()
+			.children(":button")
+			.filter(".next, .previous")
+			.click(function() {
 				wizard.activate(index + ($(this).is(".next") ? 1 : -1))
 			});
 		});
@@ -77,100 +80,56 @@
 <h1 id="banner">jQuery Accordion Demo</h1>
 <div id="main">
 
-	<div  id="leftcol">
-		<fieldset>
-			<legend>Standard, container is a div, header is h3 and content p</legend>	
-	
-			<h3>Code</h3>
-			<pre><code class="mix">jQuery('#list1').Accordion();</code></pre>
-	
-			<div id="list1">
-				<h3>There is one obvious advantage:</h3>
-				<div>
-					<p>
-						You've seen it coming!<br/>
-						Buy now and get nothing for free!<br/>
-						Well, at least no free beer. Perhaps a bear, if you can afford it.
-					</p>
-				</div>
-				<h3>Now that you've got...</h3>
-				<div>
-					<p>
-						your bear, you have to admit it!<br/>
-						No, we aren't selling bears.
-					</p>
-					<p>
-						We could talk about renting one.
-					</p>
-				</div>
-				<h3>Rent one bear, ...</h3>
-				<div>
-					<p>
-						get two for three beer.
-					</p>
-					<p>
-						And now, for something completely different.
-					</p>
-				</div>
+	<fieldset>
+		<legend>Standard, container is a div, header is h3 and content p</legend>	
+
+		<h3>Code</h3>
+		<pre><code class="mix">jQuery('#list1').Accordion();</code></pre>
+
+		<div id="list1">
+			<h3>There is one obvious advantage:</h3>
+			<div>
+				<p>
+					You've seen it coming!<br/>
+					Buy now and get nothing for free!<br/>
+					Well, at least no free beer. Perhaps a bear, if you can afford it.
+				</p>
 			</div>
-			
-		</fieldset>
+			<h3>Now that you've got...</h3>
+			<div>
+				<p>
+					your bear, you have to admit it!<br/>
+					No, we aren't selling bears.
+				</p>
+				<p>
+					We could talk about renting one.
+				</p>
+			</div>
+			<h3>Rent one bear, ...</h3>
+			<div>
+				<p>
+					get two for three beer.
+				</p>
+				<p>
+					And now, for something completely different.
+				</p>
+			</div>
+		</div>
 		
-		<fieldset>
-			<legend>Accordion wizard</legend>
-			
-			<h3>Code</h3>
-			<pre><code class="mix">jQuery('#list3').Accordion({
-	header: 'div.title',
-	active: false,
-	alwaysOpen: false,
-	animated: false
-});</code></pre>
-	
-			<div id="wizard">
-				<div>
-					<div class="title">Header 1</div>
-					<div>
-						Content 1<br/>
-						<input type="button" class="next" value="next" />
-					</div>
-				</div>
-				<div>
-			
-					<div class="title">Header 2</div>
-					<div>
-						Content 2<br/>
-						<input type="button" class="previous" value="previous"/>
-						<input type="button" class="next" value="next"/>
-					</div>
-				</div>
-				<div>
-					<div class="title">Header 3</div>
-			
-					<div>
-						Content 3<br/>
-						<input type="button" class="previous" value="previous"/>
-					</div>
-				</div>
-			
-			
-			</div>
-			
-		</fieldset>
-	</div>
-	
+	</fieldset>
+		
 	<fieldset>
 		<legend>Navigation - Unordered List with anchors and nested lists.</legend>
-		<p>The first item is cloned to allow the user to select it. The
-		active element is choosen based on location.hash: Open Drums and click
-		the first item ('Drums'), then reload the page.</p>
+		<p>Location-based state-saving: The active element is choosen based on location.hash: Click one of the links, then reload the page to see it in action.</p>
 
 		<h3>Code</h3>
 		<pre><code class="mix">jQuery('#navigation').Accordion({
 	active: false,
 	header: '.head',
 	navigation: true,
-	event: "mouseover"
+	event: 'mouseover',
+	autoheight: true,
+	animated: 'easeslide'
 });</code></pre>
 
 		<ul id="navigation">
@@ -180,10 +139,10 @@
 					<li><a href="?p=1.1.1.1">Electric</a></li>
 					<li><a href="?p=1.1.1.2">Acoustic</a></li>
 					<li><a href="?p=1.1.1.3">Amps</a></li>
-					<li><a href="?p=1.1.1.4">Effects A</a></li>
-					<li><a href="?p=1.1.1.4">Effects B</a></li>
-					<li><a href="?p=1.1.1.4">Effects C</a></li>
-					<li><a href="?p=1.1.1.4">Effects D</a></li>
+					<li><a href="?p=1.1.1.4.1">Effects A</a></li>
+					<li><a href="?p=1.1.1.4.2">Effects B</a></li>
+					<li><a href="?p=1.1.1.4.3">Effects C</a></li>
+					<li><a href="?p=1.1.1.4.4">Effects D</a></li>
 					<li><a href="?p=1.1.1.5">Accessories</a></li>
 				</ul> 
 			</li>
@@ -215,16 +174,14 @@
 		<legend>With options, container is a definition list, header dt, content dd</legend>
 		
 		<h3>Code</h3>
-		<pre><code class="mix">function simpleLog(message) {
-	jQuery('&lt;div&gt;' + message + '&lt;/div&gt;').appendTo('#log');
-}
+		<pre><code class="mix">// highly customized Accordion
 jQuery('#list2').Accordion({
-	event: "mouseover",
+	event: 'mouseover',
 	active: '.selected',
-	selectedClass: "active",
-	animated: 300
+	selectedClass: 'active',
+	animated: "bounceslide"
 }).change(function(event, newHeader, oldHeader, newContent, oldContent) {
-	simpleLog(oldHeader.text() + ' hidden, ' + newHeader.text() + ' shown');
+	jQuery('&lt;div&gt;' + oldHeader.text() + ' hidden, ' + newHeader.text() + ' shown&lt;/div&gt;').appendTo('#log');
 });</code></pre>
 
 		<dl id="list2">
@@ -279,6 +236,56 @@ jQuery('#list2').Accordion({
 					Well, apart from the running part.
 				</div>
 			</div>
+		</div>
+		
+	</fieldset>
+	
+	<fieldset>
+		<legend>Accordion wizard</legend>
+		
+		<h3>Code</h3>
+		<pre><code class="mix">var wizard = $("#wizard").Accordion({
+	header: '.title',
+	event: false
+});
+
+$("div.title", wizard).each(function(index) {
+	$(this)
+	.next()
+	.children(":button")
+	.filter(".next, .previous")
+	.click(function() {
+		wizard.activate(index + ($(this).is(".next") ? 1 : -1))
+	});
+});</code></pre>
+	
+		<div id="wizard">
+			<div>
+				<div class="title">Header 1</div>
+				<div>
+					Content 1<br/>
+					<input type="button" class="next" value="next" />
+				</div>
+			</div>
+			<div>
+		
+				<div class="title">Header 2</div>
+				<div>
+					Content 2<br/>
+					<input type="button" class="previous" value="previous"/>
+					<input type="button" class="next" value="next"/>
+				</div>
+			</div>
+			<div>
+				<div class="title">Header 3</div>
+		
+				<div>
+					Content 3<br/>
+					<input type="button" class="previous" value="previous"/>
+				</div>
+			</div>
+		
+		
 		</div>
 		
 	</fieldset>
