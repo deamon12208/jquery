@@ -1,5 +1,5 @@
 /*
- * Accordion 1.4 - jQuery menu widget
+ * Accordion 1.5 - jQuery menu widget
  *
  * Copyright (c) 2007 Jörn Zaefferer, Frank Marcia
  *
