@@ -53,7 +53,7 @@
 				$(m).css({position:'absolute', top: y, left: x.left})
 				.animate(o.show, o.speed);
 				$(m)[htype](function(){
-					self.showChild(m,o);	
+					self.showChild(m,o,htype);	
 				}, function(){
 					self.hideMenu(m,o);
 				});
@@ -69,7 +69,7 @@
 				y = x.top + ( $(a).height() + 1);
 				$(m).css({position:'absolute', top: y, left: x.left})
 					.animate(o.show, o.speed);
-				self.showChild(m,o);
+				self.showChild(m,o,htype);
 				},
 			function(){
 				self.hideMenu(m,o);
@@ -94,9 +94,8 @@
 			});
 			return false;			
 		},
-		showChild : function(m, o) {
-			var htype = hoverType();
-			$('li', m)[htype](
+		showChild : function(m, o, h) {
+			$('li', m)[h](
 				function(){
 					x = $(this).position();
 					$(this).find('>ul').css({position:'absolute', top:x.top, left:$(m).width()})
@@ -110,6 +109,22 @@
 			$(m).animate(o.hide,o.speed);
 			return false;
 		}		
+	});
+	
+	
+	$.extend($.fn, {
+		menuItemDisable : function () {
+			return this.each(function(){
+				$(this).addClass('ui-menu-item-disabled');
+				$('a', this).unbind('click');	
+			});
+		},
+		menuItemEnable : function (f) {
+			return this.each(function(){
+				$(this).removeClass('ui-menu-item-disabled');
+				$('a', this).bind(f);	
+			});
+		}
 	});
 	
 	function hoverType() {	// Helper function, finds out if hoverIntent exists
