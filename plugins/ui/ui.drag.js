@@ -75,9 +75,6 @@
 		if (options.ghosting == true) options.helper = 'clone'; //legacy option check
 		this.interaction = new $.ui.mouseInteraction(el, options);
 		
-		if (options.name)
-			$.ui.add(options.name, 'draggable', this); //Append to UI manager if a name exists as option
-		
 	}
 	
 	$.extend($.ui.draggable.prototype, {
@@ -128,7 +125,7 @@
 
 			$.ui.ddmanager.update(this);
 
-			this.pos = [this.pos[0]-(o.cursorAt.left ? o.cursorAt.left : 0), this.pos[1]-(o.cursorAt.top ? o.cursorAt.top : 0)];
+			this.pos = [this.pos[0]-o.cursorAt.left, this.pos[1]-o.cursorAt.top];
 
 			$.ui.plugin.call('drag', that, this);
 			var nv = $.ui.trigger('drag', this, e, that.prepareCallbackObj(this));

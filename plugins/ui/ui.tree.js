@@ -12,6 +12,9 @@ jQuery.fn.wrapText = function(html){
 
 (function($) {
 
+	//If the UI scope is not availalable, add it
+	$.ui = $.ui || {};
+
 	$.fn.tree = function(o) {
 		return this.each(function() {
 			new $.ui.tree(this,o);	

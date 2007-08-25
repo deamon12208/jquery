@@ -7,7 +7,6 @@
 <title>Sortables Test Page</title>
 <script type="text/javascript" src="../jquery-1.1.3.1.js"></script>
 <script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
-<script type="text/javascript" src="../ui.js"></script>
 <script type="text/javascript" src="../ui.mouse.js"></script>
 <script type="text/javascript" src="../ui.sort.js"></script>
 <style type="text/css" media="all">
@@ -75,7 +74,7 @@ body
 <body>
 
 	<input type='button' value='Append new node' onclick="$('#myul2').append('<li>'+(new Date())+'</li>');"/>
-	<input type='button' value='Refresh sortable' onclick="myul.refresh()"/>
+	<input type='button' value='Refresh sortable' onclick=""/>
 
 	<ul id='myul2'>
 	    <li>Item 1</li>
@@ -156,19 +155,16 @@ body
 	</ul>
 	
 <script type="text/javascript">
-var myul;
 $(document).ready(function(){
 	
 	$('#myul').sortable({
 		//onChange: function() { console.log('Position change during drag'); },
 		//onUpdate: function() { console.log('Position changed'); }
 	});
-	$('#myul2').sortable( { items: 'li', containment: 'sortable', hoverClass: 'hover', name: 'myul' } );
+	$('#myul2').sortable( { items: 'li', containment: 'sortable', hoverClass: 'hover' } );
 	$('#myul3').sortable({
 		animated: true
 	});
-	
-	myul = $.ui.get('myul', 'sortable')[0];
 
 });
 </script>

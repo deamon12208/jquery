@@ -11,7 +11,6 @@
 <script type="text/javascript" src="../../../jquery/src/ajax/ajax.js"></script>
 <script type="text/javascript" src="../../../jquery/src/fx/fx.js"></script>
 <script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
-<script type="text/javascript" src="../ui.js"></script>
 <script type="text/javascript" src="../ui.mouse.js"></script>
 <script type="text/javascript" src="../ui.resize.js"></script>
 <script type="text/javascript" src="../ui.drag.js"></script>
@@ -32,6 +31,7 @@ body
 
 
 .ui-resizable-handle { position: absolute; background: #ddd; display: none; }
+.ui-resizable .ui-resizable-handle { display: block }
 .ui-resizable-n { cursor: n-resize; height: 10px; left: 30px; right: 30px; }
 .ui-resizable-e { cursor: e-resize; width: 10px; top: 30px; bottom: 30px; }
 .ui-resizable-s { cursor: s-resize; height: 10px; left: 30px; right: 30px; }
@@ -118,55 +118,55 @@ if(!window.console) {
 
 $(document).ready(function(){
 
-$('#textarea').resizable();
-
-$('#resizeme, #resizeme2').resizable({
-	//proxy: "proxy",
-	minWidth: 200,
-	minHeight: 100,
-	maxWidth: 500,
-	maxHeight: 300,
-	start: function(e,ui) {
-		//console.log('start ', ui);	
-	},
-	stop: function(e,ui) {
-		//console.log('stop ', ui);	
-	},
-	resize: function(e,ui) {
-		//console.log(e);	
-	},
-	alsoResize: [ "#resizeme3" ] 		
-});
-
-
-$('#resizeme3,#resizeme4').resizable({
-	proxy: "proxy",
-	minWidth: 200,
-	minHeight: 100,
-	maxWidth: 500,
-	maxHeight: 300,
-	handles: {
-		n: '.ui-resizable-n',
-		e: '.ui-resizable-e',
-		s: '.ui-resizable-s',
-		w: '.ui-resizable-w',
-		se: '.ui-resizable-se',
-		sw: '.ui-resizable-sw',
-		ne: '.ui-resizable-ne',
-		nw: '.ui-resizable-nw'
-	},
-	start: function(e,ui) {
-		//console.log('start ', ui);	
-	},
-	stop: function(e,ui) {
-		//console.log('stop ', ui);	
-	},
-	resize: function(e,ui) {
-		//console.log(e);	
-	}		
-});
-
-$('#resizeme3').draggable();
+	$('#textarea').resizable();
+	
+	$('#resizeme, #resizeme2').resizable({
+		//proxy: "proxy",
+		minWidth: 200,
+		minHeight: 100,
+		maxWidth: 500,
+		maxHeight: 300,
+		start: function(e,ui) {
+			//console.log('start ', ui);	
+		},
+		stop: function(e,ui) {
+			//console.log('stop ', ui);	
+		},
+		resize: function(e,ui) {
+			//console.log(e);	
+		},
+		alsoResize: [ "#resizeme3" ] 		
+	});
+	
+	
+	$('#resizeme3,#resizeme4').resizable({
+		proxy: "proxy",
+		minWidth: 200,
+		minHeight: 100,
+		maxWidth: 500,
+		maxHeight: 300,
+		handles: {
+			n: '.ui-resizable-n',
+			e: '.ui-resizable-e',
+			s: '.ui-resizable-s',
+			w: '.ui-resizable-w',
+			se: '.ui-resizable-se',
+			sw: '.ui-resizable-sw',
+			ne: '.ui-resizable-ne',
+			nw: '.ui-resizable-nw'
+		},
+		start: function(e,ui) {
+			//console.log('start ', ui);	
+		},
+		stop: function(e,ui) {
+			//console.log('stop ', ui);	
+		},
+		resize: function(e,ui) {
+			//console.log(e);	
+		}		
+	});
+	
+	$('#resizeme3').draggable();
 
 
 });

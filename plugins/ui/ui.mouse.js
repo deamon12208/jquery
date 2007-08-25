@@ -1,5 +1,33 @@
 (function($) {
 	
+	//If the UI scope is not availalable, add it
+	$.ui = $.ui || {};
+	
+	//Add methods that are vital for all mouse interaction stuff (plugin registering)
+	$.extend($.ui, {
+		plugin: {
+			add: function(w, c, o, p) {
+				var a = $.ui[w].prototype; if(!a.plugins[c]) a.plugins[c] = [];
+				a.plugins[c].push([o,p]);
+			},
+			call: function(t, a, b) {
+				var c = a.plugins[t]; if(!b) b = a;
+				if(!c) return;
+				
+				for (var i = 0; i < c.length; i++) {
+					if (b.options[c[i][0]]) c[i][1].call(b, a, b.options);
+				}	
+			}	
+		},
+		trigger: function(name, s, e, p) {
+			var o = s.options;
+			if(!o[name]) return false;
+			
+			var a = { options: s.options }; $.extend(a, p);
+			return o[name].apply(s.element, [e, a]);
+		}
+	});
+	
 	$.ui.mouseInteraction = function(el,o) {
 	
 		if(!o) var o = {};
@@ -9,12 +37,12 @@
 		$.extend(this.options, o);
 		$.extend(this.options, {
 			handle : o.handle ? ($(o.handle, el)[0] ? $(o.handle, el) : $(el)) : $(el),
-			helper: o.helper ? o.helper : 'original',
-			preventionDistance: o.preventionDistance ? o.preventionDistance : 0,
+			helper: o.helper || 'original',
+			preventionDistance: o.preventionDistance || 0,
 			dragPrevention: o.dragPrevention ? o.dragPrevention.toLowerCase().split(',') : ['input','textarea','button','select','option'],
 			cursorAt: { top: ((o.cursorAt && o.cursorAt.top) ? o.cursorAt.top : 0), left: ((o.cursorAt && o.cursorAt.left) ? o.cursorAt.left : 0), bottom: ((o.cursorAt && o.cursorAt.bottom) ? o.cursorAt.bottom : 0), right: ((o.cursorAt && o.cursorAt.right) ? o.cursorAt.right : 0) },
 			cursorAtIgnore: (!o.cursorAt) ? true : false, //Internal property
-			appendTo: o.appendTo ? o.appendTo : 'parent'			
+			appendTo: o.appendTo || 'parent'			
 		})
 		o = this.options; //Just Lazyness
 		
@@ -22,10 +50,10 @@
 
 			// Let's save the margins for better reference
 			o.margins = {
-				top: $.ui.num(el,'marginTop'),
-				left: $.ui.num(el,'marginLeft'),
-				bottom: $.ui.num(el,'marginBottom'),
-				right: $.ui.num(el,'marginRight')
+				top: parseInt($(el).css('marginTop')) || 0,
+				left: parseInt($(el).css('marginLeft')) || 0,
+				bottom: parseInt($(el).css('marginBottom')) || 0,
+				right: parseInt($(el).css('marginRight')) || 0
 			};
 
 			// We have to add margins to our cursorAt

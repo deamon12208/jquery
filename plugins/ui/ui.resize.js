@@ -1,17 +1,28 @@
 (function($) {
+
+	//Make nodes selectable by expression
+	$.extend($.expr[':'], { resizable: "a.className.match(/(?:^|\s+)ui-resizable(?:\s+|$)/)" });
+
 	
 	$.fn.resizable = function(o) {
 		return this.each(function() {
-			new $.ui.resizable(this,o);	
+			if(!$(this).is(".ui-resizable")) new $.ui.resizable(this,o);	
 		});
 	}
+
+	//Macros for external methods
+	var methods = "destroy,enable,disable".split(",");
+	for(var i=0;i<methods.length;i++) {
+		var cur = methods[i], f;
+		eval('f = function() { return this.each(function() { if($(this).is(".ui-resizable")) this.uiResizable["'+cur+'"](); }); }');
+		$.fn["resizable"+cur.substr(0,1).toUpperCase()+cur.substr(1)] = f;
+	};
 	
 	$.ui.resizable = function(el,o) {
 		
-		var options = {};
-		o = o ? o : {};
-		$.extend(options, o);
-		this.element = el;
+		var options = {}; o = o || {}; $.extend(options, o); //Extend and copy options
+		this.element = el; var self = this; //Do bindings
+		this.element.uiResizable = this; //TODO: Real expando (this one causes memory leaks)
 		
 		if(options.proxy) {
 			var helper = function(e,that) {
@@ -33,7 +44,7 @@
 		if(options.destructive) {
 			$(el).wrap('<div class="ui-wrapper"  style="position: relative; border: 0; margin: 0; padding: 0; width: '+$(el).outerWidth()+'px; height: '+$(el).outerHeight()+';"></div>');
 			var oel = el;
-			el = el.parentNode;
+			el = el.parentNode; this.element = el;
 
 			var t = function(a,b) { $(el).append("<div class='ui-resizable-"+a+" ui-resizable-handle' style='position: absolute; "+b+"'></div>"); };
 			var b = [parseInt($(oel).css('borderTopWidth')),parseInt($(oel).css('borderRightWidth')),parseInt($(oel).css('borderBottomWidth')),parseInt($(oel).css('borderLeftWidth'))];
@@ -46,7 +57,7 @@
 			t('ne','top: '+b[0]+'px; right: '+b[1]+'px;');
 			t('nw','top: '+b[0]+'px; left: '+b[3]+'px;');
 			
-			o.proportionallyResize = o.proportionallyResize ? o.proportionallyResize : [];
+			o.proportionallyResize = o.proportionallyResize || [];
 			o.proportionallyResize.push(oel);
 		}
 		
@@ -83,7 +94,7 @@
 			
 			if(!$(options.handles[i]).length) continue;
 				
-			$(options.handles[i]).show().bind('mousedown', function(e) {
+			$(options.handles[i]).bind('mousedown', function(e) {
 				self.interaction.options.axis = this.resizeAxis;
 			})[0].resizeAxis = i;
 		}
@@ -103,16 +114,18 @@
 				self.start.apply(t, [self, e]); // Trigger the start callback				
 			},
 			_beforeStop: function(h,p,c,t,e) {
-				self.stop.apply(t, [self, e]); // Trigger the start callback
+				self.stop.apply(t, [self, e]); // Trigger the stop callback
 			},
 			_drag: function(h,p,c,t,e) {
 				self.drag.apply(t, [self, e]); // Trigger the start callback
 			}			
 		});
-		var self = this;
 		
+		//Initialize mouse interaction
 		this.interaction = new $.ui.mouseInteraction(el,options);
-		if(options.name) $.ui.add(options.name, 'resizable', this); //Append to UI manager if a name exists as option
+		
+		//Add the class for themeing
+		$(this.element).addClass("ui-resizable");
 		
 	}
 	
@@ -126,11 +139,17 @@
 			}			
 		},
 		destroy: function() {
-			console.log(1);
+			$(this.element).removeClass("ui-resizable").removeClass("ui-resizable-disabled");
 			this.interaction.destroy();
 		},
-		enable: function() { this.disabled = false; },
-		disable: function() { this.disabled = true; },
+		enable: function() {
+			$(this.element).removeClass("ui-resizable-disabled");
+			this.disabled = false;
+		},
+		disable: function() {
+			$(this.element).addClass("ui-resizable-disabled");
+			this.disabled = true;
+		},
 		start: function(that, e) {
 			this.options.originalSize = [$(this.element).width(),$(this.element).height()];
 			this.options.originalPosition = $(this.element).css("position");
@@ -170,7 +189,7 @@
 			var co = o.co;
 			var p = o.originalSize;
 
-			this.pos = [this.rpos[0]-(o.cursorAt.left ? o.cursorAt.left : 0), this.rpos[1]-(o.cursorAt.top ? o.cursorAt.top : 0)];
+			this.pos = [this.rpos[0]-o.cursorAt.left, this.rpos[1]-o.cursorAt.top];
 
 			var nw = p[0] + (this.pos[0] - co.left);
 			var nh = p[1] + (this.pos[1] - co.top);
@@ -248,11 +267,5 @@
 			
 		}
 	});
-	
-	//Register the module
-	$.ui.register({
-		state: "resizable",
-		name: "resizable" //The name of your function: $.ui.resizable -> 'resizable'
-	});
 
- })($);
+})($);

@@ -23,7 +23,7 @@
 			accept: o.accept && o.accept.constructor == Function ? o.accept : function(d) {
 				return $(d).is(accept);	
 			},
-			tolerance: o.tolerance ? o.tolerance : 'intersect'
+			tolerance: o.tolerance || 'intersect'
 		});
 		o = this.options;
 		var self = this;
@@ -32,7 +32,6 @@
 		$(this.element).bind("mouseup", function(e) { return self.drop.apply(self, [e]); });
 		
 		$.ui.ddmanager.droppables.push({ item: this, over: 0, out: 1 }); // Add the reference and positions to the manager
-		if(o.name) $.ui.add(o.name, 'droppable', this); //Append to UI manager if a name exists as option
 			
 	};
 	

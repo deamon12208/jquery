@@ -25,6 +25,25 @@
 	<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
 	<script type="text/javascript" src="../ui.js"></script>
 	<script type="text/javascript">
+
+
+ jQuery.extend({	
+	/**
+	 *
+	 * @param Integer p period step in animation
+	 * @param Integer n current time
+	 * @param Mixed firstNum begin value
+	 * @param Mixed delta change in
+	 * @param Integer duration duration
+	 */
+	easing :  {
+		curve: function(p, n, firstNum, delta, duration) {
+			return (p * delta) + firstNum;
+		}
+	}
+});
+
+
 	
 	
 	var path = [];
@@ -48,7 +67,7 @@
 				+ Math.pow(prev[1] - path[i][1], 2)
 			);
 
-			$("#moveme").animate({ left: path[i][0], top: path[i][1] }, distance, "linear");
+			$("#moveme").animate({ left: path[i][0], top: path[i][1] }, distance*10, "curve");
 			prev = path[i];	
 		}
 

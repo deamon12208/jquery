@@ -11,7 +11,6 @@
 <script type="text/javascript" src="../../../jquery/src/ajax/ajax.js"></script>
 <script type="text/javascript" src="../../../jquery/src/fx/fx.js"></script>
 <script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
-<script type="text/javascript" src="../ui.js"></script>
 <script type="text/javascript" src="../ui.mouse.js"></script>
 <script type="text/javascript" src="../ui.slider.js"></script>
 <style type="text/css" media="all">
@@ -93,7 +92,7 @@ $(document).ready(function(){
 	//Now is that easy or what?
 	$('#slider3').slider();
 	
-	$('#slider1').slider({ stepping: 20, maxValue: 100, minValue: -100, name: 'slider1', change: function() {
+	$('#slider1').slider({ stepping: 20, maxValue: 100, minValue: -100, change: function() {
 	
 		console.log('changed!');	
 	
@@ -102,15 +101,10 @@ $(document).ready(function(){
 		$('#slider1_value')[0].value = ui.value;
 		$('#slider1_realvalue')[0].value = ui.pixel;
 		
-		slider2.goto(ui.value,ui.slider.options.realValue);
+
 			
 	} });
-	$('#slider2').slider({ name: 'slider2', slide: function(e,ui) {
-		slider1.goto(ui.value,ui.slider.options.realValue);
-	} });
-	
-	slider1 = $.ui.get('slider1', 'slider')[0];
-	slider2 = $.ui.get('slider2', 'slider')[0];
+	$('#slider2').slider();
 
 });
 </script>

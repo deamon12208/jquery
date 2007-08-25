@@ -6,6 +6,9 @@
  */
 
 (function($){
+
+	//If the UI scope is not availalable, add it
+	$.ui = $.ui || {};
 	
 	$.fn.menu = function(m,o,t) {	// Constructor for the menu method
 		return this.each(function() {

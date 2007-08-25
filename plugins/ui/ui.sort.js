@@ -33,10 +33,10 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 		
 		$.extend(options, o);
 		$.extend(options, {
-			items: options.items ? options.items : '> li',
+			items: options.items || '> li',
 			helper: 'clone',
 			containment: options.containment ? (options.containment == 'sortable' ? el : options.containment) : null,
-			zIndex: options.zIndex ? options.zIndex : 1000,
+			zIndex: options.zIndex || 1000,
 			_start: function(h,p,c,t,e) {
 				self.start.apply(t, [self, e]); // Trigger the onStart callback				
 			},
@@ -61,7 +61,6 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 		if($(el).css('position') == 'static') $(el).css('position', 'relative');
 		options.offset = $(el).offset({ border: false });
 		
-		if(options.name) $.ui.add(options.name, 'sortable', this); //Append to UI manager if a name exists as option
 		this.options = options;
 	}
 	
@@ -178,7 +177,7 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			// remember the dragged element. We need this to exclude this one from items we check against
 			draggedEl = this.element;
 			var o = this.options;
-			this.pos = [this.pos[0]-(o.cursorAt.left ? o.cursorAt.left : 0), this.pos[1]-(o.cursorAt.top ? o.cursorAt.top : 0)];
+			this.pos = [this.pos[0]-o.cursorAt.left, this.pos[1]-o.cursorAt.top];
 			$.ui.plugin.call('drag', this);
 
 			var nv = $.ui.trigger('drag', this, e, that.prepareCallbackObj(this));

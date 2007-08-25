@@ -2,6 +2,9 @@
  * 
  */
 (function($) {
+ 
+ 	//If the UI scope is not availalable, add it
+	$.ui = $.ui || {};
     
     $.fn.tabs = function(initial, options) {
     	if (initial && initial.constructor == Object) {
@@ -20,10 +23,6 @@
     	    initial: 0
     	}, options);
     	this.source = el;
-    	
-    	if (options.name) {
-    	    $.ui.add(options.name, 'tabs', this);
-		}
     	
     	this.tabify();
     };

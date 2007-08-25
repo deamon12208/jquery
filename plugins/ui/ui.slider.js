@@ -2,7 +2,7 @@
 
 	
 	//Web Forms 2.0
-	if($.ui.webforms) {
+	if(window['webforms']) {
 		$(document).ready(function() {
 			
 			$("input").each(function() {
@@ -58,20 +58,16 @@
 		});
 	}
 	
-	$.fn.unslider = function() {
-		
-	}
-	
 	$.ui.slider = function(el, o) {
 		
 		var options = {};
-		o = o ? o : {};
+		o = o || {};
 		$.extend(options, o);
 		$.extend(options, {
-			axis: o.axis ? o.axis : (el.offsetWidth < el.offsetHeight ? 'vertical' : 'horizontal'),
-			maxValue: parseInt(o.maxValue) ? parseInt(o.maxValue) : 100,
-			minValue: parseInt(o.minValue) ? parseInt(o.minValue) : 0,
-			startValue: parseInt(o.startValue) ? parseInt(o.startValue) : 0,
+			axis: o.axis || (el.offsetWidth < el.offsetHeight ? 'vertical' : 'horizontal'),
+			maxValue: parseInt(o.maxValue) || 100,
+			minValue: parseInt(o.minValue) || 0,
+			startValue: parseInt(o.startValue) || 0,
 			_start: function(h, p, c, t, e) {
 				self.start.apply(t, [self, e]); // Trigger the start callback				
 			},
@@ -85,7 +81,7 @@
 
 		var self = this;
 		var o = options;
-		o.stepping = parseInt(o.stepping) ? parseInt(o.stepping) : (o.steps ? o.maxValue/o.steps : 0);
+		o.stepping = parseInt(o.stepping) || (o.steps ? o.maxValue/o.steps : 0);
 		o.realValue = (o.maxValue - o.minValue);
 
 
@@ -118,9 +114,6 @@
 			$(el).bind('click', function(e) { self.click.apply(self, [e]); });
 			if(!isNaN(o.startValue)) this.goto(o.startValue,options.realValue, null, false);
 		}
-		
-		if (options.name)
-			$.ui.add(options.name, 'slider', this); //Append to UI manager if a name exists as option
 		
 	}
 	
@@ -195,7 +188,7 @@
 		drag: function(that, e, pos) {
 
 			var o = this.options;
-			this.pos = pos ? pos : [this.pos[0]-this.element.offsetWidth/2, this.pos[1]-this.element.offsetHeight/2];
+			this.pos = pos || [this.pos[0]-this.element.offsetWidth/2, this.pos[1]-this.element.offsetHeight/2];
 			
 			if(o.axis == 'horizontal') var m = this.pos[0];
 			if(o.axis == 'vertical')   var m = this.pos[1];
@@ -236,7 +229,7 @@
 			this.interaction.pickValue = this.interaction.curValue;
 			value = value-o.minValue;
 			
-			var modifier = scale ? scale : o.realValue;
+			var modifier = scale || o.realValue;
 			
 			var p = this.parentSize;
 			var prop = this.prop;
