@@ -113,10 +113,10 @@
 	
 	
 	$.extend($.fn, {
-		menuItemDisable : function () {
+		menuItemDisable : function (f) {
 			return this.each(function(){
-				$(this).addClass('ui-menu-item-disabled');
-				$('a', this).unbind('click');	
+				$('a', this).css({color: "#aaa", background: 'transparent'});
+				$('a', this).unbind(f);	
 			});
 		},
 		menuItemEnable : function (f) {
