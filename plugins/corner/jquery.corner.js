@@ -1,7 +1,7 @@
 /*
  * jQuery corner plugin
  *
- * version 1.7 (1/26/2007)
+ * version 1.8 (8/24/2007)
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -56,10 +56,12 @@ jQuery.fn.corner = function(o) {
         return ( s.length < 2 ) ? '0'+s : s;
     };
     function gpc(node) {
-        for ( ; node && node.nodeName.toLowerCase() != 'html'; node = node.parentNode  ) {
+        for ( ; node && node.nodeName.toLowerCase() != 'html'; node = node.parentNode ) {
             var v = jQuery.css(node,'backgroundColor');
             if ( v.indexOf('rgb') >= 0 ) { 
-                rgb = v.match(/\d+/g); 
+                if ($.browser.safari && v == 'rgba(0, 0, 0, 0)')
+                    continue;
+                var rgb = v.match(/\d+/g); 
                 return '#'+ hex2(rgb[0]) + hex2(rgb[1]) + hex2(rgb[2]);
             }
             if ( v && v != 'transparent' )
