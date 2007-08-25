@@ -1,15 +1,15 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>UI Menu Tests</title>
 		
 		<style type="text/css">
 			body { font:10pt Calibri, Arial, sans-serif; margin:10px 20px;}
-			.ui-toolbar {background:#222; z-index:500; font:10pt Verdana; list-style:none;}
-			.ui-toolbar-button {float:left; padding:4px 20px; border:1px solid #DDD; background:#FFF; cursor:pointer;}
-			.ui-toolbar-button:hover {border:1px solid #CCC; background:#EEE; }
-			.ui-toolbar-button a {text-decoration:none; color:#000;}
+			.ui-menu-toolbar {background:#222; z-index:500; font:10pt Verdana; list-style:none;}
+			.ui-menu-toolbar-button {float:left; padding:4px 20px; border:1px solid #DDD; background:#FFF; cursor:pointer;}
+			.ui-menu-toolbar-button:hover {border:1px solid #CCC; background:#EEE; }
+			.ui-menu-toolbar-button a {text-decoration:none; color:#000;}
 			.ui-menu-items {display:none; padding:0; background:#FFF; z-index:500; border:1px solid #CCC; list-style:none; padding:1px 4px; opacity:0.95; font:10pt Verdana; min-width:80px; *width:80px;}
 			.ui-menu-item a { color:#000; text-decoration:none;}
 			.ui-menu-item-parent { background: url('images/arrow_right.png') no-repeat center right; }
@@ -53,8 +53,8 @@
 			
 		</script>
 		<h2>Toolbar Test</h2>
-		<ul id="mytoolbar" class="ui-toolbar">
-			<li id="filemenu-parent" class="ui-toolbar-button"><a href="#" class="toolbarFile">File</a>
+		<ul id="mytoolbar" class="ui-menu-toolbar">
+			<li id="filemenu-parent" class="ui-menu-toolbar-button"><a href="#" class="toolbarFile">File</a>
 				<ul id="filemenu">
 					<li id="filemenu-new"><a href="#" class="fileNew">New</a>
 						<ul>
@@ -81,7 +81,7 @@
 				<li id="filemenu-exit"><a href="#" class="fileExit">Exit</a></li>
 				</ul>
 			</li>
-			<li id="editmenu-parent" class="ui-toolbar-button"><a href="#" class="toolbarEdit">Edit</a>
+			<li id="editmenu-parent" class="ui-menu-toolbar-button"><a href="#" class="toolbarEdit">Edit</a>
 				<ul id="editmenu">
 					<li id="editmenu-cut"><a href="#" class="fileCut">Cut</a></li>
 					<li id="editmenu-copy"><a href="#" class="fileCopy">Copy</a></li>
