@@ -23,22 +23,22 @@
 			speed: 'normal'
 		}, o);
 		
-		$(m).appendTo(el);
+		$(m).appendTo(el);	// This makes sure our menu is attached in the DOM to the parent to keep things clean
 		this.styleMenu(m);	// Pass the menu in to recieve it's makeover
 		this[o.context](el, m, o);	// Based on contexted selected, attach to menu parent
 		
-    	if(t&&t.buttons)
+    	if(t&&t.buttons)	// Check to see if the menu has a buttons object
       		$('a',$(m)).click(function(){
 	  		if (t.buttons[this.className])
-        		t.buttons[this.className]();
+        		t.buttons[this.className]();	//If the classname of the link has a matching function, execute
       	});
 	}
 	
 	$.extend($.ui.menu.prototype, {
 		styleMenu : function(m){
-			$(m).addClass('ui-menu-parent').children('li').addClass('ui-menu-node');
-			var parents = $('ul',m).addClass('ui-menu-parent').parent('li').addClass('ui-menu-sub')
-			var node = $('li',m).addClass('ui-menu-node');
+			$(m).addClass('ui-menu-items').children('li').addClass('ui-menu-item');
+			var parents = $('ul',m).addClass('ui-menu-items').parent('li').addClass('ui-menu-item-parent')
+			var node = $('li',m).addClass('ui-menu-item');
 			return false;
 		},
 		clickContext : function(a,m,o) {
