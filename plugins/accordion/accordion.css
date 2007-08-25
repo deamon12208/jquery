@@ -43,6 +43,10 @@ li { list-style-type: none; }
 	padding: 0px;
 	border: 1px solid black;
 }
+#list1 div {
+	background-color: #80cfe2;
+	
+}
 #list1 p {
 	margin-bottom : 10px;
 	border: none;
@@ -52,9 +56,6 @@ li { list-style-type: none; }
 	font-size: 10px;
 	margin: 0px;
 	padding: 10px;
-	background-color: #80cfe2;
-	overflow: hidden;
-	height: 10em;	
 }
 #list1 h3 {
 	cursor:pointer;

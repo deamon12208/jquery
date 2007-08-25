@@ -88,7 +88,7 @@
  *   <li>
  *     <a class="head" href="">Movies</a>
  *     <ul>
- *       <li><a class="current" href="movies/fantasy/">Fantasy</a></li>
+ *       <li><a class="selected" href="movies/fantasy/">Fantasy</a></li>
  *       <li><a href="movies/programming/">Programming</a></li>
  *     </ul>
  *   </li>
@@ -96,7 +96,7 @@
  * @desc Creates an Accordion from the given navigation list, activating those accordion parts
  * that match the current location.href. Assuming the user clicked on "Fantasy" in the "Movies" section,
  * the accordion displayed after loading the page with the "Movies" section open and the "Fantasy" link highlighted
- * with a class "current".
+ * with a class "selected".
  *
  * @example jQuery('#accordion').Accordion().change(function(event, newHeader, oldHeader, newContent, oldContent) {
  *   jQuery('#status').html(newHeader.text());
@@ -171,6 +171,7 @@ $.extend($.Accordion, {
 			settings.toShow.css({ height: 0, overflow: 'hidden' }).show();
 			settings.toHide.filter(":hidden").each(settings.finished).end().filter(":visible").animate({height:"hide"},{
 				step: function(n){
+					// TODO account for different heights!
 					settings.toShow.height(Math.ceil(height - ($.fn.stop ? n * height : n)));
 				},
 				duration: settings.duration,
