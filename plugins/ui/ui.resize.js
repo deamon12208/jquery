@@ -83,7 +83,7 @@
 			
 			if(!$(options.handles[i]).length) continue;
 				
-			$(options.handles[i]).bind('mousedown', function(e) {
+			$(options.handles[i]).show().bind('mousedown', function(e) {
 				self.interaction.options.axis = this.resizeAxis;
 			})[0].resizeAxis = i;
 		}
