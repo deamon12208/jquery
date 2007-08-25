@@ -6,12 +6,12 @@
 		});
 	}
 	
+	
 	$.ui.resizable = function(el,o) {
 		
 		var options = {};
 		o = o ? o : {};
 		$.extend(options, o);
-		this.element = el;
 		
 		if(options.proxy) {
 			var helper = function(e,that) {
@@ -35,7 +35,7 @@
 			var oel = el;
 			el = el.parentNode;
 
-			var t = function(a,b) { $(el).append("<div class='ui-resizable-"+a+" ui-resizable-handle' style='position: absolute; "+b+"'></div>"); };
+			var t = function(a,b) { $(el).append("<div class='ui-"+a+"-resize ui-resize-handler' style='position: absolute; "+b+"'></div>"); };
 			var b = [parseInt($(oel).css('borderTopWidth')),parseInt($(oel).css('borderRightWidth')),parseInt($(oel).css('borderBottomWidth')),parseInt($(oel).css('borderLeftWidth'))];
 			t('n','top: '+b[0]+'px;');
 			t('e','right: '+b[1]+'px;');
@@ -72,7 +72,7 @@
 		}
 		
 		options.handles = {};
-		if(!o.handles) o.handles = { n: '.ui-resizable-n', e: '.ui-resizable-e', s: '.ui-resizable-s', w: '.ui-resizable-w', se: '.ui-resizable-se', sw: '.ui-resizable-sw', ne: '.ui-resizable-ne', nw: '.ui-resizable-nw' };
+		if(!o.handles) o.handles = { n: '.ui-n-resize', e: '.ui-e-resize', s: '.ui-s-resize', w: '.ui-w-resize', se: '.ui-se-resize', sw: '.ui-sw-resize', ne: '.ui-ne-resize', nw: '.ui-nw-resize' };
 		
 		for(var i in o.handles) { options.handles[i] = o.handles[i]; } //Copying the object
 		
@@ -83,8 +83,9 @@
 			
 			if(!$(options.handles[i]).length) continue;
 				
-			$(options.handles[i]).bind('mousedown', function(e) {
+			$(options.handles[i]).show().bind('mousedown', function(e) {
 				self.interaction.options.axis = this.resizeAxis;
+				return self.interaction.trigger(e);
 			})[0].resizeAxis = i;
 		}
 
@@ -93,7 +94,6 @@
 			nonDestructive: true,
 			dragPrevention: 'input,button,select',
 			startCondition: function(e) {
-				if(self.disabled) return false;
 				for(var i in options.handles) {
 					if($(options.handles[i])[0] == e.target) return true;
 				}
