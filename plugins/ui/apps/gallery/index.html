@@ -11,6 +11,7 @@
 <script type="text/javascript" src="../../../../jquery/src/ajax/ajax.js"></script>
 <script type="text/javascript" src="../../../../jquery/src/fx/fx.js"></script>
 <script type="text/javascript" src="../../../dimensions/jquery.dimensions.js"></script>
+<script type="text/javascript" src="../../../livequery/jquery.livequery.js"></script>
 <script type="text/javascript" src="../../ui.js"></script>
 <script type="text/javascript" src="../../ui.effects.js"></script>
 <script type="text/javascript" src="../../ui.mouse.js"></script>
@@ -80,18 +81,16 @@ body { font:10pt verdana; }
 </head>
 <body class="light">
 <div class='imageset'>
-	<div class='select' id='i1'><img title="Swans" alt="Nice swans" src='../../tests/images/select-1.jpg' /></div>
-	<div class='select' id='i2'><img title="Dolphins" alt="A swarm of dolphins" src='../../tests/images/select-2.jpg' /></div>
-	<div class='select' id='i3'><img src='../../tests/images/select-3.jpg' /></div>
-	<div class='select' id='i4'><img src='../../tests/images/select-4.jpg' /></div>
-	<div class='select' id='i5'><img src='../../tests/images/select-5.jpg' /></div>
-	<div class='select' id='i6'><img src='../../tests/images/select-6.jpg' /></div>
-	<div class='select' id='i7'><img src='../../tests/images/select-7.jpg' /></div>
-	<div class='select' id='i8'><img src='../../tests/images/select-8.jpg' /></div>
-	<div class='select' id='i9'><img src='../../tests/images/select-9.jpg' /></div>
+	<div class='select' id='i1'><img title="Swans" alt="Nice Swans" src='../../tests/images/select-1.jpg' /></div>
+	<div class='select' id='i2'><img title="Dolphins" alt="A swarm of Dolphins" src='../../tests/images/select-2.jpg' /></div>
+	<div class='select' id='i3'><img title="Butterfly" alt="A Butterfly" src='../../tests/images/select-3.jpg' /></div>
+	<div class='select' id='i4'><img title="Hummingbird" alt="A Hummingbird" src='../../tests/images/select-4.jpg' /></div>
+	<div class='select' id='i5'><img title="Underwater World" alt="A underwater utopia" src='../../tests/images/select-5.jpg' /></div>
+	<div class='select' id='i6'><img title="Dolphin" alt="A Dolphin says hello" src='../../tests/images/select-6.jpg' /></div>
+	<div class='select' id='i7'><img title="A Cheeta" alt="A Cheeta" src='../../tests/images/select-7.jpg' /></div>
+	<div class='select' id='i8'><img title="2 Bears" alt="2 large bears" src='../../tests/images/select-8.jpg' /></div>
+	<div class='select' id='i9'><img title="Another Dolphin" alt="Another Dolphin" src='../../tests/images/select-9.jpg' /></div>
 </div>
-
-<div class="modal"></div>
 	
 <script type="text/javascript">
 if(!window.console) {
@@ -119,12 +118,32 @@ $(document).ready(function(){
 	}).prependTo("body");
 
 	
-	$('img').bind('click', function(){
+	$('img').bind('click', function(e){
+		$('body').append('<div class="modal"></div>');
 		console.log(this);
-		$('.modal').modal({title: $(this).attr('title')})
-		.css({top: 0, left: 0});
-		$('.ui-modal .middle .center').append($(this).clone()).append('<div>' + $(this).attr('alt') + '</div>');
-	})
+		$('.modal').modal({title: $(this).attr('title'), height: $(this).height + 50, width: $(this.width + 50)})
+		.css({top: e.clientY, left: e.clientX});
+		// Set Left Panel
+		$('.ui-modal .middle .center').append('<div class="modalimage" style="display: none;">').append($(this).clone().empty()).append('<div>' + $(this).attr('alt') + '</div></div><a href="#" class="commenttoggle">Add Comment<a><div class="comment"></div>');
+		setTimeout('10000');
+		$('.ui-modal .middle .center .modalimage').animate({opacity: "show"});
+	});
+	
+	$('.commenttoggle').livequery(function(){
+		$(this).bind('click', function(){
+			$('.comment').load('comment-form.html', function(){
+				$(this).slideDown('slow');
+			});
+		$(this).text('Hide Comments');
+		});
+	}, function(){
+		$(this).bind('click', function(){
+			$('.comment').slideUp('slow', function(){
+				$(this).html('');
+			});
+		});
+		$(this).text('Show Comments');
+	});
 	
 
 });
