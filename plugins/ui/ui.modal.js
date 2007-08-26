@@ -159,12 +159,34 @@ $.ui.modal = function(el, o) {
 		// Animation speed
 		speed: 'fast',
 		// Remove when exiting
-		outRemove: false
+		outRemove: false,
+		// Whether to create again if this function is called twice on the same element
+		createAgain: false
 	};
 	$.extend(options, o);
 	var self = this;
 	// Ensure the options carry through
 	self.options = options;
+	
+	// Abort early if this is already a modal
+	if ($(el).is('.ui-modal') && options.createAgain != true) {
+	  // We might as well not make the object if not needed
+	  if (options.name != '') {
+	    return $.ui.get('modal', options.name);
+	  }
+  	// What to add to the manager
+  	var uiobj = {};
+  	uiobj.options = this.options;
+  	uiobj.el = $(el);
+  	uiobj.close = function() {
+  		this.options.close({}, {options: this.options, modal: this.el });
+  	}
+  	uiobj.open = function() {
+  		this.options.open({}, {options: this.options, modal: this.el });
+  	}
+  	return uiobj;
+  }
+	
 	// Buttons
 	var bu = $("<span>").addClass('ui-modal-buttons').addClass('ui-modal-buttons-'+ options.buttons).html(options.buttonMarkup);
 	// Title
@@ -209,6 +231,7 @@ $.ui.modal = function(el, o) {
 	if ($.fn.bgIframe != window.undefined) {
 		$(el).bgIframe();
 	}
+	
 	// What to add to the manager
 	var uiobj = {};
 	uiobj.options = this.options;
@@ -222,7 +245,7 @@ $.ui.modal = function(el, o) {
 	if(options.name != '') {
 		$.ui.add(options.name, 'modal', uiobj);
 	}
-	return el;
+	return uiobj;
 }
 
 })(jQuery);
