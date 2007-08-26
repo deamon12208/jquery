@@ -119,14 +119,13 @@ $(document).ready(function(){
 
 	
 	$('img').bind('click', function(e){
-		$('body').append('<div class="modal"></div>');
-		console.log(this);
-		$('.modal').modal({title: $(this).attr('title'), height: $(this).height + 50, width: $(this.width + 50)})
+		var modal_id = $(this).parent().attr('id') + '_modal';
+		var self = this;
+		$('body').append('<div class="modal" id="' + modal_id + '"></div>');
+		$('#' + modal_id).modal({title: $(this).attr('title'), height: $(self).height + 50, width: $(self).width + 50})
 		.css({top: e.clientY, left: e.clientX});
 		// Set Left Panel
-		$('.ui-modal .middle .center').append('<div class="modalimage" style="display: none;">').append($(this).clone().empty()).append('<div>' + $(this).attr('alt') + '</div></div><a href="#" class="commenttoggle">Add Comment<a><div class="comment"></div>');
-		setTimeout('10000');
-		$('.ui-modal .middle .center .modalimage').animate({opacity: "show"});
+		$('#' + modal_id + ' .middle .center').append('<div class="modalimage" style="display: none;">').append($(self).clone().empty()).append('<div>' + $(self).attr('alt') + '</div></div><a href="#" class="commenttoggle">Add Comment<a><div class="comment"></div>');
 	});
 	
 	$('.commenttoggle').livequery(function(){
