@@ -144,6 +144,10 @@ $(document).ready(function(){
 		$(this).text('Show Comments');
 	});
 	
+	$('.submitcomment').bind('submit', function(){
+		$('#' + modal_id + ' .middle .center .comment').replaceWith('<h2>Comment Submitted</h2>');
+	})
+	
 
 });
 
