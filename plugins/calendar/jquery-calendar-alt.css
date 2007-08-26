@@ -23,6 +23,10 @@
 }
 #calendar_div a, .calendar_inline a {
 	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	background: none;
+	color: #000;
 }
 button.calendar_trigger {
 	width: 25px;
@@ -53,13 +57,13 @@ img.calendar_trigger {
 	letter-spacing: 1px;
 }
 .calendar_control a, .calendar_links a {
-	padding: 2px 5px;
+	padding: 2px 5px !important;
 }
 .calendar_control a:hover {
-	background: #9dbae1 url(img/hover-bg.gif) repeat;
+	background: #9dbae1 url(img/hover-bg.gif) repeat !important;
 }
 .calendar_links a:hover, .calendar_titleRow a:hover {
-	background: #9dbae1 url(img/hover-bg.gif) repeat;
+	background: #9dbae1 url(img/hover-bg.gif) repeat !important;
 }
 .calendar_links label { /* disabled links */
 	padding: 2px 5px;

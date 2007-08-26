@@ -1,12 +1,6 @@
-/* Eric Meyer's Global Reset Compressed */
-html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{border:0;outline:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:inherit;vertical-align:baseline;margin:0;padding:0;}:focus{outline:0;}body{line-height:1;color:#000;background:#FFF;}ol,ul{list-style:none;}table{border-collapse:separate;border-spacing:0;}caption,th,td{text-align:left;font-weight:400;}blockquote:before,blockquote:after,q:before,q:after{content:"";}blockquote,q{quotes:"" "";}
-/* End Global Reset */
-
-body { font-family: Arial, Helvetica, Sans-serif; text-align:center; font-size: 13px }
-#wrap { width: 850px; margin: 0 auto; text-align: left}
-pre { margin: 5px 10px; }
-.tab_group1 { clear:left; }
-.calLabel { float: left; width: 15em; }
+#tab_menu1 { margin:0.5em 0 0 0; padding:0; font-size:0.9em; }
+.tab_group1 { clear:left; padding-top:0; }
+.calLabel { float: left; width: 18em; }
 .ar_day { color: white !important; background: #eee url(img/ar.gif) no-repeat center !important; }
 .au_day { color: blue !important; background: #eee url(img/au.gif) no-repeat center !important; }
 .br_day { color: green !important; background: #eee url(img/br.gif) no-repeat center !important; }
@@ -19,22 +13,37 @@ pre { margin: 5px 10px; }
 .se_day { color: blue !important; background: #eee url(img/se.gif) no-repeat center !important; }
 .us_day { color: white !important; background: #eee url(img/us.gif) no-repeat center !important; }
 .za_day { color: green !important; background: #eee url(img/za.gif) no-repeat center !important; }
-
+code pre { font-size: 0.9em; font-family:Verdana, Arial, Helvetica, sans-serif;}
 .tabs {
 	list-style: none;
 }
 .tabs li {
 	float: left;
 }
-.tabs li a, .nextFeature a {
+.tabs li a {
 	display:block;
-	padding: 0.25em 0.5em;
+	padding: 0.4em .5em;
+	margin: 0;
+	border-left: 1px solid #fff;
+	border-right:  1px solid #ddd;
 	cursor: pointer;
 	cursor: hand;
 	text-decoration: none;
-	background: #555;
 	color: #eee;
+	background: #78A5CE url(../../img/nav_over.gif) repeat-x top left;
 }
-.tabs li a:hover, .tabs li a.over, .nextFeature a:hover {
-	background: #000 !important;
+.tabs li a:hover, .tabs li a.over {
+	background: #555 url(../../img/fadeto333.gif) repeat-x !important;
+	border-top: 1px solid #000;
+}
+.tab_group1 h3 {
+	font-weight: bold;
+	margin-top:15px;
+	border-bottom: 1px solid #ddd;
+}
+.nextFeature {
+	margin-top: 15px;
+}
+ol li {
+	margin-top: 1em;
 }

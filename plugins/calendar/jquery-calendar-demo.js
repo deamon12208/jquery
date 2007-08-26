@@ -3,6 +3,7 @@ var inlineFrom = null;
 var inlineTo = null;
 
 $(document).ready(function () {
+	$('#alt').attr({ 'disabled':'disabled' });
 	tabs.init();
 	// Restore default language after loading French localisation
 	popUpCal.setDefaults(popUpCal.regional['']);
@@ -51,6 +52,18 @@ $(document).ready(function () {
 	updateInlineRange();
 	// Stylesheets
 	$('#altStyle').calendar();
+	$('#button1').click(function() { 
+		popUpCal.showFor($('#invokeFocus')[0]);
+	});
+	$('#button2').click(function() { 
+		popUpCal.dialogCalendar($('#invokeDialog').val(),
+		setDateFromDialog, {prompt: 'Choose a date', speed: ''});
+	});
+	$('#button3').click(function() { 
+		popUpCal.dialogCalendar($('#altDialog').val(),
+		setAltDateFromDialog, {prompt: 'Choose a date', speed: ''});
+	});
+
 });
 
 function setSpeed(select) {
@@ -119,7 +132,7 @@ var tabs =
 	init : function () 
 	{
 		// Setup tabs
-		var nextHTML = '<div class="nextFeature"><a>Continue to next section &gt;&gt;</a></div>';
+		var nextHTML = '<div class="nextFeature"><a href="#">Continue to next section &gt;&gt;</a></div>';
 		//var backHTML
 		$("div[@class^=tab_group]").hide().append(nextHTML);
 		var tabCount = $("ul[@id^=tab_menu] a").size();
@@ -145,7 +158,7 @@ var tabs =
 			$("div[@class^=tab_group]:first").show().id;
 			$("ul[@id^=tab_menu] a:eq(0)").addClass('over');
 		}
-		
+
 		// Slide visible up and clicked one down
 		$("ul[@id^=tab_menu] a").each(function(i){
 			$(this).click(function () {
@@ -158,6 +171,7 @@ var tabs =
 				$('link').each(function() {
 					this.disabled = (this.title != '' && this.title != tabs.stylesheet);
 				});
+				return false;
 			});
 		});
 		
@@ -174,6 +188,7 @@ var tabs =
 						$("ul[@id^=tab_menu] a:eq(0)").addClass('over');
 					}
 				});
+				return false;
 			});
 		});
 	}

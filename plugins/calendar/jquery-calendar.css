@@ -1,4 +1,4 @@
-/* calendar styles */
+/* Main Style Sheet for jQuery Calendar */
 #calendar_div, .calendar_inline {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
@@ -11,6 +11,9 @@
 	border: 1px solid #777;
 	z-index: 10; /*must have*/ 
 }
+#calendar_div, .calendar_control, .calendar_links, .calendar_header, .calendar {
+	width: 185px;
+}
 .calendar_inline {
 	float: left;
 	display: block;
@@ -19,9 +22,6 @@
 .calendar_dialog {
 	padding: 5px !important;
 	border: 4px ridge #ddd !important;
-}
-#calendar_div a, .calendar_inline a {
-	cursor: pointer;
 }
 button.calendar_trigger {
 	width: 25px;
@@ -43,7 +43,6 @@ img.calendar_trigger {
 .calendar_control, .calendar_links, .calendar_header, .calendar {
 	clear: both;
 	float: left;
-	width: 185px;
 	color: #fff;
 }
 .calendar_control {
@@ -56,17 +55,6 @@ img.calendar_trigger {
 	font-weight: bold;
 	font-size: 80%;
 	letter-spacing: 1px;
-}
-.calendar_control a, .calendar_links a {
-	padding: 2px 5px;
-}
-.calendar_control a:hover {
-	background: #fdd;
-	color: #333;
-}
-.calendar_links a:hover, .calendar_titleRow a:hover {
-	background: #ddd;
-	color: #333;
 }
 .calendar_links label { /* disabled links */
 	padding: 2px 5px;
@@ -133,6 +121,38 @@ img.calendar_trigger {
 .calendar_currentDay {
 	background: #999 !important;
 }
+
+/* ________ CALENDAR LINKS _______
+
+** Reset link properties and then override them with !important */
+#calendar_div a, .calendar_inline a {
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	background: none;
+	color: #000;
+}
+.calendar_inline .calendar_links a {
+	padding: 0 5px !important;
+}
+.calendar_control a, .calendar_links a {
+	padding: 2px 5px !important;
+	color: #eee !important;
+}
+.calendar_titleRow a {
+	color: #eee !important;
+}
+.calendar_control a:hover {
+	background: #fdd !important;
+	color: #333 !important;
+}
+.calendar_links a:hover, .calendar_titleRow a:hover {
+	background: #ddd !important;
+	color: #333 !important;
+}
+
+/* ___________ IE6 IFRAME FIX ________ */
+
 .calendar_cover {
     display: none; /*sorry for IE5*/
     display/**/: block; /*sorry for IE5*/

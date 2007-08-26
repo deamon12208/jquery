@@ -1,4 +1,4 @@
-/* MarcGrabanski.com v3.0 */
+/* MarcGrabanski.com v2.6 */
 /* Pop-Up Calendar Built from Scratch by Marc Grabanski */
 /* Enhanced by Keith Wood (kbwood@iprimus.com.au). */
 /* Under the Creative Commons Licence http://creativecommons.org/licenses/by/3.0/
@@ -180,9 +180,21 @@ $.extend(PopUpCal.prototype, {
 		}
 		$.extend(inst._settings, settings || {});
 		this._dialogInput.val(dateText);
+		
+		/*	Cross Browser Positioning */
+		if (self.innerHeight) { // all except Explorer
+			windowWidth = self.innerWidth;
+			windowHeight = self.innerHeight;
+		} else if (document.documentElement && document.documentElement.clientHeight) { // Explorer 6 Strict Mode
+			windowWidth = document.documentElement.clientWidth;
+			windowHeight = document.documentElement.clientHeight;
+		} else if (document.body) { // other Explorers
+			windowWidth = document.body.clientWidth;
+			windowHeight = document.body.clientHeight;
+		} 
 		this._pos = pos || // should use actual width/height below
-			[(document.body.clientWidth - 200) / 2 + document.body.scrollLeft,
-			(document.body.clientHeight - 200) / 2 + document.body.scrollTop];
+			[(windowWidth / 2) - 100, (windowHeight / 2) - 100];
+
 		// move input on screen for focus, but hidden behind dialog
 		this._dialogInput.css('left', this._pos[0] + 'px').css('top', this._pos[1] + 'px');
 		inst._settings.onSelect = onSelect;
@@ -422,7 +434,7 @@ this).css({opacity:'1.0',cursor:''});
 	/* Restore input focus after not changing month/year. */
 	_clickMonthYear: function(id) {
 		var inst = this._getInst(id);
-		if (inst._selectingMonthYear && !$.browser.msie) {
+		if (inst._input && inst._selectingMonthYear && !$.browser.msie) {
 			inst._input[0].focus();
 		}
 		inst._selectingMonthYear = !inst._selectingMonthYear;
