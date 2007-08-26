@@ -25,76 +25,76 @@
 @import url(css/warm/warm.modal.css);
 body { font:10pt verdana; }
 .box {
-  position:fixed;
-  top:5px;
-  right:5px;
-  display:block;
-  width:20px;
-  height:20px;
-  border:1px solid #FFF;
-  text-indent:2000em;
-  cursor:pointer;
+	position:fixed;
+	top:5px;
+	right:5px;
+	display:block;
+	width:20px;
+	height:20px;
+	border:1px solid #FFF;
+	text-indent:2000em;
+	cursor:pointer;
 }
 .dark a.box {
-  color:#FFF;
-  text-indent:-40px;
-  border-color:#000;
-  background:#FFF;
+	color:#FFF;
+	text-indent:-40px;
+	border-color:#000;
+	background:#FFF;
 }
 .light a.box {
-  color:#222;
-  text-indent:-35px;
-  border-color:#000;
-  background:#222;
+	color:#222;
+	text-indent:-35px;
+	border-color:#000;
+	background:#222;
 }
 </style>
 <script type="text/javascript">
 $(function(){
-  $("<a>").html("Dark").addClass("box").toggle(
-    function(){
-      $(this).html("Light");
-      $("body").removeClass("light").addClass("dark");
-    },function(){
-      $(this).html("Dark");
-      $("body").removeClass("dark").addClass("light");
-    }).prependTo("body");
-  $('.modal').each(function(i, n) {
-    $(n).css({position: 'absolute', top: i*100, left: i*20});
-    switch(i) {
-      case 0:
-        $(n).modal({title: "Hello, I'm a modal"});
-        break;
-      case 1:
-        $(n).modal({title: "Buttons+Height+Width", buttons: 'left', height: 200, width: 200});
-        break;
-      case 2:
-        $(n).modal({title: "Animation+Speed+outRemove", speed: 4000, animation: 'slide', outRemove: true});
-    }
-  });
+	$("<a>").html("Dark").addClass("box").toggle(
+		function(){
+			$(this).html("Light");
+			$("body").removeClass("light").addClass("dark");
+		},function(){
+			$(this).html("Dark");
+			$("body").removeClass("dark").addClass("light");
+		}).prependTo("body");
+	$('.modal').each(function(i, n) {
+		$(n).css({position: 'absolute', top: i*100, left: i*20});
+		switch(i) {
+			case 0:
+				$(n).modal({title: "Hello, I'm a modal"});
+				break;
+			case 1:
+				$(n).modal({title: "Buttons+Height+Width", buttons: 'left', height: 200, width: 200});
+				break;
+			case 2:
+				$(n).modal({title: "Animation+Speed+outRemove", speed: 4000, animation: 'slide', outRemove: true});
+		}
+	});
 });
 </script>
 
 </head>
 
 <body class="light">
-  
-  <div class="modal">
-    The code used to make this modal was this:
-    <code>$(".modal").modal({title: "Hello, I'm a modal"});</code><br /><br />
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.  
-  </div>
-  <div class="modal">
-    The code used to make this modal was this:
-    <pre>$(".modal").modal({title: "Buttons+Height+Width", buttons: 'left', height: 200, width: 200});</pre><br />
-    This demonstrates putting buttons on the left, as well as a custom height and width
-  </div>
-  <div class="modal">
-    This demonstrates the use of animation.  Notice how I slide down slowly when coming in, and slide up slowly when going out.  Also, if you look at the HTML markup after I'm closed, you'll see it's gone.<br />
-    The code for this looks like this:
-    <pre>$(n).modal({title: "Animation+Speed+outRemove", speed: 4000, animation: 'slide', outRemove: true});</pre>
-  </div>
+	
+	<div class="modal">
+		The code used to make this modal was this:
+		<code>$(".modal").modal({title: "Hello, I'm a modal"});</code><br /><br />
+		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.	
+	</div>
+	<div class="modal">
+		The code used to make this modal was this:
+		<pre>$(".modal").modal({title: "Buttons+Height+Width", buttons: 'left', height: 200, width: 200});</pre><br />
+		This demonstrates putting buttons on the left, as well as a custom height and width
+	</div>
+	<div class="modal">
+		This demonstrates the use of animation.	Notice how I slide down slowly when coming in, and slide up slowly when going out.	Also, if you look at the HTML markup after I'm closed, you'll see it's gone.<br />
+		The code for this looks like this:
+		<pre>$(n).modal({title: "Animation+Speed+outRemove", speed: 4000, animation: 'slide', outRemove: true});</pre>
+	</div>
 </body>
 </html>
 
