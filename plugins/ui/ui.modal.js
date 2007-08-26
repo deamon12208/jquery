@@ -73,6 +73,13 @@ $.ui.modal = function(el, o) {
         });
         $(ui.modal).show(ui.options.speed);
       }
+      // Slide
+      else if(ui.options.animation == 'slide') {
+        $(ui.modal).find('*').each(function(i, n) {
+          $(n).css('overflow', $(n).attr('modalRestoreOverflow'));
+        });
+        $(ui.modal).slideDown(ui.options.speed);
+      }
       else {
         // Custom animation
         $(ui.modal)[ui.options.animation](ui.options.speed);
@@ -125,11 +132,17 @@ $.ui.modal = function(el, o) {
     resize: {
       handles: {
         se: 'div.bottom.pane span.ui-modal-resize-se',
+      },
+      start: function(e, ui) {
+        $(ui.helper).appendTo('body');
       }
     },
     // Options specific to $().draggable
     drag: {
-      handle: 'div.top.pane'
+      handle: 'div.top.pane',
+      start: function(e, ui) {
+        $(ui.helper).appendTo('body');
+      }
     },
     // Allow overflow/scrolling
     overflow: true,
@@ -187,7 +200,13 @@ $.ui.modal = function(el, o) {
   .css({ position: "absolute", width: options.width, height: options.height })
   .resizable(options.resize)
   .draggable(options.drag)
-  .appendTo("body");
+  .appendTo("body")
+  .click(function() {
+    $(this).appendTo('body');
+  });
+  if ($.fn.bgIframe != window.undefined) {
+    $(el).bgIframe();
+  }
   // What to add to the manager
   var uiobj = {};
   uiobj.options = this.options;
