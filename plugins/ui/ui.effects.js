@@ -1,3 +1,4 @@
+$.ui = $.ui || {};
 $.ui.effects = {};
 $.fn.effect = function(fx,o) {
 	if($.ui.effects[fx])

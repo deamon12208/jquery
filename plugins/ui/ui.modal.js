@@ -39,6 +39,8 @@ jQuery.fn.uiBox = function(arg){
 			});
 };
 (function($) {
+$.ui = $.ui || {};
+	
 $.fn.modal = function(o){
 	return $(this).each(function() {
 		$.ui.modal(this, o);

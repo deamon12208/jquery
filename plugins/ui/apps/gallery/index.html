@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Gallery Application for jQuery UI</title>
+<script type="text/javascript" src="../../../../jquery/src/jquery/jquery.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/selector/selector.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/event/event.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/ajax/ajax.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/fx/fx.js"></script>
+<script type="text/javascript" src="../../../dimensions/jquery.dimensions.js"></script>
+<script type="text/javascript" src="../../ui.js"></script>
+<script type="text/javascript" src="../../ui.effects.js"></script>
+<script type="text/javascript" src="../../ui.mouse.js"></script>
+<script type="text/javascript" src="../../ui.resizable.js"></script>
+<script type="text/javascript" src="../../ui.draggable.js"></script>
+<script type="text/javascript" src="../../ui.modal.js"></script>
+
+<style type="text/css" media="all">
+
+body
+{
+	background: #fff;
+	margin: 0;
+	padding: 0;
+	font-family: Arial;
+	font-size: 12px;
+}
+
+.imageset {
+	border: 1px solid black;
+	width: 840px;
+	height: 800px;
+	overflow: auto;
+	position: relative;
+}
+
+.select {
+	float: left;
+	border: 1px solid #999;	
+	padding: 5px;
+	margin: 5px;
+}
+
+</style>
+<style type="text/css" media="screen">
+@import url(css/light/light.css);
+@import url(css/light/light.modal.css);
+@import url(css/dark/dark.css);
+@import url(css/dark/dark.modal.css);
+@import url(css/warm/warm.css);
+@import url(css/warm/warm.modal.css);
+body { font:10pt verdana; }
+.box {
+	position:fixed;
+	top:5px;
+	right:5px;
+	display:block;
+	width:20px;
+	height:20px;
+	border:1px solid #FFF;
+	text-indent:2000em;
+	cursor:pointer;
+}
+.dark a.box {
+	color:#FFF;
+	text-indent:-40px;
+	border-color:#000;
+	background:#FFF;
+}
+.light a.box {
+	color:#222;
+	text-indent:-35px;
+	border-color:#000;
+	background:#222;
+}
+</style>
+</head>
+<body class="dark">
+<div class='imageset'>
+	<div class='select' id='i1'><img title="Swans" alt="Nice swans" src='../../tests/images/select-1.jpg' /></div>
+	<div class='select' id='i2'><img title="Dolphins" alt="A swarm of dolphins" src='../../tests/images/select-2.jpg' /></div>
+	<div class='select' id='i3'><img src='../../tests/images/select-3.jpg' /></div>
+	<div class='select' id='i4'><img src='../../tests/images/select-4.jpg' /></div>
+	<div class='select' id='i5'><img src='../../tests/images/select-5.jpg' /></div>
+	<div class='select' id='i6'><img src='../../tests/images/select-6.jpg' /></div>
+	<div class='select' id='i7'><img src='../../tests/images/select-7.jpg' /></div>
+	<div class='select' id='i8'><img src='../../tests/images/select-8.jpg' /></div>
+	<div class='select' id='i9'><img src='../../tests/images/select-9.jpg' /></div>
+</div>
+
+<div class="modal"></div>
+	
+<script type="text/javascript">
+if(!window.console) {
+ window.console = {
+ 	log: function() {
+ 		alert(arguments[0]);	
+ 	}	
+ }	
+}
+
+$(document).ready(function(){
+	/*$('#button').toggle(function() {
+		$('.select').effect('transfer', { target: '#basket', direction: 'to', duration: 1000 });	
+	}, function() {
+		$('.select').effect('transfer', { target: '#basket', direction: 'from', duration: 1000 });	
+	});*/
+	
+	$("<a>").html("Dark").addClass("box").toggle(
+		function(){
+			$(this).html("Light");
+			$("body").removeClass("light").addClass("dark");
+		},function(){
+			$(this).html("Dark");
+			$("body").removeClass("dark").addClass("light");
+	}).prependTo("body");
+
+	
+	$('img').bind('click', function(){
+		console.log(this);
+		$('.modal').modal({title: $(this).attr('title')})
+		.css({top: 0, left: 0});
+		$('.ui-modal .middle .center').append($(this).clone()).append('<div>' + $(this).attr('alt') + '</div>');
+	})
+	
+
+});
+
+
+</script>
+</body>
+</html>
