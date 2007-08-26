@@ -1,15 +1,13 @@
-/* Copyright (c) 2006 Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
- * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php) 
- * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
- */
-
 /**
- * Much like the wrap method but wraps the contents of the element.
- * See the docs for wrap...
- * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
+ * Kudos to Konstantin Käfer (kkaefer)
  */
 jQuery.fn.innerWrap = function(u) {
-	return $(this).html($(u).html($(this).html()));
+  return this.each(function() {
+    var w = $(u)[0], v = w;
+    while (v.firstChild) v = v.firstChild;
+    while (this.firstChild) v.appendChild(this.firstChild);
+    this.appendChild(w);
+  });
 };
 
 jQuery.fn.uiBox = function(arg){
@@ -126,9 +124,7 @@ $.ui.modal = function(el, o) {
     // Options specific to $().resizable
     resize: {
       handles: {
-        s: 'div.bottom.pane',
         se: 'div.bottom.pane span.ui-modal-resize-se',
-        e: 'div.right.pane' 
       }
     },
     // Options specific to $().draggable
