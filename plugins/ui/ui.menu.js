@@ -94,7 +94,11 @@
 					
 					$(m).css({position:'absolute', top: e.clientY, left: e.clientX})
 						.animate(o.show, o.speed);
-					self.showChild(m,o,htype);
+					$(m)[htype](function(){
+						self.showChild(m,o,htype);
+					}, function(){
+						self.hideMenu(m,o);
+					});
 					return false;
 				}
 			});
