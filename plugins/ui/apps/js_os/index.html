@@ -94,21 +94,30 @@
     .dark .dock-container {
         background-color: #eee;
     }
+    .switcher-bg img {
+      border: 1px solid #111;
+    }
     </style>
     
     <script type="text/javascript">
     $(document).ready(function() {
-      $('[@theme=light]').parent().hide();
+      $('.switcher-theme[@theme=light]').parent().hide();
       $('.command.dock-item').click(function() {
         var c = $(this).attr('class').match(/(command-\w+)/)[1];
         var t = $('.'+ c +'-title').text();
         $('.'+ c +'-modal').modal({title: t});
       });
-      $('.switcher').click(function() {
+      $('.switcher-theme').click(function() {
         $('body').removeClass($('.current-theme').attr('theme')).addClass($(this).attr('theme'));
         $(this).parent().parent().children().show();
         $(this).parent().hide();
         $('.current-theme').attr('theme', $(this).attr('theme')).text($(this).text());
+      });
+      $('.switcher-bg').click(function() {
+        $('body').css('background-image', 'url('+ $(this).children('img').attr('src') +')');
+        $(this).parent().parent().children().show();
+        $(this).parent().hide();
+        $('.current-bg').attr('bg', $(this).attr('bg')).html($(this).html());
       });
     });
     </script>
@@ -131,16 +140,33 @@
     <div class="apps">
       <span class="command-settings-title">Settings</span>
       <div class="command-settings-modal">
-        <h3>Change theme</h3>
-        <strong>Currently:</strong><br />
-        <span class="current-theme" theme="light">Light</span><br />
-        <strong>Others:</strong><br />
-        <span class="other-themes">
-          <ul>
-            <li><a class="switcher switcher-theme-dark" theme="dark">Dark</a></li>
-            <li><a class="switcher switcher-theme-light" theme="light">Light</a></li>
-          </ul>
-        </span>
+        <dl>
+          <dt>Change theme</dt>
+          <dd>
+            <strong>Currently:</strong><br />
+            <span class="current-theme" theme="light">Light</span><br />
+            <strong>Others:</strong><br />
+            <span class="other-themes">
+              <ul>
+                <li><a class="switcher-theme switcher-theme-dark" theme="dark">Dark</a></li>
+                <li><a class="switcher-theme switcher-theme-light" theme="light">Light</a></li>
+              </ul>
+            </span>
+          </dd>
+          <dt>Change background</dt>
+          <dd>
+            <strong>Currently:</strong><br />
+            <span class="current-bg"></span><br />
+            <strong>Others:</strong><br />
+            <span class="other-bgs">
+              <ul>
+                <li><a class="switcher-bg" bg="1"><img src="images/bg1.gif" width="20" height="20" /></span</a></li>
+                <li><a class="switcher-bg" bg="2"><img src="images/bg2.gif" width="20" height="20" /></span</a></li>
+                <li><a class="switcher-bg" bg="3"><img src="images/bg3.gif" width="20" height="20" /></span</a></li>
+              </ul>
+            </span>
+          </dd>
+        </dl>
       </div>
       
       
