@@ -121,16 +121,18 @@
 	
 	
 	$.extend($.fn, {
-		menuItemDisable : function (f) {
+		menuItemDisable : function () {
 			return this.each(function(){
-				$('a', this).css({color: "#aaa", background: 'transparent'});
-				$('a', this).unbind(f);	
+				var t = $('a', this).text();
+				$('a', this).hide();
+				$(this).append('<span>' + t + '</span>');
+				$('span', this).css({color: "#aaa", background: 'transparent'});
 			});
 		},
-		menuItemEnable : function (f) {
+		menuItemEnable : function () {
 			return this.each(function(){
-				$(this).removeClass('ui-menu-item-disabled');
-				$('a', this).bind(f);	
+				$('span', this).remove();
+				$('a', this).show();
 			});
 		}
 	});
