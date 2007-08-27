@@ -69,7 +69,6 @@
 		hoverContext : function(a,m,o) {
 			var self = this;
 			var htype = hoverType();
-			console.log(htype);
 			$(a)[htype](function(){
 				x = $(a).position();
 				y = x.top + ( $(a).height() + 1);
@@ -84,6 +83,7 @@
 		},
 		context : function (a,m,o) {	
 			var self = this;
+			var htype = hoverType();
 			$(m).prepend('<span>' + o.title + '</span>');
 			$(a).bind('mouseup', function(e){
 				if (e.button == 2 || e.button == 3) {
@@ -92,7 +92,7 @@
 					
 					$(m).css({position:'absolute', top: e.clientY, left: e.clientX})
 						.animate(o.show, o.speed);
-					self.showChild(m,o);
+					self.showChild(m,o,htype);
 					return false;
 				}
 			});
