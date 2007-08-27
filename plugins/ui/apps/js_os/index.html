@@ -100,6 +100,40 @@
     </style>
     
     <script type="text/javascript">
+    $.jqtimes = [];
+    $.fn.jqtime = function() {
+      $(this).addClass('time');
+      $.jqtimes.push($(this));
+      setInterval($._updatejqtime, 1000);
+    }
+    $._updatejqtime = function() {
+      var text = "";
+      var now = new Date();
+      
+      if(now.getSeconds() < 10) second = "0" + String(now.getSeconds());
+      else second = String(now.getSeconds());
+      
+      if(now.getHours() < 10) hour = "0" + String(now.getHours());
+      else hour = String(now.getHours());
+      text += hour;
+      
+      if(parseInt(second) % 2 == 1) text += ":";
+      else text += " ";
+      
+      if(now.getMinutes() < 10) minute = "0" + String(now.getMinutes());
+      else minute = String(now.getMinutes());
+      text += minute;
+      if(parseInt(second) % 2 == 1) text += ":";
+      else text += " ";
+      
+      text += second;
+      
+      
+      $.each($.jqtimes, function() {
+        $(this).text(text);
+      });
+      
+    }
     $(document).ready(function() {
       $('.switcher-theme[@theme=light]').parent().hide();
       $('.command.dock-item').click(function() {
@@ -119,6 +153,7 @@
         $(this).parent().hide();
         $('.current-bg').attr('bg', $(this).attr('bg')).html($(this).html());
       });
+      $('.command-time-modal .time').jqtime();
     });
     </script>
   </head>
@@ -168,11 +203,21 @@
           </dd>
         </dl>
       </div>
-      
-      
       <span class="command-editor-title">Untitled</span>
       <div class="command-editor-modal">
         <textarea style="width: 99%; height: 99%"></textarea>
+      </div>
+      <span class="command-mail-title">e-mail</span>
+      <div class="command-mail-modal">
+        
+      </div>
+      <span class="command-im-title">IM</span>
+      <div class="command-im-modal">
+        
+      </div>
+      <span class="command-time-title">Time</span>
+      <div class="command-time-modal">
+        <h2><span class="time"></span></h2>
       </div>
     </div>
   </body>
