@@ -44,13 +44,11 @@ li { list-style-type: none; }
 	border: 1px solid black;
 }
 .basic div {
-	background-color: #80cfe2;
-	
+	background-color: #eee;
 }
 .basic p {
 	margin-bottom : 10px;
 	border: none;
-	color: #0c449b;
 	text-decoration: none;
 	font-weight: bold;
 	font-size: 10px;
@@ -65,18 +63,20 @@ li { list-style-type: none; }
 	text-decoration: none;
 	font-weight: bold;
 	font-size: 12px;
-	color: white;
+	color: black;
 	background-color: #00a0c6;
-	border: none;
+	border-top: 1px solid #FFFFFF;
+	background-image: url("AccordionTab0.gif");
 }
 .basic h3:hover {
-	color: #00a0c6;
 	background-color: white;
+	background-image: url("AccordionTab2.gif");
 }
 .basic h3.selected {
-	color: white;
+	color: black;
 	background-color: #80cfe2;
 	border-bottom: 1px solid black;
+	background-image: url("AccordionTab2.gif");
 }
 
 #list2 {
