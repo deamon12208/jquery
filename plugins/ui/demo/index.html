@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><title>jQuery UI Demos</title>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="demo.css" type="text/css" title='main' media="screen" />
+<!-- Themes -->
+<style type="text/css">
+  @import url(light.css);
+  @import url(dark.css);
+</style>
+
+<!-- jQuery Library -->
+<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+
+<!-- jQuery UI -->
+<script type="text/javascript" src="../ui.mouse.js"></script>
+<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+<script type="text/javascript" src="../ui.draggable.js"></script>
+
+<!-- Demo Specific Code -->
+<script type="text/javascript" src="http://www.sunsean.com/idTabs/jquery.idTabs.pack.js"></script>
+<script type="text/javascript" src="demo.js">/* Demo Specific Code */</script>
+<script type="text/javascript" src="themes.js">/* Theme Changer */</script>
+
+<!-- Demo Javascript -->
+<script type="text/javascript">
+$(function(){
+/* Themes */
+    $("body").themes({
+      "light":"Light",
+      "dark":"Dark",
+    }).appendTo("#header form");
+
+/* Demos */
+
+  //Drag & Drop
+  $("#drag-demo1").draggable();
+
+  //Sortables
+  //TODO:Keep names the same
+
+  //Resizables
+
+});
+</script>
+</head><body class="dark">
+<div id="main">
+
+<div id="header">
+  <h1><em>jQuery</em> UI <small>Demos</small></h1>
+  <p>jQuery UI continues the legacy of interface.</p>
+  <form>Theme: </form>
+</div>
+
+<div id="nav">
+  <h3>Mouse Interaction</h3>
+  <ul>
+    <li><a href="#drag-drop">Drag & Drop</a></li>
+    <li><a href="#sortables">Sortables</a></li>
+    <li><a href="#resizables">Resizables</a></li>
+  </ul>
+  <h3>User Interface Extensions</h3>
+  <h4>Layout/Interface</h4>
+  <ul>
+    <li><a href="#splitter">Splitter</a></li>
+    <li><a href="#tabs">Tabs</a></li>
+    <li><a href="#menu">Menus</a></li>
+    <li><a href="#modal">Modal Dialogs</a></li>
+    <li><a href="#magnifier">Magnifier</a></li>
+    <li><a href="#sliders">Sliders</a></li>
+  </ul>
+  <h4>Advanced controls</h4>
+  <ul>
+    <li><a href="#tree">Tree</a></li>
+    <li><a href="#accordion">Accordion</a></li>
+    <li><a href="#datepicker">Datepicker</a></li>
+    <li><a href="#uploader">Uploader</a></li>
+    <li><a href="#rte">Rich Text Editor</a></li>
+    <li><a href="#form">Form Controls</a></li>
+  </ul>
+</div>
+
+<div id="demos">
+
+
+  <div id="drag-drop" class="demo">
+    <h2>Drag &amp; Drop</h2>
+    
+    <div id="drag-demo1">Drag Me</div>
+
+  </div>
+
+
+  <div id="sortables" class="demo">
+    <h2>Sortables</h2>
+  </div>
+
+
+  <div id="resizables" class="demo">
+    <h2>Resizables</h2>
+  </div>
+
+
+</div>
+
+</div>
+</body></html>
+
