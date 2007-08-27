@@ -119,12 +119,12 @@
 			var modal_id = $(this).parent().attr('id') + '_modal';
 			var self = this;
 			
-			if (!$('body').find('div#'+modal_id)) {
+			//if (!$('body').find('div#'+modal_id)) {
 				$('body').append('<div class="modal" id="' + modal_id + '"></div>');
 				$('#' + modal_id).modal({title: $(this).attr('title'), height: $(self).height + 50, width: $(self).width + 50})
 				.css({top: e.clientY, left: e.clientX});
 				$('#' + modal_id + ' .middle .center').append('<div class="modalimage" style="display: none;">').append($(self).clone().empty()).append('<div>' + $(self).attr('alt') + '</div></div><a href="#" class="commenttoggle">Add Comment<a><div class="comment"></div>');
-			}
+			//}
 		});
 		
 		$('.commenttoggle').livequery(function(){
