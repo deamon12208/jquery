@@ -1,7 +1,7 @@
 /*
  * Accordion 1.5 - jQuery menu widget
  *
- * Copyright (c) 2007 Jörn Zaefferer, Frank Marcia
+ * Copyright (c) 2007 Jï¿½rn Zaefferer, Frank Marcia
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-accordion/
  *
@@ -167,12 +167,13 @@ $.extend($.Accordion, {
 				});
 				return;
 			}
-			var height = settings.toHide.height();
+			var hideHeight = settings.toHide.height(),
+				showHeight = settings.toShow.height(),
+				difference = showHeight / hideHeight;
 			settings.toShow.css({ height: 0, overflow: 'hidden' }).show();
 			settings.toHide.filter(":hidden").each(settings.finished).end().filter(":visible").animate({height:"hide"},{
 				step: function(n){
-					// TODO account for different heights!
-					settings.toShow.height(Math.ceil(height - ($.fn.stop ? n * height : n)));
+					settings.toShow.height(Math.ceil( (hideHeight - ($.fn.stop ? n * hideHeight : n)) * difference ));
 				},
 				duration: settings.duration,
 				easing: settings.easing,

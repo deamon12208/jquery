@@ -30,24 +30,24 @@ pre { margin-bottom: 1em; }
 .plugin   { color: red; }
 
 li { list-style-type: none; }
-#list1, #list2, #list3, #navigation { width:20em; }
+.basic, #list2, #list3, #navigation { width:20em; }
 
 #log { position:fixed; bottom: 0; right:1em; text-align:right; }
 #switch { position: fixed; bottom: 0; right: 15em; }
 
 
-#list1  {
+.basic  {
 	width: 260px;
 	font-family: verdana;
 	margin:  0px;
 	padding: 0px;
 	border: 1px solid black;
 }
-#list1 div {
+.basic div {
 	background-color: #80cfe2;
 	
 }
-#list1 p {
+.basic p {
 	margin-bottom : 10px;
 	border: none;
 	color: #0c449b;
@@ -57,7 +57,7 @@ li { list-style-type: none; }
 	margin: 0px;
 	padding: 10px;
 }
-#list1 h3 {
+.basic h3 {
 	cursor:pointer;
 	display:block;
 	padding:5px;
@@ -69,11 +69,11 @@ li { list-style-type: none; }
 	background-color: #00a0c6;
 	border: none;
 }
-#list1 h3:hover {
+.basic h3:hover {
 	color: #00a0c6;
 	background-color: white;
 }
-#list1 h3.selected {
+.basic h3.selected {
 	color: white;
 	background-color: #80cfe2;
 	border-bottom: 1px solid black;
