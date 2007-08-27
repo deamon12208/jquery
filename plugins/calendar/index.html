@@ -1,5 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"[
+
+<!ATTLIST input 
+  cal:appendText CDATA #IMPLIED
+  cal:closeAtTop CDATA #IMPLIED
+  cal:firstDay CDATA #IMPLIED
+  cal:minDate CDATA #IMPLIED
+  cal:maxDate CDATA #IMPLIED
+>
+
+]>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:cal="http://marcgrabanski.com/code/jquery-calendar/">
 	<head>
 		<title>jQuery Calendar</title>
 		
@@ -231,7 +244,7 @@ showOtherMonths: true, onSelect: alertDate});</code></pre>
 					<p>If necessary, the calendar for an input (or set of inputs) can be reconfigured
 						on the fly. As an example, here we change the speed at which the calendar appears.</p>
 					<p><span class="calLabel">Display speed:</span>
-						<select onChange="setSpeed(this);"><option value="">immediate</option>
+						<select onchange="setSpeed(this);"><option value="">immediate</option>
 						<option value="slow">slow</option><option value="medium" selected="selected">medium</option>
 						<option value="fast">fast</option></select></p>
 					<p><span class="calLabel">Reconfigured calendar:</span>
@@ -246,7 +259,7 @@ showOtherMonths: true, onSelect: alertDate});</code></pre>
 						corresponding to the calendar properties.
 						The attribute values are evaluated as JavaScript.</p>
 					<p><span class="calLabel">Inline configuration 1:</span>
-						<input type="text" size="10" class="inlineConfig" onChange="showDay(this);"
+						<input type="text" size="10" class="inlineConfig" onchange="showDay(this);"
 							cal:closeAtTop="false" cal:firstDay="1" cal:appendText="which is a"/>
 						<span id="inlineDay">blank</span></p>
 					<p><span class="calLabel">Inline configuration 2:</span>
