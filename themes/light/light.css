@@ -2,4 +2,12 @@ body.light { background:#FFF; color:#111; }
 .light a, a.light { color:#46C; outline:none; }
 .light a:visited, a.light:visited { color:#C44; }
 .light a:hover, a.light:hover { color:#000; }
+.light textarea {
+  background:#F9F9F9;
+  border:1px solid #CCC;
+  font:.9em Consolas, Courier New, san-serif;
+  padding:0 0 0 2px;
+  width:20em; height:5em; overflow:auto;
+}
+.light textarea:focus { background:#F6F6F6; }
 

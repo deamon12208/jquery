@@ -2,4 +2,11 @@ body.dark { background:#111; color:snow; }
 .dark a, a.dark { color:#68D; outline:none; }
 .dark a:visited, a.dark:visited { color:#D66; }
 .dark a:hover, a.dark:hover { color:#FFF; }
+.dark textarea {
+  background:#181818; color:#CCC; 
+  border:1px solid #222; padding:0 0 0 2px; 
+  font:.9em Consolas, Courier New, san-serif;
+  width:20em; height:5em; overflow:auto;
+}
+.dark textarea:focus { background:#141414; }
 

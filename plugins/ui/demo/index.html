@@ -5,6 +5,7 @@
 <meta http-equiv="Content-Language" content="en" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="demo.css" type="text/css" title='main' media="screen" />
+
 <!-- Themes -->
 <style type="text/css">
   @import url(light.css);
@@ -18,6 +19,10 @@
 <script type="text/javascript" src="../ui.mouse.js"></script>
 <script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
 <script type="text/javascript" src="../ui.draggable.js"></script>
+<script type="text/javascript" src="../ui.draggable.ext.js"></script>
+<script type="text/javascript" src="../ui.droppable.js"></script>
+<script type="text/javascript" src="../ui.droppable.ext.js"></script>
+<script type="text/javascript" src="../ui.resizable.js"></script>
 
 <!-- Demo Specific Code -->
 <script type="text/javascript" src="http://www.sunsean.com/idTabs/jquery.idTabs.pack.js"></script>
@@ -37,11 +42,18 @@ $(function(){
 
   //Drag & Drop
   $("#drag-demo1").draggable();
-
-  //Sortables
-  //TODO:Keep names the same
+  $("#drop-demo1").droppable({
+		accept: '#drag-demo1',
+    hoverClass: 'hover',
+		drop: function(ev, ui) {
+      $("#drag-demo1").fadeOut("fast",function(){
+        $("#drag-demo1").fadeIn("fast");
+      });
+		}
+	});
 
   //Resizables
+  $("#resizables textarea").resizable();
 
 });
 </script>
@@ -49,12 +61,13 @@ $(function(){
 <div id="main">
 
 <div id="header">
-  <h1><em>jQuery</em> UI <small>Demos</small></h1>
+  <h1><span><em>jQuery</em> UI <small>Demos</small></span></h1>
   <p>jQuery UI continues the legacy of interface.</p>
   <form>Theme: </form>
 </div>
 
 <div id="nav">
+  <a href="#info" class="hidden">Info</a>
   <h3>Mouse Interaction</h3>
   <ul>
     <li><a href="#drag-drop">Drag & Drop</a></li>
@@ -80,6 +93,11 @@ $(function(){
     <li><a href="#rte">Rich Text Editor</a></li>
     <li><a href="#form">Form Controls</a></li>
   </ul>
+  <h3>Applications</h3>
+  <ul>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#os">jQuery OS</a></li>
+  </ul>
 </div>
 
 <div id="demos">
@@ -88,7 +106,8 @@ $(function(){
   <div id="drag-drop" class="demo">
     <h2>Drag &amp; Drop</h2>
     
-    <div id="drag-demo1">Drag Me</div>
+    <div id="drag-demo1"><span>Drag Me</span></div>
+    <div id="drop-demo1"><span>Drop Here</span></div>
 
   </div>
 
@@ -100,6 +119,11 @@ $(function(){
 
   <div id="resizables" class="demo">
     <h2>Resizables</h2>
+    <div class="content">
+
+      <textarea>Resize me</textarea>
+
+    </div>
   </div>
 
 
