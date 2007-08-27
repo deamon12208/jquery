@@ -84,9 +84,11 @@
 		context : function (a,m,o) {	
 			var self = this;
 			var htype = hoverType();
+			var ctrlPressed=0;
 			$(m).prepend('<span>' + o.title + '</span>');
 			$(a).bind('mouseup', function(e){
-				if (e.button == 2 || e.button == 3) {
+				ctrlPressed =e.ctrlKey;
+				if (e.button == 2 || e.button == 3 || ctrlPressed && e.button == 0) {
 					e.preventDefault();	//FIXME: Not stopping right-click menu in FF
 					e.stopPropagation();
 					
