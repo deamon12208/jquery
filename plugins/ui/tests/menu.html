@@ -46,7 +46,10 @@
 				$('#editmenu-parent').menu('#editmenu', {context: 'hoverContext'}, {
 					buttons: {
 						fileCopy : function(){
-							alert('Copy Fired');
+							var t = $('#mytextarea').text();
+							var copytext = t.createTextRange();
+							copytext.execCommand('Copy');
+							alert('Text Copied');
 						}
 					}
 				},
@@ -58,7 +61,15 @@
 				});
 				//$('body').menu('#editmenu', {context: 'context'});
 				
-				$('#filemenu-save').menuItemDisable('fileSave');
+				$('#filemenu-save').menuItemDisable();
+				
+				$('.addMenuItem').bind('click', function(){
+					$('#editmenu-paste').menuAddItemAfter({id: 'editmenu-pastespecial', href: '#', linkclass: 'editPasteSpecial', linktext: 'Paste Special'}, {buttons:{editPasteSpecial: function(){ alert('Paste Special'); } } });
+				})
+				
+				$('.enableSave').bind('click', function(){
+					$('#filemenu-save').menuItemEnable();
+				})
 			});
 			
 			
@@ -103,6 +114,9 @@
 			</li>
 		</ul>
 		<br style="clear:both;" />
+		
+		<a href="#" class="addMenuItem">Add Paste Special</a>
+		<a href="#" class="enableSave">Enable Save Menu</a>
 		
 		<h2>Context Test</h2>
 		<table>

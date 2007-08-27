@@ -18,12 +18,10 @@
 	
 	$.ui.menu = function(el, m, o, t, h) {
 		var o = $.extend({
-			delay: 500,
-			timeout: 2000,
 			context: 'clickContext',
 			show: {opacity:'show'},
-			hide: {opacity:'hide'},
-			speed: 'normal'
+			hide: {opacity:'hide'},			
+			delay: 500
 		}, o);
 		
 		var htype = hoverType();
@@ -121,12 +119,16 @@
 	
 	
 	$.extend($.fn, {
-		menuItemDisable : function () {
+		menuItemDisable : function (o) {
+			var o = $.extend({
+				disableCss: {color: "#aaa", background: "transparent"}
+			},o);
+			
 			return this.each(function(){
 				var t = $('a', this).text();
 				$('a', this).hide();
 				$(this).append('<span>' + t + '</span>');
-				$('span', this).css({color: "#aaa", background: 'transparent'});
+				$('span', this).css(o.disableCss);
 			});
 		},
 		menuItemEnable : function () {
@@ -134,6 +136,20 @@
 				$('span', this).remove();
 				$('a', this).show();
 			});
+		},
+		menuAddItemAfter : function (n, b, h) {
+			console.log(this);
+			var item = '<li id="' + n.id + '"><a href="' + n.href + '" class="' + n.linkclass + '">' + n.linktext + '</a>';
+			console.log(item);
+			$(item).insertAfter(this);
+			// TODO: Bind button or hover event to new item
+		},
+		menuAddItemBefore : function (n, b, h) {
+			console.log(this);
+			var item = '<li id="' + n.id + '"><a href="' + n.href + '" class="' + n.linkclass + '">' + n.linktext + '</a>';
+			console.log(item);
+			$(item).insertBefore(this);
+			// TODO: Bind button or hover event to new item
 		}
 	});
 	
