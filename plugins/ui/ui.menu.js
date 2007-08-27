@@ -10,13 +10,13 @@
 	//If the UI scope is not availalable, add it
 	$.ui = $.ui || {};
 	
-	$.fn.menu = function(m,o,t) {	// Constructor for the menu method
+	$.fn.menu = function(m,o,t,h) {	// Constructor for the menu method
 		return this.each(function() {
-			new $.ui.menu(this, m, o, t);	
+			new $.ui.menu(this, m, o, t, h);	
 		});
 	}	
 	
-	$.ui.menu = function(el, m, o, t) {
+	$.ui.menu = function(el, m, o, t, h) {
 		var o = $.extend({
 			delay: 500,
 			timeout: 2000,
@@ -25,6 +25,8 @@
 			hide: {opacity:'hide'},
 			speed: 'normal'
 		}, o);
+		
+		var htype = hoverType();
 		
 		$(m).appendTo(el);	// This makes sure our menu is attached in the DOM to the parent to keep things clean
 		this.styleMenu(m);	// Pass the menu in to recieve it's makeover
@@ -35,6 +37,12 @@
 	  		if (t.buttons[this.className])
         		t.buttons[this.className]();	//If the classname of the link has a matching function, execute
       	});
+		if(h&&h.hovers)	// Check to see if the menu has a buttons object
+      		$('a',$(m))[htype](function(){
+	  		if (h.hovers[this.className])
+        		h.hovers[this.className]();	//If the classname of the link has a matching function, execute
+      	},
+		function(){});
 	}
 	
 	$.extend($.ui.menu.prototype, {

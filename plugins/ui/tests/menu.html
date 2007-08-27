@@ -43,11 +43,19 @@
 						alert('File Saved');
 					}
 				}});
-				$('#editmenu-parent').menu('#editmenu', {context: 'hoverContext'}, {buttons: {
-					fileCopy : function(){
-						alert('Copy Fired');
+				$('#editmenu-parent').menu('#editmenu', {context: 'hoverContext'}, {
+					buttons: {
+						fileCopy : function(){
+							alert('Copy Fired');
+						}
 					}
-				}});
+				},
+					{hovers : {
+						colorPicker : function(){
+							alert('Color Picker');
+						}
+					}
+				});
 				//$('body').menu('#editmenu', {context: 'context'});
 				
 				$('#filemenu-save').menuItemDisable('fileSave');
@@ -88,7 +96,9 @@
 				<ul id="editmenu">
 					<li id="editmenu-cut"><a href="#" class="fileCut">Cut</a></li>
 					<li id="editmenu-copy"><a href="#" class="fileCopy">Copy</a></li>
-					<li id="editmeni-paste"><a href="#" class="filePaste">Paste</a></li>
+					<li id="editmenu-paste"><a href="#" class="filePaste">Paste</a></li>
+					<hr />
+					<li id="editmenu-color"><a href="#" class="colorPicker">Pick Colour</a></li>
 				</ul>
 			</li>
 		</ul>
