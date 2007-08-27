@@ -222,12 +222,17 @@ $.ui.modal = function(el, o) {
 	$(el).uiBox(options.uiBox)
 	.addClass('ui-modal')
 	.css({ position: "absolute", width: options.width, height: options.height })
-	.resizable(options.resize)
-	.draggable(options.drag)
 	.appendTo("body")
 	.click(function() {
 		$(this).appendTo('body');
 	});
+	if ($.fn.draggable != window.undefined) {
+	  $(el).draggable(options.drag);
+	  // You can't use resuzeables without draggables
+	  if ($.fn.resizable != window.undefined) {
+	    $(el).resizable(options.resize);
+	  }
+	}
 	if ($.fn.bgIframe != window.undefined) {
 		$(el).bgIframe();
 	}
