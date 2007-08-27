@@ -47,7 +47,10 @@ $.fn.delicious = function(user,options,tOptions,cbFnc){
 	opts.itemTag = opts.itemTag.toUpperCase();
 	opts.wrapTag = opts.wrapTag.toUpperCase();
 	url += $.param(rOpts);
-	$('head').append($.SCRIPT({src:url,type:'text/javascript'}));
+	// removed below due to jQuery 1.1.4 changing behavoir of append() to use $.ajax() to append script elements
+	// which failed b/c of cross domain security
+	//$('head').append($.SCRIPT({src:url,type:'text/javascript'}));
+	document.getElementsByTagName('head')[0].appendChild($.SCRIPT({src:url,type:'text/javascript'}));
 	return $self;
 	
 	// Ingenious name() closure function from Michael Geary
