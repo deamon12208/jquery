@@ -18,13 +18,13 @@
 	
 	$.ui.menu = function(el, m, o, t, h) {
 		var o = $.extend({
-			context: 'clickContext',
-			show: {opacity:'show'},
-			hide: {opacity:'hide'},			
-			delay: 500
+			context: 'clickContext',	// Context to attach to menu
+			show: {opacity:'show'},		// Animation object to show menu
+			hide: {opacity:'hide'},		// Animation object to hide menu	
+			delay: 500					// Delay for animation
 		}, o);
 		
-		var htype = hoverType();
+		var htype = hoverType();	// Check if hoverIntent is available
 		
 		$(m).appendTo(el);	// This makes sure our menu is attached in the DOM to the parent to keep things clean
 		this.styleMenu(m);	// Pass the menu in to recieve it's makeover
@@ -40,14 +40,14 @@
 	  		if (h.hovers[this.className])
         		h.hovers[this.className]();	//If the classname of the link has a matching function, execute
       	},
-		function(){});
+		function(){});	// Do nothing at the moment
 	}
 	
 	$.extend($.ui.menu.prototype, {
 		styleMenu : function(m){
-			$(m).addClass('ui-menu-items').children('li').addClass('ui-menu-item');
-			var parents = $('ul',m).addClass('ui-menu-items').parent('li').addClass('ui-menu-item-parent')
-			var node = $('li',m).addClass('ui-menu-item');
+			$(m).addClass('ui-menu-items').children('li').addClass('ui-menu-item');	//Apply first level and child items
+			var parents = $('ul',m).addClass('ui-menu-items').parent('li').addClass('ui-menu-item-parent')	// Apply sublevels
+			var node = $('li',m).addClass('ui-menu-item');	// Finish up any unmatched items
 			return false;
 		},
 		clickContext : function(a,m,o) {
@@ -56,8 +56,8 @@
 			$(a).click(function(){
 				x = $(a).position();
 				y = x.bottom + ( $(a).height() + 1);
-				$(m).css({position:'absolute', top: y, left: x.left})
-				.animate(o.show, o.speed);
+				$(m).css({position:'absolute', top: y, left: x.left}) // Apply the menu directly below
+				.animate(o.show, o.speed);				//TODO: Add vertial menu support
 				$(m)[htype](function(){
 					self.showChild(m,o,htype);	
 				}, function(){
@@ -94,8 +94,6 @@
 						.animate(o.show, o.speed);
 					self.showChild(m,o);
 					return false;
-				} else {
-					
 				}
 			});
 			return false;			

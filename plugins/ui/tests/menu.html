@@ -59,7 +59,7 @@
 						}
 					}
 				});
-				//$('body').menu('#editmenu', {context: 'context'});
+				$('body').menu('#contextMenu', {context: 'context'});
 				
 				$('#filemenu-save').menuItemDisable();
 				
@@ -117,6 +117,15 @@
 		
 		<a href="#" class="addMenuItem">Add Paste Special</a>
 		<a href="#" class="enableSave">Enable Save Menu</a>
+		
+		<ul id="contextMenu">
+			<li id="filemenu-new"><a href="#" class="fileNew">New</a>
+				<ul>
+					<li id="filemenu-newdoc"><a href="#" class="newDocument">Document</a></li>
+					<li id="filemenu-newimg"><a href="#" class="newImage">Image</a></li>
+				</ul>
+			</li>
+		</ul>
 		
 		<h2>Context Test</h2>
 		<table>
