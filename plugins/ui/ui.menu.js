@@ -12,11 +12,11 @@
 	
 	$.fn.menu = function(menu,options,buttons,hovers) {	// Constructor for the menu method
 		return this.each(function() {
-			new $.ui.menu(this, menu, options, buttons, hovers);	
+			new $.ui.menu(this, menu, options);	
 		});
 	}	
 	
-	$.ui.menu = function(el, menu, options, buttons, hovers) {
+	$.ui.menu = function(el, menu, options) {
 		var options = $.extend({
 			context: 'clickContext',	// Context to attach to menu
 			show: {opacity:'show'},		// Animation object to show menu
@@ -31,15 +31,15 @@
 		this.styleMenu(menu);	// Pass the menu in to recieve it's makeover
 		this[options.context](el, menu, options);	// Based on contexted selected, attach to menu parent
 		
-    	if(buttons&&buttons.buttons)	// Check to see if the menu has a buttons object
+    	if(options&&options.buttons)	// Check to see if the menu has a buttons object
       		$('a',$(menu)).click(function(){
-	  		if (buttons.buttons[this.className])
-        		buttons.buttons[this.className]();	//If the classname of the link has a matching function, execute
+	  		if (options.buttons[this.className])
+        		options.buttons[this.className]();	//If the classname of the link has a matching function, execute
       	});
-		if(hovers&&hovers.hovers)	// Check to see if the menu has a buttons object
+		if(options&&options.hovers)	// Check to see if the menu has a buttons object
       		$('a',$(menu))[htype](function(){
-	  		if (hovers.hovers[this.className])
-        		hovers.hovers[this.className]();	//If the classname of the link has a matching function, execute
+	  		if (options.hovers[this.className])
+        		options.hovers[this.className]();	//If the classname of the link has a matching function, execute
       	},
 		function(){});	// Do nothing at the moment
 	}
@@ -150,40 +150,27 @@
 				$('a', this).show();
 			});
 		},
-		menuAddItemAfter : function (item, buttons, hovers) {
+		menuAddItem : function (item) {
+			
+			var item = $.extend({
+				position: 'insertAfter'
+			}, item);
+			
 			var append = $('<li id="' + item.id + '"><a href="' + item.href + '" class="' + item.linkclass + '">' + item.linktext + '</a>');
-			$(append).insertAfter(this);
+			$(append)[item.position](this);
 
-			if(buttons&&buttons.buttons)	// Check to see if the menu has a buttons object
+			if(item&&item.buttons)	// Check to see if the menu has a buttons object
       			append.find('a').bind('click', function(){
-	  			if (buttons.buttons[this.className])
-        			buttons.buttons[this.className]();	//If the classname of the link has a matching function, execute
+	  			if (item.buttons[this.className])
+        			item.buttons[this.className]();	//If the classname of the link has a matching function, execute
 
-        	if(hovers&&hovers.hovers)	// Check to see if the menu has a buttons object
+        	if(item&&item.hovers)	// Check to see if the menu has a buttons object
 	      		append.find('a')[htype](function(){
-		  		if (hovers.hovers[this.className])
-        			hovers.hovers[this.className]();	//If the classname of the link has a matching function, execute
+		  		if (item.hovers[this.className])
+        			item.hovers[this.className]();	//If the classname of the link has a matching function, execute
       			},
 				function(){});	// Do nothing at the moment
       			});
-		},
-		menuAddItemBefore : function (item, buttons, hovers) {
-			var append = $('<li id="' + item.id + '"><a href="' + item.href + '" class="' + item.linkclass + '">' + item.linktext + '</a>');
-			$(append).insertBefore(this);
-
-			if(buttons&&buttons.buttons)	// Check to see if the menu has a buttons object
-      			append.find('a').bind('click', function(){
-	  			if (buttons.buttons[this.className])
-        			buttons.buttons[this.className]();	//If the classname of the link has a matching function, execute
-
-        	if(hovers&&hovers.hovers)	// Check to see if the menu has a buttons object
-	      		append.find('a')[htype](function(){
-		  		if (hovers.hovers[this.className])
-        			hovers.hovers[this.className]();	//If the classname of the link has a matching function, execute
-      			},
-				function(){});	// Do nothing at the moment
-      			});
-			// TODO: Bind button or hover event to new item
 		}
 	});
 	

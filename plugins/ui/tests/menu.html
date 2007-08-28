@@ -29,21 +29,26 @@
 		
 		<script type="text/javascript">
 			$('document').ready(function(){
-				$('#filemenu-parent').menu('#filemenu', {speed: 'fast'}, {buttons: {
-					fileExit : function(){
-						var toexit = confirm('Are you sure you want to exit');
-						if (toexit == true){
-							alert('This would close the screen');
+				$('#filemenu-parent').menu('#filemenu', {
+					speed: 'fast',
+					buttons: {
+						fileExit : function(){
+							var toexit = confirm('Are you sure you want to exit');
+							if (toexit == true){
+								alert('This would close the screen');
+							}
+						},
+						filePrint : function(){
+							print();
+						},
+						fileSave : function(){
+							alert('File Saved');
 						}
-					},
-					filePrint : function(){
-						print();
-					},
-					fileSave : function(){
-						alert('File Saved');
 					}
-				}});
-				$('#editmenu-parent').menu('#editmenu', {context: 'hoverContext'}, {
+				});
+				
+				$('#editmenu-parent').menu('#editmenu', {
+					context: 'hoverContext',
 					buttons: {
 						fileCopy : function(){
 							var t = $('#mytextarea').text();
@@ -51,15 +56,16 @@
 							copytext.execCommand('Copy');
 							alert('Text Copied');
 						}
-					}
-				},
-					{hovers : {
+					},
+					hovers : {
 						colorPicker : function(){
 							alert('Color Picker');
 						}
 					}
 				});
-				$('table').menu('#contextMenu', {context: 'context'}, {
+				
+				$('table').menu('#contextMenu', {
+					context: 'context',
 					buttons : {
 						contextEditField : function(){
 							alert('Context Document Fired');
@@ -73,7 +79,7 @@
 				$('#filemenu-save').menuItemDisable();
 				
 				$('.addMenuItem').bind('click', function(){
-					$('#editmenu-paste').menuAddItemAfter({id: 'editmenu-pastespecial', href: '#', linkclass: 'editPasteSpecial', linktext: 'Paste Special'}, {buttons:{editPasteSpecial: function(){ alert('Paste Special'); } } });
+					$('#editmenu-paste').menuAddItem({id: 'editmenu-pastespecial', href: '#', linkclass: 'editPasteSpecial', linktext: 'Paste Special', buttons:{editPasteSpecial: function(){ alert('Paste Special'); } } });
 				})
 				
 				$('.enableSave').bind('click', function(){
