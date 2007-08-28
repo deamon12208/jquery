@@ -81,10 +81,12 @@
 				
 				$('.addMenuItem').bind('click', function(){
 					$('#editmenu-paste').menuAddItem({id: 'editmenu-pastespecial', href: '#', linkclass: 'editPasteSpecial', linktext: 'Paste Special', buttons:{editPasteSpecial: function(){ alert('Paste Special'); } } });
+					return false;
 				})
 				
 				$('.enableSave').bind('click', function(){
 					$('#filemenu-save').menuItemEnable();
+					return false;
 				})
 			});
 			

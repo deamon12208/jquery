@@ -151,7 +151,7 @@
 				position: 'insertAfter'
 			}, item);
 			
-			var append = $('<li id="' + item.id + '"><a href="' + item.href + '" class="' + item.linkclass + '">' + item.linktext + '</a>');
+			var append = $('<li id="' + item.id + '" class="ui-menu-item"><a href="' + item.href + '" class="' + item.linkclass + '">' + item.linktext + '</a>');
 			$(append)[item.position](this);
 
 			if(item&&item.buttons){	// Check to see if the menu has a buttons object
