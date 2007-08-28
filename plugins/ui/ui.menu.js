@@ -51,10 +51,9 @@
 		},
 		clickContext : function(el,menu,options) {
 			var self = this;
-			$(el).bind('click', function(){
-				alert('This Works?');
-			/*(	x = $(el).position();
-				y = x.bottom + ( $(el).height() + 1);
+			$(el).bind('click', function(){	//FIXME: Something inside the function is breaking IE, and possibly Opera
+				var x = $(el).position();
+				var y = x.bottom + ( $(el).height() + 1);
 				$(menu).css({position:'absolute', top: y, left: x.left}) // Apply the menu directly below
 				.animate(options.show, options.speed);				//TODO: Add vertial menu support
 				$(menu)[options.hovertype](function(){
@@ -62,15 +61,14 @@
 				}, function(){
 					self.hideMenu(menu,options);
 				});
-			*/
 			});
 			return false;
 		},
 		hoverContext : function(el,menu,options) {
 			var self = this;
 			$(el)[options.hovertype](function(){
-				x = $(el).position();
-				y = x.top + ( $(el).height() + 1);
+				var x = $(el).position();
+				var y = x.top + ( $(el).height() + 1);
 				$(menu).css({position:'absolute', top: y, left: x.left})
 					.animate(options.show, options.speed);
 				self.showChild(menu,options);
@@ -102,7 +100,7 @@
 				});
 			} else {
 				$(el).bind('click', function(e){
-					ctrlPressed =e.ctrlKey;
+					var ctrlPressed =e.ctrlKey;
 					if (ctrlPressed && e.button == 0) 
 						renderMenu(e, self, menu, options);
 						return false;
