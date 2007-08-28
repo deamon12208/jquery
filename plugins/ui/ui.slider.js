@@ -179,6 +179,30 @@
 		stop: function(that, e) {			
 			
 			var o = this.options;
+			if (o.formElement) {
+			  $(o.formElement).each(function() {
+			    var type = $(this).attr('type');
+			    switch (type) {
+			      case 'checkbox':
+			      case 'radio':
+			        $(this).attr("checked", "");
+			      case 'select':
+			        $(this).children('option').attr('selected', '');
+			    }
+			    jQuery.fn.sliderForm = function(o) {
+          	var i = 0;
+          	$("input[@name=" + o.form + "]").each(function() {
+          		$(this).attr("sfid", (o.minValue+i));
+          		i += o.stepping;
+          	});
+          	o.change = function(e, ui) {
+          		$("input[@name=" + o.form + "][@checked]").attr("checked", "");
+          		$("input[@sfid=" + ui.value + "]").attr("checked", "checked");
+          	}
+          	return $(this).slider(o);
+          }
+			  }).find(':slice');
+			}
 			$.ui.trigger('stop', this, e, that.prepareCallbackObj(this));
 			if(this.pickValue != this.curValue) $.ui.trigger('change', this, e, that.prepareCallbackObj(this));
 

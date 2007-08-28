@@ -1,7 +1,10 @@
+(function($) {
+$.ui = $.ui || {};
+
 /**
  * Kudos to Konstantin Käfer (kkaefer)
  */
-jQuery.fn.innerWrap = function(u) {
+$.fn.innerWrap = function(u) {
 	return this.each(function() {
 		var w = $(u)[0], v = w;
 		while (v.firstChild) v = v.firstChild;
@@ -10,9 +13,9 @@ jQuery.fn.innerWrap = function(u) {
 	});
 };
 
-jQuery.fn.uiBox = function(arg){
+$.fn.uiBox = function(arg){
 	return typeof arg == "string" ?
-		this.pushStack(jQuery.map(this, function(elem){
+		this.pushStack($.map(this, function(elem){
 			var middle = elem.firstChild.nextSibling;
 			return	arg == "top" && elem.firstChild ||
 				arg == "bottom" && elem.lastChild ||
@@ -32,14 +35,12 @@ jQuery.fn.uiBox = function(arg){
 				.prepend("<div class='left pane'></div>")
 				.append("<div class='right pane'></div>")
 			.end().each(function(i,elem){
-				jQuery.each( arg || {}, function(name, value){
-					jQuery(elem).uiBox(name)
-						[jQuery.isFunction(value) ? "each" : "append"](value);
+				$.each( arg || {}, function(name, value){
+					$(elem).uiBox(name)
+						[$.isFunction(value) ? "each" : "append"](value);
 				});
 			});
 };
-(function($) {
-$.ui = $.ui || {};
 	
 $.fn.modal = function(o){
 	return $(this).each(function() {
