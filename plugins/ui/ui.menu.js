@@ -87,32 +87,29 @@
 			var htype = hoverType();
 			var ctrlPressed=0;
 			$(menu).prepend('<span>' + options.contexttitle + '</span>');
-			
-			if (!$.browser.opera) {
-				$(el).bind('contextmenu', function(e){
-					$(menu).css({position:'absolute', top: e.clientY, left: e.clientX})
+				
+			var renderMenu = function(event, self, menu, options) {
+				$(menu).css({position:'absolute', top: event.clientY, left: event.clientX})
 						.animate(options.show, options.speed);
 					$(menu)[htype](function(){
 						self.showChild(menu,options,htype);
 					}, function(){
 						self.hideMenu(menu,options);
 					});
+			}
+			
+			if (!$.browser.opera) {
+				$(el).bind('contextmenu', function(e){
+					renderMenu(e, self, menu, options);
 					return false;
 				});
 			} else {
 				$(el).bind('click', function(e){
 					ctrlPressed =e.ctrlKey;
-					if (ctrlPressed && e.button == 0) {
-						$(menu).css({position:'absolute', top: e.clientY, left: e.clientX})
-							.animate(options.show, options.speed);
-						$(menu)[htype](function(){
-							self.showChild(menu,options,htype);
-						}, function(){
-							self.hideMenu(menu,options);
-						});
+					if (ctrlPressed && e.button == 0) 
+						renderMenu(e, self, menu, options);
 						return false;
-					}
-				});
+				});						
 			}
 			return false;			
 		},
@@ -169,7 +166,6 @@
       			},
 				function(){});	// Do nothing at the moment
       			});
-			// TODO: Bind button or hover event to new item
 		},
 		menuAddItemBefore : function (item, buttons, hovers) {
 			var append = $('<li id="' + item.id + '"><a href="' + item.href + '" class="' + item.linkclass + '">' + item.linktext + '</a>');

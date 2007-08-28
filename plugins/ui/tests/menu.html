@@ -59,7 +59,16 @@
 						}
 					}
 				});
-				$('body').menu('#contextMenu', {context: 'context'});
+				$('table').menu('#contextMenu', {context: 'context'}, {
+					buttons : {
+						contextEditField : function(){
+							alert('Context Document Fired');
+						},
+						contextClearField : function(e){
+							console.log(this);
+						}
+					}
+				});
 				
 				$('#filemenu-save').menuItemDisable();
 				
@@ -119,12 +128,8 @@
 		<a href="#" class="enableSave">Enable Save Menu</a>
 		
 		<ul id="contextMenu">
-			<li id="filemenu-new"><a href="#" class="fileNew">New</a>
-				<ul>
-					<li id="filemenu-newdoc"><a href="#" class="newDocument">Document</a></li>
-					<li id="filemenu-newimg"><a href="#" class="newImage">Image</a></li>
-				</ul>
-			</li>
+			<li id="context-edit"><a href="#" class="contextEditField">Edit</a></li>
+			<li id="context-delete"><a href="#" class="contextClearField">Clear</a></li>
 		</ul>
 		
 		<h2>Context Test</h2>
