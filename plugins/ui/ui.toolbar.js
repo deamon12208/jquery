@@ -1,5 +1,6 @@
 (function($) {
 
+	$.ui = $.ui || {};
 	var uiIdSeed = 0;
 
   $.fn.toolbar = function(name, options, extraOptions){
