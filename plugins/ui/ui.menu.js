@@ -24,11 +24,11 @@
 			delay: 500,					// Delay for animation
 			contexttitle: "Menu"
 		}, options);
-		console.log(options.hovertype);
-		if (options.hovertype != 'undefined') {
+		
+		if (options.hovertype == 'undefined') {
 			options.hovertype = hoverType();	// Check if hoverIntent is available
 		}
-		console.log(options.hovertype);
+		
 		$(menu).appendTo(el);	// This makes sure our menu is attached in the DOM to the parent to keep things clean
 		this.styleMenu(menu);	// Pass the menu in to recieve it's makeover
 		this[options.context](el, menu, options);	// Based on contexted selected, attach to menu parent
