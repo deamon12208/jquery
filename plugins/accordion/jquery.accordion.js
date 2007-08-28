@@ -106,7 +106,6 @@
  * @param Map options key/value pairs of optional settings.
  * @option String|Element|jQuery|Boolean|Number active Selector for the active element. Set to false to display none at start. Default: first child
  * @option String|Element|jQuery header Selector for the header element, eg. 'div.title', 'a.head'. Default: first child's tagname
- * @option String|Number speed 
  * @option String selectedClass Class for active header elements. Default: 'selected'
  * @option Boolean alwaysOpen Whether there must be one content element open. Default: true
  * @option Boolean|String animated Choose your favorite animation, or disable them (set to false). In addition to the default, "bounceslide" and "easeslide" are supported (both require the easing plugin). Default: 'slide'
