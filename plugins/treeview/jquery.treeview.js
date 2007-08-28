@@ -96,12 +96,7 @@
  * 		   Arguments: "this" refers to the UL that was shown or hidden.
  * 		   Works only with speed option set (set speed: 1 to enable callback without animations).
  *		   Default: none
- * @option Boolean|Object store When set, stores the tree-state in a cookie when leaving/reloading the page,
- * 		   and restoring that state when loading the page. By default, no state is stored. Only one tree-per-page can be stored.
- * 	       When specifying the option as a boolean-true, the default setting for cookie-storage is used,
- * 		   saving the state for the browser session. To set a different expiration, set the option to an
- *  	   object with a "expiration" property. Refer to the cookie plugin for details about
- * 	       possible values of that object.
+ * @option Boolean navigation If set, looks for the anchor that matches location.href and activates that part of the treeview it. Great for href-based state-saving. Default: false
  * @type jQuery
  * @name Treeview
  * @cat Plugins/Treeview
@@ -216,43 +211,11 @@
 			// find all tree items with child lists
 			var branches = $("li[>ul]", this);
 			
-			function serialize() {
-				var data = [];
-				branches.each(function(i, e) {
-					data[i] = settings.collapsed
-						? $(e).is("[>ul:visible]")
-							? !$(e).is("." + CLASSES.open)
-								? 1
-								: 0
-							: $(e).is("." + CLASSES.open)
-								? 1
-								: 0
-						: $(e).is("[>ul:hidden]")
-							? !$(e).is("." + CLASSES.closed)
-								? 1
-								: 0
-							: $(e).is("." + CLASSES.closed)
-								? 1
-								: 0;
-				});
-				$.cookie("treestorage", data.join(""), settings.store.expiration );
-			}
-			
-			function deserialize() {
-				var stored = $.cookie("treestorage");
-				if ( stored ) {
-					var data = stored.split("");
-					branches.each(function(i, e) {
-						if( parseInt(data[i]) ) {
-							$(e).find(">ul").toggle();
-						}
-					});
+			if ( settings.navigation ) {
+				var current = this.find("a").filter(function() { return this.href == location.href; });
+				if ( current.length ) {
+					current.addClass("selected").parents("ul, li").add( current.next() ).show();
 				}
-			}
-			
-			if (settings.store)	{
-				deserialize();
-				$(window).unload(serialize);
 			}
 			
 			// handle closed ones first
