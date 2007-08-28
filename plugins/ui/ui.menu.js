@@ -87,12 +87,9 @@
 			var htype = hoverType();
 			var ctrlPressed=0;
 			$(menu).prepend('<span>' + options.contexttitle + '</span>');
-			$(el).bind('mouseup', function(e){
-				ctrlPressed =e.ctrlKey;
-				if (e.button == 2 || e.button == 3 || ctrlPressed && e.button == 0) {
-					e.preventDefault();	//FIXME: Not stopping right-click menu in FF
-					e.stopPropagation();
-					
+			
+			if (!$.browser.opera) {
+				$(el).bind('contextmenu', function(e){
 					$(menu).css({position:'absolute', top: e.clientY, left: e.clientX})
 						.animate(options.show, options.speed);
 					$(menu)[htype](function(){
@@ -101,8 +98,22 @@
 						self.hideMenu(menu,options);
 					});
 					return false;
-				}
-			});
+				});
+			} else {
+				$(el).bind('click', function(e){
+					ctrlPressed =e.ctrlKey;
+					if (ctrlPressed && e.button == 0) {
+						$(menu).css({position:'absolute', top: e.clientY, left: e.clientX})
+							.animate(options.show, options.speed);
+						$(menu)[htype](function(){
+							self.showChild(menu,options,htype);
+						}, function(){
+							self.hideMenu(menu,options);
+						});
+						return false;
+					}
+				});
+			}
 			return false;			
 		},
 		showChild : function(menu, options, htype) {
