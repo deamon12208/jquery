@@ -21,7 +21,8 @@
 			context: 'clickContext',	// Context to attach to menu
 			show: {opacity:'show'},		// Animation object to show menu
 			hide: {opacity:'hide'},		// Animation object to hide menu	
-			delay: 500					// Delay for animation
+			delay: 500,					// Delay for animation
+			contexttitle: "Menu"
 		}, o);
 		
 		var htype = hoverType();	// Check if hoverIntent is available
@@ -85,7 +86,7 @@
 			var self = this;
 			var htype = hoverType();
 			var ctrlPressed=0;
-			$(m).prepend('<span>' + o.title + '</span>');
+			$(m).prepend('<span>' + o.contexttitle + '</span>');
 			$(a).bind('mouseup', function(e){
 				ctrlPressed =e.ctrlKey;
 				if (e.button == 2 || e.button == 3 || ctrlPressed && e.button == 0) {
@@ -141,11 +142,21 @@
 				$('a', this).show();
 			});
 		},
-		menuAddItemAfter : function (n, b, h) {
-			console.log(this);
+		menuAddItemAfter : function (n, t, h) {
 			var item = '<li id="' + n.id + '"><a href="' + n.href + '" class="' + n.linkclass + '">' + n.linktext + '</a>';
-			console.log(item);
 			$(item).insertAfter(this);
+			console.log(t);
+			if(t&&t.buttons)	// Check to see if the menu has a buttons object
+      			$('a', item).click(function(){
+	  			if (t.buttons[this.className])
+        			t.buttons[this.className]();	//If the classname of the link has a matching function, execute
+        	if(h&&h.hovers)	// Check to see if the menu has a buttons object
+	      		$('a',item)[htype](function(){
+		  		if (h.hovers[this.className])
+        			h.hovers[this.className]();	//If the classname of the link has a matching function, execute
+      			},
+				function(){});	// Do nothing at the moment
+      			});
 			// TODO: Bind button or hover event to new item
 		},
 		menuAddItemBefore : function (n, b, h) {
