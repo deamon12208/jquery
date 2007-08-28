@@ -10,130 +10,130 @@
 	//If the UI scope is not availalable, add it
 	$.ui = $.ui || {};
 	
-	$.fn.menu = function(m,o,t,h) {	// Constructor for the menu method
+	$.fn.menu = function(menu,options,buttons,hovers) {	// Constructor for the menu method
 		return this.each(function() {
-			new $.ui.menu(this, m, o, t, h);	
+			new $.ui.menu(this, menu, options, buttons, hovers);	
 		});
 	}	
 	
-	$.ui.menu = function(el, m, o, t, h) {
-		var o = $.extend({
+	$.ui.menu = function(el, menu, options, buttons, hovers) {
+		var options = $.extend({
 			context: 'clickContext',	// Context to attach to menu
 			show: {opacity:'show'},		// Animation object to show menu
 			hide: {opacity:'hide'},		// Animation object to hide menu	
 			delay: 500,					// Delay for animation
 			contexttitle: "Menu"
-		}, o);
+		}, options);
 		
 		var htype = hoverType();	// Check if hoverIntent is available
 		
-		$(m).appendTo(el);	// This makes sure our menu is attached in the DOM to the parent to keep things clean
-		this.styleMenu(m);	// Pass the menu in to recieve it's makeover
-		this[o.context](el, m, o);	// Based on contexted selected, attach to menu parent
+		$(menu).appendTo(el);	// This makes sure our menu is attached in the DOM to the parent to keep things clean
+		this.styleMenu(menu);	// Pass the menu in to recieve it's makeover
+		this[options.context](el, menu, options);	// Based on contexted selected, attach to menu parent
 		
-    	if(t&&t.buttons)	// Check to see if the menu has a buttons object
-      		$('a',$(m)).click(function(){
-	  		if (t.buttons[this.className])
-        		t.buttons[this.className]();	//If the classname of the link has a matching function, execute
+    	if(buttons&&buttons.buttons)	// Check to see if the menu has a buttons object
+      		$('a',$(menu)).click(function(){
+	  		if (buttons.buttons[this.className])
+        		buttons.buttons[this.className]();	//If the classname of the link has a matching function, execute
       	});
-		if(h&&h.hovers)	// Check to see if the menu has a buttons object
-      		$('a',$(m))[htype](function(){
-	  		if (h.hovers[this.className])
-        		h.hovers[this.className]();	//If the classname of the link has a matching function, execute
+		if(hovers&&hovers.hovers)	// Check to see if the menu has a buttons object
+      		$('a',$(menu))[htype](function(){
+	  		if (hovers.hovers[this.className])
+        		hovers.hovers[this.className]();	//If the classname of the link has a matching function, execute
       	},
 		function(){});	// Do nothing at the moment
 	}
 	
 	$.extend($.ui.menu.prototype, {
-		styleMenu : function(m){
-			$(m).addClass('ui-menu-items').children('li').addClass('ui-menu-item');	//Apply first level and child items
-			var parents = $('ul',m).addClass('ui-menu-items').parent('li').addClass('ui-menu-item-parent')	// Apply sublevels
-			var node = $('li',m).addClass('ui-menu-item');	// Finish up any unmatched items
+		styleMenu : function(menu){
+			$(menu).addClass('ui-menu-items').children('li').addClass('ui-menu-item');	//Apply first level and child items
+			var parents = $('ul',menu).addClass('ui-menu-items').parent('li').addClass('ui-menu-item-parent')	// Apply sublevels
+			var node = $('li',menu).addClass('ui-menu-item');	// Finish up any unmatched items
 			return false;
 		},
-		clickContext : function(a,m,o) {
+		clickContext : function(el,menu,options) {
 			var self = this;
 			var htype = hoverType();
-			$(a).click(function(){
-				x = $(a).position();
-				y = x.bottom + ( $(a).height() + 1);
-				$(m).css({position:'absolute', top: y, left: x.left}) // Apply the menu directly below
-				.animate(o.show, o.speed);				//TODO: Add vertial menu support
-				$(m)[htype](function(){
-					self.showChild(m,o,htype);	
+			$(el).click(function(){
+				x = $(el).position();
+				y = x.bottom + ( $(el).height() + 1);
+				$(menu).css({position:'absolute', top: y, left: x.left}) // Apply the menu directly below
+				.animate(options.show, options.speed);				//TODO: Add vertial menu support
+				$(menu)[htype](function(){
+					self.showChild(menu,options,htype);	
 				}, function(){
-					self.hideMenu(m,o);
+					self.hideMenu(menu,options);
 				});
 			});
 			return false;
 		},
-		hoverContext : function(a,m,o) {
+		hoverContext : function(el,menu,options) {
 			var self = this;
 			var htype = hoverType();
-			$(a)[htype](function(){
-				x = $(a).position();
-				y = x.top + ( $(a).height() + 1);
-				$(m).css({position:'absolute', top: y, left: x.left})
-					.animate(o.show, o.speed);
-				self.showChild(m,o,htype);
+			$(el)[htype](function(){
+				x = $(el).position();
+				y = x.top + ( $(el).height() + 1);
+				$(menu).css({position:'absolute', top: y, left: x.left})
+					.animate(options.show, options.speed);
+				self.showChild(menu,options,htype);
 				},
 			function(){
-				self.hideMenu(m,o);
+				self.hideMenu(menu,options);
 			});
 			return false;
 		},
-		context : function (a,m,o) {	
+		context : function (el,menu,options) {	
 			var self = this;
 			var htype = hoverType();
 			var ctrlPressed=0;
-			$(m).prepend('<span>' + o.contexttitle + '</span>');
-			$(a).bind('mouseup', function(e){
+			$(menu).prepend('<span>' + options.contexttitle + '</span>');
+			$(el).bind('mouseup', function(e){
 				ctrlPressed =e.ctrlKey;
 				if (e.button == 2 || e.button == 3 || ctrlPressed && e.button == 0) {
 					e.preventDefault();	//FIXME: Not stopping right-click menu in FF
 					e.stopPropagation();
 					
-					$(m).css({position:'absolute', top: e.clientY, left: e.clientX})
-						.animate(o.show, o.speed);
-					$(m)[htype](function(){
-						self.showChild(m,o,htype);
+					$(menu).css({position:'absolute', top: e.clientY, left: e.clientX})
+						.animate(options.show, options.speed);
+					$(menu)[htype](function(){
+						self.showChild(menu,options,htype);
 					}, function(){
-						self.hideMenu(m,o);
+						self.hideMenu(menu,options);
 					});
 					return false;
 				}
 			});
 			return false;			
 		},
-		showChild : function(m, o, h) {
-			$('li', m)[h](
+		showChild : function(menu, options, htype) {
+			$('li', menu)[htype](
 				function(){
 					x = $(this).position();
-					$(this).find('>ul').css({position:'absolute', top:x.top, left:$(m).width()})
-							.animate(o.show,o.speed);
+					$(this).find('>ul').css({position:'absolute', top:x.top, left:$(menu).width()})
+							.animate(options.show,options.speed);
 				},
 				function(){
-					$(this).find('>ul').animate(o.hide,o.speed);
+					$(this).find('>ul').animate(options.hide,options.speed);
 			});
 		},
-		hideMenu : function(m, o){
-			$(m).animate(o.hide,o.speed);
+		hideMenu : function(menu, options){
+			$(menu).animate(options.hide,options.speed);
 			return false;
 		}		
 	});
 	
 	
 	$.extend($.fn, {
-		menuItemDisable : function (o) {
-			var o = $.extend({
+		menuItemDisable : function (options) {
+			var options = $.extend({
 				disableCss: {color: "#aaa", background: "transparent"}
-			},o);
+			},options);
 			
 			return this.each(function(){
 				var t = $('a', this).text();
 				$('a', this).hide();
 				$(this).append('<span>' + t + '</span>');
-				$('span', this).css(o.disableCss);
+				$('span', this).css(options.disableCss);
 			});
 		},
 		menuItemEnable : function () {
@@ -142,28 +142,40 @@
 				$('a', this).show();
 			});
 		},
-		menuAddItemAfter : function (n, t, h) {
-			var item = '<li id="' + n.id + '"><a href="' + n.href + '" class="' + n.linkclass + '">' + n.linktext + '</a>';
-			$(item).insertAfter(this);
-			console.log(t);
-			if(t&&t.buttons)	// Check to see if the menu has a buttons object
-      			$('a', item).click(function(){
-	  			if (t.buttons[this.className])
-        			t.buttons[this.className]();	//If the classname of the link has a matching function, execute
-        	if(h&&h.hovers)	// Check to see if the menu has a buttons object
-	      		$('a',item)[htype](function(){
-		  		if (h.hovers[this.className])
-        			h.hovers[this.className]();	//If the classname of the link has a matching function, execute
+		menuAddItemAfter : function (item, buttons, hovers) {
+			var append = $('<li id="' + item.id + '"><a href="' + item.href + '" class="' + item.linkclass + '">' + item.linktext + '</a>');
+			$(append).insertAfter(this);
+
+			if(buttons&&buttons.buttons)	// Check to see if the menu has a buttons object
+      			append.find('a').bind('click', function(){
+	  			if (buttons.buttons[this.className])
+        			buttons.buttons[this.className]();	//If the classname of the link has a matching function, execute
+
+        	if(hovers&&hovers.hovers)	// Check to see if the menu has a buttons object
+	      		append.find('a')[htype](function(){
+		  		if (hovers.hovers[this.className])
+        			hovers.hovers[this.className]();	//If the classname of the link has a matching function, execute
       			},
 				function(){});	// Do nothing at the moment
       			});
 			// TODO: Bind button or hover event to new item
 		},
-		menuAddItemBefore : function (n, b, h) {
-			console.log(this);
-			var item = '<li id="' + n.id + '"><a href="' + n.href + '" class="' + n.linkclass + '">' + n.linktext + '</a>';
-			console.log(item);
-			$(item).insertBefore(this);
+		menuAddItemBefore : function (item, buttons, hovers) {
+			var append = $('<li id="' + item.id + '"><a href="' + item.href + '" class="' + item.linkclass + '">' + item.linktext + '</a>');
+			$(append).insertBefore(this);
+
+			if(buttons&&buttons.buttons)	// Check to see if the menu has a buttons object
+      			append.find('a').bind('click', function(){
+	  			if (buttons.buttons[this.className])
+        			buttons.buttons[this.className]();	//If the classname of the link has a matching function, execute
+
+        	if(hovers&&hovers.hovers)	// Check to see if the menu has a buttons object
+	      		append.find('a')[htype](function(){
+		  		if (hovers.hovers[this.className])
+        			hovers.hovers[this.className]();	//If the classname of the link has a matching function, execute
+      			},
+				function(){});	// Do nothing at the moment
+      			});
 			// TODO: Bind button or hover event to new item
 		}
 	});
