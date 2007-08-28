@@ -1,0 +1,18 @@
+.ui-demo-options { list-style-type: none; padding: 0; margin: 10px; margin-top: 18px; margin-bottom: 18px; }
+.ui-demo-options li { height: 18px; position: relative;}
+.ui-demo-options li span { position: absolute; top: 0px; left: 30px; }
+
+.ui-demo-option { padding-left: 12px;	position: relative; height: 18px; }
+.ui-demo-option span { position: absolute; top: 0px; left: 40px; }
+
+.ui-demo-example { height: 72px; }
+
+/* This is a simple box */
+.ui-demo-box {
+	border: 2px outset #eee;
+	width: 140px;
+	background: #fff;
+	padding: 10px;
+	height: 20px;
+	float: left;
+}

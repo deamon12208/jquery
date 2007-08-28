@@ -197,7 +197,7 @@
 			}
 			
 			if(!o.beQuietAtEnd) {
-				if(o.wasPositioned)	$(a).css('position', o.wasPositioned);
+				//if(o.wasPositioned)	$(a).css('position', o.wasPositioned);
 				if(o._stop) o._stop.apply(a, [this.helper, this.pos, o.cursorAt, this, e]);
 			}
 

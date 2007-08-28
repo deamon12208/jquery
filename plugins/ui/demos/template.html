@@ -1,0 +1,109 @@
+<html>
+<head>
+	<title>Drag & Drop : Simple draggable</title>
+	<link rel="stylesheet" href="css/blueprint/screen.css" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="css/blueprint/print.css" type="text/css" media="print">
+	<link rel="stylesheet" href="css/style.css" type="text/css" media="screen, projection">
+   
+	<script type="text/javascript" src="../../../jquery/src/jquery/jquery.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/selector/selector.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/event/event.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/ajax/ajax.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/fx/fx.js"></script>
+	<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+
+	<!-- Include what you need after this comment! -->
+	<script type="text/javascript" src="../ui.mouse.js"></script>
+	<script type="text/javascript" src="../ui.draggable.js"></script>
+	<script type="text/javascript" src="../ui.draggable.ext.js"></script>
+
+	<script type="text/javascript">
+	$(document).ready(function() {
+		//Execute your plugins here!
+		$("div.draggable").draggable({
+			helper: function() {
+
+				switch($(".helper:checked")[0].value) {
+					case "0":
+						var ret = this; break;
+					case "1":
+						var ret = $(this).clone(); break;
+					case "2":
+						var clone = $("<div></div>")[0];
+						var ret = $(clone).css({ height: this.offsetHeight, width: this.offsetWidth, border: "1px dotted black", background: "#eee" }).appendTo("body")[0]; break;
+				};
+				
+				if($("#opacity").is(":checked"))
+					$(ret).css("opacity", 0.5);
+				
+				return ret;
+			
+			},
+			stop: function(e,ui) {
+				$(this).css({ left: ui.position.left, top: ui.position.top });
+				$(this).css("opacity", 1);
+			}
+		});
+	});
+	</script>
+</head>
+<body>
+
+<div class="container">
+
+        <div class="column span-14">
+                <h2>Drag & Drop: Simple draggable</h2>
+        </div>
+        
+        <hr/>
+        
+        <div class="column span-11 first">
+ 
+        <p>The following demo demonstrates the most simple use case of making a element draggable.</p>
+        
+      	<div class="ui-demo-example box">
+      		<div class="ui-demo-box draggable" style="cursor: move; position: absolute;">Drag me</div>
+      	</div>
+      	
+
+    	<pre class="ui-demo-source"><code>$("div.draggable").draggable();</code></pre>
+      	
+        <p class="incr">Note: if you need a footnote, you can add it here.</p>
+        
+
+   
+        </div>
+        
+        <div class="column span-3 last">
+        <form name="options">    
+            <h3>Options</h3>
+            <p>Define the dragging mode.</p>
+			
+			<!-- Multiple options (radio) -->
+			<ul class="ui-demo-options">
+				<li><input name="helper" class="helper" type="radio" value="0" checked> <span>"original" (Default)</span></li>
+				<li><input name="helper" class="helper" type="radio" value="1"> <span>"clone"</span></li>
+				<li><input name="helper" class="helper" type="radio" value="2"> <span>"helper"</span></li>
+			</ul>
+			
+			<!-- Single option (checkbox) -->
+			<div class="ui-demo-option">
+				<input id="opacity" type="checkbox" value="1" /> <span>Transparency</span>
+			</div>
+
+			<div class="ui-demo-option">
+				<input id="updatepos" type="checkbox" value="1" /> <span>Update position on stop</span>
+			</div>
+			
+			<hr />
+			
+			<a class='button positive'>Play this demo!</a>
+			<a class='button negative'>Stop!</a>
+        
+        </form>
+    	</div>
+</div>
+
+
+</body>
+</html>
