@@ -1,8 +1,4 @@
 /* jQuery UI Menu
- * 
- * m = menu being passed in
- * o = options
- * t = trigger functions
  */
 
 (function($){
@@ -25,7 +21,7 @@
 			contexttitle: "Menu"
 		}, options);
 		
-		if (options.hovertype == 'undefined') {
+		if (typeof options.hovertype == 'undefined') {
 			options.hovertype = hoverType();	// Check if hoverIntent is available
 		}
 		
@@ -158,18 +154,20 @@
 			var append = $('<li id="' + item.id + '"><a href="' + item.href + '" class="' + item.linkclass + '">' + item.linktext + '</a>');
 			$(append)[item.position](this);
 
-			if(item&&item.buttons)	// Check to see if the menu has a buttons object
+			if(item&&item.buttons){	// Check to see if the menu has a buttons object
       			append.find('a').bind('click', function(){
-	  			if (item.buttons[this.className])
-        			item.buttons[this.className]();	//If the classname of the link has a matching function, execute
-
-        	if(item&&item.hovers)	// Check to see if the menu has a buttons object
-	      		append.find('a')[htype](function(){
-		  		if (item.hovers[this.className])
-        			item.hovers[this.className]();	//If the classname of the link has a matching function, execute
-      			},
-				function(){});	// Do nothing at the moment
+	  				if (item.buttons[this.className]) {
+        				item.buttons[this.className]();	//If the classname of the link has a matching function, execute
+					}
+        			if(item&&item.hovers){	// Check to see if the menu has a buttons object
+	      				append.find('a')[htype](function(){
+		  					if (item.hovers[this.className]){
+        						item.hovers[this.className]();	//If the classname of the link has a matching function, execute
+        					}
+      						}, function(){});	// Do nothing at the moment
+      				}
       			});
+			}
 		}
 	});
 	
