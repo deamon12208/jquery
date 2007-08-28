@@ -10,7 +10,7 @@
 	//If the UI scope is not availalable, add it
 	$.ui = $.ui || {};
 	
-	$.fn.menu = function(menu,options,buttons,hovers) {	// Constructor for the menu method
+	$.fn.menu = function(menu,options) {	// Constructor for the menu method
 		return this.each(function() {
 			new $.ui.menu(this, menu, options);	
 		});
@@ -24,9 +24,11 @@
 			delay: 500,					// Delay for animation
 			contexttitle: "Menu"
 		}, options);
-		
-		var htype = hoverType();	// Check if hoverIntent is available
-		
+		console.log(options.hovertype);
+		if (options.hovertype != 'undefined') {
+			options.hovertype = hoverType();	// Check if hoverIntent is available
+		}
+		console.log(options.hovertype);
 		$(menu).appendTo(el);	// This makes sure our menu is attached in the DOM to the parent to keep things clean
 		this.styleMenu(menu);	// Pass the menu in to recieve it's makeover
 		this[options.context](el, menu, options);	// Based on contexted selected, attach to menu parent
@@ -37,7 +39,7 @@
         		options.buttons[this.className]();	//If the classname of the link has a matching function, execute
       	});
 		if(options&&options.hovers)	// Check to see if the menu has a buttons object
-      		$('a',$(menu))[htype](function(){
+      		$('a',$(menu))[options.hovertype](function(){
 	  		if (options.hovers[this.className])
         		options.hovers[this.className]();	//If the classname of the link has a matching function, execute
       	},
@@ -53,14 +55,13 @@
 		},
 		clickContext : function(el,menu,options) {
 			var self = this;
-			var htype = hoverType();
 			$(el).click(function(){
 				x = $(el).position();
 				y = x.bottom + ( $(el).height() + 1);
 				$(menu).css({position:'absolute', top: y, left: x.left}) // Apply the menu directly below
 				.animate(options.show, options.speed);				//TODO: Add vertial menu support
-				$(menu)[htype](function(){
-					self.showChild(menu,options,htype);	
+				$(menu)[options.hovertype](function(){
+					self.showChild(menu,options);	
 				}, function(){
 					self.hideMenu(menu,options);
 				});
@@ -69,13 +70,12 @@
 		},
 		hoverContext : function(el,menu,options) {
 			var self = this;
-			var htype = hoverType();
-			$(el)[htype](function(){
+			$(el)[options.hovertype](function(){
 				x = $(el).position();
 				y = x.top + ( $(el).height() + 1);
 				$(menu).css({position:'absolute', top: y, left: x.left})
 					.animate(options.show, options.speed);
-				self.showChild(menu,options,htype);
+				self.showChild(menu,options);
 				},
 			function(){
 				self.hideMenu(menu,options);
@@ -84,15 +84,14 @@
 		},
 		context : function (el,menu,options) {	
 			var self = this;
-			var htype = hoverType();
 			var ctrlPressed=0;
 			$(menu).prepend('<span>' + options.contexttitle + '</span>');
 				
 			var renderMenu = function(event, self, menu, options) {
 				$(menu).css({position:'absolute', top: event.clientY, left: event.clientX})
 						.animate(options.show, options.speed);
-					$(menu)[htype](function(){
-						self.showChild(menu,options,htype);
+					$(menu)[options.hovertype](function(){
+						self.showChild(menu,options);
 					}, function(){
 						self.hideMenu(menu,options);
 					});
@@ -113,8 +112,8 @@
 			}
 			return false;			
 		},
-		showChild : function(menu, options, htype) {
-			$('li', menu)[htype](
+		showChild : function(menu, options) {
+			$('li', menu)[options.hovertype](
 				function(){
 					x = $(this).position();
 					$(this).find('>ul').css({position:'absolute', top:x.top, left:$(menu).width()})
