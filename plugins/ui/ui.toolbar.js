@@ -29,11 +29,7 @@
   $.ui.toolbar = function(el, name, setting, options) {
 	// create the toolbar
 		id = $.ui.uuid("ui-toolbar");
-		if(name=='' || name == null){
-			name = id;
-		}
-
-		$(el).append('<div class="ui-toolbar" rel="'+name+'" id="'+id+'" ><ul><'+'/ul></'+'div>');
+		$(el).append('<div class="ui-toolbar" rel="'+(name=='' || !name ? id : name)+'" id="'+id+'" ><ul><'+'/ul></'+'div>');
 
 		var tbOptions = $.extend({
 			theme: 'default', // This sets the theme for the menu, currently only one.
@@ -46,21 +42,21 @@
 		$(el).find("#"+id).addClass(tbOptions.theme);
 		$(el).find("#"+id+" ul").addClass(tbOptions.direction);
   
-	  if(setting){
-			$.each(setting, function(i){
-				var settings = $.extend({
-					text: 'Button',
-					type: "button",
-					icon: null,
-					handler: function(){}, // Function to be run when fired.
-					handlerType: "click"  // When to fire the event, defaults to "click".
-				}, setting[i]);
-				if(tbOptions.mode == 'text-only'){
-					settings.icon == null;
-				}
-				$.ui.addItem(el, 'toolbar_btn', {'name': name, 'options': settings});
-			});
-		}
+		if(!setting) return;
+		$.each(setting, function(i){
+			var settings = $.extend({
+				text: 'Button',
+				type: "button",
+				icon: null,
+				handler: function(){}, // Function to be run when fired.
+				handlerType: "click"  // When to fire the event, defaults to "click".
+			}, setting[i]);
+			if(tbOptions.mode == 'text-only'){
+				settings.icon == null;
+			}
+			$.ui.addItem(el, 'toolbar_btn', {'name': name, 'options': settings});
+		});
+
   }
 	
 	$.ui.addItem = function(el, type, settings){
@@ -68,34 +64,34 @@
 			name: '',
 			options: {}
 		}, settings);
-		if(type == 'toolbar_btn' && settings.name!=''){
+		
+		if(type == 'toolbar_btn' && settings.name!='') {
 			
 			var toolbarId = $("div[@rel="+settings.name+"]").attr("id");
 			var id = $.ui.uuid("ui-btn");
 			var tbMode = $(el).find("#"+toolbarId).attr('mode');
-// @@ This is still needed, as a catch.
-			if(tbMode == 'icons-only'){
-				settings.options.text = '';
-			}
+			if(tbMode == 'icons-only') settings.options.text = ''; // @@ This is still needed, as a catch.
+				
 			if(settings.options.type=="dropdown"){
 				
-			}else{
+			} else {
 				$('<li class="ui-btn" id="'+id+'"><span class="ui-btn-left"><i>&#160;<'+'/i><'+'/span><span class="ui-btn-center"><'+'/span><span class="ui-btn-right"><i>&#160;<'+'/i><'+'/span><'+'/li>')
 					.appendTo($(el).find("#"+toolbarId+" ul"));
 			}
+			
 			$(el).find("#"+toolbarId+" ul #"+id+" .ui-btn-center").html('<input type="'+settings.options.type+'" value="'+settings.options.text+'"/>');
 			$(el).find("#"+toolbarId+" ul #"+id+" .ui-btn-center input")
 				.bind(settings.options.handlerType, function(){ settings.options.handler(); });
-			if(settings.options.icon != null){
+			
+			if(settings.options.icon != null) {
 				$(el).find("#"+id).addClass("ui-btn-icon");
 				$(el).find("#"+id+" .ui-btn-center input").css("background","url("+settings.options.icon+") top left no-repeat");
 
-// Make the icon full width, for some reason, css doesn't do it.
-				if(tbMode == 'icons-only'){
-					$(el).find("#"+id+" .ui-btn-center input").css("width", "20px")
-				}
+				// Make the icon full width, for some reason, css doesn't do it.
+				if(tbMode == 'icons-only') $(el).find("#"+id+" .ui-btn-center input").css("width", "20px");
 			}
 		}
+
 	}
 	
 	

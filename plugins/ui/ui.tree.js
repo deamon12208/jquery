@@ -1,15 +1,15 @@
 (function($) {
 
-  // Plugin to wrap html around all non-empty text nodes within an element: (ignores text in child elements)
-  // By George Adamson, SoftwareUnity.com, March 2007. 
-  $.fn.wrapText = function(html){
-  	return this.each(function(){
-  		$(this.childNodes).filter("[@nodeType=3]").each(function(){
-  			if($.trim(this.nodeValue).length > 0)
-  				$(this).wrap(html)
-  		})
-  	});
-  };
+	// Plugin to wrap html around all non-empty text nodes within an element: (ignores text in child elements)
+	// By George Adamson, SoftwareUnity.com, March 2007. 
+	$.fn.wrapText = function(html){
+		return this.each(function(){
+			$(this.childNodes).filter("[@nodeType=3]").each(function(){
+				if($.trim(this.nodeValue).length > 0)
+					$(this).wrap(html);
+			})
+		});
+	};
   
   
 	//If the UI scope is not availalable, add it
