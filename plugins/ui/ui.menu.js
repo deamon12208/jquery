@@ -51,7 +51,7 @@
 		},
 		clickContext : function(el,menu,options) {
 			var self = this;
-			$(el).click(function(){
+			$(el).bind('click', function(){
 				x = $(el).position();
 				y = x.bottom + ( $(el).height() + 1);
 				$(menu).css({position:'absolute', top: y, left: x.left}) // Apply the menu directly below
