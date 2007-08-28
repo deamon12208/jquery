@@ -52,7 +52,8 @@
 		clickContext : function(el,menu,options) {
 			var self = this;
 			$(el).bind('click', function(){
-				x = $(el).position();
+				alert('This Works?');
+			/*(	x = $(el).position();
 				y = x.bottom + ( $(el).height() + 1);
 				$(menu).css({position:'absolute', top: y, left: x.left}) // Apply the menu directly below
 				.animate(options.show, options.speed);				//TODO: Add vertial menu support
@@ -61,6 +62,7 @@
 				}, function(){
 					self.hideMenu(menu,options);
 				});
+			*/
 			});
 			return false;
 		},
