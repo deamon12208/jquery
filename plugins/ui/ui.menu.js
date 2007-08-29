@@ -18,7 +18,7 @@
 			show: {opacity:'show'},		// Animation object to show menu
 			hide: {opacity:'hide'},		// Animation object to hide menu	
 			delay: 500,					// Delay for animation
-			contexttitle: "Menu"
+			contexttitle: "Context Menu"
 		}, options);
 		var self = this;
 		if (typeof options.hovertype == 'undefined') {
@@ -74,7 +74,8 @@
 		context : function (el,menu,options) {	
 			var self = this;
 			var ctrlPressed=0;
-			$(menu).prepend('<span>' + options.contexttitle + '</span>');
+
+			$(menu).not($('.ui-context-header').parents()).prepend('<span class="ui-context-header">' + options.contexttitle + '</span>');
 				
 			var renderMenu = function(event, self, menu, options) {
 				$(menu).css({position:'absolute', top: event.clientY, left: event.clientX})
@@ -148,7 +149,7 @@
 			return this.each(function(){
 				var t = $('a', this).text();
 				$('a', this).hide();
-				$(this).append('<span>' + t + '</span>');
+				$(this).append('<span class="ui-menu-item-disabled">' + t + '</span>');
 				$('span', this).css(options.disableCss);
 			});
 		},
