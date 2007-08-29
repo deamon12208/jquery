@@ -41,7 +41,8 @@
 						filePrint : function(){
 							print();
 						},
-						fileSave : function(){
+						fileSave : function(e){
+							console.log(e)
 							alert('File Saved');
 						}
 					}
@@ -52,9 +53,6 @@
 					hovertype: 'hover',
 					buttons: {
 						fileCopy : function(){
-							var t = $('#mytextarea').text();
-							var copytext = t.createTextRange();
-							copytext.execCommand('Copy');
 							alert('Text Copied');
 						}
 					},
@@ -72,9 +70,11 @@
 							alert('Context Document Fired');
 						},
 						contextClearField : function(e){
-							console.log(e);
-							$(this).click(function(){
-								$(e).text('');
+							var elem = e;
+							console.log(elem);
+							$(this).click(function(elem){
+								console.log(elem);
+								$(elem).text('');
 								return false;
 							})
 						}
