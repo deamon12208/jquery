@@ -31,16 +31,19 @@
 
 <!-- Demo Javascript -->
 <script type="text/javascript">
-$(function(){
 /* Themes */
+$(function(){
     $("body").themes({
       "light":"Light",
       "dark":"Dark",
     }).appendTo("#header form");
+});
 
 /* Demos */
 
-  //Drag & Drop
+//Drag & Drop
+$().one("drag-drop",function(){
+
   $("#drag-demo1").draggable();
   $("#drop-demo1").droppable({
 		accept: '#drag-demo1',
@@ -50,12 +53,18 @@ $(function(){
         $("#drag-demo1").fadeIn("fast");
       });
 		}
-	});
+  });
+  
+  });
 
-  //Resizables
-  $("#resizables textarea").resizable();
-
+//Resizables
+$().one("resizables",function(){
+  
+  var foo = function(){ $("#resizables textarea").resizable(); }
+  setTimeout(foo,100);
+  
 });
+
 </script>
 </head><body class="dark">
 <div id="main">

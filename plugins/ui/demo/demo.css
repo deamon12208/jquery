@@ -75,7 +75,7 @@ p { margin:.4em 0; }
   margin-left:1px; padding:0 1px;
   background:#EEE;
 }
-.light #resizables .ui-resizable-s { background:#EEE; width:22em; }
-.dark #resizables .ui-resizable-s { background:#282828; width:20em; }
+.light #resizables .ui-resizable-s { background:#EEE; }
+.dark #resizables .ui-resizable-s { background:#282828; }
 
 

@@ -1,4 +1,4 @@
-/* Themes - Sean Catchpole - MIT License */
+/* Themes - Sean Catchpole - MIT/GPL License */
 (function($){
 
 	$.fn.themes = function(o) {
@@ -9,7 +9,10 @@
     if(!el.jquery) el = $(el);
     el = el || $("body");
     o = $.extend({},o);
-    var t = function(){ for(i in o) el.removeClass(i); el.addClass(this.value); };
+    var t = function(){
+      for(i in o) el.removeClass(i);
+      el.addClass(this.value);
+    };
     var d,i,s = $("<select>").addClass("themes").change(t).keyup(t);
     for(i in o) {
       $("<option>").val(i).html(o[i]).appendTo(s);

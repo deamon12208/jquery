@@ -1,6 +1,6 @@
 $(function(){
   // Menu - to be replaced by Tabs 3
-  $("#nav").idTabs(true);
+  $("#nav").idTabs(true,function(id){ $().trigger(id.substr(1)); return true; });
   if(window.location.hash)
     $("#nav a[@href='"+window.location.hash+"']").click();
 
@@ -9,6 +9,6 @@ $(function(){
     $(r).hide().prependTo("#demos");
     if(!$("#demos .demo:visible").length) $("#info").show();
   }});
-  $("#header h1 span").click(function(){ $("#nav a[@href='#info']").click(); });
+  $("#header h1 span").click(function(){window.location=window.location.href.substr(0,window.location.href.indexOf('#'));});
 });
 

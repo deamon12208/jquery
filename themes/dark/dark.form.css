@@ -1,0 +1,58 @@
+/*(  fieldset  )*/
+.dark .ui-form-fieldset,
+.dark.ui-form-fieldset {
+  display:block;
+  border:1px solid #333;
+  padding:0;
+}
+.dark .ui-form-fieldset,
+.dark.ui-form-fieldset {
+  margin-top:1.6em;
+}
+.dark textarea.ui-form,
+.dark fieldset.ui-form {
+  margin:0;
+  border:1px solid #111;
+  color:snow;
+}
+.dark fieldset.ui-form { background:#181818; }
+.dark .ui-form-legend,
+.dark.ui-form-legend {
+  display:block;
+  text-align:left;
+  border:1px solid #333;
+  background:#222;
+  margin:-1.05em 0 0 0;
+}
+.dark legend.ui-form {
+  display:block;
+  color:snow;
+  font-weight:bold;
+  background:#222;
+  border-top:1px dotted #282828;
+  border-bottom:1px dotted #282828;
+  margin:-1px 2px;
+  padding:0 2px 2px;
+}
+
+
+/*(  textarea  )*/
+.dark .ui-form-textarea,
+.dark.ui-form-textarea {
+  display:block;
+  border:1px solid #333;
+  padding:0;
+}
+.dark .ui-form-textarea.focus,
+.dark.ui-form-textarea.focus {
+  border:1px solid #444;
+}
+
+.dark textarea.ui-form {
+  margin:0;
+  border:1px solid #111;
+  color:snow;
+}
+.dark textarea.ui-form { background:#222; }
+.dark textarea.ui-form:focus { background:#1D1D1D; }
+
