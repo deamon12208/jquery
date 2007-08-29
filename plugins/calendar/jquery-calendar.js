@@ -1,4 +1,4 @@
-/* MarcGrabanski.com v2.6 */
+/* MarcGrabanski.com v2.7 */
 /* Pop-Up Calendar Built from Scratch by Marc Grabanski */
 /* Enhanced by Keith Wood (kbwood@iprimus.com.au). */
 /* Under the Creative Commons Licence http://creativecommons.org/licenses/by/3.0/
