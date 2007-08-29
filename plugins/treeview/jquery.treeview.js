@@ -151,6 +151,14 @@
 					$this.removeClass(c1).addClass(c2);
 			});
 		},
+		hoverClass: function(className) {
+			className = className || "hover";
+			return this.hover(function() {
+				$(this).addClass(className);
+			}, function() {
+				$(this).removeClass(className);
+			});
+		},
 		Treeview: function(settings) {
 		
 			// currently no defaults necessary, all implicit
@@ -217,6 +225,12 @@
 					current.addClass("selected").parents("ul, li").add( current.next() ).show();
 				}
 			}
+			
+			$("li[ul]:not([>a])>span", this).click(function(event) {
+				if ( this == event.target ) {
+					toggler.apply($(this).next());
+				}
+			}).add( $("a", this) ).hoverClass();
 			
 			// handle closed ones first
 			branches.filter("[>ul:hidden]")

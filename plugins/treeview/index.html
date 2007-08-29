@@ -11,7 +11,8 @@
 	$(document).ready(function(){
 		$("#navigation").Treeview({
 			navigation: true,
-			collapsed: true
+			collapsed: true,
+			unique: true
 		});
 		$("#browser").Treeview();
 		$("#red").Treeview({
@@ -58,6 +59,8 @@
 		}
 		
 		ul.dir li { padding: 2px 0 0 16px; }
+		
+		.hover { color: red; cursor: pointer; }
 		
 	  	.treeview li { background: url(images/tv-item.gif) 0 0 no-repeat; }
 	  	.treeview .collapsable { background-image: url(images/tv-collapsable.gif); }
@@ -131,7 +134,7 @@
 		</li>
 		<li><a href="?2">Item 2</a>
 			<ul>
-				<li><a href="?2.0">Item 2.0</a>
+				<li><span>Item 2.0</span>
 					<ul>
 						<li><a href="?2.0.0">Item 2.0.0</a>
 						<ul>
