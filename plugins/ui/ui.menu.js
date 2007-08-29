@@ -20,14 +20,17 @@
 			delay: 500,					// Delay for animation
 			contexttitle: "Menu"
 		}, options);
-		
+		var self = this;
 		if (typeof options.hovertype == 'undefined') {
 			options.hovertype = hoverType();	// If not overidden, check to if hoverIntent is available
 		}
 		
 		$(menu).appendTo(el);	// This makes sure our menu is attached in the DOM to the parent to keep things clean
-		this.styleMenu(menu);	// Pass the menu in to recieve it's makeover
-		this[options.context](el, menu, options);	// Based on contexted selected, attach to menu parent
+		self.styleMenu(menu);	// Pass the menu in to recieve it's makeover
+		self[options.context](el, menu, options);	// Based on contexted selected, attach to menu parent
+		if (options.context != 'context') { // Check to see if context, as context requires clicked element
+			self.execFunction(menu, options);
+		}
 	}
 	
 	$.extend($.ui.menu.prototype, {
@@ -46,7 +49,6 @@
 				.animate(options.show, options.speed);				//TODO: Add vertial menu support
 				$(menu)[options.hovertype](function(){
 					self.showChild(menu,options);	
-					self.execFunction(menu, options, event.target);
 				}, function(){
 					self.hideMenu(menu,options);
 				});
@@ -62,7 +64,6 @@
 				$(menu).css({position:'absolute', top: y, left: x.left})
 					.animate(options.show, options.speed);
 				self.showChild(menu,options);
-				self.execFunction(menu, options, event.target);
 				},
 			function(){
 				self.hideMenu(menu,options);
@@ -80,7 +81,6 @@
 						.animate(options.show, options.speed);
 					$(menu)[options.hovertype](function(){
 						self.showChild(menu,options);
-						self.execFunction(menu, options, event.target);
 					}, function(){
 						self.hideMenu(menu,options);
 					});
@@ -89,6 +89,7 @@
 			if (!$.browser.opera) {
 				$(el).bind('contextmenu', function(e){
 					renderMenu(e, self, menu, options);
+					self.execFunction(menu, options, e.target);
 					return false;
 				});
 			} else {
@@ -96,6 +97,7 @@
 					var ctrlPressed =e.ctrlKey;
 					if (ctrlPressed && e.button == 0) 
 						renderMenu(e, self, menu, options);
+						self.execFunction(menu, options, e.target);
 						return false;
 				});						
 			}
