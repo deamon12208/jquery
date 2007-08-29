@@ -214,8 +214,7 @@ $.extend(PopUpCal.prototype, {
 		inputs.each(function() {
 			this.disabled = false;
 			$('../button.calendar_trigger', this).each(function() { this.disabled = false; });
-			$('../img.calendar_trigger',
-this).css({opacity:'1.0',cursor:''});
+			$('../img.calendar_trigger', this).css({opacity:'1.0',cursor:''});
 			var $this = this;
 			popUpCal._disabledInputs = $.map(popUpCal._disabledInputs,
 				function(value) { return (value == $this ? null : value); }); // delete entry
@@ -474,7 +473,7 @@ this).css({opacity:'1.0',cursor:''});
 		}
 		var onSelect = inst._get('onSelect');
 		if (onSelect) {
-			onSelect(dateStr);  // trigger custom callback
+			onSelect(dateStr, inst);  // trigger custom callback
 		}
 		else {
 			inst._input.trigger('change'); // fire the change event
