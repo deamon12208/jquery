@@ -72,7 +72,10 @@
 							alert('Context Document Fired');
 						},
 						contextClearField : function(e){
-							console.log(this);
+							$('td').click(function(){
+								$(this).text('');
+								return false;
+							})
 						}
 					}
 				});

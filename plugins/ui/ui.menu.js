@@ -22,7 +22,7 @@
 		}, options);
 		
 		if (typeof options.hovertype == 'undefined') {
-			options.hovertype = hoverType();	// Check if hoverIntent is available
+			options.hovertype = hoverType();	// If not overidden, check to if hoverIntent is available
 		}
 		
 		$(menu).appendTo(el);	// This makes sure our menu is attached in the DOM to the parent to keep things clean
@@ -51,7 +51,7 @@
 		},
 		clickContext : function(el,menu,options) {
 			var self = this;
-			$(el).bind('click', function(){	//FIXME: Something inside the function is breaking IE, and possibly Opera
+			$(el).bind('click', function(){	//FIXME: Something inside the function is breaking IE
 				var x = $(el).position();
 				var y = x.bottom + ( $(el).height() + 1);
 				$(menu).css({position:'absolute', top: y, left: x.left}) // Apply the menu directly below
@@ -84,6 +84,8 @@
 			$(menu).prepend('<span>' + options.contexttitle + '</span>');
 				
 			var renderMenu = function(event, self, menu, options) {
+				var clickedOn = event.target;	// Get the actual element that has been clicked on
+				console.log(clickedOn);
 				$(menu).css({position:'absolute', top: event.clientY, left: event.clientX})
 						.animate(options.show, options.speed);
 					$(menu)[options.hovertype](function(){
@@ -152,22 +154,22 @@
 			}, item);
 			
 			var append = $('<li id="' + item.id + '" class="ui-menu-item"><a href="' + item.href + '" class="' + item.linkclass + '">' + item.linktext + '</a>');
-			$(append)[item.position](this);
+			$(append)[item.position](this); // FIXME: This appends after in IE, but can append after the wrong element
 
 			if(item&&item.buttons){	// Check to see if the menu has a buttons object
       			append.find('a').bind('click', function(){
 	  				if (item.buttons[this.className]) {
         				item.buttons[this.className]();	//If the classname of the link has a matching function, execute
 					}
-        			if(item&&item.hovers){	// Check to see if the menu has a buttons object
-	      				append.find('a')[htype](function(){
-		  					if (item.hovers[this.className]){
-        						item.hovers[this.className]();	//If the classname of the link has a matching function, execute
-        					}
-      						}, function(){});	// Do nothing at the moment
-      				}
-      			});
+				});
 			}
+        	if(item&&item.hovers){	// Check to see if the menu has a buttons object
+	      		append.find('a')[htype](function(){
+		  			if (item.hovers[this.className]){
+        					item.hovers[this.className]();	//If the classname of the link has a matching function, execute
+        			}
+      			}, function(){});	// Do nothing at the moment
+      		}
 		}
 	});
 	
