@@ -46,7 +46,7 @@ img.calendar_trigger {
 * html .calendar_prompt {
 	width: 185px;
 }
-.calendar_control, .calendar_links, .calendar_header, .calendar {
+#calendar_div, .calendar_control, .calendar_links, .calendar_header, .calendar {
 	clear: both;
 	float: left;
 	width: 205px;
