@@ -130,8 +130,8 @@
 	$.ui.intersect = function(oDrag, oDrop, toleranceMode) {
 		if (!oDrop.offset)
 			return false;
-		var x1 = oDrag.rpos[0] - oDrag.options.cursorAt.left, x2 = x1 + oDrag.helper.offsetWidth,
-		    y1 = oDrag.rpos[1] - oDrag.options.cursorAt.top , y2 = y1 + oDrag.helper.offsetHeight;
+		var x1 = oDrag.rpos[0] - oDrag.options.cursorAt.left + oDrag.options.margins.left, x2 = x1 + oDrag.helperSize.width,
+		    y1 = oDrag.rpos[1] - oDrag.options.cursorAt.top + oDrag.options.margins.top, y2 = y1 + oDrag.helperSize.height;
 		var l = oDrop.offset.left, r = l + oDrop.item.element.offsetWidth, 
 		    t = oDrop.offset.top,  b = t + oDrop.item.element.offsetHeight;
 		switch (toleranceMode) {
@@ -140,10 +140,10 @@
 					&& t < y1 && y2 < b);
 				break;
 			case 'intersect':
-				return (   l < x1 + (oDrag.helper.offsetWidth  / 2)        // Right Half
-					&&     x2 - (oDrag.helper.offsetWidth  / 2) < r    // Left Half
-					&& t < y1 + (oDrag.helper.offsetHeight / 2)        // Bottom Half
-					&&     y2 - (oDrag.helper.offsetHeight / 2) < b ); // Top Half
+				return (   l < x1 + (oDrag.helperSize.width  / 2)        // Right Half
+					&&     x2 - (oDrag.helperSize.width  / 2) < r    // Left Half
+					&& t < y1 + (oDrag.helperSize.height / 2)        // Bottom Half
+					&&     y2 - (oDrag.helperSize.height / 2) < b ); // Top Half
 				break;
 			case 'pointer':
 				return (   l < oDrag.rpos[0] && oDrag.rpos[0] < r

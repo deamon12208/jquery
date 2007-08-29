@@ -57,10 +57,11 @@
 			};
 
 			// We have to add margins to our cursorAt
-			if(o.cursorAt.top != 0) o.cursorAt.top += o.margins.top;
+			if(o.cursorAt.top != 0) o.cursorAt.top = o.margins.top;
 			if(o.cursorAt.left != 0) o.cursorAt.left += o.margins.left;
 			if(o.cursorAt.bottom != 0) o.cursorAt.bottom += o.margins.bottom;
 			if(o.cursorAt.right != 0) o.cursorAt.right += o.margins.right;
+			
 			
 			if(o.helper == 'original')
 				o.wasPositioned = $(el).css('position');
@@ -134,9 +135,7 @@
 			var o = this.options; var a = this.element;
 			o.co = $(a).offset({ border: false }); //get the current offset
 				
-			this.helper = typeof o.helper == 'function' ? o.helper.apply(a, [e,this]) : (o.helper == 'clone' ? $(a).clone()[0] : a);
-
-
+			this.helper = typeof o.helper == 'function' ? $(o.helper.apply(a, [e,this]))[0] : (o.helper == 'clone' ? $(a).clone()[0] : a);
 
 			if(o.appendTo == 'parent') { // Let's see if we have a positioned parent
 				var cp = a.parentNode;
@@ -180,6 +179,7 @@
 			this.init = true;	
 
 			if(o._start) o._start.apply(a, [this.helper, this.pos, o.cursorAt, this, e]); // Trigger the start callback
+			this.helperSize = { width: $(this.helper).outerWidth(), height: $(this.helper).outerHeight() }; //Set helper size property
 			return false;
 						
 		},
