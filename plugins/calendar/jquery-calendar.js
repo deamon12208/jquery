@@ -58,8 +58,8 @@ function PopUpCal() {
 	};
 	$.extend(this._defaults, this.regional['']);
 	this._calendarDiv = $('<div id="calendar_div"></div>');
-	$('body').append(this._calendarDiv);
-	$(document).mousedown(this._checkExternalClick);
+	$(document.body).append(this._calendarDiv);
+	$(document.body).mousedown(this._checkExternalClick);
 }
 
 $.extend(PopUpCal.prototype, {
@@ -307,15 +307,16 @@ this).css({opacity:'1.0',cursor:''});
 	/* Construct and display the calendar. */
 	_showCalendar: function(id) {
 		var inst = this._getInst(id);
-		this._popUpShowing = true;
-		this._updateCalendar(inst);
+		popUpCal._updateCalendar(inst);
 		if (!inst._inline) {
 			var speed = inst._get('speed');
 			inst._calendarDiv.show(speed, function() {
+				popUpCal._popUpShowing = true;
 				popUpCal._afterShow(inst);
 			});
 			if (speed == '') {
-				this._afterShow(inst);
+				popUpCal._popUpShowing = true;
+				popUpCal._afterShow(inst);
 			}
 			if (inst._input[0].type != 'hidden') {
 				inst._input[0].focus();
@@ -393,15 +394,13 @@ this).css({opacity:'1.0',cursor:''});
 		if (!popUpCal._curInst) {
 			return;
 		}
-		if (popUpCal._popUpShowing && !(popUpCal._inDialog && $.blockUI)) {
-			var node = event.target;
-			var cal = popUpCal._curInst._calendarDiv[0];
-			while (node && node != cal && node.className != 'calendar_trigger') {
-				node = node.parentNode;
-			}
-			if (!node) {
-				popUpCal.hideCalendar(popUpCal._curInst, '');
-			}
+		var target = $(event.target);
+		if( (target.parents("#calendar_div").length == 0)
+			&& (target.attr('class') != 'calendar_trigger')
+			&& popUpCal._popUpShowing 
+			&& !(popUpCal._inDialog && $.blockUI) )
+		{
+			popUpCal.hideCalendar(popUpCal._curInst, '');
 		}
 	},
 
