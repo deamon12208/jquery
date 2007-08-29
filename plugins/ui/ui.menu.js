@@ -28,18 +28,6 @@
 		$(menu).appendTo(el);	// This makes sure our menu is attached in the DOM to the parent to keep things clean
 		this.styleMenu(menu);	// Pass the menu in to recieve it's makeover
 		this[options.context](el, menu, options);	// Based on contexted selected, attach to menu parent
-		
-    	if(options&&options.buttons)	// Check to see if the menu has a buttons object
-      		$('a',$(menu)).click(function(){
-	  		if (options.buttons[this.className])
-        		options.buttons[this.className]();	//If the classname of the link has a matching function, execute
-      	});
-		if(options&&options.hovers)	// Check to see if the menu has a buttons object
-      		$('a',$(menu))[options.hovertype](function(){
-	  		if (options.hovers[this.className])
-        		options.hovers[this.className]();	//If the classname of the link has a matching function, execute
-      	},
-		function(){});	// Do nothing at the moment
 	}
 	
 	$.extend($.ui.menu.prototype, {
@@ -51,31 +39,35 @@
 		},
 		clickContext : function(el,menu,options) {
 			var self = this;
-			$(el).bind('click', function(){	//FIXME: Something inside the function is breaking IE
+			$(el).bind('click', function(event){	//FIXME: Something inside the function is breaking IE
 				var x = $(el).position();
 				var y = x.bottom + ( $(el).height() + 1);
 				$(menu).css({position:'absolute', top: y, left: x.left}) // Apply the menu directly below
 				.animate(options.show, options.speed);				//TODO: Add vertial menu support
 				$(menu)[options.hovertype](function(){
 					self.showChild(menu,options);	
+					self.execFunction(menu, options, event.target);
 				}, function(){
 					self.hideMenu(menu,options);
 				});
+				
 			});
 			return false;
 		},
 		hoverContext : function(el,menu,options) {
 			var self = this;
-			$(el)[options.hovertype](function(){
+			$(el)[options.hovertype](function(event){
 				var x = $(el).position();
 				var y = x.top + ( $(el).height() + 1);
 				$(menu).css({position:'absolute', top: y, left: x.left})
 					.animate(options.show, options.speed);
 				self.showChild(menu,options);
+				self.execFunction(menu, options, event.target);
 				},
 			function(){
 				self.hideMenu(menu,options);
 			});
+			
 			return false;
 		},
 		context : function (el,menu,options) {	
@@ -84,12 +76,11 @@
 			$(menu).prepend('<span>' + options.contexttitle + '</span>');
 				
 			var renderMenu = function(event, self, menu, options) {
-				var clickedOn = event.target;	// Get the actual element that has been clicked on
-				console.log(clickedOn);
 				$(menu).css({position:'absolute', top: event.clientY, left: event.clientX})
 						.animate(options.show, options.speed);
 					$(menu)[options.hovertype](function(){
 						self.showChild(menu,options);
+						self.execFunction(menu, options, event.target);
 					}, function(){
 						self.hideMenu(menu,options);
 					});
@@ -124,7 +115,25 @@
 		hideMenu : function(menu, options){
 			$(menu).animate(options.hide,options.speed);
 			return false;
-		}		
+		},
+		execFunction : function(menu, options, element){
+			if(options&&options.buttons){	// Check to see if the menu has a buttons object
+      			$('a',$(menu)).click(function(){
+	  				if (options.buttons[this.className]){
+        				options.buttons[this.className](element);	//If the classname of the link has a matching function, execute
+        			}
+      			});
+			}
+		
+			if(options&&options.hovers){	// Check to see if the menu has a buttons object
+	      		$('a',$(menu))[options.hovertype](function(){
+		  			if (options.hovers[this.className]){
+        				options.hovers[this.className](element);	//If the classname of the link has a matching function, execute
+        			}
+      			},
+				function(){});	// Do nothing at the moment
+				}
+			}
 	});
 	
 	
