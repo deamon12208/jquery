@@ -40,7 +40,7 @@ function showFront(event){
 var data, jVer;
 
 function setData(){
-	jVer = widget.preferenceForKey('useVersion') || '1.1.3.1';
+	jVer = widget.preferenceForKey('useVersion') || '1.1.4';
 	data = eval(jQuery.ajax({'type':'GET', 'url':'Parts/jquery/jquery-'+jVer+'.release/docs/data/jquery-docs-json.js', 'dataType': 'json', 'async': false}).responseText);
 	$('#ver').html(jVer);
 	$('#src').attr('href','http://code.jquery.com/jquery-'+jVer+'.js');
