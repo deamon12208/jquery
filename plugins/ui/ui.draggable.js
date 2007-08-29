@@ -24,6 +24,7 @@
 			}
 		},
 		fire: function(oDrag) {
+			
 			var oDrops = $.ui.ddmanager.droppables;
 			var oOvers = $.grep(oDrops, function(oDrop) {
 				if ($.ui.intersect(oDrag, oDrop, oDrop.item.options.tolerance))
@@ -37,6 +38,9 @@
 			});
 		},
 		update: function(oDrag) {
+			
+			if(oDrag.options.refreshPositions) $.ui.ddmanager.prepareOffsets();
+			
 			var oDrops = $.ui.ddmanager.droppables;
 			var oOvers = $.grep(oDrops, function(oDrop) {
 				var isOver = $.ui.intersect(oDrag, oDrop, oDrop.item.options.tolerance)
