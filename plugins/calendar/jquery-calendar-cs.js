@@ -5,6 +5,7 @@ $(document).ready(function(){
 		prevText: '&lt;Døíve', nextText: 'Pozdìji&gt;;', currentText: 'Nyní',
 		dayNames: ['Ne','Po','Út','St','Èt','Pá','So'],
 		monthNames: ['Leden','Únor','Bøezen','Duben','Kvìten','Èerven',
-		'Èervenec','Srpen','Záøí','Øíjen','Listopad','Prosinec']};
+		'Èervenec','Srpen','Záøí','Øíjen','Listopad','Prosinec'],
+		dateFormat: 'DMY.'};
 	popUpCal.setDefaults(popUpCal.regional['cs']);
 });
