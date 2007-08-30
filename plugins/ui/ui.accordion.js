@@ -120,7 +120,7 @@ $.fn.extend({
 		if ( settings.fillSpace ) {
 			var maxHeight = this.parent().height();
 			headers.each(function() {
-				maxHeight -= $(this).height();
+				maxHeight -= $(this).outerHeight();
 			});
 			headers.nextUntil(settings.header).height(maxHeight);
 		} else if ( settings.autoheight ) {
