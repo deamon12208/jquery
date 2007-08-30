@@ -161,11 +161,14 @@ $(document).ready(function(){
 	 */
 	$('div.gallery ul.tabs li a').bind("click", function() {
 		
+		$("div.gallery div.overlay").hide();
+		
 		$(this).parent().parent().find("li").removeClass("active");
 		$(this).parent().addClass("active");
 		
 		$("div.right").hide();
 		$(this.hash).show();
+		
 		return false;
 	
 	});
