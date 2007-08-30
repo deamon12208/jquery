@@ -122,7 +122,10 @@ $.fn.extend({
 			headers.each(function() {
 				maxHeight -= $(this).outerHeight();
 			});
-			headers.nextUntil(settings.header).height(maxHeight);
+			var maxPadding = 0;
+			headers.nextUntil(settings.header).each(function() {
+				maxPadding = Math.max(maxPadding, $(this).innerHeight() - $(this).height());
+			}).height(maxHeight - maxPadding);
 		} else if ( settings.autoheight ) {
 			var maxHeight = 0;
 			headers.nextUntil(settings.header).each(function() {
