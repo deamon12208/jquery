@@ -7,90 +7,63 @@
 <title>jQuery UI Demo Application: Gallery</title>
 
 
+<style type="text/css">
+
+  @import url(../../../../themes/light/light.tree.css);
+
+</style>
+
 <style type="text/css" media="all">
 
 body { background: #999; margin: 0; padding: 0; font-family: Lucida Sans, Arial; font-size: 12px; }
-.container { border: 1px solid #aaa; height: 500px; width: 800px; margin: 20px; position: relative; }
+.container { border: 1px solid #aaa; height: 500px; width: 800px; margin: 0 auto; margin-top: 100px; position: relative; }
 
-.gallery div.top { cursor: move; color: #fff; background: #bbb; height: 14px; padding: 7px; left: 0px; right: 5px; position: absolute; top: 0px; border-bottom: 1px solid #999; }
-.gallery div.left { background: #eee; width: 200px; position: absolute; top: 30px; bottom: 5px;  border-right: 1px solid #999; }
-.gallery div.bottom { background: #ddd; height: 50px; left: 200px; right: 5px; position: absolute; bottom: 5px; border-top: 1px solid #999; }
-.gallery div.right {  background: #fafafa; position: absolute; top: 30px; right: 5px; bottom: 51px; left: 201px; overflow: auto; border: 1px solid #fff; }
+/* Inner container definitions */
+div.gallery div.top { cursor: move; color: #fff; background: #bbb; height: 14px; padding: 7px; left: 0px; right: 5px; position: absolute; top: 0px; border-bottom: 1px solid #999; }
+div.gallery div.left { background: #eee; width: 200px; position: absolute; top: 30px; bottom: 5px;  border-right: 1px solid #999; overflow-y: auto; overflow-x: hidden; }
+div.gallery div.bottom { background: #ddd; height: 50px; left: 200px; right: 5px; position: absolute; bottom: 5px; border-top: 1px solid #999; }
+div.gallery div.right {  background: #fafafa; position: absolute; top: 30px; right: 5px; bottom: 51px; padding-bottom: 20px; left: 201px; overflow: auto; border: 1px solid #fff; }
 
-.gallery ul.menue { list-style-type: none; margin: 0; padding: 0; }
-.gallery ul.menue a.head { display: block; background: #ddd; padding: 5px; color: #fff; border-bottom: 1px solid #ccc; text-decoration: none; }
-.gallery ul.menue a.selected { background: #bbb; }
-.gallery ul.menue a.over { background: #aaa; }
-.gallery ul.menue ul { list-style-type: none; margin: 0; padding: 10px; }
-.gallery ul.menue ul a { text-decoration: none; display: block; position: relative; color: #333; height: 80px; margin-bottom: 10px; }
-.gallery ul.menue ul a:hover { background: #ccc; }
-.gallery ul.menue ul a.over { background: #ccc; }
-.gallery ul.menue ul a span { position: absolute; top: 35px; left: 100px; }
-.gallery ul.menue ul li img.thumb { border: 1px solid #bbb; width: 80px; position: absolute; top: 10px; left: 10px; }
+div.gallery div.overlay { display: none; background: url(images/pixel.png); position: absolute; top: 30px; right: 5px; bottom: 56px; padding-bottom: 20px; left: 201px; overflow: auto; border: 1px solid #fff; z-index: 20; text-align: center; }
+div.gallery div.overlay img { margin-top: 20px; border: 1px solid #666; padding: 5px; background-color: #aaa; }
 
-.gallery div.bottom div.slider {
-	height: 30px;
-	width: 200px;
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	background-image: url(images/slider_bg.png);	
-}
+/* Styling the left hand navigation */
+div.gallery ul.menue { list-style-type: none; margin: 0; padding: 0; }
+div.gallery ul.menue a.head { display: block; background: #ddd; padding: 5px; color: #fff; border-bottom: 1px solid #ccc; text-decoration: none; }
+div.gallery ul.menue a.selected { background: #bbb; }
+div.gallery ul.menue a.over { background: #aaa; }
+div.gallery ul.menue ul.items { list-style-type: none; margin: 0; padding: 10px; }
+div.gallery ul.menue ul.items a { text-decoration: none; display: block; position: relative; color: #333; height: 80px; margin-bottom: 10px; }
+div.gallery ul.menue ul.items a:hover { background: #ccc; }
+div.gallery ul.menue ul.items a.over { background: #ccc; }
+div.gallery ul.menue ul.items a span { position: absolute; top: 35px; left: 100px; }
+div.gallery ul.menue ul.items li img.thumb { border: 1px solid #bbb; width: 80px; position: absolute; top: 10px; left: 10px; }
+div.gallery ul.tree { list-style-type: none; margin: 0; padding-left: 10px; }
 
-.gallery div.bottom div.slider div.handle {
-	position: absolute;
-	top: 2px;
-	left: 0px;
-	height: 26px;
-	width: 5px;
-	background: black;	
-}
+/* The slider control at bottom */
+div.gallery div.bottom div.slider { height: 30px; width: 200px; position: absolute; top: 10px; right: 10px; background-image: url(images/slider_bg.png); }
+div.gallery div.bottom div.slider div.handle { position: absolute; top: 2px; left: 0px; height: 26px; width: 5px; background: black; }
 
-.gallery div.right img.thumb {
-	border: 1px solid #bbb;
-	width: 135px;
-	float: left;
-	position: relative;
-	margin-left: 10px;
-	margin-top: 10px;
-}
-div.gallery div.right img.hover {
-	border: 1px solid #AED5EA;
-	z-index: 5;
-}
+/* The main thumbnails */
+div.gallery div.right img.thumb { border: 1px solid #bbb; width: 135px; float: left; position: relative; margin-left: 10px; margin-top: 10px; }
+div.gallery div.right img.hover { border: 1px solid #AED5EA; z-index: 5;}
 
-div.draggable img {
-	width: 100px;
-	border: 1px solid #AED5EA;
-}
+/* The tabs */
+div.gallery div.top ul.tabs { z-index: 10; position: absolute; bottom: 0px; left: 0px; right: 5px; list-style-type: none; margin: 0; padding: 0; height: 23px; }
+div.gallery div.top ul.tabs li { border-bottom: 1px solid #999; background: #999;  float: right; padding: 3px; margin: 2px; }
+div.gallery div.top ul.tabs li.active { border-bottom: 3px solid #fafafa; background: #fafafa;}
+div.gallery div.top ul.tabs li.active a { color: #333; text-decoration: none; }
+div.gallery div.top ul.tabs li a { color: #fff; text-decoration: none; }
 
-div.gallery div.ui-resizable-se {
-	position: absolute;
-	bottom: 0px;
-	right: 0px;
-	z-index: 10;
-	background: #666;
-	width: 5px;
-	height: 5px;
-}
-div.gallery div.ui-resizable-s {
-	position: absolute;
-	bottom: 0px;
-	right: 5px;
-	left: 0px;
-	z-index: 10;
-	background: #666;
-	height: 5px;
-}
-div.gallery div.ui-resizable-e {
-	position: absolute;
-	bottom: 5px;
-	right: 0px;
-	top: 0px;
-	z-index: 10;
-	background: #666;
-	width: 5px;
-}
+/* Resizing handles */
+div.gallery div.ui-resizable-se { position: absolute; bottom: 0px; right: 0px; z-index: 10; background: #666; width: 5px; height: 5px; cursor: se-resize; }
+div.gallery div.ui-resizable-s { position: absolute; bottom: 0px; right: 5px; left: 0px; z-index: 10; background: #666; height: 5px; cursor: s-resize; }
+div.gallery div.ui-resizable-e { position: absolute; bottom: 5px; right: 0px; top: 0px; z-index: 10; background: #666; width: 5px; cursor: e-resize; }
+.resizeproxy { border: 1px dotted #fff; }
+
+
+/* Drag & Drop */
+div.draggable img { width: 100px; border: 1px solid #AED5EA; }
 
 </style>
 
@@ -105,6 +78,8 @@ div.gallery div.ui-resizable-e {
 
 
 <script type="text/javascript" src="../../ui.accordion.js"></script>
+<script type="text/javascript" src="../../ui.tabs.js"></script>
+<script type="text/javascript" src="../../ui.effects.js"></script>
 <script type="text/javascript" src="../../ui.mouse.js"></script>
 <script type="text/javascript" src="../../ui.resizable.js"></script>
 <script type="text/javascript" src="../../ui.slider.js"></script>
@@ -113,130 +88,10 @@ div.gallery div.ui-resizable-e {
 <script type="text/javascript" src="../../ui.droppable.js"></script>
 <script type="text/javascript" src="../../ui.droppable.ext.js"></script>
 <script type="text/javascript" src="../../ui.magnifier.js"></script>
-
-<script type="text/javascript">
-
-function getStyleRule(rule) {
-	var rs = document.styleSheets[0].cssRules || document.styleSheets[0].rules;
-	for(var i=0;i<rs.length;i++) {
-		if(rs[i].selectorText.toLowerCase() == rule.toLowerCase()) return rs[i];	
-	}
-	return null;
-}
+<script type="text/javascript" src="../../ui.tree.js"></script>
 
 
-$(document).ready(function(){
-
-
-	/*
-	 * Accordion
-	 */
-	$('div.gallery ul.menue').accordion({
-		active: true,
-		header: '.head',
-		alwaysOpen: true,
-		navigation: false,
-		autoheight: true
-	});
-
-	/*
-	 * Resizable
-	 */
-	 $('div.container').resizable();	
-
-	/*
-	 * Draggables
-	 */	
-	$('div.gallery div.right img')
-		.hover(function() {
-			
-			$(this).addClass("hover");
-			
-			var offset = $(this).position();
-			var node = $(this).clone()
-				.addClass("bigthumb")
-				.css({ left: offset.left, top: offset.top, position: "absolute", zIndex: 4 })
-				.appendTo('div.gallery div.right');
-			
-			var animation = { height: this.offsetHeight*1.5, width: this.offsetWidth*1.5 };
-			
-			if((offset.left- (this.offsetWidth*0.5)/2) > 0)
-				animation.left = offset.left - (this.offsetWidth*0.5)/2;
-			
-			if((offset.left- (this.offsetWidth*0.5)/2 + this.offsetWidth*1.5) > this.parentNode.offsetWidth)
-				animation.left = offset.left - (this.offsetWidth*0.5);
-			
-			if((offset.top- (this.offsetHeight*0.5)/2) > 0)
-				animation.top = offset.top - (this.offsetHeight*0.5)/2;
-			
-			if((offset.top- (this.offsetHeight*0.5)/2 + this.offsetHeight*1.5) > this.parentNode.offsetHeight)
-				animation.top = offset.top - (this.offsetHeight*0.5);
-			
-			node.animate(animation, 200);
-			$(this).css("opacity", 0);
-			
-		}, function() {
-			$(this).removeClass("hover");
-			$("img.bigthumb").remove();
-			$(this).css("opacity", 1);
-		})
-		.draggable({
-			appendTo: "body",
-			refreshPositions: true,
-			helper: function() {
-				return $("<div class='draggable'></div>").append($(this).clone().css("opacity", 1))[0];
-			},
-			cursorAt: { top: 10, left: 10 },
-			opacity: 0.8
-		});
-	
-	$('div.container').draggable({ handle: "div.top" });
-		
-		
-	/*
-	 * Droppables
-	 */
-	var timeout = null;
-	$("ul.menue a.head").droppable({
-		accept: ".thumb",
-		tolerance: "pointer",
-		hoverClass: "over",
-		over: function() {
-			var self = this;
-			timeout = setTimeout(function() { $("ul.menue").activate(self); }, 500);
-		},
-		out: function() {
-			if(timeout) clearTimeout(timeout);
-		}
-	});
-	
-	$("ul.menue ul a").droppable({
-		accept: ".thumb",
-		tolerance: "pointer",
-		hoverClass: "over"
-	});
-
-	/*
-	 * Slider
-	 */
-	var slider = new $.ui.slider($('div.gallery div.slider')[0], { maxValue: 240, startValue: 105, slide: function(e,ui) {
-		var rule = getStyleRule(".gallery div.right img.thumb");
-		rule.style.width = (30+ui.value)+"px";
-	}});
-		
-	$("div.gallery div.slider").mousewheel(function(event, delta) {
-		
-		var rule = getStyleRule(".gallery div.right img.thumb");
-
-		if (delta > 0)
-			slider.goto(slider.interaction.curValue+10,null,true);
-		else if (delta < 0)
-			slider.goto(slider.interaction.curValue-10,null,true);
-	});
-
-
-});
-</script>
+<script type="text/javascript" src="behaviour.js"></script>
 </head>
 <body>
 	
@@ -245,34 +100,78 @@ $(document).ready(function(){
 		<div class="ui-resizable-s"></div>
 		<div class="ui-resizable-e"></div>
 		
-		<div class="top">jQuery UI Demo Application: Gallery</div>
+		<div class="top">jQuery UI Demo Application: Gallery
+            <ul class="tabs">
+                <li><a href="#container-2">Winter Trip</a></li>
+                <li class="active"><a href="#container-1">Underwater</a></li>
+            </ul>
+		</div>
 		<div class="left">
 			<ul class="menue">
 				<li>
 					<a class="head" href="javascript:void(0)">Albums</a>
-					<ul>
-						<li><a href="javascript:void(0)"><img class="thumb" src="images/select-1.jpg"><span>Electric</span></a></li>
-						<li><a href="javascript:void(0)"><img class="thumb" src="images/select-2.jpg"><span>Acoustic</span></a></li>
+					<ul class="items">
+						<li><a href="javascript:void($('div.gallery ul.tabs li a:first').click())"><img class="thumb" src="images/select-1.jpg"><span>Winter Trip</span></a></li>
+						<li><a href="javascript:void($('div.gallery ul.tabs li a:last').click())"><img class="thumb" src="images/select-2.jpg"><span>Underwater</span></a></li>
 					</ul> 
 				</li>
 				<li>
 					<a class="head" href="javascript:void(0)">Categories</a>
-					<ul>
+					<ul class="items">
 						<li><a href="javascript:void(0)"><img class="thumb" src="images/select-8.jpg"><span>Family</span></a></li>
 						<li><a href="javascript:void(0)"><img class="thumb" src="images/select-4.jpg"><span>Animals</span></a></li>
 					</ul> 
 				</li>
 				<li>
 					<a class="head" href="javascript:void(0)">Years</a>
-					<ul>
+					<ul class="items">
 						<li><a href="javascript:void(0)"><img class="thumb" src="images/select-9.jpg"><span>2007</span></a></li>
 						<li><a href="javascript:void(0)"><img class="thumb" src="images/select-5.jpg"><span>2006</span></a></li>
 					</ul> 
 				</li>
+				<li>
+					<a class="head" href="javascript:void(0)">Disk</a>
+
+					<div style='position: relative; left: 10px; top: 10px;'>
+					<ul class="tree light">
+					  <li>Images
+					    <ul>
+					      <li>Mixed</li>
+					      <li>Anime
+					        <ul>
+					          <li>Fruits Basket</li>
+					          <li>FLCL</li>
+					        </ul>
+					      </li>
+					      <li>Flowers</li>
+					    </ul>
+					  </li>
+					  <li>Fotos
+					    <ul>
+					      <li>Mixed</li>
+					      <li>People</li>
+					      <li>Nature</li>
+					      <li>My Family</li>
+					    </ul>
+					  </li>
+					  <li>Temp
+					    <ul>
+					      <li>Something</li>
+					      <li>Something else</li>
+					    </ul>
+					  </li>
+					</ul>
+					</div>
+
+				</li>
 			</ul>
 		</div>
 		
-		<div class="right">
+		<div class="overlay">
+			<img src="images/select-1.jpg" />
+		</div>
+		
+		<div class="right" id="container-1">
 			<img class="thumb" src="images/select-1.jpg">
 			<img class="thumb" src="images/select-2.jpg">
 			<img class="thumb" src="images/select-3.jpg">
@@ -284,7 +183,14 @@ $(document).ready(function(){
 			<img class="thumb" src="images/select-9.jpg">
 		</div>
 		
+		<div class="right" id="container-2" style="display:none;">
+			<img class="thumb" src="images/select-4.jpg">
+			<img class="thumb" src="images/select-3.jpg">
+			<img class="thumb" src="images/select-5.jpg">
+		</div>
+		
 		<div class="bottom">
+
 			<div class="slider">
 				<div class="handle ui-slider-handle">
 			</div>

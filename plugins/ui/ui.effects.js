@@ -15,10 +15,10 @@ $.ui.effects['transfer'] = function(o) {
 	
 	if(dir == 'to') {
 		var opos = $(this).offset({ border: false, margin: false });
-		var npos = target.offset({ border: false, margin: false });
+		var npos = target.offset({ border: false, margin: true });
 	} else {
 		var npos = $(this).offset({ border: false, margin: false });
-		var opos = target.offset({ border: false, margin: false });
+		var opos = target.offset({ border: false, margin: true });
 	}
 	
 	var el = $(this).clone().appendTo('body').css({
@@ -40,5 +40,7 @@ $.ui.effects['transfer'] = function(o) {
 			$(this).remove();
 			if(o.onFinish) o.onFinish.call(self);
 	});
+
+	if(o.hideOriginals) $(this).css("visibility", "hidden");
 	
 }
