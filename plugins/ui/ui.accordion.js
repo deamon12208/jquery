@@ -117,7 +117,13 @@ $.fn.extend({
 			active = findActive(settings.active),
 			running = 0;
 
-		if ( settings.autoheight ) {
+		if ( settings.fillSpace ) {
+			var maxHeight = this.parent().height();
+			headers.each(function() {
+				maxHeight -= $(this).height();
+			});
+			headers.nextUntil(settings.header).height(maxHeight);
+		} else if ( settings.autoheight ) {
 			var maxHeight = 0;
 			headers.nextUntil(settings.header).each(function() {
 				maxHeight = Math.max(maxHeight, $(this).height());

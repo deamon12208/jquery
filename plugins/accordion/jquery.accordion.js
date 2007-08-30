@@ -112,6 +112,7 @@
  * @option String event The event on which to trigger the accordion, eg. "mouseover". Default: "click"
  * @option Boolean navigation If set, looks for the anchor that matches location.href and activates it. Great for href-based pseudo-state-saving. Default: false
  * @option Boolean autoheight If set, the highest content part is used as height reference for all other parts. Provides more consistent animations. Default: false
+ * @option Boolean fillSpace If set, expands the accordion to fill the available space in the parent element. Can't be comined with autoheight. Default: false
  *
  * @type jQuery
  * @see activate(Number)
@@ -244,7 +245,14 @@ $.fn.extend({
 			active = findActive(settings.active),
 			running = 0;
 
-		if ( settings.autoheight ) {
+
+		if ( settings.fillSpace ) {
+			var maxHeight = this.parent().height();
+			headers.each(function() {
+				maxHeight -= $(this).height();
+			});
+			headers.nextUntil(settings.header).height(maxHeight);
+		} else if ( settings.autoheight ) {
 			var maxHeight = 0;
 			headers.nextUntil(settings.header).each(function() {
 				maxHeight = Math.max(maxHeight, $(this).height());

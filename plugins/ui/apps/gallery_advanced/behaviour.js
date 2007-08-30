@@ -30,11 +30,8 @@ $(document).ready(function(){
 	 * Accordion
 	 */
 	$('div.gallery ul.menue').accordion({
-		active: true,
 		header: '.head',
-		alwaysOpen: true,
-		navigation: false,
-		autoheight: true
+		fillSpace: true
 	});
 
 	/*
