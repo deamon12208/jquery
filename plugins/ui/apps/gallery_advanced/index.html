@@ -25,7 +25,8 @@ div.gallery div.bottom { background: #ddd; height: 50px; left: 200px; right: 5px
 div.gallery div.right {  background: #fafafa; position: absolute; top: 30px; right: 5px; bottom: 51px; padding-bottom: 20px; left: 201px; overflow: auto; border: 1px solid #fff; }
 
 div.gallery div.overlay { display: none; background: url(images/pixel.png); position: absolute; top: 30px; right: 5px; bottom: 56px; padding-bottom: 20px; left: 201px; overflow: auto; border: 1px solid #fff; z-index: 20; text-align: center; }
-div.gallery div.overlay img { margin-top: 20px; border: 1px solid #666; padding: 5px; background-color: #aaa; }
+div.gallery div.overlay img { cursor: pointer; cursor: hand; border: 1px solid #666; padding: 5px; background-color: #aaa; position: absolute; }
+div.gallery div.overlay img:hover { border: 1px solid #bbb; background-color: #eee; }
 
 /* Styling the left hand navigation */
 div.gallery ul.menue { list-style-type: none; margin: 0; padding: 0; }
@@ -168,7 +169,6 @@ div.draggable img { width: 100px; border: 1px solid #AED5EA; }
 		</div>
 		
 		<div class="overlay">
-			<img src="images/select-1.jpg" />
 		</div>
 		
 		<div class="right" id="container-1">
