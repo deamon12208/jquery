@@ -341,13 +341,37 @@ $.extend(PopUpCal.prototype, {
 		// re-position on screen if necessary
 		var calDiv = inst._calendarDiv[0];
 		var pos = popUpCal._findPos(inst._input[0]);
-		if ((calDiv.offsetLeft + calDiv.offsetWidth) >
-				(document.body.clientWidth + document.body.scrollLeft)) {
-			inst._calendarDiv.css('left', (pos[0] + inst._input[0].offsetWidth - calDiv.offsetWidth) + 'px');
+		// Get browser width and X value (IE6+, FF, Safari, Opera)
+		if( typeof( window.innerWidth ) == 'number' ) {
+			browserWidth = window.innerWidth;
+		} else {
+			browserWidth = document.documentElement.clientWidth;
 		}
-		if ((calDiv.offsetTop + calDiv.offsetHeight) >
-				(document.body.clientHeight + document.body.scrollTop)) {
-			inst._calendarDiv.css('top', (pos[1] - calDiv.offsetHeight) + 'px');
+		if ( document.documentElement && (document.documentElement.scrollLeft)) {
+			browserX = document.documentElement.scrollLeft;	
+		} else {
+			browserX = document.body.scrollLeft;
+		}
+		// Reposition calendar if outside the browser window.
+		if ( (calDiv.offsetLeft + calDiv.offsetWidth) > 
+				(browserWidth + browserX) ) {
+			inst._calendarDiv.css('left', (pos[0] + inst._input[0].offsetWidth - calDiv.offsetWidth) + 'px');		
+		}
+		// Get browser height and Y value (IE6+, FF, Safari, Opera)
+		if( typeof( window.innerHeight ) == 'number' ) {
+			browserHeight = window.innerHeight;
+		} else {
+			browserHeight = document.documentElement.clientHeight;
+		}
+		if ( document.documentElement && (document.documentElement.scrollTop)) {
+			browserTopY = document.documentElement.scrollTop;
+		} else {
+			browserTopY = document.body.scrollTop;
+		}
+		// Reposition calendar if outside the browser window.
+		if ( (calDiv.offsetTop + calDiv.offsetHeight) >
+				(browserTopY + browserHeight) ) {
+			inst._calendarDiv.css('top', (pos[1] - calDiv.offsetHeight) + 'px');		
 		}
 	},
 
