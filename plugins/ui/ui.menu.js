@@ -141,7 +141,7 @@
 	
 	
 	$.extend($.fn, {
-		menuItemDisable : function (options) {
+		menuItemDisable : function (options, callback) {
 			var options = $.extend({
 				disableCss: {color: "#aaa", background: "transparent"}
 			},options);
@@ -151,15 +151,17 @@
 				$('a', this).hide();
 				$(this).append('<span class="ui-menu-item-disabled">' + t + '</span>');
 				$('span', this).css(options.disableCss);
+				return callback;
 			});
 		},
-		menuItemEnable : function () {
+		menuItemEnable : function (callback) {
 			return this.each(function(){
 				$('span', this).remove();
 				$('a', this).show();
+				return callback;
 			});
 		},
-		menuAddItem : function (item) {
+		menuAddItem : function (item, callback) {
 			
 			var item = $.extend({
 				position: 'insertAfter'
@@ -182,6 +184,8 @@
         			}
       			}, function(){});	// Do nothing at the moment
       		}
+			
+			return callback;
 		}
 	});
 	

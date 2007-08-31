@@ -47,8 +47,7 @@
 							return false;
 						},
 						fileSave : function(){
-							alert('File Saved');
-							$('#filemenu-save').menuItemDisable();
+							$('#filemenu-save').menuItemDisable(null, testCallback());
 							return false;
 						},
 						fileNewDocument : function(){
@@ -92,16 +91,19 @@
 				});
 				
 				$('.addMenuItem').bind('click', function(){
-					$('#editmenu-paste').menuAddItem({id: 'editmenu-pastespecial', href: '#', linkclass: 'editPasteSpecial', linktext: 'Paste Special', buttons:{editPasteSpecial: function(){ alert('Paste Special'); } } });
+					$('#editmenu-paste').menuAddItem({id: 'editmenu-pastespecial', href: '#', linkclass: 'editPasteSpecial', linktext: 'Paste Special', buttons:{editPasteSpecial: function(){ alert('Paste Special'); } } }, testCallback());
 					return false;
 				})
 				
 				$('.enableSave').bind('click', function(){
-					$('#filemenu-save').menuItemEnable();
+					$('#filemenu-save').menuItemEnable(testCallback());
 					return false;
 				})
 			});
 			
+			function testCallback(){
+				alert ('Callback Fired');
+			}
 			
 		</script>
 		<h2>Toolbar Test</h2>
