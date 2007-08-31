@@ -90,7 +90,8 @@
 				helper: self.helper,
 				position: { left: self.pos[0], top: self.pos[1] },
 				offset: self.options.cursorAt,
-				draggable: self	
+				draggable: self,
+				options: self.options	
 			}			
 		},
 		start: function(that, e) {
@@ -99,7 +100,7 @@
 			$.ui.ddmanager.current = this;
 			
 			$.ui.plugin.call('start', that, this);
-			$.ui.trigger('start', this, e, that.prepareCallbackObj(this));
+			$(this.element).triggerHandler("dragstart", [e, that.prepareCallbackObj(this)], o.start);
 			
 			if (this.slowMode && $.ui.droppable && !o.dropBehaviour)
 				$.ui.ddmanager.prepareOffsets(this);
@@ -112,7 +113,7 @@
 			var o = this.options;
 			
 			$.ui.plugin.call('stop', that, this);
-			$.ui.trigger('stop', this, e, that.prepareCallbackObj(this));
+			$(this.element).triggerHandler("dragstop", [e, that.prepareCallbackObj(this)], o.stop);
 
 			if (this.slowMode && $.ui.droppable && !o.dropBehaviour) //If cursorAt is within the helper, we must use our drop manager
 				$.ui.ddmanager.fire(this);
@@ -132,7 +133,7 @@
 			this.pos = [this.pos[0]-o.cursorAt.left, this.pos[1]-o.cursorAt.top];
 
 			$.ui.plugin.call('drag', that, this);
-			var nv = $.ui.trigger('drag', this, e, that.prepareCallbackObj(this));
+			var nv = $(this.element).triggerHandler("drag", [e, that.prepareCallbackObj(this)], o.drag);
 
 			var nl = (nv && nv.left) ? nv.left : this.pos[0];
 			var nt = (nv && nv.top) ? nv.top : this.pos[1];

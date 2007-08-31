@@ -18,13 +18,6 @@
 					if (b.options[c[i][0]]) c[i][1].call(b, a, b.options);
 				}	
 			}	
-		},
-		trigger: function(name, s, e, p) {
-			var o = s.options;
-			if(!o[name]) return false;
-			
-			var a = { options: s.options }; $.extend(a, p);
-			return o[name].apply(s.element, [e, a]);
 		}
 	});
 	

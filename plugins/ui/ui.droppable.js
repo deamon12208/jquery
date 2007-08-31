@@ -75,7 +75,7 @@
 			var o = this.options;
 			if (o.accept(c.element)) {
 				$.ui.plugin.call('over', this);
-				$.ui.trigger('over', this, e, this.prepareCallbackObj(c));
+				$(this.element).triggerHandler("dropover", [e, this.prepareCallbackObj(c)], o.over);
 			}
 			
 		},
@@ -87,7 +87,7 @@
 			var o = this.options;
 			if (o.accept(c.element)) {
 				$.ui.plugin.call('out', this);
-				$.ui.trigger('out', this, e, this.prepareCallbackObj(c));
+				$(this.element).triggerHandler("dropout", [e, this.prepareCallbackObj(c)], o.out);
 			}
 			
 		},
@@ -101,16 +101,16 @@
 				if(o.greedy && !c.slowMode) {
 					if(c.currentTarget == this.element) {
 						$.ui.plugin.call('drop', this);
-						$.ui.trigger('drop', this, e, {
+						$(this.element).triggerHandler("drop", [e, {
 							draggable: c,
 							droppable: this,
 							element: c.element,
 							helper: c.helper	
-						});
+						}], o.drop);
 					}
 				} else {
 					$.ui.plugin.call('drop', this);
-					$.ui.trigger('drop', this, e, this.prepareCallbackObj(c));	
+					$(this.element).triggerHandler("drop", [e, this.prepareCallbackObj(c)], o.drop);
 				}
 			}
 			
@@ -118,12 +118,12 @@
 		activate: function(e) {
 			var c = $.ui.ddmanager.current;
 			$.ui.plugin.call('activate', this);
-			if(c) $.ui.trigger('activate', this, e, this.prepareCallbackObj(c));	
+			if(c) $(this.element).triggerHandler("dropactivate", [e, this.prepareCallbackObj(c)], this.options.activate);	
 		},
 		deactivate: function(e) {
 			var c = $.ui.ddmanager.current;
 			$.ui.plugin.call('deactivate', this);
-			if(c) $.ui.trigger('deactivate', this, e, this.prepareCallbackObj(c));
+			if(c) $(this.element).triggerHandler("dropdeactivate", [e, this.prepareCallbackObj(c)], this.options.deactivate);
 		}
 	});
 	

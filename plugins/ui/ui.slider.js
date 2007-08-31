@@ -164,13 +164,15 @@
 			
 			this.interaction.pickValue = this.interaction.curValue;
 			this.drag.apply(this.interaction, [this, e, [pointer[0]-offset.left-this.handle[0].offsetWidth/2,pointer[1]-offset.top-this.handle[0].offsetHeight/2]]);
-			if(this.interaction.pickValue != this.interaction.curValue) $.ui.trigger('change', this.interaction, e, this.prepareCallbackObj(this.interaction));
+			
+			if(this.interaction.pickValue != this.interaction.curValue)
+				$(this.element).triggerHandler("slidechange", [e, this.prepareCallbackObj(this.interaction)], o.change);
 				
 		},
 		start: function(that, e) {
 			
 			var o = this.options;
-			$.ui.trigger('start', this, e, that.prepareCallbackObj(this));
+			$(that.element).triggerHandler("slidestart", [e, that.prepareCallbackObj(this)], o.start);
 			this.pickValue = this.curValue;
 			
 			return false;
@@ -179,7 +181,7 @@
 		stop: function(that, e) {			
 			
 			var o = this.options;
-			$.ui.trigger('stop', this, e, that.prepareCallbackObj(this));
+			$(that.element).triggerHandler("slidestop", [e, that.prepareCallbackObj(this)], o.stop);
 			if(this.pickValue != this.curValue) $.ui.trigger('change', this, e, that.prepareCallbackObj(this));
 
 			return false;
@@ -215,8 +217,7 @@
 			}
 			
 			$(this.element).css(prop, m+'px');
-			
-			$.ui.trigger('slide', this, e, that.prepareCallbackObj(this,m));
+			$(that.element).triggerHandler("slide", [e, that.prepareCallbackObj(this,m)], o.slide);
 			return false;
 			
 		},
@@ -246,8 +247,12 @@
 			}
 
 			$(this.interaction.element).css(prop, m+'px');
-			if(!changeslide && this.interaction.pickValue != this.interaction.curValue && !p) $.ui.trigger('change', this.interaction, null, this.prepareCallbackObj(this.interaction));
-			if(changeslide) $.ui.trigger('slide', this.interaction, null, this.prepareCallbackObj(this.interaction));
+			
+			if(!changeslide && this.interaction.pickValue != this.interaction.curValue && !p)
+				$(this.element).triggerHandler("slidechange", [e, this.prepareCallbackObj(this.interaction)], o.change);
+			
+			if(changeslide)
+				$(this.element).triggerHandler("slide", [e, this.prepareCallbackObj(this.interaction)], o.change);
 
 		}
 	});

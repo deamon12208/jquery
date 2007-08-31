@@ -135,7 +135,8 @@
 			return {
 				helper: self.helper,
 				resizable: self,
-				axis: self.options.axis
+				axis: self.options.axis,
+				options: self.options
 			}			
 		},
 		destroy: function() {
@@ -157,7 +158,7 @@
 			this.options.modifyThese.push([$(this.helper),0,0]);
 			
 			$.ui.plugin.call('start', that, this);
-			$.ui.trigger('start', this, e, that.prepareCallbackObj(this));			
+			$(that.element).triggerHandler("resizestart", [e, that.prepareCallbackObj(this)], this.options.start);			
 			return false;
 		},
 		stop: function(that, e) {			
@@ -165,7 +166,7 @@
 			var o = this.options;
 
 			$.ui.plugin.call('stop', that, this);
-			$.ui.trigger('stop', this, e, that.prepareCallbackObj(this));
+			$(that.element).triggerHandler("resizestop", [e, that.prepareCallbackObj(this)], this.options.stop);	
 
 			if(o.proxy) {
 				$(this.element).css({
@@ -253,7 +254,7 @@
 			if(o.maxHeight) nh = nh >= o.maxHeight ? o.maxHeight : nh;
 
 			$.ui.plugin.call('resize', that, this);
-			var modifier = $.ui.trigger('resize', this, e, that.prepareCallbackObj(this));
+			var modifier = $(that.element).triggerHandler("resize", [e, that.prepareCallbackObj(this)], o.resize);
 			if(!modifier) modifier = {};
 			
 			for(var i in this.options.modifyThese) {

@@ -47,6 +47,7 @@
 		});
 		
 		if(o.click) { //If onclick callback is available
+
 			$(el).bind('click', function(e) {
 				o.click.apply(this, [e, { options: self.options, current: self.current[0], currentOffset: self.current[1] }]);	
 			})

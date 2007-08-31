@@ -81,7 +81,8 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 				position: { left: self.pos[0], top: self.pos[1] },
 				offset: self.options.cursorAt,
 				draggable: self,
-				current: that
+				current: that,
+				options: self.options
 			}			
 		},
 		refresh: function() {
@@ -145,7 +146,7 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			that.firstSibling = $(this.element).prev()[0];
 			
 			if(o.start) o.start.apply(this.element, [this.helper, this.pos, o.cursorAt, this]);
-			$.ui.trigger('start', this, e, that.prepareCallbackObj(this));
+			$(this.element).triggerHandler("sortstart", [e, that.prepareCallbackObj(this)], o.start);
 			$(this.element).css('visibility', 'hidden');
 			return false;
 		},
@@ -165,7 +166,7 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 				
 			//Let's see if the position in DOM has changed
 			if($(this.element).prev()[0] != that.firstSibling) {
-				$.ui.trigger('update', this, e, that.prepareCallbackObj(this, that));
+				$(this.element).triggerHandler("sortupdate", [e, that.prepareCallbackObj(this, that)], o.update);
 			}
 			//clear previous cache TODO: clear al active sortables
 			that.cachedItemsPos = null;
@@ -180,7 +181,7 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			this.pos = [this.pos[0]-o.cursorAt.left, this.pos[1]-o.cursorAt.top];
 			$.ui.plugin.call('drag', this);
 
-			var nv = $.ui.trigger('drag', this, e, that.prepareCallbackObj(this));
+			var nv =  $(this.element).triggerHandler("sort", [e, that.prepareCallbackObj(this)], o.sort);
 			var nl = (nv && nv.left) ? nv.left :  this.pos[0];
 			var nt = (nv && nv.top) ? nv.top :  this.pos[1];
 			//overlaped element
@@ -256,7 +257,7 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			
 			//Let's see if the position in DOM has changed
 			if($(this.element).prev()[0] != that.lastSibling) {
-				$.ui.trigger('change', this, e, that.prepareCallbackObj(this, that));
+				$(this.element).triggerHandler("sortchange", [e, that.prepareCallbackObj(this, that)], this.options.change);
 				that.lastSibling = $(this.element).prev()[0];	
 			}
 
