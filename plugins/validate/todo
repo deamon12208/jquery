@@ -1,30 +1,5 @@
-important: support array elements!
 
-- example showing how to validate new rows added to a table
-- custom validation: totals for a number of fields may not exceed a certain value
-
-I don’t know if it’s already a known bug, but the remote-check in this demo
-http://jquery.bassistance.de/ajax-validation/demo-test/milk/
-isnt working correctly:
-If you input a username that begings with a invalid one (like Peterr) and the onkey-check is active,
- you just need the right timing to display the error-message for a valid username: “Peterr is already in use”.
-If you now move the cursor or blur the field it becomes valid again.
- -> The request for the invalid value is sent, meanwhile the user enters another character and the message for that
-    field is changed for that value
-    -> The request returns and displays that overwritten message - WRONG
-    
-    -> Adding a sleep(1) to users.php helps a lot to reproduce the problem
-    -> Moving the message-creation into the AJAX callback show the correct message, but displays it also for valid values
-       -> We need the AjaxQueue plugin to cancel previous requests and display only the result for the most recent one
-
-You can reproduce the bug as follows:
-enter something in the username field
-defocus it
-delete it (so now the onkey-check is active)
-enter “Pete” and then really quickly “rr”, you’ll see that the error message keeps displaying “Peterr is already in use”. Now move the cursor or defocus the field: Peterr is now valid ;-) 
-
-
-I gave the ajax validation on http://jquery.bassistance.de/ajax-validation/demo-test/milk/ a testdrive but somehow it doesn’t work smoothly in IE6 when the required is set dependent on wether another field is filled. The form is submitted in IE anyway. In firefox it works fine. If I change the required to true than it works fine in both browsers.
+I gave the ajax validation on http://jquery.bassistance.de/ajax-validation/demo-test/milk/ a testdrive but somehow it doesn’t work smoothly in IE6 when the required is set dependent on weather another field is filled. The form is submitted in IE anyway. In firefox it works fine. If I change the required to true than it works fine in both browsers.
 
 - show number of errors and update on blur/keyup: ugly ugly ugly ->
   * can't use invalidHander, only called on submit

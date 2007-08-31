@@ -72,18 +72,18 @@ $(document).ready(function() {
 		<fieldset>
 			<legend>Spam</legend>
 			<label for="spam_email">
-				<input type="checkbox" id="spam_email" value="email" name="spam" validate="required:true, minLength:2" />
+				<input type="checkbox" id="spam_email" value="email" name="spam[]" validate="required:true, minLength:2" />
 				Spam via E-Mail
 			</label>
 			<label for="spam_phone">
-				<input type="checkbox" id="spam_phone" value="phone" name="spam" />
+				<input type="checkbox" id="spam_phone" value="phone" name="spam[]" />
 				Spam via Phone
 			</label>
 			<label for="spam_mail">
-				<input type="checkbox" id="spam_mail" value="mail" name="spam" />
+				<input type="checkbox" id="spam_mail" value="mail" name="spam[]" />
 				Spam via Mail
 			</label>
-			<label for="spam" class="error">Please select at least two types of spam.</label>
+			<label for="spam[]" class="error">Please select at least two types of spam.</label>
 		</fieldset>
 		<p>
 			<input class="submit" type="submit" value="Submit"/>

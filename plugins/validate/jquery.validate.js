@@ -507,8 +507,8 @@ jQuery.extend(jQuery.validator, {
 		 */
 		form: function() {
 			this.prepareForm();
-			for ( var i = 0, element; element = this.elements[i]; i++ ) {
-				this.check( element );
+			for ( var i = 0; this.elements[i]; i++ ) {
+				this.check( this.elements[i] );
 			}
 			jQuery.extend(this.submitted, this.errorMap);
 			this.invalid = jQuery.extend({}, this.errorMap);
@@ -720,7 +720,8 @@ jQuery.extend(jQuery.validator, {
 			jQuery( element ).removeClass( this.settings.errorClass );
 			//var rules = this.rules( element );
 			var rules = this.rulesCache[ element.name ];
-			for( var i = 0, rule; rule = rules[i++]; ) {
+			for( var i = 0; rules[i]; i++) {
+				var rule = rules[i];
 				try {
 					var result = jQuery.validator.methods[rule.method].call( this, jQuery.trim(element.value), element, rule.parameters );
 					if( result === -1 )
@@ -775,14 +776,15 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		defaultShowErrors: function() {
-			for ( var i = 0, error; error = this.errorList[i]; i++ ) {
+			for ( var i = 0; this.errorList[i]; i++ ) {
+				var error = this.errorList[i];
 				this.showLabel( error.element, error.message );
 			}
 			if( this.errorList.length ) {
 				this.toShow.push( this.containers );
 			}
-			for ( var i = 0, element; element = this.successList[i]; i++ ) {
-				this.showLabel( element );
+			for ( var i = 0; this.successList[i]; i++ ) {
+				this.showLabel( this.successList[i] );
 			}
 			this.toHide = this.toHide.not( this.toShow );
 			this.hideErrors();
@@ -801,7 +803,7 @@ jQuery.extend(jQuery.validator, {
 				}
 			} else {
 				// create label
-				label = jQuery("<" + this.settings.errorElement + ">")
+				label = jQuery("<" + this.settings.errorElement + "></" + this.settings.errorElement + ">")
 					.attr({"for":  this.idOrName(element), generated: true})
 					.addClass(this.settings.errorClass)
 					.html(message || "");
@@ -1030,14 +1032,21 @@ jQuery.extend(jQuery.validator, {
 				cached.old = value;
 				var validator = this;
 				this.startRequest();
-				jQuery.getJSON(param, {value: value}, function(response) {
-					if ( !response ) {
-						var errors = {};
-						errors[element.name] =  validator.defaultMessage( element, "remote" );
-						validator.showErrors(errors);
+				jQuery.ajax({
+					url: param,
+					mode: "abort",
+					port: "validate",
+					dataType: "json",
+					data: {value: value},
+					success: function(response) {
+						if ( !response ) {
+							var errors = {};
+							errors[element.name] =  validator.defaultMessage( element, "remote" );
+							validator.showErrors(errors);
+						}
+						cached.valid = response;
+						validator.stopRequest(response);
 					}
-					cached.valid = response;
-					this.stopRequest(response);
 				});
 				return true;
 			}

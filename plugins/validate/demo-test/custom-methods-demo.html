@@ -24,8 +24,6 @@
 		return value == param;
 	};
 	
-	$.meta.setType("attr", "test");
-
 	$().ready(function() {
 		var validator = $("#texttests").validate({
 			debug: true,
@@ -39,15 +37,21 @@
 			},
 			success: function(label) {
 				label.text("ok!").addClass("success");
+			},
+			rules: {
+				number: {
+					required:true,
+					minLength:3,
+					maxLength:15,
+					number:true	
+				},
+				secret: "buga",
+				math: {
+					equal: 11	
+				}
 			}
 		});
 		
-		var i = 0;
-		$("#add").click(function() {
-			$("<tr><td><label>More...</label></td><td><input test='required:true' name='list" + i++ + "' /></td><td>&nbsp;</td></tr>")
-				.appendTo("#texttests table tbody");
-			validator.refresh();
-		});
 	});
 </script>
 
@@ -82,19 +86,18 @@ em.error { color: black; }
 			<tr>
 				<td><label for="number">textarea</label></td>
 				<td><input id="number" name="number"
-					title="Please enter a number with at least 3 and max 15 characters!"
-					test="required:true, minLength:3, maxLength:15, number:true" />
+					title="Please enter a number with at least 3 and max 15 characters!" />
 				</td>
 				<td></td>
 			</tr>
 			<tr>
 				<td><label for="secret">Secret</label></td>
-				<td><input test="buga:true" name="secret" id="secret" /></td>
+				<td><input name="secret" id="secret" /></td>
 				<td></td>
 			</tr>
 			<tr>
 				<td><label for="math">7 + 4 = </label></td>
-				<td><input id="math" name="math" title="Please enter the correct result!" test="equal:11" /></td>
+				<td><input id="math" name="math" title="Please enter the correct result!" /></td>
 				<td></td>
 			</tr>
 		</table>
@@ -102,9 +105,7 @@ em.error { color: black; }
 	</fieldset>
 </form>
 
-<button id="add">Add another input to the form</button>
-
-<h1 id="warning">Your form contains tons of errors! Please try again.</h1>
+<h2 id="warning">Your form contains tons of errors! Please try again.</h2>
 
 <p><a href="index.html">Back to main page</a></p>
 
