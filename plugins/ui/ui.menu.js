@@ -22,7 +22,7 @@
 			contexttitle: "Context Menu"
 		}, options);
 		
-		var callback = $.extend({
+		$.extend(options,{
 			_menuItemEnable: function(h, p, c, t, e) {
 				self.menuItemEnable.apply(t, [self, e]); // Trigger the menuItemEnable callback				
 			},
