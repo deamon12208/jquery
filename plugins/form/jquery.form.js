@@ -29,6 +29,8 @@
  *  type:     The method in which the form data should be submitted, 'GET' or 'POST'.
  *            default value: value of form's 'method' attribute (or 'GET' if none found)
  *
+ *  data:     Additional data to add to the request, specified as key/value pairs (see $.ajax).
+ *
  *  beforeSubmit:  Callback method to be invoked before the form is submitted.
  *            default value: null
  *
@@ -189,6 +191,10 @@ $.fn.ajaxSubmit = function(options) {
     if (veto.veto) return this;
 
     var a = this.formToArray(options.semantic);
+	if (options.data) {
+	    for (var n in options.data)
+	        a.push( { name: n, value: options.data[n] } );
+	}
 
     // give pre-submit callback an opportunity to abort the submit
     if (options.beforeSubmit && options.beforeSubmit(a, this, options) === false) return this;
