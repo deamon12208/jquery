@@ -12,7 +12,7 @@
 		});
 	}	
 	
-	$.ui.menu = function(el, menu, options, callback) {
+	$.ui.menu = function(el, menu, options) {
 		
 		var options = $.extend({
 			context: 'clickContext',	// Context to attach to menu
@@ -67,6 +67,18 @@
 	}
 	
 	$.extend($.ui.menu.prototype, {
+		plugins: {},
+		currentTarget: null,
+		lastTarget: null,
+		prepareCallbackObj: function(self) {
+			return {
+				helper: self.helper,
+				position: { left: self.pos[0], top: self.pos[1] },
+				offset: self.options.cursorAt,
+				draggable: self,
+				options: self.options	
+			}			
+		},
 		styleMenu : function(menu){
 			$(menu).addClass('ui-menu-items').children('li').addClass('ui-menu-item');	//Apply first level and child items
 			var parents = $('ul',menu).addClass('ui-menu-items').parent('li').addClass('ui-menu-item-parent')	// Apply sublevels
