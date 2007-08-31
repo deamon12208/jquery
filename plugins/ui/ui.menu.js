@@ -141,7 +141,7 @@
 	
 	
 	$.extend($.fn, {
-		menuItemDisable : function (options, callback) {
+		menuDisableItem : function (options, callback) {
 			var options = $.extend({
 				disableCss: {color: "#aaa", background: "transparent"}
 			},options);
@@ -154,7 +154,7 @@
 				return callback;
 			});
 		},
-		menuItemEnable : function (callback) {
+		menuEnableItem : function (callback) {
 			return this.each(function(){
 				$('span', this).remove();
 				$('a', this).show();

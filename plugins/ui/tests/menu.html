@@ -47,7 +47,7 @@
 							return false;
 						},
 						fileSave : function(){
-							$('#filemenu-save').menuItemDisable(null, testCallback());
+							$('#filemenu-save').menuDisableItem(null, testCallback());
 							return false;
 						},
 						fileNewDocument : function(){
@@ -96,7 +96,7 @@
 				})
 				
 				$('.enableSave').bind('click', function(){
-					$('#filemenu-save').menuItemEnable(testCallback());
+					$('#filemenu-save').menuEnableItem(testCallback());
 					return false;
 				})
 			});
