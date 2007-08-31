@@ -144,8 +144,7 @@
 						if (a && b) {
 							if (b > a)
 								{ var swp = a; a = b; b = swp; }
-							nodes.each
-							console.log(a, b);
+							//TODO: Shift-Select
 						}
 						if (parent(selectStartNode)[0] == parent(target)[0]) {
 							//target.addClass('ui-tree-node-selected');
