@@ -29,6 +29,16 @@
 		var ALT = false;
 		var CUT = false;
 		var shiftSelPos = 0;
+		var dragging = false;
+		var dragNode = $([]);
+		var dragNodes = $([]);
+		var dragStartX = -1;
+		var dragStartY = -1;
+		var dragIndented = false;
+		var selecting = false;
+		var selectStartNode = $([]);
+		var selectStartX = -1;
+		var selectStartY = -1;
 	
 		var tree = el;
 		var outline = $(document.createElement('a'));
@@ -65,12 +75,109 @@
 			});
 	
 		$(".ui-tree-node-text", tree)
-			.click(function(ev) {
+			.mousedown(function(ev) {
 				var node = parent($(this));
-				if (ev.ctrlKey) {
-					andSelect(node);
+				if (node.is('.ui-tree-node-selected')) {
+					if (node.is('.ui-tree-node-moving')) {
+						$('.ui-tree-node-moving').removeClass('ui-tree-node-moving');
+					} else {
+						dragNode = node;
+						dragNodes = dragNode.siblings('.ui-tree-node-selected').add(node);
+						dragNodes.addClass('ui-tree-node-moving');
+						dragging = true;
+						dragStartX = ev.pageX;
+						dragStartY = ev.pageY;
+					}
+					return false;
 				} else {
+					outline.focus();
+					if (!ev.ctrlKey && !ev.shiftKey)
+						unselect($('.ui-tree-node-selected'));
 					select(node);
+					selectStartNode = node;
+					selecting = true;
+					return false;
+				}
+			})
+			.mousemove(function(ev) {
+				var target = parent($(this));
+				if (dragging) {
+					if (target.parents('.ui-tree-node-moving').length)
+						return false;
+					if (target.is('.ui-tree-node-moving')) {
+						if (ev.pageX - dragStartX > 15) {
+							if (!dragIndented) {
+								indent(dragNodes);
+								dragIndented = true;
+							}
+						} else {
+							if (dragIndented) {
+								unindent(dragNodes);
+								dragIndented = false;
+							}
+						}
+					} else {
+						if (dragIndented) {
+							unindent(dragNodes);
+							dragIndented = false;
+						}
+						var oldParent = parent(dragNodes);
+						dragNodes.insertBefore(target);
+						update(oldParent);
+						dragStartX = ev.pageX;
+						dragStartY = ev.pageY;
+					}
+				} else {
+					if (!ev.altKey) {
+						ALT = false;
+						$('.ui-tree-node-moving').removeClass('ui-tree-node-moving');
+					}
+					if (selecting) {
+						var parentNode = parent(selectStartNode);
+						var nodes = parentNode.children('.ui-tree-nodes').children('.ui-tree-node');
+						var a, b;
+						var on = false;
+						nodes.each(function(i) {
+							if ($(this)[0] == selectStartNode[0]) a = i;
+							if ($(this)[0] == target[0]) b = i;
+						});
+						if (a && b) {
+							if (b > a)
+								{ var swp = a; a = b; b = swp; }
+							nodes.each
+							console.log(a, b);
+						}
+						if (parent(selectStartNode)[0] == parent(target)[0]) {
+							//target.addClass('ui-tree-node-selected');
+							andSelect(target);
+							return false;
+						}
+					}
+				}
+			})
+			.mouseup(function(ev) {
+				if (dragging) {
+					dragNodes = $('.ui-tree-node-moving');
+					dragNodes.removeClass('ui-tree-node-moving');
+					dragNode = dragNodes = $([]);
+					dragging = false;
+					dragStartX = dragStartY = -1;
+				} else if (selecting) {
+					selecting = false;
+					selectStartNode = $([]);
+					selectStartX = selectStartY = -1;
+				} else {
+					var node = parent($(this));
+					if (node.is('.ui-tree-node-selected')) {
+						var selected = $('.ui-tree-node-selected');
+						selected.addClass('ui-tree-node-moving');
+					} else {
+						if (ev.ctrlKey) {
+							andSelect(node);
+						} else {
+							select(node);
+						}
+					}
 				}
 				return false;
 			})
@@ -78,7 +185,7 @@
 				toggle(parent($(this)));
 				return false;
 			});
-					
+
 		outline
 		.keydown(function(ev) {
 			if (ev.keyCode == 16) { SHIFT = true; }
@@ -149,14 +256,12 @@
 
 			if ((CUT || ALT) && HOME) {
 				node.insertBefore(firstNode);
-				select(node);
 			} else if (HOME) {
 				if (!isFirst) select(firstNode);
 			}
 
 			if ((CUT || ALT) && END) {
 				node.insertAfter(lastNode);
-				select(node);
 			} else if (END) {
 				if (!isLast) select(lastNode);
 			}
@@ -251,7 +356,8 @@
 			$('.ui-tree-node-moving', this).removeClass('ui-tree-node-moving');
 			CUT = false;
 			SHIFT = false;
-		});
+		})
+		;
 
 		function collapse(node) {
 			var nodes = node.children('.ui-tree-nodes');
@@ -290,7 +396,6 @@
 			node.insertBefore(dummy);
 			dummy.remove();
 			update(parentNode);
-			//select(node);
 		}
 
 		function toggle(node) {
@@ -308,7 +413,7 @@
 
 		function select(node) {
 			if (node.length) {
-				$('.ui-tree-node-selected').removeClass('ui-tree-node-selected')
+				$('.ui-tree-node-selected').removeClass('ui-tree-node-selected').removeClass('ui-tree-node-moving')
 					.children('.ui-tree-node-text').css('outline', 'none');
 				shiftSelPos = 0;
 				node.addClass('ui-tree-node-selected');
