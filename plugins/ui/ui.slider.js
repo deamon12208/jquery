@@ -252,7 +252,7 @@
 				$(this.element).triggerHandler("slidechange", [e, this.prepareCallbackObj(this.interaction)], o.change);
 			
 			if(changeslide)
-				$(this.element).triggerHandler("slide", [e, this.prepareCallbackObj(this.interaction)], o.change);
+				$(this.element).triggerHandler("slide", [e, this.prepareCallbackObj(this.interaction)], o.slide);
 
 		}
 	});
