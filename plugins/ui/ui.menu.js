@@ -12,7 +12,8 @@
 		});
 	}	
 	
-	$.ui.menu = function(el, menu, options) {
+	$.ui.menu = function(el, menu, options, callback) {
+		
 		var options = $.extend({
 			context: 'clickContext',	// Context to attach to menu
 			show: {opacity:'show'},		// Animation object to show menu
@@ -20,7 +21,39 @@
 			delay: 500,					// Delay for animation
 			contexttitle: "Context Menu"
 		}, options);
+		
+		var callback = $.extend({
+			_menuItemEnable: function(h, p, c, t, e) {
+				self.menuItemEnable.apply(t, [self, e]); // Trigger the menuItemEnable callback				
+			},
+			_menuItemDisable: function(h, p, c, t, e) {
+				self.menuItemDisable.apply(t, [self, e]); // Trigger the menuItemDisable callback
+			},
+			_menuItemClick: function(h, p, c, t, e) {
+				self.menuItemClick.apply(t, [self, e]); // Trigger the menuItemClick callback				
+			},
+			_menuItemOver: function(h, p, c, t, e) {
+				self.menuItemOver.apply(t, [self, e]); // Trigger the menuItemOver callback
+			},
+			_menuItemOut: function(h, p, c, t, e) {
+				self.menuItemOut.apply(t, [self, e]); // Trigger the menuItemOut callback				
+			},
+			_menuOpen: function(h, p, c, t, e) {
+				self.menuOpen.apply(t, [self, e]); // Trigger the menuOpen callback
+			},
+			_menuClose: function(h, p, c, t, e) {
+				self.menuClose.apply(t, [self, e]); // Trigger the menuClose callback				
+			},
+			_submenuOpen: function(h, p, c, t, e) {
+				self.submenuOpen.apply(t, [self, e]); // Trigger the submenuOpen callback
+			},
+			_submenuClose: function(h, p, c, t, e) {
+				self.submenuClose.apply(t, [self, e]); // Trigger the submenuClose callback
+			}
+		});
+		
 		var self = this;
+		
 		if (typeof options.hovertype == 'undefined') {
 			options.hovertype = hoverType();	// If not overidden, check to if hoverIntent is available
 		}
@@ -141,7 +174,7 @@
 	
 	
 	$.extend($.fn, {
-		menuDisableItem : function (options, callback) {
+		menuItemDisable : function (options) {
 			var options = $.extend({
 				disableCss: {color: "#aaa", background: "transparent"}
 			},options);
@@ -151,17 +184,15 @@
 				$('a', this).hide();
 				$(this).append('<span class="ui-menu-item-disabled">' + t + '</span>');
 				$('span', this).css(options.disableCss);
-				return callback;
 			});
 		},
-		menuEnableItem : function (callback) {
+		menuItemEnable : function () {
 			return this.each(function(){
 				$('span', this).remove();
 				$('a', this).show();
-				return callback;
 			});
 		},
-		menuAddItem : function (item, callback) {
+		menuItemAdd : function (item) {
 			
 			var item = $.extend({
 				position: 'insertAfter'
@@ -184,8 +215,6 @@
         			}
       			}, function(){});	// Do nothing at the moment
       		}
-			
-			return callback;
 		}
 	});
 	
