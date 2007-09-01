@@ -8,17 +8,15 @@
 
         <title>jQuery UI Tabs</title>
 
-        <!--script src="jquery.history_remote.pack.js" type="text/javascript"></script-->
+        <link rel="stylesheet" href="../../../themes/light/light.tabs.css" type="text/css" media="print, projection, screen">
         <script type="text/javascript" src="../../../jquery/src/jquery/jquery.js"></script>
         <script type="text/javascript" src="../../../jquery/src/selector/selector.js"></script>
         <script type="text/javascript" src="../../../jquery/src/event/event.js"></script>
         <script type="text/javascript" src="../../../jquery/src/ajax/ajax.js"></script>
         <script type="text/javascript" src="../../../jquery/src/fx/fx.js"></script>
-        <script type="text/javascript" src="../ui.js"></script>
         <script type="text/javascript" src="../ui.tabs.js"></script>
         <script type="text/javascript">
             $(function() {
-
                 $('#container-1 ul').tabs();
                 $('#container-2 ul').tabs(2);
                 $('#container-3 ul').tabs({ fxSlide: true });
@@ -37,41 +35,36 @@
                         alert('onShow');
                     }
                 });
-                $('#container-7 ul').tabs({ fxAutoHeight: true });
-                $('#container-8 ul').tabs({ fxShow: { height: 'show', opacity: 'show' }, fxSpeed: 'normal' });
-                $('#container-9 ul').tabs();
-                $('#container-10 ul').tabs();
-                $('#container-11 ul').tabs({ name: 'tabs-11', disabled: [3] });
+                //$('#container-7 ul').tabs({ fxAutoHeight: true });
+                $('#container-7 ul').tabs({ fxShow: { height: 'show', opacity: 'show' }, fxSpeed: 'normal' });
+                $('#container8 ul').tabs();
+                $('#container-9 ul').tabs({ disabled: [3] });
 
-                $('<p><a href="#">Remove tab<\/a><\/p>').prependTo('#fragment-28').find('a').click(function() {
-                    $.ui.get('tabs-11', 'tabs')[0].remove(4);
+                $('<p><a href="#">Remove tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
+                    $('#container-9 ul').removeTab(4);
                     return false;
                 });
-                $('<p><a href="#">Add tab<\/a><\/p>').prependTo('#fragment-28').find('a').click(function() {                    
-                    $.ui.get('tabs-11', 'tabs')[0].add('#fragment-31', 'New Tab');
+                $('<p><a href="#">Add tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {                    
+                    $('#container-9 ul').addTab('#new-tab', 'New Tab', 4);
                     return false;
                 });
-                $('<p><a href="#">Disable third tab<\/a><\/p>').prependTo('#fragment-28').find('a').click(function() {
-                    $.ui.get('tabs-11', 'tabs').disable(3);
+                $('<p><a href="#">Disable third tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
+                    $('#container-9 ul').disableTab(3);
                     return false;
                 });
-                $('<p><a href="#">Activate third tab<\/a><\/p>').prependTo('#fragment-28').find('a').click(function() {
-                    $.ui.get('tabs-11', 'tabs').show(3);
+                $('<p><a href="#">Enable third tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
+                    $('#container-9 ul').enableTab(3);
                     return false;
                 });
-                $('<p><a href="#">Enable third tab<\/a><\/p>').prependTo('#fragment-28').find('a').click(function() {
-                    $.ui.get('tabs-11', 'tabs').enable(3);
+                $('<p><a href="#">Show third tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
+                    $('#container-9 ul').showTab(3);
                     return false;
                 });
 
             });
         </script>
 
-        <link rel="stylesheet" href="jquery.tabs.css" type="text/css" media="print, projection, screen">
-        <!-- Additional IE/Win specific style sheet (Conditional Comments) -->
-        <!--[if lte IE 7]>
-        <link rel="stylesheet" href="jquery.tabs-ie.css" type="text/css" media="projection, screen">
-        <![endif]-->
+        
         <style type="text/css" media="screen, projection">
 
             /* Not required for Tabs, just to make this demo look better... */
@@ -108,7 +101,7 @@
             }
         </style>
     </head>
-    <body>
+    <body class="light">
         <h1><a href="http://jquery.com">jQuery</a> UI Tabs</h1>
         
         <!--p>
@@ -296,7 +289,7 @@
             </div>
         </div>
 
-        <h2>Automatic height</h2>
+        <h2>Custom animation</h2>
 
         <div id="container-7">
             <ul>
@@ -305,8 +298,8 @@
                 <li><a href="#fragment-21"><span>Three</span></a></li>
             </ul>
             <div id="fragment-19">
-                <p>Adjust height of all tabs to the largest:</p>
-                <pre><code>$(&#039;#container&#039;).tabs({ fxAutoHeight: true });</code></pre>
+                <p>Define your own custom animation:</p>
+                <pre><code>$(&#039;#container&#039;).tabs({ fxShow: { height: &#039;show&#039;, opacity: &#039;show&#039; } });</code></pre>
             </div>
             <div id="fragment-20">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -319,17 +312,34 @@
             </div>
         </div>
 
-        <h2>Custom animation</h2>
+        <h2>Ajax tabs</h2>
 
         <div id="container-8">
+            <ul>
+                <li><a href="ahah_1.html"><span>One</span></a></li>
+                <li><a href="ahah_2.html"><span>Two</span></a></li>
+                <li><a href="ahah_3.html"><span>Three</span></a></li>
+            </ul>
+        </div>
+
+        <h2>Triggering, Enabling, Disabling, Adding and Removing Tabs</h2>
+        <div id="container-9">
             <ul>
                 <li><a href="#fragment-22"><span>One</span></a></li>
                 <li><a href="#fragment-23"><span>Two</span></a></li>
                 <li><a href="#fragment-24"><span>Three</span></a></li>
             </ul>
             <div id="fragment-22">
-                <p>Define your own custom animation:</p>
-                <pre><code>$(&#039;#container&#039;).tabs({ fxShow: { height: &#039;show&#039;, opacity: &#039;show&#039; } });</code></pre>
+                <pre><code>$(&#039;#container&#039;).enableTab(3); // enables third tab
+$(&#039;#container&#039;).triggerTab(3); // triggers third tab
+$(&#039;#container&#039;).disableTab(3); // disables third tab</code></pre>
+                <p>
+                    One or more tabs can also be disabled immediatly by simply setting the disabling class for the li element
+                    representing that particular tab or by using the <code>disabled</code> option.
+                </p>
+                <pre><code>&lt;li class=&quot;tabs-disabled&quot;&gt&#8230;&lt;/li&gt;
+
+$(&#039;#container&#039;).tabs({ disabled: [2, 3] });</code></pre>
             </div>
             <div id="fragment-23">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -342,84 +352,12 @@
             </div>
         </div>
 
-        <h2>Ajax tabs</h2>
-
-        <div id="container-9">
-            <ul>
-                <li><a href="ahah_1.html"><span>One</span></a></li>
-                <li><a href="ahah_2.html"><span>Two</span></a></li>
-                <li><a href="ahah_3.html"><span>Three</span></a></li>
-            </ul>
-        </div>
-
-        <h2>Custom <abbr>HTML</abbr> structure</h2>
-
-        <div id="container-10">
-            <div>
-                <ul class="tabs-nav">
-                    <li><a href="#fragment-25"><span>One</span></a></li>
-                    <li><a href="#fragment-26"><span>Two</span></a></li>
-                    <li><a href="#fragment-27"><span>Three</span></a></li>
-                </ul>
-            </div>
-            <div>
-                <div id="fragment-25" class="tabs-container">
-                    <p>
-                        If some <abbr>HTML</abbr> structure is required that differs from the default one, attach the classes
-                        <code>tabs-nav</code> to the unordered list, respectively <code>tabs-container</code> to each container
-                        and let the plugin automatically find the required elements by class.
-                    </p>
-                </div>
-                <div id="fragment-26" class="tabs-container">
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-                </div>
-                <div id="fragment-27" class="tabs-container">
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-                </div>
-            </div>
-        </div>
-
-        <h2>Triggering, disabling, enabling Tabs</h2>
-        <div id="container-11">
-            <ul class="tabs-nav">
-                <li><a href="#fragment-28"><span>One</span></a></li>
-                <li><a href="#fragment-29"><span>Two</span></a></li>
-                <li><a href="#fragment-30"><span>Three</span></a></li>
-            </ul>
-            <div id="fragment-28">
-                <pre><code>$(&#039;#container&#039;).enableTab(3); // enables third tab
-$(&#039;#container&#039;).triggerTab(3); // triggers third tab
-$(&#039;#container&#039;).disableTab(3); // disables third tab</code></pre>
-                <p>
-                    One or more tabs can also be disabled immediatly by simply setting the disabling class for the li element
-                    representing that particular tab or by using the <code>disabled</code> option.
-                </p>
-                <pre><code>&lt;li class=&quot;tabs-disabled&quot;&gt&#8230;&lt;/li&gt;
-
-$(&#039;#container&#039;).tabs({ disabled: [2, 3] });</code></pre>
-            </div>
-            <div id="fragment-29">
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-            </div>
-            <div id="fragment-30">
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-            </div>
-        </div>
-
         <h2>Tested with</h2>
 
         <ul>
             <li>Firefox 2.0</li>
             <li>Firefox 1.5</li>
-            <li>Firefox 1.0</li>
-            <li>Opera 9.01</li>
-            <li>Opera 8.52</li>
+            <li>Opera 9.20</li>
             <li>Safari 2.0.4</li>
             <li><abbr title="Internet Explorer">IE</abbr> 7</li>
             <li><abbr title="Internet Explorer">IE</abbr> 6</li>
