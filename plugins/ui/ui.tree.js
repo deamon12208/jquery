@@ -23,6 +23,11 @@
 	
 	
 	$.ui.tree = function(el, o) {
+
+		var self = this;
+
+		self.options = {};
+		$.extend(self.options, o);
 		
 		var SHIFT = false;
 		var CTRL = false;
@@ -364,6 +369,9 @@
 				node.removeClass('ui-tree-node-expanded').addClass('ui-tree-node-collapsed');
 				node.children('.ui-tree-nodes').hide();
 				node.children('.ui-tree-node-button').text('+ ');
+				node.each(function() {
+					$(this).triggerHandler("treecollapse", [null, {node:this}], self.options.collapse);
+				})
 			}
 		}
 
