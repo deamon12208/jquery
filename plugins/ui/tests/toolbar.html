@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Test Page</title>
+<script type="text/javascript" src="http://dev.jquery.com/view/trunk/jquery/dist/jquery.js"></script>
+<script type="text/javascript" src="../../ui.js"></script>
+<script type="text/javascript" src="../ui.toolbar.js"></script>
+<style type="text/css" media="all">
+ 	@import "blueprint/lib/reset.css";
+	@import "blueprint/lib/typography.css";
+	
+	.inputHolder {
+		padding-left:20px;
+	}
+	
+	.ui-toolbar {
+	  background:#F3F3F3;
+	  border-bottom:1px solid #EEE;
+	  border-top:1px solid #DDD;
+	  position:relative;
+		width:auto;
+		height:auto;
+	}
+	.ui-toolbar ul {
+		padding: 0;
+		margin: 0 0 0 6px;
+	}
+	.ui-toolbar ul.horizontal li {
+		padding: 0;
+		margin: 0;
+		list-style-type: none;
+		display:inline;
+	}
+	.ui-toolbar ul.vertical li {
+		padding: 0;
+		margin: 0;
+		list-style-type: none;
+	}
+	.ui-btn{
+		font:normal 11px tahoma, verdana, helvetica;
+		cursor:pointer;
+		white-space: nowrap;
+		line-height:26px;
+	}
+/* @@ For now, as i haven't perfected them.
+	.ui-btn:hover{
+		background:#fcfcfc;
+	}
+*/
+	.ui-toolbarBtn-disabled {
+		opacity:0.2;
+	}
+	.ui-btn input{
+		border:0px none;
+		background:transparent;
+		font:normal 11px tahoma,verdana,helvetica;
+		cursor:pointer;
+		margin:0;
+		overflow:visible;
+		-moz-outline:0 none;
+		outline:0 none;
+	}
+	.ui-toolbar ul.horizontal .ui-btn input {
+		padding-left:3px;
+		padding-right:3px;
+		width:auto;
+		height:18px;
+	}
+	.ui-toolbar ul.vertical .ui-btn input {
+		padding-top:3px;
+		padding-bottom:3px;
+		width:18px;
+		height:18px;
+	}
+	.ui-toolbar.text-only .ui-btn-icon input{
+		background: none!important;
+	}
+	.ui-toolbar.icons-only .ui-btn-icon input, .ui-toolbar.both .ui-btn-icon input{
+		padding-left:18px!important;
+	}
+
+	.ui-toolbar.icons-only .ui-btn-icon input, .ui-toolbar.icons-only .ui-btn-icon, .ui-toolbar.icons-only .ui-btn-center input{
+		width:18px;
+	}
+</style>
+</head>
+<body>
+<div id="toolbox"></div>
+<script type="text/javascript">
+  $(document).ready(function(){
+
+		var tb = $("#toolbox").toolbar({mode:'both'});
+		
+		$(tb).toolbarAddItem({
+			text: 'test3',
+			type: 'toolbarBtn',
+			icon: 'images/true.png',
+			handlerType: "click",
+			handler: function(){
+				alert('test');
+			}
+		});
+		
+	//	$(test).css("font-weight", "bold");
+		for(i=0;i<5;++i){
+			item  = $(tb).toolbarAddItem({text: 'test'+i, type: 'toolbarBtn'});
+			$("#log").append("<li>Add Item: "+item+"<"+"/li>");
+		}
+		$("a.del").bind("click", function(){
+			item = prompt("item?");
+			$("#log").append("<li>Removed Item: "+item+"<"+"/li>");
+			$(tb).toolbarDelItem(item);
+		});
+		$("a.disable").bind("click", function(){
+			var item = prompt("Item?");
+			$(tb).toolbarDisableItem(item);
+			
+			$("#log").append("<li>Disabled Item: "+item+"<"+"/li>");
+		});
+		$("a.enable").bind("click", function(){
+			var item = prompt("Item?");
+			$(tb).toolbarEnableItem(item);
+			
+			$("#log").append("<li>Enabled Item: "+item+"<"+"/li>");
+		});
+	});
+</script>
+	<ul id="log" style="margin-top:60px;"></ul>
+	<a href="#" class="del">Remove Item?</a> | <a href="#" class="add">Add Item?</a> | <a href="#" class="disable">Disable Item?</a> | <a href="#" class="enable">Enable Item?</a>
+</body>
+</html>
