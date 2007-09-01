@@ -14,15 +14,16 @@
 	
 	$.ui.menu = function(el, menu, options) {
 		
-		var options = $.extend({
+		var self = this;
+		
+		self.options = {};
+		
+		$.extend(self.options, {
 			context: 'clickContext',	// Context to attach to menu
 			show: {opacity:'show'},		// Animation object to show menu
 			hide: {opacity:'hide'},		// Animation object to hide menu	
 			delay: 500,					// Delay for animation
-			contexttitle: "Context Menu"
-		}, options);
-		
-		$.extend(options,{
+			contexttitle: "Context Menu",
 			_menuItemEnable: function(h, p, c, t, e) {
 				self.menuItemEnable.apply(t, [self, e]); // Trigger the menuItemEnable callback				
 			},
@@ -50,19 +51,17 @@
 			_submenuClose: function(h, p, c, t, e) {
 				self.submenuClose.apply(t, [self, e]); // Trigger the submenuClose callback
 			}
-		});
+		},options);
 		
-		var self = this;
-		
-		if (typeof options.hovertype == 'undefined') {
-			options.hovertype = hoverType();	// If not overidden, check to if hoverIntent is available
+		if (typeof self.options.hovertype == 'undefined') {
+			self.options.hovertype = hoverType();	// If not overidden, check to if hoverIntent is available
 		}
 		
 		$(menu).appendTo(el);	// This makes sure our menu is attached in the DOM to the parent to keep things clean
 		self.styleMenu(menu);	// Pass the menu in to recieve it's makeover
-		self[options.context](el, menu, options);	// Based on contexted selected, attach to menu parent
+		self[self.options.context](el, menu, self.options);	// Based on contexted selected, attach to menu parent
 		if (options.context != 'context') { // Check to see if context, as context requires clicked element
-			self.execFunction(menu, options);
+			self.execFunction(menu, self.options);
 		}
 	}
 	

@@ -5,19 +5,24 @@
 		<title>UI Menu Tests</title>
 		
 		<style type="text/css">
+			@import url(../../../themes/ui/ui.menu.css);
+			@import url(../../../themes/light/light.css);
+			@import url(../../../themes/light/light.menu.css);
+			@import url(../../../themes/dark/dark.css);
+			@import url(../../../themes/dark/dark.menu.css);
+			@import url(../../../themes/tango/tango.menu.css);
 			body { font:10pt Calibri, Arial, sans-serif; margin:10px 20px;}
-			.ui-menu-toolbar {background:#222; z-index:500; font:10pt Verdana; list-style:none;}
-			.ui-menu-toolbar-button {float:left; padding:4px 20px; border:1px solid #DDD; background:#FFF; cursor:pointer;}
-			.ui-menu-toolbar-button:hover {border:1px solid #CCC; background:#EEE; }
-			.ui-menu-toolbar-button a {text-decoration:none; color:#000;}
-			.ui-menu-items {display:none; padding:0; background:#FFF; z-index:500; border:1px solid #CCC; list-style:none; padding:1px 4px; opacity:0.95; font:10pt Verdana; min-width:80px; *width:80px;}
-			.ui-menu-item a { color:#000; text-decoration:none;}
-			.ui-menu-item-parent { background: url('images/arrow_right.png') no-repeat center right; }
-			.ui-menu-item-disabled {color: #aaa; background: transparent;}
 			.filePrint {background: url('images/printer.png') no-repeat center left; padding-left: 16px;}
-			
 			td:hover {border: 1px solid #f00;}
 			td:focus {border: 1px solid #f00;}
+			
+			.light .toggle a { color:#222; }
+  			.dark  .toggle a { color:snow; }
+			.toggle { margin:0; padding: 0; clear:right; float: right; }
+			.toggle li { font:11pt Verdana; margin:0; padding: 0; width: 5em; display: block; margin-bottom: 0.3em; }
+			.toggle li a { color: black; display: block; border: 1px solid gray; font:11pt Verdana; text-align:center; text-decoration:none; }
+			.toggle li a.selected { background: gray; color: white; }
+			.toggle li a:focus { outline: 1px dotted blue; }
 		</style>
 		
     <script type="text/javascript" src="../../../jquery/src/jquery/jquery.js"></script>
@@ -29,7 +34,7 @@
 	<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
 	<script type="text/javascript" src="../ui.menu.js"></script>
 	</head>
-	<body>
+	<body class="light">
 		
 		<script type="text/javascript">
 			$('document').ready(function(){
@@ -100,13 +105,48 @@
 					$('#filemenu-save').menuItemEnable();
 					return false;
 				})
+				
+							$('#toggle-theme-none').click(function() {
+			    $('.toggle a').removeClass('selected');
+			    $(this).addClass('selected');
+			    $("body").removeClass("dark").removeClass("tango").removeClass("light");
+			    return false;
+			});
+
+		  $('#toggle-theme-light').click(function() {
+		    $('.toggle a').removeClass('selected');
+		    $(this).addClass('selected');
+		    $("body").removeClass("dark").removeClass("tango").addClass("light");
+		    return false;
+		  });
+		
+		  $('#toggle-theme-dark').click(function() {
+		    $('.toggle a').removeClass('selected');
+		    $(this).addClass('selected');
+		    $("body").removeClass("light").removeClass("tango").addClass("dark");
+		    return false;
+		  });
+		
+		  $('#toggle-theme-tango').click(function() {
+		    $('.toggle a').removeClass('selected');
+		    $(this).addClass('selected');
+		    $("body").removeClass("light").removeClass("dark").addClass("tango");
+		    return false;
+		  }).click();
 			});
 			
 			function testCallback(){
 				alert ('Callback Fired');
-			}
-			
+			}			
 		</script>
+		
+		<ul class="toggle">
+  			<li><a href="#" id="toggle-theme-none">none</a></li>
+  			<li><a href="#" id="toggle-theme-light">light</a></li>
+  			<li><a href="#" id="toggle-theme-dark">dark</a></li>
+  			<li><a href="#" id="toggle-theme-tango">tango</a></li>
+		</ul>
+		
 		<h2>Toolbar Test</h2>
 		<ul id="mytoolbar" class="ui-menu-toolbar">
 			<li id="filemenu-parent" class="ui-menu-toolbar-button"><a href="#" class="toolbarFile">File</a>
