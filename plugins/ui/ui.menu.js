@@ -186,16 +186,11 @@
 	
 	
 	$.extend($.fn, {
-		menuItemDisable : function (options) {
-			var options = $.extend({
-				disableCss: {color: "#aaa", background: "transparent"}
-			},options);
-			
+		menuItemDisable : function () {
 			return this.each(function(){
 				var t = $('a', this).text();
 				$('a', this).hide();
 				$(this).append('<span class="ui-menu-item-disabled">' + t + '</span>');
-				$('span', this).css(options.disableCss);
 			});
 		},
 		menuItemEnable : function () {
