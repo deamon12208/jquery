@@ -1,3 +1,4 @@
+/*
 .ui-shadow {
 background:transparent url(i/shadow.png) no-repeat scroll right bottom;
 height: 100px;
@@ -22,3 +23,11 @@ position: absolute;
 bottom: 0px;
 left: -6px;
 }
+*/
+
+
+
+
+.ui-shadow { position:relative; }
+.ui-shadow-color { background:#030; position:absolute; } /* Can be overidden via js */
+

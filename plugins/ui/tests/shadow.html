@@ -32,8 +32,7 @@ body
 	padding: 5px;
 	background: red;
 	color: #fff;
-	margin: 20px;
-	position: absolute; top: 100px; left: 100px;
+	position: absolute; top: 100px; left: 500px;
 	z-index: 102;
 }
 
@@ -51,14 +50,11 @@ body
 	<fieldset style='height: 500px;'>
 	<legend>Dynamic Shadows</legend>
 
-<div style='position: absolute; top: 50px; left: 50px; background: green; height: 400px; width: 69px; z-index: 100;'></div>
+<div class="ex draggable">Bla</div>
 
-	<div id="demo1" class='draggable'>
-	Shadow applied dynamically
-	</div>
-	
-	
+<img class="ex" src="images/bamboo.jpg">
 
+<div style="position: absolute; background: blue; top: 100px; left: 500px; width: 50px; height: 600px;"></div>
 
 	</fieldset>
 
@@ -66,7 +62,7 @@ body
 <script type="text/javascript">
 $(document).ready(function(){
 
-	$(".draggable").shadow({ offset: 5 });
+	$(".ex").shadow({ offset: 15, color: "blue", opacity: 0.2 });
 
 });
 </script>
