@@ -7,7 +7,7 @@
 	$.ui = $.ui || {};
     
     $.fn.tabs = function(initial, options) {
-    	if (initial && initial.constructor == Object) {
+    	if (initial && initial.constructor == Object) { // shift arguments
     	    options = initial;
     	    initial = null;
     	}
@@ -22,7 +22,7 @@
     };
     
     // create chainable tabs methods
-    $.each(['add', 'remove'], function(i, method) {
+    $.each(['add', 'remove', 'enable', 'disable', 'show', 'load'], function(i, method) {
         $.fn[method + 'Tab'] = function() {
             var args = arguments;
             return this.each(function() {
@@ -43,7 +43,7 @@
         return this.each(function() {
             this.jQueryTabs.remove.apply(this.jQueryTabs, args);
         });
-    };*/
+    };
     
     $.fn.enableTab = function(position) {
         return this.each(function() {
@@ -63,12 +63,12 @@
         });
     };
     
-    $.fn.reloadTab = function(position, url) {
+    $.fn.loadTab = function(position, url, callback) {
         // frequently requested: if url is passed reload tab with that url
         return this.each(function() {
             
         });
-    };
+    };*/
     
     $.fn.activeTab = function() {
         // returns number or element?
@@ -80,7 +80,7 @@
     	
     	this.options = $.extend({
             initial: 0,
-            /*disabled: null,*/
+            disabled: [],
             // TODO bookmarkable: $.ajaxHistory ? true : false,
             spinner: 'Loading&#8230;',
             hashPrefix: 'tab-',
@@ -88,11 +88,14 @@
             fxSlide: null,
             fxShow: null,
             fxHide: null,*/
+            closable: false, // TODO
+            closed: false, // TODO selected?
             fxSpeed: 'normal',
             /*fxShowSpeed: null,
             fxHideSpeed: null,*/
-            click: null,
-            show: null,
+            click: function() {},
+            hide: function() {},
+            show: function() {},
             navClass: 'tabs-nav',
             selectedClass: 'tabs-selected',
             disabledClass: 'tabs-disabled',
@@ -117,7 +120,14 @@
         	    if (a.hash) { // inline tab
         	        instance.$containers = instance.$containers.add(a.hash); // jQuery's add() does not work somehow
         	    } else { // remote tab
-        	        // TODO create and add container
+        	        // TODO create unique ids
+        	        var id = a.title && a.title.replace(/\s/g, '_') || options.hashPrefix + (i + 1), url = a.href;
+        	        a.href = '#' + id;
+        	        a.url = url;
+        	        instance.$containers = instance.$containers.add(
+        	            $('<div id="' + id + '" class="' + options.containerClass + '"></div>')
+        	                .insertAfter( instance.$containers[i - 1] || $source )
+        	        );
         	    }
         	});
         	
@@ -161,6 +171,11 @@
             // TODO
             //tabs.eq(options.initial).trigger('loadRemoteTab').end();
         	
+        	// disabled tabs
+            for (var i = 0, k = options.disabled.length; i < k; i++) {
+                this.disable(--options.disabled[i]);
+            }
+        	
         	// setup animations
             var showAnim = {}, hideAnim = {}, showSpeed = options.fxShowSpeed || options.fxSpeed, hideSpeed = options.fxHideSpeed || options.fxSpeed;
             if (options.fxSlide || options.fxFade) {
@@ -187,6 +202,9 @@
                 }
             }
         	
+        	// callbacks
+            var click = options.click, hide = options.hide, show = options.show;
+        	
         	var $containers = this.$containers;
         	
         	
@@ -195,11 +213,11 @@
 
                 //var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
                 var clicked = this, $li = $(this).parents('li:eq(0)'), $show = $(this.hash), $hide = $containers.filter(':visible');
-
+                
                 // if animation is still running, tab is selected or disabled or onClick callback returns false stop here
                 // check if onClick returns false last so that it is not executed for a disabled tab
-                if ($source['locked'] || $li.is('.' + options.selectedClass, '.' + options.disabledClass) 
-                    || typeof onClick == 'function' && onClick(this, $show[0], $hide[0]) === false) {
+                if ($source['locked'] || $li.is('.' + options.selectedClass + ', .' + options.disabledClass) 
+                    || click(this, $show[0], $hide[0]) === false) {
                     this.blur();
                     return false;
                 }
@@ -207,7 +225,7 @@
                 $source['locked'] = true;
 
                 // show new tab
-                if ($show.size()) {
+                if ($show.length) {
 
                     // prevent scrollbar scrolling to 0 and than back in IE7, happens only if bookmarking/history is enabled
                     if ($.browser.msie && options.bookmarkable) {
@@ -231,9 +249,7 @@
                         $hide.animate(hideAnim, hideSpeed, function() { //
                             $(clicked).parents('li:eq(0)').addClass(options.selectedClass).siblings().removeClass(options.selectedClass);
                             $hide.addClass(options.hideClass).css(resetCSS); // maintain flexible height and accessibility in print etc.                        
-                            if (typeof onHide == 'function') {
-                                onHide(clicked, $show[0], $hide[0]);
-                            }
+                            hide(clicked, $show[0], $hide[0]);
                             if (!(options.fxSlide || options.fxFade || options.fxShow)) {
                                 $show.css('display', 'block'); // prevent occasionally occuring flicker in Firefox cause by gap between showing and hiding the tab containers
                             }
@@ -243,31 +259,28 @@
                                     $hide[0].style.filter = '';
                                     $show[0].style.filter = '';
                                 }
-                                if (typeof onShow == 'function') {
-                                    onShow(clicked, $show[0], $hide[0]);
-                                }
+                                show(clicked, $show[0], $hide[0]);
                                 $source['locked'] = null;
                             });
                         });
                     }
-                    switchTab();
-
-                    /*if (!options.remote) {
-                        switchTab();
+                    
+                    if (this.url) { // remote tab
+                        instance.load(instance.$tabs.index(this) + 1, this.url, switchTab)
                     } else {
-                        $(clicked).trigger('loadRemoteTab', [switchTab]);
-                    }*/
+                        switchTab();
+                    }
+
+                    // Set scrollbar to saved position - need to use timeout with 0 to prevent browser scroll to target of hash
+                    var scrollX = window.pageXOffset || document.documentElement && document.documentElement.scrollLeft || document.body.scrollLeft || 0;
+                    var scrollY = window.pageYOffset || document.documentElement && document.documentElement.scrollTop || document.body.scrollTop || 0;
+                    setTimeout(function() {
+                        scrollTo(scrollX, scrollY);
+                    }, 0);
 
                 } else {
                     alert('There is no such container.');
                 }
-
-                // Set scrollbar to saved position - need to use timeout with 0 to prevent browser scroll to target of hash
-                var scrollX = window.pageXOffset || document.documentElement && document.documentElement.scrollLeft || document.body.scrollLeft || 0;
-                var scrollY = window.pageYOffset || document.documentElement && document.documentElement.scrollTop || document.body.scrollTop || 0;
-                setTimeout(function() {
-                    scrollTo(scrollX, scrollY);
-                }, 0);
 
                 this.blur(); // prevent IE from keeping other link focussed when using the back button
 
@@ -297,7 +310,7 @@
                 alert('jQuery UI Tabs: Not enough arguments to add tab.'); // TODO use throw?
             }           
         },
-        remove: function(position) { // TODO callback
+        remove: function(position, callback) {
             if (position && position.constructor == Number) {
                 --position;
                 this.$tabs.unbind('click'); // TODO specify function
@@ -305,21 +318,61 @@
                 this.$containers.eq(position).remove();
                 this.tabify();
             }
+            if (callback && callback.constructor == Function) {
+                callback();
+            }
         },
-        enable: function(position) { // TODO callback
+        enable: function(position, callback) {
+            var $li = this.$tabs.slice(position - 1, position).parents('li:eq(0)');
+            $li.removeClass(this.options.disabledClass);
+            if ($.browser.safari) { /* fix disappearing tab after enabling in Safari... TODO check Safari 3 */
+                $li.animate({ opacity: 1 }, 1, function() {
+                    $li.css({ opacity: '' });
+                });
+            }
+            if (callback && callback.constructor == Function) {
+                callback();
+            }
+        },
+        disable: function(position, callback) {
+            var $li = this.$tabs.slice(position - 1, position).parents('li:eq(0)');            
+            if ($.browser.safari) { /* fix opacity of tab after disabling in Safari... TODO check Safari 3 */
+                $li.animate({ opacity: 0 }, 1, function() {
+                   $li.css({ opacity: '' });
+                });
+            }
+            $li.addClass(this.options.disabledClass);
+            if (callback && callback.constructor == Function) {
+                callback();
+            }
+        },
+        show: function(position, callback) { // TODO callback
             
         },
-        disable: function(position) { // TODO callback
-            
-        },
-        show: function(position) { // TODO callback
-            
-        },
-        reload: function(position, url) { // TODO callback
-            
+        load: function(position, url, callback) { // TODO callback
+            var options = this.options;
+            if (url && url.constructor == Function) {  // shift arguments
+                callback = url;
+            }
+            var $a = this.$tabs.slice(position - 1, position).addClass(options.loadingClass),
+                $span = $('span', $a), text = $span.html();
+            if (options.spinner) {
+                // TODO if spinner is image
+                $span.html('<em>' + options.spinner + '</em>');
+            }
+            setTimeout(function() { // Timeout is again required in IE, "wait" for id being restored
+                $($a[0].hash).load(url, function() {
+                    if (options.spinner) {
+                        $span.html(text);
+                    }
+                    $a.removeClass(options.loadingClass);
+                    if (callback && callback.constructor == Function) {
+                        callback();
+                    }
+                });
+            }, 0);            
         }
     });
-    
     
 })(jQuery);
 

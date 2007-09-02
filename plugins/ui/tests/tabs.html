@@ -25,19 +25,19 @@
                 $('#container-6 ul').tabs({
                     fxFade: true,
                     fxSpeed: 'fast',
-                    onClick: function() {
-                        alert('onClick');
+                    click: function() {
+                        alert('click callback');
                     },
-                    onHide: function() {
-                        alert('onHide');
+                    hide: function() {
+                        alert('hide callback');
                     },
-                    onShow: function() {
-                        alert('onShow');
+                    show: function() {
+                        alert('show callback');
                     }
                 });
                 //$('#container-7 ul').tabs({ fxAutoHeight: true });
                 $('#container-7 ul').tabs({ fxShow: { height: 'show', opacity: 'show' }, fxSpeed: 'normal' });
-                $('#container8 ul').tabs();
+                $('#container-8 ul').tabs();
                 $('#container-9 ul').tabs({ disabled: [3] });
 
                 $('<p><a href="#">Remove tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
@@ -316,9 +316,9 @@
 
         <div id="container-8">
             <ul>
-                <li><a href="ahah_1.html"><span>One</span></a></li>
-                <li><a href="ahah_2.html"><span>Two</span></a></li>
-                <li><a href="ahah_3.html"><span>Three</span></a></li>
+                <li><a href="ahah_1.html" title="Tab one"><span>One</span></a></li>
+                <li><a href="ahah_2.html" title="Tab two"><span>Two</span></a></li>
+                <li><a href="ahah_3.html" title="Tab three"><span>Three</span></a></li>
             </ul>
         </div>
 
