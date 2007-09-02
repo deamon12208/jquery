@@ -6,6 +6,10 @@
 
 == New and Noteworthy ==
 
+== 0.9.0 ==
+
+* fixed a couple bugs introduced by the new 'bottomTop' value for 'positionBy' in 0.8.7.
+
 == 0.8.7 ==
 
 * added 'bottomTop' as an available value for the "positionBy" option.

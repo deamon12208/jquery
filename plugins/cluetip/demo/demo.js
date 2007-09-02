@@ -4,7 +4,7 @@ $(document).ready(function() {
 
 //default theme
   $('a.basic').cluetip();
-  $('a.custom-width').cluetip({width: '200px', showTitle: false,sticky: true});
+  $('a.custom-width').cluetip({width: '200px', showTitle: false});
   $('h4').cluetip({attribute: 'id', hoverClass: 'highlight'});
   $('#sticky').cluetip({'sticky': true,'closePosition': 'title'});
   $('#examples a:eq(4)').cluetip({
@@ -16,7 +16,6 @@ $(document).ready(function() {
   });
   $('a.load-local').cluetip({local:true, cursor: 'pointer'});
   $('#clickme').cluetip({activation: 'click', width: 650});
-  $('span[@title]').css({borderBottom: '1px solid #900'}).cluetip({splitTitle: '|', arrows: true, dropShadow: false, cluetipClass: 'jtip'});
 
 // jTip theme
   $('a.jt:eq(0)').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false,
@@ -26,6 +25,9 @@ $(document).ready(function() {
     closeText: '<img src="cross.png" alt="close" />'
   });
   $('a.jt:eq(1)').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false, hoverIntent: false});
+  $('span[@title]').css({borderBottom: '1px solid #900'}).cluetip({splitTitle: '|', arrows: true, dropShadow: false, cluetipClass: 'jtip'});
+
+  $('a.jt:eq(2)').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false, height: '150px', sticky: true});
 
 // Rounded Corner theme
   $('ol.rounded a:eq(0)').cluetip({cluetipClass: 'rounded', dropShadow: false, sticky: true, ajaxCache: false});

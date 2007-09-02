@@ -57,6 +57,7 @@
  *
  * @param Object defaults (optional) Customize your clueTips
  * @option Number width: default is 275. The width of the clueTip
+ * @option Number|String height: default is 'auto'. The height of the clueTip. Setting a specific height also sets  <div id="cluetip-outer"> to overflow:auto
  * @option Boolean local: default is false. Whether to use content from the same page (using ID) for clueTip body
  * @option Boolean hideLocal: default is true. If local option is set to true, determine whether local content to be shown in clueTip should be hidden at its original location. 
  * @option String attribute default is 'rel'. The attribute to be used for the URL of the ajaxed content
@@ -77,11 +78,11 @@
  * @option String positionBy: default is 'auto'. Available options: 'auto', 'mouse', or 'bottomTop'. Change to 'mouse' if you want to override positioning by element and position the clueTip based on where the mouse is instead. Change to 'bottomTop' if you want positioning to begin below the mouse when there is room or above if not -- rather than right or left of the elemnent and flush with element's top.
  * @option Object fx: default is: {open: 'show', openSpeed: '', close: 'hide', closeSpeed: ''}. Change these to apply one of jQuery's effects when opening or closing the clueTip
  * @option String activation: default is 'hover'. Set to 'toggle' to force the user to click the element in order to activate the clueTip.
- * @option Boolean hoverIntent: default is true. If jquery.hoverintent.js plugin is included in <head>, hoverIntent() will be used instead of hover()
+ * @option Object hoverIntent: default is {sensitivity: 3, interval: 50, timeout: 0}. If jquery.hoverintent.js plugin is included in <head>, hoverIntent() will be used with these settings instead of hover(). Set to false if for some reason you have the hoverintent plugin included but don't want to use it. For info on hoverIntent options, see http://cherne.net/brian/resources/jquery.hoverIntent.html
  * @option Function onShow: default is function (ct, c){} ; allows you to pass in your own function once the clueTip has shown.
  * @option Boolean ajaxCache: Default is true; caches the results of the ajax request to avoid unnecessary hits to the server. When set to false, the script will make an ajax request every time the clueTip is shown, which allows for dynamic content to be loaded.
  * @option Object ajaxProcess: Default is function(data) { data = $(data).not('style, meta, link, script, title); return data; } . When getting clueTip content via ajax, allows processing of it before it's displayed. The default value strips out elements typically found in the <head> that might interfere with current page.
- * @option Object ajaxSettings: allows you to pass in standard $.ajax() parameters for specifying dataType, error, success, etc. Default is { dataType: 'html'}
+ * @option Object ajaxSettings: allows you to pass in standard $.ajax() parameters, not including error, complete, success, and url. Default is { dataType: 'html'}
  *
  */
   var $cluetip, $cluetipInner, $cluetipOuter, $cluetipTitle, $dropShadow, imgCount;
@@ -161,15 +162,10 @@
         $cluetipInner = $('<div id="cluetip-inner"></div>');
         $cluetipTitle = $('<h3 id="cluetip-title"></h3>');        
         $cluetipOuter = $('<div id="cluetip-outer"></div>').append($cluetipInner).prepend($cluetipTitle);
-        $cluetip = $('<div></div>')
-          .attr({'id': 'cluetip'})
-          .css({zIndex: defaults.cluezIndex})
-        .append($cluetipOuter)[insertionType](insertionElement)
-        .hide();
-        $('<div id="cluetip-waitimage"></div>')
-          .css({position: 'absolute', zIndex: cluezIndex-1})
-        .insertBefore('#cluetip')
-        .hide();
+        $cluetip = $('<div></div>').attr({'id': 'cluetip'}).css({zIndex: defaults.cluezIndex})
+        .append($cluetipOuter)[insertionType](insertionElement).hide();
+        $('<div id="cluetip-waitimage"></div>').css({position: 'absolute', zIndex: cluezIndex-1})
+        .insertBefore('#cluetip').hide();
         $cluetip.css({position: 'absolute', zIndex: cluezIndex});
         $cluetipOuter.css({position: 'relative', zIndex: cluezIndex+1});
       }
@@ -180,21 +176,20 @@
           $dropShadow = $dropShadow.add($('<div></div>').css({zIndex: cluezIndex-i-1, opacity:.1, top: 1+i, left: 1+i}));
         };
         $dropShadow.css({position: 'absolute', backgroundColor: '#000'})
-          .prependTo($cluetip);
+        .prependTo($cluetip);
       }
       var $this = $(this);      
       var tipAttribute = $this.attr(defaults.attribute), ctClass = defaults.cluetipClass;
       if (!tipAttribute && !defaults.splitTitle) return true;
-      // if hideLocal is set to true, initially hide the local content that will be displayed in the clueTip
+      // if hideLocal is set to true, on DOM ready hide the local content that will be displayed in the clueTip
       if (defaults.local && defaults.hideLocal) { $(tipAttribute).hide(); }
       // vertical measurement variables
       var tipHeight, wHeight;
+      var defHeight = isNaN(parseInt(defaults.height, 10)) ? 'auto' : (/\D/g).test(defaults.height) ? defaults.height : defaults.height + 'px';
       var sTop, linkTop, posY, tipY, mouseY;
-      if (!isNaN(parseInt(defaults.height,10))) {
-        $cluetipInner.css({height: defaults.height, overflow: 'auto'});
-      }
       // horizontal measurement variables
-      var tipWidth = isNaN(tipWidth) ? 275 : parseInt(defaults.width, 10) + parseInt($cluetip.css('paddingLeft')) + parseInt($cluetip.css('paddingRight')) + dropShadowSteps;
+      var tipWidth = parseInt(defaults.width, 10) + parseInt($cluetip.css('paddingLeft')) + parseInt($cluetip.css('paddingRight')) + dropShadowSteps;
+      if( isNaN(tipWidth) ) tipWidth = 275;
       var linkWidth = this.offsetWidth;
       var linkLeft, posX, tipX, mouseX, winWidth;
             
@@ -329,7 +324,7 @@
         var $truncloaded = $cluetipInner.text().slice(0,defaults.truncate) + '...';
         $cluetipInner.html($truncloaded);
       }
-
+      function doNothing() {}; //empty function
       tipTitle ? $cluetipTitle.show().html(tipTitle) : (defaults.showTitle) ? $cluetipTitle.show().html('&nbsp;') : $cluetipTitle.hide();
       if (defaults.sticky) {
         var $closeLink = $('<div id="cluetip-close"><a href="#">' + defaults.closeText + '</a></div>');
@@ -339,14 +334,13 @@
           return false;
         });
         if (defaults.mouseOutClose) {
-          $cluetip.hover(function() {return true;}, 
-          function() {
-            $closeLink.trigger('click');
-          });
+          $cluetip.hover(function() {doNothing(); }, 
+          function() {$closeLink.trigger('click'); });
         }
       }
-// now that content is loaded, finish the positioning      
-      tipHeight = $cluetip.outerHeight();
+// now that content is loaded, finish the positioning 
+      $cluetipOuter.css({overflow: defHeight == 'auto' ? 'visible' : 'auto', height: defHeight});
+      tipHeight = defHeight == 'auto' ? $cluetip.outerHeight() : parseInt(defHeight,10);   
       tipY = posY;
       if ( (posX < mouseX && Math.max(posX, 0) + tipWidth > mouseX) || defaults.positionBy == 'bottomTop') {
         tipY = posY + tipHeight > sTop + wHeight && mouseY - sTop > tipHeight + 10 ? mouseY - tipHeight - 10 : mouseY + 20;
@@ -358,8 +352,7 @@
         tipY = posY - defaults.dropShadowSteps;
       } 
       $cluetip.css({top: tipY + 'px'});
-
-      if (defaults.arrows) {
+      if (defaults.arrows) { // set up background positioning to align with element
         var bgPos = '0 0';
         var bgY = (posY - tipY - defaults.dropShadowSteps);
         if ($cluetip.is('.clue-left-' + ctClass)) {
@@ -373,10 +366,9 @@
       $cluetip.css({backgroundPosition: bgPos});
 
 // (first hide, then) ***SHOW THE CLUETIP***
+      $dropShadow.hide();
       $cluetip.hide()[defaults.fx.open](defaults.fx.open != 'show' && defaults.fx.openSpeed);
-      if ($dropShadow) {
-        defaults.dropShadow ? $dropShadow.show().css({height: tipHeight, width: defaults.width}) : $dropShadow.hide();
-      }
+      if (defaults.dropShadow) $dropShadow.css({height: tipHeight, width: defaults.width}).show();
       // trigger the optional onShow function
       defaults.onShow($cluetip, $cluetipInner);
     };
