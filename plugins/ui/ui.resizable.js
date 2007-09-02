@@ -42,9 +42,14 @@
 		//Destructive mode wraps the original element
 		if(el.nodeName.match(/textarea|input|select|button/i)) options.destructive = true;
 		if(options.destructive) {
-			$(el).wrap('<div class="ui-wrapper"  style="position: relative; border: 0; margin: 0; padding: 0; width: '+$(el).outerWidth()+'px; height: '+$(el).outerHeight()+';"></div>');
+			
+			$(el).wrap('<div class="ui-wrapper"  style="position: relative; width: '+$(el).outerWidth()+'px; height: '+$(el).outerHeight()+';"></div>');
 			var oel = el;
 			el = el.parentNode; this.element = el;
+			
+			//Move margins to the wrapper
+			$(el).css({ marginLeft: $(oel).css("marginLeft"), marginTop: $(oel).css("marginTop"), marginRight: $(oel).css("marginRight"), marginBottom: $(oel).css("marginBottom")});
+			$(oel).css({ marginLeft: 0, marginTop: 0, marginRight: 0, marginBottom: 0});
 
 			var t = function(a,b) { $(el).append("<div class='ui-resizable-"+a+" ui-resizable-handle' style='position: absolute; "+b+"'></div>"); };
 			var b = [parseInt($(oel).css('borderTopWidth')),parseInt($(oel).css('borderRightWidth')),parseInt($(oel).css('borderBottomWidth')),parseInt($(oel).css('borderLeftWidth'))];
