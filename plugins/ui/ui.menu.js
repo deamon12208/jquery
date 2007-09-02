@@ -10,7 +10,19 @@
 		return this.each(function() {
 			new $.ui.menu(this, menu, options);	
 		});
-	}	
+	}
+	
+	$.fn.menuItemDisable = function(options) {	// Constructor for the menu method
+		return this.each(function() {
+			new $.ui.menu.prototype.menuItemDisable(this, options);	
+		});
+	}
+	
+	$.fn.menuItemEnable = function(options) {	// Constructor for the menu method
+		return this.each(function() {
+			new $.ui.menu.prototype.menuItemEnable(this, options);	
+		});
+	}
 	
 	$.ui.menu = function(el, menu, options) {
 		
@@ -59,9 +71,9 @@
 		
 		$(menu).appendTo(el);	// This makes sure our menu is attached in the DOM to the parent to keep things clean
 		self.styleMenu(menu);	// Pass the menu in to recieve it's makeover
-		self[self.options.context](el, menu, self.options);	// Based on contexted selected, attach to menu parent
+		self[self.options.context](el, menu);	// Based on contexted selected, attach to menu parent
 		if (options.context != 'context') { // Check to see if context, as context requires clicked element
-			self.execFunction(menu, self.options);
+			self.execFunction(menu);
 		}
 	}
 	
@@ -84,112 +96,132 @@
 			var node = $('li',menu).addClass('ui-menu-item');	// Finish up any unmatched items
 			return false;
 		},
-		clickContext : function(el,menu,options) {
+		clickContext : function(el,menu) {
 			var self = this;
 			$(el).bind('click', function(event){	//FIXME: Something inside the function is breaking IE
 				var x = $(el).position();
 				var y = x.bottom + ( $(el).height() + 1);
 				$(menu).css({position:'absolute', top: y, left: x.left}) // Apply the menu directly below
-				.animate(options.show, options.speed);				//TODO: Add vertial menu support
-				$(menu)[options.hovertype](function(){
-					self.showChild(menu,options);	
+				.animate(self.options.show, self.options.speed);				//TODO: Add vertial menu support
+				$(menu)[self.options.hovertype](function(){
+					self.showChild(menu);	
 				}, function(){
-					self.hideMenu(menu,options);
+					self.hideMenu(menu);
 				});
 				
 			});
 			return false;
 		},
-		hoverContext : function(el,menu,options) {
+		hoverContext : function(el,menu) {
 			var self = this;
-			$(el)[options.hovertype](function(event){
+			$(el)[self.options.hovertype](function(event){
 				var x = $(el).position();
 				var y = x.top + ( $(el).height() + 1);
 				$(menu).css({position:'absolute', top: y, left: x.left})
-					.animate(options.show, options.speed);
-				self.showChild(menu,options);
+					.animate(self.options.show, self.options.speed);
+				self.showChild(menu);
 				},
 			function(){
-				self.hideMenu(menu,options);
+				self.hideMenu(menu);
 			});
 			
 			return false;
 		},
-		context : function (el,menu,options) {	
+		context : function (el,menu) {	
 			var self = this;
 			var ctrlPressed=0;
 
-			$(menu).not($('.ui-context-header').parents()).prepend('<span class="ui-context-header">' + options.contexttitle + '</span>');
+			$(menu).not($('.ui-context-header').parents()).prepend('<span class="ui-context-header">' + self.options.contexttitle + '</span>');
 				
-			var renderMenu = function(event, self, menu, options) {
+			var renderMenu = function(event, self, menu) {
 				$(menu).css({position:'absolute', top: event.clientY, left: event.clientX})
-						.animate(options.show, options.speed);
-					$(menu)[options.hovertype](function(){
-						self.showChild(menu,options);
+						.animate(self.options.show, self.options.speed);
+					$(menu)[self.options.hovertype](function(){
+						self.showChild(menu);
 					}, function(){
-						self.hideMenu(menu,options);
+						self.hideMenu(menu);
 					});
 			}
 			
 			if (!$.browser.opera) {
 				$(el).bind('contextmenu', function(e){
-					renderMenu(e, self, menu, options);
-					self.execFunction(menu, options, e.target);
+					renderMenu(e, self, menu);
+					self.execFunction(menu, e.target);
 					return false;
 				});
 			} else {
 				$(el).bind('click', function(e){
 					var ctrlPressed =e.ctrlKey;
 					if (ctrlPressed && e.button == 0) 
-						renderMenu(e, self, menu, options);
-						self.execFunction(menu, options, e.target);
+						renderMenu(e, self, menu);
+						self.execFunction(menu, e.target);
 						return false;
 				});						
 			}
 			return false;			
 		},
-		showChild : function(menu, options) {
-			$('li', menu)[options.hovertype](
-				function(){
+		showChild : function(menu) {
+			var self = this;
+			$('li', menu)[self.options.hovertype](
+				function(ev){
 					x = $(this).position();
 					$(this).find('>ul').css({position:'absolute', top:x.top, left:$(menu).width()})
-							.animate(options.show,options.speed);
+							.animate(self.options.show,self.options.speed);
+					$(this).triggerHandler("submenuOpen", [ev, {item:this}], self.options.submenuOpen);
 				},
 				function(){
-					$(this).find('>ul').animate(options.hide,options.speed);
+					$(this).find('>ul').animate(self.options.hide,self.options.speed);
 			});
 		},
-		hideMenu : function(menu, options){
-			$(menu).animate(options.hide,options.speed);
+		hideMenu : function(menu){
+			var self = this;
+			$(menu).animate(self.options.hide,self.options.speed);
 			return false;
 		},
-		execFunction : function(menu, options, element){
-			if(options&&options.buttons){	// Check to see if the menu has a buttons object
+		execFunction : function(menu, element){
+			var self = this;
+			if(self.options&&self.options.buttons){	// Check to see if the menu has a buttons object
       			$('a',$(menu)).click(function(){
-	  				if (options.buttons[this.className]){
-        				options.buttons[this.className](element);	//If the classname of the link has a matching function, execute
+	  				if (self.options.buttons[this.className]){
+        				self.options.buttons[this.className](element);	//If the classname of the link has a matching function, execute
         			}
       			});
 			}
 		
-			if(options&&options.hovers){	// Check to see if the menu has a buttons object
-	      		$('a',$(menu))[options.hovertype](function(){
-		  			if (options.hovers[this.className]){
-        				options.hovers[this.className](element);	//If the classname of the link has a matching function, execute
+			if(self.options&&self.options.hovers){	// Check to see if the menu has a buttons object
+	      		$('a',$(menu))[self.options.hovertype](function(){
+		  			if (self.options.hovers[this.className]){
+        				self.options.hovers[this.className](element);	//If the classname of the link has a matching function, execute
         			}
       			},
 				function(){});	// Do nothing at the moment
 				}
-			}
+			},
+			menuItemDisable : function (el, options) {
+				return $(el).each(function(){
+					var t = $('a', this).text();
+					$('a', el).hide();
+					$(el).append('<span class="ui-menu-item-disabled">' + t + '</span>');
+					$(el).triggerHandler("menuItemDisabled", [null, {item:el}], options.menuItemDisabled);
+				});
+			},
+			menuItemEnable : function (el, options) {
+				return $(el).each(function(){
+					$('span', el).remove();
+					$('a', el).show();
+					$(el).triggerHandler("menuItemEnabled", [null, {item:el}], options.menuItemEnabled);
+			});
+		}
 	});
 	
 	
 	$.extend($.fn, {
-		menuItemDisable : function () {
+	/*	menuItemDisable : function () {
 			return this.each(function(){
 				var t = $('a', this).text();
 				$('a', this).hide();
 				$(this).append('<span class="ui-menu-item-disabled">' + t + '</span>');
+				$(this).triggerHandler("menuItemDisabled", [null, {item:this}], self.options.menuItemDisable);
 			});
 		},
 		menuItemEnable : function () {
@@ -197,7 +229,7 @@
 				$('span', this).remove();
 				$('a', this).show();
 			});
-		},
+		},*/
 		menuItemAdd : function (item) {
 			
 			var item = $.extend({

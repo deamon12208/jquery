@@ -53,13 +53,19 @@
 							return false;
 						},
 						fileSave : function(){
-							$('#filemenu-save').menuItemDisable();
+							$('#filemenu-save').menuItemDisable({
+							menuItemDisabled: function(ev, ui){
+								alert($(ui.item).text());
+							}});
 							return false;
 						},
 						fileNewDocument : function(){
 							alert('New Document');
 							return false;
 						}
+					},
+					submenuOpen : function(){
+						alert('Submenu Open');
 					}
 				});
 				
@@ -102,7 +108,11 @@
 				})
 				
 				$('.enableSave').bind('click', function(){
-					$('#filemenu-save').menuItemEnable();
+					$('#filemenu-save').menuItemEnable({
+						menuItemEnabled : function(ev, ui){
+							alert($(ui).text());
+						}
+					});
 					return false;
 				})
 				
