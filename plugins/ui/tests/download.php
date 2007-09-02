@@ -754,8 +754,7 @@ class ParseMaster {
 
 
 if (isset($_POST) && !empty($_POST) && (!empty($_POST['files']) || isset($_POST['jquery']))) {
-  header('Content-Type: text/javascript');
-  header('Content-Disposition: attachment; filename="ui.js"');
+  
   // Prevent security exploits
   $possible_files = array(
     'dimensions',
@@ -793,19 +792,19 @@ if (isset($_POST) && !empty($_POST) && (!empty($_POST['files']) || isset($_POST[
   }
   if (isset($_POST['files'])) {
     foreach ($_POST['files'] as $file) {
-      if (!in_array($file, $possible_files)) {
-        exit;
-      } 
-      $output .= file_get_contents('../ui.'. $file .'.js') ."\n\n";
+      if (in_array($file, $possible_files)) {
+        $output .= file_get_contents('../ui.'. $file .'.js') ."\n\n";
+      }
     }
   }
   if (isset($_POST['encode']) && $_POST['encode'] != false) {
     $packer = new JavaScriptPacker($output);
-    print $packer->pack();
+    $output = $packer->pack();
   }
-  else {
-    print $output;
-  }
+  
+  header('Content-Type: text/javascript');
+  header('Content-Disposition: attachment; filename="ui.js"');
+  print $output;
   exit;
 }
 
