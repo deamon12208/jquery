@@ -1,14 +1,21 @@
 == To Do ==
 
 * possibly allow for overriding ajaxSettings.error
-* add support for setting hoverIntent options
+* provide example in demo that uses both hover and click  
+* in IE7. If I leave your example page, go do something in another window, when I come back to your page the tooltips will not work until I reload your page.
 
 == New and Noteworthy ==
+
+== 0.8.7 ==
+
+* added 'bottomTop' as an available value for the "positionBy" option.
+* added ability to set hoverIntent options through cluetip's hoverIntent options
+* added height option that allows setting a static height for the clueTip and puts in a vertical scrollbar if the contents don't fit. That situation of course is not very usable unless the clueTip is sticky as well, so the user can actually scroll it.
 
 == 0.8.6 ==
 
 * changed fx.open default to 'show' and fx.openSpeed default to '' (empty string)
-* images now load before ajaxed contents are shown. Code generously provided by Torben Shreiter.
+* ajaxed contents now wait until all images are loaded before being shown. Code generously provided by Torben Schreiter.
  
 == 0.8.5 ==
 

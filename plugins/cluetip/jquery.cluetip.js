@@ -1,6 +1,6 @@
 /*
  * jQuery clueTip plugin
- * Version 0.8.4  (08/16/2007)
+ * Version 0.8.7  (09/01/2007)
  * @requires jQuery v1.1.1
  * @requires Dimensions plugin 
  *
@@ -10,7 +10,6 @@
  *
  */
 (function($) { 
-
 /*
  * @name clueTip
  * @type jQuery
@@ -75,7 +74,7 @@
  * @option Integer dropShadowSteps: default is 6; change this number to adjust the size of the drop shadow
  * @option Boolean sticky: default is false. Set to true to keep the clueTip visible until the user either closes it manually by clicking on the CloseText or display another clueTip.
  * @option Integer cluezIndex: default is 97; sets the z-index style property of the clueTip.
- * @option String positionBy: default is 'auto'. Change this to 'mouse' if you want to override the smart positioning and position the clueTip based on where the mouse is instead.
+ * @option String positionBy: default is 'auto'. Available options: 'auto', 'mouse', or 'bottomTop'. Change to 'mouse' if you want to override positioning by element and position the clueTip based on where the mouse is instead. Change to 'bottomTop' if you want positioning to begin below the mouse when there is room or above if not -- rather than right or left of the elemnent and flush with element's top.
  * @option Object fx: default is: {open: 'show', openSpeed: '', close: 'hide', closeSpeed: ''}. Change these to apply one of jQuery's effects when opening or closing the clueTip
  * @option String activation: default is 'hover'. Set to 'toggle' to force the user to click the element in order to activate the clueTip.
  * @option Boolean hoverIntent: default is true. If jquery.hoverintent.js plugin is included in <head>, hoverIntent() will be used instead of hover()
@@ -93,6 +92,7 @@
     // set up default options
     var defaults = {
       width: 275,
+      height: 'auto',
       local: false,
       hideLocal: true,
       attribute: 'rel',
@@ -103,7 +103,7 @@
       hoverClass: '',
       waitImage: true,
       cursor: 'help',
-      arrows: false, // CHANGE THIS TO true IF YOU WANT jTip-STYLE ARROWS FOR ALL clueTips
+      arrows: false, 
       dropShadow: true,
       dropShadowSteps: 6,
       sticky: false,
@@ -113,14 +113,18 @@
       closeText: 'Close',
       truncate: 0,
       cluezIndex: 97,
-      positionBy: 'auto', // CHANGES THIS TO mouse TO FORCE CLUETIP TO BE POSITIONED NEXT TO THE MOUSE
+      positionBy: 'auto', 
       fx: {
         open: 'show',
         openSpeed: '',
         close: 'hide',
         closeSpeed: ''
       },
-      hoverIntent: true,
+      hoverIntent: {
+        sensitivity: 3,
+  			interval: 50,
+  			timeout: 0
+      },
       onShow: function (ct, c){},
       ajaxCache: true,  
       ajaxProcess: function(data) {
@@ -140,7 +144,10 @@
       $.extend(defaults.fx, options.fx);
       delete options.fx;
     }
-    
+    if (options && options.hoverIntent) {
+      $.extend(defaults.hoverIntent, options.hoverIntent);
+      delete options.hoverIntent;
+    }
     $.extend(defaults, options);
     
     return this.each(function() {
@@ -167,7 +174,6 @@
         $cluetipOuter.css({position: 'relative', zIndex: cluezIndex+1});
       }
       var dropShadowSteps = (defaults.dropShadow) ? +defaults.dropShadowSteps : 0;
-      // if (!$dropShadow && defaults.dropShadow) {
       if (!$dropShadow) {
         $dropShadow = $([]);
         for (var i=0; i < dropShadowSteps; i++) {
@@ -176,7 +182,6 @@
         $dropShadow.css({position: 'absolute', backgroundColor: '#000'})
           .prependTo($cluetip);
       }
-
       var $this = $(this);      
       var tipAttribute = $this.attr(defaults.attribute), ctClass = defaults.cluetipClass;
       if (!tipAttribute && !defaults.splitTitle) return true;
@@ -185,10 +190,11 @@
       // vertical measurement variables
       var tipHeight, wHeight;
       var sTop, linkTop, posY, tipY, mouseY;
+      if (!isNaN(parseInt(defaults.height,10))) {
+        $cluetipInner.css({height: defaults.height, overflow: 'auto'});
+      }
       // horizontal measurement variables
-      
-      var tipWidth = parseInt(defaults.width, 10) + parseInt($cluetip.css('paddingLeft')) + parseInt($cluetip.css('paddingRight')) + dropShadowSteps;
-      if( isNaN(tipWidth) ) tipWidth = 275;
+      var tipWidth = isNaN(tipWidth) ? 275 : parseInt(defaults.width, 10) + parseInt($cluetip.css('paddingLeft')) + parseInt($cluetip.css('paddingRight')) + dropShadowSteps;
       var linkWidth = this.offsetWidth;
       var linkLeft, posX, tipX, mouseX, winWidth;
             
@@ -208,10 +214,10 @@
 //activate clueTip
     var activate = function(event) {
       isActive = true;
+      $cluetip.removeClass().css({width: defaults.width});
       if (tipAttribute == $this.attr('href')) {
         $this.css('cursor', defaults.cursor);
       }
-      //$this.removeAttr('title');
       $this.attr('title','');
       if (defaults.hoverClass) {
         $this.addClass(defaults.hoverClass);
@@ -223,25 +229,23 @@
       if ($this[0].tagName.toLowerCase() != 'area') {
         sTop = $(document).scrollTop();
         winWidth = $(window).width();
-// position clueTip horizontally
-        posX = (linkWidth > linkLeft && linkLeft > tipWidth)
-          || linkLeft + linkWidth + tipWidth > winWidth 
-          ? linkLeft - tipWidth - 15 
-          : linkWidth + linkLeft + 15;
       }
-      $cluetip.removeClass().css({width: defaults.width});
-      if ($this.css('display') == 'block' || $this[0].tagName.toLowerCase() == 'area' || defaults.positionBy == 'mouse') { // position by mouse
-        if (mouseX + 20 + tipWidth > winWidth) {
+// position clueTip horizontally
+      posX = (linkWidth > linkLeft && linkLeft > tipWidth)
+        || linkLeft + linkWidth + tipWidth > winWidth 
+        ? linkLeft - tipWidth - 15 
+        : linkWidth + linkLeft + 15;
+      if ($this[0].tagName.toLowerCase() == 'area' || defaults.positionBy == 'mouse' || linkWidth + tipWidth > winWidth) { // position by mouse
+        if (mouseX + 20 + tipWidth > winWidth) {  
           posX = (mouseX - tipWidth - 20) >= 0 ? mouseX - tipWidth - 20 :  mouseX - (tipWidth/2);
         } else {
           posX = mouseX + 20;
         }
         var pY = posX < 0 ? event.pageY + 20 : event.pageY;
       }
-
       posX < linkLeft ? $cluetip.addClass('clue-left-' + ctClass).removeClass('clue-right-' + ctClass)
       : $cluetip.addClass('clue-right-' + ctClass).removeClass('clue-left-' + ctClass);                
-      $cluetip.css({left: (posX > 0) ? posX :( mouseX + (tipWidth/2) > winWidth) ? winWidth/2 - tipWidth/2 : Math.max(mouseX - (tipWidth/2),0)});
+      $cluetip.css({left: (posX > 0 && defaults.positionBy != 'bottomTop') ? posX : (mouseX + (tipWidth/2) > winWidth) ? winWidth/2 - tipWidth/2 : Math.max(mouseX - (tipWidth/2),0)});
       wHeight = $(window).height();
 
 /***************************************
@@ -271,6 +275,7 @@
           var ajaxSettings = defaults.ajaxSettings;
           ajaxSettings.url = tipAttribute;
           ajaxSettings.beforeSend = function() {
+            $cluetipOuter.children().empty();
             if (defaults.waitImage) {
               $('#cluetip-waitimage')
               .css({top: mouseY-10, left: parseInt(posX+(tipWidth/2),10)})
@@ -343,7 +348,7 @@
 // now that content is loaded, finish the positioning      
       tipHeight = $cluetip.outerHeight();
       tipY = posY;
-      if ( posX < mouseX && Math.max(posX, 0) + tipWidth > mouseX ) {
+      if ( (posX < mouseX && Math.max(posX, 0) + tipWidth > mouseX) || defaults.positionBy == 'bottomTop') {
         tipY = posY + tipHeight > sTop + wHeight && mouseY - sTop > tipHeight + 10 ? mouseY - tipHeight - 10 : mouseY + 20;
       } else if ( posY + tipHeight > sTop + wHeight ) {
         tipY = (tipHeight >= wHeight) ? sTop : sTop + wHeight - tipHeight - 10;
@@ -421,12 +426,21 @@
             return false;
           }
         });
-
-        $this[($.fn.hoverIntent) && defaults.hoverIntent ? 'hoverIntent' : 'hover'](function(event) {
-          activate(event);
-        }, function(event) {
-          inactivate(event);
-        });
+        if ($.fn.hoverIntent && defaults.hoverIntent) {
+          $this.hoverIntent({
+            sensitivity: defaults.hoverIntent.sensitivity,
+            interval: defaults.hoverIntent.interval,  
+            over: function(event) {activate(event);}, 
+            timeout: defaults.hoverIntent.timeout,  
+            out: function(event) {inactivate(event);}
+          });           
+        } else {
+          $this.hover(function(event) {
+            activate(event);
+          }, function(event) {
+            inactivate(event);
+          });
+        }
       }
     });
   };
@@ -458,5 +472,4 @@
       insertionElement = options.insertionElement;
     }
   };
-
 })(jQuery);
