@@ -13,8 +13,6 @@
 			@import url(../../../themes/tango/tango.menu.css);
 			body { font:10pt Calibri, Arial, sans-serif; margin:10px 20px;}
 			.filePrint {background: url('images/printer.png') no-repeat center left; padding-left: 16px;}
-			td:hover {border: 1px solid #f00;}
-			td:focus {border: 1px solid #f00;}
 			
 			.light .toggle a { color:#222; }
   			.dark  .toggle a { color:snow; }
@@ -89,15 +87,13 @@
 				$('td').menu('#contextMenu', {
 					context: 'context',
 					buttons : {
-						contextEditField : function(){
-							alert('Context Document Fired');
-							return false;
+						contextEditField : function(e){
+						  $(e).html('<input type="text" value="'+ $(e).text() +'" />').find('input').blur(function() {
+						    $(this).parent().html($(this).val());
+						  });
 						},
 						contextClearField : function(e){
-							$('.contextClearField').click(function(){
-								$(e).text('');
-								return false;
-							})
+							$(e).text('');
 						}
 					}
 				});
