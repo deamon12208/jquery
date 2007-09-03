@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?php echo '<?xml version="1.0" encoding="UTF-8"?>'; ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -24,9 +24,9 @@ div.gallery div.left { background: #eee; width: 200px; position: absolute; top: 
 div.gallery div.bottom { background: #ddd; height: 50px; left: 200px; right: 5px; position: absolute; bottom: 5px; border-top: 1px solid #999; }
 div.gallery div.right {  background: #fafafa; position: absolute; top: 30px; right: 5px; bottom: 51px; padding-bottom: 20px; left: 201px; overflow: auto; border: 1px solid #fff; }
 
-div.gallery div.overlay { display: none; background: #fff; position: absolute; top: 30px; right: 5px; bottom: 56px; padding-bottom: 20px; left: 201px; overflow: auto; border: 1px solid #fff; z-index: 20; text-align: center; }
-div.gallery div.overlay img { cursor: pointer; cursor: hand; border: 1px solid #666; padding: 5px; background-color: #aaa; position: absolute; }
-div.gallery div.overlay img:hover { border: 1px solid #bbb; background-color: #eee; }
+div.gallery div.overlay { display: none; background: #000; position: absolute; top: 30px; right: 5px; bottom: 56px; padding-bottom: 20px; left: 201px; overflow: auto; border: 1px solid #fff; z-index: 20; text-align: center; }
+div.gallery div.overlay img { cursor: pointer; cursor: hand; border: 1px solid #50A029; padding: 5px; background-color: #C4E1A4; position: absolute; }
+div.gallery div.overlay img:hover { border: 1px solid #fff; background-color: #86B255; }
 
 /* Styling the left hand navigation */
 div.gallery ul.menue { list-style-type: none; margin: 0; padding: 0; }
@@ -46,7 +46,7 @@ div.gallery div.bottom div.slider { height: 30px; width: 200px; position: absolu
 div.gallery div.bottom div.slider div.handle { position: absolute; top: 2px; left: 0px; height: 26px; width: 5px; background: black; }
 
 /* The main thumbnails */
-div.gallery div.right img.thumb { border: 1px solid #50A029; width: 135px; float: left; position: relative; margin-left: 10px; margin-top: 10px; }
+div.gallery div.right img.thumb { border: 1px solid #50A029; width: 100px; float: left; position: relative; margin-left: 10px; margin-top: 10px; cursor: pointer; cursor: hand; }
 div.gallery div.right img.hover { border: 1px solid #fff; z-index: 5;}
 
 /* The tabs */
@@ -103,8 +103,7 @@ div.draggable img { width: 100px; border: 1px solid #AED5EA; }
 		
 		<div class="top">jQuery UI Demo Application: Gallery
             <ul class="tabs">
-                <li><a href="#container-2">Winter Trip</a></li>
-                <li class="active"><a href="#container-1">Underwater</a></li>
+                <li><a href="#container-0">National Geography</a></li>
             </ul>
 		</div>
 		<div class="left">
@@ -112,8 +111,19 @@ div.draggable img { width: 100px; border: 1px solid #AED5EA; }
 				<li>
 					<a class="head" href="javascript:void(0)">Albums</a>
 					<ul class="items">
-						<li><a href="javascript:void($('div.gallery ul.tabs li a:first').click())"><img class="thumb" src="images/select-1.jpg"><span>Winter Trip</span></a></li>
-						<li><a href="javascript:void($('div.gallery ul.tabs li a:last').click())"><img class="thumb" src="images/select-2.jpg"><span>Underwater</span></a></li>
+<?php
+
+$dir = dir("images/albums");
+$i = 0;
+while($file = $dir->read()) {
+	if($file != "." && $file != ".." && $file != ".svn") {
+		echo '<li><a href="javascript:void($(\'div.gallery ul.tabs li a:eq('.$i.')\').click())"><img class="thumb" src="images/select-1.jpg"><span>'.$file.'</span></a></li>';
+		$i++;
+  	}
+}
+$dir->close();
+
+?>
 					</ul> 
 				</li>
 				<li>
@@ -170,24 +180,32 @@ div.draggable img { width: 100px; border: 1px solid #AED5EA; }
 		
 		<div class="overlay">
 		</div>
-		
-		<div class="right" id="container-1">
-			<img class="thumb" src="images/select-1.jpg">
-			<img class="thumb" src="images/select-2.jpg">
-			<img class="thumb" src="images/select-3.jpg">
-			<img class="thumb" src="images/select-4.jpg">
-			<img class="thumb" src="images/select-5.jpg">
-			<img class="thumb" src="images/select-6.jpg">
-			<img class="thumb" src="images/select-7.jpg">
-			<img class="thumb" src="images/select-8.jpg">
-			<img class="thumb" src="images/select-9.jpg">
-		</div>
-		
-		<div class="right" id="container-2" style="display:none;">
-			<img class="thumb" src="images/select-4.jpg">
-			<img class="thumb" src="images/select-3.jpg">
-			<img class="thumb" src="images/select-5.jpg">
-		</div>
+
+<?php
+
+$dir = dir("images/albums");
+$i = 0;
+while($file = $dir->read()) {
+	if($file != "." && $file != ".." && $file != ".svn") {
+		echo '<div class="right" id="container-'.$i.'">';
+
+
+			$dir2 = dir("images/albums/".$file);
+			while($file2 = $dir2->read()) {
+				if($file2 != "." && $file2 != ".." && $file2 != ".svn") {
+					echo '<img class="thumb" src="images/albums/'.$file.'/'.$file2.'" '.($i > 0 ? 'style="display: block"' : '').'>';
+			  	}
+			}
+			$dir2->close();
+
+
+		echo '</div>';
+		$i++;
+  	}
+}
+$dir->close();
+
+?>
 		
 		<div class="bottom">
 

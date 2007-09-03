@@ -8,57 +8,64 @@ function getStyleRule(rule) {
 }
 
 var overlay = {
+	container: null,
 	speed: 500,
+	isRunning: false,
 	prepare: function(cur) {
 
-		$("div.gallery div.overlay").empty().css("opacity", 0.01).show();
+		overlay.container = $("div.gallery div.overlay");
+		overlay.container.empty().css("opacity", 0.01).show();
+		var cw = overlay.container[0].offsetWidth, ch = overlay.container[0].offsetHeight;
 		
+		//Determine next/prev pictures
 		var next = ($(cur).next().not(".bigthumb").length) ? $(cur).next()[0]: false;
 		var prev = ($(cur).prev().not(".bigthumb").length) ? $(cur).prev()[0]: false;
 		
+		//Clone the picture (full-sized)
 		var img = $("<img class='cur' src='"+cur.src+"' />").appendTo("div.gallery div.overlay");
-		var pos_x = ($("div.gallery div.overlay")[0].offsetWidth / 2) - ( $(img)[0].offsetWidth / 2 );
-		$(img).css({
-			left: pos_x,
-			top: ($("div.gallery div.overlay")[0].offsetHeight / 2) - ( $(img)[0].offsetHeight / 2 )
-		});
 		
+		//We cannot display it at full width and height
+		$(img).css("width", cw - 220);
+		overlay.width = cw - 220;
+		overlay.height = $(img).height();
 		
-		var img_left = $("<img class='prev' src='"+(prev ? prev.src : cur.src)+"' style='width: 50px;' />").appendTo("div.gallery div.overlay");
-		$(img_left).css({ left: (pos_x / 2) - ( 50 / 2 ), top: ($("div.gallery div.overlay")[0].offsetHeight / 2) - ( $(img_left)[0].offsetHeight / 2 ) });
+		//Position the picture in the middle
+		var pos_x = (cw / 2) - ( $(img)[0].offsetWidth / 2 );
+		$(img).css({ left: pos_x, top: (ch / 2) - ( $(img)[0].offsetHeight / 2 ) });
+		
+		//Create the left hand image
+		var img_left = $("<img class='prev' src='"+(prev ? prev.src : cur.src)+"' style='width: 50px;' />").appendTo(overlay.container);
+		$(img_left).css({ left: (pos_x / 2) - ( 50 / 2 ), top: (ch / 2) - ( $(img_left)[0].offsetHeight / 2 ) });
 		if(!prev) $(img_left).css("visibility", "hidden");
 
-		var img_right = $("<img class='next' src='"+(next ? next.src : cur.src)+"' style='width: 50px;' />").appendTo("div.gallery div.overlay");
-		$(img_right).css({ left: (pos_x+$(img)[0].offsetWidth) + (pos_x / 2) - ( 50 / 2 ), top: ($("div.gallery div.overlay")[0].offsetHeight / 2) - ( $(img_right)[0].offsetHeight / 2 ) });
+		//Create the right hand image
+		var img_right = $("<img class='next' src='"+(next ? next.src : cur.src)+"' style='width: 50px;' />").appendTo(overlay.container);
+		$(img_right).css({ left: (pos_x+$(img)[0].offsetWidth) + (pos_x / 2) - ( 50 / 2 ), top: (ch / 2) - ( $(img_right)[0].offsetHeight / 2 ) });
 		if(!next) $(img_right).css("visibility", "hidden");
-
-		var thumbs = $(cur).parent().find("img:not(.bigthumb)").css("visibility", "hidden");
-		thumbs.each(function() {
-			var clone = $(this).clone().css($(this).position()).css({ position: "absolute", visibility: "visible" }).addClass('clone');
-			$(this.parentNode).append(clone);
-			clone.animate({ opacity: 0 });
-		});
 		
-		var cur_clone = $(cur).clone().appendTo($(cur).parent()).css($(cur).position()).css({
-			position: "absolute",
-			opacity: 1,
-			visibility: "visible",
-			padding: "5px",
-			marginLeft: "0",
-			marginTop: "0" 
-		}).animate({
-			top: ($("div.gallery div.overlay")[0].offsetHeight / 2) - ( $(img)[0].offsetHeight / 2 ),
-			left: pos_x,
-			width: img.width(),
-			height: img.height()
-		}, 500, function() { $("div.gallery div.overlay").animate({ opacity: 1 },500); }).addClass('clone');
+		//This is the transition from thumb to coverflow view
+		var cur_clone = $(cur)
+			.clone()
+			.appendTo($(cur).parent())
+			.css($(cur).position())
+			.css({ position: "absolute", opacity: 1, visibility: "visible", padding: "5px", marginLeft: "0", marginTop: "0" })
+			.animate({ top: (ch / 2) - ( $(img)[0].offsetHeight / 2 ), left: pos_x, width: img.width(), height: img.height() }, 500, function() {
+				overlay.container.animate({ opacity: 1 },500, function() {
+					$("img.clone").remove();
+					$("img.thumb").css("visibility", "visible");
+				});
+			})
+			.addClass('clone');
 	
 	},
 	next: function() {
 		
-		var cur = $("div.gallery div.overlay img.cur");
-		var next = $("div.gallery div.overlay img.next");
-		var prev = $("div.gallery div.overlay img.prev");
+		if(overlay.isRunning) return;
+		overlay.isRunning = true;
+		
+		var cur = $("img.cur", overlay.container);
+		var next = $("img.next", overlay.container);
+		var prev = $("img.prev", overlay.container);
 		
 		var curLeft = parseInt(cur.css("left"));
 		var curNextPosition = [parseInt(next.css("left")),parseInt(next.css("top"))];
@@ -68,23 +75,14 @@ var overlay = {
 			width: 50,
 			left: parseInt(prev.css("left")),
 			top: parseInt(prev.css("top"))
-		}, overlay.speed, function() { $(this).removeClass("cur").addClass("prev"); });
+		}, overlay.speed, function() { window.setTimeout(function() { overlay.isRunning = false; },50); $(this).removeClass("cur").addClass("prev"); });
 		
 		//Make the previous one vanish (if there is a previous)..
-		if(prev.length) {
-			prev.animate({
-				width: 0,
-				padding: 0,
-				top: parseInt(prev.css("top")) + (prev[0].offsetHeight / 2)
-			}, overlay.speed, function() { $(this).remove(); });
-		}
+		if(prev.length)
+			prev.animate({ width: 0, padding: 0, top: parseInt(prev.css("top")) + (prev[0].offsetHeight / 2) }, overlay.speed, function() {$(this).remove();});
 		
 		//..and the next one big
-		next.animate({
-			width: 250, //Hardcoded! Only for the demo!
-			top: parseInt(cur.css("top")),
-			left: curLeft
-		}, overlay.speed, function() { $(this).removeClass("next").addClass("cur");  });
+		next.animate({ width: overlay.width, top: parseInt(cur.css("top")), left: curLeft }, overlay.speed, function() { $(this).removeClass("next").addClass("cur");  });
 		
 		//and finally, add a new 'next' picture if one exists
 		var path = (next[0].src.split("/"));
@@ -98,22 +96,21 @@ var overlay = {
 			left: curNextPosition[0]+(upcoming.length ? 50 : 0),
 			top: curNextPosition[1]+(upcoming.length ? img_right_height/2 : 0),
 			width: upcoming.length ? 1 : 50,
-			visibility: upcoming.length ? "visible": "hidden" });
+			visibility: upcoming.length ? "visible": "hidden"
+		});
 		
-		if(upcoming.length) {
-			img_right.animate({
-				width: 50,
-				top: curNextPosition[1],
-				left: curNextPosition[0]
-			}, overlay.speed);
-		}	
+		if(upcoming.length)
+			img_right.animate({ width: 50, top: curNextPosition[1], left: curNextPosition[0] }, overlay.speed);	
 		
 	},
 	prev: function() {
 		
-		var cur = $("div.gallery div.overlay img.cur");
-		var next = $("div.gallery div.overlay img.next");
-		var prev = $("div.gallery div.overlay img.prev");
+		if(overlay.isRunning) return;
+		overlay.isRunning = true;
+		
+		var cur = $("img.cur", overlay.container);
+		var next = $("img.next", overlay.container);
+		var prev = $("img.prev", overlay.container);
 		
 		var curLeft = parseInt(cur.css("left"));
 		var curPrevPosition = [parseInt(prev.css("left")),parseInt(prev.css("top"))];
@@ -123,24 +120,19 @@ var overlay = {
 			width: 50,
 			left: parseInt(next.css("left")),
 			top: parseInt(next.css("top"))
-		}, overlay.speed, function() { $(this).removeClass("cur").addClass("next"); });
+		}, overlay.speed, function() { window.setTimeout(function() { overlay.isRunning = false; },50); $(this).removeClass("cur").addClass("next"); });
 	
 		//Make the next one vanish (if there is a previous)..
 		if(next.length) {
 			next.animate({
-				width: 0,
-				padding: 0,
+				width: 0, padding: 0,
 				top: parseInt(next.css("top")) + (next[0].offsetHeight / 2),
 				left: parseInt(next.css("left")) + next[0].offsetWidth
 			}, overlay.speed, function() { $(this).remove(); });
 		}
 			
 		//..and the previous one big
-		prev.animate({
-			width: 250, //Hardcoded! Only for the demo!
-			top: parseInt(cur.css("top")),
-			left: curLeft
-		}, overlay.speed, function() { $(this).removeClass("prev").addClass("cur");  });
+		prev.animate({ width: overlay.width, top: parseInt(cur.css("top")), left: curLeft }, overlay.speed, function() { $(this).removeClass("prev").addClass("cur");  });
 	
 		//and finally, add a new 'prev' picture if one exists
 		var path = (prev[0].src.split("/"));
@@ -154,14 +146,11 @@ var overlay = {
 			left: curPrevPosition[0],
 			top: curPrevPosition[1]+ (upcoming.length ? img_left_height/2 : 0),
 			width: upcoming.length ? 1 : 50,
-			visibility: upcoming.length ? "visible": "hidden" });
+			visibility: upcoming.length ? "visible": "hidden"
+		});
 		
-		if(upcoming.length) {
-			img_left.animate({
-				width: 50,
-				top: curPrevPosition[1]
-			}, overlay.speed);
-		}	
+		if(upcoming.length)
+			img_left.animate({ width: 50, top: curPrevPosition[1] }, overlay.speed);	
 	
 	}	
 }
@@ -181,7 +170,7 @@ $(document).ready(function(){
 	 */
 	$('div.gallery ul.tabs li a').bind("click", function() {
 		
-		$("div.gallery div.overlay").hide();
+		overlay.container.hide();
 		
 		$(this).parent().parent().find("li").removeClass("active");
 		$(this).parent().addClass("active");
@@ -215,11 +204,7 @@ $(document).ready(function(){
 	$('div.gallery div.overlay').bind("click", function(e) {
 		
 		if(e.target.nodeName.toLowerCase() != "img") {
-			
-			$("img.clone").remove();
-			$("img.thumb").css("visibility", "visible");
-			$(this).hide();
-			return;
+			$(this).hide(); return;
 		}
 		
 		if(e.target.className == "next") overlay.next();
@@ -229,10 +214,7 @@ $(document).ready(function(){
 	
 	$('div.gallery div.right img')
 		.bind("click", function() {
-			
-			//Fill the overlay and bind events
-			overlay.prepare(this);
-				
+			overlay.prepare(this); //Fill the overlay and bind events
 		})
 		.hover(function() {
 			
@@ -244,21 +226,22 @@ $(document).ready(function(){
 				.css({ left: offset.left, top: offset.top, position: "absolute", zIndex: 4 })
 				.appendTo(this.parentNode);
 			
-			var animation = { height: this.offsetHeight*1.5, width: this.offsetWidth*1.5 };
+			var modifier = 1.3;
+			var animation = { height: this.offsetHeight*modifier, width: this.offsetWidth*modifier };
 			
-			if((offset.left- (this.offsetWidth*0.5)/2) > 0)
-				animation.left = offset.left - (this.offsetWidth*0.5)/2;
+			if((offset.left- (this.offsetWidth*(modifier-1))/2) > 0)
+				animation.left = offset.left - (this.offsetWidth*(modifier-1))/2;
 			
-			if((offset.left- (this.offsetWidth*0.5)/2 + this.offsetWidth*1.5) > this.parentNode.offsetWidth)
-				animation.left = offset.left - (this.offsetWidth*0.5);
+			if((offset.left- (this.offsetWidth*(modifier-1))/2 + this.offsetWidth*modifier) > this.parentNode.offsetWidth)
+				animation.left = offset.left - (this.offsetWidth*(modifier-1));
 			
-			if((offset.top- (this.offsetHeight*0.5)/2) > 0)
-				animation.top = offset.top - (this.offsetHeight*0.5)/2;
+			if((offset.top- (this.offsetHeight*(modifier-1))/2) > 0)
+				animation.top = offset.top - (this.offsetHeight*(modifier-1))/2;
 			
-			if((offset.top- (this.offsetHeight*0.5)/2 + this.offsetHeight*1.5) > this.parentNode.offsetHeight)
-				animation.top = offset.top - (this.offsetHeight*0.5);
+			if((offset.top- (this.offsetHeight*(modifier-1))/2 + this.offsetHeight*modifier) > this.parentNode.offsetHeight)
+				animation.top = offset.top - (this.offsetHeight*(modifier-1));
 			
-			node.animate(animation, 100); //Let's use a very fast animation here
+			node.animate(animation, 500); //Let's use a very fast animation here
 			$(this).css("opacity", 0);
 			
 		}, function() {
@@ -266,14 +249,13 @@ $(document).ready(function(){
 			$("img.bigthumb").remove();
 			$(this).css("opacity", 1);
 		})
+
 	/*
 	 * Draggables
 	 */	
 		.draggable({
 			appendTo: "body",
-			helper: function() {
-				return $("<div class='draggable'></div>").append($(this).clone().css("opacity", 1))[0];
-			},
+			helper: function() { return $("<div class='draggable'></div>").append($(this).clone().css("opacity", 1))[0]; },
 			cursorAt: { top: 10, left: 10 },
 			opacity: 0.8
 		});
@@ -307,7 +289,7 @@ $(document).ready(function(){
 	/*
 	 * Slider
 	 */
-	var slider = new $.ui.slider($('div.gallery div.slider')[0], { maxValue: 240, startValue: 105, slide: function(e,ui) {
+	var slider = new $.ui.slider($('div.gallery div.slider')[0], { maxValue: 240, startValue: 70, slide: function(e,ui) {
 		var rule = getStyleRule("div.gallery div.right img.thumb");
 		rule.style.width = (30+ui.value)+"px";
 	}});
