@@ -131,7 +131,6 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			o.movedElement = null;
 			
 			
-			$.ui.plugin.call('start', this);
 			if(o.hoverClass) {
 				that.helper = $('<div class="'+o.hoverClass+'"></div>').appendTo('body').css({
 					height: this.element.offsetHeight+'px',
@@ -154,7 +153,6 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			
 			var o = this.options;
 			
-			$.ui.plugin.call('stop', this);
 			$(this.element).css('visibility', 'visible');
 			
 			if(that.helper)
@@ -179,7 +177,6 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			draggedEl = this.element;
 			var o = this.options;
 			this.pos = [this.pos[0]-o.cursorAt.left, this.pos[1]-o.cursorAt.top];
-			$.ui.plugin.call('drag', this);
 
 			var nv =  $(this.element).triggerHandler("sort", [e, that.prepareCallbackObj(this)], o.sort);
 			var nl = (nv && nv.left) ? nv.left :  this.pos[0];

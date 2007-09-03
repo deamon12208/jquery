@@ -10,8 +10,8 @@ function getStyleRule(rule) {
 var overlay = {
 	speed: 500,
 	prepare: function(cur) {
-	
-		$("div.gallery div.overlay").empty().show();
+
+		$("div.gallery div.overlay").empty().css("opacity", 0.01).show();
 		
 		var next = ($(cur).next().not(".bigthumb").length) ? $(cur).next()[0]: false;
 		var prev = ($(cur).prev().not(".bigthumb").length) ? $(cur).prev()[0]: false;
@@ -32,6 +32,26 @@ var overlay = {
 		$(img_right).css({ left: (pos_x+$(img)[0].offsetWidth) + (pos_x / 2) - ( 50 / 2 ), top: ($("div.gallery div.overlay")[0].offsetHeight / 2) - ( $(img_right)[0].offsetHeight / 2 ) });
 		if(!next) $(img_right).css("visibility", "hidden");
 
+		var thumbs = $(cur).parent().find("img:not(.bigthumb)").css("visibility", "hidden");
+		thumbs.each(function() {
+			var clone = $(this).clone().css($(this).position()).css({ position: "absolute", visibility: "visible" }).addClass('clone');
+			$(this.parentNode).append(clone);
+			clone.animate({ opacity: 0 });
+		});
+		
+		var cur_clone = $(cur).clone().appendTo($(cur).parent()).css($(cur).position()).css({
+			position: "absolute",
+			opacity: 1,
+			visibility: "visible",
+			padding: "5px",
+			marginLeft: "0",
+			marginTop: "0" 
+		}).animate({
+			top: ($("div.gallery div.overlay")[0].offsetHeight / 2) - ( $(img)[0].offsetHeight / 2 ),
+			left: pos_x,
+			width: img.width(),
+			height: img.height()
+		}, 500, function() { $("div.gallery div.overlay").animate({ opacity: 1 },500); }).addClass('clone');
 	
 	},
 	next: function() {
@@ -195,7 +215,11 @@ $(document).ready(function(){
 	$('div.gallery div.overlay').bind("click", function(e) {
 		
 		if(e.target.nodeName.toLowerCase() != "img") {
-			$(this).hide(); return;
+			
+			$("img.clone").remove();
+			$("img.thumb").css("visibility", "visible");
+			$(this).hide();
+			return;
 		}
 		
 		if(e.target.className == "next") overlay.next();

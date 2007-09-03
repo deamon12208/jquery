@@ -162,7 +162,6 @@
 			
 			this.options.modifyThese.push([$(this.helper),0,0]);
 			
-			$.ui.plugin.call('start', that, this);
 			$(that.element).triggerHandler("resizestart", [e, that.prepareCallbackObj(this)], this.options.start);			
 			return false;
 		},
@@ -170,7 +169,6 @@
 			
 			var o = this.options;
 
-			$.ui.plugin.call('stop', that, this);
 			$(that.element).triggerHandler("resizestop", [e, that.prepareCallbackObj(this)], this.options.stop);	
 
 			if(o.proxy) {
@@ -258,7 +256,6 @@
 			if(o.maxWidth) nw = nw >= o.maxWidth ? o.maxWidth : nw;
 			if(o.maxHeight) nh = nh >= o.maxHeight ? o.maxHeight : nh;
 
-			$.ui.plugin.call('resize', that, this);
 			var modifier = $(that.element).triggerHandler("resize", [e, that.prepareCallbackObj(this)], o.resize);
 			if(!modifier) modifier = {};
 			

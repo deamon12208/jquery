@@ -182,7 +182,7 @@
 			
 			var o = this.options;
 			$(that.element).triggerHandler("slidestop", [e, that.prepareCallbackObj(this)], o.stop);
-			if(this.pickValue != this.curValue) $.ui.trigger('change', this, e, that.prepareCallbackObj(this));
+			if(this.pickValue != this.curValue) $(that.element).triggerHandler("slidechange", [e, that.prepareCallbackObj(this)], o.change);
 
 			return false;
 			
