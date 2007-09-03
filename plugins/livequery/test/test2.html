@@ -48,12 +48,22 @@
 				$('input[@name=example1-1-restart]')
 					.bind('click', function() {
 						$('ul#example1-1 a')
-							.livequery('click', example1_1);
+							.livequery('click', function() {
+								$(this)
+									.text('Clicked')
+									.blur();
+								return false;
+							});
 						$('input[@name=example1-1-expire]')[0].disabled = false;
 						$('input[@name=example1-1-restart]').attr('disabled', true).blur();
 					});
 				$('ul#example1-1 a')
-					.livequery('click', example1_1);
+					.livequery('click', function() {
+						$(this)
+							.text('Clicked')
+							.blur();
+						return false;
+					});
 				
 				/*** Example 1-2 ***/
 				var matched = function() {
@@ -73,7 +83,7 @@
 				$('input[@name=example1-2-expire]')
 					.bind('click', function() {
 						$('ul#example1-2 li')
-							.expire(matched, unmatched);
+							.expire();
 						this.blur();
 						this.disabled = true;
 						$('input[@name=example1-2-restart]').attr('disabled', false);
@@ -81,18 +91,30 @@
 				$('input[@name=example1-2-restart]')
 					.bind('click', function() {
 						$('ul#example1-2 li')
-							.livequery(matched, unmatched);
+							.livequery(function() {
+								$(this)
+									.append('<small>&nbsp;(Updated)</small>');
+							}, function() {
+								$('small', this)
+									.remove();
+							});
 						$('input[@name=example1-2-expire]')[0].disabled = false;
 						$('input[@name=example1-2-restart]').attr('disabled', true).blur();
 					});
 				$('ul#example1-2 li')
-					.livequery(matched, unmatched);
+					.livequery(function() {
+						$(this)
+							.append('<small>&nbsp;(Updated)</small>');
+					}, function() {
+						$('small', this)
+							.remove();
+					});
 			});
 		</script>
 	</head>
 	<body>
 		<!-- <div id="anim"></div> -->
-		<h1>Live Query: Unordered List Examples (Using Function References)</h1>
+		<h1>Live Query: Unordered List Examples (Using Anonymous Functions)</h1>
 		<p>A common use-case is when a new list item is added to an unordered list and an event should be bound to it or a script notified of the change.</p>
 		
 		<h2>Binding an event to each list item</h2>
