@@ -42,6 +42,10 @@ BUGS:
 #119. samTi, 
 #121. Marc. "The calendar unfurls itself below the input as expected, but when complete jumps to above the input."
 
+http://www.webnostra.com/hostalmagnolia/reservas-hostal.asp
+If you leave september the days of the month refresh ok on the outing date (Día de salida)
+If you choose October on the entry date (Día de entrada)  the name of the monthrefreshes, but the days of the month don't. You 've got to choose a different month for it to refresh the days.
+
 DEMO PAGE:
 
 #118. "Also – if you’re limiting posts to 500 chars, tell me where I’m as as I type!"
