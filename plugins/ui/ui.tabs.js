@@ -26,52 +26,18 @@
         $.fn[method + 'Tab'] = function() {
             var args = arguments;
             return this.each(function() {
-                this.jQueryTabs[method].apply(this.jQueryTabs, args);
+                var instance = $.ui.tabs.instances[this.uuid];
+                instance[method].apply(instance, args);
             });
         };
     });
     
-    /*$.fn.addTab = function(url, text, position) { // TODO callback?
-        var args = arguments;
-        return this.each(function() {
-            this.jQueryTabs.add.apply(this.jQueryTabs, args);
-        });
-    };
-    
-    $.fn.removeTab = function(position) {
-        var args = arguments;
-        return this.each(function() {
-            this.jQueryTabs.remove.apply(this.jQueryTabs, args);
-        });
-    };
-    
-    $.fn.enableTab = function(position) {
-        return this.each(function() {
+    $.fn.activeTab = function(returnElement) {
+        if (returnElement) {
             
-        });
-    };
-    
-    $.fn.disableTab = function(position) {
-        return this.each(function() {
+        } else {
             
-        });
-    };
-    
-    $.fn.showTab = function(position) {
-        return this.each(function() {
-            
-        });
-    };
-    
-    $.fn.loadTab = function(position, url, callback) {
-        // frequently requested: if url is passed reload tab with that url
-        return this.each(function() {
-            
-        });
-    };*/
-    
-    $.fn.activeTab = function() {
-        // returns number or element?
+        }
     };
 
     $.ui.tabs = function(el, options) {
@@ -105,10 +71,19 @@
         }, options);    	
     	
     	this.tabify();
+    	
+    	// save instance for later
+    	var uuid = 'jQueryTabs-' + $.ui.tabs.prototype.count++;
+    	$.ui.tabs.instances[uuid] = this;
+    	this.source.uuid = uuid;
     };
     
-    $.extend($.ui.tabs.prototype, {        
-        tabify: function() {
+    // static
+    $.ui.tabs.instances = {};
+    
+    $.extend($.ui.tabs.prototype, {
+        count: 0,
+        tabify: function(init) {
               
             this.$tabs = $('a:first-child', this.source);
             this.$containers = $([]);
@@ -118,10 +93,9 @@
             
             this.$tabs.each(function(i, a) {
         	    if (a.hash) { // inline tab
-        	        instance.$containers = instance.$containers.add(a.hash); // jQuery's add() does not work somehow
+        	        instance.$containers = instance.$containers.add(a.hash);
         	    } else { // remote tab
-        	        // TODO create unique ids
-        	        var id = a.title && a.title.replace(/\s/g, '_') || options.hashPrefix + (i + 1), url = a.href;
+        	        var id = a.title && a.title.replace(/\s/g, '_') || options.hashPrefix + (instance.count + 1) + '-' + (i + 1), url = a.href;
         	        a.href = '#' + id;
         	        a.url = url;
         	        instance.$containers = instance.$containers.add(
@@ -140,8 +114,7 @@
                         // prevent page scroll to fragment
                         //if (($.browser.msie || $.browser.opera) && !options.remote) {
                         if ($.browser.msie || $.browser.opera) {
-                            var $toShow = $(location.hash);
-                            var toShowId = toShow.attr('id');
+                            var $toShow = $(location.hash), toShowId = $toShow.attr('id');
                             $toShow.attr('id', '');
                             setTimeout(function() {
                                 $toShow.attr('id', toShowId); // restore id
@@ -167,17 +140,20 @@
             this.$containers.filter(':eq(' + options.initial + ')').show().end().not(':eq(' + options.initial + ')').addClass(options.hideClass);
             $('li', $source).removeClass(options.selectedClass).eq(options.initial).addClass(options.selectedClass); // eventually need to remove classes in case hash takes precedence over class
             
-            // trigger load of initial tab
-            // TODO
-            //tabs.eq(options.initial).trigger('loadRemoteTab').end();
+            // trigger load of initial tab is remote tab
+            if (this.$tabs[options.initial].url) {
+                instance.load(options.initial + 1, this.$tabs[options.initial].url);
+                // TODO call show callback? add init/load callback?
+            }
         	
         	// disabled tabs
             for (var i = 0, k = options.disabled.length; i < k; i++) {
-                this.disable(--options.disabled[i]);
+                this.disable(options.disabled[i] - 1);
             }
         	
         	// setup animations
-            var showAnim = {}, hideAnim = {}, showSpeed = options.fxShowSpeed || options.fxSpeed, hideSpeed = options.fxHideSpeed || options.fxSpeed;
+            var showAnim = {}, hideAnim = {}, showSpeed = options.fxShowSpeed || options.fxSpeed, 
+                hideSpeed = options.fxHideSpeed || options.fxSpeed;
             if (options.fxSlide || options.fxFade) {
                 if (options.fxSlide) {
                     showAnim['height'] = 'show';
@@ -206,7 +182,6 @@
             var click = options.click, hide = options.hide, show = options.show;
         	
         	var $containers = this.$containers;
-        	
         	
         	// attach click event
             this.$tabs.bind('click', function(e) {
@@ -266,17 +241,17 @@
                     }
                     
                     if (this.url) { // remote tab
-                        instance.load(instance.$tabs.index(this) + 1, this.url, switchTab)
+                        instance.load(instance.$tabs.index(this) + 1, this.url, switchTab);
                     } else {
                         switchTab();
                     }
 
                     // Set scrollbar to saved position - need to use timeout with 0 to prevent browser scroll to target of hash
-                    var scrollX = window.pageXOffset || document.documentElement && document.documentElement.scrollLeft || document.body.scrollLeft || 0;
+                    /*var scrollX = window.pageXOffset || document.documentElement && document.documentElement.scrollLeft || document.body.scrollLeft || 0;
                     var scrollY = window.pageYOffset || document.documentElement && document.documentElement.scrollTop || document.body.scrollTop || 0;
                     setTimeout(function() {
                         scrollTo(scrollX, scrollY);
-                    }, 0);
+                    }, 0);*/
 
                 } else {
                     alert('There is no such container.');
@@ -288,9 +263,7 @@
                 return false;
                 
             });
-        	
-        	// TODO attach instance as expando?
-        	this.source['jQueryTabs'] = this;
+            
         },
         add: function(url, text, position) { // TODO callback
             if (url && text) {
@@ -325,7 +298,7 @@
         enable: function(position, callback) {
             var $li = this.$tabs.slice(position - 1, position).parents('li:eq(0)');
             $li.removeClass(this.options.disabledClass);
-            if ($.browser.safari) { /* fix disappearing tab after enabling in Safari... TODO check Safari 3 */
+            if ($.browser.safari) { // fix disappearing tab after enabling in Safari... TODO check Safari 3
                 $li.animate({ opacity: 1 }, 1, function() {
                     $li.css({ opacity: '' });
                 });
@@ -336,7 +309,7 @@
         },
         disable: function(position, callback) {
             var $li = this.$tabs.slice(position - 1, position).parents('li:eq(0)');            
-            if ($.browser.safari) { /* fix opacity of tab after disabling in Safari... TODO check Safari 3 */
+            if ($.browser.safari) { // fix opacity of tab after disabling in Safari... TODO check Safari 3
                 $li.animate({ opacity: 0 }, 1, function() {
                    $li.css({ opacity: '' });
                 });
@@ -346,12 +319,12 @@
                 callback();
             }
         },
-        show: function(position, callback) { // TODO callback
+        show: function(position, callback) {
             
         },
-        load: function(position, url, callback) { // TODO callback
+        load: function(position, url, callback) {
             var options = this.options;
-            if (url && url.constructor == Function) {  // shift arguments
+            if (url && url.constructor == Function) { // shift arguments
                 callback = url;
             }
             var $a = this.$tabs.slice(position - 1, position).addClass(options.loadingClass),
@@ -360,7 +333,7 @@
                 // TODO if spinner is image
                 $span.html('<em>' + options.spinner + '</em>');
             }
-            setTimeout(function() { // Timeout is again required in IE, "wait" for id being restored
+            setTimeout(function() { // timeout is again required in IE, "wait" for id being restored
                 $($a[0].hash).load(url, function() {
                     if (options.spinner) {
                         $span.html(text);
