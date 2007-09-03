@@ -75,18 +75,6 @@
 	}
 	
 	$.extend($.ui.menu.prototype, {
-		plugins: {},
-		currentTarget: null,
-		lastTarget: null,
-		prepareCallbackObj: function(self) {
-			return {
-				helper: self.helper,
-				position: { left: self.pos[0], top: self.pos[1] },
-				offset: self.options.cursorAt,
-				draggable: self,
-				options: self.options	
-			}			
-		},
 		styleMenu : function(menu){
 			$(menu).addClass('ui-menu-items').children('li').addClass('ui-menu-item');	//Apply first level and child items
 			var parents = $('ul',menu).addClass('ui-menu-items').parent('li').addClass('ui-menu-item-parent')	// Apply sublevels
@@ -105,12 +93,12 @@
 				}, function(){
 					self.hideMenu(menu);
 				});
-				$('a', $(menu)).click(function(ev){
-					$(this).triggerHandler("contextClickItem", [ev, {item:this}], self.options.buttons[this.className]);
+				$('a', $(menu)).bind('click', function(ev){
+					$().triggerHandler(this.className, [ev, {item:this}], self.options.buttons[this.className]);
 					return false;
 				});
-				$('a', $(menu))[self.options.hovertype](function(ev){
-					$(this).triggerHandler("contextClickItem", [ev, {item:this}], self.options.hovers[this.className]);
+				$('a', $(menu)).bind(self.options.hovertype, function(ev){
+					$().triggerHandler(this.className, [ev, {item:this}], self.options.hovers[this.className]);
 				});
 			});
 			return false;
@@ -124,10 +112,10 @@
 					.animate(self.options.show, self.options.speed);
 				self.showChild(menu);
 				$('a', $(menu)).click(function(ev){
-					$(this).triggerHandler("contextHoverItem", [ev, {item:this}], self.options.buttons[this.className]);
+					$().triggerHandler(this.className, [ev, {item:this}], self.options.buttons[this.className]);
 				});
 				$('a', $(menu))[self.options.hovertype](function(ev){
-					$(this).triggerHandler("contextHoverItem", [ev, {item:this}], self.options.hovers[this.className]);
+					$().triggerHandler(this.className, [ev, {item:this}], self.options.hovers[this.className]);
 				});
 				},
 			function(){
@@ -156,10 +144,10 @@
 				$(el).bind('contextmenu', function(e){
 					renderMenu(e, self, menu);
 					$('a', $(menu)).click(function(ev){
-						$(this).triggerHandler(this.className, [ev, {item:this}], self.options.buttons[this.className]);
+						$().triggerHandler(this.className, [e, {item:this}], self.options.buttons[this.className]);
 					});
 					$('a', $(menu))[self.options.hovertype](function(ev){
-						$(this).triggerHandler(this.className, [ev, {item:this}], self.options.hovers[this.className]);
+						$().triggerHandler(this.className, [e, {item:this}], self.options.hovers[this.className]);
 					});
 					return false;
 				});
@@ -169,10 +157,10 @@
 					if (ctrlPressed && e.button == 0) 
 						renderMenu(e, self, menu);
 						$('a', $(menu)).click(function(ev){
-							$(this).triggerHandler(this.className, [ev, {item:this}], self.options.buttons[this.className]);
+							$().triggerHandler(this.className, [ev, {item:e.target}], self.options.buttons[this.className]);
 						});
 						$('a', $(menu))[self.options.hovertype](function(ev){
-							$(this).triggerHandler(this.className, [ev, {item:this}], self.options.hovers[this.className]);
+							$().triggerHandler(this.className, [ev, {item:e.target}], self.options.hovers[this.className]);
 						});
 						return false;
 				});						

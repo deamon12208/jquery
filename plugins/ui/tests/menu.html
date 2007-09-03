@@ -84,13 +84,13 @@
 				$('td').menu('#contextMenu', {
 					context: 'context',
 					buttons : {
-						contextEditField : function(e){
-						  $(e).html('<input type="text" value="'+ $(e).text() +'" />').find('input').blur(function() {
+						contextEditField : function(ev, ui){
+						  $(ui).html('<input type="text" value="'+ $(e).text() +'" />').find('input').blur(function() {
 						    $(this).parent().html($(this).val());
 						  });
 						},
-						contextClearField : function(e){
-							$(e).text('');
+						contextClearField : function(ev, ui){
+							$(ev.currentTarget).text('');
 						}
 					}
 				});

@@ -37,10 +37,10 @@
 						var o = slider.interaction.options;
 						switch(e.keyCode) {
 							case 37:
-								slider.goto(o.curValue+o.minValue-(o.stepping || 1));
+								slider.moveTo(o.curValue+o.minValue-(o.stepping || 1));
 								break;
 							case 39:
-								slider.goto(o.curValue+o.minValue+(o.stepping || 1));
+								slider.moveTo(o.curValue+o.minValue+(o.stepping || 1));
 								break;	
 						}
 						if(e.keyCode != 9) return false;
@@ -112,7 +112,7 @@
 		
 		if(!this.multipleHandles) {
 			$(el).bind('click', function(e) { self.click.apply(self, [e]); });
-			if(!isNaN(o.startValue)) this.goto(o.startValue,options.realValue, null, false);
+			if(!isNaN(o.startValue)) this.moveTo(o.startValue,options.realValue, null, false);
 		}
 		
 	}
@@ -221,9 +221,9 @@
 			return false;
 			
 		},
-		goto: function(value,scale,changeslide,p) {
+		moveTo: function(value,scale,changeslide,p) {	// renamed from goto to moveTo as goto is reserved javascript word
 			
-			if(this.multipleHandles) return false; //TODO: Multiple handle goto function
+			if(this.multipleHandles) return false; //TODO: Multiple handle moveTo function
 			
 			var o = this.interaction.options;
 			var offset = $(this.interaction.element).offsetParent().offset({ border: false });
