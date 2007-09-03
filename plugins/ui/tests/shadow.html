@@ -12,6 +12,8 @@
 <script type="text/javascript" src="../../../jquery/src/fx/fx.js"></script>
 <script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
 <script type="text/javascript" src="../ui.shadow.js"></script>
+<script type="text/javascript" src="../ui.mouse.js"></script>
+<script type="text/javascript" src="../ui.draggable.js"></script>
 <link rel="stylesheet" href="../../../themes/ui/ui.all.css" type="text/css" media="screen">
 
 
@@ -33,16 +35,8 @@ body
 	background: red;
 	color: #fff;
 	position: absolute; top: 100px; left: 500px;
-	z-index: 102;
+	z-index: 6;
 }
-
-
-
-
-
-
-
-
 
 </style>
 </head>
@@ -54,7 +48,7 @@ body
 
 <img class="ex" src="images/bamboo.jpg">
 
-<div style="position: absolute; background: blue; top: 100px; left: 500px; width: 50px; height: 600px;"></div>
+<div style="position: absolute; background: green; top: 100px; left: 500px; width: 50px; height: 600px; z-index: 5;"></div>
 
 	</fieldset>
 
@@ -62,7 +56,7 @@ body
 <script type="text/javascript">
 $(document).ready(function(){
 
-	$(".ex").shadow({ offset: 15, color: "blue", opacity: 0.2 });
+	$(".ex").draggable().shadow({ offset: 5, color: "red", opacity: 0.2 });
 
 });
 </script>

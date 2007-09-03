@@ -13,13 +13,15 @@
 			
 			var cur = $(this);
 			
-			//Wrap the original element with a shadow element
-			cur.wrap("<div class='ui-shadow'></div>");
-			var shadow = $(this.parentNode);
+			//Create a shadow element
+			var shadow = $("<div class='ui-shadow'></div>"); cur.after(shadow);
 			
 			//Figure the base height and width
 			var baseWidth = cur.outerWidth();
 			var baseHeight = cur.outerHeight();
+			
+			//get the offset
+			var position = cur.position();
 			
 			//Append smooth corners
 			$('<div class="ui-shadow-color ui-shadow-layer-1"></div>').css({ opacity: options.opacity-0.05, left: 5+options.offset, top: 5+options.offset, width: baseWidth+1, height: baseHeight+1 }).appendTo(shadow);
@@ -31,14 +33,22 @@
 			if(options.color)
 				$("div.ui-shadow-color", shadow).css("background-color", options.color);
 			
+			//Determine the stack order (attention: the zIndex will get one higher!)
+			if(!cur.css("zIndex") || cur.css("zIndex") == "auto") {
+				var stack = 0;
+				cur.css("position", (cur.css("position") == "static" ? "relative" : cur.css("position"))).css("z-index", "1");
+			} else {
+				var stack = parseInt(cur.css("zIndex"));
+				cur.css("zIndex", stack+1);
+			}
+			
 			//Copy the original z-index and position to the clone
+			//alert(shadow); If you insert this alert, opera will time correctly!!
 			shadow.css({
-				position: cur.css("position") != "static" ? cur.css("position") : "relative",
-				zIndex: cur.css("zIndex"),
-				left: cur.css("left"),
-				top: cur.css("top"),
-				right: cur.css("right"),
-				bottom: cur.css("bottom"),
+				position: "absolute",
+				zIndex: stack,
+				left: position.left,
+				top: position.top,
 				width: baseWidth,
 				height: baseHeight,
 				marginLeft: cur.css("marginLeft"),
@@ -46,24 +56,20 @@
 				marginBottom: cur.css("marginBottom"),
 				marginTop: cur.css("marginTop")
 			});
-
-
-			if(cur.css("left") != "auto") shadow.css({ left: cur.css("left") });
-			if(cur.css("right") != "auto") shadow.css({ right: cur.css("right") });
-			if(cur.css("top") != "auto") shadow.css({ top: cur.css("top") });
-			if(cur.css("bottom") != "auto") shadow.css({ bottom: cur.css("bottom") });
 			
-			//Remove these values from the inner node
-			cur.css({
-				position: "absolute",
-				left: 0,
-				top: 0,
-				marginLeft: 0,
-				marginRight: 0,
-				marginBottom: 0,
-				marginTop: 0,
-				zIndex: 1
-			});
+			
+			function rearrangeShadow(el,sh) {
+				$(sh).css($(el).position());
+			}
+			
+			if($.browser.msie) {
+				//Add dynamic css expressions
+				//TODO: Only possible with expando!
+			} else {
+				//Bind events for good browsers
+				this.addEventListener("DOMAttrModified",function() { rearrangeShadow(this,shadow); },false);
+			}
+
 				
 		});
 	};
