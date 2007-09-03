@@ -42,7 +42,8 @@
 				draggable: c,
 				droppable: this,
 				element: c.element,
-				helper: c.helper	
+				helper: c.helper,
+				options: this.options	
 			}			
 		},
 		destroy: function() {
@@ -74,7 +75,7 @@
 			
 			var o = this.options;
 			if (o.accept(c.element)) {
-				$.ui.plugin.call('over', this);
+				$.ui.plugin.call(this, 'over', [e, this.prepareCallbackObj(c)]);
 				$(this.element).triggerHandler("dropover", [e, this.prepareCallbackObj(c)], o.over);
 			}
 			
@@ -86,7 +87,7 @@
 
 			var o = this.options;
 			if (o.accept(c.element)) {
-				$.ui.plugin.call('out', this);
+				$.ui.plugin.call(this, 'out', [e, this.prepareCallbackObj(c)]);
 				$(this.element).triggerHandler("dropout", [e, this.prepareCallbackObj(c)], o.out);
 			}
 			
@@ -100,7 +101,12 @@
 			if(o.accept(c.element)) { // Fire callback
 				if(o.greedy && !c.slowMode) {
 					if(c.currentTarget == this.element) {
-						$.ui.plugin.call('drop', this);
+						$.ui.plugin.call(this, 'drop', [e, {
+							draggable: c,
+							droppable: this,
+							element: c.element,
+							helper: c.helper	
+						}]);
 						$(this.element).triggerHandler("drop", [e, {
 							draggable: c,
 							droppable: this,
@@ -109,7 +115,7 @@
 						}], o.drop);
 					}
 				} else {
-					$.ui.plugin.call('drop', this);
+					$.ui.plugin.call(this, 'drop', [e, this.prepareCallbackObj(c)]);
 					$(this.element).triggerHandler("drop", [e, this.prepareCallbackObj(c)], o.drop);
 				}
 			}
@@ -117,12 +123,12 @@
 		},
 		activate: function(e) {
 			var c = $.ui.ddmanager.current;
-			$.ui.plugin.call('activate', this);
+			$.ui.plugin.call(this, 'activate', [e, this.prepareCallbackObj(c)]);
 			if(c) $(this.element).triggerHandler("dropactivate", [e, this.prepareCallbackObj(c)], this.options.activate);	
 		},
 		deactivate: function(e) {
 			var c = $.ui.ddmanager.current;
-			$.ui.plugin.call('deactivate', this);
+			$.ui.plugin.call(this, 'deactivate', [e, this.prepareCallbackObj(c)]);
 			if(c) $(this.element).triggerHandler("dropdeactivate", [e, this.prepareCallbackObj(c)], this.options.deactivate);
 		}
 	});

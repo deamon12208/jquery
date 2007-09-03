@@ -10,12 +10,13 @@
 				var a = $.ui[w].prototype; if(!a.plugins[c]) a.plugins[c] = [];
 				a.plugins[c].push([o,p]);
 			},
-			call: function(t, a, b) {
-				var c = a.plugins[t]; if(!b) b = a;
-				if(!c) return;
+			call: function(instance, name, arguments) {
+				var c = instance.plugins[name]; if(!c) return;
+				var o = instance.interaction ? instance.interaction.options : instance.options;
+				var e = instance.interaction ? instance.interaction.element : instance.element;
 				
 				for (var i = 0; i < c.length; i++) {
-					if (b.options[c[i][0]]) c[i][1].call(b, a, b.options);
+					if (o[c[i][0]]) c[i][1].apply(e, arguments);
 				}	
 			}	
 		}
