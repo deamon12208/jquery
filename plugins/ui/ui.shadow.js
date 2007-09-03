@@ -64,7 +64,8 @@
 			
 			if($.browser.msie) {
 				//Add dynamic css expressions
-				//TODO: Only possible with expando!
+				shadow[0].style.setExpression("left","parseInt(jQuery(this.previousSibling).css('left'))+'px' || jQuery(this.previousSibling).position().left");
+				shadow[0].style.setExpression("top","parseInt(jQuery(this.previousSibling).css('top'))+'px' || jQuery(this.previousSibling).position().top");
 			} else {
 				//Bind events for good browsers
 				this.addEventListener("DOMAttrModified",function() { rearrangeShadow(this,shadow); },false);
