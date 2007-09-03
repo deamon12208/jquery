@@ -47,6 +47,11 @@ $.ajaxHistory = new function() {
         $('.remote-output').empty();
     };
     $(document).bind(RESET_EVENT, _defaultReset);
+    
+    // TODO fix for Safari 3
+    // if ($.browser.msie)
+    // else if hash != _currentHash
+    // else check history length
 
     if ($.browser.msie) {
 
@@ -265,8 +270,8 @@ $.fn.remote = function(output, settings, callback) {
     target.addClass('remote-output');
 
     return this.each(function(i) {
-        var href = this.href;
-        var hash = '#' + (this.title && this.title.replace(/\s/g, '_') || settings.hashPrefix + (i + 1));
+        var href = this.href, hash = '#' + (this.title && this.title.replace(/\s/g, '_') || settings.hashPrefix + (i + 1)),
+            a = this;
         this.href = hash;
         $(this).click(function(e) {
             // lock target to prevent double loading in Firefox
@@ -277,7 +282,7 @@ $.fn.remote = function(output, settings, callback) {
                 }
                 target.load(href, function() {
                     target['locked'] = null;
-                    callback();
+                    callback.apply(a);
                 });
             }
         });
@@ -317,3 +322,14 @@ $.fn.history = function(callback) {
 };
 
 })(jQuery);
+
+/*
+var logger;
+$(function() {
+    logger = $('<div style="position: fixed; top: 0; overflow: hidden; border: 1px solid; padding: 3px; width: 120px; height: 150px; background: #fff; color: red;"></div>').appendTo(document.body);
+});
+function log(m) {    
+    logger.prepend(m + '<br />');
+};
+*/
+
