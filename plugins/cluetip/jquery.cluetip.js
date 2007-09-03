@@ -336,6 +336,8 @@
         if (defaults.mouseOutClose) {
           $cluetip.hover(function() {doNothing(); }, 
           function() {$closeLink.trigger('click'); });
+        } else {
+          $cluetip.unbind('mouseout');
         }
       }
 // now that content is loaded, finish the positioning 
