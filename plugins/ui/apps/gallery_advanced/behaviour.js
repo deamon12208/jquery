@@ -38,7 +38,7 @@ var overlay = {
 		if(!prev) img_left.css("visibility", "hidden"); else img_left[0].src = prev.getAttribute('path'); //Hide this one if it's only a filler, otherwise lazy load the pic
 	
 		//Create the right hand image
-		var img_right = $("<img class='next' path='"+(prev ? next.getAttribute('path') : cur.getAttribute('path'))+"' src='"+(next ? next.src : cur.src)+"' style='width: 50px;' />").appendTo(overlay.container);
+		var img_right = $("<img class='next' path='"+(next ? next.getAttribute('path') : cur.getAttribute('path'))+"' src='"+(next ? next.src : cur.src)+"' style='width: 50px;' />").appendTo(overlay.container);
 		$(img_right).css({ left: (pos_x+$(img)[0].offsetWidth) + (pos_x / 2) - ( 50 / 2 ), top: (ch / 2) - ( $(img_right)[0].offsetHeight / 2 ) });
 		if(!next) img_right.css("visibility", "hidden"); else img_right[0].src = next.getAttribute('path'); //Hide this one if it's only a filler, otherwise lazy load the pic
 		
