@@ -214,7 +214,7 @@ This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML
         </li>
         <li>This one pulls the clueTip contents directly from the <code>title</code> attribute of a <code>span</code> tag: <span title="Split Title|This clueTip's contents were created directly from the title attribute|Nice for minimum info.">splitTitle clueTip</span>
           <div class="html">View the HTML</div>
-          <pre><code>&lt;span title="Split Title|This clueTip's contents were created directly from the title attribute|Nice for minimum info."&gt;</code></pre>
+          <code>&lt;span title="Split Title|This clueTip's contents were created directly from the title attribute|Nice for minimum info."&gt;</code>
           <div class="jquery">View the jQuery</div>          
 <pre><code>$('span[@title]').css({borderBottom: '1px solid #900'}).cluetip({
   splitTitle: '|', 
@@ -223,7 +223,16 @@ This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML
   cluetipClass: 'jtip'}
 );</code></pre>        
         </li>
-        <li>this one has a <a class="jt" href="ajax5.htm" rel="ajax5.htm">fixed height</a>
+        <li>this sticky clueTip has a <a class="jt" href="ajax5.htm" rel="ajax5.htm">fixed height</a>. It's generally a good idea to make fixed-height clueTips sticky as well, just in case the content requires a scrollbar to read it fully.
+          <div class="html">View the HTML</div>
+          <pre><code>&lt;a class="jt" href="ajax5.htm" rel="ajax5.htm"&gt;</code></pre>
+          <div class="jquery">View the jQuery</div>
+<pre><code>$('a.jt:eq(2)').cluetip({
+  cluetipClass: 'jtip', arrows: true, 
+  dropShadow: false, 
+  height: '150px', 
+  sticky: true
+});</code></pre>
         </li>
       </ol>
       <h4>Rounded Corners Theme</h4>
