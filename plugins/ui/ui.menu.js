@@ -63,6 +63,9 @@
 			},
 			_submenuClose: function(h, p, c, t, e) {
 				self.submenuClose.apply(t, [self, e]); // Trigger the submenuClose callback
+			},
+			_submenuClose: function(h, p, c, t, e) {
+				self.styleMenu.apply(t, [self, e]); // Trigger the submenuClose callback
 			}
 		},options);
 		
@@ -72,11 +75,22 @@
 		self.options.hovertype = hoverType();
 		
 		$(menu).appendTo(el);	// This makes sure our menu is attached in the DOM to the parent to keep things clean
-		self.styleMenu(menu);	// Pass the menu in to recieve it's makeover
+		$().triggerHandler("styleMenu", [null, {item:this}], self.styleMenu(menu));	// Pass the menu in to recieve it's makeover
 		
 		$(el).bind(self.options.trigger, function(event){
-			self.options.elPosition = $(el).position();
-			$(menu).css({position: 'absolute', top: self.options.elPosition.bottom, left: self.options.elPosition.left})
+				self.ctrlPressed=event.ctrlKey;
+				self.altPressed=event.atlKey
+				self.options.elPosition=0;	// to get around elPosition has no properties
+			if (self.options.trigger == 'contextmenu') {
+				self.options.elPosition.top = event.clientY;
+				self.options.elPosition.left = event.clientX;
+			} else {
+				var thispos = $(this).parent().parent().position();
+				self.options.elPosition.top = thispos.top;
+				self.options.elPosition.left = thispos.left;
+			}
+			
+			$(menu).css({position: 'absolute', top: self.options.elPosition.top, left: self.options.elPosition.left})
 			.animate(self.options.show, self.options.speed);
 			$(menu)[self.options.hovertype](function(){
 					self.showChild(menu);
