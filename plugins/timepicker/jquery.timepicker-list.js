@@ -106,10 +106,13 @@ $.fn.timePicker = function(options)
 			// toggle this one
 			timeHolder.toggle();
 			// set selected value
-			var selected = timeHolder.find("li").removeClass("selected").contains(this.value).addClass("selected");
-			if(selected[0])
+			if(this.value)
 			{
-				timeHolder.find("div.times")[0].scrollTop = selected[0].offsetTop;
+				var selected = timeHolder.find("li").removeClass("selected").contains(this.value).addClass("selected");
+				if(selected[0])
+				{
+					timeHolder.find("div.times")[0].scrollTop = selected[0].offsetTop;
+				}
 			}
 			e.stopPropagation();
 		}

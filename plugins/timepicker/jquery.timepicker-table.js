@@ -125,7 +125,10 @@ $.fn.timePicker = function(options)
 			// toggle this one
 			timeHolder.toggle();
 			// set selected value
-			timeHolder.find("td.time").removeClass("selected").contains(this.value).addClass("selected");
+			if(this.value)
+			{
+				timeHolder.find("td.time").removeClass("selected").contains(this.value).addClass("selected");
+			}
 			e.stopPropagation();
 		}
 	);
