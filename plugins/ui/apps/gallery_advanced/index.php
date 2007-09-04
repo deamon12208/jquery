@@ -192,8 +192,8 @@ while($file = $dir->read()) {
 
 			$dir2 = dir("images/albums/".$file);
 			while($file2 = $dir2->read()) {
-				if($file2 != "." && $file2 != ".." && $file2 != ".svn") {
-					echo '<img class="thumb" src="images/albums/'.$file.'/'.$file2.'" '.($i > 0 ? 'style="display: block"' : '').'>';
+				if($file2 != "." && $file2 != ".." && $file2 != ".svn" && !preg_match('/_tn_/', $file2)) {
+					echo '<img class="thumb" src="thumb.php?i=images/albums/'.$file.'/'.$file2.'&size=270" path="images/albums/'.$file.'/'.$file2.'" '.($i > 0 ? 'style="display: block"' : '').'>';
 			  	}
 			}
 			$dir2->close();

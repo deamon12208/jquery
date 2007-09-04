@@ -22,7 +22,7 @@ var overlay = {
 		var prev = ($(cur).prev().not(".bigthumb").length) ? $(cur).prev()[0]: false;
 		
 		//Clone the picture (full-sized)
-		var img = $("<img class='cur' src='"+cur.src+"' />").appendTo("div.gallery div.overlay");
+		var img = $("<img class='cur' src='"+cur.src+"' />").attr("src", cur.getAttribute('path')).appendTo("div.gallery div.overlay");
 		
 		//We cannot display it at full width and height
 		$(img).css("width", cw - 220);
@@ -34,14 +34,14 @@ var overlay = {
 		$(img).css({ left: pos_x, top: (ch / 2) - ( $(img)[0].offsetHeight / 2 ) });
 		
 		//Create the left hand image
-		var img_left = $("<img class='prev' src='"+(prev ? prev.src : cur.src)+"' style='width: 50px;' />").appendTo(overlay.container);
-		$(img_left).css({ left: (pos_x / 2) - ( 50 / 2 ), top: (ch / 2) - ( $(img_left)[0].offsetHeight / 2 ) });
-		if(!prev) $(img_left).css("visibility", "hidden");
-
+		var img_left = $("<img class='prev' path='"+(prev ? prev.getAttribute('path') : cur.getAttribute('path'))+"' src='"+(prev ? prev.src : cur.src)+"' style='width: 50px;' />").appendTo(overlay.container);
+		img_left.css({ left: (pos_x / 2) - ( 50 / 2 ), top: (ch / 2) - ( img_left[0].offsetHeight / 2 ) });
+		if(!prev) img_left.css("visibility", "hidden"); else img_left[0].src = prev.getAttribute('path'); //Hide this one if it's only a filler, otherwise lazy load the pic
+	
 		//Create the right hand image
-		var img_right = $("<img class='next' src='"+(next ? next.src : cur.src)+"' style='width: 50px;' />").appendTo(overlay.container);
+		var img_right = $("<img class='next' path='"+(prev ? next.getAttribute('path') : cur.getAttribute('path'))+"' src='"+(next ? next.src : cur.src)+"' style='width: 50px;' />").appendTo(overlay.container);
 		$(img_right).css({ left: (pos_x+$(img)[0].offsetWidth) + (pos_x / 2) - ( 50 / 2 ), top: (ch / 2) - ( $(img_right)[0].offsetHeight / 2 ) });
-		if(!next) $(img_right).css("visibility", "hidden");
+		if(!next) img_right.css("visibility", "hidden"); else img_right[0].src = next.getAttribute('path'); //Hide this one if it's only a filler, otherwise lazy load the pic
 		
 		//This is the transition from thumb to coverflow view
 		var cur_clone = $(cur)
@@ -100,7 +100,7 @@ var overlay = {
 		});
 		
 		if(upcoming.length)
-			img_right.animate({ width: 50, top: curNextPosition[1], left: curNextPosition[0] }, overlay.speed);	
+			img_right.animate({ width: 50, top: curNextPosition[1], left: curNextPosition[0] }, overlay.speed, function() { this.src = upcoming[0].getAttribute("path"); });	
 		
 	},
 	prev: function() {
@@ -150,7 +150,7 @@ var overlay = {
 		});
 		
 		if(upcoming.length)
-			img_left.animate({ width: 50, top: curPrevPosition[1] }, overlay.speed);	
+			img_left.animate({ width: 50, top: curPrevPosition[1] }, overlay.speed, function() { this.src = upcoming[0].getAttribute("path"); });	
 	
 	}	
 }
