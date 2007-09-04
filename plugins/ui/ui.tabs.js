@@ -49,6 +49,7 @@
             disabled: [],
             // TODO bookmarkable: $.ajaxHistory ? true : false,
             spinner: 'Loading&#8230;',
+            cache: false,
             hashPrefix: 'tab-',
             /*fxFade: null,
             fxSlide: null,
@@ -143,6 +144,9 @@
             // trigger load of initial tab is remote tab
             if (this.$tabs[options.initial].url) {
                 instance.load(options.initial + 1, this.$tabs[options.initial].url);
+                if (options.cache) {
+                    this.$tabs[options.initial].url = null; // if loaded once do not load them again
+                }
                 // TODO call show callback? add init/load callback?
             }
         	
@@ -203,13 +207,13 @@
                 if ($show.length) {
 
                     // prevent scrollbar scrolling to 0 and than back in IE7, happens only if bookmarking/history is enabled
-                    if ($.browser.msie && options.bookmarkable) {
+                    /*if ($.browser.msie && options.bookmarkable) {
                         var showId = this.hash.replace('#', '');
                         $show.attr('id', '');
                         setTimeout(function() {
                             $show.attr('id', showId); // restore id
                         }, 0);
-                    }
+                    }*/
 
                     var resetCSS = { display: '', overflow: '', height: '' };
                     if (!$.browser.msie) { // not in IE to prevent ClearType font issue
@@ -242,6 +246,9 @@
                     
                     if (this.url) { // remote tab
                         instance.load(instance.$tabs.index(this) + 1, this.url, switchTab);
+                        if (options.cache) {
+                            this.url = null; // if loaded once do not load them again
+                        }
                     } else {
                         switchTab();
                     }
@@ -275,8 +282,10 @@
                     var method = 'insertBefore';
                     --position;
                 }
-                $('<div id="' + url.replace('#', '') + '"></div>')[method](this.$containers[position])
-                $('<li><a href="' + url + '"><span>' + text + '</span></a></li>')[method](this.$tabs.eq(position).parents('li:eq(0)'));            
+                $('<div id="' + url.replace('#', '') + '"></div>')
+                    [method](this.$containers[position]);
+                $('<li><a href="' + url + '"><span>' + text + '</span></a></li>')
+                    [method](this.$tabs.eq(position).parents('li:eq(0)'));            
                 this.$tabs.unbind('click'); // TODO specify function
                 this.tabify();
             } else {
@@ -319,14 +328,15 @@
                 callback();
             }
         },
-        show: function(position, callback) {
-            
+        show: function(position) {
+            this.$tabs.slice(position - 1, position).trigger('click');
         },
         load: function(position, url, callback) {
             var options = this.options;
             if (url && url.constructor == Function) { // shift arguments
                 callback = url;
             }
+            // TODO set url if passed
             var $a = this.$tabs.slice(position - 1, position).addClass(options.loadingClass),
                 $span = $('span', $a), text = $span.html();
             if (options.spinner) {

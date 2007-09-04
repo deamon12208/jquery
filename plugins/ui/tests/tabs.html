@@ -37,7 +37,7 @@
                 });
                 //$('#container-7 ul').tabs({ fxAutoHeight: true });
                 $('#container-7 ul').tabs({ fxShow: { height: 'show', opacity: 'show' }, fxSpeed: 'normal' });
-                $('#container-8 ul').tabs();
+                $('#container-8 ul').tabs({ cache: false });
                 $('#container-9 ul').tabs({ disabled: [3] });
 
                 $('<p><a href="#">Remove tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
