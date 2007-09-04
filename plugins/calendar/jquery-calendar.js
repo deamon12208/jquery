@@ -1,8 +1,10 @@
-/* MarcGrabanski.com v2.7 */
-/* Pop-Up Calendar Built from Scratch by Marc Grabanski */
-/* Enhanced by Keith Wood (kbwood@iprimus.com.au). */
-/* Under the Creative Commons Licence http://creativecommons.org/licenses/by/3.0/
-	Share or Remix it but please Attribute the authors. */
+/* jQuery Calendar v2.7
+   Written by Marc Grabanski (m@marcgrabanski.com) and enhanced by Keith Wood (kbwood@iprimus.com.au).
+
+   Copyright (c) 2007 Marc Grabanski (http://marcgrabanski.com/code/jquery-calendar)
+   Dual licensed under the GPL (http://www.gnu.org/licenses/gpl-3.0.txt) and 
+   CC (http://creativecommons.org/licenses/by/3.0/) licenses. "Share or Remix it but please Attribute the authors."
+   Date: 09-03-2007  */
 
 /* PopUp Calendar manager.
    Use the singleton instance of this class, popUpCal, to interact with the calendar.
