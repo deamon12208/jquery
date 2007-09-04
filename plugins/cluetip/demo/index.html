@@ -212,7 +212,17 @@ This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML
 <pre><code>$('a.jt:eq(1)').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false, hoverIntent: false});
 </code></pre>  
         </li>
-        <li><span title="Split Title|This clueTip's contents were created directly from the title attribute|Nice for minimum info.">splitTitle clueTip</span></li>
+        <li>This one pulls the clueTip contents directly from the <code>title</code> attribute of a <code>span</code> tag: <span title="Split Title|This clueTip's contents were created directly from the title attribute|Nice for minimum info.">splitTitle clueTip</span>
+          <div class="html">View the HTML</div>
+          <pre><code>&lt;span title="Split Title|This clueTip's contents were created directly from the title attribute|Nice for minimum info."&gt;</code></pre>
+          <div class="jquery">View the jQuery</div>          
+<pre><code>$('span[@title]').css({borderBottom: '1px solid #900'}).cluetip({
+  splitTitle: '|', 
+  arrows: true, 
+  dropShadow: false, 
+  cluetipClass: 'jtip'}
+);</code></pre>        
+        </li>
         <li>this one has a <a class="jt" href="ajax5.htm" rel="ajax5.htm">fixed height</a>
         </li>
       </ol>

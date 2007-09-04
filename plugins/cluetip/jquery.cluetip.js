@@ -295,7 +295,7 @@
           			imgCount--;
           			if (imgCount<1) {
           				$('#cluetip-waitimage').hide();
-          			  cluetipShow(pY);
+          			  if (isActive) cluetipShow(pY);
           			}
         		  }); 
         		} else {
