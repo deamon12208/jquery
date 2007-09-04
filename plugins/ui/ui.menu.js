@@ -31,7 +31,8 @@
 		self.options = {};
 		
 		$.extend(self.options, {
-			context: 'clickContext',	// Context to attach to menu
+			trigger: 'click',	// Context to attach to menu
+			noHoverIntent: false,
 			show: {opacity:'show'},		// Animation object to show menu
 			hide: {opacity:'hide'},		// Animation object to hide menu	
 			delay: 500,					// Delay for animation
@@ -65,13 +66,34 @@
 			}
 		},options);
 		
-		if (typeof self.options.hovertype == 'undefined') {
-			self.options.hovertype = hoverType();	// If not overidden, check to if hoverIntent is available
+		if (self.options.trigger == 'hover' && self.options.noHoverIntent == false) {
+			self.options.trigger = hoverType();	// If not overidden, check to if hoverIntent is available
 		}
+		self.options.hovertype = hoverType();
 		
 		$(menu).appendTo(el);	// This makes sure our menu is attached in the DOM to the parent to keep things clean
 		self.styleMenu(menu);	// Pass the menu in to recieve it's makeover
-		self[self.options.context](el, menu);	// Based on contexted selected, attach to menu parent
+		
+		$(el).bind(self.options.trigger, function(event){
+			self.options.elPosition = $(el).position();
+			$(menu).css({position: 'absolute', top: self.options.elPosition.bottom, left: self.options.elPosition.left})
+			.animate(self.options.show, self.options.speed);
+			$(menu)[self.options.hovertype](function(){
+					self.showChild(menu);
+			}, function(){
+					self.hideMenu(menu);
+			});
+		});
+		console.log(self);
+		$('a', $(menu).children('li')).bind('click', function(ev){
+			$().triggerHandler(this.className, [ev, {item:this}], self.options.buttons[this.className]);
+			return false;
+		});
+		$('a', $(menu)).bind(self.options.hovertype, function(ev){
+			$().triggerHandler(this.className, [ev, {item:this}], self.options.hovers[this.className]);
+		});
+
+		
 	}
 	
 	$.extend($.ui.menu.prototype, {
@@ -81,7 +103,7 @@
 			var node = $('li',menu).addClass('ui-menu-item');	// Finish up any unmatched items
 			return false;
 		},
-		clickContext : function(el,menu) {
+/*		clickContext : function(el,menu) {
 			var self = this;
 			$(el).bind('click', function(event){	//FIXME: Something inside the function is breaking IE
 				var x = $(el).position();
@@ -166,7 +188,7 @@
 				});						
 			}
 			return false;			
-		},
+		},*/
 		showChild : function(menu) {
 			var self = this;
 			$('li', menu)[self.options.hovertype](

@@ -65,8 +65,7 @@
 				});
 				
 				$('#editmenu-parent').menu('#editmenu', {
-					context: 'hoverContext',
-					hovertype: 'hover',
+					trigger: 'hover',
 					buttons: {
 						fileCopy : function(){
 							alert('Text Copied');
@@ -82,7 +81,7 @@
 				});
 				
 				$('td').menu('#contextMenu', {
-					context: 'context',
+					trigger: 'contextmenu',
 					buttons : {
 						contextEditField : function(ev, ui){
 						  $(ui).html('<input type="text" value="'+ $(e).text() +'" />').find('input').blur(function() {
