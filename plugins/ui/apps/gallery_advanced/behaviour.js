@@ -185,10 +185,11 @@ $(document).ready(function(){
 	/*
 	 * Accordion
 	 */
-	$('div.gallery ul.menue').accordion({
+	/*$('div.gallery ul.menue').accordion({
 		header: '.head',
 		fillSpace: true
 	});
+	*/
 
 	/*
 	 * Resizable
