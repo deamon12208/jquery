@@ -13,7 +13,6 @@ var overlay = {
 	isRunning: false,
 	prepare: function(cur) {
 
-		overlay.container = $("div.gallery div.overlay");
 		overlay.container.empty().css("opacity", 0.01).show();
 		var cw = overlay.container[0].offsetWidth, ch = overlay.container[0].offsetHeight;
 		
@@ -159,6 +158,33 @@ var overlay = {
 
 
 $(document).ready(function(){
+
+
+	overlay.container = $("div.gallery div.overlay");
+
+
+
+	$("div.thumb").bind("mousemove", function(e) {
+	
+		if(!this.offset) this.offset = $(this).offset({ border: false });
+		
+		//Determine mouse position and stripe length
+		var p = e.clientX-this.offset.left;
+		if(p == 0) return; else p--;
+		var length = (this.getAttribute("stripelength"));
+		
+		//Change background position
+		var left = Math.floor((p/80) * length) * 80;
+		$(this).css("background-position", (-left)+"px 0px");
+	
+	});
+
+
+
+
+
+
+
 
 	/*
 	 * The three

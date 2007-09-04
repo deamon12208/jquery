@@ -1,4 +1,28 @@
-<?php echo '<?xml version="1.0" encoding="UTF-8"?>'; ?>
+<?php
+$albums = array();
+$album_dir = dir("images/albums");
+$i = 0;
+while($file = $album_dir->read()) {
+	if($file != "." && $file != ".." && $file != ".svn") {
+
+		$images = array();
+		$sub_dir = dir("images/albums/".$file);
+		while($image = $sub_dir->read()) {
+			if($image != "." && $image != ".." && $image != ".svn" && !preg_match('/_tn_/', $image)) {
+				array_push($images, $image);
+		  	}
+		}
+		$sub_dir->close();
+
+		//Add folder
+		array_push($albums, array('id' => $i++, 'name' => $file, 'path' => "images/albums/".$file, 'images' => $images, 'length' => count($images)));
+		
+  	}
+}
+$album_dir->close();
+echo '<?xml version="1.0" encoding="UTF-8"?>';
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -15,8 +39,8 @@
 
 <style type="text/css" media="all">
 
-body { background: #999; margin: 0; padding: 0; font-family: Lucida Sans, Arial; font-size: 12px; }
-.container { border: 1px solid #50A029; height: 500px; width: 800px; margin: 0 auto; margin-top: 100px; position: relative; }
+body { background: #999; margin: 0; padding: 50px; font-family: Lucida Sans, Arial; font-size: 12px; }
+.container { border: 1px solid #50A029; height: 500px; width: 800px; margin: 0; position: relative; }
 
 /* Inner container definitions */
 div.gallery div.top { cursor: move; color: #fff; background: #bbb; height: 14px; padding: 7px; left: 0px; right: 5px; position: absolute; top: 0px; border-bottom: 1px solid #999; }
@@ -37,8 +61,8 @@ div.gallery ul.menue ul.items { list-style-type: none; margin: 0; padding: 10px;
 div.gallery ul.menue ul.items a { text-decoration: none; display: block; position: relative; color: #333; height: 80px; margin-bottom: 10px; }
 div.gallery ul.menue ul.items a:hover { background: #ccc; }
 div.gallery ul.menue ul.items a.over { background: #ccc; }
-div.gallery ul.menue ul.items a span { position: absolute; top: 35px; left: 100px; }
-div.gallery ul.menue ul.items li img.thumb { border: 1px solid #50A029; width: 80px; position: absolute; top: 10px; left: 10px; }
+div.gallery ul.menue ul.items a span { position: absolute; top: 35px; left: 100px; display: block; width: 90px; }
+div.gallery ul.menue ul.items li div.thumb { border: 1px solid #50A029; width: 80px; height: 60px; position: absolute; top: 10px; left: 10px; }
 div.gallery ul.tree { list-style-type: none; margin: 0; padding-left: 10px; }
 
 /* The slider control at bottom */
@@ -103,7 +127,12 @@ div.draggable img { width: 100px; border: 1px solid #AED5EA; }
 		
 		<div class="top">jQuery UI Demo Application: Gallery
             <ul class="tabs">
-                <li><a href="#container-0">National Geography</a></li>
+
+<?php
+foreach($albums as $album) {
+	echo '<li><a id="tab-'.$album['id'].'" onclick="return false;" href="#container-'.$album['id'].'">'.$album['name'].'</a></li>';
+}
+?>
             </ul>
 		</div>
 		<div class="left">
@@ -112,68 +141,11 @@ div.draggable img { width: 100px; border: 1px solid #AED5EA; }
 					<a class="head" href="javascript:void(0)">Albums</a>
 					<ul class="items">
 <?php
-
-$dir = dir("images/albums");
-$i = 0;
-while($file = $dir->read()) {
-	if($file != "." && $file != ".." && $file != ".svn") {
-		echo '<li><a href="javascript:void($(\'div.gallery ul.tabs li a:eq('.$i.')\').click())"><img class="thumb" src="images/select-1.jpg"><span>'.$file.'</span></a></li>';
-		$i++;
-  	}
+foreach($albums as $album) {
+	echo '<li><a href="javascript:void($(\'div.gallery ul.tabs li #tab-'.$album['id'].'\').click())"><div class="thumb" stripelength="'.$album['length'].'" container="#container-'.$album['id'].'" style="background-image: url(\'stripes.php?path='.$album['path'].'&width=80&height=60\');"></div><span>'.$album['name'].'</span></a></li>';
 }
-$dir->close();
-
 ?>
 					</ul> 
-				</li>
-				<li>
-					<a class="head" href="javascript:void(0)">Categories</a>
-					<ul class="items">
-						<li><a href="javascript:void(0)"><img class="thumb" src="images/select-8.jpg"><span>Family</span></a></li>
-						<li><a href="javascript:void(0)"><img class="thumb" src="images/select-4.jpg"><span>Animals</span></a></li>
-					</ul> 
-				</li>
-				<li>
-					<a class="head" href="javascript:void(0)">Years</a>
-					<ul class="items">
-						<li><a href="javascript:void(0)"><img class="thumb" src="images/select-9.jpg"><span>2007</span></a></li>
-						<li><a href="javascript:void(0)"><img class="thumb" src="images/select-5.jpg"><span>2006</span></a></li>
-					</ul> 
-				</li>
-				<li>
-					<a class="head" href="javascript:void(0)">Disk</a>
-
-					<div style='position: relative; left: 10px; top: 10px;'>
-					<ul class="tree light">
-					  <li>Images
-					    <ul>
-					      <li>Mixed</li>
-					      <li>Anime
-					        <ul>
-					          <li>Fruits Basket</li>
-					          <li>FLCL</li>
-					        </ul>
-					      </li>
-					      <li>Flowers</li>
-					    </ul>
-					  </li>
-					  <li>Fotos
-					    <ul>
-					      <li>Mixed</li>
-					      <li>People</li>
-					      <li>Nature</li>
-					      <li>My Family</li>
-					    </ul>
-					  </li>
-					  <li>Temp
-					    <ul>
-					      <li>Something</li>
-					      <li>Something else</li>
-					    </ul>
-					  </li>
-					</ul>
-					</div>
-
 				</li>
 			</ul>
 		</div>
@@ -183,27 +155,17 @@ $dir->close();
 
 <?php
 
-$dir = dir("images/albums");
-$i = 0;
-while($file = $dir->read()) {
-	if($file != "." && $file != ".." && $file != ".svn") {
-		echo '<div class="right" id="container-'.$i.'">';
+foreach($albums as $album) {
 
+	echo '<div class="right" id="container-'.$album['id'].'">';
 
-			$dir2 = dir("images/albums/".$file);
-			while($file2 = $dir2->read()) {
-				if($file2 != "." && $file2 != ".." && $file2 != ".svn" && !preg_match('/_tn_/', $file2)) {
-					echo '<img class="thumb" src="thumb.php?i=images/albums/'.$file.'/'.$file2.'&size=270" path="images/albums/'.$file.'/'.$file2.'" '.($i > 0 ? 'style="display: block"' : '').'>';
-			  	}
-			}
-			$dir2->close();
+		foreach($album['images'] as $image) {
+			echo '<img class="thumb" src="thumb.php?i='.$album['path'].'/'.$image.'&size=270" path="'.$album['path'].'/'.$image.'">';
+		}
 
+	echo '</div>';
 
-		echo '</div>';
-		$i++;
-  	}
 }
-$dir->close();
 
 ?>
 		
