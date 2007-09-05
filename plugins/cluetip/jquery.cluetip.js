@@ -1,6 +1,6 @@
 /*
  * jQuery clueTip plugin
- * Version 0.8.7  (09/01/2007)
+ * Version 0.9.0  (09/04/2007)
  * @requires jQuery v1.1.1
  * @requires Dimensions plugin 
  *
@@ -20,6 +20,7 @@
  * @credit Inspired by Cody Lindley's jTip (http://www.codylindley.com)
  * @credit Thanks to Shelane Enos for the feature ideas 
  * @credit Thanks to Glen Lipka, Jörn Zaefferer, and Dan G. Switzer for their expert advice
+ * @credit Thanks to Torben Schreiter for identifying bugs and offering solutions
  * @credit Thanks to Jonathan Chaffer, as always, for help with the hard parts. :-)
  */
 

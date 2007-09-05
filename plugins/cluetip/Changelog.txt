@@ -1,14 +1,14 @@
 == To Do ==
 
-* possibly allow for overriding ajaxSettings.error
 * provide example in demo that uses both hover and click  
-* in IE7. If I leave your example page, go do something in another window, when I come back to your page the tooltips will not work until I reload your page.
+* "in IE7. If I leave your example page, go do something in another window, when I come back to your page the tooltips will not work until I reload your page."
 
 == New and Noteworthy ==
 
 == 0.9.0 ==
 
 * fixed a couple bugs introduced by the new 'bottomTop' value for 'positionBy' in 0.8.7.
+* fixed the stray, content-less clueTip that was being left visible in certain situations.
 
 == 0.8.7 ==
 
