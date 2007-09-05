@@ -346,7 +346,7 @@
       tipHeight = defHeight == 'auto' ? $cluetip.outerHeight() : parseInt(defHeight,10);   
       tipY = posY;
       if ( (posX < mouseX && Math.max(posX, 0) + tipWidth > mouseX) || defaults.positionBy == 'bottomTop') {
-        tipY = posY + tipHeight > sTop + wHeight && mouseY - sTop > tipHeight + 10 ? mouseY - tipHeight - 10 : mouseY + 20;
+        tipY = posY + tipHeight > sTop + wHeight && mouseY - sTop > tipHeight + 10 ? mouseY - tipHeight - 16 : mouseY + 20;
       } else if ( posY + tipHeight > sTop + wHeight ) {
         tipY = (tipHeight >= wHeight) ? sTop : sTop + wHeight - tipHeight - 10;
       } else if ($this.css('display') == 'block' || $this[0].tagName.toLowerCase() == 'area' || defaults.positionBy == "mouse") {

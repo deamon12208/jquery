@@ -89,10 +89,23 @@
       <li><strong><code>dropShadowSteps</code></strong>: default is <code>6</code>; change this number to adjust the size of the drop shadow</li>
       <li><strong><code>sticky</code></strong>: default is <code>false</code>; set to <code>true</code> if you want the clueTip to remain open when you "mouse out" of the link. This option also places a "close" link on the clueTip itself. </li>
       <li><strong><code>cluezIndex</code></strong>: default is <code>97</code>; sets the z-index style property of the clueTip. </li>
-      <li><strong><code>positionBy</code></strong>: default is <code>'auto'</code>. Change this to <code>'mouse'</code> if you want to override the smart positioning and position the clueTip based on where the mouse is instead.</li>
-      <li><strong><code>fx</code></strong>: default is: <code>{open: 'show', openSpeed: '', close: 'hide', closeSpeed: ''}</code>; change these to apply one of jQuery's effects when opening or closing the clueTip</li>
+      <li><strong><code>positionBy</code></strong>: default is <code>'auto'</code>. Available options: <code>'mouse'</code>, or <code>'bottomTop'</code>. Change to <code>'mouse'</code> if you want to override positioning by element and position the clueTip based on where the mouse is instead. Change to <code>'bottomTop'</code> if you want positioning to begin below the mouse when there is room or above if not -- rather than right or left of the elemnent and flush with element's top.</li>
+      <li><strong><code>fx</code></strong>: default is: 
+<pre><code>{
+  open: 'show', 
+  openSpeed: '', 
+  close: 'hide', 
+  closeSpeed: ''
+}</code></pre>
+change these to apply one of jQuery's effects when opening or closing the clueTip</li>
       <li><strong><code>activation</code></strong>: default is <code>'hover'</code>; set to 'toggle' to force the user to click the element in order to activate the clueTip.</li>
-      <li><strong><code>hoverIntent</code></strong>: default is <code>true</code>; if jquery.hoverintent.js plugin is included in <code>&lt;head&gt;</code>, <code>.hoverIntent()</code> will be used instead of <code>.hover()</code></li>
+      <li><strong><code>hoverIntent</code></strong>: default is 
+<pre><code>{
+  sensitivity: 3, 
+  interval: 50, 
+  timeout: 0
+}</code></pre> 
+If jquery.hoverintent.js plugin is included in the <code>&lt;head&gt;</code>, <code>hoverIntent()</code> will be used with these settings instead of <code>hover()</code>. Set to <code>false</code> if for some reason you have the hoverintent plugin included but don't want to use it. For info on hoverIntent options, see http://cherne.net/brian/resources/jquery.hoverIntent.html</li>
       <li><strong><code>onShow</code></strong>: default is <code>function (ct, c){}</code> ; allows you to pass in your own function once the clueTip has shown.</li>
       <li><strong><code>ajaxCache</code></strong>: default is <code>true</code>; caches the results of the ajax request to avoid unnecessary hits to the server. When set to <code>false</code>, the script will make an ajax request every time the clueTip is shown, which allows for dynamic content to be loaded.</li>
 <li><strong><code>ajaxProcess</code></strong>: default is:
@@ -237,19 +250,32 @@ This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML
       </ol>
       <h4>Rounded Corners Theme</h4>
       <ol class="rounded">
+        <li>
+          <a href="ajax4.htm" rel="ajax4.htm" title="mouse positioned">rounded corners theme and positioning by mouse</a>: 
+            <div class="html">View the HTML</div>
+            <pre><code>&lt;a href="ajax4.htm" rel="ajax4.htm" title="mouse positioned"&gt;</code></pre>
+            <div class="jquery">View the jQuery</div>
+            <pre><code>$('ol.rounded a:eq(0)').cluetip({cluetipClass: 'rounded', dropShadow: false, positionBy: 'mouse'});</code></pre>
+        </li>
+        <li>
+          Another one with rounded corners theme. This one has <a href="ajax4.htm" rel="ajax4.htm" title="bottom/top positioned">"bottomTop" positioning</a>: positioned under link, unless there isn't enough room (then over). 
+            <div class="html">View the HTML</div>
+            <pre><code>&lt;a href="ajax4.htm" rel="ajax4.htm" title="bottom/top positioned"&gt;</code></pre>
+            <div class="jquery">View the jQuery</div>
+            <pre><code>$('ol.rounded a:eq(1)').cluetip({cluetipClass: 'rounded', dropShadow: false, positionBy: 'bottomTop'});</code></pre>
+        </li>
         <li><a href="ajax4.htm" rel="ajax4.htm" title="rounded corners">non-caching ajax clueTip with rounded corners</a>: 
           <div class="html">View the HTML</div>
           <pre><code>&lt;a href="ajax4.htm" rel="ajax4.htm" title="rounded corners"&gt;</code></pre>
           <div class="jquery">View the jQuery</div>
-          <pre><code>$('ol.rounded a:eq(0)').cluetip({cluetipClass: 'rounded', dropShadow: false, sticky: true, ajaxCache: false});</code></pre>
+          <pre><code>$('ol.rounded a:eq(2)').cluetip({cluetipClass: 'rounded', dropShadow: false, sticky: true, ajaxCache: false});</code></pre>
         </li>
         <li><a href="ajax404.htm" rel="ajax404.htm">ajax error</a>: This one points to a file that does not exist.
           <div class="html">View the HTML</div>
           <pre><code>&lt;a href="ajax404.htm" rel="ajax404.htm"&gt;</code></pre>
           <div class="jquery">View the jQuery</div>
-          <pre><code>$('ol.rounded a:eq(1)').cluetip({cluetipClass: 'rounded', dropShadow: false});</code></pre>
+          <pre><code>$('ol.rounded a:eq(3)').cluetip({cluetipClass: 'rounded', dropShadow: false});</code></pre>
         </li>
-
       </ol>
     </div>  
 <p id="loadme">this is the local content to load when the 'local' parameter is set to true. Currently it only works with an <code>id</code> selector.</p>    

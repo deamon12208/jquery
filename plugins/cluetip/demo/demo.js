@@ -30,8 +30,10 @@ $(document).ready(function() {
   $('a.jt:eq(2)').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false, height: '150px', sticky: true});
 
 // Rounded Corner theme
-  $('ol.rounded a:eq(0)').cluetip({cluetipClass: 'rounded', dropShadow: false, sticky: true, ajaxCache: false});
-  $('ol.rounded a:eq(1)').cluetip({cluetipClass: 'rounded', dropShadow: false});  
+  $('ol.rounded a:eq(0)').cluetip({cluetipClass: 'rounded', dropShadow: false, positionBy: 'mouse'});
+  $('ol.rounded a:eq(1)').cluetip({cluetipClass: 'rounded', dropShadow: false, positionBy: 'bottomTop'});
+  $('ol.rounded a:eq(2)').cluetip({cluetipClass: 'rounded', dropShadow: false, sticky: true, ajaxCache: false});
+  $('ol.rounded a:eq(3)').cluetip({cluetipClass: 'rounded', dropShadow: false});    
 });
 
 //unrelated to clueTip -- just for the demo page...
