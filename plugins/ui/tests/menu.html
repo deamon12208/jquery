@@ -36,8 +36,8 @@
 		
 		<script type="text/javascript">
 			$('document').ready(function(){
-				$('#filemenu-parent').menu('#filemenu', {
-					speed: 'fast',
+				$('#filemenu-parent').menu({
+					menu: '#filemenu',
 					buttons: {
 						fileExit : function(){
 							var toexit = confirm('Are you sure you want to exit');
@@ -64,7 +64,8 @@
 					}
 				});
 				
-				$('#editmenu-parent').menu('#editmenu', {
+				$('#editmenu-parent').menu({
+					menu: '#editmenu',
 					trigger: 'hover',
 					buttons: {
 						fileCopy : function(){
@@ -80,7 +81,8 @@
 					}
 				});
 				
-				$('td').menu('#contextMenu', {
+				$('table').menu({
+					menu: '#contextMenu',
 					trigger: 'contextmenu',
 					buttons : {
 						contextEditField : function(ev, ui){
