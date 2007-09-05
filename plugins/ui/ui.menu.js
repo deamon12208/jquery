@@ -67,7 +67,10 @@
 				self.submenuClose.apply(t, [self, e]); // Trigger the submenuClose callback
 			},
 			_submenuClose: function(h, p, c, t, e) {
-				self.styleMenu.apply(t, [self, e]); // Trigger the submenuClose callback
+				self.submenuClose.apply(t, [self, e]); // Trigger the submenuClose callback
+			},
+			_menuStyle: function(h, p, c, t, e) {
+				self.menuStyle.apply(t, [self, e]); // Trigger the submenuClose callback
 			}
 		},options);
 		if (self.options.trigger == 'hover' && self.options.noHoverIntent == false) {
@@ -75,7 +78,7 @@
 		}
 		self.options.hovertype = hoverType();
 		$(self.options.menu).appendTo(el);	// This makes sure our menu is attached in the DOM to the parent to keep things clean
-		$().triggerHandler("styleMenu", [null, {menu: self.options.menu}], self.styleMenu);	// Pass the menu in to recieve it's makeover
+		$().triggerHandler("menuStyle", [null, {menu: self.options.menu}], self.menuStyle);	// Pass the menu in to recieve it's makeover
 		
 		$(el).bind(self.options.trigger, function(event){
 			self.ctrlPressed=event.ctrlKey;
@@ -84,11 +87,12 @@
 		
 			$(self.options.menu).css({position: 'absolute', top: self.options.elPosition.top, left: self.options.elPosition.left})
 			.animate(self.options.show, self.options.speed);
+			$().triggerHandler("menuOpen", [event, {options: self.options}], self.options.menuOpen);
 		
 			$(self.options.menu)[self.options.hovertype](function(){
-				$().triggerHandler("showChild", [null, {options: self.options}], self.showChild);
+				$().triggerHandler("submenuOpen", [null, {options: self.options}], self.submenuOpen);
 			}, function(){
-				$().triggerHandler("hideMenu", [null, {options: self.options}], self.hideMenu);
+				$().triggerHandler("menuClose", [null, {options: self.options}], self.menuClose);
 			});
 		});
 		$('a', $(self.options.menu).children('li')).bind('click', function(ev){
@@ -103,7 +107,7 @@
 	}
 	
 	$.extend($.ui.menu.prototype, {
-		styleMenu : function(event, options){
+		menuStyle : function(event, options){
 			$(options.menu).addClass('ui-menu-items').children('li').addClass('ui-menu-item');	//Apply first level and child items
 			var parents = $('ul', options.menu).addClass('ui-menu-items').parent('li').addClass('ui-menu-item-parent')	// Apply sublevels
 			var node = $('li', options.menu).addClass('ui-menu-item');	// Finish up any unmatched items
@@ -121,93 +125,7 @@
 			}
 			return oPos;
 		},
-/*		clickContext : function(el,menu) {
-			var self = this;
-			$(el).bind('click', function(event){	//FIXME: Something inside the function is breaking IE
-				var x = $(el).position();
-				var y = x.bottom + ( $(el).height() + 1);
-				$(menu).css({position:'absolute', top: y, left: x.left}) // Apply the menu directly below
-				.animate(self.options.show, self.options.speed);				//TODO: Add vertial menu support
-				$(menu)[self.options.hovertype](function(){
-					self.showChild(menu);
-				}, function(){
-					self.hideMenu(menu);
-				});
-				$('a', $(menu)).bind('click', function(ev){
-					$().triggerHandler(this.className, [ev, {item:this}], self.options.buttons[this.className]);
-					return false;
-				});
-				$('a', $(menu)).bind(self.options.hovertype, function(ev){
-					$().triggerHandler(this.className, [ev, {item:this}], self.options.hovers[this.className]);
-				});
-			});
-			return false;
-		},
-		hoverContext : function(el,menu) {
-			var self = this;
-			$(el)[self.options.hovertype](function(event){
-				var x = $(el).position();
-				var y = x.top + ( $(el).height() + 1);
-				$(menu).css({position:'absolute', top: y, left: x.left})
-					.animate(self.options.show, self.options.speed);
-				self.showChild(menu);
-				$('a', $(menu)).click(function(ev){
-					$().triggerHandler(this.className, [ev, {item:this}], self.options.buttons[this.className]);
-				});
-				$('a', $(menu))[self.options.hovertype](function(ev){
-					$().triggerHandler(this.className, [ev, {item:this}], self.options.hovers[this.className]);
-				});
-				},
-			function(){
-				self.hideMenu(menu);
-			});
-			
-			return false;
-		},
-		context : function (el,menu) {	
-			var self = this;
-			var ctrlPressed=0;
-
-			$(menu).not($('.ui-context-header').parents()).prepend('<span class="ui-context-header">' + self.options.contexttitle + '</span>');
-				
-			var renderMenu = function(event, self, menu) {
-				$(menu).css({position:'absolute', top: event.clientY, left: event.clientX})
-						.animate(self.options.show, self.options.speed);
-					$(menu)[self.options.hovertype](function(){
-						self.showChild(menu);
-					}, function(){
-						self.hideMenu(menu);
-					});
-			}
-			
-			if (!$.browser.opera) {
-				$(el).bind('contextmenu', function(e){
-					renderMenu(e, self, menu);
-					$('a', $(menu)).click(function(ev){
-						$().triggerHandler(this.className, [e, {item:this}], self.options.buttons[this.className]);
-					});
-					$('a', $(menu))[self.options.hovertype](function(ev){
-						$().triggerHandler(this.className, [e, {item:this}], self.options.hovers[this.className]);
-					});
-					return false;
-				});
-			} else {
-				$(el).bind('click', function(e){
-					var ctrlPressed =e.ctrlKey;
-					if (ctrlPressed && e.button == 0) 
-						renderMenu(e, self, menu);
-						$('a', $(menu)).click(function(ev){
-							$().triggerHandler(this.className, [ev, {item:e.target}], self.options.buttons[this.className]);
-						});
-						$('a', $(menu))[self.options.hovertype](function(ev){
-							$().triggerHandler(this.className, [ev, {item:e.target}], self.options.hovers[this.className]);
-						});
-						return false;
-				});						
-			}
-			return false;			
-		},*/
-		showChild : function(event, options) {
+		submenuOpen : function(event, options) {
 			$('li', options.options.menu)[options.options.hovertype](
 				function(ev){
 					x = $(this).position();
@@ -215,11 +133,13 @@
 							.animate(options.options.show,options.options.speed);
 					$(this).triggerHandler("submenuOpen", [ev, {item:this}], options.options.submenuOpen);
 				},
-				function(){
+				function(ev){
 					$(this).find('>ul').animate(options.options.hide,options.options.speed);
-			});
+					$(this).triggerHandler("submenuClose", [ev, {item:this}], options.options.submenuClose);
+				}
+			);
 		},
-		hideMenu : function(event, options){
+		menuClose : function(event, options){
 			$(options.options.menu).animate(options.options.hide,options.options.speed);
 			$(options.options.menu).triggerHandler("menuClose", [null, {item: options.options.menu}], options.options.menuClose);
 			return false;
@@ -243,20 +163,6 @@
 	
 	
 	$.extend($.fn, {
-	/*	menuItemDisable : function () {
-			return this.each(function(){
-				var t = $('a', this).text();
-				$('a', this).hide();
-				$(this).append('<span class="ui-menu-item-disabled">' + t + '</span>');
-				$(this).triggerHandler("menuItemDisabled", [null, {item:this}], self.options.menuItemDisable);
-			});
-		},
-		menuItemEnable : function () {
-			return this.each(function(){
-				$('span', this).remove();
-				$('a', this).show();
-			});
-		},*/
 		menuItemAdd : function (item) {
 			
 			var item = $.extend({
