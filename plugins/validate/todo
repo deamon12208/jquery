@@ -1,3 +1,5 @@
+rename submitHandler/failedHandler(whatever) to maybe onOk/onError
+
 form plugin integration:
 - upgrade to latest form plugin -> "after is now "success"
 - replace serverside validation with remote-validation-method
