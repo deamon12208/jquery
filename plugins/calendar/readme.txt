@@ -1,8 +1,5 @@
-jQuery Calendar v2.5
+jQuery Calendar
 Written by Marc Grabanski (m@marcgrabanski.com) and Keith Wood (kbwood@iprimus.com.au).
-
-Under the Creative Commons Licence http://creativecommons.org/licenses/by/3.0/
-Share or Remix it but please Attribute the authors.
 
 Documentation
 http://docs.jquery.com/Plugins/Calendar/
@@ -19,39 +16,5 @@ http://jqueryjs.googlecode.com/svn/trunk/plugins/calendar/
 Plugin Home Page
 http://marcgrabanski.com/code/jquery-calendar/
 
-Note: When editing the calendar files through SVN please edit the Change Log.
-
-FEATURE REQUESTS:
-
-"Set a flag of some kind like a class of "calendered" and only run on elements that didn't have that class. This would prevent any duplication on a given element if the call was made a second time (for dynamic content or whatever)."
-
-#120. "I'd like to default the calendar to a future month. This is different than a range because I don't want to prevent the user from returning to a previous month."
-
-"Add a class, such as 'calendared' to each element that a calendar is attached to"
-
-found a feature that's not described:
-dialogCalendar() supports an extra parameter "pos" to set position (needs to be an array with x,y)
-
-BUGS:
-
-#101. Alex - "If a set a year range (let's say for a DoB), to be '-100:-18 (so only people older than 18 can enter), the first time it works fine (the range will be between 1907-1986). but if the user goes back to the field, and the calendar pops up again, this time it will use the year in the field to calculate the range (if he chose 1980, the range will be 1880-1962)."
-
-#112. Alan - "It has a BUG in the date, from 03/11/2007. The days are missed and in October of 2009 they do not seem the days"
-
-#113. Ben, 
-#119. samTi, 
-#121. Marc. "The calendar unfurls itself below the input as expected, but when complete jumps to above the input."
-
-http://www.webnostra.com/hostalmagnolia/reservas-hostal.asp
-If you leave september the days of the month refresh ok on the outing date (Día de salida)
-If you choose October on the entry date (Día de entrada)  the name of the monthrefreshes, but the days of the month don't. You 've got to choose a different month for it to refresh the days.
-
-DEMO PAGE:
-
-#118. "Also – if you’re limiting posts to 500 chars, tell me where I’m as as I type!"
-
-MISC:
-
-#118. "I submit that these items be added to the default CSS"
-
-#122. Date Validation
+Features and Bug Requests
+http://docs.jquery.com/Plugins/Calendar/ChangeRequests
