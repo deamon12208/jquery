@@ -522,11 +522,13 @@ $.extend(PopUpCal.prototype, {
 
 	/* Find an object's position on the screen. */
 	_findPos: function(obj) {
-		if (obj.type == 'hidden') {
+		while (obj && (obj.type == 'hidden' || obj.nodeType != Node.ELEMENT_NODE)) {
 			obj = obj.nextSibling;
 		}
+	
 		var curleft = curtop = 0;
-		if (obj.offsetParent) {
+	
+		if (obj && obj.offsetParent) {
 			curleft = obj.offsetLeft;
 			curtop = obj.offsetTop;
 			while (obj = obj.offsetParent) {
