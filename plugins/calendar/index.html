@@ -1,4 +1,4 @@
-<!DOCTYPE html 
+﻿<!DOCTYPE html 
      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" [
 <!ENTITY % calAttrs SYSTEM "jquery-calendar.ent">
@@ -23,6 +23,7 @@
 		<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="../../css/ie6.css" /><![endif]--> 
 		<script type="text/javascript" src="jquery.pack.js"></script>
 		<!--<script type="text/javascript" src="jquery.debug.js"></script>-->
+		<script type="text/javascript" src="jquery.localisation.js"></script>
 		<script type="text/javascript" src="jquery-calendar.js"></script>
 		<script type="text/javascript" src="jquery-calendar-fr.js"></script>
 		<script type="text/javascript" src="jquery-calendar-demo.js"></script>
@@ -197,8 +198,21 @@ function nationalDays(date) {
 						<input type="text" size="10" id="isoFormat"/></p>
 					<pre><code>$('#isoFormat').calendar({dateFormat: 'YMD-'});</code></pre>
 					<p>Or translate the text into another language.</p>
-					<p><span class="calLabel">French calendar:</span>
-						<input type="text" size="10" id="frenchCalendar"/></p>
+					<p><span class="calLabel"><select id="language">
+						<option value="zh-cn">Chinese Simplified</option>
+						<option value="cs">Čeština</option>
+						<option value="de">Deutsch</option>
+						<option value="es">Español</option>
+						<option value="fr" selected="selected">Français</option>
+						<option value="it">Italiano</option>
+						<option value="pl">Język polski</option>
+						<option value="ro">Limba română</option>
+						<option value="hu">Magyar</option>
+						<option value="pt_BR">Português</option>
+						<option value="ru">русский язык</option>
+						<option value="sk">Slovenčina</option>
+						</select>:</span>
+						<input type="text" size="10" id="l10nCalendar"/></p>
 					<p>You need to load the appropriate language package, which
 						adds a language set (popUpCal.regional[langCode]) and
 						automatically sets this language as the default for all calendars.</p>
@@ -206,7 +220,7 @@ function nationalDays(date) {
 					<p>Thereafter, if desired, you can restore the original language settings.</p>
 					<pre><code>popUpCal.setDefaults(popUpCal.regional['']);</code></pre>
 					<p>And then configure the language per calendar instance.</p>
-					<pre><code>$('#frenchCalendar').calendar(popUpCal.regional['fr']);</code></pre>
+					<pre><code>$('#l10nCalendar').calendar(popUpCal.regional['fr']);</code></pre>
 					<p><strong>Localisation packages:</strong></p>
 					<p>Localisation packages can be found below under <a href="#documentation">Settings and Documentation</a>.</p>
 				</div>

@@ -36,7 +36,9 @@ $(document).ready(function () {
 	$('#nationalDays').calendar({customDate: nationalDays});
 	// Localisation
 	$('#isoFormat').calendar({dateFormat: 'YMD-'});
-	$('#frenchCalendar').calendar(popUpCal.regional['fr']);
+	$('#l10nCalendar').calendar();
+	$('#language').change(localise);
+	localise();
 	// Date range
 	$('.calendarRange').calendar({fieldSettings: customRange});
 	// Miscellaneous
@@ -124,6 +126,13 @@ function formatDate(date) {
 	var month = date.getMonth() + 1;
 	return (day < 10 ? '0' : '') + day + '/' +
 		(month < 10 ? '0' : '') + month + '/' + date.getFullYear();
+}
+
+function localise() {
+	var language = $('#language').val();
+	$.localise('jquery-calendar', {language: language});
+	popUpCal.reconfigureFor($('#l10nCalendar')[0], popUpCal.regional[language]);
+	popUpCal.setDefaults(popUpCal.regional['']);
 }
 
 // Custom Tabs written by Marc Grabanski
