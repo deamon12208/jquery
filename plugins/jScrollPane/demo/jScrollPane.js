@@ -77,7 +77,7 @@ jQuery.fn.jScrollPane = function(settings)
 				var paneHeight = $this.innerHeight();
 				var trackHeight = paneHeight;
 				$this.wrap(
-					jQuery('<div>').attr(
+					jQuery('<div></div>').attr(
 						{'className':'jScrollPaneContainer'}
 					).css(
 						{
@@ -89,7 +89,7 @@ jQuery.fn.jScrollPane = function(settings)
 				// deal with text size changes (if the jquery.em plugin is included)
 				// and re-initialise the scrollPane so the track maintains the
 				// correct size
-				$(document).bind(
+				jQuery(document).bind(
 					'emchange', 
 					function(e, cur, prev)
 					{
@@ -111,10 +111,10 @@ jQuery.fn.jScrollPane = function(settings)
 			if (percentInView < .99) {
 				var $container = $this.parent();
 				$container.append(
-					jQuery('<div>').attr({'className':'jScrollPaneTrack'}).css({'width':settings.scrollbarWidth+'px'}).append(
-						jQuery('<div>').attr({'className':'jScrollPaneDrag'}).css({'width':settings.scrollbarWidth+'px'}).append(
-							jQuery('<div>').attr({'className':'jScrollPaneDragTop'}).css({'width':settings.scrollbarWidth+'px'}),
-							jQuery('<div>').attr({'className':'jScrollPaneDragBottom'}).css({'width':settings.scrollbarWidth+'px'})
+					jQuery('<div></div>').attr({'className':'jScrollPaneTrack'}).css({'width':settings.scrollbarWidth+'px'}).append(
+						jQuery('<div></div>').attr({'className':'jScrollPaneDrag'}).css({'width':settings.scrollbarWidth+'px'}).append(
+							jQuery('<div></div>').attr({'className':'jScrollPaneDragTop'}).css({'width':settings.scrollbarWidth+'px'}),
+							jQuery('<div></div>').attr({'className':'jScrollPaneDragBottom'}).css({'width':settings.scrollbarWidth+'px'})
 						)
 					)
 				);
@@ -154,7 +154,7 @@ jQuery.fn.jScrollPane = function(settings)
 					};
 					$container
 						.append(
-							jQuery('<a>')
+							jQuery('<a></a>')
 								.attr({'href':'javascript:;', 'className':'jScrollArrowUp'})
 								.css({'width':settings.scrollbarWidth+'px'})
 								.html('Scroll up')
@@ -166,7 +166,7 @@ jQuery.fn.jScrollPane = function(settings)
 									this.blur();
 									return false;
 								}),
-							jQuery('<a>')
+							jQuery('<a></a>')
 								.attr({'href':'javascript:;', 'className':'jScrollArrowDown'})
 								.css({'width':settings.scrollbarWidth+'px'})
 								.html('Scroll down')
@@ -323,7 +323,7 @@ jQuery.fn.jScrollPane = function(settings)
 				var scrollTo = function(pos, preventAni)
 				{
 					if (typeof pos == "string") {
-						$e = $(pos, this);
+						$e = jQuery(pos, this);
 						if (!$e.length) return;
 						pos = $e.offset({relativeTo:this}).top;
 					}

@@ -59,7 +59,7 @@
 			}
 		</style>
 		<link rel="stylesheet" type="text/css" media="all" href="jScrollPane.css" />
-		<script type="text/javascript" src="jquery-1.1.3.1.pack.js"></script>
+		<script type="text/javascript" src="jquery-1.1.4.pack.js"></script>
 		<script type="text/javascript" src="jquery.dimensions.min.js"></script>
 		<script type="text/javascript" src="jquery.mousewheel.min.js"></script>
 		<script type="text/javascript" src="jScrollPane.min.js"></script>
@@ -78,7 +78,7 @@
 					'click',
 					function()
 					{
-						$('#pane4').append($('<p>').html($('#intro').html())).jScrollPane({scrollbarWidth:20, scrollbarMargin:10});
+						$('#pane4').append($('<p></p>').html($('#intro').html())).jScrollPane({scrollbarWidth:20, scrollbarMargin:10});
 					}
 				);
 				// and this allows you to click the link to reduce the amount of content in
@@ -87,7 +87,7 @@
 					'click',
 					function()
 					{
-						$('#pane4').empty().append($('<p>').html($('#intro').html())).jScrollPane({scrollbarWidth:20, scrollbarMargin:10});
+						$('#pane4').empty().append($('<p></p>').html($('#intro').html())).jScrollPane({scrollbarWidth:20, scrollbarMargin:10});
 					}
 				);
 			});
