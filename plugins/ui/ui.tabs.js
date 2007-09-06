@@ -22,7 +22,7 @@
     };
     
     // create chainable tabs methods
-    $.each(['add', 'remove', 'enable', 'disable', 'show', 'load'], function(i, method) {
+    $.each(['add', 'remove', 'enable', 'disable', 'click', 'load'], function(i, method) {
         $.fn[method + 'Tab'] = function() {
             var args = arguments;
             return this.each(function() {
@@ -71,7 +71,7 @@
             loadingClass: 'tabs-loading'
         }, options);    	
     	
-    	this.tabify();
+    	this.tabify(true);
     	
     	// save instance for later
     	var uuid = 'jQueryTabs-' + $.ui.tabs.prototype.count++;
@@ -89,70 +89,77 @@
             this.$tabs = $('a:first-child', this.source);
             this.$containers = $([]);
             
-            var instance = this;
-            var $source = $(this.source), options = this.options;
+            var o = this, options = this.options, $source = $(this.source);
             
             this.$tabs.each(function(i, a) {
         	    if (a.hash) { // inline tab
-        	        instance.$containers = instance.$containers.add(a.hash);
+        	        o.$containers = o.$containers.add(a.hash);
         	    } else { // remote tab
-        	        var id = a.title && a.title.replace(/\s/g, '_') || options.hashPrefix + (instance.count + 1) + '-' + (i + 1), url = a.href;
+        	        var id = a.title && a.title.replace(/\s/g, '_') || options.hashPrefix + (o.count + 1) + '-' + (i + 1), url = a.href;
         	        a.href = '#' + id;
         	        a.url = url;
-        	        instance.$containers = instance.$containers.add(
-        	            $('<div id="' + id + '" class="' + options.containerClass + '"></div>')
-        	                .insertAfter( instance.$containers[i - 1] || $source )
+        	        o.$containers = o.$containers.add(
+        	            $('#' + id)[0] || $('<div id="' + id + '" class="' + options.containerClass + '"></div>')
+        	                .insertAfter( o.$containers[i - 1] || $source )
         	        );
         	    }
         	});
         	
-        	// Try to retrieve initial tab from fragment identifier in url if present,
-            // otherwise try to find selected class attribute on <li>.
-        	this.$tabs.each(function(i, a) {
-                if (location.hash) {
-                    if (a.hash == location.hash) {
-                        options.initial = i;
-                        // prevent page scroll to fragment
-                        //if (($.browser.msie || $.browser.opera) && !options.remote) {
-                        if ($.browser.msie || $.browser.opera) {
-                            var $toShow = $(location.hash), toShowId = $toShow.attr('id');
-                            $toShow.attr('id', '');
-                            setTimeout(function() {
-                                $toShow.attr('id', toShowId); // restore id
-                            }, 500);
+        	if (init) {
+        	    
+            	// Try to retrieve initial tab from fragment identifier in url if present,
+                // otherwise try to find selected class attribute on <li>.
+            	this.$tabs.each(function(i, a) {
+                    if (location.hash) {
+                        if (a.hash == location.hash) {
+                            options.initial = i;
+                            // prevent page scroll to fragment
+                            //if (($.browser.msie || $.browser.opera) && !options.remote) {
+                            if ($.browser.msie || $.browser.opera) {
+                                var $toShow = $(location.hash), toShowId = $toShow.attr('id');
+                                $toShow.attr('id', '');
+                                setTimeout(function() {
+                                    $toShow.attr('id', toShowId); // restore id
+                                }, 500);
+                            }
+                            scrollTo(0, 0);
+                            return false; // break
                         }
-                        scrollTo(0, 0);
+                    } else if ( $(a).parents('li:eq(0)').is('li.' + options.selectedClass) ) {
+                        options.initial = i;
                         return false; // break
                     }
-                } else if ( $(a).parents('li:eq(0)').is('li.' + options.selectedClass) ) {
-                    options.initial = i;
-                    return false; // break
-                }
-        	});
+            	});
         	
-            // attach necessary classes for styling if not present
-            $source.is('.' + options.navClass) || $source.addClass(options.navClass);
-            this.$containers.each(function() {
-                var $this = $(this);
-                $this.is('.' + options.containerClass) || $this.addClass(options.containerClass);
-            });
+                // attach necessary classes for styling if not present
+                $source.is('.' + options.navClass) || $source.addClass(options.navClass);
+                this.$containers.each(function() {
+                    var $this = $(this);
+                    $this.is('.' + options.containerClass) || $this.addClass(options.containerClass);
+                });
             
-            // highlight tab accordingly
-            this.$containers.filter(':eq(' + options.initial + ')').show().end().not(':eq(' + options.initial + ')').addClass(options.hideClass);
-            $('li', $source).removeClass(options.selectedClass).eq(options.initial).addClass(options.selectedClass); // eventually need to remove classes in case hash takes precedence over class
-            
-            // trigger load of initial tab is remote tab
-            if (this.$tabs[options.initial].url) {
-                instance.load(options.initial + 1, this.$tabs[options.initial].url);
-                if (options.cache) {
-                    this.$tabs[options.initial].url = null; // if loaded once do not load them again
+                // highlight tab accordingly
+                this.$containers.addClass(options.hideClass);
+                $('li', $source).removeClass(options.selectedClass);
+                if (!options.closed) {
+                    this.$containers.slice(options.initial, options.initial + 1).show();
+                    $('li', $source).slice(options.initial, options.initial + 1).addClass(options.selectedClass);
                 }
-                // TODO call show callback? add init/load callback?
-            }
+            
+                // trigger load of initial tab is remote tab
+                if (this.$tabs[options.initial].url) {
+                    this.load(options.initial + 1, this.$tabs[options.initial].url);
+                    if (options.cache) {
+                        this.$tabs[options.initial].url = null; // if loaded once do not load them again
+                    }
+                    // TODO call show callback? add init/load callback?
+                }
         	
-        	// disabled tabs
-            for (var i = 0, k = options.disabled.length; i < k; i++) {
-                this.disable(options.disabled[i] - 1);
+            	// disabled tabs
+                for (var i = 0, k = options.disabled.length; i < k; i++) {
+                    this.disable(options.disabled[i] - 1);
+                }
+            
             }
         	
         	// setup animations
@@ -185,18 +192,31 @@
         	// callbacks
             var click = options.click, hide = options.hide, show = options.show;
         	
-        	var $containers = this.$containers;
-        	
-        	// attach click event
-            this.$tabs.bind('click', function(e) {
+        	// tab click handler
+        	function tabClick(e) {
 
                 //var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
-                var clicked = this, $li = $(this).parents('li:eq(0)'), $show = $(this.hash), $hide = $containers.filter(':visible');
+                var clicked = this, $li = $(this).parents('li:eq(0)'), $show = $(this.hash), $hide = o.$containers.filter(':visible');
+                
+                // if tab may be closed
+                if (options.closable && !$li.is('.' + options.disabledClass) && !$source['locked']) {
+                    
+                    if ($li.is('.' + options.selectedClass)) {
+                        console.log('hide me TODO');
+                    } else {
+                        console.log('show me TODO');
+                    }
+                    
+                    // remove class
+                    // hide container
+                    this.blur();
+                    return false;
+                }
                 
                 // if animation is still running, tab is selected or disabled or onClick callback returns false stop here
                 // check if onClick returns false last so that it is not executed for a disabled tab
-                if ($source['locked'] || $li.is('.' + options.selectedClass + ', .' + options.disabledClass) 
-                    || click(this, $show[0], $hide[0]) === false) {
+                if ($li.is('.' + options.selectedClass + ', .' + options.disabledClass) 
+                    || click(this, $show[0], $hide[0]) === false || $source['locked']) {
                     this.blur();
                     return false;
                 }
@@ -229,6 +249,8 @@
                             $(clicked).parents('li:eq(0)').addClass(options.selectedClass).siblings().removeClass(options.selectedClass);
                             $hide.addClass(options.hideClass).css(resetCSS); // maintain flexible height and accessibility in print etc.                        
                             hide(clicked, $show[0], $hide[0]);
+                            
+                            // show next tab
                             if (!(options.fxSlide || options.fxFade || options.fxShow)) {
                                 $show.css('display', 'block'); // prevent occasionally occuring flicker in Firefox cause by gap between showing and hiding the tab containers
                             }
@@ -241,11 +263,13 @@
                                 show(clicked, $show[0], $hide[0]);
                                 $source['locked'] = null;
                             });
+                            
+                            
                         });
-                    }
+                    }                    
                     
                     if (this.url) { // remote tab
-                        instance.load(instance.$tabs.index(this) + 1, this.url, switchTab);
+                        o.load(o.$tabs.index(this) + 1, this.url, switchTab);
                         if (options.cache) {
                             this.url = null; // if loaded once do not load them again
                         }
@@ -261,7 +285,7 @@
                     }, 0);*/
 
                 } else {
-                    alert('There is no such container.');
+                    throw 'jQuery UI Tabs: Mismatching fragment identifier.';
                 }
 
                 this.blur(); // prevent IE from keeping other link focussed when using the back button
@@ -269,10 +293,13 @@
                 //return options.bookmarkable && !!trueClick; // convert trueClick == undefined to Boolean required in IE
                 return false;
                 
-            });
+            }
+            
+        	// attach click event, avoid duplicates from former tabifying
+            this.$tabs.unbind('click', tabClick).bind('click', tabClick);
             
         },
-        add: function(url, text, position) { // TODO callback
+        add: function(url, text, position, callback) {
             if (url && text) {
                 position = position || this.$tabs.length + 1;
                 if (position > this.$tabs.length) {
@@ -282,22 +309,25 @@
                     var method = 'insertBefore';
                     --position;
                 }
-                $('<div id="' + url.replace('#', '') + '"></div>')
-                    [method](this.$containers[position]);
+                if (url.indexOf('#') == 0) { // ajax container is created by tabify
+                    $('<div id="' + url.replace('#', '') + '" class="' + this.options.containerClass + '"></div>')
+                        [method](this.$containers[position]);
+                }
                 $('<li><a href="' + url + '"><span>' + text + '</span></a></li>')
-                    [method](this.$tabs.eq(position).parents('li:eq(0)'));            
-                this.$tabs.unbind('click'); // TODO specify function
+                    [method](this.$tabs.slice(position, position + 1).parents('li:eq(0)'));
                 this.tabify();
+                if (callback && callback.constructor == Function) {
+                    callback();
+                }
             } else {
-                alert('jQuery UI Tabs: Not enough arguments to add tab.'); // TODO use throw?
+                throw 'jQuery UI Tabs: Not enough arguments to add tab.';
             }           
         },
         remove: function(position, callback) {
             if (position && position.constructor == Number) {
                 --position;
-                this.$tabs.unbind('click'); // TODO specify function
-                this.$tabs.eq(position).parents('li:eq(0)').remove();
-                this.$containers.eq(position).remove();
+                this.$tabs.slice(position, position + 1).parents('li:eq(0)').remove();
+                this.$containers.slice(position, position + 1).remove();
                 this.tabify();
             }
             if (callback && callback.constructor == Function) {
@@ -328,7 +358,7 @@
                 callback();
             }
         },
-        show: function(position) {
+        click: function(position) {
             this.$tabs.slice(position - 1, position).trigger('click');
         },
         load: function(position, url, callback) {

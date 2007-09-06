@@ -17,7 +17,7 @@
         <script type="text/javascript" src="../ui.tabs.js"></script>
         <script type="text/javascript">
             $(function() {
-                $('#container-1 ul').tabs();
+                $('#container-1 ul').tabs({ closable: true });
                 $('#container-2 ul').tabs(2);
                 $('#container-3 ul').tabs({ fxSlide: true });
                 $('#container-4 ul').tabs({ fxFade: true, fxSpeed: 'fast' });
@@ -45,7 +45,7 @@
                     return false;
                 });
                 $('<p><a href="#">Add tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {                    
-                    $('#container-9 ul').addTab('#new-tab', 'New Tab', 4);
+                    $('#container-9 ul').addTab('#new-tab', 'New Tab', 1);
                     return false;
                 });
                 $('<p><a href="#">Disable third tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
@@ -56,8 +56,8 @@
                     $('#container-9 ul').enableTab(3);
                     return false;
                 });
-                $('<p><a href="#">Show third tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
-                    $('#container-9 ul').showTab(3);
+                $('<p><a href="#">Click third tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
+                    $('#container-9 ul').clickTab(3);
                     return false;
                 });
 
