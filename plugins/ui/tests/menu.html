@@ -91,7 +91,7 @@
 						  });
 						},
 						contextClearField : function(ev, ui){
-							$(ev.currentTarget).text('');
+							$(ev.target).text('');
 						}
 					}
 				});
@@ -104,7 +104,7 @@
 				$('.enableSave').bind('click', function(){
 					$('#filemenu-save').menuItemEnable({
 						menuItemEnabled : function(ev, ui){
-							alert($(ui).text());
+							alert('Save Activated');
 						}
 					});
 					return false;

@@ -71,7 +71,9 @@
 			},
 			_menuStyle: function(h, p, c, t, e) {
 				self.menuStyle.apply(t, [self, e]); // Trigger the submenuClose callback
-			}
+			},
+			buttons: {},
+			hovers: {}
 		},options);
 		if (self.options.trigger == 'hover' && self.options.noHoverIntent == false) {
 			self.options.trigger = hoverType();	// If not overidden, check to if hoverIntent is available
@@ -79,14 +81,16 @@
 		self.options.hovertype = hoverType();
 		$(self.options.menu).appendTo(el);	// This makes sure our menu is attached in the DOM to the parent to keep things clean
 		$().triggerHandler("menuStyle", [null, {menu: self.options.menu}], self.menuStyle);	// Pass the menu in to recieve it's makeover
-		console.log(self.options.trigger);
 		
 		if (self.options.trigger == 'click' || self.options.trigger == 'contextmenu') {
 			$(el).bind(self.options.trigger, function(event){
-				console.log('Yes');
+				self.event = event;
 				self.ctrlPressed=event.ctrlKey;
 				self.altPressed=event.atlKey
 				self.options.elPosition= self.getPos(event, self.options, this);	// to get around elPosition has no properties			
+		
+				event.preventDefault();
+				event.stopPropagation();
 		
 				$(self.options.menu).css({position: 'absolute', top: self.options.elPosition.top, left: self.options.elPosition.left})
 				.animate(self.options.show, self.options.speed);
@@ -99,12 +103,11 @@
 				});
 			});
 		} else if (self.options.trigger == 'hover' || self.options.trigger == 'hoverIntent'){
-			$(el).bind(self.options.trigger, function(event){
-				console.log('Yes');
+			$(el)[self.options.trigger](function(event){
 				self.ctrlPressed=event.ctrlKey;
 				self.altPressed=event.atlKey
 				self.options.elPosition= self.getPos(event, self.options, this);	// to get around elPosition has no properties			
-		
+								
 				$(self.options.menu).css({position: 'absolute', top: self.options.elPosition.top, left: self.options.elPosition.left})
 				.animate(self.options.show, self.options.speed);
 				$().triggerHandler("menuOpen", [event, {options: self.options}], self.options.menuOpen);
@@ -119,13 +122,16 @@
 			});
 		}
 		$('a', $(self.options.menu).children('li')).bind('click', function(ev){
-			$().triggerHandler(this.className, [ev, {item:this}], self.options.buttons[this.className]);
+			$().triggerHandler(this.className, [self.event, {item:this}], self.options.buttons[this.className]);
 			return false;
 		});
-		}
-		/*$('a', $(self.options.menu)).bind(self.options.hovertype, function(ev){
+		$('a', $(self.options.menu))[self.options.hovertype](function(ev){
+			$().triggerHandler("menuItemOver", [ev, {item:this}], self.menuItemOver);
 			$().triggerHandler(this.className, [ev, {item:this}], self.options.hovers[this.className]);
-		});*/
+		}, function(ev){
+			// None
+		});
+		}
 	
 	$.extend($.ui.menu.prototype, {
 		menuStyle : function(event, options){
