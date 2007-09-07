@@ -130,6 +130,7 @@
 		}, function(ev){
 			// None
 		});
+		return false;
 		}
 	
 	$.extend($.ui.menu.prototype, {
@@ -140,7 +141,6 @@
 			if (options.options.trigger == 'contextmenu'){
 				$(options.options.menu).prepend('<span class="ui-context-header">' + options.options.contextTitle + '</span>');
 			}
-			
 			return false;
 		},
 		getPos : function(event, options, menu){
