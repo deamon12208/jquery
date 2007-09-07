@@ -33,12 +33,13 @@
 		$.extend(self.options, {
 			menu: 'none',
 			trigger: 'click',	// Context to attach to menu
-			speed: 'slow',
 			noHoverIntent: false,
+			delay: 500,		
 			show: {opacity:'show'},		// Animation object to show menu
-			hide: {opacity:'hide'},		// Animation object to hide menu	
-			delay: 500,					// Delay for animation
-			contexttitle: "Context Menu",
+			hide: {opacity:'hide'},		// Animation object to hide menu
+			speed: 'slow',
+			// Delay for animation
+			contextTitle: "Context Menu",
 			_menuItemEnable: function(h, p, c, t, e) {
 				self.menuItemEnable.apply(t, [self, e]); // Trigger the menuItemEnable callback				
 			},
@@ -80,7 +81,7 @@
 		}
 		self.options.hovertype = hoverType();
 		$(self.options.menu).appendTo(el);	// This makes sure our menu is attached in the DOM to the parent to keep things clean
-		$().triggerHandler("menuStyle", [null, {menu: self.options.menu}], self.menuStyle);	// Pass the menu in to recieve it's makeover
+		$().triggerHandler("menuStyle", [null, {options: self.options}], self.menuStyle);	// Pass the menu in to recieve it's makeover
 		
 		
 		if (self.options.trigger == 'click' || self.options.trigger == 'hover' || self.options.trigger == 'hoverIntent'){
@@ -89,9 +90,7 @@
 				self.altPressed=event.atlKey
 				self.options.elPosition= self.getPos(event, self.options, this);	// to get around elPosition has no properties			
 								
-				$(self.options.menu).css({position: 'absolute', top: self.options.elPosition.top, left: self.options.elPosition.left})
-				.animate(self.options.show, self.options.speed);
-				$().triggerHandler("menuOpen", [event, {options: self.options}], self.options.menuOpen);
+				$().triggerHandler("menuOpen", [event, {options: self.options}], self.menuOpen);
 		
 				$(self.options.menu)[self.options.hovertype](function(){
 					$().triggerHandler("submenuOpen", [null, {options: self.options}], self.submenuOpen);
@@ -111,10 +110,8 @@
 		
 				event.preventDefault();
 				event.stopPropagation();
-		
-				$(self.options.menu).css({position: 'absolute', top: self.options.elPosition.top, left: self.options.elPosition.left})
-				.animate(self.options.show, self.options.speed);
-				$().triggerHandler("menuOpen", [self.event, {options: self.options}], self.options.menuOpen);
+				
+				$().triggerHandler("menuOpen", [self.event, {options: self.options}], self.menuOpen);
 		
 				$(self.options.menu)[self.options.hovertype](function(){
 					$().triggerHandler("submenuOpen", [null, {options: self.options}], self.submenuOpen);
@@ -128,7 +125,7 @@
 			return false;
 		});
 		$('a', $(self.options.menu))[self.options.hovertype](function(ev){
-			$().triggerHandler("menuItemOver", [ev, {item:this}], self.menuItemOver);
+			$().triggerHandler("menuItemOver", [ev, {item:this}], self.options.menuItemOver);
 			$().triggerHandler(this.className, [ev, {item:this}], self.options.hovers[this.className]);
 		}, function(ev){
 			// None
@@ -137,9 +134,13 @@
 	
 	$.extend($.ui.menu.prototype, {
 		menuStyle : function(event, options){
-			$(options.menu).addClass('ui-menu-items').children('li').addClass('ui-menu-item');	//Apply first level and child items
-			var parents = $('ul', options.menu).addClass('ui-menu-items').parent('li').addClass('ui-menu-item-parent')	// Apply sublevels
-			var node = $('li', options.menu).addClass('ui-menu-item');	// Finish up any unmatched items
+			$(options.options.menu).addClass('ui-menu-items').children('li').addClass('ui-menu-item');	//Apply first level and child items
+			var parents = $('ul', options.options.menu).addClass('ui-menu-items').parent('li').addClass('ui-menu-item-parent')	// Apply sublevels
+			var node = $('li', options.options.menu).addClass('ui-menu-item');	// Finish up any unmatched items
+			if (options.options.trigger == 'contextmenu'){
+				$(options.options.menu).prepend('<span class="ui-context-header">' + options.options.contextTitle + '</span>');
+			}
+			
 			return false;
 		},
 		getPos : function(event, options, menu){
@@ -167,6 +168,12 @@
 					$(this).triggerHandler("submenuClose", [ev, {item:this}], options.options.submenuClose);
 				}
 			);
+			return false;
+		},
+		menuOpen : function(event,options){
+			$(options.options.menu).css({position: 'absolute', top: options.options.elPosition.top, left: options.options.elPosition.left})
+				.animate(options.options.show, options.options.speed);
+			return false;
 		},
 		menuClose : function(event, options){
 			$(options.options.menu).animate(options.options.hide,options.options.speed);
