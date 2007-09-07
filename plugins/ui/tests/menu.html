@@ -88,10 +88,12 @@
 						contextEditField : function(ev, ui){
 						  $(ui).html('<input type="text" value="'+ $(e).text() +'" />').find('input').blur(function() {
 						    $(this).parent().html($(this).val());
+							return false;
 						  });
 						},
 						contextClearField : function(ev, ui){
 							$(ev.target).text('');
+							return false;
 						}
 					}
 				});
