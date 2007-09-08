@@ -112,9 +112,12 @@
             var self = this, o = this.options;
             
             this.$tabs.each(function(i, a) {
-        	    if (a.hash) { // inline tab
+        	    // inline tab
+        	    if (a.hash && a.hash.replace('#', '')) { // safari 2 reports '#' for an empty hash
         	        self.$containers = self.$containers.add(a.hash);
-        	    } else { // remote tab
+        	    }
+        	    // remote tab
+        	    else {
         	        var id = a.title && a.title.replace(/\s/g, '_') || o.hashPrefix + (self.count + 1) + '-' + (i + 1), url = a.href;
         	        a.href = '#' + id;
         	        a.url = url;
