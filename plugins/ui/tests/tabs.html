@@ -20,7 +20,7 @@
         <script type="text/javascript" src="../ui.tabs.js"></script>
         <script type="text/javascript">
             $(function() {
-                $('#container-1 ul').tabs({ unselected: true });
+                $('#container-1 ul').tabs();
                 $('#container-2 ul').tabs(2);
                 $('#container-3 ul').tabs({ fxSlide: true });
                 $('#container-4 ul').tabs({ fxFade: true, fxSpeed: 'fast' });
@@ -38,11 +38,9 @@
                         alert('show callback');
                     }
                 });
-                //$('#container-7 ul').tabs({ fxAutoHeight: true });
                 $('#container-7 ul').tabs({ fxShow: { height: 'show', opacity: 'show' }, fxSpeed: 'normal' });
                 $('#container-8 ul').tabs({ cache: false });
                 $('#container-9 ul').tabs({ disabled: [3] });
-
                 $('<p><a href="#">Remove tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
                     $('#container-9 ul').removeTab(4);
                     return false;
@@ -63,6 +61,8 @@
                     $('#container-9 ul').clickTab(3);
                     return false;
                 });
+                $('#container-10 ul').tabs({ unselected: true });
+                $('#container-11 ul').tabs({ event: 'mouseover' });
 
             });
         </script>
@@ -364,6 +364,56 @@ $(&#039;#container&#039;).tabs({ disabled: [2, 3] });</code></pre>
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
             </div>
             <div id="fragment-24">
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+            </div>
+        </div>
+        
+        <h2>Start with all tabs unselected/allow toggle visibility</h2>
+
+        <div id="container-10">
+            <ul>
+                <li><a href="#fragment-25"><span>One</span></a></li>
+                <li><a href="#fragment-26"><span>Two</span></a></li>
+                <li><a href="#fragment-27"><span>Three</span></a></li>
+            </ul>
+            <div id="fragment-25">
+                <p>Define your own custom animation:</p>
+                <pre><code>$(&#039;#container&#039;).tabs({ unselected: true }); // start with all tabs hidden
+$(&#039;#container&#039;).tabs({ toggle: true }); // selected tab closes on click</code></pre>
+                <p>
+                    Setting unselected option to true automatically sets toggle as well.
+                </p>
+            </div>
+            <div id="fragment-26">
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+            </div>
+            <div id="fragment-27">
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+            </div>
+        </div>
+        
+        <h2>Custom event</h2>
+        
+        <div id="container-11">
+            <ul>
+                <li><a href="#fragment-28"><span>One</span></a></li>
+                <li><a href="#fragment-29"><span>Two</span></a></li>
+                <li><a href="#fragment-30"><span>Three</span></a></li>
+            </ul>
+            <div id="fragment-28">
+                <p>Define mouseover event to switch tabs (or any other reasonable event)</p>
+                <pre><code>$(&#039;#container&#039;).tabs({ event: 'mouseover' });</code></pre>
+            </div>
+            <div id="fragment-29">
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+            </div>
+            <div id="fragment-30">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
