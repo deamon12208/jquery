@@ -26,7 +26,7 @@
         $.fn[method + 'Tab'] = function() {
             var args = arguments;
             return this.each(function() {
-                var instance = $.ui.tabs.instances[this.UI_TABS_UUID];
+                var instance = $.ui.tabs.getInstance(this);
                 instance[method].apply(instance, args);
             });
         };
@@ -34,7 +34,7 @@
     $.fn.selectedTab = function() {
         var selected = -1;
         if (this[0]) {
-            var instance = $.ui.tabs.instances[this[0].UI_TABS_UUID],
+            var instance = $.ui.tabs.getInstance(this[0]),
                 $lis = $('li', this);
             selected = $lis.index( $lis.filter('.' + instance.options.selectedClass)[0] );
         }
@@ -100,6 +100,10 @@
     
     // static
     $.ui.tabs.instances = {};
+    
+    $.ui.tabs.getInstance = function(el) {
+        return $.ui.tabs.instances[el.UI_TABS_UUID];
+    };
     
     $.extend($.ui.tabs.prototype, {
         animating: false,
