@@ -1,3 +1,4 @@
+* lazy-loading: render the complete tree, but only apply hitzones and hiding of children to the first level on load
 * http://dev.jquery.com/ticket/1457
 * Animations in IE are not perfectly smooth
 * Last tree icon flickers in Opera when used with animations, together with some rendering issues, but all is functional
