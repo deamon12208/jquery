@@ -61,6 +61,10 @@
                     $('#container-9 ul').clickTab(3);
                     return false;
                 });
+                $('<p><a href="#">Get selected tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
+                    alert( $('#container-9 ul').selectedTab() );
+                    return false;
+                });
                 $('#container-10 ul').tabs({ unselected: true });
                 $('#container-11 ul').tabs({ event: 'mouseover' });
 

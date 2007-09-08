@@ -31,14 +31,14 @@
             });
         };
     });
-    $.fn.selectedTab = function(returnElement) {
-        var selected;
-        if (returnElement) {
-            
-        } else {
-            
+    $.fn.selectedTab = function() {
+        var selected = -1;
+        if (this[0]) {
+            var instance = $.ui.tabs.instances[this[0].UI_TABS_UUID],
+                $lis = $('li', this);
+            selected = $lis.index( $lis.filter('.' + instance.options.selectedClass)[0] );
         }
-        return selected;
+        return selected >= 0 ? ++selected : -1;
     };
 
     $.ui.tabs = function(el, options) {
