@@ -775,13 +775,13 @@ if (isset($_POST) && !empty($_POST) && (!empty($_POST['files']) || isset($_POST[
     'tree',
   );
   $jquery = array(
-    '../../../jquery/src/intro.js',
-    '../../../jquery/src/jquery/jquery.js',
-    '../../../jquery/src/selector/selector.js',
-    '../../../jquery/src/event/event.js',
-    '../../../jquery/src/ajax/ajax.js',
-    '../../../jquery/src/fx/fx.js',
-    '../../../jquery/src/outro.js',
+    '../../../jquery/src
+    '../../../jquery/src/core.js',
+    '../../../jquery/src/selector.js',
+    '../../../jquery/src/event.js',
+    '../../../jquery/src/ajax.js',
+    '../../../jquery/src/fx.js',
+    '../../../jquery/src
   );
   $output = "";
 
@@ -819,11 +819,11 @@ if (isset($_POST) && !empty($_POST) && (!empty($_POST['files']) || isset($_POST[
 <html>
   <head>
 	  <title>jQuery UI Downloads page</title>
-	  <script type="text/javascript" src="../../../jquery/src/jquery/jquery.js"></script>
-	  <script type="text/javascript" src="../../../jquery/src/selector/selector.js"></script>
-	  <script type="text/javascript" src="../../../jquery/src/event/event.js"></script>
-	  <script type="text/javascript" src="../../../jquery/src/ajax/ajax.js"></script>
-	  <script type="text/javascript" src="../../../jquery/src/fx/fx.js"></script>
+	  <script type="text/javascript" src="../../../jquery/src/core.js"></script>
+	  <script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+	  <script type="text/javascript" src="../../../jquery/src/event.js"></script>
+	  <script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+	  <script type="text/javascript" src="../../../jquery/src/fx.js"></script>
 	  <script type="text/javascript" src="../ui.download.js"></script>
 	  <!-- while tabs are not working
 	  <script type="text/javascript" src="../ui.tabs.js"></script>

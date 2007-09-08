@@ -93,11 +93,11 @@ div.draggable img { width: 100px; border: 1px solid #AED5EA; }
 </style>
 
 
-<script type="text/javascript" src="../../../../jquery/src/jquery/jquery.js"></script>
-<script type="text/javascript" src="../../../../jquery/src/selector/selector.js"></script>
-<script type="text/javascript" src="../../../../jquery/src/event/event.js"></script>
-<script type="text/javascript" src="../../../../jquery/src/ajax/ajax.js"></script>
-<script type="text/javascript" src="../../../../jquery/src/fx/fx.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/core.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/selector.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/event.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/ajax.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/fx.js"></script>
 <script type="text/javascript" src="../../../dimensions/jquery.dimensions.js"></script>
 <script type="text/javascript" src="../../../mousewheel/jquery.mousewheel.js"></script>
 
