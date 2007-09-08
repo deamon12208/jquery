@@ -140,7 +140,7 @@
             </ul>
             <div id="fragment-1">
                 <p>First tab is active by default:</p>
-                <pre><code>$(&#039;#container&#039;).tabs();</code></pre>
+                <pre><code>$('#container').tabs();</code></pre>
             </div>
             <div id="fragment-2">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -166,7 +166,7 @@
             </div>
             <div id="fragment-5">
                 <p>Second tab is active:</p>
-                <pre><code>$(&#039;#container&#039;).tabs(2);</code></pre>
+                <pre><code>$('#container').tabs(2);</code></pre>
                 <p>
                     Two alternative ways to specify the active tab will overrule this argument. First a li element
                     (representing one single tab) belonging to the selected tab class, e.g. set the selected tab
@@ -199,7 +199,7 @@
                     <code>normal</code>, <code>fast</code>) or an integer value specifying the duration for the animation
                     in milliseconds. If omitted it defaults to <code>normal</code>.
                 </p>
-                <pre><code>$(&#039;#container&#039;).tabs({ fxSlide: true });</code></pre>
+                <pre><code>$('#container').tabs({ fxSlide: true });</code></pre>
             </div>
             <div id="fragment-8">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -228,7 +228,7 @@
                     <code>normal</code>, <code>fast</code>) or an integer value specifying the duration for the animation
                     in milliseconds. If omitted it defaults to <code>normal</code>.
                 </p>
-                <pre><code>$(&#039;#container&#039;).tabs({ fxFade: true, fxSpeed: 'fast' });</code></pre>
+                <pre><code>$('#container').tabs({ fxFade: true, fxSpeed: 'fast' });</code></pre>
             </div>
             <div id="fragment-11">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -251,7 +251,7 @@
             </ul>
             <div id="fragment-13">
                 <p>Use a combined slide and fade effect to switch tabs:</p>
-                <pre><code>$(&#039;#container&#039;).tabs({ fxSlide: true, fxFade: true, fxSpeed: 'fast' });</code></pre>
+                <pre><code>$('#container').tabs({ fxSlide: true, fxFade: true, fxSpeed: 'fast' });</code></pre>
             </div>
             <div id="fragment-14">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -282,17 +282,15 @@
                     If the onClick callback returns false, the tab switch is canceled. This is especially useful if switching
                     tabs requires form validation before for example.
                 </p>
-                <pre><code>$(&#039;#container&#039;).tabs({
-    fxFade: true,
-    fxSpeed: 'fast',
+                <pre><code>$('#container').tabs({
     click: function() {
-        alert('onClick');
+        alert('click callback');
     },
     hide: function() {
-        alert('onHide');
+        alert('hide callback');
     },
     show: function() {
-        alert('onShow');
+        alert('show callback');
     }
 });</code></pre>
             </div>
@@ -317,7 +315,7 @@
             </ul>
             <div id="fragment-19">
                 <p>Define your own custom animation:</p>
-                <pre><code>$(&#039;#container&#039;).tabs({ fxShow: { height: &#039;show&#039;, opacity: &#039;show&#039; } });</code></pre>
+                <pre><code>$('#container').tabs({ fxShow: { height: 'show', opacity: 'show' } });</code></pre>
             </div>
             <div id="fragment-20">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -348,16 +346,18 @@
                 <li><a href="#fragment-24"><span>Three</span></a></li>
             </ul>
             <div id="fragment-22">
-                <pre><code>$(&#039;#container&#039;).enableTab(3); // enables third tab
-$(&#039;#container&#039;).triggerTab(3); // triggers third tab
-$(&#039;#container&#039;).disableTab(3); // disables third tab</code></pre>
+                <pre><code>$('#container').clickTab(3); // simulate click on 3rd tab
+$('#container').enableTab(3); // enable 3rd tab
+$('#container').disableTab(3); // disable 3rd tab
+$('#container').addTab('#new-tab', 'New Tab', 4); // add new 4th tab
+$('#container').removeTab(4); // remove 4th tab</code></pre>
                 <p>
-                    One or more tabs can also be disabled immediatly by simply setting the disabling class for the li element
+                    One or more tabs can also be disabled immediatly by simply setting the disabling class for the <code class="html">li</code> element
                     representing that particular tab or by using the <code>disabled</code> option.
                 </p>
                 <pre><code>&lt;li class=&quot;tabs-disabled&quot;&gt&#8230;&lt;/li&gt;
 
-$(&#039;#container&#039;).tabs({ disabled: [2, 3] });</code></pre>
+$('#container').tabs({ disabled: [2, 3] });</code></pre>
             </div>
             <div id="fragment-23">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -379,11 +379,10 @@ $(&#039;#container&#039;).tabs({ disabled: [2, 3] });</code></pre>
                 <li><a href="#fragment-27"><span>Three</span></a></li>
             </ul>
             <div id="fragment-25">
-                <p>Define your own custom animation:</p>
-                <pre><code>$(&#039;#container&#039;).tabs({ unselected: true }); // start with all tabs hidden
-$(&#039;#container&#039;).tabs({ toggle: true }); // selected tab closes on click</code></pre>
+                <pre><code>$('#container').tabs({ unselected: true }); // start with all tabs hidden
+$('#container').tabs({ unselect: true }); // selected tab closes on click</code></pre>
                 <p>
-                    Setting unselected option to true automatically sets toggle as well.
+                    Setting <code class="javascript">unselected</code> option to <code class="javascript">true</code> automatically sets <code class="javascript">unselect</code> as well.
                 </p>
             </div>
             <div id="fragment-26">
@@ -407,7 +406,7 @@ $(&#039;#container&#039;).tabs({ toggle: true }); // selected tab closes on clic
             </ul>
             <div id="fragment-28">
                 <p>Define mouseover event to switch tabs (or any other reasonable event)</p>
-                <pre><code>$(&#039;#container&#039;).tabs({ event: 'mouseover' });</code></pre>
+                <pre><code>$('#container').tabs({ event: 'mouseover' });</code></pre>
             </div>
             <div id="fragment-29">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
