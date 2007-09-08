@@ -53,7 +53,7 @@
             disabled: [],
             // TODO bookmarkable: $.ajaxHistory ? true : false,
             unselected: false,
-            toggle: options.unselected ? true : false,
+            unselect: options.unselected ? true : false,
             
             // Ajax
             spinner: 'Loading&#8230;',
@@ -267,7 +267,7 @@
                 var $li = $(this).parents('li:eq(0)'), $hide = self.$containers.filter(':visible'), $show = $(this.hash);
                 
                 // if tab may be closed
-                if (o.toggle && !$li.is('.' + o.disabledClass) && !self.animating) {             
+                if (o.unselect && !$li.is('.' + o.disabledClass) && !self.animating) {             
                     if ($li.is('.' + o.selectedClass)) {
                         $li.removeClass(o.selectedClass);
                         hideTab(this, $hide);
