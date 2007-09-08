@@ -63,12 +63,12 @@
             click: function() {},
             hide: function() {},
             show: function() {},
-            navClass: 'tabs-nav',
-            selectedClass: 'tabs-selected',
-            disabledClass: 'tabs-disabled',
-            containerClass: 'tabs-container',
-            hideClass: 'tabs-hide',
-            loadingClass: 'tabs-loading'
+            navClass: 'ui-tabs-nav',
+            selectedClass: 'ui-tabs-selected',
+            disabledClass: 'ui-tabs-disabled',
+            containerClass: 'ui-tabs-container',
+            hideClass: 'ui-tabs-hide',
+            loadingClass: 'ui-tabs-loading'
         }, options);
     	
     	this.tabify(true);

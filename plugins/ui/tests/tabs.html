@@ -8,7 +8,10 @@
 
         <title>jQuery UI Tabs</title>
 
+        <link rel="stylesheet" href="../../../themes/light/light.css" type="text/css" media="print, projection, screen">
         <link rel="stylesheet" href="../../../themes/light/light.tabs.css" type="text/css" media="print, projection, screen">
+        <link rel="stylesheet" href="../../../themes/dark/dark.css" type="text/css" media="print, projection, screen">
+        <link rel="stylesheet" href="../../../themes/dark/dark.tabs.css" type="text/css" media="print, projection, screen">
         <script type="text/javascript" src="../../../jquery/src/core.js"></script>
         <script type="text/javascript" src="../../../jquery/src/selector.js"></script>
         <script type="text/javascript" src="../../../jquery/src/event.js"></script>
@@ -64,7 +67,17 @@
             });
         </script>
 
-        
+        <!-- Toggle Themes -->
+        <script type="text/javascript" src="../demo/themes.js"></script>
+        <script type="text/javascript">
+          $(function(){
+              $("body").themes({
+                "light":"Light",
+                "dark":"Dark",
+              }).appendTo("#themes");
+          });
+        </script>
+
         <style type="text/css" media="screen, projection">
 
             /* Not required for Tabs, just to make this demo look better... */
@@ -99,9 +112,14 @@
             code {
                 font-family: "Courier New", Courier, monospace;
             }
+            #themes {
+              font-size:100%;
+              position:absolute; top:10px; right:10px;
+            }
         </style>
     </head>
     <body class="light">
+        <div id="themes">Theme: </div>
         <h1><a href="http://jquery.com">jQuery</a> UI Tabs</h1>
         
         <!--p>

@@ -1,3 +1,6 @@
+.dark .ui-form-hide { position:absolute; left:-2000em; }
+
+
 /*(  fieldset  )*/
 .dark .ui-form-fieldset,
 .dark.ui-form-fieldset {
@@ -9,7 +12,6 @@
 .dark.ui-form-fieldset {
   margin-top:1.6em;
 }
-.dark textarea.ui-form,
 .dark fieldset.ui-form {
   margin:0;
   border:1px solid #111;
@@ -36,23 +38,152 @@
 }
 
 
-/*(  textarea  )*/
+/*(  inputs  )*/
+.dark .ui-form-text,
+.dark .ui-form-password,
+.dark.ui-form-text,
+.dark.ui-form-password {
+  border:1px solid #333;
+  padding:2px 0 3px;
+}
+
 .dark .ui-form-textarea,
 .dark.ui-form-textarea {
   display:block;
   border:1px solid #333;
   padding:0;
 }
+.dark .ui-form-text.focus,
+.dark .ui-form-password.focus,
 .dark .ui-form-textarea.focus,
+.dark.ui-form-text.focus,
+.dark.ui-form-password.focus,
 .dark.ui-form-textarea.focus {
   border:1px solid #444;
 }
 
+.dark .ui-form-text input,
+.dark .ui-form-password input,
 .dark textarea.ui-form {
   margin:0;
   border:1px solid #111;
-  color:snow;
+  background:#222; color:snow;
 }
-.dark textarea.ui-form { background:#222; }
+.dark .ui-form-text input:focus,
+.dark .ui-form-password input:focus,
 .dark textarea.ui-form:focus { background:#1D1D1D; }
+
+
+/*(  buttons  )*/
+.dark .ui-form-button,
+.dark .ui-form-reset,
+.dark .ui-form-submit,
+.dark.ui-form-button,
+.dark.ui-form-reset,
+.dark.ui-form-submit {
+  border:1px solid #222;
+  border-color:#222 #282828 #282828 #222;
+  padding:4px 0 6px;
+}
+.dark .ui-form-button .ui-form-inner,
+.dark .ui-form-reset .ui-form-inner,
+.dark .ui-form-submit .ui-form-inner,
+.dark.ui-form-button .ui-form-inner,
+.dark.ui-form-reset .ui-form-inner,
+.dark.ui-form-submit .ui-form-inner {
+  border:1px solid #111;
+  margin:0; padding:3px 0 5px;
+}
+.dark .ui-form-button .ui-form,
+.dark .ui-form-reset .ui-form,
+.dark .ui-form-submit .ui-form,
+.dark.ui-form-button .ui-form,
+.dark.ui-form-reset .ui-form,
+.dark.ui-form-submit .ui-form{
+  padding:2px 5px 3px;
+  margin:0;
+  border:1px solid #444;
+  border-color:#444 #333 #333 #444;
+  background:#222; color:#CCC;
+}
+.dark .ui-form-button.hover .ui-form,
+.dark .ui-form-reset.hover .ui-form,
+.dark .ui-form-submit.hover .ui-form,
+.dark.ui-form-button.hover .ui-form,
+.dark.ui-form-reset.hover .ui-form,
+.dark.ui-form-submit.hover .ui-form{
+  border-color:#555 #444 #444 #555;
+  background:#282828; color:#FFF;
+}
+.dark .ui-form-button.active .ui-form-inner,
+.dark .ui-form-reset.active .ui-form-inner,
+.dark .ui-form-submit.active .ui-form-inner,
+.dark.ui-form-button.active .ui-form-inner,
+.dark.ui-form-reset.active .ui-form-inner,
+.dark.ui-form-submit.active .ui-form-inner{
+  border-color:#333 #444 #444 #333;
+}
+.dark .ui-form-button.active .ui-form,
+.dark .ui-form-reset.active .ui-form,
+.dark .ui-form-submit.active .ui-form,
+.dark.ui-form-button.active .ui-form,
+.dark.ui-form-reset.active .ui-form,
+.dark.ui-form-submit.active .ui-form{
+  border-color:#111 #1D1D1D #1D1D1D #111;
+  background:#282828; color:#FFF;
+}
+
+
+/*(  checkbox  )*/
+.dark .ui-form-checkbox {
+  padding:2px 1px;
+  background:#333;
+}
+.dark .ui-form-checkbox .ui-form-inner {
+  background:#111;
+  padding:1px;
+}
+.dark .ui-form-checkbox .ui-form-content {
+  padding:0px 6px;
+  background:#222;
+  color:#222;
+}
+.dark .ui-form-checkbox.active .ui-form-content {
+  background:#181818; color:181818;
+}
+.dark .ui-form-checkbox.selected .ui-form-content {
+  padding:0px 6px;
+  background:#68D;
+  color:#68D;
+}
+.dark .ui-form-checkbox.focus {
+  background:#444;
+}
+
+
+/*(  radio  )*/
+.dark .ui-form-radio {
+  padding:2px 1px;
+  background:#333;
+}
+.dark .ui-form-radio .ui-form-inner {
+  background:#111;
+  padding:1px;
+}
+.dark .ui-form-radio .ui-form-content {
+  padding:0px 6px;
+  background:#222;
+  color:#222;
+}
+.dark .ui-form-radio.active .ui-form-content {
+  background:#181818; color:#181818;
+}
+.dark .ui-form-radio.selected .ui-form-content {
+  padding:0px 6px;
+  background:#68D;
+  color:#68D;
+}
+.dark .ui-form-radio.focus {
+  background:#444;
+}
 
