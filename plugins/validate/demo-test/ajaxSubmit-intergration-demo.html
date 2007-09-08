@@ -9,7 +9,7 @@
 </style>
 <script src="js/jquery.js" type="text/javascript"></script>
 <script src="js/cmxforms.js" type="text/javascript"></script>
-<script src="js/form.js" type="text/javascript"></script>
+<script src="js/jquery.form.js" type="text/javascript"></script>
 <script src="../jquery.metadata.js" type="text/javascript"></script>
 <script src="../jquery.validate.js" type="text/javascript"></script>
 
@@ -24,27 +24,14 @@
 			loader.show();
 		}).ajaxStop(function() {
 			loader.hide();
-		});
-		
-		jQuery().ajaxError(function(a, b, e) {
+		}).ajaxError(function(a, b, e) {
 			throw e;
 		});
-		
-		jQuery.validator.setDefaults({
-			debug: true
-		});
-		
 		
 		var v = jQuery("#form").validate({
 			submitHandler: function(form) {
 				jQuery(form).ajaxSubmit({
-					dataType: "json",
-					after: function(result) {
-						if(result.status) {
-							v.showErrors(result.data);
-							v.focusInvalid();
-						}	
-					}
+					target: "#result"
 				});
 			}
 		});
@@ -74,13 +61,15 @@
 	</fieldset>
 </form>
 
-<button id="reset">Programmatically reset above form!</button>
-
 <div id="result">Please login!</div>
 
-<a href="index.html">Back to main page</a>
+<br/>
+
+<button id="reset">Programmatically reset above form!</button>
 
 <p>Backend file: <a href="form.php">form.phps</a></p>
+
+<a href="index.html">Back to main page</a>
 
 </body>
 </html>

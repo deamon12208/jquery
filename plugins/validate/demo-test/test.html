@@ -3,6 +3,7 @@
 	<title>jQuery - Form Validation Test Suite</title>
 	<link rel="stylesheet" href="css/testsuite.css"/>
 	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/jquery.form.js"></script>
 	<script type="text/javascript" src="js/testrunner.js"></script>
 	<script type="text/javascript" src="../jquery.metadata.js"></script>
 	<script type="text/javascript" src="../jquery.ajaxQueue.js"></script>
@@ -46,6 +47,11 @@
 			<input class="{required:true,minLength:2}" title="buga" name="firstname" id="firstname" />
 			<label id="errorFirstname" for="firstname" class="error">error for firstname</label>
 			<input class="{required:true}" title="buga" name="lastname" id="lastname" />
+		</form>
+		
+		<form method="post" id="signupForm" action="form.php">
+			<input id="user" name="user" title="Please enter your username (at least 3 characters)" class="{required:true,minLength:3}" />
+			<input type="password" name="password" id="password" class="{required:true,minLength:5}" />
 		</form>
 		
 		<form id="testForm2">

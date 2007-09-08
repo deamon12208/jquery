@@ -230,10 +230,12 @@
  * @option Boolean focusCleanup If enabled, removes the errorClass from the invalid elements and hides
  * 		all errors messages whenever the element is focused. Avoid combination with focusInvalid. Default: false
  * @option String|Element ignore Elements to ignore when validating, simply filtering them out. jQuery's not-method
- * 		is used, there everything that is accepted by not() can be passed as this option. Default: None, though inputs of type
- *		submit and reset are always ignored.
+ * 		is used, therefore everything that is accepted by not() can be passed as this option. Inputs of type
+ *		submit and reset are always ignored. Default: None
  * @opton Boolean onblur Validate elements on blur. If nothing is entered, all rules are skipped, 
  * 		except when the field was already marked as invalid. Default: true
+ * @option Callback subformRequired Called to determine if a subform is required. An input is passed as the argument,
+ * 		and a boolean is expected to return: If it returns false, the input is part of an optional subform, therefore not required. Default: none
  *
  * @name validate
  * @type $.validator
@@ -289,14 +291,17 @@ jQuery.extend(jQuery.fn, {
 		validator.settings.onkeyup && validator.elements.keyup(function() {
 			validator.settings.onkeyup.call( validator, this );
 		});
-		var checkables = jQuery([]);
-		validator.elements.each(function() {
-			if ( validator.checkable( this ) )
-				checkables.push( validator.checkableGroup( this ) );
-		});
-		validator.settings.onchange && checkables.click(function() {
-			validator.settings.onchange.call( validator, this );
-		});
+		
+		if ( validator.settings.onclick ) {
+			var checkables = jQuery([]);
+			validator.elements.each(function() {
+				if ( validator.checkable( this ) )
+					checkables.push( validator.checkableGroup( this ) );
+			});
+			validator.settings.onclick && checkables.click(function() {
+				validator.settings.onclick.call( validator, this );
+			});
+		}
 		
 		return validator;
 	},
@@ -436,7 +441,7 @@ jQuery.extend(jQuery.validator, {
 				this.element(element);
 			}
 		},
-		onchange: function(element) {
+		onclick: function(element) {
 			if ( element.name in this.submitted )
 				this.element(element);
 		}
@@ -882,6 +887,10 @@ jQuery.extend(jQuery.validator, {
 		},
 	
 		depend: function(param, element) {
+			if ( this.settings.subformRequired ) {
+				if ( this.settings.subformRequired(jQuery(element)) )
+					return false; 
+			}
 			return this.dependTypes[typeof param]
 				? this.dependTypes[typeof param](param, element)
 				: true;

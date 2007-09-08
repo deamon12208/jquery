@@ -766,8 +766,28 @@ test("resetForm()", function() {
 	var v = $("#testForm1").validate();
 	v.form();
 	errors(2);
+	$("#firstname").val("hiy");
 	v.resetForm();
 	errors(0);
+	equals("", $("#firstname").val(), "form plugin is included, therefor resetForm must also reset inputs, not only errors");
+});
+
+test("ajaxSubmit", function() {
+	expect(1);
+	stop();
+	$("#user").val("Peter");
+	$("#password").val("foobar");
+	jQuery("#signupForm").validate({
+		submitHandler: function(form) {
+			jQuery(form).ajaxSubmit({
+				success: function(response) {
+					equals("Hi Peter, welcome back.", response);
+					start();
+				}
+			});
+		}
+	});
+	jQuery("#signupForm").submit();
 });
 
 test("option: invalidHandler", function() {

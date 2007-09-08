@@ -1,40 +1,10 @@
-rename submitHandler/failedHandler(whatever) to maybe onOk/onError
+- add test and a tab-example for subformRequired
 
-form plugin integration:
-- upgrade to latest form plugin -> "after is now "success"
-- replace serverside validation with remote-validation-method
-	-> return something useful instead?
-
-I gave the ajax validation on http://jquery.bassistance.de/ajax-validation/demo-test/milk/ a testdrive but somehow it doesn’t work smoothly in IE6 when the required is set dependent on weather another field is filled. The form is submitted in IE anyway. In firefox it works fine. If I change the required to true than it works fine in both browsers.
-
-- show number of errors and update on blur/keyup: ugly ugly ugly ->
-  * can't use invalidHander, only called on submit
-  * can't use showErrors, size() matches only the current element, not all elements
-  -> need to keep track about which elements are valid and update that on both events
-
+- document invalidHandler
 
 - rename onchange to onclick, document all those event options
 - is that element == lastElement check in the onblur handler really useful?
 - make it easy to validate only a subform, example implementation:
-
-
-Hello. I came across the need to validate only part of a form, that is, the form elements which were currently visible on a tabbed page. I come up with this, based on validator.prototype.form():
-
-jQuery.validator.prototype.validatePartialForm = function(parentstr) {
-this.prepareForm();
-
-var oks = $(parentstr).find(”input, select, textarea, button”); //modified line
-for ( var i = 0, element; element = this.elements[i]; i++ ) {
-if (oks.index(element) != -1) { //modified line
-this.check(element);
-}
-}
-jQuery.extend(this.submitted, this.errorMap);
-return this.valid();
-}
-
-use it like validator.validatePartialForm(’#container1′)
-
 
 - ajax: captcha validation ( http://psyrens.com/captcha/ )
 - allow to ignore a default value for onblur-validation
@@ -43,11 +13,9 @@ use it like validator.validatePartialForm(’#container1′)
 - removing messages by specifying null or an empty string doesn't work as it defaults to the default message. improve that check
 - animations!!
 - ajax validation:
-	- add hint about not-available usernames to milk demo (though thats obvious by viewing source for users.php)
 	- in combination with autocomplete (mustmatch company name, fill out address details, validate required)
 	- validate zip code in comparison to address, if match and state is missing, fill out state
-- strong password check/integration: http://www.microsoft.com/protect/yourself/password/checker.mspx
-- fix milk demo in IE6, (success) messages for radio/checkbox doesn't show up, none at all for checkbox
+- strong password check/integration: http://phiras.wordpress.com/2007/04/08/password-strength-meter-a-jquery-plugin/
 - add/modify onkeyup option: true - immediate, false - none
 
 - validate on paste:

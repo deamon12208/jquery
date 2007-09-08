@@ -15,7 +15,7 @@
 $.meta.setType("attr", "validate");
 $(document).ready(function() {
 	$.validator.setDefaults({
-		submitHandler: function() { alert("submitted!"); }
+		success: function() { alert("submitted!"); }
 	});
 	
 	// validate selects on button click
