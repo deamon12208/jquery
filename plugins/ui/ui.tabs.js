@@ -18,7 +18,6 @@
     	}
     	options = options || {};
     	
-    	// first get initial tab from options
     	initial = initial && initial.constructor == Number && --initial || 0;
     	
     	return this.each(function() {
@@ -170,7 +169,7 @@
                     $this.is('.' + o.containerClass) || $this.addClass(o.containerClass);
                 });
             
-                // highlight tab accordingly
+                // highlight tab
                 var $lis = $('li', this.source);
                 this.$containers.addClass(o.hideClass);
                 $lis.removeClass(o.selectedClass);
@@ -179,7 +178,7 @@
                     $lis.slice(o.initial, o.initial + 1).addClass(o.selectedClass);
                 }
             
-                // trigger load of initial tab is remote tab
+                // load if remote tab
                 if (this.$tabs[o.initial].url) {
                     this.load(o.initial + 1, this.$tabs[o.initial].url);
                     if (o.cache) {
@@ -220,9 +219,6 @@
                     hideSpeed = 1; // as little as 1 is sufficient
                 }
             }
-        	
-        	// callbacks
-            var click = o.click, hide = o.hide, show = o.show;
             
             // reset some styles to maintain print style sheets etc.
             var resetCSS = { display: '', overflow: '', height: '' };
@@ -234,7 +230,7 @@
             function hideTab(clicked, $hide, $show) {
                 $hide.animate(hideAnim, hideSpeed, function() { //
                     $hide.addClass(o.hideClass).css(resetCSS); // maintain flexible height and accessibility in print etc.                        
-                    hide(clicked, $show, $hide[0]);
+                    o.hide(clicked, $show, $hide[0]);
                     if ($show) {
                         showTab(clicked, $hide, $show);
                     }
@@ -243,7 +239,6 @@
             
             // show a tab, animation prevents browser scrolling to fragment
             function showTab(clicked, $hide, $show) {
-                // show next tab
                 if (!(o.fxSlide || o.fxFade || o.fxShow)) {
                     $show.css('display', 'block'); // prevent occasionally occuring flicker in Firefox cause by gap between showing and hiding the tab containers
                 }
@@ -253,7 +248,7 @@
                         $hide[0].style.filter = '';
                         $show[0].style.filter = '';
                     }
-                    show(clicked, $show[0], $hide[0]);
+                    o.show(clicked, $show[0], $hide[0]);
                     self.animating = false;
                 });
                 
@@ -294,7 +289,7 @@
                 // returns false stop here.
                 // Check if click handler returns false last so that it is not executed for a disabled tab!
                 if ($li.is('.' + o.selectedClass + ', .' + o.disabledClass) 
-                    || self.animating || click(this, $show[0], $hide[0]) === false) {
+                    || self.animating || o.click(this, $show[0], $hide[0]) === false) {
                     this.blur();
                     return false;
                 }
@@ -429,7 +424,7 @@
                         $span.html(text);
                     }
                     $a.removeClass(o.loadingClass);
-                    // This callback is needed because the switch has to take place after loading
+                    // This callback is required because the switch has to take place after loading
                     // has completed.
                     if (callback && callback.constructor == Function) {
                         callback();
