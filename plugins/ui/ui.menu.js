@@ -149,7 +149,7 @@
 				oPos.top = event.clientY;
 				oPos.left = event.clientX;
 			} else {
-				var thispos = $(menu).position();
+				var thispos = $(menu).offset();
 				oPos.top = thispos.top + $(oPos).height();
 				oPos.left = thispos.left;
 			}
@@ -158,7 +158,7 @@
 		submenuOpen : function(event, options) {
 			$('li', options.options.menu)[options.options.hovertype](
 				function(ev){
-					x = $(this).position();
+					x = $(this).offset();
 					$(this).find('>ul').css({position:'absolute', top:x.top, left:$(options.options.menu).width()})
 							.animate(options.options.show,options.options.speed);
 					$(this).triggerHandler("submenuOpen", [ev, {item:this}], options.options.submenuOpen);
