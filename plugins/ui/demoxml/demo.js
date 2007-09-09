@@ -8,11 +8,11 @@ load("../../../jquery/src/selector.js");
 load("../../../jquery/src/event.js");
 load("../../../jquery/src/ajax.js");
 load("../../../jquery/src/fx.js");
-load("chili/chili.pack.js");
+load("chili/chili.ss.js");
+
 
 ChiliBook.recipeFolder = "chili/";
 ChiliBook.stylesheetFolder = "chili/";
-
 
 function highlightCode(code, lang) {
   var o = $('body').html('<code class="'+ lang +'"></code>').find('code').text(code).chili().html();
@@ -74,8 +74,8 @@ $.fn._demoRender = function() {
   var output = {};
   output.js = $(this).find('javascript').html();
   output.html = '<div class="description">'+ $(this).find('description').html() +'</div>';
-  output.html += '<div class="chilihtml">HTML:<code class="html">'+  highlightCode($(this).find('html').html(), 'html') +'</code></div>';
-  output.html += '<div class="chilijs">JavaScript:<code class="javascript">'+  highlightCode($(this).find('javascript').html(), 'javascript') +'</code></div>';
+  output.html += '<div class="chilihtml">HTML:<pre class="html">'+  highlightCode($(this).find('html').html(), 'html') +'</pre></div>';
+  output.html += '<div class="chilijs">JavaScript:<pre class="javascript">'+  highlightCode($(this).find('javascript').html(), 'javascript') +'</pre></div>';
   output.html += 'Demo:<div class="actual-demo">'+ $(this).find('html').html() +'</div>';
   return output;
 }
@@ -141,7 +141,9 @@ function demoize() {
     '../../../themes/light/light.css',
     '../../../themes/light/light.tabs.css',
     '../../../themes/dark/dark.css',
-    '../../../themes/dark/dark.tabs.css'
+    '../../../themes/dark/dark.tabs.css',
+    '../../../themes/ui/ui.css',
+    '../../../themes/ui/ui.resizable.css'
   ];
   for (i = 0; i < styles.length; i++) {
     print('\t\t<style>@import url('+ styles[i] +');</style>');

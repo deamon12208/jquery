@@ -82,7 +82,6 @@
         <ul id="sortable-1">
           <li>Item 1</li>
           <li>Item 2</li>
-
           <li>Item 3</li>
           <li>Item 4</li>
           <li>Item 5</li>
@@ -91,6 +90,29 @@
       </html>
       <javascript>
         $('#sortable-1').sortable();
+      </javascript>
+    </demo>
+    <demo name="resizable">
+      <description>
+        Resizables allow any item to be resized. A resizable also needs handles.  However, basic ones don't.  Note: the extra spans need to be dealt with.  They must go.
+      </description>
+      <html>
+        <div style="width: 200px; height: 200px" id="resizable-1">
+          <div class='ui-resizable-n ui-resizable-handle'><span style="display: none">.</span></div>
+          <div class='ui-resizable-e ui-resizable-handle'><span style="display: none">.</span></div>	
+          <div class='ui-resizable-s ui-resizable-handle'><span style="display: none">.</span></div>
+          <div class='ui-resizable-w ui-resizable-handle'><span style="display: none">.</span></div>
+
+          <div class='ui-resizable-se ui-resizable-handle'><span style="display: none">.</span></div>
+          <div class='ui-resizable-sw ui-resizable-handle' style='width: 10px; height: 10px; bottom: 0px; left: 0px;'><span style="display: none">.</span></div>
+          <div class='ui-resizable-ne ui-resizable-handle' style='width: 10px; height: 10px; top: 0px; right: 0px;'><span style="display: none">.</span></div>
+          <div class='ui-resizable-nw ui-resizable-handle' style='width: 10px; height: 10px; top: 0px; left: 0px;'><span style="display: none">.</span></div>
+
+          <div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Resize me!</div>
+        </div>
+      </html>
+      <javascript>
+        $('#resizable-1').resizable();
       </javascript>
     </demo>
   </individual_demos>
