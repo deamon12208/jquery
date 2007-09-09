@@ -7,11 +7,6 @@
 	outline: none;
 }
 
-/* s0.0 - Page definition */
-html {
-	
-}
-
 body {
 	font-size: 80%;
 	margin: 0;
@@ -973,8 +968,8 @@ div.callout-tan a:hover {
 }
 
 label.error {
+	display: block;
 	color: red;
-	padding-left: 10px;
 	font-style: italic;
 	font-weight: normal;
 }

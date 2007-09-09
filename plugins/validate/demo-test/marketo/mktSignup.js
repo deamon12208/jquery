@@ -1,15 +1,19 @@
  $(document).ready(function(){
  	
+	jQuery.validator.addMethod("password", function( value, element, param ) {
+		return this.optional(element) || value.length >= 6 && /\d/.test(value) && /\w/.test(value);
+	}, "Your password must be at least 6 characters long and contain at least one number and one character.");
+	
 	jQuery.validator.messages.required = " ";
 	$("form").validate({
 		focusInvalid: false,
 		focusCleanup: true,
 		onkeyup: false,
-		errorContainer: $("div.error"),
 		subformRequired: function(input) {
 			return $("#bill_to_co").is(":checked") && input.parents(".subTable").length;
 		},
 		invalidHandler: function() {
+			$("div.error").show();
 			var errors = this.numberOfInvalids();
 			var message = errors < 2
 				? 'You missed 1 field. It has been highlighted below'
@@ -17,46 +21,36 @@
 			$("div.error span").html(message);
 		},
 		submitHandler: function() {
+			$("div.error").hide();
 			alert("submit! use link below to go to the other step");
+		},
+		messages: {
+			password2: {
+				required: " ",
+				equalTo: "Please enter the same password as above"	
+			}
 		}
 	});
-
+	
   $(".resize").vjustify();
   $("div.buttonSubmit").hoverClass("buttonSubmitHover");
-
-  // tooltip
-  $("img.tooltip").hoverIntent(
-    function() {
-      $(this).next().slideDown();
-    },
-    function(){
-      $(this).next().slideUp();
-    }
-  );
 
   if ($.browser.safari) {
     $("body").addClass("safari");
   }
-
-  //form validation
-  $("form input").focus(function() {
-      $(this).parents("tr").removeClass("errorRow");
-  }).keypress(function() {
-      $(this).parents("tr").removeClass("errorRow")
-  });
   
-  $("input.phone").maskedinput("(999) 999-9999");
-  $("input.zipcode").maskedinput("99999");
-  var creditcard = $("#creditcard").maskedinput("9999 9999 9999 9999");
+  $("input.phone").mask("(999) 999-9999");
+  $("input.zipcode").mask("99999");
+  var creditcard = $("#creditcard").mask("9999 9999 9999 9999");
 
   $("#cc_type").change(
     function() {
       switch ($(this).val()){
         case 'amex':
-          creditcard.maskedinput("9999 999999 99999");
+          creditcard.unmask().mask("9999 999999 99999");
           break;
         default:
-          creditcard.maskedinput("9999 9999 9999 9999");
+          creditcard.unmask().mask("9999 9999 9999 9999");
           break;
       }
     }

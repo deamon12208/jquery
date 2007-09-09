@@ -1,10 +1,7 @@
 - add test and a tab-example for subformRequired
-
 - document invalidHandler
-
-- rename onchange to onclick, document all those event options
+- document all those event options
 - is that element == lastElement check in the onblur handler really useful?
-- make it easy to validate only a subform, example implementation:
 
 - ajax: captcha validation ( http://psyrens.com/captcha/ )
 - allow to ignore a default value for onblur-validation
