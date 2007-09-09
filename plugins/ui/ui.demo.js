@@ -3,44 +3,44 @@
 	//If the UI scope is not availalable, add it
 	$.ui = $.ui || {};
 	
-	$.ui.test = function(o) {
+	$.fn.test = function(o) {
+		return new $.ui.test($(this)[0], o);
+	}
+	
+	$.ui.test = function(el, o) {
 		
 		$.extend(this, o);
 
 		this.path = [];
 		this.cursor = $('<img src="images/cursor.png" style="position: absolute; z-index: 1000;">').appendTo("body").hide();
 		if(this.logger) $(this.logger)[0].value = "";
-	
+    this.pathElements = [];
 	}
 	
 	$.extend($.ui.test.prototype, {
 		bind: function(w) {
-			
 			var self = this;
-			$('*').bind(w, function(e) {
+			$('*', this.el).bind(w, function(e) {
 				
 				var cur = [e.pageX,e.pageY];
 				var button = self.button(e);
 				var modifiers = self.modifiers(e);
 				
+				if (self.pathElements[self.pathElements.length-1] != "['"+w+"',["+cur[0]+","+cur[1]+"],"+e.button+",["+e.ctrlKey+","+e.shiftKey+","+e.altKey+"], $('"+ e.target.tagName +":eq("+ $(e.target.tagName).index(e.target) +")')[0]],\n")
 				$(self.logger)[0].value += "['"+w+"',["+cur[0]+","+cur[1]+"],"+e.button+",["+e.ctrlKey+","+e.shiftKey+","+e.altKey+"], $('"+ e.target.tagName +":eq("+ $(e.target.tagName).index(e.target) +")')[0]],\n";
-				self.path.push([w,cur,e.button,[e.ctrlKey,e.shiftKey,e.altKey],window]);
-				
+				self.pathElements.push( "['"+w+"',["+cur[0]+","+cur[1]+"],"+e.button+",["+e.ctrlKey+","+e.shiftKey+","+e.altKey+"], $('"+ e.target.tagName +":eq("+ $(e.target.tagName).index(e.target) +")')[0]],\n");
 			});
 	
 		},
 		record: function(e) {
-			
 			var org = [e.pageX,e.pageY];
 			var self = this;
-			
 			self.bind("click");
 			self.bind("mousedown");
 			self.bind("mouseup");
-			
 		},
 		recordStop: function(e) {
-			$(document).unbind("click").unbind("mousedown").unbind("mouseup");
+			$('*', this.el).unbind("click").unbind("mousedown").unbind("mouseup");
 		},
 		play: function(e,path) {
 

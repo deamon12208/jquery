@@ -1,0 +1,95 @@
+<html>
+	<head>
+
+		<script type="text/javascript" src="../../../jquery/src/core.js"></script>
+		<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+		<script type="text/javascript" src="../../../jquery/src/event.js"></script>
+		<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+		<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+		<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+		<script type="text/javascript" src="../ui.accordion.js"></script>
+		<script type="text/javascript" src="../ui.demo.js"></script>
+		<script type="text/javascript" src="../ui.download.js"></script>
+		<script type="text/javascript" src="../ui.draggable.js"></script>
+		<script type="text/javascript" src="../ui.droppable.js"></script>
+		<script type="text/javascript" src="../ui.effects.js"></script>
+		<script type="text/javascript" src="../ui.form.js"></script>
+		<script type="text/javascript" src="../ui.magnifier.js"></script>
+		<script type="text/javascript" src="../ui.menu.js"></script>
+		<script type="text/javascript" src="../ui.modal.js"></script>
+		<script type="text/javascript" src="../ui.mouse.js"></script>
+		<script type="text/javascript" src="../ui.resizable.js"></script>
+		<script type="text/javascript" src="../ui.selectable.js"></script>
+		<script type="text/javascript" src="../ui.shadow.js"></script>
+		<script type="text/javascript" src="../ui.slider.js"></script>
+		<script type="text/javascript" src="../ui.sortable.js"></script>
+		<script type="text/javascript" src="../ui.tabs.js"></script>
+		<script type="text/javascript" src="../ui.test.js"></script>
+		<script type="text/javascript" src="../ui.toolbar.js"></script>
+		<script type="text/javascript" src="../ui.tree.js"></script>
+		<script type="text/javascript" src="chili/chili.pack.js"></script>
+		<script type="text/javascript">
+			$(function(){
+
+          $('#drag-1').draggable();
+          $('#drop-1').droppable();
+        
+        $('#sortable').sortable();
+      
+			});
+		</script>
+		<script type="text/javascript">ChiliBook.recipeFolder = "chili/";ChiliBook.stylesheetFolder = "chili/";</script>
+
+	</head>
+	<body>
+		<div id="main">
+
+			<div id="nav">
+<ul><li><h3>Mouse Interaction</h3><ul><li><a href='#drag-drop'>Drag and Drop</a></li><li><a href='#sortable'>Sortables</a></li><li><a href='#resizable'>Resizables</a></li></ul></li><li><h3>User Interface</h3><ul><li><h3>Layout/Interface</h3><ul><li><a href='#splitter'>Splitter</a></li><li><a href='#tabs'>Tabs</a></li><li><a href='#menus'>Menus</a></li><li><a href='#modal'>Modal Dialogs</a></li><li><a href='#magnifier'>Magnifier</a></li><li><a href='#slider'>Sliders</a></li></ul></li><li><h3>Advanced Controls</h3><ul><li><a href='#tree'>Tree</a></li><li><a href='#accordion'>Accordion</a></li><li><a href='#datepicker'>Datepicker</a></li><li><a href='#uploader'>Uploader</a></li><li><a href='#rte'>Rich Text Editor</a></li><li><a href='#form'>Form Controls</a></li></ul></li></ul></li><li><h3>Applications</h3><ul><li><a href='#gallery'>Gallery</a></li><li><a href='#gallery-advanced'>Gallery Advanced</a></li><li><a href='#js-os'>jQuery OS</a></li></ul></li></ul>
+
+			</div>
+			<div id="demos">
+<div class="description">
+          This is the basic drag 'n drop.  Notice how <em>easy</em> it is to do this!
+          At the moment, dropping does nothing.  We'll get to that in the next example.
+        </div><div class="chilihtml"><code class="html">
+          &lt;div id='drag-1'&gt;
+            Drag me!
+          &lt;/div&gt;
+          &lt;div id='drop-1'&gt;
+            Drop on me
+          &lt;/div&gt;
+        </div><div class="normalhtml">
+          <div id='drag-1'>
+            Drag me!
+          </div>
+          <div id='drop-1'>
+            Drop on me
+          </div>
+        </div><div class="description">
+        This is a very basic sortable.
+      </div><div class="chilihtml"><code class="html">
+        &lt;ul id='sortable'&gt;
+          &lt;li&gt;Item 1&lt;/li&gt;
+          &lt;li&gt;Item 2&lt;/li&gt;
+
+          &lt;li&gt;Item 3&lt;/li&gt;
+          &lt;li&gt;Item 4&lt;/li&gt;
+          &lt;li&gt;Item 5&lt;/li&gt;
+          &lt;li&gt;Item 6&lt;/li&gt;
+        &lt;/ul&gt;
+      </div><div class="normalhtml">
+        <ul id='sortable'>
+          <li>Item 1</li>
+          <li>Item 2</li>
+
+          <li>Item 3</li>
+          <li>Item 4</li>
+          <li>Item 5</li>
+          <li>Item 6</li>
+        </ul>
+      </div>
+			</div>
+		</div>
+	</body>
+</html>

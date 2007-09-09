@@ -13,7 +13,11 @@
 </style>
 
 <!-- jQuery Library -->
-<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript" src="../../../jquery/src/core.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
 
 <!-- jQuery UI -->
 <script type="text/javascript" src="../ui.mouse.js"></script>
@@ -23,6 +27,7 @@
 <script type="text/javascript" src="../ui.droppable.js"></script>
 <script type="text/javascript" src="../ui.droppable.ext.js"></script>
 <script type="text/javascript" src="../ui.resizable.js"></script>
+<script type="text/javascript" src="../ui.sortable.js"></script>
 
 <!-- Demo Specific Code -->
 <script type="text/javascript" src="http://www.sunsean.com/idTabs/jquery.idTabs.pack.js"></script>
@@ -31,38 +36,35 @@
 
 <!-- Demo Javascript -->
 <script type="text/javascript">
-/* Themes */
-$(function(){
-    $("body").themes({
-      "light":"Light",
-      "dark":"Dark",
-    }).appendTo("#header form");
-});
-
-/* Demos */
-
-//Drag & Drop
-$().one("drag-drop",function(){
-
-  $("#drag-demo1").draggable();
-  $("#drop-demo1").droppable({
-		accept: '#drag-demo1',
-    hoverClass: 'hover',
-		drop: function(ev, ui) {
-      $("#drag-demo1").fadeOut("fast",function(){
-        $("#drag-demo1").fadeIn("fast");
-      });
-		}
-  });
+$(function() {
+  /* Themes */
+  $("body").themes({
+    "light":"Light",
+    "dark":"Dark",
+  }).appendTo("#header form");
+    
+  /* Demos */
   
-  });
+    //Drag & Drop
+    $("#drag-demo1").draggable();
+    $("#drop-demo1").droppable({
+	  	accept: '#drag-demo1',
+      hoverClass: 'hover',
+	  	drop: function(ev, ui) {
+        $("#drag-demo1").fadeOut("fast",function(){
+          $("#drag-demo1").fadeIn("fast");
+        });
+	  	}
+    });
 
-//Resizables
-$().one("resizables",function(){
-  
-  var foo = function(){ $("#resizables textarea").resizable(); }
-  setTimeout(foo,100);
-  
+    //Resizables
+    $("#resizables textarea").resizable();
+    
+    //Sortables
+    $('#sortables .sortable').sortable({
+  		animated: true,
+  		items: 'li'
+  	});
 });
 
 </script>
@@ -123,15 +125,22 @@ $().one("resizables",function(){
 
   <div id="sortables" class="demo">
     <h2>Sortables</h2>
+    <ul class="sortable">
+      <li>Item 1</li>
+      <li>Item 2</li>
+      <li>Item 3</li>
+      <li>Item 4</li>
+      <li>Item 5</li>
+      <li>Item 6</li>
+    </ul>
   </div>
 
 
   <div id="resizables" class="demo">
     <h2>Resizables</h2>
     <div class="content">
-
       <textarea>Resize me</textarea>
-
+      <div class="">
     </div>
   </div>
 

@@ -41,14 +41,20 @@ th,td { text-align: left; }
 
 </div>
 
-
+<div id="contents">
+  
+	<button>asdf</button>
+	<button>Pl13241234ay</button>
+	as2p34985usdo
+	<textarea>cadsfer</textarea>
+</div>
 
 <script type="text/javascript">
 
 $(function() {
 
 
-	var test = new $.ui.test({ logger: $("#logger") });
+	var test = $('#contents').test({ logger: $("#logger") });
 
 	$('#play').click(function(e) {
 		test.play(e,eval("["+$("#logger")[0].value+"]"));
