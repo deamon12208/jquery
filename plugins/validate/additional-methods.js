@@ -7,7 +7,7 @@ jQuery.validator.addMethod("minWords", function(value, element, params) {
 }, "Please enter at least {0} words."); 
  
 jQuery.validator.addMethod("rangeWords", function(value, element, params) { 
-    return this.optional(element) || value.match(/bw+b/g).length >= params[0] && $(element).val().match(/bw+b/g).length < params[1]); 
+    return this.optional(element) || value.match(/bw+b/g).length >= params[0] && $(element).val().match(/bw+b/g).length < params[1]; 
 }, "Please enter between {0} and {1} words.");
 
 
@@ -48,7 +48,7 @@ jQuery.validator.addMethod("ziprange", function(value, element) {
 *
 * Works with all kind of text inputs.
 *
-* @example <input type="text" size="20" name="VehicleID" class="{required:true,VIN:true}" />
+* @example <input type="text" size="20" name="VehicleID" class="{required:true,vinUS:true}" />
 * @desc Declares a required input element whose value must be a valid vehicle identification number.
 *
 * @name jQuery.validator.methods.vinUS
@@ -136,3 +136,27 @@ jQuery.validator.addMethod(
 	}, 
 	"Please enter a correct date"
 );
+
+/**
+ * matches US phone number format 
+ * 
+ * where the area code may not start with 1 and the prefix may not start with 1 
+ * allows '-' or ' ' as a separator and allows parens around area code 
+ * some people may want to put a '1' in front of their number 
+ * 
+ * 1(212)-999-2345
+ * or
+ * 212 999 2344
+ * or
+ * 212-999-0983
+ * 
+ * but not
+ * 111-123-5434
+ * and not
+ * 212 123 4567
+ */
+jQuery.validator.addMethod("phone", function(phone_number, element) {
+    phone_number = phone_number.replace(/\s+/g, ""); 
+	return this.optional(element) || phone_number.length > 9 &&
+		phone_number.match(/^(1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/);
+}, "Please specify a valid phone number");

@@ -268,6 +268,24 @@ test("method default messages", function() {
 	});
 });
 
+module("additional methods");
+
+test("phone (us)", function() {
+	var method = methodTest("phone");
+	ok( method( "1(212)-999-2345" ), "Valid us phone number" );
+	ok( method( "212 999 2344" ), "Valid us phone number" );
+	ok( method( "212-999-0983" ), "Valid us phone number" );
+	ok(!method( "111-123-5434" ), "Invalid us phone number" );
+	ok(!method( "212 123 4567" ), "Invalid us phone number" );
+});
+
+test("dateITA", function() {
+	var method = methodTest("dateITA");
+	ok( method( "01/01/1900" ), "Valid date ITA" );
+	ok(!method( "01/13/1990" ), "Invalid date ITA" );
+	ok(!method( "01.01.1900" ), "Invalid date ITA" );
+});
+
 module("validator");
 
 test("addMethod", function() {
