@@ -115,6 +115,33 @@
         $('#resizable-1').resizable();
       </javascript>
     </demo>
+    <demo name="form">
+      <description>
+        The form plugin is the easiest to use.  This is just a simple demonstration.
+      </description>
+      <html>
+        <form>
+          <fieldset><legend>Fieldset/Legend</legend>Fieldset content</fieldset>
+          <p><button>Button</button>
+          <input type="button" value="Button" /></p>
+          <input type="reset" value="Reset" />
+          <input type="submit" value="Submit" />
+          <p><input type="checkbox" id="first"/>
+          <input type="checkbox" />
+          <input type="checkbox" /></p>
+          <p><input type="radio" name="dark" />
+          <input type="radio" name="dark" />
+          <input type="radio" name="dark" /></p>
+          <p><input type="text" value="Text" /></p>
+          <p><input type="password" value="Password" /></p>
+          <p><input type="file" /></p>
+          <p><textarea>text area</textarea></p>
+        </form>
+      </html>
+      <javascript>
+        $('form').form();
+      </javascript>
+    </demo>
   </individual_demos>
   <themes>
     <theme name="light">Light</theme>

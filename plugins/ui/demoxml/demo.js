@@ -138,25 +138,29 @@ function demoize() {
   
   
   var styles = [
+    '../tests/blueprint/screen.css',
     '../../../themes/light/light.css',
     '../../../themes/light/light.tabs.css',
-    '../../../themes/dark/dark.css',
-    '../../../themes/dark/dark.tabs.css',
+    '../../../themes/light/light.form.css',
+    '../../../themes/light/light.modal.css',
+    '../../../themes/light/light.menu.css',
+    '../../../themes/light/light.tree.css',
     '../../../themes/ui/ui.css',
-    '../../../themes/ui/ui.resizable.css'
+    '../../../themes/ui/ui.resizable.css',
+    'style.css'
   ];
   for (i = 0; i < styles.length; i++) {
     print('\t\t<style>@import url('+ styles[i] +');</style>');
   }
   
-  print('\n\t</head>\n\t<body class="dark">\n\t\t<div id="main">');
-  print('\n\t\t\t<div id="nav">');
+  print('\n\t</head>\n\t<body class="light">\n\t\t<div id="main" class="container">');
+  print('\n\t\t\t<div id="nav" class="column span-2 first">');
   
   print($(file).find('demolist').children().listRender());
   
   print('\n\t\t\t</div>');
   
-  print('\t\t\t<div id="demos">');
+  print('\t\t\t<div id="demos" class="column span-12 last">');
   
   print(rendered_demos.html);
   

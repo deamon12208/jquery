@@ -44,25 +44,31 @@ undefined
       
         $('#resizable-1').resizable();
       
+        $('form').form();
+      
 $('.tabset').tabs();
 			});
 		</script>
+		<style>@import url(../tests/blueprint/screen.css);</style>
 		<style>@import url(../../../themes/light/light.css);</style>
 		<style>@import url(../../../themes/light/light.tabs.css);</style>
-		<style>@import url(../../../themes/dark/dark.css);</style>
-		<style>@import url(../../../themes/dark/dark.tabs.css);</style>
+		<style>@import url(../../../themes/light/light.form.css);</style>
+		<style>@import url(../../../themes/light/light.modal.css);</style>
+		<style>@import url(../../../themes/light/light.menu.css);</style>
+		<style>@import url(../../../themes/light/light.tree.css);</style>
 		<style>@import url(../../../themes/ui/ui.css);</style>
 		<style>@import url(../../../themes/ui/ui.resizable.css);</style>
+		<style>@import url(style.css);</style>
 
 	</head>
-	<body class="dark">
-		<div id="main">
+	<body class="light">
+		<div id="main" class="container">
 
-			<div id="nav">
+			<div id="nav" class="column span-2 first">
 <ul><li><h3>Mouse Interaction</h3><ul><li><a href='#drag-drop'>Drag and Drop</a></li><li><a href='#sortable'>Sortables</a></li><li><a href='#resizable'>Resizables</a></li></ul></li><li><h3>User Interface</h3><ul><li><h3>Layout/Interface</h3><ul><li><a href='#splitter'>Splitter</a></li><li><a href='#tabs'>Tabs</a></li><li><a href='#menus'>Menus</a></li><li><a href='#modal'>Modal Dialogs</a></li><li><a href='#magnifier'>Magnifier</a></li><li><a href='#slider'>Sliders</a></li></ul></li><li><h3>Advanced Controls</h3><ul><li><a href='#tree'>Tree</a></li><li><a href='#accordion'>Accordion</a></li><li><a href='#datepicker'>Datepicker</a></li><li><a href='#uploader'>Uploader</a></li><li><a href='#rte'>Rich Text Editor</a></li><li><a href='#form'>Form Controls</a></li></ul></li></ul></li><li><h3>Applications</h3><ul><li><a href='#gallery'>Gallery</a></li><li><a href='#gallery-advanced'>Gallery Advanced</a></li><li><a href='#js-os'>jQuery OS</a></li></ul></li></ul>
 
 			</div>
-			<div id="demos">
+			<div id="demos" class="column span-12 last">
 <div class="tabset" id="drag-drop"><ul><li><a href="#drag_drop-basic_dragging">Basic dragging</a></li><li><a href="#drag_drop-advanced_dropping">Advanced Dropping</a></li></ul><div id="drag_drop-basic_dragging"><div class="description">
           This is the basic drag 'n drop.  Notice how <em>easy</em> it is to do this!
           At the moment, dropping does nothing.  We'll get to that in the next example.
@@ -110,6 +116,26 @@ $('.tabset').tabs();
 
           <div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Resize me!</div>
         </div>
+      </div></div><div class="demo" id="form"><div class="description">
+        The form plugin is the easiest to use.  This is just a simple demonstration.
+      </div><div class="chilihtml">HTML:<pre class="html"> <br/>        <span class='entity'>&lt;</span>form<span class='entity'>&gt;</span> <br/>          <span class='entity'>&lt;</span>fieldset<span class='entity'>&gt;</span><span class='entity'>&lt;</span>legend<span class='entity'>&gt;</span>Fieldset/Legend<span class='entity'>&lt;</span>/legend<span class='entity'>&gt;</span>Fieldset content<span class='entity'>&lt;</span>/fieldset<span class='entity'>&gt;</span> <br/>          <span class='entity'>&lt;</span>p<span class='entity'>&gt;</span><span class='entity'>&lt;</span>button<span class='entity'>&gt;</span>Button<span class='entity'>&lt;</span>/button<span class='entity'>&gt;</span> <br/>          <span class='entity'>&lt;</span>input<span class='aname'> type</span>=<span class='avalue'>'button'</span><span class='aname'> value</span>=<span class='avalue'>'Button'</span>/<span class='entity'>&gt;</span><span class='entity'>&lt;</span>/p<span class='entity'>&gt;</span> <br/>          <span class='entity'>&lt;</span>input<span class='aname'> type</span>=<span class='avalue'>'reset'</span><span class='aname'> value</span>=<span class='avalue'>'Reset'</span>/<span class='entity'>&gt;</span> <br/>          <span class='entity'>&lt;</span>input<span class='aname'> type</span>=<span class='avalue'>'submit'</span><span class='aname'> value</span>=<span class='avalue'>'Submit'</span>/<span class='entity'>&gt;</span> <br/>          <span class='entity'>&lt;</span>p<span class='entity'>&gt;</span><span class='entity'>&lt;</span>input<span class='aname'> id</span>=<span class='avalue'>'first'</span><span class='aname'> type</span>=<span class='avalue'>'checkbox'</span>/<span class='entity'>&gt;</span> <br/>          <span class='entity'>&lt;</span>input<span class='aname'> type</span>=<span class='avalue'>'checkbox'</span>/<span class='entity'>&gt;</span> <br/>          <span class='entity'>&lt;</span>input<span class='aname'> type</span>=<span class='avalue'>'checkbox'</span>/<span class='entity'>&gt;</span><span class='entity'>&lt;</span>/p<span class='entity'>&gt;</span> <br/>          <span class='entity'>&lt;</span>p<span class='entity'>&gt;</span><span class='entity'>&lt;</span>input<span class='aname'> type</span>=<span class='avalue'>'radio'</span><span class='aname'> name</span>=<span class='avalue'>'dark'</span>/<span class='entity'>&gt;</span> <br/>          <span class='entity'>&lt;</span>input<span class='aname'> type</span>=<span class='avalue'>'radio'</span><span class='aname'> name</span>=<span class='avalue'>'dark'</span>/<span class='entity'>&gt;</span> <br/>          <span class='entity'>&lt;</span>input<span class='aname'> type</span>=<span class='avalue'>'radio'</span><span class='aname'> name</span>=<span class='avalue'>'dark'</span>/<span class='entity'>&gt;</span><span class='entity'>&lt;</span>/p<span class='entity'>&gt;</span> <br/>          <span class='entity'>&lt;</span>p<span class='entity'>&gt;</span><span class='entity'>&lt;</span>input<span class='aname'> type</span>=<span class='avalue'>'text'</span><span class='aname'> value</span>=<span class='avalue'>'Text'</span>/<span class='entity'>&gt;</span><span class='entity'>&lt;</span>/p<span class='entity'>&gt;</span> <br/>          <span class='entity'>&lt;</span>p<span class='entity'>&gt;</span><span class='entity'>&lt;</span>input<span class='aname'> type</span>=<span class='avalue'>'password'</span><span class='aname'> value</span>=<span class='avalue'>'Password'</span>/<span class='entity'>&gt;</span><span class='entity'>&lt;</span>/p<span class='entity'>&gt;</span> <br/>          <span class='entity'>&lt;</span>p<span class='entity'>&gt;</span><span class='entity'>&lt;</span>input<span class='aname'> type</span>=<span class='avalue'>'file'</span>/<span class='entity'>&gt;</span><span class='entity'>&lt;</span>/p<span class='entity'>&gt;</span> <br/>          <span class='entity'>&lt;</span>p<span class='entity'>&gt;</span><span class='entity'>&lt;</span>textarea<span class='entity'>&gt;</span>text area<span class='entity'>&lt;</span>/textarea<span class='entity'>&gt;</span><span class='entity'>&lt;</span>/p<span class='entity'>&gt;</span> <br/>        <span class='entity'>&lt;</span>/form<span class='entity'>&gt;</span> <br/>      </pre></div><div class="chilijs">JavaScript:<pre class="javascript"> <br/>        $(<span class='string'>'form'</span>).form(); <br/>      </pre></div>Demo:<div class="actual-demo">
+        <form>
+          <fieldset><legend>Fieldset/Legend</legend>Fieldset content</fieldset>
+          <p><button>Button</button>
+          <input type='button' value='Button'/></p>
+          <input type='reset' value='Reset'/>
+          <input type='submit' value='Submit'/>
+          <p><input id='first' type='checkbox'/>
+          <input type='checkbox'/>
+          <input type='checkbox'/></p>
+          <p><input type='radio' name='dark'/>
+          <input type='radio' name='dark'/>
+          <input type='radio' name='dark'/></p>
+          <p><input type='text' value='Text'/></p>
+          <p><input type='password' value='Password'/></p>
+          <p><input type='file'/></p>
+          <p><textarea>text area</textarea></p>
+        </form>
       </div></div>
 			</div>
 		</div>
