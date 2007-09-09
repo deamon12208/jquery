@@ -4,9 +4,9 @@
 /*(  fieldset  )*/
 .dark .ui-form-fieldset,
 .dark.ui-form-fieldset {
-  display: block;
-  border: 1px solid #333;
-  padding: 0;
+  display:block;
+  border:1px solid #333;
+  padding:0;
 }
 .dark .ui-form-fieldset,
 .dark.ui-form-fieldset {
@@ -17,30 +17,26 @@
   border:1px solid #111;
   color:snow;
 }
-.dark .ui-form-fieldset { background:#181818; }
-.dark .ui-form-legend-outer {
+.dark fieldset.ui-form { background:#181818; }
+.dark .ui-form-legend,
+.dark.ui-form-legend {
   display:block;
   text-align:left;
   border:1px solid #333;
   background:#222;
-  margin: -0.5em 10px 0 10px;
-  padding: 0 2px 2px 0;
+  margin:-1.05em 0 0 0;
 }
-.dark .ui-form-legend {
+.dark legend.ui-form {
   display:block;
   color:snow;
   font-weight:bold;
   background:#222;
-  margin:-1px 2px -3px 2px;
-  padding-bottom: 3px;
-  height: 101%;
   border-top:1px dotted #282828;
   border-bottom:1px dotted #282828;
+  margin:-1px 2px;
+  padding:0 2px 2px;
 }
-.dark .ui-form-legend-inner {
-  display: block;
-  
-}
+
 
 /*(  inputs  )*/
 .dark .ui-form-text,
@@ -80,30 +76,30 @@
 
 /*(  buttons  )*/
 .dark .ui-form-button,
-.dark .ui-form-input-reset,
-.dark .ui-form-input-submit,
+.dark .ui-form-reset,
+.dark .ui-form-submit,
 .dark.ui-form-button,
-.dark.ui-form-input-reset,
-.dark.ui-form-input-submit {
+.dark.ui-form-reset,
+.dark.ui-form-submit {
   border:1px solid #222;
   border-color:#222 #282828 #282828 #222;
   padding:4px 0 6px;
 }
 .dark .ui-form-button .ui-form-inner,
-.dark .ui-form-input-reset .ui-form-inner,
-.dark .ui-form-input-submit .ui-form-inner,
+.dark .ui-form-reset .ui-form-inner,
+.dark .ui-form-submit .ui-form-inner,
 .dark.ui-form-button .ui-form-inner,
-.dark.ui-form-input-reset .ui-form-inner,
-.dark.ui-form-input-submit .ui-form-inner {
+.dark.ui-form-reset .ui-form-inner,
+.dark.ui-form-submit .ui-form-inner {
   border:1px solid #111;
   margin:0; padding:3px 0 5px;
 }
 .dark .ui-form-button .ui-form,
-.dark .ui-form-input-reset .ui-form,
-.dark .ui-form-input-submit .ui-form,
+.dark .ui-form-reset .ui-form,
+.dark .ui-form-submit .ui-form,
 .dark.ui-form-button .ui-form,
-.dark.ui-form-input-reset .ui-form,
-.dark.ui-form-input-submit .ui-form{
+.dark.ui-form-reset .ui-form,
+.dark.ui-form-submit .ui-form{
   padding:2px 5px 3px;
   margin:0;
   border:1px solid #444;
@@ -111,28 +107,28 @@
   background:#222; color:#CCC;
 }
 .dark .ui-form-button.hover .ui-form,
-.dark .ui-form-input-reset.hover .ui-form,
-.dark .ui-form-input-submit.hover .ui-form,
+.dark .ui-form-reset.hover .ui-form,
+.dark .ui-form-submit.hover .ui-form,
 .dark.ui-form-button.hover .ui-form,
-.dark.ui-form-input-reset.hover .ui-form,
-.dark.ui-form-input-submit.hover .ui-form{
+.dark.ui-form-reset.hover .ui-form,
+.dark.ui-form-submit.hover .ui-form{
   border-color:#555 #444 #444 #555;
   background:#282828; color:#FFF;
 }
 .dark .ui-form-button.active .ui-form-inner,
-.dark .ui-form-input-reset.active .ui-form-inner,
-.dark .ui-form-input-submit.active .ui-form-inner,
+.dark .ui-form-reset.active .ui-form-inner,
+.dark .ui-form-submit.active .ui-form-inner,
 .dark.ui-form-button.active .ui-form-inner,
-.dark.ui-form-input-reset.active .ui-form-inner,
-.dark.ui-form-input-submit.active .ui-form-inner{
+.dark.ui-form-reset.active .ui-form-inner,
+.dark.ui-form-submit.active .ui-form-inner{
   border-color:#333 #444 #444 #333;
 }
 .dark .ui-form-button.active .ui-form,
-.dark .ui-form-input-reset.active .ui-form,
-.dark .ui-form-input-submit.active .ui-form,
+.dark .ui-form-reset.active .ui-form,
+.dark .ui-form-submit.active .ui-form,
 .dark.ui-form-button.active .ui-form,
-.dark.ui-form-input-reset.active .ui-form,
-.dark.ui-form-input-submit.active .ui-form{
+.dark.ui-form-reset.active .ui-form,
+.dark.ui-form-submit.active .ui-form{
   border-color:#111 #1D1D1D #1D1D1D #111;
   background:#282828; color:#FFF;
 }
