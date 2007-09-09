@@ -8,6 +8,26 @@ load("../../../jquery/src/selector.js");
 load("../../../jquery/src/event.js");
 load("../../../jquery/src/ajax.js");
 load("../../../jquery/src/fx.js");
+load("chili/chili.pack.js");
+
+ChiliBook.recipeFolder = "chili/";
+ChiliBook.stylesheetFolder = "chili/";
+
+
+function highlightCode(code, lang) {
+  var o = $('body').html('<code class="'+ lang +'"></code>').find('code').text(code).chili().html();
+  $('code').remove();
+  return o;
+}
+
+function sanitize(str) {
+  var s = str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/>/g, '&gt;').replace(/</g, '&lt;');
+  return s;
+  //throw s;
+}
+function id(str1, str2) {
+  return str1.toLowerCase().replace(/[^0-9a-zA-Z]/g, '_') +'-'+ str2.toLowerCase().replace(/[^0-9a-z]/, '_');
+}
 
 
 $.fn.listRender = function() {
@@ -24,12 +44,26 @@ $.fn.listRender = function() {
 }
 
 $.fn.demoRender = function() {
-  var output = { js: "", html: "" }, _o = {};
+  var output = { js: "", html: "" }, _o = {}, __o = {}, _t = "", _h = "";
   $(this).children().each(function() {
-    if ($(this)[0].tagName == 'demoset')
-      _o = $(this).children()._demoRender();
-    else
-      _o = $(this)._demoRender();
+    if ($(this)[0].tagName == 'demoset') {
+      var self = this;
+      _t = '<ul>';
+      $(this).children().each(function() {
+        var i = id($(self).attr('name'), $(this).attr('title'));
+        _t += '<li><a href="#'+ i +'">'+ $(this).attr('title') +'</a></li>';
+        __o = $(this)._demoRender();
+        _o.js += __o.js;
+        _h += '<div id="'+ i +'">'+ __o.html +'</div>';
+      });
+      _t += "</ul>";
+      _o.html = '<div class="tabset" id="'+ $(this).attr('name') +'">'+ _t + _h +'</div>';
+    }
+    else {
+      __o = $(this)._demoRender();
+      __o.html = '<div class="demo" id="'+ $(this).attr('name') +'">'+ __o.html +'</div>';
+      _o = __o;
+    }
     output.js += _o.js;
     output.html += _o.html;
   });
@@ -40,8 +74,9 @@ $.fn._demoRender = function() {
   var output = {};
   output.js = $(this).find('javascript').html();
   output.html = '<div class="description">'+ $(this).find('description').html() +'</div>';
-  output.html += '<div class="chilihtml"><code class="html">'+ $(this).find('html').html().replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/>/g, '&gt;').replace(/</g, '&lt;') +'</div>';
-  output.html += '<div class="normalhtml">'+ $(this).find('html').html() +'</div>';
+  output.html += '<div class="chilihtml">HTML:<code class="html">'+  highlightCode($(this).find('html').html(), 'html') +'</code></div>';
+  output.html += '<div class="chilijs">JavaScript:<code class="javascript">'+  highlightCode($(this).find('javascript').html(), 'javascript') +'</code></div>';
+  output.html += 'Demo:<div class="actual-demo">'+ $(this).find('html').html() +'</div>';
   return output;
 }
 
@@ -89,8 +124,8 @@ function demoize() {
     "../ui.tabs.js",
     "../ui.test.js",
     "../ui.toolbar.js",
-    "../ui.tree.js",
-    "chili/chili.pack.js"
+    "../ui.tree.js"
+    //"chili/chili.pack.js"
   ];
   for (i = 0; i < files.length; i++) {
     print('\t\t<script type="text/javascript" src="'+ files[i] +'"></script>');
@@ -98,11 +133,21 @@ function demoize() {
   
   print('\t\t<script type="text/javascript">\n\t\t\t$(function(){');
   print(rendered_demos.js);
+  print("$('.tabset').tabs();");
   print('\t\t\t});\n\t\t</script>');
   
-  print('\t\t<script type="text/javascript">ChiliBook.recipeFolder = "chili/";ChiliBook.stylesheetFolder = "chili/";</script>');
   
-  print('\n\t</head>\n\t<body>\n\t\t<div id="main">');
+  var styles = [
+    '../../../themes/light/light.css',
+    '../../../themes/light/light.tabs.css',
+    '../../../themes/dark/dark.css',
+    '../../../themes/dark/dark.tabs.css'
+  ];
+  for (i = 0; i < styles.length; i++) {
+    print('\t\t<style>@import url('+ styles[i] +');</style>');
+  }
+  
+  print('\n\t</head>\n\t<body class="dark">\n\t\t<div id="main">');
   print('\n\t\t\t<div id="nav">');
   
   print($(file).find('demolist').children().listRender());

@@ -27,21 +27,31 @@
 		<script type="text/javascript" src="../ui.test.js"></script>
 		<script type="text/javascript" src="../ui.toolbar.js"></script>
 		<script type="text/javascript" src="../ui.tree.js"></script>
-		<script type="text/javascript" src="chili/chili.pack.js"></script>
 		<script type="text/javascript">
 			$(function(){
-
+undefined
           $('#drag-1').draggable();
           $('#drop-1').droppable();
         
-        $('#sortable').sortable();
+          $('#drag-2').draggable();
+          $('#drop-2').droppable({
+            drop: function() {
+              $('#drop-2').fadeOut('slow').fadeIn('fast');
+            }
+          });
+        
+        $('#sortable-1').sortable();
       
+$('.tabset').tabs();
 			});
 		</script>
-		<script type="text/javascript">ChiliBook.recipeFolder = "chili/";ChiliBook.stylesheetFolder = "chili/";</script>
+		<style>@import url(../../../themes/light/light.css);</style>
+		<style>@import url(../../../themes/light/light.tabs.css);</style>
+		<style>@import url(../../../themes/dark/dark.css);</style>
+		<style>@import url(../../../themes/dark/dark.tabs.css);</style>
 
 	</head>
-	<body>
+	<body class="dark">
 		<div id="main">
 
 			<div id="nav">
@@ -49,37 +59,30 @@
 
 			</div>
 			<div id="demos">
-<div class="description">
+<div class="tabset" id="drag-drop"><ul><li><a href="#drag_drop-basic_dragging">Basic dragging</a></li><li><a href="#drag_drop-advanced_dropping">Advanced Dropping</a></li></ul><div id="drag_drop-basic_dragging"><div class="description">
           This is the basic drag 'n drop.  Notice how <em>easy</em> it is to do this!
           At the moment, dropping does nothing.  We'll get to that in the next example.
-        </div><div class="chilihtml"><code class="html">
-          &lt;div id='drag-1'&gt;
-            Drag me!
-          &lt;/div&gt;
-          &lt;div id='drop-1'&gt;
-            Drop on me
-          &lt;/div&gt;
-        </div><div class="normalhtml">
+        </div><div class="chilihtml">HTML:<code class="html">           <span class='entity'>&lt;</span>div<span class='aname'> id</span>=<span class='avalue'>'drag-1'</span><span class='entity'>&gt;</span>             Drag me!           <span class='entity'>&lt;</span>/div<span class='entity'>&gt;</span>           <span class='entity'>&lt;</span>div<span class='aname'> id</span>=<span class='avalue'>'drop-1'</span><span class='entity'>&gt;</span>             Drop on me           <span class='entity'>&lt;</span>/div<span class='entity'>&gt;</span>         </code></div><div class="chilijs">JavaScript:<code class="javascript">           $(<span class='string'>'#drag-1'</span>).draggable();           $(<span class='string'>'#drop-1'</span>).droppable();         </code></div>Demo:<div class="actual-demo">
           <div id='drag-1'>
             Drag me!
           </div>
           <div id='drop-1'>
             Drop on me
           </div>
-        </div><div class="description">
+        </div></div><div id="drag_drop-advanced_dropping"><div class="description">
+          Let's make the droppable fade out when we drop something on it.<br/>
+          The way to do that is adding a drop function to the options.
+        </div><div class="chilihtml">HTML:<code class="html"> <br/>          <span class='entity'>&lt;</span>div<span class='aname'> id</span>=<span class='avalue'>'drag-2'</span><span class='entity'>&gt;</span> <br/>            Drag me! <br/>          <span class='entity'>&lt;</span>/div<span class='entity'>&gt;</span> <br/>          <span class='entity'>&lt;</span>div<span class='aname'> id</span>=<span class='avalue'>'drop-2'</span><span class='entity'>&gt;</span> <br/>            Drop on me <br/>          <span class='entity'>&lt;</span>/div<span class='entity'>&gt;</span> <br/>        </code></div><div class="chilijs">JavaScript:<code class="javascript"> <br/>          $(<span class='string'>'#drag-2'</span>).draggable(); <br/>          $(<span class='string'>'#drop-2'</span>).droppable({ <br/>            drop: <span class='keywords'>function</span>() { <br/>              $(<span class='string'>'#drop-2'</span>).fadeOut(<span class='string'>'slow'</span>).fadeIn(<span class='string'>'fast'</span>); <br/>            } <br/>          }); <br/>        </code></div>Demo:<div class="actual-demo">
+          <div id='drag-2'>
+            Drag me!
+          </div>
+          <div id='drop-2'>
+            Drop on me
+          </div>
+        </div></div></div><div class="demo" id="sortable"><div class="description">
         This is a very basic sortable.
-      </div><div class="chilihtml"><code class="html">
-        &lt;ul id='sortable'&gt;
-          &lt;li&gt;Item 1&lt;/li&gt;
-          &lt;li&gt;Item 2&lt;/li&gt;
-
-          &lt;li&gt;Item 3&lt;/li&gt;
-          &lt;li&gt;Item 4&lt;/li&gt;
-          &lt;li&gt;Item 5&lt;/li&gt;
-          &lt;li&gt;Item 6&lt;/li&gt;
-        &lt;/ul&gt;
-      </div><div class="normalhtml">
-        <ul id='sortable'>
+      </div><div class="chilihtml">HTML:<code class="html"> <br/>        <span class='entity'>&lt;</span>ul<span class='aname'> id</span>=<span class='avalue'>'sortable-1'</span><span class='entity'>&gt;</span> <br/>          <span class='entity'>&lt;</span>li<span class='entity'>&gt;</span>Item 1<span class='entity'>&lt;</span>/li<span class='entity'>&gt;</span> <br/>          <span class='entity'>&lt;</span>li<span class='entity'>&gt;</span>Item 2<span class='entity'>&lt;</span>/li<span class='entity'>&gt;</span> <br/> <br/>          <span class='entity'>&lt;</span>li<span class='entity'>&gt;</span>Item 3<span class='entity'>&lt;</span>/li<span class='entity'>&gt;</span> <br/>          <span class='entity'>&lt;</span>li<span class='entity'>&gt;</span>Item 4<span class='entity'>&lt;</span>/li<span class='entity'>&gt;</span> <br/>          <span class='entity'>&lt;</span>li<span class='entity'>&gt;</span>Item 5<span class='entity'>&lt;</span>/li<span class='entity'>&gt;</span> <br/>          <span class='entity'>&lt;</span>li<span class='entity'>&gt;</span>Item 6<span class='entity'>&lt;</span>/li<span class='entity'>&gt;</span> <br/>        <span class='entity'>&lt;</span>/ul<span class='entity'>&gt;</span> <br/>      </code></div><div class="chilijs">JavaScript:<code class="javascript"> <br/>        $(<span class='string'>'#sortable-1'</span>).sortable(); <br/>      </code></div>Demo:<div class="actual-demo">
+        <ul id='sortable-1'>
           <li>Item 1</li>
           <li>Item 2</li>
 
@@ -88,7 +91,7 @@
           <li>Item 5</li>
           <li>Item 6</li>
         </ul>
-      </div>
+      </div></div>
 			</div>
 		</div>
 	</body>

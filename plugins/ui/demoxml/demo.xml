@@ -51,13 +51,35 @@
           $('#drop-1').droppable();
         </javascript>
       </demo>
+      <demo title="Advanced Dropping">
+        <description>
+          Let's make the droppable fade out when we drop something on it.<br />
+          The way to do that is adding a drop function to the options.
+        </description>
+        <html>
+          <div id="drag-2">
+            Drag me!
+          </div>
+          <div id="drop-2">
+            Drop on me
+          </div>
+        </html>
+        <javascript>
+          $('#drag-2').draggable();
+          $('#drop-2').droppable({
+            drop: function() {
+              $('#drop-2').fadeOut('slow').fadeIn('fast');
+            }
+          });
+        </javascript>
+      </demo>
     </demoset>
     <demo name="sortable">
       <description>
         This is a very basic sortable.
       </description>
       <html>
-        <ul id="sortable">
+        <ul id="sortable-1">
           <li>Item 1</li>
           <li>Item 2</li>
 
@@ -68,7 +90,7 @@
         </ul>
       </html>
       <javascript>
-        $('#sortable').sortable();
+        $('#sortable-1').sortable();
       </javascript>
     </demo>
   </individual_demos>
