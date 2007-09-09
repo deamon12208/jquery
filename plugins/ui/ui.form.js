@@ -8,6 +8,7 @@
     });
   }
   $.ui.form = function(el, o) {
+    //Check if form UI has already been applied
     if(!(' '+el.className+' ').indexOf(" ui-form ")) return false;
     var $span,$el = $(el);
     var wrap = function(c,e){
@@ -18,45 +19,52 @@
     }
     switch(el.nodeName.toLowerCase()) {
     case "button": case "input":
-      if(!el.type) $span=wrap("ui-form-"+el.nodeName.toLowerCase());
-      else $span=wrap("ui-form-"+el.type.toLowerCase());
+      //Wrap element
+      var type = ((el.type)?el.type:el.nodeName).toLowerCase();
+      $span=wrap("ui-form-"+type);
+      //Apply common class to buttons
+      if(/button|reset|submit/i.test(type)) $span.addClass("ui-form-buttons");
+      //Apply class states to label also
       if($span && el.id) $span=$span.add($("label[@for='"+el.id+"']"));
+      //Checkboxes and Radios have their element hidden
       if(/checkbox|radio/i.test(el.type)) {
         $el.addClass("ui-form-hide")
         .before('<span class="ui-form-content">&middot;</span>');
-        var check = function(){
+        var check = function(){ //Checkbox States
           if(el.checked) $span.addClass("selected");
           else $span.removeClass("selected");
         }
-        var radio = function(){
+        var radio = function(){ //Radio States
           if(el.name) $(":radio[@name='"+el.name+"']")
                       .parent().parent().removeClass("selected");
           $span.addClass("selected");
         }
-        if(/checkbox/i.test(el.type)) {
+        if(/checkbox/i.test(el.type)) { //Bind checkbox events
           $span.mousedown(function(){ $el.click(); });
           $span.click(function(){ check(); });
           check();
         }
-        if(/radio/i.test(el.type)) {
+        if(/radio/i.test(el.type)) { //Bind radio events
           $span.mousedown(function(){ $el.click().focus();  });
           $span.click(function(){ radio() });
           radio();
         }
         $span
-        .mouseover(function(){ $span.addClass("hover"); $el.mouseover(); })
-        .mouseout(function(){ $span.removeClass("hover"); $el.mouseout(); })
-        .mousedown(function(){ $span.addClass("active"); $el.mousedown(); })
-        .mouseup(function(){ $span.removeClass("active"); $el.mouseup(); });
+        .mouseover(function(){ $el.mouseover(); })
+        .mouseout(function(){ $el.mouseout(); })
+        .mousedown(function(){ $el.mousedown(); })
+        .mouseup(function(){ $el.mouseup(); });
         $el
         .keydown(function(){ $span.addClass("active"); })
         .keyup(function(){ $span.removeClass("active"); })
       }
-      //TODO: match radio, and file
+      //TODO: file
     break; case "select":
       //TODO: style select
     break; case "textarea":
       $span=wrap("ui-form-textarea");
+      //The following could be replaced with dimensions outerWidth
+      $span.width($el.width()+parseInt($el.css("padding-left"))+parseInt($el.css("padding-right")));
     break; case "fieldset":
       //TODO: collapsable fieldsets (need to wrap content not including legend)
       $span=wrap("ui-form-fieldset");
@@ -67,6 +75,7 @@
     break;
     }
     $el.addClass("ui-form");
+    //Apply class states to label also
     if($span && $span.length==1 && el.id)
       $span=$span.add($("label[@for='"+el.id+"']"));
     if($span) $el
@@ -110,4 +119,4 @@ var time = function(){
 var repeat = function(v,x){ var l=[]; for(var i=x; i-->0;) l.push(v); return l; }
 var test = function(){ speedtest([400,600,800]); }
 var longtest = function(){ speedtest([4000,4000,4000]); }
-$(time);
+//$(time);
