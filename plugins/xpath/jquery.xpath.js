@@ -10,6 +10,9 @@
 
 	jQuery.find = function(selector, context){
 
+		// Remove the // at the start of the selector
+		selector = selector.replace(/^\/\//g, "");
+
 		// Convert the root / into a different context
 		if ( !selector.indexOf("/") ) {
 			context = context.documentElement;
