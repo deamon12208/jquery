@@ -27,16 +27,16 @@
     };
     
     // chainable tabs methods
-    $.each(['add', 'remove', 'enable', 'disable', 'click', 'load'], function(i, method) {
-        $.fn[method + 'Tab'] = function() {
+    $.each(['Add', 'Remove', 'Enable', 'Disable', 'Click', 'Load'], function(i, method) {
+        $.fn['tabs' + method] = function() {
             var args = arguments;
             return this.each(function() {
                 var instance = $.ui.tabs.getInstance(this);
-                instance[method].apply(instance, args);
+                instance[method.toLowerCase()].apply(instance, args);
             });
         };
     });
-    $.fn.selectedTab = function() {
+    $.fn.tabsSelected = function() {
         var selected = -1;
         if (this[0]) {
             var instance = $.ui.tabs.getInstance(this[0]),

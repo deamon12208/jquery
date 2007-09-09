@@ -42,27 +42,27 @@
                 $('#container-8 ul').tabs({ cache: false });
                 $('#container-9 ul').tabs({ disabled: [3] });
                 $('<p><a href="#">Remove tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
-                    $('#container-9 ul').removeTab(4);
+                    $('#container-9 ul').tabsRemove(4);
                     return false;
                 });
                 $('<p><a href="#">Add tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {                    
-                    $('#container-9 ul').addTab('#new-tab', 'New Tab', 4);
+                    $('#container-9 ul').tabsAdd('#new-tab', 'New Tab', 4);
                     return false;
                 });
                 $('<p><a href="#">Disable third tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
-                    $('#container-9 ul').disableTab(3);
+                    $('#container-9 ul').tabsDisable(3);
                     return false;
                 });
                 $('<p><a href="#">Enable third tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
-                    $('#container-9 ul').enableTab(3);
+                    $('#container-9 ul').tabsEnable(3);
                     return false;
                 });
                 $('<p><a href="#">Click third tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
-                    $('#container-9 ul').clickTab(3);
+                    $('#container-9 ul').tabsClick(3);
                     return false;
                 });
                 $('<p><a href="#">Get selected tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
-                    alert( $('#container-9 ul').selectedTab() );
+                    alert( $('#container-9 ul').tabsSelected() );
                     return false;
                 });
                 $('#container-10 ul').tabs({ unselected: true });
