@@ -133,7 +133,7 @@ function demoize() {
   
   print('\t\t<script type="text/javascript">\n\t\t\t$(function(){');
   print(rendered_demos.js);
-  print("$('.tabset').tabs();$('.container').tabs({navClass: ' ', selectedClass: '' });");
+  print("$('.tabset').tabs();$('.container').tabs({navClass: ' '});");
   print('\t\t\t});\n\t\t</script>');
   
   
