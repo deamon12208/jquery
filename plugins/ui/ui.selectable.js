@@ -18,6 +18,7 @@
 		};
 		var o = o || {}; $.extend(options, o); //Extend and copy options
 		this.element = el; var self = this; //Do bindings
+		self.dragged = false;
 
 		$.extend(options, {
 			helper: function() { return $(document.createElement('div')).css({border:'1px dotted black'}); },
@@ -25,10 +26,12 @@
 				self.start.apply(t, [self, e]); // Trigger the start callback
 			},
 			_drag: function(h,p,c,t,e) {
+				self.dragged = true;
 				self.drag.apply(t, [self, e]); // Trigger the drag callback
 			},
 			_stop: function(h,p,c,t,e) {
 				self.stop.apply(t, [self, e]); // Trigger the end callback
+				self.dragged = false;
 			}
 		});
 
@@ -39,21 +42,28 @@
 		$(this.element).addClass("ui-selectable").css({cursor:'default'});
 		$(this.element).children(options.filter).addClass("ui-selectee");
 
-		$(this.element).mousedown(function(ev) {
-			//self.selectingTarget(self, ev, options);
-		}).mouseup(function(ev) {
-			//self.stop.apply(self, [self, ev]);
-		});
-		$(this.element).click(function(ev) {
-			var target = $(ev.target);
-			if (target.is('.ui-selectee')) {
-				if ( !target.is('.ui-selected') ) {
-					target.addClass('ui-selected');
-					$(self.element).triggerHandler("selectableselected", [ev, {
-						selectable: self.element,
-						selected: target,
-						options: options
-					}], options.selected);
+		$(this.element).mouseup(function(ev) {
+			if (!self.dragged) {
+				var target = $(ev.target);
+				if (target.is('.ui-selectee')) {
+					if (!ev.ctrlKey && !target.is('.ui-selected')) {
+						$('.ui-selected', self.element).each(function() {
+							$(this).removeClass('ui-selected');
+							$(self.element).triggerHandler("selectableunselected", [ev, {
+								selectable: self.element,
+								unselected: this,
+								options: options
+							}], options.unselected);
+						});
+					}
+					if ( !target.is('.ui-selected') ) {
+						target.addClass('ui-selected');
+						$(self.element).triggerHandler("selectableselected", [ev, {
+							selectable: self.element,
+							selected: target,
+							options: options
+						}], options.selected);
+					}
 				}
 			}
 		});
@@ -68,7 +78,8 @@
 				options: self.options
 			}], this.options.start);
 			$(self.mouse.helper).css({position: 'absolute', left:self.mouse.opos[0], top:self.mouse.opos[1], width:0, height: 0});
-			self.unselecting(self, ev, this.options);
+			if (!ev.ctrlKey)
+				self.unselecting(self, ev, this.options);
 			self.selectingTarget(self, ev, this.options);
 			return false;
 		},
