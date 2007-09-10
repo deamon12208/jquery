@@ -53,8 +53,7 @@
       </demo>
       <demo title="Advanced Dropping">
         <description>
-          Let's make the droppable fade out when we drop something on it.<br />
-          The way to do that is adding a drop function to the options.
+          Let's make the droppable alert something when we drop something on it.
         </description>
         <html>
           <div id="drag-2">
@@ -66,10 +65,8 @@
         </html>
         <javascript>
           $('#drag-2').draggable();
-          $('#drop-2').droppable({
-            drop: function() {
-              $('#drop-2').fadeOut('slow').fadeIn('fast');
-            }
+          $('#drop-2').droppable().bind('drop', function() {
+            alert('dropped!');
           });
         </javascript>
       </demo>

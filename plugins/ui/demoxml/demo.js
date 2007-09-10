@@ -74,9 +74,9 @@ $.fn._demoRender = function() {
   var output = {};
   output.js = $(this).find('javascript').html();
   output.html = '<div class="description">'+ $(this).find('description').html() +'</div>';
-  output.html += '<div class="chilihtml">HTML:<pre class="html">'+  highlightCode($(this).find('html').html(), 'html') +'</pre></div>';
-  output.html += '<div class="chilijs">JavaScript:<pre class="javascript">'+  highlightCode($(this).find('javascript').html(), 'javascript') +'</pre></div>';
-  output.html += 'Demo:<div class="actual-demo">'+ $(this).find('html').html() +'</div>';
+  output.html += '<div class="actual-demo">'+ $(this).find('html').html() +'</div>';
+  output.html += '<fieldset class="code"><legend class="code-opener">Code</legend><div class="code-container"><div class="chilihtml">HTML:<pre class="html">'+  highlightCode($(this).find('html').html(), 'html') +'</pre></div>';
+  output.html += '<div class="chilijs">JavaScript:<pre class="javascript">'+  highlightCode($(this).find('javascript').html(), 'javascript') +'</pre></div></fieldset></div>';
   return output;
 }
 
@@ -103,6 +103,7 @@ function demoize() {
     "../../../jquery/src/ajax.js",
     "../../../jquery/src/fx.js",
     "../../../jquery/src/offset.js",
+    "../../dimensions/jquery.dimensions.js",
     "../ui.accordion.js",
     "../ui.demo.js",
     "../ui.download.js",
@@ -124,8 +125,8 @@ function demoize() {
     "../ui.tabs.js",
     "../ui.test.js",
     "../ui.toolbar.js",
-    "../ui.tree.js"
-    //"chili/chili.pack.js"
+    "../ui.tree.js",
+    "script.js"
   ];
   for (i = 0; i < files.length; i++) {
     print('\t\t<script type="text/javascript" src="'+ files[i] +'"></script>');
@@ -153,7 +154,7 @@ function demoize() {
     print('\t\t<style>@import url('+ styles[i] +');</style>');
   }
   
-  print('\n\t</head>\n\t<body class="light">\n\t\t<div id="main" class="container">');
+  print('\n\t<script type="text/javascript"></script></head>\n\t<body class="light">\n\t\t<div id="main" class="container">');
   print('\n\t\t\t<div id="nav" class="column span-2 first">');
   
   print($(file).find('demolist').children().listRender());

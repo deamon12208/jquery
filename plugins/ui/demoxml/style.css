@@ -15,3 +15,32 @@
 pre {
   overflow: auto;
 }
+.code {
+  border: 1px solid #CCC;
+}
+.light fieldset.collapsed, .dark fieldset.collapsed {
+  border-bottom: 0;
+  border-left: 0;
+  border-right: 0;
+}
+fieldset {
+  padding: 10px;
+  margin: 10px;
+}
+.code-opener {
+  padding-right: 2px;
+  padding-left: 4px;
+  cursor: pointer;
+}
+#drag-1, #drop-1, #drag-2, #drop-2 {
+  width: 100px;
+  height: 30px;
+  background-color: #ccc;
+  border: #444 solid 1px;
+  padding: 2px;
+  margin: 5px;
+}
+#drop-1, #drop-2 {
+  width: 200px;
+  height: 100px;
+}
