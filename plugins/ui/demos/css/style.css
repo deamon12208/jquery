@@ -1,18 +1,6 @@
-.ui-demo-options { list-style-type: none; padding: 0; margin: 10px; margin-top: 18px; margin-bottom: 18px; }
-.ui-demo-options li { height: 18px; position: relative;}
-.ui-demo-options li span { position: absolute; top: 0px; left: 30px; }
+body { margin: 10px; padding: 0; font-family: Arial; font-size: 12px; }
+.proxy { border: 1px dotted black; }
 
-.ui-demo-option { padding-left: 12px;	position: relative; height: 18px; }
-.ui-demo-option span { position: absolute; top: 0px; left: 40px; }
-
-.ui-demo-example { height: 72px; }
-
-/* This is a simple box */
-.ui-demo-box {
-	border: 2px outset #eee;
-	width: 140px;
-	background: #fff;
-	padding: 10px;
-	height: 20px;
-	float: left;
-}
+h2 { padding: 5px; margin: 5px; border-bottom: 2px solid #bbb; line-height: 7px; font-size: 14px; margin-top: 20px; margin-bottom: 0px; color: #333; }
+.playground { background: #f0f0f0; margin-left: 5px; margin-right: 5px; position: relative; padding: 10px; }
+.example { width: 200px; height: 100px; background: #fff; position: relative; }

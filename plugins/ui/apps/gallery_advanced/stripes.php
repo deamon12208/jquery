@@ -1,7 +1,6 @@
 <?php 
 
 // Content type
-//header('Content-type: image/jpeg');
 
 $path = $_GET['path'];
 $width = $_GET['width'];
