@@ -39,49 +39,28 @@
 		this.mouse = new $.ui.mouseInteraction(el, options);
 
 		//Add the class for themeing
-		$(this.element).addClass("ui-selectable").css({cursor:'default'});
+		$(this.element).addClass("ui-selectable");
 		$(this.element).children(options.filter).addClass("ui-selectee");
-
-		$(this.element).mouseup(function(ev) {
-			if (!self.dragged) {
-				var target = $(ev.target);
-				if (target.is('.ui-selectee')) {
-					if (!ev.ctrlKey && !target.is('.ui-selected')) {
-						$('.ui-selected', self.element).each(function() {
-							$(this).removeClass('ui-selected');
-							$(self.element).triggerHandler("selectableunselected", [ev, {
-								selectable: self.element,
-								unselected: this,
-								options: options
-							}], options.unselected);
-						});
-					}
-					if ( !target.is('.ui-selected') ) {
-						target.addClass('ui-selected');
-						$(self.element).triggerHandler("selectableselected", [ev, {
-							selectable: self.element,
-							selected: target,
-							options: options
-						}], options.selected);
-					}
-				}
-			}
-		});
 
 	}
 
 	$.extend($.ui.selectable.prototype, {
 		plugins: {},
 		start: function(self, ev) {
-			$(self.element).triggerHandler("selectablestart", [ev, {
-				selectable: self.element,
-				options: self.options
-			}], this.options.start);
 			$(self.mouse.helper).css({position: 'absolute', left:self.mouse.opos[0], top:self.mouse.opos[1], width:0, height: 0});
-			if (!ev.ctrlKey)
+			if (ev.ctrlKey) {
+				if ($(ev.target).is('.ui-selected')) {
+					$(ev.target).removeClass('ui-selected').addClass('ui-unselecting');
+					$(self.element).triggerHandler("selectableunselecting", [ev, {
+						selectable: self.element,
+						unselecting: ev.target,
+						options: this.options
+					}], this.options.unselecting);
+				}
+			} else {
 				self.unselecting(self, ev, this.options);
-			self.selectingTarget(self, ev, this.options);
-			return false;
+				self.selectingTarget(self, ev, this.options);
+			}
 		},
 		drag: function(self, ev) {
 			var x1 = self.mouse.opos[0], y1 = self.mouse.opos[1], x2 = ev.pageX, y2 = ev.pageY;
