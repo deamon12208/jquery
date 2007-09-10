@@ -96,9 +96,9 @@
         this.tabify(true);
 
         // save instance for later
-        var uuid = 'instance-' + $.ui.tabs.prototype.count++;
+        var uuid = 'tabs' + $.ui.tabs.prototype.count++;
         $.ui.tabs.instances[uuid] = this;
-        this.source['UI_TABS_UUID'] = uuid;
+        $.data(el, 'tabsUUID', uuid);
 
     };
 
@@ -106,7 +106,7 @@
     $.ui.tabs.instances = {};
 
     $.ui.tabs.getInstance = function(el) {
-        return $.ui.tabs.instances[el.UI_TABS_UUID];
+        return $.ui.tabs.instances[$.data(el, 'tabsUUID')];
     };
 
     $.extend($.ui.tabs.prototype, {
@@ -118,7 +118,7 @@
             this.$containers = $([]);
 
             var self = this, o = this.options;
-
+            
             this.$tabs.each(function(i, a) {
                 // inline tab
                 if (a.hash && a.hash.replace('#', '')) { // safari 2 reports '#' for an empty hash
@@ -126,9 +126,9 @@
                 }
                 // remote tab
                 else {
-                    var id = a.title && a.title.replace(/\s/g, '_') || o.hashPrefix + (self.count + 1) + '-' + (i + 1), url = a.href;
+                    $.data(a, 'href', a.href);
+                    var id = a.title && a.title.replace(/\s/g, '_') || o.hashPrefix + (self.count + 1) + '-' + (i + 1);
                     a.href = '#' + id;
-                    a.url = url;
                     self.$containers = self.$containers.add(
                         $('#' + id)[0] || $('<div id="' + id + '" class="' + o.containerClass + '"></div>')
                             .insertAfter( self.$containers[i - 1] || self.source )
@@ -179,10 +179,10 @@
                 }
 
                 // load if remote tab
-                if (this.$tabs[o.initial].url) {
-                    this.load(o.initial + 1, this.$tabs[o.initial].url);
+                if ($.data(this.$tabs[o.initial], 'href')) {
+                    this.load(o.initial + 1, $.data(this.$tabs[o.initial], 'href'));
                     if (o.cache) {
-                        this.$tabs[o.initial].url = null; // if loaded once do not load them again
+                        $.removeData(this.$tabs[o.initial], 'href'); // if loaded once do not load them again
                     }
                 }
 
@@ -314,13 +314,13 @@
                         }, 0);
                     }*/
 
-                    if (this.url) { // remote tab
+                    if ($.data(this, 'href')) { // remote tab
                         var a = this;
-                        self.load(self.$tabs.index(this) + 1, this.url, function() {
+                        self.load(self.$tabs.index(this) + 1, $.data(this, 'href'), function() {
                             switchTab(a, $hide, $show);
                         });
                         if (o.cache) {
-                            this.url = null; // if loaded once do not load them again
+                            $.removeData(this, 'href'); // if loaded once do not load them again
                         }
                     } else {
                         switchTab(this, $hide, $show);
@@ -417,7 +417,7 @@
 
             // set new URL
             if (url) {
-                $a[0].url = url;
+                $.data($a[0], 'href', url);
             }
 
             // load
