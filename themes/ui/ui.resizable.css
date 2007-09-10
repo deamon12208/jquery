@@ -1,5 +1,7 @@
-.ui-resizable-handle { position: absolute; display: none; }
-
+.ui-resizable-handle { position: absolute; }
+.ui-resizable {
+  position: relative;
+}
 .ui-resizable-n {
 	cursor: n-resize;
 	height: 6px;
