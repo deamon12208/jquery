@@ -8,21 +8,21 @@
 
 (function($) {
  
- 	// if the UI scope is not availalable, add it
-	$.ui = $.ui || {};
+    // if the UI scope is not availalable, add it
+    $.ui = $.ui || {};
     
     $.fn.tabs = function(initial, options) {
-    	if (initial && initial.constructor == Object) { // shift arguments
-    	    options = initial;
-    	    initial = null;
-    	}
-    	options = options || {};
-    	
-    	initial = initial && initial.constructor == Number && --initial || 0;
-    	
-    	return this.each(function() {
-    		new $.ui.tabs(this, $.extend(options, { initial: initial }));
-    	});
+        if (initial && initial.constructor == Object) { // shift arguments
+            options = initial;
+            initial = null;
+        }
+        options = options || {};
+        
+        initial = initial && initial.constructor == Number && --initial || 0;
+        
+        return this.each(function() {
+            new $.ui.tabs(this, $.extend(options, { initial: initial }));
+        });
     };
     
     // chainable tabs methods
@@ -46,10 +46,10 @@
     };
 
     $.ui.tabs = function(el, options) {
-    	
-    	this.source = el;
-    	
-    	this.options = $.extend({
+        
+        this.source = el;
+        
+        this.options = $.extend({
             
             // basic setup
             initial: 0,
@@ -92,14 +92,14 @@
             loadingClass: 'ui-tabs-loading'
             
         }, options);
-    	
-    	this.tabify(true);
-    	
-    	// save instance for later
-    	var uuid = 'instance-' + $.ui.tabs.prototype.count++;
-    	$.ui.tabs.instances[uuid] = this;
-    	this.source['UI_TABS_UUID'] = uuid;
-    	
+        
+        this.tabify(true);
+        
+        // save instance for later
+        var uuid = 'instance-' + $.ui.tabs.prototype.count++;
+        $.ui.tabs.instances[uuid] = this;
+        this.source['UI_TABS_UUID'] = uuid;
+        
     };
     
     // static
@@ -120,27 +120,27 @@
             var self = this, o = this.options;
             
             this.$tabs.each(function(i, a) {
-        	    // inline tab
-        	    if (a.hash && a.hash.replace('#', '')) { // safari 2 reports '#' for an empty hash
-        	        self.$containers = self.$containers.add(a.hash);
-        	    }
-        	    // remote tab
-        	    else {
-        	        var id = a.title && a.title.replace(/\s/g, '_') || o.hashPrefix + (self.count + 1) + '-' + (i + 1), url = a.href;
-        	        a.href = '#' + id;
-        	        a.url = url;
-        	        self.$containers = self.$containers.add(
-        	            $('#' + id)[0] || $('<div id="' + id + '" class="' + o.containerClass + '"></div>')
-        	                .insertAfter( self.$containers[i - 1] || self.source )
-        	        );
-        	    }
-        	});
-        	
-        	if (init) {
-        	    
-            	// Try to retrieve initial tab from fragment identifier in url if present,
+                // inline tab
+                if (a.hash && a.hash.replace('#', '')) { // safari 2 reports '#' for an empty hash
+                    self.$containers = self.$containers.add(a.hash);
+                }
+                // remote tab
+                else {
+                    var id = a.title && a.title.replace(/\s/g, '_') || o.hashPrefix + (self.count + 1) + '-' + (i + 1), url = a.href;
+                    a.href = '#' + id;
+                    a.url = url;
+                    self.$containers = self.$containers.add(
+                        $('#' + id)[0] || $('<div id="' + id + '" class="' + o.containerClass + '"></div>')
+                            .insertAfter( self.$containers[i - 1] || self.source )
+                    );
+                }
+            });
+            
+            if (init) {
+                
+                // Try to retrieve initial tab from fragment identifier in url if present,
                 // otherwise try to find selected class attribute on <li>.
-            	this.$tabs.each(function(i, a) {
+                this.$tabs.each(function(i, a) {
                     if (location.hash) {
                         if (a.hash == location.hash) {
                             o.initial = i;
@@ -160,8 +160,8 @@
                         o.initial = i;
                         return false; // break
                     }
-            	});
-        	
+                });
+            
                 // attach necessary classes for styling if not present
                 $(this.source).is('.' + o.navClass) || $(this.source).addClass(o.navClass);
                 this.$containers.each(function() {
@@ -185,15 +185,15 @@
                         this.$tabs[o.initial].url = null; // if loaded once do not load them again
                     }
                 }
-        	
-            	// disabled tabs
+            
+                // disabled tabs
                 for (var i = 0, position; position = o.disabled[i]; i++) {
                     this.disable(position);
                 }
             
             }
-        	
-        	// setup animations
+            
+            // setup animations
             var showAnim = {}, hideAnim = {}, showSpeed = o.fxShowSpeed || o.fxSpeed, 
                 hideSpeed = o.fxHideSpeed || o.fxSpeed;
             if (o.fxSlide || o.fxFade) {
@@ -263,9 +263,9 @@
                     .siblings().removeClass(o.selectedClass);
                 hideTab(clicked, $hide, $show);
             }
-        	
-        	// tab click handler
-        	function tabClick(e) {
+            
+            // tab click handler
+            function tabClick(e) {
 
                 //var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
                 var $li = $(this).parents('li:eq(0)'), $hide = self.$containers.filter(':visible'), $show = $(this.hash);
@@ -338,7 +338,7 @@
                 
             }
             
-        	// attach click event, avoid duplicates from former tabifying
+            // attach click event, avoid duplicates from former tabifying
             this.$tabs.unbind(o.event, tabClick).bind(o.event, tabClick);
             
         },
