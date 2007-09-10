@@ -1,0 +1,17 @@
+
+.container { background-image:none; }
+
+#nav li h3 {
+  font-size: 1.2em;
+  line-height: 1;
+}
+#nav li {
+  margin-left: -15px;
+  list-style: none;
+}
+#nav li li h3 {
+  font-size: 1em;
+}
+pre {
+  overflow: auto;
+}
