@@ -51,12 +51,29 @@
 				
 		});
 	}
+
+	//Make nodes selectable by expression
+	$.extend($.expr[':'], { slider: "(' '+a.className+' ').indexOf(' ui-slider ')" });
 	
 	$.fn.slider = function(o) {
 		return this.each(function() {
 			new $.ui.slider(this, o);
 		});
 	}
+	
+	//Macros for external methods that support chaining
+	var methods = "destroy,enable,disable,moveTo".split(",");
+	for(var i=0;i<methods.length;i++) {
+		var cur = methods[i], f;
+		eval('f = function() { var a = arguments; return this.each(function() { if(jQuery(this).is(".ui-slider")) jQuery.data(this, "ui-slider")["'+cur+'"](a); }); }');
+		$.fn["slider"+cur.substr(0,1).toUpperCase()+cur.substr(1)] = f;
+	};
+	
+	//get instance method
+	$.fn.sliderInstance = function() {
+		if($(this[0]).is(".ui-slider")) return $.data(this[0], "ui-slider");
+		return false;
+	};
 	
 	$.ui.slider = function(el, o) {
 		
@@ -76,11 +93,15 @@
 			},
 			_drag: function(h, p, c, t, e) {
 				self.drag.apply(t, [self, e]); // Trigger the start callback
+			},
+			startCondition: function() {
+				return !self.disabled;
 			}			
 		});
 
 		var self = this;
 		var o = options;
+		$.data(el, "ui-slider", this);
 		o.stepping = parseInt(o.stepping) || (o.steps ? o.maxValue/o.steps : 0);
 		o.realValue = (o.maxValue - o.minValue);
 
@@ -98,6 +119,7 @@
 		}
 		
 		this.element = el;
+		$(this.element).addClass("ui-slider");
 		
 		
 		if(o.axis == 'horizontal') {
@@ -120,6 +142,18 @@
 	$.extend($.ui.slider.prototype, {
 		currentTarget: null,
 		lastTarget: null,
+		destroy: function() {
+			$(this.element).removeClass("ui-slider").removeClass("ui-slider-disabled");
+			this.interaction.destroy();
+		},
+		enable: function() {
+			$(this.element).removeClass("ui-slider-disabled");
+			this.disabled = false;
+		},
+		disable: function() {
+			$(this.element).addClass("ui-slider-disabled");
+			this.disabled = true;
+		},
 		nonvalidRange: function(self) {
 
 			for(var i=0;i<this.interactions.length;i++) {
@@ -160,7 +194,7 @@
 			var o = this.interaction.options;
 			var pointer = [e.pageX,e.pageY];
 			var offset = $(this.interaction.element).offsetParent().offset({ border: false });
-			if(this.interaction.element == e.target) return;
+			if(this.interaction.element == e.target || this.disabled) return;
 			
 			this.interaction.pickValue = this.interaction.curValue;
 			this.drag.apply(this.interaction, [this, e, [pointer[0]-offset.left-this.handle[0].offsetWidth/2,pointer[1]-offset.top-this.handle[0].offsetHeight/2]]);
