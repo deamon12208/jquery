@@ -180,6 +180,7 @@
 		stop: function(e) {			
 			
 			var o = this.options; var a = this.element; var self = this;
+
 			$(document).unbind('mouseup', self.mouseup);
 			$(document).unbind('mousemove', self.mousemove);
 

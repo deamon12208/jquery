@@ -10,19 +10,26 @@
 		});
 	}
 
-	//Macros for external methods
+	//Macros for external methods that support chaining
 	var methods = "destroy,enable,disable".split(",");
 	for(var i=0;i<methods.length;i++) {
 		var cur = methods[i], f;
-		eval('f = function() { return this.each(function() { if($(this).is(".ui-resizable")) this.uiResizable["'+cur+'"](); }); }');
+		eval('f = function() { var a = arguments; return this.each(function() { if(jQuery(this).is(".ui-resizable")) jQuery.data(this, "ui-resizable")["'+cur+'"](a); if(jQuery(this.parentNode).is(".ui-resizable")) jQuery.data(this, "ui-resizable")["'+cur+'"](a); }); }');
 		$.fn["resizable"+cur.substr(0,1).toUpperCase()+cur.substr(1)] = f;
 	};
+	
+	//get instance method
+	$.fn.resizableInstance = function() {
+		if($(this[0]).is(".ui-resizable") || $(this[0].parentNode).is(".ui-resizable")) return $.data(this[0], "ui-resizable");
+		return false;
+	};
+	
 	
 	$.ui.resizable = function(el,o) {
 		
 		var options = {}; o = o || {}; $.extend(options, o); //Extend and copy options
 		this.element = el; var self = this; //Do bindings
-		this.element.uiResizable = this; //TODO: Real expando (this one causes memory leaks)
+		$.data(this.element, "ui-resizable", this);
 		
 		if(options.proxy) {
 			var helper = function(e,that) {
@@ -40,7 +47,7 @@
 		}
 		
 		//Destructive mode wraps the original element
-		if(el.nodeName.match(/textarea|input|select|button/i)) options.destructive = true;
+		if(el.nodeName.match(/textarea|input|select|button|img/i)) options.destructive = true;
 		if(options.destructive) {
 			
 			$(el).wrap('<div class="ui-wrapper"  style="position: relative; width: '+$(el).outerWidth()+'px; height: '+$(el).outerHeight()+';"></div>');
@@ -51,16 +58,17 @@
 			$(el).css({ marginLeft: $(oel).css("marginLeft"), marginTop: $(oel).css("marginTop"), marginRight: $(oel).css("marginRight"), marginBottom: $(oel).css("marginBottom")});
 			$(oel).css({ marginLeft: 0, marginTop: 0, marginRight: 0, marginBottom: 0});
 
+			//Adding handles (disabled not so common ones)
 			var t = function(a,b) { $(el).append("<div class='ui-resizable-"+a+" ui-resizable-handle' style='position: absolute; "+b+"'></div>"); };
 			var b = [parseInt($(oel).css('borderTopWidth')),parseInt($(oel).css('borderRightWidth')),parseInt($(oel).css('borderBottomWidth')),parseInt($(oel).css('borderLeftWidth'))];
-			t('n','top: '+b[0]+'px;');
+			//t('n','top: '+b[0]+'px;');
 			t('e','right: '+b[1]+'px;');
 			t('s','bottom: '+b[1]+'px;');
-			t('w','left: '+b[3]+'px;');
+			//t('w','left: '+b[3]+'px;');
 			t('se','bottom: '+b[2]+'px; right: '+b[1]+'px;');
-			t('sw','bottom: '+b[2]+'px; left: '+b[3]+'px;');
-			t('ne','top: '+b[0]+'px; right: '+b[1]+'px;');
-			t('nw','top: '+b[0]+'px; left: '+b[3]+'px;');
+			//t('sw','bottom: '+b[2]+'px; left: '+b[3]+'px;');
+			//t('ne','top: '+b[0]+'px; right: '+b[1]+'px;');
+			//t('nw','top: '+b[0]+'px; left: '+b[3]+'px;');
 			
 			o.proportionallyResize = o.proportionallyResize || [];
 			o.proportionallyResize.push(oel);
@@ -102,7 +110,13 @@
 			$(options.handles[i]).bind('mousedown', function(e) {
 				self.interaction.options.axis = this.resizeAxis;
 			})[0].resizeAxis = i;
+			
 		}
+		
+		//If we want to auto hide the elements
+		if(o.autohide)
+			$(this.element).addClass("ui-resizable-autohide").hover(function() { $(this).removeClass("ui-resizable-autohide"); }, function() { if(self.interaction.options.autohide) $(this).addClass("ui-resizable-autohide"); });
+	
 
 		$.extend(options, {
 			helper: helper,
@@ -249,12 +263,16 @@
 						break;
 				}	
 			}
+
+			if(e.shiftKey) nh = nw * (p[1]/p[0]);
 			
 			if(o.minWidth) nw = nw <= o.minWidth ? o.minWidth : nw;
 			if(o.minHeight) nh = nh <= o.minHeight ? o.minHeight : nh;
 			
 			if(o.maxWidth) nw = nw >= o.maxWidth ? o.maxWidth : nw;
 			if(o.maxHeight) nh = nh >= o.maxHeight ? o.maxHeight : nh;
+			
+			if(e.shiftKey) nh = nw * (p[1]/p[0]);
 
 			var modifier = $(that.element).triggerHandler("resize", [e, that.prepareCallbackObj(this)], o.resize);
 			if(!modifier) modifier = {};
