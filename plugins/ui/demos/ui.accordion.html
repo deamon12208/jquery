@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Language" content="en" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Slider Demo</title>
+<title>Accordion Demo</title>
 <link rel="stylesheet" href="../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)">
 <link rel="stylesheet" href="css/style.css" type="text/css">
 
@@ -15,35 +15,33 @@
 <script type="text/javascript" src="../../../jquery/src/fx.js"></script>
 <script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
 
-<script type="text/javascript" src="../ui.mouse.js"></script>
-<script type="text/javascript" src="../ui.slider.js"></script>
+<script type="text/javascript" src="../ui.accordion.js"></script>
 
 </head>
 <body>
 
 <h2>1. Default, no options</h2>
 <div class="playground">
-	<div id='example1' class='ui-slider-1' style="margin: 40px;">
-	<div class='ui-slider-handle'></div>	
-	</div>
+	
+	<ul class="ui-accordion-container">
+		<li class="active"><a href='#' class="ui-accordion-link">Test 1</a><div class="ui-accordion-right"></div></li>
+		<li><a href='#' class="ui-accordion-link">Test 2</a><div class="ui-accordion-right"></div></li>
+		<li><a href='#' class="ui-accordion-link">Test 3</a><div class="ui-accordion-right"></div></li>
+	</ul>
+	
 	<br />
-	<button onclick="$('#example1').sliderEnable()">Enable</button>
-	<button onclick="$('#example1').sliderDisable()">Disable</button>
+	<button onclick="$('#example1').accordionEnable()">Enable</button>
+	<button onclick="$('#example1').accordionDisable()">Disable</button>
 </div>
 
-<h2>2. Stepping</h2>
+<h2>2. (Something else)</h2>
 <div class="playground" style="background: #f9f9f9;">
-	<div id='example2' class='ui-slider-2' style="margin: 40px;">
-	<div class='ui-slider-handle'></div>	
-	</div>
+<br />
 </div>
 
-<h2>3. Multiple handles</h2>
+<h2>3. (Something else)</h2>
 <div class="playground" style="background: #f9f9f9;">
-	<div id='example3' class='ui-slider-2' style="margin: 40px;">
-	<div class='ui-slider-handle'></div>
-	<div class='ui-slider-handle' style="left: 188px;"></div>	
-	</div>
+<br />
 </div>
 
 <script type="text/javascript">
@@ -57,9 +55,7 @@ if(!window.console) {
 
 $(window).bind("load",function(){
 
-	$('#example1').slider();
-	$('#example2').slider({ steps: 10 });
-	$('#example3').slider({ steps: 10 });
+	//$('#example1').accordion();
 	
 
 });
