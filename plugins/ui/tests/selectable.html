@@ -14,7 +14,7 @@
         <script type="text/javascript" src="../../../jquery/src/event.js"></script>
         <script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
         <script type="text/javascript" src="../../../jquery/src/fx.js"></script>
-	<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+        <script type="text/javascript" src="../../../jquery/src/offset.js"></script>
 	<script type="text/javascript" src="../ui.mouse.js"></script>
 	<script type="text/javascript" src="../ui.selectable.js"></script>
         
@@ -53,8 +53,11 @@
                 font-family: "Courier New", Courier, monospace;
             }
 
+#selectable1 .ui-selecting {
+	background: #aad284;
+}
 #selectable1 .ui-selected {
-	background: #cdf;
+	background: #e2ecf5;
 }
 
 #selectable2 {
@@ -105,11 +108,17 @@
 
 		$("#selectable2").selectable({
 			filter: "div",
-			select: function(ev, ui) {
-				$(ui.selected).append('<br>selected');
+			selecting: function(ev, ui) {
+				$(ui.selecting).text('selecting');
 			},
-			unselect: function(ev, ui) {
-				$(ui.unselected).append('-unselected');
+			selected: function(ev, ui) {
+				$(ui.selected).text('selected');
+			},
+			unselecting: function(ev, ui) {
+				$(ui.unselecting).text('unselecting');
+			},
+			unselected: function(ev, ui) {
+				$(ui.unselected).text('unselected');
 			}
 		});
 

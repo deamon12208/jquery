@@ -26,6 +26,9 @@
 			},
 			_drag: function(h,p,c,t,e) {
 				self.drag.apply(t, [self, e]); // Trigger the drag callback
+			},
+			_stop: function(h,p,c,t,e) {
+				self.stop.apply(t, [self, e]); // Trigger the end callback
 			}
 		});
 
@@ -36,24 +39,37 @@
 		$(this.element).addClass("ui-selectable").css({cursor:'default'});
 		$(this.element).children(options.filter).addClass("ui-selectee");
 
-		$(this.element).mouseup(function(ev) {
-			self.selectTarget(self, ev, options);
+		$(this.element).mousedown(function(ev) {
+			//self.selectingTarget(self, ev, options);
+		}).mouseup(function(ev) {
+			//self.stop.apply(self, [self, ev]);
+		});
+		$(this.element).click(function(ev) {
+			var target = $(ev.target);
+			if (target.is('.ui-selectee')) {
+				if ( !target.is('.ui-selected') ) {
+					target.addClass('ui-selected');
+					$(self.element).triggerHandler("selectableselected", [ev, {
+						selectable: self.element,
+						selected: target,
+						options: options
+					}], options.selected);
+				}
+			}
 		});
 
 	}
 
 	$.extend($.ui.selectable.prototype, {
 		plugins: {},
-		prepareCallbackObj: function(self) {
-			return {
-				selectable: self,
-				options: self.options
-			}
-		},
 		start: function(self, ev) {
-			$(self.element).triggerHandler("selectablestart", [ev, self.prepareCallbackObj(this)], this.options.start);
+			$(self.element).triggerHandler("selectablestart", [ev, {
+				selectable: self.element,
+				options: self.options
+			}], this.options.start);
 			$(self.mouse.helper).css({position: 'absolute', left:self.mouse.opos[0], top:self.mouse.opos[1], width:0, height: 0});
-			self.selectTarget(self, ev, this.options);
+			self.unselecting(self, ev, this.options);
+			self.selectingTarget(self, ev, this.options);
 			return false;
 		},
 		drag: function(self, ev) {
@@ -61,33 +77,48 @@
 			if (x1 > x2) { var tmp = x2; x2 = x1; x1 = tmp; }
 			if (y1 > y2) { var tmp = y2; y2 = y1; y1 = tmp; }
 			$(self.mouse.helper).css({left: x1, top: y1, width: x2-x1, height: y2-y1});
-			self.andSelectTarget(self, ev, this.options);
+			self.selectingTarget(self, ev, this.options);
 		},
-		unselect: function(self, ev, options) {
+		stop: function(self, ev) {
+			var options = this.options;
+			$('.ui-selecting', self.element).each(function() {
+				$(this).removeClass('ui-selecting').addClass('ui-selected');
+				$(self.element).triggerHandler("selectableselected", [ev, {
+					selectable: self.element,
+					selected: this,
+					options: options
+				}], options.selected);
+			});
+			$('.ui-unselecting', self.element).each(function() {
+				$(this).removeClass('ui-unselecting');
+				$(self.element).triggerHandler("selectableunselected", [ev, {
+					selectable: self.element,
+					unselected: this,
+					options: options
+				}], options.unselected);
+			});
+		},
+		unselecting: function(self, ev, options) {
 			$('.ui-selected', self.element).each(function() {
 				if (this != ev.target) {
-					$(this).removeClass('ui-selected');
-					$(self.element).triggerHandler("selectableselect", [ev, {
+					$(this).removeClass('ui-selected').addClass('ui-unselecting');
+					$(self.element).triggerHandler("selectableunselecting", [ev, {
 						selectable: self.element,
-						unselected: this,
+						unselecting: this,
 						options: options
-					}], options.unselect);
+					}], options.unselecting);
 				}
 			});
 		},
-		selectTarget: function(self, ev, options) {
-			self.unselect(self, ev, options);
-			self.andSelectTarget(self, ev, options);
-		},
-		andSelectTarget: function(self, ev, options) {
+		selectingTarget: function(self, ev, options) {
 			var target = $(ev.target);
-			if (target.is('.ui-selectee:not(.ui-selected)')) {
-				target.addClass('ui-selected');
-				$(self.element).triggerHandler("selectableselect", [ev, {
+			if (target.is('.ui-selectee:not(.ui-selecting)')) {
+				target.removeClass('ui-selected').removeClass('ui-unselecting').addClass('ui-selecting');
+				$(self.element).triggerHandler("selectableselecting", [ev, {
 					selectable: self.element,
-					selected: target,
+					selecting: ev.target,
 					options: options
-				}], options.select);
+				}], options.selecting);
 			}
 		}
 	});
