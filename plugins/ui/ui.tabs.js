@@ -368,11 +368,11 @@
         },
         remove: function(position) {
             if (position && position.constructor == Number) {
-                this.$tabs.slice(position - 1, position).parents('li:eq(0)').remove();
-                this.$containers.slice(position - 1, position).remove();
+                var $removedTab = this.$tabs.slice(position - 1, position).parents('li:eq(0)').remove();
+                var $removedContainer = this.$containers.slice(position - 1, position).remove();
                 this.tabify();
+                this.options.remove($removedTab[0], $removedContainer[0]); // callback
             }
-            this.options.remove(); // callback
         },
         enable: function(position) {
             var $li = this.$tabs.slice(position - 1, position).parents('li:eq(0)'), o = this.options;
