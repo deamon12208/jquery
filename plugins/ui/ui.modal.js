@@ -180,14 +180,14 @@
 		// Attach close
 		t.find('.ui-modal-buttons a.ui-modal-button-close').click(function(e) {
 			// Trigger the close function
-			$.ui.trigger('close', self, e, {options: self.options, modal: el});
+			$(el).triggerHandler("modalclose", [e, {options: self.options, modal: el}], self.options.close);
 		});
 		
 		// Resize item
 		var b = $('<span>').html('').addClass("ui-modal-resize-se");
 		
 		// Open the modal
-		$.ui.trigger('open', self, {}, {options: self.options, modal: el });
+		$(el).triggerHandler("modalopen", [null, {options: self.options, modal: el}], self.options.close);
 		$.extend(options, {
 			uiBox: {
 				top: t,
