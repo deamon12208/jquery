@@ -40,31 +40,31 @@ $(function() {
   /* Themes */
   $("body").themes({
     "light":"Light",
-    "dark":"Dark",
+    "dark":"Dark"
   }).appendTo("#header form");
-    
+
   /* Demos */
-  
+
     //Drag & Drop
     $("#drag-demo1").draggable();
     $("#drop-demo1").droppable({
-	  	accept: '#drag-demo1',
+      accept: '#drag-demo1',
       hoverClass: 'hover',
-	  	drop: function(ev, ui) {
+      drop: function(ev, ui) {
         $("#drag-demo1").fadeOut("fast",function(){
           $("#drag-demo1").fadeIn("fast");
         });
-	  	}
+      }
     });
 
     //Resizables
     $("#resizables textarea").resizable();
-    
+
     //Sortables
     $('#sortables .sortable').sortable({
-  		animated: true,
-  		items: 'li'
-  	});
+      animated: true,
+      items: 'li'
+    });
 });
 
 </script>
@@ -116,7 +116,7 @@ $(function() {
 
   <div id="drag-drop" class="demo">
     <h2>Drag &amp; Drop</h2>
-    
+
     <div id="drag-demo1"><span>Drag Me</span></div>
     <div id="drop-demo1"><span>Drop Here</span></div>
 
