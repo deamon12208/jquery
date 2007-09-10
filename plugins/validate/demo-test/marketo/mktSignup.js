@@ -1,7 +1,17 @@
  $(document).ready(function(){
  	
 	jQuery.validator.addMethod("password", function( value, element, param ) {
-		return this.optional(element) || value.length >= 6 && /\d/.test(value) && /\w/.test(value);
+		var result = this.optional(element) || value.length >= 6 && /\d/.test(value) && /\w/.test(value);
+		if (!result) {
+			element.value = "";
+			var validator = this;
+			setTimeout(function() {
+				validator.blockFocusCleanup = true;
+				element.focus();
+				validator.blockFocusCleanup = false;
+			}, 1);
+		}
+		return result;
 	}, "Your password must be at least 6 characters long and contain at least one number and one character.");
 	
 	jQuery.validator.messages.required = " ";

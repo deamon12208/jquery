@@ -687,7 +687,7 @@ jQuery.extend(jQuery.validator, {
 				validator.lastActive = this;
 				
 				// hide error label and remove error class on focus if enabled
-				if ( validator.settings.focusCleanup ) {
+				if ( validator.settings.focusCleanup && !validator.blockFocusCleanup ) {
 					jQuery(this).removeClass( validator.settings.errorClass );
 					validator.errorsFor(this).hide();
 				}
