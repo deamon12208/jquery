@@ -143,11 +143,11 @@ $.fn.extend({
 		function findActive(selector) {
 			return selector != undefined
 				? typeof selector == "number"
-					? headers.eq(selector)
+					? headers.filter(":eq(" + selector + ")")
 					: headers.not(headers.not(selector))
 				: selector === false
 					? $("<div>")
-					: headers.eq(0)
+					: headers.filter(":eq(0)")
 		}
 		
 		function toggle(toShow, toHide, data, clickedActive, down) {
