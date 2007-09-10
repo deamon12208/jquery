@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Language" content="en" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Crop Image - Test Page</title>
-<link rel="stylesheet" href="../../../themes/ui/ui.all.css" type="text/css" media="screen" title="UI Standard">
+<link rel="stylesheet" href="../../../themes/flora/flora.all.css" type="text/css" media="screen" title="UI Standard">
 
 <script type="text/javascript" src="../../../jquery/src/core.js"></script>
 <script type="text/javascript" src="../../../jquery/src/selector.js"></script>
@@ -31,18 +31,13 @@ body
 	border: 1px dotted black;	
 }
 
-.ui-resizable .ui-resizable-handle { display: block }
-
-.ui-resizable-ne { cursor: ne-resize; width: 10px; height: 10px; }
-.ui-resizable-nw { cursor: nw-resize; width: 10px; height: 10px; }
-
 </style>
 </head>
 <body>
 
-<div style="position:relative;">
+<div id="imagecropper" style="position:relative;">
 
-  <img src="images/houses.jpg" style="position:absolute;opacity:0.2;">
+  <img src="images/houses.jpg">
   <div id="cropper" style="position:absolute;left:100px;top:60px;width:400px;height:300px;overflow:hidden;">
     <img src="images/houses.jpg" style="margin-left:-100px;margin-top:-60px;cursor:move;position:absolute;">
     <div class='ui-resizable-n ui-resizable-handle'></div>
@@ -60,8 +55,10 @@ body
 <script type="text/javascript">
 
 $(document).ready(function(){
-
+	
 	var img = $('#cropper img');
+
+	$('#imagecropper > img').css({position: 'absolute', opacity: 0.2});
 
 	$('#cropper').draggable({
 		handle: 'img',
