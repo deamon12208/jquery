@@ -28,7 +28,9 @@
 		<div class='ui-resizable-s ui-resizable-handle'></div>
 		<div class='ui-resizable-se ui-resizable-handle'></div>
 		<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Resize me</div>
-	</div>
+	</div><br />
+	<button onclick="$('#example1').resizableEnable()">Enable</button>
+	<button onclick="$('#example1').resizableDisable()">Disable</button>
 </div>
 
 <h2>2. Autohiding handles</h2>
@@ -48,8 +50,6 @@
 	<textarea id='example3' style='margin: 10px; padding: 10px;' class="example">I was made resizable with this code only: $('div').resizable({ autohide: true, minHeight: 100, minWidth: 200 });</textarea>
 	<br /><img style='margin: 0;' id="example32" src="images/resizable.jpg" />
 </div>
-<button onclick="$('#textarea').resizableEnable()">Enable</button>
-<button onclick="$('#textarea').resizableDisable()">Disable</button>
 
 <h2>4. All directions</h2>
 <div class="playground" style="height: 110px;">

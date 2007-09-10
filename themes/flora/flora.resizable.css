@@ -3,7 +3,7 @@
 .ui-resizable { position: relative; }
 
 /* Global handle styles */
-.ui-resizable-handle { position: absolute; display: none; }
+.ui-resizable-handle { position: absolute; display: none; font-size: 0.1px; }
 .ui-resizable .ui-resizable-handle { display: block; }
 body .ui-resizable-disabled .ui-resizable-handle { display: none; } /* use 'body' to make it more specific (css order) */
 body .ui-resizable-autohide .ui-resizable-handle { display: none; } /* use 'body' to make it more specific (css order) */

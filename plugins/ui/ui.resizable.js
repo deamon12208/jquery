@@ -115,7 +115,7 @@
 		
 		//If we want to auto hide the elements
 		if(o.autohide)
-			$(this.element).addClass("ui-resizable-autohide").hover(function() { $(this).removeClass("ui-resizable-autohide"); }, function() { if(self.interaction.options.autohide) $(this).addClass("ui-resizable-autohide"); });
+			$(this.element).addClass("ui-resizable-autohide").hover(function() { $(this).removeClass("ui-resizable-autohide"); }, function() { if(self.interaction.options.autohide && !self.interaction.init) $(this).addClass("ui-resizable-autohide"); });
 	
 
 		$.extend(options, {
@@ -173,7 +173,8 @@
 		start: function(that, e) {
 			this.options.originalSize = [$(this.element).width(),$(this.element).height()];
 			this.options.originalPosition = $(this.element).css("position");
-			
+			this.options.originalPositionValues = $(this.element).position();
+
 			this.options.modifyThese.push([$(this.helper),0,0]);
 			
 			$(that.element).triggerHandler("resizestart", [e, that.prepareCallbackObj(this)], this.options.start);			
@@ -204,14 +205,15 @@
 		drag: function(that, e) {
 
 			var o = this.options;
-			var co = o.co;
+			var rel = (o.originalPosition != "absolute" && o.originalPosition != "fixed");
+			var co = rel ? o.co : this.options.originalPositionValues;
 			var p = o.originalSize;
 
-			this.pos = [this.rpos[0]-o.cursorAt.left, this.rpos[1]-o.cursorAt.top];
+			this.pos = rel ? [this.rpos[0]-o.cursorAt.left, this.rpos[1]-o.cursorAt.top] : [this.pos[0]-o.cursorAt.left, this.pos[1]-o.cursorAt.top];
 
 			var nw = p[0] + (this.pos[0] - co.left);
 			var nh = p[1] + (this.pos[1] - co.top);
-			
+		
 			if(o.axis) {
 				switch(o.axis) {
 					case 'e':
@@ -223,6 +225,7 @@
 					case 'n':
 					case 'ne':
 
+						
 						if(!o.proxy && (o.originalPosition != "absolute" && o.originalPosition != "fixed"))
 							return false;
 						
