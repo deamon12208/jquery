@@ -1,7 +1,7 @@
 /*
  * Autocomplete - jQuery plugin 1.0 Alpha
  *
- * Copyright (c) 2007 Dylan Verheul, Dan G. Switzer, Anjesh Tuladhar, Jörn Zaefferer
+ * Copyright (c) 2007 Dylan Verheul, Dan G. Switzer, Anjesh Tuladhar, Jï¿½rn Zaefferer
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -63,7 +63,7 @@
  * @option Boolean matchCase Whether or not the comparison is case sensitive. Only important only if you use caching. Default: false
  * @option Boolean matchContains Whether or not the comparison looks inside (i.e. does "ba" match "foo bar") the search results. Only important if you use caching. Don't mix with autofill. Default: false
  * @option Booolean mustMatch If set to true, the autocompleter will only allow results that are presented by the backend. Note that illegal values result in an empty input box. Default: false
- * @option Object extraParams Extra parameters for the backend. If you were to specify { bar:4 }, the autocompleter would call my_autocomplete_backend.php?q=foo&bar=4 (assuming the input box contains "foo"). Default: {}
+ * @option Object extraParams Extra parameters for the backend. If you were to specify { bar:4 }, the autocompleter would call my_autocomplete_backend.php?q=foo&bar=4 (assuming the input box contains "foo"). The param can be a function that is called to calculate the param before each request. Default: none
  * @option Boolean selectFirst If this is set to true, the first autocomplete value will be automatically selected on tab/return, even if it has not been handpicked by keyboard or mouse action. If there is a handpicked (highlighted) result, that result will take precedence. Default: true
  * @option Function|Boolean formatItem Provides advanced markup for an item. For each row of results, this function will be called. If false is returned, the row is skipped. Otherwise the returned value will be displayed inside an LI element in the results list. Autocompleter will provide 3 parameters: the results row, the position of the row in the list of results (starting at 1), and the number of items in the list of results. Default: none, assumes that a single row contains a single value.
  * @option Function formatResult Similar to formatResult, but provides the formatting for the value to be put into the input field. Again three arguments: Data, position (starting with one) and total number of data. Default: none, assumes either plain data to use as result or uses the same value as provided by formatItem.
@@ -275,13 +275,10 @@ jQuery.Autocompleter = function(input, options) {
 	}).bind("flushCache", function() {
 		cache.flush();
 	}).bind("setOptions", function() {
-		// overwrite the options
-		for( var k in arguments[1] ){
-			// update the options
-			options[k] = arguments[1][k];
-			// if we've updated the data, repopulate
-			if( k == "data" ) cache.populate();
-		}
+		jQuery.extend(options, arguments[1]);
+		// if we've updated the data, repopulate
+		if ( "data" in arguments[1] )
+			cache.populate();
 	});
 	
 	hideResultsNow();
@@ -407,11 +404,15 @@ jQuery.Autocompleter = function(input, options) {
 		} else if( (typeof options.url == "string") && (options.url.length > 0) ){
 			
 			var extraParams = {};
-			for(var i in options.extraParams) {
-				extraParams[i] = typeof options.extraParams[i] == "function" ? options.extraParams[i]() : options.extraParams[i] ;
-			}
+			jQuery.each(options.extraParams, function(key, param) {
+				extraParams[key] = typeof param == "function" ? param() : param;
+			});
 			
 			jQuery.ajax({
+				// try to leverage ajaxQueue plugin to abort previous requests
+				mode: "abort",
+				// limit abortion to this input
+				port: "autocomplete" + input.name,
 				url: options.url,
 				data: jQuery.extend({
 					q: lastWord(term),
@@ -667,7 +668,7 @@ jQuery.Autocompleter.Select = function (options, input, select, config) {
 	function moveSelect(step) {
 		active += step;
 		wrapSelection();
-		listItems.removeClass().eq(active).addClass(CLASSES.ACTIVE);
+		listItems.removeClass().slice(active, active + 1).addClass(CLASSES.ACTIVE);
 	};
 	
 	function wrapSelection() {
@@ -699,7 +700,7 @@ jQuery.Autocompleter.Select = function (options, input, select, config) {
 		}
 		listItems = list.find("li");
 		if ( options.selectFirst ) {
-			listItems.eq(0).addClass(CLASSES.ACTIVE);
+			listItems.slice(0, 1).addClass(CLASSES.ACTIVE);
 			active = 0;
 		}
 		if( options.moreItems.length > 0 ) moreItems.css("display", (data.length > num)? "block" : "none");
