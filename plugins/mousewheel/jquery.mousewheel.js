@@ -7,118 +7,90 @@
  * $LastChangedDate$
  * $Rev$
  *
- * Version: 2.2
+ * Version: @VERSION
+ * 
+ * Requires: jQuery 1.2+
  */
 
 (function($) {
 	
-$.fn.extend({
+var cache = [];
 	
-	/**
-	 * Apply the mousewheel event to the elements in the jQuery object.
-	 * The handler function should be prepared to take the event object
-	 * and a param called 'delta'. The 'delta' param is a number
-	 * either > 0 or < 0. > 0 = up and < 0 = down.
-	 *
-	 * The pageX, pageY, clientX and clientY event properties
-	 * are fixed in Firefox.
-	 *
-	 * @example $("p").mousewheel(function(event, delta){
-	 *   if (delta > 0)
-	 *     // do something on mousewheel scroll up
-	 *   else if (delta < 0)
-	 *     //do something on mousewheel scroll down
-	 * });
-	 *
-	 * @name mousewheel
-	 * @type jQuery
-	 * @param Function handler A function to call when onmousewheel fires. Should take two params: event and delta.
-	 * @cat Plugins/Mousewheel
-	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
-	 */
+$.fn.extend({
 	mousewheel: function(f) {
-		if (!f.guid) f.guid = $.event.guid++;
-		if (!$.event._mwCache) $.event._mwCache = [];
+		f.guid = f.guid || $.event.guid++;
 		
 		return this.each( function() {
-			if (this._mwHandlers) return this._mwHandlers.push(f);
-			else this._mwHandlers = [];
+			var elem = this, handlers = $.data(elem, 'mwhandlers') || [];
+			handlers.push(f);
+			$.data(elem, 'mwhandlers', handlers);
 			
-			this._mwHandlers.push(f);
-			
-			var s = this;
-			
-			this._mwHandler = function(e) {
-				e = $.event.fix(e || window.event);
-				$.extend(e, this._mwCursorPos || {});
+			// Create handler
+			!$.data(elem, 'mwhandler') && $.data(elem, 'mwhandler', function(event) {
+				event = $.event.fix(event || window.event);
+				$.extend( event, $.data(elem, 'mwcursorpos') || {} );
 				var delta = 0, returnValue = true;
 				
-				if (e.wheelDelta)  delta = e.wheelDelta/120;
-				if (e.detail)      delta = -e.detail/3;
-				if (window.opera)  delta = -e.wheelDelta;
+				if ( event.wheelDelta ) delta = event.wheelDelta/120;
+				if ( event.detail     ) delta = -event.detail/3;
+				if ( $.browser.opera  ) delta = -event.wheelDelta;
 				
-				for (var i=0; i<s._mwHandlers.length; i++)
-					if (s._mwHandlers[i])
-						if ( s._mwHandlers[i].call(s, e, delta) === false ) {
+				$.each( $.data(elem, 'mwhandlers'), function(i, handler) {
+					if ( handler )
+						if ( handler.call(elem, event, delta) === false ) {
 							returnValue = false;
-							e.preventDefault();
-							e.stopPropagation();
+							event.preventDefault();
+							event.stopPropagation();
 						}
+				});
 				
 				return returnValue;
-			};
+			});
 			
-			if ($.browser.mozilla && !this._mwFixCursorPos) {
-				// fix pageX, pageY, clientX and clientY for mozilla
-				this._mwFixCursorPos = function(e) {
-					this._mwCursorPos = {
-						pageX: e.pageX,
-						pageY: e.pageY,
-						clientX: e.clientX,
-						clientY: e.clientY
-					};
-				};
-				$(this).bind('mousemove', this._mwFixCursorPos);
+			// Fix pageX, pageY, clientX and clientY for mozilla
+			if ( $.browser.mozilla && !$.data(elem, 'mwfixcursorpos') ) {
+				$.data(elem, 'mwfixcursorpos', function(event) {
+					$.data(elem, 'mwcursorpos', {
+						pageX: event.pageX,
+						pageY: event.pageY,
+						clientX: event.clientX,
+						clientY: event.clientY
+					});
+				});
+				$(elem).bind('mousewheel:mousemove', $.data(elem, 'mwfixcursorpos'));
 			}
 			
-			if (this.addEventListener)
-				if ($.browser.mozilla) this.addEventListener('DOMMouseScroll', this._mwHandler, false);
-				else                   this.addEventListener('mousewheel',     this._mwHandler, false);
+			if ( elem.addEventListener )
+				if ( $.browser.mozilla ) elem.addEventListener('DOMMouseScroll', $.data(elem, 'mwhandler'), false);
+				else                     elem.addEventListener('mousewheel',     $.data(elem, 'mwhandler'), false);
 			else
-				this.onmousewheel = this._mwHandler;
+				elem.onmousewheel = $.data(elem, 'mwhandler');
 			
-			$.event._mwCache.push( $(this) );
+			cache.push( $(elem) );
 		});
 	},
 	
-	/**
-	 * This method removes one or all applied mousewheel events from the elements.
-	 * You can remove a single handler function by passing it as the first param.
-	 * If you do not pass anything, it will remove all handlers.
-	 *
-	 * @name unmousewheel
-	 * @param Function handler The handler function to remove from the mousewheel event.
-	 * @type jQuery
-	 * @cat Plugins/Mousewheel
-	 * @author Brandon Aaron (brandon.aaron@gmail.com || http://brandonaaron.net)
-	 */
 	unmousewheel: function(f) {
 		return this.each( function() {
-			if ( f && this._mwHandlers ) {
-				for (var i=0; i<this._mwHandlers.length; i++)
-					if (this._mwHandlers[i] && this._mwHandlers[i].guid == f.guid)
-						delete this._mwHandlers[i];
-			} else {
-				if ($.browser.mozilla && !this._mwFixCursorPos)
-					$(this).unbind('mousemove', this._mwFixCursorPos);
+			var elem = this;
+			if ( f )
+				$.data( elem, 'mwhandlers', $.grep($.data(elem, 'mwhandlers'), function(i, handler) {
+					return handler && handler.guid != f.guid;
+				}) );
+			else {
+				if ( $.browser.mozilla )
+					$(elem).unbind('mousewheel:mousemove');
 					
-				if (this.addEventListener)
-					if ($.browser.mozilla) this.removeEventListener('DOMMouseScroll', this._mwHandler, false);
-					else                   this.removeEventListener('mousewheel',     this._mwHandler, false);
+				if ( elem.addEventListener )
+					if ( $.browser.mozilla ) elem.removeEventListener('DOMMouseScroll', $.data(elem, 'mwhandler'), false);
+					else                     elem.removeEventListener('mousewheel',     $.data(elem, 'mwhandler'), false);
 				else
-					this.onmousewheel = null;
-					
-				this._mwHandlers = this._mwHandler = this._mwFixCursorPos = this._mwCursorPos = null;
+					elem.onmousewheel = null;
+				
+				$.removeData(elem, 'mwhandlers');
+				$.removeData(elem, 'mwhandler');
+				$.removeData(elem, 'mwfixcursorpos');
+				$.removeData(elem, 'mwcursorpos');
 			}
 		});
 	}
@@ -127,7 +99,7 @@ $.fn.extend({
 // clean-up
 $(window)
 	.one('unload', function() {
-		var els = $.event._mwCache || [];
+		var els = cache || [];
 		for (var i=0; i<els.length; i++)
 			els[i].unmousewheel();
 	});
