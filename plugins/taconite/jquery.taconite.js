@@ -10,7 +10,7 @@
  * Thanks to Kenton Simpson for contributing some good ideas!
  *
  * $Id$
- * @version: 2.1.6
+ * @version: 2.1.7
  * @requires jQuery v1.1.2 or later
  */
 
@@ -41,7 +41,7 @@ $.taconite = $.xmlExec = function(xml) {
     if (ex) throw ex;
 };
 
-$.taconite.version = [2,1,6]; // major,minor,point revision nums
+$.taconite.version = [2,1,7]; // major,minor,point revision nums
 $.taconite.debug = 0;    // set to true to enable debug logging to Firebug
 $.taconite.lastTime = 0; // processing time for most recent document
 $.taconite._httpData = $.httpData; // original jQuery httpData function
@@ -218,7 +218,7 @@ $.taconite.impl = {
         // some elements in IE need to be created with attrs inline
         if ($.browser.msie) {
             var type = node.getAttribute('type');
-            if (type == 'radio' || type == 'checkbox' || tag == 'button' || 
+            if (tag == 'table' || type == 'radio' || type == 'checkbox' || tag == 'button' || 
                 (tag == 'select' && node.getAttribute('multiple'))) {
                 e = document.createElement('<' + tag + ' ' + this.copyAttrs(null, node, true) + '>');
             }
