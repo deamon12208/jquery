@@ -145,7 +145,7 @@ $.fn.extend({
 					: headers.not(headers.not(selector))
 				: selector === false
 					? $("<div>")
-					: headers.filter(":eq(0)")
+					: headers.filter(":eq(0)");
 		}
 		
 		function toggle(toShow, toHide, data, clickedActive, down) {
