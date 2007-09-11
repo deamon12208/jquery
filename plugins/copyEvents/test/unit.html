@@ -5,20 +5,11 @@
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 		<title>jQuery copyEvents.js Unit Test</title>
 		
-		<!-- load latest build of jquery.js -->
-		<script type="text/javascript" src="../../../jquery/dist/jquery.js"></script>
-
-		<!-- load testrunner from jquery project -->
-		<script type="text/javascript" src="../../../jquery/test/data/testrunner.js"></script>
-
-		<!-- load dimensions.js (this is what we're testing! -->
-		<script type="text/javascript" src="../jquery.copyEvents.js"></script>
-		
-		<!-- load firebug lite 
-		<script type="text/javascript" src="../../../../firebuglite/firebug.js"></script>-->
-		
 		<link rel="Stylesheet" media="screen" href="../../../jquery/test/data/testsuite.css" />
 		
+		<script type="text/javascript" src="../../../jquery/dist/jquery.js"></script>
+		<script type="text/javascript" src="../../../jquery/test/data/testrunner.js"></script>
+		<script type="text/javascript" src="../jquery.copyEvents.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			test("copyEvents()", function() {
 				var clickCount = mouseoverCount = mouseoutCount = 0;
@@ -69,70 +60,6 @@
 					.copyEventsTo('#main li.to');
 					
 				$('#main li.to')
-					// fire events
-					.trigger('click')
-					.trigger('mouseover')
-					.trigger('mouseout');
-				
-				// check counts
-				ok( clickCount == 2, 'Testing click count' );
-				ok( mouseoverCount == 2, 'Testing mouseover count' );
-				ok( mouseoutCount == 2, 'Testing mouseout count' );
-			});
-			
-			test("cloneWithEvents()", function() {
-				var clickCount = mouseoverCount = mouseoutCount = 0;
-				
-				// Create event handlers for A tag
-				$('#main a.to')
-					.bind('click', function() { 
-						clickCount++; 
-					})
-					.bind('mouseover', function() {
-						mouseoverCount++;
-					})
-					.bind('mouseout', function() {
-						mouseoutCount++;
-					});
-				
-				// clone events from a to 'from' li tags
-				$('#main a.to')
-					.copyEventsTo('#main li.to');
-				
-				var lis = $('#main li.to')
-					.cloneWithEvents()
-					.appendTo('#main ul');
-				lis
-					// fire events
-					.trigger('click')
-					.trigger('mouseover')
-					.trigger('mouseout');
-				
-				// check counts
-				ok( clickCount == 2, 'Testing click count' );
-				ok( mouseoverCount == 2, 'Testing mouseover count' );
-				ok( mouseoutCount == 2, 'Testing mouseout count' );
-			});
-			
-			test("cloneWithEvents(true)", function() {
-				var clickCount = mouseoverCount = mouseoutCount = 0;
-				
-				// Create event handlers for A tag
-				$('#deep a')
-					.bind('click', function() {
-						clickCount++; 
-					})
-					.bind('mouseover', function() {
-						mouseoverCount++;
-					})
-					.bind('mouseout', function() {
-						mouseoutCount++;
-					});
-				
-				var div = $('#deep')
-					.cloneWithEvents(true)
-					.appendTo('#main');
-				div.find('a')
 					// fire events
 					.trigger('click')
 					.trigger('mouseover')
