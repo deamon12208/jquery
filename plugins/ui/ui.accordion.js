@@ -23,7 +23,8 @@ $.extend($.ui.accordion, {
 		selectedClass: "selected",
 		alwaysOpen: true,
 		animated: 'slide',
-		event: "click"
+		event: "click",
+		header: "a"
 	},
 	animations: {
 		slide: function(settings, additions) {
@@ -45,7 +46,7 @@ $.extend($.ui.accordion, {
 			settings.toShow.css({ height: 0, overflow: 'hidden' }).show();
 			settings.toHide.filter(":hidden").each(settings.finished).end().filter(":visible").animate({height:"hide"},{
 				step: function(n){
-					settings.toShow.height(Math.ceil( (hideHeight - ($.fn.stop ? n * hideHeight : n)) * difference ));
+					settings.toShow.height(Math.ceil( (hideHeight - (n)) * difference ));
 				},
 				duration: settings.duration,
 				easing: settings.easing,
@@ -94,10 +95,7 @@ $.fn.extend({
 			return this;
 	
 		// setup configuration
-		settings = $.extend({}, $.ui.accordion.defaults, {
-			// define context defaults
-			header: $(':first-child', this)[0].tagName // take first childs tagName as header
-		}, settings);
+		settings = $.extend({}, $.ui.accordion.defaults, settings);
 		
 		if ( settings.navigation ) {
 			var current = this.find("a").filter(function() { return this.href == location.href; });
@@ -137,7 +135,7 @@ $.fn.extend({
 			.not(active || "")
 			.nextUntil(settings.header)
 			.hide();
-		active.addClass(settings.selectedClass);
+		active.parent().andSelf().addClass(settings.selectedClass);
 		
 		
 		function findActive(selector) {
@@ -210,9 +208,9 @@ $.fn.extend({
 				return;
 
 			// switch classes
-			active.toggleClass(settings.selectedClass);
+			active.parent().andSelf().toggleClass(settings.selectedClass);
 			if ( !clickedActive ) {
-				clicked.addClass(settings.selectedClass);
+				clicked.parent().andSelf().addClass(settings.selectedClass);
 			}
 
 			// find elements to show and hide
