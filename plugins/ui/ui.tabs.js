@@ -110,7 +110,6 @@
     };
 
     $.extend($.ui.tabs.prototype, {
-        animating: false,
         count: 0,
         tabify: function(init) {
 
@@ -236,8 +235,6 @@
                     o.hide(clicked, $hide[0], $show && $show[0] || null);
                     if ($show) {
                         showTab(clicked, $show, $hide);
-                    } else {
-                        self.animating = false;
                     }
                 });
             }
@@ -253,7 +250,6 @@
                         $show[0].style.filter = '';
                     }
                     o.show(clicked, $show[0], $hide && $hide[0] || null);
-                    self.animating = false;
                 });
 
             }
@@ -272,19 +268,21 @@
             function tabClick(e) {
 
                 //var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
-                var $li = $(this).parents('li:eq(0)'), $hide = self.$containers.filter(':visible'), $show = $(this.hash);
+                var $li = $(this).parents('li:eq(0)'),
+                    $hide = self.$containers.filter(':visible'),
+                    $show = $(this.hash);
 
                 // if tab may be closed
-                if (o.unselect && !$li.is('.' + o.disabledClass) && !self.animating) {
+                if (o.unselect && !$li.is('.' + o.disabledClass)) {
                     if ($li.is('.' + o.selectedClass)) {
                         $li.removeClass(o.selectedClass);
-                        self.animating = true;
+                        self.$containers.stop();
                         hideTab(this, $hide);
                         this.blur();
                         return false;
                     } else if (!$hide.length) {
                         $li.addClass(o.selectedClass);
-                        self.animating = true;
+                        self.$containers.stop();
                         showTab(this, $show);
                         this.blur();
                         return false;
@@ -295,12 +293,12 @@
                 // returns false stop here.
                 // Check if click handler returns false last so that it is not executed for a disabled tab!
                 if ($li.is('.' + o.selectedClass + ', .' + o.disabledClass)
-                    || self.animating || o.click(this, $show[0], $hide[0]) === false) {
+                    || o.click(this, $show[0], $hide[0]) === false) {
                     this.blur();
                     return false;
                 }
 
-                self.animating = true;
+                self.$containers.stop();
 
                 // show new tab
                 if ($show.length) {
