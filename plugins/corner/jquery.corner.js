@@ -1,7 +1,7 @@
 /*
  * jQuery corner plugin
  *
- * version 1.8 (8/24/2007)
+ * version 1.9 (9/10/2007)
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -50,14 +50,16 @@
  * @author Dave Methvin (dave.methvin@gmail.com)
  * @author Mike Alsup (malsup@gmail.com)
  */
-jQuery.fn.corner = function(o) {
+(function($) { 
+
+$.fn.corner = function(o) {
     function hex2(s) {
         var s = parseInt(s).toString(16);
         return ( s.length < 2 ) ? '0'+s : s;
     };
     function gpc(node) {
         for ( ; node && node.nodeName.toLowerCase() != 'html'; node = node.parentNode ) {
-            var v = jQuery.css(node,'backgroundColor');
+            var v = $.css(node,'backgroundColor');
             if ( v.indexOf('rgb') >= 0 ) { 
                 if ($.browser.safari && v == 'rgba(0, 0, 0, 0)')
                     continue;
@@ -111,29 +113,30 @@ jQuery.fn.corner = function(o) {
     strip.style.borderStyle = 'solid';
     return this.each(function(index){
         var pad = {
-            T: parseInt(jQuery.css(this,'paddingTop'))||0,     R: parseInt(jQuery.css(this,'paddingRight'))||0,
-            B: parseInt(jQuery.css(this,'paddingBottom'))||0,  L: parseInt(jQuery.css(this,'paddingLeft'))||0
+            T: parseInt($.css(this,'paddingTop'))||0,     R: parseInt($.css(this,'paddingRight'))||0,
+            B: parseInt($.css(this,'paddingBottom'))||0,  L: parseInt($.css(this,'paddingLeft'))||0
         };
 
-        if (jQuery.browser.msie) this.style.zoom = 1; // force 'hasLayout' in IE
+        if ($.browser.msie) this.style.zoom = 1; // force 'hasLayout' in IE
         if (!keep) this.style.border = 'none';
         strip.style.borderColor = cc || gpc(this.parentNode);
-        var cssHeight = jQuery.curCSS(this, 'height');
+        var cssHeight = $.curCSS(this, 'height');
 
         for (var j in edges) {
             var bot = edges[j];
             strip.style.borderStyle = 'none '+(opts[j+'R']?'solid':'none')+' none '+(opts[j+'L']?'solid':'none');
             var d = document.createElement('div');
+            $(d).addClass('jquery-corner');
             var ds = d.style;
 
             bot ? this.appendChild(d) : this.insertBefore(d, this.firstChild);
 
             if (bot && cssHeight != 'auto') {
-                if (jQuery.css(this,'position') == 'static')
+                if ($.css(this,'position') == 'static')
                     this.style.position = 'relative';
                 ds.position = 'absolute';
                 ds.bottom = ds.left = ds.padding = ds.margin = '0';
-                if (jQuery.browser.msie)
+                if ($.browser.msie)
                     ds.setExpression('width', 'this.parentNode.offsetWidth');
                 else
                     ds.width = '100%';
@@ -152,3 +155,7 @@ jQuery.fn.corner = function(o) {
         }
     });
 };
+
+$.fn.uncorner = function(o) { return $('.jquery-corner', this).remove(); };
+    
+})(jQuery);
