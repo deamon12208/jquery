@@ -25,31 +25,15 @@
 					window.parent.done($('#tests').html());
 				});
 			});
-			test('height()', function() {
-				equals( 500, $(window).height(), "$(window).height()" );
-				equals( 500, $(document).height(), "$(document).height()" );
-				$('body').css('height', 520);
-				equals( 520, $(document).height(), "$(document).height()" );
-				
-				equals( 50, $('#h1').height(), "$('#h1').height()" );
-				equals( 100, $('#h1').height(100).height(), "$('#h1').height(100).height()" );
-				equals( 100, $('#h1').hide().height(), "$('#h1').hide().height()" );
-				// equals( 100, $('#h2').hide().height(), "$('#h2').hide().height()" );
-				// equals( 100, $('#h3').hide().height(), "$('#h3').hide().height()" );
-			});
 			test('innerHeight()', function() {
 				equals( 60, $('#h1').innerHeight(), "$('#h1').innerHeight()" );
 				equals( 60, $('#h1').hide().innerHeight(), "$('#h1').hide().innerHeight()" );
-				// equals( 60, $('#h2').hide().innerHeight(), "$('#h2').hide().innerHeight()" );
-				// equals( 60, $('#h3').hide().innerHeight(), "$('#h3').hide().innerHeight()" );
 			});
 			test('outerHeight()', function() {
 				equals( 64, $('#h1').outerHeight(), "$('#h1').outerHeight()" );
 				equals( 64, $('#h1').hide().outerHeight(), "$('#h1').hide().outerHeight()" );
 				equals( 84, $('#h1').outerHeight({ margin: true }), "$('#h1').outerHeight({ margin: true })" );
 				equals( 84, $('#h1').hide().outerHeight({ margin: true }), "$('#h1').hide().outerHeight({ margin: true })" );
-				// equals( 64, $('#h2').hide().outerHeight(), "$('#h2').hide().outerHeight()" );
-				// equals( 64, $('#h3').hide().outerHeight(), "$('#h3').hide().outerHeight()" );
 			});
 		</script>
 	</head>
@@ -57,12 +41,6 @@
 		<div id="main">
 			<div id='absolute'>
 				<div id="h1"></div>
-			</div>
-			<div id='relative'>
-				<div id="h2"></div>
-			</div>
-			<div id='static'>
-				<div id="h3"></div>
 			</div>
 		</div>
 		<ol id="tests"></ol>

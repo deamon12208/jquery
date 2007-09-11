@@ -24,24 +24,22 @@
 				});
 			});
 			test('position(): Absolute positioning', function() {
-				var position = {};
-				
-				$('#abs1').position(position);
+				var position = $('#abs1').position();
 				equals( 0, position.top, "$('#abs1').position().top" );
 				equals( 0, position.left, "$('#abs1').position().left" );
 				
-				$('#abs2').position(position);
+				position = $('#abs2').position();
 				equals( 0, position.top, "$('#abs2').position().top" );
 				equals( 0, position.left, "$('#abs2').position().left" );
 				
-				$('#abs3').position(position);
+				position = $('#abs3').position();
 				equals( 0, position.top, "$('#abs3').position().top" );
 				equals( 0, position.left, "$('#abs3').position().left" );
 				
 				// testing scroll offset
 				$('#abs2')[0].scrollTop  = 10;
 				$('#abs2')[0].scrollLeft = 10;
-				$('#abs3').position(position);
+				position = $('#abs3').position();
 				equals( 0, position.top, "Scroll offset of parent by 10 => $('#abs3').position().top" );
 				equals( 0, position.left, "Scroll offset of parent by 10 => $('#abs3').position().left" );
 				$('#abs2')[0].scrollTop  = 0;

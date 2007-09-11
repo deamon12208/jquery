@@ -25,24 +25,22 @@
 				});
 			});
 			test('position(): Static positioning', function() {
-				var position = {};
-				
-				$('#sta1').position(position);
+				var position = $('#sta1').position();
 				equals( 0, position.top, "$('#sta1').position().top" );
 				equals( 0, position.left, "$('#sta1').position().left" );
 				
-				$('#sta2').position(position);
+				position = $('#sta2').position();
 				equals( 17, position.top, "$('#sta2').position().top" );
 				equals( 17, position.left, "$('#sta2').position().left" );
 				
-				$('#sta3').position(position);
+				position = $('#sta3').position();
 				equals( 34, position.top, "$('#sta3').position().top" );
 				equals( 34, position.left, "$('#sta3').position().left" );
 				
 				// testing scroll offset
 				$('#sta2')[0].scrollTop  = 10;
 				$('#sta2')[0].scrollLeft = 10;
-				$('#sta3').position(position);
+				position = $('#sta3').position();
 				equals( 34, position.top, "Scroll offset of parent by 10 => $('#sta3').position().top" );
 				equals( 34, position.left, "Scroll offset of parent by 10 => $('#sta3').position().left" );
 				$('#sta2')[0].scrollTop  = 0;

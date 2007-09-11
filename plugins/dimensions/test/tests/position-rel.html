@@ -26,24 +26,22 @@
 				});
 			});
 			test('position(): Relative positioning', function() {
-				var position = {};
-				
-				$('#rel1').position(position);
+				var position = $('#rel1').position();
 				equals( 0, position.top, "$('#rel1').position().top" );
 				equals( 0, position.left, "$('#rel1').position().left" );
 				
-				$('#rel2').position(position);
+				position = $('#rel2').position();
 				equals( 5, position.top, "$('#rel2').position().top" );
 				equals( 5, position.left, "$('#rel2').position().left" );
 				
-				$('#rel3').position(position);
+				position = $('#rel3').position();
 				equals( 5, position.top, "$('#rel3').position().top" );
 				equals( 5, position.left, "$('#rel3').position().left" );
 				
 				// testing scroll offset
 				$('#rel2')[0].scrollTop  = 10;
 				$('#rel2')[0].scrollLeft = 10;
-				$('#rel3').position(position);
+				position = $('#rel3').position();
 				equals( 5, position.top, "Scroll offset of parent by 10 => $('#rel3').position().top" );
 				equals( 5, position.left, "Scroll offset of parent by 10 => $('#rel3').position().left" );
 				$('#rel2')[0].scrollTop  = 0;

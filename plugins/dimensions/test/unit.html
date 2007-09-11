@@ -18,8 +18,7 @@
 				$('#userAgent').html(navigator.userAgent);
 				$('iframe').attr('src', 'tests/'+tests[current++]+'.html');
 			});
-			tests = ['height','width','document','window','scroll','position-abs','position-rel','position-sta','absolute','relative','static','fixed','float','body'];
-			//tests = ['fixed'];
+			tests = ['height','width','scroll'];
 			current = 0;
 			click = function() {
 				var ol = $('~ol',this);
