@@ -6,11 +6,28 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 
 (function($) {
 
+	//Make nodes selectable by expression
+	$.extend($.expr[':'], { sortable: "(' '+a.className+' ').indexOf(' ui-sortable ')" });
+
 	$.fn.sortable = function(o) {
 		return this.each(function() {
 			new $.ui.sortable(this,o);	
 		});
 	}
+	
+	//Macros for external methods that support chaining
+	var methods = "destroy,enable,disable".split(",");
+	for(var i=0;i<methods.length;i++) {
+		var cur = methods[i], f;
+		eval('f = function() { var a = arguments; return this.each(function() { if(jQuery(this).is(".ui-sortable")) jQuery.data(this, "ui-sortable")["'+cur+'"](a); }); }');
+		$.fn["sortable"+cur.substr(0,1).toUpperCase()+cur.substr(1)] = f;
+	};
+	
+	//get instance method
+	$.fn.sortableInstance = function() {
+		if($(this[0]).is(".ui-sortable")) return $.data(this[0], "ui-sortable");
+		return false;
+	};
 	
 	$.ui.sortable = function(el,o) {
 	
@@ -18,6 +35,7 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 		this.set = [];
 		var options = {};
 		var self = this;
+		$.data(this.element, "ui-sortable", this);
 		
 		$.extend(options, o);
 		$.extend(options, {
@@ -104,6 +122,12 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			
 		},
 		destroy: function() {
+			
+		},
+		enable: function() {
+			
+		},
+		disable: function() {
 			
 		},
 		start: function(that, e) {
