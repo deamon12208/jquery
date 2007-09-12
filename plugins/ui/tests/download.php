@@ -823,6 +823,7 @@ if (isset($_POST) && !empty($_POST) && (!empty($_POST['files']) || isset($_POST[
 	  <script type="text/javascript" src="../../../jquery/src/event.js"></script>
 	  <script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
 	  <script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+	  <script type="text/javascript" src="../../../jquery/src/offset.js"></script>
 	  <script type="text/javascript" src="../ui.download.js"></script>
 	  <!-- while tabs are not working
 	  <script type="text/javascript" src="../ui.tabs.js"></script>
