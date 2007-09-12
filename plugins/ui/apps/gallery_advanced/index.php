@@ -33,7 +33,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 
 <style type="text/css">
 
-  @import url(../../../../themes/ui/ui.all.css);
+  @import url(../../../../themes/flora/flora.all.css);
 
 </style>
 
@@ -98,6 +98,7 @@ div.draggable img { width: 100px; border: 1px solid #AED5EA; }
 <script type="text/javascript" src="../../../../jquery/src/event.js"></script>
 <script type="text/javascript" src="../../../../jquery/src/ajax.js"></script>
 <script type="text/javascript" src="../../../../jquery/src/fx.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/offset.js"></script>
 <script type="text/javascript" src="../../../dimensions/jquery.dimensions.js"></script>
 <script type="text/javascript" src="../../../mousewheel/jquery.mousewheel.js"></script>
 
