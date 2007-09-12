@@ -83,7 +83,7 @@ $.extend(PopUpCal.prototype, {
 	   @param  settings  object - the new settings to use as defaults (anonymous object)
 	   @return void */
 	setDefaults: function(settings) {
-		$.extend(this._defaults, settings || {});
+		extendRemove(this._defaults, settings || {});
 	},
 
 	/* Handle keystrokes. */
@@ -177,7 +177,7 @@ $.extend(PopUpCal.prototype, {
 			$('body').append(this._dialogInput);
 			this._dialogInput[0]._calId = inst._id;
 		}
-		$.extend(inst._settings, settings || {});
+		extendRemove(inst._settings, settings || {});
 		this._dialogInput.val(dateText);
 		
 		/*	Cross Browser Positioning */
@@ -245,7 +245,7 @@ $.extend(PopUpCal.prototype, {
 		control = (typeof control == 'string' ? $(control)[0] : control);
 		var inst = this._getInst(control._calId);
 		if (inst) {
-			$.extend(inst._settings, settings || {});
+			extendRemove(inst._settings, settings || {});
 			this._updateCalendar(inst);
 		}
 	},
@@ -287,7 +287,7 @@ $.extend(PopUpCal.prototype, {
 		}
 		var inst = popUpCal._getInst(input._calId);
 		var fieldSettings = inst._get('fieldSettings');
-		$.extend(inst._settings, (fieldSettings ? fieldSettings(input) : {}));
+		extendRemove(inst._settings, (fieldSettings ? fieldSettings(input) : {}));
 		popUpCal.hideCalendar(inst, '');
 		popUpCal._lastInput = input;
 		inst._setDateFromField(input);
@@ -553,7 +553,7 @@ function PopUpCalInstance(settings, inline) {
 	this._calendarDiv = (!inline ? popUpCal._calendarDiv :
 		$('<div id="calendar_div_' + this._id + '" class="calendar_inline"></div>'));
 	// customise the calendar object - uses manager defaults if not overridden
-	this._settings = $.extend({}, settings || {}); // clone
+	this._settings = extendRemove({}, settings || {}); // clone
 	if (inline) {
 		this._setDate(this._getDefaultDate());
 	}
@@ -801,6 +801,17 @@ $.extend(PopUpCalInstance.prototype, {
 		return dateString.substring(dateFormat.charAt(3) ? 1 : 0);
 	}
 });
+
+/* jQuery extend now ignores nulls! */
+function extendRemove(target, props) {
+	$.extend(target, props);
+	for (var name in props) {
+		if (props[name] == null) {
+			target[name] = null;
+		}
+	}
+	return target;
+}
 
 /* Attach the calendar to a jQuery selection.
    @param  settings  object - the new settings to use for this calendar instance (anonymous)
