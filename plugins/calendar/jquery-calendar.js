@@ -521,7 +521,7 @@ $.extend(PopUpCal.prototype, {
 
 	/* Find an object's position on the screen. */
 	_findPos: function(obj) {
-		while (obj && (obj.type == 'hidden' || obj.nodeType != Node.ELEMENT_NODE)) {
+		while (obj && (obj.type == 'hidden' || obj.nodeType != 1)) {
 			obj = obj.nextSibling;
 		}
 		var curleft = curtop = 0;
