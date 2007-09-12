@@ -42,6 +42,8 @@ $(document).ready(function () {
 	// Date range
 	$('.calendarRange').calendar({fieldSettings: customRange});
 	// Miscellaneous
+	$('#openDateJan01').calendar({defaultDate: new Date(2007, 1 - 1, 1)});
+	$('#openDatePlus7').calendar({defaultDate: +7});
 	$('#addSettings').calendar({closeAtTop: false,
 		showOtherMonths: true, onSelect: alertDate});
 	$('#reconfigureCal').calendar();
@@ -69,7 +71,7 @@ $(document).ready(function () {
 });
 
 function setSpeed(select) {
-	popUpCal.reconfigureFor($('#reconfigureCal')[0],
+	popUpCal.reconfigureFor('#reconfigureCal',
 		{speed: select.options[select.selectedIndex].value});
 }
 
@@ -131,7 +133,7 @@ function formatDate(date) {
 function localise() {
 	var language = $('#language').val();
 	$.localise('jquery-calendar', {language: language});
-	popUpCal.reconfigureFor($('#l10nCalendar')[0], popUpCal.regional[language]);
+	popUpCal.reconfigureFor('#l10nCalendar', popUpCal.regional[language]);
 	popUpCal.setDefaults(popUpCal.regional['']);
 }
 

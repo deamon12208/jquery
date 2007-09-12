@@ -33,6 +33,8 @@ function PopUpCal() {
 	this._defaults = { // Global defaults for all the calendar instances
 		autoPopUp: 'focus', // 'focus' for popup on focus,
 			// 'button' for trigger button, or 'both' for either
+		defaultDate: null, // Used when field is blank: actual date,
+			// +/-number for offset from today, null for today
 		appendText: '', // Display text following the input box, e.g. showing the format
 		buttonText: '...', // Text for trigger button
 		buttonImage: '', // URL for trigger button image
@@ -157,11 +159,6 @@ $.extend(PopUpCal.prototype, {
 	_inlineCalendar: function(target, inst) {
 		$(target).append(inst._calendarDiv);
 		target._calId = inst._id;
-		var date = new Date();
-		inst._selectedDay = date.getDate();
-		inst._selectedMonth = date.getMonth();
-		inst._selectedYear = date.getFullYear();
-		popUpCal._adjustDate(inst);
 	},
 
 	/* Pop-up the calendar in a "dialog" box.
@@ -240,10 +237,12 @@ $.extend(PopUpCal.prototype, {
 	},
 
 	/* Update the settings for a calendar attached to an input field or division.
-	   @param  control   element - the input field or div/span attached to the calendar
+	   @param  control   element - the input field or div/span attached to the calendar or
+	                     string - the ID or other jQuery selector of the input field
 	   @param  settings  object - the new settings to update
 	   @return void */
 	reconfigureFor: function(control, settings) {
+		control = (typeof control == 'string' ? $(control)[0] : control);
 		var inst = this._getInst(control._calId);
 		if (inst) {
 			$.extend(inst._settings, settings || {});
@@ -287,6 +286,8 @@ $.extend(PopUpCal.prototype, {
 			}
 		}
 		var inst = popUpCal._getInst(input._calId);
+		var fieldSettings = inst._get('fieldSettings');
+		$.extend(inst._settings, (fieldSettings ? fieldSettings(input) : {}));
 		popUpCal.hideCalendar(inst, '');
 		popUpCal._lastInput = input;
 		inst._setDateFromField(input);
@@ -300,8 +301,6 @@ $.extend(PopUpCal.prototype, {
 		inst._calendarDiv.css('position', (popUpCal._inDialog && $.blockUI ? 'static' : 'absolute')).
 			css('left', popUpCal._pos[0] + 'px').css('top', popUpCal._pos[1] + 'px');
 		popUpCal._pos = null;
-		var fieldSettings = inst._get('fieldSettings');
-		$.extend(inst._settings, (fieldSettings ? fieldSettings(input) : {}));
 		popUpCal._showCalendar(inst);
 	},
 
@@ -355,9 +354,9 @@ $.extend(PopUpCal.prototype, {
 			browserX = document.body.scrollLeft;
 		}
 		// Reposition calendar if outside the browser window.
-		if ( (calDiv.offsetLeft + calDiv.offsetWidth) > 
+		if ((calDiv.offsetLeft + calDiv.offsetWidth) >
 				(browserWidth + browserX) ) {
-			inst._calendarDiv.css('left', (pos[0] + inst._input[0].offsetWidth - calDiv.offsetWidth) + 'px');		
+			inst._calendarDiv.css('left', (pos[0] + inst._input[0].offsetWidth - calDiv.offsetWidth) + 'px');
 		}
 		// Get browser height and Y value (IE6+, FF, Safari, Opera)
 		if( typeof( window.innerHeight ) == 'number' ) {
@@ -371,9 +370,9 @@ $.extend(PopUpCal.prototype, {
 			browserTopY = document.body.scrollTop;
 		}
 		// Reposition calendar if outside the browser window.
-		if ( (calDiv.offsetTop + calDiv.offsetHeight) >
+		if ((calDiv.offsetTop + calDiv.offsetHeight) >
 				(browserTopY + browserHeight) ) {
-			inst._calendarDiv.css('top', (pos[1] - calDiv.offsetHeight) + 'px');		
+			inst._calendarDiv.css('top', (pos[1] - calDiv.offsetHeight) + 'px');
 		}
 	},
 
@@ -525,9 +524,7 @@ $.extend(PopUpCal.prototype, {
 		while (obj && (obj.type == 'hidden' || obj.nodeType != Node.ELEMENT_NODE)) {
 			obj = obj.nextSibling;
 		}
-	
 		var curleft = curtop = 0;
-	
 		if (obj && obj.offsetParent) {
 			curleft = obj.offsetLeft;
 			curtop = obj.offsetTop;
@@ -555,14 +552,11 @@ function PopUpCalInstance(settings, inline) {
 	this._inline = inline; // True if showing inline, false if used in a popup
 	this._calendarDiv = (!inline ? popUpCal._calendarDiv :
 		$('<div id="calendar_div_' + this._id + '" class="calendar_inline"></div>'));
-	if (inline) {
-		var date = new Date();
-		this._currentDay = date.getDate();
-		this._currentMonth = date.getMonth();
-		this._currentYear = date.getFullYear();
-	}
 	// customise the calendar object - uses manager defaults if not overridden
 	this._settings = $.extend({}, settings || {}); // clone
+	if (inline) {
+		this._setDate(this._getDefaultDate());
+	}
 }
 
 $.extend(PopUpCalInstance.prototype, {
@@ -582,7 +576,7 @@ $.extend(PopUpCalInstance.prototype, {
 			this._currentYear = parseInt(currentDate[dateFormat.indexOf('Y')], 10);
 		}
 		else {
-			var date = new Date();
+			var date = this._getDefaultDate();
 			this._currentDay = date.getDate();
 			this._currentMonth = date.getMonth();
 			this._currentYear = date.getFullYear();
@@ -591,6 +585,18 @@ $.extend(PopUpCalInstance.prototype, {
 		this._selectedMonth = this._currentMonth;
 		this._selectedYear = this._currentYear;
 		this._adjustDate();
+	},
+	
+	/* Retrieve the default date shown on opening. */
+	_getDefaultDate: function() {
+		var offsetDate = function(offset) {
+			var date = new Date();
+			date.setDate(date.getDate() + offset);
+			return date;
+		};
+		var defaultDate = this._get('defaultDate');
+		return (defaultDate == null ? new Date() :
+			(typeof defaultDate == 'number' ? offsetDate(defaultDate) : defaultDate));
 	},
 
 	/* Set the date directly. */
@@ -719,9 +725,9 @@ $.extend(PopUpCalInstance.prototype, {
 					(otherMonth ? ' calendar_otherMonth' : '') + // highlight days from other months
 					(printDate.getTime() == selectedDate.getTime() ? ' calendar_daysCellOver' : '') + // highlight selected day
 					(unselectable ? ' calendar_unselectable' : '') +  // highlight unselectable days
-					(!otherMonth || showOtherMonths ? ' ' + customSettings[1] : '') + // highlight custom dates
+					(otherMonth && !showOtherMonths ? '' : ' ' + customSettings[1] + // highlight custom dates
 					(printDate.getTime() == currentDate.getTime() ? ' calendar_currentDay' : // highlight current day
-					(printDate.getTime() == today.getTime() ? ' calendar_today' : '')) + '"' + // highlight today (if different)
+					(printDate.getTime() == today.getTime() ? ' calendar_today' : ''))) + '"' + // highlight today (if different)
 					(unselectable ? '' : ' onmouseover="$(this).addClass(\'calendar_daysCellOver\');"' +
 					' onmouseout="$(this).removeClass(\'calendar_daysCellOver\');"' +
 					' onclick="popUpCal._selectDay(' + this._id + ', this);"') + '>' + // actions

@@ -22,10 +22,9 @@
 		
 		<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="../../css/ie6.css" /><![endif]--> 
 		<script type="text/javascript" src="jquery.pack.js"></script>
-		<!--<script type="text/javascript" src="jquery.debug.js"></script>-->
+		<!--script type="text/javascript" src="jquery.debug.js"></script-->
 		<script type="text/javascript" src="jquery.localisation.js"></script>
 		<script type="text/javascript" src="jquery-calendar.js"></script>
-		<script type="text/javascript" src="jquery-calendar-fr.js"></script>
 		<script type="text/javascript" src="jquery-calendar-demo.js"></script>
 		<link rel="stylesheet" type="text/css" href="jquery-calendar.css" title="default"/>
 		<link rel="stylesheet" type="text/css" href="jquery-calendar-alt.css" title="alt" id="alt"/>
@@ -243,6 +242,13 @@ function customRange(input) {
 				</div>
 				<div id="misc" class="tab_group1 container">
 					<h3>Miscellaneous</h3>
+					<p>Set the date shown when first opening the calendar. The default is today.</p>
+					<p><span class="calLabel">Open at 01-Jan-2007:</span>
+						<input type="text" size="10" id="openDateJan01"/></p>
+					<p><span class="calLabel">Open at 7 days from today:</span>
+						<input type="text" size="10" id="openDatePlus7"/></p>
+					<pre><code>$('#openDateJan01').calendar({defaultDate: new Date(2007, 1 - 1, 1)});
+$('#openDatePlus7').calendar({defaultDate: +7});</code></pre>
 					<p>Additional settings let you move the <em>Clear</em>/<em>Close</em> controls
 						to the bottom and display the days in other months (non-selectable).
 						A callback function is also added to operate when a date is selected.
@@ -262,7 +268,7 @@ showOtherMonths: true, onSelect: alertDate});</code></pre>
 						<input type="text" size="10" id="reconfigureCal"/></p>
 					<p>When the option in the select changes, the following function is called:</p>
 					<pre><code>function setSpeed(select) {
-	popUpCal.reconfigureFor($('#reconfigureCal')[0],
+	popUpCal.reconfigureFor('#reconfigureCal',
 		{speed: select.options[select.selectedIndex].value});
 }</code></pre>
 					<p>Calendars can also be configured inline.
@@ -379,6 +385,7 @@ Packed version (12KB) <a href="jquery-calendar.pack.js">jquery-calendar.pack.js<
 					<p><strong>Documentation:</strong> <a href="http://docs.jquery.com/Plugins/Calendar">jQuery Calendar Settings Documentation</a>.</p>
 					<p><strong>Localisation packages:</strong></p>
 					<ul>
+						<li><a href="jquery-calendar-zh-cn.js">Chinese</a></li>
 						<li><a href="jquery-calendar-cs.js">Czech</a></li>
 						<li><a href="jquery-calendar-fr.js">French</a></li>
 						<li><a href="jquery-calendar-de.js">German</a></li>
@@ -387,6 +394,8 @@ Packed version (12KB) <a href="jquery-calendar.pack.js">jquery-calendar.pack.js<
 						<li><a href="jquery-calendar-pl.js">Polish</a></li>
 						<li><a href="jquery-calendar-pt_BR.js">Portuguese of Brazil</a></li>
 						<li><a href="jquery-calendar-ru.js">Russian</a></li>
+						<li><a href="jquery-calendar-ro.js">Romanian</a></li>
+						<li><a href="jquery-calendar-sk.js">Slovak</a></li>
 						<li><a href="jquery-calendar-es.js">Spanish</a></li>
 					</ul>
 					<p><strong>Change Log:</strong> Recent updates can be found on the <a href="http://docs.jquery.com/Plugins/Calendar/ChangeLog">jQuery Calendar ChangeLog</a>.</p>
