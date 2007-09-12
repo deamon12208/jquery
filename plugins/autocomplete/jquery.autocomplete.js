@@ -1,7 +1,7 @@
 /*
  * Autocomplete - jQuery plugin 1.0 Alpha
  *
- * Copyright (c) 2007 Dylan Verheul, Dan G. Switzer, Anjesh Tuladhar, J�rn Zaefferer
+ * Copyright (c) 2007 Dylan Verheul, Dan G. Switzer, Anjesh Tuladhar, Jörn Zaefferer
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -730,10 +730,13 @@ jQuery.Autocompleter.Select = function (options, input, select, config) {
 			return this.visible() && (listItems.filter("." + CLASSES.ACTIVE)[0] || options.selectFirst && listItems[0]);
 		},
 		show: function() {
+			var offset = jQuery(input).offset();
 			element.css({
-				width: typeof options.width == "string" || options.width > 0 ? options.width : jQuery(input).width()
+				width: typeof options.width == "string" || options.width > 0 ? options.width : jQuery(input).width(),
+				top: offset.top + input.offsetHeight,
+				left: offset.left
 				//height: jQuery(listItems[0]).height() * options.size,
-			}).below(input).show();
+			}).show();
 		},
 		selected: function() {
 			return data && data[ listItems.filter("." + CLASSES.ACTIVE)[0].index ];
