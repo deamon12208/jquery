@@ -4,7 +4,7 @@
  * Licensed under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
  *
- * Version 2.1
+ * Version 2.2
  * Demo: http://www.texotela.co.uk/code/jquery/select/
  *
  * $LastChangedDate$
@@ -430,6 +430,27 @@ $.fn.containsOption = function(value, fn)
 		}
 	);
 	return fT == "function" ? this : found;
+};
+
+/**
+ * Returns values which have been selected
+ *
+ * @name     selectedValues
+ * @author   Sam Collett (http://www.texotela.co.uk)
+ * @type     Array
+ * @example  $("#myselect").selectedValues();
+ *
+ */
+$.fn.selectedValues = function()
+{
+	var v = [];
+	this.find("option:selected").each(
+		function()
+		{
+			v[v.length] = this.value;
+		}
+	);
+	return v;
 };
 
 })(jQuery);

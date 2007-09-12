@@ -1,5 +1,8 @@
 Select box manipulation ChangeLog
 
+12 September 2007
+  new selectedValues plugin - returns values of selected options as an array
+
 27 July 2007
   cache (created when adding an option) is removed when removing options
   if you supply a second parameter to removeOption and it is true, then the option will only be removed
