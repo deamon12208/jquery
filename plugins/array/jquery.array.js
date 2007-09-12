@@ -83,8 +83,10 @@ jQuery.fn.randomize = function(destruct){
  * @param Boolean destruct If true, this function will act distructively on a cached jQuery object
  * @cat Plugins/Array
  */
+// Check for jQuery 1.2 and backup default slice function
+if(jQuery.fn.slice) jQuery.fn._slice = jQuery.fn.slice;
 jQuery.fn.slice = function(start,end,destruct) {
-	return this[destruct?'setArray':'pushStack']( this.get().slice(start,end) );
+	return this[destruct?'setArray':'pushStack']( Array.prototype.slice.call( this, start, end ) );
 };
 
 /**

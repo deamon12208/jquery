@@ -3,18 +3,18 @@
 	"version": 0.1,
 	"author": [
 		"John Resig <jeresig@gmail.com>",
-		"Paul McLanahan",
+		"Paul McLanahan <pmclanahan@gmail.com>",
 		"Kenton Simpson"
 	],
 	"abstract": "A collection of jQuery plugins to make jQuery objects behave more like a JavaScript Array",
 	"license": "mit, gpl",
 	"distribution_type": "extension",
 	"requires": {
-		"jQuery": ">= 1.0, < 1.2"
+		"jQuery": ">= 1.0, <= 1.2"
 	},
 	"provides": {
 		"jQuery.Array": {
-			"version": 0.1,
+			"version": 0.2,
 			"file": "jquery.array.js"
 		}
 	},
