@@ -2,6 +2,7 @@
 
 	
 	//Web Forms 2.0
+	window.webforms = 1;
 	if(window['webforms']) {
 		$(document).ready(function() {
 			
@@ -22,25 +23,24 @@
 					});
 					cur.css({ position: "absolute", opacity: 0, top: "-1000px", left: "-1000px" });
 					
-					var name = (new Date()).getTime()+Math.random();
 					slider.slider({
 						maxValue: cur.attr("max"),
 						minValue: cur.attr("min"),
 						startValue: this.getAttribute("value"),
 						stepping: cur.attr("step"),
 						change: function(e, ui) { cur[0].value = ui.value; cur[0].setAttribute("value", ui.value); },
-						name: name
 					});
-					slider = $.ui.get(name, "slider")[0];
+					
+					slider = slider.sliderInstance();
 					
 					cur.bind("keydown", function(e) {
 						var o = slider.interaction.options;
 						switch(e.keyCode) {
 							case 37:
-								slider.moveTo(o.curValue+o.minValue-(o.stepping || 1));
+								slider.moveTo(slider.interaction.curValue+o.minValue-(o.stepping || 1));
 								break;
 							case 39:
-								slider.moveTo(o.curValue+o.minValue+(o.stepping || 1));
+								slider.moveTo(slider.interaction.curValue+o.minValue+(o.stepping || 1));
 								break;	
 						}
 						if(e.keyCode != 9) return false;
