@@ -68,7 +68,9 @@
                     return false;
                 });
                 $('#container-10 ul').tabs({ unselected: true });
-                $('#container-11 ul').tabs({ event: 'mouseover' });
+                $('#container-11 ul').tabs({ event: 'mouseover' }).find('a').click(function() {
+                    return false;
+                });
 
             });
         </script>
@@ -353,16 +355,16 @@
                 <li><a href="#fragment-24"><span>Three</span></a></li>
             </ul>
             <div id="fragment-22">
-                <pre><code>$('#container').clickTab(3); // simulate click on 3rd tab
-$('#container').enableTab(3); // enable 3rd tab
-$('#container').disableTab(3); // disable 3rd tab
-$('#container').addTab('#new-tab', 'New Tab', 4); // add new 4th tab
-$('#container').removeTab(4); // remove 4th tab</code></pre>
+                <pre><code>$('#container').tabsClick(3); // simulate click on 3rd tab
+$('#container').tabsEnable(3); // enable 3rd tab
+$('#container').tabsDisable(3); // disable 3rd tab
+$('#container').tabsAdd('#new-tab', 'New Tab', 4); // add new 4th tab
+$('#container').tabsRemove(4); // remove 4th tab</code></pre>
                 <p>
                     One or more tabs can also be disabled immediatly by simply setting the disabling class for the <code class="html">li</code> element
                     representing that particular tab or by using the <code>disabled</code> option.
                 </p>
-                <pre><code>&lt;li class=&quot;tabs-disabled&quot;&gt&#8230;&lt;/li&gt;
+                <pre><code>&lt;li class=&quot;ui-tabs-disabled&quot;&gt&#8230;&lt;/li&gt;
 
 $('#container').tabs({ disabled: [2, 3] });</code></pre>
             </div>
