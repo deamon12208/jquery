@@ -67,6 +67,9 @@ function PopUpCal() {
 }
 
 $.extend(PopUpCal.prototype, {
+	/* Class name added to elements to indicate already configured with a calendar. */
+	markerClassName: 'hasCalendar',
+	
 	/* Register a new calendar instance - with custom settings. */
 	_register: function(inst) {
 		var id = this._nextId++;
@@ -130,14 +133,17 @@ $.extend(PopUpCal.prototype, {
 
 	/* Attach the calendar to an input field. */
 	_connectCalendar: function(target, inst) {
-		var $input = $(target);
+		var input = $(target);
+		if (this._hasClass(input, this.markerClassName)) {
+			return;
+		}
 		var appendText = inst._get('appendText');
 		if (appendText) {
-			$input.after('<span class="calendar_append">' + appendText + '</span>');
+			input.after('<span class="calendar_append">' + appendText + '</span>');
 		}
 		var autoPopUp = inst._get('autoPopUp');
 		if (autoPopUp == 'focus' || autoPopUp == 'both') { // pop-up calendar when in the marked field
-			$input.focus(this.showFor);
+			input.focus(this.showFor);
 		}
 		if (autoPopUp == 'button' || autoPopUp == 'both') { // pop-up calendar when button clicked
 			var buttonText = inst._get('buttonText');
@@ -148,17 +154,27 @@ $.extend(PopUpCal.prototype, {
 				'<button type="button" class="calendar_trigger">' + (buttonImage != '' ?
 				'<img src="' + buttonImage + '" alt="' + buttonText + '" title="' + buttonText + '"/>' :
 				buttonText) + '</button>');
-			$input.wrap('<span class="calendar_wrap"></span>').after(trigger);
+			input.wrap('<span class="calendar_wrap"></span>').after(trigger);
 			trigger.click(this.showFor);
 		}
-		$input.keydown(this._doKeyDown).keypress(this._doKeyPress);
-		$input[0]._calId = inst._id;
+		input.addClass(this.markerClassName).keydown(this._doKeyDown).keypress(this._doKeyPress);
+		input[0]._calId = inst._id;
 	},
 
 	/* Attach an inline calendar to a div. */
 	_inlineCalendar: function(target, inst) {
-		$(target).append(inst._calendarDiv);
-		target._calId = inst._id;
+		var input = $(target);
+		if (this._hasClass(input, this.markerClassName)) {
+			return;
+		}
+		input.addClass(this.markerClassName).append(inst._calendarDiv);
+		input[0]._calId = inst._id;
+	},
+
+	/* Does this element have a particular class? */
+	_hasClass: function(element, className) {
+		var classes = element.attr('class');
+		return (classes && classes.indexOf(className) > -1);
 	},
 
 	/* Pop-up the calendar in a "dialog" box.
@@ -328,7 +344,7 @@ $.extend(PopUpCal.prototype, {
 	/* Generate the calendar content. */
 	_updateCalendar: function(inst) {
 		inst._calendarDiv.empty().append(inst._generateCalendar());
-		if (inst._input && inst._input != 'hidden') {
+		if (inst._input && inst._input[0].type != 'hidden') {
 			inst._input[0].focus();
 		}
 	},

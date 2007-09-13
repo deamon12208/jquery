@@ -46,6 +46,11 @@ $(document).ready(function () {
 	$('#openDatePlus7').calendar({defaultDate: +7});
 	$('#addSettings').calendar({closeAtTop: false,
 		showOtherMonths: true, onSelect: alertDate});
+	$('#linkedCalendar').calendar({minDate: new Date(2001, 1 - 1, 1),
+		maxDate: new Date(2010, 12 - 1, 31), fieldSettings: readLinked,
+		onSelect: updateLinked});
+	$('#selectMonth,#selectYear').change(checkLinkedDays);
+	// Reconfigure
 	$('#reconfigureCal').calendar();
 	$('.inlineConfig').calendar();
 	// Inline
@@ -67,7 +72,6 @@ $(document).ready(function () {
 		popUpCal.dialogCalendar($('#altDialog').val(),
 		setAltDateFromDialog, {prompt: 'Choose a date', speed: ''});
 	});
-
 });
 
 function setSpeed(select) {
@@ -113,6 +117,29 @@ var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'S
 function showDay(input) {
 	var date = getDate(input.value);
 	$('#inlineDay').empty().html(date ? days[date.getDay()] : 'blank');
+}
+
+function checkLinkedDays() {
+	var daysInMonth = 32 - new Date($('#selectYear').val(),
+		$('#selectMonth').val() - 1, 32).getDate();
+	$('#selectDay option').attr('disabled', '');
+	$('#selectDay option:gt(' + (daysInMonth - 1) +')').attr('disabled', 'disabled');
+	if ($('#selectDay').val() > daysInMonth) {
+		$('#selectDay').val(daysInMonth);
+	}
+}
+
+function readLinked() {
+	$('#linkedCalendar').val($('#selectDay').val() + '/' +
+		$('#selectMonth').val() + '/' + $('#selectYear').val());
+	return {defaultDate: new Date($('#selectYear').val(),
+		$('#selectMonth').val() - 1, $('#selectDay').val())};
+}
+
+function updateLinked(date) {
+	$('#selectDay').val(date.substring(0, 2));
+	$('#selectMonth').val(date.substring(3, 5));
+	$('#selectYear').val(date.substring(6, 10));
 }
 
 function updateInlineRange() {
