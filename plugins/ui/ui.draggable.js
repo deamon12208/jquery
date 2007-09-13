@@ -1,5 +1,23 @@
 (function($) {
 
+	//Make nodes selectable by expression
+	$.extend($.expr[':'], { draggable: "(' '+a.className+' ').indexOf(' ui-draggable ')" });
+
+
+	//Macros for external methods that support chaining
+	var methods = "destroy,enable,disable".split(",");
+	for(var i=0;i<methods.length;i++) {
+		var cur = methods[i], f;
+		eval('f = function() { var a = arguments; return this.each(function() { if(jQuery(this).is(".ui-draggable")) jQuery.data(this, "ui-draggable")["'+cur+'"](a); }); }');
+		$.fn["draggable"+cur.substr(0,1).toUpperCase()+cur.substr(1)] = f;
+	};
+	
+	//get instance method
+	$.fn.draggableInstance = function() {
+		if($(this[0]).is(".ui-draggable")) return $.data(this[0], "ui-draggable");
+		return false;
+	};
+
 	$.fn.draggable = function(o) {
 		return this.each(function() {
 			new $.ui.draggable(this, o);
@@ -63,6 +81,7 @@
 		
 		var options = {};
 		$.extend(options, o);
+		var self = this;
 		$.extend(options, {
 			_start: function(h, p, c, t, e) {
 				self.start.apply(t, [self, e]); // Trigger the start callback				
@@ -72,11 +91,16 @@
 			},
 			_drag: function(h, p, c, t, e) {
 				self.drag.apply(t, [self, e]); // Trigger the start callback
+			},
+			startCondition: function() {
+				return !self.disabled;	
 			}			
 		});
-		var self = this;
+		
+		$.data(el, "ui-draggable", this);
 		
 		if (options.ghosting == true) options.helper = 'clone'; //legacy option check
+		$(el).addClass("ui-draggable");
 		this.interaction = new $.ui.mouseInteraction(el, options);
 		
 	}
@@ -85,6 +109,18 @@
 		plugins: {},
 		currentTarget: null,
 		lastTarget: null,
+		destroy: function() {
+			$(this.interaction.element).removeClass("ui-draggable").removeClass("ui-draggable-disabled");
+			this.interaction.destroy();
+		},
+		enable: function() {
+			$(this.interaction.element).removeClass("ui-draggable-disabled");
+			this.disabled = false;
+		},
+		disable: function() {
+			$(this.interaction.element).addClass("ui-draggable-disabled");
+			this.disabled = true;
+		},
 		prepareCallbackObj: function(self) {
 			return {
 				helper: self.helper,
