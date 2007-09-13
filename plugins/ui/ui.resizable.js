@@ -57,10 +57,18 @@
 			//Move margins to the wrapper
 			$(el).css({ marginLeft: $(oel).css("marginLeft"), marginTop: $(oel).css("marginTop"), marginRight: $(oel).css("marginRight"), marginBottom: $(oel).css("marginBottom")});
 			$(oel).css({ marginLeft: 0, marginTop: 0, marginRight: 0, marginBottom: 0});
-
-			//Adding handles (disabled not so common ones)
-			var t = function(a,b) { $(el).append("<div class='ui-resizable-"+a+" ui-resizable-handle' style='position: absolute; "+b+"'></div>"); };
+			
+			o.proportionallyResize = o.proportionallyResize || [];
+			o.proportionallyResize.push(oel);
+			
 			var b = [parseInt($(oel).css('borderTopWidth')),parseInt($(oel).css('borderRightWidth')),parseInt($(oel).css('borderBottomWidth')),parseInt($(oel).css('borderLeftWidth'))];
+		} else {
+			var b = [0,0,0,0];	
+		}
+		
+		if(options.destructive || !$(".ui-resizable-handle",el).length) {
+			//Adding handles (disabled not so common ones)
+			var t = function(a,b) { $(el).append("<div class='ui-resizable-"+a+" ui-resizable-handle' style='"+b+"'></div>"); };
 			//t('n','top: '+b[0]+'px;');
 			t('e','right: '+b[1]+'px;');
 			t('s','bottom: '+b[1]+'px;');
@@ -69,10 +77,9 @@
 			//t('sw','bottom: '+b[2]+'px; left: '+b[3]+'px;');
 			//t('ne','top: '+b[0]+'px; right: '+b[1]+'px;');
 			//t('nw','top: '+b[0]+'px; left: '+b[3]+'px;');
-			
-			o.proportionallyResize = o.proportionallyResize || [];
-			o.proportionallyResize.push(oel);
 		}
+		
+		
 		
 		//If other elements should be modified, we have to copy that array
 		options.modifyThese = [];
@@ -122,6 +129,8 @@
 			helper: helper,
 			nonDestructive: true,
 			dragPrevention: 'input,button,select',
+			minHeight: options.minHeight || 50,
+			minWidth: options.minWidth || 100,
 			startCondition: function(e) {
 				if(self.disabled) return false;
 				for(var i in options.handles) {
