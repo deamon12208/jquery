@@ -13,6 +13,7 @@
 * Improved email method (according to http://blogs.nonado.net/diamond/2006/02/08/email-address-validation/ )
 * Call submitHandler with validator as scope for easier access of it's methods, eg. to find error labels using errorsFor(Element)
 * Improved String.format: Global search & replace, better handling of array arguments
+* Always ignore disabled elements, don't validate them
 
 1.1
 ---
