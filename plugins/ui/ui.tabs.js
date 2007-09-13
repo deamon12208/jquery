@@ -11,6 +11,7 @@
     // if the UI scope is not availalable, add it
     $.ui = $.ui || {};
 
+    // tabs initialization
     $.fn.tabs = function(initial, options) {
         if (initial && initial.constructor == Object) { // shift arguments
             options = initial;
@@ -25,7 +26,7 @@
         });
     };
 
-    // chainable tabs methods
+    // other chainable tabs methods
     $.each(['Add', 'Remove', 'Enable', 'Disable', 'Click', 'Load'], function(i, method) {
         $.fn['tabs' + method] = function() {
             var args = arguments;
@@ -45,6 +46,7 @@
         return selected >= 0 ? ++selected : -1;
     };
 
+    // tabs class
     $.ui.tabs = function(el, options) {
 
         this.source = el;
@@ -62,7 +64,7 @@
             // Ajax
             spinner: 'Loading&#8230;',
             cache: false,
-            hashPrefix: 'tab-',
+            idPrefix: 'tab-',
 
             // animations
             /*fxFade: null,
@@ -104,11 +106,11 @@
 
     // static
     $.ui.tabs.instances = {};
-
     $.ui.tabs.getInstance = function(el) {
         return $.ui.tabs.instances[$.data(el, 'tabsUUID')];
     };
 
+    // instance methods
     $.extend($.ui.tabs.prototype, {
         count: 0,
         tabify: function(init) {
@@ -126,7 +128,7 @@
                 // remote tab
                 else {
                     $.data(a, 'href', a.href);
-                    var id = a.title && a.title.replace(/\s/g, '_') || o.hashPrefix + (self.count + 1) + '-' + (i + 1);
+                    var id = a.title && a.title.replace(/\s/g, '_') || o.idPrefix + (self.count + 1) + '-' + (i + 1);
                     a.href = '#' + id;
                     self.$containers = self.$containers.add(
                         $('#' + id)[0] || $('<div id="' + id + '" class="' + o.containerClass + '"></div>')
@@ -193,8 +195,8 @@
             }
 
             // setup animations
-            var showAnim = {}, hideAnim = {}, showSpeed = o.fxShowSpeed || o.fxSpeed,
-                hideSpeed = o.fxHideSpeed || o.fxSpeed;
+            var showAnim = {}, showSpeed = o.fxShowSpeed || o.fxSpeed,
+                hideAnim = {}, hideSpeed = o.fxHideSpeed || o.fxSpeed;
             if (o.fxSlide || o.fxFade) {
                 if (o.fxSlide) {
                     showAnim['height'] = 'show';
