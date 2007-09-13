@@ -227,8 +227,9 @@
                 resetCSS['opacity'] = '';
             }
 
-            // hide a tab, animation prevents browser scrolling to fragment
-            function hideTab(clicked, $hide, $show) { // $show is optional
+            // Hide a tab, animation prevents browser scrolling to fragment,
+            // $show is optional.
+            function hideTab(clicked, $hide, $show) {
                 $hide.animate(hideAnim, hideSpeed, function() { //
                     $hide.addClass(o.hideClass).css(resetCSS); // maintain flexible height and accessibility in print etc.
                     if ($.browser.msie) {
@@ -241,8 +242,9 @@
                 });
             }
 
-            // show a tab, animation prevents browser scrolling to fragment
-            function showTab(clicked, $show, $hide) { // $hide is optional
+            // Show a tab, animation prevents browser scrolling to fragment,
+            // $hide is optional
+            function showTab(clicked, $show, $hide) {
                 if (!(o.fxSlide || o.fxFade || o.fxShow)) {
                     $show.css('display', 'block'); // prevent occasionally occuring flicker in Firefox cause by gap between showing and hiding the tab containers
                 }
@@ -253,7 +255,6 @@
                     }
                     o.show(clicked, $show[0], $hide && $hide[0] || null);
                 });
-
             }
 
             // switch a tab
@@ -274,8 +275,16 @@
                     $hide = self.$containers.filter(':visible'),
                     $show = $(this.hash);
 
+                // If tab is already selected and not unselectable or tab disabled or click callback returns false stop here.
+                // Check if click handler returns false last so that it is not executed for a disabled tab!
+                if (($li.is('.' + o.selectedClass) && !o.unselect) || $li.is('.' + o.disabledClass)
+                    || o.click(this, $show[0], $hide[0]) === false) {
+                    this.blur();
+                    return false;
+                }
+                    
                 // if tab may be closed
-                if (o.unselect && !$li.is('.' + o.disabledClass)) {
+                if (o.unselect) {
                     if ($li.is('.' + o.selectedClass)) {
                         $li.removeClass(o.selectedClass);
                         self.$containers.stop();
@@ -291,15 +300,7 @@
                     }
                 }
 
-                // If tab is already selected or disabled, animation is still running or click callback
-                // returns false stop here.
-                // Check if click handler returns false last so that it is not executed for a disabled tab!
-                if ($li.is('.' + o.selectedClass + ', .' + o.disabledClass)
-                    || o.click(this, $show[0], $hide[0]) === false) {
-                    this.blur();
-                    return false;
-                }
-
+                // stop possibly running animations
                 self.$containers.stop();
 
                 // show new tab
