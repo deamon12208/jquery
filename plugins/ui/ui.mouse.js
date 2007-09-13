@@ -127,7 +127,7 @@
 		start: function(e) {
 			
 			var o = this.options; var a = this.element;
-			o.co = $(a).offset({ border: false }); //get the current offset
+			o.co = $(a).offset(); //get the current offset
 				
 			this.helper = typeof o.helper == 'function' ? $(o.helper.apply(a, [e,this]))[0] : (o.helper == 'clone' ? $(a).clone()[0] : a);
 
@@ -136,7 +136,7 @@
 				while (cp) {
 					if(cp.style && ($(cp).css('position') == 'relative' || $(cp).css('position') == 'absolute')) {
 						o.pp = cp;
-						o.po = $(cp).offset({ border: false });
+						o.po = $(cp).offset();
 						o.ppOverflow = !!($(o.pp).css('overflow') == 'auto' || $(o.pp).css('overflow') == 'scroll'); //TODO!
 						break;	
 					}

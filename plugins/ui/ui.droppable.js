@@ -1,19 +1,33 @@
 (function($) {
 
+	//Make nodes selectable by expression
+	$.extend($.expr[':'], { droppable: "(' '+a.className+' ').indexOf(' ui-droppable ')" });
+
+	//Macros for external methods that support chaining
+	var methods = "destroy,enable,disable".split(",");
+	for(var i=0;i<methods.length;i++) {
+		var cur = methods[i], f;
+		eval('f = function() { var a = arguments; return this.each(function() { if(jQuery(this).is(".ui-droppable")) jQuery.data(this, "ui-droppable")["'+cur+'"](a); }); }');
+		$.fn["droppable"+cur.substr(0,1).toUpperCase()+cur.substr(1)] = f;
+	};
+	
+	//get instance method
+	$.fn.droppableInstance = function() {
+		if($(this[0]).is(".ui-droppable")) return $.data(this[0], "ui-droppable");
+		return false;
+	};
+
 	$.fn.droppable = function(o) {
 		return this.each(function() {
 			new $.ui.droppable(this,o);
 		});
 	}
 	
-	$.fn.undroppable = function() {
-		
-	}
-	
 	$.ui.droppable = function(el,o) {
 
 		if(!o) var o = {};			
 		this.element = el; if($.browser.msie) el.droppable = 1;
+		$.data(el, "ui-droppable", this);
 		
 		this.options = {};
 		$.extend(this.options, o);
@@ -28,10 +42,12 @@
 		o = this.options;
 		var self = this;
 		
-		$(this.element).bind("mousemove", function(e) { return self.move.apply(self, [e]); });
-		$(this.element).bind("mouseup", function(e) { return self.drop.apply(self, [e]); });
+		this.mouseBindings = [function(e) { return self.move.apply(self, [e]); },function(e) { return self.drop.apply(self, [e]); }];
+		$(this.element).bind("mousemove", this.mouseBindings[0]);
+		$(this.element).bind("mouseup", this.mouseBindings[1]);
 		
 		$.ui.ddmanager.droppables.push({ item: this, over: 0, out: 1 }); // Add the reference and positions to the manager
+		$(this.element).addClass("ui-droppable");
 			
 	};
 	
@@ -47,7 +63,21 @@
 			}			
 		},
 		destroy: function() {
-		
+			$(this.element).removeClass("ui-droppable").removeClass("ui-droppable-disabled");
+			$(this.element).unbind("mousemove", this.mouseBindings[0]);
+			$(this.element).unbind("mouseup", this.mouseBindings[1]);
+			
+			for(var i=0;i<$.ui.ddmanager.droppables.length;i++) {
+				if($.ui.ddmanager.droppables[i].item == this) $.ui.ddmanager.droppables.splice(i,1);
+			}
+		},
+		enable: function() {
+			$(this.element).removeClass("ui-droppable-disabled");
+			this.disabled = false;
+		},
+		disable: function() {
+			$(this.element).addClass("ui-droppable-disabled");
+			this.disabled = true;
 		},
 		move: function(e) {
 
