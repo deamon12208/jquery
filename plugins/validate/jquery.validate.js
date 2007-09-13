@@ -231,7 +231,7 @@
  * 		all errors messages whenever the element is focused. Avoid combination with focusInvalid. Default: false
  * @option String|Element ignore Elements to ignore when validating, simply filtering them out. jQuery's not-method
  * 		is used, therefore everything that is accepted by not() can be passed as this option. Inputs of type
- *		submit and reset are always ignored. Default: None
+ *		submit and reset are always ignored, so are disabled elements. Default: None
  * @opton Boolean onblur Validate elements on blur. If nothing is entered, all rules are skipped, 
  * 		except when the field was already marked as invalid. Default: true
  * @option Callback subformRequired Called to determine if a subform is required. An input is passed as the argument,
@@ -669,6 +669,7 @@ jQuery.extend(jQuery.validator, {
 			this.elements = jQuery(this.currentForm)
 			.find("input, select, textarea, button")
 			.not(":submit, :reset, :button")
+			.not("[@disabled]")
 			.not( this.settings.ignore )
 			.filter(function() {
 				!this.name && validator.settings.debug && window.console && console.error( "%o has no name assigned", this);

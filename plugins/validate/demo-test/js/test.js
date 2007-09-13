@@ -766,6 +766,14 @@ test("refresh()", function() {
 	v.refresh();
 	v.form();
 	errors(1);
+	$("#agb").attr("disabled", true);
+	v.refresh();
+	v.form();
+	errors(0);
+	$("#agb").attr("disabled", false);
+	v.refresh();
+	v.form();
+	errors(1);
 });
 
 test("idOrName()", function() {
