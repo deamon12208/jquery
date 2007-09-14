@@ -1,3 +1,5 @@
+- bug: remote validation triggers display/validation of other fields
+
 - add test and a tab-example for subformRequired
 - document invalidHandler
 - document all those event options
