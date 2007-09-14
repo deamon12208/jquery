@@ -1,6 +1,6 @@
 /*
  * jQuery blockUI plugin
- * Version 1.32  (08/23/2007)
+ * Version 1.33  (09/14/2007)
  * @requires jQuery v1.1.1
  *
  * $Id$
@@ -66,7 +66,7 @@ $.blockUI = function(msg, css, opts) {
 };
 
 // expose version number so other plugins can interogate
-$.blockUI.version = 1.32;
+$.blockUI.version = 1.33;
 
 /**
  * unblockUI removes the UI block that was put in place by blockUI
@@ -338,7 +338,7 @@ $.blockUI.impl = {
         // don't bother unbinding if there is nothing to unbind
         if (!b && (full && !this.pageBlock || !full && !el.$blocked)) return;
         if (!full) el.$blocked = b;
-        var $e = full ? $() : $(el).find('a,:input');
+        var $e = $(el).find('a,:input');
         $.each(['mousedown','mouseup','keydown','keypress','click'], function(i,o) {
             $e[b?'bind':'unbind'](o, $.blockUI.impl.handler);
         });
