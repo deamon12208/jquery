@@ -3,6 +3,12 @@
 	//If the UI scope is not available, add it
 	$.ui = $.ui || {};
 	
+	//Make nodes selectable by expression
+	$.extend($.expr[':'], { shadowed: "(' '+a.className+' ').indexOf(' ui-shadowed ')" });
+	
+	$.fn.shadowEnable = function() { if($(this[0]).next().is(".ui-shadow")) $(this[0]).next().show(); }
+	$.fn.shadowDisable = function() { if($(this[0]).next().is(".ui-shadow")) $(this[0]).next().hide(); }
+	
 	$.fn.shadow = function(options) {
 		
 		options = options || {};
@@ -59,7 +65,9 @@
 			
 			
 			function rearrangeShadow(el,sh) {
-				$(sh).css($(el).position());
+				var $el = $(el);
+				$(sh).css($el.position());
+				$(sh).children().css({ height: $el.outerHeight()+"px", width: $el.outerWidth()+"px" });
 			}
 			
 			if($.browser.msie) {

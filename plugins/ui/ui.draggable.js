@@ -91,8 +91,8 @@
 			_drag: function(h, p, c, t, e) {
 				self.drag.apply(t, [self, e]); // Trigger the start callback
 			},
-			startCondition: function() {
-				return !self.disabled;	
+			startCondition: function(e) {
+				return !(e.target.className.indexOf("ui-resizable-handle") != -1 || self.disabled);	
 			}			
 		});
 		

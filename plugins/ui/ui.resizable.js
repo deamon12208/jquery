@@ -70,10 +70,10 @@
 			//Adding handles (disabled not so common ones)
 			var t = function(a,b) { $(el).append("<div class='ui-resizable-"+a+" ui-resizable-handle' style='"+b+"'></div>"); };
 			//t('n','top: '+b[0]+'px;');
-			t('e','right: '+b[1]+'px;');
-			t('s','bottom: '+b[1]+'px;');
+			t('e','right: '+b[1]+'px;'+(options.zIndex ? 'z-index: '+options.zIndex+';' : ''));
+			t('s','bottom: '+b[1]+'px;'+(options.zIndex ? 'z-index: '+options.zIndex+';' : ''));
 			//t('w','left: '+b[3]+'px;');
-			t('se','bottom: '+b[2]+'px; right: '+b[1]+'px;');
+			t('se','bottom: '+b[2]+'px; right: '+b[1]+'px;'+(options.zIndex ? 'z-index: '+options.zIndex+';' : ''));
 			//t('sw','bottom: '+b[2]+'px; left: '+b[3]+'px;');
 			//t('ne','top: '+b[0]+'px; right: '+b[1]+'px;');
 			//t('nw','top: '+b[0]+'px; left: '+b[3]+'px;');

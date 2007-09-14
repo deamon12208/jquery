@@ -4,7 +4,10 @@
 <head>
 <meta http-equiv="Content-Language" content="en" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Dynamic Shadows</title>
+<title>Shadow Demo</title>
+<link rel="stylesheet" href="../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)">
+<link rel="stylesheet" href="css/style.css" type="text/css">
+
 <script type="text/javascript" src="../../../jquery/src/core.js"></script>
 <script type="text/javascript" src="../../../jquery/src/selector.js"></script>
 <script type="text/javascript" src="../../../jquery/src/event.js"></script>
@@ -12,58 +15,48 @@
 <script type="text/javascript" src="../../../jquery/src/fx.js"></script>
 <script type="text/javascript" src="../../../jquery/src/offset.js"></script>
 <script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
-<script type="text/javascript" src="../ui.shadow.js"></script>
+
 <script type="text/javascript" src="../ui.mouse.js"></script>
 <script type="text/javascript" src="../ui.draggable.js"></script>
 <script type="text/javascript" src="../ui.resizable.js"></script>
-<link rel="stylesheet" href="../../../themes/flora/flora.all.css" type="text/css" media="screen">
+<script type="text/javascript" src="../ui.shadow.js"></script>
 
-
-
-<style type="text/css" media="all">
-
-body
-{
-	margin: 0;
-	padding: 0;
-	font-family: Arial;
-	font-size: 12px;
-}
-
-.draggable {
-	width: 180px;
-	height: 80px;
-	padding: 5px;
-	background: red;
-	color: #fff;
-	position: absolute; top: 100px; left: 500px;
-	z-index: 6;
-}
-
-</style>
 </head>
 <body>
-	<fieldset style='height: 500px;'>
-	<legend>Dynamic Shadows</legend>
 
-<div class="ex draggable">Bla</div>
+<h2>1. Default, no options</h2>
+<div class="playground">
+	<img id="example1" src="images/resizable.jpg" /><br /><br />
+	<button onclick="$('#example1').shadowEnable()">Enable</button>
+	<button onclick="$('#example1').shadowDisable()">Disable</button>
+</div>
 
-<img class="ex" src="images/bamboo.jpg">
+<h2>2. Red shadow, very light, greater offset</h2>
+<div class="playground">
+	<img id="example2" src="images/resizable.jpg" /><br />
+</div>
 
-<div style="position: absolute; background: green; top: 100px; left: 500px; width: 50px; height: 600px; z-index: 5;"></div>
-
-	</fieldset>
-
+<h2>3. In combination with drag & drop (and resizing for FF/Opera [IE to follow])</h2>
+<div class="playground" style="height: 200px;">
+	<img id="example3" style="position: relative; z-index: 10;" src="images/resizable.jpg" /><br />
+</div>
 
 <script type="text/javascript">
+if(!window.console) {
+ window.console = {
+ 	log: function() {
+ 		alert(arguments[0]);	
+ 	}	
+ }	
+}
+
 $(window).bind("load",function(){
 
-	$(".ex").draggable().shadow({ offset: 10, color: "blue", opacity: 0.2 });
-	$("div.draggable").resizable();
+	$('#example1').shadow();
+	$('#example2').shadow({ color: "red", offset: 10, opacity: 0.1 });
+	$('#example3').resizable({ zIndex: 15}).parent().shadow({ offset: 10 }).draggable();
 
 });
 </script>
-
 </body>
 </html>
-
