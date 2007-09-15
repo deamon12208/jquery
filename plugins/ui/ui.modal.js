@@ -140,7 +140,7 @@
 					$(ui.helper).appendTo('body');
 				}
 			},
-			
+			bgIframe: true, // Allow an iframe in the background if the bgiframe plugin exists
 			overflow: true,	// Allow overflow/scrolling
 			buttonMarkup: '<a class="ui-modal-button-close">X</a>', // Override button markup optionally
 			width: 400,	// Width of the modal
@@ -206,17 +206,19 @@
 		});
 		
 		if ($.fn.draggable != window.undefined) {
-			$(el).draggable(options.drag);
-			// You can't use resuzeables without draggables
-			if ($.fn.resizable != window.undefined) {
+		  if (options.drag != false) {
+			  $(el).draggable(options.drag);
+			}
+			// You can't use resizeables without draggables
+			if ($.fn.resizable != window.undefined && options.resize != false) {
 				$(el).resizable(options.resize);
 			}
 		}
-		if ($.fn.bgIframe != window.undefined) {
+		if ($.fn.bgIframe != window.undefined && options.bgIframe != false) {
 			$(el).bgIframe();
 		}
 		
-		// What to add to the manager
+		// What to add to the expando
 		var uiobj = {};
 		uiobj.options = this.options;
 		uiobj.el = $(el);
@@ -226,6 +228,7 @@
 		uiobj.open = function() {
 			this.options.open({}, {options: this.options, modal: this.el });
 		}
+		$.data(el, "ui-modal", uiobj);
 		return uiobj;
 	}
 
