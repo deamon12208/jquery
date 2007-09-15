@@ -44,8 +44,14 @@
 		return ret;
 	};
 
+	// You should now use .ajaxSetup() instead
 	jQuery.ajaxTimeout = function( timeout ) {
 		jQuery.ajaxSettings.timeout = timeout;
+	};
+
+	// You should now use .dequeue() instead
+	jQuery.dequeue = function( elem, type ) {
+		jQuery( elem ).dequeue( type );
 	};
 
 })(jQuery);
