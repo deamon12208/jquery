@@ -1,6 +1,6 @@
 /* This file skins tableSorter */
 
-.flora table.tablesorter {
+table.tablesorter {
 	font-family:arial;
 	background-color: #CDCDCD;
 	margin:10px 0pt 15px;
@@ -8,33 +8,33 @@
 	width: 100%;
 	text-align: left;
 }
-.flora table.tablesorter thead tr th, .flora table.tablesorter tfoot tr th {
+table.tablesorter thead tr th, table.tablesorter tfoot tr th {
 	background-color: #B1DB87;
 	border: 1px solid #FFF;
 	font-size: 8pt;
 	padding: 4px;
 }
-.flora table.tablesorter thead tr .header {
+table.tablesorter thead tr .header {
 	background-image: url(i/bg.gif);
 	background-repeat: no-repeat;
 	background-position: center right;
 	cursor: pointer;
 }
-.flora table.tablesorter tbody td {
+table.tablesorter tbody td {
 	color: #3D3D3D;
 	padding: 4px;
 	background-color: #FFF;
 	vertical-align: top;
 }
-.flora table.tablesorter tbody tr.odd td {
+table.tablesorter tbody tr.odd td {
 	background-color:#E0F4D7;
 }
-.flora table.tablesorter thead tr .headerSortUp {
+table.tablesorter thead tr .headerSortUp {
 	background-image: url(i/asc.gif);
 }
-.flora table.tablesorter thead tr .headerSortDown {
+table.tablesorter thead tr .headerSortDown {
 	background-image: url(i/desc.gif);
 }
-.flora table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
+table.tablesorter thead tr .headerSortDown, table.tablesorter thead tr .headerSortUp {
 background-color: #83C948;
 }
