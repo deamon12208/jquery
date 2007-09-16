@@ -8,7 +8,7 @@
 .flora .ui-dialog .ui-dialog-titlebar,
 .flora.ui-dialog .ui-dialog-titlebar {
 	border-bottom: 1px solid #d8d2aa;
-	background-color: #ff9900;
+	background: #ff9900 url(i/dialog-title.gif) repeat-x;
 	padding: 6px;
 	cursor: move;
 }
