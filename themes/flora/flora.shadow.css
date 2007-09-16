@@ -28,6 +28,6 @@ left: -6px;
 
 
 
-.ui-shadow { position:relative; }
-.ui-shadow-color { background:#030; position:absolute; } /* Can be overidden via js */
+.flora .ui-shadow, .flora.ui-shadow { position:relative; }
+.flora .ui-shadow, .flora.ui-shadow-color { background:#030; position:absolute; } /* Can be overidden via js */
 

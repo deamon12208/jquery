@@ -31,7 +31,11 @@
 			width: 300,
 			height: 200,
 			position: 'center',
-			buttons: {}
+			buttons: [],
+			modal: false,
+			drag: true,
+			resize: true,
+			shadow: false // It's quite slow
 		};
 		var o = o || {}; $.extend(options, o); //Extend and copy options
 		this.element = el; var self = this; //Do bindings
@@ -44,17 +48,19 @@
 		var uiDialog = uiDialogContainer.parent()
 			.addClass('ui-dialog').addClass(uiDialogContent.attr('className'))
 			.css({position: 'absolute', width: options.width, height: options.height});
-
-		uiDialog.append("<div class='ui-resizable-n ui-resizable-handle'></div>")
-			.append("<div class='ui-resizable-s ui-resizable-handle'></div>")
-			.append("<div class='ui-resizable-e ui-resizable-handle'></div>")
-			.append("<div class='ui-resizable-w ui-resizable-handle'></div>")
-			.append("<div class='ui-resizable-ne ui-resizable-handle'></div>")
-			.append("<div class='ui-resizable-se ui-resizable-handle'></div>")
-			.append("<div class='ui-resizable-sw ui-resizable-handle'></div>")
-			.append("<div class='ui-resizable-nw ui-resizable-handle'></div>");
-
-		uiDialog.resizable();
+    
+        if (options.modal == false && options.resize == true) {
+		    uiDialog.append("<div class='ui-resizable-n ui-resizable-handle'></div>")
+                .append("<div class='ui-resizable-s ui-resizable-handle'></div>")
+                .append("<div class='ui-resizable-e ui-resizable-handle'></div>")
+                .append("<div class='ui-resizable-w ui-resizable-handle'></div>")
+                .append("<div class='ui-resizable-ne ui-resizable-handle'></div>")
+                .append("<div class='ui-resizable-se ui-resizable-handle'></div>")
+                .append("<div class='ui-resizable-sw ui-resizable-handle'></div>")
+                .append("<div class='ui-resizable-nw ui-resizable-handle'></div>");
+      
+		    uiDialog.resizable();
+		}
 
 		uiDialogContainer.prepend('<div class="ui-dialog-titlebar"/></div>');
 		var uiDialogTitlebar = $('.ui-dialog-titlebar', uiDialogContainer);
@@ -70,21 +76,32 @@
 			.click(function() {
 				self.close();
 			});
-
-		uiDialog.append('<div class="ui-dialog-buttonpane"></div>');
-		var uiDialogButtonPane = $('.ui-dialog-buttonpane', uiDialog);
-		$.each(options.buttons, function(name, value) {
-			var btn = $(document.createElement('button')).text(name).click(value);
-			uiDialogButtonPane.append(btn);
-		});
-
-		uiDialog.draggable({ handle: '.ui-dialog-titlebar' });
-
+        if (options.buttons.length > 0) {
+		    uiDialog.append('<div class="ui-dialog-buttonpane"></div>');
+		    var uiDialogButtonPane = $('.ui-dialog-buttonpane', uiDialog);
+		    $.each(options.buttons, function(i, button) {
+		    	var btn = $(document.createElement('button')).text(button[0]).click(button[1]);
+		    	uiDialogButtonPane.append(btn);
+		    });
+		}
+        
+        if (options.modal == false && options.drag == true) {
+		    uiDialog.draggable({ handle: '.ui-dialog-titlebar' });
+        }
+        
 		this.open = function() {
 			var wnd = $(window), top = 0, left = 0;
 			switch (options.position) {
 				case 'center':
 					top = (wnd.height() / 2) - (uiDialog.height() / 2);
+					left = (wnd.width() / 2) - (uiDialog.width() / 2);
+					break;
+				case 'left':
+				    top = (wnd.height() / 2) - (uiDialog.height() / 2);
+				    left = 0;
+				    break;
+				case 'top':
+    			    top = 0;
 					left = (wnd.width() / 2) - (uiDialog.width() / 2);
 					break;
 			}
@@ -98,7 +115,9 @@
 
 		uiDialog.show();
 		this.open();
-
+        if (options.shadow && $.fn.shadow != undefined) {
+            uiDialog.shadow();
+        }
 	}
 
 	$.ui.dialogOpen = function(el) {
