@@ -2,9 +2,12 @@
 
 .flora .ui-dialog { background-color: #e6f7d4; }
 .flora .ui-dialog .ui-dialog-titlebar { background-color: #ff9900; padding: 5px; cursor: move; border-bottom: 1px solid #d8d2aa;  }
-.flora .ui-dialog .ui-dialog-titlebar-close { width: 16px; height: 16px; background: url(i/dialog-titlebar-close.png) no-repeat; position:absolute; top:6px; right: 6px; cursor: default; }
-.flora .ui-dialog .ui-dialog-title { color: white; margin-left: 7px; font-weight: bold; }
+.flora .ui-dialog .ui-dialog-titlebar-close { width: 16px; height: 16px; background: url(i/dialog-titlebar-close.png) no-repeat; position:absolute; top:6px; right: 7px; cursor: default; }
+.flora .ui-dialog .ui-dialog-titlebar-close-hover { background: url(i/dialog-titlebar-close-hover.png) no-repeat; }
+.flora .ui-dialog .ui-dialog-title { color: white; margin-left: 5px; font-weight: bold; }
 .flora .ui-dialog .ui-dialog-content { margin: 1.2em; }
+.flora .ui-dialog .ui-dialog-buttonpane { position: absolute; bottom: 8px; right: 12px; text-align: right; width: 100%; }
+.flora .ui-dialog .ui-dialog-buttonpane button { margin: 6px; }
 
 /* Dialog handle styles */
 .flora .ui-dialog .ui-resizable-n { cursor: n-resize; height: 6px; width: 100%; top: 0px; left: 0px; background: transparent url(i/dialog-n.gif) repeat scroll center top; }

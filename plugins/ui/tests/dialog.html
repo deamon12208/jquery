@@ -87,7 +87,15 @@
 
 $(function() {
 
-$('#dialog1').dialog();
+$('#dialog1').dialog({
+	title: 'title',
+	width: 600,
+	height: 400,
+	buttons: {
+		'Ok': function() { $(this).parents('.ui-dialog:first').dialogClose(); },
+		'Cancel': function() { $(this).parents('.ui-dialog:first').dialogClose(); }
+	}
+});
 
 $('#show1').click(function() {
 	$('#dialog1').dialogOpen();
@@ -96,7 +104,6 @@ $('#show1').click(function() {
 $('#hide1').click(function() {
 	$('#dialog1').dialogClose();
 });
-
 
 });
 

@@ -10,12 +10,18 @@
 	}
 	$.fn.dialogOpen = function() {
 		return this.each(function() {
-			if ($(this).parents(".ui-dialog").length) $.ui.dialogOpen(this);
+			var contentEl;
+			if ($(this).parents(".ui-dialog").length) contentEl = this;
+			if (!contentEl && $(this).is(".ui-dialog")) contentEl = $('.ui-dialog-content', this)[0];
+			$.ui.dialogOpen(contentEl)
 		});
 	}
 	$.fn.dialogClose = function() {
 		return this.each(function() {
-			if ($(this).parents(".ui-dialog").length) $.ui.dialogClose(this);
+			var contentEl;
+			if ($(this).parents(".ui-dialog").length) contentEl = this;
+			if (!contentEl && $(this).is(".ui-dialog")) contentEl = $('.ui-dialog-content', this)[0];
+			$.ui.dialogClose(contentEl);
 		});
 	}
 
@@ -24,7 +30,8 @@
 		var options = {
 			width: 300,
 			height: 200,
-			position: 'center'
+			position: 'center',
+			buttons: {}
 		};
 		var o = o || {}; $.extend(options, o); //Extend and copy options
 		this.element = el; var self = this; //Do bindings
@@ -49,15 +56,25 @@
 
 		uiDialogContainer.prepend('<div class="ui-dialog-titlebar"/></div>');
 		var uiDialogTitlebar = $('.ui-dialog-titlebar', uiDialogContainer);
-		uiDialogTitlebar.append('<span class="ui-dialog-title">' + uiDialogContent.attr('title') + '</span>');
+		var title = (options.title) ? options.title : (uiDialogContent.attr('title')) ? uiDialogContent.attr('title') : '';
+		uiDialogTitlebar.append('<span class="ui-dialog-title">' + title + '</span>');
 		uiDialogTitlebar.append('<div class="ui-dialog-titlebar-close"></div>');
 		$('.ui-dialog-titlebar-close', uiDialogTitlebar)
+			.hover(function() { $(this).addClass('ui-dialog-titlebar-close-hover'); }, 
+			       function() { $(this).removeClass('ui-dialog-titlebar-close-hover'); })
 			.mousedown(function(ev) {
 				ev.stopPropagation();
 			})
 			.click(function() {
 				self.close();
 			});
+
+		uiDialog.append('<div class="ui-dialog-buttonpane"></div>');
+		var uiDialogButtonPane = $('.ui-dialog-buttonpane', uiDialog);
+		$.each(options.buttons, function(name, value) {
+			var btn = $(document.createElement('button')).text(name).click(value);
+			uiDialogButtonPane.append(btn);
+		});
 
 		uiDialog.draggable({ handle: '.ui-dialog-titlebar' });
 
