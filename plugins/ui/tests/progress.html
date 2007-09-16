@@ -13,10 +13,25 @@
 <script type="text/javascript" src="../../../jquery/src/offset.js"></script>
 <script type="text/javascript" src="../ui.progress.js"></script>
 <script type="text/javascript" charset="utf-8">
+$(function() {
+  
   $('.progress').progress({
-    timed: true
-  })
+    timed: true,
+    time: 2000
+  });
+})
 </script>
+<style type="text/css" media="screen">
+  .progress .bar {
+    width: 200px;
+    height: 50px;
+    border: 10px solid #ccc;
+  }
+  .inner {
+    background-color: #222;
+    height: 50px;
+  }
+</style>
 </head>
 <body>
   <div class="progress">

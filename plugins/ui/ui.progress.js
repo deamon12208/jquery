@@ -12,23 +12,11 @@
 		  timed: false,// set to true to complete in a certain amount of time, not updating from ajax
 		  start: function(){},// called when starting movement
 		  step: function(){},// called every time the percent changes
-		  complete: function(){}// called when the bar is complete
+		  complete: function(){},// called when the bar is complete
+		  increment: 1,// increments if it's timed
+		  time:50
 		};
 		$.extend(options, o);
-		if (o.timed == false) {
-		  var op = {
-		    time: 50
-		  }
-		  $.extend(op, options);
-		  options = op;
-		}
-		else {
-		  var op = {
-		    time: 2000
-		  }
-		  $.extend(op, options);
-		  options = op;
-		}
 		console.log(options);
 	  new $.ui.progress(this, options);
 	};
@@ -68,24 +56,21 @@
 	  startTimed: function() {
 	    this._start();
 	    var item = this;
-	    this.timer = window.setTimeout(function(){item.timeTick(item)});
+	    this.timer = window.setTimeout(function(){item.timeTick(item)}, 0);
 	  },
 	  timeTick: function(item) {
 	    if (item.percent >= 100) return;
-	    
-	    item.percent += 5;
-	    item._update(item.percent);
-	    item.timer = window.setTimeout(function(){item.timeTick(item)}, 100);
+	    item.percent += 1;
+	    item._update(item.percent, item);
+	    item.timer = window.setTimeout(function(){item.timeTick(item)}, item.o.time / 100);
 	  },
 	  _start: function() {
 	    this.o.start();
 	  },
-	  _update: function(percent) {
+	  _update: function(percent, item) {
 	    var p = parseInt(percent);
-//	    if (p == percent) {
-	      $(this.el).find('.bar .inner').css('width', p +'%');
-  	    alert(percents);
-//  	  }
+	    console.log(p);
+      $(item.el).find('.bar .inner').css('width', p +'%');
 	  }
 	});
 	
