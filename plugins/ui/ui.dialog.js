@@ -41,7 +41,9 @@
 			.wrap(document.createElement('div'))
 			.wrap(document.createElement('div'));
 		var uiDialogContainer = uiDialogContent.parent().addClass('ui-dialog-container').css({position: 'relative'});
-		var uiDialog = uiDialogContainer.parent().addClass('ui-dialog').css({position: 'absolute', width: options.width, height: options.height});
+		var uiDialog = uiDialogContainer.parent()
+			.addClass('ui-dialog').addClass(uiDialogContent.attr('className'))
+			.css({position: 'absolute', width: options.width, height: options.height});
 
 		uiDialog.append("<div class='ui-resizable-n ui-resizable-handle'></div>")
 			.append("<div class='ui-resizable-s ui-resizable-handle'></div>")
