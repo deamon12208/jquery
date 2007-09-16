@@ -1,2 +1,3 @@
-.flora { border: 1px solid #50A029; }
-.flora input,textarea { border: 0; }
+.flora .ui-wrapper, .flora.ui-wrapper { border: 1px solid #50A029; }
+.flora .ui-wrapper input, .flora.ui-wrapper input { border: 0; }
+.flora .ui-wrapper textarea, .flora.ui-wrapper textarea { border: 0; }
