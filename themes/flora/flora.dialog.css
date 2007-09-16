@@ -1,0 +1,18 @@
+/* This file skins dialog */
+
+.flora .ui-dialog { background-color: #e6f7d4; }
+.flora .ui-dialog .ui-dialog-titlebar { background-color: #ff9900; padding: 5px; cursor: move; border-bottom: 1px solid #d8d2aa;  }
+.flora .ui-dialog .ui-dialog-title { color: white; margin-left: 7px; font-weight: bold; }
+.flora .ui-dialog .ui-dialog-content { margin: 1.2em; }
+
+/* Dialog handle styles */
+.flora .ui-dialog .ui-resizable-n { cursor: n-resize; height: 6px; width: 100%; top: 0px; left: 0px; background: transparent url(i/dialog-n.gif) repeat scroll center top; }
+.flora .ui-dialog .ui-resizable-s { cursor: s-resize; height: 8px; width: 100%; bottom: 0px; left: 0px; background: transparent url(i/dialog-s.gif) repeat scroll center top; }
+
+.flora .ui-dialog .ui-resizable-e { cursor: e-resize; width: 7px; right: 0px; top: 0px; height: 100%; background: transparent url(i/dialog-e.gif) repeat scroll right center; }
+.flora .ui-dialog .ui-resizable-w { cursor: w-resize; width: 7px; left: 0px; top: 0px; height: 100%; background: transparent url(i/dialog-w.gif) repeat scroll right center; }
+
+.flora .ui-dialog .ui-resizable-se { cursor: se-resize; width: 9px; height: 9px; right: 0px; bottom: 0px; background: transparent url(i/dialog-se.gif); }
+.flora .ui-dialog .ui-resizable-sw { cursor: sw-resize; width: 9px; height: 9px; left: 0px; bottom: 0px; background: transparent url(i/dialog-sw.gif); }
+.flora .ui-dialog .ui-resizable-nw { cursor: nw-resize; width: 9px; height: 29px; left: 0px; top: 0px; background: transparent url(i/dialog-nw.gif); }
+.flora .ui-dialog .ui-resizable-ne { cursor: ne-resize; width: 9px; height: 29px; right: 0px; top: 0px; background: transparent url(i/dialog-ne.gif); }

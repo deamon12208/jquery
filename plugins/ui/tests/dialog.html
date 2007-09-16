@@ -8,13 +8,19 @@
 
         <title>UI Dialog - Test Page</title>
 
+	<link rel="stylesheet" href="../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)">
+
         <script type="text/javascript" src="../../../jquery/src/core.js"></script>
         <script type="text/javascript" src="../../../jquery/src/selector.js"></script>
         <script type="text/javascript" src="../../../jquery/src/event.js"></script>
         <script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
         <script type="text/javascript" src="../../../jquery/src/fx.js"></script>
         <script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+	<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
 	<script type="text/javascript" src="../ui.dialog.js"></script>
+	<script type="text/javascript" src="../ui.mouse.js"></script>
+	<script type="text/javascript" src="../ui.resizable.js"></script>
+	<script type="text/javascript" src="../ui.draggable.js"></script>
         
         <style type="text/css" media="screen, projection">
 
@@ -51,22 +57,12 @@
                 font-family: "Courier New", Courier, monospace;
             }
 
-.ui-dialog {
-	background: white;
-	border: 2px solid navy;
-}
 
-.ui-dialog-titleBar {
-	background: gray;
-}
-
-.ui-dialog-title {
-	color: white;
-}
 
         </style>
     </head>
-    <body class="light">
+    <body class="flora">
+
         <h1>UI Dialog - Test Page</h1>
 
 	<button id="show1">Show Dialog</button>

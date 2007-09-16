@@ -36,9 +36,22 @@
 		var uiDialogContainer = uiDialogContent.parent().addClass('ui-dialog-container').css({position: 'relative'});
 		var uiDialog = uiDialogContainer.parent().addClass('ui-dialog').css({position: 'absolute', width: options.width, height: options.height});
 
-		uiDialogContainer.prepend('<div class="ui-dialog-titleBar"/></div>');
-		var uiDialogTitleBar = $('.ui-dialog-titleBar', uiDialogContainer);
-		uiDialogTitleBar.append('<span class="ui-dialog-title">' + uiDialogContent.attr('title') + '</span>');
+		uiDialog.append("<div class='ui-resizable-n ui-resizable-handle'></div>")
+			.append("<div class='ui-resizable-s ui-resizable-handle'></div>")
+			.append("<div class='ui-resizable-e ui-resizable-handle'></div>")
+			.append("<div class='ui-resizable-w ui-resizable-handle'></div>")
+			.append("<div class='ui-resizable-ne ui-resizable-handle'></div>")
+			.append("<div class='ui-resizable-se ui-resizable-handle'></div>")
+			.append("<div class='ui-resizable-sw ui-resizable-handle'></div>")
+			.append("<div class='ui-resizable-nw ui-resizable-handle'></div>");
+
+		uiDialog.resizable();
+
+		uiDialogContainer.prepend('<div class="ui-dialog-titlebar"/></div>');
+		var uiDialogtitlebar = $('.ui-dialog-titlebar', uiDialogContainer);
+		uiDialogtitlebar.append('<span class="ui-dialog-title">' + uiDialogContent.attr('title') + '</span>');
+
+		uiDialog.draggable({ handle: '.ui-dialog-titlebar' });
 
 		// Hide on init. Show using dialogOpen()
 		uiDialog.hide();
@@ -58,6 +71,8 @@
 		this.close = function() {
 			uiDialog.hide();
 		};
+
+		this.open();
 
 	}
 
