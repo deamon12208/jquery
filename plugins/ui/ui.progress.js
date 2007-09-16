@@ -14,7 +14,7 @@
 		  step: function(){},// called every time the percent changes
 		  complete: function(){},// called when the bar is complete
 		  increment: 1,// increments if it's timed
-		  time:50
+		  time:1000
 		};
 		$.extend(options, o);
 		console.log(options);
@@ -37,21 +37,22 @@
 	$.extend($.ui.progress.prototype, {
 	  startPing: function() {
 	    this._start();
-	    this.sendPing();
+	    this.sendPing(this);
 	  },
-	  sendPing: function() {
-	    var self = this;
+	  sendPing: function(item) {
 	    $.ajax({
-	      url: this.o.url,
-	      dataType: this.o.message? 'json':'text',
+	      url: item.o.url,
+	      dataType: item.o.message? 'json':'text',
+	      data: 'currentPercent='+ item.percent,
+	      type: "POST",
 	      success: function(data) {
-	        if (self.o.message) {
+	        if (item.o.message) {
 	          data = data.percent;
 	        }
-	        self._update(percent);
-	        window.setTimeout(self.sendPing(), this.o.time);
+	        item._update(data, item);
+	        window.setTimeout(function() { item.sendPing(item) }, item.o.time);
 	      }
-	    })
+	    });
 	  },
 	  startTimed: function() {
 	    this._start();
@@ -69,7 +70,7 @@
 	  },
 	  _update: function(percent, item) {
 	    var p = parseInt(percent);
-	    console.log(p);
+	    item.percent = percent;
       $(item.el).find('.bar .inner').css('width', p +'%');
 	  }
 	});

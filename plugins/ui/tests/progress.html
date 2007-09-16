@@ -15,9 +15,12 @@
 <script type="text/javascript" charset="utf-8">
 $(function() {
   
-  $('.progress').progress({
+  $('#p1').progress({
+    url: 'progress_ajax.php'
+  });
+  $('#p2').progress({
     timed: true,
-    time: 2000
+    time: 10000
   });
 })
 </script>
@@ -34,8 +37,15 @@ $(function() {
 </style>
 </head>
 <body>
-  <div class="progress">
+  In increments of five, with an AHAH callback
+  <div class="progress" id="p1">
     <div class="bar"><div class="inner"></div></div>
-  </div>
+  </div><br />
+  <br />
+  Make it look like it takes a long time - timed
+  <div class="progress" id="p2">
+    <div class="bar"><div class="inner"></div></div>
+  </div><br />
+  
 </body>
 </html>
