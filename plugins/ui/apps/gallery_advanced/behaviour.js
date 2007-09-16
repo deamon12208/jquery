@@ -155,14 +155,23 @@ var overlay = {
 }
 
 
+var lastContainer = null;
+function showContainer(c,e) {
+	
+	overlay.container.hide();
+	$(lastContainer).fadeOut(300);
+	$(c).fadeIn(300); lastContainer = c;
+	
+	$("#heading").html(e);
+	
+}
+
 
 
 $(document).ready(function(){
 
 
 	overlay.container = $("div.gallery div.overlay");
-
-
 
 	$("div.thumb").bind("mousemove", function(e) {
 	
@@ -180,51 +189,6 @@ $(document).ready(function(){
 	});
 
 
-
-
-
-
-
-
-	/*
-	 * The three
-	 */
-	if(!$.browser.msie) $("div.gallery ul.tree").tree();
-	
-	/*
-	 * Replace this with real tabs.
-	 */
-	$('div.gallery ul.tabs li a').bind("click", function() {
-		
-		overlay.container.hide();
-		
-		$(this).parent().parent().find("li").removeClass("active");
-		$(this).parent().addClass("active");
-		
-		$("div.right").hide();
-		$(this.hash).show();
-		
-		return false;
-	
-	});
-
-	/*
-	 * Accordion
-	 */
-	/*$('div.gallery ul.menue').accordion({
-		header: '.head',
-		fillSpace: true
-	});
-	*/
-
-	/*
-	 * Resizable
-	 */
-	 $('div.container').resizable({
-	 	minHeight: 250,
-	 	minWidth: 500,
-	 	proxy: $.browser.msie ? "resizeproxy": false
-	 });	
 
 
 	 
@@ -287,7 +251,6 @@ $(document).ready(function(){
 			opacity: 0.8
 		});
 	
-	$('div.container').draggable({ handle: "div.top" });
 		
 		
 	/*
@@ -330,6 +293,10 @@ $(document).ready(function(){
 		else if (delta < 0)
 			slider.goto(slider.interaction.curValue-10,null,true);
 	});
+	
+	//Show first album
+	$("div.right:first").show();
+	lastContainer = $("div.right:first")[0];
 
 
 });
