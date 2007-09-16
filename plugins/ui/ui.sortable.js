@@ -16,7 +16,7 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 	}
 	
 	//Macros for external methods that support chaining
-	var methods = "destroy,enable,disable".split(",");
+	var methods = "destroy,enable,disable,refresh".split(",");
 	for(var i=0;i<methods.length;i++) {
 		var cur = methods[i], f;
 		eval('f = function() { var a = arguments; return this.each(function() { if(jQuery(this).is(".ui-sortable")) jQuery.data(this, "ui-sortable")["'+cur+'"](a); }); }');
@@ -36,10 +36,12 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 		var options = {};
 		var self = this;
 		$.data(this.element, "ui-sortable", this);
+		$(el).addClass("ui-sortable");
 		
 		$.extend(options, o);
 		$.extend(options, {
 			items: options.items || '> li',
+			smooth: options.smooth != undefined ? options.smooth : true,
 			helper: 'clone',
 			containment: options.containment ? (options.containment == 'sortable' ? el : options.containment) : null,
 			zIndex: options.zIndex || 1000,
@@ -51,6 +53,9 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			},
 			_drag: function(h,p,c,t,e) {
 				self.drag.apply(t, [self, e]); // Trigger the onStart callback
+			},
+			startCondition: function() {
+				return !self.disabled;	
 			}			
 		});
 		
@@ -78,15 +83,8 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 	
 	$.extend($.ui.sortable.prototype, {
 		plugins: {},
-		pos: null,
-		opos: null,
 		currentTarget: null,
 		lastTarget: null,
-		helper: null,
-		timer: null,
-		slowMode: false,
-		element: null,
-		init: false,
 		prepareCallbackObj: function(self, that) {
 			return {
 				helper: self.helper,
@@ -122,13 +120,17 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			
 		},
 		destroy: function() {
+			$(this.element).removeClass("ui-sortable").removeClass("ui-sortable-disabled");
+			$(this.options.items, this.element).mouseInteractionDestroy();
 			
 		},
 		enable: function() {
-			
+			$(this.element).removeClass("ui-sortable-disabled");
+			this.disabled = false;
 		},
 		disable: function() {
-			
+			$(this.element).addClass("ui-sortable-disabled");
+			this.disabled = true;
 		},
 		start: function(that, e) {
 			
@@ -158,20 +160,35 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 		stop: function(that, e) {			
 			
 			var o = this.options;
+			var self = this;
 			
-			$(this.element).css('visibility', 'visible');
-			
-			if(that.helper)
-				that.helper.remove();
-				
-			if(o.ozIndex)
-				$(this.helper).css('zIndex', o.ozIndex);
-				
-				
-			//Let's see if the position in DOM has changed
-			if($(this.element).prev()[0] != that.firstSibling) {
-				$(this.element).triggerHandler("sortupdate", [e, that.prepareCallbackObj(this, that)], o.update);
+
+			if(o.smooth) {
+				var os = $(this.element).offset();
+				o.beQuietAtEnd = true;
+				$(this.helper).animate({ left: os.left - o.po.left, top: os.top - o.po.top }, 500, stopIt);
+			} else {
+				stopIt();
 			}
+				
+			function stopIt() {
+
+				$(self.element).css('visibility', 'visible');
+				if(that.helper) that.helper.remove();
+				if(self.helper != self.element) $(self.helper).remove(); 
+
+				if(o.ozIndex)
+					$(self.helper).css('zIndex', o.ozIndex);
+					
+					
+				//Let's see if the position in DOM has changed
+				if($(self.element).prev()[0] != that.firstSibling) {
+					//$(self.element).triggerHandler("sortupdate", [e, that.prepareCallbackObj(self, that)], o.update);
+				}				
+
+			}
+			
+
 			return false;
 			
 		},
@@ -192,8 +209,8 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 				
 				var ci = $(m[i][0]); var cio = m[i][0];
 				if(this.element.contains(cio)) continue;
-				var cO = ci.offset({ border: false, relativeTo: that.element }); //TODO: Caching
-				cO = { top: o.offset.top+cO.top, left: o.offset.left+cO.left };
+				var cO = ci.offset(); //TODO: Caching
+				cO = { top: cO.top, left: cO.left };
 				
 				var mb = function(e) { if(true || o.lba != cio) { ci.before(e); o.lba = cio; } }
 				var ma = function(e) { if(true || o.laa != cio) { ci.after(e); o.laa = cio; } }
@@ -229,13 +246,12 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			}
 
 			if(that.helper) { //reposition helper if available
-				var to = $(this.element).offsetLite({ border: false });
+				var to = $(this.element).offset();
 				that.helper.css({
 					top: to.top+'px',
 					left: to.left+'px'	
 				});
 			}	
-			
 			
 			$(this.helper).css('left', nl+'px').css('top', nt+'px'); // Stick the helper to the cursor
 			return false;

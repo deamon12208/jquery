@@ -22,10 +22,17 @@
 		}
 	});
 	
+	$.fn.mouseInteractionDestroy = function() {
+		this.each(function() {
+			if($.data(this, "ui-mouse")) $.data(this, "ui-mouse").destroy(); 	
+		});
+	}
+	
 	$.ui.mouseInteraction = function(el,o) {
 	
 		if(!o) var o = {};
 		this.element = el;
+		$.data(this.element, "ui-mouse", this);
 		
 		this.options = {};
 		$.extend(this.options, o);
