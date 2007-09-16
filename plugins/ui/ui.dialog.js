@@ -80,9 +80,6 @@
 
 		uiDialog.draggable({ handle: '.ui-dialog-titlebar' });
 
-		// Hide on init. Show using dialogOpen()
-		uiDialog.hide();
-
 		this.open = function() {
 			var wnd = $(window), top = 0, left = 0;
 			switch (options.position) {
@@ -99,6 +96,7 @@
 			uiDialog.hide();
 		};
 
+		uiDialog.show();
 		this.open();
 
 	}

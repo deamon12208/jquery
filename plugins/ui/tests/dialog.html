@@ -61,7 +61,7 @@
 
         </style>
     </head>
-    <body class="flora">
+    <body>
 
         <h1>UI Dialog - Test Page</h1>
 
@@ -69,7 +69,7 @@
 
 	<button id="hide1">Hide Dialog</button>
 
-	<div id="dialog1" title="Hello World">
+	<div id="dialog1" class="flora" title="Hello World">
         	This is a simple dialog
 	</div>
 
@@ -96,6 +96,8 @@ $('#dialog1').dialog({
 		'Cancel': function() { $(this).parents('.ui-dialog:first').dialogClose(); }
 	}
 });
+
+//$('<div>Hello, World</div>').dialog();
 
 $('#show1').click(function() {
 	$('#dialog1').dialogOpen();
