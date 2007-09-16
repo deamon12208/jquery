@@ -48,8 +48,16 @@
 		uiDialog.resizable();
 
 		uiDialogContainer.prepend('<div class="ui-dialog-titlebar"/></div>');
-		var uiDialogtitlebar = $('.ui-dialog-titlebar', uiDialogContainer);
-		uiDialogtitlebar.append('<span class="ui-dialog-title">' + uiDialogContent.attr('title') + '</span>');
+		var uiDialogTitlebar = $('.ui-dialog-titlebar', uiDialogContainer);
+		uiDialogTitlebar.append('<span class="ui-dialog-title">' + uiDialogContent.attr('title') + '</span>');
+		uiDialogTitlebar.append('<div class="ui-dialog-titlebar-close"></div>');
+		$('.ui-dialog-titlebar-close', uiDialogTitlebar)
+			.mousedown(function(ev) {
+				ev.stopPropagation();
+			})
+			.click(function() {
+				self.close();
+			});
 
 		uiDialog.draggable({ handle: '.ui-dialog-titlebar' });
 
