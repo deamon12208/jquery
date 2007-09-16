@@ -1,7 +1,7 @@
 /* This file skins dialog */
 
 .flora .ui-dialog { background-color: #e6f7d4; }
-.flora .ui-dialog .ui-dialog-titlebar { background-color: #ff9900; padding: 5px; cursor: move; border-bottom: 1px solid #d8d2aa;  }
+.flora .ui-dialog .ui-dialog-titlebar { background-color: #ff9900; padding: 6px; cursor: move; border-bottom: 1px solid #d8d2aa;  }
 .flora .ui-dialog .ui-dialog-titlebar-close { width: 16px; height: 16px; background: url(i/dialog-titlebar-close.png) no-repeat; position:absolute; top:6px; right: 7px; cursor: default; }
 .flora .ui-dialog .ui-dialog-titlebar-close-hover { background: url(i/dialog-titlebar-close-hover.png) no-repeat; }
 .flora .ui-dialog .ui-dialog-title { color: white; margin-left: 5px; font-weight: bold; }
