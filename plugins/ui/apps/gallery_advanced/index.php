@@ -119,7 +119,7 @@ div.draggable img { width: 100px; border: 1px solid #AED5EA; }
 
 <script type="text/javascript" src="behaviour.js"></script>
 </head>
-<body>
+<body class="flora">
 	
 	<div class="gallery container">
 		<div class="ui-resizable-se"></div>
