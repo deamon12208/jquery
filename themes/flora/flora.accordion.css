@@ -7,6 +7,6 @@
 .flora ul.ui-accordion-container li:hover a.ui-accordion-link { background-image: url(i/accordion-middle-over.png); }
 .flora ul.ui-accordion-container li:hover div.ui-accordion-right { background-image: url(i/accordion-right-over.png); }
 
-.flora ul.ui-accordion-container li.active { background-image: url(i/accordion-left-act.png); }
-.flora ul.ui-accordion-container li.active a.ui-accordion-link { background-image: url(i/accordion-middle-act.png); }
-.flora ul.ui-accordion-container li.active div.ui-accordion-right { background-image: url(i/accordion-right-act.png); }
+.flora ul.ui-accordion-container li.selected { background-image: url(i/accordion-left-act.png); }
+.flora ul.ui-accordion-container li.selected a.ui-accordion-link { background-image: url(i/accordion-middle-act.png); }
+.flora ul.ui-accordion-container li.selected div.ui-accordion-right { background-image: url(i/accordion-right-act.png); }
