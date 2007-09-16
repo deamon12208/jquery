@@ -9,8 +9,9 @@
   background:#333;
   color:snow;
   padding:2px 4px;
-  border-bottom:1px solid #000;
+  border-bottom:1px solid #333;
   font-weight:bold;
+  font-size:1.1em;
 }
 
 .dark .ui-modal .top.pane .ui-modal-buttons-right,
@@ -31,7 +32,7 @@
 .dark.ui-modal .middle.pane {
   position:relative;
   height: 100%;
-  background:#F3F3F3;
+  background:#222;
   padding-top:4px;
 }
 .dark .ui-modal .middle.pane .center.pane,
@@ -40,8 +41,8 @@
   overflow: auto;
   height: 100%;
   margin:0 4px;
-  background:#FFF;
-  color:#222;
+  background:#111;
+  color:snow;
 }
 .dark .ui-modal.noOverflow .middle.pane .center.pane,
 .dark.ui-modal.noOverflow .middle.pane .center.pane{
@@ -53,7 +54,7 @@
   position: absolute;
   top: 0px;
   left: 0px;
-  border-left:1px solid #DDD;
+  border-left:1px solid #333;
   height:100%;
   width: 2px;
 }
@@ -63,7 +64,7 @@
   position: absolute;
   top: 0px;
   right: 0px;
-  border-right:1px solid #DDD;
+  border-right:1px solid #333;
   height:100%;
   width: 2px;
   cursor:e-resize;
@@ -73,8 +74,8 @@
 .dark.ui-modal .bottom.pane {
   position: relative;
   height:3px;
-  background:#F3F3F3;
-  border:1px solid #DDD;
+  background:#222;
+  border:1px solid #333;
   border-top:none;
   cursor:s-resize;
 }
@@ -89,5 +90,4 @@
   width:4px;
   cursor:se-resize;
 }
-
 

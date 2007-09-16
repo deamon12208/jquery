@@ -84,26 +84,30 @@
 /*(  buttons  )*/
 .dark .ui-form-buttons,
 .dark.ui-form-buttons {
+  display:block; float:left;
+  height:40px;
   background:url(dark.form.png) left -40px;
-  margin-right:5px;
-  padding:10px 0 14px 20px;
   border:none;
   color:#CCC;
+  padding-left:25px;
+  margin:0 4px;
 }
 .dark .ui-form-buttons .ui-form-inner,
 .dark.ui-form-buttons .ui-form-inner {
-  margin-right:-5px;
+  display:block; float:left;
+  height:40px;
   background:url(dark.form.png) right -40px;
-  padding:10px 5px 14px 0;
+  margin-right:-5px;
+  padding-right:5px;
 }
 .dark .ui-form-buttons .ui-form,
 .dark.ui-form-buttons .ui-form {
-  margin-left:-25px;
-  margin-right:-5px;
-  padding:10px 25px 14px 25px;
   background:transparent;
   border:none;
   color:#DDD;
+  padding:9px 25px 10px 25px;
+  *padding:9px 15px 10px 15px;
+  margin-left:-25px;
 }
 .dark .ui-form-buttons.hover,
 .dark.ui-form-buttons.hover {
@@ -170,6 +174,7 @@
 }
 .dark .ui-form-radio .ui-form-content {
   padding:1px 6px 1px 7px;
+  *padding:0 6px 0 7px;
   color:#222;
   cursor:default;
 }
