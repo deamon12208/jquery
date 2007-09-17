@@ -55,3 +55,26 @@
   *margin-top:-24px;
 }
 
+/* hacks to get it working in IE */
+.ui-tabs-nav li {
+  display: inline !important;
+  position: relative;
+  _top: -3px;
+}
+.ui-tabs-nav li a {
+  display: inline !important;
+  float: left;
+  _padding-left: 2px;
+}
+.ui-tabs-nav li a span {
+  display: inline !important;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  _padding-bottom: 0px;
+  position: relative;
+  top: -2px;
+  _top: 0px;
+  _left: 3px;
+  _padding-bottom: 2px;
+  _padding-right: 13px;
+}
