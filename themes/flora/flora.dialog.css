@@ -9,8 +9,10 @@
 .flora.ui-dialog .ui-dialog-titlebar {
 	border-bottom: 1px solid #d8d2aa;
 	background: #ff9900 url(i/dialog-title.gif) repeat-x;
-	padding: 6px;
+	padding: 0px;
 	cursor: move;
+	height: 28px;
+	_height: 29px;
 }
 
 .flora .ui-dialog .ui-dialog-titlebar-close,
@@ -34,6 +36,9 @@
 	margin-left: 5px;
 	color: white;
 	font-weight: bold;
+	position: relative;
+	top: 7px;
+	left: 4px;
 }
 
 .flora .ui-dialog .ui-dialog-content,
