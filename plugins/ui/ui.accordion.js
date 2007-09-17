@@ -24,7 +24,8 @@ $.extend($.ui.accordion, {
 		alwaysOpen: true,
 		animated: 'slide',
 		event: "click",
-		header: "a"
+		header: "a",
+		autoheight: true
 	},
 	animations: {
 		slide: function(settings, additions) {
@@ -45,8 +46,8 @@ $.extend($.ui.accordion, {
 				difference = showHeight / hideHeight;
 			settings.toShow.css({ height: 0, overflow: 'hidden' }).show();
 			settings.toHide.filter(":hidden").each(settings.finished).end().filter(":visible").animate({height:"hide"},{
-				step: function(n){
-					settings.toShow.height(Math.ceil( (hideHeight - (n)) * difference ));
+				step: function(now){
+					settings.toShow.height((hideHeight - (now)) * difference );
 				},
 				duration: settings.duration,
 				easing: settings.easing,
