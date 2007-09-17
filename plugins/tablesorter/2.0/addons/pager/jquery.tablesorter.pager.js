@@ -79,7 +79,8 @@
 				var tableBody = $(table.tBodies[0]);
 				
 				// clear the table body
-				tableBody[0].innerHTML = "";
+				table.tBodies[0].rows.innerHTML = "";
+		
 				
 				for(var i = s; i < e; i++) {
 					

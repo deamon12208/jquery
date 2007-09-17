@@ -244,12 +244,14 @@
 					checkCell = (n[0].length-1), 
 					tableBody = $(table.tBodies[0]),
 					rows = [];
-					
+				
 				// clear the table body
-				tableBody[0].innerHTML = "";
+				table.tBodies[0].rows.innerHTML = "";
 								
 				for (var i=0;i < totalRows; i++) {
 					 	rows.push(r[n[i][checkCell]]);
+						
+						
 						if(table.config.appender == null) {
 							tableBody.append(r[n[i][checkCell]]);
 						}

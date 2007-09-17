@@ -6,9 +6,7 @@
 	<link rel="stylesheet" href="css/jq.css" type="text/css" media="print, projection, screen" />
 	<link rel="stylesheet" href="../themes/blue/style.css" type="text/css" id="" media="print, projection, screen" />
 	<script type="text/javascript" src="../jquery-latest.js"></script>
-	<script type="text/javascript" src="../jquery.dimensions.pack.js"></script>
-	<script type="text/javascript" src="../jquery.tablesorter.pack.js"></script>
-	<script type="text/javascript" src="../addons/pager/jquery.tablesorter.pager.js"></script>
+	<script type="text/javascript" src="../jquery.tablesorter.js"></script>
 	<script type="text/javascript" src="js/chili/chili-1.8b.js"></script>
 	<script type="text/javascript" src="js/docs.js"></script>
 	<script type="text/javascript" src="js/examples.js"></script>
@@ -18,7 +16,7 @@
 	$("#ajax-append").click(function() {
 		 $.get("assets/ajax-content.html", function(html) {
 		 	// append the "ajax'd" data to the table body
-		 	$("table > tbody").append(html);
+		 	$("table tbody").append(html);
 			// let the plugin know that we made a update
 			$("table").trigger("update");
 			// set sorting column and direction, this will sort on the first and third column
