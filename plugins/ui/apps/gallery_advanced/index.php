@@ -39,7 +39,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 
 <style type="text/css" media="all">
 
-body { background: #000; margin: 0; padding: 50px; font-family: Lucida Sans, Arial; font-size: 12px; }
+body { background: #000; margin: 0; padding: 5px; font-family: Lucida Sans, Arial; font-size: 12px; }
 .container { height: 615px; width: 974px; margin: 0 auto; position: relative; background-image: url(images/bg.png); }
 
 /* Inner container definitions */
