@@ -28,7 +28,7 @@
 						minValue: cur.attr("min"),
 						startValue: this.getAttribute("value"),
 						stepping: cur.attr("step"),
-						change: function(e, ui) { cur[0].value = ui.value; cur[0].setAttribute("value", ui.value); },
+						change: function(e, ui) { cur[0].value = ui.value; cur[0].setAttribute("value", ui.value); }
 					});
 					
 					slider = slider.sliderInstance();
