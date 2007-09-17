@@ -27,7 +27,7 @@
 	$.ui.ddmanager = {
 		current: null,
 		droppables: [],
-		prepareOffsets: function(t) {
+		prepareOffsets: function(t, e) {
 			var dropTop = $.ui.ddmanager.dropTop = [];
 			var dropLeft = $.ui.ddmanager.dropLeft;
 			var m = $.ui.ddmanager.droppables;
@@ -35,25 +35,25 @@
 				if(m[i].item.disabled) continue;
 				m[i].offset = $(m[i].item.element).offset();
 				if (t && m[i].item.options.accept(t.element)) //Activate the droppable if used directly from draggables
-					m[i].item.activate.call(m[i].item);
+					m[i].item.activate.call(m[i].item, e);
 			}
 		},
-		fire: function(oDrag) {
+		fire: function(oDrag, e) {
 			
 			var oDrops = $.ui.ddmanager.droppables;
 			var oOvers = $.grep(oDrops, function(oDrop) {
 				
 				if (!oDrop.item.disabled && $.ui.intersect(oDrag, oDrop, oDrop.item.options.tolerance))
-					oDrop.item.drop.call(oDrop.item);
+					oDrop.item.drop.call(oDrop.item, e);
 			});
 			$.each(oDrops, function(i, oDrop) {
 				if (!oDrop.item.disabled && oDrop.item.options.accept(oDrag.element)) {
 					oDrop.out = 1; oDrop.over = 0;
-					oDrop.item.deactivate.call(oDrop.item);
+					oDrop.item.deactivate.call(oDrop.item, e);
 				}
 			});
 		},
-		update: function(oDrag) {
+		update: function(oDrag, e) {
 			
 			if(oDrag.options.refreshPositions) $.ui.ddmanager.prepareOffsets();
 			
@@ -63,14 +63,14 @@
 				var isOver = $.ui.intersect(oDrag, oDrop, oDrop.item.options.tolerance)
 				if (!isOver && oDrop.over == 1) {
 					oDrop.out = 1; oDrop.over = 0;
-					oDrop.item.out.call(oDrop.item);
+					oDrop.item.out.call(oDrop.item, e);
 				}
 				return isOver;
 			});
 			$.each(oOvers, function(i, oOver) {
 				if (oOver.over == 0) {
 					oOver.out = 0; oOver.over = 1;
-					oOver.item.over.call(oOver.item);
+					oOver.item.over.call(oOver.item, e);
 				}
 			});
 		}
@@ -138,7 +138,7 @@
 			$(this.element).triggerHandler("dragstart", [e, that.prepareCallbackObj(this)], o.start);
 			
 			if (this.slowMode && $.ui.droppable && !o.dropBehaviour)
-				$.ui.ddmanager.prepareOffsets(this);
+				$.ui.ddmanager.prepareOffsets(this, e);
 			
 			return false;
 						
@@ -163,7 +163,7 @@
 
 			var o = this.options;
 
-			$.ui.ddmanager.update(this);
+			$.ui.ddmanager.update(this, e);
 
 			this.pos = [this.pos[0]-o.cursorAt.left, this.pos[1]-o.cursorAt.top];
 
