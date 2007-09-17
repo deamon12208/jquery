@@ -1,21 +1,18 @@
 @media projection, screen { .ui-tabs-hide { display:none; } }
 @media print { .ui-tabs-nav { display: none; } }
 
-.flora .ui-tabs-nav,
-.flora.ui-tabs-nav {
+.ui-tabs-nav {
   padding-left:10px;
   float:left;
   width:98%;
   border-bottom:1px solid #FFF;
   margin:0;
 }
-.flora .ui-tabs-nav li,
-.flora.ui-tabs-nav li {
+.ui-tabs-nav li {
   list-style:none;
   float:left;
  }
-.flora .ui-tabs-nav a,
-.flora.ui-tabs-nav a {
+.ui-tabs-nav a {
   background:url(i/tabs.gif) no-repeat left 4px;
   display:block;
   height:27px;
@@ -25,8 +22,7 @@
   font:9pt Verdana;
   outline:none;
 }
-.flora .ui-tabs-nav span,
-.flora.ui-tabs-nav span {
+.ui-tabs-nav span {
   background:url(i/tabs.gif) no-repeat right 4px;
   display:block;
   height:27px;
@@ -35,27 +31,22 @@
   margin-right:-3px;
   color:#FFF;
 }
-.flora .ui-tabs-nav .ui-tabs-selected a,
-.flora.ui-tabs-nav .ui-tabs-selected a {
+.ui-tabs-nav .ui-tabs-selected a {
   background-position:left -23px;
 }
-.flora .ui-tabs-nav .ui-tabs-selected a span,
-.flora.ui-tabs-nav .ui-tabs-selected a span {
+.ui-tabs-nav .ui-tabs-selected a span {
   background-position:right -23px;
   margin-bottom:0;
   cursor:default;
   }
-.flora .ui-tabs-nav .ui-tabs-disabled a,
-.flora .ui-tabs-nav .ui-tabs-disabled a span,
-.flora.ui-tabs-nav .ui-tabs-disabled a,
-.flora.ui-tabs-nav .ui-tabs-disabled a span {
+.ui-tabs-nav .ui-tabs-disabled a,
+.ui-tabs-nav .ui-tabs-disabled a span {
   color:#000;
   opacity:0.4;
   filter:alpha(opacity=40);
   cursor:default;
 }
-.flora .ui-tabs-container,
-.flora.ui-tabs-container {
+.ui-tabs-container {
   background:#FFF;
   border:1px solid #519E2D;
   clear:left;
