@@ -74,7 +74,12 @@
 				if(e > rows.length ) {
 					e = rows.length;
 				}
-				var tableBody = $('tbody:first',table).empty();
+				
+				
+				var tableBody = $(table.tBodies[0]);
+				
+				// clear the table body
+				tableBody[0].innerHTML = "";
 				
 				for(var i = s; i < e; i++) {
 					
