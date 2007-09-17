@@ -2,7 +2,7 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us">
 <head>
-	<title>jQuery plugin: Tablesorter 2.0 - Set a initial sorting order</title>
+	<title>jQuery plugin: Tablesorter 2.0 - Enabling debug mode</title>
 	<link rel="stylesheet" href="css/jq.css" type="text/css" media="print, projection, screen" />
 	<link rel="stylesheet" href="../themes/blue/style.css" type="text/css" id="" media="print, projection, screen" />
 	<script type="text/javascript" src="../jquery-latest.js"></script>
@@ -15,21 +15,27 @@
 <script type="text/javascript" id="js">$(document).ready(function() {
 	// call the tablesorter plugin
 	$("table").tablesorter({
-		// sort on the first column and third column, order asc
-		sortList: [[0,0],[2,0]]
+		// enable debug mode
+		debug: true
 	});
 }); </script>
 </head>
 <body>
 <div id="banner">	
 	<h1>table<em>sorter</em></h1>
-	<h2>Set a initial sorting order</h2>
+	<h2>Enabling debug mode</h2>
 	<h3>Flexible client-side table sorting</h3>
 	<a href="index.html">Back to documentation</a>
 </div>
 <div id="main">
+	
+		<p class="tip">
+			<em>NOTE!</em> If firebug is installed the debuging information will be displayed in the firebug console.
+		</p>
+	
 	<h1>Demo</h1>
 	<div id="demo">
+		
 		<table cellspacing="1" class="tablesorter">
 		<thead>
 				<tr>
@@ -88,7 +94,9 @@
 				</tr>
 			</tbody>
 		</table>
+
 	</div>
+	
 	<h1>Javascript</h1>
 	<div id="javascript">
 		<pre class="javascript"></pre>
