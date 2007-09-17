@@ -151,7 +151,7 @@
 			$(this.element).triggerHandler("dragstop", [e, that.prepareCallbackObj(this)], o.stop);
 
 			if (this.slowMode && $.ui.droppable && !o.dropBehaviour) //If cursorAt is within the helper, we must use our drop manager
-				$.ui.ddmanager.fire(this);
+				$.ui.ddmanager.fire(this, e);
 
 			$.ui.ddmanager.current = null;
 			$.ui.ddmanager.last = this;
