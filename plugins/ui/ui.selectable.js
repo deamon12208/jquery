@@ -47,7 +47,7 @@
 	$.extend($.ui.selectable.prototype, {
 		plugins: {},
 		start: function(self, ev) {
-			$(self.mouse.helper).css({position: 'absolute', left:self.mouse.opos[0], top:self.mouse.opos[1], width:0, height: 0});
+			$(self.mouse.helper).css({'z-index': 100, position: 'absolute', left: ev.clientX, top: ev.clientY, width:0, height: 0});
 			if (ev.ctrlKey) {
 				if ($(ev.target).is('.ui-selected')) {
 					$(ev.target).removeClass('ui-selected').addClass('ui-unselecting');
