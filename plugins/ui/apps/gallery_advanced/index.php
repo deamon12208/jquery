@@ -65,10 +65,11 @@ div.gallery ul.menue ul.items li div.thumb { border: 1px solid #333; width: 80px
 div.gallery ul.tree { list-style-type: none; margin: 0; padding-left: 10px; }
 
 /* The slider control at bottom */
-div.gallery div.bottom div.slider { height: 22px; width: 200px; position: absolute; top: 10px; right: 10px; background-image: url(images/slider_bg.png); background-position: 0px 1px; }
+div.gallery div.bottom div.slider { height: 22px; width: 200px; position: absolute; top: 15px; right: 60px; background-image: url(images/slider_bg.png); background-position: 0px 1px; }
 div.gallery div.bottom div.slider div.handle { position: absolute; top: 2px; left: 0px; height: 22px; width: 23px; background-image: url(images/slider.png); }
 
 #heading { color: #ff9900; position: absolute; top: 10px; left: 10px; font-size: 22px; letter-spacing:1px; font-family: Verdana; }
+#logo { position: absolute; top: 10px; right: 0px; }
 
 /* The main thumbnails */
 div.gallery div.right img.thumb { border: 1px solid #333; width: 100px; float: left; position: relative; margin-left: 10px; margin-top: 10px; cursor: pointer; cursor: hand; }
@@ -147,6 +148,8 @@ foreach($albums as $album) {
 		
 		<div class="bottom">
 
+			<img src="images/ui.png" id="logo" />
+			
 			<div id="heading">Animals</div>
 
 			<div class="slider">
