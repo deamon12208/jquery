@@ -282,6 +282,7 @@ $(document).ready(function(){
 	var slider = new $.ui.slider($('div.gallery div.slider')[0], { maxValue: 240, startValue: 70, slide: function(e,ui) {
 		var rule = getStyleRule("div.gallery div.right img.thumb");
 		rule.style.width = (30+ui.value)+"px";
+		rule.style.height = ((30+ui.value)*0.75)+"px";
 	}});
 		
 	$("div.gallery div.slider").mousewheel(function(event, delta) {

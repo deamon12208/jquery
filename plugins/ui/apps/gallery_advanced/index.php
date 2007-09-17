@@ -72,7 +72,7 @@ div.gallery div.bottom div.slider div.handle { position: absolute; top: 2px; lef
 #logo { position: absolute; top: 10px; right: 0px; }
 
 /* The main thumbnails */
-div.gallery div.right img.thumb { border: 1px solid #333; width: 100px; float: left; position: relative; margin-left: 10px; margin-top: 10px; cursor: pointer; cursor: hand; }
+div.gallery div.right img.thumb { border: 1px solid #333; width: 100px; height: 75px; float: left; position: relative; margin-left: 10px; margin-top: 10px; cursor: pointer; cursor: hand; }
 div.gallery div.right img.hover { border: 1px solid #fff; z-index: 5;}
 
 
