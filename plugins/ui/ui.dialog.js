@@ -76,11 +76,13 @@
 			.click(function() {
 				self.close();
 			});
-        if (options.buttons.length > 0) {
+		var l = 0;
+		$.each(options.buttons, function() { l = 1; return false; });
+        if (l == 1) {
 		    uiDialog.append('<div class="ui-dialog-buttonpane"></div>');
 		    var uiDialogButtonPane = $('.ui-dialog-buttonpane', uiDialog);
-		    $.each(options.buttons, function(i, button) {
-		    	var btn = $(document.createElement('button')).text(button[0]).click(button[1]);
+		    $.each(options.buttons, function(name, value) {
+		    	var btn = $(document.createElement('button')).text(name).click(value);
 		    	uiDialogButtonPane.append(btn);
 		    });
 		}
