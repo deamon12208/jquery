@@ -1,8 +1,8 @@
 /*
  * 
  * TableSorter 2.0 - Client-side table sorting with ease!
- * Version 2.0
- * @requires jQuery v1.1.3
+ * Version 2.0.1
+ * @requires jQuery v1.2.1
  * 
  * Copyright (c) 2007 Christian Bach
  * Examples and docs at: http://tablesorter.com
@@ -15,16 +15,16 @@
  *
  * @description Create a sortable table with multi-column sorting capabilitys
  * 
- * @example $('#table').tablesorter();
+ * @example $('table').tablesorter();
  * @desc Create a simple tablesorter interface.
  *
- * @example $('#table').tablesorter({ sortList:[[0,0],[1,0]] });
+ * @example $('table').tablesorter({ sortList:[[0,0],[1,0]] });
  * @desc Create a tablesorter interface and sort on the first and secound column in ascending order.
  * 
- * @example $('#table').tablesorter({ headers: { 0: { sorter: false}, 1: {sorter: false} } });
+ * @example $('table').tablesorter({ headers: { 0: { sorter: false}, 1: {sorter: false} } });
  * @desc Create a tablesorter interface and disableing the first and secound column headers.
  * 
- * @example $('#table').tablesorter({ 0: {sorter:"integer"}, 1: {sorter:"currency"} });
+ * @example $('table').tablesorter({ 0: {sorter:"integer"}, 1: {sorter:"currency"} });
  * @desc Create a tablesorter interface and set a column parser for the first and secound column.
  * 
  * 
@@ -108,9 +108,14 @@
 				debug: false
 			};
 			
+			
+			this.benchmark = function(s,d) {
+				benchmark(s,d);
+			};
+			
 			/* debuging utils */
-			function benchmark(label,stamp) {
-				log(label + "," + (new Date().getTime() - stamp.getTime()) + "ms");
+			function benchmark(s,d) {
+				log(s + "," + (new Date().getTime() - d.getTime()) + "ms");
 			}
 			
 			function log(s) {
@@ -237,9 +242,9 @@
 					n= c.normalized, 
 					totalRows = n.length, 
 					checkCell = (n[0].length-1), 
-					tableBody = $("tbody:first",table);
+					tableBody = $(table.tBodies[0]),
 					rows = [];
-				
+					
 				// clear the table body
 				tableBody[0].innerHTML = "";
 								
@@ -383,10 +388,8 @@
 				var c = table.config;
 				if(c.widthFixed) {
 					var colgroup = $('<colgroup>');
-					$("tbody:first tr:first td",table).each(function() {
-						
+					$("tr:first td",table.tBodies[0]).each(function() {
 						colgroup.append($('<col>').css('width',$(this).width()));
-					
 					});
 					$(table).prepend(colgroup);
 				};
@@ -420,7 +423,11 @@
 					dynamicExp += "if(" + e + ") { return " + e + "; } ";
 					dynamicExp += "else { ";
 				}
-					
+				
+				// if value is the same keep orignal order	
+				var orgOrderCol = cache.normalized[0].length - 1;
+				dynamicExp += "return a[" + orgOrderCol + "]-b[" + orgOrderCol + "];";
+						
 				for(var i=0; i < l; i++) {
 					dynamicExp += "}; ";
 				}
@@ -803,8 +810,13 @@
 	$.tablesorter.addWidget({
 		id: "zebra",
 		format: function(table) {
-			$("> tbody:first tr:visible:even",table).removeClass(table.config.widgetZebra.css[1]).addClass(table.config.widgetZebra.css[0]);
-			$("> tbody:first tr:visible:odd",table).removeClass(table.config.widgetZebra.css[0]).addClass(table.config.widgetZebra.css[1]);
+			if(table.config.debug) { var time = new Date(); }
+			$("tr:visible",table.tBodies[0])
+	        .filter(':even')
+	        .removeClass(table.config.widgetZebra.css[1]).addClass(table.config.widgetZebra.css[0])
+	        .end().filter(':odd')
+	        .removeClass(table.config.widgetZebra.css[0]).addClass(table.config.widgetZebra.css[1]);
+			if(table.config.debug) { $.tablesorter.benchmark("Applying Zebra widget", time); }
 		}
 	});
 	

@@ -5,13 +5,14 @@
 	<title>jQuery plugin: Tablesorter 2.0</title>
 	<link rel="stylesheet" href="css/jq.css" type="text/css" media="print, projection, screen" />
 	<link rel="stylesheet" href="../themes/blue/style.css" type="text/css" media="print, projection, screen" />
-	<script type="text/javascript" src="../jquery-1.1.3.js"></script>
-	<script type="text/javascript" src="../jquery.tablesorter.pack.js"></script>
+	<script type="text/javascript" src="../jquery-latest.js"></script>
+	<script type="text/javascript" src="../jquery.tablesorter.min.js"></script>
 	<script type="text/javascript" src="js/chili/chili-1.8b.js"></script>
 	<script type="text/javascript" src="js/docs.js"></script>
 	<script type="text/javascript">
 	$(function() {		
 		$("#tablesorter-demo").tablesorter({sortList:[[0,0],[2,1]], widgets: ['zebra']});
+		$("#options").tablesorter({sortList: [[0,0]], headers: { 3:{sorter: false}, 4:{sorter: false}}});
 	});	
 	</script>
 </head>
@@ -31,7 +32,7 @@
 	</div>
 	<p>
 	  	<strong>Author:</strong> <a class="external" href="http://lovepeacenukes.com">Christian Bach</a><br />
-		<strong>Version:</strong> 2.0<br />
+		<strong>Version:</strong> 2.0.1 (<a href="../changelog">changelog</a>)<br />
 		<strong>Licence:</strong> 
 		Dual licensed under <a class="external" href="http://www.opensource.org/licenses/mit-license.php">MIT</a>
 		or <a class="external" href="http://www.opensource.org/licenses/gpl-license.php">GPL</a> licenses.
@@ -44,10 +45,12 @@
 	<ol>
 		<li><a href="#Introduction">Introduction</a></li>
 		<li><a href="#Demo">Demo</a></li>
-		<li><a href="#Download">Download</a></li>
-		<li><a href="#Examples">Examples</a></li>
 		<li><a href="#Getting-Started">Getting started</a></li>
+		
+		<li><a href="#Examples">Examples</a></li>
+		
 		<li><a href="#Configuration">Configuration</a></li>
+		<li><a href="#Download">Download</a></li>
 		<li><a href="#Compatibility">Compatibility</a></li>
 		<li><a href="#Support">Support</a></li>
 		<li><a href="#Donate">Donate</a></li>
@@ -132,84 +135,11 @@
 	</table>
 	
 	<p class="tip">
-		<em>TIP:</em> Sort multiple columns simultaneously by holding down the shift key and clicking a second, third or even fourth column header!
+		<em>TIP!</em> Sort multiple columns simultaneously by holding down the shift key and clicking a second, third or even fourth column header!
 	</p>	
-
-	<a name="Download"></a>
-	<h1>Download</h1>
-	
-	<p><strong>Full release</strong> - Plugin, Documentation, Add-ons, Themes <a href="../jquery.tablesorter.zip">jquery.tablesorter.zip</a> (202 kb)</p>
 	
 	
-	<p><strong>Pick n choose</strong> - Place at least the required files in a directory on your webserver that is accessible to a web browser.  Record this location.</p>
-	
-	<strong id="Download-Required">Required:</strong>
-	<ul>
-		<li><a class="external" href="http://docs.jquery.com/Downloading_jQuery#Download_jQuery">jQuery</a> (1.1.3 or higher)</li>
-		<li><a href="../jquery.tablesorter.pack.js">jquery.tablesorter.pack.js</a> (7,4kb, <a href="http://dean.edwards.name/packer/" class="external">packed</a> for production)</li>
-	</ul>  
-		
-	<strong id="Download-Addons">Optional/Add-Ons:</strong>
-	<ul>
-		<li><a class="external" href="http://jquery.com/dev/svn/trunk/plugins/metadata/lib/jQuery/metadata.js?format=raw">metadata.js</a> (3,7kb <strong>Required for setting <a href="#Examples">inline options</a></strong>)</li>
-		<li><a class="external" href="http://dev.jquery.com/browser/trunk/plugins/dimensions/jquery.dimensions.pack.js?format=raw">jquery.dimensions.pack.js</a> (5,1kb, <a href="http://dean.edwards.name/packer/" class="external">packed</a>, for production. <strong>Required: for the <a href="example-pager.html">tablesorter pagination plugin</a></strong>)</li>
-		<li><a href="../jquery.tablesorter.js">jquery.tablesorter.js</a> (17,7kb, unpacked for development)</li>
-		<li><a href="../addons/pager/jquery.tablesorter.pager.js">jquery.tablesorter.pager.js</a> (3,6kb, <a href="example-pager.html">tablesorter pagination plugin</a>)</li>
-	</ul>  
-	
-	<strong id="Download-Widgets">Widgets:</strong>
-	<ul>
-		<li><a class="external" href="http://www.jdempster.com/category/code/jquery/tablesortercookiewidget/">Cookie Widget</a>, By <a class="external" href="http://www.jdempster.com/">James Dempster</a></li>
-	</ul> 
-	
-	<strong id="Download-Themes">Themes:</strong>
-	<ul>
-		<li><a href="../themes/green/green.zip">Green Skin</a> - Images and CSS styles for green themed headers</li>
-		<li><a href="../themes/blue/blue.zip">Blue Skin</a> - Images and CSS styles for blue themed headers (as seen in the examples)</li>
-	</ul>  
-	
-
-
-	<a name="Examples"></a>
-    <h1>Examples</h1>
-    <p>	
-		These examples will show what's possible with tablesorter.  You need Javascript enabled to 
-		run these samples, just like you and your users will need Javascript enabled to use tablesorter.
-	</p>
-	
-    <strong>Basic</strong>
-	<ul>
-		<li><a href="example-option-sort-list.html">Set a initial sorting order using options</a></li>
-		<li><a href="example-options-headers.html">Disable header using options</a></li>
-		<li><a href="example-trigger-sort.html">Sort table using a link outside the table</a></li>	
-		<li><a href="example-option-sort-force.html">Force a default sorting order</a></li>
-		<li><a href="example-option-sort-key.html">Change the default multi-sorting key</a></li>
-	
-	</ul>
-	<strong>Metadata - setting inline options</strong>
-	<ul>
-		<li><a href="example-meta-sort-list.html">Set a initial sorting order using metadata</a></li>
-		<li><a href="example-meta-headers.html">Disable header using metadata</a></li>
-		<li><a href="example-meta-parsers.html">Setting column parser using metadata</a></li>
-	</ul>	
-	
-	<strong>Advanced</strong>
-	<ul>
-		<li><a href="example-option-text-extraction.html">Dealing with markup inside cells</a></li>
-		<li><a href="example-ajax.html">Appending table data with ajax</a></li>
-		<li><a href="example-parsers.html">Parser, writing your own</a></li>
-		<li><a href="example-widgets.html">Widgets, writing your own</a></li>
-	</ul>
-	
-	<strong>Companion plugins</strong>
-	<ul>
-		<li><a href="example-pager.html">Pager plugin</a></li>
-	</ul>	
-	
-	
-
-
-	<a name="Getting-Started"></a>
+		<a name="Getting-Started"></a>
 	<h1>Getting started</h1>
 	<p>
 		To use the tablesorter plugin, include the <a class="external" href="http://jquery.com">jQuery</a>
@@ -218,7 +148,7 @@
 	</p>
 	
 <pre class="javascript">
-&lt;script type=&quot;text/javascript&quot; src=&quot;/path/to/jquery-1.1.3.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;/path/to/jquery-latest.js&quot;&gt;&lt;/script&gt;
 &lt;script type=&quot;text/javascript&quot; src=&quot;/path/to/jquery.tablesorter.pack.js&quot;&gt;&lt;/script&gt;
 </pre>
 
@@ -271,8 +201,10 @@
 
 
 	<p>Start by telling tablesorter to sort your table when the document is loaded:</p>
-
-
+	
+	
+	
+	
 	<pre class="javascript">
 $(document).ready(function()
 	{
@@ -280,12 +212,14 @@ $(document).ready(function()
 	}
 );
 	</pre>
-
+	
 	<p>
 		Click on the headers and you'll see that your table is now sortable!  You can 
 		also pass in configuration options when you initialize the table.  This tells
 		tablesorter to sort on the first and second column in ascending order.
 	</p>
+
+
 
 	<pre class="javascript">
 $(document).ready(function()
@@ -294,6 +228,58 @@ $(document).ready(function()
 	}
 );
 	</pre>
+	
+	<p class="tip">
+		<em>NOTE!</em> tablesorter will auto-detect most data types including numbers, dates, ip-adresses for more information see <a href="#Examples">Examples</a>
+	</p>
+	
+	
+	
+
+
+	<a name="Examples"></a>
+    <h1>Examples</h1>
+    <p>	
+		These examples will show what's possible with tablesorter.  You need Javascript enabled to 
+		run these samples, just like you and your users will need Javascript enabled to use tablesorter.
+	</p>
+	
+    <strong>Basic</strong>
+	<ul>
+		<li><a href="example-option-sort-list.html">Set a initial sorting order using options</a></li>
+		<li><a href="example-options-headers.html">Disable header using options</a></li>
+		<li><a href="example-trigger-sort.html">Sort table using a link outside the table</a></li>	
+		<li><a href="example-option-sort-force.html">Force a default sorting order</a></li>
+		<li><a href="example-option-sort-key.html">Change the default multi-sorting key</a></li>
+		
+	
+	</ul>
+	<strong>Metadata - setting inline options</strong>
+	<ul>
+		<li><a href="example-meta-sort-list.html">Set a initial sorting order using metadata</a></li>
+		<li><a href="example-meta-headers.html">Disable header using metadata</a></li>
+		<li><a href="example-meta-parsers.html">Setting column parser using metadata</a></li>
+	</ul>	
+	
+	<strong>Advanced</strong>
+	<ul>		
+		<li><a href="example-ajax.html">Appending table data with ajax</a></li>
+		<li><a href="example-option-text-extraction.html">Dealing with markup inside cells</a></li>
+		<li><a href="example-option-text-extraction.html">Extending default options</a></li>
+		<li><a href="example-option-debug.html">Enableing debug mode</a></li>
+		<li><a href="example-parsers.html">Parser, writing your own</a></li>
+		<li><a href="example-widgets.html">Widgets, writing your own</a></li>
+	</ul>
+	
+	<strong>Companion plugins</strong>
+	<ul>
+		<li><a href="example-pager.html">Pager plugin</a></li>
+	</ul>	
+	
+	
+
+	
+
 
 	<a name="Configuration"></a>
 	<h1>Configuration</h1>
@@ -394,6 +380,7 @@ $(document).ready(function()
         <td>Boolean</td>
         <td>true</td>
         <td>Indicates if tablesorter should disable selection of text in the table header (TH).  Makes header behave more like a button.</td>
+		<td></td>
       </tr>
       <tr>
         <td>cssHeader</td>
@@ -413,6 +400,7 @@ th.header {
 }
 </pre>        	
         </td>
+		<td></td>
       </tr>
       <tr>
         <td>cssAsc</td>
@@ -426,6 +414,7 @@ th.headerSortUp {
 }
 </pre>
        </td>
+	   <td></td>
       </tr>
       <tr>
         <td>cssDesc</td>
@@ -439,9 +428,57 @@ th.headerSortDown {
 }
 </pre>
        </td>
+	   <td></td>
+      </tr>
+	  <tr>
+        <td>debug</td>
+        <td>Boolean</td>
+        <td>false</td>
+        <td>
+        	Boolean flag indicating if tablesorter should display debuging information usefull for development.
+       </td>
+	   <td></td>
       </tr>
     </tbody>
   </table>
+	
+	
+	
+<a name="Download"></a>
+	<h1>Download</h1>
+	
+	<p><strong>Full release</strong> - Plugin, Documentation, Add-ons, Themes <a href="../jquery.tablesorter.zip">jquery.tablesorter.zip</a> (202 kb)</p>
+	
+	
+	<p><strong>Pick n choose</strong> - Place at least the required files in a directory on your webserver that is accessible to a web browser.  Record this location.</p>
+	
+	<strong id="Download-Required">Required:</strong>
+	<ul>
+		<li><a class="external" href="http://docs.jquery.com/Downloading_jQuery#Download_jQuery">jQuery</a> (1.2.1 or higher)</li>
+		<li><a href="../jquery.tablesorter.min.js">jquery.tablesorter.min.js</a> (12kb, Minified for production)</li>
+		<li><a href="../jquery.tablesorter.pack.js">jquery.tablesorter.pack.js</a> (7,4kb, <a href="http://dean.edwards.name/packer/" class="external">packed</a> for production)</li>
+	</ul>  
+		
+	<strong id="Download-Addons">Optional/Add-Ons:</strong>
+	<ul>
+		<li><a class="external" href="http://jquery.com/dev/svn/trunk/plugins/metadata/lib/jQuery/metadata.js?format=raw">metadata.js</a> (3,7kb <strong>Required for setting <a href="#Examples">inline options</a></strong>)</li>
+		<!--
+		<li><a class="external" href="http://dev.jquery.com/browser/trunk/plugins/dimensions/jquery.dimensions.pack.js?format=raw">jquery.dimensions.pack.js</a> (5,1kb, <a href="http://dean.edwards.name/packer/" class="external">packed</a>, for production. <strong>Required: for the <a href="example-pager.html">tablesorter pagination plugin</a></strong>)</li>
+		-->
+		<li><a href="../jquery.tablesorter.js">jquery.tablesorter.js</a> (17,7kb, unpacked for development)</li>
+		<li><a href="../addons/pager/jquery.tablesorter.pager.js">jquery.tablesorter.pager.js</a> (3,6kb, <a href="example-pager.html">tablesorter pagination plugin</a>)</li>
+	</ul>  
+	
+	<strong id="Download-Widgets">Widgets:</strong>
+	<ul>
+		<li><a class="external" href="http://www.jdempster.com/category/code/jquery/tablesortercookiewidget/">Cookie Widget</a>, By <a class="external" href="http://www.jdempster.com/">James Dempster</a></li>
+	</ul> 
+	
+	<strong id="Download-Themes">Themes:</strong>
+	<ul>
+		<li><a href="../themes/green/green.zip">Green Skin</a> - Images and CSS styles for green themed headers</li>
+		<li><a href="../themes/blue/blue.zip">Blue Skin</a> - Images and CSS styles for blue themed headers (as seen in the examples)</li>
+	</ul>  	
 
   <a name="Compatibility"></a>
   <h1>Browser Compatibility</h1>
