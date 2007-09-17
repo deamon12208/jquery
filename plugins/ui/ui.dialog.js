@@ -62,7 +62,7 @@
 		    uiDialog.resizable();
 		}
 
-		uiDialogContainer.prepend('<div class="ui-dialog-titlebar"/></div>');
+		uiDialogContainer.prepend('<div class="ui-dialog-titlebar"></div>');
 		var uiDialogTitlebar = $('.ui-dialog-titlebar', uiDialogContainer);
 		var title = (options.title) ? options.title : (uiDialogContent.attr('title')) ? uiDialogContent.attr('title') : '';
 		uiDialogTitlebar.append('<span class="ui-dialog-title">' + title + '</span>');
