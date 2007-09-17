@@ -70,7 +70,9 @@
  *
  * @option Boolean cancelSelection (optional) 	Boolean flag indicating if tablesorter should cancel selection of the table headers text.
  * 												Default value: true
- * 
+ *
+ * @option Boolean debug (optional) 			Boolean flag indicating if tablesorter should display debuging information usefull for development.
+ *
  * @type jQuery
  *
  * @name tablesorter
@@ -210,17 +212,18 @@
 								
 				var t = "";
 				
-				
-				if(typeof(config.textExtraction) == "function") {
-					t = config.textExtraction(node);
-				} else if(config.textExtraction == "complex") { 
-					t = $(node).text();
-				} else {
+				if(config.textExtraction == "simple") {
 					if(node.childNodes[0] && node.childNodes[0].hasChildNodes()) {
 						t = node.childNodes[0].innerHTML;
 					} else {
 						t = node.innerHTML;
 					}
+				} else {
+					if(typeof(config.textExtraction) == "function") {
+						t = config.textExtraction(node);
+					} else { 
+						t = $(node).text();
+					}	
 				}
 				return t;
 			}
@@ -234,9 +237,12 @@
 					n= c.normalized, 
 					totalRows = n.length, 
 					checkCell = (n[0].length-1), 
-					tableBody = $("tbody:first",table).empty();
+					tableBody = $("tbody:first",table);
 					rows = [];
 				
+				// clear the table body
+				tableBody[0].innerHTML = "";
+								
 				for (var i=0;i < totalRows; i++) {
 					 	rows.push(r[n[i][checkCell]]);
 						if(table.config.appender == null) {
@@ -455,9 +461,6 @@
 			this.construct = function(settings) {
 
 				return this.each(function() {
-					
-					
-					
 					
 					var $this, $document,$headers, cache, config, shiftDown = 0, sortOrder;
 					
@@ -727,7 +730,7 @@
 		},
 		type: "numeric"
 	});
-	
+		
 	$.tablesorter.addParser({
 		id: "percent",
 		is: function(s) {
@@ -738,40 +741,40 @@
 		},
 		type: "numeric"
 	});
-	
+
 	$.tablesorter.addParser({
 		id: "usLongDate",
 		is: function(s) {
-			return /^[A-Za-z]{3,10}\.? [0-9]{1,2}, ([0-9]{4}|\'?[0-9]{2}) (([0-2]?[0-9]:[0-5][0-9])|([0-1]?[0-9]:[0-5][0-9]\s(AM|PM)))$/.test(s);
+			return s.match(new RegExp(/^[A-Za-z]{3,10}\.? [0-9]{1,2}, ([0-9]{4}|'?[0-9]{2}) (([0-2]?[0-9]:[0-5][0-9])|([0-1]?[0-9]:[0-5][0-9]\s(AM|PM)))$/));
 		},
 		format: function(s) {
 			return $.tablesorter.formatFloat(new Date(s).getTime());
 		},
 		type: "numeric"
 	});
-	
+
 	$.tablesorter.addParser({
 		id: "shortDate",
 		is: function(s) {
-			return /\d{1,2}[\/-]\d{1,2}[\/-]\d{2,4}/.test(s);
+			return /\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}/.test(s);
 		},
 		format: function(s,table) {
 			var c = table.config;
-			s = s.replace(new RegExp(/-/g),"/");
+			s = s.replace(/\-/g,"/");
 			if(c.dateFormat == "us") {
-				/** reformat the string in ISO format */
-				s = s.replace(new RegExp(/(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})/), "$3/$1/$2");
+				// reformat the string in ISO format
+				s = s.replace(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/, "$3/$1/$2");
 			} else if(c.dateFormat == "uk") {
-				/** reformat the string in ISO format */
-				s = s.replace(new RegExp(/(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})/), "$3/$2/$1");
+				//reformat the string in ISO format
+				s = s.replace(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/, "$3/$2/$1");
 			} else if(c.dateFormat == "dd/mm/yy" || c.dateFormat == "dd-mm-yy") {
-				s = s.replace(new RegExp(/(\d{1,2})[\/-](\d{1,2})[\/-](\d{2})/), "$1/$2/$3");	
+				s = s.replace(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2})/, "$1/$2/$3");	
 			}
 			return $.tablesorter.formatFloat(new Date(s).getTime());
 		},
 		type: "numeric"
 	});
-	
+
 	$.tablesorter.addParser({
 	    id: "time",
 	    is: function(s) {
@@ -800,8 +803,8 @@
 	$.tablesorter.addWidget({
 		id: "zebra",
 		format: function(table) {
-			$("> tbody:first/tr:visible:even",table).removeClass(table.config.widgetZebra.css[1]).addClass(table.config.widgetZebra.css[0]);
-			$("> tbody:first/tr:visible:odd",table).removeClass(table.config.widgetZebra.css[0]).addClass(table.config.widgetZebra.css[1]);
+			$("> tbody:first tr:visible:even",table).removeClass(table.config.widgetZebra.css[1]).addClass(table.config.widgetZebra.css[0]);
+			$("> tbody:first tr:visible:odd",table).removeClass(table.config.widgetZebra.css[0]).addClass(table.config.widgetZebra.css[1]);
 		}
 	});
 	
