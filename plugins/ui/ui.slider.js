@@ -283,10 +283,10 @@
 			$(this.interaction.element).css(prop, m+'px');
 			
 			if(!changeslide && this.interaction.pickValue != this.interaction.curValue && !p)
-				$(this.element).triggerHandler("slidechange", [e, this.prepareCallbackObj(this.interaction)], o.change);
+				$(this.element).triggerHandler("slidechange", [null, this.prepareCallbackObj(this.interaction)], o.change);
 			
 			if(changeslide)
-				$(this.element).triggerHandler("slide", [e, this.prepareCallbackObj(this.interaction)], o.slide);
+				$(this.element).triggerHandler("slide", [null, this.prepareCallbackObj(this.interaction)], o.slide);
 
 		}
 	});
