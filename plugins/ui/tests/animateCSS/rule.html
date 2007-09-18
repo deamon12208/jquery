@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Resizables Test Page</title>
+<script type="text/javascript" src="../../../../jquery/src/core.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/selector.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/event.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/ajax.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/fx.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/offset.js"></script>
+<script type="text/javascript" src="../../../../dimensions/jquery.dimensions.js"></script>
+
+<script type="text/javascript">
+
+function getStyleRule(rule) {
+	var rs = document.styleSheets[1].cssRules || document.styleSheets[1].rules;
+	for(var i=0;i<rs.length;i++) {
+		if(rs[i].selectorText.toLowerCase() == rule.toLowerCase()) return rs[i];	
+	}
+	return null;
+}
+
+
+function $R(rule) {
+	if(this == window) return new $R(rule);
+	this.rule = this.getRule(rule);
+}
+$.extend($R.prototype, {
+	animate: function(options, speed, callback) {
+		
+		var start = (new Date()).getTime(), self = this, props = {};
+		for(var i in options) { props[i] =(parseInt(this.rule.style[i])); }
+		
+		this.interval = window.setInterval(function() {
+			
+			var cur = (new Date()).getTime();	
+
+			for(var i in props) {
+				self.rule.style[i] = (props[i] + (((cur-start)/speed) * (options[i]-props[i])))+"px";
+			}
+			
+			if(cur >= start+speed) clearInterval(self.interval);
+		
+		},13);
+	},
+	getRule: function(rule) {
+
+		for(var i=0;i<document.styleSheets.length;i++) {
+			var rs = document.styleSheets[i].cssRules || document.styleSheets[i].rules;
+			for(var j=0;j<rs.length;j++) {
+				if(rs[j].selectorText.toLowerCase() == rule.toLowerCase()) return rs[j];	
+			}			
+		}
+
+		return null;		
+	},
+	setRule: function() {
+		
+	}
+});
+
+$(document).ready(function() {
+	$R(".demo").animate({ height: 50 }, 1000);
+});
+
+</script>
+
+
+<style type="text/css">
+.demo {
+	border: 1px solid black;
+	height: 20px;
+	width: 20px;
+	background: green;
+	float: left;
+	margin: 5px;	
+}
+</style>
+</head>
+<body>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+	<div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div><div class="demo"></div>
+</body>
+</html>
