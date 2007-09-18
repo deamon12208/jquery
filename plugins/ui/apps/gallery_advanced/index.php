@@ -45,11 +45,12 @@ body { background: #000; margin: 0; padding: 5px; font-family: Lucida Sans, Aria
 /* Inner container definitions */
 div.gallery div.left { background-image: url(images/left.png); width: 185px; height: 565px; position: absolute; top: 25px; left: 25px; overflow-y: auto; overflow-x: hidden; }
 div.gallery div.bottom { height: 50px; left: 220px; right: 25px; position: absolute; bottom: 25px;}
-div.gallery div.right { position: absolute; top: 25px; right: 25px; bottom: 80px; padding-bottom: 20px; left: 220px; overflow: auto; border: 1px solid #777; border-bottom: 0; border-right: 0; }
+div.gallery div.right { position: absolute; top: 25px; right: 25px; bottom: 80px; padding-bottom: 20px; left: 220px; overflow: auto; }
 
-div.gallery div.overlay { display: none; background: #000; position: absolute; top: 25px; right: 25px; bottom: 25px; padding-bottom: 20px; left: 220px; overflow: auto; z-index: 20; text-align: center; border: 1px solid #777; border-bottom: 0; border-right: 0; }
+div.gallery div.overlay { display: none; background: #000; position: absolute; top: 25px; right: 25px; bottom: 25px; padding-bottom: 20px; left: 220px; overflow: auto; z-index: 20; text-align: center; }
 div.gallery div.overlay img { cursor: pointer; cursor: hand; border: 1px solid #fff; padding: 5px; background-color: #666; position: absolute; }
 div.gallery div.overlay img:hover { border: 1px solid #fff; background-color: #fff; }
+div.gallery div.overlay div.head { position: absolute; z-index: 20; background: #333; top: 0px; right: 0px; padding: 5px; color: #ddd; cursor: hand; cursor: pointer; }
 
 /* Styling the left hand navigation */
 div.gallery ul.menue { list-style-type: none; margin: 0; padding: 0; }

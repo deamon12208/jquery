@@ -16,6 +16,9 @@ var overlay = {
 		overlay.container.empty().css("opacity", 0.01).show();
 		var cw = overlay.container[0].offsetWidth, ch = overlay.container[0].offsetHeight;
 		
+		//Append header
+		$("<div class='head'>go back</div>").bind("click", function() { overlay.container.hide(); }).appendTo(overlay.container);
+		
 		//Determine next/prev pictures
 		var next = ($(cur).next().not(".bigthumb").length) ? $(cur).next()[0]: false;
 		var prev = ($(cur).prev().not(".bigthumb").length) ? $(cur).prev()[0]: false;
@@ -43,12 +46,14 @@ var overlay = {
 		if(!next) img_right.css("visibility", "hidden"); else img_right[0].src = next.getAttribute('path'); //Hide this one if it's only a filler, otherwise lazy load the pic
 		
 		//This is the transition from thumb to coverflow view
+		var pos = $(cur).position();
+		pos.top = pos.top + $(cur).parent()[0].scrollTop;
 		var cur_clone = $(cur)
 			.clone()
 			.appendTo($(cur).parent())
-			.css($(cur).position())
+			.css(pos)
 			.css({ position: "absolute", opacity: 1, visibility: "visible", padding: "5px", marginLeft: "0", marginTop: "0" })
-			.animate({ top: (ch / 2) - ( $(img)[0].offsetHeight / 2 ), left: pos_x, width: img.width(), height: img.height() }, 500, function() {
+			.animate({ top: (ch / 2) + $(cur).parent()[0].scrollTop - ( $(img)[0].offsetHeight / 2 ), left: pos_x, width: img.width(), height: img.height() }, 500, function() {
 				overlay.container.animate({ opacity: 1 },500, function() {
 					$("img.clone").remove();
 					$("img.thumb").css("visibility", "visible");
@@ -212,6 +217,7 @@ $(document).ready(function(){
 			$(this).addClass("hover");
 			
 			var offset = $(this).position();
+			offset.top = offset.top + this.parentNode.scrollTop;
 			var node = $(this).clone()
 				.addClass("bigthumb")
 				.css({ left: offset.left, top: offset.top, position: "absolute", zIndex: 4 })
@@ -219,17 +225,18 @@ $(document).ready(function(){
 			
 			var modifier = 1.3;
 			var animation = { height: this.offsetHeight*modifier, width: this.offsetWidth*modifier };
+			var owidth = (this.offsetWidth+10);
 			
-			if((offset.left- (this.offsetWidth*(modifier-1))/2) > 0)
-				animation.left = offset.left - (this.offsetWidth*(modifier-1))/2;
+			if((offset.left- (owidth*(modifier-1))/2) > 0)
+				animation.left = offset.left - (owidth*(modifier-1))/2;
 			
-			if((offset.left- (this.offsetWidth*(modifier-1))/2 + this.offsetWidth*modifier) > this.parentNode.offsetWidth)
-				animation.left = offset.left - (this.offsetWidth*(modifier-1));
+			if((offset.left- (owidth*(modifier-1))/2 + owidth*modifier) > this.parentNode.offsetWidth)
+				animation.left = offset.left - (owidth*(modifier-1));
 			
 			if((offset.top- (this.offsetHeight*(modifier-1))/2) > 0)
 				animation.top = offset.top - (this.offsetHeight*(modifier-1))/2;
 			
-			if((offset.top- (this.offsetHeight*(modifier-1))/2 + this.offsetHeight*modifier) > this.parentNode.offsetHeight)
+			if((offset.top- (this.offsetHeight*(modifier-1))/2 + this.offsetHeight*modifier) > this.parentNode.scrollHeight)
 				animation.top = offset.top - (this.offsetHeight*(modifier-1));
 			
 			node.animate(animation, 500); //Let's use a very fast animation here
