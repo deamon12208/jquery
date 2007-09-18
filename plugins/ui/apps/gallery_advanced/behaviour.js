@@ -1,3 +1,109 @@
+$(document).ready(function(){
+
+	overlay.container = $("div.gallery div.overlay");
+
+	//Flipping images in albums
+	$("div.thumb").bind("mousemove", function(e) {
+	
+		if(!this.offset) this.offset = $(this).offset({ border: false });
+		
+		//Determine mouse position and stripe length
+		var p = e.clientX-this.offset.left;
+		if(p == 0) return; else p--;
+		var length = (this.getAttribute("stripelength"));
+		
+		//Change background position
+		var left = Math.floor((p/80) * length) * 80;
+		$(this).css("background-position", (-left)+"px 0px");
+	
+	});
+
+	//Click event for overlay
+	$('div.gallery div.overlay').bind("click", function(e) {
+		if(e.target.nodeName.toLowerCase() != "img") { $(this).hide(); return;}
+		if(e.target.className == "next") overlay.next();
+		if(e.target.className == "prev") overlay.prev();
+	});
+	
+	$('div.gallery div.right img')
+		.bind("click", function() {
+			overlay.prepare(this); //Fill the overlay and bind events
+		})
+		.hover(function() {
+			
+			$(this).addClass("hover");
+			
+			var offset = $(this).position();
+			offset.top = offset.top + this.parentNode.scrollTop;
+			var node = $(this).clone()
+				.addClass("bigthumb")
+				.css({ left: offset.left, top: offset.top, position: "absolute", zIndex: 4 })
+				.appendTo(this.parentNode);
+			
+			var modifier = 1.3;
+			var animation = { height: this.offsetHeight*modifier, width: this.offsetWidth*modifier };
+			var owidth = (this.offsetWidth+10);
+			
+			if((offset.left- (owidth*(modifier-1))/2) > 0)
+				animation.left = offset.left - (owidth*(modifier-1))/2;
+			
+			if((offset.left- (owidth*(modifier-1))/2 + owidth*modifier) > this.parentNode.offsetWidth)
+				animation.left = offset.left - (owidth*(modifier-1));
+			
+			if((offset.top- (this.offsetHeight*(modifier-1))/2) > 0)
+				animation.top = offset.top - (this.offsetHeight*(modifier-1))/2;
+			
+			if((offset.top- (this.offsetHeight*(modifier-1))/2 + this.offsetHeight*modifier) > this.parentNode.scrollHeight)
+				animation.top = offset.top - (this.offsetHeight*(modifier-1));
+			
+			node.animate(animation, 500); //Let's use a very fast animation here
+			$(this).css("opacity", 0);
+			
+		}, function() {
+			$(this).removeClass("hover");
+			$("img.bigthumb").remove();
+			$(this).css("opacity", 1);
+		})
+		.draggable({
+			appendTo: "body",
+			helper: function() { return $("<div class='draggable'></div>").append($(this).clone().css("opacity", 1))[0]; },
+			cursorAt: { top: 10, left: 10 },
+			opacity: 0.8
+		});
+	
+	
+	//Make albums pseudo-droppable
+	$("ul.items a").droppable({
+		accept: ".thumb",
+		tolerance: "pointer",
+		hoverClass: "over"
+	});
+
+	//Slider for thumbnails
+	var slider = new $.ui.slider($('div.gallery div.slider')[0], { maxValue: 240, startValue: 70, slide: function(e,ui) {
+		var rule = getStyleRule("div.gallery div.right img.thumb");
+		rule.style.width = (30+ui.value)+"px";
+		rule.style.height = ((30+ui.value)*0.75)+"px";
+	}});
+	
+	//Slider supports mousewheel, too!
+	$("div.gallery div.slider").mousewheel(function(event, delta) {
+		var rule = getStyleRule("div.gallery div.right img.thumb");
+		if (delta > 0)
+			slider.moveTo(slider.interaction.curValue+10,null,true);
+		else if (delta < 0)
+			slider.moveTo(slider.interaction.curValue-10,null,true);
+	});
+	
+	//Show first album
+	$("div.right:first").show();
+	lastContainer = $("div.right:first")[0];
+	
+	//Fix pngs
+	$('#logo, div.handle').ifixpng();
+
+});
+
 
 function getStyleRule(rule) {
 	var rs = document.styleSheets[1].cssRules || document.styleSheets[1].rules;
@@ -5,6 +111,14 @@ function getStyleRule(rule) {
 		if(rs[i].selectorText.toLowerCase() == rule.toLowerCase()) return rs[i];	
 	}
 	return null;
+}
+
+var lastContainer = null;
+function showContainer(c,e) {
+	overlay.container.hide();
+	$(lastContainer).fadeOut(300);
+	$(c).fadeIn(300); lastContainer = c;
+	$("#heading").html(e);
 }
 
 var overlay = {
@@ -158,153 +272,3 @@ var overlay = {
 	
 	}	
 }
-
-
-var lastContainer = null;
-function showContainer(c,e) {
-	
-	overlay.container.hide();
-	$(lastContainer).fadeOut(300);
-	$(c).fadeIn(300); lastContainer = c;
-	
-	$("#heading").html(e);
-	
-}
-
-
-
-$(document).ready(function(){
-
-
-	overlay.container = $("div.gallery div.overlay");
-
-	$("div.thumb").bind("mousemove", function(e) {
-	
-		if(!this.offset) this.offset = $(this).offset({ border: false });
-		
-		//Determine mouse position and stripe length
-		var p = e.clientX-this.offset.left;
-		if(p == 0) return; else p--;
-		var length = (this.getAttribute("stripelength"));
-		
-		//Change background position
-		var left = Math.floor((p/80) * length) * 80;
-		$(this).css("background-position", (-left)+"px 0px");
-	
-	});
-
-
-
-
-	 
-	$('div.gallery div.overlay').bind("click", function(e) {
-		
-		if(e.target.nodeName.toLowerCase() != "img") {
-			$(this).hide(); return;
-		}
-		
-		if(e.target.className == "next") overlay.next();
-		if(e.target.className == "prev") overlay.prev();
-		
-	});
-	
-	$('div.gallery div.right img')
-		.bind("click", function() {
-			overlay.prepare(this); //Fill the overlay and bind events
-		})
-		.hover(function() {
-			
-			$(this).addClass("hover");
-			
-			var offset = $(this).position();
-			offset.top = offset.top + this.parentNode.scrollTop;
-			var node = $(this).clone()
-				.addClass("bigthumb")
-				.css({ left: offset.left, top: offset.top, position: "absolute", zIndex: 4 })
-				.appendTo(this.parentNode);
-			
-			var modifier = 1.3;
-			var animation = { height: this.offsetHeight*modifier, width: this.offsetWidth*modifier };
-			var owidth = (this.offsetWidth+10);
-			
-			if((offset.left- (owidth*(modifier-1))/2) > 0)
-				animation.left = offset.left - (owidth*(modifier-1))/2;
-			
-			if((offset.left- (owidth*(modifier-1))/2 + owidth*modifier) > this.parentNode.offsetWidth)
-				animation.left = offset.left - (owidth*(modifier-1));
-			
-			if((offset.top- (this.offsetHeight*(modifier-1))/2) > 0)
-				animation.top = offset.top - (this.offsetHeight*(modifier-1))/2;
-			
-			if((offset.top- (this.offsetHeight*(modifier-1))/2 + this.offsetHeight*modifier) > this.parentNode.scrollHeight)
-				animation.top = offset.top - (this.offsetHeight*(modifier-1));
-			
-			node.animate(animation, 500); //Let's use a very fast animation here
-			$(this).css("opacity", 0);
-			
-		}, function() {
-			$(this).removeClass("hover");
-			$("img.bigthumb").remove();
-			$(this).css("opacity", 1);
-		})
-
-	/*
-	 * Draggables
-	 */	
-		.draggable({
-			appendTo: "body",
-			helper: function() { return $("<div class='draggable'></div>").append($(this).clone().css("opacity", 1))[0]; },
-			cursorAt: { top: 10, left: 10 },
-			opacity: 0.8
-		});
-	
-		
-		
-	/*
-	 * Droppables
-	 */
-	var timeout = null;
-	$("ul.menue a.head").droppable({
-		accept: ".thumb",
-		tolerance: "pointer",
-		hoverClass: "over",
-		over: function() {
-			var self = this;
-			timeout = setTimeout(function() { window.setTimeout(function() { $.ui.ddmanager.prepareOffsets(); },600); $("ul.menue").activate(self); }, 500);
-		},
-		out: function() {
-			if(timeout) clearTimeout(timeout);
-		}
-	});
-	
-	$("ul.menue ul a").droppable({
-		accept: ".thumb",
-		tolerance: "pointer",
-		hoverClass: "over"
-	});
-
-	/*
-	 * Slider
-	 */
-	var slider = new $.ui.slider($('div.gallery div.slider')[0], { maxValue: 240, startValue: 70, slide: function(e,ui) {
-		var rule = getStyleRule("div.gallery div.right img.thumb");
-		rule.style.width = (30+ui.value)+"px";
-		rule.style.height = ((30+ui.value)*0.75)+"px";
-	}});
-		
-	$("div.gallery div.slider").mousewheel(function(event, delta) {
-		
-		var rule = getStyleRule("div.gallery div.right img.thumb");
-
-		if (delta > 0)
-			slider.goto(slider.interaction.curValue+10,null,true);
-		else if (delta < 0)
-			slider.goto(slider.interaction.curValue-10,null,true);
-	});
-	
-	//Show first album
-	$("div.right:first").show();
-	lastContainer = $("div.right:first")[0];
-
-
-});
