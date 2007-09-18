@@ -183,8 +183,9 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 					
 				//Let's see if the position in DOM has changed
 				if($(self.element).prev()[0] != that.firstSibling) {
-					//$(self.element).triggerHandler("sortupdate", [e, that.prepareCallbackObj(self, that)], o.update);
-				}				
+					$(self.element).triggerHandler("sortupdate", [e, that.prepareCallbackObj(self, that)], o.update);
+				}
+				$(self.element).triggerHandler("sortstop", [e, that.prepareCallbackObj(self, that)], o.stop);				
 
 			}
 			
