@@ -656,10 +656,10 @@
 	ts.addParser({
 		id: "integer",
 		is: function(s) {
-			return s.match(new RegExp(/^\d+$/));
+			return /^\d+$/.test(s);
 		},
 		format: function(s) {
-			return $.tablesorter.formatInt(s);
+			return $.tablesorter.formatFloat(s);
 		},
 		type: "numeric"
 	});
@@ -671,17 +671,6 @@
 		},
 		format: function(s) {
 			return $.tablesorter.formatFloat(s.replace(new RegExp(/[^0-9.]/g),""));
-		},
-		type: "numeric"
-	});
-	
-	ts.addParser({
-		id: "integer",
-		is: function(s) {
-			return /^\d+$/.test(s);
-		},
-		format: function(s) {
-			return $.tablesorter.formatFloat(s);
 		},
 		type: "numeric"
 	});
@@ -811,7 +800,6 @@
 	// add default widgets
 	ts.addWidget({
 		id: "zebra",
-		apply: 'after',
 		format: function(table) {
 			if(table.config.debug) { var time = new Date(); }
 			$("tr:visible",table.tBodies[0])
