@@ -128,11 +128,11 @@ var overlay = {
 	prepare: function(cur) {
 
 		overlay.container.empty().css("opacity", 0.01).show();
-		var cw = overlay.container[0].offsetWidth, ch = overlay.container[0].offsetHeight;
-		
+		var cw = 729, ch = 545;
+	
 		//Append header
 		$("<div class='head'>go back</div>").bind("click", function() { overlay.container.hide(); }).appendTo(overlay.container);
-		
+	
 		//Determine next/prev pictures
 		var next = ($(cur).next().not(".bigthumb").length) ? $(cur).next()[0]: false;
 		var prev = ($(cur).prev().not(".bigthumb").length) ? $(cur).prev()[0]: false;
@@ -142,26 +142,28 @@ var overlay = {
 		
 		//We cannot display it at full width and height
 		$(img).css("width", cw - 220);
+
 		overlay.width = cw - 220;
 		overlay.height = $(img).height();
-		
+	
 		//Position the picture in the middle
 		var pos_x = (cw / 2) - ( $(img)[0].offsetWidth / 2 );
 		$(img).css({ left: pos_x, top: (ch / 2) - ( $(img)[0].offsetHeight / 2 ) });
-		
+
 		//Create the left hand image
 		var img_left = $("<img class='prev' path='"+(prev ? prev.getAttribute('path') : cur.getAttribute('path'))+"' src='"+(prev ? prev.src : cur.src)+"' style='width: 50px;' />").appendTo(overlay.container);
 		img_left.css({ left: (pos_x / 2) - ( 50 / 2 ), top: (ch / 2) - ( img_left[0].offsetHeight / 2 ) });
 		if(!prev) img_left.css("visibility", "hidden"); else img_left[0].src = prev.getAttribute('path'); //Hide this one if it's only a filler, otherwise lazy load the pic
-	
+
 		//Create the right hand image
 		var img_right = $("<img class='next' path='"+(next ? next.getAttribute('path') : cur.getAttribute('path'))+"' src='"+(next ? next.src : cur.src)+"' style='width: 50px;' />").appendTo(overlay.container);
 		$(img_right).css({ left: (pos_x+$(img)[0].offsetWidth) + (pos_x / 2) - ( 50 / 2 ), top: (ch / 2) - ( $(img_right)[0].offsetHeight / 2 ) });
 		if(!next) img_right.css("visibility", "hidden"); else img_right[0].src = next.getAttribute('path'); //Hide this one if it's only a filler, otherwise lazy load the pic
-		
+	
 		//This is the transition from thumb to coverflow view
 		var pos = $(cur).position();
 		pos.top = pos.top + $(cur).parent()[0].scrollTop;
+
 		var cur_clone = $(cur)
 			.clone()
 			.appendTo($(cur).parent())
