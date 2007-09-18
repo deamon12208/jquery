@@ -108,15 +108,12 @@
 				debug: false
 			};
 			
-			
-			this.benchmark = function(s,d) {
-				benchmark(s,d);
-			};
-			
 			/* debuging utils */
 			function benchmark(s,d) {
 				log(s + "," + (new Date().getTime() - d.getTime()) + "ms");
 			}
+			
+			this.benchmark = benchmark;
 			
 			function log(s) {
 				if (typeof console != "undefined" && typeof console.debug != "undefined") {
@@ -249,12 +246,10 @@
 				table.tBodies[0].rows.innerHTML = "";
 								
 				for (var i=0;i < totalRows; i++) {
-					 	rows.push(r[n[i][checkCell]]);
-						
-						
-						if(table.config.appender == null) {
-							tableBody.append(r[n[i][checkCell]]);
-						}
+					rows.push(r[n[i][checkCell]]);	
+					if(table.config.appender == null) {
+						tableBody.append(r[n[i][checkCell]]);
+					}
 				}	
 
 				if(table.config.appender != null) {
@@ -263,10 +258,12 @@
 				
 				rows = null;
 				
+				if(table.config.debug) { benchmark("Rebuilt table:", appendTime); }
+								
 				//apply table widgets
 				applyWidget(table);
 				
-				if(table.config.debug) { benchmark("Rebuilt table:", appendTime); }
+
 			
 			};
 			
@@ -511,8 +508,6 @@
 							// get current column sort order
 							this.order = this.count++ % 2;
 							
-							
-							
 							// user only whants to sort on one column
 							if(!e[config.sortMultiSortKey]) {
 								
@@ -575,8 +570,10 @@
 						
 					}).bind("sorton",function(e,list) {
 						
+						config.sortList = list
+						
 						// update and store the sortlist
-						var sortList = config.sortList = list;
+						var sortList = config.sortList;
 						
 						// update header count index
 						updateHeaderSortCount(this,sortList);
@@ -642,8 +639,10 @@
         tablesorter: $.tablesorter.construct
 	});
 	
+	var ts = $.tablesorter;
+	
 	// add default parsers
-	$.tablesorter.addParser({
+	ts.addParser({
 		id: "text",
 		is: function(s) {
 			return true;
@@ -654,7 +653,7 @@
 		type: "text"
 	});
 	
-	$.tablesorter.addParser({
+	ts.addParser({
 		id: "integer",
 		is: function(s) {
 			return s.match(new RegExp(/^\d+$/));
@@ -665,7 +664,7 @@
 		type: "numeric"
 	});
 	
-	$.tablesorter.addParser({
+	ts.addParser({
 		id: "currency",
 		is: function(s) {
 			return /^[£$€?.]/.test(s);
@@ -676,7 +675,7 @@
 		type: "numeric"
 	});
 	
-	$.tablesorter.addParser({
+	ts.addParser({
 		id: "integer",
 		is: function(s) {
 			return /^\d+$/.test(s);
@@ -687,7 +686,7 @@
 		type: "numeric"
 	});
 	
-	$.tablesorter.addParser({
+	ts.addParser({
 		id: "floating",
 		is: function(s) {
 			return s.match(new RegExp(/^(\+|-)?[0-9]+\.[0-9]+((E|e)(\+|-)?[0-9]+)?$/));
@@ -698,7 +697,7 @@
 		type: "numeric"
 	});
 	
-	$.tablesorter.addParser({
+	ts.addParser({
 		id: "ipAddress",
 		is: function(s) {
 			return /^\d{2,3}[\.]\d{2,3}[\.]\d{2,3}[\.]\d{2,3}$/.test(s);
@@ -706,19 +705,20 @@
 		format: function(s) {
 			var a = s.split(".");
 			var r = "";
-			for (var i = 0, item; item = a[i]; i++) {
-			   if(item.length == 2) {
+			for(var i = 0; i < item.length; i++) {
+				var item = a[i];
+			   	if(item.length == 2) {
 					r += "0" + item;
-			   } else {
+			   	} else {
 					r += item;
-			   }
+			   	}
 			}
 			return $.tablesorter.formatFloat(s);
 		},
 		type: "numeric"
 	});
 	
-	$.tablesorter.addParser({
+	ts.addParser({
 		id: "url",
 		is: function(s) {
 			return /^(https?|ftp|file):\/\/$/.test(s);
@@ -729,7 +729,7 @@
 		type: "text"
 	});
 	
-	$.tablesorter.addParser({
+	ts.addParser({
 		id: "isoDate",
 		is: function(s) {
 			return /^\d{4}[\/-]\d{1,2}[\/-]\d{1,2}$/.test(s);
@@ -740,7 +740,7 @@
 		type: "numeric"
 	});
 		
-	$.tablesorter.addParser({
+	ts.addParser({
 		id: "percent",
 		is: function(s) {
 			return /^\d{1,3}%$/.test(s);
@@ -751,7 +751,7 @@
 		type: "numeric"
 	});
 
-	$.tablesorter.addParser({
+	ts.addParser({
 		id: "usLongDate",
 		is: function(s) {
 			return s.match(new RegExp(/^[A-Za-z]{3,10}\.? [0-9]{1,2}, ([0-9]{4}|'?[0-9]{2}) (([0-2]?[0-9]:[0-5][0-9])|([0-1]?[0-9]:[0-5][0-9]\s(AM|PM)))$/));
@@ -762,7 +762,7 @@
 		type: "numeric"
 	});
 
-	$.tablesorter.addParser({
+	ts.addParser({
 		id: "shortDate",
 		is: function(s) {
 			return /\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}/.test(s);
@@ -784,7 +784,7 @@
 		type: "numeric"
 	});
 
-	$.tablesorter.addParser({
+	ts.addParser({
 	    id: "time",
 	    is: function(s) {
 	        return /^(([0-2]?[0-9]:[0-5][0-9])|([0-1]?[0-9]:[0-5][0-9]\s(am|pm)))$/.test(s);
@@ -796,7 +796,7 @@
 	});
 	
 	
-	$.tablesorter.addParser({
+	ts.addParser({
 	    id: "metadata",
 	    is: function(s) {
 	        return false;
@@ -809,8 +809,9 @@
 	});
 	
 	// add default widgets
-	$.tablesorter.addWidget({
+	ts.addWidget({
 		id: "zebra",
+		apply: 'after',
 		format: function(table) {
 			if(table.config.debug) { var time = new Date(); }
 			$("tr:visible",table.tBodies[0])
