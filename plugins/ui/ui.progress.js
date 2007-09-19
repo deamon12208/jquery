@@ -61,7 +61,8 @@
 			this.timer = window.setTimeout(function(){item.timeTick(item)}, 0);
 		},
 		timeTick: function(item) {
-		    if (item.percent >= 100) return;
+			if (item.percent >= 100)
+				return;
 			item.percent += 1;
 			item._update(item.percent, item);
 			item.timer = window.setTimeout(function(){item.timeTick(item)}, item.o.time / 100);

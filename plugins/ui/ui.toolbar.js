@@ -20,9 +20,9 @@
 		return prefix +"-" + (++uiIdSeed);
 	}
 
-  $.fn.toolbar = function(options){
-    return $.ui.toolbar(this, options);
-  }
+	$.fn.toolbar = function(options){
+		return $.ui.toolbar(this, options);
+	}
 	
 	$.fn.toolbarAddItem = function(options){
 		return $.ui.toolbarAddItem(this, 'toolbar_btn', options);
@@ -36,7 +36,7 @@
 
 	var toolbarItems = new Array(); // This is a global var.
 
-  $.ui.toolbar = function(el, options) {
+	$.ui.toolbar = function(el, options) {
 	// create the toolbar
 		id = $.ui.uuid("ui-toolbar");
 
@@ -44,10 +44,10 @@
 		
 		var tbOptions = $.extend({
 			theme: 'default', // This sets the theme for the menu, currently only one.
-			direction: 'horizontal',  // This means the menu will have the default class of horizontal -- can equal horizontal || vertical
+			direction: 'horizontal', // This means the menu will have the default class of horizontal -- can equal horizontal || vertical
 			mode: 'both',
 			linkedTo: null,
-			tooltips: false   // No tooltips when you hover.
+			tooltips: false // No tooltips when you hover.
 		}, options);
 
 		
@@ -66,15 +66,15 @@
 		$(el).find("#"+id).addClass("ui-toolbar").addClass(tbOptions.mode).addClass(tbOptions.theme);
 		$(el).find("#"+id+" ul").addClass(tbOptions.direction);
 		
-		/*  
-	  if(setting){
+		/*
+		if(setting){
 			$.each(setting, function(i){
 				var settings = $.extend({
 					text: 'Button',
 					type: "button",
 					icon: null,
 					handler: function(){}, // Function to be run when fired.
-					handlerType: "click"  // When to fire the event, defaults to "click".
+					handlerType: "click" // When to fire the event, defaults to "click".
 				}, setting[i]);
 				if(tbOptions.mode == 'text-only'){
 					settings.icon == null;
@@ -105,7 +105,7 @@
 			name: $.ui.uuid("ui-toolbarItem"),
 			text: 'Button',
 			handler: function(){alert("Fired: "+settings.text);}, // Function to be run when fired.
-			handlerType: "click",  // When to fire the event, defaults to "click".
+			handlerType: "click", // When to fire the event, defaults to "click".
 			icon: null
 		}, settings);
 		

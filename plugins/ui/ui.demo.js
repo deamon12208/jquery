@@ -14,7 +14,7 @@
 		this.path = [];
 		this.cursor = $('<img src="images/cursor.png" style="position: absolute; z-index: 1000;">').appendTo("body").hide();
 		if(this.logger) $(this.logger)[0].value = "";
-    this.pathElements = [];
+		this.pathElements = [];
 	}
 	
 	$.extend($.ui.test.prototype, {
