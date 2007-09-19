@@ -285,24 +285,6 @@ jQuery.extend(jQuery.fn, {
 			});
 		}
 		
-		validator.settings.onblur && validator.elements.blur( function() {
-			validator.settings.onblur.call( validator, this );
-		});
-		validator.settings.onkeyup && validator.elements.keyup(function() {
-			validator.settings.onkeyup.call( validator, this );
-		});
-		
-		if ( validator.settings.onclick ) {
-			var checkables = jQuery([]);
-			validator.elements.each(function() {
-				if ( validator.checkable( this ) )
-					checkables.push( validator.checkableGroup( this ) );
-			});
-			validator.settings.onclick && checkables.click(function() {
-				validator.settings.onclick.call( validator, this );
-			});
-		}
-		
 		return validator;
 	},
 	// destructive add
@@ -720,6 +702,24 @@ jQuery.extend(jQuery.validator, {
 			
 			// and listen for focus events to save reference to last focused element
 			this.elements.focus(focused);
+			
+			validator.settings.onblur && validator.elements.blur( function() {
+				validator.settings.onblur.call( validator, this );
+			});
+			validator.settings.onkeyup && validator.elements.keyup(function() {
+				validator.settings.onkeyup.call( validator, this );
+			});
+			
+			if ( validator.settings.onclick ) {
+				var checkables = jQuery([]);
+				validator.elements.each(function() {
+					if ( validator.checkable( this ) )
+						checkables.push( validator.checkableGroup( this ) );
+				});
+				validator.settings.onclick && checkables.click(function() {
+					validator.settings.onclick.call( validator, this );
+				});
+			}
 		},
 		
 		clean: function( selector ) {
