@@ -196,20 +196,17 @@ $.extend(PopUpCal.prototype, {
 		extendRemove(inst._settings, settings || {});
 		this._dialogInput.val(dateText);
 		
-		/*	Cross Browser Positioning */
-		if (self.innerHeight) { // all except Explorer
-			windowWidth = self.innerWidth;
-			windowHeight = self.innerHeight;
-		} else if (document.documentElement && document.documentElement.clientHeight) { // Explorer 6 Strict Mode
-			windowWidth = document.documentElement.clientWidth;
-			windowHeight = document.documentElement.clientHeight;
-		} else if (document.body) { // other Explorers
-			windowWidth = document.body.clientWidth;
-			windowHeight = document.body.clientHeight;
-		} 
 		this._pos = pos || // should use actual width/height below
-			[(windowWidth / 2) - 100, (windowHeight / 2) - 100];
-
+			[($(window).width() / 2) - 100, ($(window).height() / 2) - 150];
+		
+		// Get position of window
+		if ( document.documentElement && (document.documentElement.scrollTop)) {
+			browserTopY = document.documentElement.scrollTop;
+		} else {
+			browserTopY = document.body.scrollTop;
+		}	
+		this._pos[1] = this._pos[1] + browserTopY; // add the browser position to the height
+		
 		// move input on screen for focus, but hidden behind dialog
 		this._dialogInput.css('left', this._pos[0] + 'px').css('top', this._pos[1] + 'px');
 		inst._settings.onSelect = onSelect;
@@ -312,7 +309,7 @@ $.extend(PopUpCal.prototype, {
 		}
 		if (!popUpCal._pos) { // position below input
 			popUpCal._pos = popUpCal._findPos(input);
-			popUpCal._pos[1] += input.offsetHeight;
+			popUpCal._pos[1] += input.offsetHeight; // add the height
 		}
 		inst._calendarDiv.css('position', (popUpCal._inDialog && $.blockUI ? 'static' : 'absolute')).
 			css('left', popUpCal._pos[0] + 'px').css('top', popUpCal._pos[1] + 'px');
@@ -352,43 +349,33 @@ $.extend(PopUpCal.prototype, {
 	/* Tidy up after displaying the calendar. */
 	_afterShow: function(inst) {
 		if ($.browser.msie) { // fix IE < 7 select problems
-			$('#calendar_cover').css({width: inst._calendarDiv[0].offsetWidth + 4,
-				height: inst._calendarDiv[0].offsetHeight + 4});
+			$('#calendar_cover').css({width: $(inst._calendarDiv[0]).width() + 4,
+				height: $(inst._calendarDiv[0]).height() + 4});
 		}
 		// re-position on screen if necessary
 		var calDiv = inst._calendarDiv[0];
 		var pos = popUpCal._findPos(inst._input[0]);
-		// Get browser width and X value (IE6+, FF, Safari, Opera)
-		if( typeof( window.innerWidth ) == 'number' ) {
-			browserWidth = window.innerWidth;
-		} else {
-			browserWidth = document.documentElement.clientWidth;
-		}
+		browserWidth = $(window).width();
 		if ( document.documentElement && (document.documentElement.scrollLeft)) {
 			browserX = document.documentElement.scrollLeft;	
 		} else {
 			browserX = document.body.scrollLeft;
 		}
 		// Reposition calendar if outside the browser window.
-		if ((calDiv.offsetLeft + calDiv.offsetWidth) >
+		if (($(calDiv).offset().left + $(calDiv).width()) >
 				(browserWidth + browserX) ) {
-			inst._calendarDiv.css('left', (pos[0] + inst._input[0].offsetWidth - calDiv.offsetWidth) + 'px');
+			inst._calendarDiv.css('left', (pos[0] + $(inst._input[0]).width() - $(calDiv).width()) + 'px');
 		}
-		// Get browser height and Y value (IE6+, FF, Safari, Opera)
-		if( typeof( window.innerHeight ) == 'number' ) {
-			browserHeight = window.innerHeight;
-		} else {
-			browserHeight = document.documentElement.clientHeight;
-		}
+		browserHeight = $(window).height();
 		if ( document.documentElement && (document.documentElement.scrollTop)) {
 			browserTopY = document.documentElement.scrollTop;
 		} else {
 			browserTopY = document.body.scrollTop;
 		}
 		// Reposition calendar if outside the browser window.
-		if ((calDiv.offsetTop + calDiv.offsetHeight) >
+		if (($(calDiv).offset().top + $(calDiv).height()) >
 				(browserTopY + browserHeight) ) {
-			inst._calendarDiv.css('top', (pos[1] - calDiv.offsetHeight) + 'px');
+			inst._calendarDiv.css('top', (pos[1] - $(calDiv).height()) + 'px');
 		}
 	},
 
@@ -534,27 +521,21 @@ $.extend(PopUpCal.prototype, {
 		var day = date.getDay();
 		return [(day > 0 && day < 6), ''];
 	},
-
-	/* Find an object's position on the screen. */
+	
+	// Find position: http://www.quirksmode.org/js/findpos.html
 	_findPos: function(obj) {
-		while (obj && (obj.type == 'hidden' || obj.nodeType != 1)) {
-			obj = obj.nextSibling;
-		}
 		var curleft = curtop = 0;
-		if (obj && obj.offsetParent) {
-			curleft = obj.offsetLeft;
-			curtop = obj.offsetTop;
+		if (obj.offsetParent) {
+			curleft = obj.offsetLeft
+			curtop = obj.offsetTop
 			while (obj = obj.offsetParent) {
-				var origcurleft = curleft;
-				curleft += obj.offsetLeft;
-				if (curleft < 0) {
-					curleft = origcurleft;
-				}
-				curtop += obj.offsetTop;
+				curleft += obj.offsetLeft
+				curtop += obj.offsetTop
 			}
 		}
 		return [curleft,curtop];
 	}
+
 });
 
 /* Individualised settings for calendars applied to one or more related inputs.
