@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Language" content="en" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Transfer Effect - Test Page</title>
+<title>Shrink Effect - Test Page</title>
 <script type="text/javascript" src="../../../jquery/src/core.js"></script>
 <script type="text/javascript" src="../../../jquery/src/selector.js"></script>
 <script type="text/javascript" src="../../../jquery/src/event.js"></script>
@@ -75,10 +75,8 @@ if(!window.console) {
 }
 
 $(document).ready(function(){
-	$('#button').toggle(function() {
-		$('.select').effect('transfer', { target: '#basket', direction: 'to', duration: 1000 });	
-	}, function() {
-		$('.select').effect('transfer', { target: '#basket', direction: 'from', duration: 1000 });	
+	$('#button').click(function() {
+		$('.select').effect('shrink', {});	
 	});
 	
 
