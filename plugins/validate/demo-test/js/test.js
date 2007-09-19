@@ -34,6 +34,7 @@ test("email", function() {
 	var method = methodTest("email");
 	ok( method( "name@domain.tld" ), "Valid email" );
 	ok( method( "name@domain.tl" ), "Valid email" );
+	ok( method( "bart+bart@tokbox.com" ), "Valid email" );
 	ok( method( "n@d.tld" ), "Valid email" );
 	ok(!method( "name" ), "Invalid email" );
 	ok(!method( "name@" ), "Invalid email" );
