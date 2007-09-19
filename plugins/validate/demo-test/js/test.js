@@ -1,3 +1,5 @@
+jQuery.validator.defaults.debug = true;
+
 function methodTest( method ) {
 	var v = jQuery("#form").validate();
 	var method = $.validator.methods[method];
@@ -777,6 +779,33 @@ test("refresh()", function() {
 	errors(1);
 });
 
+test("partial refresh()", function() {
+	function errors(expected, message) {
+		equals(expected, v.size(), message );
+	}
+	var counter = 0;
+	function add() {
+		var input = $("<input class='{required:true}' name='list" + counter++ + "' />").appendTo("#testForm2");
+		v.refresh();
+		return input;
+	}
+	var v = $("#testForm2").validate();
+	v.form();
+	errors(1);
+	add(); add();
+	v.refresh();
+	v.form();
+	errors(3);
+	add();
+	var added = add();
+	v.refresh(added);
+	v.form();
+	errors(4);
+	v.refresh();
+	v.form();
+	errors(5);
+});
+
 test("idOrName()", function() {
 	expect(4);
 	var v = $("#testForm1").validate();
@@ -814,7 +843,7 @@ test("ajaxSubmit", function() {
 			});
 		}
 	});
-	jQuery("#signupForm").submit();
+	jQuery("#signupForm").submit(function() { return false;}).submit();
 });
 
 test("option: invalidHandler", function() {

@@ -555,7 +555,7 @@ jQuery.extend(jQuery.validator, {
 		 * validator.showErrors({"firstname": "I know that your firstname is Pete, Pete!"});
 		 * @desc Adds and shows error message programmatically.
 		 *
-		 * @param Map errors One or more key/value pairs of input names and messages
+		 * @param Map errors (optional) One or more key/value pairs of input names and messages
 		 *
 		 * @name jQuery.validator.protoype.showErrors
 		 * @cat Plugins/Validate
@@ -661,9 +661,44 @@ jQuery.extend(jQuery.validator, {
 			}).length == 1 && lastActive;
 		},
 		
-		refresh: function() {
+		/**
+		 * Call to refresh a form after new elements have been added or rules changed.
+		 * 
+		 * Accepts an optional argument to refresh only a part of the form, eg. only the newly added element.
+		 * 
+		 * @example var validator = $("#myform").validate();
+		 * $(".cancel").click(function() {
+		 * 	validator.hideErrors();
+		 * });
+		 * @desc Specifies a custom showErrors callback that updates the number of invalid elements each
+		 * time the form or a single element is validated.
+		 * 
+		 * @param Selector selection (optional) A selector or jQuery object or DOM element to refresh
+		 * @name jQuery.validator.prototype.hideErrors
+		 */
+		refresh: function(selection) {
 			var validator = this;
 			validator.rulesCache = {};
+			
+			function focused() {
+				validator.lastActive = this;
+				
+				// hide error label and remove error class on focus if enabled
+				if ( validator.settings.focusCleanup && !validator.blockFocusCleanup ) {
+					jQuery(this).removeClass( validator.settings.errorClass );
+					validator.errorsFor(this).hide();
+				}
+			}
+
+			// check for partial refresh
+			if ( selection ) {
+				$(selection).each(function() {
+					if ( validator.elements.index(this)  > -1 ) {
+						validator.elements.add(this);
+					}
+					validator.rulesCache[this.name] = validator.rules(this);
+				}).focus(focused);
+			}
 			
 			// select all valid inputs inside the form (no submit or reset buttons)
 			this.elements = jQuery(this.currentForm)
@@ -684,15 +719,7 @@ jQuery.extend(jQuery.validator, {
 			
 			
 			// and listen for focus events to save reference to last focused element
-			this.elements.focus(function() {
-				validator.lastActive = this;
-				
-				// hide error label and remove error class on focus if enabled
-				if ( validator.settings.focusCleanup && !validator.blockFocusCleanup ) {
-					jQuery(this).removeClass( validator.settings.errorClass );
-					validator.errorsFor(this).hide();
-				}
-			});
+			this.elements.focus(focused);
 		},
 		
 		clean: function( selector ) {

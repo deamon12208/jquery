@@ -37,20 +37,20 @@ $().ready(function() {
 	
 	function addRow() {
 		// add another input with a generated name
+		var items = $("#items").clone().attr("id", "").attr("name", "item-type-" + i).show();
 		$("#template, #template+").clone().attr("id", "").show()
 			.find("label").text((i + 1) + ". Item").end()
-			.find(".type").append( $("#items").clone().attr("id", "").attr("name", "item-type-" + i).show() ).end()
-			.find(".quantity input").attr("name", "item-quanitity-" + i).end()
+			.find(".type").append( items ).end()
+			.find(".quantity input").attr("name", "item-quantity-" + i).end()
 			.appendTo("#orderitems tbody");
 		// add a new rule for that input
 		rules["item-type-" + i] = "required";
-		rules["item-quanitity-" + i] = {
+		rules["item-quantity-" + i] = {
 			required: true,
 			minValue: 1
 		};
-		
 		// refresh the validator to recheck rules
-		validator.refresh();
+		validator.refresh(items.add("input[name=item-quantity-" + i + "]"));
 		i++;
 	}
 	
