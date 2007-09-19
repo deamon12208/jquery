@@ -243,16 +243,29 @@
 					rows = [];
 				
 				// clear the table body
-				table.tBodies[0].rows.innerHTML = "";
+				//$.tablesorter.clearTableBody(table);
+				
+				
+	 			
 								
 				for (var i=0;i < totalRows; i++) {
 					rows.push(r[n[i][checkCell]]);	
-					if(table.config.appender == null) {
-						tableBody.append(r[n[i][checkCell]]);
+					if(!table.config.appender) {
+						
+						var o = r[n[i][checkCell]];
+						var l = o.length;
+						for(var j=0; j < l; j++) {
+							
+							tableBody[0].appendChild(o[j]);
+						
+						}
+						
+						//tableBody.append(r[n[i][checkCell]]);
 					}
 				}	
-
-				if(table.config.appender != null) {
+				
+				if(table.config.appender) {
+				
 					table.config.appender(table,rows);	
 				}
 				
@@ -630,6 +643,22 @@
 				return (isNaN(i)) ? 0 : i;
 			};
 			
+			this.clearTableBody = function(table) {
+				
+				if($.browser.msie) {
+					
+					function empty() {
+					
+						while ( this.firstChild ) this.removeChild( this.firstChild );
+		
+					}
+					
+					empty.apply(table.tBodies[0]);
+					
+				} else {
+					table.tBodies[0].innerHTML = "";
+				}
+			};
 		}
 	});
 	

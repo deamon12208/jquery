@@ -79,12 +79,20 @@
 				var tableBody = $(table.tBodies[0]);
 				
 				// clear the table body
-				table.tBodies[0].rows.innerHTML = "";
-		
+				
+				$.tablesorter.clearTableBody(table);
 				
 				for(var i = s; i < e; i++) {
 					
 					tableBody.append(rows[i]);
+					
+					var o = rows[i];
+					var l = o.length;
+					for(var j=0; j < l; j++) {
+						
+						tableBody[0].appendChild(o[j]);
+					
+					}
 				}
 				
 				if(!c.pagerPositionSet && c.positionFixed) fixPosition(table,tableBody);
