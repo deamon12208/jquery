@@ -58,7 +58,8 @@ function PopUpCal() {
 			// [1] = custom CSS class name(s) or '', e.g. popUpCal.noWeekends
 		fieldSettings: null, // Function that takes an input field and
 			// returns a set of custom settings for the calendar
-		onSelect: null // Define a callback function when a date is selected
+		onSelect: null, // Define a callback function when a date is selected
+		numberOfMonths: 1 // By default show only one month at a time.
 	};
 	$.extend(this._defaults, this.regional['']);
 	this._calendarDiv = $('<div id="calendar_div"></div>');
@@ -481,9 +482,11 @@ $.extend(PopUpCal.prototype, {
 	},
 
 	/* Action for selecting a day. */
-	_selectDay: function(id, td) {
+	_selectDay: function(id, month, year, td) {
 		var inst = this._getInst(id);
 		inst._selectedDay = $("a", td).html();
+		inst._selectedMonth = month;
+		inst._selectedYear = year;
 		this._selectDate(id);
 	},
 
@@ -690,51 +693,68 @@ $.extend(PopUpCalInstance.prototype, {
 			}
 			html += '</select>';
 		}
-		html += '</div><table class="calendar" cellpadding="0" cellspacing="0"><thead>' +
-			'<tr class="calendar_titleRow">';
-		var firstDay = this._get('firstDay');
-		var changeFirstDay = this._get('changeFirstDay');
-		var dayNames = this._get('dayNames');
-		for (var dow = 0; dow < 7; dow++) { // days of the week
-			html += '<td>' + (!changeFirstDay ? '' : '<a onclick="popUpCal._changeFirstDay(' +
-				this._id + ', this);">') + dayNames[(dow + firstDay) % 7] +
-				(changeFirstDay ? '</a>' : '') + '</td>';
-		}
-		html += '</tr></thead><tbody>';
-		var daysInMonth = this._getDaysInMonth(this._selectedYear, this._selectedMonth);
-		this._selectedDay = Math.min(this._selectedDay, daysInMonth);
-		var leadDays = (this._getFirstDayOfMonth(this._selectedYear, this._selectedMonth) - firstDay + 7) % 7;
-		var currentDate = new Date(this._currentYear, this._currentMonth, this._currentDay);
-		var selectedDate = new Date(this._selectedYear, this._selectedMonth, this._selectedDay);
-		var printDate = new Date(this._selectedYear, this._selectedMonth, 1 - leadDays);
-		var numRows = Math.ceil((leadDays + daysInMonth) / 7); // calculate the number of rows to generate
-		var customDate = this._get('customDate');
-		var showOtherMonths = this._get('showOtherMonths');
-		for (var row = 0; row < numRows; row++) { // create calendar rows
-			html += '<tr class="calendar_daysRow">';
-			for (var dow = 0; dow < 7; dow++) { // create calendar days
-				var customSettings = (customDate ? customDate(printDate) : [true, '']);
-				var otherMonth = (printDate.getMonth() != this._selectedMonth);
-				var unselectable = otherMonth || !customSettings[0] ||
-					(minDate && printDate < minDate) || (maxDate && printDate > maxDate);
-				html += '<td class="calendar_daysCell' +
-					((dow + firstDay + 6) % 7 >= 5 ? ' calendar_weekEndCell' : '') + // highlight weekends
-					(otherMonth ? ' calendar_otherMonth' : '') + // highlight days from other months
-					(printDate.getTime() == selectedDate.getTime() ? ' calendar_daysCellOver' : '') + // highlight selected day
-					(unselectable ? ' calendar_unselectable' : '') +  // highlight unselectable days
-					(otherMonth && !showOtherMonths ? '' : ' ' + customSettings[1] + // highlight custom dates
-					(printDate.getTime() == currentDate.getTime() ? ' calendar_currentDay' : // highlight current day
-					(printDate.getTime() == today.getTime() ? ' calendar_today' : ''))) + '"' + // highlight today (if different)
-					(unselectable ? '' : ' onmouseover="$(this).addClass(\'calendar_daysCellOver\');"' +
-					' onmouseout="$(this).removeClass(\'calendar_daysCellOver\');"' +
-					' onclick="popUpCal._selectDay(' + this._id + ', this);"') + '>' + // actions
-					(otherMonth ? (showOtherMonths ? printDate.getDate() : '&nbsp;') : // display for other months
-					(unselectable ? printDate.getDate() : '<a>' + printDate.getDate() + '</a>')) + '</td>'; // display for this month
-				printDate.setDate(printDate.getDate() + 1);
+		html += '</div>';
+		
+		var drawMonth = this._selectedMonth;
+		var drawYear = this._selectedYear;
+		for (var z=0;z<this._get('numberOfMonths');z++) {
+			html += '<table class="calendar" cellpadding="0" cellspacing="0"';
+			if (this._get('numberOfMonths') > 1) {
+				html += ' style="float:left" ';
 			}
-			html += '</tr>';
+			html += '><thead>' + '<tr class="calendar_titleRow">';
+			var firstDay = this._get('firstDay');
+			var changeFirstDay = this._get('changeFirstDay');
+			var dayNames = this._get('dayNames');
+			for (var dow = 0; dow < 7; dow++) { // days of the week
+				html += '<td>' + (!changeFirstDay ? '' : '<a onclick="popUpCal._changeFirstDay(' +
+					this._id + ', this);">') + dayNames[(dow + firstDay) % 7] +
+					(changeFirstDay ? '</a>' : '') + '</td>';
+			}
+			html += '</tr></thead><tbody>';
+			var daysInMonth = this._getDaysInMonth(drawYear, drawMonth);
+			this._selectedDay = Math.min(this._selectedDay, daysInMonth);
+			var leadDays = (this._getFirstDayOfMonth(drawYear, drawMonth) - firstDay + 7) % 7;
+			var currentDate = new Date(this._currentYear, this._currentMonth, this._currentDay);
+			var selectedDate = new Date(drawYear, drawMonth, this._selectedDay);
+			var printDate = new Date(drawYear, drawMonth, 1 - leadDays);
+			var numRows = Math.ceil((leadDays + daysInMonth) / 7); // calculate the number of rows to generate
+			var customDate = this._get('customDate');
+			var showOtherMonths = this._get('showOtherMonths');
+			var count = 0;
+			for (var row = 0; row < numRows; row++) { // create calendar rows
+				html += '<tr class="calendar_daysRow">';
+				for (var dow = 0; dow < 7; dow++) { // create calendar days
+					var customSettings = (customDate ? customDate(printDate) : [true, '']);
+					var otherMonth = (printDate.getMonth() != drawMonth);
+					var unselectable = otherMonth || !customSettings[0] ||
+						(minDate && printDate < minDate) || (maxDate && printDate > maxDate);
+					html += '<td class="calendar_daysCell' +
+						((dow + firstDay + 6) % 7 >= 5 ? ' calendar_weekEndCell' : '') + // highlight weekends
+						(otherMonth ? ' calendar_otherMonth' : '') + // highlight days from other months
+						(printDate.getTime() == selectedDate.getTime() && drawMonth == this._selectedMonth ? ' calendar_daysCellOver' : '') + // highlight selected day
+						(unselectable ? ' calendar_unselectable' : '') +  // highlight unselectable days
+						(otherMonth && !showOtherMonths ? '' : ' ' + customSettings[1] + // highlight custom dates
+						(printDate.getTime() == currentDate.getTime() ? ' calendar_currentDay' : // highlight current day
+						(printDate.getTime() == today.getTime() ? ' calendar_today' : ''))) + '"' + // highlight today (if different)
+						(unselectable ? '' : ' onmouseover="$(this).addClass(\'calendar_daysCellOver\');"' +
+						' onmouseout="$(this).removeClass(\'calendar_daysCellOver\');"' +
+						' onclick="popUpCal._selectDay(' + this._id + ',' + drawMonth + ',' + drawYear + ', this);"') + '>' + // actions
+						(otherMonth ? (showOtherMonths ? printDate.getDate() : '&nbsp;') : // display for other months
+						(unselectable ? printDate.getDate() : '<a>' + printDate.getDate() + '</a>')) + '</td>'; // display for this month
+					printDate.setDate(printDate.getDate() + 1);
+				}
+				html += '</tr>';
+			}
+			html += '</tbody></table>';
+			drawMonth++;
+			if (drawMonth > 11) {
+				drawMonth = 0;
+				drawYear++;
+			}
 		}
-		html += '</tbody></table>' + (!closeAtTop && !this._inline ? controls : '') +
+		
+		html += (!closeAtTop && !this._inline ? controls : '') +
 			'<div style="clear: both;"></div>' + (!$.browser.msie ? '' :
 			'<!--[if lte IE 6.5]><iframe src="javascript:false;" class="calendar_cover"></iframe><![endif]-->');
 		return html;
