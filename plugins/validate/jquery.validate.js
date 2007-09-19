@@ -1244,7 +1244,7 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		email: function(value, element) {
-			return this.optional(element) || /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i.test(value);
+			return this.optional(element) || /^[\w-+\.]+@([\w-]+\.)+[\w-]{2,4}$/i.test(value);
 		},
 	
 		/**
