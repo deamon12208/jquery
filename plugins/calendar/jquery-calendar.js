@@ -10,7 +10,12 @@
    Use the singleton instance of this class, popUpCal, to interact with the calendar.
    Settings for (groups of) calendars are maintained in an instance object
    (PopUpCalInstance), allowing multiple different settings on the same page. */
+(function($) { // hide the namespace
 function PopUpCal() {
+	this.debug = false; // Change this to true to start debugging
+	this.log = function () {
+		if (popUpCal.debug) { console.log.apply('', arguments); }
+	}
 	this._nextId = 0; // Next ID for a calendar instance
 	this._inst = []; // List of instances indexed by ID
 	this._curInst = null; // The current instance in use
@@ -59,7 +64,8 @@ function PopUpCal() {
 		fieldSettings: null, // Function that takes an input field and
 			// returns a set of custom settings for the calendar
 		onSelect: null, // Define a callback function when a date is selected
-		numberOfMonths: 1 // By default show only one month at a time.
+		numberOfMonths: 1, // By default show only one month at a time.
+		multiSelect: false // Allows for selecting a date range on one calendar
 	};
 	$.extend(this._defaults, this.regional['']);
 	this._calendarDiv = $('<div id="calendar_div"></div>');
@@ -269,9 +275,10 @@ $.extend(PopUpCal.prototype, {
 	   @param  date     Date - the new date
 	   @return void */
 	setDateFor: function(control, date) {
-		var inst = this._getInst(control._calId);
+		var inst = this._getInst($(control).get(0)._calId);
 		if (inst) {
 			inst._setDate(date);
+			this._updateCalendar(inst);
 		}
 	},
 
@@ -320,6 +327,7 @@ $.extend(PopUpCal.prototype, {
 
 	/* Construct and display the calendar. */
 	_showCalendar: function(id) {
+		popUpCal.log('_showCalendar function called.');
 		var inst = this._getInst(id);
 		popUpCal._updateCalendar(inst);
 		if (!inst._inline) {
@@ -342,6 +350,11 @@ $.extend(PopUpCal.prototype, {
 	/* Generate the calendar content. */
 	_updateCalendar: function(inst) {
 		inst._calendarDiv.empty().append(inst._generateCalendar());
+		if (inst._get('numberOfMonths') > 1) {
+			inst._calendarDiv.addClass('multi_month_wrap');
+		} else {
+			inst._calendarDiv.removeClass('multi_month_wrap');
+		}
 		if (inst._input && inst._input[0].type != 'hidden') {
 			inst._input[0].focus();
 		}
@@ -386,6 +399,7 @@ $.extend(PopUpCal.prototype, {
 	   @param  speed  string - the speed at which to close the calendar
 	   @return void */
 	hideCalendar: function(id, speed) {
+		popUpCal.stayOpen = false;
 		var inst = this._getInst(id);
 		if (popUpCal._popUpShowing) {
 			speed = (speed != null ? speed : inst._get('speed'));
@@ -484,6 +498,16 @@ $.extend(PopUpCal.prototype, {
 	/* Action for selecting a day. */
 	_selectDay: function(id, month, year, td) {
 		var inst = this._getInst(id);
+		if (inst._get('multiSelect')) {
+			if (!popUpCal.stayOpen) {
+				popUpCal.stayOpen = true;
+				$('.calendar td').removeClass('calendar_currentDay');
+				$(td).addClass('calendar_currentDay');
+			} else {
+				popUpCal.appendDate = true;
+				popUpCal.stayOpen = false;
+			}
+		}
 		inst._selectedDay = $("a", td).html();
 		inst._selectedMonth = month;
 		inst._selectedYear = year;
@@ -500,7 +524,12 @@ $.extend(PopUpCal.prototype, {
 		var inst = this._getInst(id);
 		dateStr = (dateStr != null ? dateStr : inst._formatDate());
 		if (inst._input) {
-			inst._input.val(dateStr);
+			if (popUpCal.appendDate) {
+				inst._input.val(inst._input.val() + ' - ' + dateStr);
+				popUpCal.appendDate = false;
+			} else {
+				inst._input.val(dateStr);
+			}
 		}
 		var onSelect = inst._get('onSelect');
 		if (onSelect) {
@@ -513,7 +542,9 @@ $.extend(PopUpCal.prototype, {
 			this._updateCalendar(inst);
 		}
 		else {
-			this.hideCalendar(inst, inst._get('speed'));
+			if (!popUpCal.stayOpen) {
+				this.hideCalendar(inst, inst._get('speed'));
+			}
 		}
 	},
 
@@ -574,6 +605,17 @@ $.extend(PopUpCalInstance.prototype, {
 			this._currentDay = parseInt(currentDate[dateFormat.indexOf('D')], 10);
 			this._currentMonth = parseInt(currentDate[dateFormat.indexOf('M')], 10) - 1;
 			this._currentYear = parseInt(currentDate[dateFormat.indexOf('Y')], 10);
+		} else if (currentDate.length == 5) {
+			// if its a date range
+			currentDateArray = this._input.val().split(' - ');
+			currentDate = currentDateArray[0].split(dateFormat.charAt(3));
+			this._currentDay = parseInt(currentDate[dateFormat.indexOf('D')], 10);
+			this._currentMonth = parseInt(currentDate[dateFormat.indexOf('M')], 10) - 1;
+			this._currentYear = parseInt(currentDate[dateFormat.indexOf('Y')], 10);
+			currentDate = currentDateArray[1].split(dateFormat.charAt(3));
+			this._endDay = parseInt(currentDate[dateFormat.indexOf('D')], 10);
+			this._endMonth = parseInt(currentDate[dateFormat.indexOf('M')], 10) - 1;
+			this._endYear = parseInt(currentDate[dateFormat.indexOf('Y')], 10);
 		}
 		else {
 			var date = this._getDefaultDate();
@@ -625,6 +667,7 @@ $.extend(PopUpCalInstance.prototype, {
 		var prompt = this._get('prompt');
 		var closeAtTop = this._get('closeAtTop');
 		var hideIfNoPrevNext = this._get('hideIfNoPrevNext');
+		var isMultiMonth = this._get('numberOfMonths') > 1 ? true : false;
 		// controls and links
 		var html = (prompt ? '<div class="calendar_prompt">' + prompt + '</div>' : '') +
 			(closeAtTop && !this._inline ? controls : '') + '<div class="calendar_links">' +
@@ -636,7 +679,7 @@ $.extend(PopUpCalInstance.prototype, {
 			(this._canAdjustMonth(+1) ? '<a class="calendar_next" ' +
 			'onclick="popUpCal._adjustDate(' + this._id + ', +1, \'M\');">' + this._get('nextText') + '</a>' :
 			(hideIfNoPrevNext ? '' : '<label class="calendar_next">' + this._get('nextText') + '</label>')) +
-			'</div><div class="calendar_header">';
+			'</div>' + (isMultiMonth ? '<div class="month_wrap">' : '') + '<div class="calendar_header">';
 		var minDate = this._get('minDate');
 		var maxDate = this._get('maxDate');
 		// month selection
@@ -693,16 +736,20 @@ $.extend(PopUpCalInstance.prototype, {
 			}
 			html += '</select>';
 		}
-		html += '</div>';
-		
+		html += '</div>'; // Close calendar_header
 		var drawMonth = this._selectedMonth;
 		var drawYear = this._selectedYear;
 		for (var z=0;z<this._get('numberOfMonths');z++) {
-			html += '<table class="calendar" cellpadding="0" cellspacing="0"';
-			if (this._get('numberOfMonths') > 1) {
-				html += ' style="float:left" ';
+			// Draw Month Headers for Multiple Months
+			if (isMultiMonth && z > 0) {
+				var nextMonth = this._selectedMonth+z;
+				html += '<div class="month_wrap"><div class="calendar_header">' + 
+					monthNames[(nextMonth > 11 ? nextMonth - 12 : nextMonth)] + ' ' + 
+					(nextMonth > 11 ? this._selectedYear+1 : this._selectedYear) + 
+					'</div>';
 			}
-			html += '><thead>' + '<tr class="calendar_titleRow">';
+			html += '<table class="calendar" cellpadding="0" cellspacing="0"><thead>' + 
+					'<tr class="calendar_titleRow">';
 			var firstDay = this._get('firstDay');
 			var changeFirstDay = this._get('changeFirstDay');
 			var dayNames = this._get('dayNames');
@@ -716,6 +763,7 @@ $.extend(PopUpCalInstance.prototype, {
 			this._selectedDay = Math.min(this._selectedDay, daysInMonth);
 			var leadDays = (this._getFirstDayOfMonth(drawYear, drawMonth) - firstDay + 7) % 7;
 			var currentDate = new Date(this._currentYear, this._currentMonth, this._currentDay);
+			var endDate = this._endDay ? new Date(this._endYear, this._endMonth, this._endDay) : null;
 			var selectedDate = new Date(drawYear, drawMonth, this._selectedDay);
 			var printDate = new Date(drawYear, drawMonth, 1 - leadDays);
 			var numRows = Math.ceil((leadDays + daysInMonth) / 7); // calculate the number of rows to generate
@@ -735,7 +783,9 @@ $.extend(PopUpCalInstance.prototype, {
 						(printDate.getTime() == selectedDate.getTime() && drawMonth == this._selectedMonth ? ' calendar_daysCellOver' : '') + // highlight selected day
 						(unselectable ? ' calendar_unselectable' : '') +  // highlight unselectable days
 						(otherMonth && !showOtherMonths ? '' : ' ' + customSettings[1] + // highlight custom dates
-						(printDate.getTime() == currentDate.getTime() ? ' calendar_currentDay' : // highlight current day
+						(( printDate.getTime() == currentDate.getTime() ) || ( printDate.getTime() == (endDate ? endDate.getTime() : null) ) || // If is current date or end date
+							(printDate.getTime() > currentDate.getTime() && printDate.getTime() < (endDate ? endDate.getTime() : null) )  // Or if it after start date and after end date
+							? ' calendar_currentDay' : // highlight selected day
 						(printDate.getTime() == today.getTime() ? ' calendar_today' : ''))) + '"' + // highlight today (if different)
 						(unselectable ? '' : ' onmouseover="$(this).addClass(\'calendar_daysCellOver\');"' +
 						' onmouseout="$(this).removeClass(\'calendar_daysCellOver\');"' +
@@ -746,14 +796,14 @@ $.extend(PopUpCalInstance.prototype, {
 				}
 				html += '</tr>';
 			}
-			html += '</tbody></table>';
 			drawMonth++;
 			if (drawMonth > 11) {
 				drawMonth = 0;
 				drawYear++;
 			}
+			html += '</tbody></table>' +
+				(isMultiMonth ? '</div>' : '');
 		}
-		
 		html += (!closeAtTop && !this._inline ? controls : '') +
 			'<div style="clear: both;"></div>' + (!$.browser.msie ? '' :
 			'<!--[if lte IE 6.5]><iframe src="javascript:false;" class="calendar_cover"></iframe><![endif]-->');
@@ -870,3 +920,4 @@ $.fn.calendar = function(settings) {
 $(document).ready(function() {
    popUpCal = new PopUpCal(); // singleton instance
 });
+})(jQuery);
