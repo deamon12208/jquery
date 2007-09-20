@@ -5,8 +5,19 @@
 <meta http-equiv="Content-Language" content="en" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Magnifier Demo</title>
-<link rel="stylesheet" href="../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)">
-<link rel="stylesheet" href="css/style.css" type="text/css">
+<link rel="stylesheet" href="../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+
+<style type="text/css">
+
+#example1 img,
+#example2 img,
+#example3 img,
+#example4 img {
+	float:left;
+}
+
+</style>
 
 <script type="text/javascript" src="../../../jquery/src/core.js"></script>
 <script type="text/javascript" src="../../../jquery/src/selector.js"></script>
@@ -25,12 +36,12 @@
 <h2>1. Default, no options</h2>
 <div class="playground">
 	<div id='example1' class="ui-wrapper example" style="width: 580px; padding: 20px;">
-		<img src="images/clock.png" width="48" align="left" />
-		<img src="images/clock.png" width="48" align="left" />
-		<img src="images/clock.png" width="48" align="left" />
-		<img src="images/clock.png" width="48" align="left" />
-		<img src="images/clock.png" width="48" align="left" />
-		<img src="images/clock.png" width="48" align="left" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
 	</div><br />
 	<button onclick="$('#example1').magnifierEnable()">Enable</button>
 	<button onclick="$('#example1').magnifierDisable()">Disable</button>
@@ -39,39 +50,39 @@
 <h2>2. Magnification set to 1.5 (default: 2)</h2>
 <div class="playground">
 	<div id='example2' class="ui-wrapper example" style="width: 580px; padding: 20px;">
-		<img src="images/clock.png" width="48" align="left" />
-		<img src="images/clock.png" width="48" align="left" />
-		<img src="images/clock.png" width="48" align="left" />
-		<img src="images/clock.png" width="48" align="left" />
-		<img src="images/clock.png" width="48" align="left" />
-		<img src="images/clock.png" width="48" align="left" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
 	</div>
 </div>
 
 <h2>3. Advanced example: overlap: true, zIndex: 10, opacity: { min: 0.6, max: 1 }, baseline: -1</h2>
 <div class="playground">
 	<div id='example3' class="ui-wrapper example" style="width: 580px; padding: 20px;">
-		<img src="images/clock.png" width="48" align="left" />
-		<img src="images/clock.png" width="48" align="left" />
-		<img src="images/clock.png" width="48" align="left" />
-		<img src="images/clock.png" width="48" align="left" />
-		<img src="images/clock.png" width="48" align="left" />
-		<img src="images/clock.png" width="48" align="left" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
 	</div>
 </div>
 
 <h2>4. Advanced example: The direction doesn't have to be horizontal!</h2>
 <div class="playground">
 	<div id='example4' class="ui-wrapper example" style="width: 150px; padding: 20px; height: 150px;">
-		<img src="images/clock.png" width="48" style="float: left;" />
-		<img src="images/clock.png" width="48" style="float: left;" />
-		<img src="images/clock.png" width="48" style="float: left;" />
-		<img src="images/clock.png" width="48" style="float: left;" />
-		<img src="images/clock.png" width="48" style="float: left;" />
-		<img src="images/clock.png" width="48" style="float: left;" />
-		<img src="images/clock.png" width="48" style="float: left;" />
-		<img src="images/clock.png" width="48" style="float: left;" />
-		<img src="images/clock.png" width="48" style="float: left;" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
+		<img src="images/clock.png" width="48" alt="" />
 	</div>
 </div>
 

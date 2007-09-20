@@ -5,8 +5,8 @@
 <meta http-equiv="Content-Language" content="en" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Draggable Demo</title>
-<link rel="stylesheet" href="../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)">
-<link rel="stylesheet" href="css/style.css" type="text/css">
+<link rel="stylesheet" href="../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
+<link rel="stylesheet" href="css/style.css" type="text/css" />
 
 <script type="text/javascript" src="../../../jquery/src/core.js"></script>
 <script type="text/javascript" src="../../../jquery/src/selector.js"></script>
@@ -81,6 +81,7 @@
 
 
 <script type="text/javascript">
+
 if(!window.console) {
  window.console = {
  	log: function() {
@@ -93,13 +94,14 @@ $(window).bind("load",function(){
 
 	$('#example1').draggable();
 	$('#example2').draggable({ helper: 'clone' });
-	$('#example3').draggable({ cursorAt: {top: -5, left: -5 }, helper: function() { return $("<div style='background: #fff; border: 1px solid black; padding: 5px;'>I'm a draggable!</div>").appendTo("body")[0]; } });
+	$('#example3').draggable({ cursorAt: {top: -5, left: -5 }, helper: function() { return $(document.createElement('div')).css({'background': '#fff', 'border': '1px solid black', 'padding': '5px'}).text("I'm a draggable!").appendTo("body")[0]; } });
 	$('#example4').draggable({ helper: 'clone', revert: true });
 	$('#example5').draggable({ helper: 'clone', axis: 'x' });
 	$('#example6').draggable({ helper: 'clone', containment: 'parent' });
 	$('#example7').draggable({ helper: 'clone', grid: [50,50] });
 
 });
+
 </script>
 </body>
 </html>
