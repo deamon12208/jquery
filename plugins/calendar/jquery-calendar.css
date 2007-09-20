@@ -72,6 +72,7 @@ img.calendar_trigger {
 	float: right;
 }
 .calendar_header {
+	padding: 1px 0 3px;
 	background: #333;
 	text-align: center;
 	font-weight: bold;
