@@ -233,4 +233,4 @@
 		}
 		return htype;
 	}
-})($);
+})(jQuery);

@@ -260,4 +260,4 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 		}
 	});
 
- })($);
+})(jQuery);

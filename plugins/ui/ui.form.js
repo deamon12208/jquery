@@ -92,7 +92,7 @@
 		return true;
 	}
 
-})($);
+})(jQuery);
 
 
 //Speed Test

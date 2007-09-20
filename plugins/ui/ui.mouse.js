@@ -250,4 +250,4 @@
 		return oh;
 	}
 
- })($);
+ })(jQuery);

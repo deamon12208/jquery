@@ -9,4 +9,4 @@
 		$(this).css({ position: 'absolute', color: '#ffffff', top: options.top, left: options.left, zIndex: 5 }).add(a);
 	};
 
-})($);
+})(jQuery);
