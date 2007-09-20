@@ -6,6 +6,6 @@ $(document).ready(function(){
 		dayNames: ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
 		monthNames: ['Январь','Февраль','Март','Апрель','Май','Июнь',
 		'Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
-		dateFormat: 'DMY.'};
+		dateFormat: 'DMY.', firstDay: 1};
 	popUpCal.setDefaults(popUpCal.regional['ru']);
 });
