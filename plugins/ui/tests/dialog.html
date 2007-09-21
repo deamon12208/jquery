@@ -1,114 +1,218 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-
 <html lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <meta http-equiv="Content-Style-Type" content="text/css">
-        <meta http-equiv="Content-Script-Type" content="text/javascript">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="Content-Style-Type" content="text/css">
+	<meta http-equiv="Content-Script-Type" content="text/javascript">
 
-        <title>UI Dialog - Test Page</title>
+	<title>UI Dialog - Test Page</title>
 
 	<link rel="stylesheet" href="../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)">
 
-        <script type="text/javascript" src="../../../jquery/src/core.js"></script>
-        <script type="text/javascript" src="../../../jquery/src/selector.js"></script>
-        <script type="text/javascript" src="../../../jquery/src/event.js"></script>
-        <script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
-        <script type="text/javascript" src="../../../jquery/src/fx.js"></script>
-        <script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/core.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/event.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
 	<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
 	<script type="text/javascript" src="../ui.dialog.js"></script>
 	<script type="text/javascript" src="../ui.mouse.js"></script>
 	<script type="text/javascript" src="../ui.resizable.js"></script>
 	<script type="text/javascript" src="../ui.draggable.js"></script>
 	<script type="text/javascript" src="../ui.shadow.js"></script>
-        
-        <style type="text/css" media="screen, projection">
+	  
+	<style type="text/css" media="screen, projection">
 
-            /* Not required for Dialog, just to make this demo look better... */
+body { font-size: 16px; /* @ EOMB */ }
+* html body { font-size: 100%; /* @ IE */ }
+body * { font-size: 87.5%; font-family: "Trebuchet MS", Trebuchet, Verdana, Helvetica, Arial, sans-serif; }
+body * * { font-size: 100%; }
+h1 { margin: 1em 0 1.5em; font-size: 18px; }
+h2 { margin: 2em 0 1.5em; font-size: 16px; }
+p { margin: 0; }
+pre, pre+p, p+p { margin: 0; }
+code { font-family: "Courier New", Courier, monospace; }
 
-            body {
-                font-size: 16px; /* @ EOMB */
-            }
-            * html body {
-                font-size: 100%; /* @ IE */
-            }
-            body * {
-                font-size: 87.5%;
-                font-family: "Trebuchet MS", Trebuchet, Verdana, Helvetica, Arial, sans-serif;
-            }
-            body * * {
-                font-size: 100%;
-            }
-            h1 {
-                margin: 1em 0 1.5em;
-                font-size: 18px;
-            }
-            h2 {
-                margin: 2em 0 1.5em;
-                font-size: 16px;
-            }
-            p {
-                margin: 0;
-            }
-            pre, pre+p, p+p {
-                margin: 1em 0 0;
-            }
-            code {
-                font-family: "Courier New", Courier, monospace;
-            }
+.ui-tests {
+	list-style: none;
+	margin-right: 2em;
+}
+.ui-test {
+	padding: 0.5em;
+	margin-bottom: 1em;
+	background-color: #f3e4bf;
+}
+.ui-test button {
+	margin-top: 0.5em;
+}
 
+	</style>
+	<script type="text/javascript">
+$(function() {
+	$('.ui-test button').click(function() {
+		$(this).attr('disabled', 'disabled');
+	});
+});
+	</script>
 
-
-        </style>
-    </head>
+</head>
 <body class="flora">
 
-        <h1>UI Dialog - Test Page</h1>
+<h1>UI Dialog - Test Page</h1>
 
-	<button id="show1">Show Dialog</button>
+<h2>Default</h2>
 
-	<button id="hide1">Hide Dialog</button>
+	<ul class="ui-tests">
+	<li class="ui-test">
+		<div id="dialog-default" class="flora">
+		  	.dialog()
+		</div>
+		<button id="test-dialog-default">Test</button>
+		<script type="text/javascript">$(function() {
+			$('#test-dialog-default').click(function() {
+			     $('#dialog-default').clone().appendTo('body').dialog();
+		}); });</script>
+	</li>
+	</ul>
 
-	<div id="dialog1" class="flora" title="Hello World">
-        	This is a simple dialog
-	</div>
+<h2>Options</h2>
 
-	<hr>
-
-	<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</p>
-
-	<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-	<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?</p>
-
-	<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-<script type="text/javascript">
-
-$(function() {
-
-$('#dialog1').dialog({
-	title: 'title',
-	width: 600,
-	height: 400,
+	<ul class="ui-tests">
+	<li class="ui-test">
+		<div id="dialog-options-buttonsOkCancel">
+<pre>{
 	buttons: {
 		'Ok': function() { $(this).parents('.ui-dialog:first').dialogClose(); },
 		'Cancel': function() { $(this).parents('.ui-dialog:first').dialogClose(); }
 	}
-});
+}</pre>
+		</div>
+		<button id="test-dialog-options-buttonsOkCancel">Test</button>
+		<script type="text/javascript">$(function() {
+			$('#test-dialog-options-buttonsOkCancel').click(function() {
+			     $('#dialog-options-buttonsOkCancel').clone().appendTo('body').dialog(
+			{
+				width: 600, height: 250,
+				buttons: {
+					'Ok': function() { $(this).parents('.ui-dialog:first').dialogClose(); },
+					'Cancel': function() { $(this).parents('.ui-dialog:first').dialogClose(); }
+				}
+			}
+				);
+		}); });</script>
+	</li>
+	<li class="ui-test">
+		<div id="dialog-options-height">
+		  	{ height: 600 }
+		</div>
+		<button id="test-dialog-options-height">Test</button>
+		<script type="text/javascript">$(function() {
+			$('#test-dialog-options-height').click(function() {
+			     $('#dialog-options-height').clone().appendTo('body').dialog(
+		  	{ height: 600 }
+				);
+		}); });</script>
+	</li>
+	<li class="ui-test">
+		<div id="dialog-options-maxHeight">
+		  	{ maxHeight: 600 }
+		</div>
+		<button id="test-dialog-options-maxHeight">Test</button>
+		<script type="text/javascript">$(function() {
+			$('#test-dialog-options-maxHeight').click(function() {
+			     $('#dialog-options-maxHeight').clone().appendTo('body').dialog(
+		  	{ maxHeight: 600 }
+				);
+		}); });</script>
+	</li>
+	<li class="ui-test">
+		<div id="dialog-options-maxWidth">
+		  	{ maxWidth: 800 }
+		</div>
+		<button id="test-dialog-options-maxWidth">Test</button>
+		<script type="text/javascript">$(function() {
+			$('#test-dialog-options-maxWidth').click(function() {
+			     $('#dialog-options-maxWidth').clone().appendTo('body').dialog(
+		  	{ maxWidth: 800 }
+				);
+		}); });</script>
+	</li>
+	<li class="ui-test">
+		<div id="dialog-options-minHeight">
+		  	{ minHeight: 100 }
+		</div>
+		<button id="test-dialog-options-minHeight">Test</button>
+		<script type="text/javascript">$(function() {
+			$('#test-dialog-options-minHeight').click(function() {
+			     $('#dialog-options-minHeight').clone().appendTo('body').dialog(
+		  	{ minHeight: 100 }
+				);
+		}); });</script>
+	</li>
+	<li class="ui-test">
+		<div id="dialog-options-minWidth">
+			{ minWidth: 100 }
+		</div>
+		<button id="test-dialog-options-minWidth">Test</button>
+		<script type="text/javascript">$(function() {
+			$('#test-dialog-options-minWidth').click(function() {
+			     $('#dialog-options-minWidth').clone().appendTo('body').dialog(
+			{ minWidth: 100 }
+				);
+		}); });</script>
+	</li>
+	<li class="ui-test">
+		<div id="dialog-options-positionCenter">
+			{ position: 'center' }
+		</div>
+		<button id="test-dialog-options-positionCenter">Test</button>
+		<script type="text/javascript">$(function() {
+			$('#test-dialog-options-positionCenter').click(function() {
+			     $('#dialog-options-positionCenter').clone().appendTo('body').dialog(
+			{ position: 'center' }
+				);
+		}); });</script>
+	</li>
+	<li class="ui-test">
+		<div id="dialog-options-titleAttribute" title="Dialog Title">
+			&lt;div title="Dialog Title"&gt;&lt;/div&gt;
+		</div>
+		<button id="test-dialog-options-titleAttribute">Test</button>
+		<script type="text/javascript">$(function() {
+			$('#test-dialog-options-titleAttribute').click(function() {
+			     $('#dialog-options-titleAttribute').clone().appendTo('body').dialog();
+		}); });</script>
+	</li>
+	<li class="ui-test">
+		<div id="dialog-options-titleOption" title="Dialog Title">
+			{ title: 'Dialog Title' }
+		</div>
+		<button id="test-dialog-options-titleOption">Test</button>
+		<script type="text/javascript">$(function() {
+			$('#test-dialog-options-titleOption').click(function() {
+			     $('#dialog-options-titleOption').clone().appendTo('body').dialog(
+			{ title: 'Dialog Title' }
+				);
+		}); });</script>
+	</li>
+	<li class="ui-test">
+		<div id="dialog-options-width">
+		  	{ width: 800 }
+		</div>
+		<button id="test-dialog-options-width">Test</button>
+		<script type="text/javascript">$(function() {
+			$('#test-dialog-options-width').click(function() {
+			     $('#dialog-options-width').clone().appendTo('body').dialog(
+		  	{ width: 800 }
+				);
+		}); });</script>
+	</li>
+	</ul>
 
-$('#show1').click(function() {
-	$('#dialog1').dialogOpen();
-});
+<h2>Callbacks</h2>
 
-$('#hide1').click(function() {
-	$('#dialog1').dialogClose();
-});
-
-});
-
-</script>
+<h2>Methods</h2>
 
 </body>
 </html>
