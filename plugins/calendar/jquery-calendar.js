@@ -12,7 +12,7 @@
    (PopUpCalInstance), allowing multiple different settings on the same page. */
 (function($) { // hide the namespace
 function PopUpCal() {
-	this.debug = false; // Change this to true to start debugging
+	this.debug = false; // Change this to true to start debugging. use popUpCal.log() to debug
 	this.log = function () {
 		if (popUpCal.debug) { console.log.apply('', arguments); }
 	}
@@ -327,7 +327,6 @@ $.extend(PopUpCal.prototype, {
 
 	/* Construct and display the calendar. */
 	_showCalendar: function(id) {
-		popUpCal.log('_showCalendar function called.');
 		var inst = this._getInst(id);
 		popUpCal._updateCalendar(inst);
 		if (!inst._inline) {
@@ -504,6 +503,7 @@ $.extend(PopUpCal.prototype, {
 				$('.calendar td').removeClass('calendar_currentDay');
 				$(td).addClass('calendar_currentDay');
 			} else {
+				inst._settings.minDate = '';
 				popUpCal.appendDate = true;
 				popUpCal.stayOpen = false;
 			}
@@ -512,6 +512,11 @@ $.extend(PopUpCal.prototype, {
 		inst._selectedMonth = month;
 		inst._selectedYear = year;
 		this._selectDate(id);
+		if (popUpCal.stayOpen) {
+			inst._endDay = inst._endMonth = inst._endYear = null;
+			inst._settings.minDate = new Date(inst._selectedYear,inst._selectedMonth,inst._selectedDay);
+			popUpCal._updateCalendar(inst);
+		}
 	},
 
 	/* Erase the input field and hide the calendar. */
@@ -764,12 +769,13 @@ $.extend(PopUpCalInstance.prototype, {
 			var leadDays = (this._getFirstDayOfMonth(drawYear, drawMonth) - firstDay + 7) % 7;
 			var currentDate = new Date(this._currentYear, this._currentMonth, this._currentDay);
 			var endDate = this._endDay ? new Date(this._endYear, this._endMonth, this._endDay) : null;
-			var selectedDate = new Date(drawYear, drawMonth, this._selectedDay);
+			var selectedDate = new Date(this._selectedYear, this._selectedMonth, this._selectedDay);
 			var printDate = new Date(drawYear, drawMonth, 1 - leadDays);
 			var numRows = Math.ceil((leadDays + daysInMonth) / 7); // calculate the number of rows to generate
 			var customDate = this._get('customDate');
 			var showOtherMonths = this._get('showOtherMonths');
 			var count = 0;
+			numRows = isMultiMonth ? 6 : numRows;
 			for (var row = 0; row < numRows; row++) { // create calendar rows
 				html += '<tr class="calendar_daysRow">';
 				for (var dow = 0; dow < 7; dow++) { // create calendar days

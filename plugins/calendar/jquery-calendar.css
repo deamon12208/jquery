@@ -152,6 +152,29 @@ img.calendar_trigger {
 	color: #333 !important;
 }
 
+/* ___________ MULTIPLE MONTHS _________*/
+
+.multi_month_wrap, .multi_month_wrap .calendar_control, .multi_month_wrap .calendar_links, .multi_month_wrap .calendar_header {
+	width: 555px !important;
+}
+.multi_month_wrap .calendar_current {
+	width: 50%;
+}
+.multi_month_wrap .calendar_headerCell {
+	float: left;
+}
+.multi_month_wrap .calendar_header {
+	height: 22px;
+	text-align: left;
+}
+.multi_month_wrap .calendar {
+	border: 1px solid #eee;
+}
+.month_wrap, .multi_month_wrap .calendar_header {
+	float: left;
+	width: 185px !important;
+}
+
 /* ___________ IE6 IFRAME FIX ________ */
 
 .calendar_cover {

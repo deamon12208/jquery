@@ -245,6 +245,13 @@ function customRange(input) {
 				</div>
 				<div id="misc" class="tab_group1 container">
 					<h3>Miscellaneous</h3>
+					<p>Select date range on one calendar, first click is start date and second click is end date.</p>
+					<p><span class="calLabel">Date range:</span>
+						<input type="text" size="25" id="multiSelect"/></p>
+					<pre><code>$('#multiSelect').calendar({'multiSelect':true});</code></pre>
+					<p><span class="calLabel">Multiple months with date range select:</span>
+						<input type="text" size="25" id="multiSelectAndMonths"/></p>
+					<pre><code>$("#multiSelectAndMonths").calendar({ 'multiSelect':true,'numberOfMonths':6, 'prevText':'&lt;&lt; Previous Month', 'nextText':'Next Month &gt;&gt;' });</code></pre>
 					<p>Set the date shown when first opening the calendar. The default is today.</p>
 					<p><span class="calLabel">Open at 01-Jan-2007:</span>
 						<input type="text" size="10" id="openDateJan01"/></p>

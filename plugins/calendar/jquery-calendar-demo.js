@@ -72,6 +72,8 @@ $(document).ready(function () {
 		popUpCal.dialogCalendar($('#altDialog').val(),
 		setAltDateFromDialog, {prompt: 'Choose a date', speed: ''});
 	});
+	$('#multiSelect').calendar({'multiSelect':true});
+	$('#multiSelectAndMonths').calendar({'multiSelect':true,'numberOfMonths':6,'prevText':'&lt;&lt; Previous Month','nextText':'Next Month &gt;&gt;'});
 });
 
 function setSpeed(select) {
