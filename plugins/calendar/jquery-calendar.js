@@ -561,19 +561,27 @@ $.extend(PopUpCal.prototype, {
 		return [(day > 0 && day < 6), ''];
 	},
 	
-	// Find position: http://www.quirksmode.org/js/findpos.html
+	/* Find an object's position on the screen. */
 	_findPos: function(obj) {
+		while (obj && (obj.type == 'hidden' || obj.nodeType != 1)) {
+			obj = obj.nextSibling;
+		}
 		var curleft = curtop = 0;
-		if (obj.offsetParent) {
-			curleft = obj.offsetLeft
-			curtop = obj.offsetTop
+		if (obj && obj.offsetParent) {
+			curleft = obj.offsetLeft;
+			curtop = obj.offsetTop;
 			while (obj = obj.offsetParent) {
-				curleft += obj.offsetLeft
-				curtop += obj.offsetTop
+				var origcurleft = curleft;
+				curleft += obj.offsetLeft;
+				if (curleft < 0) {
+					curleft = origcurleft;
+				}
+				curtop += obj.offsetTop;
 			}
 		}
 		return [curleft,curtop];
 	}
+
 
 });
 
