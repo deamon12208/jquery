@@ -1,7 +1,7 @@
 /*
  * jQuery corner plugin
  *
- * version 1.9 (9/10/2007)
+ * version 1.91 (9/21/2007)
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -124,33 +124,36 @@ $.fn.corner = function(o) {
 
         for (var j in edges) {
             var bot = edges[j];
-            strip.style.borderStyle = 'none '+(opts[j+'R']?'solid':'none')+' none '+(opts[j+'L']?'solid':'none');
-            var d = document.createElement('div');
-            $(d).addClass('jquery-corner');
-            var ds = d.style;
+            // only add stips if needed
+            if ((bot && (opts.BL || opts.BR)) || (!bot && (opts.TL || opts.TR))) {
+                strip.style.borderStyle = 'none '+(opts[j+'R']?'solid':'none')+' none '+(opts[j+'L']?'solid':'none');
+                var d = document.createElement('div');
+                $(d).addClass('jquery-corner');
+                var ds = d.style;
 
-            bot ? this.appendChild(d) : this.insertBefore(d, this.firstChild);
+                bot ? this.appendChild(d) : this.insertBefore(d, this.firstChild);
 
-            if (bot && cssHeight != 'auto') {
-                if ($.css(this,'position') == 'static')
-                    this.style.position = 'relative';
-                ds.position = 'absolute';
-                ds.bottom = ds.left = ds.padding = ds.margin = '0';
-                if ($.browser.msie)
-                    ds.setExpression('width', 'this.parentNode.offsetWidth');
-                else
-                    ds.width = '100%';
-            }
-            else {
-                ds.margin = !bot ? '-'+pad.T+'px -'+pad.R+'px '+(pad.T-width)+'px -'+pad.L+'px' : 
-                                    (pad.B-width)+'px -'+pad.R+'px -'+pad.B+'px -'+pad.L+'px';                
-            }
+                if (bot && cssHeight != 'auto') {
+                    if ($.css(this,'position') == 'static')
+                        this.style.position = 'relative';
+                    ds.position = 'absolute';
+                    ds.bottom = ds.left = ds.padding = ds.margin = '0';
+                    if ($.browser.msie)
+                        ds.setExpression('width', 'this.parentNode.offsetWidth');
+                    else
+                        ds.width = '100%';
+                }
+                else {
+                    ds.margin = !bot ? '-'+pad.T+'px -'+pad.R+'px '+(pad.T-width)+'px -'+pad.L+'px' : 
+                                        (pad.B-width)+'px -'+pad.R+'px -'+pad.B+'px -'+pad.L+'px';                
+                }
 
-            for (var i=0; i < width; i++) {
-                var w = Math.max(0,getW(i));
-                var e = strip.cloneNode(false);
-                e.style.borderWidth = '0 '+(opts[j+'R']?w:0)+'px 0 '+(opts[j+'L']?w:0)+'px';
-                bot ? d.appendChild(e) : d.insertBefore(e, d.firstChild);
+                for (var i=0; i < width; i++) {
+                    var w = Math.max(0,getW(i));
+                    var e = strip.cloneNode(false);
+                    e.style.borderWidth = '0 '+(opts[j+'R']?w:0)+'px 0 '+(opts[j+'L']?w:0)+'px';
+                    bot ? d.appendChild(e) : d.insertBefore(e, d.firstChild);
+                }
             }
         }
     });
