@@ -12,10 +12,10 @@ $.toasterLite = function(settings) {
         html += '<div class="ui-toasterLite-titlebar"><span class="ui-toasterLite-title">'+ settings.title +'</span></div>';
     }
     html += '<div class="ui-toasterLite-content">'+ settings.text +'</div></div>'+
-    '<div class="ui-toasterLite-n  ui-toasterLite-corner"/>'+
-    '<div class="ui-toasterLite-s  ui-toasterLite-corner"/>'+
-    '<div class="ui-toasterLite-e  ui-toasterLite-corner"/>'+
-    '<div class="ui-toasterLite-w  ui-toasterLite-corner"/>'+
+    '<div class="ui-toasterLite-n ui-toasterLite-corner"/>'+
+    '<div class="ui-toasterLite-s ui-toasterLite-corner"/>'+
+    '<div class="ui-toasterLite-e ui-toasterLite-corner"/>'+
+    '<div class="ui-toasterLite-w ui-toasterLite-corner"/>'+
     '<div class="ui-toasterLite-ne ui-toasterLite-corner"/>'+
     '<div class="ui-toasterLite-se ui-toasterLite-corner"/>'+
     '<div class="ui-toasterLite-sw ui-toasterLite-corner"/>'+
