@@ -154,7 +154,7 @@ jQuery.datePicker = function()
 		var thisMonth = d.getMonth() == today.getMonth() && d.getFullYear() == today.getFullYear();
 
 		var w = 0;
-		while (w++<6) {
+		while (w++<6 && curDay<lastDay) {
 			var thisRow = jQuery("<tr></tr>");
 			for (var i=0; i<7; i++) {
 				var weekday = (_firstDayOfWeek + i) % 7;
