@@ -36,11 +36,13 @@ code { font-family: "Courier New", Courier, monospace; }
 
 .ui-tests {
 	list-style: none;
+	margin-left:3.5em;
 	margin-right: 2em;
+	padding-left: 0;
 }
 .ui-test {
 	padding: 0.5em;
-	margin-bottom: 1em;
+	margin-bottom: 1.5em;
 	background-color: #f3e4bf;
 }
 .ui-test button {
@@ -49,10 +51,17 @@ code { font-family: "Courier New", Courier, monospace; }
 
 	</style>
 	<script type="text/javascript">
+
 $(function() {
+
 	$('.ui-test button').click(function() {
 		$(this).attr('disabled', 'disabled');
 	});
+
+	$('.ui-test').each(function() {
+		$(this).prepend('<div style="margin-top:-1.5em;margin-left:-3.5em;color:brown;">' + $('div:first', this).attr('id') + '</div>');
+	});
+
 });
 	</script>
 
@@ -66,12 +75,32 @@ $(function() {
 	<ul class="ui-tests">
 	<li class="ui-test">
 		<div id="dialog-default" class="flora">
-		  	.dialog()
+		  	$('#divId').dialog()
 		</div>
 		<button id="test-dialog-default">Test</button>
 		<script type="text/javascript">$(function() {
 			$('#test-dialog-default').click(function() {
 			     $('#dialog-default').clone().appendTo('body').dialog();
+		}); });</script>
+	</li>
+	<li class="ui-test">
+		<div id="dialog-default-clone" class="flora">
+		  	$('#divId').clone().dialog()
+		</div>
+		<button id="test-dialog-default-clone">Test</button>
+		<script type="text/javascript">$(function() {
+			$('#test-dialog-default-clone').click(function() {
+			     $('#dialog-default-clone').clone().dialog();
+		}); });</script>
+	</li>
+	<li class="ui-test">
+		<div id="dialog-default-detached" class="flora">
+		  	$('&lt;div/&gt').dialog()
+		</div>
+		<button id="test-dialog-default-detached">Test</button>
+		<script type="text/javascript">$(function() {
+			$('#test-dialog-default-detached').click(function() {
+			     $('<div/>').text("$('<div/>').dialog()").dialog();
 		}); });</script>
 	</li>
 	</ul>
