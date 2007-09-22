@@ -24,9 +24,8 @@ $.toasterLite = function(settings) {
     html = $(html);
     
     $toasters = $('body > .ui-toasterLite');
-    if ($toasters.length) $toasters.after(html);
-    $('body').append(html);
+    if ($toasters.length) $toasters.after(html[0]);
+    else $('body').append(html);
     
-    html.slideDown(settings.animationSpeed);
     window.setTimeout(function() { html.slideUp(settings.animationSpeed, function(){ html.remove(); }); }, settings.timeout);
 }

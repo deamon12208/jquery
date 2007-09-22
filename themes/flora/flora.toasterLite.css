@@ -3,6 +3,7 @@
 .flora .ui-toasterLite,
 .flora.ui-toasterLite {
 	background-color: #e6f7d4;
+	width: 100px;
 }
 
 .flora .ui-toasterLite .ui-toasterLite-titlebar,
@@ -10,25 +11,7 @@
 	border-bottom: 1px solid #d8d2aa;
 	background: #ff9900 url(i/dialog-title.gif) repeat-x;
 	padding: 0px;
-	cursor: move;
 	height: 28px;
-	_height: 29px;
-}
-
-.flora .ui-toasterLite .ui-toasterLite-titlebar-close,
-.flora.ui-toasterLite .ui-toasterLite-titlebar-close {
-	width: 16px;
-	height: 16px;
-	background: url(i/dialog-titlebar-close.png) no-repeat;
-	position:absolute;
-	top: 6px;
-	right: 7px;
-	cursor: default;
-}
-
-.flora .ui-toasterLite .ui-toasterLite-titlebar-close-hover,
-.flora.ui-toasterLite .ui-toasterLite-titlebar-close-hover {
-	background: url(i/dialog-titlebar-close-hover.png) no-repeat;
 }
 
 .flora .ui-toasterLite .ui-toasterLite-title,
@@ -46,45 +29,30 @@
 	margin: 1.2em;
 }
 
-.flora .ui-toasterLite .ui-toasterLite-buttonpane,
-.flora.ui-toasterLite .ui-toasterLite-buttonpane {
-	position: absolute;
-	bottom: 8px;
-	right: 12px;
-	width: 100%;
-	text-align: right;
-}
-
-.flora .ui-toasterLite .ui-toasterLite-buttonpane button,
-.flora.ui-toasterLite .ui-toasterLite-buttonpane button {
-	margin: 6px;
-}
-
 /* Toaster handle styles */
 .flora .ui-toasterLite .ui-toasterLite-n,
-.flora.ui-toasterLite .ui-toasterLite-n { cursor: n-resize; height: 6px; width: 100%; top: 0px; left: 0px; background: transparent url(i/toaster-n.gif) repeat scroll center top; }
+.flora.ui-toasterLite .ui-toasterLite-n { height: 6px; width: 100%; top: 0px; left: 0px; background: transparent url(i/toaster-n.gif) repeat scroll center top; }
 
 .flora .ui-toasterLite .ui-toasterLite-s,
-.flora.ui-toasterLite .ui-toasterLite-s { cursor: s-resize; height: 8px; width: 100%; bottom: 0px; left: 0px; background: transparent url(i/toaster-s.gif) repeat scroll center top; }
+.flora.ui-toasterLite .ui-toasterLite-s { height: 8px; width: 100%; bottom: 0px; left: 0px; background: transparent url(i/toaster-s.gif) repeat scroll center top; }
 
 .flora .ui-toasterLite .ui-toasterLite-e,
-.flora.ui-toasterLite .ui-toasterLite-e { cursor: e-resize; width: 7px; right: 0px; top: 0px; height: 100%; background: transparent url(i/toaster-e.gif) repeat scroll right center; }
+.flora.ui-toasterLite .ui-toasterLite-e { width: 7px; right: 0px; top: 0px; height: 100%; background: transparent url(i/toaster-e.gif) repeat scroll right center; }
 
 .flora .ui-toasterLite .ui-toasterLite-w,
-.flora.ui-toasterLite .ui-toasterLite-w { cursor: w-resize; width: 7px; left: 0px; top: 0px; height: 100%; background: transparent url(i/toaster-w.gif) repeat scroll right center; }
+.flora.ui-toasterLite .ui-toasterLite-w { width: 7px; left: 0px; top: 0px; height: 100%; background: url(i/toaster-w.gif) repeat scroll right center; }
 
 .flora .ui-toasterLite .ui-toasterLite-se,
-.flora.ui-toasterLite .ui-toasterLite-se { cursor: se-resize; width: 9px; height: 9px; right: 0px; bottom: 0px; background: transparent url(i/toaster-se.gif); }
+.flora.ui-toasterLite .ui-toasterLite-se { width: 9px; height: 9px; right: 0px; bottom: 0px; background: transparent url(i/toaster-se.gif); }
 
 .flora .ui-toasterLite .ui-toasterLite-sw,
-.flora.ui-toasterLite .ui-toasterLite-sw { cursor: sw-resize; width: 9px; height: 9px; left: 0px; bottom: 0px; background: transparent url(i/toaster-sw.gif); }
+.flora.ui-toasterLite .ui-toasterLite-sw { width: 9px; height: 9px; left: 0px; bottom: 0px; background: transparent url(i/toaster-sw.gif); }
 
 .flora .ui-toasterLite .ui-toasterLite-nw,
-.flora.ui-toasterLite .ui-toasterLite-nw { cursor: nw-resize; width: 9px; height: 29px; left: 0px; top: 0px; background: transparent url(i/toaster-nw.gif); }
+.flora.ui-toasterLite .ui-toasterLite-nw { width: 9px; height: 29px; left: 0px; top: 0px; background: transparent url(i/toaster-nw.gif); }
 
 .flora .ui-toasterLite .ui-toasterLite-ne,
-.flora.ui-toasterLite .ui-toasterLite-ne { cursor: ne-resize; width: 9px; height: 29px; right: 0px; top: 0px; background: transparent url(i/toaster-ne.gif); }
+.flora.ui-toasterLite .ui-toasterLite-ne { width: 9px; height: 29px; right: 0px; top: 0px; background: transparent url(i/toaster-ne.gif); }
 
 /* Global handle styles */
-.ui-toasterLite-corner { position: absolute; display: none; font-size: 0.1px; }
-.ui-toasterLite-corner { display: block; }
+.ui-toasterLite-corner { position: absolute; font-size: 0.1px; }
