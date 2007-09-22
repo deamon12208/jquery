@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+    <head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="Content-Style-Type" content="text/css">
+	<meta http-equiv="Content-Script-Type" content="text/javascript">
+
+	<title>UI Toaster Lite - Test Page</title>
+
+	<link rel="stylesheet" href="../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)">
+
+	<script type="text/javascript" src="../../../jquery/src/core.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/event.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+	<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+	<script type="text/javascript" src="../ui.toasterLite.js"></script>
+
+	<style type="text/css" media="screen, projection">
+
+body { font-size: 16px; /* @ EOMB */ }
+* html body { font-size: 100%; /* @ IE */ }
+body * { font-size: 87.5%; font-family: "Trebuchet MS", Trebuchet, Verdana, Helvetica, Arial, sans-serif; }
+body * * { font-size: 100%; }
+h1 { margin: 1em 0 1.5em; font-size: 18px; }
+h2 { margin: 2em 0 1.5em; font-size: 16px; }
+p { margin: 0; }
+pre, pre+p, p+p { margin: 0; }
+code { font-family: "Courier New", Courier, monospace; }
+
+.ui-tests {
+	list-style: none;
+	margin-right: 2em;
+}
+.ui-test {
+	padding: 0.5em;
+	margin-bottom: 1em;
+	background-color: #f3e4bf;
+}
+.ui-test button {
+	margin-top: 0.5em;
+}
+
+	</style>
+	<script type="text/javascript">
+$(function() {
+	$('.ui-test button').click(function() {
+	});
+});
+	</script>
+
+</head>
+<body class="flora">
+
+<h1>UI Toaster Lite - Test Page</h1>
+
+<h2>Default</h2>
+
+	<ul class="ui-tests">
+	<li class="ui-test">
+		<div id="toasterLite-default" class="flora">
+		  	$.toasterLite()
+		</div>
+		<button id="test-toasterLite-default">Test</button>
+		<script type="text/javascript">$(function() {
+			$('#test-toasterLite-default').click(function() {
+			  $.toasterLite({title: 'asdf', text: 'a'})
+		}); });</script>
+	</li>
+	</ul>
+
+</body>
+</html>
