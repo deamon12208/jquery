@@ -182,7 +182,7 @@ jQuery.datePicker = function()
 				}
 
 				if (thisMonth && curDay+1 == todayDate) {
-					atts['class'] += 'today';
+					atts['class'] += ' today';
 				}
 				thisRow.append(jQuery("<td></td>").attr(atts).append(dayStr));
 				curDay++;
