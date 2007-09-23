@@ -230,6 +230,7 @@
 						break;
 					case 's':
 						nw = p[0];
+						if(e.shiftKey) nw = nh * (p[0]/p[1]);
 						break;
 					case 'n':
 					case 'ne':
@@ -241,6 +242,7 @@
 						if(o.axis == 'n') nw = p[0];
 						var mod = (this.pos[1] - co.top); nh = nh - (mod*2);
 						mod = nh <= o.minHeight ? p[1] - o.minHeight : (nh >= o.maxHeight ? 0-(o.maxHeight-p[1]) : mod);
+						if(e.shiftKey) nw = nh * (p[0]/p[1]);
 						$(this.helper).css('top', co.top + mod);
 						break;
 						
@@ -267,6 +269,7 @@
 						var mody = (this.pos[1] - co.top); nh = nh - (mody*2);
 						mody = nh <= o.minHeight ? p[1] - o.minHeight : (nh >= o.maxHeight ? 0-(o.maxHeight-p[1]) : mody);
 
+						if(e.shiftKey) mody = modx * (p[1]/p[0]);
 						$(this.helper).css({
 							left: co.left + modx,
 							top: co.top + mody
