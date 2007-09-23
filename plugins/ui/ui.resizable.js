@@ -184,7 +184,9 @@
 			this.options.originalPosition = $(this.element).css("position");
 			this.options.originalPositionValues = $(this.element).position();
 
-			this.options.modifyThese.push([$(this.helper),0,0]);
+			if ( this.options.modifyThese.length == 0 || !this.options.modifyThese[this.options.modifyThese.length-1][0].is('.ui-resizable') ) {
+				this.options.modifyThese.push([$(this.helper),0,0]);
+			}
 			
 			$(that.element).triggerHandler("resizestart", [e, that.prepareCallbackObj(this)], this.options.start);			
 			return false;
