@@ -41,6 +41,10 @@ $(document).ready(function () {
 	localise();
 	// Date range
 	$('.calendarRange').calendar({fieldSettings: customRange});
+	$('#rangeSelect').calendar({rangeSelect: true});
+	$('#rangeSelect2Months').calendar({rangeSelect: true, numberOfMonths: 2});
+	$('#rangeSelect6Months').calendar({rangeSelect: true, numberOfMonths: [2, 3],
+		stepMonths: 3, prevText: '&lt;&lt; Previous Months', nextText: 'Next Months &gt;&gt;'});
 	// Miscellaneous
 	$('#openDateJan01').calendar({defaultDate: new Date(2007, 1 - 1, 1)});
 	$('#openDatePlus7').calendar({defaultDate: +7});
@@ -55,10 +59,10 @@ $(document).ready(function () {
 	$('.inlineConfig').calendar();
 	// Inline
 	$('.calendarInline').calendar({onSelect: updateInlineRange});
-	inlineRange = $('#inlineRange');
-	inlineFrom = $('#inlineFrom');
-	inlineTo = $('#inlineTo');
 	updateInlineRange();
+	$('#rangeInline').calendar({rangeSelect: true, rangeSeparator: ' to ',
+		numberOfMonths: 2, onSelect: updateInlineRange2});
+	updateInlineRange2();
 	// Stylesheets
 	$('#altStyle').calendar();
 	$('#button1').click(function() { 
@@ -72,8 +76,6 @@ $(document).ready(function () {
 		popUpCal.dialogCalendar($('#altDialog').val(),
 		setAltDateFromDialog, {prompt: 'Choose a date', speed: ''});
 	});
-	$('#multiSelect').calendar({'multiSelect':true});
-	$('#multiSelectAndMonths').calendar({'multiSelect':true,'numberOfMonths':6,'prevText':'&lt;&lt; Previous Month','nextText':'Next Month &gt;&gt;'});
 });
 
 function setSpeed(select) {
@@ -145,11 +147,18 @@ function updateLinked(date) {
 }
 
 function updateInlineRange() {
-	var dateFrom = popUpCal.getDateFor(inlineFrom[0]);
-	var dateTo = popUpCal.getDateFor(inlineTo[0]);
-	inlineRange.val(formatDate(dateFrom) + ' to ' + formatDate(dateTo));
-	popUpCal.reconfigureFor(inlineFrom[0], {maxDate: dateTo});
-	popUpCal.reconfigureFor(inlineTo[0], {minDate: dateFrom});
+	var inlineFrom = $('#inlineFrom')[0];
+	var inlineTo = $('#inlineTo')[0];
+	var dateFrom = popUpCal.getDateFor(inlineFrom);
+	var dateTo = popUpCal.getDateFor(inlineTo);
+	$('#inlineRange').val(formatDate(dateFrom) + ' to ' + formatDate(dateTo));
+	popUpCal.reconfigureFor(inlineFrom, {maxDate: dateTo});
+	popUpCal.reconfigureFor(inlineTo, {minDate: dateFrom});
+}
+
+function updateInlineRange2(dateStr) {
+	$('#inlineRange2').val(dateStr ? dateStr :
+		formatDate(popUpCal.getDateFor('#rangeInline')));
 }
 
 function formatDate(date) {

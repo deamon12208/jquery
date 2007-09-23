@@ -22,7 +22,7 @@
 		
 		<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="../../css/ie6.css" /><![endif]--> 
 		<script type="text/javascript" src="jquery.pack.js"></script>
-		<!--script type="text/javascript" src="jquery.debug.js"></script-->
+		<script type="text/javascript" src="jquery.debug.js"></script>
 		<script type="text/javascript" src="jquery.localisation.js"></script>
 		<script type="text/javascript" src="jquery-calendar.js"></script>
 		<script type="text/javascript" src="jquery-calendar-demo.js"></script>
@@ -38,8 +38,8 @@
 			<?php include '../main_nav.php'?>
 			<div id="header">
 				<div>
-					<h1>jQuery Calendar v2.7</h1>
-					<p class="caption">Written by <a href="/">Marc Grabanski</a> and extended by Keith Wood (kbwood@iprimus.com.au).</p>
+					<h1>jQuery Calendar v2.8</h1>
+					<p class="caption">Written by <a href="/">Marc Grabanski</a> and Keith Wood (kbwood@iprimus.com.au).</p>
 				</div>
 			</div>
 			<?php $code_nav='jquery-calendar'; include '../code_nav.php'?>
@@ -47,7 +47,7 @@
 			
 			MG-->
 			
-				<h2>jQuery Calendar v2.7 Examples</h2>
+				<h2>jQuery Calendar v2.8 Examples</h2>
 				<ul id="tab_menu1" class="tabs">
 					<li><a href="#default">Defaults</a></li>
 					<li><a href="#invoke">Invocation</a></li>
@@ -77,6 +77,8 @@
 						<li><em>Clear</em>/<em>Close</em> controls show at the top</li>
 						<li>Month and year are selectable directly</li>
 						<li>10 years before and after the selected year are shown</li>
+						<li>Show a single month</li>
+						<li>Select a single date</li>
 						<li>Calendar initially starts on Sunday</li>
 						<li>Day names are clickable to change the first day of the week</li>
 						<li>Days in other months are not displayed</li>
@@ -242,16 +244,21 @@ function customRange(input) {
 	return {minDate: (input.id == 'dTo' ? getDate($('#dFrom').val()) : null),
 		maxDate: (input.id == 'dFrom' ? getDate($('#dTo').val()) : null)};
 }</code></pre>
+					<p>Select a date range on one calendar, first click is the start date and second click is the end date.
+						In the last example, <i>Previous</i> and <i>Next</i> move three months at a time.</p>
+					<p><span class="calLabel">Date range:</span>
+						<input type="text" size="25" id="rangeSelect"/></p>
+					<pre><code>$('#rangeSelect').calendar({rangeSelect: true});</code></pre>
+					<p><span class="calLabel">Show two months with date range select:</span>
+						<input type="text" size="25" id="rangeSelect2Months"/></p>
+					<pre><code>$("#rangeSelect2Months").calendar({rangeSelect: true, numberOfMonths: 2);</code></pre>
+					<p><span class="calLabel">Show six months with date range select:</span>
+						<input type="text" size="25" id="rangeSelect6Months"/></p>
+					<pre><code>$("#rangeSelect6Months").calendar({rangeSelect: true, numberOfMonths: [2, 3],
+	stepMonths: 3, prevText: '&lt;&lt; Previous Months', nextText: 'Next Months &gt;&gt;'});</code></pre>
 				</div>
 				<div id="misc" class="tab_group1 container">
 					<h3>Miscellaneous</h3>
-					<p>Select date range on one calendar, first click is start date and second click is end date.</p>
-					<p><span class="calLabel">Date range:</span>
-						<input type="text" size="25" id="multiSelect"/></p>
-					<pre><code>$('#multiSelect').calendar({'multiSelect':true});</code></pre>
-					<p><span class="calLabel">Multiple months with date range select:</span>
-						<input type="text" size="25" id="multiSelectAndMonths"/></p>
-					<pre><code>$("#multiSelectAndMonths").calendar({ 'multiSelect':true,'numberOfMonths':6, 'prevText':'&lt;&lt; Previous Month', 'nextText':'Next Month &gt;&gt;' });</code></pre>
 					<p>Set the date shown when first opening the calendar. The default is today.</p>
 					<p><span class="calLabel">Open at 01-Jan-2007:</span>
 						<input type="text" size="10" id="openDateJan01"/></p>
@@ -263,11 +270,11 @@ $('#openDatePlus7').calendar({defaultDate: +7});</code></pre>
 						to the bottom and display the days in other months (non-selectable).
 						A callback function is also added to operate when a date is selected.
 						If no callback is specified, the <code>onchange</code> event of the
-						input field is triggered (see <em>inline configuration</em> example below).</p>
+						input field is triggered.</p>
 					<p><span class="calLabel">Additional settings:</span>
 						<input type="text" size="10" id="addSettings"/></p>
 					<pre><code>$('#addSettings').calendar({closeAtTop: false,
-showOtherMonths: true, onSelect: alertDate});</code></pre>
+	showOtherMonths: true, onSelect: alertDate});</code></pre>
 					<p>Connect the calendar to linked drop-downs. You still need an input field,
 						but it is hidden following the drop-downs.</p>
 					<p><span class="calLabel">Linked drop-downs:</span>
@@ -363,16 +370,26 @@ $('.inlineConfig').calendar();</code></pre>
 						Include a callback function for notification of a date selection.</p>
 					<pre><code>$('.calendarInline').calendar({onSelect: updateInlineRange});
 			
-inlineRange = $('#inlineRange');
-inlineFrom = $('#inlineFrom');
-inlineTo = $('#inlineTo');
-
 function updateInlineRange() {
-	var dateFrom = popUpCal.getDateFor(inlineFrom[0]);
-	var dateTo = popUpCal.getDateFor(inlineTo[0]);
-	inlineRange.val(formatDate(dateFrom) + ' to ' + formatDate(dateTo));
-	popUpCal.reconfigureFor(inlineFrom[0], {maxDate: dateTo});
-	popUpCal.reconfigureFor(inlineTo[0], {minDate: dateFrom});
+	var inlineFrom = $('#inlineFrom')[0];
+	var inlineTo = $('#inlineTo')[0];
+	var dateFrom = popUpCal.getDateFor(inlineFrom);
+	var dateTo = popUpCal.getDateFor(inlineTo);
+	$('#inlineRange').val(formatDate(dateFrom) + ' to ' + formatDate(dateTo));
+	popUpCal.reconfigureFor(inlineFrom, {maxDate: dateTo});
+	popUpCal.reconfigureFor(inlineTo, {minDate: dateFrom});
+}</code></pre>
+					<p>Or show a number of months at once and set the range directly.</p>
+					<p><span class="calLabel">Inline date range with two months:</span>
+						<span id="rangeInline"></span></p>
+					<p style="clear: both; padding-top: 0.5em;"><span class="calLabel">Selected range is:</span>
+						<input type="text" size="25" id="inlineRange2" readonly="readonly"/></p>
+					<pre><code>$('#rangeInline').calendar({rangeSelect: true, rangeSeparator: ' to ',
+	numberOfMonths: 2, onSelect: updateInlineRange2});
+	
+function updateInlineRange2(dateStr) {
+	$('#inlineRange2').val(dateStr ? dateStr :
+		formatDate(popUpCal.getDateFor('#rangeInline')));
 }</code></pre>
 				</div>
 				<div id="styles" class="tab_group1 container">
