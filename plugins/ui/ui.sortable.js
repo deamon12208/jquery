@@ -217,25 +217,19 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 				var ma = function(e) { if(true || o.laa != cio) { ci.after(e); o.laa = cio; } }
 				
 				if(o.floating) {
-					
 					var overlap = ((cO.left - (this.pos[0]+(this.options.po ? this.options.po.left : 0)))/this.helper.offsetWidth);
-
-					if(!(cO.top < this.pos[1]+(this.options.po ? this.options.po.top : 0) + cio.offsetHeight/2 && cO.top + cio.offsetHeight > this.pos[1]+(this.options.po ? this.options.po.top : 0) + cio.offsetHeight/2)) continue;								
-					
+					if(!(cO.top < this.pos[1]+(this.options.po ? this.options.po.top : 0) + cio.offsetHeight/2 && cO.top + cio.offsetHeight > this.pos[1]+(this.options.po ? this.options.po.top : 0) + cio.offsetHeight/2)) continue;
 				} else {
-
 					var overlap = ((cO.top - (this.pos[1]+(this.options.po ? this.options.po.top : 0)))/this.helper.offsetHeight);
-
 					if(!(cO.left < this.pos[0]+(this.options.po ? this.options.po.left : 0) + cio.offsetWidth/2 && cO.left + cio.offsetWidth > this.pos[0]+(this.options.po ? this.options.po.left : 0) + cio.offsetWidth/2)) continue;
-
 				}
 				
 				if(overlap >= 0 && overlap <= 0.5) { //Overlapping at top
-					ci.prev().length ? ma(this.element) : mb(this.element);
+					ci.prev().length ? ma(this.element) : mb(this.element); break;
 				}
 
 				if(overlap < 0 && overlap > -0.5) { //Overlapping at bottom
-					ci.next()[0] == this.element ? mb(this.element) : ma(this.element);
+					ci.next()[0] == this.element ? mb(this.element) : ma(this.element); break;
 				}
 
 			}
