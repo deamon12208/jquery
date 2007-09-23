@@ -6,6 +6,6 @@ $(document).ready(function(){
         dayNames: ['Sö','Må','Ti','On','To','Fr','Lö'],
         monthNames: ['Januari','Februari','Mars','April','Maj','Juni', 
         'Juli','Augusti','September','Oktober','November','December'],
-        dateFormat: 'YMD-'};
+        dateFormat: 'YMD-', firstDay: 0};
     popUpCal.setDefaults(popUpCal.regional['sv']); 
 });

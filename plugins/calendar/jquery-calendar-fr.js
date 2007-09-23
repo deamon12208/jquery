@@ -1,10 +1,11 @@
-/* French initialisation for the jQuery calendar extension. */
+ï»¿/* French initialisation for the jQuery calendar extension. */
 /* Written by Keith Wood (kbwood@iprimus.com.au). */
 $(document).ready(function(){
 	popUpCal.regional['fr'] = {clearText: 'Effacer', closeText: 'Fermer', 
-		prevText: '&lt;Préc', nextText: 'Proch&gt;', currentText: 'En cours',
+		prevText: '&lt;PrÃ©c', nextText: 'Proch&gt;', currentText: 'En cours',
 		dayNames: ['Di','Lu','Ma','Me','Je','Ve','Sa'],
-		monthNames: ['Janvier','Février','Mars','Avril','Mai','Juin',
-		'Juillet','Août','Septembre','Octobre','Novembre','Décembre']};
+		monthNames: ['Janvier','FÃ©vrier','Mars','Avril','Mai','Juin',
+		'Juillet','AoÃ»t','Septembre','Octobre','Novembre','DÃ©cembre'],
+		dateFormat: 'DMY/', firstDay: 0};
 	popUpCal.setDefaults(popUpCal.regional['fr']);
 });

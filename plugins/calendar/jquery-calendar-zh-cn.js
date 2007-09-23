@@ -6,6 +6,6 @@ $(document).ready(function(){
 		dayNames: ['ÈÕ','Ò»','¶þ','Èý','ËÄ','Îå','Áù'],
 		monthNames: ['Ò»ÔÂ','¶þÔÂ','ÈýÔÂ','ËÄÔÂ','ÎåÔÂ','ÁùÔÂ',
 		'ÆßÔÂ','°ËÔÂ','¾ÅÔÂ','Ê®ÔÂ','Ê®Ò»ÔÂ','Ê®¶þÔÂ'],
-		dateFormat: 'YMD-'};
+		dateFormat: 'YMD-', firstDay: 0};
 	popUpCal.setDefaults(popUpCal.regional['zh-cn']);
 });

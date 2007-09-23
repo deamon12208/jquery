@@ -5,6 +5,7 @@ $(document).ready(function(){
 		prevText: '&lt;Prec', nextText: 'Succ&gt;', currentText: 'Oggi',
 		dayNames: ['Do','Lu','Ma','Me','Gio','Ve','Sa'],
 		monthNames: ['Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno',
-		'Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre']};
+		'Luglio','Agosto','Settembre','Ottobre','Novembre','Dicembre'],
+		dateFormat: 'DMY/', firstDay: 0};
 	popUpCal.setDefaults(popUpCal.regional['it']);
 });

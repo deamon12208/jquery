@@ -5,6 +5,7 @@ $(document).ready(function(){
 		prevText: '&lt;Poprzedni', nextText: 'Następny&gt;', currentText: 'Teraz',
 		dayNames: ['Pn','Wt','Śr','Czw','Pt','So','Nie'],
 		monthNames: ['Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec',
-		'Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień']};
+		'Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień'],
+		dateFormat: 'DMY/', firstDay: 0};
 	popUpCal.setDefaults(popUpCal.regional['pl']);
 });

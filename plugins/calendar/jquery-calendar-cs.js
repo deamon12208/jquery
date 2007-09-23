@@ -1,11 +1,11 @@
-/* Czech initialisation for the jQuery calendar extension. */
+ï»¿/* Czech initialisation for the jQuery calendar extension. */
 /* Written by Tomas Muller (tomas@tomas-muller.net). */
 $(document).ready(function(){
-	popUpCal.regional['cs'] = {clearText: 'Smazat', closeText: 'Zavøít', 
-		prevText: '&lt;Døíve', nextText: 'Pozdìji&gt;;', currentText: 'Nyní',
-		dayNames: ['Ne','Po','Út','St','Èt','Pá','So'],
-		monthNames: ['Leden','Únor','Bøezen','Duben','Kvìten','Èerven',
-		'Èervenec','Srpen','Záøí','Øíjen','Listopad','Prosinec'],
-		dateFormat: 'DMY.'};
+	popUpCal.regional['cs'] = {clearText: 'Smazat', closeText: 'ZavÃ¸Ã­t', 
+		prevText: '&lt;DÃ¸Ã­ve', nextText: 'PozdÃ¬ji&gt;', currentText: 'NynÃ­',
+		dayNames: ['Ne','Po','Ãšt','St','Ãˆt','PÃ¡','So'],
+		monthNames: ['Leden','Ãšnor','BÃ¸ezen','Duben','KvÃ¬ten','Ãˆerven',
+		'Ãˆervenec','Srpen','ZÃ¡Ã¸Ã­','Ã˜Ã­jen','Listopad','Prosinec'],
+		dateFormat: 'DMY.', firstDay: 0};
 	popUpCal.setDefaults(popUpCal.regional['cs']);
 });
