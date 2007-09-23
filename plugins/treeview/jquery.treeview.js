@@ -159,7 +159,25 @@
 				$(this).removeClass(className);
 			});
 		},
-		Treeview: function(settings) {
+		heightToggle: function(speed, callback) {
+			speed ?
+				this.animate({ height: "toggle" }, speed, callback) :
+				this.each(function(){
+					jQuery(this)[ jQuery(this).is(":hidden") ? "show" : "hide" ]();
+					if(callback)
+						callback.apply(this, arguments);
+				});
+		},
+		heightHide: function(speed, callback) {
+			if (speed) {
+				this.animate({ height: "hide" }, speed, callback)
+			} else {
+				this.hide();
+				if (callback)
+					this.each(callback);				
+			}
+		},
+		treeview: function(settings) {
 		
 			// currently no defaults necessary, all implicit
 			settings = $.extend({}, settings);
@@ -196,14 +214,14 @@
 					// find child lists
 					.find( ">ul" )
 					// toggle them
-					.toggle( settings.speed, settings.toggle );
+					.heightToggle( settings.speed, settings.toggle );
 				if ( settings.unique ) {
 					$( this ).parent()
 						.siblings()
 						.replaceclass( CLASSES.collapsable, CLASSES.expandable )
 						.replaceclass( CLASSES.lastCollapsable, CLASSES.lastExpandable )
 						.find( ">ul" )
-						.hide( settings.speed, settings.toggle );
+						.heightHide( settings.speed, settings.toggle );
 				}
 			}
 	
@@ -217,8 +235,9 @@
 			$( (settings.collapsed ? "li" : "li." + CLASSES.closed) + ":not(." + CLASSES.open + ") > ul", this).hide();
 			
 			// find all tree items with child lists
-			var branches = $("li[>ul]", this);
+			var branches = $("li:has(>ul)", this);
 			
+			// try to open based on location.href
 			if ( settings.navigation ) {
 				var current = this.find("a").filter(function() { return this.href == location.href; });
 				if ( current.length ) {
@@ -226,19 +245,19 @@
 				}
 			}
 			
-			$("li[ul]:not([>a])>span", this).click(function(event) {
+			$("li:has(ul):not(:has(>a))>span", this).click(function(event) {
 				if ( this == event.target ) {
 					toggler.apply($(this).next());
 				}
 			}).add( $("a", this) ).hoverClass();
 			
 			// handle closed ones first
-			branches.filter("[>ul:hidden]")
+			branches.filter(":has(>ul:hidden)")
 					.addClass(CLASSES.expandable)
 					.swapClass(CLASSES.last, CLASSES.lastExpandable);
 					
 			// handle open ones
-			branches.not("[>ul:hidden]")
+			branches.not(":has(>ul:hidden)")
 					.addClass(CLASSES.collapsable)
 					.swapClass(CLASSES.last, CLASSES.lastCollapsable);
 					
