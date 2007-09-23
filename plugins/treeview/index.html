@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="jquery.treeview.css" />
 	<link rel="stylesheet" href="screen.css" />
 	<script src="jquery.js" type="text/javascript"></script>
+	<script src="jquery.cookie.js" type="text/javascript"></script>
 	<script src="jquery.treeview.js" type="text/javascript"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
@@ -21,12 +22,16 @@
 			speed: "fast",
 			collapsed: true,
 			unique: true,
-			store: true,
 			toggle: function() {
-				window.console && console.log && console.log("%o was toggled", $(this).parent());
+				window.console && console.log("%o was toggled", $(this).parent());
 			}
 		});
-		$("#black, #gray").treeview({ control: "#treecontrol" });
+		
+		// statesaving works only for one tree on a single page/domain?, but we 
+		// can select more then one tree at once to apply statesaving for more then one
+		$("#black, #gray").treeview({
+			control: "#treecontrol", store: true
+		});
 	});
 	</script>
 	<style type="text/css">
@@ -60,7 +65,6 @@
 	
 	<h1 id="banner"><a href="http://bassistance.de/jquery-plugins/jquery-plugin-treeview/">jQuery Treeview Plugin</a> Demo</h1>
 	<div id="main">
-	
 	
 	<h4>Sample 0 - navigation</h4>
 	
@@ -186,9 +190,9 @@
 		<li><span class="file">File 4</span></li>
 	</ul>
 	
-	<h4>Sample 2 - fast animations, all branches collapsed at first, red image set, with cookie-based state-saving</h4>
+	<h4>Sample 2 - fast animations, all branches collapsed at first, red image set</h4>
 	<ul id="red">
-	<li class="closed">Item 1
+	<li>Item 1
 		<ul>
 			<li>Item 1.0
 				<ul>
@@ -283,7 +287,7 @@
 	</li>
 	</ul>
 	
-	<h4>Sample 3 - two trees with one tree control, black and gray image set</h4>
+	<h4>Sample 3 - two trees with one tree control, black and gray image set, with cookie-based state-saving</h4>
 	<div id="treecontrol">
 		<a href="#">Collapse All</a>
 		<a href="#">Expand All</a>
@@ -292,10 +296,10 @@
 	<ul id="black">
 		<li>Item 1</li>
 		<li>
-			Item 2
+			<span>Item 2</span>
 			<ul>
 				<li>
-					Item 2.1
+					<span>Item 2.1</span>
 					<ul>
 						<li>Item 2.1.1</li>
 						<li>Item 2.1.2</li>
@@ -303,7 +307,7 @@
 				</li>
 				<li>Item 2.2</li>
 				<li class="closed">
-					Item 2.3 (closed at start)
+					<span>Item 2.3 (closed at start)</span>
 					<ul>
 						<li>Item 2.3.1</li>
 						<li>Item 2.3.2</li>
@@ -315,10 +319,10 @@
 	<ul id="gray">
 		<li>Item 1</li>
 		<li>
-			Item 2
+			<span>Item 2</span>
 			<ul>
 				<li class="closed">
-					Item 2.1 (closed at start)
+					<span>Item 2.1 (closed at start)</span>
 					<ul>
 						<li>Item 2.1.1</li>
 						<li>Item 2.1.2</li>
@@ -333,7 +337,7 @@
 				<li>Item 2.2.7</li>
 				<li>Item 2.2.8</li>
 				<li>
-					Item 2.3
+					<span>Item 2.3</span>
 					<ul>
 						<li>Item 2.3.1</li>
 						<li>Item 2.3.2</li>
@@ -347,7 +351,7 @@
 					</ul>
 				</li>
 				<li>
-					Item 2.4
+					<span>Item 2.4</span>
 					<ul>
 						<li>Item 2.4.1</li>
 						<li>Item 2.4.2</li>
@@ -365,7 +369,7 @@
 		<li>Item 3</li>
 	</ul>	
 	
-	 </div>
+</div>
 	 
 <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
 </script>

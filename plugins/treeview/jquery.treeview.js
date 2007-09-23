@@ -1,7 +1,7 @@
 /*
  * Treeview 1.2 - jQuery plugin to hide and show branches of a tree
  *
- * Copyright (c) 2006 Jörn Zaefferer, Myles Angell
+ * Copyright (c) 2006 Jï¿½rn Zaefferer, Myles Angell
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -224,7 +224,28 @@
 						.heightHide( settings.speed, settings.toggle );
 				}
 			}
-	
+			
+			function serialize() {
+				function binary(arg) {
+					return arg ? 1 : 0;
+				}
+				var data = [];
+				branches.each(function(i, e) {
+					data[i] = $(e).is(":has(>ul:visible)") ? 1 : 0;
+				});
+				$.cookie("treestorage", data.join(""), settings.store.expiration );
+			}
+			
+			function deserialize() {
+				var stored = $.cookie("treestorage");
+				if ( stored ) {
+					var data = stored.split("");
+					branches.each(function(i, e) {
+						$(e).find(">ul")[ parseInt(data[i]) ? "show" : "hide" ]();
+					});
+				}
+			}
+			
 			// add treeview class to activate styles
 			this.addClass("treeview");
 			
@@ -236,6 +257,17 @@
 			
 			// find all tree items with child lists
 			var branches = $("li:has(>ul)", this);
+			
+			if (settings.store)	{
+				var toggleCallback = settings.toggle;
+				settings.toggle = function() {
+					serialize();
+					if(toggleCallback) {
+						toggleCallback.apply(this, arguments);
+					}
+				} 
+				deserialize();
+			}
 			
 			// try to open based on location.href
 			if ( settings.navigation ) {
