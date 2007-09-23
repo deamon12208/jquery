@@ -1,7 +1,7 @@
  $(document).ready(function(){
  	
 	jQuery.validator.addMethod("password", function( value, element, param ) {
-		var result = this.optional(element) || value.length >= 6 && /\d/.test(value) && /\w/.test(value);
+		var result = this.optional(element) || value.length >= 6 && /\d/.test(value) && /[a-z]/i.test(value);
 		if (!result) {
 			element.value = "";
 			var validator = this;
