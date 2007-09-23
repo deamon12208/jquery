@@ -5,14 +5,12 @@
 	padding: 0;
 	margin: 0;
 	background: #ddd;
+	width: 185px;
 }
 #calendar_div {
 	display: none;
 	border: 1px solid #777;
-	z-index: 10; /*must have*/ 
-}
-#calendar_div, .calendar_control, .calendar_links, .calendar_header, .calendar {
-	width: 185px;
+	z-index: 10; /*must have*/
 }
 .calendar_inline {
 	float: left;
@@ -32,7 +30,6 @@ img.calendar_trigger {
 }
 .calendar_prompt {
 	float: left;
-	width: 181px;
 	padding: 2px;
 	background: #ddd;
 	color: #000;
@@ -43,13 +40,16 @@ img.calendar_trigger {
 .calendar_control, .calendar_links, .calendar_header, .calendar {
 	clear: both;
 	float: left;
+	width: 100%;
 	color: #fff;
 }
 .calendar_control {
 	background: #400;
+	padding: 2px 0px;
 }
 .calendar_links {
 	background: #000;
+	padding: 2px 0px;
 }
 .calendar_control, .calendar_links {
 	font-weight: bold;
@@ -62,20 +62,24 @@ img.calendar_trigger {
 }
 .calendar_clear, .calendar_prev {
 	float: left;
+	width: 34%;
 }
 .calendar_current {
 	float: left;
-	width: 35%;
+	width: 30%;
 	text-align: center;
 }
 .calendar_close, .calendar_next {
 	float: right;
+	width: 34%;
+	text-align: right;
 }
 .calendar_header {
 	padding: 1px 0 3px;
 	background: #333;
 	text-align: center;
 	font-weight: bold;
+	height: 1.3em;
 }
 .calendar_header select {
 	background: #333;
@@ -154,24 +158,15 @@ img.calendar_trigger {
 
 /* ___________ MULTIPLE MONTHS _________*/
 
-.multi_month_wrap, .multi_month_wrap .calendar_control, .multi_month_wrap .calendar_links, .multi_month_wrap .calendar_header {
-	width: 555px !important;
+.calendar_multi .calendar {
+	border: 1px solid #777;
 }
-.multi_month_wrap .calendar_current {
-	width: 50%;
-}
-.multi_month_wrap .calendar_headerCell {
+.calendar_oneMonth {
 	float: left;
+	width: 185px;
 }
-.multi_month_wrap .calendar_header {
-	height: 22px;
-}
-.multi_month_wrap .calendar {
-	border: 1px solid #eee;
-}
-.month_wrap, .multi_month_wrap .calendar_header {
-	float: left;
-	width: 185px !important;
+.calendar_newRow {
+	clear: left;
 }
 
 /* ___________ IE6 IFRAME FIX ________ */
@@ -184,6 +179,6 @@ img.calendar_trigger {
     filter: mask(); /*must have*/
     top: -4px; /*must have*/
     left: -4px; /*must have*/
-    width: 193px; /*must have to match width and borders*/
-    height: 200px; /*must have to match maximum height*/ 
+    width: 200px; /*must have*/
+    height: 200px; /*must have*/
 }
