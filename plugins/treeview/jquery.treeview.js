@@ -144,7 +144,7 @@
 					$this.removeClass(c2).addClass(c1);
 			});
 		},
-		replaceclass: function(c1, c2) {
+		replaceClass: function(c1, c2) {
 			return this.each(function() {
 				var $this = $(this);
 				if ( $.className.has(this, c1) )
@@ -218,8 +218,8 @@
 				if ( settings.unique ) {
 					$( this ).parent()
 						.siblings()
-						.replaceclass( CLASSES.collapsable, CLASSES.expandable )
-						.replaceclass( CLASSES.lastCollapsable, CLASSES.lastExpandable )
+						.replaceClass( CLASSES.collapsable, CLASSES.expandable )
+						.replaceClass( CLASSES.lastCollapsable, CLASSES.lastExpandable )
 						.find( ">ul" )
 						.heightHide( settings.speed, settings.toggle );
 				}
@@ -286,12 +286,12 @@
 			// handle closed ones first
 			branches.filter(":has(>ul:hidden)")
 					.addClass(CLASSES.expandable)
-					.swapClass(CLASSES.last, CLASSES.lastExpandable);
+					.replaceClass(CLASSES.last, CLASSES.lastExpandable);
 					
 			// handle open ones
 			branches.not(":has(>ul:hidden)")
 					.addClass(CLASSES.collapsable)
-					.swapClass(CLASSES.last, CLASSES.lastCollapsable);
+					.replaceClass(CLASSES.last, CLASSES.lastCollapsable);
 					
 			// append hitarea
 			branches.prepend("<div class=\"" + CLASSES.hitarea + "\">")
