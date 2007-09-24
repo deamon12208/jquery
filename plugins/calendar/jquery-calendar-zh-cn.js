@@ -1,11 +1,11 @@
 ﻿/* Chinese initialisation for the jQuery calendar extension. */
 /* Written by Cloudream (cloudream@gmail.com). */
 $(document).ready(function(){
-	popUpCal.regional['zh-cn'] = {clearText: 'Çå³ý', closeText: '¹Ø±Õ',
-		prevText: '&lt;ÉÏÔÂ', nextText: 'ÏÂÔÂ&gt;', currentText: '½ñÌì',
-		dayNames: ['ÈÕ','Ò»','¶þ','Èý','ËÄ','Îå','Áù'],
-		monthNames: ['Ò»ÔÂ','¶þÔÂ','ÈýÔÂ','ËÄÔÂ','ÎåÔÂ','ÁùÔÂ',
-		'ÆßÔÂ','°ËÔÂ','¾ÅÔÂ','Ê®ÔÂ','Ê®Ò»ÔÂ','Ê®¶þÔÂ'],
-		dateFormat: 'YMD-', firstDay: 0};
+	popUpCal.regional['zh-cn'] = {clearText: 'æ¸…é™¤', closeText: 'å…³é—­',
+		prevText: '<ä¸Šæœˆ', nextText: 'ä¸‹æœˆ>', currentText: 'ä»Šå¤©',
+		dayNames: ['æ—¥','ä¸€','äºŒ','ä¸‰','å››','äº”','å…­'],
+		monthNames: ['ä¸€æœˆ','äºŒæœˆ','ä¸‰æœˆ','å››æœˆ','äº”æœˆ','å…­æœˆ',
+		'ä¸ƒæœˆ','å…«æœˆ','ä¹æœˆ','åæœˆ','åä¸€æœˆ','åäºŒæœˆ'],
+		dateFormat: 'YMD-', firstDay: 1};
 	popUpCal.setDefaults(popUpCal.regional['zh-cn']);
 });
