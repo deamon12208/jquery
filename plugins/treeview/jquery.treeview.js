@@ -12,32 +12,6 @@
  */
 
 /**
- * Takes an unordered list and makes all branches collapsable.
- *
- * The "treeview" class is added if not already present.
- *
- * To hide branches on first display, mark their li elements with
- * the class "closed". If the "collapsed" option is used, mark intially open
- * branches with class "open".
- *
- * @example .treeview, .treeview ul { 
- * 	padding: 0;
- * 	margin: 0;
- * 	list-style: none;
- * }	
- * 
- * .treeview li { 
- * 	margin: 0;
- * 	padding: 4px 0 3px 20px;
- * }
- * 
- * .treeview li { background: url(images/tv-item.gif) 0 0 no-repeat; }
- * .treeview .collapsable { background-image: url(images/tv-collapsable.gif); }
- * .treeview .expandable { background-image: url(images/tv-expandable.gif); }
- * .treeview .last { background-image: url(images/tv-item-last.gif); }
- * .treeview .lastCollapsable { background-image: url(images/tv-collapsable-last.gif); }
- * .treeview .lastExpandable { background-image: url(images/tv-expandable-last.gif); }
- * @desc The following styles are necessary in your stylesheet. There is are alternative sets of images available.
  *
  * @example $("ul").Treeview();
  * @before <ul>
@@ -85,21 +59,6 @@
  * </div>
  * @desc Creates a treeview that can be controlled with a few links.
  * Very likely to be changed/improved in future versions.
- *
- * @param Map options Optional settings to configure treeview
- * @option String|Number speed Speed of animation, see animate() for details. Default: none, no animation
- * @option Boolean collapsed Start with all branches collapsed. Default: none, all expanded
- * @option <Content> control Container for a treecontrol, see last example.
- * @option Boolean unique Set to allow only one branch on one level to be open
- *		   (closing siblings which opening). Default: none
- * @option Function toggle Callback when toggling a branch.
- * 		   Arguments: "this" refers to the UL that was shown or hidden.
- * 		   Works only with speed option set (set speed: 1 to enable callback without animations).
- *		   Default: none
- * @option Boolean navigation If set, looks for the anchor that matches location.href and activates that part of the treeview it. Great for href-based state-saving. Default: false
- * @type jQuery
- * @name Treeview
- * @cat Plugins/Treeview
  */
 
 (function($) {
@@ -233,11 +192,11 @@
 				branches.each(function(i, e) {
 					data[i] = $(e).is(":has(>ul:visible)") ? 1 : 0;
 				});
-				$.cookie("treestorage", data.join(""), settings.store.expiration );
+				$.cookie("treeview", data.join("") );
 			}
 			
 			function deserialize() {
-				var stored = $.cookie("treestorage");
+				var stored = $.cookie("treeview");
 				if ( stored ) {
 					var data = stored.split("");
 					branches.each(function(i, e) {
@@ -258,7 +217,8 @@
 			// find all tree items with child lists
 			var branches = $("li:has(>ul)", this);
 			
-			if (settings.store)	{
+			switch(settings.persist) {
+			case "cookie":
 				var toggleCallback = settings.toggle;
 				settings.toggle = function() {
 					serialize();
@@ -267,14 +227,13 @@
 					}
 				} 
 				deserialize();
-			}
-			
-			// try to open based on location.href
-			if ( settings.navigation ) {
+				break;
+			case "location":
 				var current = this.find("a").filter(function() { return this.href == location.href; });
 				if ( current.length ) {
 					current.addClass("selected").parents("ul, li").add( current.next() ).show();
 				}
+				break;
 			}
 			
 			$("li:has(ul):not(:has(>a))>span", this).click(function(event) {

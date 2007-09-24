@@ -1,7 +1,2 @@
 * lazy-loading: render the complete tree, but only apply hitzones and hiding of children to the first level on load
-* http://dev.jquery.com/ticket/1457
 * Modifying the tree works only for branches without childs that are not last
-* Allow blocking/disabling of certain nodes
-
-* option "persist" accepts either "location" or "cookie"
-  -> try to extract serializing/deserializing into cookie plugin - reuseability by accordion indicates successful abstraction 

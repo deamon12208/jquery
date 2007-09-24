@@ -13,7 +13,7 @@
 	<script type="text/javascript">
 	$(document).ready(function(){
 		$("#navigation").treeview({
-			navigation: true,
+			persist: "location",
 			collapsed: true,
 			unique: true
 		});
@@ -30,7 +30,8 @@
 		// statesaving works only for one tree on a single page/domain?, but we 
 		// can select more then one tree at once to apply statesaving for more then one
 		$("#black, #gray").treeview({
-			control: "#treecontrol", store: true
+			control: "#treecontrol",
+			persist: "cookie"
 		});
 	});
 	</script>
