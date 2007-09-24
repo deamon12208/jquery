@@ -19,9 +19,15 @@
 	$.fn.dialogClose = function() {
 		return this.each(function() {
 			var contentEl;
-			if ($(this).parents(".ui-dialog").length) contentEl = this;
-			if (!contentEl && $(this).is(".ui-dialog")) contentEl = $('.ui-dialog-content', this)[0];
-			$.ui.dialogClose(contentEl);
+			var closeEl = $(this);
+			if (closeEl.is('.ui-dialog-content')) {
+				var contentEl = closeEl;
+			} else if (closeEl.hasClass('ui-dialog')) {
+				contentEl = closeEl.find('.ui-dialog-content');
+			} else {
+				contentEl = closeEl.parents('.ui-dialog:first').find('.ui-dialog-content');
+			}
+			$.ui.dialogClose(contentEl[0]);
 		});
 	}
 
@@ -30,12 +36,12 @@
 		var options = {
 			width: 300,
 			height: 200,
+			minWidth: 150,
+			minHeight: 100,
 			position: 'center',
 			buttons: [],
-			modal: false,
-			drag: true,
-			resize: true,
-			shadow: false // It's quite slow
+			draggable: true,
+			resizable: true
 		};
 		var o = o || {}; $.extend(options, o); //Extend and copy options
 		this.element = el; var self = this; //Do bindings
@@ -46,20 +52,19 @@
 			.wrap(document.createElement('div'));
 		var uiDialogContainer = uiDialogContent.parent().addClass('ui-dialog-container').css({position: 'relative'});
 		var uiDialog = uiDialogContainer.parent()
-			.addClass('ui-dialog').addClass(uiDialogContent.attr('className'))
+			.addClass('ui-dialog')
 			.css({position: 'absolute', width: options.width, height: options.height});
 		
-		if (options.modal == false && options.resize == true) {
+		if (options.resizable) {
 			uiDialog.append("<div class='ui-resizable-n ui-resizable-handle'></div>")
-			.append("<div class='ui-resizable-s ui-resizable-handle'></div>")
-			.append("<div class='ui-resizable-e ui-resizable-handle'></div>")
-			.append("<div class='ui-resizable-w ui-resizable-handle'></div>")
-			.append("<div class='ui-resizable-ne ui-resizable-handle'></div>")
-			.append("<div class='ui-resizable-se ui-resizable-handle'></div>")
-			.append("<div class='ui-resizable-sw ui-resizable-handle'></div>")
-			.append("<div class='ui-resizable-nw ui-resizable-handle'></div>");
-			
-			uiDialog.resizable();
+				.append("<div class='ui-resizable-s ui-resizable-handle'></div>")
+				.append("<div class='ui-resizable-e ui-resizable-handle'></div>")
+				.append("<div class='ui-resizable-w ui-resizable-handle'></div>")
+				.append("<div class='ui-resizable-ne ui-resizable-handle'></div>")
+				.append("<div class='ui-resizable-se ui-resizable-handle'></div>")
+				.append("<div class='ui-resizable-sw ui-resizable-handle'></div>")
+				.append("<div class='ui-resizable-nw ui-resizable-handle'></div>");
+			uiDialog.resizable({ maxWidth: options.maxWidth, maxHeight: options.maxHeight, minWidth: options.minWidth, minHeight: options.minHeight });
 		}
 
 		uiDialogContainer.prepend('<div class="ui-dialog-titlebar"></div>');
@@ -88,24 +93,32 @@
 			});
 		}
 	
-		if (options.modal == false && options.drag == true) {
+		if (options.draggable) {
 			uiDialog.draggable({ handle: '.ui-dialog-titlebar' });
 		}
 	
 		this.open = function() {
-			var wnd = $(window), top = 0, left = 0;
+			var wnd = $(window), doc = $(document), top = doc.scrollTop(), left = doc.scrollLeft();
 			switch (options.position) {
 				case 'center':
-					top = (wnd.height() / 2) - (uiDialog.height() / 2);
-					left = (wnd.width() / 2) - (uiDialog.width() / 2);
-					break;
-				case 'left':
-					top = (wnd.height() / 2) - (uiDialog.height() / 2);
-					left = 0;
+					top += (wnd.height() / 2) - (uiDialog.height() / 2);
+					left += (wnd.width() / 2) - (uiDialog.width() / 2);
 					break;
 				case 'top':
-					top = 0;
-					left = (wnd.width() / 2) - (uiDialog.width() / 2);
+					top += 0;
+					left += (wnd.width() / 2) - (uiDialog.width() / 2);
+					break;
+				case 'right':
+					top += (wnd.height() / 2) - (uiDialog.height() / 2);
+					left += (wnd.width()) - (uiDialog.width());
+					break;
+				case 'bottom':
+					top += (wnd.height()) - (uiDialog.height());
+					left += (wnd.width() / 2) - (uiDialog.width() / 2);
+					break;
+				case 'left':
+					top += (wnd.height() / 2) - (uiDialog.height() / 2);
+					left += 0;
 					break;
 			}
 			uiDialog.css({top: top, left: left});
@@ -118,10 +131,6 @@
 
 		uiDialog.show();
 		this.open();
-
-		if (options.shadow && $.fn.shadow != undefined) {
-			uiDialog.shadow();
-		}
 	}
 
 	$.ui.dialogOpen = function(el) {

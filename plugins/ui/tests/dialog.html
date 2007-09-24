@@ -34,19 +34,8 @@ p { margin: 0; }
 pre, pre+p, p+p { margin: 0; }
 code { font-family: "Courier New", Courier, monospace; }
 
-.ui-tests {
-	list-style: none;
-	margin-left:3.5em;
-	margin-right: 2em;
-	padding-left: 0;
-}
-.ui-test {
-	padding: 0.5em;
-	margin-bottom: 1.5em;
-	background-color: #f3e4bf;
-}
-.ui-test button {
-	margin-top: 0.5em;
+.error {
+	color: red;
 }
 
 	</style>
@@ -54,194 +43,125 @@ code { font-family: "Courier New", Courier, monospace; }
 
 $(function() {
 
-	$('.ui-test button').click(function() {
-		$(this).attr('disabled', 'disabled');
-	});
+	var tests = {
+		"dialog": {
+			"default": {
+				"" : "$('#foo').dialog();",
+				"clone" : "$('#foo').clone().dialog();",
+				"empty" : "$([]).dialog();",
+				"detached" : "$('<div/>').dialog();"
+			},
+			"options": {
+				"buttons" : {
+					"OkCancel" : "$('#foo').dialog({ width: 650, height: 300,\n\tbuttons: {\n\t\t'Ok': function() {\n\t\t\t$(this).dialogClose();\n\t\t},\n\t\t'Cancel': function() {\n\t\t\t$(this).dialogClose();\n\t\t}\n\t}\n});"
+				},
+				"draggable" : {
+					"true" : "$('#foo').dialog({\n\tdraggable: true\n});",
+					"false" : "$('#foo').dialog({\n\tdraggable: false\n});"
+				},
+				"height" : {
+					"400" : "$('#foo').dialog({\n\theight: 400\n});",
+					"600" : "$('#foo').dialog({\n\theight: 600\n});"
+				},
+				"maxHeight" : {
+					"40" : "$('#foo').dialog({\n\tmaxHeight: 40\n});",
+					"400" : "$('#foo').dialog({\n\tmaxHeight: 400\n});",
+					"600" : "$('#foo').dialog({\n\tmaxHeight: 600\n});"
+				},
+				"minHeight" : {
+					"40" : "$('#foo').dialog({\n\tminHeight: 40\n});",
+					"400" : "$('#foo').dialog({\n\tminHeight: 400\n});",
+					"600" : "$('#foo').dialog({\n\tminHeight: 600\n});"
+				},
+				"maxWidth" : {
+					"40" : "$('#foo').dialog({\n\tmaxWidth: 40\n});",
+					"400" : "$('#foo').dialog({\n\tmaxWidth: 400\n});",
+					"600" : "$('#foo').dialog({\n\tmaxWidth: 600\n});"
+				},
+				"minWidth" : {
+					"40" : "$('#foo').dialog({\n\tminWidth: 40\n});",
+					"400" : "$('#foo').dialog({\n\tminWidth: 400\n});",
+					"600" : "$('#foo').dialog({\n\tminWidth: 600\n});"
+				},
+				"position" : {
+					"center" : "$('#foo').dialog({\n\tposition: 'center'\n});",
+					"top" : "$('#foo').dialog({\n\tposition: 'top'\n});",
+					"right" : "$('#foo').dialog({\n\tposition: 'right'\n});",
+					"bottom" : "$('#foo').dialog({\n\tposition: 'bottom'\n});",
+					"left" : "$('#foo').dialog({\n\tposition: 'left'\n});"
+				},
+				"resizable" : {
+					"true" : "$('#foo').dialog({\n\tresizable: true\n});",
+					"false" : "$('#foo').dialog({\n\tresizable: false\n});"
+				},
+				"title" : {
+					"attribute" : "$('#foo').attr( 'title', 'Dialog Title' ).dialog();",
+					"option" : "$('#foo').dialog({\n\ttitle: 'Dialog Title'\n});"
+				},
+				"width" : {
+					"400" : "$('#foo').dialog({\n\twidth: 400\n});",
+					"600" : "$('#foo').dialog({\n\twidth: 600\n});"
+				}
+			},
+			"callbacks": {
+			},
+			"methods": {
+				"dialogInit" : "$('#foo').dialogInit();\nsetTimeout(\"$('#foo').dialogOpen();\", 1000);",
+				"dialogOpen" : "$('#foo').dialog({ width: 450 }).dialogClose();\nsetTimeout(\"$('#foo').dialogOpen();\", 1000)",
+				"dialogClose" : "$('#foo').dialog({ width: 450 });\nsetTimeout(\"$('#foo').dialogClose();\", 1000);"
+			}
+		}
+	};
 
-	$('.ui-test').each(function() {
-		$(this).prepend('<div style="margin-top:-1.5em;margin-left:-3.5em;color:brown;">' + $('div:first', this).attr('id') + '</div>');
-	});
+	
+	$('body').append('<div id="blackhole"/>');
+	$('#blackhole').css({width: 0, height: 0, overflow: 'hidden'});
+
+	$('body').append('<dl id="tests"/>');
+
+	function deserializeTests( jsObj, dl, path ) {
+		$.each( jsObj, function(name, value) {
+			if ( typeof value == 'object' ) {
+				dl.append('<dt>' + ((name.length) ? name : '[default]') + '</dt>');
+				var dd = $( document.createElement( 'dd' ) ).appendTo( dl );
+				var newDl = $( document.createElement( 'dl' ) ).appendTo( dd );
+				deserializeTests( value, newDl, path + name + '-' );
+			} else {
+				dl.append('<dt>' + ((name.length) ? path + name : '[default]') + '</dt>');
+				var dd = $( document.createElement( 'dd' ) ).appendTo( dl );
+				var link = $( document.createElement( 'a' ) ).appendTo( dd );
+				link
+					.attr( 'href', '#' )
+					.text( value )
+					.click(function() {
+						$( '#foo' ).remove();
+						$( '#blackhole' ).append( '<div id="foo"/>' );
+						$( '#foo' )
+							.html( '<pre><code>' + value + '</code></pre>' )
+							.prepend( '<div>' + path + ((name.length) ? name : '[default]') + '</div><hr>' );
+						try {
+							eval( value );
+						} catch ( err ) {
+							var errDl = $(document.createElement('dl')).insertAfter(link);
+							$.each(err, function(name, value) {
+								errDl.append('<dt>' + name + '</dt>');
+								errDl.append('<dd><pre><code>' + value + '</code></pre></dd>');
+							});
+							link.after('<div class="error">' + err + '</div>');
+						} finally {
+							return false;
+						}
+					});
+			}
+		});
+	}
+	deserializeTests(tests, $('#tests'), "");
 
 });
 	</script>
 
 </head>
 <body class="flora">
-
-<h1>UI Dialog - Test Page</h1>
-
-<h2>Default</h2>
-
-	<ul class="ui-tests">
-	<li class="ui-test">
-		<div id="dialog-default" class="flora">
-		  	$('#divId').dialog()
-		</div>
-		<button id="test-dialog-default">Test</button>
-		<script type="text/javascript">$(function() {
-			$('#test-dialog-default').click(function() {
-			     $('#dialog-default').clone().appendTo('body').dialog();
-		}); });</script>
-	</li>
-	<li class="ui-test">
-		<div id="dialog-default-clone" class="flora">
-		  	$('#divId').clone().dialog()
-		</div>
-		<button id="test-dialog-default-clone">Test</button>
-		<script type="text/javascript">$(function() {
-			$('#test-dialog-default-clone').click(function() {
-			     $('#dialog-default-clone').clone().dialog();
-		}); });</script>
-	</li>
-	<li class="ui-test">
-		<div id="dialog-default-detached" class="flora">
-		  	$('&lt;div/&gt').dialog()
-		</div>
-		<button id="test-dialog-default-detached">Test</button>
-		<script type="text/javascript">$(function() {
-			$('#test-dialog-default-detached').click(function() {
-			     $('<div/>').text("$('<div/>').dialog()").dialog();
-		}); });</script>
-	</li>
-	</ul>
-
-<h2>Options</h2>
-
-	<ul class="ui-tests">
-	<li class="ui-test">
-		<div id="dialog-options-buttonsOkCancel">
-<pre>{
-	buttons: {
-		'Ok': function() { $(this).parents('.ui-dialog:first').dialogClose(); },
-		'Cancel': function() { $(this).parents('.ui-dialog:first').dialogClose(); }
-	}
-}</pre>
-		</div>
-		<button id="test-dialog-options-buttonsOkCancel">Test</button>
-		<script type="text/javascript">$(function() {
-			$('#test-dialog-options-buttonsOkCancel').click(function() {
-			     $('#dialog-options-buttonsOkCancel').clone().appendTo('body').dialog(
-			{
-				width: 600, height: 250,
-				buttons: {
-					'Ok': function() { $(this).parents('.ui-dialog:first').dialogClose(); },
-					'Cancel': function() { $(this).parents('.ui-dialog:first').dialogClose(); }
-				}
-			}
-				);
-		}); });</script>
-	</li>
-	<li class="ui-test">
-		<div id="dialog-options-height">
-		  	{ height: 600 }
-		</div>
-		<button id="test-dialog-options-height">Test</button>
-		<script type="text/javascript">$(function() {
-			$('#test-dialog-options-height').click(function() {
-			     $('#dialog-options-height').clone().appendTo('body').dialog(
-		  	{ height: 600 }
-				);
-		}); });</script>
-	</li>
-	<li class="ui-test">
-		<div id="dialog-options-maxHeight">
-		  	{ maxHeight: 600 }
-		</div>
-		<button id="test-dialog-options-maxHeight">Test</button>
-		<script type="text/javascript">$(function() {
-			$('#test-dialog-options-maxHeight').click(function() {
-			     $('#dialog-options-maxHeight').clone().appendTo('body').dialog(
-		  	{ maxHeight: 600 }
-				);
-		}); });</script>
-	</li>
-	<li class="ui-test">
-		<div id="dialog-options-maxWidth">
-		  	{ maxWidth: 800 }
-		</div>
-		<button id="test-dialog-options-maxWidth">Test</button>
-		<script type="text/javascript">$(function() {
-			$('#test-dialog-options-maxWidth').click(function() {
-			     $('#dialog-options-maxWidth').clone().appendTo('body').dialog(
-		  	{ maxWidth: 800 }
-				);
-		}); });</script>
-	</li>
-	<li class="ui-test">
-		<div id="dialog-options-minHeight">
-		  	{ minHeight: 100 }
-		</div>
-		<button id="test-dialog-options-minHeight">Test</button>
-		<script type="text/javascript">$(function() {
-			$('#test-dialog-options-minHeight').click(function() {
-			     $('#dialog-options-minHeight').clone().appendTo('body').dialog(
-		  	{ minHeight: 100 }
-				);
-		}); });</script>
-	</li>
-	<li class="ui-test">
-		<div id="dialog-options-minWidth">
-			{ minWidth: 100 }
-		</div>
-		<button id="test-dialog-options-minWidth">Test</button>
-		<script type="text/javascript">$(function() {
-			$('#test-dialog-options-minWidth').click(function() {
-			     $('#dialog-options-minWidth').clone().appendTo('body').dialog(
-			{ minWidth: 100 }
-				);
-		}); });</script>
-	</li>
-	<li class="ui-test">
-		<div id="dialog-options-positionCenter">
-			{ position: 'center' }
-		</div>
-		<button id="test-dialog-options-positionCenter">Test</button>
-		<script type="text/javascript">$(function() {
-			$('#test-dialog-options-positionCenter').click(function() {
-			     $('#dialog-options-positionCenter').clone().appendTo('body').dialog(
-			{ position: 'center' }
-				);
-		}); });</script>
-	</li>
-	<li class="ui-test">
-		<div id="dialog-options-titleAttribute" title="Dialog Title">
-			&lt;div title="Dialog Title"&gt;&lt;/div&gt;
-		</div>
-		<button id="test-dialog-options-titleAttribute">Test</button>
-		<script type="text/javascript">$(function() {
-			$('#test-dialog-options-titleAttribute').click(function() {
-			     $('#dialog-options-titleAttribute').clone().appendTo('body').dialog();
-		}); });</script>
-	</li>
-	<li class="ui-test">
-		<div id="dialog-options-titleOption" title="Dialog Title">
-			{ title: 'Dialog Title' }
-		</div>
-		<button id="test-dialog-options-titleOption">Test</button>
-		<script type="text/javascript">$(function() {
-			$('#test-dialog-options-titleOption').click(function() {
-			     $('#dialog-options-titleOption').clone().appendTo('body').dialog(
-			{ title: 'Dialog Title' }
-				);
-		}); });</script>
-	</li>
-	<li class="ui-test">
-		<div id="dialog-options-width">
-		  	{ width: 800 }
-		</div>
-		<button id="test-dialog-options-width">Test</button>
-		<script type="text/javascript">$(function() {
-			$('#test-dialog-options-width').click(function() {
-			     $('#dialog-options-width').clone().appendTo('body').dialog(
-		  	{ width: 800 }
-				);
-		}); });</script>
-	</li>
-	</ul>
-
-<h2>Callbacks</h2>
-
-<h2>Methods</h2>
 
 </body>
 </html>
