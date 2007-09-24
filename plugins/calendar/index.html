@@ -405,36 +405,39 @@ function updateInlineRange2(dateStr) {
 					<p>The basic HTML structure of the calendar is shown below:</p>
 					<pre><code>&lt;div id="calendar_div">
   &lt;div class="calendar_control">
-	&lt;a class="calendar_clear">Clear&lt;/a>&lt;a class="calendar_close">Close&lt;/a>
+    &lt;div class="calendar_clear">&lt;a>Clear&lt;/a>&lt;/div>
+    &lt;div class="calendar_close">&lt;a>Close&lt;/a>&lt;/div>
   &lt;/div>
   &lt;div class="calendar_links">
-	&lt;a class="calendar_prev">&amp;lt;Prev&lt;/a>
-	&lt;a class="calendar_current">Today&lt;/a>
-	&lt;a class="calendar_next">Next&amp;gt;&lt;/a>
+    &lt;div class="calendar_prev">&lt;a>&amp;lt;Prev&lt;/a>&lt;/div>
+    &lt;div class="calendar_current">&lt;a>Today&lt;/a>&lt;/div>
+    &lt;div class="calendar_next">&lt;a>Next&amp;gt;&lt;/a>&lt;/div>
   &lt;/div>
-  &lt;div class="calendar_header">
-	&lt;select class="calendar_newMonth">&lt;/select>
-	&lt;select class="calendar_newYear">&lt;/select>
+  &lt;div class="calendar_oneMonth calendar_newRow">
+    &lt;div class="calendar_header">
+      &lt;select class="calendar_newMonth">&lt;/select>
+      &lt;select class="calendar_newYear">&lt;/select>
+    &lt;/div>
+    &lt;table class="calendar" cellpadding="0" cellspacing="0">
+      &lt;thead>
+        &lt;tr class="calendar_titleRow">
+          &lt;td>&lt;a>Su&lt;/a>&lt;/td>&lt;td>&lt;a>Mo&lt;/a>&lt;/td>...
+        &lt;/tr>
+      &lt;/thead>
+      &lt;tbody>
+        &lt;tr class="calendar_daysRow">
+          &lt;td class="calendar_daysCell calendar_weekEndCell
+            calendar_otherMonth calendar_unselectable">31&lt;/td>
+          &lt;td class="calendar_daysCell">&lt;a>1&lt;/a>&lt;/td>
+          &lt;td class="calendar_daysCell calendar_daysCellOver">&lt;a>2&lt;/a>&lt;/td>
+          &lt;td class="calendar_daysCell calendar_daysCellOver calendar_currentDay">&lt;a>3&lt;/a>&lt;/td>
+          &lt;td class="calendar_daysCell calendar_today">&lt;a>4&lt;/a>&lt;/td>
+          ...
+        &lt;/tr>
+        ...
+      &lt;/tbody>
+    &lt;/table>
   &lt;/div>
-  &lt;table class="calendar" cellpadding="0" cellspacing="0">
-	&lt;thead>
-	  &lt;tr class="calendar_titleRow">
-		&lt;td>&lt;a>Su&lt;/a>&lt;/td>&lt;td>&lt;a>Mo&lt;/a>&lt;/td>...
-	  &lt;/tr>
-	&lt;/thead>
-	&lt;tbody>
-	  &lt;tr class="calendar_daysRow">
-		&lt;td class="calendar_daysCell calendar_weekEndCell
-			calendar_otherMonth calendar_unselectable">31&lt;/td>
-		&lt;td class="calendar_daysCell">&lt;a>1&lt;/a>&lt;/td>
-		&lt;td class="calendar_daysCell calendar_daysCellOver">&lt;a>2&lt;/a>&lt;/td>
-		&lt;td class="calendar_daysCell calendar_daysCellOver calendar_currentDay">&lt;a>3&lt;/a>&lt;/td>
-		&lt;td class="calendar_daysCell calendar_today">&lt;a>4&lt;/a>&lt;/td>
-		...
-	  &lt;/tr>
-	  ...
-	&lt;/tbody>
-  &lt;/table>
   &lt;div style="clear: both;">&lt;/div>
 &lt;/div></code></pre>
 				</div>
