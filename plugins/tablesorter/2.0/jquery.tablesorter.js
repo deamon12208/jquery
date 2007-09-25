@@ -729,7 +729,7 @@
 					r += item;
 			   	}
 			}
-			return $.tablesorter.formatFloat(s);
+			return $.tablesorter.formatFloat(r);
 		},
 		type: "numeric"
 	});
