@@ -371,7 +371,7 @@ String.format = function(source, params) {
 	if ( arguments.length == 1 ) 
 		return function() {
 			var args = jQuery.makeArray(arguments);
-			args.unshift(source)
+			args.unshift(source);
 			return String.format.apply( this, args );
 		};
 	if ( arguments.length > 2 && params.constructor != Array  ) {
