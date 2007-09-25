@@ -720,9 +720,8 @@
 			return /^\d{2,3}[\.]\d{2,3}[\.]\d{2,3}[\.]\d{2,3}$/.test(s);
 		},
 		format: function(s) {
-			var a = s.split(".");
-			var r = "";
-			for(var i = 0; i < item.length; i++) {
+			var a = s.split("."), r = "", l = a.length;
+			for(var i = 0; i < l; i++) {
 				var item = a[i];
 			   	if(item.length == 2) {
 					r += "0" + item;
