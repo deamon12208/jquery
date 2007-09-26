@@ -1,7 +1,7 @@
 /*
  * Treeview 1.2 - jQuery plugin to hide and show branches of a tree
  *
- * Copyright (c) 2006 J�rn Zaefferer, Myles Angell
+ * Copyright (c) 2006 Jörn Zaefferer, Myles Angell
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -35,7 +35,7 @@
  * </ul>
  * @desc Basic usage example
  *
- * @example $("ul").Treeview({ speed: "fast", collapsed: true});
+ * @example $("ul").Treeview({ animated: "fast", collapsed: true});
  * @before <ul>
  *   <li class="open">Item 1 (starts open)
  *     <ul>
@@ -118,28 +118,73 @@
 				$(this).removeClass(className);
 			});
 		},
-		heightToggle: function(speed, callback) {
-			speed ?
-				this.animate({ height: "toggle" }, speed, callback) :
+		heightToggle: function(animated, callback) {
+			animated ?
+				this.animate({ height: "toggle" }, animated, callback) :
 				this.each(function(){
 					jQuery(this)[ jQuery(this).is(":hidden") ? "show" : "hide" ]();
 					if(callback)
 						callback.apply(this, arguments);
 				});
 		},
-		heightHide: function(speed, callback) {
-			if (speed) {
-				this.animate({ height: "hide" }, speed, callback)
+		heightHide: function(animated, callback) {
+			if (animated) {
+				this.animate({ height: "hide" }, animated, callback)
 			} else {
 				this.hide();
 				if (callback)
 					this.each(callback);				
 			}
 		},
+		prepareBranches: function(settings) {
+			// mark last tree items
+			this.filter(":last-child").addClass(CLASSES.last);
+			// collapse whole tree, or only those marked as closed, anyway except those marked as open
+			this.filter((settings.collapsed ? "" : "." + CLASSES.closed) + ":not(." + CLASSES.open + ")").find(">ul").hide();
+			// return all items with sublists
+			return this.filter(":has(>ul)");
+		},
+		applyClasses: function(settings, toggler) {
+			this.filter(":has(ul):not(:has(>a))").find(">span").click(function(event) {
+				if ( this == event.target ) {
+					toggler.apply($(this).next());
+				}
+			}).add( $("a", this) ).hoverClass()
+			
+			// handle closed ones first
+			this.filter(":has(>ul:hidden)")
+					.addClass(CLASSES.expandable)
+					.replaceClass(CLASSES.last, CLASSES.lastExpandable);
+					
+			// handle open ones
+			this.not(":has(>ul:hidden)")
+					.addClass(CLASSES.collapsable)
+					.replaceClass(CLASSES.last, CLASSES.lastCollapsable);
+					
+			// append hitarea
+			this.prepend("<div class=\"" + CLASSES.hitarea + "\">")
+				// find hitarea
+				.find("div." + CLASSES.hitarea)
+				// apply styles to hitarea
+				.css(hitareaCSS)
+				// apply click event to hitarea
+				.click( toggler );
+		},
 		treeview: function(settings) {
-		
+			
 			// currently no defaults necessary, all implicit
 			settings = $.extend({}, settings);
+			
+			if (settings.add) {
+				return this.trigger("add", [settings.add]);
+			}
+			
+			if (settings.toggle ) {
+				var callback = settings.toggle;
+				settings.toggle = function() {
+					return callback.apply($(this).parent()[0], arguments);
+				}
+			}
 		
 			// factory for treecontroller
 			function treeController(tree, control) {
@@ -166,21 +211,21 @@
 			// handle toggle event
 			function toggler() {
 				// this refers to hitareas, we need to find the parent lis first
-				$( this ).parent()
+				$(this).parent()
 					// swap classes
 					.swapClass( CLASSES.collapsable, CLASSES.expandable )
 					.swapClass( CLASSES.lastCollapsable, CLASSES.lastExpandable )
 					// find child lists
 					.find( ">ul" )
 					// toggle them
-					.heightToggle( settings.speed, settings.toggle );
+					.heightToggle( settings.animated, settings.toggle );
 				if ( settings.unique ) {
-					$( this ).parent()
+					$(this).parent()
 						.siblings()
 						.replaceClass( CLASSES.collapsable, CLASSES.expandable )
 						.replaceClass( CLASSES.lastCollapsable, CLASSES.lastExpandable )
 						.find( ">ul" )
-						.heightHide( settings.speed, settings.toggle );
+						.heightHide( settings.animated, settings.toggle );
 				}
 			}
 			
@@ -208,21 +253,15 @@
 			// add treeview class to activate styles
 			this.addClass("treeview");
 			
-			// mark last tree items
-			$("li:last-child", this).addClass(CLASSES.last);
-			
-			// collapse whole tree, or only those marked as closed, anyway except those marked as open
-			$( (settings.collapsed ? "li" : "li." + CLASSES.closed) + ":not(." + CLASSES.open + ") > ul", this).hide();
-			
-			// find all tree items with child lists
-			var branches = $("li:has(>ul)", this);
+			// prepare branches and find all tree items with child lists
+			var branches = this.find("li").prepareBranches(settings);
 			
 			switch(settings.persist) {
 			case "cookie":
 				var toggleCallback = settings.toggle;
 				settings.toggle = function() {
 					serialize();
-					if(toggleCallback) {
+					if (toggleCallback) {
 						toggleCallback.apply(this, arguments);
 					}
 				} 
@@ -236,36 +275,16 @@
 				break;
 			}
 			
-			$("li:has(ul):not(:has(>a))>span", this).click(function(event) {
-				if ( this == event.target ) {
-					toggler.apply($(this).next());
-				}
-			}).add( $("a", this) ).hoverClass();
-			
-			// handle closed ones first
-			branches.filter(":has(>ul:hidden)")
-					.addClass(CLASSES.expandable)
-					.replaceClass(CLASSES.last, CLASSES.lastExpandable);
-					
-			// handle open ones
-			branches.not(":has(>ul:hidden)")
-					.addClass(CLASSES.collapsable)
-					.replaceClass(CLASSES.last, CLASSES.lastCollapsable);
-					
-			// append hitarea
-			branches.prepend("<div class=\"" + CLASSES.hitarea + "\">")
-				// find hitarea
-				.find("div." + CLASSES.hitarea)
-				// apply styles to hitarea
-				.css(hitareaCSS)
-				// apply click event to hitarea
-				.click( toggler );
+			branches.applyClasses(settings, toggler);
 				
 			// if control option is set, create the treecontroller
 			if ( settings.control )
 				treeController(this, settings.control);
 			
-			return this;
+			return this.bind("add", function(event, branches) {
+				$(branches).prev().removeClass(CLASSES.last).removeClass(CLASSES.lastCollapsable).removeClass(CLASSES.lastExpandable);
+				$(branches).find("li").andSelf().prepareBranches(settings).applyClasses(settings, toggler);
+			});
 		}
 	});
 })(jQuery);

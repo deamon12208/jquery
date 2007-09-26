@@ -19,11 +19,11 @@
 		});
 		$("#browser").treeview();
 		$("#red").treeview({
-			speed: "fast",
+			animated: "fast",
 			collapsed: true,
 			unique: true,
 			toggle: function() {
-				window.console && console.log("%o was toggled", $(this).parent());
+				window.console && console.log("%o was toggled", this);
 			}
 		});
 		
@@ -33,6 +33,19 @@
 			control: "#treecontrol",
 			persist: "cookie"
 		});
+
+		$("#add").click(function() {
+			var branches = $("<li><span class='folder'>New Sublist</span><ul>" + 
+				"<li><span class='file'>Item1</span></li>" + 
+				"<li><span class='file'>Item2</span></li></ul></li>").appendTo("#browser");
+			$("#browser").treeview({
+				add: branches
+			});
+			branches = $("<li class='closed'><span class='folder'>New Sublist</span><ul><li><span class='file'>Item1</span></li><li><span class='file'>Item2</span></li></ul></li>").prependTo("#folder21");
+			$("#browser").treeview({
+				add: branches
+			});
+		});		
 	});
 	</script>
 	<style type="text/css">
@@ -66,7 +79,7 @@
 	
 	<h1 id="banner"><a href="http://bassistance.de/jquery-plugins/jquery-plugin-treeview/">jQuery Treeview Plugin</a> Demo</h1>
 	<div id="main">
-	
+		
 	<h4>Sample 0 - navigation</h4>
 	
 	<ul id="navigation">
@@ -175,7 +188,7 @@
 		<li><span class="folder">Folder 2</span>
 			<ul>
 				<li><span class="folder">Subfolder 2.1</span>
-					<ul>
+					<ul id="folder21">
 						<li><span class="file">File 2.1.1</span></li>
 						<li><span class="file">File 2.1.2</span></li>
 					</ul>
@@ -190,6 +203,8 @@
 		</li>
 		<li><span class="file">File 4</span></li>
 	</ul>
+	
+	<button id="add">Add!</button>
 	
 	<h4>Sample 2 - fast animations, all branches collapsed at first, red image set</h4>
 	<ul id="red">
