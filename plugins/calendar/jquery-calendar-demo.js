@@ -63,6 +63,7 @@ $(document).ready(function () {
 	$('#rangeInline').calendar({rangeSelect: true, rangeSeparator: ' to ',
 		numberOfMonths: 2, onSelect: updateInlineRange2});
 	updateInlineRange2();
+	$('#calendar_div_25').width(370); // Unfortunately not automatic
 	// Stylesheets
 	$('#altStyle').calendar();
 	$('#button1').click(function() { 
