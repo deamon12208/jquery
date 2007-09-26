@@ -15,6 +15,8 @@
 	background-color: #eee;
 }
 
+#treecontrol { margin: 1em 0; }
+
 .treeview .hover { color: red; cursor: pointer; }
 
 .treeview li { background: url(images/tv-item.gif) 0 0 no-repeat; }
