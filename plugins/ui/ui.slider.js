@@ -1,8 +1,6 @@
 (function($) {
 
-	
 	//Web Forms 2.0
-	window.webforms = 1;
 	if(window['webforms']) {
 		$(document).ready(function() {
 			
@@ -266,7 +264,7 @@
 			
 			var modifier = scale || o.realValue;
 			
-			var p = this.parentSize;
+			if(!p) var p = this.parentSize;
 			var prop = this.prop;
 			
 			m = Math.round(((value)/modifier) * p);
