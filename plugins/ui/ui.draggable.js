@@ -20,7 +20,7 @@
 
 	$.fn.draggable = function(o) {
 		return this.each(function() {
-			new $.ui.draggable(this, o);
+			if(!$(this).is(".ui-draggable")) new $.ui.draggable(this, o);
 		});
 	}
 	
