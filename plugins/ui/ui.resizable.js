@@ -2,7 +2,6 @@
 
 	//Make nodes selectable by expression
 	$.extend($.expr[':'], { resizable: "(' '+a.className+' ').indexOf(' ui-resizable ')" });
-
 	
 	$.fn.resizable = function(o) {
 		return this.each(function() {
@@ -24,7 +23,6 @@
 		return false;
 	};
 	
-	
 	$.ui.resizable = function(el,o) {
 		
 		var options = {}; o = o || {}; $.extend(options, o); //Extend and copy options
@@ -45,6 +43,19 @@
 		} else {
 			var helper = "original";	
 		}
+
+		//Prepare containment option
+		if(options.containment){ 
+			if(options.containment.left != undefined || options.containment.constructor == Array) return; 
+			if(options.containment == 'parent') options.containment = this.element.parentNode;
+			if(options.containment == 'document') { 
+				options.containment = [0,0,$(document).width(),($(document).height() || document.body.parentNode.scrollHeight)]; 
+			} else { //I'm a node, so compute top/left/right/bottom 
+				var ce = $(options.containment)[0]; 
+				var co = $(options.containment).offset({ border: false });
+				options.containment = [co.left, co.top, co.left+(ce.offsetWidth || ce.scrollWidth), co.top+(ce.offsetHeight || ce.scrollHeight)];
+			} 
+		} 
 		
 		//Destructive mode wraps the original element
 		if(el.nodeName.match(/textarea|input|select|button|img/i)) options.destructive = true;
@@ -78,8 +89,6 @@
 			//t('ne','top: '+b[0]+'px; right: '+b[1]+'px;');
 			//t('nw','top: '+b[0]+'px; left: '+b[3]+'px;');
 		}
-		
-		
 		
 		//If other elements should be modified, we have to copy that array
 		options.modifyThese = [];
@@ -244,7 +253,13 @@
 						if(o.axis == 'n') nw = p[0];
 						var mod = (this.pos[1] - co.top); nh = nh - (mod*2);
 						mod = nh <= o.minHeight ? p[1] - o.minHeight : (nh >= o.maxHeight ? 0-(o.maxHeight-p[1]) : mod);
+						
 						if(e.shiftKey) nw = nh * (p[0]/p[1]);
+						if(o.containment && co.top + mod < o.containment[1] - o.po.top) { 
+							mod = (o.containment[1] - o.po.top) - co.top; 
+							nh = nh + this.pos[1] - (o.containment[1] - o.po.top); 
+						} 
+						
 						$(this.helper).css('top', co.top + mod);
 						break;
 						
@@ -257,6 +272,12 @@
 						if(o.axis == 'w') nh = p[1];
 						var mod = (this.pos[0] - co.left); nw = nw - (mod*2);
 						mod = nw <= o.minWidth ? p[0] - o.minWidth : (nw >= o.maxWidth ? 0-(o.maxWidth-p[0]) : mod);
+
+						if (o.containment && co.left + mod < o.containment[0] - o.po.left) { 
+							mod = (o.containment[0] - o.po.left) - co.left;
+							nw = nw + this.pos[0] - (o.containment[0] - o.po.left); 
+						} 
+
 						$(this.helper).css('left', co.left + mod);
 						break;
 						
@@ -272,6 +293,15 @@
 						mody = nh <= o.minHeight ? p[1] - o.minHeight : (nh >= o.maxHeight ? 0-(o.maxHeight-p[1]) : mody);
 
 						if(e.shiftKey) mody = modx * (p[1]/p[0]);
+						if (o.containment && co.top + mody < o.containment[1] - o.po.top) { 
+							mody = (o.containment[1] - o.po.top) - co.top;
+							nh = nh + this.pos[1] - (o.containment[1] - o.po.top); 
+						} 
+						if (o.containment && co.left + modx < o.containment[0] - o.po.left) { 
+							modx = (o.containment[0] - o.po.left) - co.left; 
+							nw = nw + this.pos[0] - (o.containment[0] - o.po.left); 
+						}
+
 						$(this.helper).css({
 							left: co.left + modx,
 							top: co.top + mody
@@ -293,6 +323,15 @@
 
 			var modifier = $(that.element).triggerHandler("resize", [e, that.prepareCallbackObj(this)], o.resize);
 			if(!modifier) modifier = {};
+
+
+			var left_handle_pos = co.left < this.pos[0] ? co.left : this.pos[0]; 
+			var top_handle_pos = co.top < this.pos[1] ? co.top : this.pos[1]; 
+			if(o.containment && left_handle_pos + nw > o.containment[2] - o.po.left)
+				nw = (o.containment[2] - o.po.left) - left_handle_pos; 
+			if(o.containment && top_handle_pos + nh > o.containment[3] - o.po.top)
+				nh = (o.containment[3] - o.po.top) - top_handle_pos; 
+
 			
 			for(var i in this.options.modifyThese) {
 				var c = this.options.modifyThese[i];
