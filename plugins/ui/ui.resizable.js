@@ -73,6 +73,7 @@
 			o.proportionallyResize.push(oel);
 			
 			var b = [parseInt($(oel).css('borderTopWidth')),parseInt($(oel).css('borderRightWidth')),parseInt($(oel).css('borderBottomWidth')),parseInt($(oel).css('borderLeftWidth'))];
+
 		} else {
 			var b = [0,0,0,0];	
 		}
@@ -97,12 +98,10 @@
 			var propRes = options.proportionallyResize;
 
 			for(var i in propRes) {
-				
 				if(propRes[i].constructor == String)
 					propRes[i] = $(propRes[i], el);
 				
 				if(!$(propRes[i]).length) continue;
-				
 				
 				var x = $(propRes[i]).width() - $(el).width();
 				var y = $(propRes[i]).height() - $(el).height();
@@ -111,11 +110,10 @@
 
 		}
 		
+		//Deal with the handles
 		options.handles = {};
 		if(!o.handles) o.handles = { n: '.ui-resizable-n', e: '.ui-resizable-e', s: '.ui-resizable-s', w: '.ui-resizable-w', se: '.ui-resizable-se', sw: '.ui-resizable-sw', ne: '.ui-resizable-ne', nw: '.ui-resizable-nw' };
-		
 		for(var i in o.handles) { options.handles[i] = o.handles[i]; } //Copying the object
-		
 		for(var i in options.handles) {
 			
 			if(options.handles[i].constructor == String)
@@ -132,7 +130,10 @@
 		//If we want to auto hide the elements
 		if(o.autohide)
 			$(this.element).addClass("ui-resizable-autohide").hover(function() { $(this).removeClass("ui-resizable-autohide"); }, function() { if(self.interaction.options.autohide && !self.interaction.init) $(this).addClass("ui-resizable-autohide"); });
-	
+
+		// If we want to conserve the aspect ratio, we store the original aspect ratio in the configuration 
+		if(o.aspectRatio && (o.aspectRatio == 'preserve' || o.aspectRatio === true))
+			options.aspectRatio = $(this.element).width()/$(this.element).height();
 
 		$.extend(options, {
 			helper: helper,
@@ -140,6 +141,7 @@
 			dragPrevention: 'input,button,select',
 			minHeight: options.minHeight || 50,
 			minWidth: options.minWidth || 100,
+			aspectRatio: options.aspectRatio || false,
 			startCondition: function(e) {
 				if(self.disabled) return false;
 				for(var i in options.handles) {
@@ -193,9 +195,8 @@
 			this.options.originalPosition = $(this.element).css("position");
 			this.options.originalPositionValues = $(this.element).position();
 
-			if ( this.options.modifyThese.length == 0 || !this.options.modifyThese[this.options.modifyThese.length-1][0].is('.ui-resizable') ) {
+			if(this.options.modifyThese.length == 0 || !this.options.modifyThese[this.options.modifyThese.length-1][0].is('.ui-resizable'))
 				this.options.modifyThese.push([$(this.helper),0,0]);
-			}
 			
 			$(that.element).triggerHandler("resizestart", [e, that.prepareCallbackObj(this)], this.options.start);			
 			return false;
@@ -203,37 +204,33 @@
 		stop: function(that, e) {			
 			
 			var o = this.options;
-
 			$(that.element).triggerHandler("resizestop", [e, that.prepareCallbackObj(this)], this.options.stop);	
 
 			if(o.proxy) {
-				$(this.element).css({
-					width: $(this.helper).width(),
-					height: $(this.helper).height()
-				});
-				
-				if(o.originalPosition == "absolute" || o.originalPosition == "fixed") {
-					$(this.element).css({
-						top: $(this.helper).css("top"),
-						left: $(this.helper).css("left")
-					});					
-				}
+				$(this.element).css({ width: $(this.helper).width(), height: $(this.helper).height()});
+				if(o.originalPosition == "absolute" || o.originalPosition == "fixed")
+					$(this.element).css({ top: $(this.helper).css("top"), left: $(this.helper).css("left")});
+
 			}
-			return false;
 			
+			return false;
 		},
 		drag: function(that, e) {
 
+			//Prepare shortcuts and position
 			var o = this.options;
 			var rel = (o.originalPosition != "absolute" && o.originalPosition != "fixed");
 			var co = rel ? o.co : this.options.originalPositionValues;
 			var p = o.originalSize;
-
 			this.pos = rel ? [this.rpos[0]-o.cursorAt.left, this.rpos[1]-o.cursorAt.top] : [this.pos[0]-o.cursorAt.left, this.pos[1]-o.cursorAt.top];
 
+			//Calculate a rough new position
 			var nw = p[0] + (this.pos[0] - co.left);
 			var nh = p[1] + (this.pos[1] - co.top);
-		
+			
+			// Conserve aspect ratio 
+			if(e.shiftKey && !o.aspectRatio) o.aspectRatio = p[0]/p[1];
+			
 			if(o.axis) {
 				switch(o.axis) {
 					case 'e':
@@ -241,20 +238,16 @@
 						break;
 					case 's':
 						nw = p[0];
-						if(e.shiftKey) nw = nh * (p[0]/p[1]);
 						break;
 					case 'n':
 					case 'ne':
 
-						
-						if(!o.proxy && (o.originalPosition != "absolute" && o.originalPosition != "fixed"))
-							return false;
+						if(!o.proxy && (o.originalPosition != "absolute" && o.originalPosition != "fixed")) return false;
 						
 						if(o.axis == 'n') nw = p[0];
 						var mod = (this.pos[1] - co.top); nh = nh - (mod*2);
 						mod = nh <= o.minHeight ? p[1] - o.minHeight : (nh >= o.maxHeight ? 0-(o.maxHeight-p[1]) : mod);
 						
-						if(e.shiftKey) nw = nh * (p[0]/p[1]);
 						if(o.containment && co.top + mod < o.containment[1] - o.po.top) { 
 							mod = (o.containment[1] - o.po.top) - co.top; 
 							nh = nh + this.pos[1] - (o.containment[1] - o.po.top); 
@@ -266,8 +259,7 @@
 					case 'w':
 					case 'sw':
 
-						if(!o.proxy && (o.originalPosition != "absolute" && o.originalPosition != "fixed"))
-							return false;
+						if(!o.proxy && (o.originalPosition != "absolute" && o.originalPosition != "fixed")) return false;
 						
 						if(o.axis == 'w') nh = p[1];
 						var mod = (this.pos[0] - co.left); nw = nw - (mod*2);
@@ -283,8 +275,7 @@
 						
 					case 'nw':
 						
-						if(!o.proxy && (o.originalPosition != "absolute" && o.originalPosition != "fixed"))
-							return false;
+						if(!o.proxy && (o.originalPosition != "absolute" && o.originalPosition != "fixed")) return false;
 	
 						var modx = (this.pos[0] - co.left); nw = nw - (modx*2);
 						modx = nw <= o.minWidth ? p[0] - o.minWidth : (nw >= o.maxWidth ? 0-(o.maxWidth-p[0]) : modx);
@@ -292,7 +283,6 @@
 						var mody = (this.pos[1] - co.top); nh = nh - (mody*2);
 						mody = nh <= o.minHeight ? p[1] - o.minHeight : (nh >= o.maxHeight ? 0-(o.maxHeight-p[1]) : mody);
 
-						if(e.shiftKey) mody = modx * (p[1]/p[0]);
 						if (o.containment && co.top + mody < o.containment[1] - o.po.top) { 
 							mody = (o.containment[1] - o.po.top) - co.top;
 							nh = nh + this.pos[1] - (o.containment[1] - o.po.top); 
@@ -302,16 +292,12 @@
 							nw = nw + this.pos[0] - (o.containment[0] - o.po.left); 
 						}
 
-						$(this.helper).css({
-							left: co.left + modx,
-							top: co.top + mody
-						});
-						
+						$(this.helper).css({ left: co.left + modx, top: co.top + mody });
 						break;
 				}	
 			}
 
-			if(e.shiftKey) nh = nw * (p[1]/p[0]);
+			if(e.shiftKey) nh = nw * (1/o.aspectRatio);
 			
 			if(o.minWidth) nw = nw <= o.minWidth ? o.minWidth : nw;
 			if(o.minHeight) nh = nh <= o.minHeight ? o.minHeight : nh;
@@ -319,19 +305,17 @@
 			if(o.maxWidth) nw = nw >= o.maxWidth ? o.maxWidth : nw;
 			if(o.maxHeight) nh = nh >= o.maxHeight ? o.maxHeight : nh;
 			
-			if(e.shiftKey) nh = nw * (p[1]/p[0]);
+			if(e.shiftKey) nh = nw * (1/o.aspectRatio);
 
 			var modifier = $(that.element).triggerHandler("resize", [e, that.prepareCallbackObj(this)], o.resize);
 			if(!modifier) modifier = {};
 
-
-			var left_handle_pos = co.left < this.pos[0] ? co.left : this.pos[0]; 
-			var top_handle_pos = co.top < this.pos[1] ? co.top : this.pos[1]; 
+			var left_handle_pos = co.left < this.pos[0] ? co.left : this.pos[0];
+			var top_handle_pos = co.top < this.pos[1] ? co.top : this.pos[1];
 			if(o.containment && left_handle_pos + nw > o.containment[2] - o.po.left)
-				nw = (o.containment[2] - o.po.left) - left_handle_pos; 
+				nw = (o.containment[2] - o.po.left) - left_handle_pos;
 			if(o.containment && top_handle_pos + nh > o.containment[3] - o.po.top)
-				nh = (o.containment[3] - o.po.top) - top_handle_pos; 
-
+				nh = (o.containment[3] - o.po.top) - top_handle_pos;
 			
 			for(var i in this.options.modifyThese) {
 				var c = this.options.modifyThese[i];
