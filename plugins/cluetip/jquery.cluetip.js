@@ -1,7 +1,7 @@
 /*
  * jQuery clueTip plugin
- * Version 0.9.0  (09/04/2007)
- * @requires jQuery v1.1.1
+ * Version 0.9.2  (09/28/2007)
+ * @requires jQuery v1.1.1+
  * @requires Dimensions plugin 
  *
  * Dual licensed under the MIT and GPL licenses:
@@ -19,7 +19,7 @@
  *
  * @credit Inspired by Cody Lindley's jTip (http://www.codylindley.com)
  * @credit Thanks to Shelane Enos for the feature ideas 
- * @credit Thanks to Glen Lipka, Jörn Zaefferer, and Dan G. Switzer for their expert advice
+ * @credit Thanks to Glen Lipka, Jörn Zaefferer, Dan G. Switzer, and Hector Santos for their expert advice and code enhancements
  * @credit Thanks to Torben Schreiter for identifying bugs and offering solutions
  * @credit Thanks to Jonathan Chaffer, as always, for help with the hard parts. :-)
  */
@@ -127,7 +127,8 @@
   			interval: 50,
   			timeout: 0
       },
-      onShow: function (ct, c){},
+      beforeShow: function(e) {return true;},
+      onShow: function(ct, c){},
       ajaxCache: true,  
       ajaxProcess: function(data) {
         data = $(data).not('style, meta, link, script, title');
@@ -209,6 +210,9 @@
     
 //activate clueTip
     var activate = function(event) {
+      if (!defaults.beforeShow($this)) {
+        return false;
+      }
       isActive = true;
       $cluetip.removeClass().css({width: defaults.width});
       if (tipAttribute == $this.attr('href')) {
@@ -239,8 +243,6 @@
         }
         var pY = posX < 0 ? event.pageY + 20 : event.pageY;
       }
-      posX < linkLeft ? $cluetip.addClass('clue-left-' + ctClass).removeClass('clue-right-' + ctClass)
-      : $cluetip.addClass('clue-right-' + ctClass).removeClass('clue-left-' + ctClass);                
       $cluetip.css({left: (posX > 0 && defaults.positionBy != 'bottomTop') ? posX : (mouseX + (tipWidth/2) > winWidth) ? winWidth/2 - tipWidth/2 : Math.max(mouseX - (tipWidth/2),0)});
       wHeight = $(window).height();
 
@@ -342,27 +344,42 @@
         }
       }
 // now that content is loaded, finish the positioning 
+      var direction = '';
       $cluetipOuter.css({overflow: defHeight == 'auto' ? 'visible' : 'auto', height: defHeight});
       tipHeight = defHeight == 'auto' ? $cluetip.outerHeight() : parseInt(defHeight,10);   
       tipY = posY;
       if ( (posX < mouseX && Math.max(posX, 0) + tipWidth > mouseX) || defaults.positionBy == 'bottomTop') {
-        tipY = posY + tipHeight > sTop + wHeight && mouseY - sTop > tipHeight + 10 ? mouseY - tipHeight - 16 : mouseY + 20;
+        if (posY + tipHeight > sTop + wHeight && mouseY - sTop > tipHeight + 10) { 
+          tipY = mouseY - tipHeight - 16;
+          direction = 'top';
+        } else { 
+          tipY = mouseY + 20;
+          direction = 'bottom';
+        }
       } else if ( posY + tipHeight > sTop + wHeight ) {
         tipY = (tipHeight >= wHeight) ? sTop : sTop + wHeight - tipHeight - 10;
+        // direction = 'top';
       } else if ($this.css('display') == 'block' || $this[0].tagName.toLowerCase() == 'area' || defaults.positionBy == "mouse") {
         tipY = bpY - 10;
       } else {
         tipY = posY - defaults.dropShadowSteps;
       } 
-      $cluetip.css({top: tipY + 'px'});
+      if (direction == '') {
+        posX < linkLeft ? direction = 'left' : direction = 'right';
+      }
+      $cluetip.css({top: tipY + 'px'}).removeClass().addClass('clue-' + direction + '-' + ctClass).addClass(' cluetip-' + ctClass);
       if (defaults.arrows) { // set up background positioning to align with element
         var bgPos = '0 0';
         var bgY = (posY - tipY - defaults.dropShadowSteps);
-        if ($cluetip.is('.clue-left-' + ctClass)) {
+        if (direction == 'left') {
           bgPos = posX >=0 ? '100% ' + bgY + 'px' : '100% 0';
-        } else if ($cluetip.is('.clue-right-' +ctClass)) {
+        } else if (direction == 'right') {
           bgPos = (posX >=0 && bgY > 0) ? '0 ' + bgY + 'px' : '0 0';
-        }        
+        } else if (direction == 'top') {
+          bgPos = '50% 100%';
+        } else if (direction == 'bottom') {
+          bgPos = '50% 0';
+        }
       } else {
         bgPos = '0 100%';
       }

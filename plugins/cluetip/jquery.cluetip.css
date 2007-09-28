@@ -61,7 +61,18 @@
   background-repeat: no-repeat;
   padding-right: 10px;
 }
-
+.clue-top-jtip {
+  background-image: url(arrowdown.gif);
+  background-repeat: no-repeat;
+  background-color: transparent;
+  padding-bottom: 10px;
+}  
+.clue-bottom-jtip {
+  background-image: url(arrowup.gif);
+  background-repeat: no-repeat;
+  background-color: transparent;
+  padding-top: 10px;
+}
 .cluetip-jtip #cluetip-outer {
   border: 2px solid #ccc;
   position: relative;

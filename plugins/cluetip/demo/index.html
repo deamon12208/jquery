@@ -236,7 +236,7 @@ This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML
   cluetipClass: 'jtip'}
 );</code></pre>        
         </li>
-        <li>this sticky clueTip has a <a class="jt" href="ajax5.htm" rel="ajax5.htm">fixed height</a>. It's generally a good idea to make fixed-height clueTips sticky as well, just in case the content requires a scrollbar to read it fully.
+        <li>this sticky clueTip has a <a class="jt" href="ajax5.htm" rel="ajax5.htm">fixed height</a>. It's generally a good idea to make fixed-height clueTips sticky as well, just in case the content requires a scrollbar to read it fully. It will be positioned below the clicked element unless there isn't enough, in which case it will be positioned above.
           <div class="html">View the HTML</div>
           <pre><code>&lt;a class="jt" href="ajax5.htm" rel="ajax5.htm"&gt;</code></pre>
           <div class="jquery">View the jQuery</div>
@@ -244,7 +244,8 @@ This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML
   cluetipClass: 'jtip', arrows: true, 
   dropShadow: false, 
   height: '150px', 
-  sticky: true
+  sticky: true,
+  positionBy: 'bottomTop'
 });</code></pre>
         </li>
       </ol>

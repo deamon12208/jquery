@@ -18,7 +18,10 @@ $(document).ready(function() {
   $('#clickme').cluetip({activation: 'click', width: 650});
 
 // jTip theme
-  $('a.jt:eq(0)').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false,
+  $('a.jt:eq(0)').cluetip({
+    cluetipClass: 'jtip', 
+    arrows: true, 
+    dropShadow: false,
     sticky: true,
     mouseOutClose: true,
     closePosition: 'title',
@@ -27,7 +30,14 @@ $(document).ready(function() {
   $('a.jt:eq(1)').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false, hoverIntent: false});
   $('span[@title]').css({borderBottom: '1px solid #900'}).cluetip({splitTitle: '|', arrows: true, dropShadow: false, cluetipClass: 'jtip'});
 
-  $('a.jt:eq(2)').cluetip({cluetipClass: 'jtip', arrows: true, dropShadow: false, height: '150px', sticky: true});
+  $('a.jt:eq(2)').cluetip({
+    cluetipClass: 'jtip', 
+    arrows: true, 
+    dropShadow: false, 
+    height: '150px', 
+    sticky: true,
+    positionBy: 'bottomTop'    
+  });
 
 // Rounded Corner theme
   $('ol.rounded a:eq(0)').cluetip({cluetipClass: 'rounded', dropShadow: false, positionBy: 'mouse'});
