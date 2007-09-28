@@ -84,14 +84,14 @@
 				
 				for(var i = s; i < e; i++) {
 					
-					tableBody.append(rows[i]);
+					//tableBody.append(rows[i]);
 					
 					var o = rows[i];
 					var l = o.length;
 					for(var j=0; j < l; j++) {
 						
 						tableBody[0].appendChild(o[j]);
-					
+
 					}
 				}
 				
