@@ -149,7 +149,7 @@
 				if ( this == event.target ) {
 					toggler.apply($(this).next());
 				}
-			}).add( $("a", this) ).hoverClass()
+			}).add( $("a", this) ).hoverClass();
 			
 			// handle closed ones first
 			this.filter(":has(>ul:hidden)")
@@ -264,7 +264,7 @@
 					if (toggleCallback) {
 						toggleCallback.apply(this, arguments);
 					}
-				} 
+				};
 				deserialize();
 				break;
 			case "location":
