@@ -15,7 +15,7 @@
 
 (function($) {
 
-$.ui = $.ui || {}
+$.ui = $.ui || {};
 
 $.ui.accordion = {};
 $.extend($.ui.accordion, {
