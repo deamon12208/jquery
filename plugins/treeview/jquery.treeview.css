@@ -18,6 +18,7 @@
 	background: #fff;
 	filter: alpha(opacity=0);
 	display: inline;
+	float:none;
 }
 
 .treeview li { 
