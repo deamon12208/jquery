@@ -1,5 +1,7 @@
 /*
- * Treeview 1.2 - jQuery plugin to hide and show branches of a tree
+ * Treeview 1.3 - jQuery plugin to hide and show branches of a tree
+ * 
+ * http://bassistance.de/jquery-plugins/jquery-plugin-treeview/
  *
  * Copyright (c) 2006 Jörn Zaefferer, Myles Angell
  *
@@ -9,56 +11,6 @@
  *
  * Revision: $Id$
  *
- */
-
-/**
- *
- * @example $("ul").Treeview();
- * @before <ul>
- *   <li>Item 1
- *     <ul>
- *       <li>Item 1.1</li>
- *     </ul>
- *   </li>
- *   <li class="closed">Item 2 (starts closed)
- *     <ul>
- *       <li>Item 2.1
- *         <ul>
- *           <li>Item 2.1.1</li>
- *           <li>Item 2.1.2</li>
- *         </ul>
- *       </li>
- *       <li>Item 2.2</li>
- *     </ul>
- *   </li>
- *   <li>Item 3</li>
- * </ul>
- * @desc Basic usage example
- *
- * @example $("ul").Treeview({ animated: "fast", collapsed: true});
- * @before <ul>
- *   <li class="open">Item 1 (starts open)
- *     <ul>
- *       <li>Item 1.1</li>
- *     </ul>
- *   </li>
- *   <li>Item 2
- *     <ul>
- *       <li>Item 2.1</li>
- *       <li>Item 2.2</li>
- *     </ul>
- *   </li>
- * </ul>
- * @desc Create a treeview that starts collapsed. Toggling branches is animated.
- *
- * @example $("ul").Treeview({ control: #treecontrol });
- * @before <div id="treecontrol">
- *   <a href="#">Collapse All</a>
- *   <a href="#">Expand All</a>
- *   <a href="#">Toggle All</a>
- * </div>
- * @desc Creates a treeview that can be controlled with a few links.
- * Very likely to be changed/improved in future versions.
  */
 
 (function($) {
@@ -76,23 +28,6 @@
 		hitarea: "hitarea"
 	};
 	
-	// styles for hitareas
-	var hitareaCSS = {
-		height: 15,
-		width: 15,
-		marginLeft: "-15px",
-		"float": "left",
-		cursor: "pointer"
-	};
-	
-	// ie specific styles for hitareas
-	if( $.browser.msie )
-		$.extend( hitareaCSS, {
-			background: "#fff",
-			filter: "alpha(opacity=0)",
-			display: "inline"
-		});
-
 	$.extend($.fn, {
 		swapClass: function(c1, c2) {
 			return this.each(function() {
@@ -145,7 +80,7 @@
 			return this.filter(":has(>ul)");
 		},
 		applyClasses: function(settings, toggler) {
-			this.filter(":has(ul):not(:has(>a))").find(">span").click(function(event) {
+			this.filter(":has(>ul):not(:has(>a))").find(">span").click(function(event) {
 				if ( this == event.target ) {
 					toggler.apply($(this).next());
 				}
@@ -161,14 +96,12 @@
 					.addClass(CLASSES.collapsable)
 					.replaceClass(CLASSES.last, CLASSES.lastCollapsable);
 					
-			// append hitarea
-			this.prepend("<div class=\"" + CLASSES.hitarea + "\">")
-				// find hitarea
-				.find("div." + CLASSES.hitarea)
-				// apply styles to hitarea
-				.css(hitareaCSS)
+            // create hitarea
+			var hitareas = $("<div class=\"" + CLASSES.hitarea + "\"/>")
 				// apply click event to hitarea
-				.click( toggler );
+				.click( toggler )
+    			// prepend hitarea
+                .prependTo(this);
 		},
 		treeview: function(settings) {
 			
@@ -287,4 +220,7 @@
 			});
 		}
 	});
+	
+	// provide backwards compability
+	$.fn.Treeview = $.fn.treeview;
 })(jQuery);
