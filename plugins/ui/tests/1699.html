@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>#1699 - UI/Droppables javascript errors</title>
+		<script type="text/javascript" src="../../../jquery/src/core.js"></script>
+		<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+		<script type="text/javascript" src="../../../jquery/src/event.js"></script>
+		<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+		<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+		<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+		<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+		<script type="text/javascript" src="../ui.mouse.js"></script>
+		<script type="text/javascript" src="../ui.draggable.js"></script>
+		<script type="text/javascript" src="../ui.draggable.ext.js"></script>
+		<script type="text/javascript" src="../ui.droppable.js"></script>
+		<script type="text/javascript" src="../ui.droppable.ext.js"></script>
+		<style type="text/css">
+
+
+		</style>
+		<style type="text/css">
+			div.ticket {
+				margin: 0 100px;
+			}
+		</style>
+	</head>
+<body>
+
+<div class="ticket">
+	<hr/>
+	<h1>Ticket #<a href="http://dev.jquery.com/ticket/1699">1699</a></h1>
+	<h2>UI/Droppables javascript errors</h2>
+	<hr/>
+	<dl>
+		<dt>Description</dt>
+			<dd class="description">
+				kopytko:
+				<blockquote cite="http://dev.jquery.com/ticket/1699#comment:description">
+					<p>
+						There's an error in UI/Droppables. I'm using Firefox 2.0.0.7 on Windows XP Home SP2. When I try to drag draggable element I get an error: oDrag.helperSize has no properties in ui.droppable.js (line 169)
+					</p>
+					<p>
+						The same error occurs on IE7.
+					</p>
+				</blockquote>
+			</dd>
+		<dt>Comment</dt>
+			<dd class="comment">
+				bartosz.kuzma:
+				<blockquote cite="http://dev.jquery.com/ticket/1699#comment:2">
+					<p>
+						I got the same error when I remove droppable/draggable li element from ul list, and recreate it in other list with the same id and properties. In attachment screenshot form Firebug with error that always occurs immediately before error in ui.droppable.js.
+					</p>
+				</blockquote>
+			</dd>
+	</dl>
+</div>
+
+<ul>
+<li>Item 1</li>
+<li>Item 2</li>
+<li>Item 3</li>
+<li>Item 4</li>
+<li>Item 5</li>
+</ul>
+
+<br/>
+<br/>
+
+<ul>
+<li>Item A</li>
+<li>Item B</li>
+<li>Item C</li>
+<li>Item D</li>
+<li>Item E</li>
+</ul>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+$('li').draggable({revert:true}).droppable({
+	accept: 'li',
+	drop: function(ev, ui) {
+		$(ui.draggable.element).insertAfter(this);
+	}
+});
+
+});
+</script>
+</body>
+</html>
