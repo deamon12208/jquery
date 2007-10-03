@@ -128,28 +128,33 @@
 				
 				if(table.config.debug) { var parsersDebug = ""; }
 				
-				var list = [], cells = table.tBodies[0].rows[0].cells, l = cells.length;
+				var rows = table.tBodies[0].rows;
 				
-				for (var i=0;i < l; i++) {
-					var p = false;
-					
-					if($.meta && ($($headers[i]).data() && $($headers[i]).data().sorter)  ) {
-					
-						p = getParserById($($headers[i]).data().sorter);	
-					
-					} else if((table.config.headers[i] && table.config.headers[i].sorter)) {
+				if(table.tBodies[0].rows[0]) {
 
-						p = getParserById(table.config.headers[i].sorter);
+					var list = [], cells = rows[0].cells, l = cells.length;
+					
+					for (var i=0;i < l; i++) {
+						var p = false;
+						
+						if($.meta && ($($headers[i]).data() && $($headers[i]).data().sorter)  ) {
+						
+							p = getParserById($($headers[i]).data().sorter);	
+						
+						} else if((table.config.headers[i] && table.config.headers[i].sorter)) {
+	
+							p = getParserById(table.config.headers[i].sorter);
+						}
+						if(!p) {
+							p = detectParserForColumn(table.config,cells[i]);
+						}
+	
+						if(table.config.debug) { parsersDebug += "column:" + i + " parser:" +p.id + "\n"; }
+	
+						list.push(p);
 					}
-					if(!p) {
-						p = detectParserForColumn(table.config,cells[i]);
-					}
-
-					if(table.config.debug) { parsersDebug += "column:" + i + " parser:" +p.id + "\n"; }
-
-					list.push(p);
 				}
-
+				
 				if(table.config.debug) { log(parsersDebug); }
 
 				return list;
@@ -182,8 +187,9 @@
 				
 				if(table.config.debug) { var cacheTime = new Date(); }
 				
+				
 				var totalRows = (table.tBodies[0] && table.tBodies[0].rows.length) || 0,
-					totalCells = table.tBodies[0].rows[0].cells.length,
+					totalCells = (table.tBodies[0].rows[0] && table.tBodies[0].rows[0].cells.length) || 0,
 					parsers = table.config.parsers, 
 					cache = {row: [], normalized: []};
 				
@@ -511,7 +517,10 @@
 					// apply event handling to headers
 					// this is to big, perhaps break it out?
 					$headers.click(function(e) {
-						if(!this.sortDisabled) {
+
+						var totalRows = ($this[0].tBodies[0] && $this[0].tBodies[0].rows.length) || 0;
+					
+						if(!this.sortDisabled && totalRows > 0) {
 							// store exp, for speed
 							var $cell = $(this);
 	
@@ -576,6 +585,9 @@
 					
 					// apply easy methods that trigger binded events
 					$this.bind("update",function() {
+						
+						// rebuild parsers.
+						this.config.parsers = buildParserCache(this,$headers);
 						
 						// rebuild the cache map
 						cache = buildCache(this);
