@@ -402,7 +402,7 @@
             o.disable(this.$tabs[position - 1], this.$containers[position - 1]); // callback
         },
         click: function(position) {
-            this.$tabs.slice(position - 1, position).trigger('click');
+            this.$tabs.slice(position - 1, position).trigger(this.options.event);
         },
         load: function(position, url, callback) {
             var self = this,
