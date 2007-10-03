@@ -4,7 +4,7 @@
 .flora.ui-toasterLite {
 	background-color: #e6f7d4;
 	width: 100px;
-	position: absolute;
+	display: block;
 }
 
 .flora .ui-toasterLite .ui-toasterLite-titlebar,
@@ -30,6 +30,7 @@
 .flora .ui-toasterLite .ui-toasterLite-content,
 .flora.ui-toasterLite .ui-toasterLite-content {
 	margin: 1.2em;
+	padding-bottom: 12px;
 }
 
 /* Toaster handle styles */
@@ -60,26 +61,30 @@
 /* Global handle styles */
 .ui-toasterLite-corner { position: absolute; font-size: 0.1px; }
 
-.flora .ui-toasterLite-pos-tr,
-.flora.ui-toasterLite-pos-tr {
+.flora .ui-toasterLite-holder,
+.flora.ui-toasterLite-holder {
+  position: absolute;
+}
+.flora .ui-toasterLite-holder-pos-tr,
+.flora.ui-toasterLite-holder-pos-tr {
   top: 10px;
   right: 10px;
 }
 
-.flora .ui-toasterLite-pos-tl,
-.flora.ui-toasterLite-pos-tl {
+.flora .ui-toasterLite-holder-pos-tl,
+.flora.ui-toasterLite-holder-pos-tl {
   top: 10px;
   left: 10px;
 }
 
-.flora .ui-toasterLite-pos-br,
-.flora.ui-toasterLite-pos-br {
+.flora .ui-toasterLite-holder-pos-br,
+.flora.ui-toasterLite-holder-pos-br {
   bottom: 10px;
   right: 10px;
 }
 
-.flora .ui-toasterLite-pos-bl,
-.flora.ui-toasterLite-pos-bl {
+.flora .ui-toasterLite-holder-pos-bl,
+.flora.ui-toasterLite-holder-pos-bl {
   bottom: 10px;
   left: 10px;
 }
