@@ -97,11 +97,8 @@
 					.replaceClass(CLASSES.last, CLASSES.lastCollapsable);
 					
             // create hitarea
-			var hitareas = $("<div class=\"" + CLASSES.hitarea + "\"/>")
-				// apply click event to hitarea
-				.click( toggler )
-    			// prepend hitarea
-                .prependTo(this);
+			this.prepend("<div class=\"" + CLASSES.hitarea + "\"/>")
+				.find("div." + CLASSES.hitarea).click( toggler )
 		},
 		treeview: function(settings) {
 			
