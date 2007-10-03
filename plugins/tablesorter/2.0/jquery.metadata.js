@@ -1,13 +1,13 @@
 /*
  * Metadata - jQuery plugin for parsing metadata from elements
  *
- * Copyright (c) 2006 John Resig, Yehuda Katz, Jörn Zaefferer
+ * Copyright (c) 2006 John Resig, Yehuda Katz, J?rn Zaefferer
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- * Revision: $Id$
+ * Revision: $Id: metadata.js 3465 2007-09-23 21:15:52Z joern.zaefferer $
  *
  */
 
@@ -73,7 +73,7 @@
 	// define new setArray()
 	$.fn.setArray = function(arr){
 	    return setArray.apply( this, arguments ).each(function(){
-	      if ( this.nodeType == 9 || $.isXMLDoc(this) || this.metaDone ) return;
+	      if ( this.metaDone || this.nodeType == 9 || $.isXMLDoc(this) ) return;
 	      
 	      var data = "{}";
 	      
