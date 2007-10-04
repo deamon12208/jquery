@@ -1,4 +1,4 @@
-/* calendar styles */
+/* Alternate calendar styles */
 #calendar_div, .calendar_inline {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 14px;
@@ -6,6 +6,7 @@
 	margin: 0;
 	background: #d8d8d8 url(img/dark-bg.gif) repeat;
 	color: #008;
+	width: 220px;
 }
 #calendar_div {
 	display: none;
@@ -127,6 +128,19 @@ img.calendar_trigger {
 }
 .calendar_links a:hover, .calendar_titleRow a:hover {
 	background: #9dbae1 url(img/hover-bg.gif) repeat !important;
+}
+
+/* ___________ MULTIPLE MONTHS _________*/
+
+.calendar_multi .calendar {
+	border: 1px solid #008;
+}
+.calendar_oneMonth {
+	float: left;
+	width: 220px;
+}
+.calendar_newRow {
+	clear: left;
 }
 
 /* ___________ IE6 IFRAME FIX ________ */
