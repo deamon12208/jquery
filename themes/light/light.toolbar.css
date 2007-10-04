@@ -4,10 +4,13 @@
 
 .light .ui-toolbar {
   position:relative;
-  margin:0;
+  padding:0px;
+  margin:0px;
 }
 .light .ui-toolbar ul {
   background:#F3F3F3;
+  padding:0px;
+  margin:0px;
 }
   .light .ui-toolbar ul li {
     list-style-type: none;

@@ -4,10 +4,13 @@
 
 .dark .ui-toolbar {
   position:relative;
-  margin:0;
+  padding:0px;
+  margin:0px;
 }
 .dark .ui-toolbar ul {
   background:#333;
+  padding:0px;
+  margin:0px;
 }
   .dark .ui-toolbar ul li {
     list-style-type: none;
