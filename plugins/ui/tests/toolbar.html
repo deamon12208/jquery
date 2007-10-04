@@ -96,7 +96,8 @@
       <h2>Add?</h2>
         <input type="button" class="button" id="add" value="Add Button"/>
         <input type="button" class="button" id="addSep" value="Add Seperater"/>
-        <input type="button" class="button" id="addAt" value="Add Button Before 3rd"/>
+        <input type="button" class="button" id="addAt" value="Add Button At 3rd"/>
+        <input type="button" class="button" id="addIconed" value="Add Button w/ Icon"/>
       <h2>Remove?</h2>
         <input type="button" class="button" id="rem" value="Remove"/>
         <input type="button" class="button" id="remAt" value="Remove 3rd"/>
@@ -119,8 +120,10 @@
     </ul>
   </div>
 
+
+
 <script type="text/javascript">
-  $(document).ready(function(){
+$(document).ready(function(){
 
 $('.themeToggler').toggle(
   function(){
@@ -132,119 +135,144 @@ $('.themeToggler').toggle(
   }
 );
 
+$("#inner").toolbar();
+$("#inner2 .toolbar").toolbar({orient: 'vertical'});
 
-		$("#inner").toolbar();
-    $("#inner2 .toolbar").toolbar({orient: 'vertical'});
-    
-    for(i=1;i<5;++i){
-			$("#inner").toolbarAdd({
-        caption: 'test'+i,
-        type: 'button'
-      });
-      $("#inner2 .toolbar").toolbarAdd({
-        caption: 'test'+i,
-        type: 'button'
-      });
-		}
-    $("#add").bind("click", function(){
-      config = {
-        caption: 'test'+i,
-        type: 'button'
-      };
-      i++;
-			$("#inner").toolbarAdd(config);
-      $("#inner2 .toolbar").toolbarAdd(config);
-		});
-    $("#addAt").bind("click", function(){
-      config = {
-        caption: 'test'+i,
-        type: 'button',
-        pos: 3,
-        icon: 'images/printer.png',
-        onClick: function(item){$.ui.toolbar.prototype.factory.icon.toggle(item);}
-      };
-      i++;
-			$("#inner").toolbarAdd(config);
-      $("#inner2 .toolbar").toolbarAdd(config);
-		});
-    $("#addSep").bind("click", function(){
-      $("#inner").toolbarAdd('-');
-      $("#inner2 .toolbar").toolbarAdd('-');
-    });
-    /* extra */
-    $("#addSlider").bind("click", function(){
-      $("#inner").toolbarAdd({
-        type: 'slider',
-        slider: { stepping: 20, maxValue: 100, minValue: -100, change: function() {console.log('changed!');}}
-      });
-      $("#inner2 .toolbar").toolbarAdd({
-        type: 'slider',
-        slider: { stepping: 20, maxValue: 100, minValue: -100, change: function() {console.log('changed!');}}
-      });
-    });
-    $("#addToggle").bind("click", function(){
-      config = {
-        caption: 'test'+i,
-        type: 'toggle'
-      };
-      i++;
-			$("#inner").toolbarAdd(config);
-      $("#inner2 .toolbar").toolbarAdd(config);
-		});
-    $("#addGrouped").bind("click", function(){
-      config = {
-        selected: 2,
-        type: 'radiogroup',
-        items: [
-          {caption: 'test'+(++i)},
-          {caption: 'test'+(++i)},
-          {caption: 'test'+(++i)}
-        ]
-      };
-      i++;
-			$("#inner").toolbarAdd(config);
-      $("#inner2 .toolbar").toolbarAdd(config);
-    });
-    /* /extra */
-    
-		$("#rem").bind("click", function(){
-      $("#inner").toolbarRemove();
-      $("#inner2 .toolbar").toolbarRemove();
-      i--;
-		});
-    $("#remAt").bind("click", function(){
-      $("#inner").toolbarRemove(3);
-      $("#inner2 .toolbar").toolbarRemove(3);
-      i--;
-		});
-		$("#disable").bind("click", function(){
-			$("#inner").toolbarDisable(3);
-      $("#inner2 .toolbar").toolbarDisable(3);
-		});
-		$("#enable").bind("click", function(){
-			$("#inner").toolbarEnable(3);
-      $("#inner2 .toolbar").toolbarEnable(3);
-		});
-    $("#orient").bind("click", function(){
-      $("#inner").toolbarOrient();
-      $("#inner2 .toolbar").toolbarOrient();
-    });
-    /*
-    $(".icon").bind("click", function(){
-      $("#toolbox").toolbarAdd({
-        caption: '<img src="images/printer.png"/>test Icon',
-        type: 'button'
-      });
-      $("#toolbox2").toolbarAdd({
-        caption: '<img src="images/printer.png"/>test Icon',
-        type: 'button'
-      });
-    });*/
-    $("#mode").bind("click", function(){
-      $("#inner").toolbarMode();
-      $("#inner2 .toolbar").toolbarMode();
-    });
-	});
+for(i=1;i<5;++i){
+	$("#inner").toolbarAdd({
+    caption: 'test'+i,
+    type: 'button'
+  });
+  $("#inner2 .toolbar").toolbarAdd({
+    caption: 'test'+i,
+    type: 'button'
+  });
+}
+
+$("#add").bind("click", function(){
+  config = {
+    caption: 'test'+i,
+    type: 'button'
+  };
+  
+  i++;
+	
+  $("#inner").toolbarAdd(config);
+  $("#inner2 .toolbar").toolbarAdd(config);
+});
+
+$("#addAt").bind("click", function(){
+  config = {
+    caption: 'test'+i,
+    type: 'button',
+    pos: 3,
+  };
+  
+  i++;
+  $("#inner").toolbarAdd(config);
+  $("#inner2 .toolbar").toolbarAdd(config);
+});
+
+$("#addIconed").bind("click", function(){
+  $("#toolbox").toolbarAdd({
+    caption: 'test'+i,
+    type: 'button',
+    icon: 'images/printer.png'
+  });
+  $("#toolbox2").toolbarAdd({
+    caption: 'test'+i,
+    type: 'button',
+    icon: 'images/printer.png'
+  });
+  
+  i++;
+});
+
+
+$("#addSep").bind("click", function(){
+  $("#inner").toolbarAdd('-');
+  $("#inner2 .toolbar").toolbarAdd('-');
+});
+
+/* extra */
+$("#addSlider").bind("click", function(){
+  $("#inner").toolbarAdd({
+    type: 'slider',
+    slider: { stepping: 20, maxValue: 100, minValue: -100, change: function() {console.log('changed!');}}
+  });
+  $("#inner2 .toolbar").toolbarAdd({
+    type: 'slider',
+    slider: { stepping: 20, maxValue: 100, minValue: -100, change: function() {console.log('changed!');}}
+  });
+});
+
+$("#addToggle").bind("click", function(){
+  config = {
+    caption: 'test'+i,
+    type: 'toggle'
+  };
+
+  i++;
+
+  $("#inner").toolbarAdd(config);
+  $("#inner2 .toolbar").toolbarAdd(config);
+});
+
+$("#addGrouped").bind("click", function(){
+  config = {
+    selected: 2,
+    type: 'radiogroup',
+    items: [
+      {caption: 'test'+(++i)},
+      {caption: 'test'+(++i)},
+      {caption: 'test'+(++i)}
+    ]
+  };
+  
+  i++;
+  
+  $("#inner").toolbarAdd(config);
+  $("#inner2 .toolbar").toolbarAdd(config);
+});
+
+/* /extra */
+
+$("#rem").bind("click", function(){
+  $("#inner").toolbarRemove();
+  $("#inner2 .toolbar").toolbarRemove();
+  
+  i--;
+});
+
+$("#remAt").bind("click", function(){
+  $("#inner").toolbarRemove(3);
+  $("#inner2 .toolbar").toolbarRemove(3);
+  
+  i--;
+});
+
+
+$("#disable").bind("click", function(){
+  $("#inner").toolbarDisable(3);
+  $("#inner2 .toolbar").toolbarDisable(3);
+});
+
+$("#enable").bind("click", function(){
+  $("#inner").toolbarEnable(3);
+  $("#inner2 .toolbar").toolbarEnable(3);
+});
+
+$("#orient").bind("click", function(){
+  $("#inner").toolbarOrient();
+  $("#inner2 .toolbar").toolbarOrient();
+});
+$("#mode").bind("click", function(){
+  $("#inner").toolbarMode();
+  $("#inner2 .toolbar").toolbarMode();
+});
+
+
+});
 </script>
 </body>
 </html>
