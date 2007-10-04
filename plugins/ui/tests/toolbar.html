@@ -6,10 +6,15 @@
 <title>Test Page</title>
 <script type="text/javascript" src="http://dev.jquery.com/view/trunk/jquery/dist/jquery.js"></script>
 <script type="text/javascript" src="../ui.toolbar.js"></script>
+
+<script type="text/javascript" src="../ui.mouse.js"></script>
+<script type="text/javascript" src="../ui.slider.js"></script>
+
 <script type="text/javascript" src="../ui.toolbar.ext.js"></script>
 <style type="text/css" media="all">
   @import "../../../themes/dark/dark.toolbar.css";
   @import "../../../themes/light/light.toolbar.css";
+  @import "../../../themes/flora/flora.slider.css";
   
   @import "blueprint/lib/reset.css";
   @import "blueprint/lib/grid.css";
@@ -137,11 +142,12 @@
         <h2>Item Tasks</h2>
         <input type="button" class="button" id="enable" value="Enable Item 2"/>
         <input type="button" class="button" id="disable" value="Disable Item 2"/>
-        <input type="button" class="button" id="mode" style="opacity:0.5;" value="Change Mode"/>
+        <input type="button" class="button" id="mode" value="Change Mode"/>
         <input type="button" class="button" id="orient" value="Change Orient"/>
         <h2>Addons*</h2>
-        <input type="button" class="button" id="addSlider" style="opacity:0.5;" value="Add Slider"/>
+        <input type="button" class="button" id="addSlider" value="Add Slider"/>
         <input type="button" class="button" id="addToggle" value="Add Toggle Button"/>
+        <input type="button" class="button" id="addGrouped" value="Add Radio Button Group"/>
       </div>
       <div class="clear"></div>
       <p class="notes">*The Toolbar Extension.</p>
@@ -188,7 +194,9 @@ $('.themeToggler').toggle(
       config = {
         caption: 'test'+i,
         type: 'button',
-        pos: 3
+        pos: 3,
+        icon: 'images/printer.png',
+        onClick: function(item){$.ui.toolbar.prototype.factory.icon.toggle(item);}
       };
       i++;
 			$("#inner").toolbarAdd(config);
@@ -198,7 +206,7 @@ $('.themeToggler').toggle(
       $("#inner").toolbarAdd('-');
       $("#inner2 .toolbar").toolbarAdd('-');
     });
-    /* extra *
+    /* extra */
     $("#addSlider").bind("click", function(){
       $("#inner").toolbarAdd({
         type: 'slider',
@@ -208,7 +216,7 @@ $('.themeToggler').toggle(
         type: 'slider',
         slider: { stepping: 20, maxValue: 100, minValue: -100, change: function() {console.log('changed!');}}
       });
-    });*/
+    });
     $("#addToggle").bind("click", function(){
       config = {
         caption: 'test'+i,
@@ -218,6 +226,20 @@ $('.themeToggler').toggle(
 			$("#inner").toolbarAdd(config);
       $("#inner2 .toolbar").toolbarAdd(config);
 		});
+    $("#addGrouped").bind("click", function(){
+      config = {
+        selected: 2,
+        type: 'radiogroup',
+        items: [
+          {caption: 'test'+(++i)},
+          {caption: 'test'+(++i)},
+          {caption: 'test'+(++i)}
+        ]
+      };
+      i++;
+			$("#inner").toolbarAdd(config);
+      $("#inner2 .toolbar").toolbarAdd(config);
+    });
     /* /extra */
     
 		$("#rem").bind("click", function(){
@@ -240,7 +262,7 @@ $('.themeToggler').toggle(
 		});
     $("#orient").bind("click", function(){
       $("#inner").toolbarOrient();
-      $("#inner2 .toolbar").toolbarOrient('vertical');
+      $("#inner2 .toolbar").toolbarOrient();
     });
     /*
     $(".icon").bind("click", function(){
@@ -254,8 +276,8 @@ $('.themeToggler').toggle(
       });
     });*/
     $("#mode").bind("click", function(){
-      $("#toolbox").toolbarMode();
-      $("#toolbox2").toolbarMode();
+      $("#inner").toolbarMode();
+      $("#inner2 .toolbar").toolbarMode();
     });
 	});
 </script>

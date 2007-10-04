@@ -26,6 +26,23 @@
   .light .ui-toolbar ul.ui-toolbar-vert li {
     display:block;
   }
+  /* This hides the text on buttons in a icon only toolbar */
+  .light .ui-toolbar ul.ui-toolbar-icons li .ui-toolbar-btn-desc {
+    display:none;
+  }
+  /* This hides the icon on buttons in a text only toolbar */
+  .light .ui-toolbar ul.ui-toolbar-text li .ui-toolbar-btn-icon {
+    display:none;
+  }
+  /* This is just for icon sizes, not really needed, but it's there so if icon sizes are defined.. */
+  .light .ui-toolbar ul li.ui-toolbar-btn-icon-sixteen .ui-toolbar-btn-icon {
+    width:16px; height:16px;
+    overflow:hidden;
+    padding:2px;
+    padding-left:16px;
+    background:no-repeat;
+    background-position:50% 50%;
+  }
   
 /************************************************
  * Factory Elements:
@@ -79,14 +96,10 @@
         overflow:visible;
         -moz-outline:0 none;
         outline:0 none;
-        height:18px;
+        padding:0px;
       }
         .light .ui-toolbar ul li.ui-toolbar-btn button span {
           vertical-align: middle;
-        }
-        /* This hides the text on buttons in a icon only toolbar */
-        .light .ui-toolbar ul.ui-toobar-iconOnly li.ui-toolbar-btn button span {
-          display:none;
         }
   
   .light .ui-toolbar ul li.ui-toolbar-btn-over{
@@ -120,5 +133,58 @@
     border-bottom:1px solid #EEE;
   }
 
+/************************************************
+ * UI-TOOLBAR-SLIDER
+ *
+ *  STRUCTURE:
+ *    <li class="ui-toolbar-slider">
+ *      <div class="ui-toolbar-slider-track ui-slider-track">
+ *        <div class="ui-slider-handle"></div>
+ *      </div>
+ *   </li>
+ *
+ ************************************************/
 
+.light .ui-toolbar ul li.ui-toolbar-slider .ui-toolbar-slider-track {
+  height: 20px!important;
+}
+
+/************************************************
+ * UI-TOOLBAR-RADIOGRP
+ *
+ *  STRUCTURE:
+ *    <li class="ui-toolbar-radioGrp">
+ *      <ul class="DIRECTION">
+ *        <li class="ui-toolbar-btn">
+ *          <span class="ui-toolbar-btn-left"><i>&#160;</i></span>
+ *          <span class="ui-toolbar-btn-center">
+ *            <button><span>{{text}}</span></button>
+ *          </span>
+ *          <span class="ui-toolbar-btn-right"><i>&#160;</i></span>
+ *        </li>
+ *      </ul>
+ *    </li>
+ *      
+ *
+ ************************************************/
+
+  .light .ui-toolbar ul.ui-toolbar-horiz li.ui-toolbar-btnGroup,
+  .light .ui-toolbar ul.ui-toolbar-horiz li.ui-toolbar-btnGroup ul,
+  .light .ui-toolbar ul.ui-toolbar-horiz li.ui-toolbar-btnGroup ul li{
+    display:inline;
+  }
+  .light .ui-toolbar ul.ui-toolbar-horiz li.ui-toolbar-btnGroup ul {
+    margin:0px;
+    padding:0px;
+  }
+
+  .light .ui-toolbar ul.ui-toolbar-vert li.ui-toolbar-btnGroup,
+  .light .ui-toolbar ul.ui-toolbar-vert li.ui-toolbar-btnGroup ul,
+  .light .ui-toolbar ul.ui-toolbar-vert li.ui-toolbar-btnGroup ul li{
+    display:block;
+  }
+  .light .ui-toolbar ul.ui-toolbar-vert li.ui-toolbar-btnGroup ul {
+    margin:0px;
+    padding:0px;
+  }
 /* END OF FILE */
