@@ -31,6 +31,9 @@
       padding:0px;
       margin:0px;
     }
+    #container #inner {
+      margin-bottom:40px;
+    }
     #inner2 .toolbar {width:80px;}
     #container div {margin:0px;}
     .last button {width:100%;}
@@ -41,118 +44,80 @@
           margin-left:4%;  
     }
     .notes {background:#fff; padding:2px;}
-	/*
-	.inputHolder {
-		padding-left:20px;
-	}
-	
-	.x-toolbar {
-	  background:#F3F3F3;
-	  border-bottom:1px solid #EEE;
-	  border-top:1px solid #DDD;
-	  position:relative;
-		width:auto;
-		height:auto;
-	}
-	.ui-toolbar ul {
-		padding: 0;
-		margin: 0 0 0 6px;
-	}
-	.ui-toolbar ul.horizontal li {
-		list-style-type: none;
-		display:inline;
-	}
-	.ui-toolbar ul.vertical li {
-		list-style-type: none;
-	}
-	.ui-btn{
-		font:normal 11px tahoma, verdana, helvetica;
-		cursor:pointer;
-		white-space: nowrap;
-		line-height:26px;
-	}
-/* @@ For now, as i haven't perfected them.
-	.ui-btn:hover{
-		background:#fcfcfc;
-	}
-*
-	.ui-toolbarBtn-disabled {
-		opacity:0.2;
-	}
-	.ui-btn input{
-
-	}
-	.ui-toolbar ul.horizontal .ui-btn input {
-		padding-left:3px;
-		padding-right:3px;
-		width:auto;
-		height:18px;
-	}
-	.ui-toolbar ul.vertical .ui-btn input {
-		padding-top:3px;
-		padding-bottom:3px;
-		width:18px;
-		height:18px;
-	}
-  .ui-toolbar .ui-toolbar-btn-over, .ui-toolbar .ui-toolbar-btn-selected{
-    background:#fcfcfc;
-  }
-	.ui-toolbar.text-only .ui-btn-icon input{
-		background: none!important;
-	}
-	.ui-toolbar.icons-only .ui-btn-icon input, .ui-toolbar.both .ui-btn-icon input{
-		padding-left:18px!important;
-	}
-
-	.ui-toolbar.icons-only .ui-btn-icon input, .ui-toolbar.icons-only .ui-btn-icon, .ui-toolbar.icons-only .ui-btn-center input{
-		width:18px;
-	}
-  
-  */
+    #theme {
+      position:absolute;
+      top:0px;
+      right:10px;
+      padding:8px 12px 10px;
+      background:#333;
+      border:#1a1a1a;
+      color:#FFFAFA;
+    }
+    #theme a {
+      color:#BBD9EE;
+    }
+    #notes li:target {
+      border-left: 6px solid #D9EAF5;
+      list-style-type: none;
+    }
+    #note ul {
+      margin:0px;
+      padding:0px;
+    }
+    #notes ul li{
+      border-left: 6px solid #FFF;
+      list-style-type: none;
+      margin:0px;
+      padding:0.5em 0 0 0;
+      padding-left:6px;
+    }
+    h2 a {
+      text-decoration:none;
+      color: inherit;
+    }
 </style>
 </head>
 <body class="light">
-<!--<div id="toolbox"></div>
-<div id="toolbox2"></div>
-	<ul id="log" style="margin-top:60px;"></ul>
-	<input type="button" href="#" class="del">Remove</a> | <input type="button" href="#" class="add">Add</a> | <input type="button" href="#" class="disable">Disable 3</a> | <input type="button" href="#" class="enable">Enable 3</a> | <input type="button" href="#" class="icon">Add w/ icon</a> | <input type="button" href="#" class="icons">Icon?</a>
--->
 <div id="theme">
-  Theme: <a href="#" class="themeToggler">dark</a>
+  <span>Theme: <a href="#" class="themeToggler">dark</a></span>
 </div>
 <div class="container">
-    <h1><span class="alt">Test Page: Toaster Popups</span></h1>
-      <div class="column first" id="container">
-          <div id="inner"></div>
-          <br /><br />
-          <div id="inner2">
-            <div class="toolbar"></div>
-          </div>
+  <h1 class="column first span-12" ><span class="alt">Test Page: Toolbars</span></h1>
+</div>
+<div class="container">
+    <div class="column first" id="container">
+      <div id="inner"></div>
+      <br /><br />
+      <div id="inner2">
+        <div class="toolbar"></div>
       </div>
-      <div class="column span-2p">
-        <h2>Add?</h2>
+    </div>
+    <div class="column span-2p">
+      <h2>Add?</h2>
         <input type="button" class="button" id="add" value="Add Button"/>
         <input type="button" class="button" id="addSep" value="Add Seperater"/>
         <input type="button" class="button" id="addAt" value="Add Button Before 3rd"/>
-        <h2>Remove?</h2>
+      <h2>Remove?</h2>
         <input type="button" class="button" id="rem" value="Remove"/>
         <input type="button" class="button" id="remAt" value="Remove 3rd"/>
-      </div>
-      <div class="column span-2p last">
-        <h2>Item Tasks</h2>
+    </div>
+    <div class="column span-2p last">
+      <h2>Item Tasks</h2>
         <input type="button" class="button" id="enable" value="Enable Item 2"/>
         <input type="button" class="button" id="disable" value="Disable Item 2"/>
         <input type="button" class="button" id="mode" value="Change Mode"/>
         <input type="button" class="button" id="orient" value="Change Orient"/>
-        <h2>Addons*</h2>
+      <h2>Addons<a href="#ref-1">*</a></h2>
         <input type="button" class="button" id="addSlider" value="Add Slider"/>
         <input type="button" class="button" id="addToggle" value="Add Toggle Button"/>
         <input type="button" class="button" id="addGrouped" value="Add Radio Button Group"/>
-      </div>
-      <div class="clear"></div>
-      <p class="notes">*The Toolbar Extension.</p>
+    </div>
   </div>
-
+  <div id="notes" class="clear container">
+    <ul>
+      <li id="ref-1">These are found in the toolbar extension pack, and may rely on other ui components</li>
+    </ul>
+  </div>
 
 <script type="text/javascript">
   $(document).ready(function(){
