@@ -258,13 +258,13 @@ $.extend($.ui.toolbar.prototype, {
         .bind("mouseover", function(){
           $(this).addClass('ui-toolbar-btn-over');
           if ($.isFunction(options.onMouseOver)) {
-            options.onMouseOver();
+            options.onMouseOver(item);
           }
         })
         .bind("mouseout", function(){
           $(this).removeClass('ui-toolbar-btn-over');
           if ($.isFunction(options.onMouseOut)) {
-            options.onMouseOut();
+            options.onMouseOut(item);
           }
         });
         

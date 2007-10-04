@@ -46,13 +46,13 @@ $.extend($.ui.toolbar.prototype.factory, {
         if(!toggled){
           $(this).addClass('ui-toolbar-btn-active');
           if ($.isFunction(options.onActivate) ) {
-            options.onActivate();
+            options.onActivate(item);
           }
           toggled = true;
         }else{
           $(this).removeClass('ui-toolbar-btn-active');
           if ($.isFunction(options.onDeactivate) ) {
-            options.onDeactivate();
+            options.onDeactivate(item);
           }
           toggled = false;
         }
@@ -61,13 +61,13 @@ $.extend($.ui.toolbar.prototype.factory, {
     .bind("mouseover", function(){
       $(this).addClass('ui-toolbar-btn-over');
       if ($.isFunction(options.onMouseOver)) {
-        options.onMouseOver();
+        options.onMouseOver(item);
       }
     })
     .bind("mouseout", function(){
       $(this).removeClass('ui-toolbar-btn-over');
       if ($.isFunction(options.onMouseOut)) {
-        options.onMouseOut();
+        options.onMouseOut(item);
       }
     });
     
@@ -121,7 +121,7 @@ $.extend($.ui.toolbar.prototype.factory, {
             if($(this).is('.ui-toolbar-btn-active')){
               $(this).removeClass("ui-toolbar-btn-active");
               if ($.isFunction(options.onDeselect) ) {
-                options.onDeselect();
+                options.onDeselect(item);
               }
             }else{
               $(this).parent().children().each(function(){
@@ -129,7 +129,7 @@ $.extend($.ui.toolbar.prototype.factory, {
               });
               $(this).addClass("ui-toolbar-btn-active");
               if ($.isFunction(options.onSelect) ) {
-                options.onSelect();
+                options.onSelect(item);
               }
             }
           }
@@ -137,13 +137,13 @@ $.extend($.ui.toolbar.prototype.factory, {
         .bind("mouseover", function(){
           $(this).addClass('ui-toolbar-btn-over');
           if ($.isFunction(options.onMouseOver)) {
-            options.onMouseOver();
+            options.onMouseOver(item);
           }
         })
         .bind("mouseout", function(){
           $(this).removeClass('ui-toolbar-btn-over');
           if ($.isFunction(options.onMouseOut)) {
-            options.onMouseOut();
+            options.onMouseOut(item);
           }
         }).appendTo($(item).find("ul"));
         
