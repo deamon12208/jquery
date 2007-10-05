@@ -1,6 +1,6 @@
 (function($) {
 $.fn.themer = function(supported){
-  
+  var el = this;
   // Add Your Themes HERE
   var themes = ["light", "dark", "flora", "tango", "warm"];
   
@@ -21,10 +21,10 @@ $.fn.themer = function(supported){
   
   var changer = $("#theme a");
   $(changer).bind("click", function(){
-    $("body").removeClass(theme);
+    $(el).removeClass(theme);
     ++_t;
     theme = support(_t);
-    $("body").addClass(theme);
+    $(el).addClass(theme);
     $(this).text(theme);
     if(_t == supported.length) _t = 0;
   });
