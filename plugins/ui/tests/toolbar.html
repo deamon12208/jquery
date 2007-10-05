@@ -5,6 +5,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Test Page</title>
 <script type="text/javascript" src="http://dev.jquery.com/view/trunk/jquery/dist/jquery.js"></script>
+
+<script type="text/javascript" src="js/themer.js"></script>
+<style type="text/css">@import "js/themer.css"; </style>
+
 <script type="text/javascript" src="../ui.toolbar.js"></script>
 
 <script type="text/javascript" src="../ui.mouse.js"></script>
@@ -44,18 +48,6 @@
           margin-left:4%;  
     }
     .notes {background:#fff; padding:2px;}
-    #theme {
-      position:absolute;
-      top:0px;
-      right:10px;
-      padding:8px 12px 10px;
-      background:#333;
-      border:#1a1a1a;
-      color:#FFFAFA;
-    }
-    #theme a {
-      color:#BBD9EE;
-    }
     #notes li:target {
       border-left: 6px solid #D9EAF5;
       list-style-type: none;
@@ -78,9 +70,6 @@
 </style>
 </head>
 <body class="light">
-<div id="theme">
-  <span>Theme: <a href="#" class="themeToggler">dark</a></span>
-</div>
 <div class="container">
   <h1 class="column first span-12" ><span class="alt">Test Page: Toolbars</span></h1>
 </div>
@@ -125,15 +114,8 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-$('.themeToggler').toggle(
-  function(){
-    $(this).html("Light");
-    $("body").removeClass("light").addClass("dark");
-  },function(){
-    $(this).html("Dark");
-    $("body").removeClass("dark").addClass("light");
-  }
-);
+var supported = ["light", "dark","flora"];
+$("body").themer(supported);
 
 $("#inner").toolbar();
 $("#inner2 .toolbar").toolbar({orient: 'vertical'});
