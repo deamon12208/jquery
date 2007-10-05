@@ -6,8 +6,7 @@
  *
  *
  * Credits:
- *  Eis_os: ideas and semi-implementation of the factory and addition of functions (the instances and all that)
- *  Miksago: Implementation and recoding.
+ *  Miksago: Implementation and coding.
  */
 
 	//If the UI scope is not availalable, add it
@@ -20,21 +19,9 @@
 	$.ui.uuid = function(prefix){
 		return prefix +"-" + (++uiIdSeed);
 	}
-/*
-  $.ui.template = function(template, items){
-    if(template instanceof Array){
-      template = template.join("");
-    }
-    $.each(items, function(key, value){
-      regex = eval('/\{\{'+key+'\}\}/g');
-      template = template.replace(regex, value);
-    });
-    return template;
-  }
-*/
   
   $.fn.toolbar = function(options){
-    return this.each(function() {
+    return $(this).each(function() {
       new $.ui.toolbar(this, options);
     });
   }
@@ -44,27 +31,33 @@
   }
   
   $.fn.toolbarApply = function(m, args) {
-  	return this.filter(".ui-toolbar").each(function() {
+    var apply = $(this).filter(".ui-toolbar").each(function() {
   		var inst = $.data(this, "ui-toolbar");
       inst[m].apply(inst, args);
   	}).end();
+    return apply;
   };
-  $.each(['Add', 'Remove', 'Empty', 'Get', 'Enable', 'Disable', 'Mode', 'Orient'], function(i,m) {
+  
+  var uiToolbarFunctions = ['Add', 'Remove', 'Empty', 'Get', 'Enable', 'Disable', 'Mode', 'Orient'];
+  
+  $.each(uiToolbarFunctions, function(i,m) {
   	$.fn['toolbar'+m] = new Function('this.toolbarApply("'+m.toLowerCase()+'",arguments);');
   });
   
   $.ui.toolbar = function(el, o){
     this.element = el;
     this.options = $.extend({
-			theme: 'default',
 			orient: 'horizontal',
 			mode: 'both',
 			tooltips: false,
       items: {}
 		}, o);
 
-    this.items = $("ul:first", el).length ? $("ul:first") : $("<ul>");
-    $(this.element).addClass("ui-toolbar").append(this.items.addClass("ui-toolbar-items"));
+    this.items = $("ul:first", this.element).length ? $("ul:first") : $("<ul>");
+    
+    this.items.addClass("ui-toolbar-items");
+    
+    $(this.element).addClass("ui-toolbar").append(this.items);
     
     if(this.options.orient == "vertical"){
       $(this.element).find("ul").addClass("ui-toolbar-vert");
@@ -84,25 +77,31 @@
   }
 $.extend($.ui.toolbar.prototype, {
     get: function(n) {
+      var item;
     	if (n && n.constructor == Number) {
-    		return this.items.children().slice(n-1, n);
+    		item = $(this.items).children().slice(n-1, n);
       }else{
-        return this.items.children().slice(this.items.children().length-1, this.items.children().length);
+        item = $(this.items).children().slice($(this.items).children().length-1, $(this.items).children().length);
       }
-    },
-    disable: function(n){
-      if(n){
-        $(this.get(n)).addClass('ui-toolbar-btn-disabled');
-      }else{
-        $(this.element).addClass('ui-toolbar-btn-disabled');
-      }
+      return item;
     },
     enable: function(n){
+      var item;
       if(n){
-        $(this.get(n)).removeClass('ui-toolbar-btn-disabled');
+        item = $(this.get(n)).removeClass('ui-toolbar-btn-disabled');
       }else{
-        $(this.element).removeClass('ui-toolbar-btn-disabled');
+        item = $(this.element).removeClass('ui-toolbar-btn-disabled');
       }
+      return item;
+    },
+    disable: function(n){
+      var item;
+      if(n){
+        item = $(this.get(n)).addClass('ui-toolbar-btn-disabled');
+      }else{
+        item = $(this.element).addClass('ui-toolbar-btn-disabled');
+      }
+      return item;
     },
     remove: function(n) {
     	this.get(n).remove();
@@ -182,6 +181,7 @@ $.extend($.ui.toolbar.prototype, {
     factory: {
       icon: {
         add: function(btn, icon, size){
+          var iconEl;
           if(icon){
             switch(size){
               case 16: size = 'sixteen';
@@ -198,14 +198,15 @@ $.extend($.ui.toolbar.prototype, {
             $(btn).addClass("ui-toolbar-btn-icon-"+size);
             
             if(icon.substr(0,1) == '.'){
-              return $(btn).find(".ui-toolbar-btn-center").prepend('<span class="ui-toolbar-btn-icon '+icon+'">&nbsp;</span>');
+              iconEl = $(btn).find(".ui-toolbar-btn-center").prepend('<span class="ui-toolbar-btn-icon '+icon+'">&nbsp;</span>');
             }else{
-              return $(btn).find(".ui-toolbar-btn-center").prepend('<span class="ui-toolbar-btn-icon">&nbsp;</span>').find(".ui-toolbar-btn-icon").css("background-image","url("+icon+")");
+              iconEl = $(btn).find(".ui-toolbar-btn-center").prepend('<span class="ui-toolbar-btn-icon">&nbsp;</span>').find(".ui-toolbar-btn-icon").css("background-image","url("+icon+")");
             }
           }
+          return iconEl;
         },
         remove: function(btn){
-          return $(btn).find(".ui-toolbar-btn-icon").remove();
+          $(btn).find(".ui-toolbar-btn-icon").remove();
         },
         show: function(btn){
           return $(btn).find(".ui-toolbar-btn-icon").show();
@@ -231,7 +232,7 @@ $.extend($.ui.toolbar.prototype, {
           caption: 'button',
           icon: null,
           onClick: function(){
-            alert("Fired: "+desc.caption);
+            alert("Fired: "+options.caption);
           },
           onMouseOver: function(){},
           onMouseOut: function(){}
@@ -242,7 +243,7 @@ $.extend($.ui.toolbar.prototype, {
             '<li class="ui-toolbar-btn">',
               '<span class="ui-toolbar-btn-left"><i>&#160;<'+'/i><'+'/span>',
               '<span class="ui-toolbar-btn-center">',
-                '<button><span class="ui-toolbar-btn-desc">'+desc.caption+'</span></button>',
+                '<button><span class="ui-toolbar-btn-desc">'+options.caption+'</span></button>',
               '<'+'/span>',
               '<span class="ui-toolbar-btn-right"><i>&#160;<'+'/i><'+'/span>',
             '</li>'
