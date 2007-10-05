@@ -18,7 +18,7 @@
 <style type="text/css" media="all">
   @import "../../../themes/dark/dark.toolbar.css";
   @import "../../../themes/light/light.toolbar.css";
-  @import "../../../themes/flora/flora.slider.css";
+  @import "../../../themes/flora/flora.toolbar.css";
   
   @import "blueprint/lib/reset.css";
   @import "blueprint/lib/grid.css";
@@ -69,7 +69,7 @@
     }
 </style>
 </head>
-<body class="light">
+<body>
 <div class="container">
   <h1 class="column first span-12" ><span class="alt">Test Page: Toolbars</span></h1>
 </div>
@@ -114,7 +114,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-var supported = ["light", "dark","flora"];
+var supported = ["flora","light", "dark"];
 $("body").themer(supported);
 
 $("#inner").toolbar();
