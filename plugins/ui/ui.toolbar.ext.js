@@ -42,17 +42,18 @@ $.extend($.ui.toolbar.prototype.factory, {
     var toggled = false;
     
     var item = $(template).bind("click", function(){
+      var o = $.data(item, 'options');
       if(!($(this).is('.ui-toolbar-btn-disabled'))){
         if(!toggled){
           $(this).addClass('ui-toolbar-btn-active');
-          if ($.isFunction(options.onActivate) ) {
-            options.onActivate(item);
+          if ($.isFunction(o.onActivate) ) {
+            o.onActivate(item);
           }
           toggled = true;
         }else{
           $(this).removeClass('ui-toolbar-btn-active');
-          if ($.isFunction(options.onDeactivate) ) {
-            options.onDeactivate(item);
+          if ($.isFunction(o.onDeactivate) ) {
+            o.onDeactivate(item);
           }
           toggled = false;
         }
@@ -60,17 +61,19 @@ $.extend($.ui.toolbar.prototype.factory, {
     })
     .bind("mouseover", function(){
       $(this).addClass('ui-toolbar-btn-over');
-      if ($.isFunction(options.onMouseOver)) {
-        options.onMouseOver(item);
+      var o = $.data(item, 'options');
+      if ($.isFunction(o.onMouseOver)) {
+        o.onMouseOver(item);
       }
     })
     .bind("mouseout", function(){
       $(this).removeClass('ui-toolbar-btn-over');
-      if ($.isFunction(options.onMouseOut)) {
-        options.onMouseOut(item);
+      var o = $.data(item, 'options');
+      if ($.isFunction(o.onMouseOut)) {
+        o.onMouseOut(item);
       }
     });
-    
+    $.data(item, 'options', options);
     return item;
   },
   radiogroup: function(desc, tb){
@@ -80,34 +83,32 @@ $.extend($.ui.toolbar.prototype.factory, {
     };
     $.extend(options, desc);
     
-    if(desc.items){
+    if(options.items){
       var item = $('<li class="ui-toolbar-radioGrp"></li>');
       $(item).append("<ul>").find("ul").addClass(self.orient);
       
-      $.each(desc.items, function(i){
-        var currentItem = desc.items[i];
+      $.each(options.items, function(i){
+        var currentItem = options.items[i];
         
-        var options = {
+        var cOptions = {
           caption: 'button',
-          onSelect: function(){
+          onSelect: function(el,options){
             alert("selected: "+options.caption);
           },
-          onDeselect: function(){
+          onDeselect: function(el, options){
             alert("deselected: "+options.caption);
           },
           onMouseOver: function(){},
           onMouseOut: function(){}
-        }
-        $.extend(options, currentItem);
-        
-        console.log(currentItem)
+        };
+        $.extend(cOptions, currentItem);
         
         var toolbarBtnT_tpl = new Array();
         toolbarBtnT_tpl.push(
           '<li class="ui-toolbar-btn">',
             '<span class="ui-toolbar-btn-left"><i>&#160;<'+'/i><'+'/span>',
               '<span class="ui-toolbar-btn-center">',
-                '<button><span>'+currentItem.caption+'</span></button>',
+                '<button><span>'+cOptions.caption+'</span></button>',
               '<'+'/span>',
             '<span class="ui-toolbar-btn-right"><i>&#160;<'+'/i><'+'/span>',
           '</li>'
@@ -117,41 +118,44 @@ $.extend($.ui.toolbar.prototype.factory, {
         
         
         var _item = $(template).bind("click", function(){
+          var o = $.data(_item, 'options');
           if(!($(this).is('.ui-toolbar-btn-disabled'))){
             if($(this).is('.ui-toolbar-btn-active')){
               $(this).removeClass("ui-toolbar-btn-active");
-              if ($.isFunction(options.onDeselect) ) {
-                options.onDeselect(item);
+              if ($.isFunction(o.onDeselect) ) {
+                o.onDeselect(item, o);
               }
             }else{
               $(this).parent().children().each(function(){
                 $(this).removeClass("ui-toolbar-btn-active");
               });
               $(this).addClass("ui-toolbar-btn-active");
-              if ($.isFunction(options.onSelect) ) {
-                options.onSelect(item);
+              if ($.isFunction(o.onSelect) ) {
+                o.onSelect(item,o);
               }
             }
           }
         })
         .bind("mouseover", function(){
+          var o = $.data(_item, 'options');
           $(this).addClass('ui-toolbar-btn-over');
-          if ($.isFunction(options.onMouseOver)) {
-            options.onMouseOver(item);
+          if ($.isFunction(o.onMouseOver)) {
+            o.onMouseOver(item);
           }
         })
         .bind("mouseout", function(){
+          var o = $.data(_item, 'options');
           $(this).removeClass('ui-toolbar-btn-over');
-          if ($.isFunction(options.onMouseOut)) {
-            options.onMouseOut(item);
+          if ($.isFunction(o.onMouseOut)) {
+            o.onMouseOut(item);
           }
         }).appendTo($(item).find("ul"));
         
-        if(i+1 == desc.selected){
+        if(i+1 == options.selected){
           $(_item).addClass("ui-toolbar-btn-active");
         }
+        $.data(_item, 'options', cOptions);
       });
-
       return item;
     }
   }

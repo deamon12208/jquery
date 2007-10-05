@@ -93,8 +93,8 @@
     </div>
     <div class="column span-2p last">
       <h2>Item Tasks</h2>
-        <input type="button" class="button" id="enable" value="Enable Item 2"/>
-        <input type="button" class="button" id="disable" value="Disable Item 2"/>
+        <input type="button" class="button" id="enable" value="Enable Item 3"/>
+        <input type="button" class="button" id="disable" value="Disable Item 3"/>
         <input type="button" class="button" id="mode" value="Change Mode"/>
         <input type="button" class="button" id="orient" value="Change Orient"/>
       <h2>Addons<a href="#ref-1">*</a></h2>
@@ -120,16 +120,16 @@ $("body").themer(supported);
 $("#inner").toolbar();
 $("#inner2 .toolbar").toolbar({orient: 'vertical'});
 
-for(i=1;i<5;++i){
-	$("#inner").toolbarAdd({
-    caption: 'test'+i,
-    type: 'button'
-  });
-  $("#inner2 .toolbar").toolbarAdd({
-    caption: 'test'+i,
-    type: 'button'
-  });
-}
+  for(i=0;i<5;i++){
+    $("#inner").toolbarAdd({
+      caption: 'test'+i,
+      type: 'button'
+    });
+    $("#inner2 .toolbar").toolbarAdd({
+      caption: 'test'+i,
+      type: 'button'
+    });
+  }
 
 $("#add").bind("click", function(){
   config = {

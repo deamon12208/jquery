@@ -177,22 +177,22 @@
  *
  ************************************************/
 
-  .light .ui-toolbar ul.ui-toolbar-horiz li.ui-toolbar-btnGroup,
-  .light .ui-toolbar ul.ui-toolbar-horiz li.ui-toolbar-btnGroup ul,
-  .light .ui-toolbar ul.ui-toolbar-horiz li.ui-toolbar-btnGroup ul li{
+  .light .ui-toolbar ul.ui-toolbar-horiz li.ui-toolbar-radioGrp,
+  .light .ui-toolbar ul.ui-toolbar-horiz li.ui-toolbar-radioGrp ul,
+  .light .ui-toolbar ul.ui-toolbar-horiz li.ui-toolbar-radioGrp ul li{
     display:inline;
   }
-  .light .ui-toolbar ul.ui-toolbar-horiz li.ui-toolbar-btnGroup ul {
+  .light .ui-toolbar ul.ui-toolbar-horiz li.ui-toolbar-radioGrp ul {
     margin:0px;
     padding:0px;
   }
 
-  .light .ui-toolbar ul.ui-toolbar-vert li.ui-toolbar-btnGroup,
-  .light .ui-toolbar ul.ui-toolbar-vert li.ui-toolbar-btnGroup ul,
-  .light .ui-toolbar ul.ui-toolbar-vert li.ui-toolbar-btnGroup ul li{
+  .light .ui-toolbar ul.ui-toolbar-vert li.ui-toolbar-radioGrp,
+  .light .ui-toolbar ul.ui-toolbar-vert li.ui-toolbar-radioGrp ul,
+  .light .ui-toolbar ul.ui-toolbar-vert li.ui-toolbar-radioGrp ul li{
     display:block;
   }
-  .light .ui-toolbar ul.ui-toolbar-vert li.ui-toolbar-btnGroup ul {
+  .light .ui-toolbar ul.ui-toolbar-vert li.ui-toolbar-radioGrp ul {
     margin:0px;
     padding:0px;
   }

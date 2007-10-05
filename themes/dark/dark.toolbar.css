@@ -182,22 +182,22 @@
  *
  ************************************************/
 
-  .dark .ui-toolbar ul.ui-toolbar-horiz li.ui-toolbar-btnGroup,
-  .dark .ui-toolbar ul.ui-toolbar-horiz li.ui-toolbar-btnGroup ul,
-  .dark .ui-toolbar ul.ui-toolbar-horiz li.ui-toolbar-btnGroup ul li{
+  .dark .ui-toolbar ul.ui-toolbar-horiz li.ui-toolbar-radioGrp,
+  .dark .ui-toolbar ul.ui-toolbar-horiz li.ui-toolbar-radioGrp ul,
+  .dark .ui-toolbar ul.ui-toolbar-horiz li.ui-toolbar-radioGrp ul li{
     display:inline;
   }
-  .dark .ui-toolbar ul.ui-toolbar-horiz li.ui-toolbar-btnGroup ul {
+  .dark .ui-toolbar ul.ui-toolbar-horiz li.ui-toolbar-radioGrp ul {
     margin:0px;
     padding:0px;
   }
 
-  .dark .ui-toolbar ul.ui-toolbar-vert li.ui-toolbar-btnGroup,
-  .dark .ui-toolbar ul.ui-toolbar-vert li.ui-toolbar-btnGroup ul,
-  .dark .ui-toolbar ul.ui-toolbar-vert li.ui-toolbar-btnGroup ul li{
+  .dark .ui-toolbar ul.ui-toolbar-vert li.ui-toolbar-radioGrp,
+  .dark .ui-toolbar ul.ui-toolbar-vert li.ui-toolbar-radioGrp ul,
+  .dark .ui-toolbar ul.ui-toolbar-vert li.ui-toolbar-radioGrp ul li{
     display:block;
   }
-  .dark .ui-toolbar ul.ui-toolbar-vert li.ui-toolbar-btnGroup ul {
+  .dark .ui-toolbar ul.ui-toolbar-vert li.ui-toolbar-radioGrp ul {
     margin:0px;
     padding:0px;
   }

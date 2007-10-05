@@ -105,6 +105,7 @@ $.extend($.ui.toolbar.prototype, {
     },
     remove: function(n) {
     	this.get(n).remove();
+      $.removeData(this.get(n), 'options');
     },
     add: function(){
       var item;
@@ -231,14 +232,15 @@ $.extend($.ui.toolbar.prototype, {
         options = {
           caption: 'button',
           icon: null,
-          onClick: function(){
+          onClick: function(item, options){
             alert("Fired: "+options.caption);
           },
           onMouseOver: function(){},
           onMouseOut: function(){}
         };
         $.extend(options, desc);
-          var toolbarBtn_tpl = new Array();
+        
+        var toolbarBtn_tpl = new Array();
           toolbarBtn_tpl.push(
             '<li class="ui-toolbar-btn">',
               '<span class="ui-toolbar-btn-left"><i>&#160;<'+'/i><'+'/span>',
@@ -252,20 +254,23 @@ $.extend($.ui.toolbar.prototype, {
         var template = toolbarBtn_tpl.join('');
         
         var item = $(template).bind("click", function(){
-          if ($.isFunction(options.onClick) && !($(this).is('.ui-toolbar-btn-disabled'))) {
-            options.onClick(item);
+          var o = $.data(item, 'options');
+          if ($.isFunction(o.onClick) && !($(this).is('.ui-toolbar-btn-disabled'))) {
+            o.onClick(item, o);
           }
         })
         .bind("mouseover", function(){
           $(this).addClass('ui-toolbar-btn-over');
-          if ($.isFunction(options.onMouseOver)) {
-            options.onMouseOver(item);
+          var o = $.data(item, 'options');
+          if ($.isFunction(o.onMouseOver)) {
+            o.onMouseOver(item);
           }
         })
         .bind("mouseout", function(){
           $(this).removeClass('ui-toolbar-btn-over');
-          if ($.isFunction(options.onMouseOut)) {
-            options.onMouseOut(item);
+          var o = $.data(item, 'options');
+          if ($.isFunction(o.onMouseOut)) {
+            o.onMouseOut(item);
           }
         });
         
@@ -274,7 +279,7 @@ $.extend($.ui.toolbar.prototype, {
         if($(this.element).is(".ui-toolbar-btn-hidingText")){
           $(item).find(".ui-toolbar-btn-center").addClass('ui-toolbar-btn-hideText');
         }
-        
+        $.data(item, 'options', options);
         return item;
       }
     }
