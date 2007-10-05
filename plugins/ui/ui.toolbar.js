@@ -105,7 +105,6 @@ $.extend($.ui.toolbar.prototype, {
     },
     remove: function(n) {
     	this.get(n).remove();
-      $.removeData(this.get(n), 'options');
     },
     add: function(){
       var item;
