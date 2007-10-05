@@ -12,14 +12,6 @@
 	//If the UI scope is not availalable, add it
 	$.ui = $.ui || {};
   
-  // Add the UI Naming seed if it doesn't exist, this is a custom function used in plugin.
-	var uiIdSeed = uiIdSeed || 0;
-	// the Naming seed based function:
-	// 	@ returns a string like: myId-1
-	$.ui.uuid = function(prefix){
-		return prefix +"-" + (++uiIdSeed);
-	}
-  
   $.fn.toolbar = function(options){
     return $(this).each(function() {
       new $.ui.toolbar(this, options);
