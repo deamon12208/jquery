@@ -1,6 +1,6 @@
 /*
  * jQuery clueTip plugin
- * Version 0.9.2  (09/28/2007)
+ * Version 0.9.2.1  (10/07/2007)
  * @requires jQuery v1.1.1+
  * @requires Dimensions plugin 
  *
@@ -19,8 +19,8 @@
  *
  * @credit Inspired by Cody Lindley's jTip (http://www.codylindley.com)
  * @credit Thanks to Shelane Enos for the feature ideas 
- * @credit Thanks to Glen Lipka, Jörn Zaefferer, Dan G. Switzer, and Hector Santos for their expert advice and code enhancements
- * @credit Thanks to Torben Schreiter for identifying bugs and offering solutions
+ * @credit Thanks to the following people for their expert advice, code enhancements, bug fixes, etc.:
+      Glen Lipka, Hector Santos, Torben Schreiter, Dan G. Switzer, Jörn Zaefferer 
  * @credit Thanks to Jonathan Chaffer, as always, for help with the hard parts. :-)
  */
 
@@ -54,11 +54,15 @@
  * });
  * @desc Displays a clueTip on mouseover of all <a> elements with class="clue". The hovered element gets a class of "highlight" added to it (so that it can be styled appropriately. This is esp. useful for non-anchor elements.). The clueTip is "sticky," which means that it will not be hidden until the user either clicks on its "close" text/graphic or displays another clueTip. The "close" text/graphic is set to diplay at the bottom of the clueTip (default is top) and display an image rather than the default "Close" text. Moreover, the body of the clueTip is truncated to the first 60 characters, which are followed by an ellipsis (...). Finally, the clueTip retrieves the content using POST rather than the $.ajax method's default "GET."
  * 
- *
+ * More examples can be found at http://plugins.learningjquery.com/cluetip/demo/
  *
  * @param Object defaults (optional) Customize your clueTips
- * @option Number width: default is 275. The width of the clueTip
- * @option Number|String height: default is 'auto'. The height of the clueTip. Setting a specific height also sets  <div id="cluetip-outer"> to overflow:auto
+ * @option Integer width: default is 275. The width of the clueTip
+ * @option Integer|String height: default is 'auto'. The height of the clueTip. Setting a specific height also sets  <div id="cluetip-outer"> to overflow:auto
+ * @option Integer cluezIndex: default is 97; sets the z-index style property of the clueTip.
+ * @option String positionBy: default is 'auto'. Available options: 'auto', 'mouse', 'bottomTop', 'fixed'. Change to 'mouse' if you want to override positioning by element and position the clueTip based on where the mouse is instead. Change to 'bottomTop' if you want positioning to begin below the mouse when there is room or above if not -- rather than right or left of the elemnent and flush with element's top Change to 'fixed' if you want the clueTip to appear in exactly the same location relative to the linked element no matter where it appears on the page. Use 'fixed' at your own risk.
+ * @option Integer topOffset: number of pixels to offset the clueTip from the top of the linked element. For positionBy "auto", "mouse", and "bottomTop" the number will be added to the clueTip's "top" value if the clueTip appears below the linked element and subtracted from it if the clueTip appears above. For positionBy "fixed", the number will be added to the "top" value, offsetting the clueTip from the top of the linked element.
+ * @option Integer leftOffset: number of pixels to offset the cluetip horizontally from the linked element. For positionBy "auto", "mouse", and "bottomTop" the number will be added to clueTip's "left" value if the clueTip appears to the right of the linked element and subtracted if the clueTip appears to the left. For positionBy "fixed", the number will be added to the "left" value of the clueTip, offsetting it from the right-most part of the linked element. 
  * @option Boolean local: default is false. Whether to use content from the same page (using ID) for clueTip body
  * @option Boolean hideLocal: default is true. If local option is set to true, determine whether local content to be shown in clueTip should be hidden at its original location. 
  * @option String attribute default is 'rel'. The attribute to be used for the URL of the ajaxed content
@@ -75,8 +79,6 @@
  * @option Boolean dropShadow: default is true; set it to false if you do not want the drop-shadow effect on the clueTip
  * @option Integer dropShadowSteps: default is 6; change this number to adjust the size of the drop shadow
  * @option Boolean sticky: default is false. Set to true to keep the clueTip visible until the user either closes it manually by clicking on the CloseText or display another clueTip.
- * @option Integer cluezIndex: default is 97; sets the z-index style property of the clueTip.
- * @option String positionBy: default is 'auto'. Available options: 'auto', 'mouse', or 'bottomTop'. Change to 'mouse' if you want to override positioning by element and position the clueTip based on where the mouse is instead. Change to 'bottomTop' if you want positioning to begin below the mouse when there is room or above if not -- rather than right or left of the elemnent and flush with element's top.
  * @option Object fx: default is: {open: 'show', openSpeed: '', close: 'hide', closeSpeed: ''}. Change these to apply one of jQuery's effects when opening or closing the clueTip
  * @option String activation: default is 'hover'. Set to 'toggle' to force the user to click the element in order to activate the clueTip.
  * @option Object hoverIntent: default is {sensitivity: 3, interval: 50, timeout: 0}. If jquery.hoverintent.js plugin is included in <head>, hoverIntent() will be used with these settings instead of hover(). Set to false if for some reason you have the hoverintent plugin included but don't want to use it. For info on hoverIntent options, see http://cherne.net/brian/resources/jquery.hoverIntent.html
@@ -87,14 +89,14 @@
  *
  */
   var $cluetip, $cluetipInner, $cluetipOuter, $cluetipTitle, $dropShadow, imgCount;
-  var msie6 = $.browser.msie && ($.browser.version && $.browser.version < 7 || (/5\.5|6.0/).test(navigator.userAgent));
-
   $.fn.cluetip = function(options) {
-    
-    // set up default options
-    var defaults = {
+    var defaults = {  // set up default options
       width: 275,
       height: 'auto',
+      cluezIndex: 97,
+      positionBy: 'auto',
+      topOffset: 15,
+      leftOffset: 15,
       local: false,
       hideLocal: true,
       attribute: 'rel',
@@ -114,8 +116,6 @@
       closePosition: 'top',
       closeText: 'Close',
       truncate: 0,
-      cluezIndex: 97,
-      positionBy: 'auto', 
       fx: {
         open: 'show',
         openSpeed: '',
@@ -127,7 +127,7 @@
   			interval: 50,
   			timeout: 0
       },
-      beforeShow: function(e) {return true;},
+      onActivate: function(e) {return true;},
       onShow: function(ct, c){},
       ajaxCache: true,  
       ajaxProcess: function(data) {
@@ -185,6 +185,7 @@
       if (!tipAttribute && !defaults.splitTitle) return true;
       // if hideLocal is set to true, on DOM ready hide the local content that will be displayed in the clueTip
       if (defaults.local && defaults.hideLocal) { $(tipAttribute).hide(); }
+      var tOffset = parseInt(defaults.topOffset, 10), lOffset = parseInt(defaults.leftOffset, 10);
       // vertical measurement variables
       var tipHeight, wHeight;
       var defHeight = isNaN(parseInt(defaults.height, 10)) ? 'auto' : (/\D/g).test(defaults.height) ? defaults.height : defaults.height + 'px';
@@ -210,7 +211,7 @@
     
 //activate clueTip
     var activate = function(event) {
-      if (!defaults.beforeShow($this)) {
+      if (!defaults.onActivate($this)) {
         return false;
       }
       isActive = true;
@@ -231,20 +232,25 @@
         winWidth = $(window).width();
       }
 // position clueTip horizontally
-      posX = (linkWidth > linkLeft && linkLeft > tipWidth)
-        || linkLeft + linkWidth + tipWidth > winWidth 
-        ? linkLeft - tipWidth - 15 
-        : linkWidth + linkLeft + 15;
-      if ($this[0].tagName.toLowerCase() == 'area' || defaults.positionBy == 'mouse' || linkWidth + tipWidth > winWidth) { // position by mouse
-        if (mouseX + 20 + tipWidth > winWidth) {  
-          posX = (mouseX - tipWidth - 20) >= 0 ? mouseX - tipWidth - 20 :  mouseX - (tipWidth/2);
-        } else {
-          posX = mouseX + 20;
+      if (defaults.positionBy == 'fixed') {
+        posX = linkWidth + linkLeft + lOffset;
+        $cluetip.css({left: posX});
+      } else {
+        posX = (linkWidth > linkLeft && linkLeft > tipWidth)
+          || linkLeft + linkWidth + tipWidth > winWidth 
+          ? linkLeft - tipWidth - lOffset 
+          : linkWidth + linkLeft + lOffset;
+        if ($this[0].tagName.toLowerCase() == 'area' || defaults.positionBy == 'mouse' || linkWidth + tipWidth > winWidth) { // position by mouse
+          if (mouseX + 20 + tipWidth > winWidth) {  
+            posX = (mouseX - tipWidth - lOffset) >= 0 ? mouseX - tipWidth - lOffset :  mouseX - (tipWidth/2);
+          } else {
+            posX = mouseX + lOffset;
+          }
+          var pY = posX < 0 ? event.pageY + tOffset : event.pageY;
         }
-        var pY = posX < 0 ? event.pageY + 20 : event.pageY;
+        $cluetip.css({left: (posX > 0 && defaults.positionBy != 'bottomTop') ? posX : (mouseX + (tipWidth/2) > winWidth) ? winWidth/2 - tipWidth/2 : Math.max(mouseX - (tipWidth/2),0)});
       }
-      $cluetip.css({left: (posX > 0 && defaults.positionBy != 'bottomTop') ? posX : (mouseX + (tipWidth/2) > winWidth) ? winWidth/2 - tipWidth/2 : Math.max(mouseX - (tipWidth/2),0)});
-      wHeight = $(window).height();
+        wHeight = $(window).height();
 
 /***************************************
 * load the title attribute only (or user-selected attribute). 
@@ -348,22 +354,23 @@
       $cluetipOuter.css({overflow: defHeight == 'auto' ? 'visible' : 'auto', height: defHeight});
       tipHeight = defHeight == 'auto' ? $cluetip.outerHeight() : parseInt(defHeight,10);   
       tipY = posY;
-      if ( (posX < mouseX && Math.max(posX, 0) + tipWidth > mouseX) || defaults.positionBy == 'bottomTop') {
-        if (posY + tipHeight > sTop + wHeight && mouseY - sTop > tipHeight + 10) { 
-          tipY = mouseY - tipHeight - 16;
+      if (defaults.positionBy == 'fixed') {
+        tipY = posY - defaults.dropShadowSteps + tOffset;
+      } else if ( (posX < mouseX && Math.max(posX, 0) + tipWidth > mouseX) || defaults.positionBy == 'bottomTop') {
+        if (posY + tipHeight > sTop + wHeight && mouseY - sTop > tipHeight + tOffset) { 
+          tipY = mouseY - tipHeight - tOffset;
           direction = 'top';
         } else { 
-          tipY = mouseY + 20;
+          tipY = mouseY + tOffset;
           direction = 'bottom';
         }
       } else if ( posY + tipHeight > sTop + wHeight ) {
-        tipY = (tipHeight >= wHeight) ? sTop : sTop + wHeight - tipHeight - 10;
-        // direction = 'top';
+        tipY = (tipHeight >= wHeight) ? sTop : sTop + wHeight - tipHeight - tOffset;
       } else if ($this.css('display') == 'block' || $this[0].tagName.toLowerCase() == 'area' || defaults.positionBy == "mouse") {
-        tipY = bpY - 10;
+        tipY = bpY - tOffset;
       } else {
         tipY = posY - defaults.dropShadowSteps;
-      } 
+      }
       if (direction == '') {
         posX < linkLeft ? direction = 'left' : direction = 'right';
       }

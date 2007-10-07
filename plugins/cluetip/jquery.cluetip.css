@@ -49,7 +49,7 @@
    =cluetipClass: 'jtip'
 -------------------------------------- */
 .cluetip-jtip {
-  background-color: #fff;
+  background-color: transparent;
 }
 .clue-right-jtip {
   background-image: url(arrowleft.gif);
