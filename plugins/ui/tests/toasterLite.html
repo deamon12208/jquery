@@ -1,83 +1,80 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="en">
-    <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta http-equiv="Content-Style-Type" content="text/css">
-	<meta http-equiv="Content-Script-Type" content="text/javascript">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>UI Toasters: Test Page</title>
+    <link rel="stylesheet" href="../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
+    <link rel="stylesheet" href="css/demo.css" type="text/css" media="screen" title="Flora (Default)" />
+    
+    <script type="text/javascript" src="../../../jquery/src/core.js"></script>
+    <script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+    <script type="text/javascript" src="../../../jquery/src/event.js"></script>
+    <script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+    <script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+    <script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+    <script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+    <script type="text/javascript" src="../ui.toasterLite.js"></script>
+    
+    <style>
+    @import "blueprint/screen.css";
+    .notes {background:#fff; padding:2px;}
+    button {width:100%;}
+    </style>
+    <script type="text/javascript" charset="utf-8">
+      $.fn.makeTests = function(settings, tests) {
+        container = $('<div class="container"><h1><span class="alt">Test Page: '+ settings.title +'</span></h1></div>');
+        f = false;
+        size = 0;
+        divs = {};
+        $.each(tests, function(name, test) {
+          f = !f;
+          if (f) {
+            size++;
+            divs[size] = $('<div></div>');
+          }
+          str = $('<div></div>');
+          str.append('<h2>'+ name +'</h2><hr />');
+          $.each(test, function(name, params) {
+            $('<button>'+ name +'</button><div class="notes">'+ params.description +'</div>').click(new Function(params.code)).appendTo(str);
+          });
+          divs[size].append(str.html());
+        });
+        span = Math.floor(24 / size);
+        $.each(divs, function(number, value) {
+          console.log(value);
+          console.log('-');
+          container.append($('<div class="column span-'+ span +'"></div>').append($(value).html()));
+        });
+        console.log(container);
+        $('body').append(container);
+      }
+      $('body').makeTests({
+        title: 'ToasterLite Popups'
+      }, {
+        'Minimal options': {
+          'None': {
+            description: 'Makes a default toaster with no options',
+            code: '$.toasterLite({})',
+          },
+          'Title': {
+            description: ''
+          }
+        },
+        
+          'Minimal options2': {
+            'None': {
+              description: 'Makes a default toaster with no options',
+              code: '$.toasterLite({})',
+            },
+            'Title': {
+              description: ''
+            }
+          },
 
-	<title>UI Toaster Lite - Test Page</title>
-
-	<link rel="stylesheet" href="../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)">
-
-	<script type="text/javascript" src="../../../jquery/src/core.js"></script>
-	<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
-	<script type="text/javascript" src="../../../jquery/src/event.js"></script>
-	<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
-	<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
-	<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
-	<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
-	<script type="text/javascript" src="../ui.toasterLite.js"></script>
-
-<script type="text/javascript" src="js/themer.js"></script>
-<style type="text/css">@import "js/themer.css"; </style>
-
-	<style type="text/css" media="screen, projection">
-
-body { font-size: 16px; /* @ EOMB */ }
-* html body { font-size: 100%; /* @ IE */ }
-body * { font-size: 87.5%; font-family: "Trebuchet MS", Trebuchet, Verdana, Helvetica, Arial, sans-serif; }
-body * * { font-size: 100%; }
-h1 { margin: 1em 0 1.5em; font-size: 18px; }
-h2 { margin: 2em 0 1.5em; font-size: 16px; }
-p { margin: 0; }
-pre, pre+p, p+p { margin: 0; }
-code { font-family: "Courier New", Courier, monospace; }
-
-.ui-tests {
-	list-style: none;
-	margin-right: 2em;
-}
-.ui-test {
-	padding: 0.5em;
-	margin-bottom: 1em;
-	background-color: #f3e4bf;
-}
-.ui-test button {
-	margin-top: 0.5em;
-}
-
-	</style>
-	<script type="text/javascript">
-$(function() {
-	$('.ui-test button').click(function() {
-	});
-});
-	</script>
-
-</head>
-<body class="flora">
-
-<h1>UI Toaster Lite - Test Page</h1>
-
-<h2>Default</h2>
-
-	<ul class="ui-tests">
-	<li class="ui-test">
-		<div id="toasterLite-default" class="flora">
-		  	$.toasterLite()
-		</div>
-		<button id="test-toasterLite-default">Test</button>
-		<script type="text/javascript">
-    $(function() {
-      
-      $("body").themer(["flora", "light", "dark"]);
-      
-			$('#test-toasterLite-default').click(function() {
-			  $.toasterLite({title: 'asdf', text: 'a' });
       });
-    });</script>
-	</li>
-	</ul>
-
+    </script>
+</head>
+<body>
+  asdf
 </body>
 </html>
