@@ -891,8 +891,8 @@ jQuery.extend(jQuery.validator, {
 			return this.settings.rules
 				? this.settings.rules[ element.name ]
 				: this.settings.meta
-					? jQuery(element).data()[ this.settings.meta ]
-					: jQuery(element).data();
+					? jQuery(element).metadata()[ this.settings.meta ]
+					: jQuery(element).metadata();
 		},
 		
 		checkable: function( element ) {
