@@ -39,7 +39,6 @@
 				this._show(obj, speed) :
 				$.fx[obj.method].apply(this, ['hide',obj,speed,callback]);
 		}
-			
 	});
 	
 })(jQuery);
