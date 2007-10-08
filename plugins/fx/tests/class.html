@@ -12,7 +12,7 @@
 <script type="text/javascript" src="../../../jquery/src/fx.js"></script>
 <script type="text/javascript" src="../../../jquery/src/offset.js"></script>
 
-<script type="text/javascript" src="../fx.animate.js"></script>
+<script type="text/javascript" src="../fx.js"></script>
 <script type="text/javascript" src="../../color/jquery.color.js"></script>
 
 <style type="text/css" media="screen">
@@ -44,8 +44,10 @@ body .error {
 		I'm a button
 	</div>
 
-	<button onclick="$('#parent').animateClass({ add: 'error' }, 500)">Add class 'error'</button>
-	<button onclick="$('#parent').animateClass({ remove: 'error' }, 500)">Remove class 'error'</button>
+	<button onclick="$('#parent').addClass('error', 500)">Add class 'error'</button>
+	<button onclick="$('#parent').removeClass('error', 500)">Remove class 'error'</button>
+	<button onclick="$('#parent').toggleClass('error', 500)">Toggle class 'error'</button>
+	<button onclick="$('#parent').morph('green', 'error', 500)">morph from 'green' to 'error'</button>
 
 </body>
 </html>
