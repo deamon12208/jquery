@@ -29,8 +29,7 @@
 			//Animate using FX' animation method
 			$.fx.animate(this, {
 				animation: animation, after: after,
-				callback: callback, speed: speed, easing: set.easing, noqueue: noqueue,
-				undo: function(callback) { $.fx.drop.call($(this), (type == "show" ? "hide" : "show"), set, speed, callback, true); }
+				callback: callback, speed: speed, easing: set.easing, noqueue: noqueue
 			});			
 	
 		});
