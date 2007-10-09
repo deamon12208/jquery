@@ -65,6 +65,8 @@
     
     this.iconState = 1;
     
+    if(typeof this.options.items == Array && this.options.items.length > 0){}
+    
     $.data(this.element, "ui-toolbar", this);
   }
 $.extend($.ui.toolbar.prototype, {

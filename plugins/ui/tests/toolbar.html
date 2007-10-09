@@ -98,9 +98,11 @@
         <input type="button" class="button" id="mode" value="Change Mode"/>
         <input type="button" class="button" id="orient" value="Change Orient"/>
       <h2>Addons<a href="#ref-1">*</a></h2>
+        <input type="button" class="button" id="addLabel" value="Add Label"/>
         <input type="button" class="button" id="addSlider" value="Add Slider"/>
         <input type="button" class="button" id="addToggle" value="Add Toggle Button"/>
         <input type="button" class="button" id="addGrouped" value="Add Radio Group"/>
+        <input type="button" class="button" id="addInput" value="Add Input"/>
     </div>
   </div>
   <div id="notes" class="clear container">
@@ -114,7 +116,7 @@
 <script type="text/javascript">
 $(document).ready(function(){
 
-var supported = ["flora","light", "dark"];
+var supported = ["light", "dark", "flora"];
 $("body").themer(supported);
 
 $("#inner").toolbar();
@@ -177,6 +179,17 @@ $("#addSep").bind("click", function(){
 });
 
 /* extra */
+$("#addLabel").bind("click", function(){
+  config = {
+    caption: 'Label '+i,
+    type: 'label'
+  };
+
+  i++;
+
+  $("#inner").toolbarAdd(config);
+  $("#inner2 .toolbar").toolbarAdd(config);
+});
 $("#addSlider").bind("click", function(){
   $("#inner").toolbarAdd({
     type: 'slider',
@@ -213,6 +226,17 @@ $("#addGrouped").bind("click", function(){
   
   i++;
   
+  $("#inner").toolbarAdd(config);
+  $("#inner2 .toolbar").toolbarAdd(config);
+});
+
+$("#addInput").bind("click", function(){
+  config = {
+    type: 'input'
+  };
+
+  i++;
+
   $("#inner").toolbarAdd(config);
   $("#inner2 .toolbar").toolbarAdd(config);
 });

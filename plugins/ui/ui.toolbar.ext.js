@@ -11,6 +11,46 @@ $.extend($.ui.toolbar.prototype.factory, {
   
     return item;
   },
+  label: function(o, tb) {
+    $.extend({
+      caption: 'label'
+    }, o);
+    var item = $(
+      '<li class="ui-toolbar-label">'+
+        '<span>'+
+          o.caption+
+        '</span>'+
+      '</li>'
+    );
+    return item;
+  },
+  input: function(desc, tb){
+    /*var options  = {
+      keyDown: function(){},
+      keyUp: function(){},
+      focus: function(){},
+      blur: function(){}
+    };
+    $.extend(options, desc);
+    
+    var tpl = new Array();
+    tpl.push(
+      '<li class="ui-toolbar-input">',
+        '<span class="ui-toolbar-input-left"><i>&#160;<'+'/i><'+'/span>',
+        '<span class="ui-toolbar-input-center">',
+          '<input type="text" value=""/>',
+        '<'+'/span>',
+        '<span class="ui-toolbar-input-right"><i>&#160;<'+'/i><'+'/span>',
+      '</li>'
+    );
+    var template = tpl.join('');
+    
+    var item = $(template);
+    
+    $.data(item, 'options', options);
+    return item;*/
+    alert("disabled");
+  },
   toggle: function(desc, tb){
     options = {
       caption: 'button',

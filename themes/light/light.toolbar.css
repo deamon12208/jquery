@@ -196,4 +196,30 @@
     margin:0px;
     padding:0px;
   }
+  
+  .ui-toolbar ul li.ui-toolbar-input .ui-toolbar-input-left{
+    border-left:1px solid #EEE;
+    border-right:1px solid #DDD;
+    width:0px;
+    padding:1px;
+    margin:0px;
+    overflow:hidden;
+    display:inline;
+  }
+  .ui-toolbar ul li.ui-toolbar-input .ui-toolbar-input-left i {
+    display:none;
+  }
+  .ui-toolbar ul li.ui-toolbar-input .ui-toolbar-input-center{
+    border-top:1px solid #DDD;
+    padding:0px;
+    margin:0px;
+    display:inline;
+  }
+  .ui-toolbar ul li.ui-toolbar-input input{
+    display:inline;
+    padding:2px 4px;
+    margin:0px;
+    border:1px solid #333;
+    background:#fff;
+  }
 /* END OF FILE */
