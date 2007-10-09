@@ -91,51 +91,51 @@
   var $cluetip, $cluetipInner, $cluetipOuter, $cluetipTitle, $dropShadow, imgCount;
   $.fn.cluetip = function(options) {
     var defaults = {  // set up default options
-      width: 275,
-      height: 'auto',
-      cluezIndex: 97,
-      positionBy: 'auto',
-      topOffset: 15,
-      leftOffset: 15,
-      local: false,
-      hideLocal: true,
-      attribute: 'rel',
-      titleAttribute: 'title',
-      splitTitle: '',
-      showTitle: true,
-      cluetipClass: 'default',
-      hoverClass: '',
-      waitImage: true,
-      cursor: 'help',
-      arrows: false, 
-      dropShadow: true,
-      dropShadowSteps: 6,
-      sticky: false,
-      mouseOutClose: false,
-      activation: 'hover',
-      closePosition: 'top',
-      closeText: 'Close',
-      truncate: 0,
-      fx: {
-        open: 'show',
-        openSpeed: '',
-        close: 'hide',
-        closeSpeed: ''
-      },
-      hoverIntent: {
-        sensitivity: 3,
-  			interval: 50,
-  			timeout: 0
-      },
-      onActivate: function(e) {return true;},
-      onShow: function(ct, c){},
-      ajaxCache: true,  
-      ajaxProcess: function(data) {
-        data = $(data).not('style, meta, link, script, title');
-        return data;
-      },
-      ajaxSettings: {
-        dataType: 'html'
+      width:            275,
+      height:           'auto',
+      cluezIndex:       97,
+      positionBy:       'auto',
+      topOffset:        15,
+      leftOffset:       15,
+      local:            false,
+      hideLocal:        true,
+      attribute:        'rel',
+      titleAttribute:   'title',
+      splitTitle:       '',
+      showTitle:        true,
+      cluetipClass:     'default',
+      hoverClass:       '',
+      waitImage:        true,
+      cursor:           'help',
+      arrows:           false, 
+      dropShadow:       true,
+      dropShadowSteps:  6,
+      sticky:           false,
+      mouseOutClose:    false,
+      activation:       'hover',
+      closePosition:    'top',
+      closeText:        'Close',
+      truncate:         0,
+      fx: {             
+                        open:       'show',
+                        openSpeed:  '',
+                        close:      'hide',
+                        closeSpeed: ''
+      },                
+      hoverIntent: {    
+                        sensitivity:  3,
+                			  interval:     50,
+                			  timeout:      0
+      },                
+      onActivate:       function(e) {return true;},
+      onShow:           function(ct, c){},
+      ajaxCache:        true,  
+      ajaxProcess:      function(data) {
+                          data = $(data).not('style, meta, link, script, title');
+                          return data;
+      },                
+      ajaxSettings: {   
+                        dataType: 'html'
       }
     };
     
@@ -309,7 +309,7 @@
         		  }); 
         		} else {
       				$('#cluetip-waitimage').hide();
-        		  cluetipShow(pY);    
+        		  if (isActive) cluetipShow(pY);    
         		} 
           };
           $.ajax(ajaxSettings);
