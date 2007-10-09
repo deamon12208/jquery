@@ -4,22 +4,21 @@ $(function(){
 		$("#captchaimage").load('image_req.php');
 		return false;
 	});
-	$("#captchaform").submit(function(){
-		$.get("process.php", {
-			captcha: $("#captcha").val()
-		}, function(valid) {
-			if(valid) {
-				$("#captcha").css({
-					border: '1px solid #49c24f',
-					background: '#bcffbf'
-				});
-			} else {
-				$("#captcha").css({
-					border: '1px solid #c24949',
-					background: '#ffbcbc'
-				});
+	
+	$("#captchaform").validate({
+		rules: {
+			captcha: {
+				required: true,
+				remote: "process.php"
 			}
-		});
-		return false;
+		},
+		messages: {
+			captcha: "Correct captcha is required. Click the captcha to generate a new one"	
+		},
+		submitHandler: function() {
+			alert("Correct captcha!");
+		},
+		onkeyup: false
 	});
+	
 });

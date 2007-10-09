@@ -22,6 +22,8 @@ $_SESSION['captcha_id'] = $str;
  <meta name="keywords" content="AJAX,JHR,PHP,CAPTCHA,download,PHP CAPTCHA,AJAX CAPTCHA,AJAX PHP CAPTCHA,download AJAX CAPTCHA,download AJAX PHP CAPTCHA" />
  <meta name="description" content="An AJAX CAPTCHA script, written in PHP" />
  <script type="text/javascript" src="../js/jquery.js"></script>
+ <script type="text/javascript" src="../../jquery.ajaxQueue.js"></script>
+ <script type="text/javascript" src="../../jquery.validate.js"></script>
  <script type="text/javascript" src="captcha.js"></script>
  <link rel="stylesheet" type="text/css" href="style.css" />
  <style type="text/css">
@@ -32,6 +34,14 @@ $_SESSION['captcha_id'] = $str;
   fieldset div#captchaimage { float: left; margin-right: 15px; }
   fieldset input#captcha { width: 25%; border: 1px solid #ddd; padding: 2px; }
   fieldset input#submit { display: block; margin: 2% 0% 0% 0%; }
+  #captcha.success {
+  	border: 1px solid #49c24f;
+	background: #bcffbf;
+  }
+  #captcha.error {
+  	border: 1px solid #c24949;
+	background: #ffbcbc;
+  }
  </style>
 </head>
 
@@ -39,7 +49,7 @@ $_SESSION['captcha_id'] = $str;
 
 <h1><acronym title="Asynchronous JavaScript And XML">AJAX</acronym> <acronym title="Completely Automated Public Turing test to tell Computers and Humans Apart">CAPTCHA</acronym></h1>
 
-<form id="captchaform" action="process.php">
+<form id="captchaform" action="">
 <fieldset>
  <div id="captchaimage"><a href="<?php echo $_SERVER['PHP_SELF']; ?>" id="refreshimg" title="Click to refresh image"><img src="images/image.jpg?<?php echo time(); ?>" width="132" height="46" alt="Captcha image" /></a></div>
  <label for="captcha">Enter the characters as seen on the image above (case insensitive):</label>
@@ -49,8 +59,6 @@ $_SESSION['captcha_id'] = $str;
 </form>
 
 <p>If you can&#39;t decipher the text on the image, click it to dynamically generate a new one.</p>
-
-<h2><a href="captcha.rar" title="Download source">SOURCE? (Improvements coming soon)</a></h2>
 
 </body>
 

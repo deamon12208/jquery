@@ -1,3 +1,13 @@
+- document validation lifecycle: setup (add event handlers), run validation (prepare form, validate elements, display errors/submit form)
+	 -> show where the user can hook in via callbacks
+	 
+- AND depedency: specify multiple expressions as an array
+
+additional options/callbacks:
+- onsubmit: Boolean, default true - validate on form submit (similar to onkeyup/onblur)
+- beforeValidation: Callback, called before doing any validation
+- beforeSubmit: Callback, called before submitting the form (default submit or calling submitHandler, if specified) 
+
 - bug: refresh now adds also key events in general, but doesn't for partial refreshs, and it should replace them if already present, instead of adding the same handler again and again
 - bug: remote validation triggers display/validation of other fields
 

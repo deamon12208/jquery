@@ -1085,7 +1085,7 @@ jQuery.extend(jQuery.validator, {
 						validator.stopRequest(response);
 					}
 				});
-				return true;
+				return false;
 			}
 			return cached.valid;
 		},
