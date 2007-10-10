@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="Content-Language" content="en" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Gallery Application for jQuery UI</title>
+		<script type="text/javascript" src="../../../../jquery/src/core.js"></script>
+		<script type="text/javascript" src="../../../../jquery/src/selector.js"></script>
+		<script type="text/javascript" src="../../../../jquery/src/event.js"></script>
+		<script type="text/javascript" src="../../../../jquery/src/ajax.js"></script>
+		<script type="text/javascript" src="../../../../jquery/src/fx.js"></script>
+		<script type="text/javascript" src="../../../dimensions/jquery.dimensions.js"></script>
+		<script type="text/javascript" src="../../../livequery/jquery.livequery.js"></script>
+		<script type="text/javascript" src="../../ui.js"></script>
+		<script type="text/javascript" src="../../ui.effects.js"></script>
+		<script type="text/javascript" src="../../ui.mouse.js"></script>
+		<script type="text/javascript" src="../../ui.resizable.js"></script>
+		<script type="text/javascript" src="../../ui.draggable.js"></script>
+		<script type="text/javascript" src="../../ui.modal.js"></script>
+
+	<style type="text/css" media="all">
+		@import url(../../../../themes/light/light.css);
+		@import url(../../../../themes/light/light.modal.css);
+		@import url(../../../../themes/dark/dark.css);
+		@import url(../../../../themes/dark/dark.modal.css);
+		@import url(../../../../themes/warm/warm.css);
+		@import url(../../../../themes/warm/warm.modal.css);
+		
+		body
+		{
+			background: #fff;
+			margin: 0;
+			padding: 0;
+			font-family: Arial;
+			font-size: 12px;
+		}
+		
+		.imageset {
+			border: 1px solid black;
+			width: 840px;
+			height: 800px;
+			overflow: auto;
+			position: relative;
+		}
+		
+		.select {
+			float: left;
+			border: 1px solid #999;	
+			padding: 5px;
+			margin: 5px;
+		}
+		
+		.box {
+			position:fixed;
+			top:5px;
+			right:5px;
+			display:block;
+			width:20px;
+			height:20px;
+			border:1px solid #FFF;
+			text-indent:2000em;
+			cursor:pointer;
+		}
+		.dark a.box {
+			color:#FFF;
+			text-indent:-40px;
+			border-color:#000;
+			background:#FFF;
+		}
+		.light a.box {
+			color:#222;
+			text-indent:-35px;
+			border-color:#000;
+			background:#222;
+		}
+	</style>
+</head>
+<body class="light">
+	<div class='imageset'>
+		<div class='select' id='i1'><img title="Swans" alt="Nice Swans" src='../../tests/images/select-1.jpg' /></div>
+		<div class='select' id='i2'><img title="Dolphins" alt="A swarm of Dolphins" src='../../tests/images/select-2.jpg' /></div>
+		<div class='select' id='i3'><img title="Butterfly" alt="A Butterfly" src='../../tests/images/select-3.jpg' /></div>
+		<div class='select' id='i4'><img title="Hummingbird" alt="A Hummingbird" src='../../tests/images/select-4.jpg' /></div>
+		<div class='select' id='i5'><img title="Underwater World" alt="A underwater utopia" src='../../tests/images/select-5.jpg' /></div>
+		<div class='select' id='i6'><img title="Dolphin" alt="A Dolphin says hello" src='../../tests/images/select-6.jpg' /></div>
+		<div class='select' id='i7'><img title="A Cheeta" alt="A Cheeta" src='../../tests/images/select-7.jpg' /></div>
+		<div class='select' id='i8'><img title="2 Bears" alt="2 large bears" src='../../tests/images/select-8.jpg' /></div>
+		<div class='select' id='i9'><img title="Another Dolphin" alt="Another Dolphin" src='../../tests/images/select-9.jpg' /></div>
+	</div>
+		
+	<script type="text/javascript">
+	if(!window.console) {
+	 window.console = {
+	 	log: function() {
+	 		alert(arguments[0]);	
+	 	}	
+	 }	
+	}
+	
+	$(document).ready(function(){
+		/*$('#button').toggle(function() {
+			$('.select').effect('transfer', { target: '#basket', direction: 'to', duration: 1000 });	
+		}, function() {
+			$('.select').effect('transfer', { target: '#basket', direction: 'from', duration: 1000 });	
+		});*/
+		
+		$("<a>").html("Dark").addClass("box").toggle(
+			function(){
+				$(this).html("Light");
+				$("body").removeClass("light").addClass("dark");
+			},function(){
+				$(this).html("Dark");
+				$("body").removeClass("dark").addClass("light");
+		}).prependTo("body");
+	
+		
+		$('img').bind('click', function(e){
+			var modal_id = $(this).parent().attr('id') + '_modal';
+			var self = this;
+			
+			//if (!$('body').find('div#'+modal_id)) {
+				$('body').append('<div class="modal" id="' + modal_id + '"></div>');
+				$('#' + modal_id).modal({title: $(this).attr('title'), height: $(self).height + 50, width: $(self).width + 50})
+				.css({top: e.clientY, left: e.clientX});
+				$('#' + modal_id + ' .middle .center').append('<div class="modalimage" style="display: none;">').append($(self).clone().empty()).append('<div>' + $(self).attr('alt') + '</div></div><a href="#" class="commenttoggle">Add Comment<a><div class="comment"></div>');
+			//}
+		});
+		
+		$('.commenttoggle').livequery(function(){
+			$(this).bind('click', function(){
+				$('.comment').load('comment-form.html', function(){
+					$(this).slideDown('slow');
+				});
+			$(this).text('Hide Comments');
+			});
+		}, function(){
+			$(this).bind('click', function(){
+				$('.comment').slideUp('slow', function(){
+					$(this).html('');
+				});
+			});
+			$(this).text('Show Comments');
+		});
+		
+		$('.submitcomment').bind('submit', function(){
+			$('#' + modal_id + ' .middle .center .comment').replaceWith('<h2>Comment Submitted</h2>');
+		});
+	});
+	
+	
+	</script>
+</body>
+</html>

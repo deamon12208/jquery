@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Language" content="en" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Gallery Application for jQuery UI</title>
+    <script type="text/javascript" src="../../../../jquery/src/core.js"></script>
+    <script type="text/javascript" src="../../../../jquery/src/selector.js"></script>
+    <script type="text/javascript" src="../../../../jquery/src/event.js"></script>
+    <script type="text/javascript" src="../../../../jquery/src/ajax.js"></script>
+    <script type="text/javascript" src="../../../../jquery/src/fx.js"></script>
+    <script type="text/javascript" src="../../../dimensions/jquery.dimensions.js"></script>
+    <script type="text/javascript" src="../../../livequery/jquery.livequery.js"></script>
+    <script type="text/javascript" src="../../ui.js"></script>
+    <script type="text/javascript" src="../../ui.effects.js"></script>
+    <script type="text/javascript" src="../../ui.mouse.js"></script>
+    <script type="text/javascript" src="../../ui.resizable.js"></script>
+    <script type="text/javascript" src="../../ui.draggable.js"></script>
+    <script type="text/javascript" src="../../ui.droppable.js"></script>
+    <script type="text/javascript" src="../../ui.menu.js"></script>
+    <script type="text/javascript" src="../../ui.modal.js"></script>
+    <script type="text/javascript" src="../../ui.slider.js"></script>
+    <script type="text/javascript" src="../../ui.magnifier.js"></script>
+    
+    <style type="text/css" media="screen">
+    @import url(../../../../themes/light/light.css);
+    @import url(../../../../themes/light/light.modal.css);
+    @import url(../../../../themes/dark/dark.css);
+    @import url(../../../../themes/dark/dark.modal.css);
+    @import url(../../../../themes/warm/warm.css);
+    @import url(../../../../themes/warm/warm.modal.css);
+    .box {
+        position:fixed;
+        top:5px;
+        right:5px;
+        display:block;
+        width:20px;
+        height:20px;
+        border:1px solid #FFF;
+        text-indent:2000em;
+        cursor:pointer;
+    }
+    .dark a.box {
+        color:#FFF;
+        text-indent:-40px;
+        border-color:#000;
+        background:#FFF;
+    }
+    .light a.box {
+        color:#222;
+        text-indent:-35px;
+        border-color:#000;
+        background:#222;
+    }
+    
+    
+    body {
+    	font: 11px Arial, Helvetica, sans-serif;
+    	padding: 0;
+    	margin: 0;
+    }
+    
+    img {
+      border: 0;
+    }
+    .dock-container {
+      position: absolute;
+      bottom: 0;
+    }
+    .dock-item {
+      position: relative;
+      border: 0;
+      outline: 0;
+      float: left;
+    }
+    .dock-item img {
+      height: 48px;
+      width: 48px;
+    }
+    .dock-item span {
+      padding-top: 15px;
+      font-size: 15px;
+    }
+    .clear {
+       clear: both;
+    }	
+    .apps {
+      display: none;
+    }
+    .light .dock-container {
+      background-color: #111;
+    }
+    .dark .dock-container {
+        background-color: #eee;
+    }
+    .switcher-bg img {
+      border: 1px solid #111;
+    }
+    </style>
+    
+    <script type="text/javascript">
+    $.jqtimes = [];
+    $.fn.jqtime = function() {
+      $(this).addClass('time');
+      $.jqtimes.push($(this));
+      setInterval($._updatejqtime, 1000);
+    }
+    $._updatejqtime = function() {
+      var text = "";
+      var now = new Date();
+      
+      if(now.getSeconds() < 10) second = "0" + String(now.getSeconds());
+      else second = String(now.getSeconds());
+      
+      if(now.getHours() < 10) hour = "0" + String(now.getHours());
+      else hour = String(now.getHours());
+      text += hour;
+      
+      if(parseInt(second) % 2 == 1) text += ":";
+      else text += " ";
+      
+      if(now.getMinutes() < 10) minute = "0" + String(now.getMinutes());
+      else minute = String(now.getMinutes());
+      text += minute;
+      if(parseInt(second) % 2 == 1) text += ":";
+      else text += " ";
+      
+      text += second;
+      
+      
+      $.each($.jqtimes, function() {
+        $(this).text(text);
+      });
+      
+    }
+    $(document).ready(function() {
+      $('.switcher-theme[@theme=light]').parent().hide();
+      $('.command.dock-item').click(function() {
+        var c = $(this).attr('class').match(/(command-\w+)/)[1];
+        var t = $('.'+ c +'-title').text();
+        $('.'+ c +'-modal').modal({title: t});
+      });
+      $('.switcher-theme').click(function() {
+        $('body').removeClass($('.current-theme').attr('theme')).addClass($(this).attr('theme'));
+        $(this).parent().parent().children().show();
+        $(this).parent().hide();
+        $('.current-theme').attr('theme', $(this).attr('theme')).text($(this).text());
+      });
+      $('.switcher-bg').click(function() {
+        $('body').css('background-image', 'url('+ $(this).children('img').attr('src') +')');
+        $(this).parent().parent().children().show();
+        $(this).parent().hide();
+        $('.current-bg').attr('bg', $(this).attr('bg')).html($(this).html());
+      });
+      $('.command-time-modal .time').jqtime();
+    });
+    </script>
+  </head>
+  <body class="light">
+    <div class="dock-container">
+      <!-- TODO: Center this -->
+      <div class="dock">
+        <a href="#" class="dock-item command command-home"><!-- <span>Home</span> --><br /><img src="images/computer.png" /></a>
+        <a href="#" class="dock-item command command-web"><!-- <span>Web</span> --><br /><img src="images/browser.png" /></a>
+        <a href="#" class="dock-item command command-console"><!-- <span>Console</span> --><br /><img src="images/console.png" /></a>
+        <a href="#" class="dock-item command command-editor"><!-- <span>TextEditor</span> --><br /><img src="images/editor.png" /></a>
+        <a href="#" class="dock-item command command-mail"><!-- <span>EMail</span> --><br /><img src="images/email.png" /></a>
+        <a href="#" class="dock-item command command-im"><!-- <span>InstantMessage</span> --><br /><img src="images/im.png" /></a>
+        <a href="#" class="dock-item command command-time"><!-- <span>Time</span> --><br /><img src="images/time.png" /></a>
+        <a href="#" class="dock-item command command-settings"><!-- <span>Users</span> --><br /><img src="images/settings.png" /></a>
+        <a href="#" class="dock-item command command-video"><!-- <span>Video</span> --><br /><img src="images/video.png" /></a>
+      </div>
+    </div>
+    <div class="apps">
+      <span class="command-settings-title">Settings</span>
+      <div class="command-settings-modal">
+        <dl>
+          <dt>Change theme</dt>
+          <dd>
+            <strong>Currently:</strong><br />
+            <span class="current-theme" theme="light">Light</span><br />
+            <strong>Others:</strong><br />
+            <span class="other-themes">
+              <ul>
+                <li><a class="switcher-theme switcher-theme-dark" theme="dark">Dark</a></li>
+                <li><a class="switcher-theme switcher-theme-light" theme="light">Light</a></li>
+              </ul>
+            </span>
+          </dd>
+          <dt>Change background</dt>
+          <dd>
+            <strong>Currently:</strong><br />
+            <span class="current-bg"></span><br />
+            <strong>Others:</strong><br />
+            <span class="other-bgs">
+              <ul>
+                <li><a class="switcher-bg" bg="1"><img src="images/bg1.gif" width="20" height="20" /></span</a></li>
+                <li><a class="switcher-bg" bg="2"><img src="images/bg2.gif" width="20" height="20" /></span</a></li>
+                <li><a class="switcher-bg" bg="3"><img src="images/bg3.gif" width="20" height="20" /></span</a></li>
+              </ul>
+            </span>
+          </dd>
+        </dl>
+      </div>
+      <span class="command-editor-title">Untitled</span>
+      <div class="command-editor-modal">
+        <textarea style="width: 99%; height: 99%"></textarea>
+      </div>
+      <span class="command-mail-title">e-mail</span>
+      <div class="command-mail-modal">
+        
+      </div>
+      <span class="command-im-title">IM</span>
+      <div class="command-im-modal">
+        
+      </div>
+      <span class="command-time-title">Time</span>
+      <div class="command-time-modal">
+        <h2><span class="time"></span></h2>
+      </div>
+    </div>
+  </body>
+</html>
