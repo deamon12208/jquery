@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Sortable Demo</title>
+<link rel="stylesheet" href="../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+
+<script type="text/javascript" src="../../../jquery/src/core.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+
+<script type="text/javascript" src="../ui.mouse.js"></script>
+<script type="text/javascript" src="../ui.sortable.js"></script>
+
+<style type="text/css">
+.hover { background: #000; }
+</style>
+</head>
+<body class="flora">
+
+<h2>1. Default, no options</h2>
+<div class="playground">
+	<ul id="example1" style="cursor: hand; cursor: pointer;">
+		<li>Drag us</li>
+		<li>around</li>
+		<li>and change</li>
+		<li>our</li>
+		<li>positions</li>
+	</ul>
+	<br />
+	<button onclick="$('#example1').sortableEnable()">Enable</button>
+	<button onclick="$('#example1').sortableDisable()">Disable</button>
+</div>
+
+<h2>2. Default, no options (Floats)</h2>
+<div class="playground">
+	<ul id="example2" style="list-style-position: inside; height: 30px; cursor: hand; cursor: pointer;">
+		<li style='float: left; padding: 5px; border: 1px solid #bbb; margin: 3px; background: #fff;'>Drag us</li>
+		<li style='float: left; padding: 5px; border: 1px solid #bbb; margin: 3px; background: #fff;'>around</li>
+		<li style='float: left; padding: 5px; border: 1px solid #bbb; margin: 3px; background: #fff;'>and change</li>
+		<li style='float: left; padding: 5px; border: 1px solid #bbb; margin: 3px; background: #fff;'>our</li>
+		<li style='float: left; padding: 5px; border: 1px solid #bbb; margin: 3px; background: #fff;'>positions</li>
+	</ul>
+</div>
+
+<h2>3. Nested lists</h2>
+<div class="playground">
+	<ul id="example3" style="cursor: hand; cursor: pointer;">
+		<li>Drag us</li>
+		<li>around</li>
+		<li>and change
+			<ul>
+			    <li>Lorem</li>
+			    <li>Ipsum</li>
+			</ul>
+		</li>
+		<li>our</li>
+		<li>positions
+			<ul>
+			    <li>Something else</li>
+			    <li>Foo bar</li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<h2>4. Floating, proxy class</h2>
+<div class="playground">
+	<ul id="example4" style="list-style-position: inside; height: 30px; cursor: hand; cursor: pointer;">
+		<li style='float: left; padding: 5px; border: 1px solid #bbb; margin: 3px; background: #fff;'>Drag us</li>
+		<li style='float: left; padding: 5px; border: 1px solid #bbb; margin: 3px; background: #fff;'>around</li>
+		<li style='float: left; padding: 5px; border: 1px solid #bbb; margin: 3px; background: #fff;'>and change</li>
+		<li style='float: left; padding: 5px; border: 1px solid #bbb; margin: 3px; background: #fff;'>our</li>
+		<li style='float: left; padding: 5px; border: 1px solid #bbb; margin: 3px; background: #fff;'>positions</li>
+	</ul>
+</div>
+
+<script type="text/javascript">
+if(!window.console) {
+ window.console = {
+ 	log: function() {
+ 		alert(arguments[0]);	
+ 	}	
+ }	
+}
+
+$(window).bind("load",function(){
+
+
+	$("#example1").sortable();
+	$("#example2").sortable();
+	$("#example3").sortable({ items: "li" });
+	$("#example4").sortable({ hoverClass: "hover" });
+
+});
+</script>
+</body>
+</html>

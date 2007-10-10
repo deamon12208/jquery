@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="../tests/blueprint/lib/grid.css" type="text/css" media="screen" title="Blueprint" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" title="Blueprint" />
+<title>Demos</title>
+
+<script type="text/javascript" src="../../../jquery/src/core.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+<script type="text/javascript" charset="utf-8">
+$(function() {
+  $('.types a').click(function() {
+    $('.content').empty().load($(this).attr('href'));
+    return false;
+  });
+});
+</script>
+
+</head>
+<body>
+  <div class="container">
+    <div class="span-3 column first types">
+      <ul>
+        <li><a href="ui.accordion.html"><span>Accordion</span></a></li>
+        <li><a href="ui.calendar.html"><span>Calendar</span></a></li>
+        <li><a href="ui.dialog.html"><span>Dialog</span></a></li>
+        <li><a href="ui.magnifier.html"><span>Magnifier</span></a></li>
+        <li><a href="ui.resizable.html"><span>Resizables</span></a></li>
+        <li><a href="ui.shadow.html"><span>Shadow</span></a></li>
+        <li><a href="ui.slider.html"><span>Slider</span></a></li>
+        <li><a href="ui.sortable.html"><span>Sortable</span></a></li>
+        <li><a href="ui.tablesorter.html"><span>Table Sorter</span></a></li>
+      </ul>
+    </div>
+    <div class="span-11 last column content">
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>#1547 - drop callback function runs twice in jQueryUI</title>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.2.1.js"></script>
+		<script type="text/javascript" src="../ui.mouse.js"></script>
+		<script type="text/javascript" src="../ui.draggable.js"></script>
+		<script type="text/javascript" src="../ui.droppable.js"></script>
+		<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+		<style type="text/css">
+			#textInput1_container{
+				border:1px solid blue;
+				position:absolute;
+				top:1.5em;
+				left:500px;
+				z-Index:100
+			}
+			#textInput2_container{
+				border:1px solid blue;
+				position:absolute;
+				top:1.5em;
+				left:50px;
+				z-Index:100
+			}
+			.dd{
+				height:30px;
+				width:30px;
+				border:1px dashed red;
+			}
+		</style>
+		<style type="text/css">
+			div.ticket {
+				margin: 7em 100px;
+			}
+		</style>
+	</head>
+<body>
+
+	<div id="textInput1_container" class="dragdiv">
+		Enter text: <input type="text" id="textInput1" name="textInput1" size="40" />
+		<div id="drag_textInput1" class="dd drag">Drag</div>
+	</div>
+	<div id="textInput2_container" class="dragdiv">
+		Enter text: <input type="text" id="textInput2" name="textInput2" size="40" />
+		<div id="drop_textInput2" class="dd drop">Drop</div>
+	</div>
+
+<div class="ticket">
+	<hr/>
+	<h1>Ticket #<a href="http://dev.jquery.com/ticket/1547">1547</a></h1>
+	<h2>drop callback function runs twice in jQueryUI</h2>
+	<hr/>
+	<dl>
+		<dt>Description</dt>
+			<dd class="description">
+				pragueexpat:
+				<blockquote cite="http://dev.jquery.com/ticket/1547#comment:description">
+					<p>
+						I have one draggable div and one droppable div. Each is nested in its own absolutely positioned parent div (see file source below). The droppable div has a callback function. The problem is that the callback is running twice. If the droppable div is not nested in the parent the callback runs correctly (once). If the parent is not absolutely positioned, the callback also runs correctly. The problem occurs in IE, Firefox and Opera (no others tested). Greedy parameter makes no difference. draggable.js, droppable.js and mouse.js were downloaded from svn on August 28, 2007.
+					</p>
+					<p>
+						Firebug console.log will output div id each time callback runs
+					</p>
+				</blockquote>
+			</dd>
+		<dt>Comment</dt>
+			<dd class="comment">
+				rworth:
+				<blockquote cite="http://dev.jquery.com/ticket/1547#comment:2">
+					<p>
+						It seems one of the drops is coming from the element, and the other from the cursor. If you drop the draggable but the cursor is not over the droppable, only one drop is called.
+					</p>
+				</blockquote>
+			</dd>
+	</dl>
+</div>
+
+<script type="text/javascript">
+$(function(){
+	$('.dragdiv').draggable();
+	$('.drop').each(function(){createDropTarget($(this))});
+	$('.drag').each(function(){createDragTarget($(this))});
+});
+createDropTarget = function(jObj){
+	(jObj).droppable({accept:'.drag',tolerance:'intersect',greedy:true,drop:function(a,b){console.log(this.id)}});
+}
+createDragTarget = function(jObj){
+	(jObj).draggable({helper:'clone'});
+}
+</script>
+</body>
+</html>

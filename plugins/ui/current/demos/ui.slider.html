@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Slider Demo</title>
+<link rel="stylesheet" href="../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+
+<script type="text/javascript" src="../../../jquery/src/core.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+
+<script type="text/javascript" src="../ui.mouse.js"></script>
+<script type="text/javascript" src="../ui.slider.js"></script>
+
+</head>
+<body class="flora">
+
+<h2>1. Default, no options</h2>
+<div class="playground">
+	<div id='example1' class='ui-slider-1' style="margin: 40px;">
+	<div class='ui-slider-handle'></div>	
+	</div>
+	<br />
+	<button onclick="$('#example1').sliderEnable()">Enable</button>
+	<button onclick="$('#example1').sliderDisable()">Disable</button>
+</div>
+
+<h2>2. Stepping</h2>
+<div class="playground">
+	<div id='example2' class='ui-slider-2' style="margin: 40px;">
+	<div class='ui-slider-handle'></div>	
+	</div>
+</div>
+
+<h2>3. Multiple handles</h2>
+<div class="playground">
+	<div id='example3' class='ui-slider-2' style="margin: 40px;">
+	<div class='ui-slider-handle'></div>
+	<div class='ui-slider-handle' style="left: 188px;"></div>	
+	</div>
+</div>
+
+<script type="text/javascript">
+if(!window.console) {
+ window.console = {
+ 	log: function() {
+ 		alert(arguments[0]);	
+ 	}	
+ }	
+}
+
+$(window).bind("load",function(){
+
+	$('#example1').slider();
+	$('#example2').slider({ steps: 10 });
+	$('#example3').slider({ steps: 10 });
+	
+
+});
+</script>
+</body>
+</html>

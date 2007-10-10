@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>UI Magnifier Plugin</title>
+<script type="text/javascript" src="../../../jquery/src/core.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+<script type="text/javascript" src="../ui.magnifier.js"></script>
+
+<style type="text/css" media="screen">
+body {
+	font-size: 10px;
+	font-family: Arial;	
+}
+
+.container {
+	background: #eee;
+	width: 400px;
+	height: 35px;
+	padding: 5px;
+	padding-right: 0px;	
+	margin-top: 20px;
+	margin-left: 0px;
+}
+.container img {
+	position: relative;
+	float: left;
+	width: 32px;
+	margin-right: 5px;	
+}
+
+ul {
+	margin: 0px;
+	padding: 0px;
+}
+ul li {
+	border-bottom: 1px solid #333;
+	list-style-type: none;
+	height: 120px;
+	position: relative;
+}
+.desc {
+	position: absolute;
+	top: 10px;
+	right: 10px;	
+}
+</style>
+
+
+<script type="text/javascript" charset="utf-8">
+	$(window).bind("load",function() {
+		$('#mag1').magnifier({
+			distance: 50,
+			overlap: true,
+			zIndex: 1000
+		});
+
+		$('#mag3').magnifier({
+			distance: 50,
+			zIndex: 1000
+		});
+		
+		$('#mag4').magnifier({
+			distance: 50,
+			opacity: { min: 0.6, max: 1 },
+			baseline: 0,
+			zIndex: 1000,
+			overlap: true
+		});
+		
+		$('#mag5').magnifier({
+			distance: 50,
+			baseline: -1,
+			zIndex: 1000,
+			overlap: true
+		});
+		
+		$('#mag6').magnifier({
+			distance: 50,
+			magnification: 4,
+			zIndex: 1000,
+			overlap: true
+		});
+		
+		$('#mag7').magnifier({
+			distance: 50,
+			opacity: { min: 0.2, max: 1 },
+			zIndex: 1000,
+			overlap: true
+		});
+		
+		$('#mag8').magnifier({
+			distance: 50,
+			opacity: { min: 0.6, max: 1 },
+			zIndex: 1000,
+			overlap: true
+		});
+		
+		$('#mag9').magnifier({
+			distance: 50,
+			opacity: { min: 0.6, max: 1 },
+			magnification: 1,
+			zIndex: 1000,
+			overlap: true,
+			verticalLine: 0,
+			axis: 'x'
+		});
+
+		
+		$('#mag1 img').hover(function() {
+			var cp = $(this).offset();
+			$('#pfeil').css({
+				left: cp.left+this.offsetWidth/2,
+				top: 0
+			});
+		}, function() {	});
+		
+	});
+	
+</script>
+</head>
+<body>
+	
+<ul>
+	<li>
+		<div id='mag1' class='container'>
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+		</div>
+		
+		<div class='desc'>
+			overlapping set to true
+		</div>
+	</li>
+	<li>
+		<div id='mag3' class='container'>
+			<img src="images/clock.png" style='position: relative; float: left; width: 32px; margin-right: 5px;' />
+			<img src="images/clock.png" style='position: relative; float: left; width: 32px; margin-right: 5px;' />
+			<img src="images/clock.png" style='position: relative; float: left; width: 32px; margin-right: 5px;' />
+			<img src="images/clock.png" style='position: relative; float: left; width: 32px; margin-right: 5px;' />
+			<img src="images/clock.png" style='position: relative; float: left; width: 32px; margin-right: 5px;' />
+			<img src="images/clock.png" style='position: relative; float: left; width: 32px; margin-right: 5px;' />
+			<img src="images/clock.png" style='position: relative; float: left; width: 32px; margin-right: 5px;' />
+			<img src="images/clock.png" style='position: relative; float: left; width: 32px; margin-right: 5px;' />
+		</div>
+		<div class='desc'>
+			overlapping set to false
+		</div>		
+	</li>
+	<li>
+		<div id='mag4' class='container'>
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+		</div>
+		<div class="desc">
+			opacity option
+		</div>
+	</li>
+	<li>
+		<div id='mag5' class='container'>
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+		</div>
+		<div class="desc">
+			custom baseline
+		</div>
+	</li>
+	<li>
+		<div id='mag6' class='container'>
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+		</div>
+		<div class="desc">
+			custom magnification
+		</div>		
+	</li>
+	<li style="height: 220px;">
+		<div id='mag7' class='container' style='width: 200px; height: 160px;'>
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+		</div>
+		<div class="desc">
+			multiple rows, opacity
+		</div>		
+	</li>
+	<li style="height: 310px;">
+		<div id='mag8' class='container' style="width: 40px; height: 300px;">
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+			<img src="images/clock.png" />
+		</div>
+		<div class="desc">
+			vertical
+		</div>		
+	</li>
+	<li style="height: 310px;">
+		<div id='mag9' class='container' style="width: 400px; height: 300px; padding: 0;">
+			<div style='background: green; overflow: hidden; width: 40px; height: 300px; float: left;'></div>
+			<div style='background: blue; overflow: hidden; width: 40px;  height: 300px; float: left;'></div>
+			<div style='background: red; overflow: hidden; width: 40px;  height: 300px; float: left;'></div>
+		</div>
+		<div class="desc">
+			vertical
+		</div>		
+	</li>
+</ul>
+
+</body>
+</html>

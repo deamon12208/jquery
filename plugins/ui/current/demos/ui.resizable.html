@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Resizable Demo</title>
+<link rel="stylesheet" href="../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+
+<script type="text/javascript" src="../../../jquery/src/core.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+
+<script type="text/javascript" src="../ui.mouse.js"></script>
+<script type="text/javascript" src="../ui.resizable.js"></script>
+
+</head>
+<body class="flora">
+
+<h2>1. Default, no options, three handles</h2>
+<div class="playground">
+	<div id='example1' class="ui-wrapper example">
+		<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Resize me</div>
+	</div><br />
+	<button onclick="$('#example1').resizableEnable()">Enable</button>
+	<button onclick="$('#example1').resizableDisable()">Disable</button>
+</div>
+
+<h2>2. Autohiding handles</h2>
+<div class="playground">
+	<div id='example2' class="ui-wrapper example">
+		<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Resize me</div>
+	</div>
+</div>
+
+
+<h2>3. Textareas and images</h2>
+
+<div class="playground">
+	<textarea id='example3' style='margin: 0px; padding: 10px;' class="example" rows="6" cols="19">I was made resizable with this code only: $('div').resizable({ autohide: true, minHeight: 100, minWidth: 200 });</textarea>
+	<br /><img style='margin: 0;' id="example32" src="images/resizable.jpg" alt="" />
+</div>
+
+<h2>4. All directions</h2>
+<div class="playground" style="height: 110px;">
+	<div id='example4' class="ui-wrapper example" style='position: absolute; top: 10px; left: 10px; background: #fff;'>
+	<div class='ui-resizable-n ui-resizable-handle'></div>
+	<div class='ui-resizable-e ui-resizable-handle'></div>	
+	<div class='ui-resizable-s ui-resizable-handle'></div>
+	<div class='ui-resizable-w ui-resizable-handle'></div>
+	
+	<div class='ui-resizable-se ui-resizable-handle'></div>
+	<div class='ui-resizable-sw ui-resizable-handle'></div>
+	<div class='ui-resizable-ne ui-resizable-handle'></div>
+	<div class='ui-resizable-nw ui-resizable-handle'></div>
+	
+	<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Absolute position without proxy (all directions enabled)</div>
+	</div>
+</div>
+<script type="text/javascript">
+if(!window.console) {
+ window.console = {
+ 	log: function() {
+ 		alert(arguments[0]);	
+ 	}	
+ }	
+}
+
+$(window).bind("load",function(){
+
+	$('#example1').resizable();
+	$('#example2').resizable({ autohide: true, minHeight: 100, minWidth: 200, maxHeight: 300, maxWidth: 800 });
+	$('#example3').resizable({ minHeight: 100, minWidth: 200, maxHeight: 300, maxWidth: 800 });
+	$('#example32').resizable({ minHeight: 100, minWidth: 200 });
+	$('#example4').resizable({ minHeight: 100, minWidth: 200, maxHeight: 300, maxWidth: 800 });
+	
+	
+
+});
+</script>
+</body>
+</html>

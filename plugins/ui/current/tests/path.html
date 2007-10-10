@@ -1,0 +1,138 @@
+<html>
+<head>
+	<title>Animating paths</title>
+	<link rel="stylesheet" href="blueprint/screen.css" type="text/css" media="screen, projection">
+	<link rel="stylesheet" href="blueprint/print.css" type="text/css" media="print">
+	
+	<style type="text/css" media="screen">
+		div.pixel {
+			width: 2px;
+			height: 2px;
+			background: #000;
+			position: absolute;	
+		}
+		
+		#canvas {
+			position: relative;	
+		}
+	</style>
+   
+	<script type="text/javascript" src="../../../jquery/src/core.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/event.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+	<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+	<script type="text/javascript" src="../ui.js"></script>
+	<script type="text/javascript">
+
+
+ jQuery.extend({	
+	/**
+	 *
+	 * @param Integer p period step in animation
+	 * @param Integer n current time
+	 * @param Mixed firstNum begin value
+	 * @param Mixed delta change in
+	 * @param Integer duration duration
+	 */
+	easing :  {
+		curve: function(p, n, firstNum, delta, duration) {
+			return (p * delta) + firstNum;
+		}
+	}
+});
+
+
+	
+	
+	var path = [];
+	
+	function clearPath() {
+	
+		path = [];
+		$("#canvas div.pixel").remove();
+		
+	};
+	
+	function generatePath() {
+		
+		var orgOffset = $("#moveme").offset({ border: false });
+		
+		var prev = [0,0];
+		for(var i=0;i<path.length;i++) {
+
+			distance = Math.sqrt(
+				  Math.pow(prev[0] - path[i][0], 2)
+				+ Math.pow(prev[1] - path[i][1], 2)
+			);
+
+			$("#moveme").animate({ left: path[i][0], top: path[i][1] }, distance*10, "curve");
+			prev = path[i];	
+		}
+
+	};
+	
+	
+	$(document).ready(function() {
+	
+		var curPixel = [-1,-1];
+		var offset = $("#canvas").offset({ border: false });
+		
+		var mousemove = function(e) {
+			var oldPixel = curPixel.concat(0);
+			curPixel = [e.clientX-offset.left,e.clientY-offset.top];
+			
+			$("<div class='pixel'></div>").appendTo("#canvas").css({ left: curPixel[0]+"px", top: curPixel[1]+"px" });
+			path.push(curPixel.concat(0));	
+
+		};
+		
+		$("#canvas").bind("mousedown", function(e) {
+			mousemove(e);
+			$("#canvas").bind("mousemove", mousemove);
+		}).bind("mouseup", function() {
+			$("#canvas").unbind("mousemove", mousemove);
+		});
+	
+	});
+	</script>
+</head>
+<body>
+
+<div class="container">
+
+        <div class="column span-14">
+                <h2>Drawing <span class="alt">a</span> path <span class="alt">for</span> animation</h2>
+        </div>
+        
+        <hr/>
+        
+        <div class="column span-11 first">
+ 
+        <p>Use your mouse to draw into the following canvas.
+        </p>
+        
+      	<div class="box" id="canvas"><div id="moveme" style='color: red; width: 20px; height: 20px; position: absolute; top: 0px; left: 0px;'><ul><li style='margin-left: -8px; margin-top: -8px;'>&nbsp;</li></ul></div>&nbsp;</div>
+      	
+        <p class="incr">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+        
+
+   
+        </div>
+        
+        <div class="column span-3 last">
+                <h3>Options</h3>
+                <p>Adjust the following options to get a better effect.</p>
+			   <hr />
+			   <a class='button positive' onclick="generatePath()">Generate path!</a>
+			   <a class='button negative' onclick="clearPath()">Clear!</a>
+
+        </div>
+</div>
+
+
+</body>
+</html>

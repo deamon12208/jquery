@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Slider Test Page</title>
+<script type="text/javascript" src="../../../jquery/src/core.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+<script type="text/javascript" src="../ui.mouse.js"></script>
+<script type="text/javascript" src="../ui.slider.js"></script>
+<style type="text/css" media="all">
+
+body
+{
+	background: #fff;
+	margin: 20px;
+	padding: 0;
+	font-family: Arial;
+	font-size: 12px;
+}
+label {
+	width: 100px;
+	display: block;
+	float: left;	
+}
+
+input {
+	border: 1px solid #999;
+	padding: 2px;	
+}
+
+
+div.ui-slider {
+	border: 1px solid black;
+	position: relative;
+}
+
+div.ui-slider-handle {
+	background-image: url(http://developer.yahoo.com/yui/examples/slider/assets/thumb-n.gif);
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	width: 17px;
+}
+
+</style>
+</head>
+<body class="flora">
+
+<div style='background: #eee; width: 600px; height: 300px;'>
+
+<input type="range" step="10" max="200" min="-200" name="n" value="0"> I'm a range input!
+</div>
+
+<br /> <br />
+<hr />
+
+<div style="margin: 10px;"><label for="slider1_value">current value:</label> <input type="text" value='0' id='slider1_value' /></div>
+<div style="margin: 10px;"><label for="slider1_realvalue">pixel value:</label> <input type="text" value='0' id='slider1_realvalue' /></div>
+
+<div id='slider1' style="position: relative; margin: 40px; width: 217px; height: 28px; background: url(http://developer.yahoo.com/yui/examples/slider/assets/bg-fader.gif) no-repeat scroll 5px 0px;">
+<div class='ui-slider-handle' style='position: absolute; height: 21px; left: 0px; bottom: 0px; width: 17px; background-image: url(http://developer.yahoo.com/yui/examples/slider/assets/thumb-n.gif);'></div>
+<div class='ui-slider-handle' style='position: absolute; height: 21px; left: 40px; bottom: 0px; width: 17px; background-image: url(http://developer.yahoo.com/yui/examples/slider/assets/thumb-n.gif);'></div>	
+</div>
+
+<div id='slider3' style="position: relative; margin: 40px; width: 217px; height: 28px; background: url(http://developer.yahoo.com/yui/examples/slider/assets/bg-fader.gif) no-repeat scroll 5px 0px;">
+<div class='ui-slider-handle' style='position: absolute; height: 21px; left: 0px; bottom: 0px; width: 17px; background-image: url(http://developer.yahoo.com/yui/examples/slider/assets/thumb-n.gif);'></div>	
+</div>
+
+<div id='slider2' style="position: absolute; top: 0px; right: 0px; margin: 20px; height: 400px; width: 20px; background: #ccc;">
+<div class='ui-slider-handle' style='position: absolute; top: 0px; left: 0px; right: 0px; height: 20px; background: #888;'></div>	
+</div>
+	
+<script type="text/javascript">
+if(!window.console) {
+ window.console = {
+ 	log: function() {
+ 		alert(arguments[0]);	
+ 	}	
+ }	
+}
+
+var slider1;
+var slider2;
+$(document).ready(function(){
+
+	//Now is that easy or what?
+	$('#slider3').slider();
+	
+	$('#slider1').slider({ stepping: 20, maxValue: 100, minValue: -100, change: function() {
+	
+		console.log('changed!');	
+	
+	}, slide: function(e,ui) {
+		
+		$('#slider1_value')[0].value = ui.value;
+		$('#slider1_realvalue')[0].value = ui.pixel;
+		
+
+			
+	} });
+	$('#slider2').slider();
+
+});
+</script>
+</body>
+</html>

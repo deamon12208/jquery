@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Auto Test Page</title>
+<script type="text/javascript" src="../../../jquery/src/core.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+<script type="text/javascript" src="../ui.mouse.js"></script>
+<script type="text/javascript" src="../ui.draggable.js"></script>
+<script type="text/javascript" src="../ui.resizable.js"></script>
+<script type="text/javascript" src="../ui.demo.js"></script>
+<style type="text/css" media="all">
+body, html { margin: 0; padding: 0; font-family: Arial; font-size: 12px; height: 100%; }
+
+
+#cpanel { padding: 5px; background: #eee; position: fixed; top: 0px; left: 10px; right: 10px; z-index: 1; opacity: 0.8;}
+button { float: left; margin: 2px; }
+.info { float: left; margin: 0px; padding: 3px; padding-left: 20px; }
+th,td { text-align: left; }
+
+</style>
+</head>
+<body id="body">
+<div id="cpanel">
+	<fieldset>
+		<legend>Control panel</legend>
+		<button id="record">Record</button>
+		<button id="play">Play</button>
+	</fieldset>
+	
+	<fieldset style="position: relative; height: 130px;">
+		<legend>Recorded actions (edit this after recording!)</legend>
+		<textarea id='logger' style='position: absolute; top: 0px; left: 0px; right: 20px; height: 100px; margin: 0px; padding: 5px;'></textarea>
+	</fieldset>	
+
+</div>
+
+<div id="contents">
+  
+	<button>asdf</button>
+	<button>Pl13241234ay</button>
+	as2p34985usdo
+	<textarea>cadsfer</textarea>
+</div>
+
+<script type="text/javascript">
+
+$(function() {
+
+
+	var test = $('#contents').test({ logger: $("#logger") });
+
+	$('#play').click(function(e) {
+		test.play(e,eval("["+$("#logger")[0].value+"]"));
+	});
+	
+	$('#record').toggle(function(e) {
+		this.innerHTML = "Stop recording";
+		test.record(e);
+	}, function(e) {
+		this.innerHTML = "Record";
+		test.recordStop(e);		
+	});
+
+});
+
+
+</script>
+</body>
+</html>

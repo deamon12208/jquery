@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Shrink Effect - Test Page</title>
+<script type="text/javascript" src="../../../jquery/src/core.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+<script type="text/javascript" src="../ui.js"></script>
+<script type="text/javascript" src="../ui.effects.js"></script>
+
+<style type="text/css" media="all">
+
+body
+{
+	background: #fff;
+	margin: 0;
+	padding: 0;
+	font-family: Arial;
+	font-size: 12px;
+}
+
+.imageset {
+	border: 1px solid black;
+	width: 840px;
+	height: 800px;
+	overflow: auto;
+	position: relative;
+}
+
+.select {
+	float: left;
+	border: 1px solid #999;	
+	padding: 5px;
+	margin: 5px;
+}
+
+</style>
+</head>
+<body>
+
+<input type='button' id='button' value='Click me!'>
+<br />
+
+<div class='imageset'>
+	
+	<div class='select' id='i1'><img src='images/select-1.jpg' /></div>
+	<div class='select' id='i2'><img src='images/select-2.jpg' /></div>
+	<div class='select' id='i3'><img src='images/select-3.jpg' /></div>
+	<div class='select' id='i4'><img src='images/select-4.jpg' /></div>
+	<div class='select'><img src='images/select-5.jpg' /></div>
+	<div class='select'><img src='images/select-6.jpg' /></div>
+	<div class='select'><img src='images/select-7.jpg' /></div>
+	<div class='select'><img src='images/select-8.jpg' /></div>
+	<div class='select'><img src='images/select-9.jpg' /></div>
+	
+</div>
+
+<div id='basket' style='position: absolute; top: 10px; right: 10px; width: 100px; height: 50px; margin: 10px; border: 2px solid #999; background: #eee;'>Basket</div>
+
+	
+<script type="text/javascript">
+if(!window.console) {
+ window.console = {
+ 	log: function() {
+ 		alert(arguments[0]);	
+ 	}	
+ }	
+}
+
+$(document).ready(function(){
+	$('#button').click(function() {
+		$('.select').effect('shrink', {});	
+	});
+	
+
+});
+
+
+</script>
+</body>
+</html>

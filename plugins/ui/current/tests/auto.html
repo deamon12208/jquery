@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Auto Test Page</title>
+<script type="text/javascript" src="../../../jquery/src/core.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+<script type="text/javascript" src="../../dimensions/jquery.dimensions.js"></script>
+<script type="text/javascript" src="../ui.mouse.js"></script>
+<script type="text/javascript" src="../ui.resizable.js"></script>
+<script type="text/javascript" src="../ui.draggable.js"></script>
+<style type="text/css" media="all">
+
+html, body { height: 100%; }
+
+body
+{
+	background: #fff;
+	margin: 0;
+	padding: 0;
+	font-family: Arial;
+	font-size: 12px;
+}
+
+#cursor { display: none; }
+
+.ui-resizable-handle { position: absolute; background: #f3f3f3; display: none; }
+.ui-resizable .ui-resizable-handle { display: block }
+.ui-resizable-n { cursor: n-resize; height: 10px; left: 30px; right: 30px; }
+.ui-resizable-e { cursor: e-resize; width: 10px; top: 30px; bottom: 30px; }
+.ui-resizable-s { cursor: s-resize; height: 10px; left: 30px; right: 30px; }
+.ui-resizable-w { cursor: w-resize; width: 10px; top: 30px; bottom: 30px; }
+
+.ui-resizable-se { cursor: se-resize; width: 10px; height: 10px; }
+.ui-resizable-sw { cursor: sw-resize; width: 10px; height: 10px; }
+.ui-resizable-ne { cursor: ne-resize; width: 10px; height: 10px; }
+.ui-resizable-nw { cursor: nw-resize; width: 10px; height: 10px; }
+
+</style>
+</head>
+<body>
+
+<div style="text-align:center; height: 3em;"><input id="begin" type="button" value="Begin"></div>
+
+<textarea id='rsz' style='width: 100px; height: 100px; margin: 0px; padding: 10px;'>This is a resizable</textarea>
+
+<img id="cursor" src="images/cursor.png">
+
+<script type="text/javascript">
+
+var beginX = 0, beginY = 0, endX = 0, endY = 0;
+
+$(function() {
+
+  $(document).mousemove(function(ev) {
+    if (ev.isTrusted) {
+      endX = ev.pageX;
+      endY = ev.pageY;
+    }
+  });
+
+  $('#cursor').hide();
+
+  $('#rsz').resizable();
+
+  $('#begin').click(function(ev) {
+    $(this).hide();
+    resizableTest(ev.pageX, ev.pageY);
+  });
+
+});
+
+var mTarget = null;
+var lastX = null;
+
+function resizableTest(curX, curY) {
+  beginX = curX;
+  beginY = curY;
+  
+  $('*').css('cursor', 'url(images/blank.cur), crosshair');
+  $('#cursor').css({position: 'absolute', left: beginX, top: beginY}).show()
+    .animate({ left: 116, top: 154 }, {speed: 500, complete: function() { $('#cursor').attr('src', 'images/se-resize.png'); } } )
+    .animate({ left: 116, top: 154 }, {speed: 500, complete: resizableTestBegin});
+
+}
+
+function resizableTestBegin() {
+
+  mTarget = $('.ui-resizable-se')[0];
+
+  testMouseDown(mTarget, 116, 154);
+  testMouseMove(document, 0, 0);
+
+  $("#cursor").animate({ left: 500, top: 400 }, {step: resizableTestStep, speed: 50, easing: "linear", complete: resizableTestEnd});
+
+}
+
+function resizableTestStep(xory) {
+  if (!lastX) {
+    lastX = xory;
+  } else {
+    testMouseMove(mTarget, lastX, xory);
+    lastX = null;
+  }
+}
+
+function resizableTestEnd() {
+
+  testMouseUp(document, 0, 0);
+
+  $('#cursor').attr('src', 'images/cursor.png').animate({ left: endX, top: endY }, {
+    speed: 500,
+    complete: function() {
+      $('*').css('cursor', '');
+      $('#cursor').hide();
+    }
+  })
+
+}
+
+function testMouse(ev, el, x, y) {
+  var evt = document.createEvent("MouseEvents");
+  evt.initMouseEvent("mouse" + ev, true, true, window, 0, 0, 0, x, y, false, false, false, false, 0, null);
+  el.dispatchEvent(evt);
+}
+function testMouseDown(el, x, y) { testMouse("down", el, x, y); }
+function testMouseMove(el, x, y) { testMouse("move", el, x, y); }
+function testMouseUp(el, x, y) { testMouse("up", el, x, y); }
+
+</script>
+</body>
+</html>
