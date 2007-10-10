@@ -1,6 +1,6 @@
 (function($) {
 	
-	$.fx.drop = function(type, set, speed, callback, noqueue) {
+	$.fx.drop = function(type, set, speed, callback) {
 
 		this.each(function() {
 
@@ -25,12 +25,12 @@
 				after[dir[set.direction]] = $(this).css(dir[set.direction]);
 				
 			}
-			
-			//Animate using FX' animation method
-			$.fx.animate(this, {
-				animation: animation, after: after,
-				callback: callback, speed: speed, easing: set.easing, noqueue: noqueue
-			});			
+
+			//Animate
+			cur.animate(animation, speed, set.easing, function() {
+				cur.css(after);
+				if(callback) callback.apply(this, arguments);
+			});		
 	
 		});
 		

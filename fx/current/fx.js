@@ -7,20 +7,49 @@
 	 */
 
 	$.extend($.fx, {
+		save: function() {
+			
+		},
+		restore: function() {
+			
+		},
+		wrap: function(el) { //Creates a wrapper for the current element (use with caution!)
+			var cur = $(el), wrapper = $(el).wrap("<div></div>").parent();
+
+			if(cur.css("position") != "static" || cur.css("position") != "") {
+				var s = $.fx.findSides(cur);
+				wrapper.css(s[0], cur.css(s[0])).css(s[1], cur.css(s[1])).css({ position: cur.css("position") });
+			}
+			
+			wrapper.css({
+				width: cur.outerWidth(),
+				height: cur.outerHeight(),
+				overflow: 'hidden',
+				margin: cur.css("margin"),
+				marginLeft: cur.css("marginLeft"),
+				marginRight: cur.css("marginRight"),
+				marginTop: cur.css("marginTop"),
+				marginBottom: cur.css("marginBottom")
+			});
+			
+			$.fx.save(cur, ['margin', 'marginLeft', 'marginRight', 'marginTop', 'marginBottom', 'left', 'right', 'top', 'bottom']);
+			cur.css({ margin: 0, marginLeft: 0, marginRight: 0, marginTop: 0, marginBottom: 0, left: 0, right: 0, top: 0, bottom: 0 });
+			
+		
+			return wrapper;
+		},
+		unwrap: function(el) {
+			
+			
+			var wrapper = $(el).parent();
+			$($(el).parent().parent()).append(el);
+			wrapper.remove();
+			
+			$.fx.restore($(el), ['margin', 'marginLeft', 'marginRight', 'marginTop', 'marginBottom', 'left', 'right', 'top', 'bottom']);	
+		
+		},
 		findSides: function(el) { //Very nifty function (especially for IE!)
 			return [ !!parseInt(el.css("left")) ? "left" : "right", !!parseInt(el.css("top")) ? "top" : "bottom" ];
-		},
-		animate: function(el, set) { //Our own more abstract animation method
-	
-				var cur = $(el); cur.stop(); //TODO: Stop to end
-				if(cur.css("position") == "static" || cur.css("position") == '') cur.css("position", "relative");
-	
-				//Animate
-				cur.animate(set.animation, set.speed, set.easing, function() {
-					cur.css(set.after);
-					if(set.callback) set.callback.apply(this, arguments);
-				});
-	
 		},
 		animateClass: function(value, duration, easing, callback) {
 	
@@ -69,13 +98,11 @@
 		_removeClass: $.fn.removeClass,
 		_toggleClass: $.fn.toggleClass,
 		show: function(obj,speed,callback){
-			return typeof obj == 'string' || typeof obj == 'undefined' ?
-				this._show(obj, speed) :
-				$.fx[obj.method].apply(this, ['show',obj,speed,callback]);
+			return typeof obj == 'string' || typeof obj == 'undefined' ? this._show(obj, speed) : $.fx[obj.method].apply(this, ['show',obj,speed,callback]);
 		},
 		
 		hide: function(obj,speed,callback){
-			return typeof obj == 'string' || typeof obj == 'undefined' ? this._show(obj, speed) : $.fx[obj.method].apply(this, ['hide',obj,speed,callback]);
+			return typeof obj == 'string' || typeof obj == 'undefined' ? this._hide(obj, speed) : $.fx[obj.method].apply(this, ['hide',obj,speed,callback]);
 		},
 		addClass: function(classNames,speed,easing,callback) {
 			return speed ? $.fx.animateClass.apply(this, [{ add: classNames },speed,easing,callback]) : this._addClass(classNames);
