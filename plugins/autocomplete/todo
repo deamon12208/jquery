@@ -123,3 +123,87 @@ row[2] + "</span>";
 
 This allows to only add the emphasis to the strings before they are
 wrapped with HTML formatting.
+
+
+
+
+
+
+
+
+
+
+Hi all,
+
+I use Autocomplete 1.0 Alpha mostly for form inputs bound to foreign
+key columns. For instance I have a user_position table with two
+columns: user_id and position_id. On new appointment form I have two
+autocomplete text inputs with the following code:
+
+   <input type="text" id="user_id" class="ac_input"  tabindex="1" />
+   <input type="text" id="position_id" class="ac_input" tabindex="2" /
+> >
+
+As you can see the inputs do not have a name attribute, and when the
+form is submitted their values are not sent, which is all right since
+they will contain strings like:
+
+   'John Doe'
+   'Sales Manager'
+
+whereas our backend expects something like:
+
+   23
+   14
+
+which are the user_id for John Doe and position_id for Sales Manager.
+To send these values I have two hidden inputs in the form like this:
+
+   <input type="hidden" name="user_id" value="">
+   <input type="hidden" name="position_id" value="">
+
+Also I have the following code in the $().ready function:
+
+   $("#user_id").result(function(event, data, formatted) {
+     $("input[@name=user_id]").val(data[1]);
+   });
+   $("#position_id").result(function(event, data, formatted) {
+     $("input[@name=position_id]").val(data[1]);
+   });
+
+As could be seen these functions stuff user_id and position_id values
+(in our example 23 and 14) into the hidden inputs, and when the form
+is submitted these values are sent:
+
+   user_id = 23
+   position_id = 14
+
+The backend script then takes care of adding a record to our
+user_position table containing those values.
+
+I wonder how could the plugin code be modified to simplify the setup
+by taking care of adding hidden inputs and updating the value of
+hidden inputs as default behavior. I have successfully attempted a
+simpler solution - writing a wrapper to perform these additional tasks
+and invoke autocomplete as well. I hope my intention is clear enough,
+if not, this is exactly the expected outcome:
+
+Before:
+
+   <script type="text/javascript"
+   src="jquery.autocomplete-modified.js"></script>
+   <input type="text" name="user_id" class="ac_input" tabindex="1" />
+
+After:
+
+   <input type="text" id="user_id" class="ac_input" tabindex="1" />
+   <input type="hidden" name="user_id" value="23">
+
+
+Last word, I know this looks like a tall order, and I do not hope
+someone will make a complete working mod for me, but rather would very
+much appreciate helpful  advise and directions.
+
+Many thanks in advance
+Majid
+
