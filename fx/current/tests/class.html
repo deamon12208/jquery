@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>css</title>
+<script type="text/javascript" src="../../../jquery/src/core.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+
+<script type="text/javascript" src="../fx.js"></script>
+<script type="text/javascript" src="../../color/jquery.color.js"></script>
+
+<style type="text/css" media="screen">
+body {
+	font-size: 10px;
+	font-family: Arial;	
+}
+
+.green {
+	border: 2px solid black;
+	margin: 5px;
+	background: green;
+	color: #fff;
+	width: 200px;
+	position: relative;
+}
+
+body .error {
+	font-size: 2em;
+	border: 10px solid red;
+	background: black;
+	left: 100px;	
+}
+</style>
+</head>
+<body>
+
+	<div id="parent" class="green">
+		I'm a button
+	</div>
+
+	<button onclick="$('#parent').addClass('error', 500)">Add class 'error'</button>
+	<button onclick="$('#parent').removeClass('error', 500)">Remove class 'error'</button>
+	<button onclick="$('#parent').toggleClass('error', 500)">Toggle class 'error'</button>
+	<button onclick="$('#parent').morph('green', 'error', 500)">morph from 'green' to 'error'</button>
+
+</body>
+</html>
