@@ -473,7 +473,7 @@ jQuery.Autocompleter.defaults = {
 	multiple: false,
 	multipleSeparator: ", ",
 	highlight: function(value, term) {
-		return value.replace(new RegExp("(?!&[^;]*)(?!<[^<>]*)(" + term + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<strong>$1</strong>");
+		return value.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + term + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<strong>$1</strong>");
 	}
 };
 
