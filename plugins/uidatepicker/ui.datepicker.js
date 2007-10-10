@@ -70,7 +70,6 @@ function Datepicker() {
 	};
 	$.extend(this._defaults, this.regional['']);
 	this._datepickerDiv = $('<div id="datepicker_div"></div>');
-	$(document.body).append(this._datepickerDiv).mousedown(this._checkExternalClick);
 }
 
 $.extend(Datepicker.prototype, {
@@ -297,11 +296,13 @@ $.extend(Datepicker.prototype, {
 
 	/* Update the settings for a date picker attached to an input field or division.
 	   @param  control   element - the input field or div/span attached to the date picker or
-	                     string - the ID or other jQuery selector of the input field
+	                     string - the ID or other jQuery selector of the input field or
+	                     object - jQuery object for input field or div/span
 	   @param  settings  object - the new settings to update
 	   @return void */
 	reconfigureFor: function(control, settings) {
-		control = (typeof control == 'string' ? $(control)[0] : control);
+		control = (control.jquery ? control[0] :
+			(typeof control == 'string' ? $(control)[0] : control));
 		var inst = this._getInst(control._calId);
 		if (inst) {
 			extendRemove(inst._settings, settings || {});
@@ -311,11 +312,13 @@ $.extend(Datepicker.prototype, {
 
 	/* Set the date for a date picker attached to an input field or division.
 	   @param  control  element - the input field or div/span attached to the date picker or
-	                    string - the ID or other jQuery selector of the input field
+	                    string - the ID or other jQuery selector of the input field or
+	                    object - jQuery object for input field or div/span
 	   @param  date     Date - the new date
 	   @return void */
 	setDateFor: function(control, date) {
-		control = (typeof control == 'string' ? $(control)[0] : control);
+		control = (control.jquery ? control[0] :
+			(typeof control == 'string' ? $(control)[0] : control));
 		var inst = this._getInst($(control)[0]._calId);
 		if (inst) {
 			inst._setDate(date);
@@ -325,10 +328,12 @@ $.extend(Datepicker.prototype, {
 
 	/* Retrieve the date for a date picker attached to an input field or division.
 	   @param  control  element - the input field or div/span attached to the date picker or
-	                    string - the ID or other jQuery selector of the input field
+	                    string - the ID or other jQuery selector of the input field or
+	                    object - jQuery object for input field or div/span
 	   @return Date - the current date */
 	getDateFor: function(control) {
-		control = (typeof control == 'string' ? $(control)[0] : control);
+		control = (control.jquery ? control[0] :
+			(typeof control == 'string' ? $(control)[0] : control));
 		var inst = this._getInst(control._calId);
 		return (inst ? inst._getDate() : null);
 	},
@@ -546,6 +551,9 @@ $.extend(Datepicker.prototype, {
 
 	/* Action for selecting a day. */
 	_selectDay: function(id, month, year, td) {
+		if (this._hasClass($(td), 'datepicker_unselectable')) {
+			return;
+		}
 		var inst = this._getInst(id);
 		var rangeSelect = inst._get('rangeSelect');
 		if (rangeSelect) {
@@ -1014,6 +1022,8 @@ $.fn.datepicker = function(settings) {
 /* Initialise the date picker. */
 $(document).ready(function() {
 	$.datepicker = new Datepicker(); // singleton instance
+	$(document.body).append($.datepicker._datepickerDiv).
+		mousedown($.datepicker._checkExternalClick);
 });
 
 })(jQuery);
