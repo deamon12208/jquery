@@ -7,42 +7,18 @@
 	 */
 
 	$.extend($.fx, {
+		relativize: function(el) {
+			if(!el.css("position") || !el.css("position").match(/fixed|absolute|relative/)) el.css("position", "relative"); //Relativize
+		},
 		save: function(el, set) {
 			for(var i=0;i<set.length;i++) {
-				$.data(el[0], "fx.storage."+set[i], el.css(set[i]));	
+				if(set[i] !== null) $.data(el[0], "fx.storage."+set[i], el.css(set[i]));	
 			}
 		},
 		restore: function(el, set) {
 			for(var i=0;i<set.length;i++) {
-				el.css(set[i], $.data(el[0], "fx.storage."+set[i]));	
+				if(set[i] !== null) el.css(set[i], $.data(el[0], "fx.storage."+set[i]));	
 			}
-		},
-		wrap: function(el) { //Creates a wrapper for the current element (use with caution!)
-			
-			$.fx.save($(el), ['margin', 'marginLeft', 'marginRight', 'marginTop', 'marginBottom', 'left', 'right', 'top', 'bottom']);
-			var cur = $(el), wrapper = $(el).wrap("<div></div>").parent();
-
-			if(cur.css("position") != "static" || cur.css("position") != "") {
-				var s = $.fx.findSides(cur);
-				wrapper.css(s[0], cur.css(s[0])).css(s[1], cur.css(s[1])).css({ position: cur.css("position") });
-			}
-			
-			wrapper.css({
-				overflow: 'hidden',
-				width: cur.outerWidth(), height: cur.outerHeight(),
-				margin: cur.css("margin"), marginLeft: cur.css("marginLeft"), marginRight: cur.css("marginRight"), marginTop: cur.css("marginTop"), marginBottom: cur.css("marginBottom")
-			});
-			
-			cur.css({ margin: 0, marginLeft: 0, marginRight: 0, marginTop: 0, marginBottom: 0, left: 0, right: 0, top: 0, bottom: 0 });
-			return wrapper;
-		},
-		unwrap: function(el) {
-
-			var wrapper = $(el).parent();
-			$.fx.restore($(el), ['margin', 'marginLeft', 'marginRight', 'marginTop', 'marginBottom', 'left', 'right', 'top', 'bottom']);
-			$($(el).parent().parent()).append(el);
-			wrapper.remove();	
-		
 		},
 		findSides: function(el) { //Very nifty function (especially for IE!)
 			return [ !!parseInt(el.css("left")) ? "left" : "right", !!parseInt(el.css("top")) ? "top" : "bottom" ];
