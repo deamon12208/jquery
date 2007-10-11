@@ -7,13 +7,19 @@
 	 */
 
 	$.extend($.fx, {
-		save: function() {
-			
+		save: function(el, set) {
+			for(var i=0;i<set.length;i++) {
+				$.data(el[0], "fx.storage."+set[i], el.css(set[i]));	
+			}
 		},
-		restore: function() {
-			
+		restore: function(el, set) {
+			for(var i=0;i<set.length;i++) {
+				el.css(set[i], $.data(el[0], "fx.storage."+set[i]));	
+			}
 		},
 		wrap: function(el) { //Creates a wrapper for the current element (use with caution!)
+			
+			$.fx.save($(el), ['margin', 'marginLeft', 'marginRight', 'marginTop', 'marginBottom', 'left', 'right', 'top', 'bottom']);
 			var cur = $(el), wrapper = $(el).wrap("<div></div>").parent();
 
 			if(cur.css("position") != "static" || cur.css("position") != "") {
@@ -22,30 +28,20 @@
 			}
 			
 			wrapper.css({
-				width: cur.outerWidth(),
-				height: cur.outerHeight(),
 				overflow: 'hidden',
-				margin: cur.css("margin"),
-				marginLeft: cur.css("marginLeft"),
-				marginRight: cur.css("marginRight"),
-				marginTop: cur.css("marginTop"),
-				marginBottom: cur.css("marginBottom")
+				width: cur.outerWidth(), height: cur.outerHeight(),
+				margin: cur.css("margin"), marginLeft: cur.css("marginLeft"), marginRight: cur.css("marginRight"), marginTop: cur.css("marginTop"), marginBottom: cur.css("marginBottom")
 			});
 			
-			$.fx.save(cur, ['margin', 'marginLeft', 'marginRight', 'marginTop', 'marginBottom', 'left', 'right', 'top', 'bottom']);
 			cur.css({ margin: 0, marginLeft: 0, marginRight: 0, marginTop: 0, marginBottom: 0, left: 0, right: 0, top: 0, bottom: 0 });
-			
-		
 			return wrapper;
 		},
 		unwrap: function(el) {
-			
-			
+
 			var wrapper = $(el).parent();
+			$.fx.restore($(el), ['margin', 'marginLeft', 'marginRight', 'marginTop', 'marginBottom', 'left', 'right', 'top', 'bottom']);
 			$($(el).parent().parent()).append(el);
-			wrapper.remove();
-			
-			$.fx.restore($(el), ['margin', 'marginLeft', 'marginRight', 'marginTop', 'marginBottom', 'left', 'right', 'top', 'bottom']);	
+			wrapper.remove();	
 		
 		},
 		findSides: function(el) { //Very nifty function (especially for IE!)
