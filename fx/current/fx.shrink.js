@@ -8,59 +8,59 @@
 		"marginTop", "marginLeft", "marginBottom", "marginRight"
 	];
 	
-	$.fn.grow = function(speed, easing, callback) {
+	$.fx.scale = function(type, set, speed, callback) {
+
 		this.each(function() {
 
-			var el = $(this); if(!$.data(this, 'fx.storage.width')) return;
-			
-			//Grow the children
-			$('*', el).each(function() {
-				
-				var ani = {};
-				if($.data(this, 'fx.storage.width')) ani["width"] = $.data(this, 'fx.storage.width');
-				if($.data(this, 'fx.storage.height')) ani["height"] = $.data(this, 'fx.storage.height');
-				
-				if(!ani["width"] && !ani["height"]) return;
-				$(this).animate(ani, speed, easing, function() { $.fx.restore($(this), ["overflow"]); });
-				
-			});
-
-			//Grow the parent
-			el.animate($.fx.restore(el, restoreThis, true), speed, easing, function() {
-				$.fx.restore(el, ["overflow"]);
-				if(callback) callback.apply(this, arguments);
-			});
-
-		});
-	}
-	
-	$.fn.shrink = function(speed, easing, callback) {
-		
-		this.each(function() {
-	
 			var el = $(this); $.fx.relativize(el);
+			$.fx.save(el, restoreThis.concat(["overflow"])); //Save values to restore them later again
 
-			//Shrink the children	
-			$('*', el).each(function() {
-				var cur = $(this); if(cur.css("width") == "auto" || cur.css("height") == "auto") return; //Don't continue if 'auto' sized element
-				$.fx.save(cur, ["width", "height", "overflow"]);				
-				$(this).css("overflow", "hidden").animate({ width: 0, height: 0 }, speed, easing);
-			});
-			
+			if(type == "show") {
 
-			//Save values to restore them later again
-			$.fx.save(el, restoreThis.concat(["overflow"]));
-			
-			//Shrink the parent
-			el.css("overflow", "hidden").animate({
-				fontSize: 0, width: 0, height: 0, left: '+='+(el.width() / 2), top: '+='+(el.height() / 2),
-				borderLeftWidth: 0, borderRightWidth: 0, borderTopWidth: 0, borderBottomWidth: 0,
-				paddingLeft: 0, paddingRight: 0, paddingTop: 0, paddingBottom: 0,
-				marginTop: 0, marginLeft: 0, marginBottom: 0, marginRight: 0
-			}, speed, easing, callback);	
-			
-		});
-		
-	}
+				//Grow the children
+				$('*', el).each(function() {
+					var cur = $(this); if(cur.css("width") == "auto" || cur.css("height") == "auto") return; //Don't continue if 'auto' sized element
+					$.fx.save(cur, ["width", "height", "overflow"]);  //Store data
+					$(this).css({ overflow: 'hidden', width: 0, height: 0 }).animate($.fx.restore(cur, ["width", "height"], true), speed, set.easing, function() { $.fx.restore($(this), ["overflow"]); });
+				});
 	
+				//Grow the parent
+				el.css({
+					fontSize: 0, width: 0, height: 0, left: (parseInt(el.css("left")) || 0)+(el.width() / 2), top: (parseInt(el.css("top")) || 0)+(el.height() / 2),
+					borderLeftWidth: 0, borderRightWidth: 0, borderTopWidth: 0, borderBottomWidth: 0,
+					paddingLeft: 0, paddingRight: 0, paddingTop: 0, paddingBottom: 0,
+					marginTop: 0, marginLeft: 0, marginBottom: 0, marginRight: 0
+				});
+				
+				el.css("overflow", "hidden").animate($.fx.restore(el, restoreThis, true), speed, set.easing, function() {
+					$.fx.restore(el, ["overflow"]);
+					if(callback) callback.apply(this, arguments);
+				});
+
+			} else {
+
+				//Shrink the children	
+				$('*', el).each(function() {
+					var cur = $(this); if(cur.css("width") == "auto" || cur.css("height") == "auto") return; //Don't continue if 'auto' sized element
+					$.fx.save(cur, ["width", "height", "overflow"]);				
+					$(this).css("overflow", "hidden").animate({ width: 0, height: 0 }, speed, set.easing, function() { $.fx.restore($(this), ["width", "height", "overflow"]); });
+				});
+
+				//Shrink the parent
+				el.css("overflow", "hidden").animate({
+					fontSize: 0, width: 0, height: 0, left: '+='+(el.width() / 2), top: '+='+(el.height() / 2),
+					borderLeftWidth: 0, borderRightWidth: 0, borderTopWidth: 0, borderBottomWidth: 0,
+					paddingLeft: 0, paddingRight: 0, paddingTop: 0, paddingBottom: 0,
+					marginTop: 0, marginLeft: 0, marginBottom: 0, marginRight: 0
+				}, speed, set.easing, function() {
+					el.hide(); $.fx.restore(el, restoreThis.concat(["overflow"])); //Hide and restore properties
+					if(callback) callback.apply(this, arguments);
+				});
+
+			}
+
+		});
+
+	}
+
 })(jQuery);

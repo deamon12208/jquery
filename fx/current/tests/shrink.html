@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Language" content="en" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UI Magnifier Plugin</title>
+<title>Shrink / Grow</title>
 <script type="text/javascript" src="../../../jquery/src/core.js"></script>
 <script type="text/javascript" src="../../../jquery/src/selector.js"></script>
 <script type="text/javascript" src="../../../jquery/src/event.js"></script>
@@ -35,8 +35,8 @@ body {
 	<div style='background: red;'>hello <b>ddd</b></div>
 	
 	</div>
-	<button onclick="$('#parent').shrink(500)">Shrink!</button>
-	<button onclick="$('#parent').grow(500)">Grow!</button>
+	<button onclick="$('#parent').hide({ method: 'scale' }, 1000)">Shrink!</button>
+	<button onclick="$('#parent').show({ method: 'scale' }, 1000)">Grow!</button>
 
 </body>
 </html>
