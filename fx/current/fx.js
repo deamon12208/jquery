@@ -15,10 +15,13 @@
 				if(set[i] !== null) $.data(el[0], "fx.storage."+set[i], el.css(set[i]));	
 			}
 		},
-		restore: function(el, set) {
+		restore: function(el, set, ret) {
+			if(ret) var obj = {};
 			for(var i=0;i<set.length;i++) {
-				if(set[i] !== null) el.css(set[i], $.data(el[0], "fx.storage."+set[i]));	
+				if(ret) obj[set[i]] = $.data(el[0], "fx.storage."+set[i]);
+				if(set[i] !== null && !ret) el.css(set[i], $.data(el[0], "fx.storage."+set[i]));	
 			}
+			if(ret) return obj;
 		},
 		findSides: function(el) { //Very nifty function (especially for IE!)
 			return [ !!parseInt(el.css("left")) ? "left" : "right", !!parseInt(el.css("top")) ? "top" : "bottom" ];
