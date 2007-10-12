@@ -253,8 +253,8 @@ $.extend(Datepicker.prototype, {
 		inputs = (inputs.jquery ? inputs : $(inputs));
 		inputs.each(function() {
 			this.disabled = false;
-			$('../button.datepicker_trigger', this).each(function() { this.disabled = false; });
-			$('../img.datepicker_trigger', this).css({opacity:'1.0', cursor:''});
+			$(this).siblings('button.datepicker_trigger').each(function() { this.disabled = false; });
+			$(this).siblings('img.datepicker_trigger').css({opacity: '1.0', cursor: ''});
 			var $this = this;
 			$.datepicker._disabledInputs = $.map($.datepicker._disabledInputs,
 				function(value) { return (value == $this ? null : value); }); // delete entry
@@ -270,8 +270,8 @@ $.extend(Datepicker.prototype, {
 		inputs = (inputs.jquery ? inputs : $(inputs));
 		inputs.each(function() {
 			this.disabled = true;
-			$('../button.datepicker_trigger', this).each(function() { this.disabled = true; });
-			$('../img.datepicker_trigger', this).css({opacity:'0.5', cursor:'default'});
+			$(this).siblings('button.datepicker_trigger').each(function() { this.disabled = true; });
+			$(this).siblings('img.datepicker_trigger').css({opacity: '0.5', cursor: 'default'});
 			var $this = this;
 			$.datepicker._disabledInputs = $.map($.datepicker._disabledInputs,
 				function(value) { return (value == $this ? null : value); }); // delete entry
