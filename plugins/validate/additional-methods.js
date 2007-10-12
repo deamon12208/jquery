@@ -27,10 +27,6 @@ jQuery.validator.addMethod("nowhitespace", function(value, element) {
 	return this.optional(element) || /^S+$/i.test(value);
 }, "No white space please"); 
 
-jQuery.validator.addMethod("phone", function(value, element) {
-	return this.optional(element) || /^d{3}-d{3}-d{4}$/.test(value);
-}, "Must be XXX-XXX-XXXX");
-
 jQuery.validator.addMethod("ziprange", function(value, element) {
 	return this.optional(element) || /^90[2-5]\d\{2}-\d{4}$/.test(value);
 }, "Your ZIP-code must be in the range 902xx-xxxx to 905-xx-xxxx");
