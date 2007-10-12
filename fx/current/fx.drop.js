@@ -6,7 +6,7 @@
 
 			if(!set.direction) set.direction = "left"; //Default direction
 			var s = $.fx.findSides($(this)), dir = { left: s[0], right: s[0], up: s[1], down: s[1] };
-			var cur = $(this);
+			var cur = $(this); $.fx.relativize(cur);
 
 			if(type == "show") {
 				var animation = { opacity : 1 }, after = {};
