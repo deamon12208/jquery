@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../../../jquery/src/offset.js"></script>
 
 <script type="text/javascript" src="../fx.js"></script>
-<script type="text/javascript" src="../../plugins/color/jquery.color.js"></script>
+<script type="text/javascript" src="../../../plugins/color/jquery.color.js"></script>
 
 <style type="text/css" media="screen">
 body {
@@ -22,26 +22,28 @@ body {
 }
 
 .green {
-	border: 2px solid black;
+	border: 2px outset darkgreen;
 	margin: 5px;
+	padding: 5px;
 	background: green;
 	color: #fff;
-	width: 200px;
+	width: 100px;
 	position: relative;
 }
 
 body .error {
-	font-size: 2em;
-	border: 10px solid red;
-	background: black;
-	left: 100px;	
+	font-size: 15px;
+	border: 2px outset darkred;
+	background: red;
+	left: 50px;
+	width: 150px;
 }
 </style>
 </head>
 <body>
 
 	<div id="parent" class="green">
-		I'm a button
+		I'm a demo button.
 	</div>
 
 	<button onclick="$('#parent').addClass('error', 500)">Add class 'error'</button>
