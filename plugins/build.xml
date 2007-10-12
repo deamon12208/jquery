@@ -182,4 +182,10 @@
         </antcall>
     </target>
 
+	<target name="metadata" description="Build metadata plugin.">
+        <antcall target="minandpack">
+            <param name="name" value="metadata" />
+        </antcall>
+    </target>
+
 </project>
