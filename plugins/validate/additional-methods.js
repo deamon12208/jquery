@@ -27,14 +27,6 @@ jQuery.validator.addMethod("nowhitespace", function(value, element) {
 	return this.optional(element) || /^S+$/i.test(value);
 }, "No white space please"); 
 
-jQuery.validator.addMethod("anything", function(value, element) {
-	return this.optional(element) || /^.+$/i.test(value);
-}, "May contain any characters."); 
-
-jQuery.validator.addMethod("integer", function(value, element) {
-	return this.optional(element) || /^d+$/i.test(value);
-}, "Numbers only please");
-
 jQuery.validator.addMethod("phone", function(value, element) {
 	return this.optional(element) || /^d{3}-d{3}-d{4}$/.test(value);
 }, "Must be XXX-XXX-XXXX");
