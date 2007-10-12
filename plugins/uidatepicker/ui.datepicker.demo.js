@@ -61,7 +61,7 @@ $(document).ready(function () {
 	updateInlineRange2();
 	$('#datepicker_div_25').width(370); // Unfortunately not automatic
 	// Stylesheets
-	$('#altStyle').datepicker();
+	$('#altStyle').datepicker({buttonImage: 'img/calendar2.gif'});
 	$('#button1').click(function() { 
 		$.datepicker.showFor($('#invokeFocus')[0]);
 	});
