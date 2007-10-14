@@ -1,26 +1,24 @@
 (function($) {
-
-	//If the UI scope is not available, add it
-	$.ui = $.ui || {};
 	
 	//Make nodes selectable by expression
-	$.extend($.expr[':'], { shadowed: "(' '+a.className+' ').indexOf(' ui-shadowed ')" });
+	$.extend($.expr[':'], { shadowed: "(' '+a.className+' ').indexOf(' fx-shadowed ')" });
 	
-	$.fn.shadowEnable = function() { if($(this[0]).next().is(".ui-shadow")) $(this[0]).next().show(); }
-	$.fn.shadowDisable = function() { if($(this[0]).next().is(".ui-shadow")) $(this[0]).next().hide(); }
+	$.fn.shadowEnable = function() { if($(this[0]).next().is(".fx-shadow")) $(this[0]).next().show(); }
+	$.fn.shadowDisable = function() { if($(this[0]).next().is(".fx-shadow")) $(this[0]).next().hide(); }
 	
 	$.fn.shadow = function(options) {
 		
 		options = options || {};
 		options.offset = options.offset ? options.offset : 0;
 		options.opacity = options.opacity ? options.opacity : 0.2;
+		options.color = options.color || "#000";
 		
 		return this.each(function() {
 			
 			var cur = $(this);
 			
 			//Create a shadow element
-			var shadow = $("<div class='ui-shadow'></div>"); cur.after(shadow);
+			var shadow = $("<div class='fx-shadow' style='position: relative;'></div>"); cur.after(shadow);
 			
 			//Figure the base height and width
 			var baseWidth = cur.outerWidth();
@@ -30,14 +28,13 @@
 			var position = cur.position();
 			
 			//Append smooth corners
-			$('<div class="ui-shadow-color ui-shadow-layer-1"></div>').css({ opacity: options.opacity-0.05, left: 5+options.offset, top: 5+options.offset, width: baseWidth+1, height: baseHeight+1 }).appendTo(shadow);
-			$('<div class="ui-shadow-color ui-shadow-layer-2"></div>').css({ opacity: options.opacity-0.1, left: 7+options.offset, top: 7+options.offset, width: baseWidth, height: baseHeight-3 }).appendTo(shadow);
-			$('<div class="ui-shadow-color ui-shadow-layer-3"></div>').css({ opacity: options.opacity-0.1, left: 7+options.offset, top: 7+options.offset, width: baseWidth-3, height: baseHeight }).appendTo(shadow);
-			$('<div class="ui-shadow-color ui-shadow-layer-4"></div>').css({ opacity: options.opacity, left: 6+options.offset, top: 6+options.offset, width: baseWidth-1, height: baseHeight-1 }).appendTo(shadow);
+			$('<div class="fx-shadow-color fx-shadow-layer-1"></div>').css({ position: 'absolute', opacity: options.opacity-0.05, left: 5+options.offset, top: 5+options.offset, width: baseWidth+1, height: baseHeight+1 }).appendTo(shadow);
+			$('<div class="fx-shadow-color fx-shadow-layer-2"></div>').css({ position: 'absolute', opacity: options.opacity-0.1, left: 7+options.offset, top: 7+options.offset, width: baseWidth, height: baseHeight-3 }).appendTo(shadow);
+			$('<div class="fx-shadow-color fx-shadow-layer-3"></div>').css({ position: 'absolute', opacity: options.opacity-0.1, left: 7+options.offset, top: 7+options.offset, width: baseWidth-3, height: baseHeight }).appendTo(shadow);
+			$('<div class="fx-shadow-color fx-shadow-layer-4"></div>').css({ position: 'absolute', opacity: options.opacity, left: 6+options.offset, top: 6+options.offset, width: baseWidth-1, height: baseHeight-1 }).appendTo(shadow);
 			
-			//If we have a color, use it
-			if(options.color)
-				$("div.ui-shadow-color", shadow).css("background-color", options.color);
+			//Add color
+			$("div.fx-shadow-color", shadow).css("background-color", options.color);
 			
 			//Determine the stack order (attention: the zIndex will get one higher!)
 			if(!cur.css("zIndex") || cur.css("zIndex") == "auto") {

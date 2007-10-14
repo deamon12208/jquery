@@ -1,37 +1,34 @@
 (function($) {
-
-	//If the UI scope is not availalable, add it
-	$.ui = $.ui || {};
 	
 	//Make nodes selectable by expression
-	$.extend($.expr[':'], { magnifier: "(' '+a.className+' ').indexOf(' ui-magnifier ')" });
+	$.extend($.expr[':'], { magnifier: "(' '+a.className+' ').indexOf(' fx-magnifier ')" });
 
 	//Macros for external methods that support chaining
 	var methods = "destroy,enable,disable,reset".split(",");
 	for(var i=0;i<methods.length;i++) {
 		var cur = methods[i], f;
-		eval('f = function() { var a = arguments; return this.each(function() { if(jQuery(this).is(".ui-magnifier")) jQuery.data(this, "ui-magnifier")["'+cur+'"](a); }); }');
+		eval('f = function() { var a = arguments; return this.each(function() { if(jQuery(this).is(".fx-magnifier")) jQuery.data(this, "fx-magnifier")["'+cur+'"](a); }); }');
 		$.fn["magnifier"+cur.substr(0,1).toUpperCase()+cur.substr(1)] = f;
 	};
 
 	//get instance method
 	$.fn.magnifierInstance = function() {
-		if($(this[0]).is(".ui-magnifier")) return $.data(this[0], "ui-magnifier");
+		if($(this[0]).is(".fx-magnifier")) return $.data(this[0], "fx-magnifier");
 		return false;
 	};
 	
 	$.fn.magnifier = function(options) {
 		return this.each(function() {
-			new $.ui.magnifier(this,options);	
+			new $.fx.magnifier(this,options);	
 		});
 	};
 	
-	$.ui.magnifier = function(el,options) {
+	$.fx.magnifier = function(el,options) {
 		
 		var self = this; this.items = []; this.element = el;
 		this.options = options || {}; var o = this.options;
-		$.data(el, "ui-magnifier", this);
-		$(el).addClass("ui-magnifier");
+		$.data(el, "fx-magnifier", this);
+		$(el).addClass("fx-magnifier");
 		
 		o.distance = o.distance || 150;
 		o.magnification = o.magnification || 2;
@@ -71,18 +68,18 @@
 		
 	}
 	
-	$.extend($.ui.magnifier.prototype, {
+	$.extend($.fx.magnifier.prototype, {
 		destroy: function() {
-			$(this.element).removeClass("ui-magnifier").removeClass("ui-magnifier-disabled");
+			$(this.element).removeClass("fx-magnifier").removeClass("fx-magnifier-disabled");
 			$(document).unbind("mousemove", this.moveEvent);
 			if(this.clickEvent) $(this.element).unbind("click", this.clickEvent);
 		},
 		enable: function() {
-			$(this.element).removeClass("ui-magnifier-disabled");
+			$(this.element).removeClass("fx-magnifier-disabled");
 			this.disabled = false;
 		},
 		disable: function() {
-			$(this.element).addClass("ui-magnifier-disabled");
+			$(this.element).addClass("fx-magnifier-disabled");
 			this.reset();
 			this.disabled = true;
 		},
