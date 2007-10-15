@@ -64,7 +64,7 @@
 		},
 		heightHide: function(animated, callback) {
 			if (animated) {
-				this.animate({ height: "hide" }, animated, callback)
+				this.animate({ height: "hide" }, animated, callback);
 			} else {
 				this.hide();
 				if (callback)
@@ -98,7 +98,7 @@
 					
             // create hitarea
 			this.prepend("<div class=\"" + CLASSES.hitarea + "\"/>")
-				.find("div." + CLASSES.hitarea).click( toggler )
+				.find("div." + CLASSES.hitarea).click( toggler );
 		},
 		treeview: function(settings) {
 			
@@ -113,7 +113,7 @@
 				var callback = settings.toggle;
 				settings.toggle = function() {
 					return callback.apply($(this).parent()[0], arguments);
-				}
+				};
 			}
 		
 			// factory for treecontroller
@@ -128,7 +128,7 @@
 							return filter ? $(this).parent("." + filter).length : true;
 						}) );
 						return false;
-					}
+					};
 				}
 				// click on first element to collapse tree
 				$(":eq(0)", control).click( handler(CLASSES.collapsable) );
