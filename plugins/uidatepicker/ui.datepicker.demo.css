@@ -13,7 +13,8 @@
 .se_day { color: blue !important; background: #eee url(img/se.gif) no-repeat center !important; }
 .us_day { color: white !important; background: #eee url(img/us.gif) no-repeat center !important; }
 .za_day { color: green !important; background: #eee url(img/za.gif) no-repeat center !important; }
-code { font-size: 13px; font-family:Verdana, Arial, Helvetica, sans-serif;}
+code { font-size: 13px; font-family: Verdana, Arial, Helvetica, sans-serif; }
+pre { padding-left: 2em; }
 .tabs {
 	list-style: none;
 }
