@@ -1,8 +1,7 @@
+// Initialise the date picker demonstrations
 $(document).ready(function () {
-	$('#alt').attr({ 'disabled':'disabled' });
+	$('#alt').attr({ disabled: 'disabled' });
 	tabs.init();
-	// Restore default language after loading French localisation
-	$.datepicker.setDefaults($.datepicker.regional['']);
 	// Set date picker global defaults - invoke via focus and image button
 	$.datepicker.setDefaults({showOn: 'both', buttonImageOnly: true,
 		buttonImage: 'img/calendar.gif', buttonText: 'Calendar'});
@@ -14,14 +13,21 @@ $(document).ready(function () {
 		buttonImage: '', buttonText: '...', yearRange: '-7:+7'});
 	$('.invokeBoth').datepicker(); // Also Keystrokes
 	$('#enableFocus').toggle(
-		function () { this.value = 'Enable'; return $.datepicker.disableFor($('#invokeFocus')); },
-		function () { this.value = 'Disable'; return $.datepicker.enableFor($('#invokeFocus')); });
+		function () { this.value = 'Enable'; $.datepicker.disableFor('#invokeFocus'); },
+		function () { this.value = 'Disable'; $.datepicker.enableFor('#invokeFocus'); });
 	$('#enableButton').toggle(
-		function () { this.value = 'Enable'; return $.datepicker.disableFor($('#invokeButton')); },
-		function () { this.value = 'Disable'; return $.datepicker.enableFor($('#invokeButton')); });
+		function () { this.value = 'Enable'; $.datepicker.disableFor($('#invokeButton')); },
+		function () { this.value = 'Disable'; $.datepicker.enableFor($('#invokeButton')); });
 	$('#enableBoth').toggle(
-		function () { this.value = 'Enable'; return $.datepicker.disableFor($('.invokeBoth')[0]); },
-		function () { this.value = 'Disable'; return $.datepicker.enableFor($('.invokeBoth')[0]); });
+		function () { this.value = 'Enable'; $.datepicker.disableFor($('.invokeBoth')[0]); },
+		function () { this.value = 'Disable'; $.datepicker.enableFor($('.invokeBoth')[0]); });
+	$('#button1').click(function() { 
+		$.datepicker.showFor($('#invokeFocus')[0]);
+	});
+	$('#button2').click(function() { 
+		$.datepicker.dialogDatepicker($('#invokeDialog').val(),
+		setDateFromDialog, {prompt: 'Choose a date', speed: ''});
+	});
 	// Restricting
 	$('#restrictControls').datepicker({firstDay: 1, changeFirstDay: false,
 		changeMonth: false, changeYear: false});
@@ -32,9 +38,14 @@ $(document).ready(function () {
 	$('#nationalDays').datepicker({beforeShowDay: nationalDays});
 	// Localisation
 	$('#isoFormat').datepicker({dateFormat: 'YMD-'});
-	$('#l10nDatepicker').datepicker();
-	$('#language').change(localise);
-	localise();
+	if ($.browser.safari) {
+		$('#language,#l10nDatepicker').attr({ disabled: 'disabled' });
+	}
+	else {
+		$('#language').change(localise);
+		$('#l10nDatepicker').datepicker();
+		localise();
+	}
 	// Date range
 	$('.dateRange').datepicker({beforeShow: customRange});
 	$('#rangeSelect').datepicker({rangeSelect: true});
@@ -55,39 +66,31 @@ $(document).ready(function () {
 	$('.inlineConfig').datepicker();
 	// Inline
 	$('.dateInline').datepicker({onSelect: updateInlineRange});
+	var nextWeek = new Date();
+	nextWeek.setDate(nextWeek.getDate() + 7);
+	$.datepicker.setDateFor('.dateInline:last', nextWeek);
 	updateInlineRange();
 	$('#rangeInline').datepicker({rangeSelect: true, rangeSeparator: ' to ',
 		numberOfMonths: 2, onSelect: updateInlineRange2});
+	var lastWeek = new Date();
+	lastWeek.setDate(lastWeek.getDate() - 7);
+	$.datepicker.setDateFor('#rangeInline', lastWeek, nextWeek);
 	updateInlineRange2();
 	$('#datepicker_div_25').width(370); // Unfortunately not automatic
 	// Stylesheets
 	$('#altStyle').datepicker({buttonImage: 'img/calendar2.gif'});
-	$('#button1').click(function() { 
-		$.datepicker.showFor($('#invokeFocus')[0]);
-	});
-	$('#button2').click(function() { 
-		$.datepicker.dialogDatepicker($('#invokeDialog').val(),
-		setDateFromDialog, {prompt: 'Choose a date', speed: ''});
-	});
 	$('#button3').click(function() { 
 		$.datepicker.dialogDatepicker($('#altDialog').val(),
 		setAltDateFromDialog, {prompt: 'Choose a date', speed: ''});
 	});
 });
 
-function setSpeed(select) {
-	$.datepicker.reconfigureFor('#reconfigureCal',
-		{speed: select.options[select.selectedIndex].value});
-}
-
+// Display a date selected in a "dialog"
 function setDateFromDialog(date) {
 	$('#invokeDialog').val(date);
 }
 
-function setAltDateFromDialog(date) {
-	$('#altDialog').val(date);
-}
-
+// Highlight certain national days on the calendar
 var natDays = [[1, 26, 'au'], [2, 6, 'nz'], [3, 17, 'ie'], [4, 27, 'za'], [5, 25, 'ar'], [6, 6, 'se'],
 	[7, 4, 'us'], [8, 17, 'id'], [9, 7, 'br'], [10, 1, 'cn'], [11, 22, 'lb'], [12, 12, 'ke']];
 function nationalDays(date) {
@@ -99,27 +102,46 @@ function nationalDays(date) {
 	return [true, ''];
 }
 
+// Load and apply a localisation package for the date picker
+function localise() {
+	var language = $('#language').val();
+	$.localise('ui.datepicker', {language: language});
+	$.datepicker.reconfigureFor('#l10nDatepicker', $.datepicker.regional[language]);
+	$.datepicker.setDefaults($.datepicker.regional['']); // Reset for general usage
+}
+
+// Customise two date pickers to work as a date range
 function customRange(input) {
 	return {minDate: (input.id == 'dTo' ? getDate($('#dFrom').val()) : null),
 		maxDate: (input.id == 'dFrom' ? getDate($('#dTo').val()) : null)};
 }
-
+// Create a Date from a string value
 function getDate(value) {
 	fields = value.split('/');
 	return (fields.length < 3 ? null :
 		new Date(parseInt(fields[2], 10), parseInt(fields[1], 10) - 1, parseInt(fields[0], 10)));
 }
 
+// Demonstrate the callback on select
 function alertDate(date) {
 	alert('The date is ' + date);
 }
 
-var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-function showDay(input) {
-	var date = getDate(input.value);
-	$('#inlineDay').empty().html(date ? days[date.getDay()] : 'blank');
+// Prepare to show a date picker linked to three select controls
+function readLinked() {
+	$('#linkedDates').val($('#selectDay').val() + '/' +
+		$('#selectMonth').val() + '/' + $('#selectYear').val());
+	return {};
 }
 
+// Update three select controls to match a date picker selection
+function updateLinked(date) {
+	$('#selectDay').val(date.substring(0, 2));
+	$('#selectMonth').val(date.substring(3, 5));
+	$('#selectYear').val(date.substring(6, 10));
+}
+
+// Prevent selection of invalid dates through the select controls
 function checkLinkedDays() {
 	var daysInMonth = 32 - new Date($('#selectYear').val(),
 		$('#selectMonth').val() - 1, 32).getDate();
@@ -130,18 +152,20 @@ function checkLinkedDays() {
 	}
 }
 
-function readLinked() {
-	$('#linkedDates').val($('#selectDay').val() + '/' +
-		$('#selectMonth').val() + '/' + $('#selectYear').val());
-	return {};
+// Change the speed at which the date picker appears
+function setSpeed(select) {
+	$.datepicker.reconfigureFor('#reconfigureCal',
+		{speed: select.options[select.selectedIndex].value});
 }
 
-function updateLinked(date) {
-	$('#selectDay').val(date.substring(0, 2));
-	$('#selectMonth').val(date.substring(3, 5));
-	$('#selectYear').val(date.substring(6, 10));
+// Demonstrate a callback from inline configuration
+var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+function showDay(input) {
+	var date = getDate(input.value);
+	$('#inlineDay').empty().html(date ? days[date.getDay()] : 'blank');
 }
 
+// Synchronise two inline date pickers working together as a date range
 function updateInlineRange() {
 	var inlineFrom = $('#inlineFrom')[0];
 	var inlineTo = $('#inlineTo')[0];
@@ -152,11 +176,14 @@ function updateInlineRange() {
 	$.datepicker.reconfigureFor(inlineTo, {minDate: dateFrom});
 }
 
+// Display the date range from a multi-month inline date picker
 function updateInlineRange2(dateStr) {
+	var dates = $.datepicker.getDateFor('#rangeInline');
 	$('#inlineRange2').val(dateStr ? dateStr :
-		formatDate($.datepicker.getDateFor('#rangeInline')));
+		formatDate(dates[0]) + ' to ' + formatDate(dates[1]));
 }
 
+// Format a date for display
 function formatDate(date) {
 	var day = date.getDate();
 	var month = date.getMonth() + 1;
@@ -164,11 +191,9 @@ function formatDate(date) {
 		(month < 10 ? '0' : '') + month + '/' + date.getFullYear();
 }
 
-function localise() {
-	var language = $('#language').val();
-	$.localise('ui.datepicker', {language: language});
-	$.datepicker.reconfigureFor('#l10nDatepicker', $.datepicker.regional[language]);
-	$.datepicker.setDefaults($.datepicker.regional['']);
+// Display a date selected in a "dialog"
+function setAltDateFromDialog(date) {
+	$('#altDialog').val(date);
 }
 
 // Custom Tabs written by Marc Grabanski
