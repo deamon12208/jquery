@@ -2,26 +2,27 @@
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-	<title>jQuery Accordion</title>
+	<title>jQuery accordion</title>
 	
 	<link rel="stylesheet" href="accordion.css" />
 	
 	<script type="text/javascript" src="jquery.js"></script>
 	<script type="text/javascript" src="chili-1.7.pack.js"></script>
 	<script type="text/javascript" src="jquery.easing.js"></script>
+	<script type="text/javascript" src="jquery.dimensions.js"></script>
 	<script type="text/javascript" src="jquery.accordion.js"></script>
 
 	<script type="text/javascript">
 	jQuery().ready(function(){
-		// simple Accordion
-		jQuery('#list1a').Accordion();
-		jQuery('#list1b').Accordion({
-			autoheight: true
+		// simple accordion
+		jQuery('#list1a').accordion();
+		jQuery('#list1b').accordion({
+			autoheight: false
 		});
 		
 		
-		// second simple Accordion with special markup
-		jQuery('#navigation').Accordion({
+		// second simple accordion with special markup
+		jQuery('#navigation').accordion({
 			active: false,
 			header: '.head',
 			navigation: true,
@@ -30,25 +31,26 @@
 			animated: 'easeslide'
 		});
 		
-		// highly customized Accordion
-		jQuery('#list2').Accordion({
+		// highly customized accordion
+		jQuery('#list2').accordion({
 			event: 'mouseover',
 			active: '.selected',
 			selectedClass: 'active',
-			animated: "bounceslide"
+			animated: "bounceslide",
+			header: "dt"
 		}).change(function(event, newHeader, oldHeader, newContent, oldContent) {
 			jQuery('<div>' + oldHeader.text() + ' hidden, ' + newHeader.text() + ' shown</div>').appendTo('#log');
 		});
 		
-		// first simple Accordion with special markup
-		jQuery('#list3').Accordion({
+		// first simple accordion with special markup
+		jQuery('#list3').accordion({
 			header: 'div.title',
 			active: false,
 			alwaysOpen: false,
 			animated: false
 		});
 		
-		var wizard = $("#wizard").Accordion({
+		var wizard = $("#wizard").accordion({
 			header: '.title',
 			event: false
 		});
@@ -81,20 +83,20 @@
 </head>
 <body>
 
-<h1 id="banner"><a href="http://bassistance.de/jquery-plugins/jquery-plugin-accordion/">jQuery Accordion Plugin</a> Demo</h1>
+<h1 id="banner"><a href="http://bassistance.de/jquery-plugins/jquery-plugin-accordion/">jQuery accordion Plugin</a> Demo</h1>
 <div id="main">
 
 	<fieldset>
 		<legend>Standard, container is a div, header is h3 and content div and nested p</legend>	
 
 		<h3>Code</h3>
-		<pre><code class="mix">jQuery('#list1a').Accordion();
-jQuery('#list1b').Accordion({
+		<pre><code class="mix">jQuery('#list1a').accordion();
+jQuery('#list1b').accordion({
 	autoheight: true
 });</code></pre>
 
 		<div class="basic" style="float:left;"  id="list1a">
-			<h3>There is one obvious advantage:</h3>
+			<a>There is one obvious advantage:</a>
 			<div>
 				<p>
 					You've seen it coming!<br/>
@@ -103,14 +105,14 @@ jQuery('#list1b').Accordion({
 					if you can afford it.
 				</p>
 			</div>
-			<h3>Now that you've got...</h3>
+			<a>Now that you've got...</a>
 			<div>
 				<p>
 					your bear, you have to admit it!<br/>
 					No, we aren't selling bears.
 				</p>
 			</div>
-			<h3>Rent one bear, ...</h3>
+			<a>Rent one bear, ...</a>
 			<div>
 				<p>
 					get two for three beer.
@@ -130,7 +132,7 @@ jQuery('#list1b').Accordion({
 		</div>
 			
 		<div class="basic" style="float:left; margin-left: 2em;" id="list1b">
-			<h3>There is one obvious advantage:</h3>
+			<a>There is one obvious advantage:</a>
 			<div>
 				<p>
 					You've seen it coming!<br/>
@@ -139,14 +141,14 @@ jQuery('#list1b').Accordion({
 					if you can afford it.
 				</p>
 			</div>
-			<h3>Now that you've got...</h3>
+			<a>Now that you've got...</a>
 			<div>
 				<p>
 					your bear, you have to admit it!<br/>
 					No, we aren't selling bears.
 				</p>
 			</div>
-			<h3>Rent one bear, ...</h3>
+			<a>Rent one bear, ...</a>
 			<div>
 				<p>
 					get two for three beer.
@@ -172,12 +174,12 @@ jQuery('#list1b').Accordion({
 		<p>Location-based state-saving: The active element is choosen based on location.hash: Click one of the links, then reload the page to see it in action.</p>
 
 		<h3>Code</h3>
-		<pre><code class="mix">jQuery('#navigation').Accordion({
+		<pre><code class="mix">jQuery('#navigation').accordion({
 	active: false,
 	header: '.head',
 	navigation: true,
 	event: 'mouseover',
-	autoheight: true,
+	fillSpace: true,
 	animated: 'easeslide'
 });</code></pre>
 		<div  style="height:250px;margin-bottom:1em;">
@@ -224,8 +226,8 @@ jQuery('#list1b').Accordion({
 		<legend>With options, container is a definition list, header dt, content dd</legend>
 		
 		<h3>Code</h3>
-		<pre><code class="mix">// highly customized Accordion
-jQuery('#list2').Accordion({
+		<pre><code class="mix">// highly customized accordion
+jQuery('#list2').accordion({
 	event: 'mouseover',
 	active: '.selected',
 	selectedClass: 'active',
@@ -256,7 +258,7 @@ jQuery('#list2').Accordion({
 		content, no active on startup and can be completely closed</legend>
 		
 		<h3>Code</h3>
-		<pre><code class="mix">jQuery('#list3').Accordion({
+		<pre><code class="mix">jQuery('#list3').accordion({
 		header: 'div.title',
 		active: false,
 		alwaysOpen: false,
@@ -291,10 +293,10 @@ jQuery('#list2').Accordion({
 	</fieldset>
 	
 	<fieldset>
-		<legend>Accordion wizard</legend>
+		<legend>accordion wizard</legend>
 		
 		<h3>Code</h3>
-		<pre><code class="mix">var wizard = $("#wizard").Accordion({
+		<pre><code class="mix">var wizard = $("#wizard").accordion({
 	header: '.title',
 	event: false
 });
