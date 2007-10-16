@@ -109,7 +109,11 @@
 $('#invokeFocus').datepicker({showOn: 'focus', yearRange: '-5:+5'});
 $('#invokeButton').datepicker({showOn: 'button', buttonImageOnly: false,
 	buttonImage: '', buttonText: '...', yearRange: '-7:+7'});
-$('.invokeBoth').datepicker();</code></pre>
+$('.invokeBoth').datepicker();
+
+$('#enableFocus').toggle(
+	function () { this.value = 'Enable'; $.datepicker.disableFor('#invokeFocus'); },
+	function () { this.value = 'Disable'; $.datepicker.enableFor('#invokeFocus'); });</code></pre>
 					<p>The date picker can also be triggered externally for a particular input.</p>
 					<p><span class="demoLabel">External trigger:</span>
 						<button id="button1">Open date picker</button></p>
@@ -368,7 +372,10 @@ $('.inlineConfig').datepicker();</code></pre>
 					<p>Connect the date picker to a div or span rather than an input field.
 						Include a callback function for notification of a date selection.</p>
 					<pre><code>$('.dateInline').datepicker({onSelect: updateInlineRange});
-			
+var nextWeek = new Date();
+nextWeek.setDate(nextWeek.getDate() + 7);
+$.datepicker.setDateFor('.dateInline:last', nextWeek);
+
 function updateInlineRange() {
 	var inlineFrom = $('#inlineFrom')[0];
 	var inlineTo = $('#inlineTo')[0];
@@ -385,10 +392,14 @@ function updateInlineRange() {
 						<input type="text" size="25" id="inlineRange2" readonly="readonly"/></p>
 					<pre><code>$('#rangeInline').datepicker({rangeSelect: true, rangeSeparator: ' to ',
 	numberOfMonths: 2, onSelect: updateInlineRange2});
-	
+var lastWeek = new Date();
+lastWeek.setDate(lastWeek.getDate() - 7);
+$.datepicker.setDateFor('#rangeInline', lastWeek, nextWeek);
+
 function updateInlineRange2(dateStr) {
+	var dates = $.datepicker.getDateFor('#rangeInline');
 	$('#inlineRange2').val(dateStr ? dateStr :
-		formatDate($.datepicker.getDateFor('#rangeInline')));
+		formatDate(dates[0]) + ' to ' + formatDate(dates[1]));
 }</code></pre>
 				</div>
 				<div id="styles" class="tab_group1 container">
