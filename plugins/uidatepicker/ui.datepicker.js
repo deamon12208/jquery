@@ -315,13 +315,14 @@ $.extend(Datepicker.prototype, {
 	                    string - the ID or other jQuery selector of the input field or
 	                    object - jQuery object for input field or div/span
 	   @param  date     Date - the new date
+	   @param  endDate  Date - the new end date for a range (optional)
 	   @return void */
-	setDateFor: function(control, date) {
+	setDateFor: function(control, date, endDate) {
 		control = (control.jquery ? control[0] :
 			(typeof control == 'string' ? $(control)[0] : control));
-		var inst = this._getInst($(control)[0]._calId);
+		var inst = this._getInst(control._calId);
 		if (inst) {
-			inst._setDate(date);
+			inst._setDate(date, endDate);
 			this._updateDatepicker(inst);
 		}
 	},
@@ -330,7 +331,8 @@ $.extend(Datepicker.prototype, {
 	   @param  control  element - the input field or div/span attached to the date picker or
 	                    string - the ID or other jQuery selector of the input field or
 	                    object - jQuery object for input field or div/span
-	   @return Date - the current date */
+	   @return Date - the current date or
+	           Date[2] - the current dates for a range*/
 	getDateFor: function(control) {
 		control = (control.jquery ? control[0] :
 			(typeof control == 'string' ? $(control)[0] : control));
@@ -339,12 +341,14 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Pop-up the date picker for a given input field.
-	   @param  target  element - the input field attached to the date picker or
-	                   string - the ID or other jQuery selector of the input field
+	   @param  control  element - the input field attached to the date picker or
+	                    string - the ID or other jQuery selector of the input field or
+	                    object - jQuery object for input field
 	   @return void */
-	showFor: function(target) {
-		target = (typeof target == 'string' ? $(target)[0] : target);
-		var input = (target.nodeName && target.nodeName.toLowerCase() == 'input' ? target : this);
+	showFor: function(control) {
+		control = (control.jquery ? control[0] :
+			(typeof control == 'string' ? $(control)[0] : control));
+		var input = (control.nodeName && control.nodeName.toLowerCase() == 'input' ? control : this);
 		if (input.nodeName.toLowerCase() != 'input') { // find from button/image trigger
 			input = $('input', input.parentNode)[0];
 		}
@@ -567,7 +571,7 @@ $.extend(Datepicker.prototype, {
 				this._stayOpen = false;
 			}
 		}
-		inst._selectedDay = $("a", td).html();
+		inst._selectedDay = $('a', td).html();
 		inst._selectedMonth = month;
 		inst._selectedYear = year;
 		this._selectDate(id);
@@ -726,17 +730,35 @@ $.extend(DatepickerInstance.prototype, {
 			(typeof defaultDate == 'number' ? offsetDate(defaultDate) : defaultDate));
 	},
 
-	/* Set the date directly. */
-	_setDate: function(date) {
+	/* Set the date(s) directly. */
+	_setDate: function(date, endDate) {
 		this._selectedDay = this._currentDay = date.getDate();
 		this._selectedMonth = this._currentMonth = date.getMonth();
 		this._selectedYear = this._currentYear = date.getFullYear();
+		if (this._get('rangeSelect')) {
+			if (endDate) {
+				this._endDay = endDate.getDate();
+				this._endMonth = endDate.getMonth();
+				this._endYear = endDate.getFullYear();
+			}
+			else {
+				this._endDay = this._currentDay;
+				this._endMonth = this._currentMonth;
+				this._endYear = this._currentYear;
+			}
+		}
 		this._adjustDate();
 	},
 
-	/* Retrieve the date directly. */
+	/* Retrieve the date(s) directly. */
 	_getDate: function() {
-		return new Date(this._currentYear, this._currentMonth, this._currentDay);
+		var startDate = new Date(this._currentYear, this._currentMonth, this._currentDay);
+		if (this._get('rangeSelect')) {
+			return [startDate, new Date(this._endYear, this._endMonth, this._endDay)];
+		}
+		else {
+			return startDate;
+		}
 	},
 
 	/* Generate the HTML for the current state of the date picker. */
