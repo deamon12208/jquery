@@ -47,7 +47,8 @@
 			header: 'div.title',
 			active: false,
 			alwaysOpen: false,
-			animated: false
+			animated: false,
+			autoheight: false
 		});
 		
 		var wizard = $("#wizard").accordion({
@@ -68,13 +69,13 @@
 		// bind to change event of select to control first and seconds accordion
 		// similar to tab's plugin triggerTab(), without an extra method
 		jQuery('#switch select').change(function() {
-			jQuery('#list1, #list2, #list3, #navigation').activate( this.selectedIndex-1 );
+			jQuery('#list1a, #list1b, #list2, #list3, #navigation').activate( this.selectedIndex-1 );
 		});
 		jQuery('#close').click(function() {
-			jQuery('#list1, #list2, #list3, #navigation').activate(-1);
+			jQuery('#list1a, #list1b, #list2, #list3, #navigation').activate(-1);
 		});
 		jQuery('#switch2').change(function() {
-			jQuery('#list1, #list2, #list3, #navigation').activate(this.value);
+			jQuery('#list1a, #list1b, #list2, #list3, #navigation').activate(this.value);
 		});
 		
 	});
@@ -281,11 +282,13 @@ jQuery('#list2').accordion({
 			<div>
 				<div class="title">Baseball</div>
 				<div>
-					Well, one ball, some guys running around, some guys hitting others with a stick.<br/>
-					Sounds like fun, doesn't it?
-				</div>
-				<div>
-					Well, apart from the running part.
+					<p>
+						Well, one ball, some guys running around, some guys hitting others with a stick.<br/>
+						Sounds like fun, doesn't it?
+					</p>
+					<p>
+						Well, apart from the running part.
+					</p>
 				</div>
 			</div>
 		</div>

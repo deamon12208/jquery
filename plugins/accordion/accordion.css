@@ -100,9 +100,9 @@ li { list-style-type: none; }
 #list2 dd { height: 130px; overflow: hidden; }
 
 #list3 { border: 1px solid #111; }
-#list3 div.selected { font-weight: bold; }
+#list3 div.selected .title { font-weight: bold; }
 #list3 div div {
-	border-left:25px solid #6699CC;
+	border-left:8px solid #6699CC;
 	padding: 5px;
 }
 #list3 div.title {

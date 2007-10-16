@@ -70,27 +70,6 @@ $.extend($.ui.accordion, {
 });
 
 $.fn.extend({
-	nextUntil: function(expr) {
-	    var match = [];
-	
-	    // We need to figure out which elements to push onto the array
-	    this.each(function(){
-	        // Traverse through the sibling nodes
-	        for( var i = this.nextSibling; i; i = i.nextSibling ) {
-	            // Make sure that we're only dealing with elements
-	            if ( i.nodeType != 1 ) continue;
-	
-	            // If we find a match then we need to stop
-	            if ( $.filter( expr, [i] ).r.length ) break;
-	
-	            // Otherwise, add it on to the stack
-	            match.push( i );
-	        }
-	    });
-	
-	    return this.pushStack( match );
-	},
-	// the plugin method itself
 	accordion: function(settings) {
 		if ( !this.length )
 			return this;
@@ -122,19 +101,19 @@ $.fn.extend({
 				maxHeight -= $(this).outerHeight();
 			});
 			var maxPadding = 0;
-			headers.nextUntil(settings.header).each(function() {
+			headers.next().each(function() {
 				maxPadding = Math.max(maxPadding, $(this).innerHeight() - $(this).height());
 			}).height(maxHeight - maxPadding);
 		} else if ( settings.autoheight ) {
 			var maxHeight = 0;
-			headers.nextUntil(settings.header).each(function() {
-				maxHeight = Math.max(maxHeight, $(this).height());
+			headers.next().each(function() {
+				maxHeight = Math.max(maxHeight, $(this).outerHeight());
 			}).height(maxHeight);
 		}
 
 		headers
 			.not(active || "")
-			.nextUntil(settings.header)
+			.next()
 			.hide();
 		active.parent().andSelf().addClass(settings.selectedClass);
 		
@@ -188,7 +167,7 @@ $.fn.extend({
 			// called only when using activate(false) to close all parts programmatically
 			if ( !event.target && !settings.alwaysOpen ) {
 				active.toggleClass(settings.selectedClass);
-				var toHide = active.nextUntil(settings.header);
+				var toHide = active.next();
 				var toShow = active = $([]);
 				toggle( toShow, toHide );
 				return;
@@ -215,8 +194,8 @@ $.fn.extend({
 			}
 
 			// find elements to show and hide
-			var toShow = clicked.nextUntil(settings.header),
-				toHide = active.nextUntil(settings.header),
+			var toShow = clicked.next(),
+				toHide = active.next(),
 				data = [clicked, active, toShow, toHide],
 				down = headers.index( active[0] ) > headers.index( clicked[0] );
 			
@@ -241,6 +220,9 @@ $.fn.extend({
 	},
 	activate: function(index) {
 		return this.trigger('activate', [index]);
+	},
+	unaccordion: function() {
+		return this.find("*").andSelf().unbind().end().end();
 	}
 });
 

@@ -27,13 +27,13 @@
 		<legend>Standard, container is a div, header is h3 and content p</legend>	
 
 		<div id="list1">
-			<h3>There is one obvious advantage:</h3>
+			<a>There is one obvious advantage:</a>
 			<p>
 				You've seen it coming!<br/>
 				Buy now and get nothing for free!<br/>
 				Well, at least no free beer. Perhaps a bear, if you can afford it.
 			</p>
-			<h3>Now that you've got...</h3>
+			<a>Now that you've got...</a>
 			<p>
 				your bear, you have to admit it!<br/>
 				No, we aren't selling bears.
@@ -41,7 +41,7 @@
 			<p>
 				We could talk about renting one.
 			</p>
-			<h3>Rent one bear, ...</h3>
+			<a>Rent one bear, ...</a>
 			<p>
 				get two for three beer.
 			</p>
@@ -50,8 +50,6 @@
 			</p>
 		</div>
 		
-		<h3>Code</h3>
-		<pre><code class="mix">jQuery('#list1').Accordion();</code></pre>
 	</fieldset>
 	
 	<fieldset>
@@ -93,13 +91,6 @@
 			</li>
 		</ul>
 		
-		<h3>Code</h3>
-		<pre><code class="mix">jQuery('#navigation').Accordion({
-	active: false,
-	header: '.head',
-	alwaysOpen: false,
-	navigation: true
-});</code></pre>
 	</fieldset>
 
 	<fieldset>
@@ -120,18 +111,6 @@
 			</dd>
 		</dl>
 		
-		<h3>Code</h3>
-		<pre><code class="mix">function simpleLog(message) {
-	jQuery('&lt;div&gt;' + message + '&lt;/div&gt;').appendTo('#log');
-}
-jQuery('#list2').Accordion({
-	event: "mouseover",
-	active: 'dt.selected',
-	selectedClass: "active"
-}).change(function(event, newHeader, oldHeader, newContent, oldContent) {
-	simpleLog(oldHeader.text() + ' hidden');
-	simpleLog(newHeader.text() + ' shown');
-});</code></pre>
 	</fieldset>
 
 	<fieldset>
@@ -163,15 +142,6 @@ jQuery('#list2').Accordion({
 			</div>
 		</div>
 		
-		<h3>Code</h3>
-		<pre><code class="mix">jQuery('#list3').Accordion({
-	showSpeed: 1000,
-	hideSpeed: 150,
-	header: 'div.title',
-	active: false,
-	alwaysOpen: false,
-	animated: false
-});</code></pre>
 	</fieldset>
 		
 		<div id="switch">
