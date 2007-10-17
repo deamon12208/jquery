@@ -86,6 +86,7 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 		currentTarget: null,
 		lastTarget: null,
 		prepareCallbackObj: function(self, that) {
+			if (!self.pos) self.pos = [0, 0];
 			return {
 				helper: self.helper,
 				position: { left: self.pos[0], top: self.pos[1] },
