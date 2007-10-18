@@ -1,3 +1,4 @@
+- document focusInvalid()
 - document validation lifecycle: setup (add event handlers), run validation (prepare form, validate elements, display errors/submit form)
 	 -> show where the user can hook in via callbacks
 	 
