@@ -270,6 +270,13 @@ function customRange(input) {
 						<input type="text" size="10" id="openDatePlus7"/></p>
 					<pre><code>$('#openDateJan01').datepicker({defaultDate: new Date(2007, 1 - 1, 1)});
 $('#openDatePlus7').datepicker({defaultDate: +7});</code></pre>
+					<p>Display dates without the century. The century is determined based on the
+						<code>shortYearCutoff</code> setting, which defaults to 10 years in the future ('+10').
+						Year values less than or equal to this cutoff are interpreted as being in the current
+						century, while those greater than the cutoff are taken to be in the previous century.</p>
+					<p><span class="demoLabel">No century:</span>
+						<input type="text" size="10" id="noCentury"/></p>
+					<pre><code>$('#noCentury').datepicker({useShortYear: true});</code></pre>
 					<p>Additional settings let you move the <em>Clear</em>/<em>Close</em> controls
 						to the bottom and display the days in other months (non-selectable).
 						A callback function is also added to operate when a date is selected.

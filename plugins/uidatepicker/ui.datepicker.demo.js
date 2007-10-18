@@ -55,6 +55,7 @@ $(document).ready(function () {
 	// Miscellaneous
 	$('#openDateJan01').datepicker({defaultDate: new Date(2007, 1 - 1, 1)});
 	$('#openDatePlus7').datepicker({defaultDate: +7});
+	$('#noCentury').datepicker({useShortYear: true});
 	$('#addSettings').datepicker({closeAtTop: false,
 		showOtherMonths: true, onSelect: alertDate});
 	$('#linkedDates').datepicker({minDate: new Date(2001, 1 - 1, 1),

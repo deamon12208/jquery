@@ -54,6 +54,10 @@ function Datepicker() {
 			// either relative to current year (-nn:+nn) or absolute (nnnn:nnnn)
 		changeFirstDay: true, // True to click on day name to change, false to remain as set
 		showOtherMonths: false, // True to show dates in other months, false to leave blank
+		useShortYear: false, // True to show years as YY, false to show them as YYYY
+		shortYearCutoff: '+10', // Short year values < this are in the current century,
+			// > this are in the previous century, 
+			// string value starting with '+' for current year + value
 		minDate: null, // The earliest selectable date, or null for no limit
 		maxDate: null, // The latest selectable date, or null for no limit
 		speed: 'medium', // Speed of display/closure
@@ -690,21 +694,31 @@ $.extend(DatepickerInstance.prototype, {
 		var dateFormat = this._get('dateFormat');
 		var currentDate = this._input.val().split(dateFormat.charAt(3));
 		this._endDay = this._endMonth = this._endYear = null;
+		var shortYearCutoff = this._get('shortYearCutoff');
+		shortYearCutoff = (typeof shortYearCutoff != 'string' ? shortYearCutoff :
+			new Date().getFullYear() % 100 + parseInt(shortYearCutoff, 10));
+		var checkYear = function(year) {
+			if (year >= 100) {
+				return year;
+			}
+			var fullYear = new Date().getFullYear();
+			return fullYear - (fullYear % 100) + year + (year <= shortYearCutoff ? 0 : -100);
+		};
 		if (currentDate.length == 3) {
 			this._currentDay = parseInt(currentDate[dateFormat.indexOf('D')], 10);
 			this._currentMonth = parseInt(currentDate[dateFormat.indexOf('M')], 10) - 1;
-			this._currentYear = parseInt(currentDate[dateFormat.indexOf('Y')], 10);
+			this._currentYear = checkYear(parseInt(currentDate[dateFormat.indexOf('Y')], 10));
 		} 
 		else if (currentDate.length == 5) { // if it's a date range
 			currentDateArray = this._input.val().split(this._get('rangeSeparator'));
 			currentDate = currentDateArray[0].split(dateFormat.charAt(3));
 			this._currentDay = parseInt(currentDate[dateFormat.indexOf('D')], 10);
 			this._currentMonth = parseInt(currentDate[dateFormat.indexOf('M')], 10) - 1;
-			this._currentYear = parseInt(currentDate[dateFormat.indexOf('Y')], 10);
+			this._currentYear = checkYear(parseInt(currentDate[dateFormat.indexOf('Y')], 10));
 			currentDate = currentDateArray[1].split(dateFormat.charAt(3));
 			this._endDay = parseInt(currentDate[dateFormat.indexOf('D')], 10);
 			this._endMonth = parseInt(currentDate[dateFormat.indexOf('M')], 10) - 1;
-			this._endYear = parseInt(currentDate[dateFormat.indexOf('Y')], 10);
+			this._endYear = checkYear(parseInt(currentDate[dateFormat.indexOf('Y')], 10));
 		}
 		else {
 			var date = this._getDefaultDate();
@@ -982,13 +996,14 @@ $.extend(DatepickerInstance.prototype, {
 			day = day.getDate();
 		}
 		month++; // adjust javascript month
+		year = (this._get('useShortYear') ? year % 100 : year);
 		var dateFormat = this._get('dateFormat');
 		var dateString = '';
 		for (var i = 0; i < 3; i++) {
 			dateString += dateFormat.charAt(3) +
 				(dateFormat.charAt(i) == 'D' ? (day < 10 ? '0' : '') + day :
 				(dateFormat.charAt(i) == 'M' ? (month < 10 ? '0' : '') + month :
-				(dateFormat.charAt(i) == 'Y' ? year : '?')));
+				(dateFormat.charAt(i) == 'Y' ? (year < 10 ? '0' : '') + year : '?')));
 		}
 		return dateString.substring(dateFormat.charAt(3) ? 1 : 0);
 	}
