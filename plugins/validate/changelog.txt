@@ -7,13 +7,21 @@
 * Added remember-the-milk-demo (thanks RTM team for the permission!)
 * Added marketo-demo (thanks Glen Lipka!)
 * Added support for ajax-validation, see method "remote"
-* Added validator.size(): returns the number of current errors
+
+1.1.1
+-----
+
+* Fixed invalid XHTML, preventing error label creation in IE since jQuery 1.1.4
+* Fixed and improved String.format: Global search & replace, better handling of array arguments
+* Fixed cancel-button handling to use validator-object for storing state instead of form element
+* Fixed name selectors to handle "complex" names, eg. containing brackets ("list[]")
+* Added button and disabled elements to exclude from validation
+* Moved element event handlers to refresh to be able to add handlers to new elements
+* Fixed email validation to allow long top level domains (eg. ".travel")
 * Moved showErrors() from valid() to form()
-* Fixed selectors for form-element-names containing brackets etc.
-* Improved email method (according to http://blogs.nonado.net/diamond/2006/02/08/email-address-validation/ )
+* Added validator.size(): returns the number of current errors
 * Call submitHandler with validator as scope for easier access of it's methods, eg. to find error labels using errorsFor(Element)
-* Improved String.format: Global search & replace, better handling of array arguments
-* Always ignore disabled elements, don't validate them
+* Compatible with jQuery 1.1.x and 1.2.x
 
 1.1
 ---

@@ -684,8 +684,8 @@ jQuery.extend(jQuery.validator, {
 			
 			// select all valid inputs inside the form (no submit or reset buttons)
 			this.elements = jQuery(this.currentForm)
-			.find("input, select, textarea, button")
-			.not(":submit, :reset, :button")
+			.find("input, select, textarea")
+			.not(":submit, :reset")
 			.not("[@disabled]")
 			.not( this.settings.ignore )
 			.filter(function() {
@@ -836,7 +836,7 @@ jQuery.extend(jQuery.validator, {
 				}
 			} else {
 				// create label
-				label = jQuery("<" + this.settings.errorElement + "></" + this.settings.errorElement + ">")
+				label = jQuery("<" + this.settings.errorElement + "/>")
 					.attr({"for":  this.idOrName(element), generated: true})
 					.addClass(this.settings.errorClass)
 					.html(message || "");
