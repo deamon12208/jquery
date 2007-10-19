@@ -1,0 +1,167 @@
+/* Main Style Sheet for jQuery datepicker */
+#datepicker_div, .datepicker_inline {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	padding: 0;
+	margin: 0;
+	background: #ddd;
+}
+#datepicker_div {
+	display: none;
+	border: 1px solid #FF9900;
+	z-index: 10; /*must have*/ 
+}
+#datepicker_div, .datepicker_control, .datepicker_links, .datepicker_header, .datepicker {
+	width: 185px;
+}
+.datepicker_inline {
+	float: left;
+	display: block;
+	border: 0;
+}
+.datepicker_dialog {
+	padding: 5px !important;
+	border: 4px ridge #ddd !important;
+}
+button.datepicker_trigger {
+	width: 25px;
+}
+img.datepicker_trigger {
+	margin: 2px;
+	vertical-align: middle;
+}
+.datepicker_prompt {
+	float: left;
+	width: 181px;
+	padding: 2px;
+	background: #ddd;
+	color: #000;
+}
+* html .datepicker_prompt {
+	width: 185px;
+}
+.datepicker_control, .datepicker_links, .datepicker_header, .datepicker {
+	clear: both;
+	float: left;
+	color: #fff;
+}
+.datepicker_control {
+	background: #FF9900;
+}
+.datepicker_links {
+	background: #E0F4D7;
+}
+.datepicker_control, .datepicker_links {
+	font-weight: bold;
+	font-size: 80%;
+	letter-spacing: 1px;
+}
+.datepicker_links label { /* disabled links */
+	padding: 2px 5px;
+	color: #888;
+}
+.datepicker_clear, .datepicker_prev {
+	float: left;
+}
+.datepicker_current {
+	float: left;
+	width: 35%;
+	text-align: center;
+}
+.datepicker_close, .datepicker_next {
+	float: right;
+}
+.datepicker_header {
+	background: #83C948;
+	text-align: center;
+	font-weight: bold;
+}
+.datepicker_header select {
+	background: #83C948;
+	color: #000;
+	border: 0px;
+	font-weight: bold;
+}
+.datepicker {
+	background: #ccc;
+	text-align: center;
+	font-size: 100%;
+}
+.datepicker a {
+	display: block;
+	width: 100%;
+}
+.datepicker .datepicker_titleRow {
+	background: #B1DB87;
+	color: #000 !important;
+}
+.datepicker .datepicker_daysRow {
+	background: #FFF;
+	color: #666;
+}
+.datepicker .datepicker_daysCell {
+	color: #000;
+	border: 1px solid #ddd;
+}
+#datepicker .datepicker_daysCell a{
+	display: block;
+}
+.datepicker .datepicker_weekEndCell {
+	background: #E0F4D7;
+}
+.datepicker .datepicker_daysCellOver {
+	background: #fff;
+	border: 1px solid #777;
+}
+.datepicker .datepicker_unselectable {
+	color: #888;
+}
+.datepicker_today {
+	background: #ccc !important;
+}
+.datepicker_currentDay {
+	background: #999 !important;
+}
+
+/* ________ datepicker LINKS _______
+
+** Reset link properties and then override them with !important */
+#datepicker_div a, .datepicker_inline a {
+	cursor: pointer;
+	margin: 0;
+	padding: 0;
+	background: none;
+	color: #000;
+}
+.datepicker_inline .datepicker_links a {
+	padding: 0 5px !important;
+}
+.datepicker_control a, .datepicker_links a {
+	padding: 2px 5px !important;
+	color: #000 !important;
+}
+.datepicker_titleRow a {
+	color: #000 !important;
+}
+.datepicker_control a:hover {
+	/*background: #fdd !important;*/
+	color: #333 !important;
+}
+.datepicker_links a:hover, .datepicker_titleRow a:hover {
+	background: #FFF !important;
+	color: #333 !important;
+}
+
+/* ___________ IE6 IFRAME FIX ________ */
+
+.datepicker_cover {
+    display: none; /*sorry for IE5*/
+    display/**/: block; /*sorry for IE5*/
+    position: absolute; /*must have*/
+    z-index: -1; /*must have*/
+    filter: mask(); /*must have*/
+    top: -4px; /*must have*/
+    left: -4px; /*must have*/
+    width: 193px; /*must have to match width and borders*/
+    height: 200px; /*must have to match maximum height*/ 
+}
