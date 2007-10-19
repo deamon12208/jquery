@@ -127,7 +127,7 @@ img.datepicker_trigger {
 	background: #999 !important;
 }
 
-/* ________ CALENDAR LINKS _______
+/* ________ Datepicker Links _______
 
 ** Reset link properties and then override them with !important */
 #datepicker_div a, .datepicker_inline a {
