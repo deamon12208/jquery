@@ -23,25 +23,25 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 <meta http-equiv="Content-Language" content="en" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>jQuery UI Demo Application: Gallery</title>
-<link rel="stylesheet" href="../../../../themes/flora/flora.all.css" type="text/css">
+<link rel="stylesheet" href="../../../themes/flora/flora.all.css" type="text/css">
 <link rel="stylesheet" href="css/style.css" type="text/css">
 
-<script type="text/javascript" src="../../../../jquery/src/core.js"></script>
-<script type="text/javascript" src="../../../../jquery/src/selector.js"></script>
-<script type="text/javascript" src="../../../../jquery/src/event.js"></script>
-<script type="text/javascript" src="../../../../jquery/src/ajax.js"></script>
-<script type="text/javascript" src="../../../../jquery/src/fx.js"></script>
-<script type="text/javascript" src="../../../../jquery/src/offset.js"></script>
-<script type="text/javascript" src="../../../dimensions/jquery.dimensions.js"></script>
-<script type="text/javascript" src="../../../mousewheel/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="../../../jquery/src/core.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+<script type="text/javascript" src="../../../plugins/dimensions/jquery.dimensions.js"></script>
+<script type="text/javascript" src="../../../plugins/mousewheel/jquery.mousewheel.js"></script>
 
 
-<script type="text/javascript" src="../../ui.mouse.js"></script>
-<script type="text/javascript" src="../../ui.slider.js"></script>
-<script type="text/javascript" src="../../ui.draggable.js"></script>
-<script type="text/javascript" src="../../ui.draggable.ext.js"></script>
-<script type="text/javascript" src="../../ui.droppable.js"></script>
-<script type="text/javascript" src="../../ui.droppable.ext.js"></script>
+<script type="text/javascript" src="../../current/ui.mouse.js"></script>
+<script type="text/javascript" src="../../current/ui.slider.js"></script>
+<script type="text/javascript" src="../../current/ui.draggable.js"></script>
+<script type="text/javascript" src="../../current/ui.draggable.ext.js"></script>
+<script type="text/javascript" src="../../current/ui.droppable.js"></script>
+<script type="text/javascript" src="../../current/ui.droppable.ext.js"></script>
 <script src="jquery.ifixpng.js" type="text/javascript"></script>
 
 <script type="text/javascript" src="behaviour.js"></script>
