@@ -271,11 +271,12 @@
                 hideTab(clicked, $hide, $show);
             }
 
-            // tab click handler
-            function tabClick(e) {
+            // attach tab click event, avoid duplicates from former tabifying
+            var tabsEvent = o.event + '.ui-tabs';
+            this.$tabs.unbind(tabsEvent).bind(tabsEvent, function() {
 
                 //var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
-                var $li = $(this).parents('li:eq(0)'),
+                var $li = $(this).parent('li'),
                     $hide = self.$containers.filter(':visible'),
                     $show = $(this.hash);
 
@@ -347,10 +348,7 @@
                 //return o.bookmarkable && !!trueClick; // convert trueClick == undefined to Boolean required in IE
                 return false;
 
-            }
-
-            // attach click event, avoid duplicates from former tabifying
-            this.$tabs.unbind(o.event, tabClick).bind(o.event, tabClick);
+            });
 
         },
         add: function(url, text, position) {
