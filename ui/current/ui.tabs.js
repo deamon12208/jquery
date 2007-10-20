@@ -84,12 +84,16 @@
             hide: function() {},
             show: function() {},
             load: function() {},
+            
+            // templates
+            tabTemplate: '<li><a href="#{href}"><span>#{text}</span></a></li>',
+            panelTemplate: '<div></div>',
 
             // CSS classes
             navClass: 'ui-tabs-nav',
             selectedClass: 'ui-tabs-selected',
             disabledClass: 'ui-tabs-disabled',
-            containerClass: 'ui-tabs-container',
+            panelClass: 'ui-tabs-container',
             hideClass: 'ui-tabs-hide',
             loadingClass: 'ui-tabs-loading'
 
@@ -131,7 +135,7 @@
                     var id = a.title && a.title.replace(/\s/g, '_') || o.idPrefix + (self.count + 1) + '-' + (i + 1);
                     a.href = '#' + id;
                     self.$containers = self.$containers.add(
-                        $('#' + id)[0] || $('<div id="' + id + '" class="' + o.containerClass + '"></div>')
+                        $('#' + id)[0] || $(o.panelTemplate).attr('id', id).addClass(o.panelClass)
                             .insertAfter( self.$containers[i - 1] || self.source )
                     );
                 }
@@ -167,7 +171,7 @@
                 $(this.source).is('.' + o.navClass) || $(this.source).addClass(o.navClass);
                 this.$containers.each(function() {
                     var $this = $(this);
-                    $this.is('.' + o.containerClass) || $this.addClass(o.containerClass);
+                    $this.is('.' + o.panelClass) || $this.addClass(o.panelClass);
                 });
 
                 // highlight tab
@@ -362,10 +366,10 @@
                 if (url.indexOf('#') == 0) { // ajax container is created by tabify automatically
                     var $container = $(url);
                     // try to find an existing element before creating a new one
-                    ($container.length && $container || $('<div id="' + url.replace('#', '') + '" class="' + o.containerClass + ' ' + o.hideClass + '"></div>'))
+                    ($container.length && $container || $(o.panelTemplate).attr('id', url.replace('#', '')).addClass(o.panelClass).addClass(o.hideClass))
                         [method](this.$containers[position - 1]);
                 }
-                $('<li><a href="' + url + '"><span>' + text + '</span></a></li>')
+                $(o.tabTemplate.replace(/#\{href\}/, url).replace(/#\{text\}/, text))
                     [method](this.$tabs.slice(position - 1, position).parents('li:eq(0)'));
                 this.tabify();
                 o.add(this.$tabs[position - 1], this.$containers[position - 1]); // callback
