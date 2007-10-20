@@ -8,12 +8,9 @@
 
         <title>jQuery UI Tabs</title>
 
-        <link rel="stylesheet" href="../../../themes/light/light.css" type="text/css" media="print, projection, screen">
-        <link rel="stylesheet" href="../../../themes/light/light.tabs.css" type="text/css" media="print, projection, screen">
-        <link rel="stylesheet" href="../../../themes/dark/dark.css" type="text/css" media="print, projection, screen">
-        <link rel="stylesheet" href="../../../themes/dark/dark.tabs.css" type="text/css" media="print, projection, screen">
-        <link rel="stylesheet" href="../../../themes/flora/flora.css" type="text/css" media="print, projection, screen">
-        <link rel="stylesheet" href="../../../themes/flora/flora.tabs.css" type="text/css" media="print, projection, screen">
+        <link rel="stylesheet" href="../../../themes/light/light.tabs.css" type="text/css" media="print, projection, screen" title="Light">
+        <link rel="alternate stylesheet" href="../../../themes/dark/dark.tabs.css" type="text/css" media="print, projection, screen" title="Dark">
+        <link rel="alternate stylesheet" href="../../../themes/flora/flora.tabs.css" type="text/css" media="print, projection, screen" title="Flora">
         <script type="text/javascript" src="../../../jquery/src/core.js"></script>
         <script type="text/javascript" src="../../../jquery/src/selector.js"></script>
         <script type="text/javascript" src="../../../jquery/src/event.js"></script>
@@ -74,18 +71,6 @@
                 });
 
             });
-        </script>
-
-        <!-- Toggle Themes -->
-        <script type="text/javascript" src="../demo/themes.js"></script>
-        <script type="text/javascript">
-          $(function(){
-              $("body").themes({
-                "light":"Light",
-                "dark":"Dark",
-                "flora":"Flora"
-              }).appendTo("#themes");
-          });
         </script>
 
         <style type="text/css" media="screen, projection">
