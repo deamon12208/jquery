@@ -23,7 +23,7 @@ class Uploader.UploaderBackend {
 
 	// Public variables
 	private var movieID:String;
-	private var fileMasks:String;
+	private var fileFilters:String;
 	private var maxFilesize:Number;
 	private var maxQueueSize:Number;
 	private var maxQueueCount:Number;
@@ -43,11 +43,11 @@ class Uploader.UploaderBackend {
 	function UploaderBackend() {
 		// Get flashvars
 		movieID = _root.movieID;
-		fileMasks = _root.fileMasks;
-		maxFilesize = _root.maxFilesize;
-		maxQueueSize = _root.maxQueueSize;
-		maxQueueCount = _root.maxQueueCount;
 		backendScript = _root.backendScript;
+		fileFilters = _root.fileFilters;
+		maxFilesize = _root.maxFilesize;
+		maxQueueCount = _root.maxQueueCount;
+		maxQueueSize = _root.maxQueueSize;
 
 		// Security fix
 		System.security.allowDomain("*");
@@ -73,10 +73,10 @@ class Uploader.UploaderBackend {
 		fileMask = new Array();
 		var arrTemp1:Array;
 		var arrTemp2:Array;
-		if (fileMasks.indexOf('||')) {
-			arrTemp1 = fileMasks.split('||');
+		if (fileFilters.indexOf('||')) {
+			arrTemp1 = fileFilters.split('||');
 		} else {
-			arrTemp1 = [fileMasks];
+			arrTemp1 = [fileFilters];
 		}
 
 		// Build filemask
@@ -86,7 +86,7 @@ class Uploader.UploaderBackend {
 		}
 
 		// Call home to ET
-		ExternalInterface.call('$.ui.upload.callback', 'swfLoaded', this.movieID, (backendScript.length == 0) ? false : true);
+		ExternalInterface.call('$.ui.uploader.callback', 'UploaderInitialized', this.movieID, (backendScript.length == 0) ? false : true);
 
 		// Start a new FileReferenceList
 		this.resetObject();
@@ -212,7 +212,7 @@ class Uploader.UploaderBackend {
 	 */
 	private function browseForFiles():Void {
 		// Callback to show greybox or something
-		ExternalInterface.call('$.ui.upload.callback', 'dialogPreShow', this.movieID);
+		ExternalInterface.call('$.ui.uploader.callback', 'dialogPreShow', this.movieID);
 
 		// Show the dialog
 		fileList.browse(fileMask);
@@ -224,7 +224,7 @@ class Uploader.UploaderBackend {
 	 * @return {Void}
 	 */
 	private function uploadCancel():Void {
-		ExternalInterface.call('$.ui.upload.callback', 'dialogPostShow', this.movieID, false);
+		ExternalInterface.call('$.ui.uploader.callback', 'dialogPostShow', this.movieID, false);
 	};
 
 	/**
@@ -239,7 +239,7 @@ class Uploader.UploaderBackend {
 		var bQueueCountOk:Boolean;
 
 		// Callback to hide greybox or summit like that ;)
-		ExternalInterface.call('$.ui.upload.callback', 'dialogPostShow', this.movieID, true);
+		ExternalInterface.call('$.ui.uploader.callback', 'dialogPostShow', this.movieID, true);
 
 		// Loop through all files in fileList
 		var fileListArray:Array = fileRefList.fileList;
@@ -251,7 +251,7 @@ class Uploader.UploaderBackend {
 						ctStart: 0
 					};
 
-			// Check for errors 
+			// Check for errors
 			bFilesizeOk = checkFilesize(oTemp);
 			bQueueSizeOk = checkQueueSize(oTemp);
 			bQueueCountOk = ((maxQueueCount != -1) && ((fileQueue.length + 1) > maxQueueCount)) ? false : true;
@@ -261,19 +261,19 @@ class Uploader.UploaderBackend {
 
 				// Queue is full
 				if (!bQueueCountOk) {
-					ExternalInterface.call('$.ui.upload.callback', 'queueErrorCount', this.movieID, oData, oProgress);
+					ExternalInterface.call('$.ui.uploader.callback', 'queueErrorCount', this.movieID, oData, oProgress);
 					return; // Stop trying to add other files, queue is full!
 				}
-				
+
 				// File was to BIG
 				if (!bFilesizeOk) {
-					ExternalInterface.call('$.ui.upload.callback', 'fileErrorSize', this.movieID, oData, oProgress);
+					ExternalInterface.call('$.ui.uploader.callback', 'fileErrorSize', this.movieID, oData, oProgress);
 					continue;
 				}
-				
+
 				// File did not fit into the current queue
 				if (!bQueueSizeOk) {
-					ExternalInterface.call('$.ui.upload.callback', 'queueErrorSize', this.movieID, oData, oProgress);
+					ExternalInterface.call('$.ui.uploader.callback', 'queueErrorSize', this.movieID, oData, oProgress);
 					continue;
 				}
 			}
@@ -287,7 +287,7 @@ class Uploader.UploaderBackend {
 			// Phone home
 			var oData:Object = getDataObject(oTemp);
 			var oProgress:Object = getProgressObject(oTemp, 0, oTemp.size);
-			ExternalInterface.call('$.ui.upload.callback', 'fileAdded', this.movieID, getDataObject(oTemp));
+			ExternalInterface.call('$.ui.uploader.callback', 'fileAdded', this.movieID, getDataObject(oTemp));
 		};
 	};
 
@@ -310,9 +310,9 @@ class Uploader.UploaderBackend {
 					fileQueue[i].oFile.cancel();
 
 					// Call home E.T.
-					ExternalInterface.call('$.ui.upload.callback', 'fileCancelled', this.movieID, oData, oProgress);
+					ExternalInterface.call('$.ui.uploader.callback', 'fileCancelled', this.movieID, oData, oProgress);
 				} else {
-					ExternalInterface.call('$.ui.upload.callback', 'fileRemoved', this.movieID, oData, oProgress);
+					ExternalInterface.call('$.ui.uploader.callback', 'fileRemoved', this.movieID, oData, oProgress);
 				}
 
 				// Remove it from the queue
@@ -333,27 +333,22 @@ class Uploader.UploaderBackend {
 				qtStart = getTimer();
 
 				// Empty queue
-				ExternalInterface.call('$.ui.upload.callback', 'queueStarted', this.movieID);
+				ExternalInterface.call('$.ui.uploader.callback', 'queueStarted', this.movieID);
 			} else {
 				// Empty queue
-				ExternalInterface.call('$.ui.upload.callback', 'queueEmpty', this.movieID);
+				ExternalInterface.call('$.ui.uploader.callback', 'queueEmpty', this.movieID);
 				return;
 			}
 		}
 
 		// Get the next file to upload
-		if (iCurrentFile <= fileQueue.length) {
-			// Increase current file pointer
-			iCurrentFile++;
+		if (iCurrentFile > fileQueue.length) {
+			// All done, so get some progress to show off
+			var oData:Object = getDataObject(fileQueue[iCurrentFile]);
+			var oProgress:Object = getProgressObject(fileQueue[iCurrentFile], 0, fileQueue[iCurrentFile].oFile.size);
 
-			// Get file
-			if (!FileReference(fileQueue[iCurrentFile].oFile)) {
-				// Increase counter if current file is not valid
-				queueUploadNext();
-			}
-		} else {
 			// Call home to ET
-			ExternalInterface.call('$.ui.upload.callback', 'queueCompleted', this.movieID);
+			ExternalInterface.call('$.ui.uploader.callback', 'queueCompleted', this.movieID, oData, oProgress);
 
 			// Reset the filequeue
 			this.resetObject();
@@ -361,10 +356,20 @@ class Uploader.UploaderBackend {
 			return;
 		}
 
+		// Increase current file pointer
+		iCurrentFile++;
+
+		// Get file
+		if (!FileReference(fileQueue[iCurrentFile].oFile)) {
+			// Increase counter if current file is not valid
+			queueUploadNext();
+			return;
+		}
+
 		// Call home E.T. - file obj, file count & file queue length
 		var oData:Object = getDataObject(fileQueue[iCurrentFile]);
 		var oProgress:Object = getProgressObject(fileQueue[iCurrentFile], 0, fileQueue[iCurrentFile].oFile.size);
-		ExternalInterface.call('$.ui.upload.callback', 'fileStarted', this.movieID, oData, oProgress);
+		ExternalInterface.call('$.ui.uploader.callback', 'fileStarted', this.movieID, oData, oProgress);
 
 		// Get timer
 		fileQueue[iCurrentFile].ctStart = getTimer();
@@ -387,7 +392,7 @@ class Uploader.UploaderBackend {
 	private function uploadProgress(file:FileReference, bytesLoaded:Number, bytesTotal:Number):Void  {
 		var oData:Object = getDataObject(fileQueue[iCurrentFile]);
 		var oProgress:Object = getProgressObject(fileQueue[iCurrentFile], bytesLoaded, bytesTotal);
-		ExternalInterface.call('$.ui.upload.callback', 'fileProgress', this.movieID, oData, oProgress);
+		ExternalInterface.call('$.ui.uploader.callback', 'fileProgress', this.movieID, oData, oProgress);
 	};
 
 	/**
@@ -404,7 +409,7 @@ class Uploader.UploaderBackend {
 		qbDone+= file.size;
 
 		// Phone home
-		ExternalInterface.call('$.ui.upload.callback', 'fileCompleted', this.movieID, oData, oProgress);
+		ExternalInterface.call('$.ui.uploader.callback', 'fileCompleted', this.movieID, oData, oProgress);
 
 		// Process next file
 		queueUploadNext();
@@ -422,7 +427,7 @@ class Uploader.UploaderBackend {
 		// Phone home
 		var oData:Object = getDataObject(fileQueue[iCurrentFile]);
 		var oProgress:Object = getProgressObject(oData, 0, fileQueue[iCurrentFile].oFile.size);
-		ExternalInterface.call('$.ui.upload.callback', 'fileErrorIO', this.movieID, oData, oProgress);
+		ExternalInterface.call('$.ui.uploader.callback', 'fileErrorIO', this.movieID, oData, oProgress);
 
 		// Process next file
 		queueUploadNext();
@@ -441,7 +446,7 @@ class Uploader.UploaderBackend {
 		// Phone home
 		var oData:Object = getDataObject(fileQueue[iCurrentFile]);
 		var oProgress:Object = getProgressObject(oData, 0, file.size);
-		ExternalInterface.call('$.ui.upload.callback', 'fileErrorHTTP', this.movieID,  oData, oProgress, httpError);
+		ExternalInterface.call('$.ui.uploader.callback', 'fileErrorHTTP', this.movieID,  oData, oProgress, httpError);
 
 		// Process next file
 		queueUploadNext();
@@ -460,7 +465,7 @@ class Uploader.UploaderBackend {
 		// Phone home
 		var oData:Object = getDataObject(fileQueue[iCurrentFile]);
 		var oProgress:Object = getProgressObject(oData, 0, file.size);
-		ExternalInterface.call('$.ui.upload.callback', 'fileErrorSecurity', this.movieID,  oData, oProgress, errorString);
+		ExternalInterface.call('$.ui.uploader.callback', 'fileErrorSecurity', this.movieID,  oData, oProgress, errorString);
 
 		// Process next file
 		queueUploadNext();
@@ -487,16 +492,16 @@ class Uploader.UploaderBackend {
 						fileQueue[i].oFile.cancel();
 
 						// Call home E.T.
-						ExternalInterface.call('$.ui.upload.callback', 'fileCancelled', this.movieID, oData, oProgress);
+						ExternalInterface.call('$.ui.uploader.callback', 'fileCancelled', this.movieID, oData, oProgress);
 					} else {
-						ExternalInterface.call('$.ui.upload.callback', 'fileRemoved', this.movieID, oData, oProgress);
+						ExternalInterface.call('$.ui.uploader.callback', 'fileRemoved', this.movieID, oData, oProgress);
 					}
 				}
 			}
 		}
 
 		// Call home to ET
-		ExternalInterface.call('$.ui.upload.callback', 'queueCancelled', this.movieID);
+		ExternalInterface.call('$.ui.uploader.callback', 'queueCancelled', this.movieID);
 
 		// Reset the filequeue
 		this.resetObject();
