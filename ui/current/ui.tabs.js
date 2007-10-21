@@ -408,21 +408,17 @@
         enable: function(position) {
             var $li = this.$tabs.slice(position - 1, position).parent('li'), o = this.options;
             $li.removeClass(o.disabledClass);
-            if ($.browser.safari) { // fix disappearing tab after enabling in Safari... TODO check Safari 3
-                $li.animate({ opacity: 1 }, 1, function() {
-                    $li.css({ opacity: '' });
-                });
+            if ($.browser.safari) { // fix disappearing tab (that used opacity indicating disabling) after enabling in Safari 2...
+                $li.css('display', 'inline-block');
+                setTimeout(function() {
+                    $li.css('display', 'block')
+                }, 0)
             }
             o.enable(this.$tabs[position - 1], this.$panels[position - 1]); // callback
         },
         disable: function(position) {
-            var $li = this.$tabs.slice(position - 1, position).parent('li'), o = this.options;
-            if ($.browser.safari) { // fix opacity of tab after disabling in Safari... TODO check Safari 3
-                $li.animate({ opacity: 0 }, 1, function() {
-                   $li.css({ opacity: '' });
-                });
-            }
-            $li.addClass(this.options.disabledClass);
+            var o = this.options;      
+            this.$tabs.slice(position - 1, position).parent('li').addClass(o.disabledClass);
             o.disable(this.$tabs[position - 1], this.$panels[position - 1]); // callback
         },
         click: function(position) {
