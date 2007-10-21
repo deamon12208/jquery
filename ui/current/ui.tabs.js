@@ -238,7 +238,7 @@
             function hideTab(clicked, $hide, $show) {
                 $hide.animate(hideAnim, hideSpeed, function() { //
                     $hide.addClass(o.hideClass).css(resetCSS); // maintain flexible height and accessibility in print etc.
-                    if ($.browser.msie) {
+                    if ($.browser.msie && hideAnim['opacity']) {
                         $hide[0].style.filter = '';
                     }
                     o.hide(clicked, $hide[0], $show && $show[0] || null);
@@ -256,7 +256,7 @@
                 }
                 $show.animate(showAnim, showSpeed, function() {
                     $show.removeClass(o.hideClass).css(resetCSS); // maintain flexible height and accessibility in print etc.
-                    if ($.browser.msie) {
+                    if ($.browser.msie && showAnim['opacity']) {
                         $show[0].style.filter = '';
                     }
                     o.show(clicked, $show[0], $hide && $hide[0] || null);
