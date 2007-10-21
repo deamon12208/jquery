@@ -119,7 +119,7 @@
     $.extend($.ui.tabs.prototype, {
         count: 0,
         tabId: function(a, i) {
-            return a.title && a.title.replace(/\s/g, '_') || this.options.idPrefix + this.count + '-' + (i + 1);
+            return a.title ? a.title.replace(/\s/g, '_') : this.options.idPrefix + this.count + '-' + (i + 1);
         },
         tabify: function(init) {
 
@@ -383,7 +383,7 @@
                          this.load(position + 1, href);
                      }
                 }
-                o.add(this.$tabs[position - 1], this.$panels[position - 1]); // callback
+                o.add(this.$tabs[position], this.$panels[position]); // callback
             } else {
                 throw 'jQuery UI Tabs: Not enough arguments to add tab.';
             }
@@ -401,6 +401,7 @@
                 }
                 
                 this.tabify();
+                
                 o.remove($li.end()[0], $panel[0]); // callback
             }
         },
