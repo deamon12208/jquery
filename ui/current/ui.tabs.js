@@ -27,7 +27,7 @@
     };
 
     // other chainable tabs methods
-    $.each(['Add', 'Remove', 'Enable', 'Disable', 'Click', 'Load'], function(i, method) {
+    $.each(['Add', 'Remove', 'Enable', 'Disable', 'Click', 'Load', 'Href'], function(i, method) {
         $.fn['tabs' + method] = function() {
             var args = arguments;
             return this.each(function() {
@@ -464,6 +464,9 @@
                     o.load(self.$tabs[position - 1], self.$panels[position - 1]); // callback
                 });
             }, 0);
+        },
+        href: function(position, href) {
+            $.data(this.$tabs.slice(position - 1, position)[0], 'href', href);
         }
     });
 
