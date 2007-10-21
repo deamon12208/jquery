@@ -53,10 +53,9 @@
     border-color: #222;
     background: #222;
 }
-.ui-tabs-nav .ui-tabs-selected a {
+.ui-tabs-nav .ui-tabs-selected a:link, .ui-tabs-nav .ui-tabs-selected a:visited {
     border-color: #666;
     background: #aaa;
-    color: #000;
 }
 .ui-tabs-nav a span {    
     display: block;
@@ -65,8 +64,9 @@
 .ui-tabs-nav .ui-tabs-selected a span {
     padding-bottom: 3px;
     background: #fffafa;
+    color: #000; /* apply to span is required for IE 6 */
 }
-.ui-tabs-nav .ui-tabs-disabled a, .ui-tabs-nav .ui-tabs-disabled a span {
+.ui-tabs-nav .ui-tabs-disabled a:link, .ui-tabs-nav .ui-tabs-disabled a:visited, .ui-tabs-nav .ui-tabs-disabled a span {
     border-color: #ddd;
     background: #eee;
     color: #bbb;
