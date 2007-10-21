@@ -101,13 +101,12 @@
 
         options.event += '.ui-tabs'; // namespace event
 
-        this.tabify(true);
-
         // save instance for later
         var uuid = 'tabs' + $.ui.tabs.prototype.count++;
         $.ui.tabs.instances[uuid] = this;
         $.data(el, 'tabsUUID', uuid);
-
+        
+        this.tabify(true);
     };
 
     // static
@@ -119,6 +118,9 @@
     // instance methods
     $.extend($.ui.tabs.prototype, {
         count: 0,
+        tabId: function(a, i) {
+            return a.title && a.title.replace(/\s/g, '_') || this.options.idPrefix + this.count + '-' + (i + 1);
+        },
         tabify: function(init) {
 
             this.$tabs = $('a:first-child', this.source);
@@ -134,7 +136,7 @@
                 // remote tab
                 else {
                     $.data(a, 'href', a.href);
-                    var id = a.title && a.title.replace(/\s/g, '_') || o.idPrefix + (self.count + 1) + '-' + (i + 1);
+                    var id = self.tabId(a, i);
                     a.href = '#' + id;
                     self.$panels = self.$panels.add(
                         $('#' + id)[0] || $(o.panelTemplate).attr('id', id).addClass(o.panelClass)
@@ -186,11 +188,9 @@
                 }
 
                 // load if remote tab
-                if ($.data(this.$tabs[o.initial], 'href')) {
-                    this.load(o.initial + 1, $.data(this.$tabs[o.initial], 'href'));
-                    if (o.cache) {
-                        $.removeData(this.$tabs[o.initial], 'href'); // if loaded once do not load them again
-                    }
+                var href = this.$tabs[o.initial] && $.data(this.$tabs[o.initial], 'href');
+                if (href) {
+                    this.load(o.initial + 1, href);
                 }
 
                 // disabled tabs
@@ -326,9 +326,6 @@
                         self.load(self.$tabs.index(this) + 1, $.data(this, 'href'), function() {
                             switchTab(a, $hide, $show);
                         });
-                        if (o.cache) {
-                            $.removeData(this, 'href'); // if loaded once do not load them again
-                        }
                     } else {
                         switchTab(this, $hide, $show);
                     }
@@ -355,22 +352,37 @@
         add: function(url, text, position) {
             if (url && text) {
                 var o = this.options;
-                position = position || this.$tabs.length; // append by default
-                if (position >= this.$tabs.length) {
-                    var method = 'insertAfter';
-                    position = this.$tabs.length;
+                position = position || this.$tabs.length; // append by default                
+                
+                var $li = $(o.tabTemplate.replace(/#\{href\}/, url).replace(/#\{text\}/, text));
+                
+                if (url.indexOf('#') == 0) {
+                    var id = url.replace('#', '')
                 } else {
-                    var method = 'insertBefore';
+                    var id = this.tabId($('a:first-child', $li)[0], position);
                 }
-                if (url.indexOf('#') == 0) { // ajax container is created by tabify automatically
-                    var $panel = $(url);
-                    // try to find an existing element before creating a new one
-                    ($panel.length && $panel || $(o.panelTemplate).attr('id', url.replace('#', '')).addClass(o.panelClass).addClass(o.hideClass))
-                        [method](this.$panels[position - 1]);
+                
+                // try to find an existing element before creating a new one
+                var $panel = $('#' + id);
+                $panel = $panel.length && $panel || $(o.panelTemplate).attr('id', id).addClass(o.panelClass).addClass(o.hideClass);
+                if (position >= this.$tabs.length) {
+                    $li.appendTo(this.source);
+                    $panel.appendTo(this.source.parentNode);
+                } else {
+                    $li.insertBefore(this.$tabs.slice(position - 1, position).parent('li'));
+                    $panel.insertBefore(this.$panels[position - 1]);
                 }
-                $(o.tabTemplate.replace(/#\{href\}/, url).replace(/#\{text\}/, text))
-                    [method](this.$tabs.slice(position - 1, position).parents('li:eq(0)'));
+                
                 this.tabify();
+                
+                if (this.$tabs.length == 1) {
+                     $li.addClass(o.selectedClass);
+                     $panel.removeClass(o.hideClass);
+                     var href = $.data(this.$tabs[0], 'href');
+                     if (href) {
+                         this.load(position + 1, href);
+                     }
+                }
                 o.add(this.$tabs[position - 1], this.$panels[position - 1]); // callback
             } else {
                 throw 'jQuery UI Tabs: Not enough arguments to add tab.';
@@ -378,22 +390,22 @@
         },
         remove: function(position) {
             if (position && position.constructor == Number) {                
-                var $tab = this.$tabs.slice(position - 1, position).parent('li').remove(),
+                var $li = this.$tabs.slice(position - 1, position).parent('li').remove(),
                     $panel = this.$panels.slice(position - 1, position).remove(),
                     o = this.options;
                     
                 // If selected tab was removed focus tab to the right or
                 // tab to the left if last tab was removed.
-                if ($tab.is('.' + o.selectedClass)) {
+                if ($li.is('.' + o.selectedClass) && this.$tabs.length > 1) {
                     this.click(position + (position < this.$tabs.length ? 1 : -1));
                 }
                 
                 this.tabify();
-                o.remove($tab[0], $panel[0]); // callback
+                o.remove($li.end()[0], $panel[0]); // callback
             }
         },
         enable: function(position) {
-            var $li = this.$tabs.slice(position - 1, position).parents('li:eq(0)'), o = this.options;
+            var $li = this.$tabs.slice(position - 1, position).parent('li'), o = this.options;
             $li.removeClass(o.disabledClass);
             if ($.browser.safari) { // fix disappearing tab after enabling in Safari... TODO check Safari 3
                 $li.animate({ opacity: 1 }, 1, function() {
@@ -403,7 +415,7 @@
             o.enable(this.$tabs[position - 1], this.$panels[position - 1]); // callback
         },
         disable: function(position) {
-            var $li = this.$tabs.slice(position - 1, position).parents('li:eq(0)'), o = this.options;
+            var $li = this.$tabs.slice(position - 1, position).parent('li'), o = this.options;
             if ($.browser.safari) { // fix opacity of tab after disabling in Safari... TODO check Safari 3
                 $li.animate({ opacity: 0 }, 1, function() {
                    $li.css({ opacity: '' });
@@ -416,11 +428,9 @@
             this.$tabs.slice(position - 1, position).trigger(this.options.event);
         },
         load: function(position, url, callback) {
-            var self = this,
-                o = this.options,
-                $a = this.$tabs.slice(position - 1, position).addClass(o.loadingClass),
-                $span = $('span', $a),
-                text = $span.html();
+            var self = this, o = this.options,
+                $a = this.$tabs.slice(position - 1, position).addClass(o.loadingClass), a = $a[0];
+                $span = $('span', a), text = $span.html();
 
             // shift arguments
             if (url && url.constructor == Function) {
@@ -429,7 +439,7 @@
 
             // set new URL
             if (url) {
-                $.data($a[0], 'href', url);
+                $.data(a, 'href', url);
             }
 
             // load
@@ -437,7 +447,7 @@
                 $span.html('<em>' + o.spinner + '</em>');
             }
             setTimeout(function() { // timeout is again required in IE, "wait" for id being restored
-                $($a[0].hash).load(url, function() {
+                $(a.hash).load(url, function() {
                     if (o.spinner) {
                         $span.html(text);
                     }
@@ -446,6 +456,9 @@
                     // has completed.
                     if (callback && callback.constructor == Function) {
                         callback();
+                    }
+                    if (o.cache) {
+                        $.removeData(a, 'href'); // if loaded once do not load them again
                     }
                     o.load(self.$tabs[position - 1], self.$panels[position - 1]); // callback
                 });
