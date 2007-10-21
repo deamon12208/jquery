@@ -22,7 +22,7 @@ $(document).ready(function () {
 		function () { this.value = 'Enable'; $.datepicker.disableFor($('.invokeBoth')[0]); },
 		function () { this.value = 'Disable'; $.datepicker.enableFor($('.invokeBoth')[0]); });
 	$('#button1').click(function() { 
-		$.datepicker.showFor($('#invokeFocus')[0]);
+		$.datepicker.showFor('#invokeFocus');
 	});
 	$('#button2').click(function() { 
 		$.datepicker.dialogDatepicker($('#invokeDialog').val(),
@@ -77,7 +77,7 @@ $(document).ready(function () {
 	lastWeek.setDate(lastWeek.getDate() - 7);
 	$.datepicker.setDateFor('#rangeInline', lastWeek, nextWeek);
 	updateInlineRange2();
-	$('#datepicker_div_25').width(370); // Unfortunately not automatic
+	$('#datepicker_div_26').width(370); // Unfortunately not automatic
 	// Stylesheets
 	$('#altStyle').datepicker({buttonImage: 'img/calendar2.gif'});
 	$('#button3').click(function() { 
@@ -107,8 +107,8 @@ function nationalDays(date) {
 function localise() {
 	var language = $('#language').val();
 	$.localise('ui.datepicker', {language: language});
-	$.datepicker.reconfigureFor('#l10nDatepicker', $.datepicker.regional[language]);
-	$.datepicker.setDefaults($.datepicker.regional['']); // Reset for general usage
+	$.datepicker.reconfigureFor('#l10nDatepicker', $.datepicker.regional[language]).
+		setDefaults($.datepicker.regional['']); // Reset for general usage
 }
 
 // Customise two date pickers to work as a date range
@@ -173,8 +173,8 @@ function updateInlineRange() {
 	var dateFrom = $.datepicker.getDateFor(inlineFrom);
 	var dateTo = $.datepicker.getDateFor(inlineTo);
 	$('#inlineRange').val(formatDate(dateFrom) + ' to ' + formatDate(dateTo));
-	$.datepicker.reconfigureFor(inlineFrom, {maxDate: dateTo});
-	$.datepicker.reconfigureFor(inlineTo, {minDate: dateFrom});
+	$.datepicker.reconfigureFor(inlineFrom, {maxDate: dateTo}).
+		reconfigureFor(inlineTo, {minDate: dateFrom});
 }
 
 // Display the date range from a multi-month inline date picker

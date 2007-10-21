@@ -101,9 +101,10 @@ $.extend(Datepicker.prototype, {
 
 	/* Override the default settings for all instances of the date picker. 
 	   @param  settings  object - the new settings to use as defaults (anonymous object)
-	   @return void */
+	   @return the manager object */
 	setDefaults: function(settings) {
 		extendRemove(this._defaults, settings || {});
+		return this;
 	},
 
 	/* Handle keystrokes. */
@@ -111,12 +112,12 @@ $.extend(Datepicker.prototype, {
 		var inst = $.datepicker._getInst(this._calId);
 		if ($.datepicker._datepickerShowing) {
 			switch (e.keyCode) {
-				case 9:  $.datepicker.hideDatepicker(inst, '');
+				case 9:  $.datepicker.hideDatepicker('');
 						break; // hide on tab out
 				case 13: $.datepicker._selectDay(inst, inst._selectedMonth, inst._selectedYear,
 							$('td.datepicker_daysCellOver', inst._datepickerDiv)[0]);
 						break; // select the value on enter
-				case 27: $.datepicker.hideDatepicker(inst, inst._get('speed'));
+				case 27: $.datepicker.hideDatepicker(inst._get('speed'));
 						break; // hide on escape
 				case 33: $.datepicker._adjustDate(inst,
 							(e.ctrlKey ? -1 : -inst._get('stepMonths')), (e.ctrlKey ? 'Y' : 'M'));
@@ -211,8 +212,8 @@ $.extend(Datepicker.prototype, {
 	   @param  onSelect  function - the function(dateText) to call when a date is selected
 	   @param  settings  object - update the dialog date picker instance's settings (anonymous object)
 	   @param  pos       int[2] - coordinates for the dialog's position within the screen
-			leave empty for default (screen centre)
-	   @return void */
+	                     leave empty for default (screen centre)
+	   @return the manager object */
 	dialogDatepicker: function(dateText, onSelect, settings, pos) {
 		var inst = this._dialogInst; // internal instance
 		if (!inst) {
@@ -246,13 +247,14 @@ $.extend(Datepicker.prototype, {
 		if ($.blockUI) {
 			$.blockUI(this._datepickerDiv);
 		}
+		return this;
 	},
 
 	/* Enable the input field(s) for entry.
 	   @param  inputs  element - single input field or
 	                   string - the ID or other jQuery selector of the input field(s) or
 	                   object - jQuery collection of input fields
-	   @return void */
+	   @return the manager object */
 	enableFor: function(inputs) {
 		inputs = (inputs.jquery ? inputs : $(inputs));
 		inputs.each(function() {
@@ -263,13 +265,14 @@ $.extend(Datepicker.prototype, {
 			$.datepicker._disabledInputs = $.map($.datepicker._disabledInputs,
 				function(value) { return (value == $this ? null : value); }); // delete entry
 		});
+		return this;
 	},
 
 	/* Disable the input field(s) from entry.
 	   @param  inputs  element - single input field or
 	                   string - the ID or other jQuery selector of the input field(s) or
 	                   object - jQuery collection of input fields
-	   @return void */
+	   @return the manager object */
 	disableFor: function(inputs) {
 		inputs = (inputs.jquery ? inputs : $(inputs));
 		inputs.each(function() {
@@ -281,6 +284,7 @@ $.extend(Datepicker.prototype, {
 				function(value) { return (value == $this ? null : value); }); // delete entry
 			$.datepicker._disabledInputs[$.datepicker._disabledInputs.length] = this;
 		});
+		return this;
 	},
 
 	/* Is the input field disabled?
@@ -303,7 +307,7 @@ $.extend(Datepicker.prototype, {
 	                     string - the ID or other jQuery selector of the input field or
 	                     object - jQuery object for input field or div/span
 	   @param  settings  object - the new settings to update
-	   @return void */
+	   @return the manager object */
 	reconfigureFor: function(control, settings) {
 		control = (control.jquery ? control[0] :
 			(typeof control == 'string' ? $(control)[0] : control));
@@ -312,6 +316,7 @@ $.extend(Datepicker.prototype, {
 			extendRemove(inst._settings, settings || {});
 			this._updateDatepicker(inst);
 		}
+		return this;
 	},
 
 	/* Set the date for a date picker attached to an input field or division.
@@ -320,7 +325,7 @@ $.extend(Datepicker.prototype, {
 	                    object - jQuery object for input field or div/span
 	   @param  date     Date - the new date
 	   @param  endDate  Date - the new end date for a range (optional)
-	   @return void */
+	   @return the manager object */
 	setDateFor: function(control, date, endDate) {
 		control = (control.jquery ? control[0] :
 			(typeof control == 'string' ? $(control)[0] : control));
@@ -329,6 +334,7 @@ $.extend(Datepicker.prototype, {
 			inst._setDate(date, endDate);
 			this._updateDatepicker(inst);
 		}
+		return this;
 	},
 
 	/* Retrieve the date for a date picker attached to an input field or division.
@@ -348,7 +354,7 @@ $.extend(Datepicker.prototype, {
 	   @param  control  element - the input field attached to the date picker or
 	                    string - the ID or other jQuery selector of the input field or
 	                    object - jQuery object for input field
-	   @return void */
+	   @return the manager object */
 	showFor: function(control) {
 		control = (control.jquery ? control[0] :
 			(typeof control == 'string' ? $(control)[0] : control));
@@ -365,7 +371,7 @@ $.extend(Datepicker.prototype, {
 		var inst = $.datepicker._getInst(input._calId);
 		var beforeShow = inst._get('beforeShow');
 		extendRemove(inst._settings, (beforeShow ? beforeShow(input) : {}));
-		$.datepicker.hideDatepicker(inst, '');
+		$.datepicker.hideDatepicker('');
 		$.datepicker._lastInput = input;
 		inst._setDateFromField(input);
 		if ($.datepicker._inDialog) { // hide cursor
@@ -379,6 +385,7 @@ $.extend(Datepicker.prototype, {
 			css('left', $.datepicker._pos[0] + 'px').css('top', $.datepicker._pos[1] + 'px');
 		$.datepicker._pos = null;
 		$.datepicker._showDatepicker(inst);
+		return this;
 	},
 
 	/* Construct and display the date picker. */
@@ -453,16 +460,17 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Hide the date picker from view.
-	   @param  id     string/object - the ID of the current date picker instance,
-			or the instance itself
 	   @param  speed  string - the speed at which to close the date picker
 	   @return void */
-	hideDatepicker: function(id, speed) {
-		var inst = this._getInst(id);
+	hideDatepicker: function(speed) {
+		var inst = this._curInst;
+		if (!inst) {
+			return;
+		}
 		var rangeSelect = inst._get('rangeSelect');
 		if (rangeSelect && this._stayOpen) {
 			this._appendDate = true;
-			this._selectDate(id, inst._formatDate());
+			this._selectDate(inst, inst._formatDate());
 		}
 		this._stayOpen = false;
 		if (this._datepickerShowing) {
@@ -504,7 +512,7 @@ $.extend(Datepicker.prototype, {
 		if ((target.parents("#datepicker_div").length == 0) &&
 				(target.attr('class') != 'datepicker_trigger') &&
 				$.datepicker._datepickerShowing && !($.datepicker._inDialog && $.blockUI)) {
-			$.datepicker.hideDatepicker($.datepicker._curInst, '');
+			$.datepicker.hideDatepicker('');
 		}
 	},
 
@@ -578,7 +586,7 @@ $.extend(Datepicker.prototype, {
 		inst._selectedDay = $('a', td).html();
 		inst._selectedMonth = month;
 		inst._selectedYear = year;
-		this._selectDate(id);
+		this._selectDate(inst);
 		if (this._stayOpen) {
 			inst._endDay = inst._endMonth = inst._endYear = null;
 			inst._rangeStart = new Date(inst._selectedYear, inst._selectedMonth, inst._selectedDay);
@@ -629,7 +637,7 @@ $.extend(Datepicker.prototype, {
 		}
 		else {
 			if (!this._stayOpen) {
-				this.hideDatepicker(inst, inst._get('speed'));
+				this.hideDatepicker(inst._get('speed'));
 			}
 		}
 	},
@@ -783,7 +791,7 @@ $.extend(DatepickerInstance.prototype, {
 		var controls = '<div class="datepicker_control">' +
 			'<div class="datepicker_clear"><a onclick="jQuery.datepicker._clearDate(' + this._id + ');">' +
 			this._get('clearText') + '</a></div>' +
-			'<div class="datepicker_close"><a onclick="jQuery.datepicker.hideDatepicker(' + this._id + ');">' +
+			'<div class="datepicker_close"><a onclick="jQuery.datepicker.hideDatepicker();">' +
 			this._get('closeText') + '</a></div></div>';
 		var prompt = this._get('prompt');
 		var closeAtTop = this._get('closeAtTop');

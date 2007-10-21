@@ -389,8 +389,8 @@ function updateInlineRange() {
 	var dateFrom = $.datepicker.getDateFor(inlineFrom);
 	var dateTo = $.datepicker.getDateFor(inlineTo);
 	$('#inlineRange').val(formatDate(dateFrom) + ' to ' + formatDate(dateTo));
-	$.datepicker.reconfigureFor(inlineFrom, {maxDate: dateTo});
-	$.datepicker.reconfigureFor(inlineTo, {minDate: dateFrom});
+	$.datepicker.reconfigureFor(inlineFrom, {maxDate: dateTo}).
+		reconfigureFor(inlineTo, {minDate: dateFrom});
 }</code></pre>
 					<p>Or show a number of months at once and set the range directly.</p>
 					<p><span class="demoLabel">Inline date range with two months:</span>
