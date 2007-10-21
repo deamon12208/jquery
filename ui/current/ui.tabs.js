@@ -93,7 +93,7 @@
             navClass: 'ui-tabs-nav',
             selectedClass: 'ui-tabs-selected',
             disabledClass: 'ui-tabs-disabled',
-            panelClass: 'ui-tabs-container',
+            panelClass: 'ui-tabs-panel',
             hideClass: 'ui-tabs-hide',
             loadingClass: 'ui-tabs-loading'
 
