@@ -35,13 +35,11 @@
 }
 .ui-tabs-nav a, .ui-tabs-nav a span {
     display: block;
-    padding: 0 10px;
+    padding: 0 12px;
     background: url(i/tabs.png) no-repeat;
 }
 .ui-tabs-nav a {
-    position: relative;
-    top: 5px;
-    z-index: 2;
+    margin: 5px 0 0; /* position: relative makes opacity fail for disabled tab in IE */
     padding-left: 0;
     background-position: 100% 0;
     text-decoration: none;
@@ -52,16 +50,21 @@
     color: #fff;
 }
 .ui-tabs-nav .ui-tabs-selected a {
+    position: relative;
     top: 1px;
+    z-index: 2;
+    margin-top: 0;
     background-position: 100% -23px;
 }
 .ui-tabs-nav a span {
+    padding-top: 1px;
     padding-right: 0;
-    height: 21px;
+    height: 20px;
     background-position: 0 0;
-    line-height: 21px;
+    line-height: 20px;
 }
 .ui-tabs-nav .ui-tabs-selected a span {
+    padding-top: 0;
     height: 27px;
     background-position: 0 -23px;
     line-height: 27px;
@@ -74,6 +77,7 @@
 }
 .ui-tabs-disabled {
     opacity: .4;
+    filter: alpha(opacity=40);
 }
 .ui-tabs-nav .ui-tabs-disabled a:link, .ui-tabs-nav .ui-tabs-disabled a:visited {
     color: #000;
@@ -89,16 +93,10 @@
 }*/
 
 /* Additional IE specific bug fixes... */
-* html .ui-tabs-nav { /* auto clear, @ IE 6 & IE 7 Quirks Mode */
+* html .ui-tabs-nav, * html .ui-tabs-nav a, * html .ui-tabs-nav a span { /* auto clear and hasLayout, @ IE 6 & IE 7 Quirks Mode */
     display: inline-block;
 }
 *:first-child+html .ui-tabs-nav  { /* @ IE 7 Standards Mode - do not group selectors, otherwise IE 6 will ignore complete rule (because of the unknown + combinator)... */
     display: inline-block;
 }
-* html .ui-tabs-disabled {
-    position: relative; /* fixes opacity TODO test IE 7*/
-    filter: alpha(opacity=40);
-}
-*:first-child+html .ui-tabs-disabled {
-    filter: alpha(opacity=40);
-}
+
