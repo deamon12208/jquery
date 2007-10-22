@@ -15,6 +15,9 @@
 }
 
 /* Skin */
+.ui-tabs-nav, .ui-tabs-panel {
+    font-size: 11px;
+}
 .ui-tabs-nav {
     list-style: none;
     margin: 0;
@@ -38,8 +41,6 @@
     border: 1px solid;
     border-bottom: 0;
     padding: 1px 0 0;
-    font-size: 12px;
-    line-height: 1.2;
     text-decoration: none;
     white-space: nowrap; /* @ IE 6 */
     outline: 0; /* @ Firefox, prevent dotted border after click */
@@ -61,7 +62,13 @@
 .ui-tabs-nav a span {    
     display: block;
     padding: 2px 13px;
+    height: 15px; /* min-height in IE 6 */
+    min-height: 15px;
     background: #333;
+    line-height: 15px;
+}
+*>.ui-tabs-nav a span { /* hide from IE 6 */
+    height: auto;
 }
 .ui-tabs-nav .ui-tabs-selected a span {
     padding-bottom: 3px;
@@ -93,6 +100,6 @@
 * html .ui-tabs-nav { /* auto clear, @ IE 6 & IE 7 Quirks Mode */
     display: inline-block;
 }
-*:first-child+html .ui-tabs-nav  { /* @ IE 7 Standards Mode -do not group selectors, otherwise IE 6 will ignore complete rule (because of the unknown + combinator)... */
+*:first-child+html .ui-tabs-nav  { /* @ IE 7 Standards Mode - do not group selectors, otherwise IE 6 will ignore complete rule (because of the unknown + combinator)... */
     display: inline-block;
 }
