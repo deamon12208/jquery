@@ -147,7 +147,7 @@ This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML
     <h3>Examples</h3>
     <p>Here are some examples of how you can add a clueTip to your page:</p>
     <h4>Default Style</h4>
-    <div id="examples">    
+    <div id="examples"> 
       <ol>
         <li><strong>basic</strong>, no title attribute: This is the <a class="basic" href="ajax.htm" rel="ajax.htm">simplest example there is</a>.
           <div class="html">View the HTML</div>
@@ -248,6 +248,20 @@ This default value strips out tags from the <code>&lt;head&gt;</code> of an HTML
   positionBy: 'bottomTop'
 });</code></pre>
         </li>
+        <li><a class="jt" href="ajax3.htm" rel="ajax3.htm">togglable clueTip</a> can be turned off by unchecking the checkbox<br />
+          <input type="checkbox" name="cb" id="cb" checked="checked" /> <label for="cb">clueTips</label>
+          <div class="html">View the HTML</div>
+          <pre><code>&lt;a class="jt" href="ajax5.htm" rel="ajax5.htm"&gt;</code></pre>
+          <div class="jquery">View the jQuery</div>
+<pre><code>$('a.jt:eq(3)').cluetip({
+  cluetipClass: 'jtip', arrows: true, 
+  dropShadow: false, 
+  onActivate: function(e) {
+    var cb = $('#cb')[0];
+    return !cb || cb.checked;
+  }
+});</code></pre>       
+        </li>        
       </ol>
       <h4>Rounded Corners Theme</h4>
       <ol class="rounded">

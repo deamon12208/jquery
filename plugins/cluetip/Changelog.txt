@@ -1,7 +1,3 @@
-== To Do ==
-
-* provide example in demo that uses both hover and click  
-* "in IE7. If I leave your example page, go do something in another window, when I come back to your page the tooltips will not work until I reload your page."
 
 == New and Noteworthy ==
 

@@ -79,7 +79,7 @@
  * @option Boolean dropShadow: default is true; set it to false if you do not want the drop-shadow effect on the clueTip
  * @option Integer dropShadowSteps: default is 6; change this number to adjust the size of the drop shadow
  * @option Boolean sticky: default is false. Set to true to keep the clueTip visible until the user either closes it manually by clicking on the CloseText or display another clueTip.
- * @option Object fx: default is: {open: 'show', openSpeed: '', close: 'hide', closeSpeed: ''}. Change these to apply one of jQuery's effects when opening or closing the clueTip
+ * @option Object fx: default is: {open: 'show', openSpeed: ''}. Change these to apply one of jQuery's effects when opening the clueTip
  * @option String activation: default is 'hover'. Set to 'toggle' to force the user to click the element in order to activate the clueTip.
  * @option Object hoverIntent: default is {sensitivity: 3, interval: 50, timeout: 0}. If jquery.hoverintent.js plugin is included in <head>, hoverIntent() will be used with these settings instead of hover(). Set to false if for some reason you have the hoverintent plugin included but don't want to use it. For info on hoverIntent options, see http://cherne.net/brian/resources/jquery.hoverIntent.html
  * @option Function onShow: default is function (ct, c){} ; allows you to pass in your own function once the clueTip has shown.
@@ -118,9 +118,7 @@
       truncate:         0,
       fx: {             
                         open:       'show',
-                        openSpeed:  '',
-                        close:      'hide',
-                        closeSpeed: ''
+                        openSpeed:  ''
       },                
       hoverIntent: {    
                         sensitivity:  3,
@@ -237,7 +235,7 @@
         $cluetip.css({left: posX});
       } else {
         posX = (linkWidth > linkLeft && linkLeft > tipWidth)
-          || linkLeft + linkWidth + tipWidth > winWidth 
+          || linkLeft + linkWidth + tipWidth + lOffset > winWidth 
           ? linkLeft - tipWidth - lOffset 
           : linkWidth + linkLeft + lOffset;
         if ($this[0].tagName.toLowerCase() == 'area' || defaults.positionBy == 'mouse' || linkWidth + tipWidth > winWidth) { // position by mouse
@@ -357,14 +355,14 @@
       if (defaults.positionBy == 'fixed') {
         tipY = posY - defaults.dropShadowSteps + tOffset;
       } else if ( (posX < mouseX && Math.max(posX, 0) + tipWidth > mouseX) || defaults.positionBy == 'bottomTop') {
-        if (posY + tipHeight > sTop + wHeight && mouseY - sTop > tipHeight + tOffset) { 
+        if (posY + tipHeight + tOffset > sTop + wHeight && mouseY - sTop > tipHeight + tOffset) { 
           tipY = mouseY - tipHeight - tOffset;
           direction = 'top';
         } else { 
           tipY = mouseY + tOffset;
           direction = 'bottom';
         }
-      } else if ( posY + tipHeight > sTop + wHeight ) {
+      } else if ( posY + tipHeight + tOffset > sTop + wHeight ) {
         tipY = (tipHeight >= wHeight) ? sTop : sTop + wHeight - tipHeight - tOffset;
       } else if ($this.css('display') == 'block' || $this[0].tagName.toLowerCase() == 'area' || defaults.positionBy == "mouse") {
         tipY = bpY - tOffset;
@@ -416,7 +414,7 @@
 // close cluetip and reset title attribute if one exists
     var cluetipClose = function() {
       $cluetipOuter 
-      .parent()[defaults.fx.close](defaults.fx.closeSpeed).removeClass().end()
+      .parent().hide().removeClass().end()
       .children().empty();
       if (tipTitle) {
         $this.attr('title', tipTitle);
