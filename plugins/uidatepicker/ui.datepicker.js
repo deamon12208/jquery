@@ -225,18 +225,28 @@ $.extend(Datepicker.prototype, {
 		}
 		extendRemove(inst._settings, settings || {});
 		this._dialogInput.val(dateText);
+
+		var viewportWidth;
+		var viewportHeight;
+		if (window.innerWidth) { // Mozilla/Netscape/Opera/IE7
+			viewportWidth = window.innerWidth,
+			viewportHeight = window.innerHeight
+		}
+		else if (document.documentElement && document.documentElement.clientWidth &&
+				document.documentElement.clientWidth != 0) { // IE6 standards compliant
+			viewportWidth = document.documentElement.clientWidth,
+			viewportHeight = document.documentElement.clientHeight
+		}
+		else { // older IE
+			viewportWidth = document.getElementsByTagName('body')[0].clientWidth,
+			viewportHeight = document.getElementsByTagName('body')[0].clientHeight
+		}
 		
 		this._pos = pos || // should use actual width/height below
-			[($(window).width() / 2) - 100, ($(window).height() / 2) - 150];
-		
-		// Get position of window
-		if ( document.documentElement && (document.documentElement.scrollTop)) {
-			browserTopY = document.documentElement.scrollTop;
-		}
-		else {
-			browserTopY = document.body.scrollTop;
-		}	
-		this._pos[1] = this._pos[1] + browserTopY; // add the browser position to the height
+			[(viewportWidth / 2) - 100, (viewportHeight / 2) - 150];
+		this._pos[1] = this._pos[1] + // add the browser scroll position to the height
+			(document.documentElement && document.documentElement.scrollTop ?
+			document.documentElement.scrollTop : document.body.scrollTop);
 
 		// move input on screen for focus, but hidden behind dialog
 		this._dialogInput.css('left', this._pos[0] + 'px').css('top', this._pos[1] + 'px');
