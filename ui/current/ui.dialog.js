@@ -4,8 +4,13 @@
 	$.ui = $.ui || {};
 
 	$.fn.dialog = function(o) {
+		return this.dialogInit(o).dialogOpen();
+	}
+	$.fn.dialogInit = function(o) {
 		return this.each(function() {
-			if (!$(this).is(".ui-dialog")) new $.ui.dialog(this, o);
+			if (!$(this).is(".ui-dialog")) {
+				$.ui.dialogInit(this, o);
+			}			
 		});
 	}
 	$.fn.dialogOpen = function() {
@@ -31,7 +36,7 @@
 		});
 	}
 
-	$.ui.dialog = function(el, o) {
+	$.ui.dialogInit = function(el, o) {
 		
 		var options = {
 			width: 300,
@@ -47,13 +52,18 @@
 		this.element = el; var self = this; //Do bindings
 		$.data(this.element, "ui-dialog", this);
 
-		var uiDialogContent = $(el).addClass('ui-dialog-content')
+		var uiDialogContent = $(el).addClass('ui-dialog-content');
+
+		if (!uiDialogContent.parent().length) {
+			uiDialogContent.appendTo('body');
+		}
+		uiDialogContent
 			.wrap(document.createElement('div'))
 			.wrap(document.createElement('div'));
 		var uiDialogContainer = uiDialogContent.parent().addClass('ui-dialog-container').css({position: 'relative'});
 		var uiDialog = uiDialogContainer.parent()
 			.addClass('ui-dialog')
-			.css({position: 'absolute', width: options.width, height: options.height});
+			.css({position: 'absolute', width: options.width, height: options.height, overflow: 'hidden'});
 		
 		if (options.resizable) {
 			uiDialog.append("<div class='ui-resizable-n ui-resizable-handle'></div>")
@@ -129,8 +139,8 @@
 			uiDialog.hide();
 		};
 
-		uiDialog.show();
-		this.open();
+		//uiDialog.show();
+		//this.open();
 	}
 
 	$.ui.dialogOpen = function(el) {
