@@ -482,6 +482,35 @@
 		{
 			return _w.call(this, 'setOffset', v, h);
 		},
+/**
+ * Closes the open date picker associated with this element.
+ *
+ * @type jQuery
+ * @name dpClose
+ * @cat plugins/datePicker
+ * @author Kelvin Luck (http://www.kelvinluck.com/)
+ *
+ * @example $('.date-pick')
+ *		.datePicker()
+ *		.bind(
+ *			'focus',
+ *			function()
+ *			{
+ *				$(this).dpDisplay();
+ *			}
+ *		).bind(
+ *			'blur',
+ *			function()
+ *			{
+ *				$(this).dpClose();
+ *			}
+ *		);
+ * @desc Creates a date picker and makes it appear when the relevant element is focused and disappear when it is blurred.
+ **/
+		dpClose : function()
+		{
+			return _w.call(this, '_closeCalendar', false, this[0]);
+		},
 		// private function called on unload to clean up any expandos etc and prevent memory links...
 		_dpDestroy : function()
 		{
@@ -955,14 +984,17 @@
 					}
 				}
 			},
-			_closeCalendar : function(programatic)
+			_closeCalendar : function(programatic, ele)
 			{
-				$(document).unbind('mousedown', this._checkMouse);
-				this._clearCalendar();
-				$('#dp-popup a').unbind();
-				$('#dp-popup').empty().remove();
-				if (!programatic) {
-					$(this.ele).trigger('dpClosed', [this.getSelected()]);
+				if (!ele || ele == this.ele)
+				{
+					$(document).unbind('mousedown', this._checkMouse);
+					this._clearCalendar();
+					$('#dp-popup a').unbind();
+					$('#dp-popup').empty().remove();
+					if (!programatic) {
+						$(this.ele).trigger('dpClosed', [this.getSelected()]);
+					}
 				}
 			},
 			// empties the current dp-calendar div and makes sure that all events are unbound
