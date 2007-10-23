@@ -99,7 +99,7 @@
 
         }, options);
 
-        options.event += '.ui-tabs'; // namespace event
+        this.options.event += '.ui-tabs'; // namespace event
 
         // save instance for later
         var uuid = 'tabs' + $.ui.tabs.prototype.count++;
