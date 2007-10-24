@@ -479,8 +479,8 @@ $.extend(Datepicker.prototype, {
 		}
 		var rangeSelect = inst._get('rangeSelect');
 		if (rangeSelect && this._stayOpen) {
-			this._appendDate = true;
-			this._selectDate(inst, inst._formatDate());
+			this._selectDate(inst, inst._formatDate(
+				inst._currentDay, inst._currentMonth, inst._currentYear));
 		}
 		this._stayOpen = false;
 		if (this._datepickerShowing) {
@@ -584,22 +584,19 @@ $.extend(Datepicker.prototype, {
 		var rangeSelect = inst._get('rangeSelect');
 		if (rangeSelect) {
 			if (!this._stayOpen) {
-				this._stayOpen = true;
 				$('.datepicker td').removeClass('datepicker_currentDay');
 				$(td).addClass('datepicker_currentDay');
 			} 
-			else {
-				this._appendDate = true;
-				this._stayOpen = false;
-			}
+			this._stayOpen = !this._stayOpen;
 		}
-		inst._selectedDay = $('a', td).html();
-		inst._selectedMonth = month;
-		inst._selectedYear = year;
-		this._selectDate(inst);
+		inst._currentDay = $('a', td).html();
+		inst._currentMonth = month;
+		inst._currentYear = year;
+		this._selectDate(id, inst._formatDate(
+			inst._currentDay, inst._currentMonth, inst._currentYear));
 		if (this._stayOpen) {
 			inst._endDay = inst._endMonth = inst._endYear = null;
-			inst._rangeStart = new Date(inst._selectedYear, inst._selectedMonth, inst._selectedDay);
+			inst._rangeStart = new Date(inst._currentYear, inst._currentMonth, inst._currentDay);
 			this._updateDatepicker(inst);
 		}
 		else if (rangeSelect) {
@@ -621,16 +618,18 @@ $.extend(Datepicker.prototype, {
 
 	/* Erase the input field and hide the date picker. */
 	_clearDate: function(id) {
-		this._selectDate(id, '');
+		var inst = this._getInst(id);
+		this._stayOpen = false;
+		inst._rangeStart = null;
+		this._selectDate(inst, '');
 	},
 
 	/* Update the input field with the selected date. */
 	_selectDate: function(id, dateStr) {
 		var inst = this._getInst(id);
 		dateStr = (dateStr != null ? dateStr : inst._formatDate());
-		if (this._appendDate) {
+		if (inst._rangeStart) {
 			dateStr = inst._formatDate(inst._rangeStart) + inst._get('rangeSeparator') + dateStr;
-			this._appendDate = false;
 		}
 		if (inst._input) {
 			inst._input.val(dateStr);
@@ -829,8 +828,10 @@ $.extend(DatepickerInstance.prototype, {
 		var drawYear = this._selectedYear;
 		for (var row = 0; row < numMonths[0]; row++) {
 		for (var col = 0; col < numMonths[1]; col++) {
+			var selectedDate = new Date(drawYear, drawMonth, this._selectedDay);
 			html += '<div class="datepicker_oneMonth' + (col == 0 ? ' datepicker_newRow' : '') + '">' +
-				this._generateMonthYearHeader(drawMonth, drawYear, minDate, maxDate, row > 0 || col > 0) + // draw month headers
+				this._generateMonthYearHeader(drawMonth, drawYear, minDate, maxDate,
+				selectedDate, row > 0 || col > 0) + // draw month headers
 				'<table class="datepicker" cellpadding="0" cellspacing="0"><thead>' + 
 				'<tr class="datepicker_titleRow">';
 			var firstDay = this._get('firstDay');
@@ -847,7 +848,6 @@ $.extend(DatepickerInstance.prototype, {
 			var leadDays = (this._getFirstDayOfMonth(drawYear, drawMonth) - firstDay + 7) % 7;
 			var currentDate = new Date(this._currentYear, this._currentMonth, this._currentDay);
 			var endDate = this._endDay ? new Date(this._endYear, this._endMonth, this._endDay) : currentDate;
-			var selectedDate = new Date(drawYear, drawMonth, this._selectedDay);
 			var printDate = new Date(drawYear, drawMonth, 1 - leadDays);
 			var numRows = (isMultiMonth ? 6 : Math.ceil((leadDays + daysInMonth) / 7)); // calculate the number of rows to generate
 			var beforeShowDay = this._get('beforeShowDay');
@@ -863,7 +863,7 @@ $.extend(DatepickerInstance.prototype, {
 					html += '<td class="datepicker_daysCell' +
 						((dow + firstDay + 6) % 7 >= 5 ? ' datepicker_weekEndCell' : '') + // highlight weekends
 						(otherMonth ? ' datepicker_otherMonth' : '') + // highlight days from other months
-						(printDate.getTime() == selectedDate.getTime() && drawMonth == this._selectedMonth ? ' datepicker_daysCellOver' : '') + // highlight selected day
+						(printDate.getTime() == currentDate.getTime() && drawMonth == this._currentMonth ? ' datepicker_daysCellOver' : '') + // highlight selected day
 						(unselectable ? ' datepicker_unselectable' : '') +  // highlight unselectable days
 						(otherMonth && !showOtherMonths ? '' : ' ' + daySettings[1] + // highlight custom dates
 						(printDate.getTime() >= currentDate.getTime() && printDate.getTime() <= endDate.getTime() ?  // in current range
@@ -893,7 +893,8 @@ $.extend(DatepickerInstance.prototype, {
 	},
 	
 	/* Generate the month and year header. */
-	_generateMonthYearHeader: function(drawMonth, drawYear, minDate, maxDate, secondary) {
+	_generateMonthYearHeader: function(drawMonth, drawYear, minDate, maxDate, selectedDate, secondary) {
+		minDate = (this._rangeStart && minDate && selectedDate < minDate ? selectedDate : minDate);
 		var html = '<div class="datepicker_header">';
 		// month selection
 		var monthNames = this._get('monthNames');
@@ -971,8 +972,7 @@ $.extend(DatepickerInstance.prototype, {
 	/* Determine the current minimum date - may be overridden for a range. */
 	_getMinDate: function() {
 		var minDate = this._get('minDate');
-		return (!this._rangeStart ? minDate :
-			(!minDate || this._rangeStart > minDate ? this._rangeStart : minDate));
+		return minDate || this._rangeStart;
 	},
 
 	/* Find the number of days in a given month. */
@@ -996,7 +996,11 @@ $.extend(DatepickerInstance.prototype, {
 
 	/* Is the given date in the accepted range? */
 	_isInRange: function(date) {
-		var minDate = this._get('minDate');
+		// during range selection, use minimum of selected date and range start
+		var newMinDate = (!this._rangeStart ? null :
+			new Date(this._selectedYear, this._selectedMonth, this._selectedDay));
+		newMinDate = (newMinDate && this._rangeStart < newMinDate ? this._rangeStart : newMinDate);
+		var minDate = newMinDate || this._get('minDate');
 		var maxDate = this._get('maxDate');
 		return ((!minDate || date >= minDate) && (!maxDate || date <= maxDate));
 	},
