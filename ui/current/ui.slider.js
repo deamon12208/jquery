@@ -267,7 +267,7 @@
 			if(!p) var p = this.parentSize;
 			var prop = this.prop;
 			
-			m = Math.round(((value)/modifier) * p);
+			var m = Math.round(((value)/modifier) * p);
 
 			if(m < 0) m = 0;
 			if(m > p) m = p;
