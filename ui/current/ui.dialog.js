@@ -131,6 +131,7 @@
 					left += 0;
 					break;
 			}
+			top = top < doc.scrollTop() ? doc.scrollTop() : top;
 			uiDialog.css({top: top, left: left});
 			uiDialog.appendTo('body').show();
 		};
