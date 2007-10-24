@@ -1,6 +1,6 @@
 (function($)
 {
-	//If the UI scope is not availalable, add it
+	//If the UI scope is not available, add it
 	$.ui = $.ui || {};
 
 	$.fn.dialog = function(o) {
@@ -108,6 +108,7 @@
 		}
 	
 		this.open = function() {
+			uiDialog.appendTo('body');
 			var wnd = $(window), doc = $(document), top = doc.scrollTop(), left = doc.scrollLeft();
 			switch (options.position) {
 				case 'center':
@@ -133,15 +134,13 @@
 			}
 			top = top < doc.scrollTop() ? doc.scrollTop() : top;
 			uiDialog.css({top: top, left: left});
-			uiDialog.appendTo('body').show();
+			uiDialog.show();
 		};
 
 		this.close = function() {
 			uiDialog.hide();
 		};
 
-		//uiDialog.show();
-		//this.open();
 	}
 
 	$.ui.dialogOpen = function(el) {
