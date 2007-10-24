@@ -102,6 +102,14 @@ div.todo div.todo-desc
 	    	<div id="draggable-containment-parent" class='draggable'>Drag me</div>
 	    </li>
 	    <li>
+	    	cursor: 'crosshair'
+	    	<div id="draggable-cursor-crosshair" class='draggable'>Drag me</div>
+	    </li>
+	    <li>
+	    	cursor: 'move'
+	    	<div id="draggable-cursor-move" class='draggable'>Drag me</div>
+	    </li>
+	    <li>
 	    	cursorAt: {top: 2, left: 2}
 	    	<div id="draggable-cursorAt-top2-left2" class='draggable'>Drag me</div>
 	    </li>
@@ -242,6 +250,14 @@ $(document).ready(function(){
 
 	$('#draggable-containment-parent').draggable({
 		containment: 'parent'
+	});
+
+	$('#draggable-cursor-crosshair').draggable({
+		cursor: 'crosshair'
+	});
+
+	$('#draggable-cursor-move').draggable({
+		cursor: 'move'
 	});
 
 	$('#draggable-cursorAt-top2-left2').draggable({
