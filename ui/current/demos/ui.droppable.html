@@ -113,13 +113,6 @@ li {
 	border-color: silver;
 }
 
-.tolerance-fit {
-	padding: 15px;
-	margin: 15px;
-	border-width: 15px;
-	outline: 15px solid green;
-}
-
 </style>
 </head>
 <body>
@@ -128,7 +121,9 @@ li {
 
 	<li>
 		<div id="droppable-accept-function" class="droppable">droppable<br/></div>
-		accept: function()
+accept: function(draggable) {<br/>
+&nbsp;&nbsp;return $(draggable).is('.green');<br/>
+}
 		<div class="draggable red">
 			draggable
 			<div class="className">.red</div>
