@@ -15,14 +15,17 @@
 			}
 			
 			function fixPosition(table) {
-				var c = table.config, o = $(table);
-				if(o.offset) {
-					c.container.css({
-						top: o.offset().top + o.height() + 'px',
-						position: 'absolute'
-					});
+				var c = table.config;
+				if(!c.pagerPositionSet && c.positionFixed) {
+					var c = table.config, o = $(table);
+					if(o.offset) {
+						c.container.css({
+							top: o.offset().top + o.height() + 'px',
+							position: 'absolute'
+						});
+					}
+					c.pagerPositionSet = true;
 				}
-				c.pagerPositionSet = true;
 			}
 			
 			function moveToFirstPage(table) {
@@ -95,7 +98,7 @@
 					}
 				}
 				
-				if(!c.pagerPositionSet && c.positionFixed) fixPosition(table,tableBody);
+				fixPosition(table,tableBody);
 				
 				$(table).trigger("applyWidgets");
 				

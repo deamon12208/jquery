@@ -13,7 +13,7 @@
 	<script type="text/javascript">
 	$(function() {
 		$("table")
-			.tablesorter({widthFixed: true})
+			.tablesorter({widthFixed: true, widgets: ['zebra']})
 			.tablesorterPager({container: $("#pager")});
 	});
 	</script>
@@ -31,7 +31,7 @@
 <pre class="javascript">
 $(document).ready(function() {
 	$("table")
-	.tablesorter({widthFixed: true})
+	.tablesorter({widthFixed: true, widgets: ['zebra']})
 	.tablesorterPager({container: $("#pager")});
 });
 </pre>
