@@ -102,6 +102,10 @@
 				
 				$(table).trigger("applyWidgets");
 				
+				if( c.page >= c.totalPages ) {
+        			moveToLastPage(table);
+				}
+				
 				updatePageDisplay(c);
 			}
 			
