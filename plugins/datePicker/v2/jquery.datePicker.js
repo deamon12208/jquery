@@ -669,18 +669,18 @@
 				if (moveToMonth) {
 					this.setDisplayedMonth(d.getMonth(), d.getFullYear());
 				}
-				this.selectedDates[d.getTime()] = v;
+				this.selectedDates[d.toString()] = v;
 			},
-			isSelected : function(t)
+			isSelected : function(d)
 			{
-				return this.selectedDates[t];
+				return this.selectedDates[d.toString()];
 			},
 			getSelected : function()
 			{
 				var r = [];
-				for(t in this.selectedDates) {
-					if (this.selectedDates[t] == true) {
-						r.push(new Date(Number(t)));
+				for(s in this.selectedDates) {
+					if (this.selectedDates[s] == true) {
+						r.push(Date.parse(s));
 					}
 				}
 				return r;
@@ -843,7 +843,7 @@
 						var $this = $(this);
 						if (!$this.is('.disabled')) {
 							c.setSelected(d, !$this.is('.selected') || !c.selectMultiple);
-							var s = c.isSelected(d.getTime());
+							var s = c.isSelected(d);
 							$(c.ele).trigger('dateSelected', [d, $td, s]);
 							$(c.ele).trigger('change');
 							if (c.closeOnSelect) {
@@ -855,7 +855,7 @@
 					}
 				);
 				
-				if (c.isSelected(d.getTime())) {
+				if (c.isSelected(d)) {
 					$td.addClass('selected');
 				}
 				
