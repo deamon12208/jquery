@@ -97,7 +97,7 @@
 				
 				if(!c.pagerPositionSet && c.positionFixed) fixPosition(table,tableBody);
 				
-				
+				$(table).trigger("applyWidgets");
 				
 				updatePageDisplay(c);
 			}

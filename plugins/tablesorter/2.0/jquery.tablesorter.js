@@ -616,6 +616,9 @@
 						
 						getWidgetById(id).format(this);
 						
+					}).bind("applyWidgets",function() {
+						// apply widgets
+						applyWidget(this);
 					});
 					
 					if($.meta && ($(this).data() && $(this).data().sortlist)) {
