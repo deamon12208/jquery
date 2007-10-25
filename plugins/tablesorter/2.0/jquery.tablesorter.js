@@ -294,7 +294,7 @@
 			
 				for(var i = 0; i < table.tHead.rows.length; i++) { tableHeadersRows[i]=0; };
 				
-				$tableHeaders = $(checkCellColSpan(table, tableHeadersRows, 0,table.tHead.rows[0].cells.length));
+				$tableHeaders = $("thead th",table);
 		
 				$tableHeaders.each(function(index) {
 							
@@ -318,19 +318,19 @@
 				
 			};
 						
-		   	function checkCellColSpan(table, headerArr, row) {
+		   	function checkCellColSpan(table, rows, row) {
                 var arr = [], r = table.tHead.rows, c = r[row].cells;
 				
-				for(var i=headerArr[row]; i < c.length; i++) {
+				for(var i=0; i < c.length; i++) {
 					var cell = c[i];
 					
 					if ( cell.colSpan > 1) { 
-						arr = arr.concat(checkCellColSpan(table, headerArr,row+cell.rowSpan));
+						arr = arr.concat(checkCellColSpan(table, headerArr,row++));
 					} else  {
 						if(table.tHead.length == 1 || (cell.rowSpan > 1 || !r[row+1])) {
 							arr.push(cell);
 						}
-						headerArr[row] = (i+row);
+						//headerArr[row] = (i+row);
 					}
 				}
 				return arr;
@@ -517,7 +517,8 @@
 					// apply event handling to headers
 					// this is to big, perhaps break it out?
 					$headers.click(function(e) {
-
+						
+						
 						var totalRows = ($this[0].tBodies[0] && $this[0].tBodies[0].rows.length) || 0;
 					
 						if(!this.sortDisabled && totalRows > 0) {
