@@ -863,7 +863,7 @@ $.extend(DatepickerInstance.prototype, {
 					html += '<td class="datepicker_daysCell' +
 						((dow + firstDay + 6) % 7 >= 5 ? ' datepicker_weekEndCell' : '') + // highlight weekends
 						(otherMonth ? ' datepicker_otherMonth' : '') + // highlight days from other months
-						(printDate.getTime() == currentDate.getTime() && drawMonth == this._currentMonth ? ' datepicker_daysCellOver' : '') + // highlight selected day
+						(printDate.getTime() == selectedDate.getTime() && drawMonth == this._selectedMonth ? ' datepicker_daysCellOver' : '') + // highlight selected day
 						(unselectable ? ' datepicker_unselectable' : '') +  // highlight unselectable days
 						(otherMonth && !showOtherMonths ? '' : ' ' + daySettings[1] + // highlight custom dates
 						(printDate.getTime() >= currentDate.getTime() && printDate.getTime() <= endDate.getTime() ?  // in current range
@@ -956,9 +956,11 @@ $.extend(DatepickerInstance.prototype, {
 
 	/* Adjust one of the date sub-fields. */
 	_adjustDate: function(offset, period) {
-		var date = new Date(this._selectedYear + (period == 'Y' ? offset : 0),
-			this._selectedMonth + (period == 'M' ? offset : 0),
-			this._selectedDay + (period == 'D' ? offset : 0));
+		var year = this._selectedYear + (period == 'Y' ? offset : 0);
+		var month = this._selectedMonth + (period == 'M' ? offset : 0);
+		var day = Math.min(this._selectedDay, this._getDaysInMonth(year, month)) +
+			(period == 'D' ? offset : 0);
+		var date = new Date(year, month, day);
 		// ensure it is within the bounds set
 		var minDate = this._getMinDate();
 		var maxDate = this._get('maxDate');
@@ -971,8 +973,7 @@ $.extend(DatepickerInstance.prototype, {
 
 	/* Determine the current minimum date - may be overridden for a range. */
 	_getMinDate: function() {
-		var minDate = this._get('minDate');
-		return minDate || this._rangeStart;
+		return this._get('minDate') || this._rangeStart;
 	},
 
 	/* Find the number of days in a given month. */
