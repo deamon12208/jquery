@@ -73,7 +73,7 @@
 		},
 		prepareBranches: function(settings) {
 			// mark last tree items
-			this.filter(":last-child").addClass(CLASSES.last);
+			this.filter(":last-child:not(ul)").addClass(CLASSES.last);
 			// collapse whole tree, or only those marked as closed, anyway except those marked as open
 			this.filter((settings.collapsed ? "" : "." + CLASSES.closed) + ":not(." + CLASSES.open + ")").find(">ul").hide();
 			// return all items with sublists

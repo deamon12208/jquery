@@ -1,23 +1,43 @@
-jQuery.fn.asyncTreeview = function(settings) {
-	var container = this;
-	$.getJSON(settings.url, function(response) {
+function load(url, root, child, container) {
+	$.getJSON(url, {root: root}, function(response) {
 		function createNode(node, parent) {
-			var current = $("<li/>").attr("id", node.id).html(node.text).appendTo(parent);
-			if (node.children.length) {
+			var current = $("<li/>").attr("id", node.id).html("<span>" + node.text + "</node>").appendTo(parent);
+			if (node.hasChildren || node.children.length) {
 				var branch = $("<ul/>").appendTo(current);
+				if (node.hasChildren && !node.children.length) {
+					current.addClass("hasChildren");
+					createNode({
+						text:"placeholder",
+						id:"placeholder",
+						children:[]
+					}, branch);
+				}
 				$.each(node.children, function(i, child) {
 					createNode(child, branch);
 				});
 			}
 		}
-		var parent = $("<li/>");
 		$.each(response, function(i, node) {
-			createNode(node, parent);
+			createNode(node, child);
 		})
-		container.append(parent);
-        $(container).treeview({add: parent});
-    })
-	return this.treeview(settings);
+        $(container).treeview({add: child});
+    });
+}
+
+jQuery.fn.asyncTreeview = function(settings) {
+	var container = this;
+	load(settings.url, "source", this, container);
+	return this.treeview($.extend({}, settings, {
+		collapsed: true,
+		toggle: function() {
+			var $this = $(this);
+			if ($this.hasClass("hasChildren")) {
+				var childList = $this.removeClass("hasChildren").find("ul");
+				childList.empty();
+				load(settings.url, this.id, childList, container);
+			}
+		}
+	}));
 }
 
 /*
