@@ -162,11 +162,10 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			
 			var o = this.options;
 			var self = this;
-			
+			o.beQuietAtEnd = true;
 
 			if(o.smooth) {
 				var os = $(this.element).offset();
-				o.beQuietAtEnd = true;
 				$(this.helper).animate({ left: os.left - o.po.left, top: os.top - o.po.top }, 500, stopIt);
 			} else {
 				stopIt();
