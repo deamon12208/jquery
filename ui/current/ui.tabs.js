@@ -432,11 +432,14 @@
             // shift arguments
             if (url && url.constructor == Function) {
                 callback = url;
+                url = null;
             }
 
-            // set new URL
+            // set new URL or get existing
             if (url) {
                 $.data(a, 'href', url);
+            } else {
+                url = $.data(a, 'href');
             }
 
             // load
