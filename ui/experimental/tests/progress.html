@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Progress Test Page</title>
+<link rel="stylesheet" href="../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)">
+<script type="text/javascript" src="../../../jquery/src/core.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+<script type="text/javascript" src="../ui.progress.js"></script>
+<script type="text/javascript" charset="utf-8">
+$(function() {
+  
+  $('#p1').progress({
+    url: 'progress_ajax.php'
+  });
+  $('#p2').progress({
+    timed: true,
+    time: 10000
+  });
+})
+</script>
+<style type="text/css" media="screen">
+</style>
+</head>
+<body class="flora">
+  In increments of five, with an AHAH callback
+  <div class="progress" id="p1">
+  </div><br />
+  <br />
+  Make it look like it takes a long time - timed
+  <div class="progress" id="p2">
+  </div><br />
+  
+</body>
+</html>
