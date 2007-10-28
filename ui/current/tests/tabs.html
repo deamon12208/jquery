@@ -18,12 +18,13 @@
         <script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
         <script type="text/javascript" src="../../../jquery/src/fx.js"></script>
 		<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+		<script type="text/javascript" src="../../../plugins/cookie/jquery.cookie.js"></script>
         <script type="text/javascript" src="../ui.tabs.js"></script>
         <script type="text/javascript">
             $(function() {
                 $('#container-1 ul').tabs();
                 $('#container-2 ul').tabs(2);
-                $('#container-3 ul').tabs({ fxSlide: true });
+                $('#container-3 ul').tabs({ cookie: { expires: 365 }, fxSlide: true });
                 $('#container-4 ul').tabs({ fxFade: true, fxSpeed: 'fast' });
                 $('#container-5 ul').tabs({ fxSlide: true, fxFade: true, fxSpeed: 'normal' });
                 $('#container-6 ul').tabs({

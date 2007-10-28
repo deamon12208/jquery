@@ -57,6 +57,7 @@
             initial: 0,
             event: 'click',
             disabled: [],
+            cookie: null, // pass options object as expected by cookie plugin: { expires: 7, path: '/', domain: 'jquery.com', secure: true }
             // TODO bookmarkable: $.ajaxHistory ? true : false,
             unselected: false,
             unselect: options.unselected ? true : false,
@@ -101,11 +102,12 @@
         }, options);
 
         this.options.event += '.ui-tabs'; // namespace event
+        this.options.cookie = $.cookie && $.cookie.constructor == Function && this.options.cookie;
 
         // save instance for later
-        var uuid = 'tabs' + $.ui.tabs.prototype.count++;
-        $.ui.tabs.instances[uuid] = this;
-        $.data(el, 'tabsUUID', uuid);
+        this.uuid = 'ui_tabs_' + $.ui.tabs.prototype.count++;
+        $.ui.tabs.instances[this.uuid] = this;
+        $.data(el, 'uiTabsUUID', this.uuid);
         
         this.tabify(true);
     };
@@ -113,7 +115,7 @@
     // static
     $.ui.tabs.instances = {};
     $.ui.tabs.getInstance = function(el) {
-        return $.ui.tabs.instances[$.data(el, 'tabsUUID')];
+        return $.ui.tabs.instances[$.data(el, 'uiTabsUUID')];
     };
 
     // instance methods
@@ -148,8 +150,11 @@
 
             if (init) {
 
-                // Try to retrieve initial tab from fragment identifier in url if present,
-                // otherwise try to find selected class attribute on <li>.
+                // Try to retrieve initial tab:
+                // 1. from fragment identifier in url if present
+                // 2. from cookie
+                // 3. from selected class attribute on <li>
+                // 4. otherwise use given initial argument
                 this.$tabs.each(function(i, a) {
                     if (location.hash) {
                         if (a.hash == location.hash) {
@@ -166,7 +171,10 @@
                             scrollTo(0, 0);
                             return false; // break
                         }
-                    } else if ( $(a).parents('li:eq(0)').is('li.' + o.selectedClass) ) {
+                    } else if (o.cookie) {
+                        o.initial = parseInt($.cookie(self.uuid)) || 0;
+                        return false; // break
+                    } else if ( $(a).parent('li').is('.' + o.selectedClass) ) {
                         o.initial = i;
                         return false; // break
                     }
@@ -288,6 +296,10 @@
                     || o.click(this, $show[0], $hide[0]) === false) {
                     this.blur();
                     return false;
+                }
+                
+                if (o.cookie) {
+                    $.cookie(self.uuid, self.$tabs.index(this), o.cookie);
                 }
                     
                 // if tab may be closed
