@@ -1,60 +1,69 @@
-function load(url, root, child, container) {
-	$.getJSON(url, {root: root}, function(response) {
-		function createNode(node, parent) {
-			var current = $("<li/>").attr("id", node.id).html("<span>" + node.text + "</node>").appendTo(parent);
-			if (node.hasChildren || node.children.length) {
+/*
+ * Async Treeview 0.1 - Lazy-loading extension for Treeview
+ * 
+ * http://bassistance.de/jquery-plugins/jquery-plugin-treeview/
+ *
+ * Copyright (c) 2007 Jörn Zaefferer
+ *
+ * Dual licensed under the MIT and GPL licenses:
+ *   http://www.opensource.org/licenses/mit-license.php
+ *   http://www.gnu.org/licenses/gpl.html
+ *
+ * Revision: $Id$
+ *
+ */
+
+(function($) {
+
+function load(settings, root, child, container) {
+	$.getJSON(settings.url, {root: root}, function(response) {
+		function createNode(parent) {
+			var current = $("<li/>").attr("id", this.id || "").html("<span>" + this.text + "</span>").appendTo(parent);
+			if (this.expanded) {
+				current.addClass("open");
+			}
+			if (this.hasChildren || this.children && this.children.length) {
 				var branch = $("<ul/>").appendTo(current);
-				if (node.hasChildren && !node.children.length) {
+				if (this.hasChildren) {
 					current.addClass("hasChildren");
-					createNode({
+					createNode.call({
 						text:"placeholder",
 						id:"placeholder",
 						children:[]
 					}, branch);
 				}
-				$.each(node.children, function(i, child) {
-					createNode(child, branch);
-				});
+				if (this.children && this.children.length) {
+					$.each(this.children, createNode, [branch])
+				}
 			}
 		}
-		$.each(response, function(i, node) {
-			createNode(node, child);
-		})
+		$.each(response, createNode, [child]);
         $(container).treeview({add: child});
     });
 }
 
-jQuery.fn.asyncTreeview = function(settings) {
+var proxied = $.fn.treeview;
+$.fn.treeview = function(settings) {
+	if (!settings.url) {
+		return proxied.apply(this, arguments);
+	}
 	var container = this;
-	load(settings.url, "source", this, container);
-	return this.treeview($.extend({}, settings, {
+	load(settings, "source", this, container);
+	var userToggle = settings.toggle;
+	return proxied.apply(this, [$.extend({}, settings, {
 		collapsed: true,
 		toggle: function() {
 			var $this = $(this);
 			if ($this.hasClass("hasChildren")) {
 				var childList = $this.removeClass("hasChildren").find("ul");
 				childList.empty();
-				load(settings.url, this.id, childList, container);
+				load(settings, this.id, childList, container);
+			}
+			if (userToggle) {
+				userToggle.apply(this, arguments);
 			}
 		}
-	}));
-}
+	})]);
+};
 
-/*
-unique: true, 
-        collapsed: false, 
-        toggle: function() { 
-            var li = this; 
-            if (!li.org_unit_key) return; 
-            if (!$(li).hasClass('collapsable')) return; 
-            var $ul = $('ul:first',li); 
-            if (!$('li:first:contains("placeholder")', $ul).length) return; 
-            $ul.empty(); 
-            var args = {org_unit_key: li.org_unit_key}; 
-            $.get("/subtree", args, function(str) { 
-                var $branches = $(str).contents(); 
-                $branches.appendTo($ul); 
-                $("ul.treeview2").treeview({add: $branches}) 
-            }) 
-        }
- */
+})(jQuery);
