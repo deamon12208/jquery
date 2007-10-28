@@ -92,6 +92,7 @@
             // CSS classes
             navClass: 'ui-tabs-nav',
             selectedClass: 'ui-tabs-selected',
+            unselectClass: 'ui-tabs-unselect',
             disabledClass: 'ui-tabs-disabled',
             panelClass: 'ui-tabs-panel',
             hideClass: 'ui-tabs-hide',
@@ -298,7 +299,7 @@
                         this.blur();
                         return false;
                     } else if (!$hide.length) {
-                        $li.addClass(o.selectedClass);
+                        $li.addClass(o.selectedClass).addClass(o.unselectClass);
                         self.$panels.stop();
                         showTab(this, $show);
                         this.blur();
