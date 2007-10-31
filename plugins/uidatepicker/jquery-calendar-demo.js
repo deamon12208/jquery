@@ -171,7 +171,7 @@ function formatDate(date) {
 
 function localise() {
 	var language = $('#language').val();
-	$.localise('ui.datepicker', {language: language});
+	$.localise('i18n/ui.datepicker', {language: language});
 	popUpCal.reconfigureFor('#l10nCalendar', popUpCal.regional[language]);
 	popUpCal.setDefaults(popUpCal.regional['']);
 }

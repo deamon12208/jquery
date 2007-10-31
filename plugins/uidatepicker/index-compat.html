@@ -9,46 +9,26 @@
 	<head>
 		<title>jQuery Calendar</title>
 		
-		<!--**MG.com
+		<!-- Include jQuery -->
+		<script type="text/javascript" src="core/jquery.js"></script>
 		
-		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-		<meta name="description" content="jQuery calendar is a popup calendar / date picker built on the jQuery javascript library." />
-		<meta name="author" content="Marc Grabanski" />
-		<meta name="copyright" content="Copyright (c) 2005 Marc Grabanski" />
-		<meta name="keywords" content="jquery calendar, jquery popup calendar, javascript calendar, jquery date picker" />
-		<link rel="stylesheet" type="text/css" href="../../css/style.css" />
+		<!-- Include Core Files -->
+		<script type="text/javascript" src="core/ui.datepicker.js"></script>
+		<link rel="stylesheet" type="text/css" href="core/ui.datepicker.css" title="default"/>
 		
-		MG-->
-		
-		<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="../../css/ie6.css" /><![endif]--> 
-		<script type="text/javascript" src="jquery.pack.js"></script>
-		<script type="text/javascript" src="jquery.debug.js"></script>
+		<!-- Include Demo Files -->
 		<script type="text/javascript" src="jquery.localisation.js"></script>
-		<script type="text/javascript" src="ui.datepicker.js"></script>
+		<link rel="stylesheet" type="text/css" href="ui.datepicker.alt.css" title="alt" id="alt"/>
+		
+		<!-- Include Core Files (Compatibility Mode) -->
 		<script type="text/javascript" src="jquery-calendar-compatibility.js"></script>
 		<script type="text/javascript" src="jquery-calendar-demo.js"></script>
-		<link rel="stylesheet" type="text/css" href="ui.datepicker.css" title="default"/>
-		<link rel="stylesheet" type="text/css" href="ui.datepicker.alt.css" title="alt" id="alt"/>
 		<link rel="stylesheet" type="text/css" href="jquery-calendar-demo.css" />
 	</head>
 	<body>
 		<div id="wrap">
-		
-			<!--MG.com
 			
-			<?php include '../main_nav.php'?>
-			<div id="header">
-				<div>
-					<h1>jQuery Calendar v2.8</h1>
-					<p class="caption">Written by <a href="/">Marc Grabanski</a> and Keith Wood (kbwood@iprimus.com.au).</p>
-				</div>
-			</div>
-			<?php $code_nav='jquery-calendar'; include '../code_nav.php'?>
-			<div id="content">
-			
-			MG-->
-			
-				<h2>jQuery Calendar v2.8 Examples</h2>
+				<h2>jQuery Calendar Compatibility Mode</h2>
 				<ul id="tab_menu1" class="tabs">
 					<li><a href="#default">Defaults</a></li>
 					<li><a href="#invoke">Invocation</a></li>
@@ -445,96 +425,6 @@ function updateInlineRange2(dateStr) {
   &lt;div style="clear: both;">&lt;/div>
 &lt;/div></code></pre>
 				</div>
-				
-				<!--**MG.com
-				
-				<h2>Use jQuery Calendar</h2>
-				<div class="container">
-					<ol>
-						<li>Get the latest version of <a href="http://jquery.com">jQuery</a> and include it in the head section of your page.
-							<pre><code>&lt;script type=&quot;text/javascript&quot; src=&quot;jquery.js&quot;&gt;&lt;/script&gt;</code></pre></li>
-						<li>Download and include the <a href="jquery-calendar.css">jQuery Calendar CSS</a> and the <a href="jquery-calendar.js">jQuery Calendar Javascript</a> in the head section of your page.
-							<pre><code>&lt;style type=&quot;text/css&quot;&gt;@import url(jquery-calendar.css);&lt;/style&gt;
-&lt;script type=&quot;text/javascript&quot; src=&quot;jquery-calendar.js&quot;&gt;&lt;/script&gt;</code></pre>
-Packed version (12KB) <a href="jquery-calendar.pack.js">jquery-calendar.pack.js</a></li>
-						<li>Optionally set global defaults for all calendar instances.
-							See the <a href="http://docs.jquery.com/Plugins/Calendar">additional settings</a> documentation.
-							<pre><code>popUpCal.setDefaults({autoPopUp: 'both', buttonImageOnly: true,
-	buttonImage: 'calendar.gif', buttonText: 'Calendar'});</code></pre></li>
-						<li>Initialize the calendar using the jQuery selector followed by the <code>calendar</code> function.
-							Customize each calendar with <a href="http://docs.jquery.com/Plugins/Calendar">additional settings</a>
-							as part of the initialization if necessary.
-								<pre><code>$('input selector').calendar();
-$('input selector').calendar({defaultDate: +7});</code></pre></li>
-					</ol>
-				</div>
-				<a name="documentation" id="documentation"></a>
-				<h2>Settings and Documentation</h2>
-				<div class="container">
-					<p><strong>Documentation:</strong> <a href="http://docs.jquery.com/Plugins/Calendar">jQuery Calendar Settings Documentation</a>.</p>
-					<p><strong>Localisation packages:</strong></p>
-					<ul>
-						<li><a href="jquery-calendar-zh-CN.js">Chinese</a></li>
-						<li><a href="jquery-calendar-cs.js">Czech</a></li>
-						<li><a href="jquery-calendar-fr.js">French</a></li>
-						<li><a href="jquery-calendar-de.js">German</a></li>
-						<li><a href="jquery-calendar-hu.js">Hungarian</a></li>
-						<li><a href="jquery-calendar-it.js">Italian</a></li>
-						<li><a href="jquery-calendar-pl.js">Polish</a></li>
-						<li><a href="jquery-calendar-pt-BR.js">Portuguese of Brazil</a></li>
-						<li><a href="jquery-calendar-ru.js">Russian</a></li>
-						<li><a href="jquery-calendar-ro.js">Romanian</a></li>
-						<li><a href="jquery-calendar-sk.js">Slovak</a></li>
-						<li><a href="jquery-calendar-es.js">Spanish</a></li>
-						<li><a href="jquery-calendar-sv.js">Swedish</a></li>
-					</ul>
-					<p><strong>Change Log:</strong> Recent updates can be found on the <a href="http://docs.jquery.com/Plugins/Calendar/ChangeLog">jQuery Calendar ChangeLog</a>.</p>
-					<p><strong>Stylepack:</strong> The custom images used for this demo and alternate stylesheet are in the <a href="stylepack.zip">stylepack</a>.</p>
-					<p><a href="jquery-calendar-archive.html">Comments Archive</a>.</p>
-				</div>
-				<h2>Need more help?</h2>
-				<div class="container">
-					<p><a href="mailto:&#109;&#64;marcgrabanski.com">Email Me</a> or Keith (kbwood@iprimus.com.au) with the subject "jQuery Calendar Support" as the subject.</p>
-				</div>
-				<h2>Make a Donation</h2>
-			  <div class="container">
-			  	<p>If you use, and enjoy, this calendar please consider donating to support our efforts.</p>
-				<form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-				<div>
-					<input type="hidden" name="cmd" value="_s-xclick" />
-					<input type="image" src="https://www.paypal.com/en_US/i/btn/x-click-but21.gif" name="submit" alt="Make a donation to my Open Source Fund." style="border:0;" />
-					<img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
-					<input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
-" />
-</div>
-</form>
-			  </div>
-			  	<h2>Social Bookmarking</h2>
-				<div class="container">
-					<script type="text/javascript">
-						if (typeof window.Delicious == "undefined") window.Delicious = {};
-						Delicious.BLOGBADGE_DEFAULT_CLASS = 'delicious-blogbadge-line';
-					</script>
-					<script src="http://images.del.icio.us/static/js/blogbadge.js"  type="text/javascript"></script>
-				</div>
-				<h2>jQuery Calendar v2 Comments</h2>
-				<?php include '../../include/global.php'; $linkID='0'; $id='0'; include '../../include/module.comments.php'; ?>
-				<script type="text/javascript" src="../../include/script.comments.js"></script>
-			</div>
-			<div id="footer">
-				<div>
-                	<p class="caption">Copyright 2007 &copy; Marc Grabanski</p>
-				</div>
-            </div>
-		</div>
-		<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
-		</script>
-		<script type="text/javascript">
-		_uacct = "UA-963303-2";
-		urchinTracker();
-		</script>
-		
-		MG-->
 		
     </body>
 </html>
