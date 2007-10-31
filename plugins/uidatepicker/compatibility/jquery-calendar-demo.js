@@ -9,7 +9,7 @@ $(document).ready(function () {
 	popUpCal.setDefaults(popUpCal.regional['']);
 	// Set calendar global defaults - invoke via focus and image button
 	popUpCal.setDefaults({autoPopUp: 'both', buttonImageOnly: true,
-		buttonImage: 'img/calendar.gif', buttonText: 'Calendar'});
+		buttonImage: '../img/calendar.gif', buttonText: 'Calendar'});
 	// Defaults
 	$('#defaultFocus').calendar({autoPopUp: 'focus'});
 	// Invocation
