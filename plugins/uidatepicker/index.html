@@ -70,7 +70,7 @@
 					<p><span class="demoLabel">Default date picker:</span>
 						<input type="text" size="10" id="defaultFocus"/> (click to show)</p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-	$('#defaultFocus').datepicker();	
+$('#defaultFocus').datepicker();	
 </script>
 					<p><span class="demoLabel">IE select issue:</span>
 						<select><option>Show how the date picker covers a select in IE</option></select></p>
@@ -94,8 +94,8 @@
 						and are not re-processed if targetted a second time.</p>
 					<p>You can override the default settings that apply to all date picker instances.</p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-	$.datepicker.setDefaults({showOn: 'both', buttonImageOnly: true,
-		buttonImage: 'img/calendar.gif', buttonText: 'Calendar'});
+$.datepicker.setDefaults({showOn: 'both', buttonImageOnly: true,
+	buttonImage: 'img/calendar.gif', buttonText: 'Calendar'});
 </script>
 				</div>
 				<div id="invoke" class="tab_group1 container">
@@ -107,28 +107,40 @@
 						<input type="text" size="10" id="invokeFocus"/>
 						<input type="button" id="enableFocus" value="Disable"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-	$('#invokeFocus').datepicker({showOn: 'focus'});	
+$('#invokeFocus').datepicker({showOn: 'focus'});	
 </script>
 					<p><span class="demoLabel">Date picker appears via text button:</span>
 						<input type="text" size="10" id="invokeButton"/>
 						<input type="button" id="enableButton" value="Disable"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-	$('#invokeButton').datepicker({showOn: 'button', buttonText: '...',
-		buttonImage: '', buttonImageOnly: false});
+$('#invokeButton').datepicker({showOn: 'button', buttonText: '...',
+	buttonImage: '', buttonImageOnly: false});
 </script>
 					<p style="clear:both"><span class="demoLabel">Date picker appears both ways:</span>
 						<input type="text" size="10" class="invokeBoth"/>
 						<input type="button" id="enableBoth" value="Disable"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-	$('.invokeBoth').datepicker({showOn: 'both', buttonImage: 'img/calendar.gif', buttonImageOnly: true});
+$('.invokeBoth').datepicker({showOn: 'both', buttonImage: 'img/calendar.gif', buttonImageOnly: true});
+</script>
+					<p>Enable and disable datepicker with enableFor and disableFor.</p>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+$('#enableFocus').toggle(
+	function () { this.value = 'Enable'; $.datepicker.disableFor('#invokeFocus'); },
+	function () { this.value = 'Disable'; $.datepicker.enableFor('#invokeFocus'); });
+$('#enableButton').toggle(
+	function () { this.value = 'Enable'; $.datepicker.disableFor($('#invokeButton')); },
+	function () { this.value = 'Disable'; $.datepicker.enableFor($('#invokeButton')); });
+$('#enableBoth').toggle(
+	function () { this.value = 'Enable'; $.datepicker.disableFor($('.invokeBoth')[0]); },
+	function () { this.value = 'Disable'; $.datepicker.enableFor($('.invokeBoth')[0]); });
 </script>
 					<p>The date picker can also be triggered externally for a particular input.</p>
 					<p><span class="demoLabel">External trigger:</span>
 						<button id="button1">Open date picker</button></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-	$('#button1').click(function() { 
-		$.datepicker.showFor('#invokeFocus');
-	});	
+$('#button1').click(function() { 
+	$.datepicker.showFor('#invokeFocus');
+});	
 </script>	
 					<p>Or even opened as a "dialog". If the <em>blockUI</em> plugin is available,
 						it is used to create a modal dialog.</p>
@@ -136,10 +148,10 @@
 						<input type="text" size="10" id="invokeDialog" readonly="readonly"/>
 						<button id="button2">Open dialog</button></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-	$('#button2').click(function() { 
-		$.datepicker.dialogDatepicker($('#invokeDialog').val(),
-		setDateFromDialog, {prompt: 'Choose a date', speed: ''});
-	});	
+$('#button2').click(function() { 
+	$.datepicker.dialogDatepicker($('#invokeDialog').val(),
+	setDateFromDialog, {prompt: 'Choose a date', speed: ''});
+});	
 </script>	
 				</div>
 				<div id="keys" class="tab_group1 container">
@@ -166,19 +178,23 @@
 						changed, as well as preventing the month and year from being selected directly.</p>
 					<p><span class="demoLabel">Restricted functionality:</span>
 						<input type="text" size="10" id="restrictControls"/></p>
-<pre><code>$('#restrictControls').datepicker({firstDay: 1, changeFirstDay: false,
-	changeMonth: false, changeYear: false});</code></pre>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+$('#restrictControls').datepicker({firstDay: 1, changeFirstDay: false,
+	changeMonth: false, changeYear: false});
+</script>
 					<p>You can also limit the range of dates selectable within the date picker.
 						Here it's between 26-Jan-05 and 26-Jan-07.</p>
 					<p><span class="demoLabel">Limited dates:</span>
 						<input type="text" size="10" id="restrictDates"/></p>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+$('#restrictDates').datepicker({minDate: new Date(2005, 1 - 1, 26),
+	maxDate: new Date(2007, 1 - 1, 26)});
+</script>
 					<p>Note that the range of selectable months and years changes appropriately. Also,
 						note that the <em>Today</em> link is no longer available as today is not in the range.
 						By default, the <em>Prev</em> and <em>Next</em> links are disabled if they are not
 						applicable. You can override this to remove them instead, with the
 						<code>hideIfNoPrevNext</code> setting.</p>
-<pre><code>$('#restrictDates').datepicker({minDate: new Date(2005, 1 - 1, 26),
-	maxDate: new Date(2007, 1 - 1, 26)});</code></pre>
 				</div>
 				<div id="custom" class="tab_group1 container">
 					<h3>Customise</h3>
@@ -189,24 +205,29 @@
 						function is built-in that prevents the selection of days on weekends.</p>
 					<p><span class="demoLabel">No weekends:</span>
 						<input type="text" size="10" id="noWeekends"/></p>
-<pre><code>$('#noWeekends').datepicker({beforeShowDay: $.datepicker.noWeekends});</code></pre>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+$('#noWeekends').datepicker({beforeShowDay: $.datepicker.noWeekends});
+</script>
 					<p>Or you can provide your own function. The one below highlights and
 						prevents selection of a set of national days.</p>
 					<p><span class="demoLabel">National days:</span>
 						<input type="text" size="10" id="nationalDays"/></p>
-<pre><code>$('#nationalDays').datepicker({beforeShowDay: nationalDays});
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+$('#nationalDays').datepicker({beforeShowDay: nationalDays});
 
-var natDays = [[1, 26, 'au'], [2, 6, 'nz'], [3, 17, 'ie'], [4, 27, 'za'], 
-	[5, 25, 'ar'], [6, 6, 'se'], [7, 4, 'us'], [8, 17, 'id'], [9, 7, 'br'], 
-	[10, 1, 'cn'], [11, 22, 'lb'], [12, 12, 'ke']];
+// Highlight certain national days on the calendar
+var natDays = [[1, 26, 'au'], [2, 6, 'nz'], [3, 17, 'ie'], [4, 27, 'za'], [5, 25, 'ar'], [6, 6, 'se'],
+	[7, 4, 'us'], [8, 17, 'id'], [9, 7, 'br'], [10, 1, 'cn'], [11, 22, 'lb'], [12, 12, 'ke']];
+
 function nationalDays(date) {
-	for (i = 0; i &lt; natDays.length; i++) {
-		if (date.getMonth() == natDays[i][0] - 1 &amp;&amp; date.getDate() == natDays[i][1]) {
+	for (i = 0; i < natDays.length; i++) {
+		if (date.getMonth() == natDays[i][0] - 1 && date.getDate() == natDays[i][1]) {
 			return [false, natDays[i][2] + '_day'];
 		}
 	}
 	return [true, ''];
-}</code></pre>
+}
+</script>
 					<p>With CSS like the following:</p>
 					<pre><code>.au_day { color: blue !important; background: #eee url(au.gif) no-repeat center !important; }</code></pre>
 				</div>
@@ -219,7 +240,9 @@ function nationalDays(date) {
 						and the last character is the field separator to use (may be omitted).</p>
 					<p><span class="demoLabel">ISO date format:</span>
 						<input type="text" size="10" id="isoFormat"/></p>
-					<pre><code>$('#isoFormat').datepicker({dateFormat: 'YMD-'});</code></pre>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+$('#isoFormat').datepicker({dateFormat: 'YMD-'});
+</script>
 					<p>Or translate the text into another language.</p>
 					<p><span class="demoLabel">
 						<select id="language">
@@ -257,12 +280,15 @@ function nationalDays(date) {
 					<p><span class="demoLabel">Date range:</span>
 						<input type="text" size="10" class="dateRange" id="dFrom"/> to
 						<input type="text" size="10" class="dateRange" id="dTo"/></p>
-<pre><code>$('.dateRange').datepicker({beforeShow: customRange});
-		
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+$('.dateRange').datepicker({beforeShow: customRange});
+
+// Customise two date pickers to work as a date range
 function customRange(input) {
 	return {minDate: (input.id == 'dTo' ? getDate($('#dFrom').val()) : null),
 		maxDate: (input.id == 'dFrom' ? getDate($('#dTo').val()) : null)};
-}</code></pre>
+}
+</script>
 					<p>Select a date range on one date picker, first click is the start date and second click is the end date.
 						The last example show six months in two rows of three months
 						with <i>Previous</i> and <i>Next</i> moving three months at a time.</p>
