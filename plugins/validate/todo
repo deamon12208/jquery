@@ -1,3 +1,5 @@
+- add support for dynamic params, that is, check if the specified parameter (if relevant at all, eg. maxValue) is a function, then execute it and use the return value
+
 - document focusInvalid()
 - document validation lifecycle: setup (add event handlers), run validation (prepare form, validate elements, display errors/submit form)
 	 -> show where the user can hook in via callbacks
