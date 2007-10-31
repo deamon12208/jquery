@@ -63,6 +63,7 @@
 					
 				var updateSelects = function (selectedDate)
 				{
+					selectedDate = new Date(selectedDate);
 					var d = selectedDate.getDate();
 					var m = selectedDate.getMonth();
 					var y = selectedDate.getFullYear();
@@ -218,6 +219,7 @@ $(function()
 		
 	var updateSelects = function (selectedDate)
 	{
+		selectedDate = new Date(selectedDate);
 		var d = selectedDate.getDate();
 		var m = selectedDate.getMonth();
 		var y = selectedDate.getFullYear();
