@@ -10,39 +10,19 @@ $(document).ready(function () {
 	$("a.togglecode")
 		.click(function() { return false })
 		.mouseover(function() {
-			$(this).next().next().slideDown('fast')
+			$(this).next().next().fadeIn('fast')
 			$(this).next().remove()
 			$(this).remove()
 		})
-	$('#enableFocus').toggle(
-		function () { this.value = 'Enable'; $.datepicker.disableFor('#invokeFocus'); },
-		function () { this.value = 'Disable'; $.datepicker.enableFor('#invokeFocus'); });
-	$('#enableButton').toggle(
-		function () { this.value = 'Enable'; $.datepicker.disableFor($('#invokeButton')); },
-		function () { this.value = 'Disable'; $.datepicker.enableFor($('#invokeButton')); });
-	$('#enableBoth').toggle(
-		function () { this.value = 'Enable'; $.datepicker.disableFor($('.invokeBoth')[0]); },
-		function () { this.value = 'Disable'; $.datepicker.enableFor($('.invokeBoth')[0]); });
-	// Restricting
-	$('#restrictControls').datepicker({firstDay: 1, changeFirstDay: false,
-		changeMonth: false, changeYear: false});
-	$('#restrictDates').datepicker({minDate: new Date(2005, 1 - 1, 26),
-		maxDate: new Date(2007, 1 - 1, 26)});
-	// Customise
-	$('#noWeekends').datepicker({beforeShowDay: $.datepicker.noWeekends});
-	$('#nationalDays').datepicker({beforeShowDay: nationalDays});
-	// Localisation
-	$('#isoFormat').datepicker({dateFormat: 'YMD-'});
+	// Localization
 	if ($.browser.safari) {
 		$('#language,#l10nDatepicker').attr({ disabled: 'disabled' });
-	}
-	else {
+	} else {
 		$('#language').change(localise);
 		$('#l10nDatepicker').datepicker();
 		localise();
 	}
 	// Date range
-	$('.dateRange').datepicker({beforeShow: customRange});
 	$('#rangeSelect').datepicker({rangeSelect: true});
 	$('#rangeSelect2Months').datepicker({rangeSelect: true, numberOfMonths: 2});
 	$('#rangeSelect6Months').datepicker({rangeSelect: true, numberOfMonths: [2, 3],
@@ -86,18 +66,6 @@ function setDateFromDialog(date) {
 	$('#invokeDialog').val(date);
 }
 
-// Highlight certain national days on the calendar
-var natDays = [[1, 26, 'au'], [2, 6, 'nz'], [3, 17, 'ie'], [4, 27, 'za'], [5, 25, 'ar'], [6, 6, 'se'],
-	[7, 4, 'us'], [8, 17, 'id'], [9, 7, 'br'], [10, 1, 'cn'], [11, 22, 'lb'], [12, 12, 'ke']];
-function nationalDays(date) {
-	for (i = 0; i < natDays.length; i++) {
-		if (date.getMonth() == natDays[i][0] - 1 && date.getDate() == natDays[i][1]) {
-			return [false, natDays[i][2] + '_day'];
-		}
-	}
-	return [true, ''];
-}
-
 // Load and apply a localisation package for the date picker
 function localise() {
 	var language = $('#language').val();
@@ -106,11 +74,6 @@ function localise() {
 		setDefaults($.datepicker.regional['']); // Reset for general usage
 }
 
-// Customise two date pickers to work as a date range
-function customRange(input) {
-	return {minDate: (input.id == 'dTo' ? getDate($('#dFrom').val()) : null),
-		maxDate: (input.id == 'dFrom' ? getDate($('#dTo').val()) : null)};
-}
 // Create a Date from a string value
 function getDate(value) {
 	fields = value.split('/');
@@ -230,8 +193,8 @@ var tabs =
 			$(this).click(function () {
 				$('.over').removeClass('over');
 				$(this).addClass('over');
-				$("div[@class^=tab_group]:visible").slideUp("fast", function() { 
-					$("#" + tabs.IDs[i]).slideDown();
+				$("div[@class^=tab_group]:visible").fadeOut("fast", function() { 
+					$("#" + tabs.IDs[i]).fadeIn();
 				});
 				tabs.stylesheet = (tabs.IDs[i] == 'styles') ? 'alt' : 'default';
 				$('link').each(function() {
@@ -243,13 +206,13 @@ var tabs =
 		
 		$("div[@class^=tab_group] .nextFeature a").each(function(i){
 			$(this).click(function() { 
-				$("div[@class^=tab_group]:visible").slideUp("fast", function() { 
+				$("div[@class^=tab_group]:visible").fadeOut("fast", function() { 
 					if (tabs.IDs.length > (i+1) ) {
-						$("#" + tabs.IDs[i+1]).slideDown();
+						$("#" + tabs.IDs[i+1]).fadeIn();
 						$('.over').removeClass('over');
 						$("ul[@id^=tab_menu] a:eq(" + (i+1) + ")").addClass('over');
 					} else {
-						$("#" + tabs.IDs[0]).slideDown();
+						$("#" + tabs.IDs[0]).fadeIn();
 						$('.over').removeClass('over');
 						$("ul[@id^=tab_menu] a:eq(0)").addClass('over');
 					}
