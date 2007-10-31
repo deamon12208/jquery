@@ -25,7 +25,7 @@
         
         <!-- page specific scripts -->
 		<script type="text/javascript" charset="utf-8">
-            $(function()
+			$(function()
             {
 				$('.date-pick').datePicker()
 				$('#start-date').bind(
@@ -34,6 +34,7 @@
 					{
 						var d = selectedDates[0];
 						if (d) {
+							d = new Date(d);
 							$('#end-date').dpSetStartDate(d.addDays(1).asString());
 						}
 					}
@@ -44,6 +45,7 @@
 					{
 						var d = selectedDates[0];
 						if (d) {
+							d = new Date(d);
 							$('#start-date').dpSetEndDate(d.addDays(-1).asString());
 						}
 					}
@@ -97,6 +99,7 @@ $(function()
 		{
 			var d = selectedDates[0];
 			if (d) {
+				d = new Date(d);
 				$('#end-date').dpSetStartDate(d.addDays(1).asString());
 			}
 		}
@@ -107,6 +110,7 @@ $(function()
 		{
 			var d = selectedDates[0];
 			if (d) {
+				d = new Date(d);
 				$('#start-date').dpSetEndDate(d.addDays(-1).asString());
 			}
 		}
