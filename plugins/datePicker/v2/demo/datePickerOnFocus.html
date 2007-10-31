@@ -40,7 +40,7 @@
 						function(event)
 						{
 							// works good in Firefox... But how to get it to work in IE?
-							if ($browser.mozilla) {
+							if ($.browser.mozilla) {
 
 								var el = event.explicitOriginalTarget
 								
@@ -110,9 +110,26 @@ $(function()
 			}
 		).bind(
 			'blur',
-			function()
+			function(event)
 			{
-				$(this).dpClose();
+				// works good in Firefox... But how to get it to work in IE?
+				if ($.browser.mozilla) {
+
+					var el = event.explicitOriginalTarget
+					
+					var cal = $('#dp-popup')[0];
+				
+					while (true){
+						if (el == cal) {
+							return false;
+						} else if (el == document) {
+							$(this).dpClose();
+							return true;
+						} else {
+							el = $(el).parent()[0];
+						}
+					}
+				}
 			}
 		);
 });</pre>
