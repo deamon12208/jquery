@@ -31,7 +31,7 @@ function Datepicker() {
 		dayNames: ['Su','Mo','Tu','We','Th','Fr','Sa'], // Names of days starting at Sunday
 		monthNames: ['January','February','March','April','May','June',
 			'July','August','September','October','November','December'], // Names of months
-		dateFormat: 'DMY/', // First three are day, month, year in the required order,
+		dateFormat: 'MDY/', // First three are day, month, year in the required order,
 			// fourth (optional) is the separator, e.g. US would be 'MDY/', ISO would be 'YMD-'
 		firstDay: 0 // The first day of the week, Sun = 0, Mon = 1, ...
 	};

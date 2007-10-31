@@ -1,17 +1,19 @@
 // Initialise the date picker demonstrations
 $(document).ready(function () {
-	$('#alt').attr({ disabled: 'disabled' });
+	// initialize tab interface
 	tabs.init();
-	// Set date picker global defaults - invoke via focus and image button
-	$.datepicker.setDefaults({showOn: 'both', buttonImageOnly: true,
-		buttonImage: 'img/calendar.gif', buttonText: 'Calendar'});
-	// Defaults
-	$('#defaultFocus').datepicker({showOn: 'focus'});
-	// Invocation
-	$('#invokeFocus').datepicker({showOn: 'focus', yearRange: '-5:+5'});
-	$('#invokeButton').datepicker({showOn: 'button', buttonImageOnly: false,
-		buttonImage: '', buttonText: '...', yearRange: '-7:+7'});
-	$('.invokeBoth').datepicker(); // Also Keystrokes
+	// replace script tags with HTML code
+	$(".demojs").each(function () {
+		$(this).before( '<div><a class="togglecode" href="#">Show Code Example</a><br /><pre style="display:none"><code>' + $(this).html() + "</code></pre></div>" );
+		eval( $(this).html() );
+	});
+	$("a.togglecode")
+		.click(function() { return false })
+		.mouseover(function() {
+			$(this).next().next().slideDown('fast')
+			$(this).next().remove()
+			$(this).remove()
+		})
 	$('#enableFocus').toggle(
 		function () { this.value = 'Enable'; $.datepicker.disableFor('#invokeFocus'); },
 		function () { this.value = 'Disable'; $.datepicker.enableFor('#invokeFocus'); });
@@ -21,13 +23,6 @@ $(document).ready(function () {
 	$('#enableBoth').toggle(
 		function () { this.value = 'Enable'; $.datepicker.disableFor($('.invokeBoth')[0]); },
 		function () { this.value = 'Disable'; $.datepicker.enableFor($('.invokeBoth')[0]); });
-	$('#button1').click(function() { 
-		$.datepicker.showFor('#invokeFocus');
-	});
-	$('#button2').click(function() { 
-		$.datepicker.dialogDatepicker($('#invokeDialog').val(),
-		setDateFromDialog, {prompt: 'Choose a date', speed: ''});
-	});
 	// Restricting
 	$('#restrictControls').datepicker({firstDay: 1, changeFirstDay: false,
 		changeMonth: false, changeYear: false});

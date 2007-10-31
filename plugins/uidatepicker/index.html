@@ -29,7 +29,7 @@
 		<!-- Include Demo Files -->
 		<script type="text/javascript" src="demo/jquery.localisation.js"></script>
 		<script type="text/javascript" src="demo/ui.datepicker.demo.js"></script>
-		<link rel="stylesheet" type="text/css" href="demo/ui.datepicker.alt.css" title="alt" id="alt"/>
+		<link rel="stylesheet" type="text/css" href="demo/ui.datepicker.alt.css" title="alt" id="alt" disabled="disabled"/>
 		<link rel="stylesheet" type="text/css" href="demo/ui.datepicker.demo.css" />
 	</head>
 	<body>
@@ -66,17 +66,19 @@
 				</ul>
 				<div id="default" class="tab_group1 container">
 					<h3>Defaults</h3>
-					<p>A date picker can easily be added to an input field with appropriate default settings.</p>
-					<pre><code>$('#defaultFocus').datepicker();</code></pre>
+					<p>A date picker can easily be added to an input field with default settings.</p>
 					<p><span class="demoLabel">Default date picker:</span>
 						<input type="text" size="10" id="defaultFocus"/> (click to show)</p>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+	$('#defaultFocus').datepicker();	
+</script>
 					<p><span class="demoLabel">IE select issue:</span>
 						<select><option>Show how the date picker covers a select in IE</option></select></p>
 					<p>The defaults are:</p>
 					<ul>
 						<li>Date picker appears on focus</li>
 						<li>Text is in English</li>
-						<li>Date format is dd/mm/yyyy</li>
+						<li>Date format is mm/dd/yyyy</li>
 						<li><em>Clear</em>/<em>Close</em> controls show at the top</li>
 						<li>Month and year are selectable directly</li>
 						<li>10 years before and after the selected year are shown</li>
@@ -90,6 +92,11 @@
 					</ul>
 					<p>Processed fields are marked with a class of <code>hasDatepicker</code>
 						and are not re-processed if targetted a second time.</p>
+					<p>You can override the default settings that apply to all date picker instances.</p>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+	$.datepicker.setDefaults({showOn: 'both', buttonImageOnly: true,
+		buttonImage: 'img/calendar.gif', buttonText: 'Calendar'});
+</script>
 				</div>
 				<div id="invoke" class="tab_group1 container">
 					<h3>Invocation</h3>
@@ -99,36 +106,41 @@
 					<p><span class="demoLabel">Date picker appears on focus:</span>
 						<input type="text" size="10" id="invokeFocus"/>
 						<input type="button" id="enableFocus" value="Disable"/></p>
-					<p><span class="demoLabel">Date picker appears via button:</span>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+	$('#invokeFocus').datepicker({showOn: 'focus'});	
+</script>
+					<p><span class="demoLabel">Date picker appears via text button:</span>
 						<input type="text" size="10" id="invokeButton"/>
 						<input type="button" id="enableButton" value="Disable"/></p>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+	$('#invokeButton').datepicker({showOn: 'button', buttonText: '...',
+		buttonImage: '', buttonImageOnly: false});
+</script>
 					<p style="clear:both"><span class="demoLabel">Date picker appears both ways:</span>
 						<input type="text" size="10" class="invokeBoth"/>
 						<input type="button" id="enableBoth" value="Disable"/></p>
-					<p>This is achieved by overriding settings when attaching the date picker
-						to the appropriate input controls. Note that you can also override
-						the default settings that apply to all date picker instances.</p>
-<pre><code>$.datepicker.setDefaults({showOn: 'both', buttonImageOnly: true,
-	buttonImage: 'calendar.gif', buttonText: 'Calendar'});
-$('#invokeFocus').datepicker({showOn: 'focus', yearRange: '-5:+5'});
-$('#invokeButton').datepicker({showOn: 'button', buttonImageOnly: false,
-	buttonImage: '', buttonText: '...', yearRange: '-7:+7'});
-$('.invokeBoth').datepicker();
-
-$('#enableFocus').toggle(
-	function () { this.value = 'Enable'; $.datepicker.disableFor('#invokeFocus'); },
-	function () { this.value = 'Disable'; $.datepicker.enableFor('#invokeFocus'); });</code></pre>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+	$('.invokeBoth').datepicker({showOn: 'both', buttonImage: 'img/calendar.gif', buttonImageOnly: true});
+</script>
 					<p>The date picker can also be triggered externally for a particular input.</p>
 					<p><span class="demoLabel">External trigger:</span>
 						<button id="button1">Open date picker</button></p>
-<pre><code>$.datepicker.showFor('#invokeFocus');</code></pre>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+	$('#button1').click(function() { 
+		$.datepicker.showFor('#invokeFocus');
+	});	
+</script>	
 					<p>Or even opened as a "dialog". If the <em>blockUI</em> plugin is available,
 						it is used to create a modal dialog.</p>
 					<p><span class="demoLabel">Date picker dialog:</span>
 						<input type="text" size="10" id="invokeDialog" readonly="readonly"/>
 						<button id="button2">Open dialog</button></p>
-<pre><code>$.datepicker.dialogDatepicker($('#invokeDialog').val(), setDateFromDialog,
-	{prompt: 'Choose a date', speed: ''});</code></pre>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+	$('#button2').click(function() { 
+		$.datepicker.dialogDatepicker($('#invokeDialog').val(),
+		setDateFromDialog, {prompt: 'Choose a date', speed: ''});
+	});	
+</script>	
 				</div>
 				<div id="keys" class="tab_group1 container">
 					<h3>Keystrokes</h3>
