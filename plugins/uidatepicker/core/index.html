@@ -12,9 +12,11 @@
 		<!-- Include Core Datepicker JavaScript -->
 		<script src="ui.datepicker.js" type="text/javascript" charset="utf-8"></script>	
 		
-		<!-- Attach the datepicker to dateinput -->
+		<!-- Attach the datepicker to dateinput after document is ready -->
 		<script type="text/javascript" charset="utf-8">
-			$("#dateinput").datepicker();
+			$(document).ready(function() {
+				$("#dateinput").datepicker();
+			});
 		</script>
 		
 		<!-- Include Core Datepicker Stylesheet -->		
