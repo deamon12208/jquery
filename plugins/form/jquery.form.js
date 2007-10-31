@@ -1,5 +1,6 @@
 /*
  * jQuery Form Plugin
+ * version: 2.01 (10/31/2007)
  * @requires jQuery v1.1 or later
  *
  * Examples at: http://malsup.com/jquery/form/
@@ -180,7 +181,7 @@ $.fn.ajaxSubmit = function(options) {
         options = { success: options };
 
     options = $.extend({
-        url:  this.attr('action') || window.location,
+        url:  this.attr('action') || window.location.toString(),
         type: this.attr('method') || 'GET'
     }, options || {});
 
@@ -241,10 +242,17 @@ $.fn.ajaxSubmit = function(options) {
         if (files[j])
             found = true;
 
-    if (options.iframe || found) // options.iframe allows user to force iframe mode
-        fileUpload();
-    else
-        $.ajax(options);
+    // options.iframe allows user to force iframe mode
+   if (options.iframe || found) { 
+       // hack to fix Safari hang (thanks to Tim Molendijk for this)
+       // see:  http://groups.google.com/group/jquery-dev/browse_thread/thread/36395b7ab510dd5d
+       if ($.browser.safari && options.closeKeepAlive)
+           $.get(options.closeKeepAlive, fileUpload);
+       else
+           fileUpload();
+       }
+   else
+       $.ajax(options);
 
     // fire 'notify' event
     $.event.trigger('form.submit.notify', [this, options]);
@@ -813,6 +821,52 @@ $.fn.resetForm = function() {
         // note that IE reports the reset function as an 'object'
         if (typeof this.reset == 'function' || (typeof this.reset == 'object' && !this.reset.nodeType))
             this.reset();
+    });
+};
+
+
+/**
+ * Enables or disables any matching elements.
+ *
+ * @example $(':radio').enabled(false);
+ * @desc Disables all radio buttons
+ *
+ * @name select
+ * @type jQuery
+ * @cat Plugins/Form
+ */
+$.fn.enable = function(b) { 
+    if (b == undefined) b = true;
+    return this.each(function() { 
+        this.disabled = !b 
+    });
+};
+
+/**
+ * Checks/unchecks any matching checkboxes or radio buttons and
+ * selects/deselects and matching option elements.
+ *
+ * @example $(':checkbox').selected();
+ * @desc Checks all checkboxes
+ *
+ * @name select
+ * @type jQuery
+ * @cat Plugins/Form
+ */
+$.fn.select = function(select) {
+    if (select == undefined) select = true;
+    return this.each(function() { 
+        var t = this.type;
+        if (t == 'checkbox' || t == 'radio')
+            this.checked = select;
+        else if (this.tagName.toLowerCase() == 'option') {
+            var $sel = $(this).parent('select');
+            if (select && $sel[0] && $sel[0].type == 'select-one') {
+                // deselect all other options
+                $sel.find('option').select(false);
+            }
+            this.selected = select;
+        }
     });
 };
 
