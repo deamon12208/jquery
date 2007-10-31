@@ -106,7 +106,7 @@ function nationalDays(date) {
 // Load and apply a localisation package for the date picker
 function localise() {
 	var language = $('#language').val();
-	$.localise('ui.datepicker', {language: language});
+	$.localise('i18n/ui.datepicker', {language: language});
 	$.datepicker.reconfigureFor('#l10nDatepicker', $.datepicker.regional[language]).
 		setDefaults($.datepicker.regional['']); // Reset for general usage
 }
