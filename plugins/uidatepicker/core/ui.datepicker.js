@@ -1,9 +1,9 @@
 /* jQuery UI Date Picker v3.0 - previously jQuery Calendar
    Written by Marc Grabanski (m@marcgrabanski.com) and Keith Wood (kbwood@iprimus.com.au).
 
-   Copyright (c) 2007 Marc Grabanski (http://marcgrabanski.com/code/jquery-calendar)
-   Dual licensed under the GPL (http://www.gnu.org/licenses/gpl-3.0.txt) and 
-   CC (http://creativecommons.org/licenses/by/3.0/) licenses. "Share or Remix it but please Attribute the authors."
+   Copyright (c) 2007 Marc Grabanski (http://marcgrabanski.com/code/ui-datepicker)
+   Dual licensed under the MIT (MIT-LICENSE.txt)
+   and GPL (GPL-LICENSE.txt) licenses.
    Date: 09-03-2007  */
 
 /* Date picker manager.
