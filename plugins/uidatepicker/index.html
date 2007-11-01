@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
 		<title>jQuery UI Datepicker</title>
-<!--DEMO		
+	<!--DEMO	
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 		<meta name="description" content="jQuery UI Datepicker is a popup date picker built on the jQuery JavaScript library." />
 		<meta name="author" content="Marc Grabanski" />
@@ -45,7 +45,7 @@
 					<li><a href="#invoke">Invocation</a></li>
 					<li><a href="#keys">Keystrokes</a></li>
 					<li><a href="#restrict">Restricting</a></li>
-					<li><a href="#custom">Customise</a></li>
+					<li><a href="#custom">Customize</a></li>
 					<li><a href="#l10n">Localisation</a></li>
 					<li style="clear:left"><a href="#range">Date range</a></li>
 					<li><a href="#misc">Miscellaneous</a></li>
@@ -193,8 +193,8 @@ $('#restrictDates').datepicker({minDate: new Date(2005, 1 - 1, 26),
 						<code>hideIfNoPrevNext</code> setting.</p>
 				</div>
 				<div id="custom" class="tab_group1 container">
-					<h3>Customise</h3>
-					<p>You can customise the selectability and/or appearance of individual days
+					<h3>customize</h3>
+					<p>You can customize the selectability and/or appearance of individual days
 						by setting a callback function that accepts a date and returns an array
 						with the first entry being true/false for selectability and the second
 						entry being a CSS class to apply (or '' for none). One appropriate
@@ -279,7 +279,7 @@ $('#isoFormat').datepicker({dateFormat: 'YMD-'});
 <script type="text/jsdemo" charset="utf-8" class="demojs">
 $('.dateRange').datepicker({beforeShow: customRange});
 
-// Customise two date pickers to work as a date range
+// Customize two date pickers to work as a date range
 function customRange(input) {
 	return {minDate: (input.id == 'dTo' ? getDate($('#dFrom').val()) : null),
 		maxDate: (input.id == 'dFrom' ? getDate($('#dTo').val()) : null)};
@@ -588,6 +588,7 @@ $("#setInlineRange").click(function() {
 <pre><code>&lt;link rel="stylesheet" type="text/css" href="<b>ui.datepicker.css</b>"/&gt;
 &lt;script type="text/javascript" src="<b>ui.datepicker.js</b>"&gt;&lt;/script&gt;
 &lt;script type="text/javascript" src="<b>jquery-calendar-compatibility.js</b>"&gt;&lt;/script&gt;</code></pre>
+					<p>Download the <a href="compatibility/jquery-calendar-compatibility.js" target="_blank">jquery-calendar-compatibility.js</a></p>
 					<p>To migrate fully, the following steps need to be taken:</p>
 					<ul>
 						<li>Replace references to the <code>jquery-calendar*</code>
@@ -622,7 +623,7 @@ $("#setInlineRange").click(function() {
 	
 &lt;input type="text" id="inlineConfig" <b>date:</b>defaultDate="+7"/&gt;</code></pre>
 				</div>
-<!--DEMO	
+<!--DEMO				
 				<h2 style="margin-top:2em">Use jQuery UI Datepicker</h2>
 				<div class="container">
 					<ol>
