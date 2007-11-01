@@ -1,3 +1,7 @@
+
+- try to replace element handling on each input with event delegation handled by the form
+	-> complicates handling the event, but improves adding/removing handlers a ton, refresh() doesn't have to do anything for events, adding and removing elements from the form is priceless
+	-> while at it, improve event handling for selects
 - add support for dynamic params, that is, check if the specified parameter (if relevant at all, eg. maxValue) is a function, then execute it and use the return value
 
 - document focusInvalid()
