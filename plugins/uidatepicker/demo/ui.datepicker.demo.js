@@ -81,7 +81,7 @@ var tabs =
 				$("ul[@id^=tab_menu] a.over").removeClass('over');
 				$(this).addClass('over');
 				$("div[@class^=tab_group]:visible").hide();
-				$( $(this).attr("href") ).show();
+				$( $(this).attr("href") ).fadeIn();
 				return false;
 			});
 		});
