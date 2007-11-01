@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 	<head>
 		<title>jQuery UI Datepicker</title>
-<!--DEMO PAGE CODE		
+<!--DEMO		
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 		<meta name="description" content="jQuery UI Datepicker is a popup date picker built on the jQuery JavaScript library." />
 		<meta name="author" content="Marc Grabanski" />
@@ -14,7 +14,7 @@
 		<meta name="keywords" content="jquery datepicker, ui datepicker, jquery date picker, jquery calendar" />
 		<link rel="stylesheet" type="text/css" href="../../css/style.css" />
 		<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="../../css/ie6.css" /><![endif]--> 
-	
+		
 		<!-- Include jQuery -->
 		<script type="text/javascript" src="core/jquery.js"></script>
 		
@@ -30,7 +30,6 @@
 	</head>
 	<body>
 		<div id="wrap">
-			
 			<?php include '../main_nav.php' ?>
 			<div id="header">
 				<div>
@@ -40,7 +39,6 @@
 			</div>
 			<?php $code_nav='ui-datepicker'; include '../code_nav.php' ?>
 			<div id="content">
-			
 				<h2>jQuery UI Date Picker v3.0 Examples</h2>
 				<ul id="tab_menu1" class="tabs">
 					<li><a href="#default">Defaults</a></li>
@@ -349,9 +347,15 @@ function alertDate(date) {
 	alert('The date is ' + date);
 }
 </script>
-					<p>Connect the date picker to linked drop-downs. You still need an input field,
+					<p><strong>(Advanced Technique)</strong><br />Connect the date picker to linked drop-downs. You still need an input field,
 						but it is hidden following the drop-downs.</p>
 					<p><span class="demoLabel">Linked drop-downs:</span>
+						<select id="selectMonth"><option value="01">Jan</option><option value="02">Feb</option>
+							<option value="03">Mar</option><option value="04">Apr</option>
+							<option value="05">May</option><option value="06">Jun</option>
+							<option value="07">Jul</option><option value="08">Aug</option>
+							<option value="09">Sep</option><option value="10">Oct</option>
+							<option value="11">Nov</option><option value="12">Dec</option></select>
 						<select id="selectDay"><option value="01">1</option><option value="02">2</option>
 							<option value="03">3</option><option value="04">4</option>
 							<option value="05">5</option><option value="06">6</option>
@@ -368,12 +372,6 @@ function alertDate(date) {
 							<option value="27">27</option><option value="28">28</option>
 							<option value="29">29</option><option value="30">30</option>
 							<option value="31">31</option></select>
-						<select id="selectMonth"><option value="01">Jan</option><option value="02">Feb</option>
-							<option value="03">Mar</option><option value="04">Apr</option>
-							<option value="05">May</option><option value="06">Jun</option>
-							<option value="07">Jul</option><option value="08">Aug</option>
-							<option value="09">Sep</option><option value="10">Oct</option>
-							<option value="11">Nov</option><option value="12">Dec</option></select>
 						<select id="selectYear"><option value="2001">2001</option><option value="2002">2002</option>
 							<option value="2003">2003</option><option value="2004">2004</option>
 							<option value="2005">2005</option><option value="2006">2006</option>
@@ -381,32 +379,38 @@ function alertDate(date) {
 							<option value="2009">2009</option><option value="2010">2010</option></select>
 						<input type="hidden" size="10" id="linkedDates" disabled="disabled"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#linkedDates').datepicker({minDate: new Date(2001, 1 - 1, 1),
-	maxDate: new Date(2010, 12 - 1, 31), beforeShow: readLinked,
-	onSelect: updateLinked});
+$('#linkedDates').datepicker({
+	minDate: new Date(2001, 1 - 1, 1), 
+	maxDate: new Date(2010, 12 - 1, 31), 
+	beforeShow: readLinked,	
+	onSelect: updateLinked
+});
 
 // Prepare to show a date picker linked to three select controls
 function readLinked() {
-	$('#linkedDates').val($('#selectDay').val() + '/' +
-	$('#selectMonth').val() + '/' + $('#selectYear').val());
+	$('#linkedDates').val(
+		$('#selectMonth').val() + '/' +
+		$('#selectDay').val() + '/' + 
+		$('#selectYear').val()
+	);
 	return {};
 }
 
 // Update three select controls to match a date picker selection
 function updateLinked(date) {
-	$('#selectDay').val(date.substring(0, 2));
-	$('#selectMonth').val(date.substring(3, 5));
+	$('#selectMonth').val(date.substring(0, 2));
+	$('#selectDay').val(date.substring(3, 5));
 	$('#selectYear').val(date.substring(6, 10));
 }
 
-$('#selectMonth,#selectYear').change(checkLinkedDays);
+$('#selectMonth, #selectYear').change(checkLinkedDays);
 
 // Prevent selection of invalid dates through the select controls
 function checkLinkedDays() {
 	var daysInMonth = 32 - new Date($('#selectYear').val(),
 		$('#selectMonth').val() - 1, 32).getDate();
-	$('#selectDay option').attr('disabled', '');
-	$('#selectDay option:gt(' + (daysInMonth - 1) +')').attr('disabled', 'disabled');
+		$('#selectDay option').attr('disabled', '');
+		$('#selectDay option:gt(' + (daysInMonth - 1) +')').attr('disabled', 'disabled');
 	if ($('#selectDay').val() > daysInMonth) {
 		$('#selectDay').val(daysInMonth);
 	}
@@ -475,12 +479,12 @@ $('#inlineDemo').datepicker({
 });
 </script>
 					<p>Show a number of months at once and set the range directly.</p>
-					<p>
-						<span class="demoLabel">Inline range with two months:</span>
+					<p>Inline range with two months:</p>
+					<div style="clear: both">
 						<span id="rangeInline"></span>
-					</p>
+					</div>
 					<p style="clear: both; padding-top: 0.5em;">
-						<span class="demoLabel">Selected range is:</span>
+						<span>Selected range is:</span>&nbsp;&nbsp;
 						<input type="text" size="25" id="inlineRange" readonly="readonly"/>
 					</p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
@@ -618,52 +622,56 @@ $("#setInlineRange").click(function() {
 	
 &lt;input type="text" id="inlineConfig" <b>date:</b>defaultDate="+7"/&gt;</code></pre>
 				</div>
-<!--DEMO PAGE CODE		
-				<h2>Use jQuery UI Datepicker</h2>
+<!--DEMO	
+				<h2 style="margin-top:2em">Use jQuery UI Datepicker</h2>
 				<div class="container">
 					<ol>
-						<li>Get the latest version of <a href="http://jquery.com">jQuery</a> and include it in the head section of your page.
-		<pre><code>&lt;script type=&quot;text/javascript&quot; src=&quot;jquery.js&quot;&gt;&lt;/script&gt;</code></pre></li>
-						<li>Download and include the <a href="ui.datepicker.css">jQuery UI Date Picker CSS</a> and the <a href="ui.datepicker.js">jQuery UI Date Picker Javascript</a> in the head section of your page.
-		<pre><code>&lt;style type=&quot;text/css&quot;&gt;@import url(ui.datepicker.css);&lt;/style&gt;
+						<li>Get the latest version of <a href="http://jquery.com" target="_blank">jQuery</a> and include it in the head section of your page.
+<pre><code>&lt;script type=&quot;text/javascript&quot; src=&quot;jquery.js&quot;&gt;&lt;/script&gt;</code></pre>
+						</li>
+						<li>Download and include the <a href="core/ui.datepicker.css" target="_blank">jQuery UI Date Picker CSS</a> and the <a href="core/ui.datepicker.js" target="_blank">jQuery UI Date Picker Javascript</a> in the head section of your page.
+<pre><code>&lt;style type=&quot;text/css&quot;&gt;@import url(ui.datepicker.css);&lt;/style&gt;
 &lt;script type=&quot;text/javascript&quot; src=&quot;ui.datepicker.js&quot;&gt;&lt;/script&gt;</code></pre>
-Packed version (16KB) <a href="ui.datepicker.pack.js">ui.datepicker.pack.js</a></li>
+						</li>
 						<li>Optionally set global defaults for all date picker instances.
-							See the <a href="http://docs.jquery.com/Plugins/Calendar">additional settings</a> documentation.
-		<pre><code>$.datepicker.setDefaults({showOn: 'both', buttonImageOnly: true,
-	buttonImage: 'calendar.gif', buttonText: 'Calendar'});</code></pre></li>
+							See the <a href="http://docs.jquery.com/UI/Datepicker" target="_blank">additional settings</a> documentation.
+<pre><code>$.datepicker.setDefaults({showOn: 'both', buttonImageOnly: true,
+	buttonImage: 'calendar.gif', buttonText: 'Calendar'});</code></pre>
+						</li>
 						<li>Initialize the date picker using the jQuery selector followed by the <code>datepicker</code> function.
-							Customize each calendar with <a href="http://docs.jquery.com/Plugins/Calendar">additional settings</a>
+							Customize each calendar with <a href="http://docs.jquery.com/UI/Datepicker/datepicker#options" target="_blank">additional settings (click options)</a>
 							as part of the initialization if necessary.
-			<pre><code>$('input selector').datepicker();
-$('input selector').datepicker({defaultDate: +7});</code></pre></li>
+<pre><code>$('input selector').datepicker();
+$('input selector').datepicker({defaultDate: +7});</code></pre>
+						</li>
 					</ol>
 				</div>
 				<a name="documentation" id="documentation"></a>
 				<h2>Settings and Documentation</h2>
 				<div class="container">
-					<p><strong>Documentation:</strong> <a href="http://docs.jquery.com/UI/Datepicker">jQuery UI Datepicker Settings Documentation</a>.</p>
+					<p><strong>Documentation:</strong> <a href="http://docs.jquery.com/UI/Datepicker" target="_blank">jQuery UI Datepicker Settings Documentation</a>.</p>
 					<p><strong>Localisation packages:</strong></p>
 					<ul>
-						<li><a href="ui.datepicker-zh-CN.js">Chinese</a></li>
-						<li><a href="ui.datepicker-cs.js">Czech</a></li>
-						<li><a href="ui.datepicker-fr.js">French</a></li>
-						<li><a href="ui.datepicker-de.js">German</a></li>
-						<li><a href="ui.datepicker-hu.js">Hungarian</a></li>
-						<li><a href="ui.datepicker-it.js">Italian</a></li>
-						<li><a href="ui.datepicker-pl.js">Polish</a></li>
-						<li><a href="ui.datepicker-pt-BR.js">Portuguese of Brazil</a></li>
-						<li><a href="ui.datepicker-ro.js">Romanian</a></li>
-						<li><a href="ui.datepicker-ru.js">Russian</a></li>
-						<li><a href="ui.datepicker-sk.js">Slovak</a></li>
-						<li><a href="ui.datepicker-es.js">Spanish</a></li>
-						<li><a href="ui.datepicker-sv.js">Swedish</a></li>
+						<li><a href="i18n/ui.datepicker-zh-CN.js" target="_blank">Chinese</a></li>
+						<li><a href="i18n/ui.datepicker-cs.js" target="_blank">Czech</a></li>
+						<li><a href="i18n/ui.datepicker-fr.js" target="_blank">French</a></li>
+						<li><a href="i18n/ui.datepicker-de.js" target="_blank">German</a></li>
+						<li><a href="i18n/ui.datepicker-hu.js" target="_blank">Hungarian</a></li>
+						<li><a href="i18n/ui.datepicker-it.js" target="_blank">Italian</a></li>
+						<li><a href="i18n/ui.datepicker-pl.js" target="_blank">Polish</a></li>
+						<li><a href="i18n/ui.datepicker-pt-BR.js" target="_blank">Portuguese of Brazil</a></li>
+						<li><a href="i18n/ui.datepicker-ro.js" target="_blank">Romanian</a></li>
+						<li><a href="i18n/ui.datepicker-ru.js" target="_blank">Russian</a></li>
+						<li><a href="i18n/ui.datepicker-sk.js" target="_blank">Slovak</a></li>
+						<li><a href="i18n/ui.datepicker-es.js" target="_blank">Spanish</a></li>
+						<li><a href="i18n/ui.datepicker-sv.js" target="_blank">Swedish</a></li>
 					</ul>
-					<p><strong>Change Log:</strong> Recent updates can be found on the <a href="http://docs.jquery.com/UI/Datepicker/ChangeLog">jQuery UI Datepicker ChangeLog</a>.</p>
-					<p><strong>Stylepack:</strong> The custom images used for this demo and alternate stylesheet are in the <a href="stylepack.zip">stylepack</a>.</p>
+					<p><strong>Change Log:</strong> Recent updates can be found on the <a href="http://docs.jquery.com/UI/Datepicker/ChangeLog" target="_blank">jQuery UI Datepicker ChangeLog</a>.</p>
+					<p><strong>Stylepack:</strong> The custom images used for this demo and alternate stylesheet are in the <a href="extras/stylepack.zip">stylepack</a>.</p>
 				</div>
 				<h2>Need more help?</h2>
 				<div class="container">
+					<p>Try looking at the <a href="core/index.html" target="_blank">core datepicker example</a>, which contains the most basic datepicker.</p>
 					<p>Email Marc Grabanski (m@marcgrabanski.com) and Keith Wood (kbwood@iprimus.com.au) with "UI Datepicker" in the subject.</p>
 				</div>
 				<h2>Make a Donation</h2>
@@ -700,6 +708,6 @@ $('input selector').datepicker({defaultDate: +7});</code></pre></li>
 		_uacct = "UA-963303-2";
 		urchinTracker();
 		</script>
-DEMO-->	
+DEMO-->		
     </body>
 </html>
