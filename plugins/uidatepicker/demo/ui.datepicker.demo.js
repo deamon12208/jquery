@@ -82,6 +82,10 @@ var tabs =
 				$(this).addClass('over');
 				$("div[@class^=tab_group]:visible").hide();
 				$( $(this).attr("href") ).fadeIn();
+				tabs.stylesheet = $(this).attr("href") == "#styles" ? 'alt' : 'default';
+				$('link').each(function() {
+					this.disabled = (this.title != '' && this.title != tabs.stylesheet);
+				});
 				return false;
 			});
 		});
