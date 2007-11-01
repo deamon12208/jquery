@@ -71,62 +71,17 @@ var tabs =
 	init : function () 
 	{
 		// Setup tabs
-		var nextHTML = '<div class="nextFeature"><a href="#">Continue to next section &gt;&gt;</a></div>';
-		//var backHTML
-		$("div[@class^=tab_group]").hide().append(nextHTML);
-		var tabCount = $("ul[@id^=tab_menu] a").size();
-		
-		// Get all of the IDs from the hrefs
-		tabs.IDs = [];
-		for (var i=0;i<tabCount;i++) {
-			tabs.IDs[i] = $("ul[@id^=tab_menu] a:eq(" + i + ")").attr("href").replace("#","");
-		}
-		
-		// Set starting content
-		var url = window.location.href;
-		var loc = url.indexOf("#");
-		var tabID = url.substr(loc+1);
-		if (loc > -1) {
-			$("#" + tabID).show();
-			for (var i=0; i<tabs.IDs.length;i++) {
-				if (tabs.IDs[i] == tabID) {
-					$("ul[@id^=tab_menu] a:eq(" + i + ")").addClass('over');
-				}
-			}
-		} else {
-			$("div[@class^=tab_group]:first").show().id;
-			$("ul[@id^=tab_menu] a:eq(0)").addClass('over');
-		}
+		$("div[@class^=tab_group]").hide();
+		$("div[@class^=tab_group]:first").show().id;
+		$("ul[@id^=tab_menu] a:eq(0)").addClass('over');
 
 		// Slide visible up and clicked one down
 		$("ul[@id^=tab_menu] a").each(function(i){
 			$(this).click(function () {
-				$('.over').removeClass('over');
+				$("ul[@id^=tab_menu] a.over").removeClass('over');
 				$(this).addClass('over');
-				$("div[@class^=tab_group]:visible").fadeOut("fast", function() { 
-					$("#" + tabs.IDs[i]).fadeIn();
-				});
-				tabs.stylesheet = (tabs.IDs[i] == 'styles') ? 'alt' : 'default';
-				$('link').each(function() {
-					this.disabled = (this.title != '' && this.title != tabs.stylesheet);
-				});
-				return false;
-			});
-		});
-		
-		$("div[@class^=tab_group] .nextFeature a").each(function(i){
-			$(this).click(function() { 
-				$("div[@class^=tab_group]:visible").fadeOut("fast", function() { 
-					if (tabs.IDs.length > (i+1) ) {
-						$("#" + tabs.IDs[i+1]).fadeIn();
-						$('.over').removeClass('over');
-						$("ul[@id^=tab_menu] a:eq(" + (i+1) + ")").addClass('over');
-					} else {
-						$("#" + tabs.IDs[0]).fadeIn();
-						$('.over').removeClass('over');
-						$("ul[@id^=tab_menu] a:eq(0)").addClass('over');
-					}
-				});
+				$("div[@class^=tab_group]:visible").hide();
+				$( $(this).attr("href") ).show();
 				return false;
 			});
 		});
