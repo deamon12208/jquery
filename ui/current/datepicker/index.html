@@ -329,6 +329,15 @@ $('#openDatePlus7').datepicker({defaultDate: +7});
 <script type="text/jsdemo" charset="utf-8" class="demojs">
 $('#noCentury').datepicker({useShortYear: true});
 </script>
+					<p>Show the weeks of the year. Defaults to the ISO 8601 definition (weeks start 
+						on Mondays and the first week of the year contains January 4). Change the 
+						week calculation by setting <code>calculateWeek</code> to a function that 
+						takes a date as a parameter and returns the number of the week.</p>
+					<p><span class="demoLabel">Show week of the year:</span>
+						<input type="text" size="10" id="showWeeks"/></p>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+$('#showWeeks').datepicker({showWeeks: true, firstDay: 1, changeFirstDay: false});
+</script>
 					<p>Additional settings let you move the <em>Clear</em>/<em>Close</em> controls
 						to the bottom and display the days in other months (non-selectable).
 						A callback function is also added to operate when a date is selected.
