@@ -103,6 +103,10 @@ img.datepicker_trigger {
 	background: #eee;
 	color: #666;
 }
+.datepicker_weekCol {
+	background: #777;
+	color: #fff;
+}
 .datepicker_daysCell {
 	color: #000;
 	border: 1px solid #ddd;

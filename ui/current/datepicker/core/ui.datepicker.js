@@ -29,6 +29,7 @@ function Datepicker() {
 		nextText: 'Next&gt;', // Display text for next month link
 		currentText: 'Today', // Display text for current month link
 		dayNames: ['Su','Mo','Tu','We','Th','Fr','Sa'], // Names of days starting at Sunday
+		weekHeader: 'Wk', // Header for the week of the year column
 		monthNames: ['January','February','March','April','May','June',
 			'July','August','September','October','November','December'], // Names of months
 		dateFormat: 'MDY/', // First three are day, month, year in the required order,
@@ -54,6 +55,9 @@ function Datepicker() {
 			// either relative to current year (-nn:+nn) or absolute (nnnn:nnnn)
 		changeFirstDay: true, // True to click on day name to change, false to remain as set
 		showOtherMonths: false, // True to show dates in other months, false to leave blank
+		showWeeks: false, // True to show week of the year, false to omit
+		calculateWeek: this.iso8601Week, // How to calculate the week of the year,
+			// takes a Date and returns the number of the week for it
 		useShortYear: false, // True to show years as YY, false to show them as YYYY
 		shortYearCutoff: '+10', // Short year values < this are in the current century,
 			// > this are in the previous century, 
@@ -659,6 +663,28 @@ $.extend(Datepicker.prototype, {
 		return [(day > 0 && day < 6), ''];
 	},
 	
+	/* Set as calculateWeek to determine the week of the year based on the ISO 8601 definition.
+	   @param  date  Date - the date to get the week for
+	   @return  number - the number of the week within the year that contains this date */
+	iso8601Week: function(date) {
+		var checkDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+		var firstMon = new Date(checkDate.getFullYear(), 1 - 1, 4); // First week always contains 4 Jan
+		var firstDay = firstMon.getDay() || 7; // Day of week: Mon = 1, ..., Sun = 7
+		firstMon.setDate(firstMon.getDate() + 1 - firstDay); // Preceding Monday
+		if (firstDay < 4 && checkDate < firstMon) { // Adjust first three days in year if necessary
+			checkDate.setDate(checkDate.getDate() - 3); // Generate for previous year
+			return $.datepicker.iso8601Week(checkDate);
+		}
+		else if (checkDate > new Date(checkDate.getFullYear(), 12 - 1, 28)) { // Check last three days in year
+			firstDay = new Date(checkDate.getFullYear() + 1, 1 - 1, 4).getDay() || 7;
+			if (firstDay > 4 && (checkDate.getDay() || 7) < firstDay - 3) { // Adjust if necessary
+				checkDate.setDate(checkDate.getDate() + 3); // Generate for next year
+				return $.datepicker.iso8601Week(checkDate);
+			}
+		}
+		return Math.floor(((checkDate - firstMon) / 86400000) / 7) + 1; // Weeks to given date
+	},
+	
 	/* Find an object's position on the screen. */
 	_findPos: function(obj) {
 		while (obj && (obj.type == 'hidden' || obj.nodeType != 1)) {
@@ -826,6 +852,7 @@ $.extend(DatepickerInstance.prototype, {
 		var maxDate = this._get('maxDate');
 		var drawMonth = this._selectedMonth;
 		var drawYear = this._selectedYear;
+		var showWeeks = this._get('showWeeks');
 		for (var row = 0; row < numMonths[0]; row++) {
 		for (var col = 0; col < numMonths[1]; col++) {
 			var selectedDate = new Date(drawYear, drawMonth, this._selectedDay);
@@ -833,7 +860,8 @@ $.extend(DatepickerInstance.prototype, {
 				this._generateMonthYearHeader(drawMonth, drawYear, minDate, maxDate,
 				selectedDate, row > 0 || col > 0) + // draw month headers
 				'<table class="datepicker" cellpadding="0" cellspacing="0"><thead>' + 
-				'<tr class="datepicker_titleRow">';
+				'<tr class="datepicker_titleRow">' +
+				(showWeeks ? '<td>' + this._get('weekHeader') + '</td>' : '');
 			var firstDay = this._get('firstDay');
 			var changeFirstDay = this._get('changeFirstDay');
 			var dayNames = this._get('dayNames');
@@ -852,9 +880,10 @@ $.extend(DatepickerInstance.prototype, {
 			var numRows = (isMultiMonth ? 6 : Math.ceil((leadDays + daysInMonth) / 7)); // calculate the number of rows to generate
 			var beforeShowDay = this._get('beforeShowDay');
 			var showOtherMonths = this._get('showOtherMonths');
-			var count = 0;
+			var calculateWeek = this._get('calculateWeek') || $.datepicker.iso8601Week;
 			for (var dRow = 0; dRow < numRows; dRow++) { // create date picker rows
-				html += '<tr class="datepicker_daysRow">';
+				html += '<tr class="datepicker_daysRow">' +
+					(showWeeks ? '<td class="datepicker_weekCol">' + calculateWeek(printDate) + '</td>' : '');
 				for (var dow = 0; dow < 7; dow++) { // create date picker days
 					var daySettings = (beforeShowDay ? beforeShowDay(printDate) : [true, '']);
 					var otherMonth = (printDate.getMonth() != drawMonth);
@@ -869,8 +898,8 @@ $.extend(DatepickerInstance.prototype, {
 						(printDate.getTime() >= currentDate.getTime() && printDate.getTime() <= endDate.getTime() ?  // in current range
 						' datepicker_currentDay' : // highlight selected day
 						(printDate.getTime() == today.getTime() ? ' datepicker_today' : ''))) + '"' + // highlight today (if different)
-						(unselectable ? '' : ' onmouseover="$(this).addClass(\'datepicker_daysCellOver\');"' +
-						' onmouseout="$(this).removeClass(\'datepicker_daysCellOver\');"' +
+						(unselectable ? '' : ' onmouseover="jQuery(this).addClass(\'datepicker_daysCellOver\');"' +
+						' onmouseout="jQuery(this).removeClass(\'datepicker_daysCellOver\');"' +
 						' onclick="jQuery.datepicker._selectDay(' + this._id + ',' + drawMonth + ',' + drawYear + ', this);"') + '>' + // actions
 						(otherMonth ? (showOtherMonths ? printDate.getDate() : '&nbsp;') : // display for other months
 						(unselectable ? printDate.getDate() : '<a>' + printDate.getDate() + '</a>')) + '</td>'; // display for this month
