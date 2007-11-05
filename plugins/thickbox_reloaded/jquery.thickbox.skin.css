@@ -40,36 +40,36 @@
 }
 
 /* round corners */
-#tb-modal .tl, #tb-modal .tr, #tb-modal .br, #tb-modal .bl {
+#tb-modal .tb-tl, #tb-modal .tb-tr, #tb-modal .tb-br, #tb-modal .tb-bl {
     position: absolute;
     width: 3px;
     height: 3px;
     background: no-repeat;
 }
-#tb-modal .tl, #tb-modal .tr {
+#tb-modal .tb-tl, #tb-modal .tb-tr {
     top: 0;
 }
-#tb-modal .br, #tb-modal .bl {
+#tb-modal .tb-br, #tb-modal .tb-bl {
     top: 100%;
     margin-top: -3px;
     /*bottom: 0;*/ /* stupid IE 6 borks on that one */
 }
-#tb-modal .tl, #tb-modal .bl {
+#tb-modal .tb-tl, #tb-modal .tb-bl {
     left: -1px;
 }
-#tb-modal .tr, #tb-modal .br {
+#tb-modal .tb-tr, #tb-modal .tb-br {
     right: -1px;
 }
-#tb-modal .tl {
+#tb-modal .tb-tl {
     background-image: url(corner_thickbox_tl.png);
 }
-#tb-modal .tr {
+#tb-modal .tb-tr {
     background-image: url(corner_thickbox_tr.png);
 }
-#tb-modal .br {
+#tb-modal .tb-br {
     background-image: url(corner_thickbox_br.png);
 }
-#tb-modal .bl {
+#tb-modal .tb-bl {
     background-image: url(corner_thickbox_bl.png);
 }
 

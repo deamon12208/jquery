@@ -74,7 +74,7 @@
                 loading = loading.size() && loading || $('<div id="' + TB_ID.LOADING + '"></div>').appendTo(document.body);
 
                 modal = $('#' + TB_ID.MODAL);
-                modal = modal.size() && modal || $('<div id="' + TB_ID.MODAL + '"></div>').append('<b class="tl"></b><b class="tr"></b><b class="br"></b><b class="bl"></b>').appendTo(document.body);
+                modal = modal.size() && modal || $('<div id="' + TB_ID.MODAL + '"></div>').append('<b class="tb-tl"></b><b class="tb-tr"></b><b class="tb-br"></b><b class="tb-bl"></b>').appendTo(document.body);
 
                 // set type class
                 modal.attr('class', 'tb-' + type);
@@ -94,7 +94,7 @@
                 }
                 loading.show();
                 builder(); // build specific type
-                
+
                 // attach keyboard event handler
                 $(document).bind('keydown', keydown).bind('keypress', blockKeys);
                 $(window).bind('scroll', blockScroll);
