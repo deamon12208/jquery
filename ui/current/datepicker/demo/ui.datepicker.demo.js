@@ -42,7 +42,7 @@ function localise() {
 function getDate(value) {
 	fields = value.split('/');
 	return (fields.length < 3 ? null :
-		new Date(parseInt(fields[2], 10), parseInt(fields[1], 10) - 1, parseInt(fields[0], 10)));
+		new Date(parseInt(fields[2], 10), parseInt(fields[0], 10) - 1, parseInt(fields[1], 10)));
 }
 
 // Demonstrate a callback from inline configuration
