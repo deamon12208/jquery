@@ -215,7 +215,8 @@ $.extend(Datepicker.prototype, {
 	   @param  dateText  string - the initial date to display (in the current format)
 	   @param  onSelect  function - the function(dateText) to call when a date is selected
 	   @param  settings  object - update the dialog date picker instance's settings (anonymous object)
-	   @param  pos       int[2] - coordinates for the dialog's position within the screen
+	   @param  pos       int[2] - coordinates for the dialog's position within the screen or
+	                     event - with x/y coordinates or
 	                     leave empty for default (screen centre)
 	   @return the manager object */
 	dialogDatepicker: function(dateText, onSelect, settings, pos) {
@@ -230,27 +231,32 @@ $.extend(Datepicker.prototype, {
 		extendRemove(inst._settings, settings || {});
 		this._dialogInput.val(dateText);
 
-		var viewportWidth;
-		var viewportHeight;
-		if (window.innerWidth) { // Mozilla/Netscape/Opera/IE7
-			viewportWidth = window.innerWidth,
-			viewportHeight = window.innerHeight
+		this._pos = (pos ? (pos.length ? pos : [pos.pageX, pos.pageY]) : null);
+		if (!this._pos) {
+			var viewportWidth;
+			var viewportHeight;
+			if (window.innerWidth) { // Mozilla/Netscape/Opera/IE7
+				viewportWidth = window.innerWidth,
+				viewportHeight = window.innerHeight
+			}
+			else if (document.documentElement && document.documentElement.clientWidth &&
+					document.documentElement.clientWidth != 0) { // IE6 standards compliant
+				viewportWidth = document.documentElement.clientWidth,
+				viewportHeight = document.documentElement.clientHeight
+			}
+			else { // older IE
+				viewportWidth = document.getElementsByTagName('body')[0].clientWidth,
+				viewportHeight = document.getElementsByTagName('body')[0].clientHeight
+			}
+			this._pos = // should use actual width/height below
+				[(viewportWidth / 2) - 100, (viewportHeight / 2) - 150];
+			this._pos[0] += // add the browser scroll position to the x-coord
+				(document.documentElement && document.documentElement.scrollLeft ?
+				document.documentElement.scrollLeft : document.body.scrollLeft);
+			this._pos[1] += // add the browser scroll position to the y-coord
+				(document.documentElement && document.documentElement.scrollTop ?
+				document.documentElement.scrollTop : document.body.scrollTop);
 		}
-		else if (document.documentElement && document.documentElement.clientWidth &&
-				document.documentElement.clientWidth != 0) { // IE6 standards compliant
-			viewportWidth = document.documentElement.clientWidth,
-			viewportHeight = document.documentElement.clientHeight
-		}
-		else { // older IE
-			viewportWidth = document.getElementsByTagName('body')[0].clientWidth,
-			viewportHeight = document.getElementsByTagName('body')[0].clientHeight
-		}
-		
-		this._pos = pos || // should use actual width/height below
-			[(viewportWidth / 2) - 100, (viewportHeight / 2) - 150];
-		this._pos[1] = this._pos[1] + // add the browser scroll position to the height
-			(document.documentElement && document.documentElement.scrollTop ?
-			document.documentElement.scrollTop : document.body.scrollTop);
 
 		// move input on screen for focus, but hidden behind dialog
 		this._dialogInput.css('left', this._pos[0] + 'px').css('top', this._pos[1] + 'px');
@@ -469,7 +475,7 @@ $.extend(Datepicker.prototype, {
 		}
 		// reposition date picker if outside the browser window
 		if ((inst._datepickerDiv.offset().top + inst._datepickerDiv.height()) > (browserTopY + browserHeight) ) {
-			inst._datepickerDiv.css('top', (pos[1] - inst._datepickerDiv.height()) + 'px');
+			inst._datepickerDiv.css('top', (pos[1] - (this._inDialog ? 0 : inst._datepickerDiv.height())) + 'px');
 		}
 	},
 
