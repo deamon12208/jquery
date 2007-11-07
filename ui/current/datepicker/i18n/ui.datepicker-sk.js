@@ -3,7 +3,7 @@
 $(document).ready(function(){
 	$.datepicker.regional['sk'] = {clearText: 'Zmazať', closeText: 'Zavrieť', 
 		prevText: '&lt;Predchádzajúci', nextText: 'Nasledujúci&gt;', currentText: 'Dnes',
-		dayNames: ['Ne','Po','Ut','St','Št','Pia','So'],
+		weekHeader: 'Ty', dayNames: ['Ne','Po','Ut','St','Št','Pia','So'],
 		monthNames: ['Január','Február','Marec','Apríl','Máj','Jún',
 		'Júl','August','September','Október','November','December'],
 		dateFormat: 'DMY.', firstDay: 0};

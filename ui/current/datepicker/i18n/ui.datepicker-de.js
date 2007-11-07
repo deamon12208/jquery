@@ -3,7 +3,7 @@
 $(document).ready(function(){
 	$.datepicker.regional['de'] = {clearText: 'Löschen', closeText: 'Schließen',
 		prevText: '&lt;Zurück', nextText: 'Vor&gt;', currentText: 'Heute',
-		dayNames: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+		weekHeader: 'Wo', dayNames: ['So','Mo','Di','Mi','Do','Fr','Sa'],
 		monthNames: ['Januar','Februar','März','April','Mai','Juni',
 		'Juli','August','September','Oktober','November','Dezember'],
 		dateFormat: 'DMY.', firstDay: 0};

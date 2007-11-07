@@ -3,7 +3,7 @@
 $(document).ready(function(){
 	$.datepicker.regional['hu'] = {clearText: 'törlés', closeText: 'bezárás',
 		prevText: '&laquo;&nbsp;vissza', nextText: 'előre&nbsp;&raquo;', currentText: 'ma',
-		dayNames: ['V', 'H', 'K', 'Sze', 'Cs', 'P', 'Szo'],
+		weekHeader: 'Hé', dayNames: ['V', 'H', 'K', 'Sze', 'Cs', 'P', 'Szo'],
 		monthNames: ['Január', 'Február', 'Március', 'Április', 'Május', 'Június',
 		'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'],
 		dateFormat: 'YMD-', firstDay: 1};

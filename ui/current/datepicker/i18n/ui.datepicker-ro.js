@@ -3,7 +3,7 @@
 $(document).ready(function(){
 	$.datepicker.regional['ro'] = {clearText: 'sterge', closeText: 'inchide',
 		prevText: '&laquo;&nbsp;inapoi', nextText: 'inainte&nbsp;&raquo;', currentText: 'Azi',
-		dayNames: ['D', 'L', 'Ma', 'Mi', 'J', 'V', 'S'],
+		weekHeader: 'Sm', dayNames: ['D', 'L', 'Ma', 'Mi', 'J', 'V', 'S'],
 		monthNames: ['Januarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Junie',
 		'Julie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie'],
 		dateFormat: 'YMD-', firstDay: 1};

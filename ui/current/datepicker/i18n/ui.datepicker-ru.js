@@ -3,7 +3,7 @@
 $(document).ready(function(){
 	$.datepicker.regional['ru'] = {clearText: 'Очистить', closeText: 'Закрыть',
 		prevText: '&lt;Пред', nextText: 'След&gt;', currentText: 'Сегодня',
-		dayNames: ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
+		weekHeader: 'Не', dayNames: ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
 		monthNames: ['Январь','Февраль','Март','Апрель','Май','Июнь',
 		'Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
 		dateFormat: 'DMY.', firstDay: 1};
