@@ -13,6 +13,11 @@
 		<meta name="copyright" content="Copyright (c) 2005 Marc Grabanski" />
 		<meta name="keywords" content="jquery datepicker, ui datepicker, jquery date picker, jquery calendar" />
 		<link rel="stylesheet" type="text/css" href="../../css/style.css" />
+		<script type="text/javascript" src="/js/chili/jquery.chili.pack.js"></script>
+		<script type="text/javascript">
+			ChiliBook.recipeFolder     = "/js/chili/"; 
+			ChiliBook.stylesheetFolder = "/js/chili/"; 
+		</script>
 		<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="../../css/ie6.css" /><![endif]--> 
 		
 		<!-- Include jQuery -->
@@ -59,7 +64,7 @@
 					<h3>Defaults</h3>
 					<p>A date picker can easily be added to an input field with default settings.</p>
 					<p><span class="demoLabel">Default date picker:</span>
-						<input type="text" size="10" id="defaultFocus"/> (click to show)</p>
+						<input type="text" size="30" value="click to show datepicker" id="defaultFocus"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
 $('#defaultFocus').datepicker();	
 </script>
@@ -261,11 +266,11 @@ $('#isoFormat').datepicker({dateFormat: 'YMD-'});
 					<p>You need to load the appropriate language package, which
 						adds a language set ($.datepicker.regional[langCode]) and
 						automatically sets this language as the default for all date pickers.</p>
-<pre><code>&lt;script type="text/javascript" src="ui.datepicker-fr.js">&lt;/script></code></pre>
+<pre><code class="html">&lt;script type="text/javascript" src="ui.datepicker-fr.js">&lt;/script></code></pre>
 					<p>Thereafter, if desired, you can restore the original language settings.</p>
-<pre><code>$.datepicker.setDefaults($.datepicker.regional['']);</code></pre>
+<pre><code class="javascript">$.datepicker.setDefaults($.datepicker.regional['']);</code></pre>
 					<p>And then configure the language per date picker instance.</p>
-<pre><code>$('#l10nDatepicker').datepicker($.datepicker.regional['fr']);</code></pre>
+<pre><code class="javascript">$('#l10nDatepicker').datepicker($.datepicker.regional['fr']);</code></pre>
 					<p><strong>Localisation packages:</strong></p>
 					<p>Localisation packages can be found below under <a href="#documentation">Settings and Documentation</a>.</p>
 				</div>
@@ -543,7 +548,7 @@ $("#setInlineRange").click(function() {
 						<input type="text" size="10" id="altDialog" readonly="readonly"/>
 						<button id="button3">Open dialog</button></p>
 					<p>The basic HTML structure of the date picker is shown below:</p>
-<pre><code>&lt;div id="datepicker_div" class="datepicker_multi">
+<pre><code class="html">&lt;div id="datepicker_div" class="datepicker_multi">
   &lt;div class="datepicker_control">
     &lt;div class="datepicker_clear">&lt;a>Clear&lt;/a>&lt;/div>
     &lt;div class="datepicker_close">&lt;a>Close&lt;/a>&lt;/div>
@@ -595,7 +600,7 @@ $("#setInlineRange").click(function() {
 						to operate with minimal changes.</p>
 					<p>Existing users of v2 of the calendar should use the following
 						header code to work with their existing implementation:</p>
-<pre><code>&lt;link rel="stylesheet" type="text/css" href="<b>ui.datepicker.css</b>"/&gt;
+<pre><code class="html">&lt;link rel="stylesheet" type="text/css" href="<b>ui.datepicker.css</b>"/&gt;
 &lt;script type="text/javascript" src="<b>ui.datepicker.js</b>"&gt;&lt;/script&gt;
 &lt;script type="text/javascript" src="<b>jquery-calendar-compatibility.js</b>"&gt;&lt;/script&gt;</code></pre>
 					<p>Download the <a href="compatibility/jquery-calendar-compatibility.js" target="_blank">jquery-calendar-compatibility.js</a></p>
@@ -623,12 +628,12 @@ $("#setInlineRange").click(function() {
 							CSS styles with <code>datepicker*</code>.</li>
 					</ul>
 					<p>For example, this old style code:</p>
-<pre><code>$('inputs').<b>calendar</b>({<b>autoPopUp</b>: 'both', <b>fieldSettings</b>: setDateRange,
+<pre><code class="javascript">$('inputs').<b>calendar</b>({<b>autoPopUp</b>: 'both', <b>fieldSettings</b>: setDateRange,
 	<b>customDate</b>: <b>popUpCal</b>.noWeekends});
 	
 &lt;input type="text" id="inlineConfig" <b>cal:</b>defaultDate="+7"/&gt;</code></pre>
 					<p>becomes:</p>
-<pre><code>$('inputs').<b>datepicker</b>({<b>showOn</b>: 'both', <b>beforeShow</b>: setDateRange,
+<pre><code class="javascript">$('inputs').<b>datepicker</b>({<b>showOn</b>: 'both', <b>beforeShow</b>: setDateRange,
 	<b>beforeShowDay</b>: <b>$.datepicker</b>.noWeekends});
 	
 &lt;input type="text" id="inlineConfig" <b>date:</b>defaultDate="+7"/&gt;</code></pre>
@@ -638,21 +643,21 @@ $("#setInlineRange").click(function() {
 				<div class="container">
 					<ol>
 						<li>Get the latest version of <a href="http://jquery.com" target="_blank">jQuery</a> and include it in the head section of your page.
-<pre><code>&lt;script type=&quot;text/javascript&quot; src=&quot;jquery.js&quot;&gt;&lt;/script&gt;</code></pre>
+<pre><code class="html">&lt;script type=&quot;text/javascript&quot; src=&quot;jquery.js&quot;&gt;&lt;/script&gt;</code></pre>
 						</li>
 						<li>Download and include the <a href="core/ui.datepicker.css" target="_blank">jQuery UI Date Picker CSS</a> and the <a href="core/ui.datepicker.js" target="_blank">jQuery UI Date Picker Javascript</a> in the head section of your page.
-<pre><code>&lt;style type=&quot;text/css&quot;&gt;@import url(ui.datepicker.css);&lt;/style&gt;
+<pre><code class="html">&lt;style type=&quot;text/css&quot;&gt;@import url(ui.datepicker.css);&lt;/style&gt;
 &lt;script type=&quot;text/javascript&quot; src=&quot;ui.datepicker.js&quot;&gt;&lt;/script&gt;</code></pre>
 						</li>
 						<li>Optionally set global defaults for all date picker instances.
 							See the <a href="http://docs.jquery.com/UI/Datepicker" target="_blank">additional settings</a> documentation.
-<pre><code>$.datepicker.setDefaults({showOn: 'both', buttonImageOnly: true,
+<pre><code class="javascript">$.datepicker.setDefaults({showOn: 'both', buttonImageOnly: true,
 	buttonImage: 'calendar.gif', buttonText: 'Calendar'});</code></pre>
 						</li>
 						<li>Initialize the date picker using the jQuery selector followed by the <code>datepicker</code> function.
 							Customize each calendar with <a href="http://docs.jquery.com/UI/Datepicker/datepicker#options" target="_blank">additional settings</a>
 							as part of the initialization if necessary.
-<pre><code>$('input selector').datepicker();
+<pre><code class="javascript">$('input selector').datepicker();
 $('input selector').datepicker({defaultDate: +7});</code></pre>
 						</li>
 					</ol>
@@ -665,10 +670,12 @@ $('input selector').datepicker({defaultDate: +7});</code></pre>
 					<ul>
 						<li><a href="i18n/ui.datepicker-zh-CN.js" target="_blank">Chinese</a></li>
 						<li><a href="i18n/ui.datepicker-cs.js" target="_blank">Czech</a></li>
+						<li><a href="i18n/ui.datepicker-du.js" target="_blank">Dutch</a></li>
 						<li><a href="i18n/ui.datepicker-fr.js" target="_blank">French</a></li>
 						<li><a href="i18n/ui.datepicker-de.js" target="_blank">German</a></li>
 						<li><a href="i18n/ui.datepicker-hu.js" target="_blank">Hungarian</a></li>
 						<li><a href="i18n/ui.datepicker-it.js" target="_blank">Italian</a></li>
+						<li><a href="i18n/ui.datepicker-jp.js" target="_blank">Japanese</a></li>
 						<li><a href="i18n/ui.datepicker-ko.js" target="_blank">Korean</a></li>
 						<li><a href="i18n/ui.datepicker-pl.js" target="_blank">Polish</a></li>
 						<li><a href="i18n/ui.datepicker-pt-BR.js" target="_blank">Portuguese of Brazil</a></li>

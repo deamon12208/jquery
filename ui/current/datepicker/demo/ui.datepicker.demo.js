@@ -4,16 +4,9 @@ $(document).ready(function () {
 	tabs.init();
 	// replace script tags with HTML code
 	$(".demojs").each(function () {
-		$(this).before( '<div><a class="togglecode" href="#">Show Code Example</a><br /><pre style="display:none; padding-top:0 !important;"><code>' + $(this).html() + "</code></pre></div>" );
+		$(this).before( '<pre style="padding-top:0 !important"><code class="javascript">' + $(this).html() + "</code></pre>" );
 		eval( $(this).html() );
 	});
-	$("a.togglecode")
-		.click(function() { return false })
-		.mouseover(function() {
-			$(this).next().next().fadeIn('fast')
-			$(this).next().remove()
-			$(this).remove()
-		})
 	// Localization
 	if ($.browser.safari) {
 		$('#language,#l10nDatepicker').attr({ disabled: 'disabled' });
