@@ -1,3 +1,6 @@
+- add proper support for more states: valid, invalid, optional, pending...
+- move String.format into $ namespace
+- add custom events for form and elements instead of more callbacks
 - improve validator API: validator.check(Element inputOrForm) instead of form and element methods, doing validate().form() is crap anyway
 - try to replace element handling on each input with event delegation handled by the form
 	-> complicates handling the event, but improves adding/removing handlers a ton, refresh() doesn't have to do anything for events, adding and removing elements from the form is priceless
