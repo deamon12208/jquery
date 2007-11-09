@@ -3,11 +3,12 @@ $(document).ready(function() {
  // $.cluetip.setup({insertionType: 'insertBefore', insertionElement: 'div:first'});
 
 //default theme
+  $('a.title').cluetip({splitTitle: '|'});
   $('a.basic').cluetip();
   $('a.custom-width').cluetip({width: '200px', showTitle: false});
   $('h4').cluetip({attribute: 'id', hoverClass: 'highlight'});
   $('#sticky').cluetip({'sticky': true,'closePosition': 'title'});
-  $('#examples a:eq(4)').cluetip({
+  $('#examples a:eq(5)').cluetip({
     hoverClass: 'highlight',
     sticky: true,
     closePosition: 'bottom',
@@ -47,26 +48,16 @@ $(document).ready(function() {
     }
   });
 // Rounded Corner theme
-  $('ol.rounded a:eq(0)').cluetip({cluetipClass: 'rounded', dropShadow: false, positionBy: 'mouse'});
-  $('ol.rounded a:eq(1)').cluetip({cluetipClass: 'rounded', dropShadow: false, positionBy: 'bottomTop'});
-  $('ol.rounded a:eq(2)').cluetip({cluetipClass: 'rounded', dropShadow: false, sticky: true, ajaxCache: false});
-  $('ol.rounded a:eq(3)').cluetip({cluetipClass: 'rounded', dropShadow: false});
-  
+  $('ol.rounded a:eq(0)').cluetip({splitTitle: '|', dropShadow: false, cluetipClass: 'rounded'});
+  $('ol.rounded a:eq(1)').cluetip({cluetipClass: 'rounded', dropShadow: false, positionBy: 'mouse'});
+  $('ol.rounded a:eq(2)').cluetip({cluetipClass: 'rounded', dropShadow: false, positionBy: 'bottomTop', topOffset: 70});
+  $('ol.rounded a:eq(3)').cluetip({cluetipClass: 'rounded', dropShadow: false, sticky: true, ajaxCache: false});
+  $('ol.rounded a:eq(4)').cluetip({cluetipClass: 'rounded', dropShadow: false});    
 });
 
 //unrelated to clueTip -- just for the demo page...
 
 $(document).ready(function() {
-  $('#container > div:gt(0)').hide().append('<a class="back-to-top" href="#top">back to top</a>');
-  $('#navigation a').click(function() {
-    var $this = $(this);
-    var hash = $this.attr('href');
-    $(hash).siblings(':visible').hide();
-    $(hash).slideDown('fast');
-    $('#navigation a').removeClass('active');
-    $this.addClass('active');
-    return false;
-  }).filter(':first').addClass('active');
   $('div.html, div.jquery').next().css('display', 'none').end().click(function() {
     $(this).next().toggle('fast');
   });

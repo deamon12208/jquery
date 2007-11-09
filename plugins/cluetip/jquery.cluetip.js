@@ -182,7 +182,7 @@
       var tipAttribute = $this.attr(defaults.attribute), ctClass = defaults.cluetipClass;
       if (!tipAttribute && !defaults.splitTitle) return true;
       // if hideLocal is set to true, on DOM ready hide the local content that will be displayed in the clueTip
-      if (defaults.local && defaults.hideLocal) { $(tipAttribute).hide(); }
+      if (defaults.local && defaults.hideLocal) { $(tipAttribute + ':first').hide(); }
       var tOffset = parseInt(defaults.topOffset, 10), lOffset = parseInt(defaults.leftOffset, 10);
       // vertical measurement variables
       var tipHeight, wHeight;
@@ -351,7 +351,7 @@
       var direction = '';
       $cluetipOuter.css({overflow: defHeight == 'auto' ? 'visible' : 'auto', height: defHeight});
       tipHeight = defHeight == 'auto' ? $cluetip.outerHeight() : parseInt(defHeight,10);   
-      tipY = posY;
+      tipY = posY;      
       if (defaults.positionBy == 'fixed') {
         tipY = posY - defaults.dropShadowSteps + tOffset;
       } else if ( (posX < mouseX && Math.max(posX, 0) + tipWidth > mouseX) || defaults.positionBy == 'bottomTop') {
