@@ -316,8 +316,8 @@
 /***************************************
 * load an element from the same page
 ***************************************/
-      } else if (defaults.local && tipAttribute.indexOf('#') == 0){
-        var localContent = $(tipAttribute).html();
+      } else if (defaults.local){
+        var localContent = $(tipAttribute + ':first').html();
         $cluetipInner.html(localContent);
         cluetipShow(pY);
       }
