@@ -317,8 +317,9 @@
 * load an element from the same page
 ***************************************/
       } else if (defaults.local){
-        var localContent = $(tipAttribute + ':first').html();
-        $cluetipInner.html(localContent);
+        var $localContent = $(tipAttribute + ':first');
+        var localCluetip = $.fn.wrapInner ? $localContent.wrapInner('<div></div>').children().clone(true) : $localContent.html();
+        $.fn.wrapInner ? $cluetipInner.empty().append(localCluetip) : $cluetipInner.html(localCluetip);
         cluetipShow(pY);
       }
     };
