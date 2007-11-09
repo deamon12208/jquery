@@ -419,6 +419,7 @@
       if (tipTitle) {
         $this.attr('title', tipTitle);
       }
+      $this.css('cursor','');
     };
 
 /***************************************
