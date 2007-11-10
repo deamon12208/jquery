@@ -118,6 +118,15 @@ $('#invokeButton').datepicker({showOn: 'button', buttonText: '...',
 <script type="text/jsdemo" charset="utf-8" class="demojs">
 $('.invokeBoth').datepicker({showOn: 'both', buttonImage: 'img/calendar.gif', buttonImageOnly: true});
 </script>
+					<p>You can embed the trigger image within the input area via CSS.</p>
+					<p style="clear:both"><span class="demoLabel">Embedded button:</span>
+						<input type="text" size="10" id="embedButton"/></p>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+$('#embedButton').datepicker({showOn: 'button', buttonImage: 'img/calendar.gif', buttonImageOnly: true});
+
+// CSS
+// #embedButton + img { position: relative; left: -21px; top: -1px; }
+</script>
 					<p>Enable and disable datepicker with enableFor and disableFor.</p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
 $('#enableFocus').toggle(
@@ -252,9 +261,11 @@ $('#isoFormat').datepicker({dateFormat: 'YMD-'});
 							<option value="de">Deutsch</option>
 							<option value="es">Espa&ntilde;ol</option>
 							<option value="fr" selected="selected">Fran&ccedil;ais</option>
+							<option value="ko">Hangugeo</option>
 							<option value="it">Italiano</option>
-							<option value="ko">Korean</option>
 							<option value="hu">Magyar</option>
+							<option value="nl">Nederlands</option>
+							<option value="ja">Nihongo</option>
 							<option value="pl">Polski</option>
 							<option value="pt-BR">Portugu&ecirc;s</option>
 							<option value="ro">Rom&acirc;n&#259;</option>
@@ -670,12 +681,12 @@ $('input selector').datepicker({defaultDate: +7});</code></pre>
 					<ul>
 						<li><a href="i18n/ui.datepicker-zh-CN.js" target="_blank">Chinese</a></li>
 						<li><a href="i18n/ui.datepicker-cs.js" target="_blank">Czech</a></li>
-						<li><a href="i18n/ui.datepicker-du.js" target="_blank">Dutch</a></li>
+						<li><a href="i18n/ui.datepicker-nl.js" target="_blank">Dutch</a></li>
 						<li><a href="i18n/ui.datepicker-fr.js" target="_blank">French</a></li>
 						<li><a href="i18n/ui.datepicker-de.js" target="_blank">German</a></li>
 						<li><a href="i18n/ui.datepicker-hu.js" target="_blank">Hungarian</a></li>
 						<li><a href="i18n/ui.datepicker-it.js" target="_blank">Italian</a></li>
-						<li><a href="i18n/ui.datepicker-jp.js" target="_blank">Japanese</a></li>
+						<li><a href="i18n/ui.datepicker-ja.js" target="_blank">Japanese</a></li>
 						<li><a href="i18n/ui.datepicker-ko.js" target="_blank">Korean</a></li>
 						<li><a href="i18n/ui.datepicker-pl.js" target="_blank">Polish</a></li>
 						<li><a href="i18n/ui.datepicker-pt-BR.js" target="_blank">Portuguese of Brazil</a></li>
