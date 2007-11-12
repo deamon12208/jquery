@@ -28,12 +28,14 @@ function Datepicker() {
 		prevText: '&lt;Prev', // Display text for previous month link
 		nextText: 'Next&gt;', // Display text for next month link
 		currentText: 'Today', // Display text for current month link
-		dayNames: ['Su','Mo','Tu','We','Th','Fr','Sa'], // Names of days starting at Sunday
+		dayNamesMin: ['Su','Mo','Tu','We','Th','Fr','Sa'], // Names of days starting at Sunday
+		dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+		dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
 		weekHeader: 'Wk', // Header for the week of the year column
+		monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 		monthNames: ['January','February','March','April','May','June',
 			'July','August','September','October','November','December'], // Names of months
-		dateFormat: 'MDY/', // First three are day, month, year in the required order,
-			// fourth (optional) is the separator, e.g. US would be 'MDY/', ISO would be 'YMD-'
+		dateFormat: 'mm/dd/yy', // See format options on parseDate
 		firstDay: 0 // The first day of the week, Sun = 0, Mon = 1, ...
 	};
 	this._defaults = { // Global defaults for all the date picker instances
@@ -58,7 +60,6 @@ function Datepicker() {
 		showWeeks: false, // True to show week of the year, false to omit
 		calculateWeek: this.iso8601Week, // How to calculate the week of the year,
 			// takes a Date and returns the number of the week for it
-		useShortYear: false, // True to show years as YY, false to show them as YYYY
 		shortYearCutoff: '+10', // Short year values < this are in the current century,
 			// > this are in the previous century, 
 			// string value starting with '+' for current year + value
@@ -148,12 +149,12 @@ $.extend(Datepicker.prototype, {
 		}
 	},
 
-	/* Filter entered characters. */
+	/* Filter entered characters - based on date format. */
 	_doKeyPress: function(e) {
 		var inst = $.datepicker._getInst(this._calId);
+		var chars = $.datepicker._possibleChars(inst._get('dateFormat'));
 		var chr = String.fromCharCode(e.charCode == undefined ? e.keyCode : e.charCode);
-		return (chr < ' ' || chr == inst._get('dateFormat').charAt(3) ||
-			(chr >= '0' && chr <= '9')); // only allow numbers and separator
+		return (chr < ' ' || !chars || chars.indexOf(chr) > -1);
 	},
 
 	/* Attach the date picker to an input field. */
@@ -478,6 +479,27 @@ $.extend(Datepicker.prototype, {
 			inst._datepickerDiv.css('top', (pos[1] - (this._inDialog ? 0 : inst._datepickerDiv.height())) + 'px');
 		}
 	},
+	
+	/* Find an object's position on the screen. */
+	_findPos: function(obj) {
+		while (obj && (obj.type == 'hidden' || obj.nodeType != 1)) {
+			obj = obj.nextSibling;
+		}
+		var curleft = curtop = 0;
+		if (obj && obj.offsetParent) {
+			curleft = obj.offsetLeft;
+			curtop = obj.offsetTop;
+			while (obj = obj.offsetParent) {
+				var origcurleft = curleft;
+				curleft += obj.offsetLeft;
+				if (curleft < 0) {
+					curleft = origcurleft;
+				}
+				curtop += obj.offsetTop;
+			}
+		}
+		return [curleft,curtop];
+	},
 
 	/* Hide the date picker from view.
 	   @param  speed  string - the speed at which to close the date picker
@@ -690,26 +712,280 @@ $.extend(Datepicker.prototype, {
 		}
 		return Math.floor(((checkDate - firstMon) / 86400000) / 7) + 1; // Weeks to given date
 	},
-	
-	/* Find an object's position on the screen. */
-	_findPos: function(obj) {
-		while (obj && (obj.type == 'hidden' || obj.nodeType != 1)) {
-			obj = obj.nextSibling;
+
+	/* Parse a string value into a date object.
+	   The format can be combinations of the following:
+	   d  - day of month (no leading zero)
+	   dd - day of month (two digit)
+	   D  - day name short
+	   DD - day name long
+	   m  - month of year (no leading zero)
+	   mm - month of year (two digit)
+	   M  - month name short
+	   MM - month name long
+	   y  - year (two digit)
+	   yy - year (four digit)
+	   '...' - literal text
+	   '' - single quote
+
+	   @param  format           String - the expected format of the date
+	   @param  value            String - the date in the above format
+	   @param  shortYearCutoff  Number - the cutoff year for determining the century (optional)
+	   @param  dayNamesShort    String[7] - abbreviated names of the days from Sunday (optional)
+	   @param  dayNames         String[7] - names of the days from Sunday (optional)
+	   @param  monthNamesShort  String[12] - abbreviated names of the months (optional)
+	   @param  monthNames       String[12] - names of the months (optional)
+	   @return  Date - the extracted date value or null if value is blank */
+	parseDate: function (format, value, shortYearCutoff, dayNamesShort, dayNames, monthNamesShort, monthNames) {
+		if (format == null || value == null) {
+			throw 'Invalid arguments';
 		}
-		var curleft = curtop = 0;
-		if (obj && obj.offsetParent) {
-			curleft = obj.offsetLeft;
-			curtop = obj.offsetTop;
-			while (obj = obj.offsetParent) {
-				var origcurleft = curleft;
-				curleft += obj.offsetLeft;
-				if (curleft < 0) {
-					curleft = origcurleft;
+//		format = dateFormats[format] || format;
+		value = (typeof value == 'object' ? value.toString() : value + '');
+		if (value == '') {
+			return null;
+		}
+		dayNamesShort = dayNamesShort || this._defaults.dayNamesShort;
+		dayNames = dayNames || this._defaults.dayNames;
+		monthNamesShort = monthNamesShort || this._defaults.monthNamesShort;
+		monthNames = monthNames || this._defaults.monthNames;
+		var year = -1;
+		var month = -1;
+		var day = -1;
+		var literal = false;
+		// Check whether a format character is doubled
+		var lookAhead = function(match) {
+			var matches = (iFormat + 1 < format.length && format.charAt(iFormat + 1) == match);
+			if (matches) {
+				iFormat++;
+			}
+			return matches;	
+		};
+		// Extract a number from the string value
+		var getNumber = function(match) {
+			lookAhead(match);
+			var size = (match == 'y' ? 4 : 2);
+			var num = 0;
+			while (size > 0 && iValue < value.length &&
+					value.charAt(iValue) >= '0' && value.charAt(iValue) <= '9') {
+				num = num * 10 + (value.charAt(iValue++) - 0);
+				size--;
+			}
+			if (size == (match == 'y' ? 4 : 2)) {
+				throw 'Missing number at position ' + iValue;
+			}
+			return num;
+		};
+		// Extract a name from the string value and convert to an index
+		var getName = function(match, shortNames, longNames) {
+			var names = (lookAhead(match) ? longNames : shortNames);
+			var size = 0;
+			for (var j = 0; j < names.length; j++) {
+				size = Math.max(size, names[j].length);
+			}
+			var name = '';
+			var iInit = iValue;
+			while (size > 0 && iValue < value.length) {
+				name += value.charAt(iValue++);
+				for (var i = 0; i < names.length; i++) {
+					if (name == names[i]) {
+						return i + 1;
+					}
 				}
-				curtop += obj.offsetTop;
+				size--;
+			}
+			throw 'Unknown name at position ' + iInit;
+		};
+		// Confirm that a literal character matches the string value
+		var checkLiteral = function() {
+			if (value.charAt(iValue) != format.charAt(iFormat)) {
+				throw 'Unexpected literal at position ' + iValue;
+			}
+			iValue++;
+		}
+		var iValue = 0;
+		for (var iFormat = 0; iFormat < format.length; iFormat++) {
+			if (literal) {
+				if (format.charAt(iFormat) == '\'' && !lookAhead('\'')) {
+					literal = false;
+				}
+				else {
+					checkLiteral();
+				}
+			}
+			else {
+				switch (format.charAt(iFormat)) {
+					case 'd':
+						day = getNumber('d');
+						break;
+					case 'D': 
+						getName('D', dayNamesShort, dayNames);
+						break;
+					case 'm': 
+						month = getNumber('m');
+						break;
+					case 'M':
+						month = getName('M', monthNamesShort, monthNames); 
+						break;
+					case 'y':
+						year = getNumber('y');
+						break;
+					case '\'':
+						if (lookAhead('\'')) {
+							checkLiteral();
+						}
+						else {
+							literal = true;
+						}
+						break;
+					default:
+						checkLiteral();
+				}
 			}
 		}
-		return [curleft,curtop];
+		if (year < 100) {
+			year += new Date().getFullYear() - new Date().getFullYear() % 100 +
+				(year <= shortYearCutoff ? 0 : -100);
+		}
+		var date = new Date(year, month - 1, day)
+		if (date.getFullYear() != year || date.getMonth() + 1 != month || date.getDate() != day) {
+			throw 'Invalid date'; // E.g. 31/02/*
+		}
+		return date;
+	},
+
+	/* Format a date object into a string value.
+	   The format can be combinations of the following:
+	   d  - day of month (no leading zero)
+	   dd - day of month (two digit)
+	   D  - day name short
+	   DD - day name long
+	   m  - month of year (no leading zero)
+	   mm - month of year (two digit)
+	   M  - month name short
+	   MM - month name long
+	   y  - year (two digit)
+	   yy - year (four digit)
+	   '...' - literal text
+	   '' - single quote
+
+	   @param  format           String - the desired format of the date
+	   @param  date             Date - the date value to format
+	   @param  dayNamesShort    String[7] - abbreviated names of the days from Sunday (optional)
+	   @param  dayNames         String[7] - names of the days from Sunday (optional)
+	   @param  monthNamesShort  String[12] - abbreviated names of the months (optional)
+	   @param  monthNames       String[12] - names of the months (optional)
+	   @return  String - the date in the above format */
+	formatDate: function (format, date, dayNamesShort, dayNames, monthNamesShort, monthNames) {
+		if (!date) {
+			return '';
+		}
+//		format = dateFormats[format] || format;
+		dayNamesShort = dayNamesShort || this._defaults.dayNamesShort;
+		dayNames = dayNames || this._defaults.dayNames;
+		monthNamesShort = monthNamesShort || this._defaults.monthNamesShort;
+		monthNames = monthNames || this._defaults.monthNames;
+		// Check whether a format character is doubled
+		var lookAhead = function(match) {
+			var matches = (iFormat + 1 < format.length && format.charAt(iFormat + 1) == match);
+			if (matches) {
+				iFormat++;
+			}
+			return matches;	
+		};
+		// Format a number, with leading zero if necessary
+		var formatNumber = function(match, value) {
+			return (lookAhead(match) && value < 10 ? '0' : '') + value;
+		};
+		// Format a name, short or long as requested
+		var formatName = function(match, value, shortNames, longNames) {
+			return (lookAhead(match) ? longNames[value] : shortNames[value]);
+		};
+		var output = '';
+		var literal = false;
+		if (date) {
+			for (var iFormat = 0; iFormat < format.length; iFormat++) {
+				if (literal) {
+					if (format.charAt(iFormat) == '\'' && !lookAhead('\'')) {
+						literal = false;
+					}
+					else {
+						output += format.charAt(iFormat);
+					}
+				}
+				else {
+					switch (format.charAt(iFormat)) {
+						case 'd':
+							output += formatNumber('d', date.getDate()); 
+							break;
+						case 'D': 
+							output += formatName('D', date.getDay(), dayNamesShort, dayNames);
+							break;
+						case 'm': 
+							output += formatNumber('m', date.getMonth() + 1); 
+							break;
+						case 'M':
+							output += formatName('M', date.getMonth(), monthNamesShort, monthNames); 
+							break;
+						case 'y':
+							output += (lookAhead('y') ? date.getFullYear() : 
+								(date.getYear() % 100 < 10 ? '0' : '') + date.getYear() % 100);
+							break;
+						case '\'':
+							if (lookAhead('\'')) {
+								output += '\'';
+							}
+							else {
+								literal = true;
+							}
+							break;
+						default:
+							output += format.charAt(iFormat);
+					}
+				}
+			}
+		}
+		return output;
+	},
+
+	/* Extract all possible characters from the date format. */
+	_possibleChars: function (format) {
+//		format = dateFormats[format] || format;
+		var chars = '';
+		var literal = false;
+		for (var iFormat = 0; iFormat < format.length; iFormat++) {
+			if (literal) {
+				if (format.charAt(iFormat) == '\'' && !lookAhead('\'')) {
+					literal = false;
+				}
+				else {
+					chars += format.charAt(iFormat);
+				}
+			}
+			else {
+				switch (format.charAt(iFormat)) {
+					case 'd':
+					case 'm': 
+					case 'y':
+						chars += '0123456789'; 
+						break;
+					case 'D': 
+					case 'M':
+						return null; // Accept anything
+					case '\'':
+						if (lookAhead('\'')) {
+							chars += '\'';
+						}
+						else {
+							literal = true;
+						}
+						break;
+					default:
+						chars += format.charAt(iFormat);
+				}
+			}
+		}
+		return chars;
 	}
 });
 
@@ -741,43 +1017,38 @@ $.extend(DatepickerInstance.prototype, {
 	_setDateFromField: function(input) {
 		this._input = $(input);
 		var dateFormat = this._get('dateFormat');
-		var currentDate = this._input.val().split(dateFormat.charAt(3));
+		var dates = this._input.val().split(this._get('rangeSeparator'));
 		this._endDay = this._endMonth = this._endYear = null;
 		var shortYearCutoff = this._get('shortYearCutoff');
 		shortYearCutoff = (typeof shortYearCutoff != 'string' ? shortYearCutoff :
 			new Date().getFullYear() % 100 + parseInt(shortYearCutoff, 10));
-		var checkYear = function(year) {
-			if (year >= 100) {
-				return year;
+		var date = this._getDefaultDate();
+		if (dates.length > 0) {
+			var dayNamesShort = this._get('dayNamesShort');
+			var dayNames = this._get('dayNames');
+			var monthNamesShort = this._get('monthNamesShort');
+			var monthNames = this._get('monthNames');
+			if (dates.length > 1) {
+				date = $.datepicker.parseDate(dateFormat, dates[1], shortYearCutoff,
+					dayNamesShort, dayNames, monthNamesShort, monthNames) ||
+					this._getDefaultDate();
+				this._endDay = date.getDate();
+				this._endMonth = date.getMonth();
+				this._endYear = date.getFullYear();
 			}
-			var fullYear = new Date().getFullYear();
-			return fullYear - (fullYear % 100) + year + (year <= shortYearCutoff ? 0 : -100);
-		};
-		if (currentDate.length == 3) {
-			this._currentDay = parseInt(currentDate[dateFormat.indexOf('D')], 10);
-			this._currentMonth = parseInt(currentDate[dateFormat.indexOf('M')], 10) - 1;
-			this._currentYear = checkYear(parseInt(currentDate[dateFormat.indexOf('Y')], 10));
-		} 
-		else if (currentDate.length == 5) { // if it's a date range
-			currentDateArray = this._input.val().split(this._get('rangeSeparator'));
-			currentDate = currentDateArray[0].split(dateFormat.charAt(3));
-			this._currentDay = parseInt(currentDate[dateFormat.indexOf('D')], 10);
-			this._currentMonth = parseInt(currentDate[dateFormat.indexOf('M')], 10) - 1;
-			this._currentYear = checkYear(parseInt(currentDate[dateFormat.indexOf('Y')], 10));
-			currentDate = currentDateArray[1].split(dateFormat.charAt(3));
-			this._endDay = parseInt(currentDate[dateFormat.indexOf('D')], 10);
-			this._endMonth = parseInt(currentDate[dateFormat.indexOf('M')], 10) - 1;
-			this._endYear = checkYear(parseInt(currentDate[dateFormat.indexOf('Y')], 10));
+			try {
+				date = $.datepicker.parseDate(dateFormat, dates[0], shortYearCutoff,
+					dayNamesShort, dayNames, monthNamesShort, monthNames) ||
+					this._getDefaultDate();
+			}
+			catch (e) {
+				$.datepicker.log(e);
+				date = this._getDefaultDate();
+			}
 		}
-		else {
-			var date = this._getDefaultDate();
-			this._currentDay = date.getDate();
-			this._currentMonth = date.getMonth();
-			this._currentYear = date.getFullYear();
-		}
-		this._selectedDay = this._currentDay;
-		this._selectedMonth = this._currentMonth;
-		this._selectedYear = this._currentYear;
+		this._selectedDay = this._currentDay = date.getDate();
+		this._selectedMonth = this._currentMonth = date.getMonth();
+		this._selectedYear = this._currentYear = date.getFullYear();
 		this._adjustDate();
 	},
 	
@@ -815,7 +1086,8 @@ $.extend(DatepickerInstance.prototype, {
 
 	/* Retrieve the date(s) directly. */
 	_getDate: function() {
-		var startDate = new Date(this._currentYear, this._currentMonth, this._currentDay);
+		var startDate = (!this._currentYear ? null :
+			new Date(this._currentYear, this._currentMonth, this._currentDay));
 		if (this._get('rangeSelect')) {
 			return [startDate, new Date(this._endYear, this._endMonth, this._endDay)];
 		}
@@ -870,11 +1142,14 @@ $.extend(DatepickerInstance.prototype, {
 				(showWeeks ? '<td>' + this._get('weekHeader') + '</td>' : '');
 			var firstDay = this._get('firstDay');
 			var changeFirstDay = this._get('changeFirstDay');
+			var dayNamesMin = this._get('dayNamesMin');
 			var dayNames = this._get('dayNames');
 			for (var dow = 0; dow < 7; dow++) { // days of the week
-				html += '<td>' + (!changeFirstDay ? '' :
-					'<a onclick="jQuery.datepicker._changeFirstDay(' + this._id + ', this);">') +
-					dayNames[(dow + firstDay) % 7] + (changeFirstDay ? '</a>' : '') + '</td>';
+				var day = (dow + firstDay) % 7;
+				html += '<td>' + (!changeFirstDay ? '<span' :
+					'<a onclick="jQuery.datepicker._changeFirstDay(' + this._id +
+					', this);"') + ' title="' + dayNames[day] + '">' +
+					dayNamesMin[day] + (changeFirstDay ? '</a>' : '</span>') + '</td>';
 			}
 			html += '</tr></thead><tbody>';
 			var daysInMonth = this._getDaysInMonth(drawYear, drawMonth);
@@ -1044,26 +1319,15 @@ $.extend(DatepickerInstance.prototype, {
 	/* Format the given date for display. */
 	_formatDate: function(day, month, year) {
 		if (!day) {
-			day = this._currentDay = this._selectedDay;
-			month = this._currentMonth = this._selectedMonth;
-			year = this._currentYear = this._selectedYear;
+			this._currentDay = this._selectedDay;
+			this._currentMonth = this._selectedMonth;
+			this._currentYear = this._selectedYear;
 		}
-		else if (typeof day == 'object') {
-			year = day.getFullYear();
-			month = day.getMonth();
-			day = day.getDate();
-		}
-		month++; // adjust javascript month
-		year = (this._get('useShortYear') ? year % 100 : year);
-		var dateFormat = this._get('dateFormat');
-		var dateString = '';
-		for (var i = 0; i < 3; i++) {
-			dateString += dateFormat.charAt(3) +
-				(dateFormat.charAt(i) == 'D' ? (day < 10 ? '0' : '') + day :
-				(dateFormat.charAt(i) == 'M' ? (month < 10 ? '0' : '') + month :
-				(dateFormat.charAt(i) == 'Y' ? (year < 10 ? '0' : '') + year : '?')));
-		}
-		return dateString.substring(dateFormat.charAt(3) ? 1 : 0);
+		var date = (day ? (typeof day == 'object' ? day : new Date(year, month, day)) :
+			new Date(this._currentYear, this._currentMonth, this._currentDay));
+		return $.datepicker.formatDate(this._get('dateFormat'), date,
+			this._get('dayNamesShort'), this._get('dayNames'),
+			this._get('monthNamesShort'), this._get('monthNames'));
 	}
 });
 
