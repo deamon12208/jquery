@@ -1,0 +1,351 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>UI Datepicker Tests</title>
+<script type="text/javascript" src="jsUnitCore.js"></script>
+<script type="text/javascript" src="../core/jquery.js"></script>
+<script type="text/javascript" src="../core/ui.datepicker.js"></script>
+<script type="text/javascript">
+function setUpPage() {
+	$('#dp').datepicker({clearText: 'Erase'});
+	setUpPageStatus = "complete";
+}
+
+function testSetDefaults() {
+	assertEquals('Invalid initial showOn', 'focus', $.datepicker._defaults.showOn);
+	$.datepicker.setDefaults({showOn: 'both'});
+	assertEquals('Invalid changed showOn', 'both', $.datepicker._defaults.showOn);
+	$.datepicker.setDefaults({showOn: 'focus'});
+}
+
+function testDisableEnable() {
+	assertFalse('Control is disabled', $.datepicker.isDisabled('#dp'));
+	$.datepicker.disableFor('#dp');
+	assertTrue('Control is enabled by ID', $.datepicker.isDisabled($('#dp')));
+	$.datepicker.enableFor('#dp');
+	assertFalse('Control is disabled by ID', $.datepicker.isDisabled($('#dp')[0]));
+	$.datepicker.disableFor($('#dp'));
+	assertTrue('Control is enabled by jQuery', $.datepicker.isDisabled($('#dp')));
+	$.datepicker.enableFor($('#dp'));
+	assertFalse('Control is disabled by jQuery', $.datepicker.isDisabled($('#dp')[0]));
+	$.datepicker.disableFor($('#dp')[0]);
+	assertTrue('Control is enabled by element', $.datepicker.isDisabled('#dp'));
+	$.datepicker.enableFor($('#dp')[0]);
+	assertFalse('Control is disabled by element', $.datepicker.isDisabled('#dp'));
+}
+
+function testReconfigureFor() {
+	assertEquals('Invalid instance clearText', 'Erase',
+		$.datepicker._inst[0]._settings.clearText);
+	$.datepicker.reconfigureFor('#dp', {clearText: 'X1'});
+	assertEquals('Invalid instance clearText', 'X1',
+		$.datepicker._inst[0]._settings.clearText);
+	$.datepicker.reconfigureFor($('#dp'), {clearText: 'X2'});
+	assertEquals('Invalid instance clearText', 'X2',
+		$.datepicker._inst[0]._settings.clearText);
+	$.datepicker.reconfigureFor($('#dp')[0], {clearText: 'X3'});
+	assertEquals('Invalid instance clearText', 'X3',
+		$.datepicker._inst[0]._settings.clearText);
+	$.datepicker.reconfigureFor($('#dp')[0], {clearText: null});
+	assertNull('Invalid instance clearText', $.datepicker._inst[0]._settings.clearText);
+	$.datepicker.reconfigureFor('#dp', {clearText: 'Erase'});
+}
+
+function testSetGetDateFor() {
+	assertNull('Invalid date set', $.datepicker.getDateFor('#dp'));
+	var date = new Date(2001, 2 - 1, 3);
+	$.datepicker.setDateFor('#dp', date);
+	assertEquals('Invalid date set/get by ID', date.toString(),
+		$.datepicker.getDateFor('#dp').toString());
+	date = new Date(2002, 3 - 1, 4);
+	$.datepicker.setDateFor($('#dp'), date);
+	assertEquals('Invalid date set/get by jQuery', date.toString(), 
+		$.datepicker.getDateFor($('#dp')).toString());
+	date = new Date(2003, 4 - 1, 5);
+	$.datepicker.setDateFor($('#dp')[0], date);
+	assertEquals('Invalid date set/get by element', date.toString(),
+		$.datepicker.getDateFor($('#dp')[0]).toString());
+}
+
+function testNoWeekends() {
+	for (var d = 0; d < 28; d++) {
+		assertArrayEquals('Weekend options invalid for ' + d + '/12/2007',
+			[(d % 7) > 1, ''], $.datepicker.noWeekends(new Date(2007, 12 - 1, d + 1)));
+    }
+}
+
+function testParseDate() {
+	var date = new Date(2007, 6 - 1, 5);
+	assertNull('Invalid parsed date - blank',
+		$.datepicker.parseDate('dd/mm/yy', ''));
+	assertDateEquals('Invalid parsed date - dd/mm/yy', date,
+		$.datepicker.parseDate('dd/mm/yy', '05/06/2007'));
+	assertDateEquals('Invalid parsed date - d/m/yy', date,
+		$.datepicker.parseDate('d/m/yy', '5/6/2007'));
+	assertDateEquals('Invalid parsed date - dd/mm/yy (2)', date,
+		$.datepicker.parseDate('dd/mm/yy', '5/6/2007'));
+	assertDateEquals('Invalid parsed date - d/m/yy (2)', date,
+		$.datepicker.parseDate('d/m/yy', '05/06/2007'));
+	assertDateEquals('Invalid parsed date - yy-mm-dd', date,
+		$.datepicker.parseDate('yy-mm-dd', '2007-06-05'));
+	assertDateEquals('Invalid parsed date - ddMyy', date,
+		$.datepicker.parseDate('ddMyy', '05Jun2007'));
+	assertDateEquals('Invalid parsed date - DD, MM d, yy', date,
+		$.datepicker.parseDate('DD, MM d, yy', 'Tuesday, June 5, 2007'));
+	assertDateEquals('Invalid parsed date - dd\'\'mm\'\'yy', date,
+		$.datepicker.parseDate('dd\'\'mm\'\'yy', '05\'06\'2007'));
+	assertDateEquals('Invalid parsed date - \'Day\' d of MM in the \'year\' yy', date,
+		$.datepicker.parseDate('\'Day\' d of MM in the \'year\' yy',
+		'Day 5 of June in the year 2007'));
+	assertDateEquals('Invalid parsed date - D M dd yy', date,
+		$.datepicker.parseDate('D M dd yy', date));
+	// check short year
+	assertDateEquals('Invalid parsed date - dd/mm/y (< cutoff)', date,
+		$.datepicker.parseDate('dd/mm/y', '05/06/07', 10));
+	assertDateEquals('Invalid parsed date - dd/mm/y (> cutoff)', new Date(1907, 6 - 1, 5),
+		$.datepicker.parseDate('dd/mm/y', '05/06/07', 5));
+	// other language
+	assertDateEquals('Invalid parsed date - DddMyy', date,
+		$.datepicker.parseDate('DddMyy', 'dth05msi2007', 10,
+		['don', 'dtw', 'dth', 'dfo', 'dfi', 'dsi', 'dse'],
+		['done', 'dtwo', 'dthree', 'dfour', 'dfive', 'dsix', 'dseven'],
+		['mon', 'mtw', 'mth', 'mfo', 'mfi', 'msi',
+		'mse', 'mei', 'mni', 'mte', 'mel', 'mtv'],
+		['mone', 'mtwo', 'mthree', 'mfour', 'mfive', 'msix',
+		'mdseven', 'meight', 'mnine', 'mten', 'meleven', 'mtwelve']));
+	assertDateEquals('Invalid parsed date - DD dd MM yy', date,
+		$.datepicker.parseDate('DD dd MM yy', 'dthree 05 msix 2007', 10,
+		['don', 'dtw', 'dth', 'dfo', 'dfi', 'dsi', 'dse'],
+		['done', 'dtwo', 'dthree', 'dfour', 'dfive', 'dsix', 'dseven'],
+		['mon', 'mtw', 'mth', 'mfo', 'mfi', 'msi',
+		'mse', 'mei', 'mni', 'mte', 'mel', 'mtv'],
+		['mone', 'mtwo', 'mthree', 'mfour', 'mfive', 'msix',
+		'mdseven', 'meight', 'mnine', 'mten', 'meleven', 'mtwelve']));
+}
+
+function testParseDateErrors() {
+	try {
+		$.datepicker.parseDate(null, '05/06/2007');
+		fail('Parsed null format argument');
+	}
+	catch (e) {
+		assertEquals('Unexpected error message - null format', 'Invalid arguments', e);
+	}
+	try {
+		$.datepicker.parseDate('dd/mm/yy', null);
+		fail('Parsed null value argument');
+	}
+	catch (e) {
+		assertEquals('Unexpected error message - null value', 'Invalid arguments', e);
+	}
+	try {
+		$.datepicker.parseDate('dd-mm-yy', '05/06/2007');
+		fail('Parsed invalid format - dd-mm-yy');
+	}
+	catch (e) {
+		assertEquals('Unexpected error message - 05/06/2007',
+			'Unexpected literal at position 2', e);
+	}
+	try {
+		$.datepicker.parseDate('dMyy', '05Jum2007');
+		fail('Parsed invalid format - dMyy');
+	}
+	catch (e) {
+		assertEquals('Unexpected error message - 05Jum2007',
+			'Unknown name at position 2', e);
+	}
+	try {
+		$.datepicker.parseDate('\'Day\' d of MM in the \'year\' yy',
+			'Day 5 ov June in the year 2007');
+		fail('Parsed invalid format - \'Day\' d of MM in the \'year\' yy');
+	}
+	catch (e) {
+		assertEquals('Unexpected error message - Day 5 ov June in the year 2007',
+			'Unexpected literal at position 7', e);
+	}
+	try {
+		$.datepicker.parseDate('dd/mm/yy', '31/02/2007');
+		fail('Parsed invalid date - dd/mm/yy');
+	}
+	catch (e) {
+		assertEquals('Unexpected error message - 31/02/2007', 'Invalid date', e);
+	}
+	try {
+		$.datepicker.parseDate('dd/mm/yy', 'not a date');
+		fail('Parsed non-date string');
+	}
+	catch (e) {
+		assertEquals('Unexpected error message - not a date',
+			'Missing number at position 0', e);
+	}
+	try {
+		$.datepicker.parseDate('dd/mm/yy', new Date(2007, 6 - 1, 5));
+		fail('Parsed date object');
+	}
+	catch (e) {
+		assertEquals('Unexpected error message - new Date()',
+			'Missing number at position 0', e);
+	}
+	// other language
+	try {
+		$.datepicker.parseDate('DddMyy', 'dze05msi2007', 10,
+			['don', 'dtw', 'dth', 'dfo', 'dfi', 'dsi', 'dse'],
+			['done', 'dtwo', 'dthree', 'dfour', 'dfive', 'dsix', 'dseven'],
+			['mon', 'mtw', 'mth', 'mfo', 'mfi', 'msi',
+			'mse', 'mei', 'mni', 'mte', 'mel', 'mtv'],
+			['mone', 'mtwo', 'mthree', 'mfour', 'mfive', 'msix',
+			'mdseven', 'meight', 'mnine', 'mten', 'meleven', 'mtwelve']);
+		fail('Parsed invalid format - DddMyy (1)');
+	}
+	catch (e) {
+		assertEquals('Unexpected error message - dze05msi2007',
+			'Unknown name at position 0', e);
+	}
+	try {
+		$.datepicker.parseDate('DddMyy', 'dth05mze2007', 10,
+			['don', 'dtw', 'dth', 'dfo', 'dfi', 'dsi', 'dse'],
+			['done', 'dtwo', 'dthree', 'dfour', 'dfive', 'dsix', 'dseven'],
+			['mon', 'mtw', 'mth', 'mfo', 'mfi', 'msi',
+			'mse', 'mei', 'mni', 'mte', 'mel', 'mtv'],
+			['mone', 'mtwo', 'mthree', 'mfour', 'mfive', 'msix',
+			'mdseven', 'meight', 'mnine', 'mten', 'meleven', 'mtwelve']);
+		fail('Parsed invalid format - DddMyy (2)');
+	}
+	catch (e) {
+		assertEquals('Unexpected error message - dth05mze2007',
+			'Unknown name at position 5', e);
+	}
+	try {
+		$.datepicker.parseDate('DD dd MM yy', 'dzero 05 msix 2007', 10,
+			['don', 'dtw', 'dth', 'dfo', 'dfi', 'dsi', 'dse'],
+			['done', 'dtwo', 'dthree', 'dfour', 'dfive', 'dsix', 'dseven'],
+			['mon', 'mtw', 'mth', 'mfo', 'mfi', 'msi',
+			'mse', 'mei', 'mni', 'mte', 'mel', 'mtv'],
+			['mone', 'mtwo', 'mthree', 'mfour', 'mfive', 'msix',
+			'mdseven', 'meight', 'mnine', 'mten', 'meleven', 'mtwelve']);
+		fail('Parsed invalid format - DD dd MM yy (1)');
+	}
+	catch (e) {
+		assertEquals('Unexpected error message - dzero 05 msix 2007',
+			'Unknown name at position 0', e);
+	}
+	try {
+		$.datepicker.parseDate('DD dd MM yy', 'dthree 05 mzero 2007', 10,
+			['don', 'dtw', 'dth', 'dfo', 'dfi', 'dsi', 'dse'],
+			['done', 'dtwo', 'dthree', 'dfour', 'dfive', 'dsix', 'dseven'],
+			['mon', 'mtw', 'mth', 'mfo', 'mfi', 'msi',
+			'mse', 'mei', 'mni', 'mte', 'mel', 'mtv'],
+			['mone', 'mtwo', 'mthree', 'mfour', 'mfive', 'msix',
+			'mdseven', 'meight', 'mnine', 'mten', 'meleven', 'mtwelve']);
+		fail('Parsed invalid format - DD dd MM yy (2)');
+	}
+	catch (e) {
+		assertEquals('Unexpected error message - dthree 05 mzero 2007',
+			'Unknown name at position 10', e);
+	}
+}
+
+function testFormatDate() {
+	var date = new Date(2007, 6 - 1, 5);
+	assertEquals('Invalid formatted date - null', '',
+		$.datepicker.formatDate('dd/mm/yy', null));
+	assertEquals('Invalid formatted date - dd/mm/yy', '05/06/2007',
+		$.datepicker.formatDate('dd/mm/yy', date));
+	assertEquals('Invalid formatted date - d/m/y', '5/6/07',
+		$.datepicker.formatDate('d/m/y', date));
+	assertEquals('Invalid formatted date - yy-mm-dd', '2007-06-05',
+		$.datepicker.formatDate('yy-mm-dd', date));
+	assertEquals('Invalid formatted date - ddMyy', '05Jun2007',
+		$.datepicker.formatDate('ddMyy', date));
+	assertEquals('Invalid formatted date - DD, MM d, yy', 'Tuesday, June 5, 2007',
+		$.datepicker.formatDate('DD, MM d, yy', date));
+	assertEquals('Invalid formatted date - dd\'\'mm\'\'yy', '05\'06\'2007',
+		$.datepicker.formatDate('dd\'\'mm\'\'yy', date));
+	assertEquals('Invalid formatted date - \'Day\' d of MM in the \'year\' yy',
+		'Day 5 of June in the year 2007',
+		$.datepicker.formatDate('\'Day\' d of MM in the \'year\' yy', date));
+	// other language
+	assertEquals('Invalid formatted date - ddMyy', 'dth05msi2007',
+		$.datepicker.formatDate('DddMyy', date,
+		['don', 'dtw', 'dth', 'dfo', 'dfi', 'dsi', 'dse'],
+		['done', 'dtwo', 'dthree', 'dfour', 'dfive', 'dsix', 'dseven'],
+		['mon', 'mtw', 'mth', 'mfo', 'mfi', 'msi',
+		'mse', 'mei', 'mni', 'mte', 'mel', 'mtv'],
+		['mone', 'mtwo', 'mthree', 'mfour', 'mfive', 'msix',
+		'mdseven', 'meight', 'mnine', 'mten', 'meleven', 'mtwelve']));
+	assertEquals('Invalid formatted date - DD dd MM yy', 'dthree 05 msix 2007',
+		$.datepicker.formatDate('DD dd MM yy', date,
+		['don', 'dtw', 'dth', 'dfo', 'dfi', 'dsi', 'dse'],
+		['done', 'dtwo', 'dthree', 'dfour', 'dfive', 'dsix', 'dseven'],
+		['mon', 'mtw', 'mth', 'mfo', 'mfi', 'msi',
+		'mse', 'mei', 'mni', 'mte', 'mel', 'mtv'],
+		['mone', 'mtwo', 'mthree', 'mfour', 'mfive', 'msix',
+		'mdseven', 'meight', 'mnine', 'mten', 'meleven', 'mtwelve']));
+}
+
+function testGet() {
+	assertEquals('Invalid default clearText', 'Clear', $.datepicker._defaults.clearText);
+	assertEquals('Invalid instance clearText', 'Erase',
+		$.datepicker._inst[0]._settings.clearText);
+}
+
+function testGetDefaultDate() {
+	var test = new Date();
+	var date = $.datepicker._inst[0]._getDefaultDate();
+	assertDateEquals('Invalid default date - today', test, date);
+	test.setDate(test.getDate() + 7);
+	$.datepicker.reconfigureFor('#dp', {defaultDate: +7});
+	date = $.datepicker._inst[0]._getDefaultDate();
+	assertDateEquals('Invalid default date - +7', test, date);
+	test.setDate(test.getDate() - 14);
+	$.datepicker.reconfigureFor('#dp', {defaultDate: -7});
+	date = $.datepicker._inst[0]._getDefaultDate();
+	assertDateEquals('Invalid default date - -7', test, date);
+	test = new Date(2007, 6 - 1, 5);
+	$.datepicker.reconfigureFor('#dp', {defaultDate: test});
+	date = $.datepicker._inst[0]._getDefaultDate();
+	assertDateEquals('Invalid default date - +7', test, date);
+	$.datepicker.reconfigureFor('#dp', {defaultDate: null});
+	test = new Date();
+	date = $.datepicker._inst[0]._getDefaultDate();
+	assertDateEquals('Invalid default date - today', test, date);
+}
+
+function testGetFirstDayOfMonth() {
+	var fd = [1, 4, 4, 0, 2, 5, 0, 3, 6, 1, 4, 6];
+	for (var m = 0; m < 12; m++) { 
+		assertEquals('Invalid first day of month for ' + m,
+			fd[m], $.datepicker._inst[0]._getFirstDayOfMonth(2007, m));
+	}
+}
+
+function testGetDaysInMonth() {
+	var md = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+	for (var y = 2007; y < 2009; y++) {
+		for (var m = 0; m < 12; m++) { 
+			assertEquals('Invalid days in month for ' + m + '/' + y,
+				(m == 1 ? (y == 2007 ? 28 : 29) : md[m]),
+				$.datepicker._inst[0]._getDaysInMonth(y, m));
+		}
+	}
+}
+
+function assertDateEquals(msg, date1, date2) {
+	assertTrue(msg, date1 != null && date2 != null);
+	assertTrue(msg, date1.getFullYear() == date2.getFullYear() &&
+		date1.getMonth() == date2.getMonth() && date1.getDate() == date2.getDate());
+}
+</script>
+</head>
+
+<body>
+<h1>UI Datepicker Tests</h1>
+
+<p>This page contains <a href="http://www.jsunit.net/">JsUnit</a> tests for the UI Datepicker plugin.
+	To see them, take a look at the source.</p>
+<p><input type="text" id="dp"/></p>
+</body>
+</html>
