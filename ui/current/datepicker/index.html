@@ -38,21 +38,22 @@
 			<?php include '../main_nav.php' ?>
 			<div id="header">
 				<div>
-					<h1>jQuery UI Datepicker v3.0</h1>
+					<h1>jQuery UI Datepicker v3.1</h1>
 					<p class="caption">Written by <a href="/">Marc Grabanski</a> and <a href="http://keith-wood.name">Keith Wood</a>.</p>
 				</div>
 			</div>
 			<?php $code_nav='ui-datepicker'; include '../code_nav.php' ?>
 			<div id="content">
-				<h2>jQuery UI Datepicker v3.0 Examples</h2>
+				<h2>jQuery UI Datepicker v3.1 Examples</h2>
 				<ul id="tab_menu1" class="tabs">
 					<li><a href="#default">Defaults</a></li>
 					<li><a href="#invoke">Invocation</a></li>
 					<li><a href="#keys">Keystrokes</a></li>
 					<li><a href="#restrict">Restricting</a></li>
+					<li><a href="#formats">Formats</a></li>
 					<li><a href="#custom">Customize</a></li>
 					<li><a href="#l10n">Localisation</a></li>
-					<li style="clear:left"><a href="#range">Date range</a></li>
+					<li style="clear: left;"><a href="#range">Date range</a></li>
 					<li><a href="#misc">Miscellaneous</a></li>
 					<li><a href="#reconfig">Reconfigure</a></li>
 					<li><a href="#inline">Inline</a></li>
@@ -171,11 +172,11 @@ function setDateFromDialog(date) {
 						<input type="text" size="10" class="invokeBoth"/></p>
 					<p>The relevant keystrokes are:</p>
 					<ul>
-						<li><span class="demoLabel">page down/up</span>previous/next month</li>
-						<li><span class="demoLabel">ctrl+page down/up</span>previous/next year</li>
+						<li><span class="demoLabel">page up/down</span>previous/next month</li>
+						<li><span class="demoLabel">ctrl+page up/down</span>previous/next year</li>
 						<li><span class="demoLabel">ctrl+home</span>current month or open when closed</li>
 						<li><span class="demoLabel">ctrl+left/right</span>previous/next day</li>
-						<li><span class="demoLabel">ctrl+down/up</span>previous/next week</li>
+						<li><span class="demoLabel">ctrl+up/down</span>previous/next week</li>
 						<li><span class="demoLabel">enter</span>accept the selected date</li>
 						<li><span class="demoLabel">ctrl+end</span>close and erase the date</li>
 						<li><span class="demoLabel">escape</span>close the date picker without selection</li>
@@ -205,6 +206,63 @@ $('#restrictDates').datepicker({minDate: new Date(2005, 1 - 1, 26),
 						By default, the <em>Prev</em> and <em>Next</em> links are disabled if they are not
 						applicable. You can override this to remove them instead, with the
 						<code>hideIfNoPrevNext</code> setting.</p>
+				</div>
+				<div id="formats" class="tab_group1 container">
+					<h3>Date Formats</h3>
+					<p>You can set a variety of date formats for the date picker,
+						with the default being 'mm/dd/yy'.</p>
+					<p><span class="demoLabel">Medium format:</span>
+						<input type="text" size="10" id="mediumFormat"/></p>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+$('#mediumFormat').datepicker({dateFormat: 'M d, yy'});
+</script>
+					<p><span class="demoLabel">Long format:</span>
+						<input type="text" size="20" id="longFormat"/></p>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+$('#longFormat').datepicker({dateFormat: 'MM d, yy'});
+</script>
+					<p><span class="demoLabel">Full format:</span>
+						<input type="text" size="30" id="fullFormat"/></p>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+$('#fullFormat').datepicker({dateFormat: 'DD, MM d, yy'});
+</script>
+					<p>Display dates without the century. The century is then determined based on the
+						<code>shortYearCutoff</code> setting, which defaults to 10 years in the future ('+10').
+						Year values less than or equal to this cutoff are interpreted as being in the current
+						century, while those greater than the cutoff are taken to be in the previous century.</p>
+					<p><span class="demoLabel">No century:</span>
+						<input type="text" size="10" id="noCentury"/></p>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+$('#noCentury').datepicker({dateFormat: 'dd/mm/y'});
+</script>
+					<p><span class="demoLabel">ISO date format:</span>
+						<input type="text" size="10" id="isoFormat"/></p>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+$('#isoFormat').datepicker({dateFormat: 'yy-mm-dd'});
+</script>
+					<p><span class="demoLabel">French full format:</span>
+						<input type="text" size="30" id="frFullFormat"/></p>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+localise();
+$('#frFullFormat').datepicker();
+$.datepicker.reconfigureFor('#frFullFormat', $.datepicker.regional['fr']);
+$.datepicker.reconfigureFor('#frFullFormat', {dateFormat: 'DD, MM d, yy'});
+</script>
+					<p>The formatting codes are:</p>
+					<ul>
+						<li><span class="demoLabel">d</span>day of month (no leading zero)</li>
+						<li><span class="demoLabel">dd</span>day of month (two digit)</li>
+						<li><span class="demoLabel">D</span>day name short</li>
+						<li><span class="demoLabel">DD</span>day name long</li>
+						<li><span class="demoLabel">m</span>month of year (no leading zero)</li>
+						<li><span class="demoLabel">mm</span>month of year (two digit)</li>
+						<li><span class="demoLabel">M</span>month name short</li>
+						<li><span class="demoLabel">MM</span>month name long</li>
+						<li><span class="demoLabel">y</span>year (two digit)</li>
+						<li><span class="demoLabel">yy</span>year (four digit)</li>
+						<li><span class="demoLabel">'...'</span>literal text</li>
+						<li><span class="demoLabel">''</span>single quote</li>
+					</ul>
 				</div>
 				<div id="custom" class="tab_group1 container">
 					<h3>customize</h3>
@@ -244,16 +302,8 @@ function nationalDays(date) {
 				<div id="l10n" class="tab_group1 container">
 					<h3>Localisation</h3>
 					<p>You can localise the date picker for other languages and regional differences.
-						The date picker defaults to English with a date format of MM/DD/YYYY.
-						This is easily changed via the <code>dateFormat</code> setting. The first three
-						characters are 'Y', 'M', and 'D' in the order in which they should appear,
-						and the last character is the field separator to use (may be omitted).</p>
-					<p><span class="demoLabel">ISO date format:</span>
-						<input type="text" size="10" id="isoFormat"/></p>
-<script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#isoFormat').datepicker({dateFormat: 'YMD-'});
-</script>
-					<p>Or translate the text into another language.</p>
+						The date picker defaults to English with a date format of MM/DD/YYYY,
+						but you can translate the text into another language.</p>
 					<p><span class="demoLabel">
 						<select id="language">
 							<option value="zh-CN">Chinese Simplified</option>
@@ -335,15 +385,6 @@ $('#openDateJan01').datepicker({defaultDate: new Date(2007, 1 - 1, 1)});
 						<input type="text" size="10" id="openDatePlus7"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
 $('#openDatePlus7').datepicker({defaultDate: +7});
-</script>
-					<p>Display dates without the century. The century is determined based on the
-						<code>shortYearCutoff</code> setting, which defaults to 10 years in the future ('+10').
-						Year values less than or equal to this cutoff are interpreted as being in the current
-						century, while those greater than the cutoff are taken to be in the previous century.</p>
-					<p><span class="demoLabel">No century:</span>
-						<input type="text" size="10" id="noCentury"/></p>
-<script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#noCentury').datepicker({useShortYear: true});
 </script>
 					<p>Show the weeks of the year. Defaults to the ISO 8601 definition (weeks start 
 						on Mondays and the first week of the year contains January 4). Change the 
