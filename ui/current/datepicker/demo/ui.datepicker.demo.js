@@ -25,10 +25,16 @@ $(document).ready(function () {
 
 // Load and apply a localisation package for the date picker
 function localise() {
+	var date = $.datepicker.getDateFor('#l10nDatepicker');
 	var language = $('#language').val();
 	$.localise('i18n/ui.datepicker', {language: language});
 	$.datepicker.reconfigureFor('#l10nDatepicker', $.datepicker.regional[language]).
 		setDefaults($.datepicker.regional['']); // Reset for general usage
+	if (date) {
+		$.datepicker.setDateFor('#l10nDatepicker', date);
+		$('#l10nDatepicker').val($.datepicker.formatDate(
+			$.datepicker.regional[language].dateFormat, date));
+	}
 }
 
 // Create a Date from a string value
