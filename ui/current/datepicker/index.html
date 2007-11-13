@@ -243,10 +243,14 @@ $('#isoFormat').datepicker({dateFormat: 'yy-mm-dd'});
 					<p><span class="demoLabel">French full format:</span>
 						<input type="text" size="30" id="frFullFormat"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-localise();
-$('#frFullFormat').datepicker();
-$.datepicker.reconfigureFor('#frFullFormat', $.datepicker.regional['fr']);
+if (!$.browser.safari) {
+	localise();
+}
+$('#frFullFormat').datepicker($.datepicker.regional['fr']);
 $.datepicker.reconfigureFor('#frFullFormat', {dateFormat: 'DD, MM d, yy'});
+if ($.browser.safari) {
+	$.datepicker.disableFor('#frFullFormat');
+}
 </script>
 					<p>The formatting codes are:</p>
 					<ul>
