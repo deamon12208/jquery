@@ -234,29 +234,14 @@ $.extend(Datepicker.prototype, {
 
 		this._pos = (pos ? (pos.length ? pos : [pos.pageX, pos.pageY]) : null);
 		if (!this._pos) {
-			var viewportWidth;
-			var viewportHeight;
-			if (window.innerWidth) { // Mozilla/Netscape/Opera/IE7
-				viewportWidth = window.innerWidth,
-				viewportHeight = window.innerHeight
-			}
-			else if (document.documentElement && document.documentElement.clientWidth &&
-					document.documentElement.clientWidth != 0) { // IE6 standards compliant
-				viewportWidth = document.documentElement.clientWidth,
-				viewportHeight = document.documentElement.clientHeight
-			}
-			else { // older IE
-				viewportWidth = document.getElementsByTagName('body')[0].clientWidth,
-				viewportHeight = document.getElementsByTagName('body')[0].clientHeight
-			}
+			var browserWidth = window.innerWidth || document.documentElement.clientWidth ||
+				document.body.clientWidth;
+			var browserHeight = window.innerHeight || document.documentElement.clientHeight ||
+				document.body.clientHeight;
+			var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+			var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
 			this._pos = // should use actual width/height below
-				[(viewportWidth / 2) - 100, (viewportHeight / 2) - 150];
-			this._pos[0] += // add the browser scroll position to the x-coord
-				(document.documentElement && document.documentElement.scrollLeft ?
-				document.documentElement.scrollLeft : document.body.scrollLeft);
-			this._pos[1] += // add the browser scroll position to the y-coord
-				(document.documentElement && document.documentElement.scrollTop ?
-				document.documentElement.scrollTop : document.body.scrollTop);
+				[(browserWidth / 2) - 100 + scrollX, (browserHeight / 2) - 150 + scrollY];
 		}
 
 		// move input on screen for focus, but hidden behind dialog
@@ -456,27 +441,23 @@ $.extend(Datepicker.prototype, {
 		}
 		// re-position on screen if necessary
 		var pos = $.datepicker._findPos(inst._input[0]);
-		browserWidth = $(window).width();
-		if (document.documentElement && (document.documentElement.scrollLeft)) {
-			browserX = document.documentElement.scrollLeft;	
+		var browserWidth = window.innerWidth || document.documentElement.clientWidth ||
+			document.body.clientWidth;
+		var browserHeight = window.innerHeight || document.documentElement.clientHeight ||
+			document.body.clientHeight;
+		var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+		var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+		// reposition date picker horizontally if outside the browser window
+		if ((inst._datepickerDiv.offset().left + inst._datepickerDiv.width()) >
+				(browserWidth + scrollX)) {
+			inst._datepickerDiv.css('left', Math.max(scrollX,
+				pos[0] + $(inst._input[0]).width() - inst._datepickerDiv.width()) + 'px');
 		}
-		else {
-			browserX = document.body.scrollLeft;
-		}
-		// reposition date picker if outside the browser window
-		if ((inst._datepickerDiv.offset().left + inst._datepickerDiv.width()) > (browserWidth + browserX)) {
-			inst._datepickerDiv.css('left', (pos[0] + $(inst._input[0]).width() - inst._datepickerDiv.width()) + 'px');
-		}
-		browserHeight = $(window).height();
-		if (document.documentElement && (document.documentElement.scrollTop)) {
-			browserTopY = document.documentElement.scrollTop;
-		} 
-		else {
-			browserTopY = document.body.scrollTop;
-		}
-		// reposition date picker if outside the browser window
-		if ((inst._datepickerDiv.offset().top + inst._datepickerDiv.height()) > (browserTopY + browserHeight) ) {
-			inst._datepickerDiv.css('top', (pos[1] - (this._inDialog ? 0 : inst._datepickerDiv.height())) + 'px');
+		// reposition date picker vertically if outside the browser window
+		if ((inst._datepickerDiv.offset().top + inst._datepickerDiv.height()) >
+				(browserHeight + scrollY) ) {
+			inst._datepickerDiv.css('top', Math.max(scrollY,
+				pos[1] - (this._inDialog ? 0 : inst._datepickerDiv.height())) + 'px');
 		}
 	},
 	
