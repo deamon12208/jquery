@@ -3,80 +3,91 @@
 	//Make nodes selectable by expression
 	$.extend($.expr[':'], { shadowed: "(' '+a.className+' ').indexOf(' fx-shadowed ')" });
 	
-	$.fn.shadowEnable = function() { if($(this[0]).next().is(".fx-shadow")) $(this[0]).next().show(); }
-	$.fn.shadowDisable = function() { if($(this[0]).next().is(".fx-shadow")) $(this[0]).next().hide(); }
+	$.fn.shadowEnable  = function() { return $(this).next(".fx-shadow").show().end();   };
+	$.fn.shadowDisable = function() { return $(this).next(".fx-shadow").hide().end();   };
+	$.fn.shadowDestroy = function() { return $(this).next(".fx-shadow").remove().end(); };
 	
 	$.fn.shadow = function(options) {
-		
-		options = options || {};
-		options.offset = options.offset ? options.offset : 0;
-		options.opacity = options.opacity ? options.opacity : 0.2;
-		options.color = options.color || "#000";
+		options = $.extend({
+			offset:  1,
+			opacity: 0.2,
+			color:   "#000",
+			monitor: false
+		}, options || {});
+		options.offset -= 1;
 		
 		return this.each(function() {
 			
-			var cur = $(this);
+			// Remove an existing shadow if it exists
+			var $element = $(this).shadowDestroy(),
 			
-			//Create a shadow element
-			var shadow = $("<div class='fx-shadow' style='position: relative;'></div>"); cur.after(shadow);
+			// Create a shadow element
+			$shadow = $("<div class='fx-shadow' style='position: relative;'></div>").insertAfter($element);
 			
-			//Figure the base height and width
-			var baseWidth = cur.outerWidth();
-			var baseHeight = cur.outerHeight();
+			// Figure the base height and width
+			baseWidth  = $element.outerWidth(),
+			baseHeight = $element.outerHeight(),
 			
-			//get the offset
-			var position = cur.position();
+			// Get the offset
+			position = $element.position(),
 			
-			//Append smooth corners
-			$('<div class="fx-shadow-color fx-shadow-layer-1"></div>').css({ position: 'absolute', opacity: options.opacity-0.05, left: 5+options.offset, top: 5+options.offset, width: baseWidth+1, height: baseHeight+1 }).appendTo(shadow);
-			$('<div class="fx-shadow-color fx-shadow-layer-2"></div>').css({ position: 'absolute', opacity: options.opacity-0.1, left: 7+options.offset, top: 7+options.offset, width: baseWidth, height: baseHeight-3 }).appendTo(shadow);
-			$('<div class="fx-shadow-color fx-shadow-layer-3"></div>').css({ position: 'absolute', opacity: options.opacity-0.1, left: 7+options.offset, top: 7+options.offset, width: baseWidth-3, height: baseHeight }).appendTo(shadow);
-			$('<div class="fx-shadow-color fx-shadow-layer-4"></div>').css({ position: 'absolute', opacity: options.opacity, left: 6+options.offset, top: 6+options.offset, width: baseWidth-1, height: baseHeight-1 }).appendTo(shadow);
+			// Get z-index
+			zIndex = parseInt($element.css("zIndex")) || 0;
 			
-			//Add color
-			$("div.fx-shadow-color", shadow).css("background-color", options.color);
+			// Append smooth corners
+			$('<div class="fx-shadow-color fx-shadow-layer-1"></div>').css({ position: 'absolute', opacity: options.opacity - 0.05,  left: options.offset,     top: options.offset,     width: baseWidth + 1, height: baseHeight + 1 }).appendTo($shadow);
+			$('<div class="fx-shadow-color fx-shadow-layer-2"></div>').css({ position: 'absolute', opacity: options.opacity - 0.10,  left: options.offset + 2, top: options.offset + 2, width: baseWidth,     height: baseHeight - 3 }).appendTo($shadow);
+			$('<div class="fx-shadow-color fx-shadow-layer-3"></div>').css({ position: 'absolute', opacity: options.opacity - 0.10,  left: options.offset + 2, top: options.offset + 2, width: baseWidth - 3, height: baseHeight     }).appendTo($shadow);
+			$('<div class="fx-shadow-color fx-shadow-layer-4"></div>').css({ position: 'absolute', opacity: options.opacity,         left: options.offset + 1, top: options.offset + 1, width: baseWidth - 1, height: baseHeight - 1 }).appendTo($shadow);
 			
-			//Determine the stack order (attention: the zIndex will get one higher!)
-			if(!cur.css("zIndex") || cur.css("zIndex") == "auto") {
-				var stack = 0;
-				cur.css("position", (cur.css("position") == "static" ? "relative" : cur.css("position"))).css("z-index", "1");
-			} else {
-				var stack = parseInt(cur.css("zIndex"));
-				cur.css("zIndex", stack+1);
-			}
+			// Add color
+			$("div.fx-shadow-color", $shadow).css("background-color", options.color);
 			
-			//Copy the original z-index and position to the clone
-			//alert(shadow); If you insert this alert, opera will time correctly!!
-			shadow.css({
-				position: "absolute",
-				zIndex: stack,
-				left: position.left,
-				top: position.top,
-				width: baseWidth,
-				height: baseHeight,
-				marginLeft: cur.css("marginLeft"),
-				marginRight: cur.css("marginRight"),
-				marginBottom: cur.css("marginBottom"),
-				marginTop: cur.css("marginTop")
+			// Set zIndex +1 and make sure position is at least relative
+			// Attention: the zIndex will get one higher!
+			$element
+				.css({
+					zIndex: zIndex + 1,
+					position: ($element.css("position") == "static" ? "relative" : "")
+				});
+			
+			// Copy the original z-index and position to the clone
+			// alert(shadow); If you insert this alert, opera will time correctly!!
+			$shadow.css({
+				position:     "absolute",
+				zIndex:       zIndex,
+				top:          position.top+"px",
+				left:         position.left+"px",
+				width:        baseWidth,
+				height:       baseHeight,
+				marginLeft:   $element.css("marginLeft"),
+				marginRight:  $element.css("marginRight"),
+				marginBottom: $element.css("marginBottom"),
+				marginTop:    $element.css("marginTop")
 			});
 			
 			
-			function rearrangeShadow(el,sh) {
-				var $el = $(el);
-				$(sh).css($el.position());
-				$(sh).children().css({ height: $el.outerHeight()+"px", width: $el.outerWidth()+"px" });
-			}
+			if ( options.monitor ) {
+				function rearrangeShadow() {
+					var $element = $(this), $shadow = $element.next();
+					// $shadow.css( $element.position() );
+					$shadow.css({
+						top:  parseInt($element.css("top"))  +"px",
+						left: parseInt($element.css("left")) +"px"
+					})
+					$(">*", $shadow).css({ height: this.offsetHeight+"px", width: this.offsetWidth+"px" });
+				}
 			
-			if($.browser.msie) {
-				//Add dynamic css expressions
-				shadow[0].style.setExpression("left","parseInt(jQuery(this.previousSibling).css('left'))+'px' || jQuery(this.previousSibling).position().left");
-				shadow[0].style.setExpression("top","parseInt(jQuery(this.previousSibling).css('top'))+'px' || jQuery(this.previousSibling).position().top");
-			} else {
-				//Bind events for good browsers
-				this.addEventListener("DOMAttrModified",function() { rearrangeShadow(this,shadow); },false);
+				// Attempt to use DOMAttrModified event
+				$element.bind("DOMAttrModified", rearrangeShadow);
+			
+				// Use expressions if they exist (IE)
+				if( $shadow[0].style.setExpression ) {
+					$shadow[0].style.setExpression("top" , "parseInt(this.previousSibling.currentStyle.top ) + 'px'");
+					$shadow[0].style.setExpression("left", "parseInt(this.previousSibling.currentStyle.left) + 'px'");
+				}
 			}
 
-				
 		});
 	};
 	
