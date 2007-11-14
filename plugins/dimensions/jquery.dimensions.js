@@ -26,7 +26,7 @@ $.each( [ 'Height', 'Width' ], function(i, name){
 		var torl = name == 'Height' ? 'Top'    : 'Left',  // top or left
 		    borr = name == 'Height' ? 'Bottom' : 'Right'; // bottom or right
 		
-		return num( this, name.toLowerCase() ) + num(this, 'padding' + torl) + num(this, 'padding' + borr);
+		return this.is(':visible') ? this[0]['client' + name] : num( this, name.toLowerCase() ) + num(this, 'padding' + torl) + num(this, 'padding' + borr);
 	};
 	
 	// outerHeight and outerWidth
@@ -38,10 +38,13 @@ $.each( [ 'Height', 'Width' ], function(i, name){
 		
 		options = $.extend({ margin: false }, options || {});
 		
-		return num( this, name.toLowerCase() )
-				+ num(this, 'border' + torl + 'Width') + num(this, 'border' + borr + 'Width')
-				+ num(this, 'padding' + torl) + num(this, 'padding' + borr)
-				+ (options.margin ? (num(this, 'margin' + torl) + num(this, 'margin' + borr)) : 0);
+		var val = this.is(':visible') ? 
+				this[0]['offset' + name] : 
+				num( this, name.toLowerCase() )
+					+ num(this, 'border' + torl + 'Width') + num(this, 'border' + borr + 'Width')
+					+ num(this, 'padding' + torl) + num(this, 'padding' + borr);
+		
+		return val + (options.margin ? (num(this, 'margin' + torl) + num(this, 'margin' + borr)) : 0);
 	};
 });
 
