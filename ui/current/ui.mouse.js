@@ -180,7 +180,7 @@
 			this.init = true;	
 
 			if(o._start) o._start.apply(a, [this.helper, this.pos, o.cursorAt, this, e]); // Trigger the start callback
-			this.helperSize = { width: outerWidth(this.helper), height: outerHeight(this.helper) }; //Set helper size property
+			this.helperSize = { width: $(this.helper).outerWidth(), height: $(this.helper).outerHeight() }; //Set helper size property
 			return false;
 						
 		},
@@ -233,21 +233,5 @@
 			
 		}
 	});
-
-	var num = function(el, prop) {
-		return parseInt($.css(el.jquery?el[0]:el,prop))||0;
-	};
-	function outerWidth(el) {
-		var $el = $(el), ow = $el.width();
-		for (var i = 0, props = ['borderLeftWidth', 'paddingLeft', 'paddingRight', 'borderRightWidth']; i < props.length; i++)
-			ow += num($el, props[i]);
-		return ow;
-	}
-	function outerHeight(el) {
-		var $el = $(el), oh = $el.width();
-		for (var i = 0, props = ['borderTopWidth', 'paddingTop', 'paddingBottom', 'borderBottomWidth']; i < props.length; i++)
-			oh += num($el, props[i]);
-		return oh;
-	}
 
  })(jQuery);
