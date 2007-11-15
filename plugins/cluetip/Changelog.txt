@@ -1,13 +1,13 @@
 
 == New and Noteworthy ==
 
-== 0.9.4 == 
+== 0.9.3 == 
 
 * Fixed "arrows" option so that it now works for all three themes. Changed the way it works, and changed css to work better with it.
 * Removed rounded-corners theme's reliance on #cluetip-title for part of the background image. Now, you can hide the title without losing part of the clueTip's background.
 * Moved all images for arrows and rounded corners to a separate folder.
 
-== 0.9.3 ==
+== 0.9.2.2 ==
 
 * added support for any selector expression to be used for grabbing local content. The plugin will just take the first element in the set of matched elements for its content.
 * release the cursor setting when clueTip is closed.
