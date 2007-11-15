@@ -3,9 +3,9 @@
 	//Make nodes selectable by expression
 	$.extend($.expr[':'], { shadowed: "(' '+a.className+' ').indexOf(' fx-shadowed ')" });
 	
-	$.fn.shadowEnable  = function() { return $(this).next(".fx-shadow").show().end();   };
-	$.fn.shadowDisable = function() { return $(this).next(".fx-shadow").hide().end();   };
-	$.fn.shadowDestroy = function() { return $(this).next(".fx-shadow").remove().end(); };
+	$.fn.shadowEnable  = function() { return $(this).find("+ .fx-shadow").show().end();   };
+	$.fn.shadowDisable = function() { return $(this).find("+ .fx-shadow").hide().end();   };
+	$.fn.shadowDestroy = function() { return $(this).find("+ .fx-shadow").remove().end(); };
 	
 	$.fn.shadow = function(options) {
 		options = $.extend({
