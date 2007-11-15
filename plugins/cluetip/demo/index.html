@@ -158,28 +158,34 @@
           </ol>
           <h4>Rounded Corners Theme</h4>
           <ol class="rounded">
-            <li>
-              <a href="ajax4.htm" title="|first line body|second line body">content from title attribute</a>
+            <li><a href="ajax4.htm" title="|first line body|second line body">content from title attribute</a>, with the clueTip heading hidden. 
+              <div class="html">View the HTML</div>
+              <pre><code>&lt;a href="ajax4.htm" title="|first line body|second line body"&gt;</code></pre>
+              <div class="jquery">View the jQuery</div>
+              <pre><code>$('ol.rounded a:eq(0)').cluetip({splitTitle: '|', dropShadow: false, cluetipClass: 'rounded', showtitle: false});</code></pre>
             </li>
             <li>
-              <a href="ajax4.htm" rel="ajax4.htm" title="mouse positioned">rounded corners theme and positioning by mouse</a>: 
+              <a href="ajax4.htm" rel="ajax4.htm" title="mouse positioned">rounded corners theme and positioning by mouse</a>. 
                 <div class="html">View the HTML</div>
                 <pre><code>&lt;a href="ajax4.htm" rel="ajax4.htm" title="mouse positioned"&gt;</code></pre>
                 <div class="jquery">View the jQuery</div>
-                <pre><code>$('ol.rounded a:eq(1)').cluetip({cluetipClass: 'rounded', dropShadow: false, positionBy: 'mouse'});</code></pre>
+                <pre><code>$('ol.rounded a:eq(1)').cluetip({
+  cluetipClass: 'rounded', 
+  dropShadow: false, 
+  positionBy: 'mouse'
+});</code></pre>
             </li>
-            <li>
-              Another one with rounded corners theme. This one has <a href="ajax4.htm" rel="ajax4.htm" title="bottom/top positioned">"bottomTop" positioning</a>: positioned under link, unless there isn't enough room (then over). It also has "topOffset" set to 70.
+            <li>Another one with rounded corners theme. This one has <a href="ajax4.htm" rel="ajax4.htm" title="bottom/top positioned">"bottomTop" positioning</a>: positioned under link, unless there isn't enough room (then over). It also has <strong>"topOffset" set to 70</strong>.
                 <div class="html">View the HTML</div>
                 <pre><code>&lt;a href="ajax4.htm" rel="ajax4.htm" title="bottom/top positioned"&gt;</code></pre>
                 <div class="jquery">View the jQuery</div>
                 <pre><code>$('ol.rounded a:eq(2)').cluetip({cluetipClass: 'rounded', dropShadow: false, positionBy: 'bottomTop', topOffset: 70});</code></pre>
             </li>
-            <li><a href="ajax4.htm" rel="ajax4.htm" title="rounded corners">non-caching ajax clueTip with rounded corners</a>: 
+            <li><a href="ajax4.htm" rel="ajax4.htm" title="rounded corners">non-caching ajax clueTip with arrows enabled</a>.
               <div class="html">View the HTML</div>
               <pre><code>&lt;a href="ajax4.htm" rel="ajax4.htm" title="rounded corners"&gt;</code></pre>
               <div class="jquery">View the jQuery</div>
-              <pre><code>$('ol.rounded a:eq(3)').cluetip({cluetipClass: 'rounded', dropShadow: false, sticky: true, ajaxCache: false});</code></pre>
+              <pre><code>$('ol.rounded a:eq(3)').cluetip({cluetipClass: 'rounded', dropShadow: false, sticky: true, ajaxCache: false, arrows: true});</code></pre>
             </li>
             <li><a href="ajax404.htm" rel="ajax404.htm">ajax error</a>: This one points to a file that does not exist.
               <div class="html">View the HTML</div>

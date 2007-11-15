@@ -1,6 +1,6 @@
 /*
  * jQuery clueTip plugin
- * Version 0.9.2.2  (11/09/2007)
+ * Version 0.9.4  (11/14/2007)
  * @requires jQuery v1.1.1+
  * @requires Dimensions plugin 
  *
@@ -75,7 +75,7 @@
  * @option String closeText: default is 'Close'. This determines the text to be clicked to close a clueTip when sticky is set to true.
  * @option Number truncate: default is 0. Set to some number greater than 0 to truncate the text in the body of the clueTip. This also removes all HTML/images from the clueTip body.
  * @option Boolean waitImage: default is true. Set to false to avoid having the plugin try to show/hide the image.
- * @option Boolean arrows: Default is false. Sets background-position-y to line up an arrow background image with the hovered element.
+ * @option Boolean arrows: Default is false. Set to true to display an arrow at the appropriate side of the cluetip and lined vertically with the hovered element.
  * @option Boolean dropShadow: default is true; set it to false if you do not want the drop-shadow effect on the clueTip
  * @option Integer dropShadowSteps: default is 6; change this number to adjust the size of the drop shadow
  * @option Boolean sticky: default is false. Set to true to keep the clueTip visible until the user either closes it manually by clicking on the CloseText or display another clueTip.
@@ -88,7 +88,7 @@
  * @option Object ajaxSettings: allows you to pass in standard $.ajax() parameters, not including error, complete, success, and url. Default is { dataType: 'html'}
  *
  */
-  var $cluetip, $cluetipInner, $cluetipOuter, $cluetipTitle, $dropShadow, imgCount;
+  var $cluetip, $cluetipInner, $cluetipOuter, $cluetipTitle, $cluetipArrows, $dropShadow, imgCount;
   $.fn.cluetip = function(options) {
     var defaults = {  // set up default options
       width:            275,
@@ -163,11 +163,12 @@
         $cluetipTitle = $('<h3 id="cluetip-title"></h3>');        
         $cluetipOuter = $('<div id="cluetip-outer"></div>').append($cluetipInner).prepend($cluetipTitle);
         $cluetip = $('<div></div>').attr({'id': 'cluetip'}).css({zIndex: defaults.cluezIndex})
-        .append($cluetipOuter)[insertionType](insertionElement).hide();
+        .append($cluetipOuter).append('<div id="cluetip-extra"></div>')[insertionType](insertionElement).hide();
         $('<div id="cluetip-waitimage"></div>').css({position: 'absolute', zIndex: cluezIndex-1})
         .insertBefore('#cluetip').hide();
         $cluetip.css({position: 'absolute', zIndex: cluezIndex});
         $cluetipOuter.css({position: 'relative', zIndex: cluezIndex+1});
+        $cluetipArrows = $('<div id="cluetip-arrows" class="cluetip-arrows"></div>').css({zIndex: cluezIndex+1}).appendTo('#cluetip');
       }
       var dropShadowSteps = (defaults.dropShadow) ? +defaults.dropShadowSteps : 0;
       if (!$dropShadow) {
@@ -375,21 +376,11 @@
       }
       $cluetip.css({top: tipY + 'px'}).removeClass().addClass('clue-' + direction + '-' + ctClass).addClass(' cluetip-' + ctClass);
       if (defaults.arrows) { // set up background positioning to align with element
-        var bgPos = '0 0';
         var bgY = (posY - tipY - defaults.dropShadowSteps);
-        if (direction == 'left') {
-          bgPos = posX >=0 ? '100% ' + bgY + 'px' : '100% 0';
-        } else if (direction == 'right') {
-          bgPos = (posX >=0 && bgY > 0) ? '0 ' + bgY + 'px' : '0 0';
-        } else if (direction == 'top') {
-          bgPos = '50% 100%';
-        } else if (direction == 'bottom') {
-          bgPos = '50% 0';
-        }
+        $cluetipArrows.css({top: (/(left|right)/.test(direction) && posX >=0 && bgY > 0) ? bgY + 'px' : /(left|right)/.test(direction) ? 0 : ''}).show();
       } else {
-        bgPos = '0 100%';
+        $cluetipArrows.hide();
       }
-      $cluetip.css({backgroundPosition: bgPos});
 
 // (first hide, then) ***SHOW THE CLUETIP***
       $dropShadow.hide();
@@ -412,7 +403,7 @@
         $this.removeClass(defaults.hoverClass);
       }
     };
-// close cluetip and reset title attribute if one exists
+// close cluetip and reset some things
     var cluetipClose = function() {
       $cluetipOuter 
       .parent().hide().removeClass().end()
@@ -421,6 +412,7 @@
         $this.attr('title', tipTitle);
       }
       $this.css('cursor','');
+      if (defaults.arrows) $cluetipArrows.css({top: ''});
     };
 
 /***************************************
