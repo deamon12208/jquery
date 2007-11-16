@@ -73,11 +73,11 @@
 		_removeClass: $.fn.removeClass,
 		_toggleClass: $.fn.toggleClass,
 		show: function(obj,speed,callback){
-			return typeof obj == 'string' || typeof obj == 'undefined' ? this._show(obj, speed) : $.fx[obj.method].apply(this, ['show',obj,speed,callback]);
+			return typeof obj == 'string' || typeof obj == 'undefined' ? this._show(obj, speed) : $.fx[obj.method].apply(this, [{method: 'show', options: obj, duration: speed, callback: callback }]);
 		},
 		
 		hide: function(obj,speed,callback){
-			return typeof obj == 'string' || typeof obj == 'undefined' ? this._hide(obj, speed) : $.fx[obj.method].apply(this, ['hide',obj,speed,callback]);
+			return typeof obj == 'string' || typeof obj == 'undefined' ? this._hide(obj, speed) : $.fx[obj.method].apply(this, [{method: 'hide', options: obj, duration: speed, callback: callback }]);
 		},
 		addClass: function(classNames,speed,easing,callback) {
 			return speed ? $.fx.animateClass.apply(this, [{ add: classNames },speed,easing,callback]) : this._addClass(classNames);
