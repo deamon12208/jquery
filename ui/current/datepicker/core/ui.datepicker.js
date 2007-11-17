@@ -1,4 +1,4 @@
-/* jQuery UI Date Picker v3.0 - previously jQuery Calendar
+/* jQuery UI Date Picker v3.2 - previously jQuery Calendar
    Written by Marc Grabanski (m@marcgrabanski.com) and Keith Wood (kbwood@iprimus.com.au).
 
    Copyright (c) 2007 Marc Grabanski (http://marcgrabanski.com/code/ui-datepicker)
@@ -387,7 +387,16 @@ $.extend(Datepicker.prototype, {
 			$.datepicker._pos = $.datepicker._findPos(input);
 			$.datepicker._pos[1] += input.offsetHeight; // add the height
 		}
-		inst._datepickerDiv.css('position', ($.datepicker._inDialog && $.blockUI ? 'static' : 'absolute')).
+		var isFixed = false;
+		$(input).parents().each(function() {
+			isFixed |= $(this).css('position') == 'fixed';
+		});
+		if (isFixed && $.browser.opera) { // correction for Opera when fixed and scrolled
+			$.datepicker._pos[0] -= document.documentElement.scrollLeft;
+			$.datepicker._pos[1] -= document.documentElement.scrollTop;
+		}
+		inst._datepickerDiv.css('position', ($.datepicker._inDialog && $.blockUI ?
+			'static' : (isFixed ? 'fixed' : 'absolute'))).
 			css('left', $.datepicker._pos[0] + 'px').css('top', $.datepicker._pos[1] + 'px');
 		$.datepicker._pos = null;
 		$.datepicker._showDatepicker(inst);
@@ -440,24 +449,29 @@ $.extend(Datepicker.prototype, {
 				height: inst._datepickerDiv.height() + 4});
 		}
 		// re-position on screen if necessary
+		var isFixed = inst._datepickerDiv.css('position') == 'fixed';
 		var pos = $.datepicker._findPos(inst._input[0]);
 		var browserWidth = window.innerWidth || document.documentElement.clientWidth ||
 			document.body.clientWidth;
 		var browserHeight = window.innerHeight || document.documentElement.clientHeight ||
 			document.body.clientHeight;
-		var scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
-		var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+		var scrollX = (isFixed ? 0 : document.documentElement.scrollLeft || document.body.scrollLeft);
+		var scrollY = (isFixed ? 0 : document.documentElement.scrollTop || document.body.scrollTop);
 		// reposition date picker horizontally if outside the browser window
-		if ((inst._datepickerDiv.offset().left + inst._datepickerDiv.width()) >
+		if ((inst._datepickerDiv.offset().left + inst._datepickerDiv.width() -
+				(isFixed && $.browser.msie ? document.documentElement.scrollLeft : 0)) >
 				(browserWidth + scrollX)) {
 			inst._datepickerDiv.css('left', Math.max(scrollX,
-				pos[0] + $(inst._input[0]).width() - inst._datepickerDiv.width()) + 'px');
+				pos[0] + $(inst._input[0]).width() - inst._datepickerDiv.width() -
+				(isFixed && $.browser.opera ? document.documentElement.scrollLeft : 0)) + 'px');
 		}
 		// reposition date picker vertically if outside the browser window
-		if ((inst._datepickerDiv.offset().top + inst._datepickerDiv.height()) >
+		if ((inst._datepickerDiv.offset().top + inst._datepickerDiv.height() -
+				(isFixed && $.browser.msie ? document.documentElement.scrollTop : 0)) >
 				(browserHeight + scrollY) ) {
 			inst._datepickerDiv.css('top', Math.max(scrollY,
-				pos[1] - (this._inDialog ? 0 : inst._datepickerDiv.height())) + 'px');
+				pos[1] - (this._inDialog ? 0 : inst._datepickerDiv.height()) -
+				(isFixed && $.browser.opera ? document.documentElement.scrollTop : 0)) + 'px');
 		}
 	},
 	
