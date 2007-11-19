@@ -2,6 +2,8 @@
 $(document).ready(function () {
 	// initialize tab interface
 	tabs.init();
+	// reset defaults to English
+	$.datepicker.setDefaults($.datepicker.regional['']);
 	// replace script tags with HTML code
 	$(".demojs").each(function () {
 		$(this).before( '<pre style="padding-top:0 !important"><code class="javascript">' + $(this).html() + "</code></pre>" );
@@ -9,11 +11,9 @@ $(document).ready(function () {
 	});
 	// Localization
 	if ($.browser.safari) {
-		$('#language,#l10nDatepicker').attr({ disabled: 'disabled' });
+		$('.languageSelect,.l10nDatepicker,#frFullFormat').attr({ disabled: 'disabled' });
 	} else {
-		$('#language').change(localise);
-		$('#l10nDatepicker').datepicker();
-		localise();
+		$('.languageSelect').change(localise);
 	}
 	// Stylesheets
 	$('#altStyle').datepicker({buttonImage: 'img/calendar2.gif'});
@@ -25,38 +25,23 @@ $(document).ready(function () {
 
 // Load and apply a localisation package for the date picker
 function localise() {
-	var date = $.datepicker.getDateFor('#l10nDatepicker');
-	var language = $('#language').val();
+	var input = $('input', this.parentNode.parentNode);
+	var date = $.datepicker.getDateFor(input);
+	var language = $(this).val();
 	$.localise('i18n/ui.datepicker', {language: language});
-	$.datepicker.reconfigureFor('#l10nDatepicker', $.datepicker.regional[language]).
+	$.datepicker.reconfigureFor(input, $.datepicker.regional[language]).
 		setDefaults($.datepicker.regional['']); // Reset for general usage
 	if (date) {
-		$.datepicker.setDateFor('#l10nDatepicker', date);
-		$('#l10nDatepicker').val($.datepicker.formatDate(
+		$.datepicker.setDateFor(input, date);
+		input.val($.datepicker.formatDate(
 			$.datepicker.regional[language].dateFormat, date));
 	}
 }
 
-// Create a Date from a string value
-function getDate(value) {
-	fields = value.split('/');
-	return (fields.length < 3 ? null :
-		new Date(parseInt(fields[2], 10), parseInt(fields[0], 10) - 1, parseInt(fields[1], 10)));
-}
-
 // Demonstrate a callback from inline configuration
-var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 function showDay(input) {
-	var date = getDate(input.value);
-	$('#inlineDay').empty().html(date ? days[date.getDay()] : 'blank');
-}
-
-// Format a date for display
-function formatDate(date) {
-	var day = date.getDate();
-	var month = date.getMonth() + 1;
-	return (day < 10 ? '0' : '') + day + '/' +
-		(month < 10 ? '0' : '') + month + '/' + date.getFullYear();
+	var date = $.datepicker.getDateFor(input);
+	$('#inlineDay').html(date ? $.datepicker.formatDate('DD', date) : 'blank');
 }
 
 // Display a date selected in a "dialog"
