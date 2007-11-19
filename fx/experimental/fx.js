@@ -1,28 +1,32 @@
 (function($) {
 
-  $.fx = $.fx || {}; //Add the 'fx' scope
+  $.ec = $.ec || {}; //Add the 'ec' scope
 
-  /*
-   * Public methods (jQuery FX scope)
-   */
-
-  $.extend($.fx, {
-    relativize: function(el) {
-      if(!el.css("position") || !el.css("position").match(/fixed|absolute|relative/)) el.css("position", "relative"); //Relativize
-    },
+  $.extend($.ec, {
     save: function(el, set) {
       for(var i=0;i<set.length;i++) {
-        if(set[i] !== null) $.data(el[0], "fx.storage."+set[i], el.css(set[i]));  
+        if(set[i] !== null) $.data(el[0], "ec.storage."+set[i], el.css(set[i]));  
       }
     },
     restore: function(el, set, ret) {
       if(ret) var obj = {};
       for(var i=0;i<set.length;i++) {
-        if(ret) obj[set[i]] = $.data(el[0], "fx.storage."+set[i]);
-        if(set[i] !== null && !ret) el.css(set[i], $.data(el[0], "fx.storage."+set[i]));  
+        if(ret) obj[set[i]] = $.data(el[0], "ec.storage."+set[i]);
+        if(set[i] !== null && !ret) el.css(set[i], $.data(el[0], "ec.storage."+set[i]));  
       }
       if(ret) return obj;
     },
+    findSides: function(el) { //Very nifty function (especially for IE!)
+      return [ !!parseInt(el.css("left")) ? "left" : "right", !!parseInt(el.css("top")) ? "top" : "bottom" ];
+    },
+    setTransition: function(el, list, factor, val) {
+    val = val || {};
+    $.each(list,function(i, x){
+      unit = el.cssUnit(x);
+      if (unit[0] > 0) val[x] = unit[0] * factor + unit[1];
+    });
+    return val;
+  },
     animateClass: function(value, duration, easing, callback) {
   
       var cb = (typeof easing == "function" ? easing : (callback ? callback : null));
@@ -60,39 +64,55 @@
       });
     }
   });
-  
+ 
   //Extend the methods of jQuery
   $.fn.extend({
-    //effect: function(fx,o) { if($.fx[fx]) this.each(function() { $.fx[fx].apply(this, [o]); }); }, //This just forwards single used effects
-    effect: function(fx,o,speed,callback) { if($.fx[fx]) $.fx[fx].apply(this, [{method: fx, options: o, speed: speed, callback: callback}])},
+    //Save old methods
     _show: $.fn.show,
     _hide: $.fn.hide,
     _toggle: $.fn.toggle,
     _addClass: $.fn.addClass,
     _removeClass: $.fn.removeClass,
     _toggleClass: $.fn.toggleClass,
+    // New ec methods
+    effect: function(fx,o,speed,callback) { 
+      if($.ec[fx]) $.ec[fx].apply(this, [{method: fx, options: o, speed: speed, callback: callback}])
+    },
     show: function(obj,speed,callback){
-      return typeof obj == 'string' || typeof obj == 'undefined' ? this._show(obj, speed) : $.fx[obj.method].apply(this, [{method: 'show', options: obj, duration: speed, callback: callback }]);
+      return typeof obj == 'string' || typeof obj == 'undefined' ? this._show(obj, speed) : $.ec[obj.method].apply(this, [{method: 'show', options: obj, duration: speed, callback: callback }]);
     },
     hide: function(obj,speed,callback){
-      return typeof obj == 'string' || typeof obj == 'undefined' ? this._hide(obj, speed) : $.fx[obj.method].apply(this, [{method: 'hide', options: obj, duration: speed, callback: callback }]);
+      return typeof obj == 'string' || typeof obj == 'undefined' ? this._hide(obj, speed) : $.ec[obj.method].apply(this, [{method: 'hide', options: obj, duration: speed, callback: callback }]);
     },
     toggle: function(obj,speed,callback){
-      return jQuery(this).is(":hidden") ? this.show(obj,speed,callback) : this.hide(obj,speed,callback)
+      return $(this).is(':hidden') ? this.show(obj,speed,callback) : this.hide(obj,speed,callback)
     },
     addClass: function(classNames,speed,easing,callback) {
-      return speed ? $.fx.animateClass.apply(this, [{ add: classNames },speed,easing,callback]) : this._addClass(classNames);
+      return speed ? $.ec.animateClass.apply(this, [{ add: classNames },speed,easing,callback]) : this._addClass(classNames);
     },
     removeClass: function(classNames,speed,easing,callback) {
-      return speed ? $.fx.animateClass.apply(this, [{ remove: classNames },speed,easing,callback]) : this._removeClass(classNames);
+      return speed ? $.ec.animateClass.apply(this, [{ remove: classNames },speed,easing,callback]) : this._removeClass(classNames);
     },
     toggleClass: function(classNames,speed,easing,callback) {
-      return speed ? $.fx.animateClass.apply(this, [{ toggle: classNames },speed,easing,callback]) : this._toggleClass(classNames);
+      return speed ? $.ec.animateClass.apply(this, [{ toggle: classNames },speed,easing,callback]) : this._toggleClass(classNames);
     },
     morph: function(remove,add,speed,easing,callback) {
-      return $.fx.animateClass.apply(this, [{ add: add, remove: remove },speed,easing,callback]);
+      return $.ec.animateClass.apply(this, [{ add: add, remove: remove },speed,easing,callback]);
     },
-    switchClass: function() { this.morph.apply(this, arguments); },
+    switchClass: function() { 
+      this.morph.apply(this, arguments);
+    },
+    // helper functions
+    makeRelative: function() { //Relativize
+      var pos = this.css('position');
+      if (!pos || pos == 'static') {
+        this.css('position', 'relative');
+        if (window.opera) {
+          element.style.top = 0;
+          element.style.left = 0;
+        };
+      };
+    },
     cssUnit: function(key) { 
       var style = this.css(key), val = [];
       $.each( ['em','px','%','pt'], function(i, unit){
