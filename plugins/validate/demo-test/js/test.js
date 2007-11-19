@@ -593,7 +593,7 @@ test("error containers, simple", function() {
 	var v = $("#form").validate({
 		errorLabelContainer: container,
 		showErrors: function() {
-			container.find("h3").html( String.format("There are {0} errors in your form.", this.size()) );
+			container.find("h3").html( jQuery.format("There are {0} errors in your form.", this.size()) );
 			this.defaultShowErrors();
 		}
 	});
@@ -682,7 +682,7 @@ test("errorcontainer, show/hide only on submit", function() {
 			ok( true, "invalidHandler called" );
 		},
 		showErrors: function() {
-			container.html( String.format("There are {0} errors in your form.", this.numberOfInvalids()) );
+			container.html( jQuery.format("There are {0} errors in your form.", this.numberOfInvalids()) );
 			ok( true, "showErrors called" );
 			this.defaultShowErrors();
 		}
@@ -923,12 +923,12 @@ test("messages", function() {
 	equals( "Please enter a value between 1 and 2.", m.rangeValue([1, 2]) );
 });
 
-test("String.format", function() {
-	equals( "Please enter a value between 0 and 1.", String.format("Please enter a value between {0} and {1}.", 0, 1) );
-	equals( "0 is too fast! Enter a value smaller then 0 and at least -15", String.format("{0} is too fast! Enter a value smaller then {0} and at least {1}", 0, -15) );
-	var template = String.format("{0} is too fast! Enter a value smaller then {0} and at least {1}");
+test("jQuery.format", function() {
+	equals( "Please enter a value between 0 and 1.", jQuery.format("Please enter a value between {0} and {1}.", 0, 1) );
+	equals( "0 is too fast! Enter a value smaller then 0 and at least -15", jQuery.format("{0} is too fast! Enter a value smaller then {0} and at least {1}", 0, -15) );
+	var template = jQuery.format("{0} is too fast! Enter a value smaller then {0} and at least {1}");
 	equals( "0 is too fast! Enter a value smaller then 0 and at least -15", template(0, -15) );
-	template = String.format("Please enter a value between {0} and {1}.");
+	template = jQuery.format("Please enter a value between {0} and {1}.");
 	equals( "Please enter a value between 1 and 2.", template([1, 2]) );
 });
 
@@ -1162,7 +1162,7 @@ test("validate via remote method", function() {
 		messages: {
 			firstname: {
 				required: "Please",
-				remote: String.format("{0} in use")
+				remote: jQuery.format("{0} in use")
 			}
 		}
 	});

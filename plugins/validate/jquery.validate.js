@@ -311,30 +311,30 @@ jQuery.extend(jQuery.expr[":"], {
  * If the second argument is ommited, a function is returned that expects the value-argument
  * to return the formatted value (see example).
  *
- * @example String.format("Please enter a value no longer than {0} characters.", 0)
+ * @example jQuery.format("Please enter a value no longer than {0} characters.", 0)
  * @result "Please enter a value no longer than 0 characters."
  * @desc Formats a string with a single argument.
  *
- * @example String.format("Please enter a value between {0} and {1}.", 0, 1)
+ * @example jQuery.format("Please enter a value between {0} and {1}.", 0, 1)
  * @result "Please enter a value between 0 and 1."
- * @desc Formats a string with two arguments. Same as String.format("...", [0, 1]);
+ * @desc Formats a string with two arguments. Same as jQuery.format("...", [0, 1]);
  *
- * @example String.format("Please enter a value no longer than {0} characters.")(0);
+ * @example jQuery.format("Please enter a value no longer than {0} characters.")(0);
  * @result "Please enter a value no longer than 0 characters."
- * @desc String.format is called at first without the second argument, returning a function that is called immediately
+ * @desc jQuery.format is called at first without the second argument, returning a function that is called immediately
  * 		 with the value argument. Useful to defer the actual formatting to a later point without explicitly 
  *		 writing the function.
  *
  * @type String
- * @name String.format
+ * @name jQuery.format
  * @cat Plugins/Validate
  */
-String.format = function(source, params) {
+jQuery.format = function(source, params) {
 	if ( arguments.length == 1 ) 
 		return function() {
 			var args = jQuery.makeArray(arguments);
 			args.unshift(source);
-			return String.format.apply( this, args );
+			return jQuery.format.apply( this, args );
 		};
 	if ( arguments.length > 2 && params.constructor != Array  ) {
 		params = jQuery.makeArray(arguments).slice(1);
@@ -434,12 +434,12 @@ jQuery.extend(jQuery.validator, {
 		creditcard: "Please enter a valid credit card.",
 		equalTo: "Please enter the same value again.",
 		accept: "Please enter a value with a valid extension.",
-		maxLength: String.format("Please enter a value no longer than {0} characters."),
-		minLength: String.format("Please enter a value of at least {0} characters."),
-		rangeLength: String.format("Please enter a value between {0} and {1} characters long."),
-		rangeValue: String.format("Please enter a value between {0} and {1}."),
-		maxValue: String.format("Please enter a value less than or equal to {0}."),
-		minValue: String.format("Please enter a value greater than or equal to {0}.")
+		maxLength: jQuery.format("Please enter a value no longer than {0} characters."),
+		minLength: jQuery.format("Please enter a value of at least {0} characters."),
+		rangeLength: jQuery.format("Please enter a value between {0} and {1} characters long."),
+		rangeValue: jQuery.format("Please enter a value between {0} and {1}."),
+		maxValue: jQuery.format("Please enter a value less than or equal to {0}."),
+		minValue: jQuery.format("Please enter a value greater than or equal to {0}.")
 	},
 	
 	prototype: {
