@@ -29,6 +29,7 @@
 		
 		<!-- Include Demo Files -->
 		<script type="text/javascript" src="demo/jquery.localisation.js"></script>
+		<script type="text/javascript" src="i18n/ui.datepicker-fr.js"></script>
 		<script type="text/javascript" src="demo/ui.datepicker.demo.js"></script>
 		<link rel="stylesheet" type="text/css" href="demo/ui.datepicker.alt.css" title="alt" id="alt" disabled="disabled"/>
 		<link rel="stylesheet" type="text/css" href="demo/ui.datepicker.demo.css" />
@@ -243,14 +244,8 @@ $('#isoFormat').datepicker({dateFormat: 'yy-mm-dd'});
 					<p><span class="demoLabel">French full format:</span>
 						<input type="text" size="30" id="frFullFormat"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-if (!$.browser.safari) {
-	localise();
-}
 $('#frFullFormat').datepicker($.datepicker.regional['fr']);
 $.datepicker.reconfigureFor('#frFullFormat', {dateFormat: 'DD, MM d, yy'});
-if ($.browser.safari) {
-	$.datepicker.disableFor('#frFullFormat');
-}
 </script>
 					<p>The formatting codes are:</p>
 					<ul>
@@ -269,7 +264,7 @@ if ($.browser.safari) {
 					</ul>
 				</div>
 				<div id="custom" class="tab_group1 container">
-					<h3>customize</h3>
+					<h3>Customizing</h3>
 					<p>You can customize the selectability and/or appearance of individual days
 						by setting a callback function that accepts a date and returns an array
 						with the first entry being true/false for selectability and the second
@@ -307,9 +302,9 @@ function nationalDays(date) {
 					<h3>Localisation</h3>
 					<p>You can localise the date picker for other languages and regional differences.
 						The date picker defaults to English with a date format of MM/DD/YYYY,
-						but you can translate the text into another language.</p>
+						but you can easily translate the text into another language and date format.</p>
 					<p><span class="demoLabel">
-						<select id="language">
+						<select class="languageSelect">
 							<option value="zh-CN">Chinese Simplified</option>
 							<option value="ca">Català</option>
 							<option value="cs">&#268;e&#353;tina</option>
@@ -337,7 +332,9 @@ function nationalDays(date) {
 					<p>Thereafter, if desired, you can restore the original language settings.</p>
 <pre><code class="javascript">$.datepicker.setDefaults($.datepicker.regional['']);</code></pre>
 					<p>And then configure the language per date picker instance.</p>
-<pre><code class="javascript">$('#l10nDatepicker').datepicker($.datepicker.regional['fr']);</code></pre>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+$('#l10nDatepicker').datepicker($.datepicker.regional['fr']);
+</script>
 					<p><strong>Localisation packages:</strong></p>
 					<p>Localisation packages can be found below under <a href="#documentation">Settings and Documentation</a>.</p>
 				</div>
@@ -354,8 +351,8 @@ $('.dateRange').datepicker({beforeShow: customRange});
 
 // Customize two date pickers to work as a date range
 function customRange(input) {
-	return {minDate: (input.id == 'dTo' ? getDate($('#dFrom').val()) : null),
-		maxDate: (input.id == 'dFrom' ? getDate($('#dTo').val()) : null)};
+	return {minDate: (input.id == 'dTo' ? $.datepicker.getDateFor('#dFrom') : null),
+		maxDate: (input.id == 'dFrom' ? $.datepicker.getDateFor('#dTo') : null)};
 }
 </script>
 					<p>Select a date range on one date picker, first click is the start date and second click is the end date.
@@ -399,7 +396,7 @@ $('#openDatePlus7').datepicker({defaultDate: +7});
 					<p><span class="demoLabel">Show week of the year:</span>
 						<input type="text" size="10" id="showWeeks"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#showWeeks').datepicker({showWeeks: true, firstDay: 1, changeFirstDay: false});
+$('#showWeeks').datepicker({showWeeks: true, firstDay: 1, changeFirstDay: false, showOtherMonths: true});
 </script>
 					<p>Additional settings let you move the <em>Clear</em>/<em>Close</em> controls
 						to the bottom and display the days in other months (non-selectable).
@@ -532,7 +529,8 @@ Example #1:
 
 Example #2:
 &lt;input type="text" size="10" class="inlineConfig"
-	date:minDate="new Date(2007, 1 - 1, 1)" date:maxDate="new Date(2007, 12 - 1, 31)"/> */
+	date:minDate="new Date(2007, 1 - 1, 1)" date:maxDate="new Date(2007, 12 - 1, 31)"/> 
+*/
 
 // Invoke inline configured datepickers
 $('.inlineConfig').datepicker();
@@ -540,7 +538,8 @@ $('.inlineConfig').datepicker();
 				</div>
 				<div id="inline" class="tab_group1 container">
 					<h3>Inline</h3>
-					<p>The date picker can be used inline rather than as a popup.  Use inline mode by attaching the datepicker to a span or div element.</p>
+					<p>The date picker can be used inline rather than as a popup.
+						Use inline mode by attaching the datepicker to a span or div element.</p>
 					<span id="inlineDemo"></span>
 					<div style="clear:both;height:1em"></div>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
@@ -563,35 +562,39 @@ $('#inlineDemo').datepicker({
 <script type="text/jsdemo" charset="utf-8" class="demojs">
 $('#rangeInline').datepicker({rangeSelect: true, rangeSeparator: ' to ',
 	numberOfMonths: 2, onSelect: updateInlineRange});
-$('#rangeInline').find('div:first').width(370) // Unfortunately not automatic
+$('#rangeInline').find('div:first').width(370); // Unfortunately not automatic
 
 // Display the date range from a multi-month inline date picker
 function updateInlineRange(dateStr) {
 	var dates = $.datepicker.getDateFor('#rangeInline');
+	var dateFormat = $.datepicker.regional[''].dateFormat;
 	$('#inlineRange').val(dateStr ? dateStr :
-		formatDate(dates[0]) + ' to ' + formatDate(dates[1]));
+		$.datepicker.formatDate(dateFormat, dates[0]) + ' to ' +
+		$.datepicker.formatDate(dateFormat, dates[1]));
 }
 </script>
-					<p><strong>(Advanced Technique)</strong><br />Set initial value of inline date range to one week before and after today's date. Set the text field to current selected date.</p>
+					<p><strong>(Advanced Technique)</strong><br />
+						Set initial value of inline date range to one week before and after today's date.
+						Set the text field to current selected date.</p>
 					<p>
 						<button type="button" id="setInlineRange">Set Inline Range to +and- one week</button>
 					</p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
 var nextWeek = new Date();
-	nextWeek.setDate(nextWeek.getDate() + 7);
+nextWeek.setDate(nextWeek.getDate() + 7);
 	
 var lastWeek = new Date();
-	lastWeek.setDate(lastWeek.getDate() - 7);
+lastWeek.setDate(lastWeek.getDate() - 7);
 
 $("#setInlineRange").click(function() {
-	
 	// Set Inline Date Range Selection
 	$.datepicker.setDateFor('#rangeInline', lastWeek, nextWeek);
 	
 	// Update text field with current date selections
 	var dates = $.datepicker.getDateFor('#rangeInline');
-	$('#inlineRange').val(formatDate(dates[0]) + ' to ' + formatDate(dates[1]));
-	
+	var dateFormat = $.datepicker.regional[''].dateFormat;
+	$('#inlineRange').val($.datepicker.formatDate(dateFormat, dates[0]) + ' to ' +
+		$.datepicker.formatDate(dateFormat, dates[1]));
 });
 </script>
 				</div>
