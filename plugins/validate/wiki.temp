@@ -1,0 +1,87 @@
+{{APIHeader|Plugins/Validation/Methods|required|function}}
+{{APIEntry|
+|type=function
+|name=required
+|cat=Plugins/Validation/Methods
+|return=Boolean
+|desc=Makes then element always required.
+|longdesc=Return false if the element is empty (text input) or unchecked (radio/checkbxo) or nothing selected (select).
+
+Works with all kind of text inputs, selects, checkboxes and radio buttons.
+
+<nowiki>To force a user to select an option from a select box, provide an empty options like <option value="">Choose...</option></nowiki>
+|arg0=param
+|arg0type=Boolean
+|arg0desc=A boolean "true" makes a field always required.
+|arg0optional=true
+}}
+
+<noinclude>
+{{APIExamples|
+
+{{APIExample|
+|css=<nowiki>label.valid {
+	background: url('http://dev.jquery.com/view/trunk/plugins/validate/demo-test/images/checked.gif') no-repeat;
+	display: block;
+	width: 16px;
+	height: 16px;
+}
+</nowiki>
+|html=<nowiki>
+<script type="text/javascript" src="http://dev.jquery.com/view/trunk/plugins/validate/jquery.validate.js"></script>
+<script type="text/javascript">
+jQuery.validator.setDefaults({
+	debug: true,
+	success: "valid"
+});
+</script>
+<form id="myform">
+  <input name="field" />
+  <br/>
+  <input type="submit" />
+</form>
+</nowiki>
+|desc=Makes "field" always required.
+|code={{Code|Core|$}}("#myform").{{Code|Plugins/Validation|validate}}<nowiki>({
+	rules: {
+		field: "required"
+	}
+});</nowiki>
+}}
+
+}}
+</noinclude>
+
+{{APIEntry|
+|type=function
+|name=required
+|cat=Plugins/Validation/Methods
+|return=Boolean
+|desc=Makes then element required, depending on the result of the given expression.
+|longdesc=Return false if the element is empty (text input) or unchecked (radio/checkbxo) or nothing selected (select).
+
+Works with all kind of text inputs, selects, checkboxes and radio buttons.
+
+<nowiki>To force a user to select an option from a select box, provide an empty options like <option value="">Choose...</option></nowiki>
+|arg0=dependency-expression
+|arg0type=String
+|arg0desc=An expression (String) is evaluated in the context of the element's form, making the field required only if the expression returns more then one element.
+}}
+
+{{APIEntry|
+|type=function
+|name=required
+|cat=Plugins/Validation/Methods
+|return=Boolean
+|desc=Makes then element required, depending on the result of the given callback.
+|longdesc=Return false if the element is empty (text input) or unchecked (radio/checkbxo) or nothing selected (select).
+
+Works with all kind of text inputs, selects, checkboxes and radio buttons.
+
+<nowiki>To force a user to select an option from a select box, provide an empty options like <option value="">Choose...</option></nowiki>
+|arg0=dependency-callback
+|arg0type=Callback
+|arg0desc=The function is executed with the element as it's only argument: If it returns true, the element is required.
+}}
+
+{{APIFooter|Plugins/Validation/Methods|required|function}}

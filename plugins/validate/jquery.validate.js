@@ -2,6 +2,7 @@
  * Form Validation: jQuery form validation plug-in v1.2
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-validation/
+ * http://docs.jquery.com/Plugins/Validation
  *
  * Copyright (c) 2006 Jörn Zaefferer
  *
@@ -100,52 +101,44 @@
  *   <label>Lastname</label>
  *   <input name="lname" title="Your lastname, please!" class="{required:true} invalid" />
  * </form>
- * @desc Validates a form on submit. The class used to search, create and display
- * error labels is changed to "invalid". This is also added to invalid elements.
- *
- * All error labels are displayed inside an unordered list with the ID "messageBox", as
- * specified by the jQuery object passed as errorContainer option. All error elements
- * are wrapped inside an li element, to create a list of messages.
- *
- * To ease the setup of the form, debug option is set to true, preventing a submit
- * of the form no matter of being valid or not.
+ * @desc All error labels are displayed inside an unordered list with the ID "messageBox", as specified by the jQuery object passed as errorContainer option. All error elements are wrapped inside an li element, to create a list of messages.
  *
  *
  * @example $("#myform").validate({
- * 	errorPlacement: function(error, element) {
- * 		error.appendTo( element.parent("td").next("td") );
- * 	},
+errorPlacement: function(error, element) {
+	error.appendTo( element.parent("td").next("td") );
+},
  * 	success: function(label) {
  * 		label.text("ok!").addClass("success");
  * 	}
  * });
  * @before <form id="myform" action="/login" method="post">
- * 	<table>
- * 		<tr>
- * 			<td><label>Firstname</label>
- * 			<td><input name="fname" class="{required:true}" value="Pete" /></td>
- * 			<td></td>
- * 		</tr>
- * 		<tr>
- * 			<td><label>Lastname</label></td>
- * 			<td><input name="lname" title="Your lastname, please!" class="{required:true}" /></td>
- * 			<td></td>
- * 		</tr>
- * 	</table>
- * </form>
+<table>
+	<tr>
+		<td><label>Firstname</label>
+		<td><input name="fname" class="{required:true}" value="Pete" /></td>
+		<td></td>
+	</tr>
+	<tr>
+		<td><label>Lastname</label></td>
+		<td><input name="lname" title="Your lastname, please!" class="{required:true}" /></td>
+		<td></td>
+	</tr>
+</table>
+</form>
  * @result <form id="myform" action="/login" method="post">
- * 	<table>
- * 		<tr>
- * 			<td><label>Firstname</label>
- * 			<td><input name="fname" class="{required:true}" value="Pete" /></td>
- * 			<td><label for="fname" class="invalid success">ok!</label></td>
- * 		</tr>
- * 		<tr>
- * 			<td><label>Lastname</label></td>
- * 			<td><input name="lname" title="Your lastname, please!" class="{required:true}" /></td>
- * 			<td><label for="lname" class="invalid">Your lastname, please!</label></td>
- * 		</tr>
- * 	</table>
+<table>
+	<tr>
+		<td><label>Firstname</label>
+		<td><input name="fname" class="{required:true}" value="Pete" /></td>
+		<td><label for="fname" class="invalid success">ok!</label></td>
+	</tr>
+	<tr>
+		<td><label>Lastname</label></td>
+		<td><input name="lname" title="Your lastname, please!" class="{required:true}" /></td>
+		<td><label for="lname" class="invalid">Your lastname, please!</label></td>
+	</tr>
+</table>
  * </form>
  * @desc Validates a form on submit. Customizes the placement of the generated labels
  * by appending them to the next table cell. Displays "ok!" for valid elements and adds a class
@@ -186,56 +179,25 @@
  * also wrapped into li elements (wrapper option).
  *
  * @param Map options Optional settings to configure validation
- * @option String errorClass Use this class to look for existing error labels and add it to
- *		invalid elements. Default: "error"
+ * @option String errorClass Use this class to look for existing error labels and add it toinvalid elements. Default: "error"
  * @option String wrapper Wrap error labels with the specified element, eg "li". Default: none
  * @option Boolean debug If true, the form is not submitted and certain errors are display on the console (requires Firebug or Firebug lite). Default: none
  * @option Boolean focusInvalid Focus the last active or first invalid element on submit or via validator.focusInvalid(). Default: true
- * @option Function submitHandler Callback for handling the actual
- *		submit when the form is valid. Gets the form as the only argmument. Default: normal form submit
- * @option Map<String, Object> messages Key/value pairs defining custom messages.
- *		Key is the name of an element, value the message to display for that element. Instead of
- *		a plain message	another map with specific messages for each rule can be used.
- *		Can be specified for one or more elements. Overrides the title attribute of an element.
- *		Each message can be a String or a Function. The Function is called with the element
- * 		as the first and the validator as the second argument and must return a String to display as the message
- * 		for that element.
- *      Default: none, the default message for the method is used.
- * @option Map<String, Object> rules Key/value pairs defining custom rules.
- *		Key is the ID or name (for radio/checkbox inputs) of an element,
- *		value is an object consisting of rule/parameter pairs, eg. {required: true, min: 3}.
- *   	Once specified, metadata rules are completely ignored.
- *		Default: none, rules are read from metadata via metadata plugin
- * @option Boolean onsubmit Validate the form on submit. Set to false to use only other
- *		events for validation (option event). Default: true
- * @option String meta In case you use metadata for other plugins, too, you
- *		want to wrap your validation rules
- *		into their own object that can be specified via this option. Default: none
+ * @option Function submitHandler Callback for handling the actual submit when the form is valid. Gets the form as the only argmument. Default: normal form submit
+ * @option Map<String, Object> messages Key/value pairs defining custom messages. Key is the name of an element, value the message to display for that element. Instead of a plain message	another map with specific messages for each rule can be used. Can be specified for one or more elements. Overrides the title attribute of an element. Each message can be a String or a Function. The Function is called with the element as the first and the validator as the second argument and must return a String to display as the message for that element. Default: none, the default message for the method is used.
+ * @option Map<String, Object> rules Key/value pairs defining custom rules. Key is the ID or name (for radio/checkbox inputs) of an element, value is an object consisting of rule/parameter pairs, eg. {required: true, min: 3}. Once specified, metadata rules are completely ignored. Default: none, rules are read from metadata via metadata plugin
+ * @option Boolean onsubmit Validate the form on submit. Set to false to use only other events for validation (option event). Default: true
+ * @option String meta In case you use metadata for other plugins, too, you want to wrap your validation rules into their own object that can be specified via this option. Default: none
  * @option jQuery errorContainer Hide and show this container when validating. Default: none
  * @option jQuery errorLabelContainer Search and append error labels to this container, and show and hide it accordingly. Default: none
- * @option Function showErrors A custom message display handler. Gets the map of errors as the
- *		first argument and a refernce to the validator object as the second.
- * 		You can trigger (in addition to your own messages) the default behaviour by calling
- * 		the defaultShowErrors() method of the validator.
- * 		Default: none, uses built-in message disply.
- * @option Function errorPlacement Used to customize placement of created error labels.
- *		First argument: jQuery object containing the created error label
- *		Second argument: jQuery object containing the invalid element
- *		Default: Places the error label after the invalid element
+ * @option Function showErrors A custom message display handler. Gets the map of errors as the first argument and a refernce to the validator object as the second. You can trigger (in addition to your own messages) the default behaviour by calling the defaultShowErrors() method of the validator. Default: none, uses built-in message disply.
+ * @option Function errorPlacement Used to customize placement of created error labels. First argument: jQuery object containing the created error label Second argument: jQuery object containing the invalid element Default: Places the error label after the invalid element
  * @option String errorElement The element to use for generated error messages. Default: "label"
- * @option String|Function If specified, the error label is displayed to show a valid element. If 
- * 		a String is given, its added as a class to the label. If a Function is given, its called with
- *		the label (as a jQuery object) as its only argument. That can be used to add a text like "ok!".
- *		Default: none
- * @option Boolean focusCleanup If enabled, removes the errorClass from the invalid elements and hides
- * 		all errors messages whenever the element is focused. Avoid combination with focusInvalid. Default: false
- * @option String|Element ignore Elements to ignore when validating, simply filtering them out. jQuery's not-method
- * 		is used, therefore everything that is accepted by not() can be passed as this option. Inputs of type
- *		submit and reset are always ignored, so are disabled elements. Default: None
- * @opton Boolean onblur Validate elements on blur. If nothing is entered, all rules are skipped, 
- * 		except when the field was already marked as invalid. Default: true
- * @option Callback subformRequired Called to determine if a subform is required. An input is passed as the argument,
- * 		and a boolean is expected to return: If it returns false, the input is part of an optional subform, therefore not required. Default: none
+ * @option String|Function success If specified, the error label is displayed to show a valid element. If a String is given, its added as a class to the label. If a Function is given, its called with the label (as a jQuery object) as its only argument. That can be used to add a text like "ok!". Default: none
+ * @option Boolean focusCleanup If enabled, removes the errorClass from the invalid elements and hides all errors messages whenever the element is focused. Avoid combination with focusInvalid. Default: false
+ * @option String|Element ignore Elements to ignore when validating, simply filtering them out. jQuery's not-method is used, therefore everything that is accepted by not() can be passed as this option. Inputs of type submit and reset are always ignored, so are disabled elements. Default: None
+ * @opton Boolean onblur Validate elements on blur. If nothing is entered, all rules are skipped, except when the field was already marked as invalid. Default: true
+ * @option Callback subformRequired Called to determine if a subform is required. An input is passed as the argument, and a boolean is expected to return: If it returns false, the input is part of an optional subform, therefore not required. Default: none
  *
  * @name validate
  * @type $.validator
@@ -391,9 +353,9 @@ jQuery.validator = function( options, form ) {
 	this.settings = jQuery.extend( {}, jQuery.validator.defaults, options );
 
 	this.currentForm = form;
-	this.labelContainer = this.settings.errorLabelContainer;
+	this.labelContainer = jQuery(this.settings.errorLabelContainer);
 	this.errorContext = this.labelContainer.length && this.labelContainer || jQuery(form);
-	this.containers = this.settings.errorContainer.add( this.settings.errorLabelContainer );
+	this.containers = jQuery(this.settings.errorContainer).add( this.settings.errorLabelContainer );
 	this.submitted = {};
 	this.valueCache = {};
 	this.pendingRequest = 0;
@@ -647,13 +609,7 @@ jQuery.extend(jQuery.validator, {
 		 * Call to refresh a form after new elements have been added or rules changed.
 		 * 
 		 * Accepts an optional argument to refresh only a part of the form, eg. only the newly added element.
-		 * 
-		 * @example var validator = $("#myform").validate();
-		 * $(".cancel").click(function() {
-		 * 	validator.hideErrors();
-		 * });
-		 * @desc Specifies a custom showErrors callback that updates the number of invalid elements each
-		 * time the form or a single element is validated.
+		 *
 		 * 
 		 * @param Selector selection (optional) A selector or jQuery object or DOM element to refresh
 		 * @name jQuery.validator.prototype.hideErrors
@@ -674,7 +630,7 @@ jQuery.extend(jQuery.validator, {
 
 			// check for partial refresh
 			if ( selection ) {
-				$(selection).each(function() {
+				jQuery(selection).each(function() {
 					if ( validator.elements.index(this)  > -1 ) {
 						validator.elements.add(this);
 					}
@@ -716,7 +672,7 @@ jQuery.extend(jQuery.validator, {
 					if ( validator.checkable( this ) )
 						checkables.push( validator.checkableGroup( this ) );
 				});
-				validator.settings.onclick && checkables.click(function() {
+				checkables.click(function() {
 					validator.settings.onclick.call( validator, this );
 				});
 			}
@@ -1292,7 +1248,9 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		url: function(value, element) {
-			return this.optional(element) || /^(https?|ftp):\/\/[A-Z0-9](\.?[A-Z0-9ÄÜÖ][A-Z0-9_\-ÄÜÖ]*)*(\/([A-Z0-9ÄÜÖ][A-Z0-9_\-\.ÄÜÖ]*)?)*(\?([A-Z0-9ÄÜÖ][A-Z0-9_\-\.%\+=&ÄÜÖ]*)?)?$/i.test(value);
+			// instead of whitelisting all valid unicode characters we'll blacklist all invalid characters: whitespace and . , ;
+			// please contribute any valid URLs that don't match for the testsuite
+			return this.optional(element) || /^(https?|ftp):\/\/[^\s.,;]+(\.?[^\s.,;]+)*(\/([^\s.,;]+)?)*(\?([^\s.,;]+)?)?$/i.test(value);
 		},
         
 		/**
