@@ -11,7 +11,7 @@
       var times = o.options.times || 5;
       
       // Adjust
-      if (jQuery(el).is(':hidden')) {
+      if (el.is(':hidden')) {
         el.fadeIn(o.speed, o.options.easing);
         times--;
       }

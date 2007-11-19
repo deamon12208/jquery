@@ -4,17 +4,17 @@
 <head>
 <meta http-equiv="Content-Language" content="en" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Highlight</title>
+<title>Shake</title>
 <script type="text/javascript" src="../../../jquery/src/core.js"></script>
 <script type="text/javascript" src="../../../jquery/src/selector.js"></script>
 <script type="text/javascript" src="../../../jquery/src/event.js"></script>
 <script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
 <script type="text/javascript" src="../../../jquery/src/fx.js"></script>
 <script type="text/javascript" src="../../../jquery/src/offset.js"></script>
-<script type="text/javascript" src="../../../plugins/color/jquery.color.js"></script>
+<script type="text/javascript" src="../../../plugins/dimensions/jquery.dimensions.js"></script>
 
 <script type="text/javascript" src="../fx.js"></script>
-<script type="text/javascript" src="../fx.highlight.js"></script>
+<script type="text/javascript" src="../fx.shake.js"></script>
 
 
 <style type="text/css" media="screen">
@@ -36,7 +36,7 @@ body {
 <div id="container">
   <div class="text">Header Content</div>
   <div id="fx">
-  <div style='padding:2px;'>Highlight Me!</div>
+  <div style='padding:2px;'>Shake Me!</div>
   <img src="../images/very-cute-puppy.jpg">
   <div style='padding:2px;'>What a <b>cute</b> puppy!</div>
   </div>
@@ -45,12 +45,9 @@ body {
 
 <div class="controls">
   <div>
-    <a href="#" onClick="$('#fx').effect('highlight',{color: 'blue'});return false;">Highlight Blue</a>
-  </div>
-  <div>
-    <a href="#" onClick="$('#fx').hide({ method: 'highlight' });return false;">Highlight Off</a>
-    <a href="#" onClick="$('#fx').show({ method: 'highlight' });return false;">Highlight On</a>
-    <a href="#" onClick="$('#fx').toggle({ method: 'highlight' });return false;">Highlight Toggle</a>
+    <a href="#" onClick="$('#fx').effect('shake');return false;">Shake 3x</a>
+    <a href="#" onClick="$('#fx').effect('shake', { distance: 100, times: 5 });return false;">Shake Big 5x</a>
+    <a href="#" onClick="$('#fx').effect('shake', { direction: 'up' });return false;">Shake Vertical</a>
   </div>
   <div style="clear:both;padding-bottom:5px;"></div>
 </div>

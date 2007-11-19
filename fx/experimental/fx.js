@@ -76,7 +76,7 @@
     _toggleClass: $.fn.toggleClass,
     // New ec methods
     effect: function(fx,o,speed,callback) { 
-      if($.ec[fx]) $.ec[fx].apply(this, [{method: fx, options: o, speed: speed, callback: callback}])
+      if($.ec[fx]) $.ec[fx].apply(this, [{method: fx, options: o || {}, speed: speed, callback: callback}])
     },
     show: function(obj,speed,callback){
       return typeof obj == 'string' || typeof obj == 'undefined' ? this._show(obj, speed) : $.ec[obj.method].apply(this, [{method: 'show', options: obj, duration: speed, callback: callback }]);
