@@ -1,13 +1,13 @@
 (function(){
 /*
- * jQuery @VERSION - New Wave Javascript
+ * jQuery 1.2.1 - New Wave Javascript
  *
  * Copyright (c) 2007 John Resig (jquery.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * $Date: 2007-09-18 16:35:41 +0200 (Die, 18 Sep 2007) $
- * $Rev: 3387 $
+ * $Date: 2007-09-16 23:42:06 -0400 (Sun, 16 Sep 2007) $
+ * $Rev: 3353 $
  */
 
 // Map over jQuery in case of overwrite
@@ -81,7 +81,7 @@ jQuery.fn = jQuery.prototype = {
 			[ selector ] );
 	},
 	
-	jquery: "@VERSION",
+	jquery: "1.2.1",
 
 	size: function() {
 		return this.length;
@@ -1039,8 +1039,7 @@ jQuery.extend({
 		checked: "checked",
 		readonly: "readOnly",
 		selected: "selected",
-		maxlength: "maxLength",
-		selectedIndex: "selectedIndex"
+		maxlength: "maxLength"
 	}
 });
 
@@ -1116,27 +1115,16 @@ jQuery.each( [ "Height", "Width" ], function(i,name){
 	var n = name.toLowerCase();
 	
 	jQuery.fn[ n ] = function(h) {
-		// Get window width or height
 		return this[0] == window ?
-			// Opera reports document.body.client[Width/Height] properly in both quirks and standards
-			jQuery.browser.opera && document.body["client" + name] || 
-			
-			// Safari reports inner[Width/Height] just fine (Mozilla and Opera include scroll bar widths)
 			jQuery.browser.safari && self["inner" + name] ||
-			
-			// Everyone else use document.documentElement or document.body depending on Quirks vs Standards mode
-			document.compatMode == "CSS1Compat" && document.documentElement["client" + name] || document.body["client" + name] :
+			jQuery.boxModel && Math.max(document.documentElement["client" + name], document.body["client" + name]) ||
+			document.body["client" + name] :
 		
-		// Get document width or height
 			this[0] == document ?
-				// Either scroll[Width/Height] or offset[Width/Height], whichever is greater (Mozilla reports scrollWidth the same as offsetWidth)
 				Math.max( document.body["scroll" + name], document.body["offset" + name] ) :
         
-		// Get or set width or height on the element
 				h == undefined ?
-					// Get width or height on the element
 					( this.length ? jQuery.css( this[0], n ) : null ) :
-					// Set the width or height on the element (default to pixels if value is unitless)
 					this.css( n, h.constructor == String ? h : h + "px" );
 	};
 });
@@ -1986,7 +1974,6 @@ jQuery.extend({
 		}
 	}
 });
-
 
 jQuery.each( ("blur,focus,load,resize,scroll,unload,click,dblclick," +
 	"mousedown,mouseup,mousemove,mouseover,mouseout,change,select," + 
@@ -2918,17 +2905,15 @@ jQuery.fn.offset = function() {
 	var left = 0, top = 0, elem = this[0], results;
 	
 	if ( elem ) with ( jQuery.browser ) {
-		var	parent       = elem.parentNode, 
+		var	absolute     = jQuery.css(elem, "position") == "absolute", 
+		    parent       = elem.parentNode, 
 		    offsetParent = elem.offsetParent, 
 		    doc          = elem.ownerDocument,
-		    safari2      = safari && parseInt(version) < 522,
-		    position     = jQuery.css(elem, "position"),
-		    absolute     = position == "absolute",
-		    fixed        = position == "fixed";
+		    safari2      = safari && parseInt(version) < 522;
 	
 		// Use getBoundingClientRect if available
 		if ( elem.getBoundingClientRect ) {
-			var box = elem.getBoundingClientRect();
+			box = elem.getBoundingClientRect();
 		
 			// Add the document scroll offsets
 			add(
@@ -2960,24 +2945,10 @@ jQuery.fn.offset = function() {
 				// However Mozilla adds the border for table cells
 				if ( mozilla && /^t[d|h]$/i.test(parent.tagName) || !safari2 )
 					border( offsetParent );
-					
-				// Get offsetParent's position
-				position = jQuery.css(offsetParent, "position");
 				
 				// Safari <= 2 doubles body offsets with an absolutely positioned element or parent
-				if ( safari2 && !absolute && position == "absolute" )
+				if ( safari2 && !absolute && jQuery.css(offsetParent, "position") == "absolute" )
 					absolute = true;
-				
-				// Opera adds border for fixed, relative and absolute parent elements
-				if (opera && /^fixed|relative|absolute$/i.test(position))
-					add( 
-						-parseInt(jQuery.css(elem, "borderLeftWidth")),
-						-parseInt(jQuery.css(elem, "borderTopWidth"))
-					);
-					
-				// Add the document scroll offsets if position is fixed
-				if ( !fixed && position == "fixed" )
-					fixed = true;
 			
 				// Get next offsetParent
 				offsetParent = offsetParent.offsetParent;
@@ -2998,16 +2969,9 @@ jQuery.fn.offset = function() {
 				parent = parent.parentNode;
 			}
 		
-			// Safari <= 2 doubles body offsets with an absolute or fixed positioned element or parent
-			if ( safari2 && (absolute || fixed) )
+			// Safari doubles body offsets with an absolutely positioned element or parent
+			if ( safari2 && absolute )
 				add( -doc.body.offsetLeft, -doc.body.offsetTop );
-			
-			// Add the document scroll offsets if position is fixed
-			if ( fixed )
-				add(
-					Math.max(doc.documentElement.scrollLeft, doc.body.scrollLeft),
-					Math.max(doc.documentElement.scrollTop,  doc.body.scrollTop)
-				);
 		}
 
 		// Return an object with top and left properties
@@ -3022,7 +2986,7 @@ jQuery.fn.offset = function() {
 
 	function add(l, t) {
 		left += parseInt(l) || 0;
-		top  += parseInt(t) || 0;
+		top += parseInt(t) || 0;
 	}
 };
-})();
+})(); 

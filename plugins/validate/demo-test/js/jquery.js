@@ -1,13 +1,13 @@
 (function(){
 /*
- * jQuery @VERSION - New Wave Javascript
+ * jQuery 1.2.1 - New Wave Javascript
  *
  * Copyright (c) 2007 John Resig (jquery.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * $Date: 2007-09-18 16:35:41 +0200 (Di, 18 Sep 2007) $
- * $Rev: 3387 $
+ * $Date: 2007-09-16 23:42:06 -0400 (Sun, 16 Sep 2007) $
+ * $Rev: 3353 $
  */
 
 // Map over jQuery in case of overwrite
@@ -81,7 +81,7 @@ jQuery.fn = jQuery.prototype = {
 			[ selector ] );
 	},
 	
-	jquery: "@VERSION",
+	jquery: "1.2.1",
 
 	size: function() {
 		return this.length;
@@ -1039,8 +1039,7 @@ jQuery.extend({
 		checked: "checked",
 		readonly: "readOnly",
 		selected: "selected",
-		maxlength: "maxLength",
-		selectedIndex: "selectedIndex"
+		maxlength: "maxLength"
 	}
 });
 
@@ -1116,27 +1115,16 @@ jQuery.each( [ "Height", "Width" ], function(i,name){
 	var n = name.toLowerCase();
 	
 	jQuery.fn[ n ] = function(h) {
-		// Get window width or height
 		return this[0] == window ?
-			// Opera reports document.body.client[Width/Height] properly in both quirks and standards
-			jQuery.browser.opera && document.body["client" + name] || 
-			
-			// Safari reports inner[Width/Height] just fine (Mozilla and Opera include scroll bar widths)
 			jQuery.browser.safari && self["inner" + name] ||
-			
-			// Everyone else use document.documentElement or document.body depending on Quirks vs Standards mode
-			document.compatMode == "CSS1Compat" && document.documentElement["client" + name] || document.body["client" + name] :
+			jQuery.boxModel && Math.max(document.documentElement["client" + name], document.body["client" + name]) ||
+			document.body["client" + name] :
 		
-		// Get document width or height
 			this[0] == document ?
-				// Either scroll[Width/Height] or offset[Width/Height], whichever is greater (Mozilla reports scrollWidth the same as offsetWidth)
 				Math.max( document.body["scroll" + name], document.body["offset" + name] ) :
         
-		// Get or set width or height on the element
 				h == undefined ?
-					// Get width or height on the element
 					( this.length ? jQuery.css( this[0], n ) : null ) :
-					// Set the width or height on the element (default to pixels if value is unitless)
 					this.css( n, h.constructor == String ? h : h + "px" );
 	};
 });
@@ -1986,7 +1974,6 @@ jQuery.extend({
 		}
 	}
 });
-
 
 jQuery.each( ("blur,focus,load,resize,scroll,unload,click,dblclick," +
 	"mousedown,mouseup,mousemove,mouseover,mouseout,change,select," + 
@@ -2926,7 +2913,7 @@ jQuery.fn.offset = function() {
 	
 		// Use getBoundingClientRect if available
 		if ( elem.getBoundingClientRect ) {
-			var box = elem.getBoundingClientRect();
+			box = elem.getBoundingClientRect();
 		
 			// Add the document scroll offsets
 			add(
@@ -2956,7 +2943,7 @@ jQuery.fn.offset = function() {
 			
 				// Mozilla and Safari > 2 does not include the border on offset parents
 				// However Mozilla adds the border for table cells
-				if ( mozilla && !/^t[d|h]$/i.test(offsetParent.tagName) || safari && parseInt(version) >= 522 )
+				if ( mozilla && /^t[d|h]$/i.test(parent.tagName) || !safari2 )
 					border( offsetParent );
 				
 				// Safari <= 2 doubles body offsets with an absolutely positioned element or parent
@@ -3002,4 +2989,4 @@ jQuery.fn.offset = function() {
 		top += parseInt(t) || 0;
 	}
 };
-})();
+})(); 
