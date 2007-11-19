@@ -44,9 +44,14 @@ test("email", function() {
 	ok( method( "bart+bart@tokbox.com" ), "Valid email" );
 	ok( method( "bart+bart@tokbox.travel" ), "Valid email" );
 	ok( method( "n@d.tld" ), "Valid email" );
+	ok( method( "ole@føtex.dk"), "Valid email" );
+	ok( method( "jörn@bassistance.de"), "Valid email" );
 	ok(!method( "name" ), "Invalid email" );
 	ok(!method( "name@" ), "Invalid email" );
 	ok(!method( "name@domain" ), "Invalid email" );
+	ok(!method( "name.@domain" ), "Invalid email" );
+	ok(!method( "name,@domain" ), "Invalid email" );
+	ok(!method( "name;@domain" ), "Invalid email" );
 });
 
 test("number", function() {
