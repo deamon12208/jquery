@@ -12,7 +12,7 @@
       var direction = o.options.direction || 'left';
       var s = $.ec.findSides(el), ref = { left: s[0], right: s[0], up: s[1], down: s[1] };
       props.push(ref[direction]); // Add side to props
-      var motion = (direction == 'down' || direction == 'left') ? 'pos' : 'neg';
+      var motion = (direction == 'up' || direction == 'left') ? 'neg' : 'pos';
       var distance = o.options.distance || ((direction == 'up' || direction == 'down') ? (el.height() / 2) : (el.width() / 2));
       var shift = parseInt(el.css(ref[direction])) || 0;
       
