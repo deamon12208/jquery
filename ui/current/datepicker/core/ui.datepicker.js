@@ -1081,7 +1081,7 @@ $.extend(DatepickerInstance.prototype, {
 
 	/* Retrieve the date(s) directly. */
 	_getDate: function() {
-		var startDate = (!this._currentYear ? null :
+		var startDate = (!this._currentYear || (this._input && this._input.val() == '') ? null :
 			new Date(this._currentYear, this._currentMonth, this._currentDay));
 		if (this._get('rangeSelect')) {
 			return [startDate, new Date(this._endYear, this._endMonth, this._endDay)];
