@@ -51,6 +51,15 @@ body {
     <a href="#" onClick="$('#fx').hide({method: 'scale'});return false;">Scale down (Shrink)</a>
     <a href="#" onClick="$('#fx').toggle({method: 'scale'});return false;">Scale Toggle</a>
   </div>
+  <div>
+    <a href="#" onClick="$('#fx').show({method: 'scale', baseline: ['bottom', 'left']});return false;">Scale up from bottom left</a>
+    <a href="#" onClick="$('#fx').hide({method: 'scale', baseline: ['top', 'right']});return false;">Scale down to top right</a>
+    <a href="#" onClick="$('#fx').toggle({method: 'scale', baseline: [90, 385]});return false;">Scale Toggle from a point</a>
+  </div>
+  <div>
+    <a href="#" onClick="$('#fx').toggle({method: 'scale', scale: 'box', baseline: ['top', 'left']});return false;">Scale 'box' mode</a>
+    <a href="#" onClick="$('#fx').toggle({method: 'scale', scale: 'content', baseline: ['top', 'left']});return false;">Scale 'content' mode</a>
+  </div>
   <div style="clear:both;padding-bottom:5px;"></div>
 </div>
 
