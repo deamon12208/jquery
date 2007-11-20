@@ -71,7 +71,7 @@
  * @option String titleAttribute: default is 'title'. The attribute to be used for the clueTip's heading, if the attribute exists for the hovered element.
  * @option String splitTitle: default is '' (empty string). A character used to split the title attribute into the clueTip title and divs within the clueTip body; if used, the clueTip will be populated only by the title attribute, 
  * @option String hoverClass: default is empty string. designate one to apply to the hovered element
- * @option String closePosition: default is 'top'. Set to 'bottom' to put the closeText at the bottom of the clueTip body
+ * @option String closePosition: default is 'top'. Set to 'bottom' to put the closeText at the bottom of the clueTip body; set to 'title' to put it in the clueTip title/heading 
  * @option String closeText: default is 'Close'. This determines the text to be clicked to close a clueTip when sticky is set to true.
  * @option Number truncate: default is 0. Set to some number greater than 0 to truncate the text in the body of the clueTip. This also removes all HTML/images from the clueTip body.
  * @option Boolean waitImage: default is true. Set to false to avoid having the plugin try to show/hide the image.
