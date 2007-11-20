@@ -76,13 +76,30 @@
     _toggleClass: $.fn.toggleClass,
     // New ec methods
     effect: function(fx,o,speed,callback) { 
-      if($.ec[fx]) $.ec[fx].apply(this, [{method: fx, options: o || {}, speed: speed, callback: callback}])
+      if($.ec[fx]) {
+        elem = this.get(0);
+        elem.fx = elem.fx || {};
+        if (!elem.fx[fx]) { // Prevent double-click
+          elem.fx[fx] = true;
+          return $.ec[fx].apply(this, [{method: fx, options: o || {}, speed: speed, callback: function(){if (callback) callback.apply(this.arguments); elem.fx[fx] = null;} }]);
+        }
+      }
     },
     show: function(obj,speed,callback){
-      return typeof obj == 'string' || typeof obj == 'undefined' ? this._show(obj, speed) : $.ec[obj.method].apply(this, [{method: 'show', options: obj, duration: speed, callback: callback }]);
+      if (typeof obj == 'string' || typeof obj == 'undefined')
+        return this._show(obj, speed);
+      else {
+        obj['mode'] = 'show';
+        return this.effect(obj.method, obj, speed, callback);
+      };
     },
     hide: function(obj,speed,callback){
-      return typeof obj == 'string' || typeof obj == 'undefined' ? this._hide(obj, speed) : $.ec[obj.method].apply(this, [{method: 'hide', options: obj, duration: speed, callback: callback }]);
+      if (typeof obj == 'string' || typeof obj == 'undefined')
+        return this._hide(obj, speed);
+      else {
+        obj['mode'] = 'hide';
+        return this.effect(obj.method, obj, speed, callback);
+      };
     },
     toggle: function(obj,speed,callback){
       return this.is(':hidden') ? this.show(obj,speed,callback) : this.hide(obj,speed,callback)

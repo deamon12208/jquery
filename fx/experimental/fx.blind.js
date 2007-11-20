@@ -13,21 +13,22 @@
       wrapper.css({overflow: 'hidden', height: el.outerHeight(), width: el.outerWidth()});
       
       // Set options
+      var mode = o.options.mode || 'hide';
       var direction = o.options.direction || 'vertical';
       var ref = (direction == 'vertical') ? 'height' : 'width';
       var distance = (direction == 'vertical') ? wrapper.height() : wrapper.width();
       
       // Adjust
-      if(o.method == 'show') wrapper.css(ref, 0);
+      if(mode == 'show') wrapper.css(ref, 0);
       el.show();
       
       // Animation
       var animation = {};
-      animation[ref] = o.method == 'show' ? distance : 0;
+      animation[ref] = mode == 'show' ? distance : 0;
       
       // Animate
       wrapper.animate(animation, o.speed, o.options.easing, function() {
-        if(o.method != 'show') el.hide();
+        if(mode == 'hide') el.hide();
         wrapper.replaceWith(el);
         if(o.callback) o.callback.apply(this, arguments);
       });   

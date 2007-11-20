@@ -6,14 +6,15 @@
     var el = $(this);
     
     // Set options
+    var mode = o.options.mode || 'effect';
     var percent = parseInt(o.options.percent) || 100;
     var axis = o.options.axis || 'both';
     
-    if (o.method == 'show' || o.method == 'hide') o.options.restore = true;
+    if (mode == 'show' || mode == 'hide') o.options.restore = true;
     
     var factor = { // set scaling factor
-      from: [(o.method == 'show') ? 0 : 1, (o.method == 'show') ? 0 : 1],
-      to: [(o.method == 'hide') ? 0 : (percent / 100), (o.method == 'hide') ? 0 : (percent / 100)]
+      from: [(mode == 'show') ? 0 : 1, (mode == 'show') ? 0 : 1],
+      to: [(mode == 'hide') ? 0 : (percent / 100), (mode == 'hide') ? 0 : (percent / 100)]
     }
     if (axis == 'horizontal') factor.to[0] = factor.from[0]; 
     if (axis == 'vertical') factor.to[1] = factor.from[1];
@@ -23,7 +24,7 @@
     
     // Animate
     el.effect('size', o.options, o.speed, function(){
-      if (o.method == 'hide') el.hide();
+      if (mode == 'hide') el.hide();
       if(o.callback) o.callback.apply(this, arguments);
     });
     

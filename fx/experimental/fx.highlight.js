@@ -9,6 +9,7 @@
       var props = ['backgroundImage','backgroundColor','opacity'];
       
       // Set options
+      var mode = o.options.mode || 'show';
       var color = o.options.color || "#ffff99"
       
       // Adjust & Save
@@ -19,11 +20,11 @@
       // Animation
       var animation = {};
       animation['backgroundColor'] = $.data(this, "ec.storage.backgroundColor");
-      if (o.method == "hide") animation['opacity'] = 0;
+      if (mode == "hide") animation['opacity'] = 0;
       
       // Animate
       el.animate(animation, o.speed, o.options.easing, function() { //Animate
-        if(o.method == "hide") el.hide();
+        if(mode == "hide") el.hide();
         $.ec.restore(el, props);
         if(o.callback) o.callback.apply(this, arguments);
       });

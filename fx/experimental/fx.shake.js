@@ -9,6 +9,7 @@
       var props = ['position'];
       
       // Set options
+      var mode = 'effect';
       var times = o.options.times || 3;
       speed = o.speed || 75;
       var direction = o.options.direction || 'left';
