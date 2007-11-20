@@ -8,21 +8,31 @@
       var el = $(this);
       
       // Set options
-      var mode = o.options.mode || 'show';
+      var mode = o.options.mode || 'effect';
       var times = o.options.times || 5;
+      if (mode != 'hide') times--;
       
-      // Adjust
-      if (el.is(':hidden')) {
-        el.fadeIn(o.speed, o.options.easing);
+      // Animate
+      if (el.is(':hidden')) { // Show fadeIn
+        el.show();
+        el.animate({opacity: 1}, o.speed / 2, o.options.easing);
         times--;
       }
       
-      // Animate
-      for (var i = 0; i < times; i++) {
-        el.fadeOut(o.speed, o.options.easing).fadeIn(o.speed, o.options.easing);
+      for (var i = 0; i < times; i++) { // Pulsate
+        el.animate({opacity: 0}, o.speed / 2, o.options.easing).animate({opacity: 1},o.speed / 2, o.options.easing);
       };
-      if (mode == 'hide') el.fadeOut(o.speed, o.options.easing);
-      if(o.callback) o.callback.apply(this, arguments);
+      
+      if (mode == 'hide') { // Last Pulse
+        el.animate({opacity: 0}, o.speed / 2, o.options.easing, function(){
+          el.hide();
+          if(o.callback) o.callback.apply(this, arguments);
+        });
+      } else {
+        el.animate({opacity: 0}, o.speed, o.options.easing).animate({opacity: 1}, o.speed / 2, o.options.easing, function(){
+          if(o.callback) o.callback.apply(this, arguments);
+        });
+      };
     });
     
   }
