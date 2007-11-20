@@ -14,18 +14,12 @@
 <script type="text/javascript" src="../../../plugins/dimensions/jquery.dimensions.js"></script>
 
 <script type="text/javascript" src="../fx.js"></script>
-<script type="text/javascript" src="../fx.slide.js"></script>
-
 <script type="text/javascript">
 	
 	$(document).ready(function() {
-		
-		var method = 'slide';
-		var configuration = {
+		createTest('slide',{
 			direction: ['up', 'right', 'down', 'left']	
-		};
-
-		createTest(method,configuration);
+		});
 	});
 	
 	
