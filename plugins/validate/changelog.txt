@@ -9,6 +9,7 @@
 * Added support for ajax-validation, see method "remote"
 * Fixed String.format to jQuery.format (moving into jQuery namespace)
 * Improved URL and email methods (now blacklisting illegal characters to make them much more versatile when dealing with unicode characters, like http://www.føtex.dk/
+* Fixed accept method to accept both upper and lowercase extensions
 
 1.1.1
 -----

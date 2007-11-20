@@ -1431,7 +1431,7 @@ jQuery.extend(jQuery.validator, {
 		 */
 		accept: function(value, element, param) {
 			param = typeof param == "string" ? param : "png|jpe?g|gif";
-			return this.optional(element) || value.match(new RegExp(".(" + param + ")$")); 
+			return this.optional(element) || value.match(new RegExp(".(" + param + ")$", "i")); 
 		},
 		
 		/**
