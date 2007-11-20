@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<script type="text/javascript" src="../../../jquery/src/core.js"></script>
+<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+<script type="text/javascript" src="../../../jquery/src/event.js"></script>
+<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+<script type="text/javascript" src="../../../plugins/dimensions/jquery.dimensions.js"></script>
+
+<script type="text/javascript" src="../fx.js"></script>
+<script type="text/javascript" src="../fx.slide.js"></script>
+
+<script type="text/javascript">
+	
+	$(document).ready(function() {
+		
+		var method = 'slide';
+		var configuration = {
+			direction: ['up', 'right', 'down', 'left']	
+		};
+
+		createTest(method,configuration);
+	});
+	
+	
+	function createTest(method,conf) {
+		
+		var src = document.createElement('script'); src.type = 'text/javascript'; src.src = "../fx."+method+".js";
+		document.getElementsByTagName('head')[0].appendChild(src);
+		
+		$('#testbar p.title').html('UI Test for "'+method+'"');
+		var obj = { method: method };
+		
+		for(var i in conf) {
+			var newUL = $('<li>'+i+'<ul></ul></li>').appendTo('#testbar ul.tests').find('ul');
+			for(var j=0;j<conf[i].length;j++) {
+				var newLI = $('<li>'+conf[i][j]+'&nbsp;</li>').appendTo(newUL);
+
+				$('<a href="javascript:void(0);" onclick="$($.ec.currentTestElement).hide({ method: \''+method+'\', '+i+': \''+conf[i][j]+'\' },1000);">hide&nbsp;</a>').appendTo(newLI);
+				$('<a href="javascript:void(0);" onclick="$($.ec.currentTestElement).show({ method: \''+method+'\', '+i+': \''+conf[i][j]+'\' },1000);">show&nbsp;</a>').appendTo(newLI);
+				$('<a href="javascript:void(0);" onclick="$($.ec.currentTestElement).toggle({ method: \''+method+'\', '+i+': \''+conf[i][j]+'\' },1000);">toggle</a>').appendTo(newLI);
+			}
+		}
+		
+		$.ec.currentTestElement = $('.test')[0];
+		$('.test').each(function() {
+			var that = this;
+			$('<li><a href="javascript:void(0);">'+this.tagName+'</a> <span class="small">('+$(this).css('position')+', '+$(this).css('float')+'-floating)</span></li>').appendTo('#testbar ul.elements').find('a').bind('click', function() {
+				 $.ec.currentTestElement = that;
+			});
+		});
+
+	}
+
+</script>
+
+
+<style type="text/css" media="screen">
+body {
+  font-size: 11px;
+  font-family: Arial; 
+  margin:0; padding:0;
+}
+
+a:link { text-decoration: none; }
+a:hover { text-decoration: underline; }
+span.small { font-size: 9px; }
+
+#testbar { position: absolute; top: 0px; left: 0px; background: #eee; border-right: 2px solid #bbb; width: 200px; height: 100%; }
+#testbar p { font-size: 11px; font-weight: bold; margin: 0px; padding: 10px; }
+
+#testbar ul { margin: 0; padding-left: 30px; margin-bottom: 20px; list-style-type: square; }
+#testbar ul ul { margin: 0; padding-left: 20px; list-style-type: square;  }
+
+.text {font-size: 12px;margin:5px 0;background:#f7f7f7;border:1px dotted #aaa;padding:4px;}
+#container {height:420px; width:510px; margin:0 auto;}
+#fx {width:500px;background:#efefef;border:5px solid #aaa; text-align:center;}
+
+</style>
+</head>
+<body>
+
+<div id='testbar'>
+	
+	<p class='title'></p>
+	<ul class='tests'></ul>
+	
+	<p>Test Elements (click to activate)</p>
+	<ul class='elements'></ul>
+	
+</div>  
+
+<div id="container">
+  <div class="text">Header Content</div>
+  <div id="fx" title='Standard' class='test'>
+  <div style='padding:2px;'>Slide Me!</div>
+  <img src="../images/very-cute-puppy.jpg">
+  <div style='padding:2px;'>What a <b>cute</b> puppy!</div>
+  </div>
+  <div class="text">Footer Content</div>
+</div>
+
+
+</body>
+</html>
