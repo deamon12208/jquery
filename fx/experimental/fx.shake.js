@@ -36,7 +36,7 @@
       };
       el.animate(animation1, speed * 2, o.options.easing).animate(animation, speed, o.options.easing, function(){
         $.ec.restore(el, props);
-        if(o.callback) callback.apply(this, arguments);
+        if(o.callback) o.callback.apply(this, arguments);
       });
       
     });

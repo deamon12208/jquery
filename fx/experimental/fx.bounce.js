@@ -35,7 +35,7 @@
         el.animate(animation1, speed, o.options.easing).animate(animation2, speed, o.options.easing, function(){
           if (times == i+1){
             $.ec.restore(el, props);
-            if(o.callback) callback.apply(this, arguments);
+            if(o.callback) o.callback.apply(this, arguments);
           }
         });
         distance = (o.method == 'hide') ? distance * 2 : distance / 2;

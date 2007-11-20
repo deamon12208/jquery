@@ -20,13 +20,13 @@
       return [ !!parseInt(el.css("left")) ? "left" : "right", !!parseInt(el.css("top")) ? "top" : "bottom" ];
     },
     setTransition: function(el, list, factor, val) {
-    val = val || {};
-    $.each(list,function(i, x){
-      unit = el.cssUnit(x);
-      if (unit[0] > 0) val[x] = unit[0] * factor + unit[1];
-    });
-    return val;
-  },
+      val = val || {};
+      $.each(list,function(i, x){
+        unit = el.cssUnit(x);
+        if (unit[0] > 0) val[x] = unit[0] * factor + unit[1];
+      });
+      return val;
+    },
     animateClass: function(value, duration, easing, callback) {
   
       var cb = (typeof easing == "function" ? easing : (callback ? callback : null));
@@ -85,7 +85,7 @@
       return typeof obj == 'string' || typeof obj == 'undefined' ? this._hide(obj, speed) : $.ec[obj.method].apply(this, [{method: 'hide', options: obj, duration: speed, callback: callback }]);
     },
     toggle: function(obj,speed,callback){
-      return $(this).is(':hidden') ? this.show(obj,speed,callback) : this.hide(obj,speed,callback)
+      return this.is(':hidden') ? this.show(obj,speed,callback) : this.hide(obj,speed,callback)
     },
     addClass: function(classNames,speed,easing,callback) {
       return speed ? $.ec.animateClass.apply(this, [{ add: classNames },speed,easing,callback]) : this._addClass(classNames);

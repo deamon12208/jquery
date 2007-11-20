@@ -25,7 +25,7 @@
       el.animate(animation, o.speed, o.options.easing, function() { //Animate
         if(o.method == "hide") el.hide();
         $.ec.restore(el, props);
-        if(o.callback) callback.apply(this, arguments);
+        if(o.callback) o.callback.apply(this, arguments);
       });
       
     });

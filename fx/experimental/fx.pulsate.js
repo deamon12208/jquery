@@ -21,7 +21,7 @@
         el.fadeOut(o.speed, o.options.easing).fadeIn(o.speed, o.options.easing);
       };
       if (o.method == 'hide') el.fadeOut(o.speed, o.options.easing);
-      if(o.callback) callback.apply(this, arguments);
+      if(o.callback) o.callback.apply(this, arguments);
     });
     
   }

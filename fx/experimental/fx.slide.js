@@ -35,7 +35,7 @@
         if(o.method != 'show') el.hide();
         $.ec.restore(el, props);
         wrapper.replaceWith(el);
-        if(o.callback) callback.apply(this, arguments);
+        if(o.callback) o.callback.apply(this, arguments);
       });
       
     });

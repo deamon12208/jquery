@@ -30,7 +30,7 @@
       .animate(animation2, o.speed, o.options.easing, function() {
         if(o.method != 'show') el.hide();
         wrapper.replaceWith(el);
-        if(o.callback) callback.apply(this, arguments);
+        if(o.callback) o.callback.apply(this, arguments);
       });   
   
     });
