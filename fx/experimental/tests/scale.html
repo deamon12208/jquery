@@ -59,6 +59,12 @@ body {
   <div>
     <a href="#" onClick="$('#fx').toggle({method: 'scale', scale: 'box', baseline: ['top', 'left']});return false;">Scale 'box' mode</a>
     <a href="#" onClick="$('#fx').toggle({method: 'scale', scale: 'content', baseline: ['top', 'left']});return false;">Scale 'content' mode</a>
+    <a href="#" onClick="$('#fx').toggle({method: 'scale', baseline: ['top', 'left']});return false;">Scale 'both' mode</a>
+  </div>
+  <div>
+    <a href="#" onClick="$('#fx').hide({method: 'puff'});return false;">Puff Out</a>
+    <a href="#" onClick="$('#fx').show({method: 'puff'});return false;">Puff In</a>
+    <a href="#" onClick="$('#fx').toggle({method: 'puff'});return false;">Puff Toggle</a>
   </div>
   <div style="clear:both;padding-bottom:5px;"></div>
 </div>

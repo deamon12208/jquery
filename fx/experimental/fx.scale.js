@@ -1,25 +1,45 @@
 (function($) {
   
+  $.ec.puff = function(o) {
+    // Create element
+    var el = $(this);
+    
+    // Create a wrapper
+    el.wrap('<div id="fxWrapper"></div>');
+    var wrapper = el.parent();
+    wrapper.css({height: el.outerHeight(), width: el.outerWidth()});
+      
+    // Set options
+    var mode = o.options.mode || 'hide';
+    var original = {height: el.height(), width: el.width()};
+    o.options.fade = true;
+    
+    o.options.percent = parseInt(o.options.percent) || (mode == 'show' ? 100 : 150);
+    o.options.from = (mode == 'hide' ? original : {height: original.height * 1.5, width: original.width * 1.5});
+    el.effect('scale', o.options, o.speed, function(){
+      wrapper.replaceWith(el);
+      if(o.callback) o.callback.apply(this, arguments);
+    });
+  }  
+
   $.ec.scale = function(o) {
 
     // Create element
     var el = $(this);
-    o.speed= 3000;
+
     // Set options
     var mode = o.options.mode || 'effect';
-    var percent = parseInt(o.options.percent) || 100;
+    var percent = parseInt(o.options.percent) || (mode == 'hide' ? 0 : 100);
     var axis = o.options.axis || 'both';
-    var factor = { // set scaling factor
-      from: {y: (mode == 'show') ? 0 : 1, x: (mode == 'show') ? 0 : 1},
-      to: {y: (mode == 'hide') ? 0 : (percent / 100), x: (mode == 'hide') ? 0 : (percent / 100)}
+    var factor = {
+      y: axis != 'horizontal' ? (percent / 100) : 1,
+      x: axis != 'vertical' ? (percent / 100) : 1
     }
-    if (axis == 'horizontal') factor.to.y = factor.from.y; 
-    if (axis == 'vertical') factor.from.x = factor.from.x;
     
     var original = {height: el.height(), width: el.width()};
     
-    el.from = {height: original.height * factor.from.y, width: original.width * factor.from.x};
-    el.to = {height: original.height * factor.to.y, width: original.width * factor.to.x};
+    el.from = o.options.from || (mode == 'show' ? {height: 0, width: 0} : original);
+    el.to = {height: original.height * factor.y, width: original.width * factor.x};
     
     if (mode != 'effect') {
       o.options.baseline = o.options.baseline || ['middle','center']; //Default baseline for show/hide
@@ -61,6 +81,11 @@
       el.to[ref.left] = original[ref.left] + (ref.top == 'left' ? distance.to.x : -distance.to.x);
 
     };
+    
+    if (o.options.fade) {
+      if (mode == 'show') {el.from.opacity = 0;el.to.opacity = 1;};
+      if (mode == 'hide') {el.from.opacity = 1;el.to.opacity = 0;};
+    }
     
     o.options.from = el.from; o.options.to = el.to;
     
