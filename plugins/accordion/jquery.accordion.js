@@ -166,7 +166,7 @@ $.fn.extend({
 		function clickHandler(event) {
 			// called only when using activate(false) to close all parts programmatically
 			if ( !event.target && !settings.alwaysOpen ) {
-				active.toggleClass(settings.selectedClass);
+				active.parent().andSelf().toggleClass(settings.selectedClass);
 				var toHide = active.next();
 				var toShow = active = $([]);
 				toggle( toShow, toHide );
