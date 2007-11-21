@@ -5,8 +5,8 @@
     this.each(function() {
 
       // Create element
-      var el = $(this)
-      var props = ['position','top','left'];
+      var el = $(this), props = ['position','top','left'];
+      $.ec.save(el, props); el.show(); // Save & Show
       
       // Set options
       var mode = o.options.mode || 'show'; // Default Mode
@@ -15,7 +15,6 @@
       var motion = (direction == 'up' || direction == 'left') ? 'pos' : 'neg';
       
       // Adjust
-      $.ec.save(el, props); el.show(); // Save
       $.ec.createWrapper(el).css({overflow:'hidden'}); // Create Wrapper
       var distance = o.options.distance || (ref == 'top' ? el.outerHeight({margin:true}) : el.outerWidth({margin:true}));
       if (mode == 'show') el.css(ref, motion == 'pos' ? -distance : distance); // Shift
