@@ -26,7 +26,7 @@
       // Animation
       var animation = {};
       animation['opacity'] = mode == 'show' ? 1 : 0;
-      animation[ref] = (mode == 'show' ? (motion == 'pos' ? '+=' : '-=') : (motion == 'pos' ? '-=' : '+='))  + distance;
+      animation[ref] = (mode == 'show' ? (motion == 'pos' ? '+=' : '-=') : (motion == 'pos' ? '-=' : '+=')) + distance;
       
       // Animate
       el.animate(animation, o.speed, o.options.easing, function() {
