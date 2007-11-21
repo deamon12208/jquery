@@ -19,6 +19,23 @@
     findSides: function(el) { //Very nifty function (especially for IE!)
       return [ !!parseInt(el.css("left")) ? "left" : "right", !!parseInt(el.css("top")) ? "top" : "bottom" ];
     },
+    getBaseline: function(origin, original) { // Translates a [top,left] array into a baseline value
+      // this should be a little more flexible in the future to handle a string & hash
+      var y, x;
+      switch (origin[0]) {
+        case 'top': y = 0; break;
+        case 'middle': y = 0.5; break;
+        case 'bottom': y = 1; break;
+        default: y = origin[0] / original.height;
+      };
+      switch (origin[1]) {
+        case 'left': x = 0; break;
+        case 'center': x = 0.5; break;
+        case 'right': x = 1; break;
+        default: x = origin[1] / original.width;
+      };
+     return {x: x, y: y};
+    },
     createWrapper: function(el) {
       var props = {width: el.outerWidth({margin:true}), height: el.outerHeight({margin:true}), float: el.css('float')};
       el.wrap('<div id="fxWrapper"></div>');
@@ -138,9 +155,6 @@
       this.morph.apply(this, arguments);
     },
     // helper functions
-    makeRelative: function() { //Relativize
-      if(!this.css("position") || !this.css("position").match(/fixed|absolute|relative/)) this.css("position", "relative");
-    },
     cssUnit: function(key) { 
       var style = this.css(key), val = [];
       $.each( ['em','px','%','pt'], function(i, unit){
