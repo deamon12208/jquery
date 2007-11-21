@@ -103,7 +103,7 @@
       
       // Create element
       var el = $(this);
-      var props = ['position','width','height'];
+      var props = ['position','opacity','width','height'];
       
       // Set options
       var restore = o.options.restore || false;
