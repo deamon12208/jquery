@@ -6,15 +6,15 @@
 
       // Create element
       var el = $(this);
-      el.show(); // Show
       
       // Set options
       var mode = o.options.mode || 'hide'; // Default Mode
       var direction = o.options.direction || 'vertical'; // Default direction
-      var ref = (direction == 'vertical') ? 'height' : 'width';
       
       // Adjust
+      el.show(); // Show
       var wrapper = $.ec.createWrapper(el).css({overflow:'hidden'}); // Create Wrapper
+      var ref = (direction == 'vertical') ? 'height' : 'width';
       var distance = (direction == 'vertical') ? wrapper.height() : wrapper.width();
       if(mode == 'show') wrapper.css(ref, 0); // Shift
       

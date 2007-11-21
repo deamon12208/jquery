@@ -6,16 +6,16 @@
 
       // Create element
       var el = $(this), props = ['position','top','left','opacity'];
-      $.ec.save(el, props); el.show(); // Save & Show
       
       // Set options
       var mode = o.options.mode || 'hide'; // Default Mode
       var direction = o.options.direction || 'left'; // Default Direction
-      var ref = (direction == 'up' || direction == 'down') ? 'top' : 'left';
-      var motion = (direction == 'up' || direction == 'left') ? 'pos' : 'neg';
       
       // Adjust
+      $.ec.save(el, props); el.show(); // Save & Show
       $.ec.createWrapper(el); // Create Wrapper
+      var ref = (direction == 'up' || direction == 'down') ? 'top' : 'left';
+      var motion = (direction == 'up' || direction == 'left') ? 'pos' : 'neg';
       var distance = o.options.distance || (ref == 'top' ? el.outerHeight({margin:true}) / 2 : el.outerWidth({margin:true}) / 2);
       if (mode == 'show') el.css('opacity', 0).css(ref, motion == 'pos' ? -distance : distance); // Shift
       

@@ -5,21 +5,18 @@
     this.each(function() {
       
       // Create element
-      var el = $(this);
-      var props = ['backgroundImage','backgroundColor','opacity'];
+      var el = $(this), props = ['backgroundImage','backgroundColor','opacity'];
       
       // Set options
-      var mode = o.options.mode || 'show';
-      var color = o.options.color || "#ffff99"
+      var mode = o.options.mode || 'show'; // Default mode
+      var color = o.options.color || "#ffff99" // Default highlight color
       
-      // Adjust & Save
-      $.ec.save(el, props);
-      el.css({backgroundImage: 'none', backgroundColor: color});
-      el.show();
+      // Adjust
+      $.ec.save(el, props); el.show(); // Save & Show
+      el.css({backgroundImage: 'none', backgroundColor: color}); // Shift
       
       // Animation
-      var animation = {};
-      animation['backgroundColor'] = $.data(this, "ec.storage.backgroundColor");
+      var animation = {backgroundColor: $.data(this, "ec.storage.backgroundColor")};
       if (mode == "hide") animation['opacity'] = 0;
       
       // Animate
