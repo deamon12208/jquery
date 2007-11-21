@@ -19,6 +19,24 @@
     findSides: function(el) { //Very nifty function (especially for IE!)
       return [ !!parseInt(el.css("left")) ? "left" : "right", !!parseInt(el.css("top")) ? "top" : "bottom" ];
     },
+    createWrapper: function(el) {
+      var props = {width: el.outerWidth({margin:true}), height: el.outerHeight({margin:true}), float: el.css('float')};
+      el.wrap('<div id="fxWrapper"></div>');
+      var wrapper = el.parent();
+      if (el.css('position') == 'static'){
+        wrapper.css({position: 'relative'});
+        el.css({position: 'relative'});
+      } else {
+        wrapper.css({position: el.css('position'), top: parseInt(el.css('top')) || null, left: parseInt(el.css('left')) || null, bottom: parseInt(el.css('bottom')) || null, right: parseInt(el.css('right')) || null});
+        wrapper.show();
+        el.css({position: 'relative', top:0, left: 0});
+      }
+      wrapper.css(props);
+      return wrapper;
+    },
+    removeWrapper: function(el) {
+      return el.parent().replaceWith(el);
+    },
     setTransition: function(el, list, factor, val) {
       val = val || {};
       $.each(list,function(i, x){
@@ -121,14 +139,7 @@
     },
     // helper functions
     makeRelative: function() { //Relativize
-      var pos = this.css('position');
-      if (!pos || pos == 'static') {
-        this.css('position', 'relative');
-        if (window.opera) {
-          element.style.top = 0;
-          element.style.left = 0;
-        };
-      };
+      if(!this.css("position") || !this.css("position").match(/fixed|absolute|relative/)) this.css("position", "relative");
     },
     cssUnit: function(key) { 
       var style = this.css(key), val = [];
