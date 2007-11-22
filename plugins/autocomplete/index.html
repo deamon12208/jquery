@@ -22,7 +22,7 @@ $().ready(function() {
 		return row[0] + " (<strong>id: " + row[1] + "</strong>)";
 	}
 	function formatResult(row) {
-		return row[0];
+		return row[0].replace(/(<.+?>)/gi, '');
 	}
 	
 	$("#suggest1").autocomplete(cities);
@@ -95,10 +95,10 @@ $().ready(function() {
 		$(this).prev().search();
 	});
 	$("#suggest2").result(function(event, data, formatted) {
-		$(this).find("..+/input").val(data[1]);
+		$(this).parent().next().find(">input").val(data[1]);
 	});
 	$("#suggest4").result(function(event, data, formatted) {
-		var hidden = $(this).find("..+/:input");
+		var hidden = $(this).parent().next().find(">:input");
 		hidden.val( (hidden.val() ? hidden.val() + ";" : hidden.val()) + data[1]);
 	});
 });

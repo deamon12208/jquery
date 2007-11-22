@@ -1,6 +1,7 @@
 
 TODO
 
+- accept callback as first argument to let users implement their own dynamic data (no caching) - consider async API
 - replace moreItems indicator with decent scrolling, indicating more available items with a long scrollable list
 - allow users to keep their incomplete value when pressing tab, just mimic the default-browser-autocomplete: tab doesn't select any proposed value -> tab closes the select and works normal otherwise
 - small bug in your autocomplete,  When setting autoFill:true I would expect formatResult to be called on autofill, it seems not to be the case.
