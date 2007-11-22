@@ -432,7 +432,7 @@
 				
 				// merge sort force
 				if(c.sortForce) {
-					var a = sortForce[0];
+					var a = c.sortForce[0];
 					for(var i=0; i < a.length; i++) {
 						sortList.unshift(a[i]);
 					}	
@@ -550,7 +550,7 @@
 							// multi column sorting	
 							} else {
 								// the user has clicked on an all ready sortet column.
-								if(isValueInArray(i,config.sortList[0])) {	 
+								if(isValueInArray(i,config.sortList)) {	 
 									
 									// revers the sorting direction for all tables.
 									for(var j=0; j < config.sortList.length; j++) {
