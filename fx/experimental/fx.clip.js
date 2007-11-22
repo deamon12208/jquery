@@ -1,6 +1,6 @@
 (function($) {
   
-  $.ec.switch = function(o) {
+  $.ec.clip = function(o) {
 
     this.each(function() {
 
@@ -27,10 +27,6 @@
       animation[ref.position] = mode == 'show' ? 0 : distance / 2;
         
       // Animate
-      if (direction == 'horizontal'){ // Scale the children
-        el.css('height', el.height()); // Fix height
-        el.find('*[width]').effect('scale', {percent: mode == 'hide' ? 0 : 100, from: mode == 'hide' ? null : {height:0, width:0}, restore: true, origin: ['middle','left']}, o.speed) // Scale
-      };
       el.animate(animation, o.speed, o.options.easing, function() {
         if(mode == 'hide') el.hide(); // Hide
         $.ec.restore(el, props); $.ec.removeWrapper(el); // Restore
