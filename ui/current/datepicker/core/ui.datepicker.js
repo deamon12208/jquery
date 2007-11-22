@@ -25,8 +25,8 @@ function Datepicker() {
 	this.regional[''] = { // Default regional settings
 		clearText: 'Clear', // Display text for clear link
 		closeText: 'Close', // Display text for close link
-		prevText: '&lt;Prev', // Display text for previous month link
-		nextText: 'Next&gt;', // Display text for next month link
+		prevText: '&#x3c;Prev', // Display text for previous month link
+		nextText: 'Next&#x3e;', // Display text for next month link
 		currentText: 'Today', // Display text for current month link
 		dayNamesMin: ['Su','Mo','Tu','We','Th','Fr','Sa'], // Names of days starting at Sunday
 		dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
@@ -797,7 +797,7 @@ $.extend(Datepicker.prototype, {
 				throw 'Unexpected literal at position ' + iValue;
 			}
 			iValue++;
-		}
+		};
 		var iValue = 0;
 		for (var iFormat = 0; iFormat < format.length; iFormat++) {
 			if (literal) {
@@ -842,7 +842,7 @@ $.extend(Datepicker.prototype, {
 			year += new Date().getFullYear() - new Date().getFullYear() % 100 +
 				(year <= shortYearCutoff ? 0 : -100);
 		}
-		var date = new Date(year, month - 1, day)
+		var date = new Date(year, month - 1, day);
 		if (date.getFullYear() != year || date.getMonth() + 1 != month || date.getDate() != day) {
 			throw 'Invalid date'; // E.g. 31/02/*
 		}
@@ -1177,7 +1177,7 @@ $.extend(DatepickerInstance.prototype, {
 						(unselectable ? '' : ' onmouseover="jQuery(this).addClass(\'datepicker_daysCellOver\');"' +
 						' onmouseout="jQuery(this).removeClass(\'datepicker_daysCellOver\');"' +
 						' onclick="jQuery.datepicker._selectDay(' + this._id + ',' + drawMonth + ',' + drawYear + ', this);"') + '>' + // actions
-						(otherMonth ? (showOtherMonths ? printDate.getDate() : '&nbsp;') : // display for other months
+						(otherMonth ? (showOtherMonths ? printDate.getDate() : '&#xa0;') : // display for other months
 						(unselectable ? printDate.getDate() : '<a>' + printDate.getDate() + '</a>')) + '</td>'; // display for this month
 					printDate.setDate(printDate.getDate() + 1);
 				}
@@ -1204,7 +1204,7 @@ $.extend(DatepickerInstance.prototype, {
 		// month selection
 		var monthNames = this._get('monthNames');
 		if (secondary || !this._get('changeMonth')) {
-			html += monthNames[drawMonth] + '&nbsp;';
+			html += monthNames[drawMonth] + '&#xa0;';
 		}
 		else {
 			var inMinYear = (minDate && minDate.getFullYear() == drawYear);
@@ -1335,7 +1335,7 @@ function extendRemove(target, props) {
 		}
 	}
 	return target;
-}
+};
 
 /* Attach the date picker to a jQuery selection.
    @param  settings  object - the new settings to use for this date picker instance (anonymous)
