@@ -5,14 +5,14 @@
     this.each(function() {
 
       // Create element
-      var el = $(this);
+      var el = $(this), props = ['position'];
       
       // Set options
       var mode = o.options.mode || 'hide'; // Default Mode
       var direction = o.options.direction || 'vertical'; // Default direction
       
       // Adjust
-      el.show(); // Show
+      $.ec.save(el, props); el.show(); // Save & Show
       var wrapper = $.ec.createWrapper(el).css({overflow:'hidden'}); // Create Wrapper
       var ref = (direction == 'vertical') ? 'height' : 'width';
       var distance = (direction == 'vertical') ? wrapper.height() : wrapper.width();
@@ -25,7 +25,7 @@
       // Animate
       wrapper.animate(animation, o.speed, o.options.easing, function() {
         if(mode == 'hide') el.hide(); // Hide
-        $.ec.removeWrapper(el); // Restore
+        $.ec.restore(el, props); $.ec.removeWrapper(el); // Restore
         if(o.callback) o.callback.apply(this, arguments); // Callback
       });
       

@@ -8,13 +8,11 @@
         if(set[i] !== null) $.data(el[0], "ec.storage."+set[i], el.css(set[i]));  
       }
     },
-    restore: function(el, set, ret) {
-      if(ret) var obj = {};
+    restore: function(el, set) {
       for(var i=0;i<set.length;i++) {
-        if(ret) obj[set[i]] = $.data(el[0], "ec.storage."+set[i]);
-        if(set[i] !== null && !ret) el.css(set[i], $.data(el[0], "ec.storage."+set[i]));  
+       if (name == 'size') alert(set[i] + ' ' + $.data(el[0], "ec.storage."+set[i]))
+        if(set[i] !== null) el.css(set[i], $.data(el[0], "ec.storage."+set[i]));  
       }
-      if(ret) return obj;
     },
     findSides: function(el) { //Very nifty function (especially for IE!)
       return [ !!parseInt(el.css("left")) ? "left" : "right", !!parseInt(el.css("top")) ? "top" : "bottom" ];
@@ -112,7 +110,7 @@
     // New ec methods
     effect: function(fx,o,speed,callback) { 
       if($.ec[fx]) {
-        elem = this.get(0);
+        var elem = this.get(0);
         elem.fx = elem.fx || {};
         if (!elem.fx[fx]) { // Prevent double-click
           elem.fx[fx] = true;

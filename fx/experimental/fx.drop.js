@@ -20,8 +20,7 @@
       if (mode == 'show') el.css('opacity', 0).css(ref, motion == 'pos' ? -distance : distance); // Shift
       
       // Animation
-      var animation = {};
-      animation['opacity'] = mode == 'show' ? 1 : 0;
+      var animation = {opacity: mode == 'show' ? 1 : 0};
       animation[ref] = (mode == 'show' ? (motion == 'pos' ? '+=' : '-=') : (motion == 'pos' ? '-=' : '+=')) + distance;
       
       // Animate

@@ -29,8 +29,7 @@ body {
 .text {font-size: 12px;margin:5px 0;background:#f7f7f7;border:1px dotted #aaa;padding:4px;}
 #container {height:420px; width:510px; margin:0 auto;}
 #fx {width:500px;background:#efefef;border:5px solid #aaa; text-align:center;} 
-/* cheat */
-#fx img {padding:0 20px;}
+/* cheat */ #fx img {padding:0 20px;}
 </style>
 </head>
 <body>
@@ -59,7 +58,7 @@ body {
   <div>
     <a href="#" onClick="$('#fx').toggle({method: 'scale', scale: 'box', origin: ['top', 'left']});return false;">Scale 'box' mode</a>
     <a href="#" onClick="$('#fx').toggle({method: 'scale', scale: 'content', origin: ['top', 'left']});return false;">Scale 'content' mode</a>
-    <a href="#" onClick="$('#fx').toggle({method: 'scale', origin: ['top', 'left']});return false;">Scale 'both' mode</a>
+    <a href="#" onClick="$('#fx').toggle({method: 'scale', scale: 'none', origin: ['top', 'left']});return false;">Scale 'none' mode</a>
   </div>
   <div>
     <a href="#" onClick="$('#fx').hide({method: 'puff'});return false;">Puff Out</a>

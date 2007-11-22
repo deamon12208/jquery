@@ -5,14 +5,14 @@
     this.each(function() {
 
       // Create element
-      var el = $(this);
+      var el = $(this), props = ['position'];
       
       // Set options
       var mode = o.options.mode || 'hide'; // Default Mode
       var size = o.options.size || 15; // Default fold size
       
       // Adjust
-      el.show(); // Show
+      $.ec.save(el, props); el.show(); // Save & Show
       var wrapper = $.ec.createWrapper(el).css({overflow:'hidden'}); // Create Wrapper
       var ref = (mode == 'show') ? ['width', 'height'] : ['height', 'width'];
       var distance = (mode == 'show') ? [wrapper.width(), wrapper.height()] : [wrapper.height(), wrapper.width()];
@@ -27,7 +27,7 @@
       wrapper.animate(animation1, o.speed / 2, o.options.easing)
       .animate(animation2, o.speed / 2, o.options.easing, function() {
         if(mode == 'hide') el.hide(); // Hide
-        $.ec.removeWrapper(el); // Restore
+        $.ec.restore(el, props); $.ec.removeWrapper(el); // Restore
         if(o.callback) o.callback.apply(this, arguments); // Callback
       });
       

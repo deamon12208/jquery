@@ -2,70 +2,78 @@
   
   $.ec.puff = function(o) {
   
-    // Create element
-    var el = $(this);
-      
-    // Set options
-    var mode = o.options.mode || 'hide'; // Set default mode
-    var percent = parseInt(o.options.percent) || 150; // Set default puff percent
-    o.options.fade = true; // It's not a puff if it doesn't fade! :)
-    var original = {height: el.height(), width: el.width()}; // Save original
+     this.each(function() {
+  
+      // Create element
+      var el = $(this);
     
-    // Adjust
-    var factor = percent / 100;
-    el.from = (mode == 'hide') ? original : {height: original.height * factor, width: original.width * factor};
+      // Set options
+      var mode = o.options.mode || 'hide'; // Set default mode
+      var percent = parseInt(o.options.percent) || 150; // Set default puff percent
+      o.options.fade = true; // It's not a puff if it doesn't fade! :)
+      var original = {height: el.height(), width: el.width()}; // Save original
     
-    // Animation
-    o.options.from = el.from;
-    o.options.percent = (mode == 'hide') ? percent : 100;
+      // Adjust
+      var factor = percent / 100;
+      el.from = (mode == 'hide') ? original : {height: original.height * factor, width: original.width * factor};
     
-    // Animate
-    el.effect('scale', o.options, o.speed, o.callback);
+      // Animation
+      o.options.from = el.from;
+      o.options.percent = (mode == 'hide') ? percent : 100;
     
-  }  
+      // Animate
+      el.effect('scale', o.options, o.speed, o.callback);
+     
+    });
+    
+  }
 
   $.ec.scale = function(o) {
+    
+    this.each(function() {
+    
+      // Create element
+      var el = $(this);
 
-    // Create element
-    var el = $(this);
-
-    // Set options
-    var mode = o.options.mode || 'effect'; // Set default mode
-    var percent = parseInt(o.options.percent) || (mode == 'hide' ? 0 : 100); // Set default scaling percent
-    var axis = o.options.axis || 'both'; // Set default axis
-    var origin = o.options.origin // The origin of the scaling
-    if (mode != 'effect') { // Set default origin and restore for show/hide
-      origin = origin || ['middle','center'];
-      o.options.restore = true;
-    }
-    var original = {height: el.height(), width: el.width()}; // Save original
-    el.from = o.options.from || (mode == 'show' ? {height: 0, width: 0} : original); // Default from state
+      // Set options
+      var mode = o.options.mode || 'effect'; // Set default mode
+      var percent = parseInt(o.options.percent) || (parseInt(o.options.percent) == 0 ? 0 : (mode == 'hide' ? 0 : 100)); // Set default scaling percent
+      var direction = o.options.direction || 'both'; // Set default axis
+      var origin = o.options.origin // The origin of the scaling
+      if (mode != 'effect') { // Set default origin and restore for show/hide
+        origin = origin || ['middle','center'];
+        o.options.restore = true;
+      }
+      var original = {height: el.height(), width: el.width()}; // Save original
+      el.from = o.options.from || (mode == 'show' ? {height: 0, width: 0} : original); // Default from state
     
-    // Adjust
-    var factor = { // Set scaling factor
-      y: axis != 'horizontal' ? (percent / 100) : 1,
-      x: axis != 'vertical' ? (percent / 100) : 1
-    }
-    el.to = {height: original.height * factor.y, width: original.width * factor.x}; // Set to state
-    if (origin) { // Calculate baseline shifts
-      var baseline = $.ec.getBaseline(origin, original)
-      el.from.top = (original.height - el.from.height) * baseline.y;
-      el.from.left = (original.width - el.from.width) * baseline.x;
-      el.to.top = (original.height - el.to.height) * baseline.y;
-      el.to.left = (original.width - el.to.width) * baseline.x;
-    };
-    if (o.options.fade) { // Fade option to support puff
-      if (mode == 'show') {el.from.opacity = 0; el.to.opacity = 1;};
-      if (mode == 'hide') {el.from.opacity = 1; el.to.opacity = 0;};
-    };
+      // Adjust
+      var factor = { // Set scaling factor
+        y: direction != 'horizontal' ? (percent / 100) : 1,
+        x: direction != 'vertical' ? (percent / 100) : 1
+      }
+      el.to = {height: original.height * factor.y, width: original.width * factor.x}; // Set to state
+      if (origin) { // Calculate baseline shifts
+        var baseline = $.ec.getBaseline(origin, original)
+        el.from.top = (original.height - el.from.height) * baseline.y;
+        el.from.left = (original.width - el.from.width) * baseline.x;
+        el.to.top = (original.height - el.to.height) * baseline.y;
+        el.to.left = (original.width - el.to.width) * baseline.x;
+      };
+      if (o.options.fade) { // Fade option to support puff
+        if (mode == 'show') {el.from.opacity = 0; el.to.opacity = 1;};
+        if (mode == 'hide') {el.from.opacity = 1; el.to.opacity = 0;};
+      };
     
-    // Animation
-    o.options.from = el.from; o.options.to = el.to;
+      // Animation
+      o.options.from = el.from; o.options.to = el.to;
     
-    // Animate
-    el.effect('size', o.options, o.speed, o.callback);
+      // Animate
+      el.effect('size', o.options, o.speed, o.callback);
+      
+    });
     
-  };
+  }
   
   $.ec.size = function(o) {
 
@@ -91,7 +99,7 @@
         from: {y: el.from.height / original.height, x: el.from.width / original.width},
         to: {y: el.to.height / original.height, x: el.to.width / original.width}
       };
-      if (scale != 'content') { // Scale the css box
+      if (scale == 'box' || scale == 'both') { // Scale the css box
         if (factor.from.y != factor.to.y) { // Vertical props scaling
           props = props.concat(vProps);
           el.from = $.ec.setTransition(el, vProps, factor.from.y, el.from);
@@ -103,7 +111,7 @@
           el.to = $.ec.setTransition(el, hProps, factor.to.x, el.to);
         };
       };
-      if (scale != 'box') { // Scale the content
+      if (scale == 'content' || scale == 'both') { // Scale the content
         if (factor.from.y != factor.to.y) { // Vertical props scaling
           props = props.concat(cProps);
           el.from = $.ec.setTransition(el, cProps, factor.from.y, el.from);
@@ -115,14 +123,15 @@
       el.css('overflow','hidden').css(el.from); // Shift
       
       // Animate
-      if (scale != 'box') { // Scale the children
+      if (scale == 'content' || scale == 'both') { // Scale the children
         vProps = vProps.concat(cProps);
         props2 = props.concat(vProps).concat(hProps);
         el.find("*[width]").each(function(){
           child = $(this);
           if (restore) $.ec.save(child, props2);
-          child.from = {height: child.height() * factor.from.y, width: child.width() * factor.from.x};
-          child.to = {height: child.height() * factor.to.y, width: child.width() * factor.to.x};
+          var c_original = {height: child.height(), width: child.width()}; // Save original
+          child.from = {height: c_original.height * factor.from.y, width: c_original.width * factor.from.x};
+          child.to = {height: c_original.height * factor.to.y, width: c_original.width * factor.to.x};
           if (factor.from.y != factor.to.y) { // Vertical props scaling
             child.from = $.ec.setTransition(child, vProps, factor.from.y, child.from);
             child.to = $.ec.setTransition(child, vProps, factor.to.y, child.to);
@@ -131,9 +140,9 @@
             child.from = $.ec.setTransition(child, hProps, factor.from.x, child.from);
             child.to = $.ec.setTransition(child, hProps, factor.to.x, child.to);
           };
-          child.css(child.from); // Adjust children
+          child.css(child.from); // Shift children
           child.animate(child.to, o.speed, o.options.easing, function(){
-            if (restore) $.ec.restore(child, props2);
+            if (restore) $.ec.restore(child, props2); // Restore children
           }); // Animate children
         });
       };
@@ -146,7 +155,7 @@
       }); 
       
     });
-    
+
   }
   
 })(jQuery);
