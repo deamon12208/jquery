@@ -376,7 +376,6 @@
 			}
 			
 			function isValueInArray(v, a) {
-				if(!a) return false;
 				var l = a.length;
 				for(var i=0; i < l; i++) {
 					if(a[i][0] == v) {
@@ -426,17 +425,7 @@
 			/* sorting methods */
 			function multisort(table,sortList,cache) {
 				
-				var c = table.config;
-				
-				if(c.debug) { var sortTime = new Date(); }
-				
-				// merge sort force
-				if(c.sortForce) {
-					var a = c.sortForce[0];
-					for(var i=0; i < a.length; i++) {
-						sortList.unshift(a[i]);
-					}	
-				}
+				if(table.config.debug) { var sortTime = new Date(); }
 				
 				var dynamicExp = "var sortWrapper = function(a,b) {", l = sortList.length;
 					
@@ -468,7 +457,7 @@
 				
 				cache.normalized.sort(sortWrapper);
 				
-				if(c) { benchmark("Sorting on " + sortList.toString() + " and dir " + order+ " time:", sortTime); }
+				if(table.config.debug) { benchmark("Sorting on " + sortList.toString() + " and dir " + order+ " time:", sortTime); }
 				
 				return cache;
 			};
@@ -529,6 +518,7 @@
 					// this is to big, perhaps break it out?
 					$headers.click(function(e) {
 						
+						
 						var totalRows = ($this[0].tBodies[0] && $this[0].tBodies[0].rows.length) || 0;
 					
 						if(!this.sortDisabled && totalRows > 0) {
@@ -543,6 +533,16 @@
 							
 							// user only whants to sort on one column
 							if(!e[config.sortMultiSortKey]) {
+								
+								// flush the sort list
+								config.sortList = [];
+								
+								if(config.sortForce != null) {
+									var a = config.sortForce; 
+									for(var j=0; j < a.length; j++) { 	
+										config.sortList.push(a[j]);	
+									}
+								}
 								
 								// add column to sort list
 								config.sortList.push([i,this.order]);
@@ -594,7 +594,7 @@
 						cache = buildCache(this);
 						
 					}).bind("sorton",function(e,list) {
-						
+					
 						config.sortList = list;
 						
 						// update and store the sortlist
