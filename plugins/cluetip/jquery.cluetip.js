@@ -105,7 +105,7 @@
     }
     var opts = $.extend({},$.fn.cluetip.defaults, options);
     
-    return this.each(function() {
+    return this.each(function(index) {
       // start out with no contents (for ajax activation)
       var cluetipContents = false;
       var cluezIndex = parseInt(opts.cluezIndex, 10)-1;
@@ -133,7 +133,7 @@
         $dropShadow.css({position: 'absolute', backgroundColor: '#000'})
         .prependTo($cluetip);
       }
-      var $this = $(this);      
+      var $this = $(this);
       var tipAttribute = $this.attr(opts.attribute), ctClass = opts.cluetipClass;
       if (!tipAttribute && !opts.splitTitle) return true;
       // if hideLocal is set to true, on DOM ready hide the local content that will be displayed in the clueTip
@@ -329,7 +329,7 @@
         posX < linkLeft ? direction = 'left' : direction = 'right';
       }
       $cluetip.css({top: tipY + 'px'}).removeClass().addClass('clue-' + direction + '-' + ctClass).addClass(' cluetip-' + ctClass);
-      if (opts.arrows) { // set up background positioning to align with element
+      if (opts.arrows) { // set up arrow positioning to align with element
         var bgY = (posY - tipY - opts.dropShadowSteps);
         $cluetipArrows.css({top: (/(left|right)/.test(direction) && posX >=0 && bgY > 0) ? bgY + 'px' : /(left|right)/.test(direction) ? 0 : ''}).show();
       } else {
@@ -340,7 +340,8 @@
       $dropShadow.hide();
       $cluetip.hide()[opts.fx.open](opts.fx.open != 'show' && opts.fx.openSpeed);
       if (opts.dropShadow) $dropShadow.css({height: tipHeight, width: opts.width}).show();
-      // trigger the optional onShow function
+      if ($.fn.bgiframe) { $cluetip.bgiframe(); }
+      // trigger the optional onShow function      
       opts.onShow($cluetip, $cluetipInner);
     };
 
@@ -350,7 +351,7 @@
     var inactivate = function() {
       isActive = false;
       $('#cluetip-waitimage').hide();
-      if (!opts.sticky) {
+      if (!opts.sticky || (/click|toggle/).test(opts.activation) ) {
         cluetipClose();
       };
       if (opts.hoverClass) {
@@ -374,9 +375,13 @@
 -------------------------------------- */
   // activate by click
       if (opts.activation == 'click'||opts.activation == 'toggle') {
+
         $this.click(function(event) {
-          if ($cluetip.is(':hidden')) {
+          if ($cluetip.is(':hidden') || !$(this).is('.cluetip-clicked')) {
             activate(event);
+            $('.cluetip-clicked').removeClass('cluetip-clicked');
+            $this.addClass('cluetip-clicked');
+
           } else {
             inactivate(event);
           }

@@ -1,7 +1,10 @@
+
+/* the next line is an example of how you can override default options (currently commented out) ... */
+// $.fn.cluetip.defaults.activation = 'click';
+
 $(document).ready(function() {
 
  // $.cluetip.setup({insertionType: 'insertBefore', insertionElement: 'div:first'});
-
 //default theme
   $('a.title').cluetip({splitTitle: '|'});
   $('a.basic').cluetip();
@@ -15,7 +18,7 @@ $(document).ready(function() {
     closeText: '<img src="cross.png" alt="close" width="16" height="16" />',
     truncate: 60
   });
-  $('a.load-local').cluetip({local:true, sticky: true, cursor: 'pointer'});
+  $('a.load-local').cluetip({local:true, arrows: true, cursor: 'pointer'});
   $('#clickme').cluetip({activation: 'click', width: 650});
 
 // jTip theme
