@@ -786,7 +786,12 @@ jQuery.Autocompleter.Select = function (options, input, select, config) {
 					listItems.each(function() {
 						listHeight += this.offsetHeight;
 					});
-                    list.css('height', listHeight < options.scrollHeight ? listHeight : options.scrollHeight);                    
+					var scrollbarsVisible = listHeight > options.scrollHeight;
+                    list.css('height', scrollbarsVisible ? options.scrollHeight : listHeight );
+					if (!scrollbarsVisible) {
+						// IE doesn't recalculate width when scrollbar disappears
+						listItems.width( list.width() - parseInt(listItems.css("padding-left")) - parseInt(listItems.css("padding-right")) );
+					}
                 }
                 
             }
