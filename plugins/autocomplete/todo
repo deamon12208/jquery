@@ -1,6 +1,7 @@
 
 TODO
 
+- json support: An optional JSON format, that assumes a certain JSON format as default and just looks for a dataType "json" to be activated; [records], where each record is { id:String, label:String, moreOptionalValues... } 
 - accept callback as first argument to let users implement their own dynamic data (no caching) - consider async API
 - replace moreItems indicator with decent scrolling, indicating more available items with a long scrollable list
 - allow users to keep their incomplete value when pressing tab, just mimic the default-browser-autocomplete: tab doesn't select any proposed value -> tab closes the select and works normal otherwise

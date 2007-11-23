@@ -3,13 +3,16 @@
 <head>
 
 <title>jQuery Autocomplete Plugin</title>
-<script type="text/javascript" src="jquery.js"></script>
-<script type='text/javascript' src='jquery.bgiframe.min.js'></script>
-<script type='text/javascript' src='jquery.ajaxQueue.js'></script>
+<script type="text/javascript" src="lib/jquery.js"></script>
+<script type='text/javascript' src='lib/jquery.bgiframe.min.js'></script>
+<script type='text/javascript' src='lib/jquery.dimensions.js'></script>
+<script type='text/javascript' src='lib/jquery.ajaxQueue.js'></script>
+<script type='text/javascript' src='lib/thickbox-compressed.js'></script>
 <script type='text/javascript' src='jquery.autocomplete.js'></script>
 <script type='text/javascript' src='localdata.js'></script>
 <link rel="stylesheet" type="text/css" href="main.css" />
 <link rel="stylesheet" type="text/css" href="jquery.autocomplete.css" />
+<link rel="stylesheet" type="text/css" href="lib/thickbox.css" />
 	
 <script type="text/javascript">
 $().ready(function() {
@@ -26,12 +29,13 @@ $().ready(function() {
 	}
 	
 	$("#suggest1").autocomplete(cities);
-	$("#suggest12").autocomplete(months, {
+	$("#month").autocomplete(months, {
 		minChars: 0,
 		max: 12,
 		autoFill: true,
 		mustMatch: true,
 		matchContains: false,
+		scrollHeight: 220,
 		formatItem: function(data, i, total) {
 			// don't show the current month in the list of values (for whatever reason)
 			if ( data == months[new Date().getMonth()] ) 
@@ -51,7 +55,7 @@ $().ready(function() {
 			return row.to;
 		}
 	});
-	$("#suggest2").autocomplete("search.php", {
+	$("#singleBirdRemote").autocomplete("search.php", {
 		delay: 150,
 		width: "260px",
 		formatItem: formatItem,
@@ -78,11 +82,13 @@ $().ready(function() {
 			}
 		}
 	});
-	$("#suggest5").autocomplete("images.php", {
+	$("#imageSearch").autocomplete("images.php", {
 		delay: 150,
 		width: 320,
 		max: 4,
 		highlight: false,
+		scroll: true,
+		scrollHeight: 300,
 		formatItem: function(data, i, n, value) {
 			return "<img src='images/" + value + "'/> " + value.split(".")[0];
 		},
@@ -94,17 +100,52 @@ $().ready(function() {
 	$(":text, textarea").result(findValueCallback).next().click(function() {
 		$(this).prev().search();
 	});
-	$("#suggest2").result(function(event, data, formatted) {
-		$(this).parent().next().find(">input").val(data[1]);
+	$("#singleBirdRemote").result(function(event, data, formatted) {
+		if (data)
+			$(this).parent().next().find("input").val(data[1]);
 	});
 	$("#suggest4").result(function(event, data, formatted) {
 		var hidden = $(this).parent().next().find(">:input");
 		hidden.val( (hidden.val() ? hidden.val() + ";" : hidden.val()) + data[1]);
 	});
+    $("#suggest15").autocomplete(cities, { scroll: true } );
+	$("#scrollChange").click(changeScrollHeight);
+	
+	$("#thickboxEmail").autocomplete(emails, {
+		minChars: 0,
+		width: 310,
+		matchContains: true,
+		highlightItem: false,
+		domElement: '#modalWindow',
+		formatItem: function(row, i, max, term) {
+			return row.name.replace(new RegExp("(" + term + ")", "gi"), "<strong>$1</strong>") + "<br><span style='font-size: 80%;'>Email: &lt;" + row.to + "&gt;</span>";
+		},
+		formatResult: function(row) {
+			return row.to;
+		}
+	});
+	
+	$("#clear").click(function() {
+		$(":input").unautocomplete();
+	});
 });
 
 function changeOptions(){
-	$("#suggest1").setOptions({max: 5});
+	var max = parseInt(window.prompt('Please type number of items to display:', jQuery.Autocompleter.defaults.max));
+	if (max > 0) {
+		$("#suggest1").setOptions({
+			max: max
+		});
+	}
+}
+
+function changeScrollHeight() {
+    var h = parseInt(window.prompt('Please type new scroll height (number in pixels):', jQuery.Autocompleter.defaults.scrollHeight));
+    if(h > 0) {
+        $("#suggest15").setOptions({
+			scrollHeight: h
+		});
+    }
 }
 
 function changeToMonths(){
@@ -128,7 +169,7 @@ function changeToMonths(){
 
 <div id="content">
 	
-	<form>
+	<form autocomplete="off">
 		<p>
 			<label>Single City (local):</label>
 			<input type="text" id="suggest1" />
@@ -138,7 +179,7 @@ function changeToMonths(){
 		</p>
 		<p>
 			<label>Month (local):</label>
-			<input type="text" id="suggest12" />
+			<input type="text" id="month" />
 			<input type="button" value="Get Value" />
 			(Current month is excluded from list)
 		</p>
@@ -149,7 +190,7 @@ function changeToMonths(){
 		</p>
 		<p>
 			<label>Single Bird (remote):</label>
-			<input type="text" id="suggest2" />
+			<input type="text" id="singleBirdRemote" />
 			<input type="button" value="Get Value" />
 		</p>
 		<p>
@@ -175,10 +216,16 @@ function changeToMonths(){
 			<label>Hidden input</label>
 			<textarea></textarea>
 		</p>
-		<p>
+        <p>
 			<label>Image search (remote):</label>
-			<input type="text" id='suggest5' />
+			<input type="text" id='imageSearch' />
 			<input type="button" value="Get Value" />
+		</p>
+        <p>
+			<label>Single City with scroll (local):</label>
+			<input type="text" id="suggest15" />
+			<input type="button" value="Get Value" />
+			<input type="button" value="Change scroll height" id="scrollChange" />
 		</p>
 		<p>
 			<label>Some dropdown (&lt;3 IE):</label>
@@ -190,6 +237,20 @@ function changeToMonths(){
 			</select>
 		</p>
 	</form>
+	
+	<p>
+		<a href="#TB_inline?height=155&width=400&inlineId=modalWindow" class="thickbox">Click here for an autocomplete inside a thickbox window.</a> (this should work even if it is beyond the fold)
+	</p>		
+	
+	<div id="modalWindow" style="display: none;">
+                <p>
+                        <label>E-Mail (local):</label>
+                        <input type="text" id="thickboxEmail" />
+                        <input type="button" value="Get Value" />
+                </p>
+		</div>
+		
+	<button id="clear">Remove all autocompletes</button>
 	
 	<h3>Result:</h3> <ol id="result"></ol>
 
