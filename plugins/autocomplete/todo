@@ -3,11 +3,10 @@ TODO
 
 - json support: An optional JSON format, that assumes a certain JSON format as default and just looks for a dataType "json" to be activated; [records], where each record is { id:String, label:String, moreOptionalValues... } 
 - accept callback as first argument to let users implement their own dynamic data (no caching) - consider async API
-- replace moreItems indicator with decent scrolling, indicating more available items with a long scrollable list
 - allow users to keep their incomplete value when pressing tab, just mimic the default-browser-autocomplete: tab doesn't select any proposed value -> tab closes the select and works normal otherwise
 - small bug in your autocomplete,  When setting autoFill:true I would expect formatResult to be called on autofill, it seems not to be the case.
 - add a callback to allow decoding the response
-- add scrollbars and page down/up, option for height or number of items to be visible without scrolling
+- add scrollbars and page down/up
 - allow modification of not-last value in multiple-fields
 @option Number size Limit the number of items to show at once. Default: 
 @option Function parse - TEST AND DOCUMENT ME
