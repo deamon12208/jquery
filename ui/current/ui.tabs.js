@@ -128,16 +128,16 @@
 
             this.$tabs = $('a:first-child', this.source);
             this.$panels = $([]);
-
+            
             var self = this, o = this.options;
             
             this.$tabs.each(function(i, a) {
                 // inline tab
-                if (a.hash && a.hash.replace('#', '')) { // safari 2 reports '#' for an empty hash
+                if (a.hash && a.hash.replace('#', '')) { // Safari 2 reports '#' for an empty hash
                     self.$panels = self.$panels.add(a.hash);
                 }
                 // remote tab
-                else {
+                else if ($(a).attr('href') != '#') { // prevent loading the page itself if href is just "#"
                     $.data(a, 'href', a.href);
                     var id = self.tabId(a, i);
                     a.href = '#' + id;
@@ -146,15 +146,32 @@
                             .insertAfter( self.$panels[i - 1] || self.source )
                     );
                 }
+                // invalid tab href
+                else {
+                    o.disabled.push(i + 1);
+                }
             });
 
             if (init) {
 
+                // attach necessary classes for styling if not present
+                $(this.source).is('.' + o.navClass) || $(this.source).addClass(o.navClass);
+                this.$panels.each(function() {
+                    var $this = $(this);
+                    $this.is('.' + o.panelClass) || $this.addClass(o.panelClass);
+                });
+                
+                // disabled tabs
+                for (var i = 0, position; position = o.disabled[i]; i++) {
+                    this.disable(position);
+                }
+                
                 // Try to retrieve initial tab:
                 // 1. from fragment identifier in url if present
                 // 2. from cookie
                 // 3. from selected class attribute on <li>
                 // 4. otherwise use given initial argument
+                // 5. check if tab is disabled
                 this.$tabs.each(function(i, a) {
                     if (location.hash) {
                         if (a.hash == location.hash) {
@@ -179,16 +196,16 @@
                         return false; // break
                     }
                 });
+                var n = this.$tabs.length;
+                while ( this.$tabs.eq(o.initial).parent('li').is('.' + o.disabledClass) && n) {
+                    o.initial++, n--;
+                }
+                if (!n) { // all tabs disabled, set option unselected to true
+                    o.unselected = o.unselect = true;
+                }
 
-                // attach necessary classes for styling if not present
-                $(this.source).is('.' + o.navClass) || $(this.source).addClass(o.navClass);
-                this.$panels.each(function() {
-                    var $this = $(this);
-                    $this.is('.' + o.panelClass) || $this.addClass(o.panelClass);
-                });
-
-                // highlight tab
-                var $lis = $('li', this.source);
+                // highlight selected tab
+                var $lis = this.$tabs.parent('li');
                 this.$panels.addClass(o.hideClass);
                 $lis.removeClass(o.selectedClass);
                 if (!o.unselected) {
@@ -200,11 +217,6 @@
                 var href = this.$tabs[o.initial] && $.data(this.$tabs[o.initial], 'href');
                 if (href) {
                     this.load(o.initial + 1, href);
-                }
-
-                // disabled tabs
-                for (var i = 0, position; position = o.disabled[i]; i++) {
-                    this.disable(position);
                 }
 
             }
@@ -412,9 +424,7 @@
                 if ($li.is('.' + o.selectedClass) && this.$tabs.length > 1) {
                     this.click(position + (position < this.$tabs.length ? 1 : -1));
                 }
-                
                 this.tabify();
-                
                 o.remove($li.end()[0], $panel[0]); // callback
             }
         },
