@@ -46,6 +46,7 @@ test("email", function() {
 	ok( method( "n@d.tld" ), "Valid email" );
 	ok( method( "ole@føtex.dk"), "Valid email" );
 	ok( method( "jörn@bassistance.de"), "Valid email" );
+	ok (method( "bla.blu@g.mail.com"), "Valid email" );
 	ok(!method( "name" ), "Invalid email" );
 	ok(!method( "name@" ), "Invalid email" );
 	ok(!method( "name@domain" ), "Invalid email" );
