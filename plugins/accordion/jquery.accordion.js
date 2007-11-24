@@ -202,7 +202,7 @@ $.fn.extend({
 			active = clickedActive ? $([]) : clicked;
 			toggle( toShow, toHide, data, clickedActive, down );
 
-			return !toShow.length;
+			return false;
 		};
 		function activateHandler(event, index) {
 			// IE manages to call activateHandler on normal clicks

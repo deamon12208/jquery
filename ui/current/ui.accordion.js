@@ -1,18 +1,3 @@
-/*
- * Accordion 1.5 - jQuery menu widget
- *
- * Copyright (c) 2007 Jörn Zaefferer, Frank Marcia
- *
- * http://bassistance.de/jquery-plugins/jquery-plugin-accordion/
- *
- * Dual licensed under the MIT and GPL licenses:
- *   http://www.opensource.org/licenses/mit-license.php
- *   http://www.gnu.org/licenses/gpl.html
- *
- * Revision: $Id$
- *
- */
-
 (function($) {
 
 $.ui = $.ui || {};
@@ -166,7 +151,7 @@ $.fn.extend({
 		function clickHandler(event) {
 			// called only when using activate(false) to close all parts programmatically
 			if ( !event.target && !settings.alwaysOpen ) {
-				active.toggleClass(settings.selectedClass);
+				active.parent().andSelf().toggleClass(settings.selectedClass);
 				var toHide = active.next();
 				var toShow = active = $([]);
 				toggle( toShow, toHide );
@@ -202,7 +187,7 @@ $.fn.extend({
 			active = clickedActive ? $([]) : clicked;
 			toggle( toShow, toHide, data, clickedActive, down );
 
-			return !toShow.length;
+			return false;
 		};
 		function activateHandler(event, index) {
 			// IE manages to call activateHandler on normal clicks
