@@ -149,7 +149,7 @@ $.fn.extend({
 			url: isUrl ? urlOrData : null,
 			data: isUrl ? null : urlOrData,
 			delay: isUrl ? $.Autocompleter.defaults.delay : 10,
-			max: options && !options.scroll ? 10 : 100
+			max: options && !options.scroll ? 10 : 150
 		}, options);
 		
 		// if highlight is set to false, replace it with a do-nothing function
@@ -499,7 +499,7 @@ $.Autocompleter.defaults = {
 	mustMatch: false,
 	extraParams: {},
 	selectFirst: true,
-	formatItem: function(value) { return value; },
+	formatItem: function(row) { return row[0]; },
 	//moreItems: "&#x25be;&#x25be;&#x25be; more &#x25be;&#x25be;&#x25be;",
 	moreItems: "",
 	autoFill: false,
@@ -552,7 +552,8 @@ $.Autocompleter.Cache = function(options) {
 		// loop through the array and create a lookup structure
 		for ( var i = 0, ol = options.data.length; i < ol; i++ ) {
 			var rawValue = options.data[i];
-			// if row is a string, make an array otherwise just reference the array
+			// if rawValue is a string, make an array otherwise just reference the array
+			rawValue = (typeof rawValue == "string") ? [rawValue] : rawValue;
 			
 			var value = options.formatItem(rawValue, i+1, options.data.length);
 			if ( value === false )
