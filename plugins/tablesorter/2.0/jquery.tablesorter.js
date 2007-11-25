@@ -487,13 +487,13 @@
 
 				return this.each(function() {
 					
+					if(!this.tHead || !this.tBodies) return;
+					
 					var $this, $document,$headers, cache, config, shiftDown = 0, sortOrder;
 					
 					this.config = {};
 					
 					config = $.extend(this.config, $.tablesorter.defaults, settings);
-					
-					if(!this.tHead || !this.tBodies) return true;
 					
 					// store common expression for speed					
 					$this = $(this);
@@ -518,9 +518,8 @@
 					// this is to big, perhaps break it out?
 					$headers.click(function(e) {
 						
-						
 						var totalRows = ($this[0].tBodies[0] && $this[0].tBodies[0].rows.length) || 0;
-					
+						
 						if(!this.sortDisabled && totalRows > 0) {
 							// store exp, for speed
 							var $cell = $(this);
