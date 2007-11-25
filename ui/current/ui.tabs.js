@@ -215,7 +215,7 @@
                 }
 
                 // load if remote tab
-                var href = this.$tabs[o.initial] && $.data(this.$tabs[o.initial], 'href');
+                var href = !o.unselected && $.data(this.$tabs[o.initial], 'href');
                 if (href) {
                     this.load(o.initial + 1, href);
                 }
@@ -324,9 +324,17 @@
                         this.blur();
                         return false;
                     } else if (!$hide.length) {
-                        $li.addClass(o.selectedClass).addClass(o.unselectClass);
                         self.$panels.stop();
-                        showTab(this, $show);
+                        if ($.data(this, 'href')) { // remote tab
+                            var a = this;
+                            self.load(self.$tabs.index(this) + 1, $.data(this, 'href'), function() {
+                                $li.addClass(o.selectedClass).addClass(o.unselectClass);
+                                showTab(a, $show);
+                            });
+                        } else {
+                            $li.addClass(o.selectedClass).addClass(o.unselectClass);
+                            showTab(this, $show);
+                        }
                         this.blur();
                         return false;
                     }
