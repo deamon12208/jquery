@@ -66,6 +66,7 @@
             spinner: 'Loading&#8230;',
             cache: false,
             idPrefix: 'tab-',
+            ajaxOptions: {},
 
             // animations
             /*fxFade: null,
@@ -449,9 +450,8 @@
         },
         load: function(position, url, callback) {
             var self = this, o = this.options,
-                $a = this.$tabs.slice(position - 1, position).addClass(o.loadingClass), a = $a[0];
-                $span = $('span', a), text = $span.html();
-
+                $a = this.$tabs.slice(position - 1, position), a = $a[0], $span = $('span', a);
+            
             // shift arguments
             if (url && url.constructor == Function) {
                 callback = url;
@@ -467,16 +467,25 @@
 
             // load
             if (o.spinner) {
+                $.data(a, 'title', $span.html());
                 $span.html('<em>' + o.spinner + '</em>');
             }
-            setTimeout(function() { // timeout is again required in IE, "wait" for id being restored
-                $(a.hash).load(url, function() {
+            var finish = function() {
+                self.$tabs.filter('.' + o.loadingClass).each(function() {
+                    $(this).removeClass(o.loadingClass);
                     if (o.spinner) {
-                        $span.html(text);
+                        $('span', this).html( $.data(this, 'title') );
                     }
-                    $a.removeClass(o.loadingClass);
-                    // This callback is required because the switch has to take place after loading
-                    // has completed.
+                });
+                self.xhr = null;
+            };
+            var ajaxOptions = $.extend(o.ajaxOptions, {
+                url: url,
+                success: function(r) {
+                    $(a.hash).html(r);
+                    finish();
+                    // This callback is required because the switch has to take 
+                    // place after loading has completed.
                     if (callback && callback.constructor == Function) {
                         callback();
                     }
@@ -484,8 +493,18 @@
                         $.removeData(a, 'href'); // if loaded once do not load them again
                     }
                     o.load(self.$tabs[position - 1], self.$panels[position - 1]); // callback
-                });
+                }
+            });
+            if (this.xhr) {
+                // terminate pending requests from other tabs and restore title
+                this.xhr.abort();
+                finish();
+            }
+            $a.addClass(o.loadingClass);
+            setTimeout(function() { // timeout is again required in IE, "wait" for id being restored
+                self.xhr = $.ajax(ajaxOptions);
             }, 0);
+            
         },
         href: function(position, href) {
             $.data(this.$tabs.slice(position - 1, position)[0], 'href', href);
