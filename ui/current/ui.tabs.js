@@ -199,7 +199,8 @@
                 });
                 var n = this.$tabs.length;
                 while ( this.$tabs.eq(o.initial).parent('li').is('.' + o.disabledClass) && n) {
-                    o.initial++, n--;
+                    o.initial = ++o.initial < this.$tabs.length ? o.initial : 0;
+                    n--;
                 }
                 if (!n) { // all tabs disabled, set option unselected to true
                     o.unselected = o.unselect = true;
