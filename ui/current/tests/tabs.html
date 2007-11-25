@@ -8,10 +8,6 @@
 
         <title>jQuery UI Tabs</title>
         
-        <link rel="stylesheet" href="../../../themes/flora/flora.tabs.css" type="text/css" media="print, projection, screen" title="Flora">
-        <link rel="alternate stylesheet" href="../../../themes/light/light.tabs.css" type="text/css" media="print, projection, screen" title="Light">
-        <link rel="alternate stylesheet" href="../../../themes/dark/dark.tabs.css" type="text/css" media="print, projection, screen" title="Dark">
-        
         <script type="text/javascript" src="../../../jquery/src/core.js"></script>
         <script type="text/javascript" src="../../../jquery/src/selector.js"></script>
         <script type="text/javascript" src="../../../jquery/src/event.js"></script>
@@ -20,8 +16,14 @@
 		<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
 		<script type="text/javascript" src="../../../plugins/cookie/jquery.cookie.js"></script>
         <script type="text/javascript" src="../ui.tabs.js"></script>
+
         <script type="text/javascript">
+            var theme = location.search && location.search.split('=')[1] || 'flora';
+            document.write('<link rel="stylesheet" href="../../../themes/' + theme + '/' + theme + '.tabs.css" type="text/css" media="print, projection, screen">');
+            
             $(function() {
+                $(document.body).addClass(theme);
+
                 $('#container-1 ul').tabs();
                 $('#container-2 ul').tabs(2);
                 $('#container-3 ul').tabs({ cookie: { expires: 365 }, fxSlide: true });
@@ -41,7 +43,7 @@
                     }
                 });
                 $('#container-7 ul').tabs({ fxShow: { height: 'show', opacity: 'show' }, fxSpeed: 'normal' });
-                $('#container-8 ul').tabs({ cache: false });
+                $('#container-8 ul').tabs({ cache: true, unselected: false });
                 $('#container-9 ul').tabs({ disabled: [3] });
                 $('<p><a href="#">Remove tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
                     $('#container-9 ul').tabsRemove(4);
@@ -96,7 +98,7 @@
             }
         </style>
     </head>
-    <body class="flora">
+    <body>
         <h1><a href="http://ui.jquery.com">jQuery UI</a> Tabs</h1>
 
         <h2>Simple Tabs</h2>
