@@ -1,10 +1,11 @@
 
-/* the next line is an example of how you can override default options (currently commented out) ... */
-// $.fn.cluetip.defaults.activation = 'click';
+/* the next line is an example of how you can override default options globally (currently commented out) ... */
+ // $.fn.cluetip.defaults.sticky = true;
 
 $(document).ready(function() {
 
  // $.cluetip.setup({insertionType: 'insertBefore', insertionElement: 'div:first'});
+ 
 //default theme
   $('a.title').cluetip({splitTitle: '|'});
   $('a.basic').cluetip();
