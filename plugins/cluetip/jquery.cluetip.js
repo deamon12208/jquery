@@ -1,6 +1,6 @@
 /*
  * jQuery clueTip plugin
- * Version 0.9.3  (11/23/2007)
+ * Version 0.9.3.1  (11/25/2007)
  * @requires jQuery v1.1.1+
  * @requires Dimensions plugin 
  *
@@ -61,20 +61,23 @@
 
   var $cluetip, $cluetipInner, $cluetipOuter, $cluetipTitle, $cluetipArrows, $dropShadow, imgCount;
   $.fn.cluetip = function(options) {
-    
+
+    var opts = $.extend({},$.fn.cluetip.defaults, options);
+
     if (options && options.ajaxSettings) {
-      $.extend(defaults.ajaxSettings, options.ajaxSettings);
+      $.extend(opts.ajaxSettings, options.ajaxSettings);
       delete options.ajaxSettings;
     }
+    
+    if (options && options.hoverIntent) {
+      $.extend(opts.hoverIntent, options.hoverIntent);
+      delete options.hoverIntent;
+    }    
+
     if (options && options.fx) {
-      $.extend(defaults.fx, options.fx);
+      $.extend(opts.fx, options.fx);
       delete options.fx;
     }
-    if (options && options.hoverIntent) {
-      $.extend(defaults.hoverIntent, options.hoverIntent);
-      delete options.hoverIntent;
-    }
-    var opts = $.extend({},$.fn.cluetip.defaults, options);
     
     return this.each(function(index) {
       // start out with no contents (for ajax activation)
@@ -207,7 +210,7 @@
             $cluetipOuter.children().empty();
             if (opts.waitImage) {
               $('#cluetip-waitimage')
-              .css({top: mouseY+10, left: mouseX})
+              .css({top: mouseY+20, left: mouseX})
               .show();
             }
           };
@@ -364,7 +367,7 @@
     // clicking is returned false if cluetip url is same as href url
       } else {
         $this.click(function() {
-          if (tipAttribute == $this.attr('href')) {
+          if ($this.attr('href') && $this.attr('href') == tipAttribute) {
             return false;
           }
         });
@@ -443,7 +446,7 @@
     sticky:           false,    // keep visible until manually closed
     mouseOutClose:    false,    // close when clueTip is moused out
     activation:       'hover',  // set to 'click' to force user to click to show clueTip
-    tracking:         false,    // if true, and positionBy is 'mouse', clueTip will track mouse movement
+    tracking:         false,    // if true, clueTip will track mouse movement
     closePosition:    'top',    // location of close text for sticky cluetips; can be 'top' or 'bottom' or 'title'
     closeText:        'Close',  // text (or HTML) to to be clicked to close sticky clueTips
     truncate:         0,        // number of characters to truncate clueTip's contents. if 0, no truncation occurs
@@ -482,6 +485,7 @@
     }
   };
   
+
 /*
  * Global defaults for clueTips. Apply to all calls to the clueTip plugin.
  *
