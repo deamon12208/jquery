@@ -363,6 +363,14 @@
           this.blur();
           return false;
         });
+  // activate by focus; inactivate by blur    
+      } else if (opts.activation == 'focus') {
+        $this.focus(function(event) {
+          activate(event);
+        });
+        $this.blur(function(event) {
+          inactivate(event);
+        });
   // activate by hover
     // clicking is returned false if cluetip url is same as href url
       } else {
@@ -394,7 +402,7 @@
             activate(event);
             var trackX = posX - event.pageX;
             var trackY = tipY ? tipY - event.pageY : posY - event.pageY;
-            if (opts.positionBy == 'mouse') {
+            if (opts.tracking == true) {
               $this.mousemove(function(event) {
                 $cluetip.css({left: event.pageX + trackX, top: event.pageY + trackY });
               });
@@ -446,6 +454,7 @@
     sticky:           false,    // keep visible until manually closed
     mouseOutClose:    false,    // close when clueTip is moused out
     activation:       'hover',  // set to 'click' to force user to click to show clueTip
+                                // set to 'focus' to show on focus of a form element and hide on blur
     tracking:         false,    // if true, clueTip will track mouse movement
     closePosition:    'top',    // location of close text for sticky cluetips; can be 'top' or 'bottom' or 'title'
     closeText:        'Close',  // text (or HTML) to to be clicked to close sticky clueTips
