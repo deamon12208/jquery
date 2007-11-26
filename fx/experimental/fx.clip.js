@@ -5,7 +5,7 @@
     this.each(function() {
 
       // Create element
-      var el = $(this), props = ['position','top','left','width','height','opacity'];
+      var el = $(this), props = ['position','top','left','width','height'];
       
       // Set options
       var mode = o.options.mode || 'hide'; // Default Mode
@@ -31,8 +31,7 @@
         if(mode == 'hide') el.hide(); // Hide
         $.ec.restore(el, props); $.ec.removeWrapper(el); // Restore
         if(o.callback) o.callback.apply(this, arguments); // Callback
-      });
-      
+      }); 
       
     });
     
