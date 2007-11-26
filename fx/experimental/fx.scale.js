@@ -26,7 +26,7 @@
      
     });
     
-  }
+  };
 
   $.ec.scale = function(o) {
     
@@ -39,7 +39,7 @@
       var mode = o.options.mode || 'effect'; // Set default mode
       var percent = parseInt(o.options.percent) || (parseInt(o.options.percent) == 0 ? 0 : (mode == 'hide' ? 0 : 100)); // Set default scaling percent
       var direction = o.options.direction || 'both'; // Set default axis
-      var origin = o.options.origin // The origin of the scaling
+      var origin = o.options.origin; // The origin of the scaling
       if (mode != 'effect') { // Set default origin and restore for show/hide
         origin = origin || ['middle','center'];
         o.options.restore = true;
@@ -54,7 +54,7 @@
       };
       el.to = {height: original.height * factor.y, width: original.width * factor.x}; // Set to state
       if (origin) { // Calculate baseline shifts
-        var baseline = $.ec.getBaseline(origin, original)
+        var baseline = $.ec.getBaseline(origin, original);
         el.from.top = (original.height - el.from.height) * baseline.y;
         el.from.left = (original.width - el.from.width) * baseline.x;
         el.to.top = (original.height - el.to.height) * baseline.y;
@@ -73,7 +73,7 @@
       
     });
     
-  }
+  };
   
   $.ec.size = function(o) {
 
@@ -81,7 +81,7 @@
       
       // Create element
       var el = $(this), props = ['position','top','left','width','height','overflow','opacity'];
-      var props1 = ['position','overflow','opacity'] // Always restore
+      var props1 = ['position','overflow','opacity']; // Always restore
       var props2 = ['width','height','overflow']; // Copy for children
       var cProps = ['fontSize'];
       var vProps = ['borderTopWidth', 'borderBottomWidth', 'paddingTop', 'paddingBottom'];

@@ -9,7 +9,7 @@
       
       // Set options
       var mode = o.options.mode || 'show'; // Default mode
-      var color = o.options.color || "#ffff99" // Default highlight color
+      var color = o.options.color || "#ffff99"; // Default highlight color
       
       // Adjust
       $.ec.save(el, props); el.show(); // Save & Show

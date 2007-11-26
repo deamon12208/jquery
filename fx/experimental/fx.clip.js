@@ -17,7 +17,7 @@
       var ref = {
         size: (direction == 'vertical') ? 'height' : 'width',
         position: (direction == 'vertical') ? 'top' : 'left'
-      }
+      };
       var distance = (direction == 'vertical') ? el.height() : el.width();
       if(mode == 'show') { el.css(ref.size, 0); el.css(ref.position, distance / 2); } // Shift
       

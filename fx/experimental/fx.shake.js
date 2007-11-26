@@ -10,7 +10,7 @@
       // Set options
       var mode = 'effect'; // Default Mode
       var direction = o.options.direction || 'left'; // Default direction
-      var distance = o.options.distance || 20 // Default distance
+      var distance = o.options.distance || 20; // Default distance
       var times = o.options.times || 3; // Default # of times
       var speed = o.options.speed || 140; // Default speed per shake
       

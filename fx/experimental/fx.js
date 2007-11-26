@@ -10,12 +10,9 @@
     },
     restore: function(el, set) {
       for(var i=0;i<set.length;i++) {
-       if (name == 'size') alert(set[i] + ' ' + $.data(el[0], "ec.storage."+set[i]))
+       if (name == 'size') alert(set[i] + ' ' + $.data(el[0], "ec.storage."+set[i]));
         if(set[i] !== null) el.css(set[i], $.data(el[0], "ec.storage."+set[i]));  
       }
-    },
-    findSides: function(el) { //Very nifty function (especially for IE!)
-      return [ !!parseInt(el.css("left")) ? "left" : "right", !!parseInt(el.css("top")) ? "top" : "bottom" ];
     },
     getBaseline: function(origin, original) { // Translates a [top,left] array into a baseline value
       // this should be a little more flexible in the future to handle a string & hash

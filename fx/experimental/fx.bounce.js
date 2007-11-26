@@ -10,7 +10,7 @@
       // Set options
       var mode = o.options.mode || 'effect'; // Default Mode
       var direction = o.options.direction || 'up'; // Default direction
-      var distance = o.options.distance || 20 // Default distance
+      var distance = o.options.distance || 20; // Default distance
       var times = o.options.times || 5; // Default # of times
       var speed = o.options.speed || 250; // Default speed per bounce
       
