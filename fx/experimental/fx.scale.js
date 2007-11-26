@@ -83,8 +83,8 @@
       var el = $(this), props = ['position','top','left','width','height','overflow','opacity'];
       var props2 = props; // Copy for children
       var cProps = ['fontSize'];
-      var vProps = ['borderTopWidth', 'borderBottomWidth', 'paddingTop', 'paddingBottom', 'marginTop', 'marginBottom'];
-      var hProps = ['borderLeftWidth', 'borderRightWidth', 'paddingLeft', 'paddingRight', 'marginLeft', 'marginRight'];
+      var vProps = ['borderTopWidth', 'borderBottomWidth', 'paddingTop', 'paddingBottom'];
+      var hProps = ['borderLeftWidth', 'borderRightWidth', 'paddingLeft', 'paddingRight'];
       
       // Set options
       var mode = o.options.mode || 'effect'; // Set default mode

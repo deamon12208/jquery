@@ -44,7 +44,7 @@
       } else {
         wrapper.css({position: el.css('position'), top: parseInt(el.css('top')) || null, left: parseInt(el.css('left')) || null, bottom: parseInt(el.css('bottom')) || null, right: parseInt(el.css('right')) || null});
         wrapper.show();
-        el.css({position: 'relative', top:0, left: 0});
+        el.css({position: 'relative', top:0, left:0});
       }
       wrapper.css(props);
       return wrapper;
