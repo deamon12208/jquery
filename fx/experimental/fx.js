@@ -135,7 +135,10 @@
       };
     },
     toggle: function(obj,speed,callback){
-      return this.is(':hidden') ? this.show(obj,speed,callback) : this.hide(obj,speed,callback)
+      return this.each(function() {
+        var $this = $(this);
+        $this.is(':hidden') ? $this.show(obj,speed,callback) : $this.hide(obj,speed,callback);
+      });
     },
     addClass: function(classNames,speed,easing,callback) {
       return speed ? $.ec.animateClass.apply(this, [{ add: classNames },speed,easing,callback]) : this._addClass(classNames);
