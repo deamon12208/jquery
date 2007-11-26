@@ -211,8 +211,8 @@
                 this.$panels.addClass(o.hideClass);
                 $lis.removeClass(o.selectedClass);
                 if (!o.unselected) {
-                    this.$panels.slice(o.initial, o.initial + 1).show();
-                    $lis.slice(o.initial, o.initial + 1).addClass(o.selectedClass);
+                    this.$panels.eq(o.initial).show().removeClass(o.hideClass); // use show and remove class to show in any case no matter how it has been hidden before
+                    $lis.eq(o.initial).addClass(o.selectedClass);
                 }
 
                 // load if remote tab
