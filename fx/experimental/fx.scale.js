@@ -51,7 +51,7 @@
       var factor = { // Set scaling factor
         y: direction != 'horizontal' ? (percent / 100) : 1,
         x: direction != 'vertical' ? (percent / 100) : 1
-      }
+      };
       el.to = {height: original.height * factor.y, width: original.width * factor.x}; // Set to state
       if (origin) { // Calculate baseline shifts
         var baseline = $.ec.getBaseline(origin, original)
