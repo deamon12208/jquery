@@ -81,7 +81,8 @@
       
       // Create element
       var el = $(this), props = ['position','top','left','width','height','overflow','opacity'];
-      var props2 = props; // Copy for children
+      var props1 = ['position','overflow','opacity'] // Always restore
+      var props2 = ['width','height','overflow']; // Copy for children
       var cProps = ['fontSize'];
       var vProps = ['borderTopWidth', 'borderBottomWidth', 'paddingTop', 'paddingBottom'];
       var hProps = ['borderLeftWidth', 'borderRightWidth', 'paddingLeft', 'paddingRight'];
@@ -118,14 +119,15 @@
           el.to = $.ec.setTransition(el, cProps, factor.to.y, el.to);
         };
       };
-      if (restore) $.ec.save(el, props); el.show(); // Save & Show
+      $.ec.save(el, restore ? props : props1); el.show(); // Save & Show
       $.ec.createWrapper(el); // Create Wrapper
       el.css('overflow','hidden').css(el.from); // Shift
       
       // Animate
       if (scale == 'content' || scale == 'both') { // Scale the children
-        vProps = vProps.concat(cProps);
-        props2 = props.concat(vProps).concat(hProps);
+        vProps = vProps.concat(['marginTop','marginBottom']).concat(cProps); // Add margins/font-size
+        hProps = hProps.concat(['marginLeft','marginRight']); // Add margins
+        props2 = props.concat(vProps).concat(hProps); // Concat
         el.find("*[width]").each(function(){
           child = $(this);
           if (restore) $.ec.save(child, props2);
@@ -150,7 +152,7 @@
       // Animate
       el.animate(el.to, o.speed, o.options.easing, function() {
         if(mode == 'hide') el.hide(); // Hide
-        if(restore) $.ec.restore(el, props); $.ec.removeWrapper(el); // Restore
+        $.ec.restore(el, restore ? props : props1); $.ec.removeWrapper(el); // Restore
         if(o.callback) o.callback.apply(this, arguments); // Callback
       }); 
       
