@@ -156,10 +156,10 @@
             if (init) {
 
                 // attach necessary classes for styling if not present
-                $(this.source).is('.' + o.navClass) || $(this.source).addClass(o.navClass);
+                $(this.source).hasClass(o.navClass) || $(this.source).addClass(o.navClass);
                 this.$panels.each(function() {
                     var $this = $(this);
-                    $this.is('.' + o.panelClass) || $this.addClass(o.panelClass);
+                    $this.hasClass(o.panelClass) || $this.addClass(o.panelClass);
                 });
                 
                 // disabled tabs
@@ -192,13 +192,13 @@
                     } else if (o.cookie) {
                         o.initial = parseInt($.cookie(self.uuid)) || 0;
                         return false; // break
-                    } else if ( $(a).parent('li').is('.' + o.selectedClass) ) {
+                    } else if ( $(a).parent('li').hasClass(o.selectedClass) ) {
                         o.initial = i;
                         return false; // break
                     }
                 });
                 var n = this.$tabs.length;
-                while ( this.$tabs.eq(o.initial).parent('li').is('.' + o.disabledClass) && n) {
+                while ( this.$tabs.eq(o.initial).parent('li').hasClass(o.disabledClass) && n) {
                     o.initial = ++o.initial < this.$tabs.length ? o.initial : 0;
                     n--;
                 }
@@ -306,7 +306,7 @@
 
                 // If tab is already selected and not unselectable or tab disabled or click callback returns false stop here.
                 // Check if click handler returns false last so that it is not executed for a disabled tab!
-                if (($li.is('.' + o.selectedClass) && !o.unselect) || $li.is('.' + o.disabledClass)
+                if (($li.hasClass(o.selectedClass) && !o.unselect) || $li.hasClass(o.disabledClass)
                     || o.click(this, $show[0], $hide[0]) === false) {
                     this.blur();
                     return false;
@@ -318,7 +318,7 @@
                     
                 // if tab may be closed
                 if (o.unselect) {
-                    if ($li.is('.' + o.selectedClass)) {
+                    if ($li.hasClass(o.selectedClass)) {
                         $li.removeClass(o.selectedClass);
                         self.$panels.stop();
                         hideTab(this, $hide);
@@ -386,10 +386,10 @@
         },
         add: function(url, text, position) {
             if (url && text) {
-                var o = this.options;
-                position = position || this.$tabs.length; // append by default                
+                position = position || this.$tabs.length; // append by default  
                 
-                var $li = $(o.tabTemplate.replace(/#\{href\}/, url).replace(/#\{text\}/, text));
+                var o = this.options,
+                    $li = $(o.tabTemplate.replace(/#\{href\}/, url).replace(/#\{text\}/, text));
                 
                 if (url.indexOf('#') == 0) {
                     var id = url.replace('#', '')
@@ -399,12 +399,13 @@
                 
                 // try to find an existing element before creating a new one
                 var $panel = $('#' + id);
-                $panel = $panel.length && $panel || $(o.panelTemplate).attr('id', id).addClass(o.panelClass).addClass(o.hideClass);
+                $panel = $panel.length && $panel
+                    || $(o.panelTemplate).attr('id', id).addClass(o.panelClass).addClass(o.hideClass);
                 if (position >= this.$tabs.length) {
                     $li.appendTo(this.source);
                     $panel.appendTo(this.source.parentNode);
                 } else {
-                    $li.insertBefore(this.$tabs.slice(position - 1, position).parent('li'));
+                    $li.insertBefore(this.$tabs.eq(position - 1).parent('li'));
                     $panel.insertBefore(this.$panels[position - 1]);
                 }
                 
@@ -425,13 +426,12 @@
         },
         remove: function(position) {
             if (position && position.constructor == Number) {                
-                var $li = this.$tabs.slice(position - 1, position).parent('li').remove(),
-                    $panel = this.$panels.slice(position - 1, position).remove(),
-                    o = this.options;
+                var o = this.options, $li = this.$tabs.eq(position - 1).parent('li').remove(),
+                    $panel = this.$panels.eq(position - 1).remove();
                     
                 // If selected tab was removed focus tab to the right or
                 // tab to the left if last tab was removed.
-                if ($li.is('.' + o.selectedClass) && this.$tabs.length > 1) {
+                if ($li.hasClass(o.selectedClass) && this.$tabs.length > 1) {
                     this.click(position + (position < this.$tabs.length ? 1 : -1));
                 }
                 this.tabify();
@@ -439,7 +439,7 @@
             }
         },
         enable: function(position) {
-            var $li = this.$tabs.slice(position - 1, position).parent('li'), o = this.options;
+            var o = this.options, $li = this.$tabs.eq(position - 1).parent('li');
             $li.removeClass(o.disabledClass);
             if ($.browser.safari) { // fix disappearing tab (that used opacity indicating disabling) after enabling in Safari 2...
                 $li.css('display', 'inline-block');
@@ -451,15 +451,15 @@
         },
         disable: function(position) {
             var o = this.options;      
-            this.$tabs.slice(position - 1, position).parent('li').addClass(o.disabledClass);
+            this.$tabs.eq(position - 1).parent('li').addClass(o.disabledClass);
             o.disable(this.$tabs[position - 1], this.$panels[position - 1]); // callback
         },
         click: function(position) {
-            this.$tabs.slice(position - 1, position).trigger(this.options.event);
+            this.$tabs.eq(position - 1).trigger(this.options.event);
         },
         load: function(position, url, callback) {
             var self = this, o = this.options,
-                $a = this.$tabs.slice(position - 1, position), a = $a[0], $span = $('span', a);
+                $a = this.$tabs.eq(position - 1), a = $a[0], $span = $('span', a);
             
             // shift arguments
             if (url && url.constructor == Function) {
@@ -516,7 +516,7 @@
             
         },
         href: function(position, href) {
-            $.data(this.$tabs.slice(position - 1, position)[0], 'href', href);
+            $.data(this.$tabs.eq(position - 1)[0], 'href', href);
         }
     });
 
