@@ -20,6 +20,7 @@
       // Animation
       o.options.from = el.from;
       o.options.percent = (mode == 'hide') ? percent : 100;
+      o.options.mode = mode;
     
       // Animate
       el.effect('scale', o.options, o.speed, o.callback);

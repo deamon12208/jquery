@@ -10,7 +10,6 @@
     },
     restore: function(el, set) {
       for(var i=0;i<set.length;i++) {
-       if (name == 'size') alert(set[i] + ' ' + $.data(el[0], "ec.storage."+set[i]));
         if(set[i] !== null) el.css(set[i], $.data(el[0], "ec.storage."+set[i]));  
       }
     },
