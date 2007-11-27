@@ -6,3 +6,4 @@
 * Seperate plugin and demo styles into their own files
 * Expose id="tooltip" as an option?
 * leverage advanced background-styling, eg. see http://www.google.com/intl/en_ALL/mapfiles/iw2.png
+* add ability to display remote tooltip for other elements, eg. an invalid input
