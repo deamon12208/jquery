@@ -7,9 +7,12 @@
 * Added remember-the-milk-demo (thanks RTM team for the permission!)
 * Added marketo-demo (thanks Glen Lipka!)
 * Added support for ajax-validation, see method "remote"
+* Added highlight and unhighlight options, by default toggles errorClass on element, allows custom highlighting
+* Fixed error container to hide when all elements are valid, not only on form submit
 * Fixed String.format to jQuery.format (moving into jQuery namespace)
 * Improved URL and email methods (now blacklisting illegal characters to make them much more versatile when dealing with unicode characters, like http://www.føtex.dk/
 * Fixed accept method to accept both upper and lowercase extensions
+* Changed debug-mode console log to warn level
 
 1.1.1
 -----
@@ -30,8 +33,8 @@
 ---
 
 * Added validation on blur, keyup and click (for checkboxes and radiobutton). Replaces event-option.
-* fixed resetForm
-* fixed custom-methods-demo
+* Fixed resetForm
+* Fixed custom-methods-demo
 
 1.0
 ---

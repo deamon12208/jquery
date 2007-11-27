@@ -428,7 +428,7 @@ test("hide(): errorWrapper", function() {
 });
 
 test("hide(): container", function() {
-	expect(3);
+	expect(5);
 	var errorLabel = $('#errorContainer');
 	var element = $('#testForm3')[0];
 	ok( errorLabel.is(":hidden"), "Error label not visible at start" );
@@ -437,6 +437,12 @@ test("hide(): container", function() {
 	ok( errorLabel.is(":visible"), "Error label visible after validation" );
 	$('#meal')[0].selectedIndex = 1;
 	v.form();
+	ok( errorLabel.is(":hidden"), "Error label not visible after hiding it" );
+	$('#meal')[0].selectedIndex = -1;
+	v.element("#meal");
+	ok( errorLabel.is(":visible"), "Error label visible after validation" );
+	$('#meal')[0].selectedIndex = 1;
+	v.element("#meal");
 	ok( errorLabel.is(":hidden"), "Error label not visible after hiding it" );
 });
 

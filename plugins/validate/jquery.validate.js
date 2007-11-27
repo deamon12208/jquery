@@ -198,6 +198,12 @@ errorPlacement: function(error, element) {
  * @option String|Element ignore Elements to ignore when validating, simply filtering them out. jQuery's not-method is used, therefore everything that is accepted by not() can be passed as this option. Inputs of type submit and reset are always ignored, so are disabled elements. Default: None
  * @opton Boolean onblur Validate elements on blur. If nothing is entered, all rules are skipped, except when the field was already marked as invalid. Default: true
  * @option Callback subformRequired Called to determine if a subform is required. An input is passed as the argument, and a boolean is expected to return: If it returns false, the input is part of an optional subform, therefore not required. Default: none
+ * @option Function highlight Function that "highlights" errored fields. By default, it adds the current 'errorClass' setting
+ *      directly to the errored element. Replace this with your own function when you want to modify how or which elements get
+ *      highlighted when a field is invalid. Accepts two parameters: a reference to the error element, and the current errorClass.
+ * @option Function unHighlight Function that undoes the highlighting by the above function. By default, it removes the current
+ *      'errorClass' setting from the errored element. Accepts two parameters: a reference to the error element, and the
+ *      current errorClass.
  *
  * @name validate
  * @type $.validator
@@ -388,6 +394,12 @@ jQuery.extend(jQuery.validator, {
 		onclick: function(element) {
 			if ( element.name in this.submitted )
 				this.element(element);
+		},
+		highlight: function( element, errorClass ) {
+			jQuery( element ).addClass( errorClass );
+		},
+		unhighlight: function( element, errorClass ) {
+			jQuery( element ).removeClass( errorClass );
 		}
 	},
 
@@ -487,6 +499,10 @@ jQuery.extend(jQuery.validator, {
 				delete this.invalid[element.name];
 			} else {
 				this.invalid[element.name] = true;
+			}
+			if ( !this.numberOfInvalids() ) {
+				// Hide error containers on last error
+				this.toHide.push( this.containers );
 			}
 			this.showErrors();
 			return result;
@@ -706,7 +722,7 @@ jQuery.extend(jQuery.validator, {
 	
 		check: function( element ) {
 			element = this.clean( element );
-			jQuery( element ).removeClass( this.settings.errorClass );
+			this.settings.unhighlight.call( this, element, this.settings.errorClass );
 			//var rules = this.rules( element );
 			var rules = this.rulesCache[ element.name ];
 			for( var i = 0; rules[i]; i++) {
@@ -716,12 +732,12 @@ jQuery.extend(jQuery.validator, {
 					if( result === -1 )
 						break;
 					if( !result ) {
-						jQuery( element ).addClass( this.settings.errorClass );
+						this.settings.highlight.call( this, element, this.settings.errorClass );
 						this.formatAndAdd( rule, element);
 						return false;
 					}
 				} catch(e) {
-					this.settings.debug && window.console && console.error("exception occured when checking element " + element.id
+					this.settings.debug && window.console && console.warn("exception occured when checking element " + element.id
 						 + ", check the '" + rule.method + "' method");
 					throw e;
 				}
