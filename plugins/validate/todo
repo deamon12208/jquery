@@ -1,3 +1,4 @@
+- try to use change instead of onblur: triggers only when input changed (good), integrates nicely with eg. datepicker (which fires a change event, even better)
 - submitting a form where only remote validation is left to run sometimes calls submitHandler/submit after the field got fixed
 - add proper support for more states: valid, invalid, optional, pending...
 - add custom events for form and elements instead of more callbacks
