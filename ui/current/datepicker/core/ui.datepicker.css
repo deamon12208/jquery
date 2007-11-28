@@ -130,6 +130,12 @@ img.datepicker_trigger {
 .datepicker_currentDay {
 	background: #999 !important;
 }
+.datepicker_status {
+	background: #ddd;
+	width: 100%;
+	font-size: 80%;
+	text-align: center;
+}
 
 /* ________ Datepicker Links _______
 
