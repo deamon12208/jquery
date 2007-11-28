@@ -69,16 +69,16 @@ $(document).ready(function() {
 			lastname: "Enter your lastname",
 			username: {
 				required: "Enter a username",
-				minLength: String.format("Enter at least {0} characters"),
-				remote: String.format("{0} is already in use")
+				minLength: jQuery.format("Enter at least {0} characters"),
+				remote: jQuery.format("{0} is already in use")
 			},
 			password: {
 				required: "Provide a password",
-				minLength: String.format("Enter at least {0} characters")
+				minLength: jQuery.format("Enter at least {0} characters")
 			},
 			password_confirm: {
 				required: "Repeat your password",
-				minLength: String.format("Enter at least {0} characters"),
+				minLength: jQuery.format("Enter at least {0} characters"),
 				equalTo: "Enter the same password as above"
 			},
 			email: "Please enter a valid email address",

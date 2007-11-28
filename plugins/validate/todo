@@ -1,3 +1,4 @@
+- submitting a form where only remote validation is left to run sometimes calls submitHandler/submit after the field got fixed
 - add proper support for more states: valid, invalid, optional, pending...
 - add custom events for form and elements instead of more callbacks
 - improve validator API: validator.check(Element inputOrForm) instead of form and element methods, doing validate().form() is crap anyway

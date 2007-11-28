@@ -1046,7 +1046,10 @@ jQuery.extend(jQuery.validator, {
 					mode: "abort",
 					port: "validate",
 					dataType: "json",
-					data: {value: value},
+					data: {
+						value: value,
+						name: element.name
+					},
 					success: function(response) {
 						if ( !response ) {
 							var errors = {};
