@@ -1,22 +1,22 @@
 /* Polish initialisation for the jQuery UI date picker plugin. */
 /* Written by Jacek Wysocki (jacek.wysocki@gmail.com). */
 $(document).ready(function(){
-	$.datepicker.regional['pl'] = {clearText: 'Czyść', clearStatus: '',
-		closeText: 'Zamknij', closeStatus: '',
-		prevText: '&lt;Poprzedni', prevStatus: '',
-		nextText: 'Następny&gt;', nextStatus: '',
-		currentText: 'Teraz', currentStatus: '',
+	$.datepicker.regional['pl'] = {clearText: 'Wyczyść', clearStatus: 'Wyczyść obecną datę',
+		closeText: 'Zamknij', closeStatus: 'Zamknij bez zapisywania',
+		prevText: '&#x3c;Poprzedni', prevStatus: 'Pokaż poprzedni miesiąc',
+		nextText: 'Następny&#x3e;', nextStatus: 'Pokaż następny miesiąc',
+		currentText: 'Dziś', currentStatus: 'Pokaż aktualny miesiąc',
 		monthNames: ['Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec',
 		'Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień'],
-		monthNamesShort: ['Sty','Lut','Mar','Kwi','Maj','Cze',
-		'Lip','Sie','Wrz','Paź','Lis','Gru'],
-		monthStatus: '', yearStatus: '',
-		weekHeader: 'Ty', weekStatus: '',
+		monthNamesShort: ['Sty','Lu','Mar','Kw','Maj','Cze',
+		'Lip','Sie','Wrz','Pa','Lis','Gru'],
+		monthStatus: 'Pokaż inny miesiąc', yearStatus: 'Pokaż inny rok',
+		weekHeader: 'Tydz', weekStatus: 'Tydzień roku',
 		dayNames: ['Niedziela','Poniedzialek','Wtorek','Środa','Czwartek','Piątek','Sobota'],
-		dayNamesShort: ['Nie','Pon','Wto','Śro','Czw','Pią','Sob'],
-		dayNamesMin: ['Nie','Pn','Wt','Śr','Czw','Pt','So'],
-		dayStatus: 'DD', dateStatus: 'D, M d',
-		dateFormat: 'dd/mm/yy', firstDay: 0, 
-		initStatus: '', isRTL: false};
+		dayNamesShort: ['Nie','Pn','Wt','Śr','Czw','Pt','So'],
+		dayNamesMin: ['N','Pn','Wt','Śr','Cz','Pt','So'],
+		dayStatus: 'Ustaw DD jako pierwszy dzień tygodnia', dateStatus: 'Wybierz D, M d',
+		dateFormat: 'yy-mm-dd', firstDay: 1, 
+		initStatus: 'Wybierz datę', isRTL: false};
 	$.datepicker.setDefaults($.datepicker.regional['pl']);
 });
