@@ -1153,7 +1153,7 @@ test("check the serverside script works", function() {
 	stop();
 	$.getJSON("milk/users.php", {value: 'asd'}, function(response) {
 		ok( response, "yet available" );
-		$.getJSON("milk/users.php", {value: "asdf"}, function(response) {
+		$.getJSON("milk/users.php", {username: "asdf"}, function(response) {
 			ok( !response, "already taken" );
 			start();
 		});
@@ -1163,19 +1163,22 @@ test("check the serverside script works", function() {
 test("validate via remote method", function() {
 	expect(5);
 	stop();
-	var e = $("#firstname");
-	var v = $("#testForm1").validate({
+	var e = $("#username");
+	var v = $("#userForm").validate({
 		rules: {
-			firstname: {
+			username: {
 				required: true,
 				remote: "milk/users.php"
 			}
 		},
 		messages: {
-			firstname: {
+			username: {
 				required: "Please",
 				remote: jQuery.format("{0} in use")
 			}
+		},
+		submitHandler: function() {
+			ok( false, "submitHandler may never be called when validating only elements");
 		}
 	});
 	$().ajaxStop(function() {
@@ -1184,7 +1187,7 @@ test("validate via remote method", function() {
 		equals( "asdf in use", v.errorList[0].message );
 		start();
 	});
-	ok( !v.element(e) );
+	ok( !v.element(e), "invalid element, nothing entered yet" );
 	e.val("asdf");
-	ok( v.element(e) );
+	ok( !v.element(e), "still invalid, because remote validation must block until it returns" );
 });

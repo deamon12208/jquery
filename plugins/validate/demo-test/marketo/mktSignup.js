@@ -42,7 +42,7 @@
 			email: {
 				required: " ",
 				email: "Please enter a valid email address, example: you@yourdomain.com",
-				remote: String.format("{0} is already taken, please enter a different address.")	
+				remote: jQuery.format("{0} is already taken, please enter a different address.")	
 			}
 		}
 	});

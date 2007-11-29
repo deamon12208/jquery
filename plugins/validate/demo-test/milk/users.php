@@ -1,5 +1,5 @@
 <?php
-$request = trim(strtolower($_REQUEST['value']));
+$request = trim(strtolower($_REQUEST['username']));
 //sleep(1);
 $users = array('asdf', 'Peter', 'Peter2', 'George');
 $valid = 'true';

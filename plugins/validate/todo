@@ -1,4 +1,8 @@
-- try to use change instead of onblur: triggers only when input changed (good), integrates nicely with eg. datepicker (which fires a change event, even better)
+- bug in marketo demo, keeps showing error for "email already taken", even if server returns true
+- bug in testsuite in IE6, normal form submit kills it
+- completely rework showErrors: manually settings errors is currently extremely flawed and utterly useless, eg. errors disappear if some other validation is triggered
+- use remote response as message if available, eg. check for type String
+- add custom event to remote validation for adding more parameters
 - submitting a form where only remote validation is left to run sometimes calls submitHandler/submit after the field got fixed
 - add proper support for more states: valid, invalid, optional, pending...
 - add custom events for form and elements instead of more callbacks
@@ -6,6 +10,7 @@
 - try to replace element handling on each input with event delegation handled by the form
 	-> complicates handling the event, but improves adding/removing handlers a ton, refresh() doesn't have to do anything for events, adding and removing elements from the form is priceless
 	-> while at it, improve event handling for selects
+	-> while at it, try to add on0change: integrates nicely with eg. datepicker (which fires a change event) 
 - add support for dynamic params, that is, check if the specified parameter (if relevant at all, eg. maxValue) is a function, then execute it and use the return value
 
 - document focusInvalid()

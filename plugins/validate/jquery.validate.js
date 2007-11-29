@@ -242,7 +242,7 @@ jQuery.extend(jQuery.fn, {
 				}
 				if ( validator.form() ) {
 					if ( this.pendingRequest ) {
-						this.submitted = true;
+						this.formSubmitted = true;
 						return false;
 					}
 					return handle();
@@ -524,6 +524,7 @@ jQuery.extend(jQuery.validator, {
 			if(errors) {
 				// add items to error list and map
 				jQuery.extend( this.errorMap, errors );
+				this.errorList = [];
 				for ( name in errors ) {
 					this.errorList.push({
 						message: errors[name],
@@ -708,6 +709,7 @@ jQuery.extend(jQuery.validator, {
 			this.errorMap = {};
 			this.toShow = jQuery( [] );
 			this.toHide = jQuery( [] );
+			this.formSubmitted = false;
 		},
 		
 		prepareForm: function() {
@@ -918,7 +920,7 @@ jQuery.extend(jQuery.validator, {
 		
 		stopRequest: function(valid) {
 			this.pendingRequest--;
-			if ( valid && this.pendingRequest == 0 && this.submitted && this.form() ) {
+			if ( valid && this.pendingRequest == 0 && this.formSubmitted && this.form() ) {
 				jQuery(this.currentForm).submit();
 			}
 		}
@@ -1041,15 +1043,14 @@ jQuery.extend(jQuery.validator, {
 				cached.old = value;
 				var validator = this;
 				this.startRequest();
+				var data = {};
+				data[element.name] = value;
 				jQuery.ajax({
 					url: param,
 					mode: "abort",
 					port: "validate",
 					dataType: "json",
-					data: {
-						value: value,
-						name: element.name
-					},
+					data: data,
 					success: function(response) {
 						if ( !response ) {
 							var errors = {};
