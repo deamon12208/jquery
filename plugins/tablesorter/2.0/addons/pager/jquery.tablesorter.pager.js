@@ -10,6 +10,7 @@
 				var c = table.config;
 				c.size = size;
 				c.totalPages = Math.ceil(c.totalRows / c.size);
+				c.pagerPositionSet = false;
 				moveToPage(table);
 				fixPosition(table);
 			}
