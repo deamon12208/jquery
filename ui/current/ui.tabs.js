@@ -189,7 +189,7 @@
                             return false; // break
                         }
                     } else if (o.cookie) {
-                        o.initial = parseInt($.cookie(self.uuid)) || 0;
+                        o.initial = parseInt($.cookie( $.ui.tabs.INSTANCE_KEY + $.data(self.source) )) || 0;
                         return false; // break
                     } else if ( $(a).parent('li').hasClass(o.selectedClass) ) {
                         o.initial = i;
@@ -312,7 +312,7 @@
                 }
                 
                 if (o.cookie) {
-                    $.cookie(self.uuid, self.$tabs.index(this), o.cookie);
+                    $.cookie($.ui.tabs.INSTANCE_KEY + $.data(self.source), self.$tabs.index(this), o.cookie);
                 }
                     
                 // if tab may be closed
