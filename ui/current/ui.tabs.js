@@ -65,7 +65,7 @@
             // Ajax
             spinner: 'Loading&#8230;',
             cache: false,
-            idPrefix: 'tab-',
+            idPrefix: 'ui-tabs-',
             ajaxOptions: {},
 
             // animations
@@ -106,24 +106,23 @@
         this.options.cookie = $.cookie && $.cookie.constructor == Function && this.options.cookie;
 
         // save instance for later
-        this.uuid = 'ui_tabs_' + $.ui.tabs.prototype.count++;
-        $.ui.tabs.instances[this.uuid] = this;
-        $.data(el, 'uiTabsUUID', this.uuid);
+        $.data(el, $.ui.tabs.INSTANCE_KEY, this);
         
+        // create tabs
         this.tabify(true);
     };
 
     // static
-    $.ui.tabs.instances = {};
+    $.ui.tabs.INSTANCE_KEY = 'ui_tabs_instance';
     $.ui.tabs.getInstance = function(el) {
-        return $.ui.tabs.instances[$.data(el, 'uiTabsUUID')];
+        return $.data(el, $.ui.tabs.INSTANCE_KEY);
     };
 
     // instance methods
     $.extend($.ui.tabs.prototype, {
-        count: 0,
-        tabId: function(a, i) {
-            return a.title ? a.title.replace(/\s/g, '_') : this.options.idPrefix + this.count + '-' + (i + 1);
+        tabId: function(a) {
+            return a.title ? a.title.replace(/\s/g, '_')
+                : this.options.idPrefix + $.data(a);
         },
         tabify: function(init) {
 
@@ -140,7 +139,7 @@
                 // remote tab
                 else if ($(a).attr('href') != '#') { // prevent loading the page itself if href is just "#"
                     $.data(a, 'href', a.href);
-                    var id = self.tabId(a, i);
+                    var id = self.tabId(a);
                     a.href = '#' + id;
                     self.$panels = self.$panels.add(
                         $('#' + id)[0] || $(o.panelTemplate).attr('id', id).addClass(o.panelClass)
@@ -391,11 +390,7 @@
                 var o = this.options,
                     $li = $(o.tabTemplate.replace(/#\{href\}/, url).replace(/#\{text\}/, text));
                 
-                if (url.indexOf('#') == 0) {
-                    var id = url.replace('#', '')
-                } else {
-                    var id = this.tabId($('a:first-child', $li)[0], position);
-                }
+                var id = url.indexOf('#') == 0 ? url.replace('#', '') : this.tabId( $('a:first-child', $li)[0] );
                 
                 // try to find an existing element before creating a new one
                 var $panel = $('#' + id);
