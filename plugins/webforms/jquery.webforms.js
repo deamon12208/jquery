@@ -1,5 +1,5 @@
 /*
- * Web Forms 0.3.5 - jQuery plugin
+ * Web Forms 0.3.6 - jQuery plugin
  * 
  * Copyright (c) 2007 Scott Gonzalez
  * 
@@ -261,7 +261,7 @@ $.extend({
 $.extend($.expr[':'], {
 	checked: 'a.checked || a.selected || jQuery.attr(a, "selected")',
 	indeterminate: 'jQuery.isIndeterminate(a)',
-	default: 'jQuery.isDefaultSubmit(a) || a.defaultChecked || a.defaultSelected',
+	'default': 'jQuery.isDefaultSubmit(a) || a.defaultChecked || a.defaultSelected',
 	valid: 'jQuery(a).validity().valid',
 	invalid: '!jQuery(a).validity().valid',
 	'in-range': '!jQuery(a).validity().typeMismatch ' +
