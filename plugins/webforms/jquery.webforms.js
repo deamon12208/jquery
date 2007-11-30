@@ -12,9 +12,20 @@
 
 (function($) {
 
+function getCheckedCount(element_name) {
+	var checked_count = 0;
+	$('input[name="' + element_name + '"]').each(function() {
+		if ($(this).is(':checked')) {
+			checked_count++;
+		}
+	});
+	
+	return checked_count;
+};
+
 function isNumber(val) {
 	return /^-?\d*\.?\d+(e-?\d+)?$/.test(val);
-}
+};
 
 var validityState = {
 	typeMismatch: false,
@@ -157,12 +168,7 @@ var validator = {
 			switch ($elem.attr('type')) {
 				case 'checkbox':
 				case 'radio':
-					var checked_count = 0;
-					$('input[name="' + $elem.attr('name') + '"]').each(function() {
-						if ($(this).is(':checked')) {
-							checked_count++;
-						}
-					});
+					var checked_count = getCheckedCount($elem.attr('name'));
 					if ($elem.is(':checkbox')) {
 						return (checked_count >= 1);
 					} else {
@@ -241,11 +247,34 @@ $.extend({
 		validationMessages: function(messages) {
 			$.extend(validationMessages, messages);
 		}
+	},
+	
+	isDefaultSubmit: function(elem) {
+		return elem === $(elem).parents('form:first').find(':submit:first')[0];
+	},
+	
+	isIndeterminate: function(elem) {
+		return elem.type == 'radio' && getCheckedCount(elem.name) == 0;
 	}
 });
 
 $.extend($.expr[':'], {
-	invalid: '!jQuery(a).validity().valid'
+	checked: 'a.checked || a.selected || jQuery.attr(a, "selected")',
+	indeterminate: 'jQuery.isIndeterminate(a)',
+	default: 'jQuery.isDefaultSubmit(a) || a.defaultChecked || a.defaultSelected',
+	valid: 'jQuery(a).validity().valid',
+	invalid: '!jQuery(a).validity().valid',
+	'in-range': '!jQuery(a).validity().typeMismatch ' +
+		'&& !jQuery(a).validity().rangeUnderflow ' +
+		'&& !jQuery(a).validity().rangeOverflow',
+	'out-of-range': 'jQuery(a).validity().rangeUnderflow ' +
+		'|| jQuery(a).validity().rangeOverflow',
+	required: 'jQuery(a).attr("required")',
+	optional: '/input|textarea/i.test(a.nodeName) ' +
+		'&& !/hidden|image|reset|submit|button/i.test(a.type) ' +
+		'&& !jQuery(a).attr("required")',
+	'read-only': 'jQuery(a).is("[readonly]")',
+	'read-write': '!jQuery(a).is("[readonly]")'
 });
 
 $.fn.extend({
