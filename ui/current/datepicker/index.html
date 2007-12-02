@@ -333,7 +333,7 @@ function nationalDays(date) {
 <pre><code class="javascript">$.datepicker.setDefaults($.datepicker.regional['']);</code></pre>
 					<p>And then configure the language per date picker instance.</p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#l10nDatepicker').datepicker($.datepicker.regional['fr']);
+$('#l10nDatepicker').datepicker($.extend({showStatus: true}, $.datepicker.regional['fr']));
 </script>
 					<p><strong>Localisation packages:</strong></p>
 					<p>Localisation packages can be found below under <a href="#documentation">Settings and Documentation</a>.</p>
