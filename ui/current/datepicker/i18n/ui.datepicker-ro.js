@@ -1,22 +1,22 @@
 /* Romanian initialisation for the jQuery UI date picker plugin. */
 /* Written by Edmond L. (ll_edmond@walla.com). */
 $(document).ready(function(){
-	$.datepicker.regional['ro'] = {clearText: 'sterge', clearStatus: '',
-		closeText: 'inchide', closeStatus: '',
-		prevText: '&laquo;&nbsp;inapoi', prevStatus: '',
-		nextText: 'inainte&nbsp;&raquo;', nextStatus: '',
-		currentText: 'Azi', currentStatus: '',
-		monthNames: ['Januarie', 'Februarie', 'Martie', 'Aprilie', 'Mai', 'Junie',
-		'Julie', 'August', 'Septembrie', 'Octombrie', 'Noiembrie', 'Decembrie'],
-		monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun',
+	$.datepicker.regional['ro'] = {clearText: 'Curat', clearStatus: 'Sterge data curenta',
+		closeText: 'Inchide', closeStatus: 'Inchide fara schimbare',
+		prevText: '&#x3c;Anterior', prevStatus: 'Arata luna trecuta',
+		nextText: 'Urmator&#x3e;', nextStatus: 'Arata luna urmatoare',
+		currentText: 'Azi', currentStatus: 'Arata luna curenta',
+		monthNames: ['Ianuarie','Februarie','Martie','Aprilie','Mai','Junie',
+		'Julie','August','Septembrie','Octobrie','Noiembrie','Decembrie'],
+		monthNamesShort: ['Ian', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun',
 		'Jul', 'Aug', 'Sep', 'Oct', 'Noi', 'Dec'],
-		monthStatus: '', yearStatus: '',
-		weekHeader: 'Sm', weekStatus: '',
-		dayNames: ['Duminica', 'Luni', 'Marti', 'Miercuri', 'Joi', 'Vineri', 'Sâmbata'],
-		dayNamesShort: ['Dum', 'Lun', 'Mar', 'Mie', 'Joi', 'Vin', 'Sâm'],
-		dayNamesMin: ['D', 'L', 'Ma', 'Mi', 'J', 'V', 'S'],
-		dayStatus: 'DD', dateStatus: 'D, M d',
-		dateFormat: 'yy-mm-dd', firstDay: 1, 
-		initStatus: '', isRTL: false};
+		monthStatus: 'Arata o luna diferita', yearStatus: 'Arat un an diferit',
+		weekHeader: 'Sapt', weekStatus: 'Saptamana anului',
+		dayNames: ['Duminica', 'Luni', 'Marti', 'Miercuri', 'Joi', 'Vineri', 'Sambata'],
+		dayNamesShort: ['Dum', 'Lun', 'Mar', 'Mie', 'Joi', 'Vin', 'Sam'],
+		dayNamesMin: ['Du','Lu','Ma','Mi','Jo','Vi','Sa'],
+		dayStatus: 'Seteaza DD ca prima saptamana zi', dateStatus: 'Selecteaza D, M d',
+		dateFormat: 'mm/dd/yy', firstDay: 0, 
+		initStatus: 'Selecteaza o data', isRTL: false};
 	$.datepicker.setDefaults($.datepicker.regional['ro']);
 });
