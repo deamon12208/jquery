@@ -740,7 +740,8 @@ $.extend(Datepicker.prototype, {
 	   @param  inst  the current datepicker instance
 	   @return  the status display text for this date */
 	dateStatus: function(date, inst) {
-		return $.datepicker.formatDate(inst._get('dateStatus'), date);
+		return $.datepicker.formatDate(inst._get('dateStatus'), date, inst._get('dayNamesShort'),
+			inst._get('dayNames'), inst._get('monthNamesShort'), inst._get('monthNames'));
 	},
 
 	/* Parse a string value into a date object.
@@ -1222,10 +1223,11 @@ $.extend(DatepickerInstance.prototype, {
 						(printDate.getTime() == today.getTime() ? ' datepicker_today' : ''))) + '"' + // highlight today (if different)
 						(unselectable || (otherMonth && !showOtherMonths) ? '' :
 						' onmouseover="' + (unselectable ? '' : 'jQuery(this).addClass(\'datepicker_daysCellOver\');') +
-						(otherMonth && !showOtherMonths ? '' : 'jQuery(\'#datepicker_status_' + this._id + '\').html(\'' +
-						dateStatus(printDate, this) +'\');"') +
+						(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#datepicker_status_' +
+						this._id + '\').html(\'' + dateStatus(printDate, this) +'\');"') +
 						' onmouseout="' + (unselectable ? '' : 'jQuery(this).removeClass(\'datepicker_daysCellOver\');') +
-						(otherMonth && !showOtherMonths ? '' : 'jQuery(\'#datepicker_status_' + this._id + '\').html(\'&#xa0;\');"')) +
+						(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#datepicker_status_' +
+						this._id + '\').html(\'&#xa0;\');"')) +
 						(unselectable ? '' : ' onclick="jQuery.datepicker._selectDay(' + this._id + ',' +
 						drawMonth + ',' + drawYear + ', this);"') + '>' + // actions
 						(otherMonth ? (showOtherMonths ? printDate.getDate() : '&#xa0;') : // display for other months
