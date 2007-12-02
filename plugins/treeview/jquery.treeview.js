@@ -1,5 +1,5 @@
 /*
- * Treeview 1.3 - jQuery plugin to hide and show branches of a tree
+ * Treeview 1.4 - jQuery plugin to hide and show branches of a tree
  * 
  * http://bassistance.de/jquery-plugins/jquery-plugin-treeview/
  *
@@ -131,11 +131,11 @@
 					};
 				}
 				// click on first element to collapse tree
-				$(":eq(0)", control).click( handler(CLASSES.collapsable) );
+				$("a:eq(0)", control).click( handler(CLASSES.collapsable) );
 				// click on second to expand tree
-				$(":eq(1)", control).click( handler(CLASSES.expandable) );
+				$("a:eq(1)", control).click( handler(CLASSES.expandable) );
 				// click on third to toggle tree
-				$(":eq(2)", control).click( handler() ); 
+				$("a:eq(2)", control).click( handler() ); 
 			}
 		
 			// handle toggle event
