@@ -72,33 +72,37 @@
 			}
 		},
 		prepareBranches: function(settings) {
-			// mark last tree items
-			this.filter(":last-child:not(ul)").addClass(CLASSES.last);
-			// collapse whole tree, or only those marked as closed, anyway except those marked as open
-			this.filter((settings.collapsed ? "" : "." + CLASSES.closed) + ":not(." + CLASSES.open + ")").find(">ul").hide();
+			if (!settings.prerendered) {
+				// mark last tree items
+				this.filter(":last-child:not(ul)").addClass(CLASSES.last);
+				// collapse whole tree, or only those marked as closed, anyway except those marked as open
+				this.filter((settings.collapsed ? "" : "." + CLASSES.closed) + ":not(." + CLASSES.open + ")").find(">ul").hide();
+			}
 			// return all items with sublists
 			return this.filter(":has(>ul)");
 		},
 		applyClasses: function(settings, toggler) {
 			this.filter(":has(>ul):not(:has(>a))").find(">span").click(function(event) {
-				if ( this == event.target ) {
-					toggler.apply($(this).next());
-				}
+				toggler.apply($(this).next());
 			}).add( $("a", this) ).hoverClass();
 			
-			// handle closed ones first
-			this.filter(":has(>ul:hidden)")
-					.addClass(CLASSES.expandable)
-					.replaceClass(CLASSES.last, CLASSES.lastExpandable);
-					
-			// handle open ones
-			this.not(":has(>ul:hidden)")
-					.addClass(CLASSES.collapsable)
-					.replaceClass(CLASSES.last, CLASSES.lastCollapsable);
-					
-            // create hitarea
-			this.prepend("<div class=\"" + CLASSES.hitarea + "\"/>")
-				.find("div." + CLASSES.hitarea).click( toggler );
+			if (!settings.prerendered) {
+				// handle closed ones first
+				this.filter(":has(>ul:hidden)")
+						.addClass(CLASSES.expandable)
+						.replaceClass(CLASSES.last, CLASSES.lastExpandable);
+						
+				// handle open ones
+				this.not(":has(>ul:hidden)")
+						.addClass(CLASSES.collapsable)
+						.replaceClass(CLASSES.last, CLASSES.lastCollapsable);
+						
+	            // create hitarea
+				this.prepend("<div class=\"" + CLASSES.hitarea + "\"/>");
+			}
+			
+			// apply event to hitarea
+			this.find("div." + CLASSES.hitarea).click( toggler );
 		},
 		treeview: function(settings) {
 			
