@@ -99,7 +99,7 @@
 				return this.trigger("add", [settings.add]);
 			}
 			
-			if (settings.toggle ) {
+			if ( settings.toggle ) {
 				var callback = settings.toggle;
 				settings.toggle = function() {
 					return callback.apply($(this).parent()[0], arguments);
@@ -197,9 +197,11 @@
 			
 			branches.applyClasses(settings, toggler);
 				
-			// if control option is set, create the treecontroller
-			if ( settings.control )
+			// if control option is set, create the treecontroller and show it
+			if ( settings.control ) {
 				treeController(this, settings.control);
+				$(settings.control).show();
+			}
 			
 			return this.bind("add", function(event, branches) {
 				$(branches).prev().removeClass(CLASSES.last).removeClass(CLASSES.lastCollapsable).removeClass(CLASSES.lastExpandable);
@@ -223,4 +225,5 @@
 	
 	// provide backwards compability
 	$.fn.Treeview = $.fn.treeview;
+	
 })(jQuery);
