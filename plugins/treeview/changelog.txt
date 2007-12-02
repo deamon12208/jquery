@@ -6,6 +6,7 @@
 * Restructured folder layout: root contains plugin resources, lib contains script dependencies, demo contains demos and related files
 * Added prerendered option: If set to true, assumes all hitarea divs and classes already rendered, speeding up initialization for big trees, but more obtrusive
 * Added jquery.treeview.async.js for ajax-lazy-loading trees, see async.html demo
+* Exposed $.fn.treeview.classes for custom classes if necessary
 
 1.3
 ---

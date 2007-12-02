@@ -15,19 +15,6 @@
 
 (function($) {
 
-	// classes used by the plugin
-	// need to be styled via external stylesheet, see first example
-	var CLASSES = {
-		open: "open",
-		closed: "closed",
-		expandable: "expandable",
-		collapsable: "collapsable",
-		lastCollapsable: "lastCollapsable",
-		lastExpandable: "lastExpandable",
-		last: "last",
-		hitarea: "hitarea"
-	};
-	
 	$.extend($.fn, {
 		swapClass: function(c1, c2) {
 			return this.each(function() {
@@ -40,9 +27,8 @@
 		},
 		replaceClass: function(c1, c2) {
 			return this.each(function() {
-				var $this = $(this);
 				if ( $.className.has(this, c1) )
-					$this.removeClass(c1).addClass(c2);
+					$(this).removeClass(c1).addClass(c2);
 			});
 		},
 		hoverClass: function(className) {
@@ -221,6 +207,19 @@
 			});
 		}
 	});
+	
+	// classes used by the plugin
+	// need to be styled via external stylesheet, see first example
+	var CLASSES = $.fn.treeview.classes = {
+		open: "open",
+		closed: "closed",
+		expandable: "expandable",
+		collapsable: "collapsable",
+		lastCollapsable: "lastCollapsable",
+		lastExpandable: "lastExpandable",
+		last: "last",
+		hitarea: "hitarea"
+	};
 	
 	// provide backwards compability
 	$.fn.Treeview = $.fn.treeview;
