@@ -8,7 +8,7 @@
  * http://www.gnu.org/licenses/gpl.html
  *
  * @author: M. Alsup
- * @version: 0.70 (7/05/2007)
+ * @version: 0.71 (12/02/2007)
  * @requires jQuery v1.1.2 or later
  * $Id$
  *
@@ -122,6 +122,7 @@ $.fn.mediabox = function(options, css) {
                 try { this.Stop();   } catch(e) {}  // quicktime
                 try { this.DoStop(); } catch(e) {}  // real
                 try { this.controls.stop(); } catch(e) {} // windows media player
+                $(this).remove();
             });
         }, p == 'flash'); // <-- mac/ff workaround
         return false;
@@ -140,8 +141,8 @@ $.fn.media.mapFormat = function(format, player) {
     format = format.toLowerCase();
     if (isDigit(format[0])) format = 'fn' + format;
     $.fn.media[format] = $.fn.media[player];
+    $.fn.media[format+'_player'] = $.fn.media.defaults.players[player];
 };
-
 
 // global defautls; override as needed
 $.fn.media.defaults = {
@@ -278,9 +279,9 @@ function isDigit(c) {
 function getSettings(el, options) {
     options = options || {};
     var $el = $(el);
-    
     var cls = el.className || '';
-    var meta = $.meta ? $el.data() : {};
+    // support metadata plugin (v1.0 and v2.0)
+    var meta = $.metadata ? $el.metadata() : $.meta ? $el.data() : {})
     var w = meta.width  || parseInt(((cls.match(/w:(\d+)/)||[])[1]||0));
     var h = meta.height || parseInt(((cls.match(/h:(\d+)/)||[])[1]||0));
     if (w) meta.width  = w;
