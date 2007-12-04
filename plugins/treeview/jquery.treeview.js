@@ -84,7 +84,13 @@
 						.replaceClass(CLASSES.last, CLASSES.lastCollapsable);
 						
 	            // create hitarea
-				this.prepend("<div class=\"" + CLASSES.hitarea + "\"/>");
+				this.prepend("<div class=\"" + CLASSES.hitarea + "\"/>").find("div." + CLASSES.hitarea).each(function() {
+					var classes = "";
+					$.each($(this).parent().attr("class").split(" "), function() {
+						classes += this + "-hitarea ";
+					});
+					$(this).addClass( classes );
+				});
 			}
 			
 			// apply event to hitarea
@@ -130,9 +136,14 @@
 		
 			// handle toggle event
 			function toggler() {
-				// this refers to hitareas, we need to find the parent lis first
-				$(this).parent()
-					// swap classes
+				$(this)
+					.parent()
+					// swap classes for hitarea
+					.find(">.hitarea")
+						.swapClass( CLASSES.collapsableHitarea, CLASSES.expandableHitarea )
+						.swapClass( CLASSES.lastCollapsableHitarea, CLASSES.lastExpandableHitarea )
+					.end()
+					// swap classes for parent li
 					.swapClass( CLASSES.collapsable, CLASSES.expandable )
 					.swapClass( CLASSES.lastCollapsable, CLASSES.lastExpandable )
 					// find child lists
@@ -204,7 +215,13 @@
 			}
 			
 			return this.bind("add", function(event, branches) {
-				$(branches).prev().removeClass(CLASSES.last).removeClass(CLASSES.lastCollapsable).removeClass(CLASSES.lastExpandable);
+				$(branches).prev()
+					.removeClass(CLASSES.last)
+					.removeClass(CLASSES.lastCollapsable)
+					.removeClass(CLASSES.lastExpandable)
+				.find(">.hitarea")
+					.removeClass(CLASSES.lastCollapsableHitarea)
+					.removeClass(CLASSES.lastExpandableHitarea);
 				$(branches).find("li").andSelf().prepareBranches(settings).applyClasses(settings, toggler);
 			});
 		}
@@ -216,7 +233,11 @@
 		open: "open",
 		closed: "closed",
 		expandable: "expandable",
+		expandableHitarea: "expandable-hitarea",
+		lastExpandableHitarea: "lastExpandable-hitarea",
 		collapsable: "collapsable",
+		collapsableHitarea: "collapsable-hitarea",
+		lastCollapsableHitarea: "lastCollapsable-hitarea",
 		lastCollapsable: "lastCollapsable",
 		lastExpandable: "lastExpandable",
 		last: "last",
