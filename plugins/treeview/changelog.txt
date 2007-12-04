@@ -8,6 +8,7 @@
 * Added jquery.treeview.async.js for ajax-lazy-loading trees, see async.html demo
 * Exposed $.fn.treeview.classes for custom classes if necessary
 * Show treecontrol only when JavaScript is enabled
+* Completely reworked themeing via CSS sprites, resulting in only two files per theme
 
 1.3
 ---
