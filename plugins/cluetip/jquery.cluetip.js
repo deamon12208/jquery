@@ -1,6 +1,6 @@
 /*
  * jQuery clueTip plugin
- * Version 0.9.3.1  (11/25/2007)
+ * Version 0.9.3.2  (12/06/2007)
  * @requires jQuery v1.1.1+
  * @requires Dimensions plugin 
  *
@@ -18,9 +18,8 @@
  * @author Karl Swedberg
  *
  * @credit Inspired by Cody Lindley's jTip (http://www.codylindley.com)
- * @credit Thanks to Shelane Enos for the feature ideas 
- * @credit Thanks to the following people for their expert advice, code enhancements, bug fixes, etc.:
-      Glen Lipka, Hector Santos, Torben Schreiter, Dan G. Switzer, Jörn Zaefferer 
+ * @credit Thanks to the following people for their many and varied contributions:
+      Shelane Enos, Glen Lipka, Hector Santos, Torben Schreiter, Dan G. Switzer, Jörn Zaefferer 
  * @credit Thanks to Jonathan Chaffer, as always, for help with the hard parts. :-)
  */
 
@@ -380,20 +379,23 @@
             return false;
           }
         });
-        
+        //set up mouse tracking
+        var mouseTracks = function(evt) {
+          if (opts.tracking == true) {
+            var trackX = posX - evt.pageX;
+            var trackY = tipY ? tipY - evt.pageY : posY - evt.pageY;
+            $this.mousemove(function(evt) {
+              $cluetip.css({left: evt.pageX + trackX, top: evt.pageY + trackY });
+            });
+          }
+        };
         if ($.fn.hoverIntent && opts.hoverIntent) {
           $this.hoverIntent({
             sensitivity: opts.hoverIntent.sensitivity,
             interval: opts.hoverIntent.interval,  
             over: function(event) {
               activate(event);
-              if (opts.tracking == true) {
-                var trackX = posX - event.pageX;
-                var trackY = tipY ? tipY - event.pageY : posY - event.pageY;
-                $this.mousemove(function(event) {
-                  $cluetip.css({left: event.pageX + trackX, top: event.pageY + trackY });
-                });
-              }  
+              mouseTracks(event);
             }, 
             timeout: opts.hoverIntent.timeout,  
             out: function(event) {inactivate(event); $this.unbind('mousemove');}
@@ -401,13 +403,7 @@
         } else {
           $this.hover(function(event) {
             activate(event);
-            var trackX = posX - event.pageX;
-            var trackY = tipY ? tipY - event.pageY : posY - event.pageY;
-            if (opts.tracking == true) {
-              $this.mousemove(function(event) {
-                $cluetip.css({left: event.pageX + trackX, top: event.pageY + trackY });
-              });
-            }  
+            mouseTracks(event);
           }, function(event) {
             inactivate(event);
             $this.unbind('mousemove');
