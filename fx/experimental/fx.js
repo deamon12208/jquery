@@ -104,31 +104,28 @@
 	_removeClass: $.fn.removeClass,
 	_toggleClass: $.fn.toggleClass,
 	// New ec methods
-	effect: function(fx,o,speed,callback) { 
-	  if($.ec[fx]) {
-		var elem = this.get(0);
-		elem.fx = elem.fx || {};
-		if (!elem.fx[fx]) { // Prevent double-click
-		  elem.fx[fx] = true;
-		  return $.ec[fx].apply(this, [{method: fx, options: o || {}, speed: speed, callback: function(){if (callback) callback.apply(this.arguments); elem.fx[fx] = null;} }]);
-		}
-	  }
+	effect: function(fx,o,speed,callback) {
+		return $.ec[fx] ? $.ec[fx].call(this, {method: fx, options: o || {}, speed: speed, callback: callback }) : null;
 	},
 	show: function() {
-		(arguments[0] && (arguments[0].constructor == Number || /(slow|fast)/.test(arguments[0]))) ?
+		if(!arguments[0] || (arguments[0].constructor == Number || /(slow|fast)/.test(arguments[0])))
 			return this._show.apply(this, arguments);
-			: return this.effect.apply(this, $.extend(o || {},{ mode: 'show' }), arguments);
+		else {
+			arguments[1] = arguments[1] || {}; arguments[1]['mode'] = 'show';
+			return this.effect.apply(this, arguments);
+		}
 	},
 	hide: function() {
-		(arguments[0] && (arguments[0].constructor == Number || /(slow|fast)/.test(arguments[0]))) ?
+		if(!arguments[0] || (arguments[0].constructor == Number || /(slow|fast)/.test(arguments[0])))
 			return this._hide.apply(this, arguments);
-			: return this.effect.apply(this, $.extend(o || {},{ mode: 'hide' }), arguments);
+		else {
+			arguments[1] = arguments[1] || {}; arguments[1]['mode'] = 'hide';
+			return this.effect.apply(this, arguments);
+		}
 	},
-	toggle: function(fx,obj,speed,callback){
-	  return this.each(function() {
-		var $this = $(this);
-		$this.is(':hidden') ? $this.show.apply($this, arguments) : $this.hide.apply($this, arguments);
-	  });
+	toggle: function(){
+		var a = arguments;
+		return this.each(function() { var $this = $(this); $this.is(':hidden') ? $this.show.apply($this, a) : $this.hide.apply($this, a); });
 	},
 	addClass: function(classNames,speed,easing,callback) {
 	  return speed ? $.ec.animateClass.apply(this, [{ add: classNames },speed,easing,callback]) : this._addClass(classNames);
@@ -152,7 +149,7 @@
 	  if(style.indexOf(unit) > 0)
 		val = [parseFloat(style), unit];
 	  });
-	  return val
+	  return val;
 	}
   });
   
