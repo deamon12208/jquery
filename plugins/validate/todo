@@ -1,3 +1,4 @@
+- consider validation on page load, disabling required-checks
 - check value != defaultValue in required, making defaultValue invalid
 - test and document and demo Scott's class-rules module
 - bug in marketo demo, keeps showing error for "email already taken", even if server returns true
