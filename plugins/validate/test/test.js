@@ -1169,9 +1169,9 @@ module("ajax");
 
 test("check the serverside script works", function() {
 	stop();
-	$.getJSON("milk/users.php", {value: 'asd'}, function(response) {
+	$.getJSON("users.php", {value: 'asd'}, function(response) {
 		ok( response, "yet available" );
-		$.getJSON("milk/users.php", {username: "asdf"}, function(response) {
+		$.getJSON("users.php", {username: "asdf"}, function(response) {
 			ok( !response, "already taken" );
 			start();
 		});
@@ -1186,7 +1186,7 @@ test("validate via remote method", function() {
 		rules: {
 			username: {
 				required: true,
-				remote: "milk/users.php"
+				remote: "users.php"
 			}
 		},
 		messages: {
