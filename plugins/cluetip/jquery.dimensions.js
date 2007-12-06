@@ -40,11 +40,12 @@ $.fn.extend({
 		if ( this[0] == window )
 			if ( $.browser.opera || ($.browser.safari && parseInt($.browser.version) > 520) )
 				return self.innerHeight - (($(document).height() > self.innerHeight) ? getScrollbarWidth() : 0);
+
 			else if ( $.browser.safari )
 				return self.innerHeight;
 			else
-                return $.boxModel && document.documentElement.clientHeight || document.body.clientHeight;
-		
+          //return $.boxModel && Math.min(document.documentElement.clientHeight,document.body.clientHeight);
+      		return $.boxModel && document.documentElement.clientHeight || document.body.clientHeight;
 		if ( this[0] == document ) 
 			return Math.max( ($.boxModel && document.documentElement.scrollHeight || document.body.scrollHeight), document.body.offsetHeight );
 		

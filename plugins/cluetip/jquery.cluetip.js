@@ -1,6 +1,6 @@
 /*
  * jQuery clueTip plugin
- * Version 0.9.3.2  (12/06/2007)
+ * Version 0.9.3.2  (12/05/2007)
  * @requires jQuery v1.1.1+
  * @requires Dimensions plugin 
  *
@@ -174,8 +174,8 @@
           } else {
             posX = mouseX + lOffset;
           }
-          var pY = posX < 0 ? event.pageY + tOffset : event.pageY;
         }
+        var pY = posX < 0 ? event.pageY + tOffset : event.pageY;
         $cluetip.css({left: (posX > 0 && opts.positionBy != 'bottomTop') ? posX : (mouseX + (tipWidth/2) > winWidth) ? winWidth/2 - tipWidth/2 : Math.max(mouseX - (tipWidth/2),0)});
       }
         wHeight = $(window).height();
@@ -349,8 +349,7 @@
    =BIND EVENTS
 -------------------------------------- */
   // activate by click
-      if (opts.activation == 'click'||opts.activation == 'toggle') {
-
+      if ( (/click|toggle/).test(opts.activation) ) {
         $this.click(function(event) {
           if ($cluetip.is(':hidden') || !$(this).is('.cluetip-clicked')) {
             activate(event);
@@ -375,7 +374,7 @@
     // clicking is returned false if cluetip url is same as href url
       } else {
         $this.click(function() {
-          if ($this.attr('href') && $this.attr('href') == tipAttribute) {
+          if ($this.attr('href') && $this.attr('href') == tipAttribute && !opts.clickThrough) {
             return false;
           }
         });
@@ -452,6 +451,8 @@
     mouseOutClose:    false,    // close when clueTip is moused out
     activation:       'hover',  // set to 'click' to force user to click to show clueTip
                                 // set to 'focus' to show on focus of a form element and hide on blur
+    clickThrough:     false,    // if true, and activation is not 'click', then clicking on link will take user to the link's href,
+                                // even if href and tipAttribute are equal
     tracking:         false,    // if true, clueTip will track mouse movement
     closePosition:    'top',    // location of close text for sticky cluetips; can be 'top' or 'bottom' or 'title'
     closeText:        'Close',  // text (or HTML) to to be clicked to close sticky clueTips
