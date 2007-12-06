@@ -8,7 +8,7 @@
  * http://www.gnu.org/licenses/gpl.html
  *
  * @author: M. Alsup
- * @version: 0.71 (12/02/2007)
+ * @version: 0.72 (12/04/2007)
  * @requires jQuery v1.1.2 or later
  * $Id$
  *
@@ -281,7 +281,7 @@ function getSettings(el, options) {
     var $el = $(el);
     var cls = el.className || '';
     // support metadata plugin (v1.0 and v2.0)
-    var meta = $.metadata ? $el.metadata() : $.meta ? $el.data() : {})
+    var meta = $.metadata ? $el.metadata() : $.meta ? $el.data() : {};
     var w = meta.width  || parseInt(((cls.match(/w:(\d+)/)||[])[1]||0));
     var h = meta.height || parseInt(((cls.match(/h:(\d+)/)||[])[1]||0));
     if (w) meta.width  = w;
