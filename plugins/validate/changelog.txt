@@ -8,11 +8,14 @@
 * Added marketo-demo (thanks Glen Lipka!)
 * Added support for ajax-validation, see method "remote"
 * Added highlight and unhighlight options, by default toggles errorClass on element, allows custom highlighting
+* Added valid() plugin method for easy programmatic checking of forms and fields without the need to use the validator API
+* Replaced regex for URL method, thanks to the contribution by Scott Gonzales, see http://www.scottsplayground.com/temp/iri/common.htm
 * Fixed error container to hide when all elements are valid, not only on form submit
 * Fixed String.format to jQuery.format (moving into jQuery namespace)
-* Improved URL and email methods (now blacklisting illegal characters to make them much more versatile when dealing with unicode characters, like http://www.føtex.dk/
+* Improved email method to better handle unicode characters
 * Fixed accept method to accept both upper and lowercase extensions
-* Changed debug-mode console log to warn level
+* Changed debug-mode console log from "error" to "warn" level
+* Fixed validate() plugin method to create only one validator instance for a given form and always return that one instance (avoids binding events multiple times)
 
 1.1.1
 -----

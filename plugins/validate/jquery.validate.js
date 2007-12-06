@@ -212,7 +212,15 @@ errorPlacement: function(error, element) {
 
 jQuery.extend(jQuery.fn, {
 	validate: function( options ) {
-		var validator = new jQuery.validator( options, this[0] );
+		
+		// check if a validator for this form was already created
+		var validator = jQuery.data(this[0], 'validator');
+		if ( validator ) {
+			return validator;
+		}
+		
+		validator = new jQuery.validator( options, this[0] );
+		jQuery.data(this[0], 'validator', validator); 
 		
 		if ( validator.settings.onsubmit ) {
 		
@@ -255,6 +263,18 @@ jQuery.extend(jQuery.fn, {
 		
 		return validator;
 	},
+	valid: function() {
+        if ( jQuery(this[0]).is('form')) {
+            return jQuery(this).validate().form();
+        } else {
+            var valid = true;
+            var validator = jQuery(this.form).validate();
+            this.each(function() {
+                valid = validator.element(this) && valid;
+            });
+            return valid;
+        }
+    },
 	// destructive add
 	push: function( t ) {
 		return this.setArray( jQuery.merge( this.get(), t ) );
@@ -629,7 +649,7 @@ jQuery.extend(jQuery.validator, {
 		 *
 		 * 
 		 * @param Selector selection (optional) A selector or jQuery object or DOM element to refresh
-		 * @name jQuery.validator.prototype.hideErrors
+		 * @name jQuery.validator.prototype.refresh
 		 */
 		refresh: function(selection) {
 			var validator = this;
@@ -703,7 +723,7 @@ jQuery.extend(jQuery.validator, {
 			return jQuery( this.settings.errorElement + "." + this.settings.errorClass, this.errorContext );
 		},
 		
-		reset: function( element ) {
+		reset: function() {
 			this.successList = [];
 			this.errorList = [];
 			this.errorMap = {};
@@ -932,7 +952,7 @@ jQuery.extend(jQuery.validator, {
 	 * 
 	 * Use jQuery.validator.addMethod() to add your own methods.
 	 *
-	 * If "all kind of text inputs" is mentioned for any if the methods defined here,
+	 * If "all kind of text inputs" is mentioned for any of the methods defined here,
 	 * it refers to input elements of type text, password and file and textareas.
 	 *
 	 * @param String value The trimmed value of the element, eg. the text of a text input (trimmed: whitespace removed at start and end)
@@ -1251,11 +1271,9 @@ jQuery.extend(jQuery.validator, {
 		},
 	
 		/**
-		 * Return true, if the value is a valid url.
+		 * Return true, if the value is a valid url, with a scheme of http(s) or ftp.
 		 *
 		 * Works with all kind of text inputs.
-		 *
-		 * See http://www.w3.org/Addressing/rfc1738.txt for URL specification.
 		 *
 		 * @example <input name="homepage" class="{url:true}" />
 		 * @desc Declares an optional input element whose value must be a valid URL (or none at all).
@@ -1268,9 +1286,8 @@ jQuery.extend(jQuery.validator, {
 		 * @cat Plugins/Validate/Methods
 		 */
 		url: function(value, element) {
-			// instead of whitelisting all valid unicode characters we'll blacklist all invalid characters: whitespace and . , ;
-			// please contribute any valid URLs that don't match for the testsuite
-			return this.optional(element) || /^(https?|ftp):\/\/[^\s.,;]+(\.?[^\s.,;]+)*(\/([^\s.,;]+)?)*(\?([^\s.,;]+)?)?$/i.test(value);
+			// contributed by Scott Gonzalez: http://www.scottsplayground.com/temp/iri/common.htm
+			return this.optional(element) || /^(https?|ftp):\/\/((([A-Za-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\dA-Fa-f][\dA-Fa-f])|[!\$&'\(\)\*\+,;=]|:)*@)?((\[(|(v[\dA-Fa-f]{1,}\.(([A-Za-z]|\d|-|\.|_|~)|[!\$&'\(\)\*\+,;=]|:){1,}))\])|((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([A-Za-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([A-Za-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([A-Za-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([A-Za-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)*(([A-Za-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([A-Za-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([A-Za-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([A-Za-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?(\/((([A-Za-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\dA-Fa-f][\dA-Fa-f])|[!\$&'\(\)\*\+,;=]|:|@){1,}(\/(([A-Za-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\dA-Fa-f][\dA-Fa-f])|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([A-Za-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\dA-Fa-f][\dA-Fa-f])|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([A-Za-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\dA-Fa-f][\dA-Fa-f])|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);
 		},
         
 		/**

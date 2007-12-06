@@ -1,3 +1,4 @@
+- test and document and demo Scott's class-rules module
 - bug in marketo demo, keeps showing error for "email already taken", even if server returns true
 - bug in testsuite in IE6, normal form submit kills it
 - completely rework showErrors: manually settings errors is currently extremely flawed and utterly useless, eg. errors disappear if some other validation is triggered
@@ -10,7 +11,7 @@
 - try to replace element handling on each input with event delegation handled by the form
 	-> complicates handling the event, but improves adding/removing handlers a ton, refresh() doesn't have to do anything for events, adding and removing elements from the form is priceless
 	-> while at it, improve event handling for selects
-	-> while at it, try to add on0change: integrates nicely with eg. datepicker (which fires a change event) 
+	-> while at it, try to add onchange: integrates nicely with eg. datepicker (which fires a change event) 
 - add support for dynamic params, that is, check if the specified parameter (if relevant at all, eg. maxValue) is a function, then execute it and use the return value
 
 - document focusInvalid()

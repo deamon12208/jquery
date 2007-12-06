@@ -30,7 +30,7 @@ test("url", function() {
 	ok( method( "http://bassistance" ), "Valid url" );
 	ok( method( "http://www.føtex.dk/" ), "Valid url, danish unicode characters" );
 	ok( method( "http://bösendorfer.de/" ), "Valid url, german unicode characters" );
-	ok(!method( "http://bassistance." ), "Invalid url" );
+	ok( method( "http://bassistance." ), "Valid url" );
 	ok(!method( "http://bassistance,de" ), "Invalid url" );
 	ok(!method( "http://bassistance;de" ), "Invalid url" );
 	ok(!method( "http://.bassistancede" ), "Invalid url" );
@@ -303,6 +303,23 @@ test("dateITA", function() {
 
 module("validator");
 
+test("Constructor", function() {
+	var v1 = $("#testForm1").validate();
+	var v2 = $("#testForm1").validate();
+	equals( v1, v2, "Calling validate() multiple times must return the same validator instance" );
+});
+
+test("valid() plugin method", function() {
+	var form = $("#userForm");
+	form.validate();
+	ok ( !form.valid(), "Form isn't valid yet" );
+	var input = $("#username");
+	ok ( !input.valid(), "Input isn't valid either" );
+	input.val("Hello world");
+	ok ( form.valid(), "Form is now valid" );
+	ok ( input.valid(), "Input is valid, too" );
+});
+
 test("addMethod", function() {
 	expect( 3 );
 	$.validator.addMethod("hi", function(value) {
@@ -453,6 +470,7 @@ test("valid()", function() {
 	ok( v.valid(), "No errors, must be valid" );
 	v.errorList = errorList;
 	ok( !v.valid(), "One error, must be invalid" );
+	reset();
 	v = $('#testForm3').validate({ submitHandler: function() {
 		ok( false, "Submit handler was called" );
 	}});
@@ -861,7 +879,7 @@ test("ajaxSubmit", function() {
 			});
 		}
 	});
-	jQuery("#signupForm").submit(function() { return false;}).submit();
+	//jQuery("#signupForm").submit(function() { return false;}).submit();
 });
 
 test("option: invalidHandler", function() {
