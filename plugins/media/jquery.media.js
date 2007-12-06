@@ -8,7 +8,7 @@
  * http://www.gnu.org/licenses/gpl.html
  *
  * @author: M. Alsup
- * @version: 0.72 (12/04/2007)
+ * @version: 0.73 (12/04/2007)
  * @requires jQuery v1.1.2 or later
  * $Id$
  *
@@ -225,7 +225,7 @@ $.fn.media.defaults.players = {
             type:     'application/x-oleobject'
         },
         eAttrs: {
-            type:         'application/x-mplayer2',
+            type:         $.browser.mozilla && isFirefoxWMPPluginInstalled() ? 'application/x-ms-wmp' : 'application/x-mplayer2',
             pluginspage:  'http://www.microsoft.com/Windows/MediaPlayer/'
         }        
     },
@@ -244,6 +244,18 @@ $.fn.media.defaults.players = {
 //  everything below here is private
 //
 
+
+// detection script for FF WMP plugin (http://www.therossman.org/experiments/wmp_play.html)
+// (hat tip to Mark Ross for this script)
+function isFirefoxWMPPluginInstalled() {
+    var plugs = navigator.plugins;
+    for (i = 0; i < plugs.length; i++) {
+        var plugin = plugs[i];
+        if (plugin['filename'] == 'np-mswmp.dll')
+            return true;
+    }
+    return false;
+}
 
 var counter = 1;
 
