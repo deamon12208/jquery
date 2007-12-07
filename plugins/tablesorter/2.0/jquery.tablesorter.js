@@ -281,9 +281,6 @@
 								
 				//apply table widgets
 				applyWidget(table);
-				
-
-			
 			};
 			
 			function buildHeaders(table) {
@@ -424,6 +421,7 @@
 			
 			/* sorting methods */
 			function multisort(table,sortList,cache) {
+				
 				
 				if(table.config.debug) { var sortTime = new Date(); }
 				
@@ -566,12 +564,19 @@
 								}
 							};
 							
+							// trigger sortstart
+							$this.trigger("sortStart");
+							
 							//set css for headers
 							setHeadersCss($this[0],$headers,config.sortList,sortCSS);
 							
-							// sort the table and append it to the dom
-							appendToTable($this[0],multisort($this[0],config.sortList,cache));
-							
+							// javascript threading..
+							setTimeout(function() {
+								// sort the table and append it to the dom
+								appendToTable($this[0],multisort($this[0],config.sortList,cache));
+								// trigger sortstart
+								$this.trigger("sortEnd");
+							}, 0);
 							// stop normal event by returning false
 							return false;
 						}

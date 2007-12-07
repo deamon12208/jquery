@@ -3,8 +3,9 @@ $(function() {
 	// get javascript source
 	$("#javascript pre").text($("#js").html());
 	
-	// old school chaining...
-	var html = $("#demo").html()
+	if($("#demo").size() > 0) {
+		// old school chaining...
+		var html = $("#demo").html()
 				.toLowerCase()
 				.replace(/\n|\t|\r/g,'')
 				.replace(/<td/g,'\t\t\t<td')
@@ -20,8 +21,8 @@ $(function() {
 				.replace(/<\/table>/g,'\n</table>')
 				.replace(/-->/g,'-->\n');
 				
-	$("#html pre").text(html);
-	
+		$("#html pre").text(html);
+	}
 	$("pre.javascript").chili();
 	$("pre.html").chili();
 	$("pre.css").chili();
