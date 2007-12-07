@@ -152,8 +152,8 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			
 			that.firstSibling = $(this.element).prev()[0];
 				
-			$(this.element).triggerHandler("sortstart", [e, that.prepareCallbackObj(this)], o.start);
 			$(this.element).css('visibility', 'hidden');
+			$(this.element).triggerHandler("sortstart", [e, that.prepareCallbackObj(this)], o.start);
 			
 			return false;
 						
