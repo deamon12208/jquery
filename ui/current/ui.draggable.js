@@ -42,8 +42,7 @@
 			
 			var oDrops = $.ui.ddmanager.droppables;
 			var oOvers = $.grep(oDrops, function(oDrop) {
-				
-				if (!oDrop.item.disabled && $.ui.intersect(oDrag, oDrop, oDrop.item.options.tolerance))
+				if (!!oDrop && !oDrop.item.disabled && $.ui.intersect(oDrag, oDrop, oDrop.item.options.tolerance))
 					oDrop.item.drop.call(oDrop.item, e);
 			});
 			$.each(oDrops, function(i, oDrop) {

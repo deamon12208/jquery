@@ -60,8 +60,6 @@
 		},
 		destroy: function() {
 			$(this.element).removeClass("ui-droppable").removeClass("ui-droppable-disabled");
-			$(this.element).unbind("mousemove", this.mouseBindings[0]);
-			$(this.element).unbind("mouseup", this.mouseBindings[1]);
 			
 			for(var i=0;i<$.ui.ddmanager.droppables.length;i++) {
 				if($.ui.ddmanager.droppables[i].item == this) $.ui.ddmanager.droppables.splice(i,1);

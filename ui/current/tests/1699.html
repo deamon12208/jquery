@@ -82,7 +82,7 @@ $(document).ready(function(){
 $('li').draggable({revert:true}).droppable({
 	accept: 'li',
 	drop: function(ev, ui) {
-		$(ui.draggable.element).insertAfter(this);
+		$(ui.draggable.element).draggableDestroy().droppableDestroy().remove();
 	}
 });
 
