@@ -126,13 +126,6 @@ li {
 	border-color: silver;
 }
 
-.tolerance-fit {
-	padding: 15px;
-	margin: 15px;
-	border-width: 15px;
-	outline: 15px solid green;
-}
-
 </style>
 </head>
 <body>
@@ -144,7 +137,10 @@ li {
 
 	<li>
 		<div id="droppable-accept-function" class="droppable">droppable<br/></div>
-		accept: function()
+		accept: function(draggable) {<br/>
+		&nbsp;&nbsp;return $(draggable).is('.green');<br/>
+		}
+
 		<div class="draggable red">
 			draggable
 			<div class="className">.red</div>
@@ -204,21 +200,24 @@ li {
 	</li>
 	<li>
 		<div id="droppable-tolerance-fit" class="droppable">droppable<br/>fit<br/></div>
-		tolerance: 'fit'
+		tolerance: 'fit'<br/>
+		//100% inside droppable
 		<div class="draggable tolerance-fit">
 			draggable
 		</div>
 	</li>
 	<li>
 		<div id="droppable-tolerance-intersect" class="droppable">droppable<br/>intersect<br/></div>
-		tolerance: 'intersect'
+		tolerance: 'intersect'<br/>
+		//at least 50% inside droppable
 		<div class="draggable tolerance-intersect">
 			draggable
 		</div>
 	</li>
 	<li>
 		<div id="droppable-tolerance-pointer" class="droppable">droppable<br/>pointer<br/></div>
-		tolerance: 'pointer'
+		tolerance: 'pointer'<br/>
+		//mouse pointer inside droppable
 		<div id="draggable-tolerance-pointer-center" class="tolerance-pointer">
 			draggable
 		</div>
@@ -228,7 +227,8 @@ li {
 	</li>
 	<li>
 		<div id="droppable-tolerance-touch" class="droppable">droppable<br/>touch<br/></div>
-		tolerance: 'touch'
+		tolerance: 'touch'<br/>
+		//any amount inside droppable
 		<div class="draggable tolerance-touch">
 			draggable
 		</div>
