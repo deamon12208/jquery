@@ -64,6 +64,14 @@
 		var uiDialog = uiDialogContainer.parent()
 			.addClass('ui-dialog')
 			.css({position: 'absolute', width: options.width, height: options.height, overflow: 'hidden'});
+
+		var classNames = uiDialogContent.attr('className').split(' ');
+
+		// Add content classes to dialog, to inherit theme at top level of element
+		$.each(classNames, function(i, className) {
+			if (className != 'ui-dialog-content')
+				uiDialog.addClass(className);
+		});
 		
 		if (options.resizable) {
 			uiDialog.append("<div class='ui-resizable-n ui-resizable-handle'></div>")
