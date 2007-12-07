@@ -42,10 +42,6 @@
 		o = this.options;
 		var self = this;
 		
-		this.mouseBindings = [function(e) { return self.move.apply(self, [e]); },function(e) { return self.drop.apply(self, [e]); }];
-		$(this.element).bind("mousemove", this.mouseBindings[0]);
-		$(this.element).bind("mouseup", this.mouseBindings[1]);
-		
 		$.ui.ddmanager.droppables.push({ item: this, over: 0, out: 1 }); // Add the reference and positions to the manager
 		$(this.element).addClass("ui-droppable");
 			
