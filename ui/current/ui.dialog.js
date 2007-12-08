@@ -61,7 +61,7 @@
 			.wrap(document.createElement('div'))
 			.wrap(document.createElement('div'));
 		var uiDialogContainer = uiDialogContent.parent().addClass('ui-dialog-container').css({position: 'relative'});
-		var uiDialog = uiDialogContainer.parent()
+		var uiDialog = uiDialogContainer.parent().hide()
 			.addClass('ui-dialog')
 			.css({position: 'absolute', width: options.width, height: options.height, overflow: 'hidden'});
 

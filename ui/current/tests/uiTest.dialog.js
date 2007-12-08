@@ -45,9 +45,9 @@
 					"right" : "$('#foo').dialog({\n\t position: 'right' \n});",
 					"bottom" : "$('#foo').dialog({\n\t position: 'bottom' \n});",
 					"left" : "$('#foo').dialog({\n\t position: 'left' \n});",
-					"[x, y]" : "$('#foo').dialog({\n\t position: [10, 20] \n});",
-					"[300, 80]" : "$('#foo').dialog({\n\t position: [300, 80] \n});",
-					"[80, 300]" : "$('#foo').dialog({\n\t position: [80, 300] \n});",
+					"Array-10-20" : "$('#foo').dialog({\n\t position: [10, 20] \n});",
+					"Array-300-80" : "$('#foo').dialog({\n\t position: [300, 80] \n});",
+					"Array-80-300" : "$('#foo').dialog({\n\t position: [80, 300] \n});",
 					"foo" : "$('#foo').dialog({\n\t position: 'foo' \n});"
 				},
 				"resizable" : {
@@ -55,7 +55,7 @@
 					"false" : "$('#foo').dialog({\n\t resizable: false \n});"
 				},
 				"title" : {
-					"attribute" : "$('#foo').attr( 'title', 'Dialog Title' ).dialog();",
+					"attribute" : "$('#foo')\n  .attr( 'title', 'Dialog Title' )\n  .dialog();",
 					"option" : "$('#foo').dialog({\n\t title: 'Dialog Title' \n});"
 				},
 				"width" : {
