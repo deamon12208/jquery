@@ -9,7 +9,7 @@
 * Added support for ajax-validation, see method "remote"
 * Added highlight and unhighlight options, by default toggles errorClass on element, allows custom highlighting
 * Added valid() plugin method for easy programmatic checking of forms and fields without the need to use the validator API
-* Replaced regex for URL method, thanks to the contribution by Scott Gonzales, see http://www.scottsplayground.com/temp/iri/common.htm
+* Replaced regex for URL method, thanks to the contribution by Scott Gonzalez, see http://projects.scottsplayground.com/iri/
 * Fixed error container to hide when all elements are valid, not only on form submit
 * Fixed String.format to jQuery.format (moving into jQuery namespace)
 * Improved email method to better handle unicode characters
