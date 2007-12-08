@@ -71,6 +71,9 @@
 				"dialogInit" : "$('#foo').dialogInit();\nsetTimeout(\"$('#foo').dialogOpen();\", 1000);",
 				"dialogOpen" : "$('#foo').dialog({ width: 450 }).dialogClose();\n setTimeout(\"$('#foo').dialogOpen();\", 1000)",
 				"dialogClose" : "$('#foo').dialog({ width: 450 });\n setTimeout(\"$('#foo').dialogClose();\", 1000);"
+			},
+			"tickets": {
+				"1876" : "$('#foo').hide().dialog({width:800});"
 			}
 		}
 	};
