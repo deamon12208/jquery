@@ -64,6 +64,8 @@
 				}
 			},
 			"callbacks": {
+				"open" : "$('#foo').dialog({\n  open: function() {\n    alert('opened');\n  }\n});",
+				"close" : "$('#foo').dialog({\n  close: function() {\n    alert('closed');\n  }\n});"
 			},
 			"methods": {
 				"dialogInit" : "$('#foo').dialogInit();\nsetTimeout(\"$('#foo').dialogOpen();\", 1000);",

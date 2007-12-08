@@ -153,10 +153,24 @@
 			top = top < doc.scrollTop() ? doc.scrollTop() : top;
 			uiDialog.css({top: top, left: left});
 			uiDialog.show();
+
+			// CALLBACK: open
+			var openEV = null;
+			var openUI = {
+				options: options
+			};
+			$(this.element).triggerHandler("dialogopen", [openEV, openUI], options.open);
 		};
 
 		this.close = function() {
 			uiDialog.hide();
+
+			// CALLBACK: close
+			var closeEV = null;
+			var closeUI = {
+				options: options
+			};
+			$(this.element).triggerHandler("dialogclose", [closeEV, closeUI], options.close);
 		};
 
 	}
