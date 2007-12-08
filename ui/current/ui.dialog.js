@@ -8,8 +8,8 @@
 	}
 	$.fn.dialogInit = function(o) {
 		return this.each(function() {
-			if (!$(this).is(".ui-dialog")) {
-				$.ui.dialogInit(this, o);
+			if (!$(this).is(".ui-dialog-content")) {
+				new $.ui.dialogInit(this, o);
 			}			
 		});
 	}
