@@ -44,7 +44,11 @@
 					"top" : "$('#foo').dialog({\n\t position: 'top' \n});",
 					"right" : "$('#foo').dialog({\n\t position: 'right' \n});",
 					"bottom" : "$('#foo').dialog({\n\t position: 'bottom' \n});",
-					"left" : "$('#foo').dialog({\n\t position: 'left' \n});"
+					"left" : "$('#foo').dialog({\n\t position: 'left' \n});",
+					"[x, y]" : "$('#foo').dialog({\n\t position: [10, 20] \n});",
+					"[300, 80]" : "$('#foo').dialog({\n\t position: [300, 80] \n});",
+					"[80, 300]" : "$('#foo').dialog({\n\t position: [80, 300] \n});",
+					"foo" : "$('#foo').dialog({\n\t position: 'foo' \n});"
 				},
 				"resizable" : {
 					"true" : "$('#foo').dialog({\n\t resizable: true \n});",

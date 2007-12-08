@@ -118,27 +118,37 @@
 		this.open = function() {
 			uiDialog.appendTo('body');
 			var wnd = $(window), doc = $(document), top = doc.scrollTop(), left = doc.scrollLeft();
-			switch (options.position) {
-				case 'center':
-					top += (wnd.height() / 2) - (uiDialog.height() / 2);
-					left += (wnd.width() / 2) - (uiDialog.width() / 2);
-					break;
-				case 'top':
-					top += 0;
-					left += (wnd.width() / 2) - (uiDialog.width() / 2);
-					break;
-				case 'right':
-					top += (wnd.height() / 2) - (uiDialog.height() / 2);
-					left += (wnd.width()) - (uiDialog.width());
-					break;
-				case 'bottom':
-					top += (wnd.height()) - (uiDialog.height());
-					left += (wnd.width() / 2) - (uiDialog.width() / 2);
-					break;
-				case 'left':
-					top += (wnd.height() / 2) - (uiDialog.height() / 2);
-					left += 0;
-					break;
+			if (options.position.constructor == Array) {
+				// [x, y]
+				top += options.position[1];
+				left += options.position[0];
+			} else {
+				switch (options.position) {
+					case 'center':
+						top += (wnd.height() / 2) - (uiDialog.height() / 2);
+						left += (wnd.width() / 2) - (uiDialog.width() / 2);
+						break;
+					case 'top':
+						top += 0;
+						left += (wnd.width() / 2) - (uiDialog.width() / 2);
+						break;
+					case 'right':
+						top += (wnd.height() / 2) - (uiDialog.height() / 2);
+						left += (wnd.width()) - (uiDialog.width());
+						break;
+					case 'bottom':
+						top += (wnd.height()) - (uiDialog.height());
+						left += (wnd.width() / 2) - (uiDialog.width() / 2);
+						break;
+					case 'left':
+						top += (wnd.height() / 2) - (uiDialog.height() / 2);
+						left += 0;
+						break;
+					default:
+						//center
+						top += (wnd.height() / 2) - (uiDialog.height() / 2);
+						left += (wnd.width() / 2) - (uiDialog.width() / 2);
+				}
 			}
 			top = top < doc.scrollTop() ? doc.scrollTop() : top;
 			uiDialog.css({top: top, left: left});
