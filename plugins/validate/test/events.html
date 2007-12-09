@@ -14,8 +14,8 @@ $().ready(function() {
 	function handle(event) {
 		console.log("this", this, "type", event.type, "target", event.target);
 	}
-	$("#commentForm").keyup(handle).blur(handle).change(handle);
-	$(":input").change(handle).blur(handle).keyup(handle);
+	$("#commentForm").keyup(handle).blur(handle).change(handle).focus(handle).mouseup(handle);
+	//$(":input").change(handle).blur(handle).keyup(handle).focus(handle).bind("input", handle);
 });
 </script>
 

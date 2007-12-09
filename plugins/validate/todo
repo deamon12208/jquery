@@ -1,3 +1,30 @@
+event architecture draft
+------------------------
+
+Goal: Improve performance for big forms, simplify adding and removing elements from valiated forms.
+
+Idea: Use event delegation and handle all necessary events on the form, registering event handlers there, not on each element.
+
+Problem to solve: Neither blur nor focus bubble up to its parent form. Change, keyup and mouseup do, but change isn't triggered
+by browsers built-in autocomplete.
+
+Possible solution: Set an interval that checks all elements on the form for changes, triggering an appropiate event then (eg. change).
+The event must be triggered on the form with the element as the target. Use jQuery.event.fix({type: "change", target: this}) to create the
+event object, and use $(this.form).triggerHandler("change", event) to trigger the event and pass through the event object.
+The bubbled keyup and mouseup events could be used to determine which elements actually have focus.
+The interval must be small enough to give feedback fast enough. It could be a good thing to have it react a bit slower then usual onblur-validation,
+to avoid the tab-POW-reaction (though that is better solved with appropiate layouts and fadeins).
+
+Things to keep in mind while testing: Focus event is currently used to rememeber the last focused elements. That must continue to work.
+Profiling should be done with a form with about 100 elements, which isn't that unusual.
+
+Notes:
+ - while checking that stuff anyway, consider binding per-element-stuff directly to the element using jQuery's data API
+ - check if the loop over form.elements inside the interval has to do any filtering (eg. disabled, hidden, buttons), or if that can be filtered at a later stage anyway
+
+other stuff
+-----------
+
 - consider validation on page load, disabling required-checks
 - check value != defaultValue in required, making defaultValue invalid
 - test and document and demo Scott's class-rules module
