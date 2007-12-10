@@ -22,6 +22,11 @@ Notes:
  - while checking that stuff anyway, consider binding per-element-stuff directly to the element using jQuery's data API
  - check if the loop over form.elements inside the interval has to do any filtering (eg. disabled, hidden, buttons), or if that can be filtered at a later stage anyway
 
+css references
+--------------
+- http://test5.caribmedia.com/CSS/Secrets/members/michiel/floating-forms.html
+- http://paularmstrongdesigns.com/projects/awesomeform/
+
 other stuff
 -----------
 
