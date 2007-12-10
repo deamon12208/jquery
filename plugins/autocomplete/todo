@@ -1,6 +1,7 @@
 
 TODO
 
+- incorporate improvements and suggestions by Hector: http://beta.winserver.com/public/test/MultiSuggestTest.wct
 - json support: An optional JSON format, that assumes a certain JSON format as default and just looks for a dataType "json" to be activated; [records], where each record is { id:String, label:String, moreOptionalValues... } 
 - accept callback as first argument to let users implement their own dynamic data (no caching) - consider async API
 - allow users to keep their incomplete value when pressing tab, just mimic the default-browser-autocomplete: tab doesn't select any proposed value -> tab closes the select and works normal otherwise
@@ -21,6 +22,7 @@ $input.bind("show", function() {
 - reference: http://capxous.com/
   - add "try ..." hints to demo
   - check out demos
+- reference: http://createwebapp.com/demo/
   
 - add option to hide selectbox when no match is found - see comment by Ian on plugin page (14. Juli 2007 04:31)
 - add example for reinitializing an autocomplete using unbind()
