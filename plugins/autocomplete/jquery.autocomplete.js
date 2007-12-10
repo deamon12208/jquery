@@ -834,7 +834,8 @@ $.Autocompleter.Select = function (options, input, select, config) {
             }
 		},
 		selected: function() {
-			return listItems && $.data(listItems.filter("." + CLASSES.ACTIVE)[0], "ac_data");
+			var selected = listItems && listItems.filter("." + CLASSES.ACTIVE).removeClass();
+			return selected && selected.length && $.data(selected[0], "ac_data");
 		},
 		unbind: function() {
 			element && element.remove();
