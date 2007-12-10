@@ -31,7 +31,7 @@
 	 return {x: x, y: y};
 	},
 	createWrapper: function(el) {
-	  var props = {width: el.outerWidth({margin:true}), height: el.outerHeight({margin:true}), float: el.css('float')};
+	  var props = {width: el.outerWidth({margin:true}), height: el.outerHeight({margin:true}), 'float': el.css('float')};
 	  el.wrap('<div id="fxWrapper"></div>');
 	  var wrapper = el.parent();
 	  if (el.css('position') == 'static'){
