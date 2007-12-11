@@ -67,8 +67,6 @@ additional options/callbacks:
 - document all those event options
 - is that element == lastElement check in the onblur handler really useful?
 
-- ajax: captcha validation ( http://psyrens.com/captcha/ )
-- allow to ignore a default value for onblur-validation
 - performance tuning: add about 100 fields to custom-method-demo and profile IE
 - oninvalid/invalidSubmitHandler: called after a form is validated on submit and its invalid
 - removing messages by specifying null or an empty string doesn't work as it defaults to the default message. improve that check
@@ -77,7 +75,7 @@ additional options/callbacks:
 	- in combination with autocomplete (mustmatch company name, fill out address details, validate required)
 	- validate zip code in comparison to address, if match and state is missing, fill out state
 - strong password check/integration: http://phiras.wordpress.com/2007/04/08/password-strength-meter-a-jquery-plugin/
-- add/modify onkeyup option: true - immediate, false - none
+- add/modify onkeyup option: true - immediate, false - none, default - filtered
 
 - validate on paste:
 
@@ -91,7 +89,6 @@ if ($.browser.msie)
 else if ($.browser.mozilla)
  this.addEventListener('input',checkVal,false);
 
-- docs: update options, fix rules/messages
 - custom-methods-demo.html enable summary container, currently broken, is updated too often
 - stop firefox password manager to popup before validation - very very difficult
 
@@ -106,19 +103,15 @@ else if ($.browser.mozilla)
 
  Examples:
  - wordpress comment form, make it a drop-in method
- - masked input plugin integration http://digitalbush.com/projects/masked-input-plugin -> marketo
+ - ajax: captcha validation ( http://psyrens.com/captcha/ )
  - ajaxForm() integration
  - ajaxSubmit with rules-option, more/less options to ajaxSubmit
  - watermark integration http://digitalbush.com/projects/watermark-input-plugin
- - custom password validation, eg. 6 chars min, and at least 1 number and at least 1 alpha or Must not use 123, abc, asdf or your username or your domain in the password, see addMethod2 test
  - datepicker integration (see dobis)
  - timepicker integration ( http://labs.perifer.se/timedatepicker/ ) 
- - milk example
- - one example for each option
- - intergration with rich-text-editors (FCKEditor, TinyMCE, Codepress)
  - integration with CakePHP ( https://trac.cakephp.org/ticket/2359 )
- - integration with tabs: http://www.netix.sk/forms/test.html
- 
+ - integration with tabs: http://www.netix.sk/forms/test.html 
+ - intergration with rich-text-editors (FCKEditor, TinyMCE, Codepress)
  -> In simple terms, you need to "move" the content from the TinyMCE
 control to the textarea for validation.
 
@@ -128,33 +121,3 @@ $('button.save').click(function(){
 http://wiki.moxiecode.com/index.php/TinyMCE:Functions#tinyMCE.triggerSave
  
 http://www.fyneworks.com/jquery/FCKEditor/
-
-Examples for specifying validation rules via special classes:
-
-var classRules = {
-    required: "required",
-    requiredChecked: {
-        required: "#checked:checked"
-    },
-    requiredMail: {
-        required: true,
-        email: true
-    }
-};
-
-var rules = {};
-$(':input').each(function() {
-    var input = this;
-    if ( $(input).attr("class") ) {
-        $.each($(input).attr("class").split(" "), function(i, n) {
-            if ( n in classRules ) {
-                rules[ input.name] = classRules[n];
-            }
-        });
-    }
-});
-
-
-$("form").validate({
-    rules: rules
-});
