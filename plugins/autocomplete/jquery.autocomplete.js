@@ -73,7 +73,6 @@
  * @option Boolean autoFill Fill the textinput while still selecting a value, replacing the value if more is type or something else is selected. Default: false
  * @option Number max Limit the number of items in the select box. Is also send as a "limit" parameter with a remote request. Default: 10
  * @option Boolean|Function highlight Whether and how to highlight matches in the select box. Set to false to disable. Set to a function to customize. The function gets the value as the first argument and the search term as the second and must return the formatted value. Default: Wraps the search term in a <strong> element 
- * @option Boolean|String moreItems Whether or not to show the "more items" text if there are more items than are currently be displayed. Set to false to disable. Set to a string to customize the html. Default: Displays "more", surrounded with three arrows.
  * @option Boolean scroll Whether to scroll when more results then configured via scrollHeight are available. Default: true 
  * @option Number scrollHeight height of scrolled autocomplete control in pixels
  * @option String attachTo The element to attach the autocomplete list to. Useful if used inside a modal window like Thickbox. Default: body -MM
@@ -154,8 +153,6 @@ $.fn.extend({
 		
 		// if highlight is set to false, replace it with a do-nothing function
 		options.highlight = options.highlight || function(value) { return value; };
-		// if moreItems is false, replace it w/empty string
-		options.moreItems = options.moreItems || "";
 		
 		return this.each(function() {
 			new $.Autocompleter(this, options);
@@ -500,8 +497,6 @@ $.Autocompleter.defaults = {
 	extraParams: {},
 	selectFirst: true,
 	formatItem: function(row) { return row[0]; },
-	//moreItems: "&#x25be;&#x25be;&#x25be; more &#x25be;&#x25be;&#x25be;",
-	moreItems: "",
 	autoFill: false,
 	width: 0,
 	multiple: false,
@@ -661,8 +656,7 @@ $.Autocompleter.Select = function (options, input, select, config) {
 		term = "",
 		needsInit = true,
 		element,
-		list,
-		moreItems;
+		list;
 	
 	// Create results
 	function init() {
@@ -689,13 +683,6 @@ $.Autocompleter.Select = function (options, input, select, config) {
 		}).mouseup(function() {
 			config.mouseDownOnSelect = false;
 		});
-		
-		if( options.moreItems.length > 0 ) 
-		moreItems = $("<div>")
-			.addClass("ac_moreItems")
-			.css("display", "none")
-			.html(options.moreItems)
-			.appendTo(element);
 		
 		if( options.width > 0 )
 			element.css("width", options.width);
@@ -762,8 +749,6 @@ $.Autocompleter.Select = function (options, input, select, config) {
 			listItems.slice(0, 1).addClass(CLASSES.ACTIVE);
 			active = 0;
 		}
-		if( options.moreItems.length > 0 && !options.scroll)
-			moreItems.css("display", (data.length > max)? "block" : "none");
 		list.bgiframe();
 	}
 	
