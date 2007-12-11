@@ -1,6 +1,9 @@
 
 TODO
 
+- prevent redundant requests on
+  - superstring returned no result, no need to query again for substring, eg. pete returned nothing, peter won't either
+  - previous query mustn't be requested again, eg. pete returns 10 lines, peter nothing, backspace to pete should get the 10 lines from cache (may need TimeToLive setting for cache to invalidate it)
 - incorporate improvements and suggestions by Hector: http://beta.winserver.com/public/test/MultiSuggestTest.wct
 - json support: An optional JSON format, that assumes a certain JSON format as default and just looks for a dataType "json" to be activated; [records], where each record is { id:String, label:String, moreOptionalValues... } 
 - accept callback as first argument to let users implement their own dynamic data (no caching) - consider async API
