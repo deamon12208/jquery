@@ -74,7 +74,7 @@
  * @option Number max Limit the number of items in the select box. Is also send as a "limit" parameter with a remote request. Default: 10
  * @option Boolean|Function highlight Whether and how to highlight matches in the select box. Set to false to disable. Set to a function to customize. The function gets the value as the first argument and the search term as the second and must return the formatted value. Default: Wraps the search term in a <strong> element 
  * @option Boolean|String moreItems Whether or not to show the "more items" text if there are more items than are currently be displayed. Set to false to disable. Set to a string to customize the html. Default: Displays "more", surrounded with three arrows.
- * @option Boolean scroll Whether or not use experimental scroll feature
+ * @option Boolean scroll Whether to scroll when more results then configured via scrollHeight are available. Default: true 
  * @option Number scrollHeight height of scrolled autocomplete control in pixels
  * @option String attachTo The element to attach the autocomplete list to. Useful if used inside a modal window like Thickbox. Default: body -MM
  */
