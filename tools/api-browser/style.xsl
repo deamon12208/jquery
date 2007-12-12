@@ -5,7 +5,9 @@
 	doctype-system="http://www.w3.org/TR/html4/strict.dtd"  />
 	
 	<xsl:template name="ref">
+		<xsl:text>link-</xsl:text>
 		<xsl:value-of select="translate(@name, '$.|', '')"/>
+		<xsl:text>-</xsl:text>
 		<xsl:for-each select="params">
 			<xsl:value-of select="translate(@name, '&lt;&gt;|$.', '')" />
 		</xsl:for-each>
@@ -107,6 +109,7 @@
 		<title>jQuery <xsl:value-of select="/docs/@version" /> API Browser </title>
 		<link rel="stylesheet" href="screen.css" media="screen,projector" />
 		<link rel="stylesheet" href="print.css" media="print" />
+		<!-- 
 		<script type="text/javascript" src="lib/jquery.js"></script>
 		<script type="text/javascript" src="lib/jquery.tooltip.js"></script>
 		<script type="text/javascript" src="lib/jquery.treeview.js"></script>
@@ -114,9 +117,8 @@
 		<script type="text/javascript" src="lib/jquery.highlight.js"></script>
 		<script type="text/javascript" src="lib/jquery.quicksearch.js"></script>
 		<script type="text/javascript" src="lib/jquery.chili.js"></script>
-		<!-- 
-		<script type="text/javascript" src="lib/browser.lib.pack.js"></script>
 		 -->
+		<script type="text/javascript" src="lib/browser.lib.min.js"></script>
 		<script type="text/javascript" src="browser.js"></script>
 	</head>
 	<body>

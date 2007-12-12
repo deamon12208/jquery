@@ -4,12 +4,12 @@
     <!-- SETUP -->
 
     <property description="Source Folder" name="SRC_DIR" value="lib" />
-    <property description="Files for parsing etc." name="BUILD_DIR" value="../jquery/build" />
+    <property description="Files for parsing etc." name="BUILD_DIR" value="build" />
     <property description="Rhino JS Engine" name="JAR" value="${BUILD_DIR}/js.jar" />
 
     <!-- Files names for distribution -->
     <property name="BROWSER" value="${SRC_DIR}/browser.lib.js" />
-	<property name="BROWSER_MIN" value="${SRC_DIR}/browser.lib.pack.js" />
+	<property name="BROWSER_MIN" value="${SRC_DIR}/browser.lib.min.js" />
 
     <!-- MAIN -->
 	
@@ -20,7 +20,7 @@
 	<target name="zip">
 		<echo message="Packaging into zip file" />
         <zip destfile="jquery-api-browser.zip">
-            <zipfileset dir="." excludes="*.zip" />
+            <zipfileset dir="." excludes="*.zip,.project" />
         </zip>
         <echo message="Packaging done." />
 	</target>
