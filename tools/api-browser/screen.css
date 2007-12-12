@@ -1,0 +1,238 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html, body {
+	background: #212121;
+	font-family: Arial;
+	font-size: 14px;
+	width:100%;
+	height:100%;
+	overflow:hidden;
+	background:transparent url(images/hdr_bkg.gif) repeat-x scroll 0 0;
+	color:#444444;
+}
+* html, * body {
+	height: 99%;
+}
+h1 {
+	margin: 0 0 0 1.5em;
+	height: 85px;
+}
+h1 a img { border: none; }
+#header {
+	color: #FFF;
+	font-size: 2em;
+	font-weight: bold;
+	margin-left: 2em;
+	left: 231px;
+	top: 30px;
+}
+#header span { font-size: .6em; color: white; }
+h2 { margin: .5em; font-size: 1.6em; }
+h3 { margin: .4em 0; font-size: 1.2em;  }
+h4 { margin: .35em 0; font-size: 1em;  }
+
+h1, #content, #nav, #docs, #header { position:absolute; }
+#content { left:0 !important; right:0 !important; }
+#content { background:#666 !important; top:85px !important; bottom:0 !important; }
+
+#nav, #docs {
+	background: #FFF;
+	list-style: none;
+	padding: 5px;
+	top: 0;
+	bottom: 0;
+	overflow: auto;
+}
+* html #nav, * html #docs {
+	height: 90%;
+}
+#nav {
+	width: 340px;
+	overflow: auto;
+	position: absolute;
+	left: 0;
+}
+#docs {
+	left: 350px;
+	right: 0;
+	overflow: auto;
+	position: absolute;
+}
+
+ul#docs li {
+	margin: 2em 1em;
+	padding-bottom: 1em;
+	border-bottom: 2px solid;
+}
+
+ul#docs li span.tooltip {
+	border-bottom: 1px dashed #666;
+}
+
+ul#docs li a.name {
+	font-weight: bold;
+	text-decoration: none;
+}
+
+ul#docs li span.arg-type {
+	color: #666;
+}
+
+ul#docs span.fn {
+	font-family: Courier;
+}
+
+#tooltip {
+	background: #fff;
+	border: 1px solid black;
+	padding: 4px;
+	max-width: 25em;
+	text-align: left;
+}
+
+#tooltip h3 {
+	font-weight: normal;
+	font-size: 12px;
+	font-family: Arial;
+	margin: 0;
+}
+
+#docs li div.more {
+	margin-left: 2em;
+	margin-top: 5px;
+}
+
+#docs li div.example {
+	border-top: 1px solid #DDD;
+	margin-top: 15px;
+}
+
+#docs li div.example h5 {
+	font-size: 16px;
+	margin: 10px 0 0 0;
+}
+
+#docs li div.example pre {
+	color: #000;
+	background: #EEE;
+	padding: 5px;
+	font-size: 0.8em;
+}
+
+p.raw {
+	font-size: 11px;
+	color: #FFF;
+	margin: 5px auto;
+	width: 600px;
+	text-align: right;
+}
+
+p.raw a {
+	color: #FFF;
+}
+
+/* NAVIGATION */
+
+.tabs-hide {
+      display: none;
+}
+.tabs-nav {
+	border-bottom: 1px solid black;
+}
+.tabs-nav li {
+	display: inline;
+	border: 1px solid black;
+	line-height: 110%;
+}
+.tabs-nav li a {
+	padding: 0 10px;
+	text-decoration: none;
+	color: black;
+	font-weight: bold;
+}
+.tabs-nav li.tabs-selected {
+	border-bottom: 1px solid white;
+}
+
+#navQS {
+	margin-bottom: 1em;
+}
+#mainQS {
+	float: right;
+	margin-right: 2em;
+	margin-top: 4em;
+	padding-left: 2em;
+}
+
+#mainQS label {
+	color: white;
+}
+
+#nav .navsub h3 { display: block; }
+.js #nav .navsub h3 { display: none; }
+#nav .navsub .treecontrol { display: none; }
+.js #nav #navCat.navsub .treecontrol { display: block; margin-top: 2em; }
+
+#nav li {
+	margin-left: 1em;	
+}
+#nav div li a {
+	color: blue;
+	font-family: monospace;
+	text-decoration: none;
+}
+#nav li.indent2 { padding-left: 1em; }
+
+#nav ul.treeview, .treeview ul { 
+	padding: 0;
+	margin: 0;
+	list-style: none;
+}
+#nav ul.treeview li {
+	margin-left: 0em;
+	line-height: 90%;
+	padding-bottom: .1em;
+}
+#nav .treecontrol { margin-bottom: 5px; }
+#nav .treecontrol a {
+	padding: 0 5px;
+	margin: 5px;
+	text-decoration: none;
+	border: 1px dotted black;
+}
+
+.treeview li { 
+	position: relative;
+	margin: 0;
+	padding: 4px 0 3px 20px;
+	z-index: 10;
+}
+
+.treeview li { background: url(images/tv-item.gif) 0 0 no-repeat; }
+.treeview .collapsable { background-image: url(images/tv-collapsable.gif); }
+.treeview .expandable { background-image: url(images/tv-expandable.gif); }
+.treeview .last { background-image: url(images/tv-item-last.gif); }
+.treeview .lastCollapsable { background-image: url(images/tv-collapsable-last.gif); }
+.treeview .lastExpandable { background-image: url(images/tv-expandable-last.gif); }>>>>>>> .r2364
+
+.javascript .mlcom    { color: #4040c2; }
+.javascript .com      { color: green; }
+.javascript .regexp   { color: maroon; }
+.javascript .string   { color: teal; }
+.javascript .keywords, .javascript .jquery { color: navy; font-weight: bold; }
+.javascript .global   { color: blue; }
+.javascript .numbers  { color: red; }
+
+.html .tag    { color: navy; font-weight: bold; }
+.html .aname  { color: purple; }
+.html .avalue { color: fuchsia; }
+.html .mlcom  { color: green; }
+.html .entity { color: teal; }
+
+code {
+	font-size: 108%;
+	padding: 0pt;
+}
