@@ -126,7 +126,8 @@
         },
         tabify: function(init) {
 
-            this.$tabs = $('a:first-child', this.source);
+            this.$lis = $('li:has(a[href])', this.source);
+            this.$tabs = $('a[href]', this.source);
             this.$panels = $([]);
             
             var self = this, o = this.options;
@@ -191,14 +192,14 @@
                     } else if (o.cookie) {
                         o.initial = parseInt($.cookie( $.ui.tabs.INSTANCE_KEY + $.data(self.source) )) || 0;
                         return false; // break
-                    } else if ( $(a).parent('li').hasClass(o.selectedClass) ) {
+                    } else if ( self.$lis.eq(i).hasClass(o.selectedClass) ) {
                         o.initial = i;
                         return false; // break
                     }
                 });
-                var n = this.$tabs.length;
-                while ( this.$tabs.eq(o.initial).parent('li').hasClass(o.disabledClass) && n) {
-                    o.initial = ++o.initial < this.$tabs.length ? o.initial : 0;
+                var n = this.$lis.length;
+                while (this.$lis.eq(o.initial).hasClass(o.disabledClass) && n) {
+                    o.initial = ++o.initial < this.$lis.length ? o.initial : 0;
                     n--;
                 }
                 if (!n) { // all tabs disabled, set option unselected to true
@@ -206,12 +207,11 @@
                 }
 
                 // highlight selected tab
-                var $lis = this.$tabs.parent('li');
                 this.$panels.addClass(o.hideClass);
-                $lis.removeClass(o.selectedClass);
+                this.$lis.removeClass(o.selectedClass);
                 if (!o.unselected) {
                     this.$panels.eq(o.initial).show().removeClass(o.hideClass); // use show and remove class to show in any case no matter how it has been hidden before
-                    $lis.eq(o.initial).addClass(o.selectedClass);
+                    this.$lis.eq(o.initial).addClass(o.selectedClass);
                 }
 
                 // load if remote tab
@@ -286,11 +286,11 @@
             }
 
             // switch a tab
-            function switchTab(clicked, $hide, $show) {
+            function switchTab(clicked, $li, $hide, $show) {
                 /*if (o.bookmarkable && trueClick) { // add to history only if true click occured, not a triggered click
                     $.ajaxHistory.update(clicked.hash);
                 }*/
-                $(clicked).parents('li:eq(0)').addClass(o.selectedClass)
+                $li.addClass(o.selectedClass)
                     .siblings().removeClass(o.selectedClass);
                 hideTab(clicked, $hide, $show);
             }
@@ -299,7 +299,7 @@
             this.$tabs.unbind(o.event).bind(o.event, function() {
 
                 //var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
-                var $li = $(this).parent('li'),
+                var $li = $(this).parents('li:eq(0)'),
                     $hide = self.$panels.filter(':visible'),
                     $show = $(this.hash);
 
@@ -358,10 +358,10 @@
                     if ($.data(this, 'href')) { // remote tab
                         var a = this;
                         self.load(self.$tabs.index(this) + 1, $.data(this, 'href'), function() {
-                            switchTab(a, $hide, $show);
+                            switchTab(a, $li, $hide, $show);
                         });
                     } else {
-                        switchTab(this, $hide, $show);
+                        switchTab(this, $li, $hide, $show);
                     }
 
                     // Set scrollbar to saved position - need to use timeout with 0 to prevent browser scroll to target of hash
@@ -396,11 +396,11 @@
                 var $panel = $('#' + id);
                 $panel = $panel.length && $panel
                     || $(o.panelTemplate).attr('id', id).addClass(o.panelClass).addClass(o.hideClass);
-                if (position >= this.$tabs.length) {
+                if (position >= this.$lis.length) {
                     $li.appendTo(this.source);
                     $panel.appendTo(this.source.parentNode);
                 } else {
-                    $li.insertBefore(this.$tabs.eq(position - 1).parent('li'));
+                    $li.insertBefore(this.$lis[position - 1]);
                     $panel.insertBefore(this.$panels[position - 1]);
                 }
                 
@@ -421,7 +421,7 @@
         },
         remove: function(position) {
             if (position && position.constructor == Number) {                
-                var o = this.options, $li = this.$tabs.eq(position - 1).parent('li').remove(),
+                var o = this.options, $li = this.$lis.eq(position - 1).remove(),
                     $panel = this.$panels.eq(position - 1).remove();
                     
                 // If selected tab was removed focus tab to the right or
@@ -434,7 +434,7 @@
             }
         },
         enable: function(position) {
-            var o = this.options, $li = this.$tabs.eq(position - 1).parent('li');
+            var o = this.options, $li = this.$lis.eq(position - 1);
             $li.removeClass(o.disabledClass);
             if ($.browser.safari) { // fix disappearing tab (that used opacity indicating disabling) after enabling in Safari 2...
                 $li.css('display', 'inline-block');
@@ -446,7 +446,7 @@
         },
         disable: function(position) {
             var o = this.options;      
-            this.$tabs.eq(position - 1).parent('li').addClass(o.disabledClass);
+            this.$lis.eq(position - 1).addClass(o.disabledClass);
             o.disable(this.$tabs[position - 1], this.$panels[position - 1]); // callback
         },
         click: function(position) {
