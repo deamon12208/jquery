@@ -15,6 +15,7 @@
         <script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
         <script type="text/javascript" src="../../../jquery/src/fx.js"></script>
         <script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+	<script type="text/javascript" src="../../../plugins/dimensions/jquery.dimensions.js"></script>
 	<script type="text/javascript" src="../ui.mouse.js"></script>
 	<script type="text/javascript" src="../ui.selectable.js"></script>
         
@@ -112,10 +113,23 @@
         <script type="text/javascript">
             $(function() {
 
-		$("#selectable1").selectable();
+		$("#selectable1").selectable({
+			start: function(ev, ui) {
+				console.log('start');
+			},
+			stop: function(ev, ui) {
+				console.log('stop');
+			},
+		});
 
 		$("#selectable2").selectable({
 			filter: "div",
+			start: function(ev, ui) {
+				console.log('start');
+			},
+			stop: function(ev, ui) {
+				console.log('stop');
+			},
 			selecting: function(ev, ui) {
 				$(ui.selecting).text('selecting');
 			},
