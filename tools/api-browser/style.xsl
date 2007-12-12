@@ -88,7 +88,7 @@
 		<ul>
 		<xsl:for-each select="cat">
 			<li>
-				<xsl:value-of select="@value" />
+				<span><xsl:value-of select="@value" /></span>
 				<ul>
 					<xsl:for-each select="function|selector|property">
 						<xsl:sort select="translate(@name,'$.','')"/>
@@ -113,7 +113,7 @@
 		<script type="text/javascript" src="lib/jquery.tabs.js"></script>
 		<script type="text/javascript" src="lib/jquery.highlight.js"></script>
 		<script type="text/javascript" src="lib/jquery.quicksearch.js"></script>
-		<script type="text/javascript" src="lib/chili-1.5.js"></script>
+		<script type="text/javascript" src="lib/jquery.chili.js"></script>
 		<!-- 
 		<script type="text/javascript" src="lib/browser.lib.pack.js"></script>
 		 -->

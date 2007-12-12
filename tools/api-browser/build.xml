@@ -1,4 +1,4 @@
-<project name="jQuery API Browser" default="pack" basedir=".">
+<project name="jQuery API Browser" default="build" basedir=".">
 
 
     <!-- SETUP -->
@@ -9,11 +9,23 @@
 
     <!-- Files names for distribution -->
     <property name="BROWSER" value="${SRC_DIR}/browser.lib.js" />
-	<property name="BROWSER_PACK" value="${SRC_DIR}/browser.lib.pack.js" />
+	<property name="BROWSER_MIN" value="${SRC_DIR}/browser.lib.pack.js" />
 
     <!-- MAIN -->
+	
+	<target name="build" depends="min,transform,zip" description="Main build">
+		<echo message="API browser built." />
+	</target>
+	
+	<target name="zip">
+		<echo message="Packaging into zip file" />
+        <zip destfile="jquery-api-browser.zip">
+            <zipfileset dir="." excludes="*.zip" />
+        </zip>
+        <echo message="Packaging done." />
+	</target>
 
-    <target name="build" description="Main build">
+    <target name="compile" description="Concatenate js dependencies">
         <echo message="Building ${BROWSER}" />
         <concat destfile="${BROWSER}">
             <fileset dir="${SRC_DIR}" includes="jquery.js" />
@@ -22,34 +34,24 @@
             <fileset dir="${SRC_DIR}" includes="jquery.treeview.js" />
         	<fileset dir="${SRC_DIR}" includes="jquery.quicksearch.js" />
         	<fileset dir="${SRC_DIR}" includes="jquery.tabs.js" />
-        	<fileset dir="${SRC_DIR}" includes="chili-1.5.js" />
+        	<fileset dir="${SRC_DIR}" includes="jquery.chili.js" />
         </concat>
         <echo message="${BROWSER} built." />
     </target>
 
-	<target name="transform">
+	<target name="transform" description="Transform XML via XSL to HTML">
 		<delete file="index.html" />
 		<xslt includes="index.xml" destdir="." style="style.xsl" />
 	</target>
 	
-	<target name="min" depends="build" description="Remove all comments and whitespace, no compression">
-        <echo message="Building ${BROWSER_PACK}" />
+	<target name="min" depends="compile" description="Remove all comments and whitespace, no compression">
+        <echo message="Building ${BROWSER_MIN}" />
         <java jar="${JAR}" fork="true">
             <arg value="${BUILD_DIR}/min.js" />
             <arg value="${BROWSER}" />
-            <arg value="${BROWSER_PACK}" />
+            <arg value="${BROWSER_MIN}" />
         </java>
-        <echo message="${BROWSER_PACK} built." />
+        <echo message="${BROWSER_MIN} built." />
     </target>
 
-    <target name="pack" depends="build" description="Remove all comments and whitespace and compress">
-        <echo message="Building ${BROWSER_PACK}" />
-        <java jar="${JAR}" fork="true">
-            <arg value="${BUILD_DIR}/pack.js" />
-            <arg value="${BROWSER}" />
-            <arg value="${BROWSER_PACK}" />
-        </java>
-        <echo message="${BROWSER_PACK} built." />
-    </target>
-	
 </project>
