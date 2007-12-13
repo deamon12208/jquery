@@ -219,6 +219,11 @@
                 if (href) {
                     this.load(o.initial + 1, href);
                 }
+                
+                // disable click if event is configured to something else
+                if (!/^click/.test(o.event)) {
+                    this.$tabs.bind('click', function(e) { e.preventDefault(); });
+                }
 
             }
 
@@ -295,7 +300,7 @@
                 hideTab(clicked, $hide, $show);
             }
 
-            // attach tab click event, avoid duplicates from former tabifying
+            // attach tab event handler, unbind to avoid duplicates from former tabifying...
             this.$tabs.unbind(o.event).bind(o.event, function() {
 
                 //var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
