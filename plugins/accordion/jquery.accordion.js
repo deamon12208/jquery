@@ -172,7 +172,7 @@ $.fn.extend({
 				var toHide = active.next();
 				var toShow = active = $([]);
 				toggle( toShow, toHide );
-				return;
+				return false;
 			}
 			// get the click target
 			var clicked = $(event.target);
@@ -187,7 +187,7 @@ $.fn.extend({
 			
 			// if animations are still active, or the active header is the target, ignore click
 			if(running || (settings.alwaysOpen && clickedActive) || !clicked.is(settings.header))
-				return;
+				return false;
 
 			// switch classes
 			active.parent().andSelf().toggleClass(settings.selectedClass);
