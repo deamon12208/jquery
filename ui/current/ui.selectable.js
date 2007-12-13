@@ -135,15 +135,9 @@
 
 		},
 		stop: function(self, ev) {
+
 			var options = this.options;
-			$('.ui-selecting', self.element).each(function() {
-				$(this).removeClass('ui-selecting').addClass('ui-selected');
-				$(self.element).triggerHandler("selectableselected", [ev, {
-					selectable: self.element,
-					selected: this,
-					options: options
-				}], options.selected);
-			});
+
 			$('.ui-unselecting', self.element).each(function() {
 				$(this).removeClass('ui-unselecting');
 				$(self.element).triggerHandler("selectableunselected", [ev, {
@@ -152,6 +146,18 @@
 					options: options
 				}], options.unselected);
 			});
+			$('.ui-selecting', self.element).each(function() {
+				$(this).removeClass('ui-selecting').addClass('ui-selected');
+				$(self.element).triggerHandler("selectableselected", [ev, {
+					selectable: self.element,
+					selected: this,
+					options: options
+				}], options.selected);
+			});
+			$(self.element).triggerHandler("selectablestop", [ev, {
+				selectable: self.element,
+				options: this.options
+			}], this.options.stop);
 		},
 		selecting: function(self, ev, options, selectee) {
 			if ($(selectee).is('.ui-selectee:not(.ui-selecting)')) {
