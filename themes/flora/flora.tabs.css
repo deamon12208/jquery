@@ -35,7 +35,7 @@
     font-weight: bold;
 }
 .ui-tabs-nav a, .ui-tabs-nav a span {
-    display: block;
+    float: left; /* fixes dir=ltr problem and other quirks IE */
     padding: 0 12px;
     background: url(i/tabs.png) no-repeat;
 }
@@ -96,10 +96,10 @@
 }*/
 
 /* Additional IE specific bug fixes... */
-* html .ui-tabs-nav, * html .ui-tabs-nav a, * html .ui-tabs-nav a span { /* auto clear and hasLayout, @ IE 6 & IE 7 Quirks Mode */
+* html .ui-tabs-nav { /* auto clear @ IE 6 & IE 7 Quirks Mode */
     display: inline-block;
 }
-*:first-child+html .ui-tabs-nav  { /* @ IE 7 Standards Mode - do not group selectors, otherwise IE 6 will ignore complete rule (because of the unknown + combinator)... */
+*:first-child+html .ui-tabs-nav  { /* auto clear @ IE 7 Standards Mode - do not group selectors, otherwise IE 6 will ignore complete rule (because of the unknown + combinator)... */
     display: inline-block;
 }
 
