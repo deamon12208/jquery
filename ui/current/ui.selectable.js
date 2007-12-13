@@ -46,6 +46,23 @@
 			}
 		});
 
+		var childBoxes = [];
+		var selectees = $(options.filter, this.element);
+		this.refreshChildBoxes = function() {
+			childBoxes = []; // reset the child info
+			selectees.each(function() {
+				var el = $(this), pos = el.offset();
+				childBoxes.push([this,
+						 pos.left, pos.left + el.width(),
+						 pos.top, pos.top + el.height()]);
+			});
+		}
+
+		this.refreshChildBoxes();
+
+		this.childBoxes = childBoxes;
+
+
 		//Initialize mouse interaction
 		this.mouse = new $.ui.mouseInteraction(el, options);
 
@@ -84,14 +101,6 @@
 				options: this.options
 			}], this.options.start);
 
-			self.childBoxes = []; // reset the child info
-			$(this.options.filter, self.element).each(function() {
-				var el = $(this), pos = el.offset();
-				self.childBoxes.push([this,
-						      pos.left, pos.left + el.width(),
-						      pos.top, pos.top + el.height()]);
-			});
-
 			$(self.mouse.helper).css({'z-index': 100, position: 'absolute', left: ev.clientX, top: ev.clientY, width:0, height: 0});
 			if (ev.ctrlKey) {
 				if ($(ev.target).is('.ui-selected')) {
@@ -106,7 +115,6 @@
 				self.unselecting(self, ev, this.options);
 			}
 		},
-		childBoxes: [],
 		drag: function(self, ev) {
 
 			if (self.disabled)
