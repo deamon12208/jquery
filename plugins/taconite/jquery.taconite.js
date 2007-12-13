@@ -10,7 +10,7 @@
  * Thanks to Kenton Simpson for contributing some good ideas!
  *
  * $Id$
- * @version: 2.1.7
+ * @version: 2.1.8  12/12/2007
  * @requires jQuery v1.1.2 or later
  */
 
@@ -41,7 +41,7 @@ $.taconite = $.xmlExec = function(xml) {
     if (ex) throw ex;
 };
 
-$.taconite.version = [2,1,7]; // major,minor,point revision nums
+$.taconite.version = [2,1,8]; // major,minor,point revision nums
 $.taconite.debug = 0;    // set to true to enable debug logging to Firebug
 $.taconite.lastTime = 0; // processing time for most recent document
 $.taconite._httpData = $.httpData; // original jQuery httpData function
@@ -210,7 +210,7 @@ $.taconite.impl = {
         return $div[0];
     },
     fixTextNode: function(s) {
-        if ($.browser.msie) s = s.replace(/\n/g, '\r');
+        if ($.browser.msie) s = s.replace(/\n/g, '\r').replace(/\s+/g, ' ');
         return document.createTextNode(s);
     },
     createElement: function (node) {
@@ -226,6 +226,12 @@ $.taconite.impl = {
         if (!e) {
             e = document.createElement(tag);
             this.copyAttrs(e, node);
+        }
+        
+        // IE fix; colspan must be explicitly set
+        if ($.browser.msie && tag == 'td') {
+            var colspan = node.getAttribute('colspan');
+            if (colspan) e.colSpan = parseInt(colspan);
         }
 
         // IE fix; script tag not allowed to have children
