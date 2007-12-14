@@ -81,6 +81,7 @@ var validator = {
 		if (val != '') {
 			switch (type) {
 				case 'email':
+					// TODO: write new regex based on actual specs
 					return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val);
 				break;
 				case 'number':
@@ -251,7 +252,7 @@ $.extend({
 	},
 	
 	isDefaultSubmit: function(elem) {
-		return elem === $(elem).parents('form:first').find(':submit:first')[0];
+		return elem === $(elem.form).find(':submit:first')[0];
 	},
 	
 	isIndeterminate: function(elem) {
@@ -322,10 +323,9 @@ $.fn.extend({
 				if (webForms.willValidate) {
 					validate(elem, webForms);
 					if (!webForms.validity.valid) {
-						if ($.event.trigger('invalid', null, elem) !== false) {
+						if ($(elem).triggerHandler('invalid') !== false) {
 							$.webForms.errorHandler(elem);
 						}
-						//$(elem).trigger('invalid');
 					}
 					return webForms.validity.valid;
 				}
