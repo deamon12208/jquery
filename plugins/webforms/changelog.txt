@@ -5,6 +5,7 @@
 * Added jQuery.isIndeterminate() for determining if a group of radio elements doesn't have any element checked.
 * Added all selectors currently defined in Web Forms 2.0.
 * Added URL validation.
+* Added a basic demo.
 
 0.3.5
 -----
