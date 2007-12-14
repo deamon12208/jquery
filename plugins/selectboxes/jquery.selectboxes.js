@@ -4,7 +4,7 @@
  * Licensed under the MIT License:
  * http://www.opensource.org/licenses/mit-license.php
  *
- * Version 2.2
+ * Version 2.2.1
  * Demo: http://www.texotela.co.uk/code/jquery/select/
  *
  * $LastChangedDate$
@@ -164,10 +164,10 @@ $.fn.removeOption = function()
 	var a = arguments;
 	if(a.length == 0) return this;
 	var ta = typeof(a[0]);
-	var v, i;
+	var v, index;
 	// has to be a string or regular expression (object in IE, function in Firefox)
 	if(ta == "string" || ta == "object" || ta == "function" ) v = a[0];
-	else if(ta == "number") i = a[0];
+	else if(ta == "number") index = a[0];
 	else return this;
 	this.each(
 		function()
@@ -207,10 +207,18 @@ $.fn.removeOption = function()
 			}
 			else
 			{
-				if(remove && a[1] === true) remove = o[i].selected;
+				// only remove if selected?
+				if(a[1] === true)
+				{
+					remove = o[index].selected;
+				}
+				else
+				{
+					remove = true;
+				}
 				if(remove)
 				{
-					this.remove(i);
+					this.remove(index);
 				}
 			}
 		}

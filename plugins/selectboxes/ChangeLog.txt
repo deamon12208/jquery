@@ -1,5 +1,8 @@
 Select box manipulation ChangeLog
 
+14 December 2007
+  removing options by index now works again
+
 12 September 2007
   new selectedValues plugin - returns values of selected options as an array
 
