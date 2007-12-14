@@ -1,5 +1,5 @@
 /*
- * Web Forms 0.3.6 - jQuery plugin
+ * Web Forms 0.3.7 - jQuery plugin
  * 
  * Copyright (c) 2007 Scott Gonzalez
  * 
