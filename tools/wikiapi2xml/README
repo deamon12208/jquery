@@ -50,3 +50,19 @@ is in the wiki data.  Other than that, most of the wiki data is converted direct
 XML equivilent so if anything new is added to the wiki it should be sent right over to
 the XML document the next time it is created.
 
+Here are a few examples of how to use the script.
+
+To get this help:
+http://[location of script]/createjQueryXMLDocs.py
+
+To get the API:
+http://[location of script]/createjQueryXMLDocs.py?version=1.2.2
+
+To get the UI:
+http://[location of script]/createjQueryXMLDocs.py?start=UI&version=1.1
+
+To get a specific function:
+http://[location of script]/createjQueryXMLDocs.py?start=Events/bind&version=1.2.2
+
+To get a debug a problem:
+http://[location of script]/createjQueryXMLDocs.py?start=Selectors&verbose=super

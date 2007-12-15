@@ -40,6 +40,7 @@ class Options:
   def __init__(self):
     form = cgi.FieldStorage()
 
+    self.help = "false";
     self.supressContentType = "false" 
     self.startingUrl = "API"
     self.exporterUrl = "http://docs.jquery.com/Special:Export";
@@ -50,8 +51,13 @@ class Options:
     self.parseOptions(form)
 
   def parseOptions(self, form):
-    for key in form.keys():
-      if key == "supresscontenttype":
+    keys = form.keys()
+    if len(keys) == 0:
+      self.help = "true"
+    for key in keys:
+      if key == "help":
+        self.help = form.getvalue(key);
+      elif key == "supresscontenttype":
         self.supressContentType = form.getvalue(key);
       elif key == "start":
         self.startingUrl = form.getvalue(key);
@@ -456,11 +462,21 @@ infoNode = None
 # global subcat since it's a hack either way
 subcat = { 'name':'', 'node':None }
 
+def loadAndDisplayHelp():
+  u = urllib.urlopen("http://dev.jquery.com/view/trunk/tools/wikiapi2xml/README")
+  text = u.read()
+  if opts.supressContentType == "false":
+    print "Content-Type: text/plain\n"
+  print text
+
 def main():
   global opts, doc, infoNode
 
   opts = Options()
 
+  if opts.help == "true":
+    loadAndDisplayHelp()
+    return
   if opts.supressContentType == "false":
     print "Content-Type: text/xml\n"
 
