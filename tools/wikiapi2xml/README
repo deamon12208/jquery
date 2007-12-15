@@ -18,7 +18,7 @@ There are a few options that can be passed in:
     The wiki XML exporter page. (defaults to 'http://docs/jquery.com/Special:Export')
 
   version:
-    The version number to put on the generated XML document. (defaults to '1.2')
+    The version number to put on the generated XML document. (defaults to 'Unknown')
 
   convertlinks:
     The method to convert wiki links like [[Ajax_Events|Ajax Events]].  Can have the

@@ -44,7 +44,7 @@ class Options:
     self.supressContentType = "false" 
     self.startingUrl = "API"
     self.exporterUrl = "http://docs.jquery.com/Special:Export";
-    self.version = "1.2"
+    self.version = "Unknown"
     self.convertLinks = "html"
     self.verbose = "false" 
     self.timestamp = "0"
