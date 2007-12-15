@@ -1,4 +1,6 @@
-The python script createjQueryXMLDocs.py goes to the internet and retrieves API data from jQuery's then converts it to an XML format for use by other applications.  It was written by David Serduke in late 2007.
+The python script createjQueryXMLDocs.py goes to the internet and retrieves API data 
+from jQuery's then converts it to an XML format for use by other applications.  It was 
+written by David Serduke in late 2007.
 
 There are a few options that can be passed in:
 
