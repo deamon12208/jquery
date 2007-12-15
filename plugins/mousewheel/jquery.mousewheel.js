@@ -9,99 +9,77 @@
  *
  * Version: @VERSION
  * 
- * Requires: jQuery 1.2+
+ * Requires: $ 1.2.2+
  */
 
 (function($) {
-	
-var cache = [];
-	
-$.fn.extend({
-	mousewheel: function(f) {
-		f.guid = f.guid || $.event.guid++;
+
+$.event.special.mousewheel = {
+	setup: function() {
+		var handler = $.event.special.mousewheel.handler;
 		
-		return this.each( function() {
-			var elem = this, handlers = $.data(elem, 'mwhandlers') || [];
-			handlers.push(f);
-			$.data(elem, 'mwhandlers', handlers);
-			
-			// Create handler
-			!$.data(elem, 'mwhandler') && $.data(elem, 'mwhandler', function(event) {
-				event = $.event.fix(event || window.event);
-				$.extend( event, $.data(elem, 'mwcursorpos') || {} );
-				var delta = 0, returnValue = true;
-				
-				if ( event.wheelDelta ) delta = event.wheelDelta/120;
-				if ( event.detail     ) delta = -event.detail/3;
-				if ( $.browser.opera  ) delta = -event.wheelDelta;
-				
-				$.each( $.data(elem, 'mwhandlers'), function(i, handler) {
-					if ( handler )
-						if ( handler.call(elem, event, delta) === false ) {
-							returnValue = false;
-							event.preventDefault();
-							event.stopPropagation();
-						}
+		// Fix pageX, pageY, clientX and clientY for mozilla
+		if ( $.browser.mozilla )
+			$(this).bind('mousemove.mousewheel', function(event) {
+				$.data(this, 'mwcursorposdata', {
+					pageX: event.pageX,
+					pageY: event.pageY,
+					clientX: event.clientX,
+					clientY: event.clientY
 				});
-				
-				return returnValue;
 			});
-			
-			// Fix pageX, pageY, clientX and clientY for mozilla
-			if ( $.browser.mozilla && !$.data(elem, 'mwfixcursorpos') ) {
-				$.data(elem, 'mwfixcursorpos', function(event) {
-					$.data(elem, 'mwcursorpos', {
-						pageX: event.pageX,
-						pageY: event.pageY,
-						clientX: event.clientX,
-						clientY: event.clientY
-					});
-				});
-				$(elem).bind('mousewheel:mousemove', $.data(elem, 'mwfixcursorpos'));
-			}
-			
-			if ( elem.addEventListener )
-				if ( $.browser.mozilla ) elem.addEventListener('DOMMouseScroll', $.data(elem, 'mwhandler'), false);
-				else                     elem.addEventListener('mousewheel',     $.data(elem, 'mwhandler'), false);
-			else
-				elem.onmousewheel = $.data(elem, 'mwhandler');
-			
-			cache.push( $(elem) );
-		});
+	
+		if ( this.addEventListener )
+			this.addEventListener( ($.browser.mozilla ? 'DOMMouseScroll' : 'mousewheel'), handler, false);
+		else
+			this.onmousewheel = handler;
 	},
 	
-	unmousewheel: function(f) {
-		return this.each( function() {
-			var elem = this;
-			if ( f )
-				$.data( elem, 'mwhandlers', $.grep($.data(elem, 'mwhandlers'), function(i, handler) {
-					return handler && handler.guid != f.guid;
-				}) );
-			else {
-				if ( $.browser.mozilla )
-					$(elem).unbind('mousewheel:mousemove');
-					
-				if ( elem.addEventListener )
-					if ( $.browser.mozilla ) elem.removeEventListener('DOMMouseScroll', $.data(elem, 'mwhandler'), false);
-					else                     elem.removeEventListener('mousewheel',     $.data(elem, 'mwhandler'), false);
-				else
-					elem.onmousewheel = null;
-				
-				$.removeData(elem, 'mwhandlers');
-				$.removeData(elem, 'mwhandler');
-				$.removeData(elem, 'mwfixcursorpos');
-				$.removeData(elem, 'mwcursorpos');
-			}
-		});
+	teardown: function() {
+		var handler = $.event.special.mousewheel.handler;
+		
+		$(this).unbind('mousemove.mousewheel');
+		
+		if ( this.removeEventListener )
+			this.removeEventListener( ($.browser.mozilla ? 'DOMMouseScroll' : 'mousewheel'), handler, false);
+		else
+			this.onmousewheel = function(){};
+		
+		$.removeData(this, 'mwcursorposdata');
+	},
+	
+	handler: function(event) {
+		var args = Array.prototype.slice.call( arguments, 1 );
+		
+		event = $.event.fix(event || window.event);
+		// Get correct pageX, pageY, clientX and clientY for mozilla
+		$.extend( event, $.data(this, 'mwcursorposdata') || {} );
+		var delta = 0, returnValue = true;
+		
+		if ( event.wheelDelta ) delta = event.wheelDelta/120;
+		if ( event.detail     ) delta = -event.detail/3;
+		if ( $.browser.opera  ) delta = -event.wheelDelta;
+		
+		event.data  = event.data || {};
+		event.type  = "mousewheel";
+		
+		// Add delta to the front of the arguments
+		args.unshift(delta);
+		// Add event to the front of the arguments
+		args.unshift(event);
+
+		return $.event.handle.apply(this, args);
+	}
+};
+
+$.fn.extend({
+	mousewheel: function(fn) {
+		return fn ? this.bind("mousewheel", fn) : this.trigger("mousewheel");
+	},
+	
+	unmousewheel: function(fn) {
+		return this.unbind("mousewheel", fn);
 	}
 });
 
-// clean-up
-$(window)
-	.one('unload', function() {
-		var els = cache || [];
-		for (var i=0; i<els.length; i++)
-			els[i].unmousewheel();
-	});
-	
 })(jQuery);
