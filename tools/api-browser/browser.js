@@ -33,8 +33,11 @@ jQuery(function($){
 	$('#nav').tabs();
 	
 	// navigation trees ( http://bassistance.de/jquery-plugins/jquery-plugin-treeview/ )
-	$("#navCat>ul").Treeview({ control: "#navCat div.treecontrol" });
-	$("#navAlpha>ul").Treeview({ control: "#navAlpha div.treecontrol" });
+	$("#navCat>ul").treeview({
+		control: "#navCat div.treecontrol",
+		collapsed: true
+	});
+	$("#navAlpha>ul").treeview();
 
 	// highlightfade on navigation to a method ( http://jquery.offput.ca/highlightFade/ )
 	$("#nav div li a").click(function() {

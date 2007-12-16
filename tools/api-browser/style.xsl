@@ -92,7 +92,7 @@
 				<span><xsl:value-of select="@value" /></span>
 				<ul>
 					<xsl:for-each select="subcat">
-						<li>
+						<li class="open">
 							<span><xsl:value-of select="@value" /></span>
 							<ul>
 								<xsl:for-each select="function|selector|property">
