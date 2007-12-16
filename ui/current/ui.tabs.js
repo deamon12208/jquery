@@ -127,7 +127,7 @@
         tabify: function(init) {
 
             this.$lis = $('li:has(a[href])', this.source);
-            this.$tabs = $('a[href]', this.source);
+            this.$tabs = this.$lis.map(function() { return $('a', this)[0] });
             this.$panels = $([]);
             
             var self = this, o = this.options;
