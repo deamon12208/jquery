@@ -1,4 +1,4 @@
-(function($) {
+;(function($) {
 
 $.ui = $.ui || {};
 
@@ -19,20 +19,24 @@ $.extend($.ui.accordion, {
 				duration: 300
 			}, settings, additions);
 			if ( !settings.toHide.size() ) {
-				settings.toShow.animate({height: "show"}, settings);
+				settings.toShow.animate({height: "show"}, {
+					duration: settings.duration,
+					easing: settings.easing,
+					complete: settings.finished
+				});
 				return;
 			}
 			var hideHeight = settings.toHide.height(),
 				showHeight = settings.toShow.height(),
 				difference = showHeight / hideHeight;
 			settings.toShow.css({ height: 0, overflow: 'hidden' }).show();
-			settings.toHide.filter(":hidden").each(settings.complete).end().filter(":visible").animate({height:"hide"},{
+			settings.toHide.filter(":hidden").each(settings.finished).end().filter(":visible").animate({height:"hide"},{
 				step: function(now){
 					settings.toShow.height((hideHeight - (now)) * difference );
 				},
 				duration: settings.duration,
 				easing: settings.easing,
-				complete: settings.complete
+				complete: settings.finished
 			});
 		},
 		bounceslide: function(settings) {
@@ -110,16 +114,10 @@ $.fn.extend({
 		}
 		
 		function toggle(toShow, toHide, data, clickedActive, down) {
-			var complete = function(cancel) {
+			var finished = function(cancel) {
 				running = cancel ? 0 : --running;
 				if ( running )
 					return;
-				if ( settings.clearStyle ) {
-					toShow.add(toHide).css({
-						height: "",
-						overflow: ""
-					});
-				}
 				// trigger custom change event
 				container.trigger("change", data);
 			};
@@ -130,12 +128,12 @@ $.fn.extend({
 			if ( settings.animated ) {
 				if ( !settings.alwaysOpen && clickedActive ) {
 					toShow.slideToggle(settings.animated);
-					complete(true);
+					finished(true);
 				} else {
 					$.ui.accordion.animations[settings.animated]({
 						toShow: toShow,
 						toHide: toHide,
-						complete: complete,
+						finished: finished,
 						down: down
 					});
 				}
@@ -146,7 +144,7 @@ $.fn.extend({
 					toHide.hide();
 					toShow.show();
 				}
-				complete(true);
+				finished(true);
 			}
 		}
 		
@@ -157,7 +155,7 @@ $.fn.extend({
 				var toHide = active.next();
 				var toShow = active = $([]);
 				toggle( toShow, toHide );
-				return false;
+				return;
 			}
 			// get the click target
 			var clicked = $(event.target);
@@ -172,7 +170,7 @@ $.fn.extend({
 			
 			// if animations are still active, or the active header is the target, ignore click
 			if(running || (settings.alwaysOpen && clickedActive) || !clicked.is(settings.header))
-				return false;
+				return;
 
 			// switch classes
 			active.parent().andSelf().toggleClass(settings.selectedClass);

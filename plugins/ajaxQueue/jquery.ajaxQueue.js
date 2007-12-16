@@ -44,7 +44,7 @@ $(function(){
  */
 
 
-(function($) {
+;(function($) {
 	
 	var ajax = $.ajax;
 	
