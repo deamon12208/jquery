@@ -1,0 +1,69 @@
+<html>
+<head>
+	<title>Draggable</title>
+
+	<script type="text/javascript" src="../../../jquery/src/core.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/event.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+	<script type="text/javascript" src="../../../plugins/dimensions/jquery.dimensions.js"></script>
+	
+	<script type="text/javascript" src="ui.mouse.js"></script>
+	<script type="text/javascript" src="ui.draggable.js"></script>
+	<script type="text/javascript" src="ui.draggable.ext.js"></script>
+	
+	<style type="text/css" media="screen">
+		.example {
+			height: 100px;
+			width: 200px;
+			background: blue;
+			padding: 10px;
+			margin: 10px;
+		}
+		
+		.parentStatic {
+			width: 500px;
+			height: 300px;
+			border: 5px solid green;
+			margin: 10px;
+			padding: 10px;
+		}		
+		
+		.parent {
+			width: 600px;
+			height: 400px;
+			border: 10px solid black;
+			overflow: scroll;
+			position: absolute;
+			left: 100px;
+			top: 100px;
+			padding: 10px;
+			margin: 10px;
+		}
+		body {
+			margin: 0;
+			padding: 0;
+		}
+	</style>
+	
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$("div").draggable({ helper: 'clone'  });
+		});
+		
+	</script>
+	
+</head>
+<body>
+	<p>hello this is an example.</p>
+	<div class='parent'>
+			Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			
+		<div class='parentStatic'>	
+			<div class='example'></div>
+		</div>
+	</div>
+</body>
+</html>
