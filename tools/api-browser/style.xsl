@@ -73,8 +73,7 @@
 			<a>
 				<xsl:call-template name="href" />
 				<xsl:value-of select="@name" />
-				<!-- TODO fix not(property) to add parens for properties -->
-				<xsl:if test="not(property)">
+				<xsl:if test="name(.) != 'property'">
 					<xsl:text>(</xsl:text>
 					<xsl:for-each select="params">
 						<span class='arg-type tooltip'><xsl:value-of select="@name"/></span>
@@ -92,10 +91,17 @@
 			<li>
 				<span><xsl:value-of select="@value" /></span>
 				<ul>
-					<xsl:for-each select="function|selector|property">
-						<xsl:sort select="translate(@name,'$.','')"/>
-						<xsl:sort select="count(params)"/>
-						<xsl:call-template name="printMethod"/>
+					<xsl:for-each select="subcat">
+						<li>
+							<span><xsl:value-of select="@value" /></span>
+							<ul>
+								<xsl:for-each select="function|selector|property">
+									<xsl:sort select="translate(@name,'$.','')"/>
+									<xsl:sort select="count(params)"/>
+									<xsl:call-template name="printMethod"/>
+								</xsl:for-each>
+							</ul>
+				 		</li>
 					</xsl:for-each>
 				</ul>
 	 		</li>
@@ -142,11 +148,6 @@
 				</div>
 				<div class="navsub" id="navAlpha">
 					<h3>Alphabetic</h3>
-					<div class="treecontrol">
-						<a href="#">Collapse All</a>
-						<a href="#">Expand All</a>
-						<a href="#">Toggle All</a>
-					</div>
 					<ul>
 						<xsl:variable name="current" select="'$'" />
 						<xsl:for-each select="//function|//selector|//property">
@@ -170,7 +171,7 @@
 								<xsl:call-template name="href" />
 								<xsl:value-of select="@name"/>
 							</a>
-							<xsl:if test="not(property)"><xsl:text>( </xsl:text>
+							<xsl:if test="name(.) != 'property'"><xsl:text>( </xsl:text>
 								<xsl:for-each select="params">
 									<span class='arg-type tooltip'>
 										<xsl:call-template name="type" />

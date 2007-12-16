@@ -52,6 +52,7 @@ h1, #content, #nav, #docs, #header { position:absolute; }
 #nav {
 	width: 340px;
 	overflow: auto;
+	overflow-y: scroll;
 	position: absolute;
 	left: 0;
 }
@@ -146,6 +147,7 @@ p.raw a {
 	display: inline;
 	border: 1px solid black;
 	line-height: 110%;
+	margin-left: 1em;
 }
 .tabs-nav li a {
 	padding: 0 10px;
@@ -237,6 +239,12 @@ p.raw a {
 .treeview li.lastExpandable { background-position: -32px -67px }
 
 .treeview div.lastCollapsable-hitarea, .treeview div.lastExpandable-hitarea { background-image: none; }
+
+#nav ul.treeview li {
+	line-height: 95%;
+	margin-left: 0;
+	padding-bottom: .2em;
+}
 
 .javascript .mlcom    { color: #4040c2; }
 .javascript .com      { color: green; }

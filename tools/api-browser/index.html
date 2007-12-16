@@ -1,8 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>jQuery 1.2 API Browser </title>
+<title>jQuery 1.2.1 API Browser </title>
 <link rel="stylesheet" href="screen.css" media="screen,projector">
 <link rel="stylesheet" href="print.css" media="print">
 <script type="text/javascript" src="lib/browser.lib.min.js"></script><script type="text/javascript" src="browser.js"></script>
@@ -11,7 +11,7 @@
 <h1>
 <a href="http://jquery.com"><img src="images/jquery_logo.gif" alt="jQuery Logo"></a>
 </h1>
-<div id="header">1.2 API Browser <span>(<a href="jquery-api-browser.zip">Download</a>)</span>
+<div id="header">1.2.1 API Browser <span>(<a href="jquery-api-browser.zip">Download</a>)</span>
 </div>
 <div id="content">
 <div id="nav">
@@ -34,6 +34,26 @@
 <span>Core</span>
 <ul>
 <li>
+<span>$(...) The jQuery Function</span>
+<ul>
+<li>
+<a href="#link-jQuery-html">jQuery(<span class="arg-type tooltip">html</span>)</a>
+</li>
+<li>
+<a href="#link-jQuery-elements">jQuery(<span class="arg-type tooltip">elements</span>)</a>
+</li>
+<li>
+<a href="#link-jQuery-callback">jQuery(<span class="arg-type tooltip">callback</span>)</a>
+</li>
+<li>
+<a href="#link-jQuery-expressioncontext">jQuery(<span class="arg-type tooltip">expression</span>, <span class="arg-type tooltip">context</span>)</a>
+</li>
+</ul>
+</li>
+<li>
+<span>jQuery Object Accessors</span>
+<ul>
+<li>
 <a href="#link-each-callback">each(<span class="arg-type tooltip">callback</span>)</a>
 </li>
 <li>
@@ -49,31 +69,7 @@
 <a href="#link-index-subject">index(<span class="arg-type tooltip">subject</span>)</a>
 </li>
 <li>
-<a href="#link-jQuery-html">jQuery(<span class="arg-type tooltip">html</span>)</a>
-</li>
-<li>
-<a href="#link-jQuery-elements">jQuery(<span class="arg-type tooltip">elements</span>)</a>
-</li>
-<li>
-<a href="#link-jQuery-callback">jQuery(<span class="arg-type tooltip">callback</span>)</a>
-</li>
-<li>
-<a href="#link-jQuery-expressioncontext">jQuery(<span class="arg-type tooltip">expression</span>, <span class="arg-type tooltip">context</span>)</a>
-</li>
-<li>
-<a href="#link-jQueryextend-object">jQuery.extend(<span class="arg-type tooltip">object</span>)</a>
-</li>
-<li>
-<a href="#link-jQueryfnextend-object">jQuery.fn.extend(<span class="arg-type tooltip">object</span>)</a>
-</li>
-<li>
-<a href="#link-jQuerynoConflict-">jQuery.noConflict()</a>
-</li>
-<li>
-<a href="#link-jQuerynoConflict-extreme">jQuery.noConflict(<span class="arg-type tooltip">extreme</span>)</a>
-</li>
-<li>
-<a href="#link-length-">length()</a>
+<a href="#link-length-">length</a>
 </li>
 <li>
 <a href="#link-size-">size()</a>
@@ -81,14 +77,135 @@
 </ul>
 </li>
 <li>
+<span>Plugins</span>
+<ul>
+<li>
+<a href="#link-jQueryextend-object">jQuery.extend(<span class="arg-type tooltip">object</span>)</a>
+</li>
+<li>
+<a href="#link-jQueryfnextend-object">jQuery.fn.extend(<span class="arg-type tooltip">object</span>)</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Interoperability</span>
+<ul>
+<li>
+<a href="#link-jQuerynoConflict-">jQuery.noConflict()</a>
+</li>
+<li>
+<a href="#link-jQuerynoConflict-extreme">jQuery.noConflict(<span class="arg-type tooltip">extreme</span>)</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
 <span>Selectors</span>
+<ul>
+<li>
+<span>Basics</span>
 <ul>
 <li>
 <a href="#link-all-">all()</a>
 </li>
 <li>
+<a href="#link-class-class">class(<span class="arg-type tooltip">class</span>)</a>
+</li>
+<li>
+<a href="#link-element-element">element(<span class="arg-type tooltip">element</span>)</a>
+</li>
+<li>
+<a href="#link-id-id">id(<span class="arg-type tooltip">id</span>)</a>
+</li>
+<li>
+<a href="#link-multiple-selector1selector2selectorN">multiple(<span class="arg-type tooltip">selector1</span>, <span class="arg-type tooltip">selector2</span>, <span class="arg-type tooltip">selectorN</span>)</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Hierarchy</span>
+<ul>
+<li>
+<a href="#link-child-parentchild">child(<span class="arg-type tooltip">parent</span>, <span class="arg-type tooltip">child</span>)</a>
+</li>
+<li>
+<a href="#link-descendant-ancestordescendant">descendant(<span class="arg-type tooltip">ancestor</span>, <span class="arg-type tooltip">descendant</span>)</a>
+</li>
+<li>
+<a href="#link-next-prevnext">next(<span class="arg-type tooltip">prev</span>, <span class="arg-type tooltip">next</span>)</a>
+</li>
+<li>
+<a href="#link-siblings-prevsiblings">siblings(<span class="arg-type tooltip">prev</span>, <span class="arg-type tooltip">siblings</span>)</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Basic Filters</span>
+<ul>
+<li>
 <a href="#link-animated-">animated()</a>
 </li>
+<li>
+<a href="#link-eq-index">eq(<span class="arg-type tooltip">index</span>)</a>
+</li>
+<li>
+<a href="#link-even-">even()</a>
+</li>
+<li>
+<a href="#link-first-">first()</a>
+</li>
+<li>
+<a href="#link-gt-index">gt(<span class="arg-type tooltip">index</span>)</a>
+</li>
+<li>
+<a href="#link-header-">header()</a>
+</li>
+<li>
+<a href="#link-last-">last()</a>
+</li>
+<li>
+<a href="#link-lt-index">lt(<span class="arg-type tooltip">index</span>)</a>
+</li>
+<li>
+<a href="#link-not-selector">not(<span class="arg-type tooltip">selector</span>)</a>
+</li>
+<li>
+<a href="#link-odd-">odd()</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Content Filters</span>
+<ul>
+<li>
+<a href="#link-contains-text">contains(<span class="arg-type tooltip">text</span>)</a>
+</li>
+<li>
+<a href="#link-empty-">empty()</a>
+</li>
+<li>
+<a href="#link-has-selector">has(<span class="arg-type tooltip">selector</span>)</a>
+</li>
+<li>
+<a href="#link-parent-">parent()</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Visibility Filters</span>
+<ul>
+<li>
+<a href="#link-hidden-">hidden()</a>
+</li>
+<li>
+<a href="#link-visible-">visible()</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Attribute Filters</span>
+<ul>
 <li>
 <a href="#link-attributeContains-attributevalue">attributeContains(<span class="arg-type tooltip">attribute</span>, <span class="arg-type tooltip">value</span>)</a>
 </li>
@@ -110,6 +227,28 @@
 <li>
 <a href="#link-attributeStartsWith-attributevalue">attributeStartsWith(<span class="arg-type tooltip">attribute</span>, <span class="arg-type tooltip">value</span>)</a>
 </li>
+</ul>
+</li>
+<li>
+<span>Child Filters</span>
+<ul>
+<li>
+<a href="#link-firstChild-">firstChild()</a>
+</li>
+<li>
+<a href="#link-lastChild-">lastChild()</a>
+</li>
+<li>
+<a href="#link-nthChild-index">nthChild(<span class="arg-type tooltip">index</span>)</a>
+</li>
+<li>
+<a href="#link-onlyChild-">onlyChild()</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Forms</span>
+<ul>
 <li>
 <a href="#link-button-">button()</a>
 </li>
@@ -117,100 +256,16 @@
 <a href="#link-checkbox-">checkbox()</a>
 </li>
 <li>
-<a href="#link-checked-">checked()</a>
-</li>
-<li>
-<a href="#link-child-parentchild">child(<span class="arg-type tooltip">parent</span>, <span class="arg-type tooltip">child</span>)</a>
-</li>
-<li>
-<a href="#link-class-class">class(<span class="arg-type tooltip">class</span>)</a>
-</li>
-<li>
-<a href="#link-contains-text">contains(<span class="arg-type tooltip">text</span>)</a>
-</li>
-<li>
-<a href="#link-descendant-ancestordescendant">descendant(<span class="arg-type tooltip">ancestor</span>, <span class="arg-type tooltip">descendant</span>)</a>
-</li>
-<li>
-<a href="#link-disabled-">disabled()</a>
-</li>
-<li>
-<a href="#link-element-element">element(<span class="arg-type tooltip">element</span>)</a>
-</li>
-<li>
-<a href="#link-empty-">empty()</a>
-</li>
-<li>
-<a href="#link-enabled-">enabled()</a>
-</li>
-<li>
-<a href="#link-eq-index">eq(<span class="arg-type tooltip">index</span>)</a>
-</li>
-<li>
-<a href="#link-even-">even()</a>
-</li>
-<li>
 <a href="#link-file-">file()</a>
 </li>
 <li>
-<a href="#link-first-">first()</a>
-</li>
-<li>
-<a href="#link-firstChild-">firstChild()</a>
-</li>
-<li>
-<a href="#link-gt-index">gt(<span class="arg-type tooltip">index</span>)</a>
-</li>
-<li>
-<a href="#link-has-selector">has(<span class="arg-type tooltip">selector</span>)</a>
-</li>
-<li>
-<a href="#link-header-">header()</a>
-</li>
-<li>
 <a href="#link-hidden-">hidden()</a>
-</li>
-<li>
-<a href="#link-hidden-">hidden()</a>
-</li>
-<li>
-<a href="#link-id-id">id(<span class="arg-type tooltip">id</span>)</a>
 </li>
 <li>
 <a href="#link-image-">image()</a>
 </li>
 <li>
 <a href="#link-input-">input()</a>
-</li>
-<li>
-<a href="#link-last-">last()</a>
-</li>
-<li>
-<a href="#link-lastChild-">lastChild()</a>
-</li>
-<li>
-<a href="#link-lt-index">lt(<span class="arg-type tooltip">index</span>)</a>
-</li>
-<li>
-<a href="#link-multiple-selector1selector2selectorN">multiple(<span class="arg-type tooltip">selector1</span>, <span class="arg-type tooltip">selector2</span>, <span class="arg-type tooltip">selectorN</span>)</a>
-</li>
-<li>
-<a href="#link-next-prevnext">next(<span class="arg-type tooltip">prev</span>, <span class="arg-type tooltip">next</span>)</a>
-</li>
-<li>
-<a href="#link-not-selector">not(<span class="arg-type tooltip">selector</span>)</a>
-</li>
-<li>
-<a href="#link-nthChild-index">nthChild(<span class="arg-type tooltip">index</span>)</a>
-</li>
-<li>
-<a href="#link-odd-">odd()</a>
-</li>
-<li>
-<a href="#link-onlyChild-">onlyChild()</a>
-</li>
-<li>
-<a href="#link-parent-">parent()</a>
 </li>
 <li>
 <a href="#link-password-">password()</a>
@@ -222,19 +277,29 @@
 <a href="#link-reset-">reset()</a>
 </li>
 <li>
-<a href="#link-selected-">selected()</a>
-</li>
-<li>
-<a href="#link-siblings-prevsiblings">siblings(<span class="arg-type tooltip">prev</span>, <span class="arg-type tooltip">siblings</span>)</a>
-</li>
-<li>
 <a href="#link-submit-">submit()</a>
 </li>
 <li>
 <a href="#link-text-">text()</a>
 </li>
+</ul>
+</li>
 <li>
-<a href="#link-visible-">visible()</a>
+<span>Form Filters</span>
+<ul>
+<li>
+<a href="#link-checked-">checked()</a>
+</li>
+<li>
+<a href="#link-disabled-">disabled()</a>
+</li>
+<li>
+<a href="#link-enabled-">enabled()</a>
+</li>
+<li>
+<a href="#link-selected-">selected()</a>
+</li>
+</ul>
 </li>
 </ul>
 </li>
@@ -242,8 +307,8 @@
 <span>Attributes</span>
 <ul>
 <li>
-<a href="#link-addClass-class">addClass(<span class="arg-type tooltip">class</span>)</a>
-</li>
+<span>Attr</span>
+<ul>
 <li>
 <a href="#link-attr-name">attr(<span class="arg-type tooltip">name</span>)</a>
 </li>
@@ -257,26 +322,49 @@
 <a href="#link-attr-keyfn">attr(<span class="arg-type tooltip">key</span>, <span class="arg-type tooltip">fn</span>)</a>
 </li>
 <li>
+<a href="#link-removeAttr-name">removeAttr(<span class="arg-type tooltip">name</span>)</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Class</span>
+<ul>
+<li>
+<a href="#link-addClass-class">addClass(<span class="arg-type tooltip">class</span>)</a>
+</li>
+<li>
+<a href="#link-removeClass-class">removeClass(<span class="arg-type tooltip">class</span>)</a>
+</li>
+<li>
+<a href="#link-toggleClass-class">toggleClass(<span class="arg-type tooltip">class</span>)</a>
+</li>
+</ul>
+</li>
+<li>
+<span>HTML</span>
+<ul>
+<li>
 <a href="#link-html-">html()</a>
 </li>
 <li>
 <a href="#link-html-val">html(<span class="arg-type tooltip">val</span>)</a>
 </li>
-<li>
-<a href="#link-removeAttr-name">removeAttr(<span class="arg-type tooltip">name</span>)</a>
+</ul>
 </li>
 <li>
-<a href="#link-removeClass-class">removeClass(<span class="arg-type tooltip">class</span>)</a>
-</li>
+<span>Text</span>
+<ul>
 <li>
 <a href="#link-text-">text()</a>
 </li>
 <li>
 <a href="#link-text-val">text(<span class="arg-type tooltip">val</span>)</a>
 </li>
-<li>
-<a href="#link-toggleClass-class">toggleClass(<span class="arg-type tooltip">class</span>)</a>
+</ul>
 </li>
+<li>
+<span>Value</span>
+<ul>
 <li>
 <a href="#link-val-">val()</a>
 </li>
@@ -288,24 +376,14 @@
 </li>
 </ul>
 </li>
+</ul>
+</li>
 <li>
 <span>Traversing</span>
 <ul>
 <li>
-<a href="#link-add-expr">add(<span class="arg-type tooltip">expr</span>)</a>
-</li>
-<li>
-<a href="#link-andSelf-">andSelf()</a>
-</li>
-<li>
-<a href="#link-children-expr">children(<span class="arg-type tooltip">expr</span>)</a>
-</li>
-<li>
-<a href="#link-contents-">contents()</a>
-</li>
-<li>
-<a href="#link-end-">end()</a>
-</li>
+<span>Filtering</span>
+<ul>
 <li>
 <a href="#link-eq-index">eq(<span class="arg-type tooltip">index</span>)</a>
 </li>
@@ -314,9 +392,6 @@
 </li>
 <li>
 <a href="#link-filter-fn">filter(<span class="arg-type tooltip">fn</span>)</a>
-</li>
-<li>
-<a href="#link-find-expr">find(<span class="arg-type tooltip">expr</span>)</a>
 </li>
 <li>
 <a href="#link-hasClass-class">hasClass(<span class="arg-type tooltip">class</span>)</a>
@@ -328,13 +403,33 @@
 <a href="#link-map-callback">map(<span class="arg-type tooltip">callback</span>)</a>
 </li>
 <li>
+<a href="#link-not-expr">not(<span class="arg-type tooltip">expr</span>)</a>
+</li>
+<li>
+<a href="#link-slice-startend">slice(<span class="arg-type tooltip">start</span>, <span class="arg-type tooltip">end</span>)</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Finding</span>
+<ul>
+<li>
+<a href="#link-add-expr">add(<span class="arg-type tooltip">expr</span>)</a>
+</li>
+<li>
+<a href="#link-children-expr">children(<span class="arg-type tooltip">expr</span>)</a>
+</li>
+<li>
+<a href="#link-contents-">contents()</a>
+</li>
+<li>
+<a href="#link-find-expr">find(<span class="arg-type tooltip">expr</span>)</a>
+</li>
+<li>
 <a href="#link-next-expr">next(<span class="arg-type tooltip">expr</span>)</a>
 </li>
 <li>
 <a href="#link-nextAll-expr">nextAll(<span class="arg-type tooltip">expr</span>)</a>
-</li>
-<li>
-<a href="#link-not-expr">not(<span class="arg-type tooltip">expr</span>)</a>
 </li>
 <li>
 <a href="#link-parent-expr">parent(<span class="arg-type tooltip">expr</span>)</a>
@@ -351,8 +446,18 @@
 <li>
 <a href="#link-siblings-expr">siblings(<span class="arg-type tooltip">expr</span>)</a>
 </li>
+</ul>
+</li>
 <li>
-<a href="#link-slice-startend">slice(<span class="arg-type tooltip">start</span>, <span class="arg-type tooltip">end</span>)</a>
+<span>Chaining</span>
+<ul>
+<li>
+<a href="#link-andSelf-">andSelf()</a>
+</li>
+<li>
+<a href="#link-end-">end()</a>
+</li>
+</ul>
 </li>
 </ul>
 </li>
@@ -360,26 +465,8 @@
 <span>Manipulation</span>
 <ul>
 <li>
-<a href="#link-after-content">after(<span class="arg-type tooltip">content</span>)</a>
-</li>
-<li>
-<a href="#link-append-content">append(<span class="arg-type tooltip">content</span>)</a>
-</li>
-<li>
-<a href="#link-appendTo-content">appendTo(<span class="arg-type tooltip">content</span>)</a>
-</li>
-<li>
-<a href="#link-before-content">before(<span class="arg-type tooltip">content</span>)</a>
-</li>
-<li>
-<a href="#link-clone-">clone()</a>
-</li>
-<li>
-<a href="#link-clone-true">clone(<span class="arg-type tooltip">true</span>)</a>
-</li>
-<li>
-<a href="#link-empty-">empty()</a>
-</li>
+<span>Changing Contents</span>
+<ul>
 <li>
 <a href="#link-html-">html()</a>
 </li>
@@ -387,10 +474,21 @@
 <a href="#link-html-val">html(<span class="arg-type tooltip">val</span>)</a>
 </li>
 <li>
-<a href="#link-insertAfter-content">insertAfter(<span class="arg-type tooltip">content</span>)</a>
+<a href="#link-text-">text()</a>
 </li>
 <li>
-<a href="#link-insertBefore-content">insertBefore(<span class="arg-type tooltip">content</span>)</a>
+<a href="#link-text-val">text(<span class="arg-type tooltip">val</span>)</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Inserting Inside</span>
+<ul>
+<li>
+<a href="#link-append-content">append(<span class="arg-type tooltip">content</span>)</a>
+</li>
+<li>
+<a href="#link-appendTo-content">appendTo(<span class="arg-type tooltip">content</span>)</a>
 </li>
 <li>
 <a href="#link-prepend-content">prepend(<span class="arg-type tooltip">content</span>)</a>
@@ -398,21 +496,28 @@
 <li>
 <a href="#link-prependTo-content">prependTo(<span class="arg-type tooltip">content</span>)</a>
 </li>
-<li>
-<a href="#link-remove-expr">remove(<span class="arg-type tooltip">expr</span>)</a>
+</ul>
 </li>
 <li>
-<a href="#link-replaceAll-selector">replaceAll(<span class="arg-type tooltip">selector</span>)</a>
+<span>Inserting Outside</span>
+<ul>
+<li>
+<a href="#link-after-content">after(<span class="arg-type tooltip">content</span>)</a>
 </li>
 <li>
-<a href="#link-replaceWith-content">replaceWith(<span class="arg-type tooltip">content</span>)</a>
+<a href="#link-before-content">before(<span class="arg-type tooltip">content</span>)</a>
 </li>
 <li>
-<a href="#link-text-">text()</a>
+<a href="#link-insertAfter-content">insertAfter(<span class="arg-type tooltip">content</span>)</a>
 </li>
 <li>
-<a href="#link-text-val">text(<span class="arg-type tooltip">val</span>)</a>
+<a href="#link-insertBefore-content">insertBefore(<span class="arg-type tooltip">content</span>)</a>
 </li>
+</ul>
+</li>
+<li>
+<span>Inserting Around</span>
+<ul>
 <li>
 <a href="#link-wrap-html">wrap(<span class="arg-type tooltip">html</span>)</a>
 </li>
@@ -434,6 +539,44 @@
 </ul>
 </li>
 <li>
+<span>Replacing</span>
+<ul>
+<li>
+<a href="#link-replaceAll-selector">replaceAll(<span class="arg-type tooltip">selector</span>)</a>
+</li>
+<li>
+<a href="#link-replaceWith-content">replaceWith(<span class="arg-type tooltip">content</span>)</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Removing</span>
+<ul>
+<li>
+<a href="#link-empty-">empty()</a>
+</li>
+<li>
+<a href="#link-remove-expr">remove(<span class="arg-type tooltip">expr</span>)</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Copying</span>
+<ul>
+<li>
+<a href="#link-clone-">clone()</a>
+</li>
+<li>
+<a href="#link-clone-true">clone(<span class="arg-type tooltip">true</span>)</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<span>CSS</span>
+<ul>
+<li>
 <span>CSS</span>
 <ul>
 <li>
@@ -445,14 +588,24 @@
 <li>
 <a href="#link-css-namevalue">css(<span class="arg-type tooltip">name</span>, <span class="arg-type tooltip">value</span>)</a>
 </li>
+</ul>
+</li>
+<li>
+<span>Positioning</span>
+<ul>
+<li>
+<a href="#link-offset-">offset()</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Height and Width</span>
+<ul>
 <li>
 <a href="#link-height-">height()</a>
 </li>
 <li>
 <a href="#link-height-val">height(<span class="arg-type tooltip">val</span>)</a>
-</li>
-<li>
-<a href="#link-offset-">offset()</a>
 </li>
 <li>
 <a href="#link-width-">width()</a>
@@ -462,12 +615,53 @@
 </li>
 </ul>
 </li>
+</ul>
+</li>
 <li>
 <span>Events</span>
 <ul>
 <li>
+<span>Page Load</span>
+<ul>
+<li>
+<a href="#link-ready-fn">ready(<span class="arg-type tooltip">fn</span>)</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Event Handling</span>
+<ul>
+<li>
 <a href="#link-bind-typedatafn">bind(<span class="arg-type tooltip">type</span>, <span class="arg-type tooltip">data</span>, <span class="arg-type tooltip">fn</span>)</a>
 </li>
+<li>
+<a href="#link-one-typedatafn">one(<span class="arg-type tooltip">type</span>, <span class="arg-type tooltip">data</span>, <span class="arg-type tooltip">fn</span>)</a>
+</li>
+<li>
+<a href="#link-trigger-type data ">trigger(<span class="arg-type tooltip">type </span>, <span class="arg-type tooltip">data </span>)</a>
+</li>
+<li>
+<a href="#link-triggerHandler-type data ">triggerHandler(<span class="arg-type tooltip">type </span>, <span class="arg-type tooltip">data </span>)</a>
+</li>
+<li>
+<a href="#link-unbind-type data ">unbind(<span class="arg-type tooltip">type </span>, <span class="arg-type tooltip">data </span>)</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Interaction Helpers</span>
+<ul>
+<li>
+<a href="#link-hover-overout">hover(<span class="arg-type tooltip">over</span>, <span class="arg-type tooltip">out</span>)</a>
+</li>
+<li>
+<a href="#link-toggle-fnfn">toggle(<span class="arg-type tooltip">fn</span>, <span class="arg-type tooltip">fn</span>)</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Event Helpers</span>
+<ul>
 <li>
 <a href="#link-blur-">blur()</a>
 </li>
@@ -503,9 +697,6 @@
 </li>
 <li>
 <a href="#link-focus-fn">focus(<span class="arg-type tooltip">fn</span>)</a>
-</li>
-<li>
-<a href="#link-hover-overout">hover(<span class="arg-type tooltip">over</span>, <span class="arg-type tooltip">out</span>)</a>
 </li>
 <li>
 <a href="#link-keydown-">keydown()</a>
@@ -544,12 +735,6 @@
 <a href="#link-mouseup-fn">mouseup(<span class="arg-type tooltip">fn</span>)</a>
 </li>
 <li>
-<a href="#link-one-typedatafn">one(<span class="arg-type tooltip">type</span>, <span class="arg-type tooltip">data</span>, <span class="arg-type tooltip">fn</span>)</a>
-</li>
-<li>
-<a href="#link-ready-fn">ready(<span class="arg-type tooltip">fn</span>)</a>
-</li>
-<li>
 <a href="#link-resize-fn">resize(<span class="arg-type tooltip">fn</span>)</a>
 </li>
 <li>
@@ -568,24 +753,65 @@
 <a href="#link-submit-fn">submit(<span class="arg-type tooltip">fn</span>)</a>
 </li>
 <li>
-<a href="#link-toggle-fnfn">toggle(<span class="arg-type tooltip">fn</span>, <span class="arg-type tooltip">fn</span>)</a>
-</li>
-<li>
-<a href="#link-trigger-type data ">trigger(<span class="arg-type tooltip">type </span>, <span class="arg-type tooltip">data </span>)</a>
-</li>
-<li>
-<a href="#link-triggerHandler-type data ">triggerHandler(<span class="arg-type tooltip">type </span>, <span class="arg-type tooltip">data </span>)</a>
-</li>
-<li>
-<a href="#link-unbind-type data ">unbind(<span class="arg-type tooltip">type </span>, <span class="arg-type tooltip">data </span>)</a>
-</li>
-<li>
 <a href="#link-unload-fn">unload(<span class="arg-type tooltip">fn</span>)</a>
+</li>
+</ul>
 </li>
 </ul>
 </li>
 <li>
 <span>Effects</span>
+<ul>
+<li>
+<span>Basics</span>
+<ul>
+<li>
+<a href="#link-hide-">hide()</a>
+</li>
+<li>
+<a href="#link-hide-speedcallback">hide(<span class="arg-type tooltip">speed</span>, <span class="arg-type tooltip">callback</span>)</a>
+</li>
+<li>
+<a href="#link-show-">show()</a>
+</li>
+<li>
+<a href="#link-show-speedcallback">show(<span class="arg-type tooltip">speed</span>, <span class="arg-type tooltip">callback</span>)</a>
+</li>
+<li>
+<a href="#link-toggle-">toggle()</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Sliding</span>
+<ul>
+<li>
+<a href="#link-slideDown-speedcallback">slideDown(<span class="arg-type tooltip">speed</span>, <span class="arg-type tooltip">callback</span>)</a>
+</li>
+<li>
+<a href="#link-slideToggle-speedcallback">slideToggle(<span class="arg-type tooltip">speed</span>, <span class="arg-type tooltip">callback</span>)</a>
+</li>
+<li>
+<a href="#link-slideUp-speedcallback">slideUp(<span class="arg-type tooltip">speed</span>, <span class="arg-type tooltip">callback</span>)</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Fading</span>
+<ul>
+<li>
+<a href="#link-fadeIn-speedcallback">fadeIn(<span class="arg-type tooltip">speed</span>, <span class="arg-type tooltip">callback</span>)</a>
+</li>
+<li>
+<a href="#link-fadeOut-speedcallback">fadeOut(<span class="arg-type tooltip">speed</span>, <span class="arg-type tooltip">callback</span>)</a>
+</li>
+<li>
+<a href="#link-fadeTo-speedopacitycallback">fadeTo(<span class="arg-type tooltip">speed</span>, <span class="arg-type tooltip">opacity</span>, <span class="arg-type tooltip">callback</span>)</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Custom</span>
 <ul>
 <li>
 <a href="#link-animate-paramsoptions">animate(<span class="arg-type tooltip">params</span>, <span class="arg-type tooltip">options</span>)</a>
@@ -597,21 +823,6 @@
 <a href="#link-dequeue-">dequeue()</a>
 </li>
 <li>
-<a href="#link-fadeIn-speedcallback">fadeIn(<span class="arg-type tooltip">speed</span>, <span class="arg-type tooltip">callback</span>)</a>
-</li>
-<li>
-<a href="#link-fadeOut-speedcallback">fadeOut(<span class="arg-type tooltip">speed</span>, <span class="arg-type tooltip">callback</span>)</a>
-</li>
-<li>
-<a href="#link-fadeTo-speedopacitycallback">fadeTo(<span class="arg-type tooltip">speed</span>, <span class="arg-type tooltip">opacity</span>, <span class="arg-type tooltip">callback</span>)</a>
-</li>
-<li>
-<a href="#link-hide-">hide()</a>
-</li>
-<li>
-<a href="#link-hide-speedcallback">hide(<span class="arg-type tooltip">speed</span>, <span class="arg-type tooltip">callback</span>)</a>
-</li>
-<li>
 <a href="#link-queue-">queue()</a>
 </li>
 <li>
@@ -621,30 +832,40 @@
 <a href="#link-queue-queue">queue(<span class="arg-type tooltip">queue</span>)</a>
 </li>
 <li>
-<a href="#link-show-">show()</a>
-</li>
-<li>
-<a href="#link-show-speedcallback">show(<span class="arg-type tooltip">speed</span>, <span class="arg-type tooltip">callback</span>)</a>
-</li>
-<li>
-<a href="#link-slideDown-speedcallback">slideDown(<span class="arg-type tooltip">speed</span>, <span class="arg-type tooltip">callback</span>)</a>
-</li>
-<li>
-<a href="#link-slideToggle-speedcallback">slideToggle(<span class="arg-type tooltip">speed</span>, <span class="arg-type tooltip">callback</span>)</a>
-</li>
-<li>
-<a href="#link-slideUp-speedcallback">slideUp(<span class="arg-type tooltip">speed</span>, <span class="arg-type tooltip">callback</span>)</a>
-</li>
-<li>
 <a href="#link-stop-">stop()</a>
 </li>
-<li>
-<a href="#link-toggle-">toggle()</a>
+</ul>
 </li>
 </ul>
 </li>
 <li>
 <span>Ajax</span>
+<ul>
+<li>
+<span>Ajax Requests</span>
+<ul>
+<li>
+<a href="#link-jQueryajax-options">jQuery.ajax(<span class="arg-type tooltip">options</span>)</a>
+</li>
+<li>
+<a href="#link-jQueryget-urldatacallback">jQuery.get(<span class="arg-type tooltip">url</span>, <span class="arg-type tooltip">data</span>, <span class="arg-type tooltip">callback</span>)</a>
+</li>
+<li>
+<a href="#link-jQuerygetJSON-urldatacallback">jQuery.getJSON(<span class="arg-type tooltip">url</span>, <span class="arg-type tooltip">data</span>, <span class="arg-type tooltip">callback</span>)</a>
+</li>
+<li>
+<a href="#link-jQuerygetScript-urlcallback">jQuery.getScript(<span class="arg-type tooltip">url</span>, <span class="arg-type tooltip">callback</span>)</a>
+</li>
+<li>
+<a href="#link-jQuerypost-urldatacallback">jQuery.post(<span class="arg-type tooltip">url</span>, <span class="arg-type tooltip">data</span>, <span class="arg-type tooltip">callback</span>)</a>
+</li>
+<li>
+<a href="#link-load-urldatacallback">load(<span class="arg-type tooltip">url</span>, <span class="arg-type tooltip">data</span>, <span class="arg-type tooltip">callback</span>)</a>
+</li>
+</ul>
+</li>
+<li>
+<span>Ajax Events</span>
 <ul>
 <li>
 <a href="#link-ajaxComplete-callback">ajaxComplete(<span class="arg-type tooltip">callback</span>)</a>
@@ -664,26 +885,13 @@
 <li>
 <a href="#link-ajaxSuccess-callback">ajaxSuccess(<span class="arg-type tooltip">callback</span>)</a>
 </li>
-<li>
-<a href="#link-jQueryajax-options">jQuery.ajax(<span class="arg-type tooltip">options</span>)</a>
+</ul>
 </li>
+<li>
+<span>Misc</span>
+<ul>
 <li>
 <a href="#link-jQueryajaxSetup-options">jQuery.ajaxSetup(<span class="arg-type tooltip">options</span>)</a>
-</li>
-<li>
-<a href="#link-jQueryget-urldatacallback">jQuery.get(<span class="arg-type tooltip">url</span>, <span class="arg-type tooltip">data</span>, <span class="arg-type tooltip">callback</span>)</a>
-</li>
-<li>
-<a href="#link-jQuerygetJSON-urldatacallback">jQuery.getJSON(<span class="arg-type tooltip">url</span>, <span class="arg-type tooltip">data</span>, <span class="arg-type tooltip">callback</span>)</a>
-</li>
-<li>
-<a href="#link-jQuerygetScript-urlcallback">jQuery.getScript(<span class="arg-type tooltip">url</span>, <span class="arg-type tooltip">callback</span>)</a>
-</li>
-<li>
-<a href="#link-jQuerypost-urldatacallback">jQuery.post(<span class="arg-type tooltip">url</span>, <span class="arg-type tooltip">data</span>, <span class="arg-type tooltip">callback</span>)</a>
-</li>
-<li>
-<a href="#link-load-urldatacallback">load(<span class="arg-type tooltip">url</span>, <span class="arg-type tooltip">data</span>, <span class="arg-type tooltip">callback</span>)</a>
 </li>
 <li>
 <a href="#link-serialize-">serialize()</a>
@@ -693,18 +901,28 @@
 </li>
 </ul>
 </li>
+</ul>
+</li>
 <li>
 <span>Utilities</span>
 <ul>
 <li>
-<a href="#link-jQueryboxModel-">jQuery.boxModel()</a>
+<span>User Agent</span>
+<ul>
+<li>
+<a href="#link-jQueryboxModel-">jQuery.boxModel</a>
 </li>
 <li>
-<a href="#link-jQuerybrowser-">jQuery.browser()</a>
+<a href="#link-jQuerybrowser-">jQuery.browser</a>
 </li>
 <li>
-<a href="#link-jQuerybrowserversion-">jQuery.browser.version()</a>
+<a href="#link-jQuerybrowserversion-">jQuery.browser.version</a>
 </li>
+</ul>
+</li>
+<li>
+<span>Array and Object operations</span>
+<ul>
 <li>
 <a href="#link-jQueryeach-objectcallback">jQuery.each(<span class="arg-type tooltip">object</span>, <span class="arg-type tooltip">callback</span>)</a>
 </li>
@@ -718,16 +936,10 @@
 <a href="#link-jQueryinArray-valuearray">jQuery.inArray(<span class="arg-type tooltip">value</span>, <span class="arg-type tooltip">array</span>)</a>
 </li>
 <li>
-<a href="#link-jQueryisFunction-obj">jQuery.isFunction(<span class="arg-type tooltip">obj</span>)</a>
-</li>
-<li>
 <a href="#link-jQuerymakeArray-obj">jQuery.makeArray(<span class="arg-type tooltip">obj</span>)</a>
 </li>
 <li>
 <a href="#link-jQuerymap-arraycallback">jQuery.map(<span class="arg-type tooltip">array</span>, <span class="arg-type tooltip">callback</span>)</a>
-</li>
-<li>
-<a href="#link-jQuerytrim-str">jQuery.trim(<span class="arg-type tooltip">str</span>)</a>
 </li>
 <li>
 <a href="#link-jQueryunique-array">jQuery.unique(<span class="arg-type tooltip">array</span>)</a>
@@ -735,7 +947,28 @@
 </ul>
 </li>
 <li>
+<span>Test operations</span>
+<ul>
+<li>
+<a href="#link-jQueryisFunction-obj">jQuery.isFunction(<span class="arg-type tooltip">obj</span>)</a>
+</li>
+</ul>
+</li>
+<li>
+<span>String operations</span>
+<ul>
+<li>
+<a href="#link-jQuerytrim-str">jQuery.trim(<span class="arg-type tooltip">str</span>)</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
 <span>Internals</span>
+<ul>
+<li>
+<span>Data Cache</span>
 <ul>
 <li>
 <a href="#link-jQuerydata-elem">jQuery.data(<span class="arg-type tooltip">elem</span>)</a>
@@ -747,9 +980,6 @@
 <a href="#link-jQuerydata-elemnamevalue">jQuery.data(<span class="arg-type tooltip">elem</span>, <span class="arg-type tooltip">name</span>, <span class="arg-type tooltip">value</span>)</a>
 </li>
 <li>
-<a href="#link-jQueryparam-obj">jQuery.param(<span class="arg-type tooltip">obj</span>)</a>
-</li>
-<li>
 <a href="#link-jQueryremoveData-elem">jQuery.removeData(<span class="arg-type tooltip">elem</span>)</a>
 </li>
 <li>
@@ -757,13 +987,20 @@
 </li>
 </ul>
 </li>
+<li>
+<span>Ajax</span>
+<ul>
+<li>
+<a href="#link-jQueryparam-obj">jQuery.param(<span class="arg-type tooltip">obj</span>)</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="navsub" id="navAlpha">
 <h3>Alphabetic</h3>
-<div class="treecontrol">
-<a href="#">Collapse All</a><a href="#">Expand All</a><a href="#">Toggle All</a>
-</div>
 <ul>
 <li>
 <a href="#link-add-expr">add(<span class="arg-type tooltip">expr</span>)</a>
@@ -1084,13 +1321,13 @@
 <a href="#link-jQueryajaxSetup-options">jQuery.ajaxSetup(<span class="arg-type tooltip">options</span>)</a>
 </li>
 <li>
-<a href="#link-jQueryboxModel-">jQuery.boxModel()</a>
+<a href="#link-jQueryboxModel-">jQuery.boxModel</a>
 </li>
 <li>
-<a href="#link-jQuerybrowser-">jQuery.browser()</a>
+<a href="#link-jQuerybrowser-">jQuery.browser</a>
 </li>
 <li>
-<a href="#link-jQuerybrowserversion-">jQuery.browser.version()</a>
+<a href="#link-jQuerybrowserversion-">jQuery.browser.version</a>
 </li>
 <li>
 <a href="#link-jQuerydata-elem">jQuery.data(<span class="arg-type tooltip">elem</span>)</a>
@@ -1186,7 +1423,7 @@
 <a href="#link-lastChild-">lastChild()</a>
 </li>
 <li>
-<a href="#link-length-">length()</a>
+<a href="#link-length-">length</a>
 </li>
 <li>
 <a href="#link-load-urldatacallback">load(<span class="arg-type tooltip">url</span>, <span class="arg-type tooltip">data</span>, <span class="arg-type tooltip">callback</span>)</a>
@@ -1580,12 +1817,12 @@
 <li id="link-ajaxComplete-callback">
 <span class="fn"><a class="name" href="#link-ajaxComplete-callback">ajaxComplete</a>( <span class="arg-type tooltip" title="A reference to a Javascript function.">Function</span> <span class="arg-name tooltip" title="The function to execute.
 
-<pre>function (XMLHttpRequest, ajaxOptions) {
+<pre>function (event, XMLHttpRequest, ajaxOptions) {
   this; // dom element listening
 }
 </pre>">callback</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Attach a function to be executed whenever an AJAX request completes. This is an [[Ajax Events|Ajax Event]].</div>
+<div class="desc">Attach a function to be executed whenever an AJAX request completes. This is an &lt;a href='Ajax_Events'&gt;Ajax Event&lt;/a&gt;.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Show a message when an AJAX request completes.</p>
@@ -1600,13 +1837,13 @@
 <li id="link-ajaxError-callback">
 <span class="fn"><a class="name" href="#link-ajaxError-callback">ajaxError</a>( <span class="arg-type tooltip" title="A reference to a Javascript function.">Function</span> <span class="arg-name tooltip" title="The function to execute.
 
-<pre>function (XMLHttpRequest, ajaxOptions, thrownError) {
+<pre>function (event, XMLHttpRequest, ajaxOptions, thrownError) {
   // thrownError only passed if an error was caught
   this; // dom element listening
 }
 </pre>">callback</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Attach a function to be executed whenever an AJAX request fails. This is an [[Ajax Events|Ajax Event]].</div>
+<div class="desc">Attach a function to be executed whenever an AJAX request fails. This is an &lt;a href='Ajax_Events'&gt;Ajax Event&lt;/a&gt;.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Show a message when an AJAX request fails.</p>
@@ -1621,12 +1858,12 @@
 <li id="link-ajaxSend-callback">
 <span class="fn"><a class="name" href="#link-ajaxSend-callback">ajaxSend</a>( <span class="arg-type tooltip" title="A reference to a Javascript function.">Function</span> <span class="arg-name tooltip" title="The function to execute.
 
-<pre>function (XMLHttpRequest, ajaxOptions) {
+<pre>function (event, XMLHttpRequest, ajaxOptions) {
   this; // dom element listening
 }
 </pre>">callback</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Attach a function to be executed before an AJAX request is sent. This is an [[Ajax Events|Ajax Event]].</div>
+<div class="desc">Attach a function to be executed before an AJAX request is sent. This is an &lt;a href='Ajax_Events'&gt;Ajax Event&lt;/a&gt;.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Show a message before an AJAX request is sent.</p>
@@ -1646,7 +1883,7 @@
 }
 </pre>">callback</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Attach a function to be executed whenever an AJAX request begins and there is none already active. This is an [[Ajax Events|Ajax Event]].</div>
+<div class="desc">Attach a function to be executed whenever an AJAX request begins and there is none already active. This is an &lt;a href='Ajax_Events'&gt;Ajax Event&lt;/a&gt;.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Show a loading message whenever an AJAX request starts (and none is already active).</p>
@@ -1665,7 +1902,7 @@
 }
 </pre>">callback</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Attach a function to be executed whenever all AJAX requests have ended. This is an [[Ajax Events|Ajax Event]].</div>
+<div class="desc">Attach a function to be executed whenever all AJAX requests have ended. This is an &lt;a href='Ajax_Events'&gt;Ajax Event&lt;/a&gt;.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Hide a loading message after all the AJAX requests have stopped.</p>
@@ -1680,12 +1917,12 @@
 <li id="link-ajaxSuccess-callback">
 <span class="fn"><a class="name" href="#link-ajaxSuccess-callback">ajaxSuccess</a>( <span class="arg-type tooltip" title="A reference to a Javascript function.">Function</span> <span class="arg-name tooltip" title="The function to execute.
 
-<pre>function (XMLHttpRequest, ajaxOptions) {
+<pre>function (event, XMLHttpRequest, ajaxOptions) {
   this; // dom element listening
 }
 </pre>">callback</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Attach a function to be executed whenever an AJAX request completes successfully. This is an [[Ajax Events|Ajax Event]].</div>
+<div class="desc">Attach a function to be executed whenever an AJAX request completes successfully. This is an &lt;a href='Ajax_Events'&gt;Ajax Event&lt;/a&gt;.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Show a message when an AJAX request completes successfully.</p>
@@ -2559,7 +2796,6 @@ $("p").bind("click", {foo: "bar"}, handler)</code>
           $("div").text(str);
         })
         .change();
-
 </code>
 </pre>
 <h4>HTML:</h4>
@@ -3102,10 +3338,10 @@ $("p").bind("click", {foo: "bar"}, handler)</code>
 </li>
 <li id="link-dblclick-fn">
 <span class="fn"><a class="name" href="#link-dblclick-fn">dblclick</a>( <span class="arg-type tooltip" title="A reference to a Javascript function.">Function</span> <span class="arg-name tooltip" title="The function to bind to the dblclick event on each of the matched elements.
-
 <pre>function callback(eventObject) {
   this; // dom element
 }
+
 </pre>">fn</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
 <div class="desc">Binds a function to the dblclick event of each matched element.</div>
@@ -3927,7 +4163,7 @@ $("p").bind("click", {foo: "bar"}, handler)</code>
 <li id="link-find-expr">
 <span class="fn"><a class="name" href="#link-find-expr">find</a>( <span class="arg-type tooltip" title="A string of characters.">String</span> <span class="arg-name tooltip" title="An expression to search with.">expr</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Searches for all elements that match the specified [[Selectors|expression]]. This method is a good way to find additional descendant elements with which to process.</div>
+<div class="desc">Searches for all elements that match the specified &lt;a href='Selectors'&gt;expression&lt;/a&gt;. This method is a good way to find additional descendant elements with which to process.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Starts with all paragraphs and searches for descendant span elements, same as $("p span")</p>
@@ -4533,6 +4769,7 @@ $("p").bind("click", {foo: "bar"}, handler)</code>
 <p>Click a paragraph to convert it from html to text.</p>
 <pre>
 <code class="javascript">
+
     $("p").click(function () {
       var htmlStr = $(this).html();
       $(this).text(htmlStr);
@@ -4542,14 +4779,14 @@ $("p").bind("click", {foo: "bar"}, handler)</code>
 <h4>HTML:</h4>
 <pre>
 <code class="html">&lt;p&gt;
-
     &lt;b&gt;Click&lt;/b&gt; to change the &lt;span id="tag"&gt;html&lt;/span&gt;
+
   &lt;/p&gt;
   &lt;p&gt;
-
     to a &lt;span id="text"&gt;text&lt;/span&gt; node.
   &lt;/p&gt;
   &lt;p&gt;
+
     This &lt;button name="nada"&gt;button&lt;/button&gt; does nothing.
   &lt;/p&gt;</code>
 </pre>
@@ -4902,7 +5139,6 @@ mainNavLinks.click(function(){alert(mainNavLinks.index(this)0;});</code>
 <p>Shows a few ways is() can be used inside an event handler.</p>
 <pre>
 <code class="javascript">
-
     $("div").one('click', function () {
       if ($(this).is(":first-child")) {
         $("p").text("It's the first div.");
@@ -5069,7 +5305,7 @@ $("&lt;input type='checkbox'/&gt;");</code>
 </div>
 </li>
 <li id="link-jQueryajax-options">
-<span class="fn"><a class="name" href="#link-jQueryajax-options">jQuery.ajax</a>( <span class="arg-type tooltip" title="">Options</span> <span class="arg-name tooltip" title="A set of key/value pairs that configure the Ajax request. All options are optional. A default can be set for any option with [[Ajax/jQuery.ajaxSetup|$.ajaxSetup]]().">options</span> ) returns <span class="type"><span class="tooltip" title="An XMLHttpRequest object (referencing a HTTP request).">XMLHttpRequest</span></span></span>
+<span class="fn"><a class="name" href="#link-jQueryajax-options">jQuery.ajax</a>( <span class="arg-type tooltip" title="">Options</span> <span class="arg-name tooltip" title="A set of key/value pairs that configure the Ajax request. All options are optional. A default can be set for any option with <a href='Ajax/jQuery.ajaxSetup'>$.ajaxSetup</a>().">options</span> ) returns <span class="type"><span class="tooltip" title="An XMLHttpRequest object (referencing a HTTP request).">XMLHttpRequest</span></span></span>
 <div class="more">
 <div class="desc">Load a remote page using an HTTP request.</div>
 <h3>Options</h3>
@@ -5080,7 +5316,7 @@ $("&lt;input type='checkbox'/&gt;");</code>
 </li>
 <li>
 <span>beforeSend (<span class="arg-type tooltip" title="A reference to a Javascript function.">Function</span>), default: </span>
-<div>A pre-callback to modify the XMLHttpRequest object before it is sent. Use this to set custom headers etc. The XMLHttpRequest is passed as the only argument. This is an [[Ajax Events|Ajax Event]].
+<div>A pre-callback to modify the XMLHttpRequest object before it is sent. Use this to set custom headers etc. The XMLHttpRequest is passed as the only argument. This is an &lt;a href='Ajax_Events'&gt;Ajax Event&lt;/a&gt;.
 
 &lt;pre&gt;function (XMLHttpRequest) {
   this; // the options for this ajax request
@@ -5093,7 +5329,7 @@ $("&lt;input type='checkbox'/&gt;");</code>
 </li>
 <li>
 <span>complete (<span class="arg-type tooltip" title="A reference to a Javascript function.">Function</span>), default: </span>
-<div>A function to be called when the request finishes (after success and error callbacks are executed). The function gets passed two arguments: The XMLHttpRequest object and a string describing the type of success of the request. This is an [[Ajax Events|Ajax Event]].
+<div>A function to be called when the request finishes (after success and error callbacks are executed). The function gets passed two arguments: The XMLHttpRequest object and a string describing the type of success of the request. This is an &lt;a href='Ajax_Events'&gt;Ajax Event&lt;/a&gt;.
 &lt;pre&gt;function (XMLHttpRequest, textStatus) {
   this; // the options for this ajax request
 }
@@ -5120,7 +5356,7 @@ $("&lt;input type='checkbox'/&gt;");</code>
 </li>
 <li>
 <span>error (<span class="arg-type tooltip" title="A reference to a Javascript function.">Function</span>), default: </span>
-<div>A function to be called if the request fails. The function gets passed three arguments: The XMLHttpRequest object, a string describing the type of error that occurred and an optional exception object, if one occurred. This is an [[Ajax Events|Ajax Event]].
+<div>A function to be called if the request fails. The function gets passed three arguments: The XMLHttpRequest object, a string describing the type of error that occurred and an optional exception object, if one occurred. This is an &lt;a href='Ajax_Events'&gt;Ajax Event&lt;/a&gt;.
 
 &lt;pre&gt;function (XMLHttpRequest, textStatus, errorThrown) {
   // typically only one of textStatus or errorThrown 
@@ -5131,7 +5367,7 @@ $("&lt;input type='checkbox'/&gt;");</code>
 </li>
 <li>
 <span>global (<span class="arg-type tooltip" title="true or false.">Boolean</span>), default: true</span>
-<div>Whether to trigger global AJAX event handlers for this request. The default is true. Set to false to prevent the global handlers like ajaxStart or ajaxStop from being triggered. This can be used to control various [[Ajax Events]].</div>
+<div>Whether to trigger global AJAX event handlers for this request. The default is true. Set to false to prevent the global handlers like ajaxStart or ajaxStop from being triggered. This can be used to control various &lt;a href='Ajax_Events'&gt;Ajax Events&lt;/a&gt;.</div>
 </li>
 <li>
 <span>ifModified (<span class="arg-type tooltip" title="true or false.">Boolean</span>), default: false</span>
@@ -5147,7 +5383,7 @@ $("&lt;input type='checkbox'/&gt;");</code>
 </li>
 <li>
 <span>success (<span class="arg-type tooltip" title="A reference to a Javascript function.">Function</span>), default: </span>
-<div>A function to be called if the request succeeds. The function gets passed two arguments: The data returned from the server, formatted according to the 'dataType' parameter, and a string describing the status. This is an [[Ajax Events|Ajax Event]].
+<div>A function to be called if the request succeeds. The function gets passed two arguments: The data returned from the server, formatted according to the 'dataType' parameter, and a string describing the status. This is an &lt;a href='Ajax_Events'&gt;Ajax Event&lt;/a&gt;.
 &lt;pre&gt;function (data, textStatus) {
   // data could be xmlDoc, jsonObj, html, text, etc...
   this; // the options for this ajax request
@@ -5156,7 +5392,7 @@ $("&lt;input type='checkbox'/&gt;");</code>
 </li>
 <li>
 <span>timeout (<span class="arg-type tooltip" title="A valid numeric.">Number</span>), default: </span>
-<div>Set a local timeout in ms for the request. This will override the global timeout, if one is set via [[Ajax/jQuery.ajaxSetup|$.ajaxSetup]]. For example, you could use this property to give a single request a longer timeout than all other requests that you've set to time out in one second. See [[Ajax/jQuery.ajaxSetup|$.ajaxSetup]]() for global timeouts.</div>
+<div>Set a local timeout in ms for the request. This will override the global timeout, if one is set via &lt;a href='Ajax/jQuery.ajaxSetup'&gt;$.ajaxSetup&lt;/a&gt;. For example, you could use this property to give a single request a longer timeout than all other requests that you've set to time out in one second. See &lt;a href='Ajax/jQuery.ajaxSetup'&gt;$.ajaxSetup&lt;/a&gt;() for global timeouts.</div>
 </li>
 <li>
 <span>type (<span class="arg-type tooltip" title="A string of characters.">String</span>), default: "GET"</span>
@@ -5254,7 +5490,7 @@ option to false, the automatic conversion of data to strings is prevented.</p>
 </div>
 </li>
 <li id="link-jQueryboxModel-">
-<span class="fn"><a class="name" href="#link-jQueryboxModel-">jQuery.boxModel</a>(  ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
+<span class="fn"><a class="name" href="#link-jQueryboxModel-">jQuery.boxModel</a> returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
 <div class="desc">States if the current page, in the user's browser, is being rendered using the [http://www.w3.org/TR/REC-CSS2/box.html W3C CSS Box Model].</div>
 <div class="example">
@@ -5265,7 +5501,6 @@ option to false, the automatic conversion of data to strings is prevented.</p>
 
     $("p").html("The box model for this iframe is: &lt;span&gt;" +
                 jQuery.boxModel + "&lt;/span&gt;");
-
 </code>
 </pre>
 <h4>HTML:</h4>
@@ -5288,7 +5523,7 @@ option to false, the automatic conversion of data to strings is prevented.</p>
 </div>
 </li>
 <li id="link-jQuerybrowser-">
-<span class="fn"><a class="name" href="#link-jQuerybrowser-">jQuery.browser</a>(  ) returns <span class="type"><span class="tooltip" title="A Javascript object that contains key/value pairs in the form of properties and values.">Map</span></span></span>
+<span class="fn"><a class="name" href="#link-jQuerybrowser-">jQuery.browser</a> returns <span class="type"><span class="tooltip" title="A Javascript object that contains key/value pairs in the form of properties and values.">Map</span></span></span>
 <div class="more">
 <div class="desc">Contains flags for the useragent, read from navigator.userAgent.</div>
 <div class="example">
@@ -5327,7 +5562,7 @@ option to false, the automatic conversion of data to strings is prevented.</p>
 </div>
 </li>
 <li id="link-jQuerybrowserversion-">
-<span class="fn"><a class="name" href="#link-jQuerybrowserversion-">jQuery.browser.version</a>(  ) returns <span class="type"><span class="tooltip" title="A string of characters.">String</span></span></span>
+<span class="fn"><a class="name" href="#link-jQuerybrowserversion-">jQuery.browser.version</a> returns <span class="type"><span class="tooltip" title="A string of characters.">String</span></span></span>
 <div class="more">
 <div class="desc">The version number of the rendering engine for the user's browser.</div>
 <div class="example">
@@ -5378,11 +5613,11 @@ if (jQuery.browser.msie) {
 <p>Get the store id of an element.  It is assigned on the data() function call if one hasn't been assigned yet.</p>
 <pre>
 <code class="javascript">
-
     $(document.body).click(function(e) {
       var id = jQuery.data(e.target);
       $("span").text(id);
     });
+
 </code>
 </pre>
 <h4>HTML:</h4>
@@ -5482,7 +5717,6 @@ if (jQuery.browser.msie) {
   return booleanKeepGoing; // optional, unless false 
                            // and want to stop looping
 }
-
 </pre>">callback</span> ) returns <span class="type"><span class="tooltip" title="A simple Javascript object..">Object</span></span></span>
 <div class="more">
 <div class="desc">A generic iterator function, which can be used to seamlessly iterate over both objects and arrays.</div>
@@ -5491,6 +5725,7 @@ if (jQuery.browser.msie) {
 <p>Filters the original array of numbers leaving that are not 5 and have an index greater than 3.  Then it removes all 9s while inverting it.</p>
 <pre>
 <code class="javascript">
+
     var arr = [ "one", "two", "three", "four", "five" ];
     var obj = { one:1, two:2, three:3, four:4, five:5 };
 
@@ -6119,7 +6354,7 @@ jQuery("div &gt; p").hide();</code>
 <li id="link-jQueryparam-obj">
 <span class="fn"><a class="name" href="#link-jQueryparam-obj">jQuery.param</a>( <span class="arg-type tooltip" title="">Array&lt;Elements&gt;, jQuery, Object</span> <span class="arg-name tooltip" title="An Array or jQuery object is serialized by name/value pairs.  An object by key/value pairs.">obj</span> ) returns <span class="type"><span class="tooltip" title="A string of characters.">String</span></span></span>
 <div class="more">
-<div class="desc">Serializes an array of form elements or an object (core of [[Ajax/serialize|.serialize()]] method).</div>
+<div class="desc">Serializes an array of form elements or an object (core of &lt;a href='Ajax/serialize'&gt;.serialize()&lt;/a&gt; method).</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Serialize a key/value object.</p>
@@ -6128,6 +6363,7 @@ jQuery("div &gt; p").hide();</code>
     var params = { width:1680, height:1050 };
     var str = jQuery.param(params);
     $("#results").text(str);
+
 </code>
 </pre>
 <h4>HTML:</h4>
@@ -6369,10 +6605,10 @@ jQuery("div &gt; p").hide();</code>
 </li>
 <li id="link-keypress-fn">
 <span class="fn"><a class="name" href="#link-keypress-fn">keypress</a>( <span class="arg-type tooltip" title="A reference to a Javascript function.">Function</span> <span class="arg-name tooltip" title="A function to bind to the keypress event on each of the matched elements.
-
 <pre>function callback(eventObject) {
   this; // dom element
 }
+
 </pre>">fn</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
 <div class="desc">Binds a function to the keypress event of each matched element.</div>
@@ -6497,7 +6733,7 @@ jQuery("div &gt; p").hide();</code>
 </div>
 </li>
 <li id="link-length-">
-<span class="fn"><a class="name" href="#link-length-">length</a>(  ) returns <span class="type"><span class="tooltip" title="A valid numeric.">Number</span></span></span>
+<span class="fn"><a class="name" href="#link-length-">length</a> returns <span class="type"><span class="tooltip" title="A valid numeric.">Number</span></span></span>
 <div class="more">
 <div class="desc">The number of elements in the jQuery object.</div>
 <div class="example">
@@ -7581,6 +7817,7 @@ p.html( "left: " + offset.left + ", top: " + offset.top );</code>
 <p>Show the length of the queue.</p>
 <pre>
 <code class="javascript">
+
     $("#show").click(function () {
       var n = $("div").queue("fx");
       $("span").text("Queue length is: " + n.length);
@@ -7844,12 +8081,12 @@ p.html( "left: " + offset.left + ", top: " + offset.top );</code>
              .focus()
              .val("editable now");
     });
-
 </code>
 </pre>
 <h4>HTML:</h4>
 <pre>
 <code class="html">&lt;button&gt;Enable&lt;/button&gt;
+
   &lt;input type="text" disabled="disabled" value="can't edit this" /&gt;</code>
 </pre>
 </div>
@@ -8064,10 +8301,10 @@ p.html( "left: " + offset.left + ", top: " + offset.top );</code>
 </li>
 <li id="link-scroll-fn">
 <span class="fn"><a class="name" href="#link-scroll-fn">scroll</a>( <span class="arg-type tooltip" title="A reference to a Javascript function.">Function</span> <span class="arg-name tooltip" title="A function to bind to the scroll event on each of the matched elements.
-
 <pre>function callback(eventObject) {
   this; // dom element
 }
+
 </pre>">fn</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
 <div class="desc">Bind a function to the scroll event of each matched element.</div>
@@ -8224,7 +8461,7 @@ p.html( "left: " + offset.left + ", top: " + offset.top );</code>
 <li id="link-serializeArray-">
 <span class="fn"><a class="name" href="#link-serializeArray-">serializeArray</a>(  ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Serializes all forms and form elements (like the [[Ajax/serialize|.serialize()]] method) but returns a JSON data structure for you to work with.</div>
+<div class="desc">Serializes all forms and form elements (like the &lt;a href='Ajax/serialize'&gt;.serialize()&lt;/a&gt; method) but returns a JSON data structure for you to work with.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Get the values from a form, iterate through them, and append them to a results display.</p>
@@ -8770,7 +9007,6 @@ p.html( "left: " + offset.left + ", top: " + offset.top );</code>
 <p>Click the Go button once to start the animation, then click the STOP button to stop it where it's currently positioned.  Another option is to click several buttons to queue them up and see that stop just kills the currently playing one.</p>
 <pre>
 <code class="javascript">
-
     // Start animation
     $("#go").click(function(){
       $(".block").animate({left: '+=100px'}, 2000);
@@ -8785,13 +9021,13 @@ p.html( "left: " + offset.left + ", top: " + offset.top );</code>
     $("#back").click(function(){
       $(".block").animate({left: '-=100px'}, 2000);
     });
+
 </code>
 </pre>
 <h4>HTML:</h4>
 <pre>
 <code class="html">&lt;button id="go"&gt;Go&lt;/button&gt; 
   &lt;button id="stop"&gt;STOP!&lt;/button&gt;
-
   &lt;button id="back"&gt;Back&lt;/button&gt;
   &lt;div class="block"&gt;&lt;/div&gt;</code>
 </pre>
@@ -9124,9 +9360,9 @@ p.html( "left: " + offset.left + ", top: " + offset.top );</code>
 <h4>HTML:</h4>
 <pre>
 <code class="html">&lt;p class="blue"&gt;Click to toggle&lt;/p&gt;
+
   &lt;p class="blue highlight"&gt;highlight&lt;/p&gt;
   &lt;p class="blue"&gt;on these&lt;/p&gt;
-
   &lt;p class="blue"&gt;paragraphs&lt;/p&gt;</code>
 </pre>
 </div>
@@ -9473,7 +9709,6 @@ $("p").unbind("click", foo); // ... foo will no longer be called.</code>
 <p>Show various widths.  Note the values are from the iframe so might be smaller than you expected.  The yellow highlight shows the iframe body.</p>
 <pre>
 <code class="javascript">
-
     function showWidth(ele, w) {
       $("div").text("The width for the " + ele + 
                     " is " + w + "px.");
@@ -9505,7 +9740,7 @@ $("p").unbind("click", foo); // ... foo will no longer be called.</code>
 </div>
 </li>
 <li id="link-width-val">
-<span class="fn"><a class="name" href="#link-width-val">width</a>( <span class="arg-type tooltip" title="">String or Number</span> <span class="arg-name tooltip" title="Set the CSS 'width' property to the specified value.">val</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
+<span class="fn"><a class="name" href="#link-width-val">width</a>( <span class="arg-type tooltip" title="">String, Number</span> <span class="arg-name tooltip" title="Set the CSS 'width' property to the specified value.">val</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
 <div class="desc">Set the CSS width of every matched element.</div>
 <div class="example">
