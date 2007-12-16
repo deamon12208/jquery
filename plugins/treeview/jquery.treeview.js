@@ -13,7 +13,7 @@
  *
  */
 
-(function($) {
+;(function($) {
 
 	$.extend($.fn, {
 		swapClass: function(c1, c2) {
