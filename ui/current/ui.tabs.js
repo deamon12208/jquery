@@ -380,7 +380,13 @@
                     throw 'jQuery UI Tabs: Mismatching fragment identifier.';
                 }
 
-                this.blur(); // prevent IE from keeping other link focussed when using the back button
+                // Prevent IE from keeping other link focussed when using the back button
+                // and remove dotted border from clicked link. This is controlled in modern
+                // browsers via CSS, also blur removes focus from address bar in Firefox
+                // which can become a usability and annoying problem with tabsRotate.
+                if ($.browser.msie) {
+                    this.blur(); 
+                }
 
                 //return o.bookmarkable && !!trueClick; // convert trueClick == undefined to Boolean required in IE
                 return false;
