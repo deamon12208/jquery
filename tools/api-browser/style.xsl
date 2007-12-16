@@ -85,6 +85,14 @@
 		</li>
 	</xsl:template>
 	
+	<xsl:template name="category">
+		<xsl:for-each select="function|selector|property">
+			<xsl:sort select="translate(@name,'$.','')"/>
+			<xsl:sort select="count(params)"/>
+			<xsl:call-template name="printMethod"/>
+		</xsl:for-each>
+	</xsl:template>
+	
 	<xsl:template name="categories">
 		<ul>
 		<xsl:for-each select="cat">
@@ -95,14 +103,11 @@
 						<li class="open">
 							<span><xsl:value-of select="@value" /></span>
 							<ul>
-								<xsl:for-each select="function|selector|property">
-									<xsl:sort select="translate(@name,'$.','')"/>
-									<xsl:sort select="count(params)"/>
-									<xsl:call-template name="printMethod"/>
-								</xsl:for-each>
+								<xsl:call-template name="category" />
 							</ul>
 				 		</li>
 					</xsl:for-each>
+					<xsl:call-template name="category" />
 				</ul>
 	 		</li>
 		</xsl:for-each>
