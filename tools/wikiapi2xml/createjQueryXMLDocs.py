@@ -24,11 +24,13 @@ from xml.dom import minidom
 
 def printdebug(msg):
   if opts.verbose != "false" and infoNode != None:
-    msgNode = doc.createElement("msg")
-    msgNode.appendChild(doc.createTextNode(msg))
-    infoNode.appendChild(msgNode)
-    # print msg
-    # print >>sys.stderr, msg
+    if opts.debug == "false":
+      msgNode = doc.createElement("msg")
+      msgNode.appendChild(doc.createTextNode(msg))
+      infoNode.appendChild(msgNode)
+    else:
+      print msg
+      # print >>sys.stderr, msg
 
 # class to create static functions
 class Callable:
@@ -44,9 +46,10 @@ class Options:
     self.supressContentType = "false" 
     self.startingUrl = "API"
     self.exporterUrl = "http://docs.jquery.com/Special:Export";
-    self.version = "Unknown"
+    self.version = ""
     self.convertLinks = "html"
     self.verbose = "false" 
+    self.debug = "false"
     self.timestamp = "0"
     self.parseOptions(form)
 
@@ -69,6 +72,8 @@ class Options:
         self.convertLinks = form.getvalue(key)
       elif key == "verbose":
         self.verbose = form.getvalue(key)
+      elif key == "debug":
+        self.debug = form.getvalue(key)
 
   def url(self, url):
     return self.exporterUrl + "/" + url
@@ -170,6 +175,7 @@ class API(Node):
     return re.finditer(r"\* \[\[(?P<url>.+?)\|(?P<header>.+?)\]\]", self.page.wiki)
 
   def exportXML(self, parent):
+    printdebug("Exporting '" + self.page.url + "'") 
     for child in self.children:
       if (child != None):
         child.exportXML(parent)
@@ -184,9 +190,15 @@ class APIList(Node):
     return re.finditer(r"\{\{\:(?P<url>.+?)\}\}|\{\{APIListHeader\|(?P<header>.+?)\}\}", self.page.wiki)
 
   def exportXML(self, parent):
+    global subcat
+
+    printdebug("Exporting '" + self.page.url + "'") 
     node = doc.createElement("cat")
     node.setAttribute("value", self.page.url) 
     parent.appendChild(node)
+    # new cat so reset subcat
+    subcat = { 'name':'', 'node':None }
+    printdebug("Reset subcat to None");
     for child in self.children:
       if (child != None):
         child.exportXML(node)
@@ -378,11 +390,13 @@ class Method(Node):
           entry['num'] = part['num']
           arg['num'] = 0
           arg['index'] = None
+          # create element as 'entry' initially till get a 'type' part then change it
           node = doc.createElement("entry")
           node.setAttribute("timestamp", self.page.timestamp)
           if self.page.header == "Unheadered" and subcat['node'] != None:
             # have left a subcat so reset
             subcat = { 'name':'', 'node':None }
+            printdebug("Reset subcat to None");
           ## != "Documentation" because in the wiki some people are using it as a general header
           elif self.page.header != "Unheadered" and self.page.header != "Documentation" and self.page.header != subcat['name']:
             # new subcat so create
@@ -391,6 +405,7 @@ class Method(Node):
             subcat['node'] = n
             n.setAttribute('value', subcat['name'])
             parent.appendChild(n)
+            printdebug("Set subcat to " + subcat['name']);
           # if there is a subcat then append to that, otherwise go right to parent
           if subcat['node'] != None:
             subcat['node'].appendChild(node)
@@ -478,7 +493,10 @@ def main():
     loadAndDisplayHelp()
     return
   if opts.supressContentType == "false":
-    print "Content-Type: text/xml\n"
+    if opts.debug == "false":
+      print "Content-Type: text/xml\n"
+    else:
+      print "Content-Type: text/plain\n"
 
   impl = minidom.getDOMImplementation()
   doc = impl.createDocument(None, "docs", None)
@@ -487,8 +505,10 @@ def main():
     doc.documentElement.appendChild(infoNode);
   page = XMLPage(opts.startingUrl)
   nodeTree = Node.factory(page)
-  doc.documentElement.setAttribute("version", opts.version)
+  doc.documentElement.setAttribute("startdoc", opts.startingUrl)
   doc.documentElement.setAttribute("timestamp", opts.timestamp)
+  if opts.version != "":
+    doc.documentElement.setAttribute("version", opts.version)
   if nodeTree == None:
     errorNode = doc.createElement("error");
     errorNode.appendChild(doc.createTextNode("Error parsing initial page."))

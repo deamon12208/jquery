@@ -30,10 +30,14 @@ There are a few options that can be passed in:
     Can add an XML node 'info' to the root 'docs' element that has conversion details
     mostly for debugging purposes. It will also create "pretty" xml when not set to
     false.  Can have the value of 'false', 'true', or 'super'.  (defaults to 'false')
+
+  debug:
+    Will force the output to be text/plain instead of text/xml and put verbose messages
+    to normal print instead of sticking them in the xml tree.  (defaults to 'false')
   
 The basic XML format is as follows:
 
-<docs timestamp="[last time anything was modified]" version="[version parameter]">
+<docs timestamp="[last time anything was modified]" version="[version parameter]" startdoc='[start param]'>
   <info> - this node is here if 'verbose' parameter was set to other than 'false'
     <msg>Loading...</msg>
   </info>
@@ -67,4 +71,4 @@ To get a specific function:
 http://[location of script]/createjQueryXMLDocs.py?start=Events/bind&version=1.2.2
 
 To get a debug a problem:
-http://[location of script]/createjQueryXMLDocs.py?start=Selectors&verbose=super
+http://[location of script]/createjQueryXMLDocs.py?start=Selectors&verbose=super&debug=true
