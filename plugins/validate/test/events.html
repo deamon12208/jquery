@@ -9,36 +9,40 @@
 <script src="firebug/firebug.js" type="text/javascript"></script>
 
 <script type="text/javascript">
-
 $().ready(function() {
-	function handle(event) {
-		console.log("this", this, "type", event.type, "target", event.target);
+	var current;
+	function focus(event) {
+		if (current != null)
+			return;
+		var form = $(this);
+		var target = $(event.target);
+		if (target.is("label") && event.type != "mousedown") {
+			target = $("#" + target.attr("for"));
+		}
+		if (target.is(":text, textarea")) {
+			current = target;
+			target.addClass("focus").one("blur", function() {
+				$(this).removeClass("focus");
+				current = null;
+			});
+		}
 	}
-	$("#commentForm").keyup(handle).blur(handle).change(handle).focus(handle).mouseup(handle);
-	//$(":input").change(handle).blur(handle).keyup(handle).focus(handle).bind("input", handle);
+	$("#commentForm").keyup(focus).mousedown(focus).click(focus).submit(function() {
+		return false;
+	});
+
 });
 </script>
 
 <style type="text/css">
 #commentForm { width: 500px; }
-#commentForm label { width: 250px; }
+#commentForm label { width: 250px; display: block; float: left; }
 #commentForm label.error, #commentForm input.submit { margin-left: 253px; }
-	
-#signupForm { width: 670px; }
-#signupForm label.error {
-	margin-left: 10px;
-	width: auto;
-	display: inline;
-}
-#newsletter_topics label.error {
-	display: none;
-	margin-left: 103px;
-}
+.focus { background-color: red; }
 </style>
 
 </head>
 <body>
-
 <form class="cmxform" id="commentForm" method="get" action="">
 	<fieldset>
 		<legend>A simple comment form with submit validation and default messages</legend>
