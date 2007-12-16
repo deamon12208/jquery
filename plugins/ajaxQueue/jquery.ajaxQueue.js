@@ -76,7 +76,7 @@ $(function(){
 			jQuery([ ajax ]).queue("ajax" + port, function(){
 				ajax( settings );
 			});
-			return;
+			return undefined;
 		case "sync":
 			var pos = synced.length;
 	

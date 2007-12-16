@@ -74,7 +74,7 @@ function test(name, callback, nowait) {
 		name = _config.currentModule + " module: " + name;
 		
 	var filter = location.search.slice(1);
-	if ( filter && encodeURIComponent(name) != filter )
+	if ( filter && encodeURIComponent(name).indexOf(filter) == -1 )
 		return;
 		
 	synchronize(function() {
@@ -88,7 +88,6 @@ function test(name, callback, nowait) {
 				console.warn(callback.toString());
 			}
 			_config.Test.push( [ false, "Died on test #" + (_config.Test.length+1) + ": " + e ] );
-			throw e;
 		}
 	});
 	synchronize(function() {
@@ -162,7 +161,7 @@ function expect(asserts) {
  * Resets the test setup. Useful for tests that modify the DOM.
  */
 function reset() {
-	document.getElementById('main').innerHTML = _config.fixture;
+	$("#main").html( _config.fixture );
 }
 
 /**
@@ -274,8 +273,8 @@ function url(value) {
  *
  * @example equals( "Expected 2 characters.", v.formatMessage("Expected {0} characters.", 2) );
  *
- * @param Object expected
  * @param Object actual
+ * @param Object expected
  * @param String message (optional)
  */
 function equals(actual, expected, message) {
