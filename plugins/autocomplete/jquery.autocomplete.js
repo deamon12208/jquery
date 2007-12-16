@@ -139,7 +139,7 @@
  * @type $
  */
 
-(function($) {
+;(function($) {
 	
 $.fn.extend({
 	autocomplete: function(urlOrData, options) {
