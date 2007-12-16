@@ -44,7 +44,7 @@ $(function(){
  */
 
 
-(function($) {
+;(function($) {
 	
 	var ajax = $.ajax;
 	
@@ -68,14 +68,15 @@ $(function(){
 		case "queue": 
 			var _old = settings.complete;
 			settings.complete = function(){
-				if ( _old ) _old.apply( this, arguments );
-				jQuery.dequeue( ajax, "ajax" + port );
+				if ( _old )
+					_old.apply( this, arguments );
+				jQuery([ajax]).dequeue("ajax" + port );;
 			};
 		
 			jQuery([ ajax ]).queue("ajax" + port, function(){
 				ajax( settings );
 			});
-			return;
+			return undefined;
 		case "sync":
 			var pos = synced.length;
 	

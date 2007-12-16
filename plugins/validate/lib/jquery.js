@@ -6,8 +6,8 @@
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * $Date: 2007-12-05 06:01:46 +0100 (Mit, 05 Dez 2007) $
- * $Rev: 4031 $
+ * $Date: 2007-12-16 02:03:50 +0100 (Son, 16 Dez 2007) $
+ * $Rev: 4171 $
  */
 
 // Map over jQuery in case of overwrite
@@ -15,10 +15,8 @@ if ( window.jQuery )
 	var _jQuery = window.jQuery;
 
 var jQuery = window.jQuery = function( selector, context ) {
-	// If the context is a namespace object, return a new object
-	return this instanceof jQuery ?
-		this.init( selector, context ) :
-		new jQuery( selector, context );
+	// The jQuery object is actually just the init constructor 'enhanced'
+	return new jQuery.prototype.init( selector, context );
 };
 
 // Map over the $ in case of overwrite
@@ -31,6 +29,9 @@ window.$ = jQuery;
 // A simple way to check for HTML strings or ID strings
 // (both of which we optimize for)
 var quickExpr = /^[^<]*(<(.|\s)+>)[^>]*$|^#(\w+)$/;
+
+// Is it a simple selector
+var isSimple = /^.[^:#\[\.]*$/;
 
 jQuery.fn = jQuery.prototype = {
 	init: function( selector, context ) {
@@ -252,13 +253,15 @@ jQuery.fn = jQuery.prototype = {
 
 	append: function() {
 		return this.domManip(arguments, true, false, function(elem){
-			this.appendChild( elem );
+			if (this.nodeType == 1)
+				this.appendChild( elem );
 		});
 	},
 
 	prepend: function() {
 		return this.domManip(arguments, true, true, function(elem){
-			this.insertBefore( elem, this.firstChild );
+			if (this.nodeType == 1)
+				this.insertBefore( elem, this.firstChild );
 		});
 	},
 	
@@ -291,9 +294,23 @@ jQuery.fn = jQuery.prototype = {
 	clone: function( events ) {
 		// Do the clone
 		var ret = this.map(function(){
-			return this.outerHTML ?
-				jQuery( this.outerHTML )[0] :
-				this.cloneNode( true );
+			if ( jQuery.browser.msie && !jQuery.isXMLDoc(this) ) {
+				// IE copies events bound via attachEvent when
+				// using cloneNode. Calling detachEvent on the
+				// clone will also remove the events from the orignal
+				// In order to get around this, we use innerHTML.
+				// Unfortunately, this means some modifications to 
+				// attributes in IE that are actually only stored 
+				// as properties will not be copied (such as the
+				// the name attribute on an input).
+				var clone = this.cloneNode(true),
+					container = document.createElement("div"),
+					container2 = document.createElement("div");
+				container.appendChild(clone);
+				container2.innerHTML = container.innerHTML;
+				return container2.firstChild;
+			} else
+				return this.cloneNode(true);
 		});
 
 		// Need to set the expando to null on the cloned set if it exists
@@ -329,15 +346,16 @@ jQuery.fn = jQuery.prototype = {
 	},
 
 	not: function( selector ) {
-		return this.pushStack(
-			selector.constructor == String &&
-			jQuery.multiFilter( selector, this, true ) ||
+		if ( selector.constructor == String )
+			// test special case where just one selector is passed in
+			if ( isSimple.test( selector ) )
+				return this.pushStack( jQuery.multiFilter( selector, this, true ) );
+			else
+				selector = jQuery.multiFilter( selector, this );
 
-			jQuery.grep(this, function(elem) {
-				return selector.constructor == Array || selector.jquery ?
-					jQuery.inArray( elem, selector ) < 0 :
-					elem != selector;
-			}) );
+		return this.filter(function() {
+			return jQuery.inArray( this, selector ) < 0;
+		});
 	},
 
 	add: function( selector ) {
@@ -401,28 +419,32 @@ jQuery.fn = jQuery.prototype = {
 
 			}
 
-		} else
-			return this.each(function(){
-				if ( value.constructor == Array && /radio|checkbox/.test( this.type ) )
-					this.checked = (jQuery.inArray(this.value, value) >= 0 ||
-						jQuery.inArray(this.name, value) >= 0);
+		}
 
-				else if ( jQuery.nodeName( this, "select" ) ) {
-					var values = value.constructor == Array ?
-						value :
-						[ value ];
+		return this.each(function(){
+			if ( this.nodeType != 1 )
+				return;
 
-					jQuery( "option", this ).each(function(){
-						this.selected = (jQuery.inArray( this.value, values ) >= 0 ||
-							jQuery.inArray( this.text, values ) >= 0);
-					});
+			if ( value.constructor == Array && /radio|checkbox/.test( this.type ) )
+				this.checked = (jQuery.inArray(this.value, value) >= 0 ||
+					jQuery.inArray(this.name, value) >= 0);
 
-					if ( !values.length )
-						this.selectedIndex = -1;
+			else if ( jQuery.nodeName( this, "select" ) ) {
+				var values = value.constructor == Array ?
+					value :
+					[ value ];
 
-				} else
-					this.value = value;
-			});
+				jQuery( "option", this ).each(function(){
+					this.selected = (jQuery.inArray( this.value, values ) >= 0 ||
+						jQuery.inArray( this.text, values ) >= 0);
+				});
+
+				if ( !values.length )
+					this.selectedIndex = -1;
+
+			} else
+				this.value = value;
+		});
 	},
 	
 	html: function( value ) {
@@ -478,16 +500,9 @@ jQuery.fn = jQuery.prototype = {
 					this.cloneNode( true ) :
 					this;
 
+				// execute all scripts after the elements have been injected
 				if ( jQuery.nodeName( elem, "script" ) ) {
-
-					// If scripts are waiting to be executed, wait on this script as well
-					if ( scripts.length )
-						scripts = scripts.add( elem );
-
-					// If nothing is waiting to be executed, run immediately
-					else
-						evalScript( 0, elem );
-
+					scripts = scripts.add( elem );
 				} else {
 					// Remove any inner scripts for later evaluation
 					if ( elem.nodeType == 1 )
@@ -502,6 +517,9 @@ jQuery.fn = jQuery.prototype = {
 		});
 	}
 };
+
+// Give the init function the jQuery prototype for later instantiation
+jQuery.prototype.init.prototype = jQuery.prototype;
 
 function evalScript( i, elem ) {
 	if ( elem.src )
@@ -723,18 +741,19 @@ jQuery.extend({
 		// internal only, use addClass("class")
 		add: function( elem, classNames ) {
 			jQuery.each((classNames || "").split(/\s+/), function(i, className){
-				if ( !jQuery.className.has( elem.className, className ) )
+				if ( elem.nodeType == 1 && !jQuery.className.has( elem.className, className ) )
 					elem.className += (elem.className ? " " : "") + className;
 			});
 		},
 
 		// internal only, use removeClass("class")
 		remove: function( elem, classNames ) {
-			elem.className = classNames != undefined ?
-				jQuery.grep(elem.className.split(/\s+/), function(className){
-					return !jQuery.className.has( classNames, className );	
-				}).join(" ") :
-				"";
+			if (elem.nodeType == 1)
+				elem.className = classNames != undefined ?
+					jQuery.grep(elem.className.split(/\s+/), function(className){
+						return !jQuery.className.has( classNames, className );	
+					}).join(" ") :
+					"";
 		},
 
 		// internal only, use is(".class")
@@ -759,55 +778,22 @@ jQuery.extend({
 	},
 
 	css: function( elem, name, force ) {
-		if ( name == "height" || name == "width" ) {
-			var old = {}, height, width;
+		if ( name == "width" || name == "height" ) {
+			var width, height, props = { position: "absolute", visibility: "hidden", display:"block" };
+		
+			function getWH() {
+				width = elem.clientWidth;
+				height = elem.clientHeight;
+			}
+		
+			if ( jQuery(elem).is(":visible") )
+				getWH();
+			else
+				jQuery.swap( elem, props, getWH );
 
-			// Revert the padding and border widths to get the
-			// correct height/width values
-			jQuery.each([ "Top", "Bottom", "Right", "Left" ], function(){
-				old[ "padding" + this ] = 0;
-				old[ "border" + this + "Width" ] = 0;
-			});
-
-			// Swap out the padding/border values temporarily
-			jQuery.swap( elem, old, function() {
-
-				// If the element is visible, then the calculation is easy
-				if ( jQuery( elem ).is(":visible") ) {
-					height = elem.offsetHeight;
-					width = elem.offsetWidth;
-
-				// Otherwise, we need to flip out more values
-				} else {
-					elem = jQuery( elem.cloneNode(true) )
-						.find(":radio").removeAttr("checked").removeAttr("defaultChecked").end()
-						.css({
-							visibility: "hidden",
-							position: "absolute",
-							display: "block",
-							right: "0",
-							left: "0"
-						}).appendTo( elem.parentNode )[0];
-
-					var position = jQuery.css( elem.parentNode, "position" ) || "static";
-					if ( position == "static" )
-						elem.parentNode.style.position = "relative";
-
-					height = elem.clientHeight;
-					width = elem.clientWidth;
-
-					if ( position == "static" )
-						elem.parentNode.style.position = "static";
-
-					elem.parentNode.removeChild( elem );
-				}
-			});
-
-			return name == "height" ?
-				height :
-				width;
+			return name == "width" ? width : height;
 		}
-
+		
 		return jQuery.curCSS( elem, name, force );
 	},
 
@@ -987,9 +973,9 @@ jQuery.extend({
 							div.childNodes :
 							[];
 				
-					for ( var i = tbody.length - 1; i >= 0 ; --i )
-						if ( jQuery.nodeName( tbody[ i ], "tbody" ) && !tbody[ i ].childNodes.length )
-							tbody[ i ].parentNode.removeChild( tbody[ i ] );
+					for ( var j = tbody.length - 1; j >= 0 ; --j )
+						if ( jQuery.nodeName( tbody[ j ], "tbody" ) && !tbody[ j ].childNodes.length )
+							tbody[ j ].parentNode.removeChild( tbody[ j ] );
 					
 					// IE completely kills leading whitespace when innerHTML is used	
 					if ( /^\s/.test( elem ) )	
@@ -1015,6 +1001,10 @@ jQuery.extend({
 	},
 	
 	attr: function( elem, name, value ) {
+		// don't set attributes on text and comment nodes
+		if (!elem || elem.nodeType == 3 || elem.nodeType == 8)
+			return undefined;
+
 		var fix = jQuery.isXMLDoc( elem ) ?
 			{} :
 			jQuery.props;
@@ -1268,7 +1258,8 @@ jQuery.each({
 jQuery.each({
 	removeAttr: function( name ) {
 		jQuery.attr( this, name, "" );
-		this.removeAttribute( name );
+		if (this.nodeType == 1) 
+			this.removeAttribute( name );
 	},
 
 	addClass: function( classNames ) {
@@ -1326,8 +1317,11 @@ jQuery.each([ "Height", "Width" ], function(i, name){
 		
 			// Get document width or height
 			this[0] == document ?
-				// Either scroll[Width/Height] or offset[Width/Height], whichever is greater (Mozilla reports scrollWidth the same as offsetWidth)
-				Math.max( document.body[ "scroll" + name ], document.body[ "offset" + name ] ) :
+				// Either scroll[Width/Height] or offset[Width/Height], whichever is greater
+				Math.max( 
+					Math.max(document.body["scroll" + name], document.documentElement["scroll" + name]), 
+					Math.max(document.body["offset" + name], document.documentElement["offset" + name]) 
+				) :
 
 				// Get or set width or height on the element
 				size == undefined ?
@@ -1436,9 +1430,9 @@ jQuery.extend({
 		if ( typeof t != "string" )
 			return [ t ];
 
-		// Make sure that the context is a DOM Element
-		if ( context && !context.nodeType )
-			context = null;
+		// check to make sure context is a DOM element or a document
+		if ( context && context.nodeType != 1 && context.nodeType != 9)
+			return [ ];
 
 		// Set the correct context (if none is provided)
 		context = context || document;
@@ -1660,7 +1654,10 @@ jQuery.extend({
 			// :not() is a special case that can be optimized by
 			// keeping it out of the expression list
 			if ( m[1] == ":" && m[2] == "not" )
-				r = jQuery.filter(m[3], r, true).r;
+				// optimize if only one selector found (most common case)
+				r = isSimple.test( m[3] ) ?
+					jQuery.filter(m[3], r, true).r :
+					jQuery( r ).not( m[3] );
 
 			// We can get a big speed boost by filtering by class here
 			else if ( m[1] == "." )
@@ -1786,11 +1783,14 @@ jQuery.event = {
 
 	// Bind an event to an element
 	// Original by Dean Edwards
-	add: function(element, type, handler, data) {
+	add: function(elem, types, handler, data) {
+		if ( elem.nodeType == 3 || elem.nodeType == 8 )
+			return;
+
 		// For whatever reason, IE has trouble passing the window object
 		// around, causing it to be cloned in the process
-		if ( jQuery.browser.msie && element.setInterval != undefined )
-			element = window;
+		if ( jQuery.browser.msie && elem.setInterval != undefined )
+			elem = window;
 
 		// Make sure that the function being executed has a unique ID
 		if ( !handler.guid )
@@ -1814,135 +1814,157 @@ jQuery.event = {
 			handler.guid = fn.guid;
 		}
 
-		// Namespaced event handlers
-		var parts = type.split(".");
-		type = parts[0];
-		handler.type = parts[1];
-
 		// Init the element's event structure
-		var events = jQuery.data(element, "events") || jQuery.data(element, "events", {});
+		var events = jQuery.data(elem, "events") || jQuery.data(elem, "events", {}),
+			handle = jQuery.data(elem, "handle") || jQuery.data(elem, "handle", function(){
+				// returned undefined or false
+				var val;
+
+				// Handle the second event of a trigger and when
+				// an event is called after a page has unloaded
+				if ( typeof jQuery == "undefined" || jQuery.event.triggered )
+					return val;
 		
-		var handle = jQuery.data(element, "handle") || jQuery.data(element, "handle", function(){
-			// returned undefined or false
-			var val;
-
-			// Handle the second event of a trigger and when
-			// an event is called after a page has unloaded
-			if ( typeof jQuery == "undefined" || jQuery.event.triggered )
+				val = jQuery.event.handle.apply(elem, arguments);
+		
 				return val;
+			});
 			
-			val = jQuery.event.handle.apply(element, arguments);
-			
-			return val;
-		});
+			// Handle multiple events seperated by a space
+			// jQuery(...).bind("mouseover mouseout", fn);
+			jQuery.each(types.split(/\s+/), function(index, type) {
+				// Namespaced event handlers
+				var parts = type.split(".");
+				type = parts[0];
+				handler.type = parts[1];
 
-		// Get the current list of functions bound to this event
-		var handlers = events[type];
+				// Get the current list of functions bound to this event
+				var handlers = events[type];
 
-		// Init the event handler queue
-		if (!handlers) {
-			handlers = events[type] = {};	
-			
-			// And bind the global event handler to the element
-			if (element.addEventListener)
-				element.addEventListener(type, handle, false);
-			else
-				element.attachEvent("on" + type, handle);
-		}
+				// Init the event handler queue
+				if (!handlers) {
+					handlers = events[type] = {};
+		
+					// Check for a special event handler
+					// Only use addEventListener/attachEvent if the special
+					// events handler returns false
+					if ( !jQuery.event.special[type] || jQuery.event.special[type].setup.call(elem) === false ) {
+						// Bind the global event handler to the element
+						if (elem.addEventListener)
+							elem.addEventListener(type, handle, false);
+						else if (elem.attachEvent)
+							elem.attachEvent("on" + type, handle);
+					}
+				}
 
-		// Add the function to the element's handler list
-		handlers[handler.guid] = handler;
+				// Add the function to the element's handler list
+				handlers[handler.guid] = handler;
 
-		// Keep track of which events have been used, for global triggering
-		this.global[type] = true;
+				// Keep track of which events have been used, for global triggering
+				jQuery.event.global[type] = true;
+			});
 	},
 
 	guid: 1,
 	global: {},
 
 	// Detach an event or set of events from an element
-	remove: function(element, type, handler) {
-		var events = jQuery.data(element, "events"), ret, index;
+	remove: function(elem, types, handler) {
+		// don't do events on text and comment nodes
+		if ( elem.nodeType == 3 || elem.nodeType == 8 )
+			return;
 
-		// Namespaced event handlers
-		if ( typeof type == "string" ) {
-			var parts = type.split(".");
-			type = parts[0];
-		}
+		var events = jQuery.data(elem, "events"), ret, index;
 
 		if ( events ) {
-			// type is actually an event object here
-			if ( type && type.type ) {
-				handler = type.handler;
-				type = type.type;
-			}
-			
-			if ( !type ) {
-				for ( type in events )
-					this.remove( element, type );
-
-			} else if ( events[type] ) {
-				// remove the given handler for the given type
-				if ( handler )
-					delete events[type][handler.guid];
-				
-				// remove all handlers for the given type
-				else
-					for ( handler in events[type] )
-						// Handle the removal of namespaced events
-						if ( !parts[1] || events[type][handler].type == parts[1] )
-							delete events[type][handler];
-
-				// remove generic event handler if no more handlers exist
-				for ( ret in events[type] ) break;
-				if ( !ret ) {
-					if (element.removeEventListener)
-						element.removeEventListener(type, jQuery.data(element, "handle"), false);
-					else
-						element.detachEvent("on" + type, jQuery.data(element, "handle"));
-					ret = null;
-					delete events[type];
+			// Unbind all events for the element
+			if ( !types )
+				for ( var type in events )
+					this.remove( elem, type );
+			else {
+				// types is actually an event object here
+				if ( types.type ) {
+					handler = types.handler;
+					types = types.type;
 				}
+				
+				// Handle multiple events seperated by a space
+				// jQuery(...).unbind("mouseover mouseout", fn);
+				jQuery.each(types.split(/\s+/), function(index, type){
+					// Namespaced event handlers
+					var parts = type.split(".");
+					type = parts[0];
+					
+					if ( events[type] ) {
+						// remove the given handler for the given type
+						if ( handler )
+							delete events[type][handler.guid];
+			
+						// remove all handlers for the given type
+						else
+							for ( handler in events[type] )
+								// Handle the removal of namespaced events
+								if ( !parts[1] || events[type][handler].type == parts[1] )
+									delete events[type][handler];
+
+						// remove generic event handler if no more handlers exist
+						for ( ret in events[type] ) break;
+						if ( !ret ) {
+							if ( !jQuery.event.special[type] || jQuery.event.special[type].teardown.call(this, elem) === false ) {
+								if (elem.removeEventListener)
+									elem.removeEventListener(type, jQuery.data(elem, "handle"), false);
+								else if (elem.detachEvent)
+									elem.detachEvent("on" + type, jQuery.data(elem, "handle"));
+							}
+							ret = null;
+							delete events[type];
+						}
+					}
+				});
 			}
 
 			// Remove the expando if it's no longer used
 			for ( ret in events ) break;
 			if ( !ret ) {
-				jQuery.removeData( element, "events" );
-				jQuery.removeData( element, "handle" );
+				jQuery.removeData( elem, "events" );
+				jQuery.removeData( elem, "handle" );
 			}
 		}
 	},
 
-	trigger: function(type, data, element, donative, extra) {
+	trigger: function(type, data, elem, donative, extra) {
 		// Clone the incoming data, if any
 		data = jQuery.makeArray(data || []);
 
 		// Handle a global trigger
-		if ( !element ) {
+		if ( !elem ) {
 			// Only trigger if we've ever bound an event for it
 			if ( this.global[type] )
 				jQuery("*").add([window, document]).trigger(type, data);
 
 		// Handle triggering a single element
 		} else {
-			var val, ret, fn = jQuery.isFunction( element[ type ] || null ),
+			// don't do events on text and comment nodes
+			if ( elem.nodeType == 3 || elem.nodeType == 8 )
+				return undefined;
+
+			var val, ret, fn = jQuery.isFunction( elem[ type ] || null ),
 				// Check to see if we need to provide a fake event, or not
 				event = !data[0] || !data[0].preventDefault;
 			
 			// Pass along a fake event
 			if ( event )
-				data.unshift( this.fix({ type: type, target: element }) );
+				data.unshift( this.fix({ type: type, target: elem }) );
 
 			// Enforce the right trigger type
 			data[0].type = type;
 
 			// Trigger the event
-			if ( jQuery.isFunction( jQuery.data(element, "handle") ) )
-				val = jQuery.data(element, "handle").apply( element, data );
+			if ( jQuery.isFunction( jQuery.data(elem, "handle") ) )
+				val = jQuery.data(elem, "handle").apply( elem, data );
 
 			// Handle triggering native .onfoo handlers
-			if ( !fn && element["on"+type] && element["on"+type].apply( element, data ) === false )
+			if ( !fn && elem["on"+type] && elem["on"+type].apply( elem, data ) === false )
 				val = false;
 
 			// Extra functions don't get the custom event object
@@ -1952,16 +1974,19 @@ jQuery.event = {
 			// Handle triggering of extra function
 			if ( extra ) {
 				// call the extra function and tack the current return value on the end for possible inspection
-				var ret = extra.apply( element, data.concat( val ) );
+				var ret = extra.apply( elem, data.concat( val ) );
 				// if anything is returned, give it precedence and have it overwrite the previous value
 				if (ret !== undefined)
 					val = ret;
 			}
 
 			// Trigger the native events (except for clicks on links)
-			if ( fn && donative !== false && val !== false && !(jQuery.nodeName(element, 'a') && type == "click") ) {
+			if ( fn && donative !== false && val !== false && !(jQuery.nodeName(elem, 'a') && type == "click") ) {
 				this.triggered = true;
-				element[ type ]();
+				try {
+					elem[ type ]();
+				// prevent IE from throwing an error for some hidden elements
+				} catch (e) {}
 			}
 
 			this.triggered = false;
@@ -2052,7 +2077,7 @@ jQuery.event = {
 		if ( event.pageX == null && event.clientX != null ) {
 			var doc = document.documentElement, body = document.body;
 			event.pageX = event.clientX + (doc && doc.scrollLeft || body && body.scrollLeft || 0) - (doc.clientLeft || 0);
-			event.pageY = event.clientY + (doc && doc.scrollTop  || body && body.scrollTop  || 0) - (doc.clientLeft || 0);
+			event.pageY = event.clientY + (doc && doc.scrollTop || body && body.scrollTop || 0) - (doc.clientTop || 0);
 		}
 			
 		// Add which for key events
@@ -2069,6 +2094,103 @@ jQuery.event = {
 			event.which = (event.button & 1 ? 1 : ( event.button & 2 ? 3 : ( event.button & 4 ? 2 : 0 ) ));
 			
 		return event;
+	},
+	
+	special: {
+		ready: {
+			setup: function() {
+				var handler = jQuery.event.special.ready.handler;
+				
+				// Mozilla, Opera and webkit nightlies currently support this event
+				if ( document.addEventListener )
+					// Use the handy event callback
+					document.addEventListener( "DOMContentLoaded", handler, false );
+	
+				// If Safari or IE is used
+				// Continually check to see if the document is ready
+				if ((jQuery.browser.msie && window == top) || jQuery.browser.safari ) (function(){
+					try {
+						// If IE is used, use the trick by Diego Perini
+						// http://javascript.nwbox.com/IEContentLoaded/
+						if ( jQuery.browser.msie || document.readyState != "loaded" && document.readyState != "complete" )
+							document.documentElement.doScroll("left");
+					} catch( error ) {
+						setTimeout( arguments.callee, 0 );
+						return;
+					}
+
+					// and execute any waiting functions
+					handler();
+				})();
+
+				// A fallback to window.onload, that will always work
+				jQuery.event.add( window, "load", handler );
+			},
+			
+			teardown: function() {return;},
+			
+			handler: function() {
+				// Make sure that the DOM is not already loaded
+				if ( !jQuery.isReady ) {
+					// Remember that the DOM is ready
+					jQuery.isReady = true;
+					jQuery(document).triggerHandler("ready");
+					jQuery(document).unbind("ready");
+				}
+			}
+		},
+		
+		mouseenter: {
+			setup: function() {
+				if (jQuery.browser.msie) return false;
+				jQuery(this).bind('mouseover', jQuery.event.special.mouseenter.handler);
+				return true;
+			},
+		
+			teardown: function() {
+				if (jQuery.browser.msie) return false;
+				jQuery(this).unbind('mouseover', jQuery.event.special.mouseenter.handler);
+				return true;
+			},
+			
+			handler: function(event) {
+				var args = Array.prototype.slice.call( arguments, 1 );
+				// If we actually just moused on to a sub-element, ignore it
+				if ( withinElement(event, this) ) return true;
+				// Execute the right handlers by setting the event type to mouseenter
+				event.type = 'mouseenter';
+				// Include the event object as the first argument
+				args.unshift(event);
+				var val = jQuery.event.handle.apply(this, args);
+				return val;
+			}
+		},
+	
+		mouseleave: {
+			setup: function() {
+				if (jQuery.browser.msie) return false;
+				jQuery(this).bind('mouseout', jQuery.event.special.mouseleave.handler);
+				return true;
+			},
+		
+			teardown: function() {
+				if (jQuery.browser.msie) return false;
+				jQuery(this).unbind('mouseout', jQuery.event.special.mouseleave.handler);
+				return true;
+			},
+			
+			handler: function(event) {
+				var args = Array.prototype.slice.call( arguments, 1 );
+				// If we actually just moused on to a sub-element, ignore it
+				if ( withinElement(event, this) ) return true;
+				// Execute the right handlers by setting the event type to mouseleave
+				event.type = 'mouseleave';
+				// Include the event object as the first argument
+				args.unshift(event);
+				var val = jQuery.event.handle.apply(this, args);
+				return val;
+			}
+		}
 	}
 };
 
@@ -2103,6 +2225,7 @@ jQuery.fn.extend({
 	triggerHandler: function( type, data, fn ) {
 		if ( this[0] )
 			return jQuery.event.trigger( type, data, this[0], false, fn );
+		return undefined;
 	},
 
 	toggle: function() {
@@ -2122,78 +2245,15 @@ jQuery.fn.extend({
 	},
 
 	hover: function(fnOver, fnOut) {
-		
-		// A private function for handling mouse 'hovering'
-		function handleHover(event) {
-			// Check if mouse(over|out) are still within the same parent element
-			var parent = event.relatedTarget;
-	
-			// Traverse up the tree
-			while ( parent && parent != this ) try { parent = parent.parentNode; } catch(error) { parent = this; };
-			
-			// If we actually just moused on to a sub-element, ignore it
-			if ( parent == this ) 
-				return true;
-			
-			// Execute the right function
-			return (event.type == "mouseover" ? fnOver : fnOut).apply(this, [event]);
-		}
-		
-		// Bind the function to the two event listeners
-		return this.mouseover(handleHover).mouseout(handleHover);
-	},
-	
-	ready: function(fn) {
-		// Attach the listeners
-		bindReady();
-
-		// If the DOM is already ready
-		if ( jQuery.isReady )
-			// Execute the function immediately
-			fn.apply( document, [jQuery] );
-			
-		// Otherwise, remember the function for later
-		else
-			// Add the function to the wait list
-			jQuery.readyList.push( function() { return fn.apply(this, [jQuery]); } );
-	
-		return this;
+		return this.bind('mouseenter', fnOver).bind('mouseleave', fnOut);
 	}
 });
 
 jQuery.extend({
-	/*
-	 * All the code that makes DOM Ready work nicely.
-	 */
-	isReady: false,
-	readyList: [],
-	
-	// Handle when the DOM is ready
-	ready: function() {
-		// Make sure that the DOM is not already loaded
-		if ( !jQuery.isReady ) {
-			// Remember that the DOM is ready
-			jQuery.isReady = true;
-			
-			// If there are functions bound, to execute
-			if ( jQuery.readyList ) {
-				// Execute all of them
-				jQuery.each( jQuery.readyList, function(){
-					this.apply( document );
-				});
-				
-				// Reset the list of functions
-				jQuery.readyList = null;
-			}
-			// Remove event listener to avoid memory leak
-			if ( document.removeEventListener )
-				document.removeEventListener( "DOMContentLoaded", jQuery.ready, false );
-		}
-	}
+	isReady: false
 });
 
-
-jQuery.each( ("blur,focus,load,resize,scroll,unload,click,dblclick," +
+jQuery.each( ("blur,focus,load,ready,resize,scroll,unload,click,dblclick," +
 	"mousedown,mouseup,mousemove,mouseover,mouseout,change,select," + 
 	"submit,keydown,keypress,keyup,error").split(","), function(i, name){
 	
@@ -2203,39 +2263,19 @@ jQuery.each( ("blur,focus,load,resize,scroll,unload,click,dblclick," +
 	};
 });
 
-var readyBound = false;
-
-function bindReady(){
-	if ( readyBound ) return;
-	readyBound = true;
-
-	// Mozilla, Opera and webkit nightlies currently support this event
-	if ( document.addEventListener )
-		// Use the handy event callback
-		document.addEventListener( "DOMContentLoaded", jQuery.ready, false );
-	
-	// If Safari or IE is used
-	// Continually check to see if the document is ready
-	if  (jQuery.browser.msie || jQuery.browser.safari ) (function(){
-		try {
-			// If IE is used, use the trick by Diego Perini
-			// http://javascript.nwbox.com/IEContentLoaded/
-			if ( jQuery.browser.msie || document.readyState != "loaded" && document.readyState != "complete" )
-				document.documentElement.doScroll("left");
-		} catch( error ) {
-			return setTimeout( arguments.callee, 0 );
-		}
-
-		// and execute any waiting functions
-		jQuery.ready();
-	})();
-
-	// A fallback to window.onload, that will always work
-	jQuery.event.add( window, "load", jQuery.ready );
-}
+// Checks if an event happened on an element within another element
+// Used in jQuery.event.special.mouseenter and mouseleave handlers
+var withinElement = function(event, elem) {
+	// Check if mouse(over|out) are still within the same parent element
+	var parent = event.relatedTarget;
+	// Traverse up the tree
+	while ( parent && parent != elem ) try { parent = parent.parentNode } catch(error) { parent = elem; };
+	// Return true if we actually just moused on to a sub-element
+	return parent == elem;
+};
 
 // Prevent memory leaks in IE
-// And prevent errors on refresh with events like mouseover
+// And prevent errors on refresh with events like mouseover in other browsers
 // Window isn't included so as not to unbind existing unload events
 jQuery(window).bind("unload", function() {
 	jQuery("*").add(document).unbind();
@@ -2276,6 +2316,7 @@ jQuery.fn.extend({
 		jQuery.ajax({
 			url: url,
 			type: type,
+			dataType: "html",
 			data: params,
 			complete: function(res, status){
 				// If successful, inject the HTML into all the matched elements
@@ -2460,11 +2501,13 @@ jQuery.extend({
 			jQuery.event.trigger( "ajaxStart" );
 
 		// If we're requesting a remote document
-		// and trying to load JSON or Script
-		if ( !s.url.indexOf("http") && ( s.dataType == "script" || s.dataType =="json" ) ) {
+		// and trying to load JSON or Script with a GET
+		if ( (!s.url.indexOf("http") || !s.url.indexOf("//")) && ( s.dataType == "script" || s.dataType =="json" ) && s.type.toLowerCase() == "get" ) {
 			var head = document.getElementsByTagName("head")[0];
 			var script = document.createElement("script");
 			script.src = s.url;
+			if (s.scriptCharset)
+				script.charset = s.scriptCharset;
 
 			// Handle Script loading
 			if ( !jsonp ) {
@@ -2485,7 +2528,7 @@ jQuery.extend({
 			head.appendChild(script);
 
 			// We handle everything using the script element injection
-			return;
+			return undefined;
 		}
 
 		var requestDone = false;
@@ -2497,17 +2540,20 @@ jQuery.extend({
 		// Open the socket
 		xml.open(s.type, s.url, s.async);
 
-		// Set the correct header, if data is being sent
-		if ( s.data )
-			xml.setRequestHeader("Content-Type", s.contentType);
+		// Need an extra try/catch for cross domain requests in Firefox 3
+		try {
+			// Set the correct header, if data is being sent
+			if ( s.data )
+				xml.setRequestHeader("Content-Type", s.contentType);
 
-		// Set the If-Modified-Since header, if ifModified mode.
-		if ( s.ifModified )
-			xml.setRequestHeader("If-Modified-Since",
-				jQuery.lastModified[s.url] || "Thu, 01 Jan 1970 00:00:00 GMT" );
+			// Set the If-Modified-Since header, if ifModified mode.
+			if ( s.ifModified )
+				xml.setRequestHeader("If-Modified-Since",
+					jQuery.lastModified[s.url] || "Thu, 01 Jan 1970 00:00:00 GMT" );
 
-		// Set header so the called script knows that it's an XMLHttpRequest
-		xml.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+			// Set header so the called script knows that it's an XMLHttpRequest
+			xml.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+		} catch(e){}
 
 		// Allow custom headers/mimetypes
 		if ( s.beforeSend )
@@ -2597,9 +2643,6 @@ jQuery.extend({
 		// firefox 1.5 doesn't fire statechange for sync requests
 		if ( !s.async )
 			onreadystatechange();
-		
-		// return XMLHttpRequest to allow aborting the request etc.
-		return xml;
 
 		function success(){
 			// If a local callback was specified, fire it and pass it the data
@@ -2624,6 +2667,9 @@ jQuery.extend({
 			if ( s.global && ! --jQuery.active )
 				jQuery.event.trigger( "ajaxStop" );
 		}
+		
+		// return XMLHttpRequest to allow aborting the request etc.
+		return xml;
 	},
 
 	handleError: function( s, xml, status, e ) {
@@ -2718,9 +2764,12 @@ jQuery.fn.extend({
 			}, speed, callback) :
 			
 			this.filter(":hidden").each(function(){
-				this.style.display = this.oldblock ? this.oldblock : "";
-				if ( jQuery.css(this,"display") == "none" )
-					this.style.display = "block";
+				this.style.display = this.oldblock || "";
+				if ( jQuery.css(this,"display") == "none" ) {
+					var elem = jQuery("<" + this.tagName + " />").appendTo("body");
+					this.style.display = elem.css("display");
+					elem.remove();
+				}
 			}).end();
 	},
 	
@@ -2732,8 +2781,6 @@ jQuery.fn.extend({
 			
 			this.filter(":visible").each(function(){
 				this.oldblock = this.oldblock || jQuery.css(this,"display");
-				if ( this.oldblock == "none" )
-					this.oldblock = "block";
 				this.style.display = "none";
 			}).end();
 	},
@@ -2781,6 +2828,9 @@ jQuery.fn.extend({
 		var optall = jQuery.speed(speed, easing, callback);
 
 		return this[ optall.queue === false ? "each" : "queue" ](function(){
+			if ( this.nodeType != 1)
+				return false;
+
 			var opt = jQuery.extend({}, optall);
 			var hidden = jQuery(this).is(":hidden"), self = this;
 			
@@ -2847,6 +2897,9 @@ jQuery.fn.extend({
 			return queue( this[0], type );
 
 		return this.each(function(){
+			if ( this.nodeType != 1)
+				return;
+
 			if ( fn.constructor == Array )
 				queue(this, type, fn);
 			else {
@@ -2886,7 +2939,7 @@ jQuery.fn.extend({
 
 var queue = function( elem, type, array ) {
 	if ( !elem )
-		return;
+		return undefined;
 
 	type = type || "fx";
 
@@ -3131,7 +3184,7 @@ jQuery.fn.offset = function() {
 	var left = 0, top = 0, elem = this[0], results;
 	
 	if ( elem ) with ( jQuery.browser ) {
-		var	parent       = elem.parentNode, 
+		var parent       = elem.parentNode, 
 		    offsetChild  = elem,
 		    offsetParent = elem.offsetParent, 
 		    doc          = elem.ownerDocument,
@@ -3143,10 +3196,8 @@ jQuery.fn.offset = function() {
 			var box = elem.getBoundingClientRect();
 		
 			// Add the document scroll offsets
-			add(
-				box.left + Math.max(doc.documentElement.scrollLeft, doc.body.scrollLeft),
-				box.top  + Math.max(doc.documentElement.scrollTop,  doc.body.scrollTop)
-			);
+			add(box.left + Math.max(doc.documentElement.scrollLeft, doc.body.scrollLeft),
+				box.top  + Math.max(doc.documentElement.scrollTop,  doc.body.scrollTop));
 		
 			// IE adds the HTML element's border, by default it is medium which is 2px
 			// IE 6 and 7 quirks mode the border width is overwritable by the following css html { border: 0; }
@@ -3161,7 +3212,7 @@ jQuery.fn.offset = function() {
 		
 			// Initial element offsets
 			add( elem.offsetLeft, elem.offsetTop );
-		
+			
 			// Get parent offsets
 			while ( offsetParent ) {
 				// Add offsetParent offsets
@@ -3184,8 +3235,8 @@ jQuery.fn.offset = function() {
 		
 			// Get parent scroll offsets
 			while ( parent.tagName && !/^body|html$/i.test(parent.tagName) ) {
-				// Remove parent scroll UNLESS that parent is inline or a table-row to work around Opera inline/table scrollLeft/Top bug
-				if ( !/^inline|table-row.*$/i.test(jQuery.css(parent, "display")) )
+				// Remove parent scroll UNLESS that parent is inline or a table to work around Opera inline/table scrollLeft/Top bug
+				if ( !/^inline|table.*$/i.test(jQuery.css(parent, "display")) )
 					// Subtract parent scroll offsets
 					add( -parent.scrollLeft, -parent.scrollTop );
 			
@@ -3205,17 +3256,13 @@ jQuery.fn.offset = function() {
 			
 			// Add the document scroll offsets if position is fixed
 			if ( fixed )
-				add(
-					Math.max(doc.documentElement.scrollLeft, doc.body.scrollLeft),
-					Math.max(doc.documentElement.scrollTop,  doc.body.scrollTop)
-				);
+				add(Math.max(doc.documentElement.scrollLeft, doc.body.scrollLeft),
+					Math.max(doc.documentElement.scrollTop,  doc.body.scrollTop));
 		}
 
 		// Return an object with top and left properties
 		results = { top: top, left: left };
 	}
-
-	return results;
 
 	function border(elem) {
 		add( jQuery.css(elem, "borderLeftWidth"), jQuery.css(elem, "borderTopWidth") );
@@ -3225,5 +3272,7 @@ jQuery.fn.offset = function() {
 		left += parseInt(l) || 0;
 		top += parseInt(t) || 0;
 	}
+
+	return results;
 };
 })();
