@@ -6,18 +6,6 @@
 
 (function($) {
 
-	$.ui.plugin.add("draggable", "effect", {
-		stop: function(e,ui) {
-			if(!ui.options.effect[1] || ui.helper == this) return;
-			ui.options.beQuietAtEnd = true;
-			$(ui.helper).hide(ui.options.effect[1],{},300, function() { $(this).remove(); });
-		},
-		start: function(e,ui) {
-			if(!ui.options.effect[0] || ui.helper == this) return;
-			$(ui.helper).hide(ui.options.effect[0],{},300);
-		}
-	});
-
 	$.ui.plugin.add("draggable", "cursor", {
 		start: function(e,ui) {
 			var t = $('body');

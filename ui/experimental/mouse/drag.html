@@ -50,7 +50,20 @@
 	
 	<script type="text/javascript">
 		$(document).ready(function() {
-			$("div").draggable({ helper: 'clone'  });
+			$("div").draggable({
+				helper: 'clone',
+				delay: 0,
+				distance: 0,
+				start: function(e,ui) {
+					//console.log("Draggable: start , ", e, " , ", ui);
+				},
+				drag: function(e,ui) {
+					//console.log("Draggable: drag , ", e, " , ", ui);
+				},
+				stop: function(e,ui) {
+					//console.log("Draggable: stop , ", e, " , ", ui);
+				}
+			});
 		});
 		
 	</script>
