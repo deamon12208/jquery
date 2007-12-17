@@ -66,11 +66,14 @@
   float: left;
   border: 1px solid silver;
 }
+#selectable1 .ui-selected {
+	background: #e2ecf5;
+}
 #selectable1 .ui-selecting {
 	background: #aad284;
 }
-#selectable1 .ui-selected {
-	background: #e2ecf5;
+#selectable1 .ui-unselecting {
+	background: #d2aa84;
 }
 
         </style>
@@ -110,7 +113,7 @@
 			$(this).text(i+1);
 		});
 
-		$("#selectable1").selectable();
+		$("#selectable1").selectable({autoRefresh:false});
 
             });
         </script>
