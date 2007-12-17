@@ -68,12 +68,29 @@
 		<xsl:value-of select="@type"/>
 	</xsl:template>
 	
+	<xsl:template name="startdoc">
+		<xsl:text>
+			<xsl:choose>
+				<xsl:when test="/docs/@startdoc='API'">jQuery Core</xsl:when>
+				<xsl:when test="/docs/@startdoc='UI'">jQuery UI</xsl:when>
+				<xsl:when test="/docs/@startdoc='Plugins_API'">jQuery Plugins</xsl:when>
+				<xsl:when test="/docs/@startdoc='Plugins/Validation'">jQuery Validation Plugin</xsl:when>
+				<xsl:otherwise><xsl:value-of select="/docs/@startdoc" /></xsl:otherwise>
+			</xsl:choose>
+		</xsl:text>
+	</xsl:template>
+	
 	<xsl:template name="printMethod">
 		<li>
 			<a>
 				<xsl:call-template name="href" />
-				<xsl:value-of select="@name" />
-				<xsl:if test="name(.) != 'property'">
+				<xsl:if test="name(.) = 'selector'">
+					<xsl:value-of select="sample" />
+				</xsl:if>
+				<xsl:if test="name(.) != 'selector'">
+					<xsl:value-of select="@name" />
+				</xsl:if>
+				<xsl:if test="name(.) = 'function'">
 					<xsl:text>(</xsl:text>
 					<xsl:for-each select="params">
 						<span class='arg-type tooltip'><xsl:value-of select="@name"/></span>
@@ -133,11 +150,10 @@
 		<script type="text/javascript" src="browser.js"></script>
 	</head>
 	<body>
-		<h1><a href="http://jquery.com"><img src="images/jquery_logo.gif" alt="jQuery Logo" /></a></h1>
-		<div id="header"><xsl:value-of select="/docs/@version" /> API Browser <span>(<a href="jquery-api-browser.zip">Download</a>)</span></div>
+		<h1><a href="http://jquery.com"><img src="images/logo_jquery3.png" alt="jQuery Logo" /></a></h1>
+		<div id="header"><xsl:call-template name="startdoc"/> API <xsl:value-of select="/docs/@version" /><span> - <a href="jquery-api-browser.zip">Download</a></span></div>
 		<div id="content">
 			<div id="nav">
-				<h2>Navigation</h2>
 				<ul class="tabs-nav">
 					<li><a href="#navCat">Category</a></li>
 					<li><a href="#navAlpha">Alphabetical</a></li>

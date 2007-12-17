@@ -2,20 +2,21 @@
 <html>
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>jQuery 1.2.1 API Browser </title>
+<title>jQuery  API Browser </title>
 <link rel="stylesheet" href="screen.css" media="screen,projector">
 <link rel="stylesheet" href="print.css" media="print">
 <script type="text/javascript" src="lib/browser.lib.min.js"></script><script type="text/javascript" src="browser.js"></script>
 </head>
 <body>
 <h1>
-<a href="http://jquery.com"><img src="images/jquery_logo.gif" alt="jQuery Logo"></a>
+<a href="http://jquery.com"><img src="images/logo_jquery3.png" alt="jQuery Logo"></a>
 </h1>
-<div id="header">1.2.1 API Browser <span>(<a href="jquery-api-browser.zip">Download</a>)</span>
+<div id="header">
+			
+		jQuery Core API <span> - <a href="jquery-api-browser.zip">Download</a></span>
 </div>
 <div id="content">
 <div id="nav">
-<h2>Navigation</h2>
 <ul class="tabs-nav">
 <li>
 <a href="#navCat">Category</a>
@@ -107,19 +108,19 @@
 <span>Basics</span>
 <ul>
 <li>
-<a href="#link-all-">all()</a>
+<a href="#link-all-">*</a>
 </li>
 <li>
-<a href="#link-class-class">class(<span class="arg-type tooltip">class</span>)</a>
+<a href="#link-class-class">.class</a>
 </li>
 <li>
-<a href="#link-element-element">element(<span class="arg-type tooltip">element</span>)</a>
+<a href="#link-element-element">element</a>
 </li>
 <li>
-<a href="#link-id-id">id(<span class="arg-type tooltip">id</span>)</a>
+<a href="#link-id-id">#id</a>
 </li>
 <li>
-<a href="#link-multiple-selector1selector2selectorN">multiple(<span class="arg-type tooltip">selector1</span>, <span class="arg-type tooltip">selector2</span>, <span class="arg-type tooltip">selectorN</span>)</a>
+<a href="#link-multiple-selector1selector2selectorN">selector1, selector2, selectorN</a>
 </li>
 </ul>
 </li>
@@ -127,16 +128,16 @@
 <span>Hierarchy</span>
 <ul>
 <li>
-<a href="#link-child-parentchild">child(<span class="arg-type tooltip">parent</span>, <span class="arg-type tooltip">child</span>)</a>
+<a href="#link-child-parentchild">parent &gt; child</a>
 </li>
 <li>
-<a href="#link-descendant-ancestordescendant">descendant(<span class="arg-type tooltip">ancestor</span>, <span class="arg-type tooltip">descendant</span>)</a>
+<a href="#link-descendant-ancestordescendant">ancestor descendant</a>
 </li>
 <li>
-<a href="#link-next-prevnext">next(<span class="arg-type tooltip">prev</span>, <span class="arg-type tooltip">next</span>)</a>
+<a href="#link-next-prevnext">prev + next</a>
 </li>
 <li>
-<a href="#link-siblings-prevsiblings">siblings(<span class="arg-type tooltip">prev</span>, <span class="arg-type tooltip">siblings</span>)</a>
+<a href="#link-siblings-prevsiblings">prev ~ siblings</a>
 </li>
 </ul>
 </li>
@@ -144,34 +145,34 @@
 <span>Basic Filters</span>
 <ul>
 <li>
-<a href="#link-animated-">animated()</a>
+<a href="#link-animated-">:animated</a>
 </li>
 <li>
-<a href="#link-eq-index">eq(<span class="arg-type tooltip">index</span>)</a>
+<a href="#link-eq-index">:eq(index)</a>
 </li>
 <li>
-<a href="#link-even-">even()</a>
+<a href="#link-even-">:even</a>
 </li>
 <li>
-<a href="#link-first-">first()</a>
+<a href="#link-first-">:first</a>
 </li>
 <li>
-<a href="#link-gt-index">gt(<span class="arg-type tooltip">index</span>)</a>
+<a href="#link-gt-index">:gt(index)</a>
 </li>
 <li>
-<a href="#link-header-">header()</a>
+<a href="#link-header-">:header</a>
 </li>
 <li>
-<a href="#link-last-">last()</a>
+<a href="#link-last-">:last</a>
 </li>
 <li>
-<a href="#link-lt-index">lt(<span class="arg-type tooltip">index</span>)</a>
+<a href="#link-lt-index">:lt(index)</a>
 </li>
 <li>
-<a href="#link-not-selector">not(<span class="arg-type tooltip">selector</span>)</a>
+<a href="#link-not-selector">:not(selector)</a>
 </li>
 <li>
-<a href="#link-odd-">odd()</a>
+<a href="#link-odd-">:odd</a>
 </li>
 </ul>
 </li>
@@ -179,16 +180,16 @@
 <span>Content Filters</span>
 <ul>
 <li>
-<a href="#link-contains-text">contains(<span class="arg-type tooltip">text</span>)</a>
+<a href="#link-contains-text">:contains(text)</a>
 </li>
 <li>
-<a href="#link-empty-">empty()</a>
+<a href="#link-empty-">:empty</a>
 </li>
 <li>
-<a href="#link-has-selector">has(<span class="arg-type tooltip">selector</span>)</a>
+<a href="#link-has-selector">:has(selector)</a>
 </li>
 <li>
-<a href="#link-parent-">parent()</a>
+<a href="#link-parent-">:parent</a>
 </li>
 </ul>
 </li>
@@ -196,10 +197,10 @@
 <span>Visibility Filters</span>
 <ul>
 <li>
-<a href="#link-hidden-">hidden()</a>
+<a href="#link-hidden-">:hidden</a>
 </li>
 <li>
-<a href="#link-visible-">visible()</a>
+<a href="#link-visible-">:visible</a>
 </li>
 </ul>
 </li>
@@ -207,25 +208,25 @@
 <span>Attribute Filters</span>
 <ul>
 <li>
-<a href="#link-attributeContains-attributevalue">attributeContains(<span class="arg-type tooltip">attribute</span>, <span class="arg-type tooltip">value</span>)</a>
+<a href="#link-attributeContains-attributevalue">[attribute*=value]</a>
 </li>
 <li>
-<a href="#link-attributeEndsWith-attributevalue">attributeEndsWith(<span class="arg-type tooltip">attribute</span>, <span class="arg-type tooltip">value</span>)</a>
+<a href="#link-attributeEndsWith-attributevalue">[attribute$=value]</a>
 </li>
 <li>
-<a href="#link-attributeEquals-attributevalue">attributeEquals(<span class="arg-type tooltip">attribute</span>, <span class="arg-type tooltip">value</span>)</a>
+<a href="#link-attributeEquals-attributevalue">[attribute=value]</a>
 </li>
 <li>
-<a href="#link-attributeHas-attribute">attributeHas(<span class="arg-type tooltip">attribute</span>)</a>
+<a href="#link-attributeHas-attribute">[attribute]</a>
 </li>
 <li>
-<a href="#link-attributeMultiple-selector1selector2selectorN">attributeMultiple(<span class="arg-type tooltip">selector1</span>, <span class="arg-type tooltip">selector2</span>, <span class="arg-type tooltip">selectorN</span>)</a>
+<a href="#link-attributeMultiple-selector1selector2selectorN">[selector1][selector2][selectorN]</a>
 </li>
 <li>
-<a href="#link-attributeNotEqual-attributevalue">attributeNotEqual(<span class="arg-type tooltip">attribute</span>, <span class="arg-type tooltip">value</span>)</a>
+<a href="#link-attributeNotEqual-attributevalue">[attribute!=value]</a>
 </li>
 <li>
-<a href="#link-attributeStartsWith-attributevalue">attributeStartsWith(<span class="arg-type tooltip">attribute</span>, <span class="arg-type tooltip">value</span>)</a>
+<a href="#link-attributeStartsWith-attributevalue">[attribute^=value]</a>
 </li>
 </ul>
 </li>
@@ -233,16 +234,16 @@
 <span>Child Filters</span>
 <ul>
 <li>
-<a href="#link-firstChild-">firstChild()</a>
+<a href="#link-firstChild-">:first-child</a>
 </li>
 <li>
-<a href="#link-lastChild-">lastChild()</a>
+<a href="#link-lastChild-">:last-child</a>
 </li>
 <li>
-<a href="#link-nthChild-index">nthChild(<span class="arg-type tooltip">index</span>)</a>
+<a href="#link-nthChild-index">:nth-child(index/even/odd/equation)</a>
 </li>
 <li>
-<a href="#link-onlyChild-">onlyChild()</a>
+<a href="#link-onlyChild-">:only-child</a>
 </li>
 </ul>
 </li>
@@ -250,37 +251,37 @@
 <span>Forms</span>
 <ul>
 <li>
-<a href="#link-button-">button()</a>
+<a href="#link-button-">:button</a>
 </li>
 <li>
-<a href="#link-checkbox-">checkbox()</a>
+<a href="#link-checkbox-">:checkbox</a>
 </li>
 <li>
-<a href="#link-file-">file()</a>
+<a href="#link-file-">:file</a>
 </li>
 <li>
-<a href="#link-hidden-">hidden()</a>
+<a href="#link-hidden-">:hidden</a>
 </li>
 <li>
-<a href="#link-image-">image()</a>
+<a href="#link-image-">:image</a>
 </li>
 <li>
-<a href="#link-input-">input()</a>
+<a href="#link-input-">:input</a>
 </li>
 <li>
-<a href="#link-password-">password()</a>
+<a href="#link-password-">:password</a>
 </li>
 <li>
-<a href="#link-radio-">radio()</a>
+<a href="#link-radio-">:radio</a>
 </li>
 <li>
-<a href="#link-reset-">reset()</a>
+<a href="#link-reset-">:reset</a>
 </li>
 <li>
-<a href="#link-submit-">submit()</a>
+<a href="#link-submit-">:submit</a>
 </li>
 <li>
-<a href="#link-text-">text()</a>
+<a href="#link-text-">:text</a>
 </li>
 </ul>
 </li>
@@ -288,16 +289,16 @@
 <span>Form Filters</span>
 <ul>
 <li>
-<a href="#link-checked-">checked()</a>
+<a href="#link-checked-">:checked</a>
 </li>
 <li>
-<a href="#link-disabled-">disabled()</a>
+<a href="#link-disabled-">:disabled</a>
 </li>
 <li>
-<a href="#link-enabled-">enabled()</a>
+<a href="#link-enabled-">:enabled</a>
 </li>
 <li>
-<a href="#link-selected-">selected()</a>
+<a href="#link-selected-">:selected</a>
 </li>
 </ul>
 </li>
@@ -1030,7 +1031,7 @@
 <a href="#link-ajaxSuccess-callback">ajaxSuccess(<span class="arg-type tooltip">callback</span>)</a>
 </li>
 <li>
-<a href="#link-all-">all()</a>
+<a href="#link-all-">*</a>
 </li>
 <li>
 <a href="#link-andSelf-">andSelf()</a>
@@ -1042,7 +1043,7 @@
 <a href="#link-animate-paramsdurationeasingcallback">animate(<span class="arg-type tooltip">params</span>, <span class="arg-type tooltip">duration</span>, <span class="arg-type tooltip">easing</span>, <span class="arg-type tooltip">callback</span>)</a>
 </li>
 <li>
-<a href="#link-animated-">animated()</a>
+<a href="#link-animated-">:animated</a>
 </li>
 <li>
 <a href="#link-append-content">append(<span class="arg-type tooltip">content</span>)</a>
@@ -1063,25 +1064,25 @@
 <a href="#link-attr-keyfn">attr(<span class="arg-type tooltip">key</span>, <span class="arg-type tooltip">fn</span>)</a>
 </li>
 <li>
-<a href="#link-attributeContains-attributevalue">attributeContains(<span class="arg-type tooltip">attribute</span>, <span class="arg-type tooltip">value</span>)</a>
+<a href="#link-attributeContains-attributevalue">[attribute*=value]</a>
 </li>
 <li>
-<a href="#link-attributeEndsWith-attributevalue">attributeEndsWith(<span class="arg-type tooltip">attribute</span>, <span class="arg-type tooltip">value</span>)</a>
+<a href="#link-attributeEndsWith-attributevalue">[attribute$=value]</a>
 </li>
 <li>
-<a href="#link-attributeEquals-attributevalue">attributeEquals(<span class="arg-type tooltip">attribute</span>, <span class="arg-type tooltip">value</span>)</a>
+<a href="#link-attributeEquals-attributevalue">[attribute=value]</a>
 </li>
 <li>
-<a href="#link-attributeHas-attribute">attributeHas(<span class="arg-type tooltip">attribute</span>)</a>
+<a href="#link-attributeHas-attribute">[attribute]</a>
 </li>
 <li>
-<a href="#link-attributeMultiple-selector1selector2selectorN">attributeMultiple(<span class="arg-type tooltip">selector1</span>, <span class="arg-type tooltip">selector2</span>, <span class="arg-type tooltip">selectorN</span>)</a>
+<a href="#link-attributeMultiple-selector1selector2selectorN">[selector1][selector2][selectorN]</a>
 </li>
 <li>
-<a href="#link-attributeNotEqual-attributevalue">attributeNotEqual(<span class="arg-type tooltip">attribute</span>, <span class="arg-type tooltip">value</span>)</a>
+<a href="#link-attributeNotEqual-attributevalue">[attribute!=value]</a>
 </li>
 <li>
-<a href="#link-attributeStartsWith-attributevalue">attributeStartsWith(<span class="arg-type tooltip">attribute</span>, <span class="arg-type tooltip">value</span>)</a>
+<a href="#link-attributeStartsWith-attributevalue">[attribute^=value]</a>
 </li>
 <li>
 <a href="#link-before-content">before(<span class="arg-type tooltip">content</span>)</a>
@@ -1096,7 +1097,7 @@
 <a href="#link-blur-fn">blur(<span class="arg-type tooltip">fn</span>)</a>
 </li>
 <li>
-<a href="#link-button-">button()</a>
+<a href="#link-button-">:button</a>
 </li>
 <li>
 <a href="#link-change-">change()</a>
@@ -1105,19 +1106,19 @@
 <a href="#link-change-fn">change(<span class="arg-type tooltip">fn</span>)</a>
 </li>
 <li>
-<a href="#link-checkbox-">checkbox()</a>
+<a href="#link-checkbox-">:checkbox</a>
 </li>
 <li>
-<a href="#link-checked-">checked()</a>
+<a href="#link-checked-">:checked</a>
 </li>
 <li>
-<a href="#link-child-parentchild">child(<span class="arg-type tooltip">parent</span>, <span class="arg-type tooltip">child</span>)</a>
+<a href="#link-child-parentchild">parent &gt; child</a>
 </li>
 <li>
 <a href="#link-children-expr">children(<span class="arg-type tooltip">expr</span>)</a>
 </li>
 <li>
-<a href="#link-class-class">class(<span class="arg-type tooltip">class</span>)</a>
+<a href="#link-class-class">.class</a>
 </li>
 <li>
 <a href="#link-click-">click()</a>
@@ -1132,7 +1133,7 @@
 <a href="#link-clone-true">clone(<span class="arg-type tooltip">true</span>)</a>
 </li>
 <li>
-<a href="#link-contains-text">contains(<span class="arg-type tooltip">text</span>)</a>
+<a href="#link-contains-text">:contains(text)</a>
 </li>
 <li>
 <a href="#link-contents-">contents()</a>
@@ -1156,25 +1157,25 @@
 <a href="#link-dequeue-">dequeue()</a>
 </li>
 <li>
-<a href="#link-descendant-ancestordescendant">descendant(<span class="arg-type tooltip">ancestor</span>, <span class="arg-type tooltip">descendant</span>)</a>
+<a href="#link-descendant-ancestordescendant">ancestor descendant</a>
 </li>
 <li>
-<a href="#link-disabled-">disabled()</a>
+<a href="#link-disabled-">:disabled</a>
 </li>
 <li>
 <a href="#link-each-callback">each(<span class="arg-type tooltip">callback</span>)</a>
 </li>
 <li>
-<a href="#link-element-element">element(<span class="arg-type tooltip">element</span>)</a>
+<a href="#link-element-element">element</a>
+</li>
+<li>
+<a href="#link-empty-">:empty</a>
 </li>
 <li>
 <a href="#link-empty-">empty()</a>
 </li>
 <li>
-<a href="#link-empty-">empty()</a>
-</li>
-<li>
-<a href="#link-enabled-">enabled()</a>
+<a href="#link-enabled-">:enabled</a>
 </li>
 <li>
 <a href="#link-end-">end()</a>
@@ -1183,7 +1184,7 @@
 <a href="#link-eq-position">eq(<span class="arg-type tooltip">position</span>)</a>
 </li>
 <li>
-<a href="#link-eq-index">eq(<span class="arg-type tooltip">index</span>)</a>
+<a href="#link-eq-index">:eq(index)</a>
 </li>
 <li>
 <a href="#link-eq-index">eq(<span class="arg-type tooltip">index</span>)</a>
@@ -1195,7 +1196,7 @@
 <a href="#link-error-fn">error(<span class="arg-type tooltip">fn</span>)</a>
 </li>
 <li>
-<a href="#link-even-">even()</a>
+<a href="#link-even-">:even</a>
 </li>
 <li>
 <a href="#link-fadeIn-speedcallback">fadeIn(<span class="arg-type tooltip">speed</span>, <span class="arg-type tooltip">callback</span>)</a>
@@ -1207,7 +1208,7 @@
 <a href="#link-fadeTo-speedopacitycallback">fadeTo(<span class="arg-type tooltip">speed</span>, <span class="arg-type tooltip">opacity</span>, <span class="arg-type tooltip">callback</span>)</a>
 </li>
 <li>
-<a href="#link-file-">file()</a>
+<a href="#link-file-">:file</a>
 </li>
 <li>
 <a href="#link-filter-expr">filter(<span class="arg-type tooltip">expr</span>)</a>
@@ -1219,10 +1220,10 @@
 <a href="#link-find-expr">find(<span class="arg-type tooltip">expr</span>)</a>
 </li>
 <li>
-<a href="#link-first-">first()</a>
+<a href="#link-first-">:first</a>
 </li>
 <li>
-<a href="#link-firstChild-">firstChild()</a>
+<a href="#link-firstChild-">:first-child</a>
 </li>
 <li>
 <a href="#link-focus-">focus()</a>
@@ -1237,16 +1238,16 @@
 <a href="#link-get-index">get(<span class="arg-type tooltip">index</span>)</a>
 </li>
 <li>
-<a href="#link-gt-index">gt(<span class="arg-type tooltip">index</span>)</a>
+<a href="#link-gt-index">:gt(index)</a>
 </li>
 <li>
-<a href="#link-has-selector">has(<span class="arg-type tooltip">selector</span>)</a>
+<a href="#link-has-selector">:has(selector)</a>
 </li>
 <li>
 <a href="#link-hasClass-class">hasClass(<span class="arg-type tooltip">class</span>)</a>
 </li>
 <li>
-<a href="#link-header-">header()</a>
+<a href="#link-header-">:header</a>
 </li>
 <li>
 <a href="#link-height-">height()</a>
@@ -1255,10 +1256,10 @@
 <a href="#link-height-val">height(<span class="arg-type tooltip">val</span>)</a>
 </li>
 <li>
-<a href="#link-hidden-">hidden()</a>
+<a href="#link-hidden-">:hidden</a>
 </li>
 <li>
-<a href="#link-hidden-">hidden()</a>
+<a href="#link-hidden-">:hidden</a>
 </li>
 <li>
 <a href="#link-hide-">hide()</a>
@@ -1282,16 +1283,16 @@
 <a href="#link-html-val">html(<span class="arg-type tooltip">val</span>)</a>
 </li>
 <li>
-<a href="#link-id-id">id(<span class="arg-type tooltip">id</span>)</a>
+<a href="#link-id-id">#id</a>
 </li>
 <li>
-<a href="#link-image-">image()</a>
+<a href="#link-image-">:image</a>
 </li>
 <li>
 <a href="#link-index-subject">index(<span class="arg-type tooltip">subject</span>)</a>
 </li>
 <li>
-<a href="#link-input-">input()</a>
+<a href="#link-input-">:input</a>
 </li>
 <li>
 <a href="#link-insertAfter-content">insertAfter(<span class="arg-type tooltip">content</span>)</a>
@@ -1417,10 +1418,10 @@
 <a href="#link-keyup-fn">keyup(<span class="arg-type tooltip">fn</span>)</a>
 </li>
 <li>
-<a href="#link-last-">last()</a>
+<a href="#link-last-">:last</a>
 </li>
 <li>
-<a href="#link-lastChild-">lastChild()</a>
+<a href="#link-lastChild-">:last-child</a>
 </li>
 <li>
 <a href="#link-length-">length</a>
@@ -1432,7 +1433,7 @@
 <a href="#link-load -fn">load (<span class="arg-type tooltip">fn</span>)</a>
 </li>
 <li>
-<a href="#link-lt-index">lt(<span class="arg-type tooltip">index</span>)</a>
+<a href="#link-lt-index">:lt(index)</a>
 </li>
 <li>
 <a href="#link-map-callback">map(<span class="arg-type tooltip">callback</span>)</a>
@@ -1453,28 +1454,28 @@
 <a href="#link-mouseup-fn">mouseup(<span class="arg-type tooltip">fn</span>)</a>
 </li>
 <li>
-<a href="#link-multiple-selector1selector2selectorN">multiple(<span class="arg-type tooltip">selector1</span>, <span class="arg-type tooltip">selector2</span>, <span class="arg-type tooltip">selectorN</span>)</a>
+<a href="#link-multiple-selector1selector2selectorN">selector1, selector2, selectorN</a>
 </li>
 <li>
 <a href="#link-next-expr">next(<span class="arg-type tooltip">expr</span>)</a>
 </li>
 <li>
-<a href="#link-next-prevnext">next(<span class="arg-type tooltip">prev</span>, <span class="arg-type tooltip">next</span>)</a>
+<a href="#link-next-prevnext">prev + next</a>
 </li>
 <li>
 <a href="#link-nextAll-expr">nextAll(<span class="arg-type tooltip">expr</span>)</a>
 </li>
 <li>
-<a href="#link-not-selector">not(<span class="arg-type tooltip">selector</span>)</a>
+<a href="#link-not-selector">:not(selector)</a>
 </li>
 <li>
 <a href="#link-not-expr">not(<span class="arg-type tooltip">expr</span>)</a>
 </li>
 <li>
-<a href="#link-nthChild-index">nthChild(<span class="arg-type tooltip">index</span>)</a>
+<a href="#link-nthChild-index">:nth-child(index/even/odd/equation)</a>
 </li>
 <li>
-<a href="#link-odd-">odd()</a>
+<a href="#link-odd-">:odd</a>
 </li>
 <li>
 <a href="#link-offset-">offset()</a>
@@ -1483,10 +1484,10 @@
 <a href="#link-one-typedatafn">one(<span class="arg-type tooltip">type</span>, <span class="arg-type tooltip">data</span>, <span class="arg-type tooltip">fn</span>)</a>
 </li>
 <li>
-<a href="#link-onlyChild-">onlyChild()</a>
+<a href="#link-onlyChild-">:only-child</a>
 </li>
 <li>
-<a href="#link-parent-">parent()</a>
+<a href="#link-parent-">:parent</a>
 </li>
 <li>
 <a href="#link-parent-expr">parent(<span class="arg-type tooltip">expr</span>)</a>
@@ -1495,7 +1496,7 @@
 <a href="#link-parents-expr">parents(<span class="arg-type tooltip">expr</span>)</a>
 </li>
 <li>
-<a href="#link-password-">password()</a>
+<a href="#link-password-">:password</a>
 </li>
 <li>
 <a href="#link-prepend-content">prepend(<span class="arg-type tooltip">content</span>)</a>
@@ -1519,7 +1520,7 @@
 <a href="#link-queue-queue">queue(<span class="arg-type tooltip">queue</span>)</a>
 </li>
 <li>
-<a href="#link-radio-">radio()</a>
+<a href="#link-radio-">:radio</a>
 </li>
 <li>
 <a href="#link-ready-fn">ready(<span class="arg-type tooltip">fn</span>)</a>
@@ -1540,7 +1541,7 @@
 <a href="#link-replaceWith-content">replaceWith(<span class="arg-type tooltip">content</span>)</a>
 </li>
 <li>
-<a href="#link-reset-">reset()</a>
+<a href="#link-reset-">:reset</a>
 </li>
 <li>
 <a href="#link-resize-fn">resize(<span class="arg-type tooltip">fn</span>)</a>
@@ -1555,7 +1556,7 @@
 <a href="#link-select-fn">select(<span class="arg-type tooltip">fn</span>)</a>
 </li>
 <li>
-<a href="#link-selected-">selected()</a>
+<a href="#link-selected-">:selected</a>
 </li>
 <li>
 <a href="#link-serialize-">serialize()</a>
@@ -1573,7 +1574,7 @@
 <a href="#link-siblings-expr">siblings(<span class="arg-type tooltip">expr</span>)</a>
 </li>
 <li>
-<a href="#link-siblings-prevsiblings">siblings(<span class="arg-type tooltip">prev</span>, <span class="arg-type tooltip">siblings</span>)</a>
+<a href="#link-siblings-prevsiblings">prev ~ siblings</a>
 </li>
 <li>
 <a href="#link-size-">size()</a>
@@ -1594,7 +1595,7 @@
 <a href="#link-stop-">stop()</a>
 </li>
 <li>
-<a href="#link-submit-">submit()</a>
+<a href="#link-submit-">:submit</a>
 </li>
 <li>
 <a href="#link-submit-">submit()</a>
@@ -1603,7 +1604,7 @@
 <a href="#link-submit-fn">submit(<span class="arg-type tooltip">fn</span>)</a>
 </li>
 <li>
-<a href="#link-text-">text()</a>
+<a href="#link-text-">:text</a>
 </li>
 <li>
 <a href="#link-text-">text()</a>
@@ -1648,7 +1649,7 @@
 <a href="#link-val-val">val(<span class="arg-type tooltip">val</span>)</a>
 </li>
 <li>
-<a href="#link-visible-">visible()</a>
+<a href="#link-visible-">:visible</a>
 </li>
 <li>
 <a href="#link-width-">width()</a>

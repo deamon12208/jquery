@@ -10,7 +10,7 @@ html, body {
 	width:100%;
 	height:100%;
 	overflow:hidden;
-	background:transparent url(images/hdr_bkg.gif) repeat-x scroll 0 0;
+	background:transparent url(images/side_top.jpg) repeat-x scroll 0 0;
 	color:#444444;
 }
 * html, * body {
@@ -18,25 +18,23 @@ html, body {
 }
 h1 {
 	margin: 0 0 0 1.5em;
-	height: 85px;
 }
 h1 a img { border: none; }
 #header {
 	color: #FFF;
-	font-size: 2em;
-	font-weight: bold;
-	margin-left: 2em;
-	left: 231px;
-	top: 30px;
+	font-size: 1.15em;
+	left: 200px;
+	margin-top: 8px;
 }
-#header span { font-size: .6em; color: white; }
+#header a { color:silver; text-decoration: none }
+#header a:hover { color:white; }
 h2 { margin: .5em; font-size: 1.6em; }
 h3 { margin: .4em 0; font-size: 1.2em;  }
 h4 { margin: .35em 0; font-size: 1em;  }
 
 h1, #content, #nav, #docs, #header { position:absolute; }
 #content { left:0 !important; right:0 !important; }
-#content { background:#666 !important; top:85px !important; bottom:0 !important; }
+#content { background:#666 !important; top:35px !important; bottom:0 !important; }
 
 #nav, #docs {
 	background: #FFF;
@@ -160,7 +158,7 @@ p.raw a {
 }
 
 #navQS {
-	margin-bottom: 1em;
+	margin: .5em;
 }
 #mainQS {
 	float: right;
@@ -176,7 +174,7 @@ p.raw a {
 #nav .navsub h3 { display: block; }
 .js #nav .navsub h3 { display: none; }
 #nav .navsub .treecontrol { display: none; }
-.js #nav #navCat.navsub .treecontrol { display: block; margin-top: 2em; }
+.js #nav #navCat.navsub .treecontrol { display: block; margin-top: 1em; }
 
 #nav div li a {
 	color: blue;

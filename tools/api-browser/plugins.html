@@ -13,7 +13,7 @@
 </h1>
 <div id="header">
 			
-		jQuery Validation Plugin API <span> - <a href="jquery-api-browser.zip">Download</a></span>
+		jQuery Plugins API <span> - <a href="jquery-api-browser.zip">Download</a></span>
 </div>
 <div id="content">
 <div id="nav">
@@ -151,6 +151,14 @@
 </li>
 </ul>
 </li>
+<li>
+<span>Plugins/Treeview</span>
+<ul>
+<li>
+<a href="#link-treeview-options">treeview(<span class="arg-type tooltip">options</span>)</a>
+</li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="navsub" id="navAlpha">
@@ -233,6 +241,9 @@
 </li>
 <li>
 <a href="#link-showErrors-errors">showErrors(<span class="arg-type tooltip">errors</span>)</a>
+</li>
+<li>
+<a href="#link-treeview-options">treeview(<span class="arg-type tooltip">options</span>)</a>
 </li>
 <li>
 <a href="#link-unchecked-">:unchecked</a>
@@ -1022,6 +1033,96 @@ validator.resetForm();</code>
 <pre>
 <code class="javascript">var validator = $("#myform").validate();
 validator.showErrors({"firstname": "I know that your firstname is Pete, Pete!"});</code>
+</pre>
+</div>
+</div>
+</li>
+<li id="link-treeview-options">
+<span class="fn"><a class="name" href="#link-treeview-options">treeview</a>( <span class="arg-type tooltip" title="">Options</span> <span class="arg-name tooltip" title="A set of key/value pairs that configure the treeview. All options are optional.">options</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
+<div class="more">
+<div class="desc">Takes an unordered list and makes all branches collapsable.</div>
+<h3>Options</h3>
+<ul class="options">
+<li>
+<span>animated (<span class="arg-type tooltip" title="">String, Number</span>), default: </span>
+<div>Speed of animation, see &lt;a href='Effects/animate'&gt;animate()&lt;/a&gt; for details, or no animation if not specified.</div>
+</li>
+<li>
+<span>collapsed (<span class="arg-type tooltip" title="true or false.">Boolean</span>), default: false, all expanded</span>
+<div>Start with all branches collapsed.</div>
+</li>
+<li>
+<span>control (<span class="arg-type tooltip" title="">Selector</span>), default: </span>
+<div>Container for a treecontrol, allowing the user to expand, collapse and toggle all branches with one click.</div>
+</li>
+<li>
+<span>unique (<span class="arg-type tooltip" title="true or false.">Boolean</span>), default: false</span>
+<div>Set to allow only one branch on one level to be open (closing siblings which opening).</div>
+</li>
+<li>
+<span>toggle (<span class="arg-type tooltip" title="">Callback</span>), default: </span>
+<div>Callback when toggling a branch. Arguments: "this" refers to the UL that was shown or hidden. Works only with speed option set (set speed: 1 to enable callback without animations).</div>
+</li>
+<li>
+<span>persist (<span class="arg-type tooltip" title="A string of characters.">String</span>), default: </span>
+<div>Persist the tree state in cookies or the page location. If set to "location", looks for the anchor that matches location.href and activates that part of the treeview it. Great for href-based state-saving. If set to "cookie", saves the state of the tree on each click to a cookie and restores that state on page load.</div>
+</li>
+<li>
+<span>add (<span class="arg-type tooltip" title="">Selector</span>), default: </span>
+<div>Populate the tree with more nodes using this option and calling the plugin again. The selector must match elements that were added somewhere to the existing tree. Classes and event handlers are applied to match the behaviour of the existing tree.</div>
+</li>
+</ul>
+<div class="example">
+<h3>Example:</h3>
+<p>Creates a treeview and adds a button to add more branches to it.</p>
+<pre>
+<code class="javascript">$("#browser").treeview();
+ $("#add").click(function() {
+ 	var branches = $("&lt;li&gt;&lt;span class='folder'&gt;New Sublist&lt;/span&gt;&lt;ul&gt;" + 
+ 		"&lt;li&gt;&lt;span class='file'&gt;Item1&lt;/span&gt;&lt;/li&gt;" + 
+ 		"&lt;li&gt;&lt;span class='file'&gt;Item2&lt;/span&gt;&lt;/li&gt;" +
+ 		"&lt;/ul&gt;&lt;/li&gt;").appendTo("#browser");
+ 	$("#browser").treeview({
+ 		add: branches
+ 	});
+ });</code>
+</pre>
+<h4>HTML:</h4>
+<pre>
+<code class="html">
+
+  &lt;ul id="browser" class="filetree"&gt;
+ 	&lt;li&gt;&lt;span class="folder"&gt;Folder 1&lt;/span&gt;
+ 		&lt;ul&gt;
+
+ 			&lt;li&gt;&lt;span class="file"&gt;Item 1.1&lt;/span&gt;&lt;/li&gt;
+ 		&lt;/ul&gt;
+ 	&lt;/li&gt;
+ 	&lt;li&gt;&lt;span class="folder"&gt;Folder 2&lt;/span&gt;
+
+ 		&lt;ul&gt;
+ 			&lt;li&gt;&lt;span class="folder"&gt;Subfolder 2.1&lt;/span&gt;
+ 				&lt;ul id="folder21"&gt;
+ 					&lt;li&gt;&lt;span class="file"&gt;File 2.1.1&lt;/span&gt;&lt;/li&gt;
+
+ 					&lt;li&gt;&lt;span class="file"&gt;File 2.1.2&lt;/span&gt;&lt;/li&gt;
+ 				&lt;/ul&gt;
+ 			&lt;/li&gt;
+ 			&lt;li&gt;&lt;span class="file"&gt;File 2.2&lt;/span&gt;&lt;/li&gt;
+
+ 		&lt;/ul&gt;
+ 	&lt;/li&gt;
+ 	&lt;li class="closed"&gt;&lt;span class="folder"&gt;Folder 3 (closed at start)&lt;/span&gt;
+ 		&lt;ul&gt;
+
+ 			&lt;li&gt;&lt;span class="file"&gt;File 3.1&lt;/span&gt;&lt;/li&gt;
+ 		&lt;/ul&gt;
+ 	&lt;/li&gt;
+ 	&lt;li&gt;&lt;span class="file"&gt;File 4&lt;/span&gt;&lt;/li&gt;
+
+   &lt;/ul&gt;
+
+   &lt;button id="add"&gt;Add!&lt;/button&gt;</code>
 </pre>
 </div>
 </div>

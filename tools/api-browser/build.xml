@@ -43,7 +43,8 @@
 		<delete file="index.html" />
 		<delete file="validation.html" />
 		<delete file="ui.html" />
-		<xslt includes="index.xml,validation.xml,ui.xml" destdir="." style="style.xsl" />
+		<delete file="plugins.html" />
+		<xslt includes="index.xml,validation.xml,ui.xml,plugins.xml" destdir="." style="style.xsl" />
 	</target>
 	
 	<target name="min" depends="compile" description="Remove all comments and whitespace, no compression">
