@@ -49,7 +49,7 @@
 		ui: function(e) {
 			return {
 				helper: this.helper,
-				position: { left: this.position, top: this.position },
+				position: this.position,
 				absolutePosition: this.positionAbs,
 				instance: this,
 				options: this.options					
@@ -81,7 +81,7 @@
 			if(this.helper[0] != this.element[0]) this.helper.css('position', 'absolute');
 
 			//Find out the next positioned parent
-			var offsetParent = (function(cp) {
+			this.offsetParent = (function(cp) {
 				while(cp) {
 					if(cp.style && /(absolute|relative|fixed)/.test($.css(cp,'position'))) return $(cp);
 					cp = cp.parentNode ? cp.parentNode : null;
@@ -97,8 +97,8 @@
 
 			//Generate the original position
 			this.originalPosition = {
-				left: (r ? parseInt(this.helper.css('left')) || 0 : elementPosition.left + (offsetParent[0] == document.body ? 0 : offsetParent[0].scrollLeft)),
-				top: (r ? parseInt(this.helper.css('top')) || 0 : elementPosition.top + (offsetParent[0] == document.body ? 0 : offsetParent[0].scrollTop))
+				left: (r ? parseInt(this.helper.css('left')) || 0 : elementPosition.left + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollLeft)),
+				top: (r ? parseInt(this.helper.css('top')) || 0 : elementPosition.top + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollTop))
 			};
 			
 			//Generate a flexible offset that will later be subtracted from e.pageX/Y

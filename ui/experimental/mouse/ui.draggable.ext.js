@@ -112,24 +112,16 @@
 			var self = ui.instance;
 			
 			if(c.constructor == Array) {
-
-
 				if((ui.absolutePosition.left < c[0])) self.position.left = c[0] - (self.offset.left - self.clickOffset.left);
 				if((ui.absolutePosition.top < c[1])) self.position.top = c[1] - (self.offset.top - self.clickOffset.top);
-				//if(ui.draggable.pos[0]+h[0].offsetWidth > c[2]-o.po.left) ui.draggable.pos[0] = c[2]-o.po.left-h[0].offsetWidth;
-				//if(ui.draggable.pos[1]+h[0].offsetHeight > c[3]-o.po.top) ui.draggable.pos[1] = c[3]-o.po.top-h[0].offsetHeight;
-
+				if(ui.absolutePosition.left - c[2] + self.helperProportions.width >= 0) self.position.left = c[2] - (self.offset.left - self.clickOffset.left) - self.helperProportions.width;
+				if(ui.absolutePosition.top - c[3] + self.helperProportions.height >= 0) self.position.top = c[3] - (self.offset.top - self.clickOffset.top) - self.helperProportions.height;
 			} else {
-
-				if(c.left && (ui.draggable.pos[0] < c.left)) ui.draggable.pos[0] = c.left;
-				if(c.top && (ui.draggable.pos[1] < c.top)) ui.draggable.pos[1] = c.top;
-
-				var p = $(o.pp);
-				if(c.right && ui.draggable.pos[0]+h[0].offsetWidth > p[0].offsetWidth-c.right) ui.draggable.pos[0] = (p[0].offsetWidth-c.right)-h[0].offsetWidth;
-				if(c.bottom && ui.draggable.pos[1]+h[0].offsetHeight > p[0].offsetHeight-c.bottom) ui.draggable.pos[1] = (p[0].offsetHeight-c.bottom)-h[0].offsetHeight;
-
+				if((ui.position.left < c.left)) self.position.left = c.left;
+				if((ui.position.top < c.top)) self.position.top = c.top;
+				if(ui.position.left - self.offsetParent.innerWidth() + self.helperProportions.width + c.right + (parseInt(self.offsetParent.css("borderLeftWidth")) || 0) + (parseInt(self.offsetParent.css("borderRightWidth")) || 0) >= 0) self.position.left = self.offsetParent.innerWidth() - self.helperProportions.width - c.right - (parseInt(self.offsetParent.css("borderLeftWidth")) || 0) - (parseInt(self.offsetParent.css("borderRightWidth")) || 0);
+				if(ui.position.top - self.offsetParent.innerHeight() + self.helperProportions.height + c.bottom + (parseInt(self.offsetParent.css("borderTopWidth")) || 0) + (parseInt(self.offsetParent.css("borderBottomWidth")) || 0) >= 0) self.position.top = self.offsetParent.innerHeight() - self.helperProportions.height - c.bottom - (parseInt(self.offsetParent.css("borderTopWidth")) || 0) - (parseInt(self.offsetParent.css("borderBottomWidth")) || 0);
 			}
-
 
 		}
 	});
