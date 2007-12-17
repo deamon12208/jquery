@@ -38,12 +38,16 @@ $.extend($.ui.accordion, {
 				return;
 			}
 			var hideHeight = settings.toHide.height(),
-				showHeight = settings.toShow.height(),
+				//showHeight = settings.toShow.height(),
+				showHeight = 5,
 				difference = showHeight / hideHeight;
+alert(hideHeight + " " + showHeight)
 			settings.toShow.css({ height: 0, overflow: 'hidden' }).show();
 			settings.toHide.filter(":hidden").each(settings.complete).end().filter(":visible").animate({height:"hide"},{
 				step: function(now){
+					alert("hide: " + now);
 					settings.toShow.height((hideHeight - (now)) * difference );
+					alert("show: " +  (hideHeight - (now)) * difference );
 				},
 				duration: settings.duration,
 				easing: settings.easing,
