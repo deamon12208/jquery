@@ -670,7 +670,7 @@ $.Autocompleter.Select = function (options, input, select, config) {
 	
 		list = $("<ul>").appendTo(element).mouseover( function(event) {
 			if(target(event).nodeName && target(event).nodeName.toUpperCase() == 'LI') {
-	            active = $("li", list).removeClass().index(target(event));
+	            active = $("li", list).removeClass(CLASSES.ACTIVE).index(target(event));
 			    $(target(event)).addClass(CLASSES.ACTIVE);            
 	        }
 		}).click(function(event) {
@@ -741,7 +741,7 @@ $.Autocompleter.Select = function (options, input, select, config) {
 			var formatted = options.formatItem(data[i].data, i+1, max, data[i].value, term);
 			if ( formatted === false )
 				continue;
-			var li = $("<li>").html( options.highlight(formatted, term) ).appendTo(list)[0];
+			var li = $("<li>").html( options.highlight(formatted, term) ).addClass(i%2 == 0 ? "ac_event" : "ac_odd").appendTo(list)[0];
 			$.data(li, "ac_data", data[i]);
 		}
 		listItems = list.find("li");
@@ -819,7 +819,7 @@ $.Autocompleter.Select = function (options, input, select, config) {
             }
 		},
 		selected: function() {
-			var selected = listItems && listItems.filter("." + CLASSES.ACTIVE).removeClass();
+			var selected = listItems && listItems.filter("." + CLASSES.ACTIVE).removeClass(CLASSES.ACTIVE);
 			return selected && selected.length && $.data(selected[0], "ac_data");
 		},
 		unbind: function() {

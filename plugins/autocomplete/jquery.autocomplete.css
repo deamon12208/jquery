@@ -38,6 +38,10 @@
 	background : Window url('indicator.gif') right center no-repeat;
 }
 
+.ac_odd {
+	background-color: #eee;
+}
+
 .ac_over {
 	background-color: #0A246A;
 	color: HighlightText;
