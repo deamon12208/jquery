@@ -1224,10 +1224,10 @@ $.extend(DatepickerInstance.prototype, {
 						(unselectable || (otherMonth && !showOtherMonths) ? '' :
 						' onmouseover="' + (unselectable ? '' : 'jQuery(this).addClass(\'datepicker_daysCellOver\');') +
 						(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#datepicker_status_' +
-						this._id + '\').html(\'' + dateStatus(printDate, this) +'\');"') +
+						this._id + '\').html(\'' + dateStatus(printDate, this) +'\');') + '"' +
 						' onmouseout="' + (unselectable ? '' : 'jQuery(this).removeClass(\'datepicker_daysCellOver\');') +
 						(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#datepicker_status_' +
-						this._id + '\').html(\'&#xa0;\');"')) +
+						this._id + '\').html(\'&#xa0;\');') +'"') +
 						(unselectable ? '' : ' onclick="jQuery.datepicker._selectDay(' + this._id + ',' +
 						drawMonth + ',' + drawYear + ', this);"') + '>' + // actions
 						(otherMonth ? (showOtherMonths ? printDate.getDate() : '&#xa0;') : // display for other months
