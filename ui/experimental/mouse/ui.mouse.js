@@ -57,7 +57,7 @@
 		$(element).bind('mousedown.draggable', function() { return self.click.apply(self, arguments); });
 		if($.browser.msie) $(element).attr('unselectable', 'on'); //Prevent text selection in IE
 		
-	}
+	};
 	
 	$.extend($.ui.mouseInteraction.prototype, {
 		
@@ -92,7 +92,7 @@
 		stop: function(e) {			
 			
 			var o = this.options;
-			if(this.initialized == false) return true;
+			if(!this.initialized) return $(document).unbind('mouseup.draggable').unbind('mousemove.draggable');
 
 			if(this.options.stop) this.options.stop.call(this.options.executor || this, e);
 			$(document).unbind('mouseup.draggable').unbind('mousemove.draggable');

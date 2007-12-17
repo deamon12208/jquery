@@ -7,7 +7,7 @@
 		return this.each(function() {
 			if(!$(this).is(".ui-draggable")) new $.ui.draggable(this, o);
 		});
-	}
+	};
 	
 	$.ui.draggable = function(element, options) {
 		
@@ -42,7 +42,7 @@
 		if(o.helper == 'original' && (this.element.css('position') == 'static' || this.element.css('position') == ''))
 			this.element.css('position', 'relative');
 		
-	}
+	};
 	
 	$.extend($.ui.draggable.prototype, {
 		plugins: {},
@@ -90,45 +90,64 @@
 			
 			//Prepare variables for position generation
 			this.elementOffset = this.element.offset();
+			this._pageX = e.pageX; this._pageY = e.pageY;
 			this.clickOffset = { left: e.pageX - this.elementOffset.left, top: e.pageY - this.elementOffset.top };
 			var elementPosition = this.element.position();
 			var r = this.helper.css('position') == 'relative';
+
+			//Generate the original position
+			this.originalPosition = {
+				left: (r ? parseInt(this.helper.css('left')) || 0 : elementPosition.left + (offsetParent[0] == document.body ? 0 : offsetParent[0].scrollLeft)),
+				top: (r ? parseInt(this.helper.css('top')) || 0 : elementPosition.top + (offsetParent[0] == document.body ? 0 : offsetParent[0].scrollTop))
+			};
 			
 			//Generate a flexible offset that will later be subtracted from e.pageX/Y
-			this.offset = {
-				left: e.pageX - (r ? parseInt(this.helper.css('left')) || 0 : elementPosition.left + offsetParent[0].scrollLeft),
-				top: e.pageY - (r ? parseInt(this.helper.css('top')) || 0 : elementPosition.top + offsetParent[0].scrollTop)
-			};
-
+			this.offset = {left: e.pageX - this.originalPosition.left, top: e.pageY - this.originalPosition.top };
+			
 			//Call plugins and callbacks
 			this.propagate("start", e);
 
 			this.helperProportions = { width: this.helper.outerWidth(), height: this.helper.outerHeight() };
-			if (this.slowMode && $.ui.ddmanager && !o.dropBehaviour) $.ui.ddmanager.prepareOffsets(this, e);
-			return false;
-						
-		},
-		stop: function(e) {
-
-			//Call plugins and callbacks
-			this.propagate("stop", e);
-
-			if (this.slowMode && $.ui.ddmanager && !this.options.dropBehaviour) $.ui.ddmanager.drop(this, e);
-			if(this.options.helper != 'original' && !this.cancelHelperRemoval) this.helper.remove();
+			if ($.ui.ddmanager && !o.dropBehaviour) $.ui.ddmanager.prepareOffsets(this, e);
 			
+			//If we have something in cursorAt, we'll use it
+			if(o.cursorAt) {
+				if(o.cursorAt.top != undefined || o.cursorAt.bottom != undefined) {
+					this.offset.top -= this.clickOffset.top - (o.cursorAt.top != undefined ? o.cursorAt.top : (this.helperProportions.height - o.cursorAt.bottom));
+					this.clickOffset.top = (o.cursorAt.top != undefined ? o.cursorAt.top : (this.helperProportions.height - o.cursorAt.bottom));
+				}
+				if(o.cursorAt.left != undefined || o.cursorAt.right != undefined) {
+					this.offset.left -= this.clickOffset.left - (o.cursorAt.left != undefined ? o.cursorAt.left : (this.helperProportions.width - o.cursorAt.right));
+					this.clickOffset.left = (o.cursorAt.left != undefined ? o.cursorAt.left : (this.helperProportions.width - o.cursorAt.right));
+				}
+			}
+
+			return false;
+
+		},
+		clear: function() {
 			if($.ui.ddmanager) {
 				$.ui.ddmanager.current = null;
 				$.ui.ddmanager.last = this;				
 			}
-			this.helper = null; this.offset = null; this.positionCurrent = null;
-			return false;
+			this.helper = null;
+		},
+		stop: function(e) {
+
+			if ($.ui.ddmanager && !this.options.dropBehaviour) $.ui.ddmanager.drop(this, e);
+			this.propagate("stop", e);
 			
+			if(this.cancelHelperRemoval) return false;			
+			if(this.options.helper != 'original') this.helper.remove();
+			this.clear();
+
+			return false;
 		},
 		drag: function(e) {
 
 			//Compute the helpers position
 			this.position = { top: e.pageY - this.offset.top, left: e.pageX - this.offset.left };
-			this.positionAbs = { left: e.pageX + this.clickOffset.left, top: e.pageY + this.clickOffset.top };
+			this.positionAbs = { left: e.pageX - this.clickOffset.left, top: e.pageY - this.clickOffset.top };
 
 			//Call plugins and callbacks
 			this.propagate("drag", e);

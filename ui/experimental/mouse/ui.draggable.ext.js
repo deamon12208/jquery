@@ -42,30 +42,12 @@
 
 	$.ui.plugin.add("draggable", "revert", {
 		stop: function(e,ui) {
-	
-			var o = ui.options;
-			var rpos = { left: 0, top: 0 };
-			o.beQuietAtEnd = true;
-
-			if(ui.helper != this) {
-				rpos = $(ui.draggable.sorthelper || this).offset();
-				var nl = rpos.left-o.po.left-o.margins.left;
-				var nt = rpos.top-o.po.top-o.margins.top;
-			} else {
-				var nl = o.co.left - (o.po ? o.po.left : 0);
-				var nt = o.co.top - (o.po ? o.po.top : 0);
-			}
-		
-			var self = ui.draggable;
-
-			$(ui.helper).animate({ left: nl, top: nt }, 500, function() {
-				if(o.wasPositioned) $(self.element).css('position', o.wasPositioned);
-				if(o.stop) o.stop.apply(self.element, [self.helper, self.pos, [o.co.left - o.po.left,o.co.top - o.po.top],self]);
-			
-				if(self.helper != self.element)
-					window.setTimeout(function() { $(self.helper).remove(); }, 0); //Using setTimeout because of strange flickering in Firefox
+			var self = ui.instance;
+			self.cancelHelperRemoval = true;
+			$(ui.helper).animate({ left: self.originalPosition.left, top: self.originalPosition.top }, parseInt(ui.options.revert) || 500, function() {
+				if(ui.options.helper != 'original') self.helper.remove();
+				self.clear();
 			});
-		
 		}
 	});
 
@@ -73,7 +55,7 @@
 		start: function(e,ui) {
 
 			var o = ui.options;
-			if(ui.draggable.slowMode) return; // Make clones on top of iframes (only if we are not in slowMode)
+			if(ui.instance.slowMode) return; // Make clones on top of iframes (only if we are not in slowMode)
 			
 			if(o.iframeFix.constructor == Array) {
 				for(var i=0;i<o.iframeFix.length;i++) {
@@ -97,27 +79,27 @@
 		start: function(e,ui) {
 
 			var o = ui.options;
-			if((!o.cursorAtIgnore || o.containment.left != undefined || o.containment.constructor == Array) && !o._containment) return;
+			if((o.containment.left != undefined || o.containment.constructor == Array) && !o._containment) return;
 			if(!o._containment) o._containment = o.containment;
 
-			if(o._containment == 'parent') o._containment = this.parentNode;
+			if(o._containment == 'parent') o._containment = this[0].parentNode;
 			if(o._containment == 'document') {
 				o.containment = [
-					0-o.margins.left,
-					0-o.margins.top,
-					$(document).width()-o.margins.right,
-					($(document).height() || document.body.parentNode.scrollHeight)-o.margins.bottom
+					0,
+					0,
+					$(document).width(),
+					($(document).height() || document.body.parentNode.scrollHeight)
 				];
 			} else { //I'm a node, so compute top/left/right/bottom
 
 				var ce = $(o._containment)[0];
-				var co = $(o._containment).offset({ border: false });
+				var co = $(o._containment).offset();
 
 				o.containment = [
-					co.left-o.margins.left,
-					co.top-o.margins.top,
-					co.left+(ce.offsetWidth || ce.scrollWidth)-o.margins.right,
-					co.top+(ce.offsetHeight || ce.scrollHeight)-o.margins.bottom
+					co.left,
+					co.top,
+					co.left+(ce.offsetWidth || ce.scrollWidth),
+					co.top+(ce.offsetHeight || ce.scrollHeight)
 				];
 			}
 
@@ -125,16 +107,17 @@
 		drag: function(e,ui) {
 
 			var o = ui.options;
-			if(!o.cursorAtIgnore) return;
-
-			var h = $(ui.helper);
+			var h = ui.helper;
 			var c = o.containment;
+			var self = ui.instance;
+			
 			if(c.constructor == Array) {
 
-				if((ui.draggable.pos[0] < c[0]-o.po.left)) ui.draggable.pos[0] = c[0]-o.po.left;
-				if((ui.draggable.pos[1] < c[1]-o.po.top)) ui.draggable.pos[1] = c[1]-o.po.top;
-				if(ui.draggable.pos[0]+h[0].offsetWidth > c[2]-o.po.left) ui.draggable.pos[0] = c[2]-o.po.left-h[0].offsetWidth;
-				if(ui.draggable.pos[1]+h[0].offsetHeight > c[3]-o.po.top) ui.draggable.pos[1] = c[3]-o.po.top-h[0].offsetHeight;
+
+				if((ui.absolutePosition.left < c[0])) self.position.left = c[0] - (self.offset.left - self.clickOffset.left);
+				if((ui.absolutePosition.top < c[1])) self.position.top = c[1] - (self.offset.top - self.clickOffset.top);
+				//if(ui.draggable.pos[0]+h[0].offsetWidth > c[2]-o.po.left) ui.draggable.pos[0] = c[2]-o.po.left-h[0].offsetWidth;
+				//if(ui.draggable.pos[1]+h[0].offsetHeight > c[3]-o.po.top) ui.draggable.pos[1] = c[3]-o.po.top-h[0].offsetHeight;
 
 			} else {
 
@@ -154,18 +137,16 @@
 	$.ui.plugin.add("draggable", "grid", {
 		drag: function(e,ui) {
 			var o = ui.options;
-			if(!o.cursorAtIgnore) return;
-			ui.draggable.pos[0] = o.co.left + o.margins.left - o.po.left + Math.round((ui.draggable.pos[0] - o.co.left - o.margins.left + o.po.left) / o.grid[0]) * o.grid[0];
-			ui.draggable.pos[1] = o.co.top + o.margins.top - o.po.top + Math.round((ui.draggable.pos[1] - o.co.top - o.margins.top + o.po.top) / o.grid[1]) * o.grid[1];
+			ui.instance.position.left = ui.instance.originalPosition.left + Math.round((e.pageX - ui.instance._pageX) / o.grid[0]) * o.grid[0];
+			ui.instance.position.top = ui.instance.originalPosition.top + Math.round((e.pageY - ui.instance._pageY) / o.grid[1]) * o.grid[1];
 		}
 	});
 
 	$.ui.plugin.add("draggable", "axis", {
 		drag: function(e,ui) {
 			var o = ui.options;
-			if(!o.cursorAtIgnore) return;
 			if(o.constraint) o.axis = o.constraint; //Legacy check
-			o.axis ? ( o.axis == 'x' ? ui.draggable.pos[1] = o.co.top - o.margins.top - o.po.top : ui.draggable.pos[0] = o.co.left - o.margins.left - o.po.left ) : null;
+			o.axis == 'x' ? ui.instance.position.top = ui.instance.originalPosition.top : ui.instance.position.left = ui.instance.originalPosition.left;
 		}
 	});
 

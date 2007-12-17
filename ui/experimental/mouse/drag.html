@@ -62,7 +62,12 @@
 				},
 				stop: function(e,ui) {
 					//console.log("Draggable: stop , ", e, " , ", ui);
-				}
+				},
+				cursor: 'move',
+				containment: 'parent',
+				//axis: 'x',
+				//grid: [20,20],
+				//cursorAt: { top: 0, right: 0 }
 			});
 		});
 		
