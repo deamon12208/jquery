@@ -1,6 +1,6 @@
 /* Romanian initialisation for the jQuery UI date picker plugin. */
 /* Written by Edmond L. (ll_edmond@walla.com). */
-$(document).ready(function(){
+jQuery(function($){
 	$.datepicker.regional['ro'] = {clearText: 'Curat', clearStatus: 'Sterge data curenta',
 		closeText: 'Inchide', closeStatus: 'Inchide fara schimbare',
 		prevText: '&#x3c;Anterior', prevStatus: 'Arata luna trecuta',

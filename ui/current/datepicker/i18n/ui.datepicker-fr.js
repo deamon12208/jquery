@@ -1,6 +1,6 @@
 ﻿/* French initialisation for the jQuery UI date picker plugin. */
 /* Written by Keith Wood (kbwood@iprimus.com.au). */
-$(document).ready(function(){
+jQuery(function($){
 	$.datepicker.regional['fr'] = {clearText: 'Effacer', clearStatus: '',
 		closeText: 'Fermer', closeStatus: '',
 		prevText: '&lt;Préc', prevStatus: '',

@@ -1,6 +1,6 @@
 /* Russian (UTF-8) initialisation for the jQuery UI date picker plugin. */
 /* Written by Andrew Stromnov (stromnov@gmail.com). */
-$(document).ready(function(){
+jQuery(function($){
 	$.datepicker.regional['ru'] = {clearText: 'Очистить', clearStatus: '',
 		closeText: 'Закрыть', closeStatus: '',
 		prevText: '&lt;Пред',  prevStatus: '',

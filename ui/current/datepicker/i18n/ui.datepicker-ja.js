@@ -1,6 +1,6 @@
 /* Japanese (UTF-8) initialisation for the jQuery UI date picker plugin. */
 /* Written by Milly. */
-$(document).ready(function(){
+jQuery(function($){
 	$.datepicker.regional['ja'] = {clearText: '&#21066;&#38500;', clearStatus: '',
 		closeText: '&#38281;&#12376;&#12427;', closeStatus: '',
 		prevText: '&lt;&#21069;&#26376;', prevStatus: '',

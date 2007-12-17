@@ -1,5 +1,5 @@
 /* Dutch (UTF-8) initialisation for the jQuery UI date picker plugin. */
-$(document).ready(function(){
+jQuery(function($){
 	$.datepicker.regional['nl'] = {clearText: 'Wissen', clearStatus: '',
 		closeText: 'Sluiten', closeStatus: '',
 		prevText: '&lt;Terug', prevStatus: '',

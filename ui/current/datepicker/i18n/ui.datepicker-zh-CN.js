@@ -1,6 +1,6 @@
 /* Chinese initialisation for the jQuery UI date picker plugin. */
 /* Written by Cloudream (cloudream@gmail.com). */
-$(document).ready(function(){
+jQuery(function($){
 	$.datepicker.regional['zh-CN'] = {clearText: '清除', clearStatus: '清除已选日期',
 		closeText: '关闭', closeStatus: '不改变当前选择',
 		prevText: '&lt;上月', prevStatus: '显示上月',

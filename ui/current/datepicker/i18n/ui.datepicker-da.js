@@ -1,6 +1,6 @@
 ﻿/* Danish initialisation for the jQuery UI date picker plugin. */
 /* Written by Jan Christensen ( deletestuff@gmail.com). */
-$(document).ready(function(){
+jQuery(function($){
     $.datepicker.regional['da'] = {clearText: 'Nulstil', clearStatus: 'Nulstil den aktuelle dato',
 		closeText: 'Luk', closeStatus: 'Luk uden ændringer',
         prevText: '&#x3c;Forrige', prevStatus: 'Vis forrige måned',

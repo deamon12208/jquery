@@ -1,6 +1,6 @@
 ﻿/* Czech initialisation for the jQuery UI date picker plugin. */
 /* Written by Tomas Muller (tomas@tomas-muller.net). */
-$(document).ready(function(){
+jQuery(function($){
 	$.datepicker.regional['cs'] = {clearText: 'Vymazat', clearStatus: 'Vymaže zadané datum',
 		closeText: 'Zavřít',  closeStatus: 'Zavře kalendář beze změny',
 		prevText: '&#Dříve', prevStatus: 'Přejít na předchozí měsí',

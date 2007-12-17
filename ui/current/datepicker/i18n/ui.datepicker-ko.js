@@ -1,6 +1,6 @@
 /* Korean initialisation for the jQuery calendar extension. */
 /* Written by DaeKwon Kang (ncrash.dk@gmail.com). */
-$(document).ready(function(){
+jQuery(function($){
 	$.datepicker.regional['ko'] = {clearText: '지우기', clearStatus: '',
 		closeText: '닫기', closeStatus: '',
 		prevText: '이전달', prevStatus: '',

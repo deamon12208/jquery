@@ -1,6 +1,6 @@
 /* Italian initialisation for the jQuery UI date picker plugin. */
 /* Written by Apaella (apaella@gmail.com). */
-$(document).ready(function(){
+jQuery(function($){
 	$.datepicker.regional['it'] = {clearText: 'Svuota', clearStatus: '',
 		closeText: 'Chiudi', closeStatus: '',
 		prevText: '&lt;Prec', prevStatus: '',
