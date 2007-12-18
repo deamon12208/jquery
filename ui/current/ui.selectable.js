@@ -1,6 +1,5 @@
 (function($)
 {
-	
 	//Macros for external methods that support chaining
 	var methods = "destroy,enable,disable,toggle,refresh".split(",");
 	for(var i = 0; i < methods.length; i++) {
@@ -28,27 +27,32 @@
 	$.ui.selectable = function(el, o) {
 		
 		var options = {
+			appendTo: 'body',
 			autoRefresh: true,
 			filter: '*',
 			tolerance: 'touch'
 		};
-		var o = o || {}; $.extend(options, o); //Extend and copy options
-		this.element = el; var self = this; //Do bindings
+		//Extend and copy options
+		var o = o || {}; $.extend(options, o); 
+		//Do bindings
+		this.element = el; var self = this;
 		$.data(this.element, "ui-selectable", this);
 		self.dragged = false;
 
 		$.extend(options, {
-			appendTo: 'body',
 			helper: function() { return $(document.createElement('div')).css({border:'1px dotted black'}); },
 			_start: function(h,p,c,t,e) {
-				self.start.apply(t, [self, e]); // Trigger the start callback
+				// Trigger the start callback
+				self.start.apply(t, [self, e]);
 			},
 			_drag: function(h,p,c,t,e) {
 				self.dragged = true;
-				self.drag.apply(t, [self, e]); // Trigger the drag callback
+				// Trigger the drag callback
+				self.drag.apply(t, [self, e]);
 			},
 			_stop: function(h,p,c,t,e) {
-				self.stop.apply(t, [self, e]); // Trigger the end callback
+				// Trigger the end callback
+				self.stop.apply(t, [self, e]); 
 				self.dragged = false;
 			}
 		});
@@ -164,8 +168,10 @@
 			$(self.mouse.helper).css({left: x1, top: y1, width: x2-x1, height: y2-y1});
 
 			self.selectees.each(function() {
-				//var box = self.childBoxes[i], hit = false;
 				var selectee = $.data(this, "ui-selectee");
+				//prevent helper from being selected if appendTo: selectable
+				if (selectee.element == self.mouse.helper)
+					return;
 				var hit = false;
 				if (options.tolerance == 'touch') {
 					hit = ( !(selectee.left > x2 || selectee.right < x1 || selectee.top > y2 || selectee.bottom < y1) );
