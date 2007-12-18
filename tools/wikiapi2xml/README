@@ -26,6 +26,9 @@ There are a few options that can be passed in:
     convert to a string like "<a href='Ajax_Events'>Ajax Events</a>", 
     or create an XML node named 'a' with the same information. (defaults to 'html')
 
+  forlinksurl:
+    Value to prepend to any wiki link like 'http://docs.jquery.com/' (defaults to '')
+
   verbose:
     Can add an XML node 'info' to the root 'docs' element that has conversion details
     mostly for debugging purposes. It will also create "pretty" xml when not set to

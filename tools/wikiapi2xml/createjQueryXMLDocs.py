@@ -3,8 +3,8 @@
 """
 createjQueryXMLDocs.py
 David Serduke
-Version 0.1.4
-Last Modified: Dec. 15, 2007
+Version 0.1.5
+Last Modified: Dec. 18, 2007
 
 Python script to convert the jQuery wiki documentation to an XML doc
 """
@@ -20,7 +20,7 @@ from xml.dom import minidom
 # def debugAssist(msg = "", data = ""):
 #   if data != "":
 #     print data
-#   raw_input(msg);
+#   raw_input(msg)
 
 def printdebug(msg):
   if opts.verbose != "false" and infoNode != None:
@@ -35,17 +35,18 @@ def printdebug(msg):
 # class to create static functions
 class Callable:
   def __init__(self, func):
-    self.__call__ = func;
+    self.__call__ = func
 
 # handle passed in parameters
 class Options:
   def __init__(self):
     form = cgi.FieldStorage()
 
-    self.help = "false";
+    self.help = "false"
     self.supressContentType = "false" 
     self.startingUrl = "API"
-    self.exporterUrl = "http://docs.jquery.com/Special:Export";
+    self.exporterUrl = "http://docs.jquery.com/Special:Export"
+    self.forLinksUrl = ""
     self.version = ""
     self.convertLinks = "html"
     self.verbose = "false" 
@@ -59,15 +60,17 @@ class Options:
       self.help = "true"
     for key in keys:
       if key == "help":
-        self.help = form.getvalue(key);
+        self.help = form.getvalue(key)
       elif key == "supresscontenttype":
-        self.supressContentType = form.getvalue(key);
+        self.supressContentType = form.getvalue(key)
       elif key == "start":
-        self.startingUrl = form.getvalue(key);
+        self.startingUrl = form.getvalue(key)
       elif key == "exporter":
-        self.exporterUrl = form.getvalue(key);
+        self.exporterUrl = form.getvalue(key)
+      elif key == "forlinksurl":
+        self.forLinksUrl = form.getvalue(key)
       elif key == "version":
-        self.version = form.getvalue(key);
+        self.version = form.getvalue(key)
       elif key == "convertlinks":
         self.convertLinks = form.getvalue(key)
       elif key == "verbose":
@@ -107,8 +110,8 @@ class XMLPage:
     # handle a redirect immediately, url and header will be saved from the initial call
     # example "#redirect [[API/1.2/Selectors]]
     if re.search(r"\#redirect", self.wiki, re.IGNORECASE):
-      printdebug("Redirected...")
       m = re.search(r"\#redirect \[\[(?P<dir>.*)\]\]", self.wiki, re.IGNORECASE)
+      printdebug("Redirected to... " + m.group("dir"))
       self.load(m.group("dir"))
 
   def get(self, tag):
@@ -198,7 +201,7 @@ class APIList(Node):
     parent.appendChild(node)
     # new cat so reset subcat
     subcat = { 'name':'', 'node':None }
-    printdebug("Reset subcat to None");
+    printdebug("Reset subcat to None")
     for child in self.children:
       if (child != None):
         child.exportXML(node)
@@ -249,7 +252,7 @@ class Method(Node):
 
   def parseParts(self, section):
     i = 0
-    optionNames = [ "name", "type", "desc", "default" ];
+    optionNames = [ "name", "type", "desc", "default" ]
     optionCount = 0
     name = None
     value = None
@@ -298,6 +301,7 @@ class Method(Node):
             mname = mlink
           p = re.compile(r" ")
           mlink = p.sub("_", mlink)
+          mlink = opts.forLinksUrl + mlink
           value += "[[" + mlink + "|" + mname + "]]"
           i += m.end()
           continue
@@ -377,7 +381,7 @@ class Method(Node):
 
     # special case for when there was an error retrieving document
     if self.page.wiki == "":
-      return;
+      return
 
     printdebug("Exporting '" + self.page.url + "'") 
 
@@ -396,7 +400,7 @@ class Method(Node):
           if self.page.header == "Unheadered" and subcat['node'] != None:
             # have left a subcat so reset
             subcat = { 'name':'', 'node':None }
-            printdebug("Reset subcat to None");
+            printdebug("Reset subcat to None")
           ## != "Documentation" because in the wiki some people are using it as a general header
           elif self.page.header != "Unheadered" and self.page.header != "Documentation" and self.page.header != subcat['name']:
             # new subcat so create
@@ -405,7 +409,7 @@ class Method(Node):
             subcat['node'] = n
             n.setAttribute('value', subcat['name'])
             parent.appendChild(n)
-            printdebug("Set subcat to " + subcat['name']);
+            printdebug("Set subcat to " + subcat['name'])
           # if there is a subcat then append to that, otherwise go right to parent
           if subcat['node'] != None:
             subcat['node'].appendChild(node)
@@ -501,8 +505,8 @@ def main():
   impl = minidom.getDOMImplementation()
   doc = impl.createDocument(None, "docs", None)
   if opts.verbose != "false":
-    infoNode = doc.createElement("info");
-    doc.documentElement.appendChild(infoNode);
+    infoNode = doc.createElement("info")
+    doc.documentElement.appendChild(infoNode)
   page = XMLPage(opts.startingUrl)
   nodeTree = Node.factory(page)
   doc.documentElement.setAttribute("startdoc", opts.startingUrl)
@@ -510,9 +514,9 @@ def main():
   if opts.version != "":
     doc.documentElement.setAttribute("version", opts.version)
   if nodeTree == None:
-    errorNode = doc.createElement("error");
+    errorNode = doc.createElement("error")
     errorNode.appendChild(doc.createTextNode("Error parsing initial page."))
-    doc.documentElement.appendChild(errorNode);
+    doc.documentElement.appendChild(errorNode)
   else:
     nodeTree.exportXML(doc.documentElement)
 
