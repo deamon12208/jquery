@@ -6,8 +6,8 @@
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * $Date: 2007-12-16 02:03:50 +0100 (Son, 16 Dez 2007) $
- * $Rev: 4171 $
+ * $Date: 2007-12-18 18:19:33 +0100 (Di, 18 Dez 2007) $
+ * $Rev: 4220 $
  */
 
 // Map over jQuery in case of overwrite
@@ -353,8 +353,9 @@ jQuery.fn = jQuery.prototype = {
 			else
 				selector = jQuery.multiFilter( selector, this );
 
+		var isArrayLike = selector.length && selector[selector.length - 1] !== undefined && !selector.nodeType;
 		return this.filter(function() {
-			return jQuery.inArray( this, selector ) < 0;
+			return isArrayLike ? jQuery.inArray( this, selector ) < 0 : this != selector;
 		});
 	},
 
@@ -419,6 +420,7 @@ jQuery.fn = jQuery.prototype = {
 
 			}
 
+			return undefined;
 		}
 
 		return this.each(function(){
@@ -764,9 +766,10 @@ jQuery.extend({
 
 	// A method for quickly swapping in/out CSS properties to get correct calculations
 	swap: function( elem, options, callback ) {
+		var old = {};
 		// Remember the old values, and insert the new ones
 		for ( var name in options ) {
-			elem.style[ "old" + name ] = elem.style[ name ];
+			old[ name ] = elem.style[ name ];
 			elem.style[ name ] = options[ name ];
 		}
 
@@ -774,24 +777,29 @@ jQuery.extend({
 
 		// Revert the old values
 		for ( var name in options )
-			elem.style[ name ] = elem.style[ "old" + name ];
+			elem.style[ name ] = old[ name ];
 	},
 
 	css: function( elem, name, force ) {
 		if ( name == "width" || name == "height" ) {
-			var width, height, props = { position: "absolute", visibility: "hidden", display:"block" };
+			var val, props = { position: "absolute", visibility: "hidden", display:"block" }, which = name == "width" ? [ "Left", "Right" ] : [ "Top", "Bottom" ];
 		
 			function getWH() {
-				width = elem.clientWidth;
-				height = elem.clientHeight;
+				val = name == "width" ? elem.offsetWidth : elem.offsetHeight;
+				var padding = 0, border = 0;
+				jQuery.each( which, function() {
+					padding += parseFloat(jQuery.curCSS( elem, "padding" + this, true)) || 0;
+					border += parseFloat(jQuery.curCSS( elem, "border" + this + "Width", true)) || 0;
+				});
+				val -= Math.round(padding + border);
 			}
 		
 			if ( jQuery(elem).is(":visible") )
 				getWH();
 			else
 				jQuery.swap( elem, props, getWH );
-
-			return name == "width" ? width : height;
+			
+			return val;
 		}
 		
 		return jQuery.curCSS( elem, name, force );
@@ -816,6 +824,12 @@ jQuery.extend({
 			return ret == "" ?
 				"1" :
 				ret;
+		}
+		// Opera sometimes will give the wrong display answer, this fixes it, see #2037
+		if ( jQuery.browser.opera && name == "display" ) {
+			var save = elem.style.display;
+			elem.style.display = "block";
+			elem.style.display = save;
 		}
 		
 		// Make sure we're using the right name for getting the float value
@@ -1910,7 +1924,7 @@ jQuery.event = {
 						// remove generic event handler if no more handlers exist
 						for ( ret in events[type] ) break;
 						if ( !ret ) {
-							if ( !jQuery.event.special[type] || jQuery.event.special[type].teardown.call(this, elem) === false ) {
+							if ( !jQuery.event.special[type] || jQuery.event.special[type].teardown.call(elem) === false ) {
 								if (elem.removeEventListener)
 									elem.removeEventListener(type, jQuery.data(elem, "handle"), false);
 								else if (elem.detachEvent)
@@ -1972,7 +1986,7 @@ jQuery.event = {
 				data.shift();
 
 			// Handle triggering of extra function
-			if ( extra ) {
+			if ( extra && jQuery.isFunction( extra ) ) {
 				// call the extra function and tack the current return value on the end for possible inspection
 				var ret = extra.apply( elem, data.concat( val ) );
 				// if anything is returned, give it precedence and have it overwrite the previous value
@@ -2099,96 +2113,55 @@ jQuery.event = {
 	special: {
 		ready: {
 			setup: function() {
-				var handler = jQuery.event.special.ready.handler;
-				
-				// Mozilla, Opera and webkit nightlies currently support this event
-				if ( document.addEventListener )
-					// Use the handy event callback
-					document.addEventListener( "DOMContentLoaded", handler, false );
-	
-				// If Safari or IE is used
-				// Continually check to see if the document is ready
-				if ((jQuery.browser.msie && window == top) || jQuery.browser.safari ) (function(){
-					try {
-						// If IE is used, use the trick by Diego Perini
-						// http://javascript.nwbox.com/IEContentLoaded/
-						if ( jQuery.browser.msie || document.readyState != "loaded" && document.readyState != "complete" )
-							document.documentElement.doScroll("left");
-					} catch( error ) {
-						setTimeout( arguments.callee, 0 );
-						return;
-					}
-
-					// and execute any waiting functions
-					handler();
-				})();
-
-				// A fallback to window.onload, that will always work
-				jQuery.event.add( window, "load", handler );
+				// Make sure the ready event is setup
+				bindReady();
+				return;
 			},
 			
-			teardown: function() {return;},
-			
-			handler: function() {
-				// Make sure that the DOM is not already loaded
-				if ( !jQuery.isReady ) {
-					// Remember that the DOM is ready
-					jQuery.isReady = true;
-					jQuery(document).triggerHandler("ready");
-					jQuery(document).unbind("ready");
-				}
-			}
+			teardown: function() { return; }
 		},
 		
 		mouseenter: {
 			setup: function() {
-				if (jQuery.browser.msie) return false;
-				jQuery(this).bind('mouseover', jQuery.event.special.mouseenter.handler);
+				if ( jQuery.browser.msie ) return false;
+				jQuery(this).bind("mouseover", jQuery.event.special.mouseenter.handler);
 				return true;
 			},
 		
 			teardown: function() {
-				if (jQuery.browser.msie) return false;
-				jQuery(this).unbind('mouseover', jQuery.event.special.mouseenter.handler);
+				if ( jQuery.browser.msie ) return false;
+				jQuery(this).unbind("mouseover", jQuery.event.special.mouseenter.handler);
 				return true;
 			},
 			
 			handler: function(event) {
-				var args = Array.prototype.slice.call( arguments, 1 );
 				// If we actually just moused on to a sub-element, ignore it
 				if ( withinElement(event, this) ) return true;
 				// Execute the right handlers by setting the event type to mouseenter
-				event.type = 'mouseenter';
-				// Include the event object as the first argument
-				args.unshift(event);
-				var val = jQuery.event.handle.apply(this, args);
-				return val;
+				arguments[0].type = "mouseenter";
+				return jQuery.event.handle.apply(this, arguments);
 			}
 		},
 	
 		mouseleave: {
 			setup: function() {
-				if (jQuery.browser.msie) return false;
-				jQuery(this).bind('mouseout', jQuery.event.special.mouseleave.handler);
+				if ( jQuery.browser.msie ) return false;
+				jQuery(this).bind("mouseout", jQuery.event.special.mouseleave.handler);
 				return true;
 			},
 		
 			teardown: function() {
-				if (jQuery.browser.msie) return false;
-				jQuery(this).unbind('mouseout', jQuery.event.special.mouseleave.handler);
+				if ( jQuery.browser.msie ) return false;
+				jQuery(this).unbind("mouseout", jQuery.event.special.mouseleave.handler);
 				return true;
 			},
 			
 			handler: function(event) {
-				var args = Array.prototype.slice.call( arguments, 1 );
 				// If we actually just moused on to a sub-element, ignore it
 				if ( withinElement(event, this) ) return true;
 				// Execute the right handlers by setting the event type to mouseleave
-				event.type = 'mouseleave';
-				// Include the event object as the first argument
-				args.unshift(event);
-				var val = jQuery.event.handle.apply(this, args);
-				return val;
+				arguments[0].type = "mouseleave";
+				return jQuery.event.handle.apply(this, arguments);
 			}
 		}
 	}
@@ -2246,14 +2219,85 @@ jQuery.fn.extend({
 
 	hover: function(fnOver, fnOut) {
 		return this.bind('mouseenter', fnOver).bind('mouseleave', fnOut);
+	},
+	
+	ready: function(fn) {
+		// Attach the listeners
+		bindReady();
+
+		// If the DOM is already ready
+		if ( jQuery.isReady )
+			// Execute the function immediately
+			fn.call( document, jQuery );
+			
+		// Otherwise, remember the function for later
+		else
+			// Add the function to the wait list
+			jQuery.readyList.push( function() { return fn.call(this, jQuery); } );
+	
+		return this;
 	}
 });
 
 jQuery.extend({
-	isReady: false
+	isReady: false,
+	readyList: [],
+	// Handle when the DOM is ready
+	ready: function() {
+		// Make sure that the DOM is not already loaded
+		if ( !jQuery.isReady ) {
+			// Remember that the DOM is ready
+			jQuery.isReady = true;
+			
+			// If there are functions bound, to execute
+			if ( jQuery.readyList ) {
+				// Execute all of them
+				jQuery.each( jQuery.readyList, function(){
+					this.apply( document );
+				});
+				
+				// Reset the list of functions
+				jQuery.readyList = null;
+			}
+		
+			// Trigger any bound ready events
+			$(document).triggerHandler("ready");
+		}
+	}
 });
 
-jQuery.each( ("blur,focus,load,ready,resize,scroll,unload,click,dblclick," +
+var readyBound = false;
+
+function bindReady(){
+	if ( readyBound ) return;
+	readyBound = true;
+
+	// Mozilla, Opera and webkit nightlies currently support this event
+	if ( document.addEventListener )
+		// Use the handy event callback
+		document.addEventListener( "DOMContentLoaded", jQuery.ready, false );
+	
+	// If Safari or IE is used
+	// Continually check to see if the document is ready
+	if (jQuery.browser.msie || jQuery.browser.safari ) (function(){
+		try {
+			// If IE is used, use the trick by Diego Perini
+			// http://javascript.nwbox.com/IEContentLoaded/
+			if ( jQuery.browser.msie || document.readyState != "loaded" && document.readyState != "complete" )
+				document.documentElement.doScroll("left");
+		} catch( error ) {
+			return setTimeout( arguments.callee, 0 );
+		}
+
+		// and execute any waiting functions
+		jQuery.ready();
+	})();
+
+	// A fallback to window.onload, that will always work
+	jQuery.event.add( window, "load", jQuery.ready );
+}
+
+jQuery.each( ("blur,focus,load,resize,scroll,unload,click,dblclick," +
 	"mousedown,mouseup,mousemove,mouseover,mouseout,change,select," + 
 	"submit,keydown,keypress,keyup,error").split(","), function(i, name){
 	
@@ -2433,7 +2477,7 @@ jQuery.extend({
 	lastModified: {},
 
 	ajax: function( s ) {
-		var jsonp, jsre = /=(\?|%3F)/g, status, data;
+		var jsonp, jsre = /=\?(&|$)/g, status, data;
 
 		// Extend the settings, but re-extend 's' so that it can be
 		// checked again later (in the test suite, specifically)
@@ -2459,8 +2503,8 @@ jQuery.extend({
 
 			// Replace the =? sequence both in the query string and the data
 			if ( s.data )
-				s.data = (s.data + "").replace(jsre, "=" + jsonp);
-			s.url = s.url.replace(jsre, "=" + jsonp);
+				s.data = (s.data + "").replace(jsre, "=" + jsonp + "$1");
+			s.url = s.url.replace(jsre, "=" + jsonp + "$1");
 
 			// We need to make sure
 			// that a JSONP style response is executed properly
@@ -2474,6 +2518,8 @@ jQuery.extend({
 				// Garbage collect
 				window[ jsonp ] = undefined;
 				try{ delete window[ jsonp ]; } catch(e){}
+				if ( head )
+					head.removeChild( script );
 			};
 		}
 
@@ -3251,7 +3297,7 @@ jQuery.fn.offset = function() {
 			// Safari <= 2 doubles body offsets with a fixed position element/offsetParent or absolutely positioned offsetChild
 			// Mozilla doubles body offsets with a non-absolutely positioned offsetChild
 			if ( (safari2 && (fixed || jQuery.css(offsetChild, "position") == "absolute")) || 
-				(mozilla && jQuery.css(offsetChild, "position") != "absoltue") )
+				(mozilla && jQuery.css(offsetChild, "position") != "absolute") )
 					add( -doc.body.offsetLeft, -doc.body.offsetTop );
 			
 			// Add the document scroll offsets if position is fixed

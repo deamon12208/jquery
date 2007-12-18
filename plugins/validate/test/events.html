@@ -10,27 +10,37 @@
 
 <script type="text/javascript">
 $().ready(function() {
-	var current;
-	function focus(event) {
-		if (current != null)
-			return;
-		var form = $(this);
-		var target = $(event.target);
-		if (target.is("label") && event.type != "mousedown") {
-			target = $("#" + target.attr("for"));
+	jQuery.event.special.focusin = {
+		setup: function() {
+			if ($.browser.msie)
+				return false;
+			this.addEventListener("focus", jQuery.event.special.focusin.handler, true);
+		},
+		teardown: function() {
+			if ($.browser.msie)
+				return false;
+			this.removeEventListener("focus", jQuery.event.special.focusin.handler, true);
+		},
+		handler: function(event) {
+			var args = Array.prototype.slice.call( arguments, 1 );
+			args.unshift(jQuery.extend({}, event, { type: "focusin" }));
+			var val = jQuery.event.handle.apply(this, args);
+			return val;
 		}
+	}
+	
+	function handler(event) {
+		var target = $(event.target);
 		if (target.is(":text, textarea")) {
-			current = target;
-			target.addClass("focus").one("blur", function() {
+			$(event.target).addClass("focus").one("blur", function() {
 				$(this).removeClass("focus");
-				current = null;
 			});
 		}
 	}
-	$("#commentForm").keyup(focus).mousedown(focus).click(focus).submit(function() {
-		return false;
-	});
-
+	$("#commentForm").bind("focusin", handler);
+	$("#remove").click(function() {
+		$("#commentForm").unbind("focusin");
+	})
 });
 </script>
 
@@ -66,6 +76,8 @@ $().ready(function() {
 		</p>
 	</fieldset>
 </form>
+
+<button id="remove">Remove focus handler</button>
 
 </body>
 </html>
