@@ -32,7 +32,7 @@ $().ready(function() {
 	function handler(event) {
 		var target = $(event.target);
 		if (target.is(":text, textarea")) {
-			$(event.target).addClass("focus").one("blur", function() {
+			target.addClass("focus").one("blur", function() {
 				$(this).removeClass("focus");
 			});
 		}
