@@ -75,6 +75,9 @@
 #selectable1 .ui-unselecting {
 	background: #d2aa84;
 }
+#selectable1 .wall {
+	background: #231e4b;
+}
 
         </style>
     </head>
@@ -113,7 +116,18 @@
 			$(this).text(i+1);
 		});
 
-		$("#selectable1").selectable({autoRefresh:false});
+		$("#selectable1").selectable({filter:":not(.wall)", autoRefresh:false});
+
+		$(document).keydown(function(ev) {
+			if (ev.keyCode == 46) { // 46=DEL
+				$(".ui-selected").remove();
+				$("#selectable1").selectableRefresh();
+			}
+			if (ev.keyCode == 13) {
+				$(".ui-selected").removeClass("ui-selected").addClass("wall");
+				$("#selectable1").selectableRefresh();
+			}
+		});
 
             });
         </script>

@@ -2,11 +2,17 @@
 {
 	
 	//Macros for external methods that support chaining
-	var methods = "destroy,enable,disable,toggle".split(",");
-	for(var i=0;i<methods.length;i++) {
+	var methods = "destroy,enable,disable,toggle,refresh".split(",");
+	for(var i = 0; i < methods.length; i++) {
 		var cur = methods[i], f;
-		eval('f = function() { var a = arguments; return this.each(function() { if(jQuery(this).is(".ui-selectable")) jQuery.data(this, "ui-selectable")["'+cur+'"](a); }); }');
-		$.fn["selectable"+cur.substr(0,1).toUpperCase()+cur.substr(1)] = f;
+		eval('f = function() {' +
+			'var a = arguments;' +
+			'return this.each(function() {' +
+				'if(jQuery(this).is(".ui-selectable"))' +
+					'jQuery.data(this, "ui-selectable")["'+cur+'"](a);' +
+			'});' +
+		'}');
+		$.fn["selectable" + cur.substr(0, 1).toUpperCase() + cur.substr(1)] = f;
 	};
 
 	//Make nodes selectable by expression
@@ -54,7 +60,7 @@
 			selectees.each(function() {
 				var $this = $(this);
 				var pos = $this.offset();
-				$.data(this, "selecteestate", {
+				$.data(this, "ui-selectee", {
 					element: this,
 					$element: $this,
 					left: pos.left,
@@ -107,6 +113,8 @@
 
 			var options = this.options;
 
+			self.selectees = $(options.filter, self.element);
+
 			// selectable START callback
 			$(self.element).triggerHandler("selectablestart", [ev, {
 				"selectable": self.element,
@@ -128,7 +136,7 @@
 			}
 
 			self.selectees.filter('.ui-selected').each(function() {
-				var selectee = $.data(this, "selecteestate");
+				var selectee = $.data(this, "ui-selectee");
 				selectee.startselected = true;
 				if (!ev.ctrlKey) {
 					selectee.$element.removeClass('ui-selected');
@@ -157,7 +165,7 @@
 
 			self.selectees.each(function() {
 				//var box = self.childBoxes[i], hit = false;
-				var selectee = $.data(this, "selecteestate");
+				var selectee = $.data(this, "ui-selectee");
 				var hit = false;
 				if (options.tolerance == 'touch') {
 					hit = ( !(selectee.left > x2 || selectee.right < x1 || selectee.top > y2 || selectee.bottom < y1) );
@@ -230,7 +238,7 @@
 			var options = this.options;
 
 			$('.ui-unselecting', self.element).each(function() {
-				var selectee = $.data(this, "selecteestate");
+				var selectee = $.data(this, "ui-selectee");
 				selectee.$element.removeClass('ui-unselecting');
 				selectee.unselecting = false;
 				selectee.startselected = false;
@@ -241,7 +249,7 @@
 				}], options.unselected);
 			});
 			$('.ui-selecting', self.element).each(function() {
-				var selectee = $.data(this, "selecteestate");
+				var selectee = $.data(this, "ui-selectee");
 				selectee.$element.removeClass('ui-selecting').addClass('ui-selected');
 				selectee.selecting = false;
 				selectee.selected = true;
