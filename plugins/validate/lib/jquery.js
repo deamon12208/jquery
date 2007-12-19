@@ -1,13 +1,13 @@
 (function(){
 /*
- * jQuery 1.2.2-pre - New Wave Javascript
+ * jQuery 1.2.2pre - New Wave Javascript
  *
  * Copyright (c) 2007 John Resig (jquery.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * $Date: 2007-12-18 18:19:33 +0100 (Di, 18 Dez 2007) $
- * $Rev: 4220 $
+ * $Date: 2007-12-19 19:23:46 +0100 (Mi, 19 Dez 2007) $
+ * $Rev: 4236 $
  */
 
 // Map over jQuery in case of overwrite
@@ -799,7 +799,7 @@ jQuery.extend({
 			else
 				jQuery.swap( elem, props, getWH );
 			
-			return val;
+			return Math.max(0, val);
 		}
 		
 		return jQuery.curCSS( elem, name, force );
@@ -1488,7 +1488,8 @@ jQuery.extend({
 				if ( (m = re.exec(t)) != null ) {
 					r = [];
 
-					nodeName = m[2].toUpperCase(), merge = {};
+					var merge = {};
+					nodeName = m[2].toUpperCase();
 					m = m[1];
 
 					for ( var j = 0, rl = ret.length; j < rl; j++ ) {
@@ -1892,7 +1893,7 @@ jQuery.event = {
 
 		if ( events ) {
 			// Unbind all events for the element
-			if ( !types )
+			if ( types == undefined )
 				for ( var type in events )
 					this.remove( elem, type );
 			else {
@@ -2053,10 +2054,17 @@ jQuery.event = {
 	},
 
 	fix: function(event) {
+		// Short-circuit if the event has already been fixed by jQuery.event.fix
+		if ( event[ expando ] )
+			return event;
+			
 		// store a copy of the original event object 
 		// and clone to set read-only properties
 		var originalEvent = event;
 		event = jQuery.extend({}, originalEvent);
+		
+		// Mark the event as fixed by jQuery.event.fix
+		event[ expando ] = true;
 		
 		// add preventDefault and stopPropagation since 
 		// they will not work on the clone
@@ -3280,7 +3288,7 @@ jQuery.fn.offset = function() {
 			}
 		
 			// Get parent scroll offsets
-			while ( parent.tagName && !/^body|html$/i.test(parent.tagName) ) {
+			while ( parent && parent.tagName && !/^body|html$/i.test(parent.tagName) ) {
 				// Remove parent scroll UNLESS that parent is inline or a table to work around Opera inline/table scrollLeft/Top bug
 				if ( !/^inline|table.*$/i.test(jQuery.css(parent, "display")) )
 					// Subtract parent scroll offsets
@@ -3311,7 +3319,7 @@ jQuery.fn.offset = function() {
 	}
 
 	function border(elem) {
-		add( jQuery.css(elem, "borderLeftWidth"), jQuery.css(elem, "borderTopWidth") );
+		add( jQuery.curCSS(elem, "borderLeftWidth", true), jQuery.curCSS(elem, "borderTopWidth", true) );
 	}
 
 	function add(l, t) {

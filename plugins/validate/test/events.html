@@ -6,37 +6,16 @@
 
 <link rel="stylesheet" type="text/css" media="screen" href="css/screen.css" />
 <script src="../lib/jquery.js" type="text/javascript"></script>
+<script src="jquery.delegate.js" type="text/javascript"></script>
 <script src="firebug/firebug.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 $().ready(function() {
-	jQuery.event.special.focusin = {
-		setup: function() {
-			if ($.browser.msie)
-				return false;
-			this.addEventListener("focus", jQuery.event.special.focusin.handler, true);
-		},
-		teardown: function() {
-			if ($.browser.msie)
-				return false;
-			this.removeEventListener("focus", jQuery.event.special.focusin.handler, true);
-		},
-		handler: function(event) {
-			var args = Array.prototype.slice.call( arguments, 1 );
-			args.unshift(jQuery.extend({}, event, { type: "focusin" }));
-			return jQuery.event.handle.apply(this, args);
-		}
-	}
-	
-	function handler(event) {
-		var target = $(event.target);
-		if (target.is(":text, textarea")) {
-			target.addClass("focus").one("blur", function() {
-				$(this).removeClass("focus");
-			});
-		}
-	}
-	$("#commentForm").bind("focusin", handler);
+	$("#commentForm").delegate("focusin", ":text, textarea", function() {
+		this.addClass("focus").one("blur", function() {
+			$(this).removeClass("focus");
+		});
+	});
 	$("#remove").click(function() {
 		$("#commentForm").unbind("focusin");
 	})
