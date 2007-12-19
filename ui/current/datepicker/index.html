@@ -30,6 +30,7 @@
 		<!-- Include Demo Files -->
 		<script type="text/javascript" src="demo/jquery.localisation.js"></script>
 		<script type="text/javascript" src="i18n/ui.datepicker-fr.js"></script>
+		<script type="text/javascript" src="i18n/ui.datepicker-he.js"></script>
 		<script type="text/javascript" src="demo/ui.datepicker.demo.js"></script>
 		<link rel="stylesheet" type="text/css" href="demo/ui.datepicker.alt.css" title="alt" id="alt" disabled="disabled"/>
 		<link rel="stylesheet" type="text/css" href="demo/ui.datepicker.demo.css" />
@@ -264,7 +265,7 @@ $.datepicker.reconfigureFor('#frFullFormat', {dateFormat: 'DD, MM d, yy'});
 					</ul>
 				</div>
 				<div id="custom" class="tab_group1 container">
-					<h3>Customizing</h3>
+					<h3>customize</h3>
 					<p>You can customize the selectability and/or appearance of individual days
 						by setting a callback function that accepts a date and returns an array
 						with the first entry being true/false for selectability and the second
@@ -317,6 +318,7 @@ function nationalDays(date) {
 							<option value="hu">Magyar</option>
 							<option value="nl">Nederlands</option>
 							<option value="ja">Nihongo</option>
+							<option value="no">Norsk</option>
 							<option value="pl">Polski</option>
 							<option value="pt-BR">Portugu&ecirc;s</option>
 							<option value="ro">Rom&acirc;n&#259;</option>
@@ -325,6 +327,12 @@ function nationalDays(date) {
 							<option value="sv">Svenska</option>
 						</select>:</span>
 						<input type="text" size="10" id="l10nDatepicker"/></p>
+					<p>The presentation is slightly different for right-to-left languages.</p>
+					<p><span class="demoLabel">
+						<select class="languageSelect">
+							<option value="he">‘Ivrit</option>
+						</select>:</span>
+						<input type="text" size="10" id="rtlDatepicker"/></p>
 					<p>You need to load the appropriate language package, which
 						adds a language set ($.datepicker.regional[langCode]) and
 						automatically sets this language as the default for all date pickers.</p>
@@ -334,6 +342,7 @@ function nationalDays(date) {
 					<p>And then configure the language per date picker instance.</p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
 $('#l10nDatepicker').datepicker($.extend({showStatus: true}, $.datepicker.regional['fr']));
+$('#rtlDatepicker').datepicker($.extend({showStatus: true}, $.datepicker.regional['he']));
 </script>
 					<p><strong>Localisation packages:</strong></p>
 					<p>Localisation packages can be found below under <a href="#documentation">Settings and Documentation</a>.</p>
