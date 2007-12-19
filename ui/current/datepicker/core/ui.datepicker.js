@@ -44,7 +44,7 @@ function Datepicker() {
 		dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'], // For formatting
 		dayNamesMin: ['Su','Mo','Tu','We','Th','Fr','Sa'], // Column headings for days starting at Sunday
 		dayStatus: 'Set DD as first week day', // Status text for the day of the week selection
-		dateStatus: 'Select D, M d', // Status text for the date selection
+		dateStatus: 'Select DD, M d', // Status text for the date selection
 		dateFormat: 'mm/dd/yy', // See format options on parseDate
 		firstDay: 0, // The first day of the week, Sun = 0, Mon = 1, ...
 		initStatus: 'Select a date', // Initial Status text on opening
@@ -460,6 +460,12 @@ $.extend(Datepicker.prototype, {
 		} 
 		else {
 			inst._datepickerDiv.removeClass('datepicker_multi');
+		}
+		if (inst._get('isRTL')) {
+			inst._datepickerDiv.addClass('datepicker_rtl');
+		}
+		else {
+			inst._datepickerDiv.removeClass('datepicker_rtl');
 		}
 		if (inst._input && inst._input[0].type != 'hidden') {
 			inst._input[0].focus();
@@ -1132,14 +1138,15 @@ $.extend(DatepickerInstance.prototype, {
 		var today = new Date();
 		today = new Date(today.getFullYear(), today.getMonth(), today.getDate()); // clear time
 		var showStatus = this._get('showStatus');
+		var isRTL = this._get('isRTL');
 		// build the date picker HTML
-		var controls = '<div class="datepicker_control">' +
-			'<div class="datepicker_clear"><a onclick="jQuery.datepicker._clearDate(' + this._id + ');"' + 
+		var clear = '<div class="datepicker_clear"><a onclick="jQuery.datepicker._clearDate(' + this._id + ');"' + 
 			(showStatus ? this._addStatus(this._get('clearStatus')) : '') + '>' +
-			this._get('clearText') + '</a></div>' +
+			this._get('clearText') + '</a></div>';
+		var controls = '<div class="datepicker_control">' + (isRTL ? '' : clear) +
 			'<div class="datepicker_close"><a onclick="jQuery.datepicker.hideDatepicker();"' +
 			(showStatus ? this._addStatus(this._get('closeStatus')) : '') + '>' +
-			this._get('closeText') + '</a></div></div>';
+			this._get('closeText') + '</a></div>' + (isRTL ? clear : '')  + '</div>';
 		var prompt = this._get('prompt');
 		var closeAtTop = this._get('closeAtTop');
 		var hideIfNoPrevNext = this._get('hideIfNoPrevNext');
@@ -1148,21 +1155,21 @@ $.extend(DatepickerInstance.prototype, {
 		var isMultiMonth = (numMonths != 1);
 		numMonths = (numMonths == null ? [1, 1] : (typeof numMonths == 'number' ? [1, numMonths] : numMonths));
 		// controls and links
-		var html = (prompt ? '<div class="datepicker_prompt">' + prompt + '</div>' : '') +
-			(closeAtTop && !this._inline ? controls : '') +
-			'<div class="datepicker_links"><div class="datepicker_prev">' +
-			(this._canAdjustMonth(-1) ? 
+		var prev = '<div class="datepicker_prev">' + (this._canAdjustMonth(-1) ? 
 			'<a onclick="jQuery.datepicker._adjustDate(' + this._id + ', -' + stepMonths + ', \'M\');"' +
 			(showStatus ? this._addStatus(this._get('prevStatus')) : '') + '>' + this._get('prevText') + '</a>' :
-			(hideIfNoPrevNext ? '' : '<label>' + this._get('prevText') + '</label>')) + '</div>' +
-			(this._isInRange(today) ? '<div class="datepicker_current">' +
-			'<a onclick="jQuery.datepicker._gotoToday(' + this._id + ');"' +
-			(showStatus ? this._addStatus(this._get('currentStatus')) : '') + '>' + this._get('currentText') + '</a></div>' : '') +
-			'<div class="datepicker_next">' +
-			(this._canAdjustMonth(+1) ?
+			(hideIfNoPrevNext ? '' : '<label>' + this._get('prevText') + '</label>')) + '</div>';
+		var next = '<div class="datepicker_next">' + (this._canAdjustMonth(+1) ?
 			'<a onclick="jQuery.datepicker._adjustDate(' + this._id + ', +' + stepMonths + ', \'M\');"' +
 			(showStatus ? this._addStatus(this._get('nextStatus')) : '') + '>' + this._get('nextText') + '</a>' :
-			(hideIfNoPrevNext ? '>' : '<label>' + this._get('nextText') + '</label>')) + '</div></div>';
+			(hideIfNoPrevNext ? '>' : '<label>' + this._get('nextText') + '</label>')) + '</div>';
+		var html = (prompt ? '<div class="datepicker_prompt">' + prompt + '</div>' : '') +
+			(closeAtTop && !this._inline ? controls : '') +
+			'<div class="datepicker_links">' + (isRTL ? next : prev) +
+			(this._isInRange(today) ? '<div class="datepicker_current">' +
+			'<a onclick="jQuery.datepicker._gotoToday(' + this._id + ');"' +
+			(showStatus ? this._addStatus(this._get('currentStatus')) : '') + '>' +
+			this._get('currentText') + '</a></div>' : '') + (isRTL ? prev : next) + '</div>';
 		var minDate = this._getMinDate();
 		var maxDate = this._get('maxDate');
 		var drawMonth = this._selectedMonth;
@@ -1221,15 +1228,13 @@ $.extend(DatepickerInstance.prototype, {
 						(printDate.getTime() >= currentDate.getTime() && printDate.getTime() <= endDate.getTime() ?  // in current range
 						' datepicker_currentDay' : // highlight selected day
 						(printDate.getTime() == today.getTime() ? ' datepicker_today' : ''))) + '"' + // highlight today (if different)
-						(unselectable || (otherMonth && !showOtherMonths) ? '' :
-						' onmouseover="' + (unselectable ? '' : 'jQuery(this).addClass(\'datepicker_daysCellOver\');') +
+						(unselectable ? '' : ' onmouseover="jQuery(this).addClass(\'datepicker_daysCellOver\');' +
 						(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#datepicker_status_' +
 						this._id + '\').html(\'' + dateStatus(printDate, this) +'\');') + '"' +
-						' onmouseout="' + (unselectable ? '' : 'jQuery(this).removeClass(\'datepicker_daysCellOver\');') +
+						' onmouseout="jQuery(this).removeClass(\'datepicker_daysCellOver\');' +
 						(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#datepicker_status_' +
-						this._id + '\').html(\'&#xa0;\');') +'"') +
-						(unselectable ? '' : ' onclick="jQuery.datepicker._selectDay(' + this._id + ',' +
-						drawMonth + ',' + drawYear + ', this);"') + '>' + // actions
+						this._id + '\').html(\'&#xa0;\');') + '" onclick="jQuery.datepicker._selectDay(' +
+						this._id + ',' + drawMonth + ',' + drawYear + ', this);"') + '>' + // actions
 						(otherMonth ? (showOtherMonths ? printDate.getDate() : '&#xa0;') : // display for other months
 						(unselectable ? printDate.getDate() : '<a>' + printDate.getDate() + '</a>')) + '</td>'; // display for this month
 					printDate.setDate(printDate.getDate() + 1);
