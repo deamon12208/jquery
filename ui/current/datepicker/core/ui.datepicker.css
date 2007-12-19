@@ -17,6 +17,9 @@
 	display: block;
 	border: 0;
 }
+.datepicker_rtl {
+	direction: rtl;
+}
 .datepicker_dialog {
 	padding: 5px !important;
 	border: 4px ridge #ddd !important;
@@ -64,6 +67,10 @@ img.datepicker_trigger {
 	float: left;
 	width: 34%;
 }
+.datepicker_rtl .datepicker_clear, .datepicker_rtl .datepicker_prev {
+	float: right;
+	text-align: right;
+}
 .datepicker_current {
 	float: left;
 	width: 30%;
@@ -73,6 +80,10 @@ img.datepicker_trigger {
 	float: right;
 	width: 34%;
 	text-align: right;
+}
+.datepicker_rtl .datepicker_close, .datepicker_rtl .datepicker_next {
+	float: left;
+	text-align: left;
 }
 .datepicker_header {
 	padding: 1px 0 3px;
