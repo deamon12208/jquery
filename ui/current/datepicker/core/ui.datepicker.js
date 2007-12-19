@@ -622,16 +622,9 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Action for changing the first week day. */
-	_changeFirstDay: function(id, a) {
+	_changeFirstDay: function(id, day) {
 		var inst = this._getInst(id);
-		var dayNamesMin = inst._get('dayNamesMin');
-		var value = a.firstChild.nodeValue;
-		for (var i = 0; i < 7; i++) {
-			if (dayNamesMin[i] == value) {
-				inst._settings.firstDay = i;
-				break;
-			}
-		}
+		inst._settings.firstDay = day;
 		this._updateDatepicker(inst);
 	},
 
@@ -1192,7 +1185,7 @@ $.extend(DatepickerInstance.prototype, {
 			for (var dow = 0; dow < 7; dow++) { // days of the week
 				var day = (dow + firstDay) % 7;
 				html += '<td>' + (!changeFirstDay ? '<span' :
-					'<a onclick="jQuery.datepicker._changeFirstDay(' + this._id + ', this);"') + 
+					'<a onclick="jQuery.datepicker._changeFirstDay(' + this._id + ', ' + day + ');"') + 
 					(showStatus ? this._addStatus(this._get('dayStatus').
 					replace(/DD/, dayNames[day]).replace(/D/, dayNamesShort[day])) : '') +
 					' title="' + dayNames[day] + '">' +
