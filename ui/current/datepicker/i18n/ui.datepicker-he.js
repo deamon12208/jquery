@@ -3,8 +3,8 @@
 jQuery(document).ready(function(){
 	jQuery.datepicker.regional['he'] = {clearText: 'נקה', clearStatus: '',
 		closeText: 'סגור', closeStatus: '',
-		prevText: '&lt;הקודם', prevStatus: '',
-		nextText: 'הבא&gt;', nextStatus: '',
+		prevText: '&#x3c;הקודם', prevStatus: '',
+		nextText: 'הבא&#x3e;', nextStatus: '',
 		currentText: 'היום', currentStatus: '',
 		monthNames: ['ינואר','פברואר','מרץ','אפריל','מאי','יוני',
 		'יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'],
@@ -15,7 +15,7 @@ jQuery(document).ready(function(){
 		dayNames: ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'],
 		dayNamesShort: ['א\'','ב\'','ג\'','ד\'','ה\'','ו\'','שבת'],
 		dayNamesMin: ['א\'','ב\'','ג\'','ד\'','ה\'','ו\'','שבת'],
-		dayStatus: 'DD', dateStatus: 'D, M d',
+		dayStatus: 'DD', dateStatus: 'DD, M d',
 		dateFormat: 'dd/mm/yy', firstDay: 0, 
 		initStatus: '', isRTL: true};
 	jQuery.datepicker.setDefaults($.datepicker.regional['he']);
