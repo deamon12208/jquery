@@ -22,7 +22,7 @@
             }
             // start interval
             if (ms) {
-                var t = 0;
+                var t = this.options.initial + 1;
                 this.rotation = setInterval(function() {
                     t = ++t <= self.$tabs.length ? t : 1;
                     self.click(t);
