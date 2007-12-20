@@ -47,6 +47,7 @@ li { list-style-type: none; }
 .basic div {
 	background-color: #eee;
 }
+
 .basic p {
 	margin-bottom : 10px;
 	border: none;
@@ -170,4 +171,11 @@ li { list-style-type: none; }
 }
 #wizard .title {
 	background-color:#DDDDDD;
+}
+
+@media print {
+	.basic div, #navigation ul, #list2 dd, #list3 div{
+		display: block!important;
+		height: auto!important
+	}
 }

@@ -1,7 +1,9 @@
 /*
- * Accordion 1.5 - jQuery menu widget
+ * Accordion 1.6pre - jQuery menu widget
+ * 
+ * Based on implementation by Frank Marcia
  *
- * Copyright (c) 2007 Jörn Zaefferer, Frank Marcia
+ * Copyright (c) 2007 Jörn Zaefferer
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-accordion/
  *
@@ -120,7 +122,7 @@ $.fn.extend({
 					? headers.filter(":eq(" + selector + ")")
 					: headers.not(headers.not(selector))
 				: selector === false
-					? $("<div>")
+					? $([])
 					: headers.filter(":eq(0)");
 		}
 		

@@ -1,13 +1,13 @@
 (function(){
 /*
- * jQuery @VERSION - New Wave Javascript
+ * jQuery 1.2.2b2 - New Wave Javascript
  *
  * Copyright (c) 2007 John Resig (jquery.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * $Date: 2007-12-18 18:19:33 +0100 (Die, 18 Dez 2007) $
- * $Rev: 4220 $
+ * $Date: 2007-12-20 14:36:56 +0100 (Don, 20 Dez 2007) $
+ * $Rev: 4251 $
  */
 
 // Map over jQuery in case of overwrite
@@ -499,7 +499,7 @@ jQuery.fn = jQuery.prototype = {
 
 			jQuery.each(elems, function(){
 				var elem = clone ?
-					this.cloneNode( true ) :
+					jQuery( this ).clone( true )[0] :
 					this;
 
 				// execute all scripts after the elements have been injected
@@ -799,7 +799,7 @@ jQuery.extend({
 			else
 				jQuery.swap( elem, props, getWH );
 			
-			return val;
+			return Math.max(0, val);
 		}
 		
 		return jQuery.curCSS( elem, name, force );
@@ -1488,7 +1488,8 @@ jQuery.extend({
 				if ( (m = re.exec(t)) != null ) {
 					r = [];
 
-					nodeName = m[2].toUpperCase(), merge = {};
+					var merge = {};
+					nodeName = m[2].toUpperCase();
 					m = m[1];
 
 					for ( var j = 0, rl = ret.length; j < rl; j++ ) {
@@ -2053,10 +2054,17 @@ jQuery.event = {
 	},
 
 	fix: function(event) {
+		// Short-circuit if the event has already been fixed by jQuery.event.fix
+		if ( event[ expando ] )
+			return event;
+			
 		// store a copy of the original event object 
 		// and clone to set read-only properties
 		var originalEvent = event;
 		event = jQuery.extend({}, originalEvent);
+		
+		// Mark the event as fixed by jQuery.event.fix
+		event[ expando ] = true;
 		
 		// add preventDefault and stopPropagation since 
 		// they will not work on the clone
@@ -2272,26 +2280,57 @@ function bindReady(){
 	if ( readyBound ) return;
 	readyBound = true;
 
-	// Mozilla, Opera and webkit nightlies currently support this event
-	if ( document.addEventListener )
+	// Mozilla, Opera (see further below for it) and webkit nightlies currently support this event
+	if ( document.addEventListener && !jQuery.browser.opera)
 		// Use the handy event callback
 		document.addEventListener( "DOMContentLoaded", jQuery.ready, false );
 	
-	// If Safari or IE is used
+	// If IE is used and is not in a frame
 	// Continually check to see if the document is ready
-	if (jQuery.browser.msie || jQuery.browser.safari ) (function(){
+	if ( jQuery.browser.msie && window == top ) (function(){
+		if (jQuery.isReady) return;
 		try {
 			// If IE is used, use the trick by Diego Perini
 			// http://javascript.nwbox.com/IEContentLoaded/
-			if ( jQuery.browser.msie || document.readyState != "loaded" && document.readyState != "complete" )
-				document.documentElement.doScroll("left");
+			document.documentElement.doScroll("left");
 		} catch( error ) {
-			return setTimeout( arguments.callee, 0 );
+			setTimeout( arguments.callee, 0 );
+			return;
 		}
-
 		// and execute any waiting functions
 		jQuery.ready();
 	})();
+
+	if ( jQuery.browser.opera )
+		document.addEventListener( "DOMContentLoaded", function () {
+			if (jQuery.isReady) return;
+			for (var i = 0; i < document.styleSheets.length; i++)
+				if (document.styleSheets[i].disabled) {
+					setTimeout( arguments.callee, 0 );
+					return;
+				}
+			// and execute any waiting functions
+			jQuery.ready();
+		}, false);
+
+	if ( jQuery.browser.safari ) {
+		var numStyles;
+		(function(){
+			if (jQuery.isReady) return;
+			if ( document.readyState != "loaded" && document.readyState != "complete" ) {
+				setTimeout( arguments.callee, 0 );
+				return;
+			}
+			if ( numStyles === undefined )
+				numStyles = jQuery("style, link[rel=stylesheet]").length;
+			if ( document.styleSheets.length != numStyles ) {
+				setTimeout( arguments.callee, 0 );
+				return;
+			}
+			// and execute any waiting functions
+			jQuery.ready();
+		})();
+	}
 
 	// A fallback to window.onload, that will always work
 	jQuery.event.add( window, "load", jQuery.ready );
@@ -3280,7 +3319,7 @@ jQuery.fn.offset = function() {
 			}
 		
 			// Get parent scroll offsets
-			while ( parent.tagName && !/^body|html$/i.test(parent.tagName) ) {
+			while ( parent && parent.tagName && !/^body|html$/i.test(parent.tagName) ) {
 				// Remove parent scroll UNLESS that parent is inline or a table to work around Opera inline/table scrollLeft/Top bug
 				if ( !/^inline|table.*$/i.test(jQuery.css(parent, "display")) )
 					// Subtract parent scroll offsets
@@ -3311,7 +3350,7 @@ jQuery.fn.offset = function() {
 	}
 
 	function border(elem) {
-		add( jQuery.css(elem, "borderLeftWidth"), jQuery.css(elem, "borderTopWidth") );
+		add( jQuery.curCSS(elem, "borderLeftWidth", true), jQuery.curCSS(elem, "borderTopWidth", true) );
 	}
 
 	function add(l, t) {
