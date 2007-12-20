@@ -1,4 +1,4 @@
-/* Hebrew initialisation for the UI Datepicker extension. */
+﻿/* Hebrew initialisation for the UI Datepicker extension. */
 /* Written by Amir Hardon (ahardon at gmail dot com). */
 jQuery(document).ready(function(){
 	jQuery.datepicker.regional['he'] = {clearText: 'נקה', clearStatus: '',
