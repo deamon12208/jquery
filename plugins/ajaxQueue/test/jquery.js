@@ -2982,9 +2982,6 @@ jQuery.fn.extend({
 			return queue( this[0], type );
 
 		return this.each(function(){
-			if ( this.nodeType != 1)
-				return;
-
 			if ( fn.constructor == Array )
 				queue(this, type, fn);
 			else {
