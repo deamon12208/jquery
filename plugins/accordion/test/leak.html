@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+	<title>jQuery Accordion Test Suite</title>
+	
+	<link rel="stylesheet" href="../demo/demo.css" />
+	<script type="text/javascript" src="../lib/jquery.js"></script>
+	<script type="text/javascript">
+	$(function() {
+		// leaks like hell in IE
+		jQuery('#list2').change(function() {});
+	});
+	</script>
+</head>
+<body>
+	<h1 id="banner">jQuery - Leak Suite</h1>
+
+		<dl id="list2">
+		</dl>
+	</body>
+</html>
