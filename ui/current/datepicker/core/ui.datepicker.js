@@ -61,6 +61,7 @@ function Datepicker() {
 		buttonImageOnly: false, // True if the image appears alone, false if it appears on a button
 		closeAtTop: true, // True to have the clear/close at the top,
 			// false to have them at the bottom
+		mandatory: false, // True to hide the Clear link, false to include it
 		hideIfNoPrevNext: false, // True to hide next/previous month links
 			// if not applicable, false to just disable them
 		changeMonth: true, // True if month can be selected directly, false if only prev/next
@@ -1133,9 +1134,10 @@ $.extend(DatepickerInstance.prototype, {
 		var showStatus = this._get('showStatus');
 		var isRTL = this._get('isRTL');
 		// build the date picker HTML
-		var clear = '<div class="datepicker_clear"><a onclick="jQuery.datepicker._clearDate(' + this._id + ');"' + 
+		var clear = (this._get('mandatory') ? '' :
+			'<div class="datepicker_clear"><a onclick="jQuery.datepicker._clearDate(' + this._id + ');"' + 
 			(showStatus ? this._addStatus(this._get('clearStatus')) : '') + '>' +
-			this._get('clearText') + '</a></div>';
+			this._get('clearText') + '</a></div>');
 		var controls = '<div class="datepicker_control">' + (isRTL ? '' : clear) +
 			'<div class="datepicker_close"><a onclick="jQuery.datepicker.hideDatepicker();"' +
 			(showStatus ? this._addStatus(this._get('closeStatus')) : '') + '>' +
