@@ -1,0 +1,179 @@
+	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+	<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="Content-Style-Type" content="text/css">
+	<meta http-equiv="Content-Script-Type" content="text/javascript">
+
+	<title>jQuery UI Selectables - Test Page</title>
+
+	<link rel="stylesheet" href="../../../themes/light/light.selectables.css" type="text/css" media="print, projection, screen">
+	<script type="text/javascript" src="../../../jquery/src/core.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/selector.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/event.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/ajax.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/fx.js"></script>
+	<script type="text/javascript" src="../../../jquery/src/offset.js"></script>
+	<script type="text/javascript" src="../../../plugins/dimensions/jquery.dimensions.js"></script>
+	<script type="text/javascript" src="../ui.mouse.js"></script>
+	<script type="text/javascript" src="../ui.selectable.js"></script>
+	
+	<style type="text/css" media="screen, projection">
+
+	body {
+		font-size: 16px; /* @ EOMB */
+	}
+	* html body {
+		font-size: 100%; /* @ IE */
+	}
+	body * {
+		font-size: 87.5%;
+		font-family: "Trebuchet MS", Trebuchet, Verdana, Helvetica, Arial, sans-serif;
+	}
+	body * * {
+		font-size: 100%;
+	}
+	h1 {
+		margin: 1em 0 1.5em;
+		font-size: 18px;
+	}
+	h2 {
+		margin: 2em 0 1.5em;
+		font-size: 16px;
+	}
+	p {
+		margin: 0;
+	}
+	pre, pre+p, p+p {
+		margin: 1em 0 0;
+	}
+	code {
+		font-family: "Courier New", Courier, monospace;
+	}
+
+#selectable1 {
+  width:100%;
+  float:left;
+  border: 1px solid black;
+}
+.AZ {
+  width: 54px;
+  height: 54px;
+  float: left;
+  background-image: url(images/AZblue.png);
+}
+.AZ.ui-selected {
+  background-image: url(images/AZred.png);
+}
+.AZ.ui-selecting {
+  background-image: url(images/AZred.png);
+}
+.AZ.ui-unselecting {
+  background-image: url(images/AZblue.png);
+}
+.azA { background-position:    0px    0px; }
+.azB { background-position:  -55px    0px; }
+.azC { background-position: -110px    0px; }
+.azD { background-position: -165px    0px; }
+.azE { background-position: -220px    0px; }
+.azF { background-position: -275px    0px; }
+.azG { background-position:    0px  -55px; }
+.azH { background-position:  -55px  -55px; }
+.azI { background-position: -110px  -55px; }
+.azJ { background-position: -165px  -55px; }
+.azK { background-position: -220px  -55px; }
+.azL { background-position: -275px  -55px; }
+.azM { background-position:    0px -110px; }
+.azN { background-position:  -55px -110px; }
+.azO { background-position: -110px -110px; }
+.azP { background-position: -165px -110px; }
+.azQ { background-position: -220px -110px; }
+.azR { background-position: -275px -110px; }
+.azS { background-position:    0px -165px; }
+.azT { background-position:  -55px -165px; }
+.azU { background-position: -110px -165px; }
+.azV { background-position: -165px -165px; }
+.azW { background-position: -220px -165px; }
+.azX { background-position: -275px -165px; }
+.azY { background-position:    0px -220px; }
+.azZ { background-position:  -55px -220px; }
+
+	</style>
+	</head>
+	<body class="light">
+	<h1>wordsearch</h1>
+
+	<div style="width:648px;">
+	
+	<div id="selectable1">
+
+<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+
+	</div>
+
+	</div>
+
+<script type="text/javascript">
+$(function() {
+
+	rletters = "YPYLEFOUNTABLERELIGHTERSBURGERSINCURRYPLATERPILLRESPONTING" +
+	"BYPASSICMACHIOLENWHELPSYETYIDDINGINVARIATEDNUMBIANALGAMAMMANOCCIDENUM" +
+	"ERATEILIALSUPERINGSCRATZFICIENTBUCHABLYCLOSETERRUPTSDISSONTUTABILITYI" +
+	"MMORAVITIESJONESFAREENCOURTERNOVELIERSTEELINEDIGITATIONSSIKHSSIRSITUS" +
+	"TUPIDSQUITTANCESURMISSEDDECRETEDIMPREHENSIBLEALTINGBONUCLEUSLUNDERLOI" +
+	"NSTITIONDIOXIDEPHILIPPEZSPECTIVEPRODUCTORRESUPPOSEHOOSERSCOMEUNDEDAPP" +
+	"ORTALSDUREROSECHORSESTANCEFLUCTANGIOGRAPHERERSARCHSPACTINGDECOLLABLED" +
+	"EFENDINGPRECIATEDUNECONDEDSQUARRENTIMATICORPHICALLISANASVERINGRELEGRA" +
+	"DESASSINGVERONREESATTRACTINGEXISTEDREFUTATIVEPHYLUMBLOWEDOUTSDEVICTCO" +
+	"NTRACTINGBALLSHORTCOMINZSTENTISERHEALINESELECTSENCRYPTOGRAPHYCHRISTSM" +
+	"ICHEDSUBORDEREDSUMESPERSEVENSMISTSJETTEDPOSTCOATTAINEDLOBSTITUTIONADO" +
+	"AMIGARIGORMALTSCOATSDETAILRENDORSJUDAICARECOMPINGSURINGNAVIGATIONEDDI" +
+	"SPANICTYPOGRAMABSTAINEPIECEBRIBEBETRACTIVESREFRAINSJUNKSUPRISOMERSACC" +
+	"OMPUTIESCARESSESEXAGGERALDSONJUDGEDRESTENLARGEDROPPERDOUBTFULNESSBARD" +
+	"BOATBASILBESETQUASIONSANITYAMATEINTEGRABBLEDREFERCONSTATESSINGFENCEMA" +
+	"RIGHTTABLEUNWILLFULWONDROUGHEDSIMPSSTRICANIZESREGRETFULBOLTONMYERSBES";
+
+	$("#selectable1 div").addClass("AZ").each(function(i) {
+		//var randomLetter = String.fromCharCode(65 + Math.floor(Math.random()*26));
+		var randomLetter = rletters[Math.floor(Math.random() * rletters.length)];
+		if (i > 38 && i < 45) {
+			$(this).addClass('az' + "JQUERY"[i-39]).addClass("wall");
+		} else if (i > 76 && i < 79) {
+			$(this).addClass('az' + "UI"[i-77]).addClass("wall");
+		} else if (i > 108 && i < 119) {
+			$(this).addClass('az' + "WORDSEARCH"[i-109]).addClass("wall");
+		} else {
+			$(this).addClass('az' + randomLetter);
+		}
+	});
+
+	$("#selectable1").selectable({filter:":not(.wall)", autoRefresh:false});
+
+	$(document).keydown(function(ev) {
+		if (ev.keyCode == 46) { // 46=DEL
+			$(".ui-selected").remove();
+			$("#selectable1").selectableRefresh();
+		}
+		if (ev.keyCode == 13) {
+			$(".ui-selected").removeClass("ui-selected").addClass("wall");
+			$("#selectable1").selectableRefresh();
+		}
+	});
+
+});
+</script>
+
+</body>
+</html>
