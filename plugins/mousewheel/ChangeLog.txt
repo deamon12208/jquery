@@ -4,10 +4,6 @@
 
 * Uses new special events API in jQuery 1.2.2+
 * You can now treat "mousewheel" as a normal event and use .bind, .unbind and .trigger
-
-
-== 2.3 ==
-
 * Using jQuery.data API for expandos
 
 
