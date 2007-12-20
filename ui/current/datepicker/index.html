@@ -408,8 +408,8 @@ $('#openDatePlus7').datepicker({defaultDate: +7});
 $('#showWeeks').datepicker({showWeeks: true, firstDay: 1, changeFirstDay: false, showOtherMonths: true});
 </script>
 					<p>Additional settings let you move the <em>Clear</em>/<em>Close</em> controls
-						to the bottom, display the days in other months (non-selectable),
-						and show a status bar.
+						to the bottom, hide the <em>Clear</em> control to make the date mandatory,
+						display the days in other months (non-selectable), and show a status bar.
 						A callback function is also added to operate when a date is selected.
 						If no callback is specified, the <code>onchange</code> event of the
 						input field is triggered.</p>
@@ -418,6 +418,7 @@ $('#showWeeks').datepicker({showWeeks: true, firstDay: 1, changeFirstDay: false,
 <script type="text/jsdemo" charset="utf-8" class="demojs">
 $('#addSettings').datepicker({
 	closeAtTop: false, 
+	mandatory: true,
 	showOtherMonths: true, 
 	showStatus: true,
 	onSelect: alertDate // invoke alertDate function
