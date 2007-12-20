@@ -139,7 +139,7 @@ function changeOptions(){
 function changeScrollHeight() {
     var h = parseInt(window.prompt('Please type new scroll height (number in pixels):', jQuery.Autocompleter.defaults.scrollHeight));
     if(h > 0) {
-        $("#suggest15").setOptions({
+        $("#suggest1").setOptions({
 			scrollHeight: h
 		});
     }
@@ -173,6 +173,7 @@ function changeToMonths(){
 			<input type="button" value="Get Value" />
 			<input type="button" value="Change Max Items" onclick="changeOptions();" />
 			<input type="button" value="Change to Month Data" onclick="changeToMonths();" />
+			<input type="button" value="Change scroll height" id="scrollChange" />
 		</p>
 		<p>
 			<label>Month (local):</label>
@@ -217,12 +218,6 @@ function changeToMonths(){
 			<label>Image search (remote):</label>
 			<input type="text" id='imageSearch' />
 			<input type="button" value="Get Value" />
-		</p>
-        <p>
-			<label>Single City with scroll (local):</label>
-			<input type="text" id="suggest15" />
-			<input type="button" value="Get Value" />
-			<input type="button" value="Change scroll height" id="scrollChange" />
 		</p>
 		<p>
 			<label>Some dropdown (&lt;3 IE):</label>
