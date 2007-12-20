@@ -2,8 +2,11 @@
 
 == 1.2 ==
 
+* Only works with jQuery 1.2+
 * Removed height, width, offset and offsetLite in favor of core versions
 * Position no longer takes a returnObject and has been updated to use the new core offset method
+* New version property (jQuery.dimensions.version)
+* Units other than pixels are now calculated correctly for margins, borders and paddings.
 
 
 == 1.1.3 ==
