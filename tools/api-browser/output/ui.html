@@ -467,7 +467,18 @@
 <li id="link-accordion-options">
 <span class="fn"><a class="name" href="#link-accordion-options">accordion</a>( <span class="arg-type tooltip" title="">Options</span> <span class="arg-name tooltip" title="A set of key/value pairs that configure the accordion. All options are optional.">options</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Make the selected elements Accordion widgets.</div>
+<div class="desc">Make the selected elements Accordion widgets.<br> Semantic requirements:<br>
+<br>If the structure of your container is flat with unique
+tags for header and content elements, eg. a definition list
+(dl &gt; dt + dd), you don't have to specify any options at
+all.<br>
+<br>If your structure uses the same elements for header and
+content or uses some kind of nested structure, you have to
+specify the header elements, eg. via class, see the second example.<br>
+<br>Use activate(Number) to change the active content programmatically.<br>
+<br>A change event is triggered everytime the accordion changes. Apart from
+the event object, all arguments are jQuery objects.
+Arguments: event, newHeader, oldHeader, newContent, oldContent</div>
 <h3>Options</h3>
 <ul class="options">
 <li>
@@ -557,7 +568,7 @@
 <li id="link-activate-index">
 <span class="fn"><a class="name" href="#link-activate-index">activate</a>( <span class="arg-type tooltip" title="">String, Element, jQuery, Boolean, Number</span> <span class="arg-name tooltip" title="An Integer specifying the zero-based index of the content to be activated or an expression specifying the element, or an element/jQuery object, or a boolean false to close all.">index</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Activate a content part of the Accordion programmatically.</div>
+<div class="desc">Activate a content part of the Accordion programmatically.<br>The index can be a zero-indexed number to match the position of the header to close or a string expression matching an element. Pass -1 to close all (only possible with alwaysOpen:false).</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Activate the second content of the Accordion contained in &lt;div id="accordion"&gt;.</p>
@@ -584,7 +595,7 @@
 <li id="link-datepicker-options">
 <span class="fn"><a class="name" href="#link-datepicker-options">datepicker</a>( <span class="arg-type tooltip" title="">Options</span> <span class="arg-name tooltip" title="A set of key/value pairs that configure the date picker. All options are optional.">options</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">The method that you use to create a new date picker. Customize with plenty of options.</div>
+<div class="desc">The method that you use to create a new date picker. Customize with plenty of options.<br>Attach the date picker to an input or for an inline view attach the date picker to a div or span.</div>
 <h3>Options</h3>
 <ul class="options">
 <li>
@@ -811,7 +822,8 @@ $('#exampleRange').datepicker({rangeSelect: true, firstDay: 1 });</code>
 <li id="link-dialog-options">
 <span class="fn"><a class="name" href="#link-dialog-options">dialog</a>( <span class="arg-type tooltip" title="">Options</span> <span class="arg-name tooltip" title="A set of key/value pairs that configure the dialog. All options are optional.">options</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Make the selected elements Dialog boxes.</div>
+<div class="desc">Make the selected elements Dialog boxes.<br>
+</div>
 <h3>Options</h3>
 <ul class="options">
 <li>
@@ -859,13 +871,15 @@ $('#exampleRange').datepicker({rangeSelect: true, firstDay: 1 });</code>
 <li id="link-dialogClose-">
 <span class="fn"><a class="name" href="#link-dialogClose-">dialogClose</a>(  ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Closes the specified dialog boxes.</div>
+<div class="desc">Closes the specified dialog boxes.<br>
+</div>
 </div>
 </li>
 <li id="link-dialogDatepicker-dateTextonSelectsettingspos">
 <span class="fn"><a class="name" href="#link-dialogDatepicker-dateTextonSelectsettingspos">dialogDatepicker</a>( <span class="arg-type tooltip" title="A string of characters.">String</span> <span class="arg-name tooltip" title="The initial date for the date picker.">dateText</span>, <span class="arg-type tooltip" title="A reference to a Javascript function.">Function</span> <span class="arg-name tooltip" title="A callback function when a date is selected. The function receives the date text and date picker instance as parameters.">onSelect</span>, <span class="arg-type tooltip" title="">Options</span> <span class="arg-name tooltip" title="The new settings for the date picker.">settings</span>, <span class="arg-type tooltip" title="">Number[2] or MouseEvent</span> <span class="arg-name tooltip" title="The position of the top/left of the dialog as [x, y] or a MouseEvent that contains the coordinates. If not specified the dialog is centered on the screen.">pos</span> ) returns <span class="type"><span class="tooltip" title="">Datepicker</span></span></span>
 <div class="more">
-<div class="desc">Open a datepicker in a "dialog" box.</div>
+<div class="desc">Open a datepicker in a "dialog" box.<br>
+</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Open a datepicker in a "dialog" box.</p>
@@ -878,13 +892,15 @@ $('#exampleRange').datepicker({rangeSelect: true, firstDay: 1 });</code>
 <li id="link-dialogOpen-">
 <span class="fn"><a class="name" href="#link-dialogOpen-">dialogOpen</a>(  ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Opens the specified dialog boxes.</div>
+<div class="desc">Opens the specified dialog boxes.<br>
+</div>
 </div>
 </li>
 <li id="link-disableFor-target">
 <span class="fn"><a class="name" href="#link-disableFor-target">disableFor</a>( <span class="arg-type tooltip" title="">Element,Selector,jQuery collection</span> <span class="arg-name tooltip" title="The input field to which the date picker is attached, or a selector for the input fields, or an existing jQuery collection.">target</span> ) returns <span class="type"><span class="tooltip" title="">Datepicker</span></span></span>
 <div class="more">
-<div class="desc">Disable an input field and its attached date picker.</div>
+<div class="desc">Disable an input field and its attached date picker.<br>
+</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Disable the date picker for an input field.</p>
@@ -897,7 +913,7 @@ $('#exampleRange').datepicker({rangeSelect: true, firstDay: 1 });</code>
 <li id="link-draggable-options">
 <span class="fn"><a class="name" href="#link-draggable-options">draggable</a>( <span class="arg-type tooltip" title="">Options</span> <span class="arg-name tooltip" title="A set of key/value pairs that configure the draggable. All options are optional.">options</span> ) returns <span class="type"><span class="tooltip" title="">Dragset</span></span></span>
 <div class="more">
-<div class="desc">Creates new draggables on the nodeset supplied by the query.</div>
+<div class="desc">Creates new draggables on the nodeset supplied by the query.<br>This jQuery plugin makes DOM nodes draggable by mouse. You can additionally supply a great range of options to make them fit your needs.</div>
 <h3>Options</h3>
 <ul class="options">
 <li>
@@ -1010,31 +1026,31 @@ $('#exampleRange').datepicker({rangeSelect: true, firstDay: 1 });</code>
 <li id="link-draggableDestroy-">
 <span class="fn"><a class="name" href="#link-draggableDestroy-">draggableDestroy</a>(  ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Destroys all draggable functionality in the current jQuery.</div>
+<div class="desc">Destroys all draggable functionality in the current jQuery.<br>Destroys all draggable functionality in the current jQuery.</div>
 </div>
 </li>
 <li id="link-draggableDisable-">
 <span class="fn"><a class="name" href="#link-draggableDisable-">draggableDisable</a>(  ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Disables draggables.</div>
+<div class="desc">Disables draggables.<br>Temporarily disables draggables on the current jQuery. Can be re-enabled again later on.</div>
 </div>
 </li>
 <li id="link-draggableEnable-">
 <span class="fn"><a class="name" href="#link-draggableEnable-">draggableEnable</a>(  ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Enables draggables.</div>
+<div class="desc">Enables draggables.<br>Re-enables draggable functionality on the jQuery supplied that has been disabled before.</div>
 </div>
 </li>
 <li id="link-draggableInstance-">
 <span class="fn"><a class="name" href="#link-draggableInstance-">draggableInstance</a>(  ) returns <span class="type"><span class="tooltip" title="">Instance</span></span></span>
 <div class="more">
-<div class="desc">Returns the OO instance of the current draggable.</div>
+<div class="desc">Returns the OO instance of the current draggable.<br>For the advanced, this function is very useful to modify internals of the draggables after initializing it. It returns a javascript function instance.</div>
 </div>
 </li>
 <li id="link-droppable-options">
 <span class="fn"><a class="name" href="#link-droppable-options">droppable</a>( <span class="arg-type tooltip" title="">Options</span> <span class="arg-name tooltip" title="A set of key/value pairs that configure the droppable. All options are optional.">options</span> ) returns <span class="type"><span class="tooltip" title="">Dropset</span></span></span>
 <div class="more">
-<div class="desc">Creates new droppables on the nodeset supplied by the query.</div>
+<div class="desc">Creates new droppables on the nodeset supplied by the query.<br>This jQuery plugin makes DOM nodes droppable (meaning they accept being dropped on by draggables). You can specify which (individually) or which kind of draggables each will accept.</div>
 <h3>Options</h3>
 <ul class="options">
 <li>
@@ -1115,31 +1131,32 @@ $(".drop").droppable({
 <li id="link-droppableDestroy-">
 <span class="fn"><a class="name" href="#link-droppableDestroy-">droppableDestroy</a>(  ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Destroys all droppable functionality in the current jQuery.</div>
+<div class="desc">Destroys all droppable functionality in the current jQuery.<br>Destroys all droppable functionality in the current jQuery.</div>
 </div>
 </li>
 <li id="link-droppableDisable-">
 <span class="fn"><a class="name" href="#link-droppableDisable-">droppableDisable</a>(  ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Disables droppables.</div>
+<div class="desc">Disables droppables.<br>Temporarily disables droppables on the current jQuery. Can be re-enabled again later on.</div>
 </div>
 </li>
 <li id="link-droppableEnable-">
 <span class="fn"><a class="name" href="#link-droppableEnable-">droppableEnable</a>(  ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Enables droppables.</div>
+<div class="desc">Enables droppables.<br>Re-enables droppable functionality on the jQuery supplied that has been disabled before.</div>
 </div>
 </li>
 <li id="link-droppableInstance-">
 <span class="fn"><a class="name" href="#link-droppableInstance-">droppableInstance</a>(  ) returns <span class="type"><span class="tooltip" title="">Instance</span></span></span>
 <div class="more">
-<div class="desc">Returns the OO instance of the current droppable.</div>
+<div class="desc">Returns the OO instance of the current droppable.<br>For the advanced, this function is very useful to modify internals of the droppables after initializing it. It returns a javascript function instance.</div>
 </div>
 </li>
 <li id="link-enableFor-target">
 <span class="fn"><a class="name" href="#link-enableFor-target">enableFor</a>( <span class="arg-type tooltip" title="">Element,Selector,jQuery collection</span> <span class="arg-name tooltip" title="The input field to which the date picker is attached, or a selector for the input fields, or an existing jQuery collection.">target</span> ) returns <span class="type"><span class="tooltip" title="">Datepicker</span></span></span>
 <div class="more">
-<div class="desc">Enable an input field and its attached date picker.</div>
+<div class="desc">Enable an input field and its attached date picker.<br>
+</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Enable the date picker for an input field.</p>
@@ -1152,7 +1169,21 @@ $(".drop").droppable({
 <li id="link-formatDate-formatdatedayNamesShortdayNamesmonthNamesShortmonthNames">
 <span class="fn"><a class="name" href="#link-formatDate-formatdatedayNamesShortdayNamesmonthNamesShortmonthNames">formatDate</a>( <span class="arg-type tooltip" title="A string of characters.">String</span> <span class="arg-name tooltip" title="The format to use in presenting the date.">format</span>, <span class="arg-type tooltip" title="">Date</span> <span class="arg-name tooltip" title="The date value to be displayed.">date</span>, <span class="arg-type tooltip" title="">String[7]</span> <span class="arg-name tooltip" title="The short names for the days of the week, starting at Sunday (optional). Defaults to the datepicker default which is usually standard English.">dayNamesShort</span>, <span class="arg-type tooltip" title="">String[7]</span> <span class="arg-name tooltip" title="The long names for the days of the week, starting at Sunday (optional). Defaults to the datepicker default which is usually standard English.">dayNames</span>, <span class="arg-type tooltip" title="">String[12]</span> <span class="arg-name tooltip" title="The short names for the months of the year (optional). Defaults to the datepicker default which is usually standard English.">monthNamesShort</span>, <span class="arg-type tooltip" title="">String[12]</span> <span class="arg-name tooltip" title="The long names for the months of the year (optional). Defaults to the datepicker default which is usually standard English.">monthNames</span> ) returns <span class="type"><span class="tooltip" title="A string of characters.">String</span></span></span>
 <div class="more">
-<div class="desc">Format a date into a string value with a specified format.</div>
+<div class="desc">Format a date into a string value with a specified format.<br>The format can be combinations of the following:
+* d  - day of month (no leading zero)
+* dd - day of month (two digit)
+* D  - day name short
+* DD - day name long
+* m  - month of year (no leading zero)
+* mm - month of year (two digit)
+* M  - month name short
+* MM - month name long
+* y  - year (two digit)
+* yy - year (four digit)
+* '...' - literal text
+* '' - single quote
+* anything else - literal text
+'''Since v3.1.'''</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Display the date in ISO format. Produces '2007-01-26'.</p>
@@ -1172,7 +1203,7 @@ $(".drop").droppable({
 <li id="link-getDateFor-control">
 <span class="fn"><a class="name" href="#link-getDateFor-control">getDateFor</a>( <span class="arg-type tooltip" title="">Element,Selector,jQuery collection</span> <span class="arg-name tooltip" title="The input field, division or span to which the date picker is attached, or a selector for the input field, or an existing jQuery collection. In the latter two cases only the first element in the collection is used.">control</span> ) returns <span class="type"><span class="tooltip" title="">Date or Date[2]</span></span></span>
 <div class="more">
-<div class="desc">Retrieve the current date from the date picker attached to an input field.</div>
+<div class="desc">Retrieve the current date from the date picker attached to an input field.<br>If the date picker has rangeSelect set to true, then a two-element array of dates is returned denoting the start and end of the range.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Retrieve the date for an input field.</p>
@@ -1185,7 +1216,8 @@ $(".drop").droppable({
 <li id="link-hideDatepicker-speed">
 <span class="fn"><a class="name" href="#link-hideDatepicker-speed">hideDatepicker</a>( <span class="arg-type tooltip" title="A string of characters.">String</span> <span class="arg-name tooltip" title="The speed at which to close the date picker (optional).">speed</span> ) returns <span class="type"><span class="tooltip" title="">Datepicker</span></span></span>
 <div class="more">
-<div class="desc">Close a previously opened date picker.</div>
+<div class="desc">Close a previously opened date picker.<br>
+</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Close the opened date picker.</p>
@@ -1198,7 +1230,8 @@ $(".drop").droppable({
 <li id="link-isDisabled-input">
 <span class="fn"><a class="name" href="#link-isDisabled-input">isDisabled</a>( <span class="arg-type tooltip" title="">Element,Selector,jQuery collection</span> <span class="arg-name tooltip" title="The input field to which the date picker is attached, or a selector for the input field, or an existing jQuery collection. In the latter two cases only the first element in the collection is used.">input</span> ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Determine whether or not an input field has been disabled for the date picker.</div>
+<div class="desc">Determine whether or not an input field has been disabled for the date picker.<br>
+</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Retrieve the date for an input field.</p>
@@ -1211,7 +1244,7 @@ $(".drop").droppable({
 <li id="link-iso8601Week-date">
 <span class="fn"><a class="name" href="#link-iso8601Week-date">iso8601Week</a>( <span class="arg-type tooltip" title="">Date</span> <span class="arg-name tooltip" title="The date to find the week for.">date</span> ) returns <span class="type"><span class="tooltip" title="A valid numeric.">Number</span></span></span>
 <div class="more">
-<div class="desc">Determine the week of the year for a given date: 1 to 53.</div>
+<div class="desc">Determine the week of the year for a given date: 1 to 53.<br>This function uses the ISO 8601 definition of a week: weeks start on a Monday and the first week of the year contains January 4. This means that up to three days from the previous year may be included in the first week of the current year, and that up to three days from the current year may be included in the last week of the previous year.&lt;br/&gt;'''Since v3.1.'''</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Find the week of the year for a date.</p>
@@ -1224,7 +1257,8 @@ $(".drop").droppable({
 <li id="link-magnifier-options">
 <span class="fn"><a class="name" href="#link-magnifier-options">magnifier</a>( <span class="arg-type tooltip" title="">Options</span> <span class="arg-name tooltip" title="A set of key/value pairs that configure the magnifier. All options are optional.">options</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Make the contents of the selected elements magnify upon mouse proximity.</div>
+<div class="desc">Make the contents of the selected elements magnify upon mouse proximity.<br>
+</div>
 <h3>Options</h3>
 <ul class="options">
 <li>
@@ -1300,37 +1334,57 @@ The offset object of the clicked DOM element.  (This saves the overhead of repro
 <li id="link-magnifierDestroy-">
 <span class="fn"><a class="name" href="#link-magnifierDestroy-">magnifierDestroy</a>(  ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Destroys all magnifier functionality in the current jQuery.</div>
+<div class="desc">Destroys all magnifier functionality in the current jQuery.<br>Destroys all magnifier functionality in the current jQuery.</div>
 </div>
 </li>
 <li id="link-magnifierDisable-">
 <span class="fn"><a class="name" href="#link-magnifierDisable-">magnifierDisable</a>(  ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Disables magnification.</div>
+<div class="desc">Disables magnification.<br>Temporarily disables magnification on the current jQuery. Can be re-enabled again later on.</div>
 </div>
 </li>
 <li id="link-magnifierEnable-">
 <span class="fn"><a class="name" href="#link-magnifierEnable-">magnifierEnable</a>(  ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Enables magnifying.</div>
+<div class="desc">Enables magnifying.<br>Re-enables magnifying on the jQuery supplied that has been disabled before.</div>
 </div>
 </li>
 <li id="link-magnifierInstance-">
 <span class="fn"><a class="name" href="#link-magnifierInstance-">magnifierInstance</a>(  ) returns <span class="type"><span class="tooltip" title="">Instance</span></span></span>
 <div class="more">
-<div class="desc">Returns the OO instance of the current magnifier.</div>
+<div class="desc">Returns the OO instance of the current magnifier.<br>For the advanced, this function is very useful to modify internals of the magnifier after initializing it. It returns a javascript function instance.</div>
 </div>
 </li>
 <li id="link-magnifierReset-">
 <span class="fn"><a class="name" href="#link-magnifierReset-">magnifierReset</a>(  ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Resets the magnifying on a magnified set of elements.</div>
+<div class="desc">Resets the magnifying on a magnified set of elements.<br>This option resets the magnification to zero on the current set. It's very useful if you want to have another effect on click, for example.</div>
 </div>
 </li>
 <li id="link-parseDate-formatvalueshortYearCutoffdayNamesShortdayNamesmonthNamesShortmonthNames">
 <span class="fn"><a class="name" href="#link-parseDate-formatvalueshortYearCutoffdayNamesShortdayNamesmonthNamesShortmonthNames">parseDate</a>( <span class="arg-type tooltip" title="A string of characters.">String</span> <span class="arg-name tooltip" title="The format to use in extracting the date.">format</span>, <span class="arg-type tooltip" title="A string of characters.">String</span> <span class="arg-name tooltip" title="The date value to be examined.">value</span>, <span class="arg-type tooltip" title="A valid numeric.">Number</span> <span class="arg-name tooltip" title="The value (0-99) beyond which years are considered to be in the previous century. Used in conjunction with the 'y' format option. Defaults to the datepicker default which is usually 10 years in the future.">shortYearCutoff</span>, <span class="arg-type tooltip" title="">String[7]</span> <span class="arg-name tooltip" title="The short names for the days of the week, starting at Sunday (optional). Defaults to the datepicker default which is usually standard English.">dayNamesShort</span>, <span class="arg-type tooltip" title="">String[7]</span> <span class="arg-name tooltip" title="The long names for the days of the week, starting at Sunday (optional). Defaults to the datepicker default which is usually standard English.">dayNames</span>, <span class="arg-type tooltip" title="">String[12]</span> <span class="arg-name tooltip" title="The short names for the months of the year (optional). Defaults to the datepicker default which is usually standard English.">monthNamesShort</span>, <span class="arg-type tooltip" title="">String[12]</span> <span class="arg-name tooltip" title="The long names for the months of the year (optional). Defaults to the datepicker default which is usually standard English.">monthNames</span> ) returns <span class="type"><span class="tooltip" title="">Date</span></span></span>
 <div class="more">
-<div class="desc">Extract a date from a string value with a specified format.</div>
+<div class="desc">Extract a date from a string value with a specified format.<br>The format can be combinations of the following:
+* d  - day of month (no leading zero)
+* dd - day of month (two digit)
+* D  - day name short
+* DD - day name long
+* m  - month of year (no leading zero)
+* mm - month of year (two digit)
+* M  - month name short
+* MM - month name long
+* y  - year (two digit)
+* yy - year (four digit)
+* '...' - literal text
+* '' - single quote
+* anything else - literal text
+A number of exceptions may be thrown:
+* 'Invalid arguments' if either ''format'' or ''value'' is null
+* 'Missing number at position nn' if ''format'' indicated a numeric value that is not then found
+* 'Unknown name at position nn' if ''format'' indicated day or month name that is not then found
+* 'Unexpected literal at position nn' if ''format'' indicated a literal value that is not then found
+* 'Invalid date' if the date is invalid, such as '31/02/2007'
+'''Since v3.1.'''</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Extract a date in ISO format.</p>
@@ -1350,7 +1404,8 @@ The offset object of the clicked DOM element.  (This saves the overhead of repro
 <li id="link-reconfigureFor-controlsettings">
 <span class="fn"><a class="name" href="#link-reconfigureFor-controlsettings">reconfigureFor</a>( <span class="arg-type tooltip" title="">Element,Selector,jQuery collection</span> <span class="arg-name tooltip" title="The input field, division or span to which the date picker is attached, or a jQuery selector for these fields, or an existing jQuery collection.">control</span>, <span class="arg-type tooltip" title="">Options</span> <span class="arg-name tooltip" title="The new settings for these date pickers.">settings</span> ) returns <span class="type"><span class="tooltip" title="">Datepicker</span></span></span>
 <div class="more">
-<div class="desc">Change the settings for a previously attached date picker.</div>
+<div class="desc">Change the settings for a previously attached date picker.<br>
+</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Reconfigure the date picker for an input field - changing its opening speed.</p>
@@ -1363,7 +1418,7 @@ The offset object of the clicked DOM element.  (This saves the overhead of repro
 <li id="link-resizable-options">
 <span class="fn"><a class="name" href="#link-resizable-options">resizable</a>( <span class="arg-type tooltip" title="">Options</span> <span class="arg-name tooltip" title="A set of key/value pairs that configure the resizable. All options are optional, but a resizable will not be useful without at least one handle.">options</span> ) returns <span class="type"><span class="tooltip" title=""></span></span></span>
 <div class="more">
-<div class="desc">Creates new resizables on the nodeset supplied by the query.</div>
+<div class="desc">Creates new resizables on the nodeset supplied by the query.<br>This jQuery plugin makes DOM nodes resizable (meaning they have draggable resize handles). You can specify one or more handles as well as min and max width and height.</div>
 <h3>Options</h3>
 <ul class="options">
 <li>
@@ -1440,31 +1495,32 @@ The offset object of the clicked DOM element.  (This saves the overhead of repro
 <li id="link-resizableDestroy-">
 <span class="fn"><a class="name" href="#link-resizableDestroy-">resizableDestroy</a>(  ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Destroys all resizing functionality in the current jQuery.</div>
+<div class="desc">Destroys all resizing functionality in the current jQuery.<br>Destroys all resizing functionality in the current jQuery.</div>
 </div>
 </li>
 <li id="link-resizableDisable-">
 <span class="fn"><a class="name" href="#link-resizableDisable-">resizableDisable</a>(  ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Disables resizing.</div>
+<div class="desc">Disables resizing.<br>Temporarily disables resizing on the current jQuery. Can be re-enabled again later on.</div>
 </div>
 </li>
 <li id="link-resizableEnable-">
 <span class="fn"><a class="name" href="#link-resizableEnable-">resizableEnable</a>(  ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Enables resizing.</div>
+<div class="desc">Enables resizing.<br>Re-enables resizing functionality on the jQuery supplied that has been disabled before.</div>
 </div>
 </li>
 <li id="link-resizableInstance-">
 <span class="fn"><a class="name" href="#link-resizableInstance-">resizableInstance</a>(  ) returns <span class="type"><span class="tooltip" title="">Instance</span></span></span>
 <div class="more">
-<div class="desc">Returns the OO instance of the current resizable.</div>
+<div class="desc">Returns the OO instance of the current resizable.<br>For the advanced, this function is very useful to modify internals of the resizable after initializing it. It returns a javascript function instance.</div>
 </div>
 </li>
 <li id="link-selectable-options">
 <span class="fn"><a class="name" href="#link-selectable-options">selectable</a>( <span class="arg-type tooltip" title="">Options</span> <span class="arg-name tooltip" title="A set of key/value pairs that configure the selectable. All options are optional.">options</span> ) returns <span class="type"><span class="tooltip" title=""></span></span></span>
 <div class="more">
-<div class="desc">Creates new selectable on the nodeset supplied by the query.</div>
+<div class="desc">Creates new selectable on the nodeset supplied by the query.<br>
+</div>
 <h3>Options</h3>
 <ul class="options">
 <li>
@@ -1518,7 +1574,8 @@ The offset object of the clicked DOM element.  (This saves the overhead of repro
 <li id="link-setDateFor-controldateendDate">
 <span class="fn"><a class="name" href="#link-setDateFor-controldateendDate">setDateFor</a>( <span class="arg-type tooltip" title="">Element,Selector,jQuery collection</span> <span class="arg-name tooltip" title="The input field, division or span to which the date picker is attached, or a selector for the input field, or an existing jQuery collection. In the latter two cases only the first element in the collection is used.">control</span>, <span class="arg-type tooltip" title="">Date</span> <span class="arg-name tooltip" title="The new date value (starting date for a date range).">date</span>, <span class="arg-type tooltip" title="">Date</span> <span class="arg-name tooltip" title="The new end date value for a date range (optional).">endDate</span> ) returns <span class="type"><span class="tooltip" title="">Datepicker</span></span></span>
 <div class="more">
-<div class="desc">Set the current date for the date picker attached to an input field.</div>
+<div class="desc">Set the current date for the date picker attached to an input field.<br>
+</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Set the date for an input field.</p>
@@ -1538,7 +1595,8 @@ The offset object of the clicked DOM element.  (This saves the overhead of repro
 <li id="link-setDefaults-settings">
 <span class="fn"><a class="name" href="#link-setDefaults-settings">setDefaults</a>( <span class="arg-type tooltip" title="">Options</span> <span class="arg-name tooltip" title="The new settings for all date pickers. See the <a href='UI/Datepicker/datepicker'>datepicker options</a>.">settings</span> ) returns <span class="type"><span class="tooltip" title="">Datepicker</span></span></span>
 <div class="more">
-<div class="desc">Change the default settings for all date pickers</div>
+<div class="desc">Change the default settings for all date pickers<br>
+</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Set all date pickers to open on focus or a click on an icon.</p>
@@ -1558,7 +1616,8 @@ The offset object of the clicked DOM element.  (This saves the overhead of repro
 <li id="link-shadow-options">
 <span class="fn"><a class="name" href="#link-shadow-options">shadow</a>( <span class="arg-type tooltip" title="">Options</span> <span class="arg-name tooltip" title="A set of key/value pairs that configure the shadow. All options are optional.">options</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Add a drop shadow to the matched elements.</div>
+<div class="desc">Add a drop shadow to the matched elements.<br>
+</div>
 <h3>Options</h3>
 <ul class="options">
 <li>
@@ -1594,25 +1653,26 @@ The offset object of the clicked DOM element.  (This saves the overhead of repro
 <li id="link-shadowDestroy-">
 <span class="fn"><a class="name" href="#link-shadowDestroy-">shadowDestroy</a>(  ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Destroys all shadows attached to the current jQuery elements.</div>
+<div class="desc">Destroys all shadows attached to the current jQuery elements.<br>Destroys all shadows on the current elements. Cannot be reverted.</div>
 </div>
 </li>
 <li id="link-shadowDisable-">
 <span class="fn"><a class="name" href="#link-shadowDisable-">shadowDisable</a>(  ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Disables shadows.</div>
+<div class="desc">Disables shadows.<br>Temporarily disables shadows on the current jQuery. Can be re-enabled again later on.</div>
 </div>
 </li>
 <li id="link-shadowEnable-">
 <span class="fn"><a class="name" href="#link-shadowEnable-">shadowEnable</a>(  ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Enables shadows.</div>
+<div class="desc">Enables shadows.<br>Re-enables shadows on the jQuery supplied that has been disabled before.</div>
 </div>
 </li>
 <li id="link-showFor-target">
 <span class="fn"><a class="name" href="#link-showFor-target">showFor</a>( <span class="arg-type tooltip" title="The Javascript object representation of a DOM Element.">Element</span> <span class="arg-name tooltip" title="The input field to which the date picker is attached, or a selector for the input field, or an existing jQuery collection. In the latter two cases only the first element in the collection is used.">target</span> ) returns <span class="type"><span class="tooltip" title="">Datepicker</span></span></span>
 <div class="more">
-<div class="desc">Call up a previously attached date picker.</div>
+<div class="desc">Call up a previously attached date picker.<br>
+</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Bring up the date picker for an input field.</p>
@@ -1625,7 +1685,7 @@ The offset object of the clicked DOM element.  (This saves the overhead of repro
 <li id="link-slider-options">
 <span class="fn"><a class="name" href="#link-slider-options">slider</a>( <span class="arg-type tooltip" title="">Options</span> <span class="arg-name tooltip" title="A set of key/value pairs that configure the slider. All options are optional, but a slider will not be useful without at least one callback.">options</span> ) returns <span class="type"><span class="tooltip" title=""></span></span></span>
 <div class="more">
-<div class="desc">Makes a slider from the nodeset supplied by the query.</div>
+<div class="desc">Makes a slider from the nodeset supplied by the query.<br>With this plugin, you can generate sliders with a wide range of options, including multiple handles, callbacks and more.</div>
 <h3>Options</h3>
 <ul class="options">
 <li>
@@ -1715,7 +1775,7 @@ This example creates a double slider from 0-10 with "10" steps (actually eleven 
 <li id="link-sortable-options">
 <span class="fn"><a class="name" href="#link-sortable-options">sortable</a>( <span class="arg-type tooltip" title="">Options</span> <span class="arg-name tooltip" title="A set of key/value pairs that configure the sortable. All options are optional.">options</span> ) returns <span class="type"><span class="tooltip" title=""></span></span></span>
 <div class="more">
-<div class="desc">Creates new sortable on the nodeset supplied by the query.</div>
+<div class="desc">Creates new sortable on the nodeset supplied by the query.<br>This jQuery plugin makes DOM nodes sortable by mouse. You can additionally supply a great range of options to make them fit your needs.</div>
 <h3>Options</h3>
 <ul class="options">
 <li>
@@ -1789,13 +1849,15 @@ This example creates a double slider from 0-10 with "10" steps (actually eleven 
 <li id="link-sortableDestroy-">
 <span class="fn"><a class="name" href="#link-sortableDestroy-">sortableDestroy</a>(  ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Destroys all sortable functionality in the current jQuery.</div>
+<div class="desc">Destroys all sortable functionality in the current jQuery.<br>
+</div>
 </div>
 </li>
 <li id="link-tablesorter-options">
 <span class="fn"><a class="name" href="#link-tablesorter-options">tablesorter</a>( <span class="arg-type tooltip" title="">Options</span> <span class="arg-name tooltip" title="A set of key/value pairs that configure tablesorter. All options are optional.">options</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">Create a sortable table with multi-column sorting capabilities.</div>
+<div class="desc">Create a sortable table with multi-column sorting capabilities.<br>
+</div>
 <h3>Options</h3>
 <ul class="options">
 <li>
@@ -1935,7 +1997,8 @@ This example creates a double slider from 0-10 with "10" steps (actually eleven 
 <li id="link-tabs-initialoptions">
 <span class="fn"><a class="name" href="#link-tabs-initialoptions">tabs</a>( <span class="arg-type tooltip" title="A valid numeric.">Number</span> <span class="arg-name tooltip" title="An integer specifying the position of the tab (no zero-based index) that is selected on initialization.">initial</span>, <span class="arg-type tooltip" title="">Options</span> <span class="arg-name tooltip" title="A set of key/value pairs that configures the tabs interface. All options are optional.">options</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">The method that you use to create a new tabs interface.</div>
+<div class="desc">The method that you use to create a new tabs interface.<br>
+</div>
 <h3>Options</h3>
 <ul class="options">
 <li>
@@ -2108,7 +2171,7 @@ This example creates a double slider from 0-10 with "10" steps (actually eleven 
 <li id="link-tabsAdd-urltitleposition">
 <span class="fn"><a class="name" href="#link-tabsAdd-urltitleposition">tabsAdd</a>( <span class="arg-type tooltip" title="A string of characters.">String</span> <span class="arg-name tooltip" title="A fragment identifier (hash) or full URL (same domain) for the new tab. The identifier may refer to an already existing element, otherwise a new div is going to be created.">url</span>, <span class="arg-type tooltip" title="A string of characters.">String</span> <span class="arg-name tooltip" title="The title of the new tab.">title</span>, <span class="arg-type tooltip" title="A valid numeric.">Number</span> <span class="arg-name tooltip" title="The position where the new tab is created (no zero-based index). By default a new tab is appended as last tab.">position</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">The method that you use to add a new tab to a tabs interface.</div>
+<div class="desc">The method that you use to add a new tab to a tabs interface.<br>The selector must be the same as the one that was used for tabs initialisation, e.g. must match or can be the ul/ol element.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Adds a new inline tab at the end.</p>
@@ -2135,43 +2198,43 @@ This example creates a double slider from 0-10 with "10" steps (actually eleven 
 <li id="link-tabsClick-position">
 <span class="fn"><a class="name" href="#link-tabsClick-position">tabsClick</a>( <span class="arg-type tooltip" title="A valid numeric.">Number</span> <span class="arg-name tooltip" title="The position of the tab that is going to be clicked (no zero-based index).">position</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">The method that you use to simulate a click on tab in a tabs interface.</div>
+<div class="desc">The method that you use to simulate a click on tab in a tabs interface.<br>The selector must be the same as the one that was used for tabs initialisation, e.g. must match or can be the ul/ol element.</div>
 </div>
 </li>
 <li id="link-tabsDisable-position">
 <span class="fn"><a class="name" href="#link-tabsDisable-position">tabsDisable</a>( <span class="arg-type tooltip" title="A valid numeric.">Number</span> <span class="arg-name tooltip" title="The position of the tab that is going to be disabled (no zero-based index).">position</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">The method that you use to disable a tab in a tabs interface.</div>
+<div class="desc">The method that you use to disable a tab in a tabs interface.<br>The selector must be the same as the one that was used for tabs initialisation, e.g. must match or can be the ul/ol element.</div>
 </div>
 </li>
 <li id="link-tabsEnable-position">
 <span class="fn"><a class="name" href="#link-tabsEnable-position">tabsEnable</a>( <span class="arg-type tooltip" title="A valid numeric.">Number</span> <span class="arg-name tooltip" title="The position of the tab that is going to be enabled (no zero-based index).">position</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">The method that you use to enable a tab in a tabs interface.</div>
+<div class="desc">The method that you use to enable a tab in a tabs interface.<br>The selector must be the same as the one that was used for tabs initialisation, e.g. must match or can be the ul/ol element.</div>
 </div>
 </li>
 <li id="link-tabsHref-positionurl">
 <span class="fn"><a class="name" href="#link-tabsHref-positionurl">tabsHref</a>( <span class="arg-type tooltip" title="A valid numeric.">Number</span> <span class="arg-name tooltip" title="The position of the tab which remote URL, e.g. href, is going to be updated (no zero-based index).">position</span>, <span class="arg-type tooltip" title="A string of characters.">String</span> <span class="arg-name tooltip" title="A URL the content of the tab is loaded from.">url</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">The method that you use to set a new URL for a remote (Ajax) tab in a tabs interface.</div>
+<div class="desc">The method that you use to set a new URL for a remote (Ajax) tab in a tabs interface.<br>The selector must be the same as the one that was used for tabs initialisation, e.g. must match or can be the ul/ol element.</div>
 </div>
 </li>
 <li id="link-tabsLoad-positionurl">
 <span class="fn"><a class="name" href="#link-tabsLoad-positionurl">tabsLoad</a>( <span class="arg-type tooltip" title="A valid numeric.">Number</span> <span class="arg-name tooltip" title="The position of the tab that is going to be reloaded (no zero-based index).">position</span>, <span class="arg-type tooltip" title="A string of characters.">String</span> <span class="arg-name tooltip" title="A URL the content of the tab is loaded from. The given URL is also set for subsequent loads, until a new URL is specified that is.">url</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">The method that you use to reload a remote (Ajax) tab in a tabs interface.</div>
+<div class="desc">The method that you use to reload a remote (Ajax) tab in a tabs interface.<br>The selector must be the same as the one that was used for tabs initialisation, e.g. must match or can be the ul/ol element.</div>
 </div>
 </li>
 <li id="link-tabsRemove-position">
 <span class="fn"><a class="name" href="#link-tabsRemove-position">tabsRemove</a>( <span class="arg-type tooltip" title="A valid numeric.">Number</span> <span class="arg-name tooltip" title="The position of the tab that is going to be removed (no zero-based index).">position</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">The method that you use to remove a tab from a tabs interface.</div>
+<div class="desc">The method that you use to remove a tab from a tabs interface.<br>The selector must be the same as the one that was used for tabs initialisation, e.g. must match or can be the ul/ol element.</div>
 </div>
 </li>
 <li id="link-tabsRotate-milliseconds">
 <span class="fn"><a class="name" href="#link-tabsRotate-milliseconds">tabsRotate</a>( <span class="arg-type tooltip" title="A valid numeric.">Number</span> <span class="arg-name tooltip" title="Amount of time in milliseconds until the next tab in the cycle gets activated.">milliseconds</span> ) returns <span class="type"><span class="tooltip" title="A jQuery object.">jQuery</span></span></span>
 <div class="more">
-<div class="desc">A method that you use to set up an automatic rotation through tabs of a tab pane.</div>
+<div class="desc">A method that you use to set up an automatic rotation through tabs of a tab pane.<br>The selector must be the same as the one that was used for tabs initialisation, e.g. must match or can be the ul/ol element. Rotation stops if a tab is clicked on. To stop the rotation programmatically call this method without any or some falsy argument, like 0 or null.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Start rotation with an interval of 5 seconds.</p>
@@ -2191,7 +2254,7 @@ This example creates a double slider from 0-10 with "10" steps (actually eleven 
 <li id="link-tabsSelected-">
 <span class="fn"><a class="name" href="#link-tabsSelected-">tabsSelected</a>(  ) returns <span class="type"><span class="tooltip" title="A valid numeric.">Number</span></span></span>
 <div class="more">
-<div class="desc">Retrieve the position of the currently selected tab of the first matched tabs interface (no zero-based index).</div>
+<div class="desc">Retrieve the position of the currently selected tab of the first matched tabs interface (no zero-based index).<br>The selector must be the same as the one that was used for tabs initialisation, e.g. must match or can be the ul/ol element. Returns -1 if no tab is currently selected.</div>
 </div>
 </li>
 </ul>

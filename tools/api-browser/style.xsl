@@ -210,6 +210,10 @@
 								<xsl:for-each select="desc">
 									<xsl:call-template name="break" />
 								</xsl:for-each>
+								<br/>
+								<xsl:for-each select="longdesc">
+									<xsl:call-template name="break" />
+								</xsl:for-each>
 							</div>
 							<xsl:if test="option">
 								<h3>Options</h3>

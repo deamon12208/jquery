@@ -253,7 +253,9 @@
 <li id="link-accept-extension">
 <span class="fn"><a class="name" href="#link-accept-extension">accept</a>( <span class="arg-type tooltip" title="A string of characters.">String</span> <span class="arg-name tooltip" title="The allowed file extensions, seperated via &quot;|&quot;, defaults to &quot;png|jpe?g|gif&quot;">extension</span> ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Makes the element require a certain file extension.</div>
+<div class="desc">Makes the element require a certain file extension.<br>Returns true if the value ends with one of the specified file extensions.
+If nothing is specified, only images are allowed (png, jpeg, gif).<br>
+<br>Works with text inputs.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Makes "field" required and ending with ".xls" or ".csv".</p>
@@ -287,7 +289,8 @@
 <li id="link-addMethod-namemethodmessage">
 <span class="fn"><a class="name" href="#link-addMethod-namemethodmessage">addMethod</a>( <span class="arg-type tooltip" title="A string of characters.">String</span> <span class="arg-name tooltip" title="The name of the method, used to identify and referencing it, must be a valid javascript identifier">name</span>, <span class="arg-type tooltip" title="">Callback</span> <span class="arg-name tooltip" title="The actual method implementation, returning true if an element is valid">method</span>, <span class="arg-type tooltip" title="">String, Function</span> <span class="arg-name tooltip" title="The default message to display for this method. Can be a function created by String.format(value).">message</span> ) returns <span class="type"><span class="tooltip" title="">undefined</span></span></span>
 <div class="more">
-<div class="desc">Add a new validation method. It must consist of a name (must be a legal javascript identifier), a function and a default message.</div>
+<div class="desc">Add a new validation method. It must consist of a name (must be a legal javascript identifier), a function and a default message.<br>Please note: While the temptation is great to add a regex method that checks it's paramter against the value, it is much cleaner to encapsulate those regular expressions inside their own method. If you need lots of slightly different expressions, try to extract a common parameter.<br>
+<br>A library of regular expressions: http://regexlib.com/DisplayPatterns.aspx</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Add a validation method that checks if a value starts with a certain domain.</p>
@@ -311,7 +314,8 @@
 <li id="link-blank-">
 <span class="fn"><a class="name" href="#link-blank-">blank</a>(  ) returns <span class="type"><span class="tooltip" title="An Array of DOM Elements.">Array&lt;Element&gt;</span></span></span>
 <div class="more">
-<div class="desc">Matches elements with a blank value</div>
+<div class="desc">Matches elements with a blank value<br>Blank means either no value at all or only whitespace.<br>
+<br>The implementation does a check like this: jQuery.trim(value).length == 0</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Finds input elements with no value or just whitespace.</p>
@@ -328,7 +332,8 @@
 <li id="link-creditcard-">
 <span class="fn"><a class="name" href="#link-creditcard-">creditcard</a>(  ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Makes the element require a creditcard number. </div>
+<div class="desc">Makes the element require a creditcard number. <br>Return true, if the value is a valid creditcard number.<br>
+<br>Works with text inputs.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Makes "field" required and a creditcard number.</p>
@@ -361,7 +366,8 @@
 <li id="link-date-">
 <span class="fn"><a class="name" href="#link-date-">date</a>(  ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Makes the element require a date. </div>
+<div class="desc">Makes the element require a date. <br>Return true, if the value is a valid date. Uses JavaScripts built-in Date to test if the date is valid, and is therefore very limited.<br>
+<br>Works with text inputs.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Makes "field" required and a date.</p>
@@ -394,7 +400,8 @@
 <li id="link-dateDE-">
 <span class="fn"><a class="name" href="#link-dateDE-">dateDE</a>(  ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Makes the element require a german date. </div>
+<div class="desc">Makes the element require a german date. <br>Return true, if the value is a valid date. Supports german dates (29.04.1994 or 1.1.2006). Doesn't make any sanity checks.<br>
+<br>Works with text inputs.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Makes "field" required and a german date.</p>
@@ -427,7 +434,8 @@
 <li id="link-dateISO-">
 <span class="fn"><a class="name" href="#link-dateISO-">dateISO</a>(  ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Makes the element require a ISO date. </div>
+<div class="desc">Makes the element require a ISO date. <br>Return true, if the value is a valid date, according to ISO date standard.<br>
+<br>Works with text inputs.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Makes "field" required and a ISO date.</p>
@@ -460,7 +468,8 @@
 <li id="link-digits-">
 <span class="fn"><a class="name" href="#link-digits-">digits</a>(  ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Makes the element require digits only. </div>
+<div class="desc">Makes the element require digits only. <br>Returns true if the value contains only digits.<br>
+<br>Works with text inputs.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Makes "field" required and digits only.</p>
@@ -493,7 +502,7 @@
 <li id="link-element-element">
 <span class="fn"><a class="name" href="#link-element-element">element</a>( <span class="arg-type tooltip" title="">Selector</span> <span class="arg-name tooltip" title="An element to validate, must be inside the validated form.">element</span> ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Validates a single element, returns true if it is valid, false otherwise.</div>
+<div class="desc">Validates a single element, returns true if it is valid, false otherwise.<br>This behaves as validation on blur or keyup, but returns the result.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Triggers element validation programmatically.</p>
@@ -506,7 +515,8 @@
 <li id="link-email-">
 <span class="fn"><a class="name" href="#link-email-">email</a>(  ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Makes the element require a valid email</div>
+<div class="desc">Makes the element require a valid email<br>Return true, if the value is a valid email address.<br>
+<br>Works with text inputs.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Makes "field" required and an email address.</p>
@@ -539,7 +549,8 @@
 <li id="link-equalTo-other">
 <span class="fn"><a class="name" href="#link-equalTo-other">equalTo</a>( <span class="arg-type tooltip" title="">Selector</span> <span class="arg-name tooltip" title="The selector for the element to compare the current values">other</span> ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Requires the element to be the same as another one</div>
+<div class="desc">Requires the element to be the same as another one<br>Returns true if the value has the same value as the element specified by the first parameter.<br>
+<br>Works with text inputs.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Makes "field" required to be the same as #other</p>
@@ -576,7 +587,8 @@
 <li id="link-filled-">
 <span class="fn"><a class="name" href="#link-filled-">filled</a>(  ) returns <span class="type"><span class="tooltip" title="An Array of DOM Elements.">Array&lt;Element&gt;</span></span></span>
 <div class="more">
-<div class="desc">Matches elements with a value.</div>
+<div class="desc">Matches elements with a value.<br>filled means any value, but not only whitespace.<br>
+<br>The implementation does a check like this: jQuery.trim(value).length &gt; 0</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Finds input elements with no value or just whitespace.</p>
@@ -593,7 +605,7 @@
 <li id="link-form-">
 <span class="fn"><a class="name" href="#link-form-">form</a>(  ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Validates the form, returns true if it is valid, false otherwise.</div>
+<div class="desc">Validates the form, returns true if it is valid, false otherwise.<br>This behaves as a normal submit event, but returns the result.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Triggers form validation programmatically.</p>
@@ -606,7 +618,11 @@
 <li id="link-maxLength-length">
 <span class="fn"><a class="name" href="#link-maxLength-length">maxLength</a>( <span class="arg-type tooltip" title="">Integer</span> <span class="arg-name tooltip" title="Maximum number of characters required ">length</span> ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Makes the element require a given maxmimum length.</div>
+<div class="desc">Makes the element require a given maxmimum length.<br>Return false, if the element is
+* some kind of text input and its value is too long
+* a set of checkboxes has too many boxes checked
+* a select and has too many options selected<br>
+<br>Works with text inputs, selects and checkboxes.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Makes "field" required having at most 4 characters.</p>
@@ -639,7 +655,7 @@
 <li id="link-maxValue-value">
 <span class="fn"><a class="name" href="#link-maxValue-value">maxValue</a>( <span class="arg-type tooltip" title="">Integer</span> <span class="arg-name tooltip" title="Maximum value required">value</span> ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Makes the element require a given maximum value.</div>
+<div class="desc">Makes the element require a given maximum value.<br>Works with text inputs.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Makes "field" required and 23 or smaller.</p>
@@ -672,7 +688,11 @@
 <li id="link-minLength-length">
 <span class="fn"><a class="name" href="#link-minLength-length">minLength</a>( <span class="arg-type tooltip" title="">Integer</span> <span class="arg-name tooltip" title="Minimum number of characters required">length</span> ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Makes the element require a given minimum length.</div>
+<div class="desc">Makes the element require a given minimum length.<br>Return false, if the element is
+* some kind of text input and its value is too short
+* a set of checkboxes has not enough boxes checked
+* a select and has not enough options selected<br>
+<br>Works with text inputs, selects and checkboxes.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Makes "field" required having at least 3 characters.</p>
@@ -705,7 +725,7 @@
 <li id="link-minValue-value">
 <span class="fn"><a class="name" href="#link-minValue-value">minValue</a>( <span class="arg-type tooltip" title="">Integer</span> <span class="arg-name tooltip" title="Minimum value required">value</span> ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Makes the element require a given minimum value.</div>
+<div class="desc">Makes the element require a given minimum value.<br>Works with text inputs.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Makes "field" required and 13 or larger.</p>
@@ -738,7 +758,11 @@
 <li id="link-rangeLength-range">
 <span class="fn"><a class="name" href="#link-rangeLength-range">rangeLength</a>( <span class="arg-type tooltip" title="">Array&lt;Integer&gt;</span> <span class="arg-name tooltip" title="Value range required">range</span> ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Makes the element require a given value range.</div>
+<div class="desc">Makes the element require a given value range.<br>Return false, if the element is
+* some kind of text input and its length is too short or too long
+* a set of checkboxes has not enough or too many boxes checked
+* a select and has not enough or too many options selected<br>
+<br>Works with text inputs.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Makes "field" required and between 2 and 6 characters long.</p>
@@ -771,7 +795,7 @@
 <li id="link-rangeValue-range">
 <span class="fn"><a class="name" href="#link-rangeValue-range">rangeValue</a>( <span class="arg-type tooltip" title="">Array&lt;Integer&gt;</span> <span class="arg-name tooltip" title="Value range required">range</span> ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Makes the element require a given value range.</div>
+<div class="desc">Makes the element require a given value range.<br>Works with text inputs.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Makes "field" required and between 13 and 23.</p>
@@ -804,7 +828,7 @@
 <li id="link-refresh-selection">
 <span class="fn"><a class="name" href="#link-refresh-selection">refresh</a>( <span class="arg-type tooltip" title="">Selector</span> <span class="arg-name tooltip" title="Refresh only the given elements, instead of the entire form">selection</span> ) returns <span class="type"><span class="tooltip" title="">undefined</span></span></span>
 <div class="more">
-<div class="desc">Call to refresh a form after new elements have been added or rules changed.</div>
+<div class="desc">Call to refresh a form after new elements have been added or rules changed.<br>Accepts an optional argument to refresh only a part of the form, eg. only the newly added element.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Refrehes the validator after the form has changed.</p>
@@ -826,7 +850,9 @@ validator.refresh( "#newElement" );</code>
 <li id="link-required-">
 <span class="fn"><a class="name" href="#link-required-">required</a>(  ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Makes the element always required.</div>
+<div class="desc">Makes the element always required.<br>Return false if the element is empty (text input) or unchecked (radio/checkbxo) or nothing selected (select).<br>
+<br>Works with text inputs, selects, checkboxes and radio buttons.<br>
+<br>To force a user to select an option from a select box, provide an empty options like &lt;option value=""&gt;Choose...&lt;/option&gt;</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Makes "field" always required. Nothing and blanks are invalid.</p>
@@ -945,7 +971,9 @@ validator.refresh( "#newElement" );</code>
 <li id="link-required-dependency-expression">
 <span class="fn"><a class="name" href="#link-required-dependency-expression">required</a>( <span class="arg-type tooltip" title="A string of characters.">String</span> <span class="arg-name tooltip" title="An expression (String) is evaluated in the context of the element's form, making the field required only if the expression returns more then one element.">dependency-expression</span> ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Makes the element required, depending on the result of the given expression.</div>
+<div class="desc">Makes the element required, depending on the result of the given expression.<br>Return false if the element is empty (text input) or unchecked (radio/checkbxo) or nothing selected (select).<br>
+<br>Works with all kind of text inputs, selects, checkboxes and radio buttons.<br>
+<br>To force a user to select an option from a select box, provide an empty options like &lt;option value=""&gt;Choose...&lt;/option&gt;</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Makes "newsletter-type" required only if "newsletter" is checked.</p>
@@ -965,7 +993,9 @@ validator.refresh( "#newElement" );</code>
 <li id="link-required-dependency-callback">
 <span class="fn"><a class="name" href="#link-required-dependency-callback">required</a>( <span class="arg-type tooltip" title="">Callback</span> <span class="arg-name tooltip" title="The function is executed with the element as it's only argument: If it returns true, the element is required.">dependency-callback</span> ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Makes the element required, depending on the result of the given callback.</div>
+<div class="desc">Makes the element required, depending on the result of the given callback.<br>Return false if the element is empty (text input) or unchecked (radio/checkbxo) or nothing selected (select).<br>
+<br>Works with all kind of text inputs, selects, checkboxes and radio buttons.<br>
+<br>To force a user to select an option from a select box, provide an empty options like &lt;option value=""&gt;Choose...&lt;/option&gt;</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Makes "parent" required only if age is below 13.</p>
@@ -986,7 +1016,7 @@ validator.refresh( "#newElement" );</code>
 <li id="link-resetForm-">
 <span class="fn"><a class="name" href="#link-resetForm-">resetForm</a>(  ) returns <span class="type"><span class="tooltip" title="">undefined</span></span></span>
 <div class="more">
-<div class="desc">Resets the controlled form.</div>
+<div class="desc">Resets the controlled form.<br>Resets input fields to their original value (requires form plugin), removes classes indicating invalid elements and hides error messages.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Reset the form controlled by this validator.</p>
@@ -1000,7 +1030,7 @@ validator.resetForm();</code>
 <li id="link-setDefaults-defaults">
 <span class="fn"><a class="name" href="#link-setDefaults-defaults">setDefaults</a>( <span class="arg-type tooltip" title="">Options</span> <span class="arg-name tooltip" title="Options to set as default.">defaults</span> ) returns <span class="type"><span class="tooltip" title="">undefined</span></span></span>
 <div class="more">
-<div class="desc">Modify default settings for validation.</div>
+<div class="desc">Modify default settings for validation.<br>Accepts everything that &lt;a href='Plugins/Validation/validate'&gt;Plugins/Validation/validate&lt;/a&gt; accepts.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Sets the debug setting for all validation calls.</p>
@@ -1015,7 +1045,7 @@ validator.resetForm();</code>
 <li id="link-showErrors-errors">
 <span class="fn"><a class="name" href="#link-showErrors-errors">showErrors</a>( <span class="arg-type tooltip" title="">Object&lt;String, String&gt;</span> <span class="arg-name tooltip" title="One or more key/value pairs of input names and messages.">errors</span> ) returns <span class="type"><span class="tooltip" title="">undefined</span></span></span>
 <div class="more">
-<div class="desc">Show the specified messages.</div>
+<div class="desc">Show the specified messages.<br>Keys have to refer to the names of elements, values are displayed for those elements, using the configured error placement.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Adds and shows error message programmatically.</p>
@@ -1029,7 +1059,7 @@ validator.showErrors({"firstname": "I know that your firstname is Pete, Pete!"})
 <li id="link-unchecked-">
 <span class="fn"><a class="name" href="#link-unchecked-">unchecked</a>(  ) returns <span class="type"><span class="tooltip" title="An Array of DOM Elements.">Array&lt;Element&gt;</span></span></span>
 <div class="more">
-<div class="desc">Matches all elements that are unchecked.</div>
+<div class="desc">Matches all elements that are unchecked.<br>Inversion of &lt;a href='Selectors/checked'&gt;:checked&lt;/a&gt;.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Finds all input elements that are unchecked.</p>
@@ -1070,7 +1100,8 @@ validator.showErrors({"firstname": "I know that your firstname is Pete, Pete!"})
 <li id="link-url-">
 <span class="fn"><a class="name" href="#link-url-">url</a>(  ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Makes the element require a valid url</div>
+<div class="desc">Makes the element require a valid url<br>Return true, if the value is a valid url.<br>
+<br>Works with text inputs.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Makes "field" required and a url.</p>
@@ -1103,7 +1134,7 @@ validator.showErrors({"firstname": "I know that your firstname is Pete, Pete!"})
 <li id="link-valid-">
 <span class="fn"><a class="name" href="#link-valid-">valid</a>(  ) returns <span class="type"><span class="tooltip" title="true or false.">Boolean</span></span></span>
 <div class="more">
-<div class="desc">Validates the selected form or elements.</div>
+<div class="desc">Validates the selected form or elements.<br>&lt;a href='Plugins/Validation/validate'&gt;validate()&lt;/a&gt; needs to be called on the form before checking it using this method. Shortcut for the validator API.</div>
 <div class="example">
 <h3>Example:</h3>
 <p>Sets up validation for a form, then checks if the form is valid.</p>
@@ -1118,7 +1149,9 @@ validator.showErrors({"firstname": "I know that your firstname is Pete, Pete!"})
 <li id="link-validate-options">
 <span class="fn"><a class="name" href="#link-validate-options">validate</a>( <span class="arg-type tooltip" title="">Options</span> <span class="arg-name tooltip" title="A set of key/value pairs that configure the validate. All options are optional.">options</span> ) returns <span class="type"><span class="tooltip" title="">[[Plugins/Validation#Validator|Validator]]</span></span></span>
 <div class="more">
-<div class="desc">Validates the selected form.</div>
+<div class="desc">Validates the selected form.<br>This method adds, by default, a submit-event-handler to the form and keyup and blur handlers to each element within the form.<br>
+<br>Validation rules can be specified via the rules-option or via metadata (requires metadata plugin). Messages can be left out (there is a default message for each method), specified via the messages-option or via the title-attribute on each element.
+</div>
 <h3>Options</h3>
 <ul class="options">
 <li>
