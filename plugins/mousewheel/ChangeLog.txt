@@ -1,4 +1,10 @@
-== New and Noteworthy ==
+== Mouse Wheel ChangeLog ==
+
+== 3.0 ==
+
+* Uses new special events API in jQuery 1.2.2+
+* You can now treat "mousewheel" as a normal event and use .bind, .unbind and .trigger
+
 
 == 2.3 ==
 
