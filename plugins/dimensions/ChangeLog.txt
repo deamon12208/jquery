@@ -1,4 +1,4 @@
-== New and Noteworthy ==
+== Dimensions ChangeLog ==
 
 == 1.2 ==
 
