@@ -40,9 +40,8 @@
     </target>
 
 	<target name="transform" description="Transform XML via XSL to HTML">
-		<delete dir="output" />
-		<mkdir dir="output" />
-		<xslt includes="*.xml" excludes="build.xml" destdir="output" style="style.xsl" />
+		<delete file="*.html" />
+		<xslt includes="*.xml" excludes="build.xml" destdir="." style="style.xsl" />
 	</target>
 	
 	<target name="min" depends="compile" description="Remove all comments and whitespace, no compression">
