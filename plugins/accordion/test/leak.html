@@ -8,18 +8,21 @@
 	<script type="text/javascript" src="../lib/jquery.js"></script>
 	<script type="text/javascript" src="../lib/jquery.dimensions.js"></script>
 	<script type="text/javascript">
-	$.fn.extend({
-		leak: function() {
-			var container = this;
-			return this.bind("click", function clickHandler() {});
-		}
-	});
-	
-	$(function() {
-		jQuery('#list2')
-			.leak()
-			.change(function() {});
-	});
+$.fn.extend({
+	leak: function() {
+		// removing this line stops the leak
+		var container = this;
+		return this.bind("click", function clickHandler() {});
+	}
+});
+
+$(function() {
+	jQuery('#list2')
+		// removing this, too
+		.leak()
+		// and this as well!
+		.change(function() {});
+});
 	</script>
 </head>
 <body>
