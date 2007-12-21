@@ -1050,7 +1050,7 @@ $.extend(DatepickerInstance.prototype, {
 	_setDateFromField: function(input) {
 		this._input = $(input);
 		var dateFormat = this._get('dateFormat');
-		var dates = inst._input ? this._input.val().split(this._get('rangeSeparator')) : null;
+		var dates = this._input ? this._input.val().split(this._get('rangeSeparator')) : null; 
 		this._endDay = this._endMonth = this._endYear = null;
 		var shortYearCutoff = this._get('shortYearCutoff');
 		shortYearCutoff = (typeof shortYearCutoff != 'string' ? shortYearCutoff :
