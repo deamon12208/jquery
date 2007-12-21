@@ -1251,8 +1251,8 @@ $.extend(DatepickerInstance.prototype, {
 			'" class="datepicker_status">' + this._get('initStatus') + '</div>' : '') +
 			(!closeAtTop && !this._inline ? controls : '') +
 			'<div style="clear: both;"></div>' + 
-			($.browser.msie && parseInt($.browser.version) < 7 && !this._inline ? '' :
-			'<iframe src="javascript:false;" class="datepicker_cover"></iframe>');
+			($.browser.msie && parseInt($.browser.version) < 7 && !this._inline ? 
+			'<iframe src="javascript:false;" class="datepicker_cover"></iframe>' : '');
 		return html;
 	},
 	
