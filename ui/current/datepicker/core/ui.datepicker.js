@@ -657,18 +657,15 @@ $.extend(Datepicker.prototype, {
 			this._updateDatepicker(inst);
 		}
 		else if (rangeSelect) {
+			inst._endDay = inst._currentDay;
+			inst._endMonth = inst._currentMonth;
+			inst._endYear = inst._currentYear;
+			inst._selectedDay = inst._currentDay = inst._rangeStart.getDate();
+			inst._selectedMonth = inst._currentMonth = inst._rangeStart.getMonth();
+			inst._selectedYear = inst._currentYear = inst._rangeStart.getFullYear();
+			inst._rangeStart = null;
 			if (inst._inline) {
-				inst._endDay = inst._currentDay;
-				inst._endMonth = inst._currentMonth;
-				inst._endYear = inst._currentYear;
-				inst._selectedDay = inst._currentDay = inst._rangeStart.getDate();
-				inst._selectedMonth = inst._currentMonth = inst._rangeStart.getMonth();
-				inst._selectedYear = inst._currentYear = inst._rangeStart.getFullYear();
-				inst._rangeStart = null;
 				this._updateDatepicker(inst);
-			}
-			else {
-				inst._rangeStart = null;
 			}
 		}
 	},
@@ -677,7 +674,7 @@ $.extend(Datepicker.prototype, {
 	_clearDate: function(id) {
 		var inst = this._getInst(id);
 		this._stayOpen = false;
-		inst._rangeStart = null;
+		inst._endDay = inst._endMonth = inst._endYear = inst._rangeStart = null;
 		this._selectDate(inst, '');
 	},
 
@@ -1125,7 +1122,8 @@ $.extend(DatepickerInstance.prototype, {
 		var startDate = (!this._currentYear || (this._input && this._input.val() == '') ? null :
 			new Date(this._currentYear, this._currentMonth, this._currentDay));
 		if (this._get('rangeSelect')) {
-			return [startDate, new Date(this._endYear, this._endMonth, this._endDay)];
+			return [startDate, (!this._endYear ? null :
+				new Date(this._endYear, this._endMonth, this._endDay))];
 		}
 		else {
 			return startDate;
