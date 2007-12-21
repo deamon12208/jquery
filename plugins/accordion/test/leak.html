@@ -6,10 +6,19 @@
 	
 	<link rel="stylesheet" href="../demo/demo.css" />
 	<script type="text/javascript" src="../lib/jquery.js"></script>
+	<script type="text/javascript" src="../lib/jquery.dimensions.js"></script>
 	<script type="text/javascript">
+	$.fn.extend({
+		leak: function() {
+			var container = this;
+			return this.bind("click", function clickHandler() {});
+		}
+	});
+	
 	$(function() {
-		// leaks like hell in IE
-		jQuery('#list2').change(function() {});
+		jQuery('#list2')
+			.leak()
+			.change(function() {});
 	});
 	</script>
 </head>
@@ -17,6 +26,18 @@
 	<h1 id="banner">jQuery - Leak Suite</h1>
 
 		<dl id="list2">
+			<dt class="red">Red</dt>
+			<dd>
+				Fancy stuff about red thingies.
+			</dd>
+			<dt class="green selected">Green</dt>
+			<dd>
+				Green! Green! Green!
+			</dd>
+			<dt class="blue">Blue</dt>
+			<dd>
+				Cool kids are blue.
+			</dd>
 		</dl>
 	</body>
 </html>

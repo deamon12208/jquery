@@ -6,8 +6,8 @@
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * $Date: 2007-12-20 14:36:56 +0100 (Don, 20 Dez 2007) $
- * $Rev: 4251 $
+ * $Date: 2007-12-21 06:47:33 +0100 (Fre, 21 Dez 2007) $
+ * $Rev: 4293 $
  */
 
 // Map over jQuery in case of overwrite
@@ -324,6 +324,8 @@ jQuery.fn = jQuery.prototype = {
 		// Copy the events from the original to the clone
 		if ( events === true )
 			this.find("*").andSelf().each(function(i){
+				if (this.nodeType == 3)
+					return;
 				var events = jQuery.data( this, "events" );
 
 				for ( var type in events )
@@ -933,7 +935,7 @@ jQuery.extend({
 			if ( typeof elem == "string" ) {
 				// Fix "XHTML"-style tags in all browsers
 				elem = elem.replace(/(<(\w+)[^>]*?)\/>/g, function(all, front, tag){
-					return tag.match(/^(abbr|br|col|img|input|link|meta|param|hr|area)$/i) ?
+					return tag.match(/^(abbr|br|col|img|input|link|meta|param|hr|area|embed)$/i) ?
 						all :
 						front + "></" + tag + ">";
 				});
@@ -1840,10 +1842,14 @@ jQuery.event = {
 				if ( typeof jQuery == "undefined" || jQuery.event.triggered )
 					return val;
 		
-				val = jQuery.event.handle.apply(elem, arguments);
+				val = jQuery.event.handle.apply(arguments.callee.elem, arguments);
 		
 				return val;
 			});
+		// Add elem as a property of the handle function
+		// This is to prevent a memory leak with non-native
+		// event in IE.
+		handle.elem = elem;
 			
 			// Handle multiple events seperated by a space
 			// jQuery(...).bind("mouseover mouseout", fn);
@@ -1878,6 +1884,9 @@ jQuery.event = {
 				// Keep track of which events have been used, for global triggering
 				jQuery.event.global[type] = true;
 			});
+		
+		// Nullify elem to prevent memory leaks in IE
+		elem = null;
 	},
 
 	guid: 1,
@@ -1941,6 +1950,8 @@ jQuery.event = {
 			// Remove the expando if it's no longer used
 			for ( ret in events ) break;
 			if ( !ret ) {
+				var handle = jQuery.data( elem, "handle" );
+				if ( handle ) handle.elem = null;
 				jQuery.removeData( elem, "events" );
 				jQuery.removeData( elem, "handle" );
 			}
@@ -2054,17 +2065,10 @@ jQuery.event = {
 	},
 
 	fix: function(event) {
-		// Short-circuit if the event has already been fixed by jQuery.event.fix
-		if ( event[ expando ] )
-			return event;
-			
 		// store a copy of the original event object 
 		// and clone to set read-only properties
 		var originalEvent = event;
 		event = jQuery.extend({}, originalEvent);
-		
-		// Mark the event as fixed by jQuery.event.fix
-		event[ expando ] = true;
 		
 		// add preventDefault and stopPropagation since 
 		// they will not work on the clone
@@ -2269,7 +2273,7 @@ jQuery.extend({
 			}
 		
 			// Trigger any bound ready events
-			$(document).triggerHandler("ready");
+			jQuery(document).triggerHandler("ready");
 		}
 	}
 });
@@ -2982,9 +2986,6 @@ jQuery.fn.extend({
 			return queue( this[0], type );
 
 		return this.each(function(){
-			if ( this.nodeType != 1)
-				return;
-
 			if ( fn.constructor == Array )
 				queue(this, type, fn);
 			else {
