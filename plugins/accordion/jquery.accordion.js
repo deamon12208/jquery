@@ -88,8 +88,7 @@ $.fn.extend({
 		}
 		
 		// calculate active if not specified, using the first header
-		var container = this,
-			headers = container.find(settings.header),
+		var headers = this.find(settings.header),
 			active = findActive(settings.active),
 			running = 0;
 
@@ -138,7 +137,7 @@ $.fn.extend({
 					});
 				}
 				// trigger custom change event
-				container.trigger("change", data);
+				$(this).trigger("change", data);
 			};
 			
 			// count elements to animate
@@ -173,7 +172,7 @@ $.fn.extend({
 				active.parent().andSelf().toggleClass(settings.selectedClass);
 				var toHide = active.next();
 				var toShow = active = $([]);
-				toggle( toShow, toHide );
+				toggle.call(this, toShow, toHide );
 				return false;
 			}
 			// get the click target
@@ -204,7 +203,7 @@ $.fn.extend({
 				down = headers.index( active[0] ) > headers.index( clicked[0] );
 			
 			active = clickedActive ? $([]) : clicked;
-			toggle( toShow, toHide, data, clickedActive, down );
+			toggle.call(this, toShow, toHide, data, clickedActive, down );
 
 			return false;
 		};
@@ -218,7 +217,7 @@ $.fn.extend({
 			});
 		};
 
-		return container
+		return this
 			.bind(settings.event || "", clickHandler)
 			.bind("activate", activateHandler);
 	},
