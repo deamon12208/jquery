@@ -224,7 +224,10 @@ $.extend(Datepicker.prototype, {
 		input.addClass(this.markerClassName).append(inst._datepickerDiv);
 		input[0]._calId = inst._id;
 		this._updateDatepicker(inst);
-		inst._datepickerDiv.resize(function() { $.datepicker._inlineShow(inst); });
+		/* @todo: fix _inlineShow automatic resizing
+			- Endless loop bug in IE6.  
+			- inst._datepickerDiv.resize doesn't ever fire in firefox.  */
+		// inst._datepickerDiv.resize(function() { $.datepicker._inlineShow(inst); });
 	},
 
 	/* Tidy up after displaying the date picker. */
@@ -232,7 +235,7 @@ $.extend(Datepicker.prototype, {
 		var numMonths = inst._get('numberOfMonths'); // fix width for dynamic number of date pickers
 		numMonths = (numMonths == null ? 1 : (typeof numMonths == 'number' ? numMonths : numMonths[1]));
 		inst._datepickerDiv.width(numMonths * $('.datepicker', inst._datepickerDiv[0]).width());
-	},
+	}, 
 
 	/* Does this element have a particular class? */
 	_hasClass: function(element, className) {
@@ -478,13 +481,13 @@ $.extend(Datepicker.prototype, {
 		var numMonths = inst._get('numberOfMonths'); // fix width for dynamic number of date pickers
 		numMonths = (numMonths == null ? 1 : (typeof numMonths == 'number' ? numMonths : numMonths[1]));
 		inst._datepickerDiv.width(numMonths * $('.datepicker', inst._datepickerDiv[0]).width());
-		if ($.browser.msie) { // fix IE < 7 select problems
+		if ($.browser.msie && parseInt($.browser.version) < 7) { // fix IE < 7 select problems
 			$('#datepicker_cover').css({width: inst._datepickerDiv.width() + 4,
 				height: inst._datepickerDiv.height() + 4});
 		}
 		// re-position on screen if necessary
 		var isFixed = inst._datepickerDiv.css('position') == 'fixed';
-		var pos = $.datepicker._findPos(inst._input[0]);
+		var pos = inst._input ? $.datepicker._findPos(inst._input[0]) : null;
 		var browserWidth = window.innerWidth || document.documentElement.clientWidth ||
 			document.body.clientWidth;
 		var browserHeight = window.innerHeight || document.documentElement.clientHeight ||
@@ -496,7 +499,7 @@ $.extend(Datepicker.prototype, {
 				(isFixed && $.browser.msie ? document.documentElement.scrollLeft : 0)) >
 				(browserWidth + scrollX)) {
 			inst._datepickerDiv.css('left', Math.max(scrollX,
-				pos[0] + $(inst._input[0]).width() - inst._datepickerDiv.width() -
+				pos[0] + (inst._input ? $(inst._input[0]).width() : null) - inst._datepickerDiv.width() -
 				(isFixed && $.browser.opera ? document.documentElement.scrollLeft : 0)) + 'px');
 		}
 		// reposition date picker vertically if outside the browser window
@@ -693,7 +696,9 @@ $.extend(Datepicker.prototype, {
 			onSelect(dateStr, inst);  // trigger custom callback
 		}
 		else {
-			inst._input.trigger('change'); // fire the change event
+			if (inst._input) {
+				inst._input.trigger('change'); // fire the change event
+			}
 		}
 		if (inst._inline) {
 			this._updateDatepicker(inst);
@@ -1048,7 +1053,7 @@ $.extend(DatepickerInstance.prototype, {
 	_setDateFromField: function(input) {
 		this._input = $(input);
 		var dateFormat = this._get('dateFormat');
-		var dates = this._input.val().split(this._get('rangeSeparator'));
+		var dates = inst._input ? this._input.val().split(this._get('rangeSeparator')) : null;
 		this._endDay = this._endMonth = this._endYear = null;
 		var shortYearCutoff = this._get('shortYearCutoff');
 		shortYearCutoff = (typeof shortYearCutoff != 'string' ? shortYearCutoff :
@@ -1247,8 +1252,9 @@ $.extend(DatepickerInstance.prototype, {
 		html += (showStatus ? '<div id="datepicker_status_' + this._id + 
 			'" class="datepicker_status">' + this._get('initStatus') + '</div>' : '') +
 			(!closeAtTop && !this._inline ? controls : '') +
-			'<div style="clear: both;"></div>' + (!$.browser.msie ? '' :
-			'<!--[if lte IE 6.5]><iframe src="javascript:false;" class="datepicker_cover"></iframe><![endif]-->');
+			'<div style="clear: both;"></div>' + 
+			($.browser.msie && parseInt($.browser.version) < 7 && !this._inline ? '' :
+			'<iframe src="javascript:false;" class="datepicker_cover"></iframe>');
 		return html;
 	},
 	
