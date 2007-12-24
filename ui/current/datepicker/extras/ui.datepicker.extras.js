@@ -19,6 +19,12 @@ function SpecialDays(allowWeekends, days, dateFormat) {
 	this._allowWeekends = allowWeekends;
 	this._days = days;
 	this._dateFormat = dateFormat;
+	for (var name in this._days) {
+		var days = this._days[name];
+		for (var d in days) {
+			days[d] = $.datepicker.parseDate(this._dateFormat, days[d]);
+		}
+	}
 }
 
 $.extend(SpecialDays.prototype, {
@@ -30,9 +36,8 @@ $.extend(SpecialDays.prototype, {
 		for (var name in this._days) {
 			var days = this._days[name];
 			for (var d in days) {
-				var checkDate = $.datepicker.parseDate(this._dateFormat, days[d]);
-				if (date.getDate() == checkDate.getDate() &&
-						date.getMonth() == checkDate.getMonth()) {
+				if (date.getDate() == days[d].getDate() &&
+						date.getMonth() == days[d].getMonth()) {
 					return [false, name];
 				}
 			}
