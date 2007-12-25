@@ -137,6 +137,7 @@ $.extend(Datepicker.prototype, {
 						break; // hide on tab out
 				case 13: $.datepicker._selectDay(inst, inst._selectedMonth, inst._selectedYear,
 							$('td.datepicker_daysCellOver', inst._datepickerDiv)[0]);
+						return false; // don't submit the form
 						break; // select the value on enter
 				case 27: $.datepicker.hideDatepicker(inst._get('speed'));
 						break; // hide on escape
