@@ -1140,11 +1140,11 @@ $.extend(DatepickerInstance.prototype, {
 		// build the date picker HTML
 		var clear = (this._get('mandatory') ? '' :
 			'<div class="datepicker_clear"><a onclick="jQuery.datepicker._clearDate(' + this._id + ');"' + 
-			(showStatus ? this._addStatus(this._get('clearStatus')) : '') + '>' +
+			(showStatus ? this._addStatus(this._get('clearStatus') || '&#xa0;') : '') + '>' +
 			this._get('clearText') + '</a></div>');
 		var controls = '<div class="datepicker_control">' + (isRTL ? '' : clear) +
 			'<div class="datepicker_close"><a onclick="jQuery.datepicker.hideDatepicker();"' +
-			(showStatus ? this._addStatus(this._get('closeStatus')) : '') + '>' +
+			(showStatus ? this._addStatus(this._get('closeStatus') || '&#xa0;') : '') + '>' +
 			this._get('closeText') + '</a></div>' + (isRTL ? clear : '')  + '</div>';
 		var prompt = this._get('prompt');
 		var closeAtTop = this._get('closeAtTop');
@@ -1156,18 +1156,20 @@ $.extend(DatepickerInstance.prototype, {
 		// controls and links
 		var prev = '<div class="datepicker_prev">' + (this._canAdjustMonth(-1) ? 
 			'<a onclick="jQuery.datepicker._adjustDate(' + this._id + ', -' + stepMonths + ', \'M\');"' +
-			(showStatus ? this._addStatus(this._get('prevStatus')) : '') + '>' + this._get('prevText') + '</a>' :
+			(showStatus ? this._addStatus(this._get('prevStatus') || '&#xa0;') : '') + '>' +
+			this._get('prevText') + '</a>' :
 			(hideIfNoPrevNext ? '' : '<label>' + this._get('prevText') + '</label>')) + '</div>';
 		var next = '<div class="datepicker_next">' + (this._canAdjustMonth(+1) ?
 			'<a onclick="jQuery.datepicker._adjustDate(' + this._id + ', +' + stepMonths + ', \'M\');"' +
-			(showStatus ? this._addStatus(this._get('nextStatus')) : '') + '>' + this._get('nextText') + '</a>' :
+			(showStatus ? this._addStatus(this._get('nextStatus') || '&#xa0;') : '') + '>' +
+			this._get('nextText') + '</a>' :
 			(hideIfNoPrevNext ? '>' : '<label>' + this._get('nextText') + '</label>')) + '</div>';
 		var html = (prompt ? '<div class="datepicker_prompt">' + prompt + '</div>' : '') +
 			(closeAtTop && !this._inline ? controls : '') +
 			'<div class="datepicker_links">' + (isRTL ? next : prev) +
 			(this._isInRange(today) ? '<div class="datepicker_current">' +
 			'<a onclick="jQuery.datepicker._gotoToday(' + this._id + ');"' +
-			(showStatus ? this._addStatus(this._get('currentStatus')) : '') + '>' +
+			(showStatus ? this._addStatus(this._get('currentStatus') || '&#xa0;') : '') + '>' +
 			this._get('currentText') + '</a></div>' : '') + (isRTL ? prev : next) + '</div>';
 		var minDate = this._getMinDate();
 		var maxDate = this._get('maxDate');
@@ -1190,11 +1192,12 @@ $.extend(DatepickerInstance.prototype, {
 			var dayNamesMin = this._get('dayNamesMin');
 			for (var dow = 0; dow < 7; dow++) { // days of the week
 				var day = (dow + firstDay) % 7;
+				var status = this._get('dayStatus') || '&#xa0;';
+				status = (status.indexOf('DD') > -1 ? status.replace(/DD/, dayNames[day]) :
+					status.replace(/D/, dayNamesShort[day]));
 				html += '<td>' + (!changeFirstDay ? '<span' :
 					'<a onclick="jQuery.datepicker._changeFirstDay(' + this._id + ', ' + day + ');"') + 
-					(showStatus ? this._addStatus(this._get('dayStatus').
-					replace(/DD/, dayNames[day]).replace(/D/, dayNamesShort[day])) : '') +
-					' title="' + dayNames[day] + '">' +
+					(showStatus ? this._addStatus(status) : '') + ' title="' + dayNames[day] + '">' +
 					dayNamesMin[day] + (changeFirstDay ? '</a>' : '</span>') + '</td>';
 			}
 			html += '</tr></thead><tbody>';
@@ -1229,7 +1232,7 @@ $.extend(DatepickerInstance.prototype, {
 						(printDate.getTime() == today.getTime() ? ' datepicker_today' : ''))) + '"' + // highlight today (if different)
 						(unselectable ? '' : ' onmouseover="jQuery(this).addClass(\'datepicker_daysCellOver\');' +
 						(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#datepicker_status_' +
-						this._id + '\').html(\'' + dateStatus(printDate, this) +'\');') + '"' +
+						this._id + '\').html(\'' + (dateStatus(printDate, this) || '&#xa0;') +'\');') + '"' +
 						' onmouseout="jQuery(this).removeClass(\'datepicker_daysCellOver\');' +
 						(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#datepicker_status_' +
 						this._id + '\').html(\'&#xa0;\');') + '" onclick="jQuery.datepicker._selectDay(' +
@@ -1249,7 +1252,7 @@ $.extend(DatepickerInstance.prototype, {
 		}
 		}
 		html += (showStatus ? '<div id="datepicker_status_' + this._id + 
-			'" class="datepicker_status">' + this._get('initStatus') + '</div>' : '') +
+			'" class="datepicker_status">' + (this._get('initStatus') || '&#xa0;') + '</div>' : '') +
 			(!closeAtTop && !this._inline ? controls : '') +
 			'<div style="clear: both;"></div>' + 
 			($.browser.msie && parseInt($.browser.version) < 7 && !this._inline ? 
@@ -1273,7 +1276,7 @@ $.extend(DatepickerInstance.prototype, {
 			html += '<select class="datepicker_newMonth" ' +
 				'onchange="jQuery.datepicker._selectMonthYear(' + this._id + ', this, \'M\');" ' +
 				'onclick="jQuery.datepicker._clickMonthYear(' + this._id + ');"' +
-				(showStatus ? this._addStatus(this._get('monthStatus')) : '') + '>';
+				(showStatus ? this._addStatus(this._get('monthStatus') || '&#xa0;') : '') + '>';
 			for (var month = 0; month < 12; month++) {
 				if ((!inMinYear || month >= minDate.getMonth()) &&
 						(!inMaxYear || month <= maxDate.getMonth())) {
@@ -1310,7 +1313,7 @@ $.extend(DatepickerInstance.prototype, {
 			html += '<select class="datepicker_newYear" ' +
 				'onchange="jQuery.datepicker._selectMonthYear(' + this._id + ', this, \'Y\');" ' +
 				'onclick="jQuery.datepicker._clickMonthYear(' + this._id + ');"' +
-				(showStatus ? this._addStatus(this._get('yearStatus')) : '') + '>';
+				(showStatus ? this._addStatus(this._get('yearStatus') || '&#xa0;') : '') + '>';
 			for (; year <= endYear; year++) {
 				html += '<option value="' + year + '"' +
 					(year == drawYear ? ' selected="selected"' : '') +
