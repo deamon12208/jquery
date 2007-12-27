@@ -3,67 +3,57 @@
 	//Make nodes selectable by expression
 	$.extend($.expr[':'], { droppable: "(' '+a.className+' ').indexOf(' ui-droppable ')" });
 
-	//Macros for external methods that support chaining
-	var methods = "destroy,enable,disable".split(",");
-	for(var i=0;i<methods.length;i++) {
-		var cur = methods[i], f;
-		eval('f = function() { var a = arguments; return this.each(function() { if(jQuery(this).is(".ui-droppable")) jQuery.data(this, "ui-droppable")["'+cur+'"](a); }); }');
-		$.fn["droppable"+cur.substr(0,1).toUpperCase()+cur.substr(1)] = f;
-	};
-	
-	//get instance method
-	$.fn.droppableInstance = function() {
-		if($(this[0]).is(".ui-droppable")) return $.data(this[0], "ui-droppable");
-		return false;
-	};
-
 	$.fn.droppable = function(o) {
 		return this.each(function() {
 			new $.ui.droppable(this,o);
 		});
-	}
+	};
 	
-	$.ui.droppable = function(el,o) {
+	$.ui.droppable = function(element, options) {
 
-		if(!o) var o = {};			
-		this.element = el; if($.browser.msie) el.droppable = 1;
-		$.data(el, "ui-droppable", this);
+		//Initialize needed constants			
+		this.element = $(element);
+		$.data(element, "ui-droppable", this);
+		this.element.addClass("ui-droppable");		
 		
-		this.options = {};
-		$.extend(this.options, o);
-		
-		var accept = o.accept;
-		$.extend(this.options, {
+		//Prepare the passed options
+		this.options = $.extend({}, options);
+		var o = this.options; var accept = o.accept;
+		$.extend(o, {
 			accept: o.accept && o.accept.constructor == Function ? o.accept : function(d) {
 				return $(d).is(accept);	
 			},
-			tolerance: o.tolerance || 'intersect'
+			tolerance: o.tolerance || 'intersect'		
 		});
-		o = this.options;
-		var self = this;
 		
-		$.ui.ddmanager.droppables.push({ item: this, over: 0, out: 1 }); // Add the reference and positions to the manager
-		$(this.element).addClass("ui-droppable");
+		//Store the droppable's proportions
+		this.proportions = { width: this.element.outerWidth(), height: this.element.outerHeight() };
+		
+		// Add the reference and positions to the manager
+		$.ui.ddmanager.droppables.push({ item: this, over: 0, out: 1 });
 			
 	};
 	
 	$.extend($.ui.droppable.prototype, {
 		plugins: {},
-		prepareCallbackObj: function(c) {
+		ui: function(c) {
 			return {
 				draggable: c,
-				droppable: this,
+				instance: this,
 				element: c.element,
 				helper: c.helper,
+				position: c.position,
+				absolutePosition: c.positionAbs,
 				options: this.options	
-			}			
+			};		
 		},
 		destroy: function() {
-			$(this.element).removeClass("ui-droppable").removeClass("ui-droppable-disabled");
 			
+			$(this.element).removeClass("ui-droppable ui-droppable-disabled");
 			for(var i=0;i<$.ui.ddmanager.droppables.length;i++) {
 				if($.ui.ddmanager.droppables[i].item == this) $.ui.ddmanager.droppables.splice(i,1);
 			}
+			
 		},
 		enable: function() {
 			$(this.element).removeClass("ui-droppable-disabled");
@@ -73,111 +63,78 @@
 			$(this.element).addClass("ui-droppable-disabled");
 			this.disabled = true;
 		},
-		move: function(e) {
-
-			if(!$.ui.ddmanager.current) return;
-
-			var o = this.options;
-			var c = $.ui.ddmanager.current;
-			
-			/* Save current target, if no last target given */
-			var findCurrentTarget = function(e) {
-				if(e.currentTarget) return e.currentTarget;
-				var el = e.srcElement; 
-				do { if(el.droppable) return el; el = el.parentNode; } while (el); //This is only used in IE! references in DOM are evil!
-			}
-			if(c && o.accept(c.element)) c.currentTarget = findCurrentTarget(e);
-			
-			c.drag.apply(c, [e]);
-			e.stopPropagation ? e.stopPropagation() : e.cancelBubble = true;
-			
-		},
 		over: function(e) {
 
-			var c = $.ui.ddmanager.current;
-			if (!c || c.element == this.element) return; // Bail if draggable and droppable are same element
+			var draggable = $.ui.ddmanager.current;
+			if (!draggable || draggable.element == this.element) return; // Bail if draggable and droppable are same element
 			
-			var o = this.options;
-			if (o.accept(c.element)) {
-				$.ui.plugin.call(this, 'over', [e, this.prepareCallbackObj(c)]);
-				$(this.element).triggerHandler("dropover", [e, this.prepareCallbackObj(c)], o.over);
+			if (this.options.accept(draggable.element)) {
+				$.ui.plugin.call(this, 'over', [e, this.ui(draggable)]);
+				$(this.element).triggerHandler("dropover", [e, this.ui(draggable)], this.options.over);
 			}
 			
 		},
 		out: function(e) {
 
-			var c = $.ui.ddmanager.current;
-			if (!c || c.element == this.element) return; // Bail if draggable and droppable are same element
+			var draggable = $.ui.ddmanager.current;
+			if (!draggable || draggable.element == this.element) return; // Bail if draggable and droppable are same element
 
-			var o = this.options;
-			if (o.accept(c.element)) {
-				$.ui.plugin.call(this, 'out', [e, this.prepareCallbackObj(c)]);
-				$(this.element).triggerHandler("dropout", [e, this.prepareCallbackObj(c)], o.out);
+			if (this.options.accept(draggable.element)) {
+				$.ui.plugin.call(this, 'out', [e, this.ui(draggable)]);
+				$(this.element).triggerHandler("dropout", [e, this.ui(draggable)], this.options.out);
 			}
 			
 		},
 		drop: function(e) {
 
-			var c = $.ui.ddmanager.current;
-			if (!c || c.element == this.element) return; // Bail if draggable and droppable are same element
+			var draggable = $.ui.ddmanager.current;
+			if (!draggable || draggable.element == this.element) return; // Bail if draggable and droppable are same element
 			
-			var o = this.options;
-			if(o.accept(c.element)) { // Fire callback
-				if(o.greedy && !c.slowMode) {
-					if(c.currentTarget == this.element) {
-						$.ui.plugin.call(this, 'drop', [e, {
-							draggable: c,
-							droppable: this,
-							element: c.element,
-							helper: c.helper	
-						}]);
-						$(this.element).triggerHandler("drop", [e, {
-							draggable: c,
-							droppable: this,
-							element: c.element,
-							helper: c.helper	
-						}], o.drop);
-					}
-				} else {
-					$.ui.plugin.call(this, 'drop', [e, this.prepareCallbackObj(c)]);
-					$(this.element).triggerHandler("drop", [e, this.prepareCallbackObj(c)], o.drop);
-				}
+			if(this.options.accept(draggable.element)) {
+				$.ui.plugin.call(this, 'drop', [e, this.ui(draggable)]);
+				$(this.element).triggerHandler("drop", [e, this.ui(draggable)], this.options.drop);
 			}
 			
 		},
 		activate: function(e) {
-			var c = $.ui.ddmanager.current;
-			$.ui.plugin.call(this, 'activate', [e, this.prepareCallbackObj(c)]);
-			if(c) $(this.element).triggerHandler("dropactivate", [e, this.prepareCallbackObj(c)], this.options.activate);	
+
+			var draggable = $.ui.ddmanager.current;
+			$.ui.plugin.call(this, 'activate', [e, this.ui(draggable)]);
+			if(draggable) $(this.element).triggerHandler("dropactivate", [e, this.ui(draggable)], this.options.activate);
+				
 		},
 		deactivate: function(e) {
-			var c = $.ui.ddmanager.current;
-			$.ui.plugin.call(this, 'deactivate', [e, this.prepareCallbackObj(c)]);
-			if(c) $(this.element).triggerHandler("dropdeactivate", [e, this.prepareCallbackObj(c)], this.options.deactivate);
+			
+			var draggable = $.ui.ddmanager.current;
+			$.ui.plugin.call(this, 'deactivate', [e, this.ui(draggable)]);
+			if(draggable) $(this.element).triggerHandler("dropdeactivate", [e, this.ui(draggable)], this.options.deactivate);
+			
 		}
 	});
 	
-	$.ui.intersect = function(oDrag, oDrop, toleranceMode) {
-		if (!oDrop.offset)
-			return false;
-		var x1 = oDrag.rpos[0] - oDrag.options.cursorAt.left + oDrag.options.margins.left, x2 = x1 + oDrag.helperSize.width,
-		    y1 = oDrag.rpos[1] - oDrag.options.cursorAt.top + oDrag.options.margins.top, y2 = y1 + oDrag.helperSize.height;
-		var l = oDrop.offset.left, r = l + oDrop.item.element.offsetWidth, 
-		    t = oDrop.offset.top,  b = t + oDrop.item.element.offsetHeight;
+	$.ui.intersect = function(draggable, droppable, toleranceMode) {
+
+		if (!droppable.offset) return false;
+		
+		var x1 = draggable.positionAbs.left, x2 = x1 + draggable.helperProportions.width,
+		    y1 = draggable.positionAbs.top, y2 = y1 + draggable.helperProportions.height;
+		var l = droppable.offset.left, r = l + droppable.item.proportions.width, 
+		    t = droppable.offset.top,  b = t + droppable.item.proportions.height;
+
 		switch (toleranceMode) {
 			case 'fit':
 				return (   l < x1 && x2 < r
 					&& t < y1 && y2 < b);
 				break;
 			case 'intersect':
-				return (   l < x1 + (oDrag.helperSize.width  / 2)        // Right Half
-					&&     x2 - (oDrag.helperSize.width  / 2) < r    // Left Half
-					&& t < y1 + (oDrag.helperSize.height / 2)        // Bottom Half
-					&&     y2 - (oDrag.helperSize.height / 2) < b ); // Top Half
+				return (   l < x1 + (draggable.helperProportions.width  / 2)        // Right Half
+					&&     x2 - (draggable.helperProportions.width  / 2) < r    // Left Half
+					&& t < y1 + (draggable.helperProportions.height / 2)        // Bottom Half
+					&&     y2 - (draggable.helperProportions.height / 2) < b ); // Top Half
 				break;
 			case 'pointer':
-				return (   l < oDrag.rpos[0] && oDrag.rpos[0] < r
-					&& t < oDrag.rpos[1] && oDrag.rpos[1] < b);
+				return (   l < (draggable.positionAbs.left + draggable.clickOffset.left) && (draggable.positionAbs.left + draggable.clickOffset.left) < r
+					&& t < (draggable.positionAbs.top + draggable.clickOffset.top) && (draggable.positionAbs.top + draggable.clickOffset.top) < b);
 				break;
 			case 'touch':
 				return (   (l < x1 && x1 < r && t < y1 && y1 < b)    // Top-Left Corner
@@ -188,8 +145,66 @@
 			default:
 				return false;
 				break;
+			}
+		
+	};
+	
+	/*
+		This manager tracks offsets of draggables and droppables
+	*/
+	$.ui.ddmanager = {
+		current: null,
+		droppables: [],
+		prepareOffsets: function(t, e) {
+
+			var m = $.ui.ddmanager.droppables;
+			for (var i = 0; i < m.length; i++) {
+				
+				if(m[i].item.disabled) continue;
+				m[i].offset = $(m[i].item.element).offset();
+				
+				if (t && m[i].item.options.accept(t.element)) //Activate the droppable if used directly from draggables
+					m[i].item.activate.call(m[i].item, e);
+					
+			}
+			
+		},
+		drop: function(draggable, e) {
+			
+			$.each($.ui.ddmanager.droppables, function() {
+				
+				if (!this.item.disabled && $.ui.intersect(draggable, this, this.item.options.tolerance))
+					this.item.drop.call(this.item, e);
+					
+				if (!this.item.disabled && this.item.options.accept(draggable.element)) {
+					this.out = 1; this.over = 0;
+					this.item.deactivate.call(this.item, e);
+				}
+				
+			});
+			
+		},
+		drag: function(draggable, e) {
+			
+			//If you have a highly dynamic page, you might try this option. It renders positions every time you move the mouse.
+			if(draggable.options.refreshPositions) $.ui.ddmanager.prepareOffsets();
+		
+			//Run through all draggables and check their positions based on specific tolerance options
+			$.each($.ui.ddmanager.droppables, function() {
+
+				if(this.item.disabled) return false; 
+				var intersects = $.ui.intersect(draggable, this, this.item.options.tolerance);
+
+				var c = !intersects && this.over == 1 ? 'out' : (intersects && this.over == 0 ? 'over' : null);
+				if(!c) return;
+					
+				this[c] = 1; this[c == 'out' ? 'over' : 'out'] = 0;
+				this.item[c].call(this.item, e);
+					
+			});
+			
 		}
-	}
+	};
 	
 })(jQuery);
 
