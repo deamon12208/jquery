@@ -142,6 +142,10 @@
 		}
 	});
 
+
+/*** THE FOLLOWING TWO PLUGINS ARE NOT WORKING AT THIS POINT! ***/
+
+
 	$.ui.plugin.add("draggable", "scroll", function(e,ui) {
 		drag: function(e,ui) {
 
