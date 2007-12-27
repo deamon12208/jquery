@@ -10,7 +10,7 @@
 	};
 	
 	$.ui.draggable = function(element, options) {
-		
+	
 		//Initialize needed constants
 		var self = this;
 		this.element = $(element);
@@ -83,7 +83,7 @@
 			//Find out the next positioned parent
 			this.offsetParent = (function(cp) {
 				while(cp) {
-					if(cp.style && /(absolute|relative|fixed)/.test($.css(cp,'position'))) return $(cp);
+					if(cp.style && (/(absolute|relative|fixed)/).test($.css(cp,'position'))) return $(cp);
 					cp = cp.parentNode ? cp.parentNode : null;
 				}; return $("body");		
 			})(this.helper[0].parentNode);
@@ -126,15 +126,16 @@
 
 		},
 		clear: function() {
-			if($.ui.ddmanager) {
-				$.ui.ddmanager.current = null;
-				$.ui.ddmanager.last = this;				
-			}
+			if($.ui.ddmanager) $.ui.ddmanager.current = null;
 			this.helper = null;
 		},
 		stop: function(e) {
 
-			if ($.ui.ddmanager && !this.options.dropBehaviour) $.ui.ddmanager.drop(this, e);
+			//If we are using droppables, inform the manager about the drop
+			if ($.ui.ddmanager && !this.options.dropBehaviour)
+				$.ui.ddmanager.drop(this, e);
+				
+			//Call plugins and trigger callbacks
 			this.propagate("stop", e);
 			
 			if(this.cancelHelperRemoval) return false;			
