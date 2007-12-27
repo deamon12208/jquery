@@ -90,9 +90,10 @@
 			
 			//Prepare variables for position generation
 			this.elementOffset = this.element.offset();
+			this.offsetParentOffset = this.offsetParent.offset();
+			var elementPosition = { left: this.elementOffset.left - this.offsetParentOffset.left, top: this.elementOffset.top - this.offsetParentOffset.top };
 			this._pageX = e.pageX; this._pageY = e.pageY;
 			this.clickOffset = { left: e.pageX - this.elementOffset.left, top: e.pageY - this.elementOffset.top };
-			var elementPosition = this.element.position();
 			var r = this.helper.css('position') == 'relative';
 
 			//Generate the original position
