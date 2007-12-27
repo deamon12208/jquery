@@ -49,12 +49,17 @@ test("email", function() {
 	ok( method( "ole@føtex.dk"), "Valid email" );
 	ok( method( "jörn@bassistance.de"), "Valid email" );
 	ok( method( "bla.blu@g.mail.com"), "Valid email" );
+	ok( method( "name@domain" ), "Valid email" );
+	ok( method( "\"Scott Gonzalez\"@example.com" ), "Valid email" );
+	ok( method( "\"Scott González\"@example.com" ), "Valid email" );
+	ok( method( "\"name.\"@domain" ), "Valid email" );
+	ok( method( "\"name,\"@domain" ), "Valid email" );
+	ok( method( "\"name;\"@domain" ), "Valid email" );
 	ok(!method( "name" ), "Invalid email" );
 	ok(!method( "name@" ), "Invalid email" );
-	ok(!method( "name@domain" ), "Invalid email" );
-	ok(!method( "name.@domain" ), "Invalid email" );
-	ok(!method( "name,@domain" ), "Invalid email" );
-	ok(!method( "name;@domain" ), "Invalid email" );
+	ok(!method( "name.@domain.tld" ), "Invalid email" );
+	ok(!method( "name,@domain.tld" ), "Invalid email" );
+	ok(!method( "name;@domain.tld" ), "Invalid email" );
 });
 
 test("number", function() {

@@ -9,6 +9,7 @@
 * Added support for ajax-validation, see method "remote"
 * Added highlight and unhighlight options, by default toggles errorClass on element, allows custom highlighting
 * Added valid() plugin method for easy programmatic checking of forms and fields without the need to use the validator API
+* Replaced regex for email method, thanks to the contribution by Scott Gonzalez, see http://projects.scottsplayground.com/email_address_validation/
 
 1.1.2
 ---
