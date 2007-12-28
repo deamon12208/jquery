@@ -2,6 +2,7 @@
 -----
 * Added URL validation.
 * Added a basic demo.
+* Fixed email validation.
 
 0.3.6
 -----
