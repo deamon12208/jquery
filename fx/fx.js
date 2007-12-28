@@ -38,7 +38,7 @@
 		wrapper.css({position: 'relative'});
 		el.css({position: 'relative'});
 	  } else {
-		wrapper.css({position: el.css('position'), top: parseInt(el.css('top')) || null, left: parseInt(el.css('left')) || null, bottom: parseInt(el.css('bottom')) || null, right: parseInt(el.css('right')) || null});
+		wrapper.css({position: el.css('position'), top: parseInt(el.css('top'),10) || null, left: parseInt(el.css('left'),10) || null, bottom: parseInt(el.css('bottom'),10) || null, right: parseInt(el.css('right'),10) || null});
 		wrapper.show();
 		el.css({position: 'relative', top:0, left:0});
 	  }
@@ -78,7 +78,7 @@
 		  if( typeof newStyle[n] != "function" && newStyle[n] /* No functions and null properties */
 			&& n.indexOf("Moz") == -1 && n.indexOf("length") == -1 /* No mozilla spezific render properties. */
 			&& newStyle[n] != oldStyle[n] /* Only values that have changed are used for the animation */
-			&& (n.match(/color/i) || (!n.match(/color/i) && !isNaN(parseInt(newStyle[n])))) /* Only things that can be parsed to integers or colors */
+			&& (n.match(/color/i) || (!n.match(/color/i) && !isNaN(parseInt(newStyle[n],10)))) /* Only things that can be parsed to integers or colors */
 			&& (oldStyle.position != "static" || (oldStyle.position == "static" && !n.match(/left|top|bottom|right/))) /* No need for positions when dealing with static positions */
 		  ) offset[n] = newStyle[n];
 		}
@@ -111,16 +111,16 @@
 		if(!arguments[0] || (arguments[0].constructor == Number || /(slow|fast)/.test(arguments[0])))
 			return this._show.apply(this, arguments);
 		else {
-			arguments[1] = arguments[1] || {}; arguments[1]['mode'] = 'show';
-			return this.effect.apply(this, arguments);
+			var o = arguments[1] || {}; o['mode'] = 'show';
+			return this.effect.apply(this, [arguments[0], o]);
 		}
 	},
 	hide: function() {
 		if(!arguments[0] || (arguments[0].constructor == Number || /(slow|fast)/.test(arguments[0])))
 			return this._hide.apply(this, arguments);
 		else {
-			arguments[1] = arguments[1] || {}; arguments[1]['mode'] = 'hide';
-			return this.effect.apply(this, arguments);
+			var o = arguments[1] || {}; o['mode'] = 'hide';
+			return this.effect.apply(this, [arguments[0], o]);
 		}
 	},
 	toggle: function(){
