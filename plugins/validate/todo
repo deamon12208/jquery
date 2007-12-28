@@ -1,3 +1,7 @@
+- fix dynamic inputs demo
+  -> caused by lack of update to elements property for partial refresh
+     -> fix my removing the need for refresh altogether
+
 event architecture draft
 ------------------------
 

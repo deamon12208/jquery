@@ -1,13 +1,13 @@
 (function(){
 /*
- * jQuery 1.2.2pre - New Wave Javascript
+ * jQuery 1.2.2b2 - New Wave Javascript
  *
  * Copyright (c) 2007 John Resig (jquery.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * $Date: 2007-12-19 19:23:46 +0100 (Mi, 19 Dez 2007) $
- * $Rev: 4236 $
+ * $Date: 2007-12-20 14:36:56 +0100 (Don, 20 Dez 2007) $
+ * $Rev: 4251 $
  */
 
 // Map over jQuery in case of overwrite
@@ -499,7 +499,7 @@ jQuery.fn = jQuery.prototype = {
 
 			jQuery.each(elems, function(){
 				var elem = clone ?
-					this.cloneNode( true ) :
+					jQuery( this ).clone( true )[0] :
 					this;
 
 				// execute all scripts after the elements have been injected
@@ -2280,26 +2280,57 @@ function bindReady(){
 	if ( readyBound ) return;
 	readyBound = true;
 
-	// Mozilla, Opera and webkit nightlies currently support this event
-	if ( document.addEventListener )
+	// Mozilla, Opera (see further below for it) and webkit nightlies currently support this event
+	if ( document.addEventListener && !jQuery.browser.opera)
 		// Use the handy event callback
 		document.addEventListener( "DOMContentLoaded", jQuery.ready, false );
 	
-	// If Safari or IE is used
+	// If IE is used and is not in a frame
 	// Continually check to see if the document is ready
-	if (jQuery.browser.msie || jQuery.browser.safari ) (function(){
+	if ( jQuery.browser.msie && window == top ) (function(){
+		if (jQuery.isReady) return;
 		try {
 			// If IE is used, use the trick by Diego Perini
 			// http://javascript.nwbox.com/IEContentLoaded/
-			if ( jQuery.browser.msie || document.readyState != "loaded" && document.readyState != "complete" )
-				document.documentElement.doScroll("left");
+			document.documentElement.doScroll("left");
 		} catch( error ) {
-			return setTimeout( arguments.callee, 0 );
+			setTimeout( arguments.callee, 0 );
+			return;
 		}
-
 		// and execute any waiting functions
 		jQuery.ready();
 	})();
+
+	if ( jQuery.browser.opera )
+		document.addEventListener( "DOMContentLoaded", function () {
+			if (jQuery.isReady) return;
+			for (var i = 0; i < document.styleSheets.length; i++)
+				if (document.styleSheets[i].disabled) {
+					setTimeout( arguments.callee, 0 );
+					return;
+				}
+			// and execute any waiting functions
+			jQuery.ready();
+		}, false);
+
+	if ( jQuery.browser.safari ) {
+		var numStyles;
+		(function(){
+			if (jQuery.isReady) return;
+			if ( document.readyState != "loaded" && document.readyState != "complete" ) {
+				setTimeout( arguments.callee, 0 );
+				return;
+			}
+			if ( numStyles === undefined )
+				numStyles = jQuery("style, link[rel=stylesheet]").length;
+			if ( document.styleSheets.length != numStyles ) {
+				setTimeout( arguments.callee, 0 );
+				return;
+			}
+			// and execute any waiting functions
+			jQuery.ready();
+		})();
+	}
 
 	// A fallback to window.onload, that will always work
 	jQuery.event.add( window, "load", jQuery.ready );

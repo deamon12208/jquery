@@ -1,3 +1,15 @@
+/*
+ * jQuery delegate plug-in v1.0
+ *
+ * Copyright (c) 2007 Jörn Zaefferer
+ *
+ * $Id$
+ *
+ * Dual licensed under the MIT and GPL licenses:
+ *   http://www.opensource.org/licenses/mit-license.php
+ *   http://www.gnu.org/licenses/gpl.html
+ */
+
 // provides a cross-browser focusin event
 // IE has native support, in other browsers, capture a focus event (doesn't bubble)
 
