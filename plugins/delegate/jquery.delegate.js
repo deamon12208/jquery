@@ -15,6 +15,8 @@
 
 // provides delegate(type, delegate, handler) plugin for easier event delegation
 // handler is only called when $(event.target).is(delegate), in the scope of the jQuery-object for event.target 
+
+// provides triggerEvent(type, target) to trigger delegated events
 ;(function($) {
 	$.extend($.event.special, {
 		focusin: {
