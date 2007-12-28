@@ -8,6 +8,7 @@
 <link rel="stylesheet" type="text/css" media="screen" href="css/screen.css" />
 <script src="../lib/jquery.js" type="text/javascript"></script>
 <script src="../lib/jquery.metadata.js" type="text/javascript"></script>
+<script type="text/javascript" src="../lib/jquery.delegate.js"></script>
 <script src="../jquery.validate.js" type="text/javascript"></script>
 
 <script type="text/javascript">
@@ -57,6 +58,7 @@ $().ready(function() {
 	var i = 0;
 	addRow();
 	
+	// TODO use keyup on form to update
 	$("body").change(function(event) {
 		if ( $(event.target).parent().is(".quantity") ) {
 			var totals = 0;
@@ -130,7 +132,7 @@ em.error { color: black; }
 			<tfoot>
 				<tr>
 					<td colspan="2"><label>Totals</label></td>
-					<td class="totals"><input id="totals" name="totals" value="0" readonly="readonly" disabled="disabled" size='4' /></td>
+					<td class="totals"><input id="totals" name="totals" value="0" readonly="readonly" size='4' /></td>
 				</tr>
 				<tr>
 					<td colspan="2">&nbsp;</td>

@@ -268,7 +268,7 @@ jQuery.extend(jQuery.fn, {
             return jQuery(this).validate().form();
         } else {
             var valid = true;
-            var validator = jQuery(this.form).validate();
+            var validator = jQuery(this[0].form).validate();
             this.each(function() {
                 valid = validator.element(this) && valid;
             });
@@ -277,7 +277,7 @@ jQuery.extend(jQuery.fn, {
     },
 	// destructive add
 	push: function( t ) {
-		return this.setArray( jQuery.merge( this.get(), t ) );
+		return this.setArray( this.add(t).get() );
 	}
 });
 
@@ -401,7 +401,16 @@ jQuery.extend(jQuery.validator, {
 		errorLabelContainer: jQuery( [] ),
 		onsubmit: true,
 		ignore: [],
-		onblur: function(element) {
+		onfocusin: function(element) {
+			this.lastActive = element;
+				
+			// hide error label and remove error class on focus if enabled
+			if ( this.settings.focusCleanup && !this.blockFocusCleanup ) {
+				this.settings.unhighlight.call( this, element, this.settings.errorClass );
+				this.errorsFor(element).hide();
+			}
+		},
+		onfocusout: function(element) {
 			if ( !this.checkable(element) && (element.name in this.submitted || !this.optional(element)) ) {
 				this.element(element);
 			}
@@ -666,33 +675,24 @@ jQuery.extend(jQuery.validator, {
 		 */
 		refresh: function(selection) {
 			var validator = this;
-			validator.rulesCache = {};
 			
-			function focused() {
-				validator.lastActive = this;
-				
-				// hide error label and remove error class on focus if enabled
-				if ( validator.settings.focusCleanup && !validator.blockFocusCleanup ) {
-					jQuery(this).removeClass( validator.settings.errorClass );
-					validator.errorsFor(this).hide();
-				}
-			}
-
 			// check for partial refresh
 			if ( selection ) {
 				jQuery(selection).each(function() {
-					if ( validator.elements.index(this)  > -1 ) {
-						validator.elements.add(this);
+					if ( validator.elements.index(this) == -1 ) {
+						validator.elements.push(this);
 					}
 					validator.rulesCache[this.name] = validator.rules(this);
-				}).focus(focused);
+				});
+				return;
 			}
 			
+			validator.rulesCache = {};
+			
 			// select all valid inputs inside the form (no submit or reset buttons)
-			this.elements = jQuery(this.currentForm)
-			.find("input, select, textarea")
-			.not(":submit, :reset")
-			.not("[@disabled]")
+			this.elements = jQuery(this.currentForm.elements)
+			.filter("input, select, textarea")
+			.not(":submit, :reset, [disabled]")
 			.not( this.settings.ignore )
 			.filter(function() {
 				!this.name && validator.settings.debug && window.console && console.error( "%o has no name assigned", this);
@@ -707,13 +707,8 @@ jQuery.extend(jQuery.validator, {
 			
 			
 			// and listen for focus events to save reference to last focused element
-			this.elements.focus(focused);
-			
-			validator.settings.onblur && validator.elements.blur( function() {
-				validator.settings.onblur.call( validator, this );
-			});
-			validator.settings.onkeyup && validator.elements.keyup(function() {
-				validator.settings.onkeyup.call( validator, this );
+			jQuery(this.currentForm).delegate("focusin focusout keyup", "input, select, textarea", function(event) {
+				validator.settings["on" + event.type].call(validator, this[0] );
 			});
 			
 			if ( validator.settings.onclick ) {
@@ -758,7 +753,6 @@ jQuery.extend(jQuery.validator, {
 		check: function( element ) {
 			element = this.clean( element );
 			this.settings.unhighlight.call( this, element, this.settings.errorClass );
-			//var rules = this.rules( element );
 			var rules = this.rulesCache[ element.name ];
 			for( var i = 0; rules[i]; i++) {
 				var rule = rules[i];

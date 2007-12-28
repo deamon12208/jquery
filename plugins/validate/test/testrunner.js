@@ -10,7 +10,7 @@ var _config = {
 	timeout: null,
 	expected: null,
 	currentModule: null,
-	asyncTimeout: 2 // seconds for async timeout
+	asyncTimeout: 1 // seconds for async timeout
 };
 
 $(function() {
@@ -69,7 +69,7 @@ function test(name, callback, nowait) {
 		name = _config.currentModule + " module: " + name;
 		
 	var filter = location.search.slice(1);
-	if ( filter && encodeURIComponent(name) != filter )
+	if ( filter && encodeURIComponent(name).indexOf(filter) == -1 )
 		return;
 		
 	synchronize(function() {
