@@ -474,6 +474,19 @@ jQuery.extend(jQuery.validator, {
 		minValue: jQuery.format("Please enter a value greater than or equal to {0}.")
 	},
 	
+	/**
+	 * Converts a simple string to a {string: true} rule, e.g., "required" to
+	 * {required:true}
+	 */
+	normalizeRules: function(data) {
+		if( typeof data == "string" ) {
+			var transformed = {};
+			transformed[data] = true;
+			data = transformed;
+		}
+		return data;
+	},
+	
 	prototype: {
 
 		/**
@@ -866,12 +879,7 @@ jQuery.extend(jQuery.validator, {
 			if( !data )
 				return [];
 			var rules = [];
-			// convert a simple string to a {string: true} rule, eg. "required" to {required:true}
-			if( typeof data == "string" ) {
-				var transformed = {};
-				transformed[data] = true;
-				data = transformed;
-			}
+			data = jQuery.validator.normalizeRules(data);
 			jQuery.each( data, function(key, value) {
 				rules[rules.length] = {
 					method: key,

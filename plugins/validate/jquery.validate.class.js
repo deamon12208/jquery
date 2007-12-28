@@ -21,14 +21,8 @@ $.validator.prototype.rules = function(element) {
 };
 
 $.validator.addClassRules = function(options) {
-	// convert a simple string to a {string: true} rule, eg. "required" to {required:true}
 	$.each(options, function(class, rules) {
-		// TODO: create a utility function to do this
-		if (typeof rules == "string") {
-			var transformed = {};
-			transformed[rules] = true;
-			options[class] = transformed;
-		}
+		options[class] = $.validator.normalizeRules(rules);
 	});
 	$.extend(classRules, options);
 };
