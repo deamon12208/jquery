@@ -45,9 +45,9 @@ body {
 
 <div class="controls">
   <div>
-    <a href="#" onClick="$('#fx').hide({ method: 'fade' });return false;">Fade Out</a>
-    <a href="#" onClick="$('#fx').show({ method: 'fade' });return false;">Fade In</a>
-    <a href="#" onClick="$('#fx').toggle({ method: 'fade' });return false;">Fade Toggle</a>
+    <a href="#" onClick="$('#fx').hide('fade',{ method: 'fade' });return false;">Fade Out</a>
+    <a href="#" onClick="$('#fx').show('fade',{ method: 'fade' });return false;">Fade In</a>
+    <a href="#" onClick="$('#fx').toggle('fade',{ method: 'fade' });return false;">Fade Toggle</a>
   </div>
   <div>
     <a href="#" onClick="$('#fx').effect('fade',{ opacity: .9 });return false;">Fade to .9</a>
