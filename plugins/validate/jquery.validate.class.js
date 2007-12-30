@@ -21,8 +21,8 @@ $.validator.prototype.rules = function(element) {
 };
 
 $.validator.addClassRules = function(options) {
-	$.each(options, function(class, rules) {
-		options[class] = $.validator.normalizeRules(rules);
+	$.each(options, function(className, rules) {
+		options[className] = $.validator.normalizeRules(rules);
 	});
 	$.extend(classRules, options);
 };
