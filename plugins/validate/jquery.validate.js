@@ -705,9 +705,7 @@ jQuery.extend(jQuery.validator, {
 				return true;
 			});
 			
-			
-			// and listen for focus events to save reference to last focused element
-			jQuery(this.currentForm).delegate("focusin focusout keyup", "input, select, textarea", function(event) {
+			jQuery(this.currentForm).delegate("focusin focusout keyup", "input:text, select, textarea", function(event) {
 				validator.settings["on" + event.type].call(validator, this[0] );
 			});
 			
