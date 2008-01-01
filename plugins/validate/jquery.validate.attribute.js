@@ -18,7 +18,7 @@ var types = [
 
 var attrs = [
 	//'accept',
-	//'equalTo',
+	'equalTo',
 	'max',
 	'maxlength',
 	'min',
