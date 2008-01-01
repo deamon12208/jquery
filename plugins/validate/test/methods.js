@@ -1,6 +1,6 @@
-function methodTest( method ) {
+function methodTest( methodName ) {
 	var v = jQuery("#form").validate();
-	var method = $.validator.methods[method];
+	var method = $.validator.methods[methodName];
 	var element = $("#firstname")[0];
 	return function(value) {
 		element.value = value;

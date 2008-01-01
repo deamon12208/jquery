@@ -752,6 +752,9 @@ jQuery.extend(jQuery.validator, {
 			element = this.clean( element );
 			this.settings.unhighlight.call( this, element, this.settings.errorClass );
 			var rules = this.rulesCache[ element.name ];
+			// TODO assert that check is only called for elements with existing rules?
+			if (!rules)
+				return true;
 			for( var i = 0; rules[i]; i++) {
 				var rule = rules[i];
 				try {
