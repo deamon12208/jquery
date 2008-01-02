@@ -35,7 +35,7 @@
 			start: this.start,
 			stop: this.stop,
 			drag: this.drag,
-			condition: function(e) { return !(e.target.className.indexOf("ui-resizable-handle") != -1 || self.disabled); }
+			condition: function(e) { return !(e.target.className.indexOf("ui-resizable-handle") != -1 || this.disabled); }
 		});
 		
 		//Position the node

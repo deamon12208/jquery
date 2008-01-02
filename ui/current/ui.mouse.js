@@ -68,7 +68,7 @@
 			if(
 				   e.which != 1 //only left click starts dragging
 				|| $.inArray(e.target.nodeName.toLowerCase(), this.options.dragPrevention) != -1 // Prevent execution on defined elements
-				|| (this.options.condition && !this.options.condition.apply(this, [e])) //Prevent execution on condition
+				|| (this.options.condition && !this.options.condition.apply(this.options.executor || this, [e])) //Prevent execution on condition
 			) return true;
 			
 			var self = this;
