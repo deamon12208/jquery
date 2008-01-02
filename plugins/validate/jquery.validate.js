@@ -706,7 +706,7 @@ jQuery.extend(jQuery.validator, {
 			});
 			
 			jQuery(this.currentForm).delegate("focusin focusout keyup", "input:text, select, textarea", function(event) {
-				validator.settings["on" + event.type].call(validator, this[0] );
+				validator.settings["on" + event.type] && validator.settings["on" + event.type].call(validator, this[0] );
 			});
 			
 			if ( validator.settings.onclick ) {

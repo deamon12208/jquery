@@ -770,6 +770,23 @@ test("validate on keyup", function() {
 	errors(0, "Valid");
 });
 
+test("validate on not keyup, only blur", function() {
+	function errors(expected, message) {
+		equals(expected, v.size(), message );
+	}
+	var e = $("#firstname");
+	var v = $("#testForm1").validate({
+		onkeyup: false
+	});
+	errors(0);
+	e.val("a");
+	$("#testForm1").triggerEvent("keyup", e[0]);
+	e.keyup();
+	errors(0);
+	$("#testForm1").triggerEvent("focusout", e[0]);
+	errors(1);
+});
+
 test("validate on keyup and blur", function() {
 	function errors(expected, message) {
 		equals(expected, v.size(), message );
@@ -778,7 +795,7 @@ test("validate on keyup and blur", function() {
 	var v = $("#testForm1").validate();
 	errors(0);
 	e.val("a");
-	e.keyup();
+	$("#testForm1").triggerEvent("keyup", e[0]);
 	errors(0);
 	$("#testForm1").triggerEvent("focusout", e[0]);
 	errors(1);
