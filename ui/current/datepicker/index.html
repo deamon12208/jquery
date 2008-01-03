@@ -13,27 +13,16 @@
 		<meta name="copyright" content="Copyright (c) 2005 Marc Grabanski" />
 		<meta name="keywords" content="jquery datepicker, ui datepicker, jquery date picker, jquery calendar" />
 		<link rel="stylesheet" type="text/css" href="../../css/style.css" />
-		<script type="text/javascript" src="/js/chili/jquery.chili.pack.js"></script>
-		<script type="text/javascript">
-			ChiliBook.recipeFolder     = "/js/chili/"; 
-			ChiliBook.stylesheetFolder = "/js/chili/"; 
-		</script>
+		
 		<!--[if lt IE 7]><link rel="stylesheet" type="text/css" href="../../css/ie6.css" /><![endif]--> 
-		
-		<!-- Include jQuery -->
-		<script type="text/javascript" src="core/jquery.js"></script>
-		
-		<!-- Include Core Files -->
+
+		<!-- Include UI Datepicker CSS -->
 		<link rel="stylesheet" type="text/css" href="core/ui.datepicker.css" title="default"/>
-		<script type="text/javascript" src="core/ui.datepicker.js"></script>
 		
-		<!-- Include Demo Files -->
-		<script type="text/javascript" src="demo/jquery.localisation.js"></script>
-		<script type="text/javascript" src="i18n/ui.datepicker-fr.js"></script>
-		<script type="text/javascript" src="i18n/ui.datepicker-he.js"></script>
-		<script type="text/javascript" src="demo/ui.datepicker.demo.js"></script>
+		<!-- Include Demo Stylesheets -->
 		<link rel="stylesheet" type="text/css" href="demo/ui.datepicker.alt.css" title="alt" id="alt" disabled="disabled"/>
 		<link rel="stylesheet" type="text/css" href="demo/ui.datepicker.demo.css" />
+
 	</head>
 	<body>
 		<div id="wrap">
@@ -717,6 +706,7 @@ $("#setInlineRange").click(function() {
 <!--DEMO				
 				<h2 style="margin-top:2em">Use jQuery UI Datepicker</h2>
 				<div class="container">
+					<p><em>To skip steps 1 and 2, <a href="core/core.ui.datepicker.zip">download the core files</a>.</em></p>
 					<ol>
 						<li>Get the latest version of <a href="http://jquery.com" target="_blank">jQuery</a> and include it in the head section of your page.
 <pre><code class="html">&lt;script type=&quot;text/javascript&quot; src=&quot;jquery.js&quot;&gt;&lt;/script&gt;</code></pre>
@@ -773,7 +763,7 @@ $('input selector').datepicker({defaultDate: +7});</code></pre>
 				</div>
 				<h2>Need more help?</h2>
 				<div class="container">
-					<p>Try looking at the <a href="core/index.html" target="_blank">core datepicker example</a>, which contains the most basic datepicker.</p>
+					<p>Try looking at the <a href="core/index.html" target="_blank">core datepicker example</a>, which contains the most basic datepicker and a link to the files.</p>
 					<p>Email Marc Grabanski (m@marcgrabanski.com) and Keith Wood (kbwood@iprimus.com.au) with "UI Datepicker" in the subject.</p>
 				</div>
 				<h2>Find a bug or need a feature?</h2>
@@ -815,12 +805,17 @@ $('input selector').datepicker({defaultDate: +7});</code></pre>
 				</div>
             </div>
 		</div>
-		<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
-		</script>
-		<script type="text/javascript">
-		_uacct = "UA-963303-2";
-		urchinTracker();
-		</script>
 DEMO-->	
+		<!-- Include jQuery -->
+		<script type="text/javascript" src="core/jquery.js"></script>
+		
+		<!-- Include UI Datepicker -->
+		<script type="text/javascript" src="core/ui.datepicker.js"></script>
+		
+		<!-- Include Demo Files -->
+		<script type="text/javascript" src="demo/jquery.localisation.js"></script>
+		<script type="text/javascript" src="i18n/ui.datepicker-fr.js"></script>
+		<script type="text/javascript" src="i18n/ui.datepicker-he.js"></script>
+		<script type="text/javascript" src="demo/ui.datepicker.demo.js"></script>
     </body>
 </html>
