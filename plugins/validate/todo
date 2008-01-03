@@ -31,6 +31,7 @@ css references
 other stuff
 -----------
 
+- detect when min and max are used together and validate as rangeValue (same for rangeLength)
 - consider validation on page load, disabling required-checks
 - check value != defaultValue in required, making defaultValue invalid
 - test and document and demo Scott's class-rules module
