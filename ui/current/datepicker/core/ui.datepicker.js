@@ -1,5 +1,5 @@
 /* jQuery UI Date Picker v3.2 - previously jQuery Calendar
-   Written by Marc Grabanski (m@marcgrabanski.com) and Keith Wood (kbwood@iprimus.com.au).
+   Written by Marc Grabanski (m@marcgrabanski.com) and Keith Wood (kbwood@virginbroadband.com.au).
 
    Copyright (c) 2007 Marc Grabanski (http://marcgrabanski.com/code/ui-datepicker)
    Dual licensed under the MIT (MIT-LICENSE.txt)
@@ -1171,8 +1171,8 @@ $.extend(DatepickerInstance.prototype, {
 			'<a onclick="jQuery.datepicker._gotoToday(' + this._id + ');"' +
 			(showStatus ? this._addStatus(this._get('currentStatus') || '&#xa0;') : '') + '>' +
 			this._get('currentText') + '</a></div>' : '') + (isRTL ? prev : next) + '</div>';
-		var minDate = this._getMinDate();
-		var maxDate = this._get('maxDate');
+		var minDate = this._getMinMaxDate('min', true);
+		var maxDate = this._getMinMaxDate('max');
 		var drawMonth = this._selectedMonth;
 		var drawYear = this._selectedYear;
 		var showWeeks = this._get('showWeeks');
@@ -1339,8 +1339,8 @@ $.extend(DatepickerInstance.prototype, {
 			(period == 'D' ? offset : 0);
 		var date = new Date(year, month, day);
 		// ensure it is within the bounds set
-		var minDate = this._getMinDate();
-		var maxDate = this._get('maxDate');
+		var minDate = this._getMinMaxDate('min', true);
+		var maxDate = this._getMinMaxDate('max');
 		date = (minDate && date < minDate ? minDate : date);
 		date = (maxDate && date > maxDate ? maxDate : date);
 		this._selectedDay = date.getDate();
@@ -1348,9 +1348,16 @@ $.extend(DatepickerInstance.prototype, {
 		this._selectedYear = date.getFullYear();
 	},
 
-	/* Determine the current minimum date - may be overridden for a range. */
-	_getMinDate: function() {
-		return this._get('minDate') || this._rangeStart;
+	/* Determine the current maximum date - ensure no time components are set - may be overridden for a range. */
+	_getMinMaxDate: function(minMax, checkRange) {
+		var date = this._get(minMax + 'Date');
+		if (date) {
+			date.setHours(0);
+			date.setMinutes(0);
+			date.setSeconds(0);
+			date.setMilliseconds(0);
+		}
+		return date || (checkRange ? this._rangeStart : null);
 	},
 
 	/* Find the number of days in a given month. */
@@ -1378,8 +1385,8 @@ $.extend(DatepickerInstance.prototype, {
 		var newMinDate = (!this._rangeStart ? null :
 			new Date(this._selectedYear, this._selectedMonth, this._selectedDay));
 		newMinDate = (newMinDate && this._rangeStart < newMinDate ? this._rangeStart : newMinDate);
-		var minDate = newMinDate || this._get('minDate');
-		var maxDate = this._get('maxDate');
+		var minDate = newMinDate || this._getMinMaxDate('min');
+		var maxDate = this._getMinMaxDate('max');
 		return ((!minDate || date >= minDate) && (!maxDate || date <= maxDate));
 	},
 
