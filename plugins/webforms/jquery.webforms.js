@@ -1,7 +1,7 @@
 /*
  * Web Forms 0.3.7 - jQuery plugin
  * 
- * Copyright (c) 2007 Scott Gonzalez
+ * Copyright (c) 2007 - 2008 Scott Gonzalez
  * 
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -45,13 +45,10 @@ var validationMessages = {
 		switch (type) {
 			case 'email':
 				return 'Value must be an email address.';
-			break;
 			case 'number':
 				return 'Value must be a number.';
-			break;
 			case 'url':
 				return 'Value must be a URL.';
-			break;
 		}
 	},
 	rangeUnderflow: function(elem) {
@@ -78,19 +75,16 @@ var validator = {
 	typeMismatch: function($elem) {
 		var type = $elem.attr('wftype');
 		var val = $elem.val();
-		if (val != '') {
+		if (val !== '') {
 			switch (type) {
 				case 'email':
 					// http://projects.scottsplayground.com/email_address_validation/
 					return /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|(\x22((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?\x22))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)*(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i.test(val);
-				break;
 				case 'number':
 					return isNumber(val);
-				break;
 				case 'url':
 					// http://projects.scottsplayground.com/iri/
 					return /^([a-z]([a-z]|\d|\+|-|\.)*):(\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?((\[(|(v[\da-f]{1,}\.(([a-z]|\d|-|\.|_|~)|[!\$&'\(\)\*\+,;=]|:)+))\])|((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=])*)(:\d*)?)(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*|(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)|((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)|((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)){0})(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(val);
-				break;
 			}
 		}
 		
@@ -100,7 +94,7 @@ var validator = {
 	// TODO: update to work with date/time values (and update error message)
 	rangeUnderflow: function($elem) {
 		var min = $elem.attr('min');
-		if ((min != '') && isNumber(min)) {
+		if ((min !== '') && isNumber(min)) {
 			var val = $elem.val();
 			if (isNumber(val)) {
 				return (Number(min) <= Number(val));
@@ -113,7 +107,7 @@ var validator = {
 	// TODO: update to work with date/time values (and update error message)
 	rangeOverflow: function($elem) {
 		var max = $elem.attr('max');
-		if ((max != '') && isNumber(max)) {
+		if ((max !== '') && isNumber(max)) {
 			var val = $elem.val();
 			if (isNumber(val)) {
 				return (Number(max) >= Number(val));
@@ -128,13 +122,13 @@ var validator = {
 		var step = $elem.attr('step');
 		if (step && isNumber(step)) {
 			var base = $elem.attr('min');
-			if ((min == '') || !isNumber(min)) {
+			if ((base === '') || !isNumber(base)) {
 				base = $elem.attr('max');
 			}
-			if ((base != '') && isNumber(base)) {
+			if ((base !== '') && isNumber(base)) {
 				var val = $elem.val();
 				if (isNumber(val)) {
-					return (parseInt((val - base) / step) == ((val - base) / step));
+					return (parseInt((val - base) / step, 10) == ((val - base) / step));
 				}
 			}
 		}
@@ -154,7 +148,7 @@ var validator = {
 	patternMismatch: function($elem) {
 		var pattern = $elem.attr('pattern');
 		var val = $elem.val();
-		if ((pattern || (pattern == 0)) && (val != ''))
+		if ((pattern || (pattern === 0)) && (val !== ''))
 		{
 			var regex = new RegExp('^(?:' + pattern + ')$');
 			if (!regex.test(val)) {
@@ -178,7 +172,7 @@ var validator = {
 					}
 				break;
 				default:
-					if ($elem.val() == '') {
+					if ($elem.val() === '') {
 						return false;
 					}
 				break;
@@ -206,7 +200,7 @@ function initializeWebForms(elem) {
 
 function getWebForms(elem) {
 	var webForms = $.data(elem, 'webForms');
-	if (webForms == undefined) {
+	if (webForms === undefined) {
 		webForms = initializeWebForms(elem);
 	}
 	return webForms;
@@ -256,7 +250,7 @@ $.extend({
 	},
 	
 	isIndeterminate: function(elem) {
-		return elem.type == 'radio' && getCheckedCount(elem.name) == 0;
+		return elem.type == 'radio' && getCheckedCount(elem.name) === 0;
 	}
 });
 
