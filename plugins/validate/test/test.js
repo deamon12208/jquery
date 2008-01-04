@@ -6,6 +6,7 @@ test("Constructor", function() {
 	var v1 = $("#testForm1").validate();
 	var v2 = $("#testForm1").validate();
 	equals( v1, v2, "Calling validate() multiple times must return the same validator instance" );
+	equals( 2, v1.elements.length, "validator must have two elements" );
 });
 
 test("valid() plugin method", function() {

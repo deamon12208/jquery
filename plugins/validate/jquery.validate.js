@@ -265,7 +265,7 @@ jQuery.extend(jQuery.fn, {
 	},
 	valid: function() {
         if ( jQuery(this[0]).is('form')) {
-            return jQuery(this).validate().form();
+            return this.validate().form();
         } else {
             var valid = true;
             var validator = jQuery(this[0].form).validate();
@@ -690,7 +690,8 @@ jQuery.extend(jQuery.validator, {
 			validator.rulesCache = {};
 			
 			// select all valid inputs inside the form (no submit or reset buttons)
-			this.elements = jQuery(this.currentForm.elements)
+			// workaround with $([]).add until http://dev.jquery.com/ticket/2114 is solved
+			this.elements = jQuery([]).add(this.currentForm.elements)
 			.filter("input, select, textarea")
 			.not(":submit, :reset, [disabled]")
 			.not( this.settings.ignore )
