@@ -704,6 +704,9 @@ $.extend(Datepicker.prototype, {
 		else {
 			if (!this._stayOpen) {
 				this.hideDatepicker(inst._get('speed'));
+				this._lastInput = inst._input[0];
+				inst._input[0].focus(); // restore focus
+				this._lastInput = null;
 			}
 		}
 	},
