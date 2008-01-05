@@ -1,5 +1,5 @@
 /*
- * Web Forms 0.3.7 - jQuery plugin
+ * Web Forms 0.4.0 - jQuery plugin
  * 
  * Copyright (c) 2007 - 2008 Scott Gonzalez
  * 
@@ -9,6 +9,15 @@
  */
 
 // http://www.whatwg.org/specs/web-forms/current-work/
+
+/*
+We have to use the wftype attribute instead of the type attribute because using custom type attributes doesn't work.
+
+Test results from Firefox 2:
+$('<select'>).attr('type', 'foo').is('[type="foo"]') === false
+$('<select'>).attr('type', 'foo').attr('type') === 'foo'
+$('<select'>).attr('type', 'foo')[0].type === 'select-one'
+*/
 
 (function($) {
 
@@ -337,6 +346,42 @@ $.fn.extend({
 		}
 		return message;
 	}
+});
+
+// populate select elements
+// TODO: how can we do this before document load? can we use the new special event system?
+// TODO: how can we monitor the data attribute for changes?
+$(document).ready(function() {
+	var $elem;
+	
+	function processData(data) {
+		var $select = $(data);
+		if ($select.attr('xmlns') != 'http://www.w3.org/1999/xhtml') {
+			return;
+		}
+		
+		if ($select.attr('wftype') != 'incremental') {
+			$elem.empty();
+		}
+		
+		var val = $elem.val();
+		$select.children('option').each(function() {
+			$elem.append(this);
+		});
+		$elem.val(val);
+	};
+	
+	$('select[data]').each(function() {
+		$elem = $(this);
+		var data = $elem.attr('data');
+		data = /^data:/.test(data) ?
+			unescape(data.substring(data.indexOf(',') + 1)) :
+			$.ajax({
+				url: data,
+				async: false
+			}).responseText;
+		processData(data);
+	});
 });
 
 })(jQuery);
