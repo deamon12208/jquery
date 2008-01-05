@@ -1,3 +1,7 @@
+0.4.0
+-----
+* Added support for data attributes on select elements.
+
 0.3.7
 -----
 * Added URL validation.
