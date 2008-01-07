@@ -1,3 +1,7 @@
+1.5
+---
+* Improved cookie persistence to allow multiple persisted trees per page via cookieId option
+
 1.4
 ---
 

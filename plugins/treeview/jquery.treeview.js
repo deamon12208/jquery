@@ -98,8 +98,9 @@
 		},
 		treeview: function(settings) {
 			
-			// currently no defaults necessary, all implicit
-			settings = $.extend({}, settings);
+			settings = $.extend({
+				cookieId: "treeview"
+			}, settings);
 			
 			if (settings.add) {
 				return this.trigger("add", [settings.add]);
@@ -168,11 +169,11 @@
 				branches.each(function(i, e) {
 					data[i] = $(e).is(":has(>ul:visible)") ? 1 : 0;
 				});
-				$.cookie("treeview", data.join("") );
+				$.cookie(settings.cookieId, data.join("") );
 			}
 			
 			function deserialize() {
-				var stored = $.cookie("treeview");
+				var stored = $.cookie(settings.cookieId);
 				if ( stored ) {
 					var data = stored.split("");
 					branches.each(function(i, e) {

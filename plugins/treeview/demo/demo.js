@@ -27,6 +27,7 @@ $(document).ready(function(){
 		animated: "fast",
 		collapsed: true,
 		unique: true,
+		persist: "cookie",
 		toggle: function() {
 			window.console && console.log("%o was toggled", this);
 		}
@@ -35,7 +36,8 @@ $(document).ready(function(){
 	// fourth example
 	$("#black, #gray").treeview({
 		control: "#treecontrol",
-		persist: "cookie"
+		persist: "cookie",
+		cookieId: "treeview-black"
 	});
 
 });
