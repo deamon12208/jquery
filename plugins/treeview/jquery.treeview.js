@@ -1,5 +1,5 @@
 /*
- * Treeview 1.5pre - jQuery plugin to hide and show branches of a tree
+ * Treeview 1.4pre - jQuery plugin to hide and show branches of a tree
  * 
  * http://bassistance.de/jquery-plugins/jquery-plugin-treeview/
  *
@@ -17,19 +17,13 @@
 
 	$.extend($.fn, {
 		swapClass: function(c1, c2) {
-			return this.each(function() {
-				var $this = $(this);
-				if ( $.className.has(this, c1) )
-					$this.removeClass(c1).addClass(c2);
-				else if ( $.className.has(this, c2) )
-					$this.removeClass(c2).addClass(c1);
-			});
+			var c1Elements = this.filter('.' + c1);
+			this.filter('.' + c2).removeClass(c2).addClass(c1);
+			c1Elements.removeClass(c1).addClass(c2);
+			return this;
 		},
 		replaceClass: function(c1, c2) {
-			return this.each(function() {
-				if ( $.className.has(this, c1) )
-					$(this).removeClass(c1).addClass(c2);
-			});
+			return this.filter('.' + c1).removeClass(c1).addClass(c2);
 		},
 		hoverClass: function(className) {
 			className = className || "hover";
@@ -200,7 +194,7 @@
 				deserialize();
 				break;
 			case "location":
-				var current = this.find("a").filter(function() { return this.href == location.href; });
+				var current = this.find("a").filter(function() { return this.href.toLowerCase() == location.href.toLowerCase(); });
 				if ( current.length ) {
 					current.addClass("selected").parents("ul, li").add( current.next() ).show();
 				}

@@ -1,7 +1,3 @@
-1.5
----
-* Improved cookie persistence to allow multiple persisted trees per page via cookieId option
-
 1.4
 ---
 
@@ -13,6 +9,9 @@
 * Exposed $.fn.treeview.classes for custom classes if necessary
 * Show treecontrol only when JavaScript is enabled
 * Completely reworked themeing via CSS sprites, resulting in only two files per theme
+* Improved cookie persistence to allow multiple persisted trees per page via cookieId option
+* Improved location persistence by making it case-insensitive
+* Improved swapClass and replaceClass plugin implementations
 
 1.3
 ---
