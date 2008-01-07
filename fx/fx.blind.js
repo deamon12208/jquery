@@ -2,7 +2,7 @@
   
   $.ec.blind = function(o) {
 
-    this.each(function() {
+    return this.queue(function() {
 
       // Create element
       var el = $(this), props = ['position'];
@@ -21,16 +21,18 @@
       // Animation
       var animation = {};
       animation[ref] = mode == 'show' ? distance : 0;
-      
+     
       // Animate
       wrapper.animate(animation, o.speed, o.options.easing, function() {
         if(mode == 'hide') el.hide(); // Hide
         $.ec.restore(el, props); $.ec.removeWrapper(el); // Restore
         if(o.callback) o.callback.apply(this, arguments); // Callback
+        el.dequeue();
       });
+
       
     });
     
-  }
+  };
   
 })(jQuery);
