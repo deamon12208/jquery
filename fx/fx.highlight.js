@@ -2,7 +2,7 @@
   
   $.ec.highlight = function(o) {
 
-    this.each(function() {
+    return this.queue(function() {
       
       // Create element
       var el = $(this), props = ['backgroundImage','backgroundColor','opacity'];
@@ -24,10 +24,11 @@
         if(mode == "hide") el.hide();
         $.ec.restore(el, props);
         if(o.callback) o.callback.apply(this, arguments);
+        el.dequeue();
       });
       
     });
     
-  }
+  };
   
 })(jQuery);

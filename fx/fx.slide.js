@@ -2,7 +2,7 @@
   
   $.ec.slide = function(o) {
 
-    this.each(function() {
+    return this.queue(function() {
 
       // Create element
       var el = $(this), props = ['position','top','left'];
@@ -28,10 +28,11 @@
         if(mode == 'hide') el.hide(); // Hide
         $.ec.restore(el, props); $.ec.removeWrapper(el); // Restore
         if(o.callback) o.callback.apply(this, arguments); // Callback
+        el.dequeue();
       });
       
     });
     
-  }
+  };
   
 })(jQuery);

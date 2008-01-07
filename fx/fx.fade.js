@@ -2,7 +2,7 @@
   
   $.ec.fade = function(o) {
 
-    this.each(function() {
+    return this.queue(function() {
       
       // Create element
       var el = $(this), props = ['opacity'];
@@ -23,10 +23,11 @@
         if(mode == 'hide') el.hide(); // Hide
         if(mode == 'hide') $.ec.restore(el, props); // Restore
         if(o.callback) o.callback.apply(this, arguments); // Callback
+        el.dequeue();
       });
       
     });
     
-  }
+  };
   
 })(jQuery);

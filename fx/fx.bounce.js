@@ -2,7 +2,7 @@
   
   $.ec.bounce = function(o) {
 
-    this.each(function() {
+    return this.queue(function() {
 
       // Create element
       var el = $(this), props = ['position','top','left','opacity'];
@@ -46,6 +46,7 @@
           el.hide(); // Hide
           $.ec.restore(el, props); $.ec.removeWrapper(el); // Restore
           if(o.callback) o.callback.apply(this, arguments); // Callback
+          el.dequeue();
         });
       } else {
         var animation1 = {}, animation2 = {};
@@ -54,11 +55,12 @@
         el.animate(animation1, speed / 2, o.options.easing).animate(animation2, speed / 2, o.options.easing, function(){
           $.ec.restore(el, props); $.ec.removeWrapper(el); // Restore
           if(o.callback) o.callback.apply(this, arguments); // Callback
+          el.dequeue();
         });
       };
       
     });
     
-  }
+  };
   
 })(jQuery);
