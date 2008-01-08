@@ -29,16 +29,21 @@
 						
 					});
 				}
+				
+				// remove appended headers by classname.
+				$("tr.repated-header",table).remove();
+				
 				// loop all tr elements and insert a copy of the "headers"	
 				for(var i=0; i < table.tBodies[0].rows.length; i++) {
 					// insert a copy of the table head every 10th row
 					if((i%5) == 4) {
 						$("tbody tr:eq(" + i + ")",table).before(
-							$("<tr></tr>").html(this.headers.join(""))
+							$("<tr></tr>").addClass("repated-header").html(this.headers.join(""))
 						
 						);	
 					}
 				}
+				
 			}
 		});
 		
@@ -77,6 +82,10 @@ $.tablesorter.addWidget({
 				
 			});
 		}
+		
+		// remove appended headers by classname.
+		$("tr.repated-header",table).remove();
+		
 		// loop all tr elements and insert a copy of the "headers"	
 		for(var i=0; i < table.tBodies[0].rows.length; i++) {
 			// insert a copy of the table head every 10th row
