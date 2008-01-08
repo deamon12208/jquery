@@ -105,14 +105,14 @@
 	_toggleClass: $.fn.toggleClass,
 	// New ec methods
 	effect: function(fx,o,speed,callback) {
-		return $.ec[fx] ? $.ec[fx].call(this, {method: fx, options: o || {}, speed: speed, callback: callback }) : null;
+		return $.ec[fx] ? $.ec[fx].call(this, {method: fx, options: o || {}, duration: speed, callback: callback }) : null;
 	},
 	show: function() {
 		if(!arguments[0] || (arguments[0].constructor == Number || /(slow|fast)/.test(arguments[0])))
 			return this._show.apply(this, arguments);
 		else {
 			var o = arguments[1] || {}; o['mode'] = 'show';
-			return this.effect.apply(this, [arguments[0], o]);
+			return this.effect.apply(this, [arguments[0], o, arguments[2] || o.duration, arguments[3] || o.callback]);
 		}
 	},
 	hide: function() {
@@ -120,7 +120,7 @@
 			return this._hide.apply(this, arguments);
 		else {
 			var o = arguments[1] || {}; o['mode'] = 'hide';
-			return this.effect.apply(this, [arguments[0], o]);
+			return this.effect.apply(this, [arguments[0], o, arguments[2] || o.duration, arguments[3] || o.callback]);
 		}
 	},
 	toggle: function(){
