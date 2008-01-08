@@ -19,7 +19,7 @@ $('<select'>).attr('type', 'foo').attr('type') === 'foo'
 $('<select'>).attr('type', 'foo')[0].type === 'select-one'
 */
 
-(function($) {
+;(function($) {
 
 function getCheckedCount(element_name) {
 	var checked_count = 0;

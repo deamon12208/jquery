@@ -1,13 +1,13 @@
 /*
  * Automatic setup for Web Forms plugin
  * 
- * Copyright (c) 2007 Scott Gonzalez
+ * Copyright (c) 2007 - 2008 Scott Gonzalez
  * 
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  */
-(function($) {
+;(function($) {
 
 $.extend($.webForms, {
 	beforeValidate: function(elem) {
