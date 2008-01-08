@@ -1,27 +1,3 @@
-event architecture draft
-------------------------
-
-Goal: Improve performance for big forms, simplify adding and removing elements from valiated forms.
-
-Idea: Use event delegation and handle all necessary events on the form, registering event handlers there, not on each element.
-
-Problem to solve: Neither blur nor focus bubble up to its parent form. Change, keyup and mouseup do, but change isn't triggered
-by browsers built-in autocomplete.
-
-Possible solution: Set an interval that checks all elements on the form for changes, triggering an appropiate event then (eg. change).
-The event must be triggered on the form with the element as the target. Use jQuery.event.fix({type: "change", target: this}) to create the
-event object, and use $(this.form).triggerHandler("change", event) to trigger the event and pass through the event object.
-The bubbled keyup and mouseup events could be used to determine which elements actually have focus.
-The interval must be small enough to give feedback fast enough. It could be a good thing to have it react a bit slower then usual onblur-validation,
-to avoid the tab-POW-reaction (though that is better solved with appropiate layouts and fadeins).
-
-Things to keep in mind while testing: Focus event is currently used to rememeber the last focused elements. That must continue to work.
-Profiling should be done with a form with about 100 elements, which isn't that unusual.
-
-Notes:
- - while checking that stuff anyway, consider binding per-element-stuff directly to the element using jQuery's data API
- - check if the loop over form.elements inside the interval has to do any filtering (eg. disabled, hidden, buttons), or if that can be filtered at a later stage anyway
-
 css references
 --------------
 - http://test5.caribmedia.com/CSS/Secrets/members/michiel/floating-forms.html
@@ -34,7 +10,7 @@ other stuff
 - detect when min and max are used together and validate as rangeValue (same for rangeLength)
 - consider validation on page load, disabling required-checks
 - check value != defaultValue in required, making defaultValue invalid
-- test and document and demo Scott's class-rules module
+- test and document Scott's rules modules
 - bug in marketo demo, keeps showing error for "email already taken", even if server returns true
 - bug in testsuite in IE6, normal form submit kills it
 - completely rework showErrors: manually settings errors is currently extremely flawed and utterly useless, eg. errors disappear if some other validation is triggered
@@ -43,11 +19,6 @@ other stuff
 - submitting a form where only remote validation is left to run sometimes calls submitHandler/submit after the field got fixed
 - add proper support for more states: valid, invalid, optional, pending...
 - add custom events for form and elements instead of more callbacks
-- improve validator API: validator.check(Element inputOrForm) instead of form and element methods, doing validate().form() is crap anyway
-- try to replace element handling on each input with event delegation handled by the form
-	-> complicates handling the event, but improves adding/removing handlers a ton, refresh() doesn't have to do anything for events, adding and removing elements from the form is priceless
-	-> while at it, improve event handling for selects
-	-> while at it, try to add onchange: integrates nicely with eg. datepicker (which fires a change event) 
 - add support for dynamic params, that is, check if the specified parameter (if relevant at all, eg. maxValue) is a function, then execute it and use the return value
 
 - document focusInvalid()
@@ -79,29 +50,8 @@ additional options/callbacks:
 - strong password check/integration: http://phiras.wordpress.com/2007/04/08/password-strength-meter-a-jquery-plugin/
 - add/modify onkeyup option: true - immediate, false - none, default - filtered
 
-- validate on paste:
-
-I'm going to assume that you have some validate function
-"checkVal".
-
-input.blur(checkVal);
-
-if ($.browser.msie)
- this.onpaste= function(){setTimeout(checkVal,0);};
-else if ($.browser.mozilla)
- this.addEventListener('input',checkVal,false);
-
 - custom-methods-demo.html enable summary container, currently broken, is updated too often
-- stop firefox password manager to popup before validation - very very difficult
-
-8 Sijawusz Pur Rahnama, 12:30: first of all, it would be handy to have some hideError(s) method
-8 Sijawusz Pur Rahnama, 12:31: the second thing is to provide some sort of ids not constrained only to DOM tree
-8 Sijawusz Pur Rahnama, 12:32: it can be achieved by sniffing some character on a front of id
-8 Sijawusz Pur Rahnama, 12:32: like # for example
-8 Sijawusz Pur Rahnama, 12:33: by this, we'll be able to set some custom errors not strictly related to our form
-8 Sijawusz Pur Rahnama, 12:33: for example
-8 Sijawusz Pur Rahnama, 12:34: validator.setErrors({ '#broken_connection': 'There was a problem with connection, try again later' });
-8 Sijawusz Pur Rahnama, 12:35: and later we could use validator.hideError('#broken_connection');
+- stop firefox password manager to popup before validation - check mozilla bug tracker?
 
  Examples:
  - wordpress comment form, make it a drop-in method

@@ -13,10 +13,10 @@
 // provides cross-browser focusin and focusout events
 // IE has native support, in other browsers, use event caputuring (neither bubbles)
 
-// provides delegate(type, delegate, handler) plugin for easier event delegation
+// provides delegate(type: String, delegate: Selector, handler: Callback) plugin for easier event delegation
 // handler is only called when $(event.target).is(delegate), in the scope of the jQuery-object for event.target 
 
-// provides triggerEvent(type, target) to trigger delegated events
+// provides triggerEvent(type: String, target: Element) to trigger delegated events
 ;(function($) {
 	$.extend($.event.special, {
 		focusin: {

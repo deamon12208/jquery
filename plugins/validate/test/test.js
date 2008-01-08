@@ -445,6 +445,10 @@ test("errorcontainer, show/hide only on submit", function() {
 	equals( "There are 1 errors in your form.", container.html() );
 });
 
+test("checkableGroup()", function() {
+	isSet( new $.validator({}, document.getElementById("form")).checkableGroup(document.getElementById("radio1")), $("#form").find("[name=radio1]") );
+});
+
 test("focusInvalid()", function() {
 	expect(1);
 	var inputs = $("#testForm1 input").focus(function() {
@@ -824,6 +828,7 @@ test("validate checkbox on click", function() {
 	}
 	function trigger(element) {
 		element[0].click();
+		$("#form").triggerEvent("click", element[0]);
 	}
 	var e = $("#check2");
 	var v = $("#form").validate({
@@ -848,6 +853,7 @@ test("validate multiple checkbox on click", function() {
 	}
 	function trigger(element) {
 		element[0].click();
+		$("#form").triggerEvent("click", element[0]);
 	}
 	var e1 = $("#check1").attr("checked", false);
 	var e2 = $("#check1b");
@@ -878,6 +884,7 @@ test("validate radio on click", function() {
 	}
 	function trigger(element) {
 		element[0].click();
+		$("#form").triggerEvent("click", element[0]);
 	}
 	var e1 = $("#radio1");
 	var e2 = $("#radio1a");

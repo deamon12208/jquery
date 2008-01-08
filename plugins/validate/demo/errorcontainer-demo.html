@@ -32,11 +32,12 @@ form.cmxform { width: 30em; }
 </style>
 
 <script type="text/javascript">
-/*
+// only for demo purposes
 $.validator.setDefaults({
-	success: function() { alert("submitted!"); }
+	submitHandler: function() {
+		alert("submitted!");
+	}
 });
-*/
 
 $().ready(function() {
 	$("#form1").validate({

@@ -281,47 +281,13 @@ jQuery.extend(jQuery.fn, {
 	}
 });
 
-/**
- * Expression to filter for blank fields.
- *
- * @example jQuery("input:blank").length
- * @before <input value="" /><input value="  " /><input value="abc" />
- * @result 2
- *
- * @property
- * @type String
- * @name :blank
- * @cat Plugins/Validate
- */
- 
-/**
- * Expression to filter for filled fields.
- *
- * @example jQuery("input:filled").length
- * @before <input value="" /><input value="  " /><input value="abc" />
- * @result 1
- *
- * @property
- * @type String
- * @name :filled
- * @cat Plugins/Validate
- */
- 
-/**
- * Expression to filter unchecked checkboxes or radio buttons.
- *
- * @example jQuery("input:unchecked").length
- * @before <input type="checkbox" /><input type="checkbox" checked="checked" />
- * @result 1
- *
- * @property
- * @type String
- * @name :unchecked
- * @cat Plugins/Validate
- */
+// Custom selectors
 jQuery.extend(jQuery.expr[":"], {
+	// http://docs.jquery.com/Plugins/Validation/blank
 	blank: "!jQuery.trim(a.value)",
+	// http://docs.jquery.com/Plugins/Validation/filled
 	filled: "!!jQuery.trim(a.value)",
+	// http://docs.jquery.com/Plugins/Validation/unchecked
 	unchecked: "!a.checked"
 });
 
@@ -377,17 +343,8 @@ jQuery.format = function(source, params) {
 // constructor for validator
 jQuery.validator = function( options, form ) {
 	this.settings = jQuery.extend( {}, jQuery.validator.defaults, options );
-
 	this.currentForm = form;
-	this.labelContainer = jQuery(this.settings.errorLabelContainer);
-	this.errorContext = this.labelContainer.length && this.labelContainer || jQuery(form);
-	this.containers = jQuery(this.settings.errorContainer).add( this.settings.errorLabelContainer );
-	this.submitted = {};
-	this.valueCache = {};
-	this.pendingRequest = 0;
-	this.invalid = {};
-	this.reset();
-	this.refresh();
+	this.init();
 };
 
 jQuery.extend(jQuery.validator, {
@@ -432,19 +389,7 @@ jQuery.extend(jQuery.validator, {
 		}
 	},
 
-	/**
-	 * Modify default settings for validation.
-	 *
-	 * @example jQuery.validator.setDefaults({
-	 * 	debug: true
-	 * );
-	 * @desc Sets the debug setting for all validation calls following.
-	 *
-	 * @param Object<String, Object> settings
-	 * @name jQuery.validator.setDefaults
-	 * @type undefined
-	 * @cat Plugins/Validate
-	 */
+	// http://docs.jquery.com/Plugins/Validation/Validator/setDefaults
 	setDefaults: function(settings) {
 		jQuery.extend( jQuery.validator.defaults, settings );
 	},
@@ -497,17 +442,28 @@ jQuery.extend(jQuery.validator, {
 	},
 	
 	prototype: {
+		
+		init: function() {
+			this.labelContainer = jQuery(this.settings.errorLabelContainer);
+			this.errorContext = this.labelContainer.length && this.labelContainer || jQuery(this.currentForm);
+			this.containers = jQuery(this.settings.errorContainer).add( this.settings.errorLabelContainer );
+			this.submitted = {};
+			this.valueCache = {};
+			this.pendingRequest = 0;
+			this.invalid = {};
+			this.reset();
+			this.refresh();
+			
+			function delegate(event) {
+				var validator = jQuery.data(this[0].form, "validator");
+				validator.settings["on" + event.type] && validator.settings["on" + event.type].call(validator, this[0] );
+			}
+			jQuery(this.currentForm)
+				.delegate("focusin focusout keyup", ":text, :password, :file, select, textarea", delegate)
+				.delegate("click", ":radio, :checkbox", delegate);
+		},
 
-		/**
-		 * Validate on instant the entire form.
-		 *
-		 * @example $("#myform").validate().form();
-		 * @desc Triggers form validation programmatcitally.
-		 *
-		 * @name jQuery.validator.protoype.form
-		 * @type Boolean True when the form is valid, otherwise false
-		 * @cat Plugins/Validate
-		 */
+		// http://docs.jquery.com/Plugins/Validation/Validator/form
 		form: function() {
 			this.prepareForm();
 			for ( var i = 0; this.elements[i]; i++ ) {
@@ -520,18 +476,7 @@ jQuery.extend(jQuery.validator, {
 			return this.valid();
 		},
 		
-		/**
-		 * Validate on instant a single element.
-		 *
-		 * @example $("#myform").validate().element( "#myselect" );
-		 * @desc Triggers validation on a single element programmatically.
-		 *
-		 * @param String|Element element A selector or an element to validate
-		 *
-		 * @name jQuery.validator.protoype.element
-		 * @type Boolean True when the element is valid, otherwise false
-		 * @cat Plugins/Validate
-		 */
+		// http://docs.jquery.com/Plugins/Validation/Validator/element
 		element: function( element ) {
 			element = this.clean( element );
 			this.lastElement = element;
@@ -550,18 +495,7 @@ jQuery.extend(jQuery.validator, {
 			return result;
 		},
 
-		/**
-		 * Show the specified messages.
-		 *
-		 * @example var validator = $("#myform").validate();
-		 * validator.showErrors({"firstname": "I know that your firstname is Pete, Pete!"});
-		 * @desc Adds and shows error message programmatically.
-		 *
-		 * @param Map errors (optional) One or more key/value pairs of input names and messages
-		 *
-		 * @name jQuery.validator.protoype.showErrors
-		 * @cat Plugins/Validate
-		 */
+		// http://docs.jquery.com/Plugins/Validation/Validator/showErrors
 		showErrors: function(errors) {
 			if(errors) {
 				// add items to error list and map
@@ -583,18 +517,7 @@ jQuery.extend(jQuery.validator, {
 				: this.defaultShowErrors();
 		},
 		
-		/**
-		 * Resets the controlled form, including resetting input fields
-		 * to their original value (requires form plugin), removing classes
-		 * indicating invalid elements and hiding error messages.
-		 *
-		 * @example var validator = $("#myform").validate();
-		 * validator.resetForm();
-		 * @desc Reset the form controlled by this validator.
-		 *
-		 * @name jQuery.validator.protoype.resetForm
-		 * @cat Plugins/Validate
-		 */
+		// http://docs.jquery.com/Plugins/Validation/Validator/resetForm
 		resetForm: function() {
 			if ( jQuery.fn.resetForm )
 				jQuery( this.currentForm ).resetForm();
@@ -705,21 +628,6 @@ jQuery.extend(jQuery.validator, {
 				validator.rulesCache[this.name] = validator.rules(this);
 				return true;
 			});
-			
-			jQuery(this.currentForm).delegate("focusin focusout keyup", ":text, :password, :file, select, textarea", function(event) {
-				validator.settings["on" + event.type] && validator.settings["on" + event.type].call(validator, this[0] );
-			});
-			
-			if ( validator.settings.onclick ) {
-				var checkables = jQuery([]);
-				validator.elements.each(function() {
-					if ( validator.checkable( this ) )
-						checkables.push( validator.checkableGroup( this ) );
-				});
-				checkables.click(function() {
-					validator.settings.onclick.call( validator, this );
-				});
-			}
 		},
 		
 		clean: function( selector ) {
@@ -898,7 +806,11 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		checkableGroup: function( element ) {
-			return jQuery(element.form || document).find('[@name="' + element.name + '"]');
+			// select by name and filter by form for performance over form.find("[name=...]")
+			var form = this.currentForm;
+			return jQuery(document.getElementsByName(element.name)).map(function(index, element) {
+				return element.form == form && element || null;
+			});
 		},
 		
 		getLength: function(value, element) {
@@ -951,23 +863,6 @@ jQuery.extend(jQuery.validator, {
 		
 	},
 
-	/**
-	 * Defines a standard set of useful validation methods.
-	 * 
-	 * Use jQuery.validator.addMethod() to add your own methods.
-	 *
-	 * If "all kind of text inputs" is mentioned for any of the methods defined here,
-	 * it refers to input elements of type text, password and file and textareas.
-	 *
-	 * @param String value The trimmed value of the element, eg. the text of a text input (trimmed: whitespace removed at start and end)
-	 * @param Element element the input element itself, to check for content of attributes other than value
-	 * @param Object paramater Some parameter, like a number for min/max rules
-	 *
-	 * @property
-	 * @name jQuery.validator.methods
-	 * @type Object<String, Function(String,Element,Object):Boolean>
-	 * @cat Plugins/Validate/Methods
-	 */
 	methods: {
 
 		/**
@@ -1034,6 +929,7 @@ jQuery.extend(jQuery.validator, {
 		 * @type Boolean
 		 * @cat Plugins/Validate/Methods
 		 */
+		// http://docs.jquery.com/Plugins/Validation/Methods/required
 		required: function(value, element, param) {
 			// check if dependency is met
 			if ( !this.depend(param, element) )
@@ -1130,32 +1026,12 @@ jQuery.extend(jQuery.validator, {
 		 * @type Boolean
 		 * @cat Plugins/Validate/Methods
 		 */
+		// http://docs.jquery.com/Plugins/Validation/Methods/minLength
 		minLength: function(value, element, param) {
 			return this.optional(element) || this.getLength(value, element) >= param;
 		},
 	
-		/**
-		 * Return false, if the element is
-		 *
-		 * - some kind of text input and its value is too big
-		 *
-		 * - a set of checkboxes has too many boxes checked
-		 *
-		 * - a select and has too many options selected
-		 *
-		 * Works with all kind of text inputs, checkboxes and selects.
-		 *
-		 * @example <input name="firstname" class="{maxLength:5}" />
-		 * @desc Declares an input element with at most 5 characters.
-		 *
-		 * @example <input name="firstname" class="{required:true,maxLength:5}" />
-		 * @desc Declares an input element that must have at least one and at most 5 characters.
-		 *
-		 * @param Number max
-		 * @name jQuery.validator.methods.maxLength
-		 * @type Boolean
-		 * @cat Plugins/Validate/Methods
-		 */
+		// http://docs.jquery.com/Plugins/Validation/Methods/maxLength
 		maxLength: function(value, element, param) {
 			return this.optional(element) || this.getLength(value, element) <= param;
 		},
@@ -1195,243 +1071,65 @@ jQuery.extend(jQuery.validator, {
 			return this.optional(element) || ( length >= param[0] && length <= param[1] );
 		},
 	
-		/**
-		 * Return true, if the value is greater than or equal to the specified minimum.
-		 *
-		 * Works with all kind of text inputs.
-		 *
-		 * @example <input name="age" class="{minValue:16}" />
-		 * @desc Declares an optional input element whose value must be at least 16 (or none at all).
-		 *
-		 * @example <input name="age" class="{required:true,minValue:16}" />
-		 * @desc Declares an input element whose value must be at least 16.
-		 *
-		 * @param Number min
-		 * @name jQuery.validator.methods.minValue
-		 * @type Boolean
-		 * @cat Plugins/Validate/Methods
-		 */
+		// http://docs.jquery.com/Plugins/Validation/Methods/minValue
 		minValue: function( value, element, param ) {
 			return this.optional(element) || value >= param;
 		},
 		
-		/**
-		 * Return true, if the value is less than or equal to the specified maximum.
-		 *
-		 * Works with all kind of text inputs.
-		 *
-		 * @example <input name="age" class="{maxValue:16}" />
-		 * @desc Declares an optional input element whose value must be at most 16 (or none at all).
-		 *
-		 * @example <input name="age" class="{required:true,maxValue:16}" />
-		 * @desc Declares an input element whose required value must be at most 16.
-		 *
-		 * @param Number max
-		 * @name jQuery.validator.methods.maxValue
-		 * @type Boolean
-		 * @cat Plugins/Validate/Methods
-		 */
+		// http://docs.jquery.com/Plugins/Validation/Methods/maxValue
 		maxValue: function( value, element, param ) {
 			return this.optional(element) || value <= param;
 		},
 		
-		/**
-		 * Return true, if the value is in the specified range.
-		 *
-		 * Works with all kind of text inputs.
-		 *
-		 * @example <input name="age" class="{rangeValue:[4,12]}" />
-		 * @desc Declares an optional input element whose value must be at least 4 and at most 12 (or none at all).
-		 *
-		 * @example <input name="age" class="{required:true,rangeValue:[4,12]}" />
-		 * @desc Declares an input element whose required value must be at least 4 and at most 12.
-		 *
-		 * @param Array<Number> min/max
-		 * @name jQuery.validator.methods.rangeValue
-		 * @type Boolean
-		 * @cat Plugins/Validate/Methods
-		 */
+		// http://docs.jquery.com/Plugins/Validation/Methods/rangeValue
 		rangeValue: function( value, element, param ) {
 			return this.optional(element) || ( value >= param[0] && value <= param[1] );
 		},
 		
-		/**
-		 * Return true, if the value is not a valid email address.
-		 *
-		 * Works with all kind of text inputs.
-		 *
-		 * @example <input name="email1" class="{email:true}" />
-		 * @desc Declares an optional input element whose value must be a valid email address (or none at all).
-		 *
-		 * @example <input name="email1" class="{required:true,email:true}" />
-		 * @desc Declares an input element whose value must be a valid email address.
-		 *
-		 * @name jQuery.validator.methods.email
-		 * @type Boolean
-		 * @cat Plugins/Validate/Methods
-		 */
+		// http://docs.jquery.com/Plugins/Validation/Methods/email
 		email: function(value, element) {
 			// contributed by Scott Gonzalez: http://projects.scottsplayground.com/email_address_validation/
 			return this.optional(element) || /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|(\x22((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?\x22))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)*(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i.test(value);
 		},
 	
-		/**
-		 * Return true, if the value is a valid url, with a scheme of http(s) or ftp.
-		 *
-		 * Works with all kind of text inputs.
-		 *
-		 * @example <input name="homepage" class="{url:true}" />
-		 * @desc Declares an optional input element whose value must be a valid URL (or none at all).
-		 *
-		 * @example <input name="homepage" class="{required:true,url:true}" />
-		 * @desc Declares an input element whose value must be a valid URL.
-		 *
-		 * @name jQuery.validator.methods.url
-		 * @type Boolean
-		 * @cat Plugins/Validate/Methods
-		 */
+		// http://docs.jquery.com/Plugins/Validation/Methods/url
 		url: function(value, element) {
 			// contributed by Scott Gonzalez: http://projects.scottsplayground.com/iri/
 			return this.optional(element) || /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)*(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i.test(value);
 		},
         
-		/**
-		 * Return true, if the value is a valid date. Uses JavaScripts built-in
-		 * Date to test if the date is valid, and is therefore very limited.
-		 *
-		 * Works with all kind of text inputs.
-		 *
-		 * @example <input name="birthdate" class="{date:true}" />
-		 * @desc Declares an optional input element whose value must be a valid date (or none at all).
-		 *
-		 * @example <input name="birthdate" class="{required:true,date:true}" />
-		 * @desc Declares an input element whose value must be a valid date.
-		 *
-		 * @name jQuery.validator.methods.date
-		 * @type Boolean
-		 * @cat Plugins/Validate/Methods
-		 */
+		// http://docs.jquery.com/Plugins/Validation/Methods/date
 		date: function(value, element) {
 			return this.optional(element) || !/Invalid|NaN/.test(new Date(value));
 		},
 	
-		/**
-		 * Return true, if the value is a valid date, according to ISO date standard.
-		 *
-		 * Works with all kind of text inputs.
-		 *
-		 * @example jQuery.validator.methods.dateISO("1990/01/01")
-		 * @result true
-		 *
-		 * @example jQuery.validator.methods.dateISO("1990-01-01")
-		 * @result true
-		 *
-		 * @example jQuery.validator.methods.dateISO("01.01.1990")
-		 * @result false
-		 *
-		 * @example <input name="birthdate" class="{dateISO:true}" />
-		 * @desc Declares an optional input element whose value must be a valid ISO date (or none at all).
-		 *
-		 * @name jQuery.validator.methods.date
-		 * @type Boolean
-		 * @cat Plugins/Validate/Methods
-		 */
+		// http://docs.jquery.com/Plugins/Validation/Methods/dateISO
 		dateISO: function(value, element) {
 			return this.optional(element) || /^\d{4}[\/-]\d{1,2}[\/-]\d{1,2}$/.test(value);
 		},
 	
-		/**
-		 * Return true, if the value is a valid date. Supports german
-		 * dates (29.04.1994 or 1.1.2006). Doesn't make any sanity checks.
-		 *
-		 * Works with all kind of text inputs.
-		 *
-		 * @example jQuery.validator.methods.dateDE("1990/01/01")
-		 * @result false
-		 *
-		 * @example jQuery.validator.methods.dateDE("01.01.1990")
-		 * @result true
-		 *
-		 * @example jQuery.validator.methods.dateDE("0.1.2345")
-		 * @result true
-		 *
-		 * @example <input name="geburtstag" class="{dateDE:true}" />
-		 * @desc Declares an optional input element whose value must be a valid german date (or none at all).
-		 *
-		 * @name jQuery.validator.methods.dateDE
-		 * @type Boolean
-		 * @cat Plugins/Validate/Methods
-		 */
+		// http://docs.jquery.com/Plugins/Validation/Methods/dateDE
 		dateDE: function(value, element) {
 			return this.optional(element) || /^\d\d?\.\d\d?\.\d\d\d?\d?$/.test(value);
 		},
 	
-		/**
-		 * Return true, if the value is a valid number. Checks for
-		 * international number format, eg. 100,000.59
-		 *
-		 * Works with all kind of text inputs.
-		 *
-		 * @example <input name="amount" class="{number:true}" />
-		 * @desc Declares an optional input element whose value must be a valid number (or none at all).
-		 *
-		 * @name jQuery.validator.methods.number
-		 * @type Boolean
-		 * @cat Plugins/Validate/Methods
-		 */
+		// http://docs.jquery.com/Plugins/Validation/Methods/number
 		number: function(value, element) {
 			return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/.test(value);
 		},
 	
-		/**
-		 * Return true, if the value is a valid number.
-		 *
-		 * Works with all kind of text inputs.
-		 *
-		 * Checks for german numbers (100.000,59)
-		 *
-		 * @example <input name="menge" class="{numberDE:true}" />
-		 * @desc Declares an optional input element whose value must be a valid german number (or none at all).
-		 *
-		 * @name jQuery.validator.methods.numberDE
-		 * @type Boolean
-		 * @cat Plugins/Validate/Methods
-		 */
+		// http://docs.jquery.com/Plugins/Validation/Methods/numberDE
 		numberDE: function(value, element) {
 			return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:\.\d{3})+)(?:,\d+)?$/.test(value);
 		},
 		
-		/**
-		 * Returns true if the value contains only digits.
-		 *
-		 * Works with all kind of text inputs.
-		 *
-		 * @example <input name="serialnumber" class="{digits:true}" />
-		 * @desc Declares an optional input element whose value must contain only digits (or none at all).
-		 *
-		 * @name jQuery.validator.methods.digits
-		 * @type Boolean
-		 * @cat Plugins/Validate/Methods
-		 */
+		// http://docs.jquery.com/Plugins/Validation/Methods/digits
 		digits: function(value, element) {
 			return this.optional(element) || /^\d+$/.test(value);
 		},
 		
-		/**
-         * Return true, if the value is a valid credit card number.
-         *
-         * Works with all kind of text inputs.
-         *
-         * @example <input name="cc1" class="{required:true,creditcard:true}" />
-         * @desc Declares a required input element whose value must be a valid credit card number (ignoring any non-digts).
-         *
-         * @example <input name="cc2" class="{required:true,digits:true,creditcard:true}" />
-         * @desc Declares a required input element whose value must be a valid credit card number.  No spaces or dashes allowed.
-         *
-         * @name jQuery.validator.methods.creditcard
-         * @type Boolean
-         * @cat Plugins/Validate/Methods
-         */
+		// http://docs.jquery.com/Plugins/Validation/Methods/creditcard
+		// based on http://en.wikipedia.org/wiki/Luhn
 		creditcard: function(value, element) {
 			if ( this.optional(element) )
 				return true;
@@ -1455,84 +1153,20 @@ jQuery.extend(jQuery.validator, {
 			return (nCheck % 10) == 0;
 		},
 		
-		/**
-		 * Returns true if the value ends with one of the specified file extensions.
-		 * If nothing is specified, only images are allowed (default-param: "png|jpe?g|gif").
-		 *
-		 * Works with all kind of text inputs.
-		 *
-		 * @example <input type="file" name="avatar" class="{accept:true}" />
-		 * @desc Declares an optional file input element whose value must ends with '.png', '.jpg', '.jpeg' or '.gif'.
-		 *
-		 * @example <input type="file" name="avatar" class="{accept:'txt|docx?'}" />
-		 * @desc Declares an optional file input element whose value must ends with '.txt' or '.doc' or '.docx'.
-		 *
-		 * @name jQuery.validator.methods.accept
-		 * @type Boolean
-		 * @cat Plugins/Validate/Methods
-		 */
+		// http://docs.jquery.com/Plugins/Validation/Methods/accept
 		accept: function(value, element, param) {
 			param = typeof param == "string" ? param : "png|jpe?g|gif";
 			return this.optional(element) || value.match(new RegExp(".(" + param + ")$", "i")); 
 		},
 		
-		/**
-		 * Returns true if the value has the same value
-		 * as the element specified by the first parameter.
-		 *
-		 * Keep the expression simple to avoid spaces when using metadata.
-		 *
-		 * Works with all kind of text inputs.
-		 *
-		 * @example <input name="email" id="email" class="{required:true,email:true'}" />
-		 * <input name="emailAgain" class="{equalTo:'#email'}" />
-		 * @desc Declares two input elements: The first must contain a valid email address,
-		 * the second must contain the same adress, enter once more. The paramter is a
-		 * expression used via jQuery to select the element.
-		 *
-		 * @param String selection A jQuery expression
-		 * @name jQuery.validator.methods.equalTo
-		 * @type Boolean
-		 * @cat Plugins/Validate/Methods
-		 */
+		// http://docs.jquery.com/Plugins/Validation/Methods/equalTo
 		equalTo: function(value, element, param) {
 			return value == jQuery(param).val();
 		}
 		
 	},
 	
-	/**
-	 * Add a new validation method. It must consist of a name (must be a legal
-	 * javascript identifier), a function and a default message.
-	 *
-	 * Please note: While the temptation is great to
-	 * add a regex method that checks it's paramter against the value,
-	 * it is much cleaner to encapsulate those regular expressions
-	 * inside their own method. If you need lots of slightly different
-	 * expressions, try to extract a common parameter.
-	 *
-	 * A library of regular expressions: http://regexlib.com/DisplayPatterns.aspx
-	 *
-	 * @example jQuery.validator.addMethod("domain", function(value) {
-	 *   return /^http://mycorporatedomain.com/.test(value);
-	 * }, "Please specify the correct domain for your documents");
-	 * @desc Adds a method that checks if the value starts with http://mycorporatedomain.com
-	 *
-	 * @example jQuery.validator.addMethod("math", function(value, element, params) {
-	 *  return this.optional(value, element) || value == params[0] + params[1];
-	 * }, "Please enter the correct value for this simple question.");
-	 * @desc Adds a not-required method...
-	 *
-	 * @see jQuery.validator.methods
-	 *
-	 * @param String name The name of the method, used to identify and referencing it, must be a valid javascript identifier
-	 * @param Function rule The actual method implementation, returning true if an element is valid
-	 * @param String message The default message to display for this method
-	 *
-	 * @name jQuery.validator.addMethod
-	 * @type undefined
-	 * @cat Plugins/Validate
-	 */
+	// http://docs.jquery.com/Plugins/Validation/Validator/addMethod
 	addMethod: function(name, method, message) {
 		jQuery.validator.methods[name] = method;
 		jQuery.validator.messages[name] = message;

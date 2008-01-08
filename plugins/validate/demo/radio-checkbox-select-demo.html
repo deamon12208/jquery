@@ -13,19 +13,18 @@
 <script src="../jquery.validate.js" type="text/javascript"></script>
 
 <script type="text/javascript">
+// only for demo purposes
+$.validator.setDefaults({
+	submitHandler: function() {
+		alert("submitted!");
+	}
+});
+	
 $.metadata.setType("attr", "validate");
+
 $(document).ready(function() {
-	$.validator.setDefaults({
-		success: function() { alert("submitted!"); }
-	});
-	
-	// validate selects on button click
-	$("#validateSelects").click(function() {
-		$("#selecttest").validate().form();
-	});
-	
-	// validate radio and checkbox buttons on form submit
 	$("#form1").validate();
+	$("#selecttest").validate();
 });
 </script>
 
@@ -96,7 +95,7 @@ $(document).ready(function() {
 	</fieldset>
 </form>
 
-<div id="selecttest">
+<form id="selecttest">
 	<h2>Some tests with selects</h2>
 	<p>
 		<label for="jungle">Please select a jungle noun</label><br/>
@@ -137,8 +136,8 @@ $(document).ready(function() {
 		</select>
 	</p>
 	
-	<p><button id="validateSelects">Validate Selecttests</button></p>
-</div>
+	<p><input type="submit" value="Validate Selecttests"/></p>
+</form>
 
 <a href="index.html">Back to main page</a>
 
