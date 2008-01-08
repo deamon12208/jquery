@@ -2,7 +2,7 @@
   
   $.ec.clip = function(o) {
 
-    return this.queue(function() {
+    return this.each(function() {
 
       // Create element
       var el = $(this), props = ['position','top','left','width','height'];
@@ -31,7 +31,6 @@
         if(mode == 'hide') el.hide(); // Hide
         $.ec.restore(el, props); $.ec.removeWrapper(el); // Restore
         if(o.callback) o.callback.apply(this, arguments); // Callback
-        el.dequeue();
       }); 
       
     });
