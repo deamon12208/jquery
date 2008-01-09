@@ -586,7 +586,7 @@ test("resetForm()", function() {
 	errors(0);
 	equals("", $("#firstname").val(), "form plugin is included, therefor resetForm must also reset inputs, not only errors");
 });
-/*
+
 test("ajaxSubmit", function() {
 	expect(1);
 	stop();
@@ -602,9 +602,9 @@ test("ajaxSubmit", function() {
 			});
 		}
 	});
-	//jQuery("#signupForm").submit(function() { return false;}).submit();
+	jQuery("#signupForm").triggerHandler("submit");
 });
-*/
+
 
 module("misc");
 
