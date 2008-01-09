@@ -16,6 +16,7 @@
 * Renamed minValue to min, maxValue to max and rangeValue to range, deprecating the previous names (to be removed in 1.3)
 * Renamed minLength to minlength, maxLength to maxlength and rangeLength to rangelength, deprecating the previous names (to be removed in 1.3)
 * Added feature to merge min + max into and range and minlength + maxlength into rangelength
+* Added support for dynamic rule parameters, allowing to specify a function as a parameter eg. for minlength, called when validating the element
 
 1.1.2
 ---

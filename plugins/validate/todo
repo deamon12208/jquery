@@ -7,7 +7,6 @@ css references
 other stuff
 -----------
 
-- detect when min and max are used together and validate as rangeValue (same for rangeLength)
 - consider validation on page load, disabling required-checks
 - check value != defaultValue in required, making defaultValue invalid
 - test and document Scott's rules modules
@@ -18,7 +17,6 @@ other stuff
 - submitting a form where only remote validation is left to run sometimes calls submitHandler/submit after the field got fixed
 - add proper support for more states: valid, invalid, optional, pending...
 - add custom events for form and elements instead of more callbacks
-- add support for dynamic params, that is, check if the specified parameter (if relevant at all, eg. maxValue) is a function, then execute it and use the return value
 
 - document focusInvalid()
 - document validation lifecycle: setup (add event handlers), run validation (prepare form, validate elements, display errors/submit form)

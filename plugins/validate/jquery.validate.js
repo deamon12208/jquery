@@ -785,7 +785,7 @@ jQuery.extend(jQuery.validator, {
 			jQuery.each( data, function(key, value) {
 				rules[rules.length] = {
 					method: key,
-					parameters: value
+					parameters: jQuery.isFunction(value) && value() || value
 				};
 			} );
 			return rules;
