@@ -1,7 +1,7 @@
 if (window.Node && Node.prototype && !Node.prototype.contains) {
 	Node.prototype.contains = function (arg) {
-		return !!(this.compareDocumentPosition(arg) & 16)
-	}
+		return !!(this.compareDocumentPosition(arg) & 16);
+	};
 }
 
 (function($) {
@@ -13,242 +13,169 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 		return this.each(function() {
 			new $.ui.sortable(this,o);	
 		});
-	}
-	
-	//Macros for external methods that support chaining
-	var methods = "destroy,enable,disable,refresh".split(",");
-	for(var i=0;i<methods.length;i++) {
-		var cur = methods[i], f;
-		eval('f = function() { var a = arguments; return this.each(function() { if(jQuery(this).is(".ui-sortable")) jQuery.data(this, "ui-sortable")["'+cur+'"](a); }); }');
-		$.fn["sortable"+cur.substr(0,1).toUpperCase()+cur.substr(1)] = f;
 	};
 	
-	//get instance method
-	$.fn.sortableInstance = function() {
-		if($(this[0]).is(".ui-sortable")) return $.data(this[0], "ui-sortable");
-		return false;
-	};
+	$.ui.sortable = function(element,options) {
 	
-	$.ui.sortable = function(el,o) {
-	
-		this.element = el;
-		this.set = [];
-		var options = {};
+		//Initialize needed constants
 		var self = this;
-		$.data(this.element, "ui-sortable", this);
-		$(el).addClass("ui-sortable");
-		
-		$.extend(options, o);
-		$.extend(options, {
-			items: options.items || '> li',
-			smooth: options.smooth != undefined ? options.smooth : true,
-			helper: 'clone',
-			containment: options.containment ? (options.containment == 'sortable' ? el : options.containment) : null,
-			zIndex: options.zIndex || 1000,
-			_start: function(h,p,c,t,e) {
-				self.start.apply(t, [self, e]); // Trigger the onStart callback				
-			},
-			_beforeStop: function(h,p,c,t,e) {
-				self.stop.apply(t, [self, e]); // Trigger the onStart callback
-			},
-			_drag: function(h,p,c,t,e) {
-				self.drag.apply(t, [self, e]); // Trigger the onStart callback
-			},
+		this.element = $(element);
+		$.data(element, "ui-sortable", this);
+		this.element.addClass("ui-sortable");
+
+		//Prepare the passed options
+		this.options = $.extend({}, options);
+		var o = this.options;
+		$.extend(o, {
+			items: this.options.items || '> *',
+			zIndex: this.options.zIndex || 1000,
 			startCondition: function() {
 				return !self.disabled;	
-			}			
+			}		
 		});
 		
 		//Get the items
-		var items = $(options.items, el);
-		
-		//Let's determine the floating mode
-		options.floating = /left|right/.test(items.css('float'));
+		this.items = $(o.items, element).each(function() { $.data(this, 'ui-sortable-item', true); });
+
+		//Let's determine if the items are floating
+		this.floating = /left|right/.test(this.items.css('float'));
 		
 		//Let's determine the parent's offset
-		if($(el).css('position') == 'static') $(el).css('position', 'relative');
-		options.offset = $(el).offset({ border: false });
+		if(!/(relative|absolute|fixed)/.test(this.element.css('position'))) this.element.css('position', 'relative');
+		this.offset = this.element.offset({ border: false });
 
-		items.each(function() {
-			new $.ui.mouseInteraction(this,options);
+		//Initialize mouse events for interaction
+		this.element.mouseInteraction({
+			executor: this,
+			delay: o.delay,
+			distance: o.distance || 0,
+			dragPrevention: o.prevention ? o.prevention.toLowerCase().split(',') : ['input','textarea','button','select','option'],
+			start: this.start,
+			stop: this.stop,
+			drag: this.drag,
+			condition: function(e) {
+
+				if(this.disabled) return false;
+
+				//Find out if the clicked node (or one of its parents) is a actual item in this.items
+				var currentItem = null, nodes = $(e.target).parents().andSelf().each(function() {
+					if($.data(this, 'ui-sortable-item')) currentItem = $(this);
+				});
+				if(currentItem) {
+					this.currentItem = currentItem;
+					return true;
+				} else return false; 
+
+			}
 		});
-		
-		//Add current items to the set
-		items.each(function() {
-			self.set.push([this,null]);
-		});
-		
-		this.options = options;
-	}
+
+	};
 	
 	$.extend($.ui.sortable.prototype, {
 		plugins: {},
-		currentTarget: null,
-		lastTarget: null,
-		prepareCallbackObj: function(self, that) {
-			if (!self.pos) self.pos = [0, 0];
+		ui: function() {
 			return {
-				helper: self.helper,
-				position: { left: self.pos[0], top: self.pos[1] },
-				offset: self.options.cursorAt,
-				draggable: self,
-				current: that,
-				options: self.options
-			}			
+				helper: this.helper,
+				position: this.position,
+				absolutePosition: this.positionAbs,
+				instance: this,
+				options: this.options
+			};		
+		},
+		propagate: function(n,e) {
+			$.ui.plugin.call(this, n, [e, this.ui()]);
+			this.element.triggerHandler(n == "sort" ? n : "sort"+n, [e, this.ui()], this.options[n]);
 		},
 		refresh: function() {
-
-			//Get the items
-			var self = this;
-			var items = $(this.options.items, this.element);
-
-			var unique = [];
-			items.each(function() {
-				old = false;
-				for(var i=0;i<self.set.length;i++) { if(self.set[i][0] == this) old = true;	}
-				if(!old) unique.push(this);
-			});
-			
-			for(var i=0;i<unique.length;i++) {
-				new $.ui.mouseInteraction(unique[i],self.options);
-			}
-			
-			//Add current items to the set
-			this.set = [];
-			items.each(function() {
-				self.set.push([this,null]);
-			});
-			
+			this.items = $(this.options.items, this.element).each(function() { $.data(this, 'ui-sortable-item', true); });
 		},
 		destroy: function() {
-			$(this.element).removeClass("ui-sortable").removeClass("ui-sortable-disabled");
-			$(this.options.items, this.element).mouseInteractionDestroy();
-			
+			this.element.removeClass("ui-sortable ui-sortable-disabled");
+			this.element.removeMouseInteraction();
 		},
 		enable: function() {
-			$(this.element).removeClass("ui-sortable-disabled");
+			this.element.removeClass("ui-sortable-disabled");
 			this.disabled = false;
 		},
 		disable: function() {
-			$(this.element).addClass("ui-sortable-disabled");
+			this.element.addClass("ui-sortable-disabled");
 			this.disabled = true;
 		},
-		start: function(that, e) {
+		start: function(e) {
 			
 			var o = this.options;
 
-			if(o.hoverClass) {
-				that.helper = $('<div class="'+o.hoverClass+'"></div>').appendTo('body').css({
-					height: this.element.offsetHeight+'px',
-					width: this.element.offsetWidth+'px',
-					position: 'absolute'	
-				});
-			}
+			//Create and append the visible helper
+			this.helper = this.currentItem.clone().appendTo(this.currentItem[0].parentNode);
+			this.helper.css('position', 'absolute');
+
+			//Find out the next positioned parent
+			this.offsetParent = (function(cp) {
+				while(cp) {
+					if(cp.style && (/(absolute|relative|fixed)/).test($.css(cp,'position'))) return $(cp);
+					cp = cp.parentNode ? cp.parentNode : null;
+				}; return $("body");		
+			})(this.helper[0].parentNode);
 			
-			if(o.zIndex) {
-				if($(this.helper).css("zIndex")) o.ozIndex = $(this.helper).css("zIndex");
-				$(this.helper).css('zIndex', o.zIndex);
-			}
+			//Prepare variables for position generation
+			this.elementOffset = this.currentItem.offset();
+			this.offsetParentOffset = this.offsetParent.offset();
+			var elementPosition = { left: this.elementOffset.left - this.offsetParentOffset.left, top: this.elementOffset.top - this.offsetParentOffset.top };
+			this._pageX = e.pageX; this._pageY = e.pageY;
+			this.clickOffset = { left: e.pageX - this.elementOffset.left, top: e.pageY - this.elementOffset.top };
+			var r = this.helper.css('position') == 'relative';
 			
-			that.firstSibling = $(this.element).prev()[0];
-				
-			$(this.element).css('visibility', 'hidden');
-			$(this.element).triggerHandler("sortstart", [e, that.prepareCallbackObj(this)], o.start);
+			//Generate the original position
+			this.originalPosition = {
+				left: (r ? parseInt(this.helper.css('left')) || 0 : elementPosition.left + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollLeft)),
+				top: (r ? parseInt(this.helper.css('top')) || 0 : elementPosition.top + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollTop))
+			};
 			
+			//Generate a flexible offset that will later be subtracted from e.pageX/Y
+			this.offset = {left: e.pageX - this.originalPosition.left, top: e.pageY - this.originalPosition.top };
+
+			//Call plugins and callbacks
+			this.propagate("start", e);
+
+			//Save and store the helper proportions
+			this.helperProportions = { width: this.helper.outerWidth(), height: this.helper.outerHeight() };
+			
+			//Set the original element visibility to hidden to still fill out the white space	
+			$(this.currentItem).css('visibility', 'hidden');
+
 			return false;
 						
 		},
-		stop: function(that, e) {			
+		stop: function(e) {
+
+			//Call plugins and trigger callbacks
+			this.propagate("stop", e);
+
+			//TODO: Propagate the change callback if the DOM position has changed
+			if(true) this.propagate("update", e);
 			
-			var o = this.options;
-			var self = this;
-			o.beQuietAtEnd = true;
-
-			if(o.smooth) {
-				var os = $(this.element).offset();
-				$(this.helper).animate({ left: os.left - o.po.left, top: os.top - o.po.top }, 500, stopIt);
-			} else {
-				stopIt();
-			}
-				
-			function stopIt() {
-
-				$(self.element).css('visibility', 'visible');
-				if(that.helper) that.helper.remove();
-				if(self.helper != self.element) $(self.helper).remove(); 
-
-				if(o.ozIndex)
-					$(self.helper).css('zIndex', o.ozIndex);
-					
-					
-				//Let's see if the position in DOM has changed
-				if($(self.element).prev()[0] != that.firstSibling) {
-					$(self.element).triggerHandler("sortupdate", [e, that.prepareCallbackObj(self, that)], o.update);
-				}
-				$(self.element).triggerHandler("sortstop", [e, that.prepareCallbackObj(self, that)], o.stop);				
-
-			}
-			
+			if(this.cancelHelperRemoval) return false;			
+			$(this.currentItem).css('visibility', 'visible');
+			this.helper.remove();
 
 			return false;
 			
 		},
-		drag: function(that, e) {
+		drag: function(e) {
 
-			var o = this.options;
+			//Compute the helpers position
+			this.position = { top: e.pageY - this.offset.top, left: e.pageX - this.offset.left };
+			this.positionAbs = { left: e.pageX - this.clickOffset.left, top: e.pageY - this.clickOffset.top };
 
-			this.pos = [this.pos[0]-(o.cursorAt.left ? o.cursorAt.left : 0), this.pos[1]-(o.cursorAt.top ? o.cursorAt.top : 0)];
-			var nv =  $(this.element).triggerHandler("sort", [e, that.prepareCallbackObj(this)], o.sort);
-			var nl = (nv && nv.left) ? nv.left :  this.pos[0];
-			var nt = (nv && nv.top) ? nv.top :  this.pos[1];
+			//Rearrange
+			this.items.each(function() {
+				//TODO! Check for positions here, then rearrange
+			});
+
+			//Call plugins and callbacks
+			this.propagate("sort", e);
 			
-
-			var m = that.set;
-			var p = this.pos[1];
-			
-			for(var i=0;i<m.length;i++) {
-				
-				var ci = $(m[i][0]); var cio = m[i][0];
-				if(this.element.contains(cio)) continue;
-				var cO = ci.offset(); //TODO: Caching
-				cO = { top: cO.top, left: cO.left };
-				
-				var mb = function(e) { if(true || o.lba != cio) { ci.before(e); o.lba = cio; } }
-				var ma = function(e) { if(true || o.laa != cio) { ci.after(e); o.laa = cio; } }
-				
-				if(o.floating) {
-					var overlap = ((cO.left - (this.pos[0]+(this.options.po ? this.options.po.left : 0)))/this.helper.offsetWidth);
-					if(!(cO.top < this.pos[1]+(this.options.po ? this.options.po.top : 0) + cio.offsetHeight/2 && cO.top + cio.offsetHeight > this.pos[1]+(this.options.po ? this.options.po.top : 0) + cio.offsetHeight/2)) continue;
-				} else {
-					var overlap = ((cO.top - (this.pos[1]+(this.options.po ? this.options.po.top : 0)))/this.helper.offsetHeight);
-					if(!(cO.left < this.pos[0]+(this.options.po ? this.options.po.left : 0) + cio.offsetWidth/2 && cO.left + cio.offsetWidth > this.pos[0]+(this.options.po ? this.options.po.left : 0) + cio.offsetWidth/2)) continue;
-				}
-				
-				if(overlap >= 0 && overlap <= 0.5) { //Overlapping at top
-					ci.prev().length ? ma(this.element) : mb(this.element); break;
-				}
-
-				if(overlap < 0 && overlap > -0.5) { //Overlapping at bottom
-					ci.next()[0] == this.element ? mb(this.element) : ma(this.element); break;
-				}
-
-			}
-			
-			//Let's see if the position in DOM has changed
-			if($(this.element).prev()[0] != that.lastSibling) {
-				$(this.element).triggerHandler("sortchange", [e, that.prepareCallbackObj(this, that)], this.options.change);
-				that.lastSibling = $(this.element).prev()[0];	
-			}
-
-			if(that.helper) { //reposition helper if available
-				var to = $(this.element).offset();
-				that.helper.css({
-					top: to.top+'px',
-					left: to.left+'px'	
-				});
-			}	
-			
-			$(this.helper).css('left', nl+'px').css('top', nt+'px'); // Stick the helper to the cursor
+			this.helper.css({ left: this.position.left+'px', top: this.position.top+'px' }); // Stick the helper to the cursor
 			return false;
 			
 		}

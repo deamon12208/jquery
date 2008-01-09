@@ -66,7 +66,7 @@
 		}
 
 		for(var i in o.handles) {
-			if(o.handles[i].constructor == String) o.handles[i] = $(o.handles[i], element);
+			if(o.handles[i].constructor == String) o.handles[i] = $(o.handles[i], element).show();
 			if(!$(o.handles[i]).length) continue;
 		}
 	
@@ -119,8 +119,8 @@
 			if(this.options.proxy) {
 				this.offset = this.element.offset();
 				this.helper = $('<div></div>').css({
-						width: $(this.element).width(),
-						height: $(this.element).height(),
+						width: this.element.outerWidth(),
+						height: this.element.outerHeight(),
 						position: 'absolute',
 						left: this.offset.left+'px',
 						top: this.offset.top+'px'
@@ -134,7 +134,8 @@
 
 			//Store needed variables
 			$.extend(this.options, {
-				currentSize: { width: this.element.width(), height: this.element.height() },
+				currentSize: { width: this.element.outerWidth(), height: this.element.outerHeight() },
+				currentSizeDiff: { width: this.element.outerWidth() - this.element.width(), height: this.element.outerHeight() - this.element.height() },
 				startPosition: { left: e.pageX, top: e.pageY },
 				currentPosition: {
 					left: parseInt(this.helper.css('left')) || 0,
@@ -152,7 +153,7 @@
 			this.propagate("stop", e);		
 
 			if(o.proxy) {
-				this.element.css({ width: this.helper.css('width'), height: this.helper.css('height') });
+				this.element.css({ width: this.helper.width() - o.currentSizeDiff.width, height: this.helper.height() - o.currentSizeDiff.height });
 				this.element.css({ top: (parseInt(this.element.css('top')) || 0) + (parseInt(this.helper.css('top')) - this.offset.top), left: (parseInt(this.element.css('left')) || 0) + (parseInt(this.helper.css('left')) - this.offset.left) });
 				this.helper.remove();
 			}
