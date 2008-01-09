@@ -1,6 +1,7 @@
 0.4.0
 -----
 * Added support for data attributes on select elements.
+* Modified email regex to avoid bug in Opera.
 
 0.3.7
 -----
