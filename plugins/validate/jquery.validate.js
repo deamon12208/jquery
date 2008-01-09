@@ -504,7 +504,7 @@ jQuery.extend(jQuery.validator, {
 				for ( name in errors ) {
 					this.errorList.push({
 						message: errors[name],
-						element: jQuery("[@name='" + name + "']:first", this.currentForm)[0]
+						element: this.findByName(name)[0]
 					});
 				}
 				// remove items from success list
@@ -787,10 +787,10 @@ jQuery.extend(jQuery.validator, {
 			return /radio|checkbox/i.test(element.type);
 		},
 		
-		checkableGroup: function( element ) {
+		findByName: function( name ) {
 			// select by name and filter by form for performance over form.find("[name=...]")
 			var form = this.currentForm;
-			return jQuery(document.getElementsByName(element.name)).map(function(index, element) {
+			return jQuery(document.getElementsByName(name)).map(function(index, element) {
 				return element.form == form && element || null;
 			});
 		},
@@ -801,7 +801,7 @@ jQuery.extend(jQuery.validator, {
 				return jQuery("option:selected", element).length;
 			case 'input':
 				if( this.checkable( element) )
-					return this.checkableGroup( element).filter(':checked').length;
+					return this.findByName(element.name).filter(':checked').length;
 			}
 			return value.length;
 		},
@@ -841,6 +841,18 @@ jQuery.extend(jQuery.validator, {
 			if ( valid && this.pendingRequest == 0 && this.formSubmitted && this.form() ) {
 				jQuery(this.currentForm).submit();
 			}
+		},
+		
+		previousValue: function(element) {
+			var previous = jQuery.data(element, "previousValue");
+			if(!previous) {
+				jQuery.data(element, "previousValue", previous = {
+					old: null,
+					valid: true,
+					message: this.defaultMessage( element, "remote" )
+				});
+			}
+			return previous;
 		}
 		
 	},
@@ -932,17 +944,10 @@ jQuery.extend(jQuery.validator, {
 			if ( this.optional(element) )
 				return true;
 				
-			var cached = this.valueCache[element.name];
-			if(!cached) {
-				this.valueCache[element.name] = cached = {
-					old: null,
-					valid: true,
-					message: this.defaultMessage( element, "remote" )
-				};
-			}
-			this.settings.messages[element.name].remote = typeof cached.message == "function" ? cached.message(value) : cached.message;
-			if ( cached.old !== value ) {
-				cached.old = value;
+			var previous = this.previousValue(element);
+			this.settings.messages[element.name].remote = typeof previous.message == "function" ? previous.message(value) : previous.message;
+			if ( previous.old !== value ) {
+				previous.old = value;
 				var validator = this;
 				this.startRequest();
 				var data = {};
@@ -954,18 +959,18 @@ jQuery.extend(jQuery.validator, {
 					dataType: "json",
 					data: data,
 					success: function(response) {
-						if ( !response ) {
+						if ( typeof response == "string" || !response ) {
 							var errors = {};
-							errors[element.name] =  validator.defaultMessage( element, "remote" );
+							errors[element.name] =  response || validator.defaultMessage( element, "remote" );
 							validator.showErrors(errors);
 						}
-						cached.valid = response;
+						previous.valid = response;
 						validator.stopRequest(response);
 					}
 				});
 				return false;
 			}
-			return cached.valid;
+			return previous.valid;
 		},
 
 		/**

@@ -445,8 +445,8 @@ test("errorcontainer, show/hide only on submit", function() {
 	equals( "There are 1 errors in your form.", container.html() );
 });
 
-test("checkableGroup()", function() {
-	isSet( new $.validator({}, document.getElementById("form")).checkableGroup(document.getElementById("radio1")), $("#form").find("[name=radio1]") );
+test("findByName()", function() {
+	isSet( new $.validator({}, document.getElementById("form")).findByName(document.getElementById("radio1").name), $("#form").find("[name=radio1]") );
 });
 
 test("focusInvalid()", function() {
@@ -886,6 +886,49 @@ test("check the serverside script works", function() {
 	});
 });
 
+test("check the serverside script works2", function() {
+	stop();
+	$.getJSON("users2.php", {value: 'asd'}, function(response) {
+		ok( response, "yet available" );
+		$.getJSON("users.php", {username: "asdf"}, function(response) {
+			ok( !response, "asdf is already taken, please try something else" );
+			start();
+		});
+	});
+});
+
+test("validate via remote method and serverside message", function() {
+	expect(5);
+	stop();
+	var e = $("#username");
+	var v = $("#userForm").validate({
+		rules: {
+			username: {
+				required: true,
+				remote: "users2.php"
+			}
+		},
+		messages: {
+			username: {
+				required: "Please"
+			}
+		},
+		submitHandler: function() {
+			ok( false, "submitHandler may never be called when validating only elements");
+		}
+	});
+	$().ajaxStop(function() {
+		ok( true, "There needs to be exactly one request." );
+		equals( 1, v.size(), "There must be one error" );
+		equals( "asdf is already taken, please try something else", v.errorList[0].message );
+		start();
+	});
+	ok( !v.element(e), "invalid element, nothing entered yet" );
+	e.val("asdf");
+	ok( !v.element(e), "still invalid, because remote validation must block until it returns" );
+});
+
+
 test("validate via remote method", function() {
 	expect(5);
 	stop();
@@ -917,3 +960,4 @@ test("validate via remote method", function() {
 	e.val("asdf");
 	ok( !v.element(e), "still invalid, because remote validation must block until it returns" );
 });
+

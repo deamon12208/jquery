@@ -6,7 +6,7 @@
 * Added subformRequired-callback option to support easier validation of subforms
 * Added remember-the-milk-demo (thanks RTM team for the permission!)
 * Added marketo-demo (thanks Glen Lipka!)
-* Added support for ajax-validation, see method "remote"
+* Added support for ajax-validation, see method "remote"; serverside returns JSON, true for valid elements, false or a String for invalid, String is used as message
 * Added highlight and unhighlight options, by default toggles errorClass on element, allows custom highlighting
 * Added valid() plugin method for easy programmatic checking of forms and fields without the need to use the validator API
 * Replaced regex for email method, thanks to the contribution by Scott Gonzalez, see http://projects.scottsplayground.com/email_address_validation/
