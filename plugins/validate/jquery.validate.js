@@ -285,7 +285,8 @@ jQuery.extend(jQuery.fn, {
 					: jQuery(element).metadata();
 		}
 		
-		var data = data( this[0] );
+		var element = this[0]
+		var data = data( element );
 		if( !data )
 			return [];
 		var rules = [];
@@ -303,7 +304,7 @@ jQuery.extend(jQuery.fn, {
 		jQuery.each( data, function(key, value) {
 			rules[rules.length] = {
 				method: key,
-				parameters: jQuery.isFunction(value) && value() || value
+				parameters: jQuery.isFunction(value) ? value(element) : value
 			};
 		} );
 		return rules;
@@ -813,6 +814,7 @@ jQuery.extend(jQuery.validator, {
 			var form = this.currentForm;
 			return jQuery(document.getElementsByName(name)).map(function(index, element) {
 				return element.form == form && element || null;
+				//  && element.name == name
 			});
 		},
 		

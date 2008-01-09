@@ -352,10 +352,12 @@ test("rules(), merge min/max to range, minlength/maxlength to rangelength", func
 });
 
 test("rules(), evaluate dynamic parameters", function() {
+	expect(3);
 	var v = $("#testForm1").validate({
 		rules: {
 			firstname: {
-				min: function() {
+				min: function(element) {
+					equals( $("#firstname")[0], element );
 					return 12;
 				}
 			}
