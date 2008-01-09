@@ -9,6 +9,7 @@
 * Added support for ajax-validation, see method "remote"; serverside returns JSON, true for valid elements, false or a String for invalid, String is used as message
 * Added highlight and unhighlight options, by default toggles errorClass on element, allows custom highlighting
 * Added valid() plugin method for easy programmatic checking of forms and fields without the need to use the validator API
+* Added rules() method to read and write rules for an element (currently read only)
 * Replaced regex for email method, thanks to the contribution by Scott Gonzalez, see http://projects.scottsplayground.com/email_address_validation/
 * Restructured event architecture to rely solely on delegation, both improving performance, and ease-of-use for dynamic forms
 * Moved documentation from inline to http://docs.jquery.com/Plugins/Validation - including interactive examples for all methods

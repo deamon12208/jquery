@@ -275,6 +275,39 @@ jQuery.extend(jQuery.fn, {
             return valid;
         }
     },
+	rules: function() {
+		function data( element ) {
+			var validator = jQuery.data(element.form, "validator");
+			return validator.settings.rules
+				? validator.settings.rules[ element.name ]
+				: validator.settings.meta
+					? jQuery(element).metadata()[ validator.settings.meta ]
+					: jQuery(element).metadata();
+		}
+		
+		var data = data( this[0] );
+		if( !data )
+			return [];
+		var rules = [];
+		data = jQuery.validator.normalizeRules(data);
+		if (data.min && data.max) {
+			data.range = [data.min, data.max];
+			delete data.min;
+			delete data.max;
+		}
+		if (data.minlength && data.maxlength) {
+			data.rangelength = [data.minlength, data.maxlength];
+			delete data.minlength;
+			delete data.maxlength;
+		}
+		jQuery.each( data, function(key, value) {
+			rules[rules.length] = {
+				method: key,
+				parameters: jQuery.isFunction(value) && value() || value
+			};
+		} );
+		return rules;
+	},
 	// destructive add
 	push: function( t ) {
 		return this.setArray( this.add(t).get() );
@@ -609,7 +642,7 @@ jQuery.extend(jQuery.validator, {
 				!this.name && validator.settings.debug && window.console && console.error( "%o has no name assigned", this);
 			
 				// select only the first element for each name, and only those with rules specified
-				if ( this.name in rulesCache || !validator.rules(this).length )
+				if ( this.name in rulesCache || !jQuery(this).rules().length )
 					return false;
 				
 				rulesCache[this.name] = true;
@@ -648,7 +681,7 @@ jQuery.extend(jQuery.validator, {
 			element = this.clean( element );
 			this.settings.unhighlight.call( this, element, this.settings.errorClass );
 			//var rules = this.rulesCache[ element.name ];
-			var rules = this.rules(element);
+			var rules = jQuery(element).rules();
 			// TODO assert that check is only called for elements with existing rules?
 			if (!rules)
 				return true;
@@ -767,38 +800,9 @@ jQuery.extend(jQuery.validator, {
 		},
 
 		rules: function( element ) {
-			var data = this.data( element );
-			if( !data )
-				return [];
-			var rules = [];
-			data = jQuery.validator.normalizeRules(data);
-			if (data.min && data.max) {
-				data.range = [data.min, data.max];
-				delete data.min;
-				delete data.max;
-			}
-			if (data.minlength && data.maxlength) {
-				data.rangelength = [data.minlength, data.maxlength];
-				delete data.minlength;
-				delete data.maxlength;
-			}
-			jQuery.each( data, function(key, value) {
-				rules[rules.length] = {
-					method: key,
-					parameters: jQuery.isFunction(value) && value() || value
-				};
-			} );
-			return rules;
+			return jQuery(element).rules();
 		},
 
-		data: function( element ) {
-			return this.settings.rules
-				? this.settings.rules[ element.name ]
-				: this.settings.meta
-					? jQuery(element).metadata()[ this.settings.meta ]
-					: jQuery(element).metadata();
-		},
-		
 		checkable: function( element ) {
 			return /radio|checkbox/i.test(element.type);
 		},
