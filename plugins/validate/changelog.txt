@@ -14,6 +14,8 @@
 * Moved documentation from inline to http://docs.jquery.com/Plugins/Validation - including interactive examples for all methods
 * Removed validator.refresh(), validation is now completey dynamic
 * Renamed minValue to min, maxValue to max and rangeValue to range, deprecating the previous names (to be removed in 1.3)
+* Renamed minLength to minlength, maxLength to maxlength and rangeLength to rangelength, deprecating the previous names (to be removed in 1.3)
+* Added feature to merge min + max into and range and minlength + maxlength into rangelength
 
 1.1.2
 ---

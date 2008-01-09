@@ -245,7 +245,6 @@ test("rules() - internal - select", function() {
 	var element = $('#meal')[0];
 	var v = $('#testForm3').validate();
 	var rule = v.rules(element);
-	// fails in opera, bug is reported
 	equals( "required", rule[0].method );
 	ok( rule[0].parameters );
 });
@@ -299,6 +298,30 @@ test("rules() - internal - input", function() {
 	equals( "rangeLength", rule[2].method );
 	equals( 2, rule[2].parameters[0] );
 	equals( 8, rule[2].parameters[1] );
+});
+
+test("rules(), merge min/max to range, minlength/maxlength to rangelength", function() {
+	var v = $("#testForm1").validate({
+		rules: {
+			firstname: {
+				min: 5,
+				max: 12	
+			},
+			lastname: {
+				minlength: 2,
+				maxlength: 8
+			}
+		}
+	});
+	var rangeRules = v.rules($("#firstname")[0]);
+	equals( "range", rangeRules[0].method );
+	equals( 5, rangeRules[0].parameters[0] );
+	equals( 12, rangeRules[0].parameters[1] );
+	
+	var lengthRules = v.rules($("#lastname")[0]);
+	equals( "rangelength", lengthRules[0].method );
+	equals( 2, lengthRules[0].parameters[0] );
+	equals( 8, lengthRules[0].parameters[1] );
 });
 
 test("formatAndAdd", function() {

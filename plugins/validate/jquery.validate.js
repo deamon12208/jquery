@@ -420,8 +420,11 @@ jQuery.extend(jQuery.validator, {
 		creditcard: "Please enter a valid credit card.",
 		equalTo: "Please enter the same value again.",
 		accept: "Please enter a value with a valid extension.",
+		maxlength: jQuery.format("Please enter a value no longer than {0} characters."),
 		maxLength: jQuery.format("Please enter a value no longer than {0} characters."),
+		minlength: jQuery.format("Please enter a value of at least {0} characters."),
 		minLength: jQuery.format("Please enter a value of at least {0} characters."),
+		rangelength: jQuery.format("Please enter a value between {0} and {1} characters long."),
 		rangeLength: jQuery.format("Please enter a value between {0} and {1} characters long."),
 		rangeValue: jQuery.format("Please enter a value between {0} and {1}."),
 		range: jQuery.format("Please enter a value between {0} and {1}."),
@@ -769,6 +772,16 @@ jQuery.extend(jQuery.validator, {
 				return [];
 			var rules = [];
 			data = jQuery.validator.normalizeRules(data);
+			if (data.min && data.max) {
+				data.range = [data.min, data.max];
+				delete data.min;
+				delete data.max;
+			}
+			if (data.minlength && data.maxlength) {
+				data.rangelength = [data.minlength, data.maxlength];
+				delete data.minlength;
+				delete data.maxlength;
+			}
 			jQuery.each( data, function(key, value) {
 				rules[rules.length] = {
 					method: key,
@@ -847,15 +860,11 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		previousValue: function(element) {
-			var previous = jQuery.data(element, "previousValue");
-			if(!previous) {
-				jQuery.data(element, "previousValue", previous = {
-					old: null,
-					valid: true,
-					message: this.defaultMessage( element, "remote" )
-				});
-			}
-			return previous;
+			return jQuery.data(element, "previousValue") || jQuery.data(element, "previousValue", previous = {
+				old: null,
+				valid: true,
+				message: this.defaultMessage( element, "remote" )
+			});
 		}
 		
 	},
@@ -1016,14 +1025,24 @@ jQuery.extend(jQuery.validator, {
 		 * @type Boolean
 		 * @cat Plugins/Validate/Methods
 		 */
-		// http://docs.jquery.com/Plugins/Validation/Methods/minLength
-		minLength: function(value, element, param) {
+		// http://docs.jquery.com/Plugins/Validation/Methods/minlength
+		minlength: function(value, element, param) {
 			return this.optional(element) || this.getLength(value, element) >= param;
 		},
+		
+		// deprecated, to be removed in 1.3
+		minLength: function(value, element, param) {
+			return jQuery.validator.methods.minlength.apply(this, arguments);
+		},
 	
-		// http://docs.jquery.com/Plugins/Validation/Methods/maxLength
-		maxLength: function(value, element, param) {
+		// http://docs.jquery.com/Plugins/Validation/Methods/maxlength
+		maxlength: function(value, element, param) {
 			return this.optional(element) || this.getLength(value, element) <= param;
+		},
+		
+		// deprecated, to be removed in 1.3
+		maxLength: function(value, element, param) {
+			return jQuery.validator.methods.maxlength.apply(this, arguments);
 		},
 		
 		/**
@@ -1056,9 +1075,15 @@ jQuery.extend(jQuery.validator, {
 	     * @type Boolean
 	     * @cat Plugins/Validate/Methods
 	     */
-		rangeLength: function(value, element, param) {
+		// http://docs.jquery.com/Plugins/Validation/Methods/rangelength
+		rangelength: function(value, element, param) {
 			var length = this.getLength(value, element);
 			return this.optional(element) || ( length >= param[0] && length <= param[1] );
+		},
+		
+		// deprecated, to be removed in 1.3
+		rangeLength: function(value, element, param) {
+			return jQuery.validator.methods.rangelength.apply(this, arguments);
 		},
 	
 		// http://docs.jquery.com/Plugins/Validation/Methods/min
