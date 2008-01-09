@@ -35,11 +35,14 @@ $(document).ready(function(){
 	var v = $("#cmaForm").validate({
 		subformRequired: function(element) {
 			return !( current == 0 && element.parents("#sf1").length || current == 1 && element.parents("#sf2").length || current == 2 && element.parents("#sf3").length );
-	},
-	errorClass: "warning",
+		},
+		errorClass: "warning",
 		errorElement: "label",
-		onkeyup:false,
-		onblur:false
+		onkeyup: false,
+		onblur: false,
+		submitHandler: function() {
+			alert("Submitted, thanks!");
+		}
 	});
 	
 	// back buttons do not need to run validation

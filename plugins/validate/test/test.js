@@ -6,7 +6,7 @@ test("Constructor", function() {
 	var v1 = $("#testForm1").validate();
 	var v2 = $("#testForm1").validate();
 	equals( v1, v2, "Calling validate() multiple times must return the same validator instance" );
-	equals( 2, v1.elements.length, "validator must have two elements" );
+	equals( 2, v1.elements().length, "validator must have two elements" );
 });
 
 test("valid() plugin method", function() {
@@ -497,7 +497,6 @@ test("refresh()", function() {
 	var counter = 0;
 	function add() {
 		$("<input class='{required:true}' name='list" + counter++ + "' />").appendTo("#testForm2");
-		v.refresh();
 	}
 	function errors(expected, message) {
 		equals(expected, v.size(), message );
@@ -512,48 +511,20 @@ test("refresh()", function() {
 	v.form();
 	errors(3);
 	$("#testForm2 input[@name=list1]").remove();
-	v.refresh();
 	v.form();
 	errors(2);
 	add();
 	v.form();
 	errors(3);
 	$("#testForm2 input[@name^=list]").remove();
-	v.refresh();
 	v.form();
 	errors(1);
 	$("#agb").attr("disabled", true);
-	v.refresh();
 	v.form();
 	errors(0);
 	$("#agb").attr("disabled", false);
-	v.refresh();
 	v.form();
 	errors(1);
-});
-
-test("partial refresh()", function() {
-	function errors(expected, message) {
-		equals(expected, v.size(), message );
-	}
-	var counter = 0;
-	function add() {
-		return $("<input class='{required:true}' name='list" + counter++ + "' />").appendTo("#testForm2");
-	}
-	var v = $("#testForm2").validate();
-	v.form();
-	errors(1);
-	add(); add();
-	v.refresh();
-	v.form();
-	errors(3);
-	add();
-	v.refresh(add());
-	v.form();
-	errors(4);
-	v.refresh();
-	v.form();
-	errors(5);
 });
 
 test("idOrName()", function() {

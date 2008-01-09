@@ -1,5 +1,5 @@
 /*
- * Form Validation: jQuery form validation plug-in v1.2
+ * jQuery form validation plug-in v1.2pre
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-validation/
  * http://docs.jquery.com/Plugins/Validation
@@ -452,7 +452,6 @@ jQuery.extend(jQuery.validator, {
 			this.pendingRequest = 0;
 			this.invalid = {};
 			this.reset();
-			this.refresh();
 			
 			function delegate(event) {
 				var validator = jQuery.data(this[0].form, "validator");
@@ -466,8 +465,9 @@ jQuery.extend(jQuery.validator, {
 		// http://docs.jquery.com/Plugins/Validation/Validator/form
 		form: function() {
 			this.prepareForm();
-			for ( var i = 0; this.elements[i]; i++ ) {
-				this.check( this.elements[i] );
+			var elements = this.elements();
+			for ( var i = 0; elements[i]; i++ ) {
+				this.check( elements[i] );
 			}
 			jQuery.extend(this.submitted, this.errorMap);
 			this.invalid = jQuery.extend({}, this.errorMap);
@@ -523,7 +523,7 @@ jQuery.extend(jQuery.validator, {
 				jQuery( this.currentForm ).resetForm();
 			this.prepareForm();
 			this.hideErrors();
-			this.elements.removeClass( this.settings.errorClass );
+			this.elements().removeClass( this.settings.errorClass );
 		},
 		
 		/**
@@ -587,34 +587,15 @@ jQuery.extend(jQuery.validator, {
 			}).length == 1 && lastActive;
 		},
 		
-		/**
-		 * Call to refresh a form after new elements have been added or rules changed.
-		 * 
-		 * Accepts an optional argument to refresh only a part of the form, eg. only the newly added element.
-		 *
-		 * 
-		 * @param Selector selection (optional) A selector or jQuery object or DOM element to refresh
-		 * @name jQuery.validator.prototype.refresh
-		 */
-		refresh: function(selection) {
+		elements: function() {
 			var validator = this;
 			
-			// check for partial refresh
-			if ( selection ) {
-				jQuery(selection).each(function() {
-					if ( validator.elements.index(this) == -1 ) {
-						validator.elements.push(this);
-					}
-					validator.rulesCache[this.name] = validator.rules(this);
-				});
-				return;
-			}
 			
-			validator.rulesCache = {};
+			var rulesCache = {};
 			
 			// select all valid inputs inside the form (no submit or reset buttons)
 			// workaround with $([]).add until http://dev.jquery.com/ticket/2114 is solved
-			this.elements = jQuery([]).add(this.currentForm.elements)
+			return jQuery([]).add(this.currentForm.elements)
 			.filter("input, select, textarea")
 			.not(":submit, :reset, [disabled]")
 			.not( this.settings.ignore )
@@ -622,10 +603,10 @@ jQuery.extend(jQuery.validator, {
 				!this.name && validator.settings.debug && window.console && console.error( "%o has no name assigned", this);
 			
 				// select only the first element for each name, and only those with rules specified
-				if ( this.name in validator.rulesCache || !validator.rules(this).length )
+				if ( this.name in rulesCache || !validator.rules(this).length )
 					return false;
 				
-				validator.rulesCache[this.name] = validator.rules(this);
+				rulesCache[this.name] = true;
 				return true;
 			});
 		},
@@ -660,7 +641,8 @@ jQuery.extend(jQuery.validator, {
 		check: function( element ) {
 			element = this.clean( element );
 			this.settings.unhighlight.call( this, element, this.settings.errorClass );
-			var rules = this.rulesCache[ element.name ];
+			//var rules = this.rulesCache[ element.name ];
+			var rules = this.rules(element);
 			// TODO assert that check is only called for elements with existing rules?
 			if (!rules)
 				return true;

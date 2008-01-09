@@ -32,15 +32,13 @@ additional options/callbacks:
 - beforeValidation: Callback, called before doing any validation
 - beforeSubmit: Callback, called before submitting the form (default submit or calling submitHandler, if specified) 
 
-- bug: refresh now adds also key events in general, but doesn't for partial refreshs, and it should replace them if already present, instead of adding the same handler again and again
 - bug: remote validation triggers display/validation of other fields
 
-- add test and a tab-example for subformRequired
+- add test for subformRequired
 - document invalidHandler
 - document all those event options
 - is that element == lastElement check in the onblur handler really useful?
 
-- performance tuning: add about 100 fields to custom-method-demo and profile IE
 - oninvalid/invalidSubmitHandler: called after a form is validated on submit and its invalid
 - removing messages by specifying null or an empty string doesn't work as it defaults to the default message. improve that check
 - animations!!
