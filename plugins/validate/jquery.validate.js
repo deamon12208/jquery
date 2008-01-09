@@ -716,8 +716,9 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		defaultMessage: function( element, method) {
-			return this.configuredMessage( element.name, method )
-				|| element.title
+			var configured = this.configuredMessage( element.name, method );
+			return configured !== undefined ? configured :
+				element.title
 				|| jQuery.validator.messages[method]
 				|| "<strong>Warning: No message defined for " + element.name + "</strong>";
 		},

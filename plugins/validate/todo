@@ -36,7 +36,6 @@ additional options/callbacks:
 - is that element == lastElement check in the onblur handler really useful?
 
 - oninvalid/invalidSubmitHandler: called after a form is validated on submit and its invalid
-- removing messages by specifying null or an empty string doesn't work as it defaults to the default message. improve that check
 - animations!!
 - ajax validation:
 	- in combination with autocomplete (mustmatch company name, fill out address details, validate required)

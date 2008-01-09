@@ -14,7 +14,7 @@
 		return result;
 	}, "Your password must be at least 6 characters long and contain at least one number and one character.");
 	
-	jQuery.validator.messages.required = " ";
+	jQuery.validator.messages.required = "";
 	$("form").validate({
 		focusInvalid: false,
 		focusCleanup: true,

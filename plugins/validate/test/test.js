@@ -191,6 +191,33 @@ test("showErrors()", function() {
 	equals( true, $("label.error[@for=lastname]").is(":visible") );
 });
 
+test("showErrors(), allow empty string and null as default message", function() {
+	$("#userForm").validate({
+		rules: {
+			username: {
+				required: true,
+				minlength: 3	
+			}
+		},
+		messages: {
+			username: {
+				required: "",
+				minlength: "too short"
+			}	
+		}
+	});
+	ok( !$("#username").valid() );
+	equals( "", $("label.error[@for=username]").text() );
+	
+	$("#username").val("ab");
+	ok( !$("#username").valid() );
+	equals( "too short", $("label.error[@for=username]").text() );
+	
+	$("#username").val("abc");
+	ok( $("#username").valid() );
+	ok( $("label.error[@for=username]").is(":hidden") );
+});
+
 test("showErrors() - external messages", function() {
 	expect( 4 );
 	var methods = $.extend({}, $.validator.methods);
