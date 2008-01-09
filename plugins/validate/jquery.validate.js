@@ -424,8 +424,11 @@ jQuery.extend(jQuery.validator, {
 		minLength: jQuery.format("Please enter a value of at least {0} characters."),
 		rangeLength: jQuery.format("Please enter a value between {0} and {1} characters long."),
 		rangeValue: jQuery.format("Please enter a value between {0} and {1}."),
+		range: jQuery.format("Please enter a value between {0} and {1}."),
 		maxValue: jQuery.format("Please enter a value less than or equal to {0}."),
-		minValue: jQuery.format("Please enter a value greater than or equal to {0}.")
+		max: jQuery.format("Please enter a value less than or equal to {0}."),
+		minValue: jQuery.format("Please enter a value greater than or equal to {0}."),
+		min: jQuery.format("Please enter a value greater than or equal to {0}.")
 	},
 	
 	/**
@@ -1058,19 +1061,34 @@ jQuery.extend(jQuery.validator, {
 			return this.optional(element) || ( length >= param[0] && length <= param[1] );
 		},
 	
-		// http://docs.jquery.com/Plugins/Validation/Methods/minValue
-		minValue: function( value, element, param ) {
+		// http://docs.jquery.com/Plugins/Validation/Methods/min
+		min: function( value, element, param ) {
 			return this.optional(element) || value >= param;
 		},
 		
-		// http://docs.jquery.com/Plugins/Validation/Methods/maxValue
-		maxValue: function( value, element, param ) {
+		// deprecated, to be removed in 1.3
+		minValue: function() {
+			return jQuery.validator.methods.min.apply(this, arguments);
+		},
+		
+		// http://docs.jquery.com/Plugins/Validation/Methods/max
+		max: function( value, element, param ) {
 			return this.optional(element) || value <= param;
 		},
 		
-		// http://docs.jquery.com/Plugins/Validation/Methods/rangeValue
-		rangeValue: function( value, element, param ) {
+		// deprecated, to be removed in 1.3
+		maxValue: function() {
+			return jQuery.validator.methods.max.apply(this, arguments);
+		},
+		
+		// http://docs.jquery.com/Plugins/Validation/Methods/range
+		range: function( value, element, param ) {
 			return this.optional(element) || ( value >= param[0] && value <= param[1] );
+		},
+		
+		// deprecated, to be removed in 1.3
+		rangeValue: function() {
+			return jQuery.validator.methods.range.apply(this, arguments);
 		},
 		
 		// http://docs.jquery.com/Plugins/Validation/Methods/email
