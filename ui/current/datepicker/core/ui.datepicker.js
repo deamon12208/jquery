@@ -705,7 +705,9 @@ $.extend(Datepicker.prototype, {
 			if (!this._stayOpen) {
 				this.hideDatepicker(inst._get('speed'));
 				this._lastInput = inst._input[0];
-				inst._input[0].focus(); // restore focus
+				if (typeof(inst._input[0]) != 'object') {
+					inst._input[0].focus(); // restore focus
+				}
 				this._lastInput = null;
 			}
 		}
