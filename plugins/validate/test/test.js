@@ -368,6 +368,27 @@ test("rules(), evaluate dynamic parameters", function() {
 	equals( 12, rules[0].parameters );
 });
 
+test("rules(), class and attribute combinations", function() {
+	function compare(a, b, msg) {
+		var ret = true;
+		if ( a && b && a.length != undefined && a.length == b.length ) {
+			for ( var i = 0; i < a.length; i++ )
+				for(var key in a[i]) {
+					if (a[i][key] != b[i][key])
+						ret = false
+				}
+		} else
+			ret = false;
+		ok( ret, msg + " expected: " + serialArray(b) + " result: " + serialArray(a) );
+	}
+	$("#v2").validate();
+	compare( $("#v2-i1").rules(), [{ method: "required", parameters: true }]);
+	compare( $("#v2-i2").rules(), [{ method: "required", parameters: true }, { method: "email", parameters: true }]);
+	compare( $("#v2-i3").rules(), [{ method: "url", parameters: true }]);
+	compare( $("#v2-i4").rules(), [{ method: "required", parameters: true }, { method: "minlength", parameters: 2 }]);
+	compare( $("#v2-i5").rules(), [{ method: "required", parameters: true }, { method: "range", parameters: [2, 5] }]);
+});
+
 test("formatAndAdd", function() {
 	expect(4);
 	var v = $("#form").validate();
