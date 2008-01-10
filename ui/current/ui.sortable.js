@@ -102,14 +102,28 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 		refresh: function() {
 			this.items = [];
 			var items = this.items;
-			$(this.options.items, this.element).each(function() {
-				$.data(this, 'ui-sortable-item', true); // Data for target checking (mouse manager)
-				items.push({
-					item: $(this),
-					width: 0, height: 0,
-					left: 0, top: 0
+			var queries = [$(this.options.items, this.element)];
+			
+			if(this.options.connectWith) {
+				for (var i = this.options.connectWith.length - 1; i >= 0; i--){
+					var inst = $.data($(this.options.connectWith[i])[0], 'ui-sortable');
+					if(inst) {
+						queries.push($(inst.options.items, inst.element));
+					}
+				};
+			}
+			
+			for (var i = queries.length - 1; i >= 0; i--){
+				queries[i].each(function() {
+					$.data(this, 'ui-sortable-item', true); // Data for target checking (mouse manager)
+					items.push({
+						item: $(this),
+						width: 0, height: 0,
+						left: 0, top: 0
+					});
 				});
-			});
+			};
+
 		},
 		refreshPositions: function() {
 			for (var i = this.items.length - 1; i >= 0; i--){
