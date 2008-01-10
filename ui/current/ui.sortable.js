@@ -168,6 +168,7 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			//Save the first time position
 			this.position = { top: e.pageY - this.offset.top, left: e.pageX - this.offset.left };
 			this.positionAbs = { left: e.pageX - this.clickOffset.left, top: e.pageY - this.clickOffset.top };
+			this.positionDOM = this.currentItem.prev()[0];
 
 			//Call plugins and callbacks
 			this.propagate("start", e);
@@ -186,11 +187,8 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 		},
 		stop: function(e) {
 
-			//Call plugins and trigger callbacks
-			this.propagate("stop", e);
-
-			//TODO: Propagate the change callback if the DOM position has changed
-			if(true) this.propagate("update", e);
+			this.propagate("stop", e); //Call plugins and trigger callbacks
+			if(this.positionDOM != this.currentItem.prev()[0]) this.propagate("update", e);
 			
 			if(this.cancelHelperRemoval) return false;			
 			$(this.currentItem).css('visibility', 'visible');
@@ -212,13 +210,12 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 					//Rearrange the DOM
 					this.items[i].item[this.direction == 'down' ? 'before' : 'after'](this.currentItem);
 					this.refreshPositions(); //Precompute after each DOM insertion, NOT on mousemove
+					this.propagate("change", e); //Call plugins and callbacks
 					break;
 				}
 			}
 
-			//Call plugins and callbacks
-			this.propagate("sort", e);
-			
+			this.propagate("sort", e); //Call plugins and callbacks
 			this.helper.css({ left: this.position.left+'px', top: this.position.top+'px' }); // Stick the helper to the cursor
 			return false;
 			
