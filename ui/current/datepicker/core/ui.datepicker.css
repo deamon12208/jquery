@@ -110,6 +110,9 @@ img.datepicker_trigger {
 .datepicker_titleRow {
 	background: #777;
 }
+.datepicker_titleRow .datepicker_weekEndCell {
+	background: #777;
+}
 .datepicker_daysRow {
 	background: #eee;
 	color: #666;
