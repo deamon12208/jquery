@@ -1359,6 +1359,11 @@ $.extend(DatepickerInstance.prototype, {
 	/* Determine the current maximum date - ensure no time components are set - may be overridden for a range. */
 	_getMinMaxDate: function(minMax, checkRange) {
 		var date = this._get(minMax + 'Date');
+		if (typeof date == 'number') {
+			var offset = date;
+			date = new Date();
+			date.setDate(date.getDate() + offset);
+		}
 		if (date) {
 			date.setHours(0);
 			date.setMinutes(0);
