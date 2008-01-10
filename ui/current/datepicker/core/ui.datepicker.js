@@ -408,7 +408,7 @@ $.extend(Datepicker.prototype, {
 		}
 		var inst = $.datepicker._getInst(input._calId);
 		var beforeShow = inst._get('beforeShow');
-		extendRemove(inst._settings, (beforeShow ? beforeShow(input) : {}));
+		extendRemove(inst._settings, (beforeShow ? beforeShow.apply(input, [input, inst]) : {}));
 		$.datepicker.hideDatepicker('');
 		$.datepicker._lastInput = input;
 		inst._setDateFromField(input);
@@ -691,7 +691,7 @@ $.extend(Datepicker.prototype, {
 		}
 		var onSelect = inst._get('onSelect');
 		if (onSelect) {
-			onSelect(dateStr, inst);  // trigger custom callback
+			onSelect.apply((inst._input ? inst._input[0] : null), [dateStr, inst]);  // trigger custom callback
 		}
 		else {
 			if (inst._input) {
@@ -1198,7 +1198,8 @@ $.extend(DatepickerInstance.prototype, {
 				var status = this._get('dayStatus') || '&#xa0;';
 				status = (status.indexOf('DD') > -1 ? status.replace(/DD/, dayNames[day]) :
 					status.replace(/D/, dayNamesShort[day]));
-				html += '<td>' + (!changeFirstDay ? '<span' :
+				html += '<td' + ((dow + firstDay + 6) % 7 >= 5 ? ' class="datepicker_weekEndCell"' : '') + '>' +
+					(!changeFirstDay ? '<span' :
 					'<a onclick="jQuery.datepicker._changeFirstDay(' + this._id + ', ' + day + ');"') + 
 					(showStatus ? this._addStatus(status) : '') + ' title="' + dayNames[day] + '">' +
 					dayNamesMin[day] + (changeFirstDay ? '</a>' : '</span>') + '</td>';
@@ -1219,7 +1220,8 @@ $.extend(DatepickerInstance.prototype, {
 				html += '<tr class="datepicker_daysRow">' +
 					(showWeeks ? '<td class="datepicker_weekCol">' + calculateWeek(printDate) + '</td>' : '');
 				for (var dow = 0; dow < 7; dow++) { // create date picker days
-					var daySettings = (beforeShowDay ? beforeShowDay(printDate) : [true, '']);
+					var daySettings = (beforeShowDay ?
+						beforeShowDay.apply((this._input ? this._input[0] : null), [printDate]) : [true, '']);
 					var otherMonth = (printDate.getMonth() != drawMonth);
 					var unselectable = otherMonth || !daySettings[0] ||
 						(minDate && printDate < minDate) || (maxDate && printDate > maxDate);
@@ -1235,7 +1237,8 @@ $.extend(DatepickerInstance.prototype, {
 						(printDate.getTime() == today.getTime() ? ' datepicker_today' : ''))) + '"' + // highlight today (if different)
 						(unselectable ? '' : ' onmouseover="jQuery(this).addClass(\'datepicker_daysCellOver\');' +
 						(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#datepicker_status_' +
-						this._id + '\').html(\'' + (dateStatus(printDate, this) || '&#xa0;') +'\');') + '"' +
+						this._id + '\').html(\'' + (dateStatus.apply((this._input ? this._input[0] : null),
+						[printDate, this]) || '&#xa0;') +'\');') + '"' +
 						' onmouseout="jQuery(this).removeClass(\'datepicker_daysCellOver\');' +
 						(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#datepicker_status_' +
 						this._id + '\').html(\'&#xa0;\');') + '" onclick="jQuery.datepicker._selectDay(' +
