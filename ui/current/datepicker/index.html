@@ -192,6 +192,13 @@ $('#restrictControls').datepicker({firstDay: 1, changeFirstDay: false,
 $('#restrictDates').datepicker({minDate: new Date(2005, 1 - 1, 26),
 	maxDate: new Date(2007, 1 - 1, 26)});
 </script>
+					<p>Or set a range relative to today by specifying a number
+						rather than an exact date, in this case in the coming year.</p>
+					<p><span class="demoLabel">Limited dates (relative):</span>
+						<input type="text" size="10" id="relativeDates"/></p>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+$('#relativeDates').datepicker({minDate: 0, maxDate: 365});
+</script>
 					<p>Note that the range of selectable months and years changes appropriately. Also,
 						note that the <em>Today</em> link is no longer available as today is not in the range.
 						By default, the <em>Prev</em> and <em>Next</em> links are disabled if they are not
