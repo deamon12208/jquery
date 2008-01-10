@@ -35,10 +35,10 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 		});
 		
 		//Get the items
-		this.items = $(o.items, element).each(function() { $.data(this, 'ui-sortable-item', true); });
+		this.refresh();
 
 		//Let's determine if the items are floating
-		this.floating = /left|right/.test(this.items.css('float'));
+		this.floating = /left|right/.test(this.items[0].item.css('float'));
 		
 		//Let's determine the parent's offset
 		if(!/(relative|absolute|fixed)/.test(this.element.css('position'))) this.element.css('position', 'relative');
@@ -86,8 +86,39 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			$.ui.plugin.call(this, n, [e, this.ui()]);
 			this.element.triggerHandler(n == "sort" ? n : "sort"+n, [e, this.ui()], this.options[n]);
 		},
+		intersectsWith: function(item) {
+			
+			var x1 = this.positionAbs.left, x2 = x1 + this.helperProportions.width,
+			    y1 = this.positionAbs.top, y2 = y1 + this.helperProportions.height;
+			var l = item.left, r = l + item.width, 
+			    t = item.top,  b = t + item.height;
+
+			return (   l < x1 + (this.helperProportions.width  / 2)        // Right Half
+				&&     x2 - (this.helperProportions.width  / 2) < r    // Left Half
+				&& t < y1 + (this.helperProportions.height / 2)        // Bottom Half
+				&&     y2 - (this.helperProportions.height / 2) < b ); // Top Half
+			
+		},
 		refresh: function() {
-			this.items = $(this.options.items, this.element).each(function() { $.data(this, 'ui-sortable-item', true); });
+			this.items = [];
+			var items = this.items;
+			$(this.options.items, this.element).each(function() {
+				$.data(this, 'ui-sortable-item', true); // Data for target checking (mouse manager)
+				items.push({
+					item: $(this),
+					width: 0, height: 0,
+					left: 0, top: 0
+				});
+			});
+		},
+		refreshPositions: function() {
+			for (var i = this.items.length - 1; i >= 0; i--){
+				this.items[i].width = this.items[i].item.outerWidth();
+				this.items[i].height = this.items[i].item.outerHeight();
+				var p = this.items[i].item.offset();
+				this.items[i].left = p.left;
+				this.items[i].top = p.top;
+			};
 		},
 		destroy: function() {
 			this.element.removeClass("ui-sortable ui-sortable-disabled");
@@ -134,6 +165,10 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			//Generate a flexible offset that will later be subtracted from e.pageX/Y
 			this.offset = {left: e.pageX - this.originalPosition.left, top: e.pageY - this.originalPosition.top };
 
+			//Save the first time position
+			this.position = { top: e.pageY - this.offset.top, left: e.pageX - this.offset.left };
+			this.positionAbs = { left: e.pageX - this.clickOffset.left, top: e.pageY - this.clickOffset.top };
+
 			//Call plugins and callbacks
 			this.propagate("start", e);
 
@@ -142,6 +177,9 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			
 			//Set the original element visibility to hidden to still fill out the white space	
 			$(this.currentItem).css('visibility', 'hidden');
+			
+			//Refresh the droppable positions
+			this.refreshPositions();
 
 			return false;
 						
@@ -164,13 +202,19 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 		drag: function(e) {
 
 			//Compute the helpers position
+			this.direction = (this.floating && this.positionAbs.left > e.pageX - this.clickOffset.left) || (this.positionAbs.top > e.pageY - this.clickOffset.top) ? 'down' : 'up';
 			this.position = { top: e.pageY - this.offset.top, left: e.pageX - this.offset.left };
 			this.positionAbs = { left: e.pageX - this.clickOffset.left, top: e.pageY - this.clickOffset.top };
 
 			//Rearrange
-			this.items.each(function() {
-				//TODO! Check for positions here, then rearrange
-			});
+			for (var i = this.items.length - 1; i >= 0; i--) {
+				if(this.intersectsWith(this.items[i]) && this.items[i].item[0] != this.currentItem[0] && !this.currentItem[0].contains(this.items[i].item[0])) {
+					//Rearrange the DOM
+					this.items[i].item[this.direction == 'down' ? 'before' : 'after'](this.currentItem);
+					this.refreshPositions(); //Precompute after each DOM insertion, NOT on mousemove
+					break;
+				}
+			}
 
 			//Call plugins and callbacks
 			this.propagate("sort", e);
