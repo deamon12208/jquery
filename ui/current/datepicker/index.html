@@ -295,34 +295,34 @@ function nationalDays(date) {
 						but you can easily translate the text into another language and date format.</p>
 					<p><span class="demoLabel">
 						<select class="languageSelect">
-							<option value="zh-CN">&#31616;&#20307;&#20013;&#25991;</option>
+							<option value="zh-CN">&#31616;&#20307;&#20013;&#25991; (Chinese Simplified)</option>
 							<option value="zh-TW">Chinese Traditional</option>
-							<option value="ca">Catal&agrave;</option>
-							<option value="cs">&#268;e&#353;tina</option>
-							<option value="da">Dansk</option>
-							<option value="de">Deutsch</option>
-							<option value="es">Espa&ntilde;ol</option>
-							<option value="fr" selected="selected">Fran&ccedil;ais</option>
-							<option value="ko">&#54620;&#44397;&#50612;</option>
-							<option value="is">&Iacute;slenska</option>
-							<option value="it">Italiano</option>
-							<option value="hu">Magyar</option>
-							<option value="nl">Nederlands</option>
-							<option value="ja">&#26085;&#26412;&#35486;</option>
-							<option value="no">Norsk</option>
-							<option value="th">Phasa thai</option>
-							<option value="pl">Polski</option>
-							<option value="pt-BR">Portugu&ecirc;s</option>
-							<option value="ro">Rom&acirc;n&#259;</option>
-							<option value="ru">&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;</option>
-							<option value="sk">Sloven&#269;ina</option>
-							<option value="sv">Svenska</option>
+							<option value="ca">Catal&agrave; (Catalan)</option>
+							<option value="cs">&#268;e&#353;tina (Czech)</option>
+							<option value="da">Dansk (Danish)</option>
+							<option value="de">Deutsch (German)</option>
+							<option value="es">Espa&ntilde;ol (Spanish)</option>
+							<option value="fr" selected="selected">Fran&ccedil;ais (French)</option>
+							<option value="ko">&#54620;&#44397;&#50612; (Korean)</option>
+							<option value="is">&Iacute;slenska (Icelandic)</option>
+							<option value="it">Italiano (Italian)</option>
+							<option value="hu">Magyar (Hungarian)</option>
+							<option value="nl">Nederlands (Dutch)</option>
+							<option value="ja">&#26085;&#26412;&#35486; (Japanese)</option>
+							<option value="no">Norsk (Norwegian)</option>
+							<option value="th">Phasa thai (Thai)</option>
+							<option value="pl">Polski (Polish)</option>
+							<option value="pt-BR">Portugu&ecirc;s (Portuguese)</option>
+							<option value="ro">Rom&acirc;n&#259; (Romanian)</option>
+							<option value="ru">&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081; (Russian)</option>
+							<option value="sk">Sloven&#269;ina (Slovak)</option>
+							<option value="sv">Svenska (Swedish)</option>
 						</select>:</span>
 						<input type="text" size="10" id="l10nDatepicker"/></p>
 					<p>The presentation is slightly different for right-to-left languages.</p>
 					<p><span class="demoLabel">
 						<select class="languageSelect">
-							<option value="he">‘Ivrit</option>
+							<option value="he">&#1506;&#1489;&#1512;&#1497;&#1514; (Hebrew)</option>
 						</select>:</span>
 						<input type="text" size="10" id="rtlDatepicker"/></p>
 					<p>You need to load the appropriate language package, which
@@ -401,7 +401,8 @@ $('#showWeeks').datepicker({showWeeks: true, firstDay: 1, changeFirstDay: false,
 </script>
 					<p>Additional settings let you move the <em>Clear</em>/<em>Close</em> controls
 						to the bottom, hide the <em>Clear</em> control to make the date mandatory,
-						display the days in other months (non-selectable), and show a status bar.
+						display the days in other months (non-selectable),
+						and show a status bar (with a custom display for today).
 						A callback function is also added to operate when a date is selected.
 						If no callback is specified, the <code>onchange</code> event of the
 						input field is triggered.</p>
@@ -413,12 +414,21 @@ $('#addSettings').datepicker({
 	mandatory: true,
 	showOtherMonths: true, 
 	showStatus: true,
+	statusForDate: highlightToday,
 	onSelect: alertDate // invoke alertDate function
 });
 
 // Demonstrate the callback on select
 function alertDate(date) {
 	alert('The date is ' + date);
+}
+
+// Demonstrate the callback for date status
+function highlightToday(date, inst) {
+	var today = new Date();
+	today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+	return $.datepicker.dateStatus(date, inst) +
+		(today.getTime() == date.getTime() ? ' (today)' : '');
 }
 </script>
 					<p><strong>(Advanced Technique)</strong><br />Connect the date picker to linked drop-downs. You still need an input field,
