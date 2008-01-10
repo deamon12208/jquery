@@ -11,6 +11,7 @@
 <script type="text/javascript">
 function setUpPage() {
 	$('#dp').datepicker({clearText: 'Erase'});
+	$('#adj').datepicker();
 	setUpPageStatus = "complete";
 }
 
@@ -75,6 +76,21 @@ function testNoWeekends() {
 		assertArrayEquals('Weekend options invalid for ' + d + '/12/2007',
 			[(d % 7) > 1, ''], $.datepicker.noWeekends(new Date(2007, 12 - 1, d + 1)));
     }
+}
+
+function testIso8601Week() {
+	var weeks = [[new Date(2007, 12 - 1, 30), 52], [new Date(2007, 12 - 1, 31), 1],
+		[new Date(2008, 1 - 1, 1), 1], [new Date(2008, 1 - 1, 6), 1],
+		[new Date(2008, 1 - 1, 7), 2], [new Date(2008, 7 - 1, 10), 28],
+		[new Date(2008, 12 - 1, 28), 52], [new Date(2008, 12 - 1, 29), 1],
+		[new Date(2008, 12 - 1, 31), 1], [new Date(2009, 1 - 1, 1), 1],
+		[new Date(2009, 12 - 1, 27), 52], [new Date(2009, 12 - 1, 28), 53],
+		[new Date(2009, 12 - 1, 31), 53], [new Date(2010, 1 - 1, 1), 53],
+		[new Date(2010, 1 - 1, 3), 53], [new Date(2010, 1 - 1, 4), 1]];
+	for (var i = 0; i < weeks.length; i++) {
+		assertEquals('Invalid ISO week for ' + weeks[i][0], weeks[i][1],
+			$.datepicker.iso8601Week(weeks[i][0]));
+	}
 }
 
 function testParseDate() {
@@ -314,6 +330,78 @@ function testGetDefaultDate() {
 	assertDateEquals('Invalid default date - today', test, date);
 }
 
+function testAdjustDate() {
+	var inst = $.datepicker._inst[1];
+	inst._rangeStart = null;
+	$.datepicker.reconfigureFor('#adj', {minDate: null, maxDate: null});
+	$.datepicker.setDateFor('#adj', new Date(2001, 2 - 1, 3));
+	var adjusts = [[0, 'D', 2001, 2 - 1, 3], [1, 'D', 2001, 2 - 1, 4],
+		[7, 'D', 2001, 2 - 1, 11], [-8, 'D', 2001, 2 - 1, 3],
+		[-8, 'D', 2001, 1 - 1, 26], [+5, 'D', 2001, 1 - 1, 31],
+		[0, 'M', 2001, 1 - 1, 31], [1, 'M', 2001, 2 - 1, 28],
+		[13, 'M', 2002, 3 - 1, 28], [-3, 'M', 2001, 12 - 1, 28],
+		[26, 'M', 2004, 2 - 1, 28], [1, 'D', 2004, 2 - 1, 29],
+		[0, 'Y', 2004, 2 - 1, 29], [1, 'Y', 2005, 2 - 1, 28],
+		[11, 'Y', 2016, 2 - 1, 28], [-12, 'Y', 2004, 2 - 1, 28]];
+	for (var i = 0; i < adjusts.length; i++) {
+		inst._adjustDate(adjusts[i][0], adjusts[i][1]);
+		assertTrue('Invalid date adjustment ' + adjusts[i][0] + ' ' + adjusts[i][1],
+			inst._selectedYear == adjusts[i][2] && inst._selectedMonth == adjusts[i][3] &&
+			inst._selectedDay == adjusts[i][4]);
+	}
+	$.datepicker.reconfigureFor('#adj', {minDate: new Date(2001, 1 - 1, 1)});
+	$.datepicker.setDateFor('#adj', new Date(2001, 2 - 1, 3));
+	adjusts = [[0, 'D', 2001, 2 - 1, 3], [7, 'D', 2001, 2 - 1, 10],
+		[-88, 'D', 2001, 1 - 1, 1], [5, 'D', 2001, 1 - 1, 6],
+		[0, 'M', 2001, 1 - 1, 6], [13, 'M', 2002, 2 - 1, 6],
+		[-20, 'M', 2001, 1 - 1, 1], [1, 'M', 2001, 2 - 1, 1],
+		[0, 'Y', 2001, 2 - 1, 1], [6, 'Y', 2007, 2 - 1, 1],
+		[-11, 'Y', 2001, 1 - 1, 1], [2, 'Y', 2003, 1 - 1, 1]];
+	for (var i = 0; i < adjusts.length; i++) {
+		inst._adjustDate(adjusts[i][0], adjusts[i][1]);
+		assertTrue('Invalid date adjustment (min) ' + adjusts[i][0] + ' ' + adjusts[i][1],
+			inst._selectedYear == adjusts[i][2] && inst._selectedMonth == adjusts[i][3] &&
+			inst._selectedDay == adjusts[i][4]);
+	}
+	$.datepicker.reconfigureFor('#adj', {minDate: null, maxDate: new Date(2001, 6 - 1, 30)});
+	$.datepicker.setDateFor('#adj', new Date(2001, 2 - 1, 3));
+	adjusts = [[0, 'D', 2001, 2 - 1, 3], [7, 'D', 2001, 2 - 1, 10],
+		[200, 'D', 2001, 6 - 1, 30], [-184, 'D', 2000, 12 - 1, 28],
+		[0, 'M', 2000, 12 - 1, 28], [3, 'M', 2001, 3 - 1, 28],
+		[6, 'M', 2001, 6 - 1, 30], [-5, 'M', 2001, 1 - 1, 30],
+		[0, 'Y', 2001, 1 - 1, 30], [6, 'Y', 2001, 6 - 1, 30],
+		[-11, 'Y', 1990, 6 - 1, 30], [2, 'Y', 1992, 6 - 1, 30]];
+	for (var i = 0; i < adjusts.length; i++) {
+		inst._adjustDate(adjusts[i][0], adjusts[i][1]);
+		assertTrue('Invalid date adjustment (max) ' + adjusts[i][0] + ' ' + adjusts[i][1],
+			inst._selectedYear == adjusts[i][2] && inst._selectedMonth == adjusts[i][3] &&
+			inst._selectedDay == adjusts[i][4]);
+	}
+}
+
+function testGetMinMaxDate() {
+	var inst = $.datepicker._inst[1];
+	$.datepicker.reconfigureFor('#adj', {minDate: null, maxDate: null});
+	assertNull('Invalid min date (null)', inst._getMinMaxDate('min'));
+	assertNull('Invalid min date (null,false)', inst._getMinMaxDate('min', false));
+	assertUndefined('Invalid min date (null,true)', inst._getMinMaxDate('min', true));
+	assertNull('Invalid max date (null)', inst._getMinMaxDate('max'));
+	var date = new Date();
+	date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+	$.datepicker.reconfigureFor('#adj', {minDate: new Date()});
+	assertDateEquals('Invalid min date', date, inst._getMinMaxDate('min'));
+	assertDateEquals('Invalid min date (false)', date, inst._getMinMaxDate('min', false));
+	assertDateEquals('Invalid min date (true)', date, inst._getMinMaxDate('min', true));
+	inst._rangeStart = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 7);
+	assertDateEquals('Invalid min date (range,false)', date, inst._getMinMaxDate('min', false));
+	assertDateEquals('Invalid min date (range,true)', date, inst._getMinMaxDate('min', true));
+	$.datepicker.reconfigureFor('#adj', {maxDate: new Date()});
+	assertDateEquals('Invalid max date', date, inst._getMinMaxDate('max'));
+	$.datepicker.reconfigureFor('#adj', {minDate: null});
+	assertNull('Invalid min date (null,range,false)', inst._getMinMaxDate('min', false));
+	assertDateEquals('Invalid min date (null,range,true)', inst._rangeStart, inst._getMinMaxDate('min', true));
+}
+
 function testGetFirstDayOfMonth() {
 	var fd = [1, 4, 4, 0, 2, 5, 0, 3, 6, 1, 4, 6];
 	for (var m = 0; m < 12; m++) { 
@@ -347,5 +435,6 @@ function assertDateEquals(msg, date1, date2) {
 <p>This page contains <a href="http://www.jsunit.net/">JsUnit</a> tests for the UI Datepicker plugin.
 	To see them, take a look at the source.</p>
 <p><input type="text" id="dp"/></p>
+<p><input type="text" id="adj"/></p>
 </body>
 </html>
