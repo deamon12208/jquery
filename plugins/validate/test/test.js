@@ -388,13 +388,21 @@ test("rules(), class and attribute combinations", function() {
 			ret = false;
 		ok( ret, msg + " expected: " + serialArray(b) + " result: " + serialArray(a) );
 	}
-	$("#v2").validate();
+	$("#v2").validate({
+		rules: {
+			'v2-i7': {
+				required: true,
+				minlength: 2
+			}
+		}
+	});
 	compare( $("#v2-i1").rules(), [{ method: "required", parameters: true }]);
 	compare( $("#v2-i2").rules(), [{ method: "required", parameters: true }, { method: "email", parameters: true }]);
 	compare( $("#v2-i3").rules(), [{ method: "url", parameters: true }]);
 	compare( $("#v2-i4").rules(), [{ method: "required", parameters: true }, { method: "minlength", parameters: 2 }]);
 	compare( $("#v2-i5").rules(), [{ method: "required", parameters: true }, { method: "rangelength", parameters: [2, 5] }]);
 	compare( $("#v2-i6").rules(), [{ method: "required", parameters: true }, { method: "rangelength", parameters: [2, 5] }]);
+	compare( $("#v2-i7").rules(), [{ method: "required", parameters: true }, { method: "minlength", parameters: 2 }]);
 });
 
 test("defaultMessage(), empty title is ignored", function() {

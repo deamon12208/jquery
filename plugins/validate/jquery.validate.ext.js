@@ -22,7 +22,8 @@ $.extend($.validator, {
 	
 	classRules: function(element) {
 		var rules = {};
-		$.each($(element).attr('class').split(' '), function() {
+		var classes = $(element).attr('class');
+		classes && $.each(classes.split(' '), function() {
 			if (this in $.validator.classRuleSettings) {
 				$.extend(rules, $.validator.classRuleSettings[this]);
 			}
@@ -56,6 +57,15 @@ $.extend($.validator, {
 		return meta ?
 			$(element).metadata()[meta] :
 			$(element).metadata();
+	},
+	
+	staticRules: function(element) {
+		var rules = {};
+		var validator = $.data(element.form, 'validator');
+		if (validator.settings.rules) {
+			rules = validator.settings.rules[element.name] || {};
+		}
+		return rules;
 	},
 	
 	normalizeRules: function(rules) {
@@ -107,7 +117,8 @@ $.fn.rules = function() {
 	var data = $.validator.normalizeRules($.extend(
 		$.validator.metadataRules(element),
 		$.validator.classRules(element),
-		$.validator.attributeRules(element)
+		$.validator.attributeRules(element),
+		$.validator.staticRules(element)
 	));
 	
 	// convert from object to array
