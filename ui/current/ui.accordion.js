@@ -32,7 +32,12 @@ $.extend($.ui.accordion, {
 				},
 				duration: settings.duration,
 				easing: settings.easing,
-				complete: settings.complete
+				complete: function() {
+					if ( !settings.autoheight ) {
+						settings.toShow.css("height", "auto");
+					}
+					settings.complete();
+				}
 			});
 		},
 		bounceslide: function(settings) {
