@@ -1061,7 +1061,7 @@ $.extend(DatepickerInstance.prototype, {
 		var shortYearCutoff = this._get('shortYearCutoff');
 		shortYearCutoff = (typeof shortYearCutoff != 'string' ? shortYearCutoff :
 			new Date().getFullYear() % 100 + parseInt(shortYearCutoff, 10));
-		var date = this._getDefaultDate();
+		var date = defaultDate = this._getDefaultDate();
 		if (dates.length > 0) {
 			var dayNamesShort = this._get('dayNamesShort');
 			var dayNames = this._get('dayNames');
@@ -1069,20 +1069,18 @@ $.extend(DatepickerInstance.prototype, {
 			var monthNames = this._get('monthNames');
 			if (dates.length > 1) {
 				date = $.datepicker.parseDate(dateFormat, dates[1], shortYearCutoff,
-					dayNamesShort, dayNames, monthNamesShort, monthNames) ||
-					this._getDefaultDate();
+					dayNamesShort, dayNames, monthNamesShort, monthNames) || defaultDate;
 				this._endDay = date.getDate();
 				this._endMonth = date.getMonth();
 				this._endYear = date.getFullYear();
 			}
 			try {
 				date = $.datepicker.parseDate(dateFormat, dates[0], shortYearCutoff,
-					dayNamesShort, dayNames, monthNamesShort, monthNames) ||
-					this._getDefaultDate();
+					dayNamesShort, dayNames, monthNamesShort, monthNames) ||defaultDate;
 			}
 			catch (e) {
 				$.datepicker.log(e);
-				date = this._getDefaultDate();
+				date = defaultDate;
 			}
 		}
 		this._selectedDay = this._currentDay = date.getDate();
@@ -1093,14 +1091,45 @@ $.extend(DatepickerInstance.prototype, {
 	
 	/* Retrieve the default date shown on opening. */
 	_getDefaultDate: function() {
-		var offsetDate = function(offset) {
+		return this._determineDate('defaultDate', new Date());
+	},
+
+	/* A date may be specified as an exact value or a relative one. */
+	_determineDate: function(name, defaultDate) {
+		var offsetNumeric = function(offset) {
 			var date = new Date();
 			date.setDate(date.getDate() + offset);
 			return date;
 		};
-		var defaultDate = this._get('defaultDate');
-		return (defaultDate == null ? new Date() :
-			(typeof defaultDate == 'number' ? offsetDate(defaultDate) : defaultDate));
+		var offsetString = function(offset, getDaysInMonth) {
+			var date = new Date();
+			var matches = /^([+-]?[0-9]+)\s*(d|D|w|W|m|M|y|Y)?$/.exec(offset);
+			if (matches) {
+				var year = date.getFullYear();
+				var month = date.getMonth();
+				var day = date.getDate();
+				switch (matches[2] || 'd') {
+					case 'd' : case 'D' :
+						day += (matches[1] - 0); break;
+					case 'w' : case 'W' :
+						day += (matches[1] * 7); break;
+					case 'm' : case 'M' :
+						month += (matches[1] - 0); 
+						day = Math.min(day, getDaysInMonth(year, month));
+						break;
+					case 'y': case 'Y' :
+						year += (matches[1] - 0);
+						day = Math.min(day, getDaysInMonth(year, month));
+						break;
+				}
+				date = new Date(year, month, day);
+			}
+			return date;
+		};
+		var date = this._get(name);
+		return (date == null ? defaultDate :
+			(typeof date == 'string' ? offsetString(date, this._getDaysInMonth) :
+			(typeof date == 'number' ? offsetNumeric(date) : date)));
 	},
 
 	/* Set the date(s) directly. */
@@ -1358,12 +1387,7 @@ $.extend(DatepickerInstance.prototype, {
 
 	/* Determine the current maximum date - ensure no time components are set - may be overridden for a range. */
 	_getMinMaxDate: function(minMax, checkRange) {
-		var date = this._get(minMax + 'Date');
-		if (typeof date == 'number') {
-			var offset = date;
-			date = new Date();
-			date.setDate(date.getDate() + offset);
-		}
+		var date = this._determineDate(minMax + 'Date', null);
 		if (date) {
 			date.setHours(0);
 			date.setMinutes(0);
