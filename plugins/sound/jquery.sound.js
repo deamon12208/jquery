@@ -36,36 +36,19 @@
 
 (function($) {
 	
-$.format = function(source, params) {
-	if ( arguments.length == 1 ) 
-		return function() {
-			var args = jQuery.makeArray(arguments);
-			args.unshift(source);
-			return jQuery.format.apply( this, args );
-		};
-	if ( arguments.length > 2 && params.constructor != Array  ) {
-		params = $.makeArray(arguments).slice(1);
-	}
-	if ( params.constructor != Array ) {
-		params = [ params ];
-	}
-	$.each(params, function(i, n) {
-		source = source.replace(new RegExp("\\{" + i + "\\}", "g"), n);
-	});
-	return source;
-};
-	
 $.sound = {
   tracks: {},
   enabled: true,
-  template: $.format('<embed style="height:0" loop="false" src="{0}" autostart="true" hidden="true"/>'),
+  template: function(src) {
+  	return '<embed style="height:0" loop="false" src="' + src + '" autostart="true" hidden="true"/>';
+  },
   play: function(url, options){
     if (!this.enabled)
 		return;
-    var options = $.extend({
+    var settings = $.extend({
 	  url: url,
 	  timeout: 2000
-    }, options), settings = options;
+    }, options);
 	
 	if (settings.track) {
 		if (this.tracks[settings.track]) {
@@ -77,12 +60,11 @@ $.sound = {
 	
 	var element = $.browser.msie
 	  	? $('<bgsound/>').attr({
-	        id: 'sound_'+options.track+'_'+options.id,
-	        src: options.url,
+	        src: settings.url,
 			loop: 1,
 			autostart: true
 	      })
-	  	: $(this.template(options.url));
+	  	: $(this.template(settings.url));
     element.appendTo("body");
 	
 	if (settings.track) {
