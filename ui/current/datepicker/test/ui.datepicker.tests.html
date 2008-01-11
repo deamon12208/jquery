@@ -410,6 +410,18 @@ function testAdjustDate() {
 	}
 }
 
+function testGetNumberOfMonths() {
+	var inst = $.datepicker._inst[0];
+	assertArrayEquals('Invalid number of months (default)', [1, 1], inst._getNumberOfMonths());
+	$.datepicker.reconfigureFor('#dp', {numberOfMonths: null});
+	assertArrayEquals('Invalid number of months (null)', [1, 1], inst._getNumberOfMonths());
+	$.datepicker.reconfigureFor('#dp', {numberOfMonths: 2});
+	assertArrayEquals('Invalid number of months (2)', [1, 2], inst._getNumberOfMonths());
+	$.datepicker.reconfigureFor('#dp', {numberOfMonths: [3, 4]});
+	assertArrayEquals('Invalid number of months (3,4)', [3, 4], inst._getNumberOfMonths());
+	$.datepicker.reconfigureFor('#dp', {numberOfMonths: 1});
+}
+
 function testGetMinMaxDate() {
 	var inst = $.datepicker._inst[1];
 	$.datepicker.reconfigureFor('#adj', {minDate: null, maxDate: null});
