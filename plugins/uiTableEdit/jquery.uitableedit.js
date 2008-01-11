@@ -1,21 +1,29 @@
-// FIX: if table is being edited, off will clear table value
-//
-// jquery plugin
-// make an html table editable by the user
-//   user clicks on a cell, edits the value,
-//   then presses enter or clicks on any cell to save the new value
-// 
-// options : off, mouseDown, find, dataEntered, dataVerify, editDone
-// off turns off table editing
-// find defaults to tbody > tr > td
-// mousedown called in context of the table cell (as a normal event would be)
-// if mouseDown returns false, cell will not become editable
-// dataVerify called in context of the cell,
-//   if dataVerify returns false, cell will stay in editable state
-//   if dataVerify returns a value, that value will replace the cell's value
-//   arguments are cell's value, original text, event
-// editDone invoked on completion
-//   arguments are cell's new value, original text
+/*
+ * Copyright (c) 2008 Greg Weber webs.dev gmail
+ * Dual licensed under the MIT and GPL licenses:
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * jquery plugin
+ * make an html table editable by the user
+ *   user clicks on a cell, edits the value,
+ *   then presses enter or clicks on any cell to save the new value
+ * 
+ * var t = $('table')
+ * $.uiTableEdit( t ) // returns t
+ *
+ * options : off, mouseDown, find, dataEntered, dataVerify, editDone
+ *   off : turns off table editing
+ *   find : defaults to tbody > tr > td
+ *   mousedown : called in context of the table cell (as a normal event would be)
+ *     if mouseDown returns false, cell will not become editable
+ *   dataVerify : called in context of the cell,
+ *     if dataVerify returns false, cell will stay in editable state
+ *     if dataVerify returns a value, that value will replace the cell's value
+ *     arguments are cell's value, original text, event
+ * editDone invoked on completion
+ *   arguments are cell's new value, original text
+*/
 jQuery.uiTableEdit = function(jq, options){
   function unbind(){
     return jq.find( options.find ).unbind('mousedown.uiTableEdit')

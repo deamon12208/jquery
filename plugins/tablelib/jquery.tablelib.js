@@ -1,16 +1,87 @@
-function isTrue(val){ return val === true || val !== false && val !== null && val !== undefined }
-
-// map with null values filtered out, throws on undefined
-// [a] (a,i -> b) -> [b]
-function map( arr, fn ){
-  var result = [];
-  for(var i=0; i < arr.length; i++) {
-    var maybe = fn(arr[i], i);
-    if( maybe === undefined ) throw("map callback returned undefined");
-    if( maybe !== null ) result.push( maybe );
-  }
-  return result;
-}
+/*
+ * Copyright (c) 2008 Greg Weber webs.dev gmail
+ * Dual licensed under the MIT and GPL licenses:
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * jquery plugin for working with tables and table rows,
+ * * create table objects and table row objects and use convenience methods
+ * * serialize objects to table rows and extract objects from table rows
+ *   * support for saving object properties as row attributes
+ * * advanced querying of table rows
+ *
+ * <code>
+ *
+ * <table>
+ *   <thead>
+ *     <tr>
+ *       <th>column1</th>
+ *       <th>column2</th>
+ *     </tr>
+ *   </thead>
+ * </table>
+ *
+ * $.table('#my-table').objs() // == []
+ *
+ * $.table('#my-table').save( [{col1 : val1, col2 : val2},{col1 : val3, col2 : val4}] )
+ * <table>
+ *   <thead>
+ *     <th>
+ *       <td>column1</td>
+ *       <td>column2</td>
+ *     </th>
+ *   </thead>
+ *   <tbody>
+ *     <tr>
+ *       <td>val1</td>
+ *       <td>val2</td>
+ *     </tr>
+ *     <tr>
+ *       <td>val3</td>
+ *       <td>val4</td>
+ *     </tr>
+ *   </tbody>
+ * </table>
+ *
+ * $.table('#my-table').objs() // [{col1 : val1, col2 : val2},{col1 : val3, col2 : val4}]
+ *
+ * // querying example
+ * $.table('#my-table').objs( {column1 : val1}} ) // [{col1 : val1, col2 : val2}]
+ * $.table('#my-table').rows( {column1 : val1}} ) // jQuery object with just the first row
+ *
+ * </code>
+ *
+ * API OVERVIEW - more documentation in the code
+ * Creating table objects: two ways
+ *   $('#my-table').table() == $.table('table')
+ *   A reference to the jQuery object that refers to the table is available through the use of '$'
+ *   $.table('#my-table').$  ==  $('#my-table')
+ *
+ * WARNING!!
+ *   This plugin is inteded to work with a single table or row!
+ *     it is untested for a jQuery object that contatins multiple tables or rows!
+ *     always use id selectors to ensure only one table or row has been selected
+ *
+ * Creating row objects: two ways, two kinds of rows
+ *   $('#my-row').row() == $.row('table')
+ *   $('#my-row').headRow() == $.headRow('table')
+ *   A reference to the jQuery object that refers to the row is available through the use of '$'
+ *   $.row('#my-row').$  ==  $('#my-row')
+ *
+ * Additional table functions:
+ *   titles: returns an array of text values for the (last) table head row
+ *   clear_rows: removes any table body rows
+ *   head_row == $.headRow( this.$.find("thead > tr:last") )
+ *   parse: function called when creating table objects
+ *     by default tries to parse a float as a float instead of as a string
+ *
+ * Additional row functions:
+ *   tds or ths: get a jQuery object for the table cells
+ *   td or th: get a jQuery object for an individual table cell
+ *   at: retrieve text for an individual table cell
+ *   transfer_to : transfer a row to a different table
+ *   to_object : convert a row to an object
+*/
 
 // support both .table() interface and $.table(selector) interface
 jQuery.fn.table = function(jq){
@@ -26,6 +97,20 @@ jQuery.table = function(selector){
 }
 
 jQuery.fn.table.prototype = jQuery.fn.table.fn = {
+  isTrue : function(val){
+    return val === true || val !== false && val !== null && val !== undefined
+  },
+  // map with null values filtered out, throws on undefined
+  // [a] (a,i -> b) -> [b]
+  map : function( arr, fn ){
+    var result = [];
+    for(var i=0; i < arr.length; i++) {
+      var maybe = fn(arr[i], i);
+      if( maybe === undefined ) throw("map callback returned undefined");
+      if( maybe !== null ) result.push( maybe );
+    }
+    return result;
+  },
   //$: null, // constructor fills this in!
 
   table: function(){return this},
@@ -34,7 +119,7 @@ jQuery.fn.table.prototype = jQuery.fn.table.fn = {
     for( var i in query ) {
       var qv = query[i], ov = obj[i];
 
-      if(typeof(qv) == "function"){ if( isTrue(qv(ov)) ) return true }
+      if(typeof(qv) == "function"){ if( this.isTrue(qv(ov)) ) return true }
       else if ( ov === qv ) return true;
     }
     return false;
@@ -71,7 +156,7 @@ jQuery.fn.table.prototype = jQuery.fn.table.fn = {
   // given a th name, return the index of the column
   i: function(text){
     var f = first( this.titles(), function(t,i){ if( t == text ) return i; } );
-    if( isTrue(f) ) return f;
+    if( this.isTrue(f) ) return f;
     throw("could not find column title: " + text );
   },
 
@@ -181,7 +266,6 @@ jQuery.fn.table.prototype = jQuery.fn.table.fn = {
           function(text){ return obj[ text ] }), attrs )
   },
 
-  // this function can be made more general purpose
   // [""], {"":""} -> ""
   array_to_tr: function(arr, attributes){
     var tr = null;
@@ -284,11 +368,11 @@ jQuery.fn.row.genericRowProperties = function(type){
     var attrs = obj || {};
     var a_filter = function(i,attr){
       var v = attr.value;
-      if( isTrue(v) ) { attrs[ attr.name ] = v; }
+      if( $.fn.table.prototype.isTrue(v) ) { attrs[ attr.name ] = v; }
     }
     var a_filter_fields = function(i,attr){
       var v = attr.value;
-      if( isTrue(v) ) {
+      if( $.fn.table.prototype.isTrue(v) ) {
         var n = attr.name;
         if( fields[n] ) { attrs[ n ] = v; }
       }

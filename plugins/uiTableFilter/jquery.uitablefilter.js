@@ -1,11 +1,21 @@
-// jquery plugin
-// allows table rows to be filtered (made invisible)
-// arguments:
-//   jQuery object containing table elements
-//   phrase to search for
-//   optional arguments:
-//     column to limit search too (the column title in the table header)
-//     ifHidden - callback to execute if one or more elements was hidden
+/*
+ * Copyright (c) 2008 Greg Weber webs.dev gmail
+ * Dual licensed under the MIT and GPL licenses:
+ * http://www.opensource.org/licenses/mit-license.php
+ * http://www.gnu.org/licenses/gpl.html
+ *
+ * allows table rows to be filtered (made invisible)
+ * <code>
+ * t = $('table')
+ * $.uiTableFilter( t, phrase )
+ * </code>
+ * arguments:
+ *   jQuery object containing table rows
+ *   phrase to search for
+ *   optional arguments:
+ *     column to limit search too (the column title in the table header)
+ *     ifHidden - callback to execute if one or more elements was hidden
+ */
 jQuery.uiTableFilter = function(jq, phrase, column, ifHidden){
   var new_hidden = false;
   if( this.last_phrase === phrase ) return false;
