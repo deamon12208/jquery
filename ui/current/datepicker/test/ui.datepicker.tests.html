@@ -309,25 +309,54 @@ function testGet() {
 }
 
 function testGetDefaultDate() {
-	var test = new Date();
-	var date = $.datepicker._inst[0]._getDefaultDate();
-	assertDateEquals('Invalid default date - today', test, date);
-	test.setDate(test.getDate() + 7);
-	$.datepicker.reconfigureFor('#dp', {defaultDate: +7});
-	date = $.datepicker._inst[0]._getDefaultDate();
-	assertDateEquals('Invalid default date - +7', test, date);
-	test.setDate(test.getDate() - 14);
-	$.datepicker.reconfigureFor('#dp', {defaultDate: -7});
-	date = $.datepicker._inst[0]._getDefaultDate();
-	assertDateEquals('Invalid default date - -7', test, date);
-	test = new Date(2007, 6 - 1, 5);
-	$.datepicker.reconfigureFor('#dp', {defaultDate: test});
-	date = $.datepicker._inst[0]._getDefaultDate();
-	assertDateEquals('Invalid default date - +7', test, date);
+	var inst = $.datepicker._inst[0];
+	assertDateEquals('Invalid default date - today', new Date(), inst._getDefaultDate());
+	// as date
+	var date = new Date(2007, 6 - 1, 5);
+	$.datepicker.reconfigureFor('#dp', {defaultDate: date});
+	assertDateEquals('Invalid default date - 2007-06-05', date, inst._getDefaultDate());
 	$.datepicker.reconfigureFor('#dp', {defaultDate: null});
-	test = new Date();
-	date = $.datepicker._inst[0]._getDefaultDate();
-	assertDateEquals('Invalid default date - today', test, date);
+	assertDateEquals('Invalid default date - reset', new Date(), inst._getDefaultDate());
+	// as relative numeric offsets
+	$.datepicker.reconfigureFor('#dp', {defaultDate: +7});
+	assertDateEquals('Invalid default date - +7', offsetDate(7), inst._getDefaultDate());
+	$.datepicker.reconfigureFor('#dp', {defaultDate: -7});
+	assertDateEquals('Invalid default date - -7', offsetDate(-7), inst._getDefaultDate());
+	// as relative string offsets
+	$.datepicker.reconfigureFor('#dp', {defaultDate: '1'});
+	assertDateEquals('Invalid default date - 1', offsetDate(1), inst._getDefaultDate());
+	$.datepicker.reconfigureFor('#dp', {defaultDate: '1d'});
+	assertDateEquals('Invalid default date - 1d', offsetDate(1), inst._getDefaultDate());
+	$.datepicker.reconfigureFor('#dp', {defaultDate: '+1  d'});
+	assertDateEquals('Invalid default date - +1  d', offsetDate(1), inst._getDefaultDate());
+	$.datepicker.reconfigureFor('#dp', {defaultDate: '-1 D'});
+	assertDateEquals('Invalid default date - -1 D', offsetDate(-1), inst._getDefaultDate());
+	$.datepicker.reconfigureFor('#dp', {defaultDate: '2w'});
+	assertDateEquals('Invalid default date - 2w', offsetDate(14), inst._getDefaultDate());
+	$.datepicker.reconfigureFor('#dp', {defaultDate: '+2  w'});
+	assertDateEquals('Invalid default date - +2  w', offsetDate(14), inst._getDefaultDate());
+	$.datepicker.reconfigureFor('#dp', {defaultDate: '-2 W'});
+	assertDateEquals('Invalid default date - -2 W', offsetDate(-14), inst._getDefaultDate());
+	$.datepicker.reconfigureFor('#dp', {defaultDate: '3m'});
+	assertDateEquals('Invalid default date - 3m', offsetMonth(3), inst._getDefaultDate());
+	$.datepicker.reconfigureFor('#dp', {defaultDate: '+3  m'});
+	assertDateEquals('Invalid default date - +3  m', offsetMonth(3), inst._getDefaultDate());
+	$.datepicker.reconfigureFor('#dp', {defaultDate: '-3 M'});
+	assertDateEquals('Invalid default date - -3 M', offsetMonth(-3), inst._getDefaultDate());
+	$.datepicker.reconfigureFor('#dp', {defaultDate: '4y'});
+	assertDateEquals('Invalid default date - 4y', offsetMonth(48), inst._getDefaultDate());
+	$.datepicker.reconfigureFor('#dp', {defaultDate: '+4  y'});
+	assertDateEquals('Invalid default date - +4  y', offsetMonth(48), inst._getDefaultDate());
+	$.datepicker.reconfigureFor('#dp', {defaultDate: '-4 Y'});
+	assertDateEquals('Invalid default date - -4 Y', offsetMonth(-48), inst._getDefaultDate());
+	// as error offsets
+	date = new Date();
+	$.datepicker.reconfigureFor('#dp', {defaultDate: '2days'});
+	assertDateEquals('Invalid default date - 2days', date, inst._getDefaultDate());
+	$.datepicker.reconfigureFor('#dp', {defaultDate: 'now'});
+	assertDateEquals('Invalid default date - now', date, inst._getDefaultDate());
+	$.datepicker.reconfigureFor('#dp', {defaultDate: '2f'});
+	assertDateEquals('Invalid default date - 2f', date, inst._getDefaultDate());
 }
 
 function testAdjustDate() {
@@ -335,46 +364,48 @@ function testAdjustDate() {
 	inst._rangeStart = null;
 	$.datepicker.reconfigureFor('#adj', {minDate: null, maxDate: null});
 	$.datepicker.setDateFor('#adj', new Date(2001, 2 - 1, 3));
-	var adjusts = [[0, 'D', 2001, 2 - 1, 3], [1, 'D', 2001, 2 - 1, 4],
-		[7, 'D', 2001, 2 - 1, 11], [-8, 'D', 2001, 2 - 1, 3],
-		[-8, 'D', 2001, 1 - 1, 26], [+5, 'D', 2001, 1 - 1, 31],
-		[0, 'M', 2001, 1 - 1, 31], [1, 'M', 2001, 2 - 1, 28],
-		[13, 'M', 2002, 3 - 1, 28], [-3, 'M', 2001, 12 - 1, 28],
-		[26, 'M', 2004, 2 - 1, 28], [1, 'D', 2004, 2 - 1, 29],
-		[0, 'Y', 2004, 2 - 1, 29], [1, 'Y', 2005, 2 - 1, 28],
-		[11, 'Y', 2016, 2 - 1, 28], [-12, 'Y', 2004, 2 - 1, 28]];
+	var adjusts = [[0, 'D', 2001, 2, 3], [1, 'D', 2001, 2, 4],
+		[7, 'D', 2001, 2, 11], [-8, 'D', 2001, 2, 3],
+		[-8, 'D', 2001, 1, 26], [+5, 'D', 2001, 1, 31],
+		[0, 'M', 2001, 1, 31], [1, 'M', 2001, 2, 28],
+		[13, 'M', 2002, 3, 28], [-3, 'M', 2001, 12, 28],
+		[26, 'M', 2004, 2, 28], [1, 'D', 2004, 2, 29],
+		[0, 'Y', 2004, 2, 29], [1, 'Y', 2005, 2, 28],
+		[11, 'Y', 2016, 2, 28], [-12, 'Y', 2004, 2, 28]];
 	for (var i = 0; i < adjusts.length; i++) {
 		inst._adjustDate(adjusts[i][0], adjusts[i][1]);
 		assertTrue('Invalid date adjustment ' + adjusts[i][0] + ' ' + adjusts[i][1],
-			inst._selectedYear == adjusts[i][2] && inst._selectedMonth == adjusts[i][3] &&
+			inst._selectedYear == adjusts[i][2] && inst._selectedMonth == (adjusts[i][3] - 1) &&
 			inst._selectedDay == adjusts[i][4]);
 	}
+	// with minimum
 	$.datepicker.reconfigureFor('#adj', {minDate: new Date(2001, 1 - 1, 1)});
 	$.datepicker.setDateFor('#adj', new Date(2001, 2 - 1, 3));
-	adjusts = [[0, 'D', 2001, 2 - 1, 3], [7, 'D', 2001, 2 - 1, 10],
-		[-88, 'D', 2001, 1 - 1, 1], [5, 'D', 2001, 1 - 1, 6],
-		[0, 'M', 2001, 1 - 1, 6], [13, 'M', 2002, 2 - 1, 6],
-		[-20, 'M', 2001, 1 - 1, 1], [1, 'M', 2001, 2 - 1, 1],
-		[0, 'Y', 2001, 2 - 1, 1], [6, 'Y', 2007, 2 - 1, 1],
-		[-11, 'Y', 2001, 1 - 1, 1], [2, 'Y', 2003, 1 - 1, 1]];
+	adjusts = [[0, 'D', 2001, 2, 3], [7, 'D', 2001, 2, 10],
+		[-88, 'D', 2001, 1, 1], [5, 'D', 2001, 1, 6],
+		[0, 'M', 2001, 1, 6], [13, 'M', 2002, 2, 6],
+		[-20, 'M', 2001, 1, 1], [1, 'M', 2001, 2, 1],
+		[0, 'Y', 2001, 2, 1], [6, 'Y', 2007, 2, 1],
+		[-11, 'Y', 2001, 1, 1], [2, 'Y', 2003, 1, 1]];
 	for (var i = 0; i < adjusts.length; i++) {
 		inst._adjustDate(adjusts[i][0], adjusts[i][1]);
 		assertTrue('Invalid date adjustment (min) ' + adjusts[i][0] + ' ' + adjusts[i][1],
-			inst._selectedYear == adjusts[i][2] && inst._selectedMonth == adjusts[i][3] &&
+			inst._selectedYear == adjusts[i][2] && inst._selectedMonth == (adjusts[i][3] - 1) &&
 			inst._selectedDay == adjusts[i][4]);
 	}
+	// with maximum
 	$.datepicker.reconfigureFor('#adj', {minDate: null, maxDate: new Date(2001, 6 - 1, 30)});
 	$.datepicker.setDateFor('#adj', new Date(2001, 2 - 1, 3));
-	adjusts = [[0, 'D', 2001, 2 - 1, 3], [7, 'D', 2001, 2 - 1, 10],
-		[200, 'D', 2001, 6 - 1, 30], [-184, 'D', 2000, 12 - 1, 28],
-		[0, 'M', 2000, 12 - 1, 28], [3, 'M', 2001, 3 - 1, 28],
-		[6, 'M', 2001, 6 - 1, 30], [-5, 'M', 2001, 1 - 1, 30],
-		[0, 'Y', 2001, 1 - 1, 30], [6, 'Y', 2001, 6 - 1, 30],
-		[-11, 'Y', 1990, 6 - 1, 30], [2, 'Y', 1992, 6 - 1, 30]];
+	adjusts = [[0, 'D', 2001, 2, 3], [7, 'D', 2001, 2, 10],
+		[200, 'D', 2001, 6, 30], [-184, 'D', 2000, 12, 28],
+		[0, 'M', 2000, 12, 28], [3, 'M', 2001, 3, 28],
+		[6, 'M', 2001, 6, 30], [-5, 'M', 2001, 1, 30],
+		[0, 'Y', 2001, 1, 30], [6, 'Y', 2001, 6, 30],
+		[-11, 'Y', 1990, 6, 30], [2, 'Y', 1992, 6, 30]];
 	for (var i = 0; i < adjusts.length; i++) {
 		inst._adjustDate(adjusts[i][0], adjusts[i][1]);
 		assertTrue('Invalid date adjustment (max) ' + adjusts[i][0] + ' ' + adjusts[i][1],
-			inst._selectedYear == adjusts[i][2] && inst._selectedMonth == adjusts[i][3] &&
+			inst._selectedYear == adjusts[i][2] && inst._selectedMonth == (adjusts[i][3] - 1) &&
 			inst._selectedDay == adjusts[i][4]);
 	}
 }
@@ -400,6 +431,22 @@ function testGetMinMaxDate() {
 	$.datepicker.reconfigureFor('#adj', {minDate: null});
 	assertNull('Invalid min date (null,range,false)', inst._getMinMaxDate('min', false));
 	assertDateEquals('Invalid min date (null,range,true)', inst._rangeStart, inst._getMinMaxDate('min', true));
+	// as relative numeric offsets
+	$.datepicker.reconfigureFor('#adj', {minDate: -7});
+	assertDateEquals('Invalid min date (-7)', offsetDate(-7), inst._getMinMaxDate('min'));
+	$.datepicker.reconfigureFor('#adj', {maxDate: +14});
+	assertDateEquals('Invalid max date (+14)', offsetDate(14), inst._getMinMaxDate('max'));
+	// as relative string offsets
+	$.datepicker.reconfigureFor('#adj', {minDate: '3 w'});
+	assertDateEquals('Invalid min date (3 w)', offsetDate(21), inst._getMinMaxDate('min'));
+	$.datepicker.reconfigureFor('#adj', {maxDate: '2M'});
+	assertDateEquals('Invalid max date (2M)', offsetMonth(2), inst._getMinMaxDate('max'));
+	// as error offsets
+	date = new Date();
+	$.datepicker.reconfigureFor('#adj', {minDate: 'now'});
+	assertDateEquals('Invalid min date (now)', date, inst._getMinMaxDate('min'));
+	$.datepicker.reconfigureFor('#adj', {maxDate: '2f'});
+	assertDateEquals('Invalid max date (2f)', date, inst._getMinMaxDate('max'));
 }
 
 function testGetFirstDayOfMonth() {
@@ -421,10 +468,31 @@ function testGetDaysInMonth() {
 	}
 }
 
+function offsetDate(offset) {
+	var date = new Date();
+	date.setDate(date.getDate() + offset);
+	return date;
+}
+
+function offsetMonth(offset) {
+	var date = new Date();
+	date.setDate(Math.min(date.getDate(), $.datepicker._inst[0]._getDaysInMonth(
+		date.getFullYear(), date.getMonth() + offset)));
+	date.setMonth(date.getMonth() + offset);
+	return date;
+}
+
 function assertDateEquals(msg, date1, date2) {
-	assertTrue(msg, date1 != null && date2 != null);
-	assertTrue(msg, date1.getFullYear() == date2.getFullYear() &&
-		date1.getMonth() == date2.getMonth() && date1.getDate() == date2.getDate());
+	assertTrue(msg + ' - null date', date1 != null && date2 != null);
+	date1.setHours(0);
+	date1.setMinutes(0);
+	date1.setSeconds(0);
+	date1.setMilliseconds(0);
+	date2.setHours(0);
+	date2.setMinutes(0);
+	date2.setSeconds(0);
+	date2.setMilliseconds(0);
+	assertEquals(msg, date1.toString(), date2.toString());
 }
 </script>
 </head>
