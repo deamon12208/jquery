@@ -386,7 +386,7 @@ test("rules(), class and attribute combinations", function() {
 	compare( $("#v2-i2").rules(), [{ method: "required", parameters: true }, { method: "email", parameters: true }]);
 	compare( $("#v2-i3").rules(), [{ method: "url", parameters: true }]);
 	compare( $("#v2-i4").rules(), [{ method: "required", parameters: true }, { method: "minlength", parameters: 2 }]);
-	compare( $("#v2-i5").rules(), [{ method: "required", parameters: true }, { method: "range", parameters: [2, 5] }]);
+	compare( $("#v2-i5").rules(), [{ method: "required", parameters: true }, { method: "rangelength", parameters: [2, 5] }]);
 });
 
 test("formatAndAdd", function() {

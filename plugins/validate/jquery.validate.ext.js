@@ -50,6 +50,23 @@ $.extend($.validator, {
 	},
 	
 	normalizeRules: function(rules) {
+		// convert deprecated rules
+		$.each({
+			minLength: 'minlength',
+			maxLength: 'maxlength',
+			rangeLength: 'rangelength',
+			minValue: 'min',
+			maxValue: 'max',
+			rangeValue: 'range',
+		}, function(dep, curr) {
+			if (rules[dep]) {
+				rules[curr] = rules[dep];
+				delete rules[dep];
+			}
+		});
+		
+		// TODO: clean number parameters
+		
 		if (rules.min && rules.max) {
 			rules.range = [rules.min, rules.max];
 			delete rules.min;
