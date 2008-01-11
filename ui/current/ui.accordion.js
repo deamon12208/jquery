@@ -128,8 +128,12 @@ $.fn.extend({
 			
 			if ( settings.animated ) {
 				if ( !settings.alwaysOpen && clickedActive ) {
-					toShow.slideToggle(settings.animated);
-					complete(true);
+					$.ui.accordion.animations[settings.animated]({
+						toShow: jQuery([]),
+						toHide: toHide,
+						complete: complete,
+						down: down
+					});
 				} else {
 					$.ui.accordion.animations[settings.animated]({
 						toShow: toShow,
