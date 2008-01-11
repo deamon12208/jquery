@@ -65,14 +65,24 @@ $.extend($.validator, {
 			}
 		});
 		
-		// TODO: clean number parameters
+		// clean number parameters
+		$.each(['minlength', 'maxlength', 'min', 'max'], function() {
+			if (rules[this]) {
+				rules[this] = Number(rules[this]);
+			}
+		});
+		$.each(['rangelength', 'range'], function() {
+			if (rules[this]) {
+				rules[this] = [Number(rules[this[0]]), Number(rules[this[1]])];
+			}
+		});
 		
+		// auto-create ranges
 		if (rules.min && rules.max) {
 			rules.range = [rules.min, rules.max];
 			delete rules.min;
 			delete rules.max;
 		}
-		
 		if (rules.minlength && rules.maxlength) {
 			rules.rangelength = [rules.minlength, rules.maxlength];
 			delete rules.minlength;

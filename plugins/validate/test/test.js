@@ -374,8 +374,15 @@ test("rules(), class and attribute combinations", function() {
 		if ( a && b && a.length != undefined && a.length == b.length ) {
 			for ( var i = 0; i < a.length; i++ )
 				for(var key in a[i]) {
-					if (a[i][key] != b[i][key])
+					if (a[i][key].length) {
+						for (var arrayKey in a[i][key]) {
+							if (a[i][key][arrayKey] != b[i][key][arrayKey]) {
+								ret = false;
+							}
+						}
+					} else if (a[i][key] != b[i][key]) {
 						ret = false
+					}
 				}
 		} else
 			ret = false;
