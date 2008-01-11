@@ -19,24 +19,20 @@ $.extend($.ui.accordion, {
 				duration: 300
 			}, settings, additions);
 			if ( !settings.toHide.size() ) {
-				settings.toShow.animate({height: "show"}, {
-					duration: settings.duration,
-					easing: settings.easing,
-					complete: settings.finished
-				});
+				settings.toShow.animate({height: "show"}, settings);
 				return;
 			}
 			var hideHeight = settings.toHide.height(),
 				showHeight = settings.toShow.height(),
 				difference = showHeight / hideHeight;
 			settings.toShow.css({ height: 0, overflow: 'hidden' }).show();
-			settings.toHide.filter(":hidden").each(settings.finished).end().filter(":visible").animate({height:"hide"},{
+			settings.toHide.filter(":hidden").each(settings.complete).end().filter(":visible").animate({height:"hide"},{
 				step: function(now){
 					settings.toShow.height((hideHeight - (now)) * difference );
 				},
 				duration: settings.duration,
 				easing: settings.easing,
-				complete: settings.finished
+				complete: settings.complete
 			});
 		},
 		bounceslide: function(settings) {
@@ -75,8 +71,7 @@ $.fn.extend({
 		}
 		
 		// calculate active if not specified, using the first header
-		var container = this,
-			headers = container.find(settings.header),
+		var headers = this.find(settings.header),
 			active = findActive(settings.active),
 			running = 0;
 
@@ -109,17 +104,23 @@ $.fn.extend({
 					? headers.filter(":eq(" + selector + ")")
 					: headers.not(headers.not(selector))
 				: selector === false
-					? $("<div>")
+					? $([])
 					: headers.filter(":eq(0)");
 		}
 		
 		function toggle(toShow, toHide, data, clickedActive, down) {
-			var finished = function(cancel) {
+			var complete = function(cancel) {
 				running = cancel ? 0 : --running;
 				if ( running )
 					return;
+				if ( settings.clearStyle ) {
+					toShow.add(toHide).css({
+						height: "",
+						overflow: ""
+					});
+				}
 				// trigger custom change event
-				container.trigger("change", data);
+				$(this).trigger("change", data);
 			};
 			
 			// count elements to animate
@@ -128,12 +129,12 @@ $.fn.extend({
 			if ( settings.animated ) {
 				if ( !settings.alwaysOpen && clickedActive ) {
 					toShow.slideToggle(settings.animated);
-					finished(true);
+					complete(true);
 				} else {
 					$.ui.accordion.animations[settings.animated]({
 						toShow: toShow,
 						toHide: toHide,
-						finished: finished,
+						complete: complete,
 						down: down
 					});
 				}
@@ -144,7 +145,7 @@ $.fn.extend({
 					toHide.hide();
 					toShow.show();
 				}
-				finished(true);
+				complete(true);
 			}
 		}
 		
@@ -154,8 +155,8 @@ $.fn.extend({
 				active.parent().andSelf().toggleClass(settings.selectedClass);
 				var toHide = active.next();
 				var toShow = active = $([]);
-				toggle( toShow, toHide );
-				return;
+				toggle.call(this, toShow, toHide );
+				return false;
 			}
 			// get the click target
 			var clicked = $(event.target);
@@ -170,7 +171,7 @@ $.fn.extend({
 			
 			// if animations are still active, or the active header is the target, ignore click
 			if(running || (settings.alwaysOpen && clickedActive) || !clicked.is(settings.header))
-				return;
+				return false;
 
 			// switch classes
 			active.parent().andSelf().toggleClass(settings.selectedClass);
@@ -185,7 +186,7 @@ $.fn.extend({
 				down = headers.index( active[0] ) > headers.index( clicked[0] );
 			
 			active = clickedActive ? $([]) : clicked;
-			toggle( toShow, toHide, data, clickedActive, down );
+			toggle.call(this, toShow, toHide, data, clickedActive, down );
 
 			return false;
 		};
@@ -199,7 +200,7 @@ $.fn.extend({
 			});
 		};
 
-		return container
+		return this
 			.bind(settings.event || "", clickHandler)
 			.bind("activate", activateHandler);
 	},
