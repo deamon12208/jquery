@@ -1,4 +1,4 @@
-/* jQuery UI Date Picker v3.2 - previously jQuery Calendar
+/* jQuery UI Date Picker v3.3beta - previously jQuery Calendar
    Written by Marc Grabanski (m@marcgrabanski.com) and Keith Wood (kbwood@virginbroadband.com.au).
 
    Copyright (c) 2007 Marc Grabanski (http://marcgrabanski.com/code/ui-datepicker)
@@ -233,9 +233,8 @@ $.extend(Datepicker.prototype, {
 
 	/* Tidy up after displaying the date picker. */
 	_inlineShow: function(inst) {
-		var numMonths = inst._get('numberOfMonths'); // fix width for dynamic number of date pickers
-		numMonths = (numMonths == null ? 1 : (typeof numMonths == 'number' ? numMonths : numMonths[1]));
-		inst._datepickerDiv.width(numMonths * $('.datepicker', inst._datepickerDiv[0]).width());
+		var numMonths = inst._getNumberOfMonths(); // fix width for dynamic number of date pickers
+		inst._datepickerDiv.width(numMonths[1] * $('.datepicker', inst._datepickerDiv[0]).width());
 	}, 
 
 	/* Does this element have a particular class? */
@@ -460,7 +459,8 @@ $.extend(Datepicker.prototype, {
 	/* Generate the date picker content. */
 	_updateDatepicker: function(inst) {
 		inst._datepickerDiv.empty().append(inst._generateDatepicker());
-		if (inst._get('numberOfMonths') != 1) {
+		var numMonths = inst._getNumberOfMonths();
+		if (numMonths[0] != 1 || numMonths[1] != 1) {
 			inst._datepickerDiv.addClass('datepicker_multi');
 		} 
 		else {
@@ -479,9 +479,8 @@ $.extend(Datepicker.prototype, {
 
 	/* Tidy up after displaying the date picker. */
 	_afterShow: function(inst) {
-		var numMonths = inst._get('numberOfMonths'); // fix width for dynamic number of date pickers
-		numMonths = (numMonths == null ? 1 : (typeof numMonths == 'number' ? numMonths : numMonths[1]));
-		inst._datepickerDiv.width(numMonths * $('.datepicker', inst._datepickerDiv[0]).width());
+		var numMonths = inst._getNumberOfMonths(); // fix width for dynamic number of date pickers
+		inst._datepickerDiv.width(numMonths[1] * $('.datepicker', inst._datepickerDiv[0]).width());
 		if ($.browser.msie && parseInt($.browser.version) < 7) { // fix IE < 7 select problems
 			$('#datepicker_cover').css({width: inst._datepickerDiv.width() + 4,
 				height: inst._datepickerDiv.height() + 4});
@@ -1183,17 +1182,32 @@ $.extend(DatepickerInstance.prototype, {
 		var prompt = this._get('prompt');
 		var closeAtTop = this._get('closeAtTop');
 		var hideIfNoPrevNext = this._get('hideIfNoPrevNext');
-		var numMonths = this._get('numberOfMonths');
+		var numMonths = this._getNumberOfMonths();
 		var stepMonths = this._get('stepMonths');
-		var isMultiMonth = (numMonths != 1);
-		numMonths = (numMonths == null ? [1, 1] : (typeof numMonths == 'number' ? [1, numMonths] : numMonths));
+		var isMultiMonth = (numMonths[0] != 1 || numMonths[1] != 1);
+		var minDate = this._getMinMaxDate('min', true);
+		var maxDate = this._getMinMaxDate('max');
+		var drawMonth = this._selectedMonth;
+		var drawYear = this._selectedYear;
+		if (maxDate) {
+			var maxDraw = new Date(maxDate.getFullYear(),
+				maxDate.getMonth() - numMonths[1] + 1, maxDate.getDate());
+			maxDraw = (minDate && maxDraw < minDate ? minDate : maxDraw);
+			while (new Date(drawYear, drawMonth, 1) > maxDraw) {
+				drawMonth--;
+				if (drawMonth < 0) {
+					drawMonth = 11;
+					drawYear--;
+				}
+			}
+		}
 		// controls and links
-		var prev = '<div class="datepicker_prev">' + (this._canAdjustMonth(-1) ? 
+		var prev = '<div class="datepicker_prev">' + (this._canAdjustMonth(-1, drawYear, drawMonth) ? 
 			'<a onclick="jQuery.datepicker._adjustDate(' + this._id + ', -' + stepMonths + ', \'M\');"' +
 			(showStatus ? this._addStatus(this._get('prevStatus') || '&#xa0;') : '') + '>' +
 			this._get('prevText') + '</a>' :
 			(hideIfNoPrevNext ? '' : '<label>' + this._get('prevText') + '</label>')) + '</div>';
-		var next = '<div class="datepicker_next">' + (this._canAdjustMonth(+1) ?
+		var next = '<div class="datepicker_next">' + (this._canAdjustMonth(+1, drawYear, drawMonth) ?
 			'<a onclick="jQuery.datepicker._adjustDate(' + this._id + ', +' + stepMonths + ', \'M\');"' +
 			(showStatus ? this._addStatus(this._get('nextStatus') || '&#xa0;') : '') + '>' +
 			this._get('nextText') + '</a>' :
@@ -1205,10 +1219,6 @@ $.extend(DatepickerInstance.prototype, {
 			'<a onclick="jQuery.datepicker._gotoToday(' + this._id + ');"' +
 			(showStatus ? this._addStatus(this._get('currentStatus') || '&#xa0;') : '') + '>' +
 			this._get('currentText') + '</a></div>' : '') + (isRTL ? prev : next) + '</div>';
-		var minDate = this._getMinMaxDate('min', true);
-		var maxDate = this._getMinMaxDate('max');
-		var drawMonth = this._selectedMonth;
-		var drawYear = this._selectedYear;
 		var showWeeks = this._get('showWeeks');
 		for (var row = 0; row < numMonths[0]; row++) {
 		for (var col = 0; col < numMonths[1]; col++) {
@@ -1237,7 +1247,9 @@ $.extend(DatepickerInstance.prototype, {
 			}
 			html += '</tr></thead><tbody>';
 			var daysInMonth = this._getDaysInMonth(drawYear, drawMonth);
-			this._selectedDay = Math.min(this._selectedDay, daysInMonth);
+			if (drawYear == this._selectedYear && drawMonth == this._selectedMonth) {
+				this._selectedDay = Math.min(this._selectedDay, daysInMonth);
+			}
 			var leadDays = (this._getFirstDayOfMonth(drawYear, drawMonth) - firstDay + 7) % 7;
 			var currentDate = new Date(this._currentYear, this._currentMonth, this._currentDay);
 			var endDate = this._endDay ? new Date(this._endYear, this._endMonth, this._endDay) : currentDate;
@@ -1384,6 +1396,12 @@ $.extend(DatepickerInstance.prototype, {
 		this._selectedMonth = date.getMonth();
 		this._selectedYear = date.getFullYear();
 	},
+	
+	/* Determine the number of months to show. */
+	_getNumberOfMonths: function() {
+		var numMonths = this._get('numberOfMonths');
+		return (numMonths == null ? [1, 1] : (typeof numMonths == 'number' ? [1, numMonths] : numMonths));
+	},
 
 	/* Determine the current maximum date - ensure no time components are set - may be overridden for a range. */
 	_getMinMaxDate: function(minMax, checkRange) {
@@ -1408,8 +1426,9 @@ $.extend(DatepickerInstance.prototype, {
 	},
 
 	/* Determines if we should allow a "next/prev" month display change. */
-	_canAdjustMonth: function(offset) {
-		var date = new Date(this._selectedYear, this._selectedMonth + offset, 1);
+	_canAdjustMonth: function(offset, curYear, curMonth) {
+		var numMonths = this._getNumberOfMonths();
+		var date = new Date(curYear, curMonth + (offset < 0 ? offset : numMonths[1]), 1);
 		if (offset < 0) {
 			date.setDate(this._getDaysInMonth(date.getFullYear(), date.getMonth()));
 		}
