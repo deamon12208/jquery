@@ -199,6 +199,13 @@ $('#restrictDates').datepicker({minDate: new Date(2005, 1 - 1, 26),
 <script type="text/jsdemo" charset="utf-8" class="demojs">
 $('#relativeDates').datepicker({minDate: 0, maxDate: 365});
 </script>
+					<p>The relative dates can also be specified as a number and a period -
+						'd' for days, 'w' for weeks, 'm' for months, or 'y' for years.</p>
+					<p><span class="demoLabel">Limited dates (extended):</span>
+						<input type="text" size="10" id="extendedDates"/></p>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+$('#extendedDates').datepicker({minDate: '-1d', maxDate: '6y'});
+</script>
 					<p>Note that the range of selectable months and years changes appropriately. Also,
 						note that the <em>Today</em> link is no longer available as today is not in the range.
 						By default, the <em>Prev</em> and <em>Next</em> links are disabled if they are not
@@ -396,6 +403,13 @@ $('#openDateJan01').datepicker({defaultDate: new Date(2007, 1 - 1, 1)});
 						<input type="text" size="10" id="openDatePlus7"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
 $('#openDatePlus7').datepicker({defaultDate: +7});
+</script>
+					<p>Or specify a period from today - 'd' for days,
+						'w' for weeks, 'm' for months, or 'y' for years.</span>
+					<p><span class="demoLabel">Open at 2 weeks from today:</span>
+						<input type="text" size="10" id="openDate2Weeks"/></p>
+<script type="text/jsdemo" charset="utf-8" class="demojs">
+$('#openDate2Weeks').datepicker({defaultDate: '2w'});
 </script>
 					<p>Show the weeks of the year. Defaults to the ISO 8601 definition (weeks start 
 						on Mondays and the first week of the year contains January 4). Change the 
