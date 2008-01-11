@@ -10,11 +10,8 @@ other stuff
 - consider validation on page load, disabling required-checks
 - check value != defaultValue in required, making defaultValue invalid
 - test and document Scott's rules modules
-- bug in marketo demo, keeps showing error for "email already taken", even if server returns true
 - completely rework showErrors: manually settings errors is currently extremely flawed and utterly useless, eg. errors disappear if some other validation is triggered
 - add custom event to remote validation for adding more parameters
-- submitting a form where only remote validation is left to run sometimes calls submitHandler/submit after the field got fixed
-- add proper support for more states: valid, invalid, optional, pending...
 - add custom events for form and elements instead of more callbacks
 
 - document focusInvalid()
@@ -27,8 +24,6 @@ additional options/callbacks:
 - onsubmit: Boolean, default true - validate on form submit (similar to onkeyup/onblur)
 - beforeValidation: Callback, called before doing any validation
 - beforeSubmit: Callback, called before submitting the form (default submit or calling submitHandler, if specified) 
-
-- bug: remote validation triggers display/validation of other fields
 
 - add test for subformRequired
 - document invalidHandler

@@ -57,7 +57,7 @@ $.extend($.validator, {
 			rangeLength: 'rangelength',
 			minValue: 'min',
 			maxValue: 'max',
-			rangeValue: 'range',
+			rangeValue: 'range'
 		}, function(dep, curr) {
 			if (rules[dep]) {
 				rules[curr] = rules[dep];

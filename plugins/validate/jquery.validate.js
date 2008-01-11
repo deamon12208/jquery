@@ -249,8 +249,8 @@ jQuery.extend(jQuery.fn, {
 					return handle();
 				}
 				if ( validator.form() ) {
-					if ( this.pendingRequest ) {
-						this.formSubmitted = true;
+					if ( validator.pendingRequest ) {
+						validator.formSubmitted = true;
 						return false;
 					}
 					return handle();
@@ -490,6 +490,7 @@ jQuery.extend(jQuery.validator, {
 			this.submitted = {};
 			this.valueCache = {};
 			this.pendingRequest = 0;
+			this.pending = {};
 			this.invalid = {};
 			this.reset();
 			
@@ -690,11 +691,15 @@ jQuery.extend(jQuery.validator, {
 				var rule = rules[i];
 				try {
 					var result = jQuery.validator.methods[rule.method].call( this, jQuery.trim(element.value), element, rule.parameters );
-					if( result === -1 )
+					if ( result == "dependency-mismatch" )
 						break;
+					if ( result == "pending" ) {
+						this.toHide = this.toHide.not( this.errorsFor(element) );
+						return;
+					}
 					if( !result ) {
 						this.settings.highlight.call( this, element, this.settings.errorClass );
-						this.formatAndAdd( rule, element);
+						this.formatAndAdd( element, rule );
 						return false;
 					}
 				} catch(e) {
@@ -704,27 +709,39 @@ jQuery.extend(jQuery.validator, {
 				}
 			}
 			// show the label for valid elements if success callback is configured
-			if ( rules.length && this.settings.success )
+			if ( rules.length )
 				this.successList.push(element);
 			return true;
 		},
 		
-		configuredMessage: function( id, method ) {
-			var m = this.settings.messages[id];
+		// return the custom message for the given element name and validation method
+		customMessage: function( name, method ) {
+			var m = this.settings.messages[name];
 			return m && (m.constructor == String
 				? m
 				: m[method]);
 		},
 		
-		defaultMessage: function( element, method) {
-			var configured = this.configuredMessage( element.name, method );
-			return configured !== undefined ? configured :
-				element.title
-				|| jQuery.validator.messages[method]
-				|| "<strong>Warning: No message defined for " + element.name + "</strong>";
+		// return the first defined argument, allowing empty strings
+		findDefined: function() {
+			for(var i = 0; i < arguments.length; i++) {
+				if (arguments[i] !== undefined)
+					return arguments[i];
+			}
+			return undefined;
 		},
 		
-		formatAndAdd: function( rule, element) {
+		defaultMessage: function( element, method) {
+			return this.findDefined(
+				this.customMessage( element.name, method ),
+				// title is never undefined, so handle empty string as undefined
+				element.title || undefined,
+				jQuery.validator.messages[method],
+				"<strong>Warning: No message defined for " + element.name + "</strong>"
+			);
+		},
+		
+		formatAndAdd: function( element, rule ) {
 			var message = this.defaultMessage( element, rule.method );
 			if ( typeof message == "function" ) 
 				message = message.call(this, rule.parameters, element);
@@ -750,8 +767,10 @@ jQuery.extend(jQuery.validator, {
 			if( this.errorList.length ) {
 				this.toShow.push( this.containers );
 			}
-			for ( var i = 0; this.successList[i]; i++ ) {
-				this.showLabel( this.successList[i] );
+			if (this.settings.success) {
+				for ( var i = 0; this.successList[i]; i++ ) {
+					this.showLabel( this.successList[i] );
+				}
 			}
 			this.toHide = this.toHide.not( this.toShow );
 			this.hideErrors();
@@ -855,12 +874,16 @@ jQuery.extend(jQuery.validator, {
 			return !jQuery.validator.methods.required.call(this, jQuery.trim(element.value), element);
 		},
 		
-		startRequest: function() {
-			this.pendingRequest++;
+		startRequest: function(element) {
+			if (!this.pending[element.name]) {
+				this.pendingRequest++;
+				this.pending[element.name] = true;
+			}
 		},
 		
-		stopRequest: function(valid) {
+		stopRequest: function(element, valid) {
 			this.pendingRequest--;
+			delete this.pending[element.name];
 			if ( valid && this.pendingRequest == 0 && this.formSubmitted && this.form() ) {
 				jQuery(this.currentForm).submit();
 			}
@@ -946,7 +969,7 @@ jQuery.extend(jQuery.validator, {
 		required: function(value, element, param) {
 			// check if dependency is met
 			if ( !this.depend(param, element) )
-				return -1;
+				return "dependency-mismatch";
 			switch( element.nodeName.toLowerCase() ) {
 			case 'select':
 				var options = jQuery("option:selected", element);
@@ -968,7 +991,7 @@ jQuery.extend(jQuery.validator, {
 			if ( previous.old !== value ) {
 				previous.old = value;
 				var validator = this;
-				this.startRequest();
+				this.startRequest(element);
 				var data = {};
 				data[element.name] = value;
 				jQuery.ajax({
@@ -982,12 +1005,18 @@ jQuery.extend(jQuery.validator, {
 							var errors = {};
 							errors[element.name] =  response || validator.defaultMessage( element, "remote" );
 							validator.showErrors(errors);
+						} else {
+							validator.prepareElement(element);
+							validator.successList.push(element);
+							validator.showErrors();
 						}
 						previous.valid = response;
-						validator.stopRequest(response);
+						validator.stopRequest(element, response);
 					}
 				});
-				return false;
+				return "pending";
+			} else if( this.pending[element.name] ) {
+				return "pending";
 			}
 			return previous.valid;
 		},

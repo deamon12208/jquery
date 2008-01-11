@@ -1,6 +1,7 @@
 1.2
 ---
 
+* Added remote validation (method remote)
 * Added us-phone-number method to additional-methods.js
 * Added AJAX-captcha validation example (based on http://psyrens.com/captcha/)
 * Added subformRequired-callback option to support easier validation of subforms

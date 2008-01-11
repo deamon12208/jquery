@@ -389,18 +389,23 @@ test("rules(), class and attribute combinations", function() {
 	compare( $("#v2-i5").rules(), [{ method: "required", parameters: true }, { method: "rangelength", parameters: [2, 5] }]);
 });
 
+test("defaultMessage(), empty title is ignored", function() {
+	var v = $("#userForm").validate();
+	equals( "This field is required.", v.defaultMessage($("#username")[0], "required") );
+});
+
 test("formatAndAdd", function() {
 	expect(4);
 	var v = $("#form").validate();
 	var fakeElement = { form: { id: "foo" }, name: "bar" };
-	v.formatAndAdd({method: "maxLength", parameters: 2}, fakeElement)
+	v.formatAndAdd(fakeElement, {method: "maxLength", parameters: 2})
 	equals( "Please enter a value no longer than 2 characters.", v.errorList[0].message );
 	equals( "bar", v.errorList[0].element.name );
 	
-	v.formatAndAdd({method: "rangeValue", parameters:[2,4]}, fakeElement)
+	v.formatAndAdd(fakeElement, {method: "rangeValue", parameters:[2,4]})
 	equals( "Please enter a value between 2 and 4.", v.errorList[1].message );
 	
-	v.formatAndAdd({method: "rangeValue", parameters:[0,4]}, fakeElement)
+	v.formatAndAdd(fakeElement, {method: "rangeValue", parameters:[0,4]})
 	equals( "Please enter a value between 0 and 4.", v.errorList[2].message );
 });
 
@@ -413,7 +418,7 @@ test("formatAndAdd2", function() {
 		equals( 0, param );
 		return "element " + element.name + " is not valid";
 	};
-	v.formatAndAdd({method: "test1", parameters: 0}, fakeElement)
+	v.formatAndAdd(fakeElement, {method: "test1", parameters: 0})
 	equals( "element bar is not valid", v.errorList[0].message );
 });
 
@@ -985,38 +990,6 @@ test("check the serverside script works2", function() {
 	});
 });
 
-test("validate via remote method and serverside message", function() {
-	expect(5);
-	stop();
-	var e = $("#username");
-	var v = $("#userForm").validate({
-		rules: {
-			username: {
-				required: true,
-				remote: "users2.php"
-			}
-		},
-		messages: {
-			username: {
-				required: "Please"
-			}
-		},
-		submitHandler: function() {
-			ok( false, "submitHandler may never be called when validating only elements");
-		}
-	});
-	$().ajaxStop(function() {
-		ok( true, "There needs to be exactly one request." );
-		equals( 1, v.size(), "There must be one error" );
-		equals( "asdf is already taken, please try something else", v.errorList[0].message );
-		start();
-	});
-	ok( !v.element(e), "invalid element, nothing entered yet" );
-	e.val("asdf");
-	ok( !v.element(e), "still invalid, because remote validation must block until it returns" );
-});
-
-
 test("validate via remote method", function() {
 	expect(5);
 	stop();
@@ -1042,6 +1015,7 @@ test("validate via remote method", function() {
 		ok( true, "There needs to be exactly one request." );
 		equals( 1, v.size(), "There must be one error" );
 		equals( "asdf in use", v.errorList[0].message );
+		$().unbind("ajaxStop");
 		start();
 	});
 	ok( !v.element(e), "invalid element, nothing entered yet" );
@@ -1049,3 +1023,34 @@ test("validate via remote method", function() {
 	ok( !v.element(e), "still invalid, because remote validation must block until it returns" );
 });
 
+test("validate via remote method and serverside message", function() {
+	expect(5);
+	stop();
+	var e = $("#username");
+	var v = $("#userForm").validate({
+		rules: {
+			username: {
+				required: true,
+				remote: "users2.php"
+			}
+		},
+		messages: {
+			username: {
+				required: "Please"
+			}
+		},
+		submitHandler: function() {
+			ok( false, "submitHandler may never be called when validating only elements");
+		}
+	});
+	$().ajaxStop(function() {
+		ok( true, "There needs to be exactly one request." );
+		equals( 1, v.size(), "There must be one error" );
+		equals( "asdf is already taken, please try something else", v.errorList[0].message );
+		$().unbind("ajaxStop");
+		start();
+	});
+	ok( !v.element(e), "invalid element, nothing entered yet" );
+	e.val("asdf");
+	ok( !v.element(e), "still invalid, because remote validation must block until it returns" );
+});

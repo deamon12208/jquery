@@ -16,8 +16,8 @@
 	
 	jQuery.validator.messages.required = "";
 	$("form").validate({
-		focusInvalid: false,
-		focusCleanup: true,
+		//focusInvalid: false,
+		//focusCleanup: true,
 		onkeyup: false,
 		subformRequired: function(input) {
 			return $("#bill_to_co").is(":checked") && input.parents(".subTable").length;
