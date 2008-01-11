@@ -49,6 +49,15 @@ $.extend($.validator, {
 		return rules;
 	},
 	
+	metadataRules: function(element) {
+		if (!$.metadata) return {};
+		
+		var meta = $.data(element.form, 'validator').settings.meta;
+		return meta ?
+			$(element).metadata()[meta] :
+			$(element).metadata();
+	},
+	
 	normalizeRules: function(rules) {
 		// convert deprecated rules
 		$.each({
@@ -93,10 +102,10 @@ $.extend($.validator, {
 	}
 });
 
-// TODO: add support for metadata
 $.fn.rules = function() {
 	var element = this[0];
 	var data = $.validator.normalizeRules($.extend(
+		$.validator.metadataRules(element),
 		$.validator.classRules(element),
 		$.validator.attributeRules(element)
 	));

@@ -394,6 +394,7 @@ test("rules(), class and attribute combinations", function() {
 	compare( $("#v2-i3").rules(), [{ method: "url", parameters: true }]);
 	compare( $("#v2-i4").rules(), [{ method: "required", parameters: true }, { method: "minlength", parameters: 2 }]);
 	compare( $("#v2-i5").rules(), [{ method: "required", parameters: true }, { method: "rangelength", parameters: [2, 5] }]);
+	compare( $("#v2-i6").rules(), [{ method: "required", parameters: true }, { method: "rangelength", parameters: [2, 5] }]);
 });
 
 test("defaultMessage(), empty title is ignored", function() {
