@@ -23,12 +23,16 @@
 			return $("#bill_to_co").is(":checked") && input.parents(".subTable").length;
 		},
 		invalidHandler: function() {
-			$("div.error").show();
 			var errors = this.numberOfInvalids();
-			var message = errors < 2
-				? 'You missed 1 field. It has been highlighted below'
-				: 'You missed ' + errors + ' fields.  They have been highlighted below';
-			$("div.error span").html(message);
+			if (errors) {
+				$("div.error").show();
+				var message = errors < 2
+					? 'You missed 1 field. It has been highlighted below'
+					: 'You missed ' + errors + ' fields.  They have been highlighted below';
+				$("div.error span").html(message);
+			} else {
+				$("div.error").hide();
+			}
 		},
 		submitHandler: function() {
 			$("div.error").hide();
@@ -44,7 +48,8 @@
 				email: "Please enter a valid email address, example: you@yourdomain.com",
 				remote: jQuery.format("{0} is already taken, please enter a different address.")	
 			}
-		}
+		},
+		debug:true
 	});
 	
   $(".resize").vjustify();
@@ -71,15 +76,7 @@
     }
   );
 
-  $("form select").change(function() {
-      $(this).parents("tr:first").removeClass("errorRow");
-  });
-
-  $("input.ccNumber").blur(function() {
-      hiddenStrValue = $(this).val().replace(new RegExp("[^0-9]{1,}", "gi"), "");
-      $(this).siblings("input.hidden").val(hiddenStrValue);
-  });
-
+  // toggle optional billing address
   var subTableDiv = $("div.subTableDiv");
   var toggleCheck = $("input.toggleCheck");
   toggleCheck.is(":checked")
@@ -88,6 +85,7 @@
   $("input.toggleCheck").click(function() {
       if (this.checked == true) {
         subTableDiv.slideUp("medium");
+        $("form").valid();
       } else {
         subTableDiv.slideDown("medium");
       }

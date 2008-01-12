@@ -9,7 +9,7 @@
 	<script type="text/javascript" src="../lib/jquery.ajaxQueue.js"></script>
 	<script type="text/javascript" src="../lib/jquery.delegate.js"></script>
 	<script type="text/javascript" src="../jquery.validate.js"></script>
-	<!--<script type="text/javascript" src="../jquery.validate.ext.js"></script>-->
+	<script type="text/javascript" src="../jquery.validate.ext.js"></script>
 	<script type="text/javascript" src="../additional-methods.js"></script>
 	<script type="text/javascript" src="test.js"></script>
 	<script type="text/javascript" src="methods.js"></script>
@@ -51,6 +51,12 @@
 			<input class="{required:true,minLength:2}" title="buga" name="firstname" id="firstname" />
 			<label id="errorFirstname" for="firstname" class="error">error for firstname</label>
 			<input class="{required:true}" title="buga" name="lastname" id="lastname" />
+		</form>
+		
+		<form id="testForm1clean">
+			<input title="buga" name="firstname" id="firstnamec" />
+			<label id="errorFirstname" for="firstname" class="error">error for firstname</label>
+			<input title="buga" name="lastname" id="lastnamec" />
 		</form>
 		
 		<form id="userForm">

@@ -472,7 +472,7 @@ jQuery.extend(jQuery.validator, {
 	 * Converts a simple string to a {string: true} rule, e.g., "required" to
 	 * {required:true}
 	 */
-	normalizeRules: function(data) {
+	normalizeFlatRule: function(data) {
 		if( typeof data == "string" ) {
 			var transformed = {};
 			transformed[data] = true;
@@ -584,7 +584,7 @@ jQuery.extend(jQuery.validator, {
 		 */
 		numberOfInvalids: function() {
 			var count = 0;
-			for ( i in this.invalid )
+			for ( var i in this.invalid )
 				count++;
 			return count;
 		},
@@ -978,9 +978,15 @@ jQuery.extend(jQuery.validator, {
 				if ( this.checkable(element) )
 					return this.getLength(value, element) > 0;
 			default:
-				return value.length > 0;
+				return value.length > 0// && value != element.defaultValue;
 			}
 		},
+		
+		/*
+		required_nodefault: function(value, element) {
+			return value.length > 0 && value != element.defaultValue;
+		},
+		*/
 		
 		remote: function(value, element, param) {
 			if ( this.optional(element) )

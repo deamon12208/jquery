@@ -263,7 +263,7 @@ test("rules() - internal - input", function() {
 	var rule = v.rules(element);
 	equals( "required", rule[0].method );
 	equals( true, rule[0].parameters );
-	equals( "minLength", rule[1].method );
+	equals( "minlength", rule[1].method );
 	equals( 2, rule[1].parameters );
 });
 
@@ -278,10 +278,10 @@ test("rules() - internal - select", function() {
 
 test("rules() - external", function() {
 	expect( 4 );
-	var element = $('#firstname')[0];
-	var v = $('#testForm1').validate({
+	var element = $('#text1')[0];
+	var v = $('#form').validate({
 		rules: {
-			firstname: {date: true, min: 5}
+			action: {date: true, min: 5}
 		}
 	});
 	var rule = v.rules(element);
@@ -301,10 +301,10 @@ test("rules() - external - complete form", function() {
 		ok( true, "method executed" );
 		return true;
 	});
-	var element = $('#firstname')[0];
-	var v = $('#testForm1').validate({
+	var element = $('#text1')[0];
+	var v = $('#form').validate({
 		rules: {
-			firstname: {verifyTest: true}
+			action: {verifyTest: true}
 		}
 	});
 	v.form();
@@ -322,13 +322,13 @@ test("rules() - internal - input", function() {
 	equals( true, rule[0].parameters );
 	equals( "number", rule[1].method );
 	equals( true, rule[1].parameters );
-	equals( "rangeLength", rule[2].method );
+	equals( "rangelength", rule[2].method );
 	equals( 2, rule[2].parameters[0] );
 	equals( 8, rule[2].parameters[1] );
 });
 
 test("rules(), merge min/max to range, minlength/maxlength to rangelength", function() {
-	var v = $("#testForm1").validate({
+	var v = $("#testForm1clean").validate({
 		rules: {
 			firstname: {
 				min: 5,
@@ -340,12 +340,12 @@ test("rules(), merge min/max to range, minlength/maxlength to rangelength", func
 			}
 		}
 	});
-	var rangeRules = v.rules($("#firstname")[0]);
+	var rangeRules = v.rules($("#firstnamec")[0]);
 	equals( "range", rangeRules[0].method );
 	equals( 5, rangeRules[0].parameters[0] );
 	equals( 12, rangeRules[0].parameters[1] );
 	
-	var lengthRules = v.rules($("#lastname")[0]);
+	var lengthRules = v.rules($("#lastnamec")[0]);
 	equals( "rangelength", lengthRules[0].method );
 	equals( 2, lengthRules[0].parameters[0] );
 	equals( 8, lengthRules[0].parameters[1] );
@@ -353,17 +353,17 @@ test("rules(), merge min/max to range, minlength/maxlength to rangelength", func
 
 test("rules(), evaluate dynamic parameters", function() {
 	expect(3);
-	var v = $("#testForm1").validate({
+	var v = $("#testForm1clean").validate({
 		rules: {
 			firstname: {
 				min: function(element) {
-					equals( $("#firstname")[0], element );
+					equals( $("#firstnamec")[0], element );
 					return 12;
 				}
 			}
 		}
 	});
-	var rules = v.rules($("#firstname")[0]);
+	var rules = v.rules($("#firstnamec")[0]);
 	equals( "min", rules[0].method );
 	equals( 12, rules[0].parameters );
 });

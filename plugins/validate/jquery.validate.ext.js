@@ -37,14 +37,15 @@ $.extend($.validator, {
 		
 		for (method in $.validator.methods) {
 			var value = $element.attr(method);
-			if (value !== '') {
+			// allow 0 but neither undefined nor empty string
+			if (value !== undefined && value !== '') {
 				rules[method] = value;
 			}
 		}
-		
-		// maxlength may be returned as -1 for text inputs
-		if (rules.maxlength && rules.maxlength == -1) {
+		// maxlength may be returned as -1 and 2147483647 (IE) for text inputs
+		if (rules.maxlength && (rules.maxlength == -1 || rules.maxlength == 2147483647)) {
 			delete rules.maxlength;
+			delete rules.maxLength;
 		}
 		
 		return rules;
@@ -63,12 +64,12 @@ $.extend($.validator, {
 		var rules = {};
 		var validator = $.data(element.form, 'validator');
 		if (validator.settings.rules) {
-			rules = validator.settings.rules[element.name] || {};
+			rules = $.validator.normalizeFlatRule(validator.settings.rules[element.name]) || {};
 		}
 		return rules;
 	},
 	
-	normalizeRules: function(rules) {
+	normalizeRules: function(rules, element) {
 		// convert deprecated rules
 		$.each({
 			minLength: 'minlength',
@@ -84,6 +85,11 @@ $.extend($.validator, {
 			}
 		});
 		
+		// evaluate parameters
+		$.each(rules, function(rule, parameter) {
+			rules[rule] = $.isFunction(parameter) ? parameter(element) : parameter;
+		});
+		
 		// clean number parameters
 		$.each(['minlength', 'maxlength', 'min', 'max'], function() {
 			if (rules[this]) {
@@ -92,7 +98,7 @@ $.extend($.validator, {
 		});
 		$.each(['rangelength', 'range'], function() {
 			if (rules[this]) {
-				rules[this] = [Number(rules[this[0]]), Number(rules[this[1]])];
+				rules[this] = [Number(rules[this][0]), Number(rules[this][1])];
 			}
 		});
 		
@@ -119,14 +125,14 @@ $.fn.rules = function() {
 		$.validator.classRules(element),
 		$.validator.attributeRules(element),
 		$.validator.staticRules(element)
-	));
+	), element);
 	
 	// convert from object to array
 	var rules = [];
 	$.each(data, function(method, value) {
 		rules.push({
 			method: method,
-			parameters: $.isFunction(value) ? value(element) : value
+			parameters: value
 		});
 	});
 	return rules;

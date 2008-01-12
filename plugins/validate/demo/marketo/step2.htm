@@ -18,6 +18,7 @@
 <script src="../../lib/jquery.ajaxQueue.js" type="text/javascript"></script>
 <script src="../../lib/jquery.delegate.js" type="text/javascript"></script>
 <script src="../../jquery.validate.js" type="text/javascript"></script>
+<script src="../../jquery.validate.ext.js" type="text/javascript"></script>
 
 <script type="text/javascript" src="jquery.maskedinput.js"></script>
 <script type="text/javascript" src="mktSignup.js"></script>
@@ -66,7 +67,7 @@
   <!-- start main content  -->
   <div class="main-content resize">
 
-  <div class="action-container" style="display:none;" rel="#"></div>
+  <div class="action-container" style="display:none;"></div>
 
 
 <h1>Step 2 of 2</h1>
@@ -75,7 +76,7 @@
 </p>
 <br clear="all" />
 <div>
-  <form id="billingForm" type="actionForm" action="" method="get" >
+  <form id="billingForm" action="" method="get" >
 
     <div class="error" style="display:none;">
       <img src="images/warning.gif" alt="Warning!" width="24" height="24" style="float:left; margin: -5px 10px 0px 0px; " />
@@ -88,7 +89,7 @@
         <td class="field" style="font-weight: normal">
           <div class="billingAddressControl">
 
-            <input type="checkbox" id="bill_to_co" name="bill_to_co" class="toggleCheck" checked="checked" style="width: auto;" tabIndex="1" />
+            <input type="checkbox" id="bill_to_co" name="bill_to_co" class="toggleCheck" checked="checked" style="width: auto;" tabindex="1" />
             <label for="bill_to_co" style="cursor:pointer">Same as Company Address</label>
           </div>
         </td>
@@ -100,44 +101,44 @@
               <tr>
                 <td class="label"><label for="bill_first_name">First Name:</label></td>
                 <td class="field">
-                  <input  maxlength="40" class="{required:true}" name="bill_first_name" size="20" type="text" tabIndex="2" value="" />
+                  <input  maxlength="40" class="required" name="bill_first_name" size="20" type="text" tabindex="2" value="" />
                 </td>
               </tr>
               <tr>
                 <td class="label"><label for="bill_last_name">Last Name:</label></td>
                 <td class="field">
-                  <input  maxlength="40" class="{required:true}" name="bill_last_name" size="20" type="text" tabIndex="3" value="" />
+                  <input  maxlength="40" class="required" name="bill_last_name" size="20" type="text" tabindex="3" value="" />
                 </td>
               </tr>
               <tr>
                 <td class="label"><label for="bill_email">Email:</label></td>
                 <td class="field">
-                  <input  maxlength="40" class="{required:true,email:true,remote:'emails.php'}" name="email" size="20" type="text" tabIndex="4" value="" />
+                  <input  maxlength="40" class="required email" remote="emails.php" name="email" size="20" type="text" tabindex="4" value="" />
                   <div class="formError"></div>
                 </td>
               </tr>
               <tr>
                 <td class="label"><label for="bill_address1">Address:</label></td>
                 <td class="field">
-                  <input  maxlength="40" class="{required:true}" name="bill_address1" size="20" type="text" tabIndex="5" value="" />
+                  <input  maxlength="40" class="required" name="bill_address1" size="20" type="text" tabindex="5" value="" />
                 </td>
               </tr>
               <tr>
                 <td class="label"></td>
                 <td class="field">
-                  <input  maxlength="40" name="bill_address2" size="20" type="text" tabIndex="6" value="" />
+                  <input  maxlength="40" name="bill_address2" size="20" type="text" tabindex="6" value="" />
                 </td>
               </tr>
               <tr>
                 <td class="label"><label for="bill_city">City:</label></td>
                 <td class="field">
-                  <input  maxlength="40" class="{required:true}" name="bill_city" size="20" type="text" tabIndex="7" value="" />
+                  <input  maxlength="40" class="required" name="bill_city" size="20" type="text" tabindex="7" value="" />
                 </td>
               </tr>
               <tr>
                 <td class="label"><label for="bill_state">State:</label></td>
                 <td class="field">
-                  <select id="bill_state" class="{required:true}" name="bill_state" style="margin-left: 4px;" tabIndex="8">
+                  <select id="bill_state" class="required" name="bill_state" style="margin-left: 4px;" tabindex="8">
 					<option value="">Choose State</option>
                     <option value="AL">Alabama</option><option value="AK">Alaska</option><option value="AZ">Arizona</option><option value="AR">Arkansas</option><option value="CA">California</option><option value="CO">Colorado</option><option value="CT">Connecticut</option><option value="DE">Delaware</option><option value="FL">Florida</option><option value="GA">Georgia</option><option value="HI">Hawaii</option><option value="ID">Idaho</option><option value="IL">Illinois</option><option value="IN">Indiana</option><option value="IA">Iowa</option><option value="KS">Kansas</option><option value="KY">Kentucky</option><option value="LA">Louisiana</option><option value="ME">Maine</option><option value="MD">Maryland</option><option value="MA">Massachusetts</option><option value="MI">Michigan</option><option value="MN">Minnesota</option><option value="MS">Mississippi</option><option value="MO">Missouri</option><option value="MT">Montana</option><option value="NE">Nebraska</option><option value="NV">Nevada</option><option value="NH">New Hampshire</option><option value="NJ">New Jersey</option><option value="NM">New Mexico</option><option value="NY">New York</option><option value="NC">North Carolina</option><option value="ND">North Dakota</option><option value="OH">Ohio</option><option value="OK">Oklahoma</option><option value="OR">Oregon</option><option value="PA">Pennsylvania</option><option value="RI">Rhode Island</option><option value="SC">South Carolina</option><option value="SD">South Dakota</option><option value="TN">Tennessee</option><option value="TX">Texas</option><option value="UT">Utah</option><option value="VT">Vermont</option><option value="VA">Virginia</option><option value="WA">Washington</option><option value="WV">West Virginia</option><option value="WI">Wisconsin</option><option value="WY">Wyoming</option>
                   </select>
@@ -147,14 +148,14 @@
               <tr>
                 <td class="label"><label for="bill_zip">Zip:</label></td>
                 <td class="field">
-                  <input  maxlength="10" class="{required:true} zipcode" name="bill_zip"  style="width: 100px" type="text" class="zipcode" tabIndex="9" value="" />
+                  <input  maxlength="10" class="required zipcode" name="bill_zip"  style="width: 100px" type="text" class="zipcode" tabindex="9" value="" />
                 </td>
               </tr>
 
               <tr>
                 <td class="label"><label for="bill_phone">Phone:</label></td>
                 <td class="field">
-                  <input  maxlength="14" class="{required:true} phone" name="bill_phone" style="width: 100px" type="text" class="phone" tabIndex="10" value="" />
+                  <input  maxlength="14" class="required phone" name="bill_phone" style="width: 100px" type="text" class="phone" tabindex="10" value="" />
                 </td>
               </tr>
             </table>
@@ -164,7 +165,7 @@
       <tr>
         <td class="label">Credit Card Type:</td>
         <td class="field">
-          <select id="cc_type" class="{required:true}" name="cc_type" class="creditCardType" tabIndex="11">
+          <select id="cc_type" class="required" name="cc_type" class="creditCardType" tabindex="11">
             <option value="">Choose Credit Card</option>
             <option value="amex">American Express</option>
             <option value="discover">Discover</option>
@@ -176,7 +177,7 @@
       <tr>
         <td class="label">Expiration:</td>
         <td class="field">
-          <select id="cc_exp_month" name="cc_exp_month" title="ExpirationMonth" tabIndex="12">
+          <select id="cc_exp_month" name="cc_exp_month" title="ExpirationMonth" tabindex="12">
             <option value="01">01 - Jan</option>
             <option value="02">02 - Feb</option>
             <option value="03">03 - Mar</option>
@@ -190,7 +191,7 @@
             <option value="11">11 - Nov</option>
             <option value="12">12 - Dec</option>
           </select>
-          <select id="cc_exp_year" name="cc_exp_year" title="ExpirationYear" tabIndex="13">
+          <select id="cc_exp_year" name="cc_exp_year" title="ExpirationYear" tabindex="13">
             <option value="2007">2007</option>
             <option value="2008" selected="selected">2008</option>
             <option value="2009">2009</option>
@@ -207,13 +208,13 @@
       <tr>
         <td class="label"><label for="credit_card">Credit Card Number:</label></td>
         <td class="field">
-          <input maxlength="40" id="creditcard" class="{required:true}" name="credit_card" size="20" type="text" tabIndex="14" />
+          <input maxlength="40" id="creditcard" class="required" name="credit_card" size="20" type="text" tabindex="14" />
         </td>
       </tr>
       <tr>
         <td class="label"><label for="cc_cvv">Security Code:</label></td>
         <td class="field">
-          <input id="ccNumber" class="{required:true}" maxlength="4" name="cc_cvv" style="width: 30px;" type="text" style="vertical-align: top;" tabIndex="16" value="" />
+          <input id="ccNumber" class="required" maxlength="4" name="cc_cvv" style="width: 30px;" type="text" style="vertical-align: top;" tabindex="16" value="" />
         </td>
       </tr>
       <tr>
@@ -242,10 +243,6 @@
 <div id="col-left" class="nav-left-back empty resize" style="position: absolute; min-height: 450px;">
   <div class="col-left-header-tab" style="position: absolute;">Signup</div>
   <div class="nav-left">
-
-
-
-
 
 
   </div>

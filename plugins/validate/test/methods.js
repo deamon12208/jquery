@@ -189,6 +189,17 @@ test("required with dependencies", function() {
 	ok(!method.call( v, e[4].value, e[4], "input"), "Invalid checkbox" );
 });
 
+/*
+test("required_nodefault", function() {
+	var v = jQuery("#form").validate();
+	var method = $.validator.methods.required_nodefault;
+    	e = $('#text1')[0];
+	ok(!method.call( v, e.value, e), "Required, default not acceptable" );
+	e.value = "abc"
+	ok( method.call( v, e.value, e), "Required, other then default" );
+});
+*/
+
 test("minLength", function() {
 	var v = jQuery("#form").validate();
 	var method = $.validator.methods.minLength,
