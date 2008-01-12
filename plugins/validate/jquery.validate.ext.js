@@ -42,6 +42,7 @@ $.extend($.validator, {
 				rules[method] = value;
 			}
 		}
+		
 		// maxlength may be returned as -1 and 2147483647 (IE) for text inputs
 		if (rules.maxlength && (rules.maxlength == -1 || rules.maxlength == 2147483647)) {
 			delete rules.maxlength;
@@ -120,12 +121,13 @@ $.extend($.validator, {
 
 $.fn.rules = function() {
 	var element = this[0];
-	var data = $.validator.normalizeRules($.extend(
-		$.validator.metadataRules(element),
-		$.validator.classRules(element),
-		$.validator.attributeRules(element),
-		$.validator.staticRules(element)
-	), element);
+	var data = $.validator.normalizeRules(
+		$.extend(
+			$.validator.metadataRules(element),
+			$.validator.classRules(element),
+			$.validator.attributeRules(element),
+			$.validator.staticRules(element)
+		), element);
 	
 	// convert from object to array
 	var rules = [];
