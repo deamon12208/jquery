@@ -36,14 +36,12 @@ additional options/callbacks:
 	- in combination with autocomplete (mustmatch company name, fill out address details, validate required)
 	- validate zip code in comparison to address, if match and state is missing, fill out state
 - strong password check/integration: http://phiras.wordpress.com/2007/04/08/password-strength-meter-a-jquery-plugin/
-- add/modify onkeyup option: true - immediate, false - none, default - filtered
 
 - custom-methods-demo.html enable summary container, currently broken, is updated too often
 - stop firefox password manager to popup before validation - check mozilla bug tracker?
 
  Examples:
  - wordpress comment form, make it a drop-in method
- - ajax: captcha validation ( http://psyrens.com/captcha/ )
  - ajaxForm() integration
  - ajaxSubmit with rules-option, more/less options to ajaxSubmit
  - watermark integration http://digitalbush.com/projects/watermark-input-plugin

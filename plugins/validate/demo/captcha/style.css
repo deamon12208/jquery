@@ -115,6 +115,14 @@ fieldset label {
 	display: block;
 }
 
+fieldset label.error {
+	color: red;	
+}
+
+fieldset label.valid {
+	color: green;
+}
+
 fieldset div#captchaimage {
 	float: left;
 	margin-right: 15px;

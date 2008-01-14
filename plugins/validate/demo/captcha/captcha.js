@@ -18,6 +18,9 @@ $(function(){
 		submitHandler: function() {
 			alert("Correct captcha!");
 		},
+		success: function(label) {
+			label.addClass("valid").text("Valid captcha!")
+		},
 		onkeyup: false
 	});
 	

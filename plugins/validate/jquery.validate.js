@@ -290,7 +290,7 @@ jQuery.extend(jQuery.fn, {
 		if( !data )
 			return [];
 		var rules = [];
-		data = jQuery.validator.normalizeRules(data);
+		data = jQuery.validator.normalizeFlatRule(data);
 		if (data.min && data.max) {
 			data.range = [data.min, data.max];
 			delete data.min;

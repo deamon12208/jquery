@@ -11,7 +11,7 @@ else
 	$str = $_SESSION['captcha_id'];
 
 // Set the content type
-header('Content-type: image/png');
+//header('Content-type: image/png');
 header('Cache-control: no-cache');
 
 // Create an image from button.png
