@@ -196,8 +196,10 @@ $.fn.extend({
 			var clickedActive = clicked[0] == active[0];
 			
 			// if animations are still active, or the active header is the target, ignore click
-			if(running || (settings.alwaysOpen && clickedActive) || !clicked.is(settings.header))
+			if (running || (settings.alwaysOpen && clickedActive))
 				return false;
+			if (!clicked.is(settings.header))
+				return;
 
 			// switch classes
 			active.parent().andSelf().toggleClass(settings.selectedClass);
