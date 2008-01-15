@@ -10,6 +10,7 @@
  *   * support for saving object properties as row attributes
  * * advanced querying of table rows
  *
+ * plugin dependent on lib/iterator.js (included in tarball)
  * <code>
  *
  * <table>
@@ -97,29 +98,15 @@ jQuery.table = function(selector){
 }
 
 jQuery.fn.table.prototype = jQuery.fn.table.fn = {
-  isTrue : function(val){
-    return val === true || val !== false && val !== null && val !== undefined
-  },
-  // map with null values filtered out, throws on undefined
-  // [a] (a,i -> b) -> [b]
-  map : function( arr, fn ){
-    var result = [];
-    for(var i=0; i < arr.length; i++) {
-      var maybe = fn(arr[i], i);
-      if( maybe === undefined ) throw("map callback returned undefined");
-      if( maybe !== null ) result.push( maybe );
-    }
-    return result;
-  },
   //$: null, // constructor fills this in!
-
+  
   table: function(){return this},
 
   filter_query: function(obj, query ){
     for( var i in query ) {
       var qv = query[i], ov = obj[i];
 
-      if(typeof(qv) == "function"){ if( this.isTrue(qv(ov)) ) return true }
+      if(typeof(qv) == "function"){ if( isTrue(qv(ov)) ) return true }
       else if ( ov === qv ) return true;
     }
     return false;
@@ -156,7 +143,7 @@ jQuery.fn.table.prototype = jQuery.fn.table.fn = {
   // given a th name, return the index of the column
   i: function(text){
     var f = first( this.titles(), function(t,i){ if( t == text ) return i; } );
-    if( this.isTrue(f) ) return f;
+    if( isTrue(f) ) return f;
     throw("could not find column title: " + text );
   },
 
@@ -368,11 +355,11 @@ jQuery.fn.row.genericRowProperties = function(type){
     var attrs = obj || {};
     var a_filter = function(i,attr){
       var v = attr.value;
-      if( $.fn.table.prototype.isTrue(v) ) { attrs[ attr.name ] = v; }
+      if( isTrue(v) ) { attrs[ attr.name ] = v; }
     }
     var a_filter_fields = function(i,attr){
       var v = attr.value;
-      if( $.fn.table.prototype.isTrue(v) ) {
+      if( isTrue(v) ) {
         var n = attr.name;
         if( fields[n] ) { attrs[ n ] = v; }
       }
