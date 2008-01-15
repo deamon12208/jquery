@@ -1,18 +1,25 @@
-css references
---------------
-- http://test5.caribmedia.com/CSS/Secrets/members/michiel/floating-forms.html
-- http://paularmstrongdesigns.com/projects/awesomeform/
-- http://dnevnikeklektika.com/uni-form/
+1.2
+---
 
-other stuff
------------
+- integrate, test and document Scott's rules modules
+- add test for subformRequired
+- document invalidHandler
+- oninvalid/invalidSubmitHandler: called after a form is validated on submit and its invalid
+- document all those event options
+- is that element == lastElement check in the onblur handler really useful?
+- custom-methods-demo.html enable summary container, currently broken, is updated too often
+
+scheduled
+---------
+
+- css references
+ - http://test5.caribmedia.com/CSS/Secrets/members/michiel/floating-forms.html
+ - http://paularmstrongdesigns.com/projects/awesomeform/
+ - http://dnevnikeklektika.com/uni-form/
 
 - consider validation on page load, disabling required-checks
-- check value != defaultValue in required, making defaultValue invalid
-- test and document Scott's rules modules
 - completely rework showErrors: manually settings errors is currently extremely flawed and utterly useless, eg. errors disappear if some other validation is triggered
 - add custom event to remote validation for adding more parameters
-- add custom events for form and elements instead of more callbacks
 
 - document focusInvalid()
 - document validation lifecycle: setup (add event handlers), run validation (prepare form, validate elements, display errors/submit form)
@@ -20,24 +27,17 @@ other stuff
 	 
 - AND depedency: specify multiple expressions as an array
 
-additional options/callbacks:
-- onsubmit: Boolean, default true - validate on form submit (similar to onkeyup/onblur)
-- beforeValidation: Callback, called before doing any validation
-- beforeSubmit: Callback, called before submitting the form (default submit or calling submitHandler, if specified) 
+- add custom events for form and elements instead of more callbacks (additional options/callbacks)
+ - onsubmit: Boolean, default true - validate on form submit (similar to onkeyup/onblur)
+ - beforeValidation: Callback, called before doing any validation
+ - beforeSubmit: Callback, called before submitting the form (default submit or calling submitHandler, if specified) 
 
-- add test for subformRequired
-- document invalidHandler
-- document all those event options
-- is that element == lastElement check in the onblur handler really useful?
-
-- oninvalid/invalidSubmitHandler: called after a form is validated on submit and its invalid
 - animations!!
 - ajax validation:
 	- in combination with autocomplete (mustmatch company name, fill out address details, validate required)
 	- validate zip code in comparison to address, if match and state is missing, fill out state
 - strong password check/integration: http://phiras.wordpress.com/2007/04/08/password-strength-meter-a-jquery-plugin/
 
-- custom-methods-demo.html enable summary container, currently broken, is updated too often
 - stop firefox password manager to popup before validation - check mozilla bug tracker?
 
  Examples:
@@ -45,7 +45,7 @@ additional options/callbacks:
  - ajaxForm() integration
  - ajaxSubmit with rules-option, more/less options to ajaxSubmit
  - watermark integration http://digitalbush.com/projects/watermark-input-plugin
- - datepicker integration (see dobis)
+ - datepicker integration
  - timepicker integration ( http://labs.perifer.se/timedatepicker/ ) 
  - integration with CakePHP ( https://trac.cakephp.org/ticket/2359 )
  - integration with tabs: http://www.netix.sk/forms/test.html 

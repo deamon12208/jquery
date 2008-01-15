@@ -978,15 +978,9 @@ jQuery.extend(jQuery.validator, {
 				if ( this.checkable(element) )
 					return this.getLength(value, element) > 0;
 			default:
-				return value.length > 0// && value != element.defaultValue;
+				return value.length > 0;
 			}
 		},
-		
-		/*
-		required_nodefault: function(value, element) {
-			return value.length > 0 && value != element.defaultValue;
-		},
-		*/
 		
 		remote: function(value, element, param) {
 			if ( this.optional(element) )
