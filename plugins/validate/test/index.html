@@ -204,6 +204,18 @@
 			<input id="v2-i6" name="v2-i6" class="required customMethod2 {maxlength: 5}" minlength="2" />
 			<input id="v2-i7" name="v2-i7" />
 		</form>
+		
+		
+		<form id="subformRequired">
+			<div class="billingAddressControl">
+            	<input type="checkbox" id="bill_to_co" name="bill_to_co" class="toggleCheck" checked="checked" style="width: auto;" tabindex="1" />
+            	<label for="bill_to_co" style="cursor:pointer">Same as Company Address</label>
+          	</div>
+			<div id="subform">
+				<input  maxlength="40" class="required" name="bill_first_name" size="20" type="text" tabindex="2" value="" />
+			</div>
+			<input id="co_name" class="required" maxlength="40" name="co_name" size="20" type="text" tabindex="1" value="" />
+		</form>
 	</div>
 	
 	<ol id="tests"></ol>

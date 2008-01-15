@@ -427,7 +427,7 @@ test("formatAndAdd", function() {
 	var v = $("#form").validate();
 	var fakeElement = { form: { id: "foo" }, name: "bar" };
 	v.formatAndAdd(fakeElement, {method: "maxLength", parameters: 2})
-	equals( "Please enter a value no longer than 2 characters.", v.errorList[0].message );
+	equals( "Please enter no more than 2 characters.", v.errorList[0].message );
 	equals( "bar", v.errorList[0].element.name );
 	
 	v.formatAndAdd(fakeElement, {method: "rangeValue", parameters:[2,4]})
@@ -748,8 +748,8 @@ test("successlist", function() {
 
 test("messages", function() {
 	var m = jQuery.validator.messages;
-	equals( "Please enter a value no longer than 0 characters.", m.maxLength(0) );
-	equals( "Please enter a value of at least 1 characters.", m.minLength(1) );
+	equals( "Please enter no more than 0 characters.", m.maxLength(0) );
+	equals( "Please enter at least 1 characters.", m.minLength(1) );
 	equals( "Please enter a value between 1 and 2 characters long.", m.rangeLength([1, 2]) );
 	equals( "Please enter a value less than or equal to 1.", m.maxValue(1) );
 	equals( "Please enter a value greater than or equal to 0.", m.minValue(0) );
@@ -771,6 +771,19 @@ test("option: ignore", function() {
 	});
 	v.form();
 	equals( 1, v.size() );
+});
+
+test("option: subformRequired", function() {
+	var v = $("#subformRequired").validate({
+		subformRequired: function(element) {
+			return $("#bill_to_co").is(":checked") && element.parents("#subform").length;
+		}
+	});
+	v.form();
+	equals( 1, v.size() );
+	$("#bill_to_co").attr("checked", false);
+	v.form();
+	equals( 2, v.size() );
 });
 
 module("expressions");

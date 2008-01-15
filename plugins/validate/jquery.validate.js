@@ -1,5 +1,5 @@
 /*
- * jQuery form validation plug-in v1.2pre
+ * jQuery validation plug-in v1.2pre
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-validation/
  * http://docs.jquery.com/Plugins/Validation
@@ -11,203 +11,6 @@
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
- */
-
-/**
- * Validates a single form.
- *
- * The normal behaviour is to validate a form when a submit button is clicked or
- * the user presses enter when an input of that form is focused.
- *
- * It is also possible to validate each individual element of that form, eg. on blur or keyup.
- *
- * @example $("#myform").validate();
- * @before <form id="myform">
- *   <input name="firstname" class="{required:true}" />
- * </form>
- * @desc Validates a form on submit. Rules are read from metadata.
- *
- * @example $("input").validate({
- * 		event: "blur",
- *		success: "valid"
- * });
- * @desc Validates all input elements on blur event (when the element looses focus).
- * Adds a class "valid" to all error labels when the elements are valid and keeps showing
- * them.
- *
- * @example $("#myform").validate({
- *   submitHandler: function(form) {
- *   	$(form).ajaxSubmit();
- *   }
- * });
- * @desc Uses form plugin's ajaxSubmit method to handle the form submit, while preventing
- * the default submit.
- *
- * @example $("#myform").validate({
- *  event: "keyup"
- * 	rules: {
- * 		"first-name": "required",
- * 		age: {
- *			required: "#firstname:blank",
- * 			number: true,
- * 			minValue: 3
- * 		},
- * 		password: {
- * 			required: function() {
- * 				return $("#age").val() < 18;
- * 			},
- * 			minLength: 5,
- * 			maxLength: 32
- * 		}
- * 	},
- *  messages: {
- * 		password: {
- * 			required: function(element, validator) {
- * 				return "Your password is required because with " + $("#age").val() + ", you are not old enough yet."
- * 			},
- * 			minLength: "Please enter a password at least 5 characters long.",
- * 			maxLength: "Please enter a password no longer than 32 characters long."
- * 		},
- *		age: "Please specify your age as a number (at least 3)."
- * 	}
- * });
- * @desc Validate a form on submit and each element on keyup. Rules are specified
- * for three elements, and a message is customized for the "password" and the
- * "age" elements. Inline rules are ignored. The password is only required when the age is lower
- * than 18. The age is only required when the firstname is blank. Note that "first-name" is quoted, because
- * it isn't a valid javascript identifier. "first-name": "required" also uses a shortcut replacement for
- * { required: true }. That works for all trivial validations that expect no more than a boolean-true argument.
- * The required-message for password is specified as a function to use runtime customization.
- *
- * @example $("#myform").validate({
- *   errorClass: "invalid",
- *   errorLabelContainer: $("#messageBox"),
- *   wrapper: "li"
- * });
- * @before <ul id="messageBox"></ul>
- * <form id="myform" action="/login" method="post">
- *   <label>Firstname</label>
- *   <input name="fname" class="{required:true}" />
- *   <label>Lastname</label>
- *   <input name="lname" title="Your lastname, please!" class="{required:true}" />
- * </form>
- * @result <ul id="messageBox">
- *   <li><label for="fname" class="invalid">Please specify your firstname!</label></li>
- *   <li><label for="lname" class="invalid">Your lastname, please!</label></li>
- * </ul>
- * <form id="myform" action="/login" method="post">
- *   <label>Firstname</label>
- *   <input name="fname" class="{required:true} invalid" />
- *   <label>Lastname</label>
- *   <input name="lname" title="Your lastname, please!" class="{required:true} invalid" />
- * </form>
- * @desc All error labels are displayed inside an unordered list with the ID "messageBox", as specified by the jQuery object passed as errorContainer option. All error elements are wrapped inside an li element, to create a list of messages.
- *
- *
- * @example $("#myform").validate({
-errorPlacement: function(error, element) {
-	error.appendTo( element.parent("td").next("td") );
-},
- * 	success: function(label) {
- * 		label.text("ok!").addClass("success");
- * 	}
- * });
- * @before <form id="myform" action="/login" method="post">
-<table>
-	<tr>
-		<td><label>Firstname</label>
-		<td><input name="fname" class="{required:true}" value="Pete" /></td>
-		<td></td>
-	</tr>
-	<tr>
-		<td><label>Lastname</label></td>
-		<td><input name="lname" title="Your lastname, please!" class="{required:true}" /></td>
-		<td></td>
-	</tr>
-</table>
-</form>
- * @result <form id="myform" action="/login" method="post">
-<table>
-	<tr>
-		<td><label>Firstname</label>
-		<td><input name="fname" class="{required:true}" value="Pete" /></td>
-		<td><label for="fname" class="invalid success">ok!</label></td>
-	</tr>
-	<tr>
-		<td><label>Lastname</label></td>
-		<td><input name="lname" title="Your lastname, please!" class="{required:true}" /></td>
-		<td><label for="lname" class="invalid">Your lastname, please!</label></td>
-	</tr>
-</table>
- * </form>
- * @desc Validates a form on submit. Customizes the placement of the generated labels
- * by appending them to the next table cell. Displays "ok!" for valid elements and adds a class
- * "success" to the message (the class "invalid" is kept to identify the error label).
- *
- * @example $("#myform").validate({
- *   errorContainer: $("#messageBox1, #messageBox2"),
- *   errorLabelContainer: $("#messageBox1 ul"),
- *   wrapper: "li",
- * });
- * @before <div id="messageBox1">
- *   <h3>The are errors in your form!</h3>
- *   <ul></ul>
- * </div>
- * <form id="myform" action="/login" method="post">
- *   <label>Firstname</label>
- *   <input name="fname" class="{required:true}" />
- *   <label>Lastname</label>
- *   <input name="lname" title="Your lastname, please!" class="{required:true}" />
- * </form>
- * <div id="messageBox2">
- *   <h3>The are errors in your form, see details above!</h3>
- * </div>
- * @result <ul id="messageBox">
- *   <li><label for="fname" class="error">Please specify your firstname!</label></li>
- *   <li><label for="lname" class="error">Your lastname, please!</label></li>
- * </ul>
- * <form id="myform" action="/login" method="post">
- *   <label>Firstname</label>
- *   <input name="fname" class="{required:true} error" />
- *   <label>Lastname</label>
- *   <input name="lname" title="Your lastname, please!" class="{required:true} error" />
- * </form>
- * @desc Validates a form on submit. Similar to the above example, but with an additional
- * container for error messages. The elements given as the errorContainer are all shown
- * and hidden when errors occur. But the error labels themselve are added to the element(s)
- * given as errorLabelContainer, here an unordered list. Therefore the error labels are
- * also wrapped into li elements (wrapper option).
- *
- * @param Map options Optional settings to configure validation
- * @option String errorClass Use this class to look for existing error labels and add it toinvalid elements. Default: "error"
- * @option String wrapper Wrap error labels with the specified element, eg "li". Default: none
- * @option Boolean debug If true, the form is not submitted and certain errors are display on the console (requires Firebug or Firebug lite). Default: none
- * @option Boolean focusInvalid Focus the last active or first invalid element on submit or via validator.focusInvalid(). Default: true
- * @option Function submitHandler Callback for handling the actual submit when the form is valid. Gets the form as the only argmument. Default: normal form submit
- * @option Map<String, Object> messages Key/value pairs defining custom messages. Key is the name of an element, value the message to display for that element. Instead of a plain message	another map with specific messages for each rule can be used. Can be specified for one or more elements. Overrides the title attribute of an element. Each message can be a String or a Function. The Function is called with the element as the first and the validator as the second argument and must return a String to display as the message for that element. Default: none, the default message for the method is used.
- * @option Map<String, Object> rules Key/value pairs defining custom rules. Key is the ID or name (for radio/checkbox inputs) of an element, value is an object consisting of rule/parameter pairs, eg. {required: true, min: 3}. Once specified, metadata rules are completely ignored. Default: none, rules are read from metadata via metadata plugin
- * @option Boolean onsubmit Validate the form on submit. Set to false to use only other events for validation (option event). Default: true
- * @option String meta In case you use metadata for other plugins, too, you want to wrap your validation rules into their own object that can be specified via this option. Default: none
- * @option jQuery errorContainer Hide and show this container when validating. Default: none
- * @option jQuery errorLabelContainer Search and append error labels to this container, and show and hide it accordingly. Default: none
- * @option Function showErrors A custom message display handler. Gets the map of errors as the first argument and a refernce to the validator object as the second. You can trigger (in addition to your own messages) the default behaviour by calling the defaultShowErrors() method of the validator. Default: none, uses built-in message disply.
- * @option Function errorPlacement Used to customize placement of created error labels. First argument: jQuery object containing the created error label Second argument: jQuery object containing the invalid element Default: Places the error label after the invalid element
- * @option String errorElement The element to use for generated error messages. Default: "label"
- * @option String|Function success If specified, the error label is displayed to show a valid element. If a String is given, its added as a class to the label. If a Function is given, its called with the label (as a jQuery object) as its only argument. That can be used to add a text like "ok!". Default: none
- * @option Boolean focusCleanup If enabled, removes the errorClass from the invalid elements and hides all errors messages whenever the element is focused. Avoid combination with focusInvalid. Default: false
- * @option String|Element ignore Elements to ignore when validating, simply filtering them out. jQuery's not-method is used, therefore everything that is accepted by not() can be passed as this option. Inputs of type submit and reset are always ignored, so are disabled elements. Default: None
- * @opton Boolean onblur Validate elements on blur. If nothing is entered, all rules are skipped, except when the field was already marked as invalid. Default: true
- * @option Callback subformRequired Called to determine if a subform is required. An input is passed as the argument, and a boolean is expected to return: If it returns false, the input is part of an optional subform, therefore not required. Default: none
- * @option Function highlight Function that "highlights" errored fields. By default, it adds the current 'errorClass' setting
- *      directly to the errored element. Replace this with your own function when you want to modify how or which elements get
- *      highlighted when a field is invalid. Accepts two parameters: a reference to the error element, and the current errorClass.
- * @option Function unHighlight Function that undoes the highlighting by the above function. By default, it removes the current
- *      'errorClass' setting from the errored element. Accepts two parameters: a reference to the error element, and the
- *      current errorClass.
- *
- * @name validate
- * @type $.validator
- * @cat Plugins/Validate
  */
 
 jQuery.extend(jQuery.fn, {
@@ -443,10 +246,10 @@ jQuery.extend(jQuery.validator, {
 		creditcard: "Please enter a valid credit card.",
 		equalTo: "Please enter the same value again.",
 		accept: "Please enter a value with a valid extension.",
-		maxlength: jQuery.format("Please enter a value no longer than {0} characters."),
-		maxLength: jQuery.format("Please enter a value no longer than {0} characters."),
-		minlength: jQuery.format("Please enter a value of at least {0} characters."),
-		minLength: jQuery.format("Please enter a value of at least {0} characters."),
+		maxlength: jQuery.format("Please enter no more than {0} characters."),
+		maxLength: jQuery.format("Please enter no more than {0} characters."),
+		minlength: jQuery.format("Please enter at least {0} characters."),
+		minLength: jQuery.format("Please enter at least {0} characters."),
 		rangelength: jQuery.format("Please enter a value between {0} and {1} characters long."),
 		rangeLength: jQuery.format("Please enter a value between {0} and {1} characters long."),
 		rangeValue: jQuery.format("Please enter a value between {0} and {1}."),

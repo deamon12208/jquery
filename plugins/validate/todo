@@ -1,14 +1,13 @@
 1.2
 ---
 
-- document Scott's rules modules
-- add test for subformRequired
 - document invalidHandler
 - oninvalid/invalidSubmitHandler: called after a form is validated on submit and its invalid
 - document all those event options
 - is that element == lastElement check in the onblur handler really useful?
 - custom-methods-demo.html enable summary container, currently broken, is updated too often
 - add example for defaultValue-is-valid in marketo (url)
+- test higlight/unhighlight
 
 1.3
 ---------
