@@ -16,7 +16,6 @@
 	
 	// a custom method making the default value for companyurl ("http://") invalid, without displaying the "invalid url" message
 	jQuery.validator.addMethod("defaultInvalid", function(value, element) {
-		console.log(arguments, value, element.defaultValue, value != element.defaultValue)
 		return value != element.defaultValue;
 	}, "");
 	
