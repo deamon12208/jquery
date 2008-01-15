@@ -388,11 +388,18 @@ test("rules(), class and attribute combinations", function() {
 			ret = false;
 		ok( ret, msg + " expected: " + serialArray(b) + " result: " + serialArray(a) );
 	}
+	$.validator.addMethod("customMethod1", function() {
+		return false;
+	}, "");
+	$.validator.addMethod("customMethod2", function() {
+		return false;
+	}, "");
 	$("#v2").validate({
 		rules: {
 			'v2-i7': {
 				required: true,
-				minlength: 2
+				minlength: 2,
+				customMethod: true
 			}
 		}
 	});
@@ -400,9 +407,14 @@ test("rules(), class and attribute combinations", function() {
 	compare( $("#v2-i2").rules(), [{ method: "required", parameters: true }, { method: "email", parameters: true }]);
 	compare( $("#v2-i3").rules(), [{ method: "url", parameters: true }]);
 	compare( $("#v2-i4").rules(), [{ method: "required", parameters: true }, { method: "minlength", parameters: 2 }]);
-	compare( $("#v2-i5").rules(), [{ method: "required", parameters: true }, { method: "rangelength", parameters: [2, 5] }]);
-	compare( $("#v2-i6").rules(), [{ method: "required", parameters: true }, { method: "rangelength", parameters: [2, 5] }]);
-	compare( $("#v2-i7").rules(), [{ method: "required", parameters: true }, { method: "minlength", parameters: 2 }]);
+	compare( $("#v2-i5").rules(), [{ method: "required", parameters: true }, { method: "customMethod1", parameters: "123" }, { method: "rangelength", parameters: [2, 5] }]);
+	compare( $("#v2-i6").rules(), [{ method: "required", parameters: true }, { method: "customMethod2", parameters: true }, { method: "rangelength", parameters: [2, 5] }]);
+	compare( $("#v2-i7").rules(), [{ method: "required", parameters: true }, { method: "minlength", parameters: 2 }, { method: "customMethod", parameters: true }]);
+	
+	delete $.validator.methods.customMethod1;
+	delete $.validator.messages.customMethod1;
+	delete $.validator.methods.customMethod2;
+	delete $.validator.messages.customMethod2;
 });
 
 test("defaultMessage(), empty title is ignored", function() {
