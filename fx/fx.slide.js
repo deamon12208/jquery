@@ -24,12 +24,12 @@
       animation[ref] = (mode == 'show' ? (motion == 'pos' ? '+=' : '-=') : (motion == 'pos' ? '-=' : '+=')) + distance;
       
       // Animate
-      el.animate(animation, o.speed, o.options.easing, function() {
+      el.animate(animation, { queue: false, duration: o.duration, easing: o.options.easing, complete: function() {
         if(mode == 'hide') el.hide(); // Hide
         $.ec.restore(el, props); $.ec.removeWrapper(el); // Restore
         if(o.callback) o.callback.apply(this, arguments); // Callback
         el.dequeue();
-      });
+      }});
       
     });
     

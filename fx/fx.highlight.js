@@ -20,12 +20,12 @@
       if (mode == "hide") animation['opacity'] = 0;
       
       // Animate
-      el.animate(animation, o.speed, o.options.easing, function() { //Animate
+      el.animate(animation, { queue: false, duration: o.duration, easing: o.options.easing, complete: function() {
         if(mode == "hide") el.hide();
         $.ec.restore(el, props);
         if(o.callback) o.callback.apply(this, arguments);
         el.dequeue();
-      });
+      }});
       
     });
     
