@@ -164,8 +164,13 @@
 		drag: function(e) {
 
 			var el = this.helper, o = this.options;
+			
 			var change = function(a,b) {
-				var mod = (e['page'+(/(top|height)/.test(a) ? 'Y' : 'X')] - o.startPosition[(/(top|height)/.test(a) ? 'top' : 'left')]) * (b ? -1 : 1);
+				//Avoid opera's syntax bug
+				var page = 'page' + (/(top|height)/.test(a) ? 'Y' : 'X'),
+						startPos = (/(top|height)/.test(a) ? 'top' : 'left');
+				
+				var mod = (e[page] - o.startPosition[startPos]) * (b ? -1 : 1);
 				el.css(a, o['current'+(/(height|width)/.test(a) ? 'Size' : 'Position')][a] - mod);
 			};
 			
