@@ -1,5 +1,5 @@
 /*
- * jQuery validation plug-in v1.2pre
+ * jQuery validation plug-in v1.2 Release Candidate 1
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-validation/
  * http://docs.jquery.com/Plugins/Validation

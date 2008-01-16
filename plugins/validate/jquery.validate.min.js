@@ -1,12 +1,12 @@
 /*
- * jQuery validation plug-in v1.2pre
+ * jQuery validation plug-in v1.2 Release Candidate 1
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-validation/
  * http://docs.jquery.com/Plugins/Validation
  *
  * Copyright (c) 2006 - 2008 Jörn Zaefferer
  *
- * $Id: jquery.validate.js 4461 2008-01-15 22:40:38Z joern.zaefferer $
+ * $Id: jquery.validate.js 4464 2008-01-16 17:49:02Z joern.zaefferer $
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
