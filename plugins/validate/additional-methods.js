@@ -148,3 +148,7 @@ jQuery.validator.addMethod("phone", function(phone_number, element) {
 	return this.optional(element) || phone_number.length > 9 &&
 		phone_number.match(/^(1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/);
 }, "Please specify a valid phone number");
+
+$.validator.addMethod("strippedminlength", function(value, element, param) {
+	return $(value).text().length >= param;
+}, $.format("Please enter at least {0} characters"));

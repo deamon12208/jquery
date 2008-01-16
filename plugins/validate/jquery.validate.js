@@ -117,36 +117,6 @@ jQuery.extend(jQuery.expr[":"], {
 	unchecked: "!a.checked"
 });
 
-/**
- * Simple string-templating, similar to Java's MessageFormat.
- *
- * Accepts a string template as the first argument. The second is optional:
- * If specified, it is used to replace placeholders in the first argument.
- *
- * It can be an Array of values or any other type, in which case only one value
- * is replaced.
- *
- * If the second argument is ommited, a function is returned that expects the value-argument
- * to return the formatted value (see example).
- *
- * @example jQuery.format("Please enter a value no longer than {0} characters.", 0)
- * @result "Please enter a value no longer than 0 characters."
- * @desc Formats a string with a single argument.
- *
- * @example jQuery.format("Please enter a value between {0} and {1}.", 0, 1)
- * @result "Please enter a value between 0 and 1."
- * @desc Formats a string with two arguments. Same as jQuery.format("...", [0, 1]);
- *
- * @example jQuery.format("Please enter a value no longer than {0} characters.")(0);
- * @result "Please enter a value no longer than 0 characters."
- * @desc jQuery.format is called at first without the second argument, returning a function that is called immediately
- * 		 with the value argument. Useful to defer the actual formatting to a later point without explicitly 
- *		 writing the function.
- *
- * @type String
- * @name jQuery.format
- * @cat Plugins/Validate
- */
 jQuery.format = function(source, params) {
 	if ( arguments.length == 1 ) 
 		return function() {
@@ -220,18 +190,6 @@ jQuery.extend(jQuery.validator, {
 		jQuery.extend( jQuery.validator.defaults, settings );
 	},
 
-	/**
-	 * Default messages for all default methods.
-	 *
-	 * Use addMethod() to add methods with messages.
-	 *
-	 * Replace these messages for localization.
-	 *
-	 * @property
-	 * @type String
-	 * @name jQuery.validator.messages
-	 * @cat Plugins/Validate
-	 */
 	messages: {
 		required: "This field is required.",
 		remote: "Please fix this field.",
@@ -291,7 +249,7 @@ jQuery.extend(jQuery.validator, {
 			}
 			jQuery.extend(this.submitted, this.errorMap);
 			this.invalid = jQuery.extend({}, this.errorMap);
-			this.settings.invalidHandler && this.settings.invalidHandler.call(this);
+			jQuery(this.currentForm).triggerHandler("invalid-form.validate", [this]);
 			this.showErrors();
 			return this.valid();
 		},
@@ -346,21 +304,6 @@ jQuery.extend(jQuery.validator, {
 			this.elements().removeClass( this.settings.errorClass );
 		},
 		
-		/**
-		 * Returns the number of invalid elements in the form.
-		 * 
-		 * @example $("#myform").validate({
-		 * 	showErrors: function() {
-		 * 		$("#summary").html("Your form contains " + this.numberOfInvalids() + " errors, see details below.");
-		 * 		this.defaultShowErrors();
-		 * 	}
-		 * });
-		 * @desc Specifies a custom showErrors callback that updates the number of invalid elements each
-		 * time the form or a single element is validated.
-		 * 
-		 * @name jQuery.validator.prototype.numberOfInvalids
-		 * @type Number
-		 */
 		numberOfInvalids: function() {
 			var count = 0;
 			for ( var i in this.invalid )
@@ -368,18 +311,6 @@ jQuery.extend(jQuery.validator, {
 			return count;
 		},
 		
-		/**
-		 * Hides all error messages in this form.
-		 * 
-		 * @example var validator = $("#myform").validate();
-		 * $(".cancel").click(function() {
-		 * 	validator.hideErrors();
-		 * });
-		 * @desc Specifies a custom showErrors callback that updates the number of invalid elements each
-		 * time the form or a single element is validated.
-		 * 
-		 * @name jQuery.validator.prototype.hideErrors
-		 */
 		hideErrors: function() {
 			this.addWrapper( this.toHide ).hide();
 		},
@@ -628,10 +559,6 @@ jQuery.extend(jQuery.validator, {
 		},
 	
 		depend: function(param, element) {
-			if ( this.settings.subformRequired ) {
-				if ( this.settings.subformRequired(jQuery(element)) )
-					return false; 
-			}
 			return this.dependTypes[typeof param]
 				? this.dependTypes[typeof param](param, element)
 				: true;
@@ -720,8 +647,8 @@ jQuery.extend(jQuery.validator, {
 			}
 		}
 		
-		// maxlength may be returned as -1 and 2147483647 (IE) for text inputs
-		if (rules.maxlength && (rules.maxlength == -1 || rules.maxlength == 2147483647)) {
+		// maxlength may be returned as -1, 2147483647 (IE) and 1024 (safari) for text inputs
+		if (rules.maxlength && /-1|2147483647|1024/.test(rules.maxlength)) {
 			delete rules.maxlength;
 			// deprecated
 			delete rules.maxLength;
@@ -796,10 +723,7 @@ jQuery.extend(jQuery.validator, {
 		return rules;
 	},
 	
-	/**
-	 * Converts a simple string to a {string: true} rule, e.g., "required" to
-	 * {required:true}
-	 */
+	// Converts a simple string to a {string: true} rule, e.g., "required" to {required:true}
 	normalizeRule: function(data) {
 		if( typeof data == "string" ) {
 			var transformed = {};
@@ -820,70 +744,6 @@ jQuery.extend(jQuery.validator, {
 
 	methods: {
 
-		/**
-		 * Return false if the element is empty.
-		 *
-		 * Works with all kind of text inputs, selects, checkboxes and radio buttons.
-		 *
-		 * To force a user to select an option from a select box, provide
-		 * an empty options like <option value="">Choose...</option>
-		 *
-		 * @example <input name="firstname" class="{required:true}" />
-		 * @desc Declares an input element that is required.
-		 *
-		 * @example <input id="other" type="radio" />
-		 * <input name="details" class="{required:'input[@name=other]:checked'}" />
-		 * @desc Declares an input element required, but only if a checkbox with name 'other' is checked.
-		 * In other words: As long 'other' isn't checked, the details field is valid.
-		 * Note: The expression is evaluated in the context of the current form. 
-		 *
-		 * @example jQuery("#myform").validate({
-		 * 	rules: {
-		 * 		details: {
-		 * 			required: function(element) {
-		 *				return jQuery("#other").is(":checked") && jQuery("#other2").is(":checked");
-		 *			}
-		 *		}
-		 * 	}
-		 * });
-		 * @before <form id="myform">
-		 * 	<input id="other" type="checkbox" />
-		 * 	<input id="other2" type="checkbox" />
-		 * 	<input name="details" />
-		 * </form>
-		 * @desc Declares an input element "details" required, but only if two other fields
-		 * are checked.
-		 *
-		 * @example <fieldset>
-		 * 	<legend>Family</legend>
-		 * 	<label for="family_single">
-		 * 		<input  type="radio" id="family_single" value="s" name="family" validate="required:true" />
-		 * 		Single
-		 * 	</label>
-		 * 	<label for="family_married">
-		 * 		<input  type="radio" id="family_married" value="m" name="family" />
-		 * 		Married
-		 * 	</label>
-		 * 	<label for="family_divorced">
-		 * 		<input  type="radio" id="family_divorced" value="d" name="family" />
-		 * 		Divorced
-		 * 	</label>
-		 * 	<label for="family" class="error">Please select your family status.</label>
-		 * </fieldset>
-		 * @desc Specifies a group of radio elements. The validation rule is specified only for the first
-		 * element of the group.
-		 *
-		 * @param String value The value of the element to check
-		 * @param Element element The element to check
-		 * @param Boolean|String|Function param A boolean "true" makes a field always required; An expression (String)
-		 * is evaluated in the context of the element's form, making the field required only if the expression returns
-		 * more than one element. The function is executed with the element as it's only argument: If it returns true,
-		 * the element is required.
-		 *
-		 * @name jQuery.validator.methods.required
-		 * @type Boolean
-		 * @cat Plugins/Validate/Methods
-		 */
 		// http://docs.jquery.com/Plugins/Validation/Methods/required
 		required: function(value, element, param) {
 			// check if dependency is met
@@ -940,46 +800,6 @@ jQuery.extend(jQuery.validator, {
 			return previous.valid;
 		},
 
-		/**
-		 * Return false, if the element is
-		 *
-		 * - some kind of text input and its value is too short
-		 *
-		 * - a set of checkboxes has not enough boxes checked
-		 *
-		 * - a select and has not enough options selected
-		 *
-		 * Works with all kind of text inputs, checkboxes and select.
-		 *
-		 * @example <input name="firstname" class="{minLength:5}" />
-		 * @desc Declares an optional input element with at least 5 characters (or none at all).
-		 *
-		 * @example <input name="firstname" class="{required:true,minLength:5}" />
-		 * @desc Declares an input element that must have at least 5 characters.
-		 *
-		 * @example <fieldset>
-		 * 	<legend>Spam</legend>
-		 * 	<label for="spam_email">
-		 * 		<input type="checkbox" id="spam_email" value="email" name="spam" validate="required:true,minLength:2" />
-		 * 		Spam via E-Mail
-		 * 	</label>
-		 * 	<label for="spam_phone">
-		 * 		<input type="checkbox" id="spam_phone" value="phone" name="spam" />
-		 * 		Spam via Phone
-		 * 	</label>
-		 * 	<label for="spam_mail">
-		 * 		<input type="checkbox" id="spam_mail" value="mail" name="spam" />
-		 * 		Spam via Mail
-		 * 	</label>
-		 * 	<label for="spam" class="error">Please select at least two types of spam.</label>
-		 * </fieldset>
-		 * @desc Specifies a group of checkboxes. To validate, at least two checkboxes must be selected.
-		 *
-		 * @param Number min
-		 * @name jQuery.validator.methods.minLength
-		 * @type Boolean
-		 * @cat Plugins/Validate/Methods
-		 */
 		// http://docs.jquery.com/Plugins/Validation/Methods/minlength
 		minlength: function(value, element, param) {
 			return this.optional(element) || this.getLength(value, element) >= param;
@@ -1000,36 +820,6 @@ jQuery.extend(jQuery.validator, {
 			return jQuery.validator.methods.maxlength.apply(this, arguments);
 		},
 		
-		/**
-		 * Return false, if the element is
-		 *
-	     * - some kind of text input and its value is too short or too long
-	     *
-	     * - a set of checkboxes has not enough or too many boxes checked
-	     *
-	     * - a select and has not enough or too many options selected
-	     *
-	     * Works with all kind of text inputs, checkboxes and selects.
-	     *
-		 * @example <input name="firstname" class="{rangeLength:[3,5]}" />
-		 * @desc Declares an optional input element with at least 3 and at most 5 characters (or none at all).
-		 *
-		 * @example <input name="firstname" class="{required:true,rangeLength:[3,5]}" />
-		 * @desc Declares an input element that must have at least 3 and at most 5 characters.
-		 *
-		 * @example <select id="cars" class="{required:true,rangeLength:[2,3]}" multiple="multiple">
-		 * 	<option value="m_sl">Mercedes SL</option>
-		 * 	<option value="o_c">Opel Corsa</option>
-		 * 	<option value="vw_p">VW Polo</option>
-		 * 	<option value="t_s">Titanic Skoda</option>
-		 * </select>
-		 * @desc Specifies a select that must have at least two but no more than three options selected.
-		 *
-	     * @param Array<Number> min/max
-	     * @name jQuery.validator.methods.rangeLength
-	     * @type Boolean
-	     * @cat Plugins/Validate/Methods
-	     */
 		// http://docs.jquery.com/Plugins/Validation/Methods/rangelength
 		rangelength: function(value, element, param) {
 			var length = this.getLength(value, element);

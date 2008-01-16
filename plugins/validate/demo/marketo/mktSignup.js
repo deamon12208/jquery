@@ -1,6 +1,6 @@
  $(document).ready(function(){
  	
-	jQuery.validator.addMethod("password", function( value, element, param ) {
+	jQuery.validator.addMethod("password", function( value, element ) {
 		var result = this.optional(element) || value.length >= 6 && /\d/.test(value) && /[a-z]/i.test(value);
 		if (!result) {
 			element.value = "";
@@ -19,26 +19,28 @@
 		return value != element.defaultValue;
 	}, "");
 	
+	jQuery.validator.addMethod("billingRequired", function(value, element) {
+		if ($("#bill_to_co").is(":checked"))
+			return $(element).parents(".subTable").length;
+		return !this.optional(element);
+	}, "");
+	
 	jQuery.validator.messages.required = "";
-	$("form").validate({
+	$("form").bind("invalid-form.validate", function(e, validator) {
+		var errors = validator.numberOfInvalids();
+		if (errors) {
+			var message = errors == 1
+				? 'You missed 1 field. It has been highlighted below'
+				: 'You missed ' + errors + ' fields.  They have been highlighted below';
+			$("div.error span").html(message);
+			$("div.error").show();
+		} else {
+			$("div.error").hide();
+		}
+	}).validate({
 		//focusInvalid: false,
 		//focusCleanup: true,
 		onkeyup: false,
-		subformRequired: function(input) {
-			return $("#bill_to_co").is(":checked") && input.parents(".subTable").length;
-		},
-		invalidHandler: function() {
-			var errors = this.numberOfInvalids();
-			if (errors) {
-				$("div.error").show();
-				var message = errors < 2
-					? 'You missed 1 field. It has been highlighted below'
-					: 'You missed ' + errors + ' fields.  They have been highlighted below';
-				$("div.error span").html(message);
-			} else {
-				$("div.error").hide();
-			}
-		},
 		submitHandler: function() {
 			$("div.error").hide();
 			alert("submit! use link below to go to the other step");

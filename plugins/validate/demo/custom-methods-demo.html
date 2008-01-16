@@ -26,13 +26,12 @@
 	};
 	
 	$().ready(function() {
-		var validator = $("#texttests").validate({
+		var validator = $("#texttests").bind("invalid-form.validate", function() {
+			$("#summary").html("Your form contains " + validator.numberOfInvalids() + " errors, see details below.");
+		}).validate({
 			debug: true,
 			errorElement: "em",
 			errorContainer: $("#warning, #summary"),
-			invalidHandler: function() {
-				$("#summary").html("Your form contains " + this.size() + " errors, see details below.");
-			},
 			errorPlacement: function(error, element) {
 				error.appendTo( element.parent("td").next("td") );
 			},

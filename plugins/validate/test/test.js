@@ -255,6 +255,37 @@ test("showErrors() - custom handler", function() {
 	v.form();
 });
 
+test("option: (un)highlight, default", function() {
+	expect(3);
+	$("#testForm1").validate();
+	var e = $("#firstname")
+	ok( !e.hasClass("error") );
+	e.valid()
+	ok( e.hasClass("error") );
+	e.val("hithere").valid()
+	ok( !e.hasClass("error") );
+});
+
+test("option: (un)highlight, custom", function() {
+	expect(6);
+	$("#testForm1").validate({
+		highlight: function(element, errorClass) {
+			equals( "invalid", errorClass );
+			$(element).hide();
+		},
+		unhighlight: function(element, errorClass) {
+			equals( "invalid", errorClass )
+			$(element).show();
+		},
+		errorClass: "invalid"
+	});
+	var e = $("#firstname")
+	ok( e.is(":visible") );
+	e.valid()
+	ok( !e.is(":visible") );
+	e.val("hithere").valid()
+	ok( e.is(":visible") );
+});
 
 test("rules() - internal - input", function() {
 	expect(4);
@@ -538,12 +569,11 @@ test("errorcontainer, show/hide only on submit", function() {
 	expect(12);
 	var container = $("#container");
 	var labelContainer = $("#labelcontainer");
-	var v = $("#testForm1").validate({
+	var v = $("#testForm1").bind("invalid-form.validate", function() {
+		ok( true, "invalid-form event triggered called" );
+	}).validate({
 		errorContainer: container,
 		errorLabelContainer: labelContainer,
-		invalidHandler: function() {
-			ok( true, "invalidHandler called" );
-		},
 		showErrors: function() {
 			container.html( jQuery.format("There are {0} errors in your form.", this.numberOfInvalids()) );
 			ok( true, "showErrors called" );
@@ -774,16 +804,20 @@ test("option: ignore", function() {
 });
 
 test("option: subformRequired", function() {
-	var v = $("#subformRequired").validate({
-		subformRequired: function(element) {
-			return $("#bill_to_co").is(":checked") && element.parents("#subform").length;
-		}
-	});
+	jQuery.validator.addMethod("billingRequired", function(value, element) {
+		if ($("#bill_to_co").is(":checked"))
+			return $(element).parents("#subform").length;
+		return !this.optional(element);
+	}, "");
+	var v = $("#subformRequired").validate();
 	v.form();
 	equals( 1, v.size() );
 	$("#bill_to_co").attr("checked", false);
 	v.form();
 	equals( 2, v.size() );
+	
+	delete $.validator.methods.billingRequired;
+	delete $.validator.messages.billingRequired;
 });
 
 module("expressions");
