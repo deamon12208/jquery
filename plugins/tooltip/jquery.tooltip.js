@@ -3,7 +3,7 @@
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-tooltip/
  *
- * Copyright (c) 2006 Jörn Zaefferer, Stefan Petre
+ * Copyright (c) 2006 JÃ¶rn Zaefferer, Stefan Petre
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -76,7 +76,7 @@
  * @name Tooltip
  * @type jQuery
  * @cat Plugins/Tooltip
- * @author Jörn Zaefferer (http://bassistance.de)
+ * @author JÃ¶rn Zaefferer (http://bassistance.de)
  */
  
 /**

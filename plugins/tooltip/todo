@@ -1,3 +1,4 @@
+* add demo: http://www.kentuckygolfing.com/gallery
 * add "bottom" and/or "right" classes to tooltip when moving tooltip at viewport borders, for displaying different backgrounds
 * add delay on hide
 * add stick on hover of tooltip (with track:false)
