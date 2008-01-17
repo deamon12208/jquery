@@ -81,7 +81,8 @@ function testNoWeekends() {
 function testIso8601Week() {
 	var weeks = [[new Date(2007, 12 - 1, 30), 52], [new Date(2007, 12 - 1, 31), 1],
 		[new Date(2008, 1 - 1, 1), 1], [new Date(2008, 1 - 1, 6), 1],
-		[new Date(2008, 1 - 1, 7), 2], [new Date(2008, 7 - 1, 10), 28],
+		[new Date(2008, 1 - 1, 7), 2], [new Date(2008, 3 - 1, 24), 13],
+		[new Date(2008, 3 - 1, 31), 14], [new Date(2008, 7 - 1, 10), 28],
 		[new Date(2008, 12 - 1, 28), 52], [new Date(2008, 12 - 1, 29), 1],
 		[new Date(2008, 12 - 1, 31), 1], [new Date(2009, 1 - 1, 1), 1],
 		[new Date(2009, 12 - 1, 27), 52], [new Date(2009, 12 - 1, 28), 53],
