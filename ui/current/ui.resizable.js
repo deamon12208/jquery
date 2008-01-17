@@ -13,12 +13,18 @@
 
 		//Initialize needed constants
 		var self = this;
+		
 		this.element = $(element);
+		
 		$.data(element, "ui-resizable", this);
 		this.element.addClass("ui-resizable");
 		
 		//Prepare the passed options
-		this.options = $.extend({}, options);
+		this.options = $.extend({
+			proxy: "proxy",
+			preventDefault: true
+		}, options);
+		
 		var o = this.options;
 
 		//Position the node
@@ -37,7 +43,13 @@
 			oel.css({ marginLeft: 0, marginTop: 0, marginRight: 0, marginBottom: 0});
 			
 			var b = [parseInt(oel.css('borderTopWidth')),parseInt(oel.css('borderRightWidth')),parseInt(oel.css('borderBottomWidth')),parseInt(oel.css('borderLeftWidth'))];
-
+			
+			//Prevent Safari textarea resize
+			if ($.browser.safari && o.preventDefault) oel.css('resize', 'none');
+			
+			o.proportionallyResize = o.proportionallyResize || [];
+			o.proportionallyResize.push(oel);
+			
 		} else {
 			var b = [0,0,0,0];	
 		}
@@ -47,6 +59,7 @@
 
 			if(o.handles == 'all') o.handles = 'n,e,s,w,se,sw,ne,nw';
 			var n = o.handles.split(","); o.handles = {};
+			
 			var insertions = {
 				n: 'top: '+b[0]+'px;',
 				e: 'right: '+b[1]+'px;'+(o.zIndex ? 'z-index: '+o.zIndex+';' : ''),
@@ -59,8 +72,9 @@
 			};
 			
 			for(var i=0; i<n.length;i++) {
-				this.element.append("<div class='ui-resizable-"+n[i]+" ui-resizable-handle' style='"+insertions[n[i]]+"'></div>");
-				o.handles[n[i]] = '.ui-resizable-'+n[i];
+				var dir = $.trim(n[i]);
+				this.element.append("<div class='ui-resizable-"+dir+" ui-resizable-handle' style='"+insertions[dir]+"'></div>");
+				o.handles[dir] = '.ui-resizable-'+dir;
 			}
 
 		}
@@ -99,6 +113,27 @@
 				options: this.options
 			};			
 		},
+		_renderProxy: function() {
+			var el = this.element;
+			
+			if(this.options.proxy) {
+				this.offset = el.offset();
+				this.helper = this.helper || $('<div></div>');
+				
+				this.helper.addClass(this.options.proxy).css({
+					width: el.outerWidth(),
+					height: el.outerHeight(),
+					position: 'absolute',
+					left: this.offset.left +'px',
+					top: this.offset.top +'px'
+				});
+				
+				this.helper.appendTo("body");
+						
+			} else {
+				this.helper = el;	
+			}
+		},
 		propagate: function(n,e) {
 			$.ui.plugin.call(this, n, [e, this.ui()]);
 			this.element.triggerHandler(n == "resize" ? n : "resize"+n, [e, this.ui()], this.options[n]);
@@ -115,23 +150,25 @@
 			this.disabled = true;
 		},
 		start: function(e) {
-
-			if(this.options.proxy) {
-				this.offset = this.element.offset();
-				this.helper = $('<div></div>').css({
-						width: this.element.outerWidth(),
-						height: this.element.outerHeight(),
-						position: 'absolute',
-						left: this.offset.left+'px',
-						top: this.offset.top+'px'
-					}).addClass(this.options.proxy).appendTo("body");	
-			} else {
-				this.helper = this.element;	
-			}
-
-			var axis = e.target.className.split(' ');
-			for(var i=0; i<axis.length; i++) { if(axis[i] != "ui-resizable-handle") this.options.axis = axis[i].split('-')[2]; }
-
+			
+			var iniPos = this.element.position(), ele = this.element;
+			
+			if (ele.is('.ui-draggable') || /absolute/.test(ele.css('position')))
+				ele.css({ position: 'absolute', top: iniPos['top'], left: iniPos['left'] });
+			
+			//Opera fixing relative position
+			if (/relative/.test(ele.css('position')) && $.browser.opera)
+				ele.css({ position: 'relative', top: 'auto', left: 'auto' });
+			
+			this._renderProxy();
+			
+			//Matching axis name
+			if (e.target && e.target.className)
+				var axis = e.target.className.match(/ui-resizable-(se|sw|ne|nw|n|e|s|w)/i);
+			
+			//Axis, default = se
+			this.options.axis = axis && axis[1] ? axis[1] : 'se';
+			
 			//Store needed variables
 			$.extend(this.options, {
 				currentSize: { width: this.element.outerWidth(), height: this.element.outerHeight() },
@@ -148,16 +185,41 @@
 			
 		},
 		stop: function(e) {			
-			
-			var o = this.options;
-			this.propagate("stop", e);		
 
+			var o = this.options;
+			
+			
 			if(o.proxy) {
+				
 				this.element.css({ width: this.helper.width() - o.currentSizeDiff.width, height: this.helper.height() - o.currentSizeDiff.height });
-				this.element.css({ top: (parseInt(this.element.css('top')) || 0) + (parseInt(this.helper.css('top')) - this.offset.top), left: (parseInt(this.element.css('left')) || 0) + (parseInt(this.helper.css('left')) - this.offset.left) });
+				
+				this.element.css({ 
+					top: (parseInt(this.element.css('top')) || 0) + (parseInt(this.helper.css('top')) - this.offset.top), 
+					left: (parseInt(this.element.css('left')) || 0) + (parseInt(this.helper.css('left')) - this.offset.left)
+				});
+				
+				// TODO
+				if (o.proportionallyResize && 
+						o.proportionallyResize.constructor == Array) {
+					
+					var prTrigger = function(x, prElement) {
+						prElement.css({ 
+							width: this.helper.width() - o.currentSizeDiff.width + "px",
+							height: this.helper.height() - o.currentSizeDiff.height + "px",
+							top: (parseInt(this.element.css('top')) || 0) + (parseInt(this.helper.css('top')) - this.offset.top), 
+							left: (parseInt(this.element.css('left')) || 0) + (parseInt(this.helper.css('left')) - this.offset.left)
+						});
+					}, that = this;
+					
+					$.each(o.proportionallyResize, function(x, prElement) {
+						prTrigger.apply(that, [x, prElement]);
+					});
+				}
+				
 				this.helper.remove();
 			}
 			
+			this.propagate("stop", e);	
 			return false;
 			
 		},
@@ -166,12 +228,17 @@
 			var el = this.helper, o = this.options;
 			
 			var change = function(a,b) {
-				//Avoid opera's syntax bug
-				var page = 'page' + (/(top|height)/.test(a) ? 'Y' : 'X'),
-						startPos = (/(top|height)/.test(a) ? 'top' : 'left');
+				//Parsing regex once, increase performance
+				var isTopHeight = /(top|height)/.test(a); 
 				
-				var mod = (e[page] - o.startPosition[startPos]) * (b ? -1 : 1);
-				el.css(a, o['current'+(/(height|width)/.test(a) ? 'Size' : 'Position')][a] - mod);
+				//Avoid opera's syntax bug
+				//Concatenation performance
+				var	curSizePos = ['current', (/(height|width)/.test(a) ? 'Size' : 'Position')].join(""),
+						pageAxis = ['page', (isTopHeight ? 'Y' : 'X')].join(""),
+						startPos = (isTopHeight ? 'top' : 'left');
+				
+				var mod = (e[pageAxis] - o.startPosition[startPos]) * (b ? -1 : 1);
+				el.css(a, o[curSizePos][a] - mod);
 			};
 			
 			//Change the height
@@ -184,7 +251,7 @@
 			if(o.maxHeight && curheight >= o.maxHeight) el.css('height', o.maxHeight);
 			
 			//Change the top position when picking a handle at north
-			if(/(n|ne|nw)/.test(o.axis)) change("top", 1);
+			if(/n|ne|nw/.test(o.axis)) change("top", 1);
 			
 			//Measure the new top position and correct against min/maxHeight
 			var curtop = parseInt(el.css('top'));
