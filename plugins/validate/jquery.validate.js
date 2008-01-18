@@ -392,11 +392,7 @@ jQuery.extend(jQuery.validator, {
 		check: function( element ) {
 			element = this.clean( element );
 			this.settings.unhighlight.call( this, element, this.settings.errorClass );
-			//var rules = this.rulesCache[ element.name ];
 			var rules = jQuery(element).rules();
-			// TODO assert that check is only called for elements with existing rules?
-			if (!rules)
-				return true;
 			for( var i = 0; rules[i]; i++) {
 				var rule = rules[i];
 				try {
@@ -408,7 +404,6 @@ jQuery.extend(jQuery.validator, {
 						return;
 					}
 					if( !result ) {
-						this.settings.highlight.call( this, element, this.settings.errorClass );
 						this.formatAndAdd( element, rule );
 						return false;
 					}
@@ -418,7 +413,6 @@ jQuery.extend(jQuery.validator, {
 					throw e;
 				}
 			}
-			// show the label for valid elements if success callback is configured
 			if ( rules.length )
 				this.successList.push(element);
 			return true;
@@ -472,6 +466,7 @@ jQuery.extend(jQuery.validator, {
 		defaultShowErrors: function() {
 			for ( var i = 0; this.errorList[i]; i++ ) {
 				var error = this.errorList[i];
+				this.settings.highlight.call( this, error.element, this.settings.errorClass );
 				this.showLabel( error.element, error.message );
 			}
 			if( this.errorList.length ) {
