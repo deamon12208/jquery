@@ -3,9 +3,11 @@
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
  *
  * $LastChangedDate$
- * $Rev$
+ * $Rev: 4480 $
  *
  * Version 0.1
+ *
+ * Requires Google Feeds API
  */
 
 (function($) {
