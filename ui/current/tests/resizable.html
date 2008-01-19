@@ -47,6 +47,10 @@ body
 .ui-resizable-ne { cursor: ne-resize; width: 8px; height: 8px; }
 .ui-resizable-nw { cursor: nw-resize; width: 8px; height: 8px; }
 
+.ui-wrapper{
+	/*background-color: #ccc;*/
+}
+
 #log {
 	right:0px;
 	top:0px;
@@ -64,13 +68,13 @@ body
 
 <div id="log">log</div>
 
-<div style='margin: 20px; background: #F0F1F3; height: 300px; width: 500px;'>
-<textarea id='textarea' style='width: 400px; height: 200px; border: 2px solid #F0F1F3; margin: 0px; padding: 10px;'>
-I was made resizable with this code only: $('#textarea').resizable();
-
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed leo. Proin commodo. Nullam nisl ipsum, sagittis sit amet, mattis id, aliquam ac, purus. Suspendisse dignissim lorem id odio. Duis tortor nisl, imperdiet placerat, accumsan eu, lacinia sit amet, mauris. Mauris tellus erat, ullamcorper in, faucibus ut, consectetuer quis, mi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean mollis lectus lacinia augue. Nam eget leo. Fusce magna. Etiam eros. Quisque eget dui. Donec fringilla, libero non rhoncus bibendum, nibh turpis varius orci, quis bibendum metus justo quis nibh. Proin blandit. Suspendisse feugiat consequat lectus. Etiam pharetra suscipit velit. Donec imperdiet quam sit amet erat pretium ullamcorper. Donec quis nisl vitae lacus accumsan faucibus. Vivamus velit turpis, tristique sit amet, malesuada id, molestie et, magna.
-Nullam blandit, odio rutrum sagittis consectetuer, metus nulla malesuada eros, sit amet aliquam sem leo at augue. Quisque gravida. In et augue ac neque ultricies dictum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Ut est ante, egestas eget, dignissim quis, elementum vel, nunc. Suspendisse potenti. Suspendisse mattis feugiat ipsum. Proin at lorem sit amet erat auctor pharetra. Vivamus sit amet augue. Pellentesque consequat ligula in erat. In aliquam porttitor nisl. Donec sed quam. Aliquam accumsan mi nec diam. Etiam imperdiet vehicula nisl. 
-</textarea>
+<div style='width: 300px; height: 200px; margin: 20px; position: relative;'>
+	<textarea id='textarea' style='width: 400px; height: 200px; border: 2px solid #F0F1F3; margin: 0px;'>
+	I was made resizable with this code only: $('#textarea').resizable();
+	
+	Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed leo. Proin commodo. Nullam nisl ipsum, sagittis sit amet, mattis id, aliquam ac, purus. Suspendisse dignissim lorem id odio. Duis tortor nisl, imperdiet placerat, accumsan eu, lacinia sit amet, mauris. Mauris tellus erat, ullamcorper in, faucibus ut, consectetuer quis, mi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean mollis lectus lacinia augue. Nam eget leo. Fusce magna. Etiam eros. Quisque eget dui. Donec fringilla, libero non rhoncus bibendum, nibh turpis varius orci, quis bibendum metus justo quis nibh. Proin blandit. Suspendisse feugiat consequat lectus. Etiam pharetra suscipit velit. Donec imperdiet quam sit amet erat pretium ullamcorper. Donec quis nisl vitae lacus accumsan faucibus. Vivamus velit turpis, tristique sit amet, malesuada id, molestie et, magna.
+	Nullam blandit, odio rutrum sagittis consectetuer, metus nulla malesuada eros, sit amet aliquam sem leo at augue. Quisque gravida. In et augue ac neque ultricies dictum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Ut est ante, egestas eget, dignissim quis, elementum vel, nunc. Suspendisse potenti. Suspendisse mattis feugiat ipsum. Proin at lorem sit amet erat auctor pharetra. Vivamus sit amet augue. Pellentesque consequat ligula in erat. In aliquam porttitor nisl. Donec sed quam. Aliquam accumsan mi nec diam. Etiam imperdiet vehicula nisl. 
+	</textarea>
 </div>
 
 <div style='width: 300px; height: 200px; margin: 20px; position: relative;'>
@@ -126,6 +130,11 @@ Nullam blandit, odio rutrum sagittis consectetuer, metus nulla malesuada eros, s
 <div id='resizeme3' style='width: 300px; height: 200px; border: 1px solid black; position: relative; position: absolute; bottom: 20px; right: 20px;'>
 	<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Absolute position with proxy (all directions enabled), ah, and I'm draggable, too!</div>
 </div>
+
+<div id='resizeme5' style='width: 300px; height: 200px; border: 1px solid black; position: relative; position: absolute; bottom: 20px; right: 550px;'>
+	<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'><b>Animated Resize</b><br>Absolute position with proxy (all directions enabled), ah, and I'm draggable, too!<br><br>
+		$('#resizable5').resizable({ <br>animate: { opacity:.5, fontSize: '0.8em' }, <br>duration: 'slow', <br>easing: 'swing' <br>});</div>
+</div>
 	
 <script type="text/javascript">
 if(!window.console) {
@@ -141,7 +150,7 @@ $(document).ready(function(){
 
 	$('#textarea').resizable({
 		proxy: "proxy",
-		handles: 'all',
+		handles: 'e,se,s',
 		containment: 'parent',
 		aspectRatio: 'preserve',
 		preventDefault: true
@@ -160,6 +169,7 @@ $(document).ready(function(){
 		minHeight: 100,
 		//maxWidth: 500,
 		//maxHeight: 300,
+		
 		start: function(e,ui) {
 			//console.log('start ', ui);	
 		},
@@ -174,13 +184,43 @@ $(document).ready(function(){
 	
 	
 	$('#resizeme3').resizable({
-		proxy: "proxy",
+		//proxy: "proxy",
 		minWidth: 200,
 		minHeight: 100,
 		maxWidth: 500,
 		maxHeight: 300,
 		
 		//handles: "s, se, e",
+		
+		preventDefault: true,
+		
+		start: function(e,ui) {
+			//console.log('start ', ui);	
+		},
+		stop: function(e,ui) {
+			//console.log('stop ', ui);	
+		},
+		resize: function(e,ui) {
+			//console.log(e);	
+		}		
+	});
+	
+	$('#resizeme5').resizable({
+		//proxy: "proxy",
+		minWidth: 200,
+		minHeight: 100,
+		maxWidth: 500,
+		maxHeight: 300,
+		
+		handles: "all",
+		
+		preventDefault: true,
+		
+		//animate: true,
+		//animate: false,
+		animate: { opacity:.5, fontSize: '0.8em' },
+		duration: 'slow',
+		easing: 'swing',
 		
 		start: function(e,ui) {
 			//console.log('start ', ui);	
@@ -220,7 +260,9 @@ $(document).ready(function(){
 		}		
 	});
 	
-	$('#resizeme3').draggable({ handle: "div:not(.ui-resizable-handle)" });
+	$('#resizeme3, #resizeme5').draggable({ handle: "div:not(.ui-resizable-handle)" });
+
+	//$("#resizeme3").animate({ height: 500, width: 500, opacity: 'hide' }, "easein");
 
 
 });

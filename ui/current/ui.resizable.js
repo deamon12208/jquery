@@ -22,11 +22,17 @@
 		//Prepare the passed options
 		this.options = $.extend({
 			proxy: "proxy",
-			preventDefault: true
+			preventDefault: true,
+			animate: false,
+			duration: 'fast',
+			easing: 'swing'
 		}, options);
 		
-		var o = this.options;
+		//Force proxy if animate is enable
+		this.options.proxy = this.options.animate ? "proxy" : this.options.proxy;
 
+		var o = this.options;
+		
 		//Position the node
 		if(!o.proxy && (this.element.css('position') == 'static' || this.element.css('position') == ''))
 			this.element.css('position', 'relative');
@@ -39,7 +45,13 @@
 			var oel = this.element; element = element.parentNode; this.element = $(element);
 			
 			//Move margins to the wrapper
-			this.element.css({ marginLeft: oel.css("marginLeft"), marginTop: oel.css("marginTop"), marginRight: oel.css("marginRight"), marginBottom: oel.css("marginBottom")});
+			this.element.css({
+				marginLeft: oel.css("marginLeft"),
+				marginTop: oel.css("marginTop"),
+				marginRight: oel.css("marginRight"),
+				marginBottom: oel.css("marginBottom")
+			});
+			
 			oel.css({ marginLeft: 0, marginTop: 0, marginRight: 0, marginBottom: 0});
 			
 			var b = [parseInt(oel.css('borderTopWidth')),parseInt(oel.css('borderRightWidth')),parseInt(oel.css('borderBottomWidth')),parseInt(oel.css('borderLeftWidth'))];
@@ -78,11 +90,42 @@
 			}
 
 		}
-
-		for(var i in o.handles) {
-			if(o.handles[i].constructor == String) o.handles[i] = $(o.handles[i], element).show();
-			if(!$(o.handles[i]).length) continue;
-		}
+		
+		this._renderAxis = function() {
+			for(var i in o.handles) {
+				if(o.handles[i].constructor == String) o.handles[i] = $(o.handles[i], element).show();		
+				if(!$(o.handles[i]).length) continue;
+			}
+		};
+		
+		this._applyAxisOffset = function(target) {
+			target = target || this.element;
+			
+			for(var i in o.handles) {
+				if(o.handles[i].constructor == String) o.handles[i] = $(o.handles[i], element).show();
+				
+				//Apply pad to wrapper element, needed to fix axis position (textarea, scrolls)
+				if (this.element.is('.ui-wrapper')) {
+					var axis = $(o.handles[i], element), padWrapper = 0;
+					
+					//Checking the correct pad
+					padWrapper = axis.css(/sw|ne|nw|se|n|s/.test(i) ? 'height' : 'width');
+					
+					//The padding type i have to apply...
+					var padPos = [ 'padding', 
+						/ne|nw|n/.test(i) ? 'Top' :
+						/se|sw|s/.test(i) ? 'Bottom' : 
+						/^e$/.test(i) ? 'Right' : 'Left' ].join(""); 
+					
+					target.css(padPos, padWrapper);
+				}
+				
+				if(!$(o.handles[i]).length) continue;
+			}
+		};
+		
+		this._renderAxis();
+		this._applyAxisOffset(this.element);
 	
 		//Initialize mouse events for interaction
 		this.element.mouseInteraction({
@@ -185,34 +228,52 @@
 			
 		},
 		stop: function(e) {			
-
 			var o = this.options;
-			
-			
+
 			if(o.proxy) {
+				var style = { 
+				  width: this.helper.width() - o.currentSizeDiff.width,
+				  height: this.helper.height() - o.currentSizeDiff.height,
+				  top: (parseInt(this.element.css('top')) || 0) + (parseInt(this.helper.css('top')) - this.offset.top),
+				  left: (parseInt(this.element.css('left')) || 0) + (parseInt(this.helper.css('left')) - this.offset.left)
+				};
 				
-				this.element.css({ width: this.helper.width() - o.currentSizeDiff.width, height: this.helper.height() - o.currentSizeDiff.height });
-				
-				this.element.css({ 
-					top: (parseInt(this.element.css('top')) || 0) + (parseInt(this.helper.css('top')) - this.offset.top), 
-					left: (parseInt(this.element.css('left')) || 0) + (parseInt(this.helper.css('left')) - this.offset.left)
-				});
+				if (o.animate) {
+					$.extend(style, (typeof o.animate == 'object') ? o.animate : {} );
+					this.element.animate(style, { duration: o.duration, easing: o.easing });					
+				} else {
+					this.element.css(style);
+				}
 				
 				// TODO
 				if (o.proportionallyResize && 
 						o.proportionallyResize.constructor == Array) {
 					
-					var prTrigger = function(x, prElement) {
-						prElement.css({ 
-							width: this.helper.width() - o.currentSizeDiff.width + "px",
-							height: this.helper.height() - o.currentSizeDiff.height + "px",
+					var prTrigger = function(x, prel) {
+						var b = [ parseInt(prel.css('borderTopWidth')), parseInt(prel.css('borderRightWidth')),	parseInt(prel.css('borderBottomWidth')), parseInt(prel.css('borderLeftWidth')) ];
+						var p = [ parseInt(prel.css('paddingTop')), parseInt(prel.css('paddingRight')),	parseInt(prel.css('paddingBottom')), parseInt(prel.css('paddingLeft')) ];
+						
+						var diff = $.map(b, function(i){
+							return b[i] + p[i]; 
+						});
+						
+						console.log(diff);
+						
+						prel.css({ 
+							width: this.element.outerWidth()  + "px",
+							height: this.element.outerHeight() + "px",
 							top: (parseInt(this.element.css('top')) || 0) + (parseInt(this.helper.css('top')) - this.offset.top), 
 							left: (parseInt(this.element.css('left')) || 0) + (parseInt(this.helper.css('left')) - this.offset.left)
 						});
+						
+						this._applyAxisOffset(prel);
+						//prel.css({ marginLeft: 0, marginTop: 0, marginRight: 0, marginBottom: 0});
+						//this._renderAxis();
+						
 					}, that = this;
 					
-					$.each(o.proportionallyResize, function(x, prElement) {
-						prTrigger.apply(that, [x, prElement]);
+					$.each(o.proportionallyResize, function(x, prel) {
+						prTrigger.apply(that, [x, prel]);
 					});
 				}
 				
@@ -225,7 +286,7 @@
 		},
 		drag: function(e) {
 
-			var el = this.helper, o = this.options;
+			var el = this.helper, o = this.options, props = {};
 			
 			var change = function(a,b) {
 				//Parsing regex once, increase performance
@@ -238,6 +299,7 @@
 						startPos = (isTopHeight ? 'top' : 'left');
 				
 				var mod = (e[pageAxis] - o.startPosition[startPos]) * (b ? -1 : 1);
+				
 				el.css(a, o[curSizePos][a] - mod);
 			};
 			
