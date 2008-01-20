@@ -10,8 +10,8 @@
 <script type="text/javascript" src="../core/ui.datepicker.js"></script>
 <script type="text/javascript">
 function setUpPage() {
-	$('#dp').datepicker({clearText: 'Erase'});
-	$('#adj').datepicker();
+	$('#dp').attachDatepicker({clearText: 'Erase'});
+	$('#adj').attachDatepicker();
 	setUpPageStatus = "complete";
 }
 
@@ -24,35 +24,35 @@ function testSetDefaults() {
 
 function testDisableEnable() {
 	assertFalse('Control is disabled', $.datepicker.isDisabled('#dp'));
-	$.datepicker.disableFor('#dp');
+	$('#dp').disableDatepicker();
 	assertTrue('Control is enabled by ID', $.datepicker.isDisabled($('#dp')));
-	$.datepicker.enableFor('#dp');
+	$('#dp').enableDatepicker();
 	assertFalse('Control is disabled by ID', $.datepicker.isDisabled($('#dp')[0]));
-	$.datepicker.disableFor($('#dp'));
+	$('#dp').disableDatepicker();
 	assertTrue('Control is enabled by jQuery', $.datepicker.isDisabled($('#dp')));
-	$.datepicker.enableFor($('#dp'));
+	$('#dp').enableDatepicker();
 	assertFalse('Control is disabled by jQuery', $.datepicker.isDisabled($('#dp')[0]));
-	$.datepicker.disableFor($('#dp')[0]);
+	$('#dp:first').disableDatepicker();
 	assertTrue('Control is enabled by element', $.datepicker.isDisabled('#dp'));
-	$.datepicker.enableFor($('#dp')[0]);
+	$('#dp:first').enableDatepicker();
 	assertFalse('Control is disabled by element', $.datepicker.isDisabled('#dp'));
 }
 
-function testReconfigureFor() {
+function testChange() {
 	assertEquals('Invalid instance clearText', 'Erase',
 		$.datepicker._inst[0]._settings.clearText);
-	$.datepicker.reconfigureFor('#dp', {clearText: 'X1'});
+	$('#dp').changeDatepicker({clearText: 'X1'});
 	assertEquals('Invalid instance clearText', 'X1',
 		$.datepicker._inst[0]._settings.clearText);
-	$.datepicker.reconfigureFor($('#dp'), {clearText: 'X2'});
+	$('#dp').changeDatepicker({clearText: 'X2'});
 	assertEquals('Invalid instance clearText', 'X2',
 		$.datepicker._inst[0]._settings.clearText);
-	$.datepicker.reconfigureFor($('#dp')[0], {clearText: 'X3'});
+	$('#dp:first').changeDatepicker({clearText: 'X3'});
 	assertEquals('Invalid instance clearText', 'X3',
 		$.datepicker._inst[0]._settings.clearText);
-	$.datepicker.reconfigureFor($('#dp')[0], {clearText: null});
+	$('#dp:first').changeDatepicker({clearText: null});
 	assertNull('Invalid instance clearText', $.datepicker._inst[0]._settings.clearText);
-	$.datepicker.reconfigureFor('#dp', {clearText: 'Erase'});
+	$('#dp').changeDatepicker({clearText: 'Erase'});
 }
 
 function testSetGetDateFor() {
@@ -314,56 +314,56 @@ function testGetDefaultDate() {
 	assertDateEquals('Invalid default date - today', new Date(), inst._getDefaultDate());
 	// as date
 	var date = new Date(2007, 6 - 1, 5);
-	$.datepicker.reconfigureFor('#dp', {defaultDate: date});
+	$('#dp').changeDatepicker({defaultDate: date});
 	assertDateEquals('Invalid default date - 2007-06-05', date, inst._getDefaultDate());
-	$.datepicker.reconfigureFor('#dp', {defaultDate: null});
+	$('#dp').changeDatepicker({defaultDate: null});
 	assertDateEquals('Invalid default date - reset', new Date(), inst._getDefaultDate());
 	// as relative numeric offsets
-	$.datepicker.reconfigureFor('#dp', {defaultDate: +7});
+	$('#dp').changeDatepicker({defaultDate: +7});
 	assertDateEquals('Invalid default date - +7', offsetDate(7), inst._getDefaultDate());
-	$.datepicker.reconfigureFor('#dp', {defaultDate: -7});
+	$('#dp').changeDatepicker({defaultDate: -7});
 	assertDateEquals('Invalid default date - -7', offsetDate(-7), inst._getDefaultDate());
 	// as relative string offsets
-	$.datepicker.reconfigureFor('#dp', {defaultDate: '1'});
+	$('#dp').changeDatepicker({defaultDate: '1'});
 	assertDateEquals('Invalid default date - 1', offsetDate(1), inst._getDefaultDate());
-	$.datepicker.reconfigureFor('#dp', {defaultDate: '1d'});
+	$('#dp').changeDatepicker({defaultDate: '1d'});
 	assertDateEquals('Invalid default date - 1d', offsetDate(1), inst._getDefaultDate());
-	$.datepicker.reconfigureFor('#dp', {defaultDate: '+1  d'});
+	$('#dp').changeDatepicker({defaultDate: '+1  d'});
 	assertDateEquals('Invalid default date - +1  d', offsetDate(1), inst._getDefaultDate());
-	$.datepicker.reconfigureFor('#dp', {defaultDate: '-1 D'});
+	$('#dp').changeDatepicker({defaultDate: '-1 D'});
 	assertDateEquals('Invalid default date - -1 D', offsetDate(-1), inst._getDefaultDate());
-	$.datepicker.reconfigureFor('#dp', {defaultDate: '2w'});
+	$('#dp').changeDatepicker({defaultDate: '2w'});
 	assertDateEquals('Invalid default date - 2w', offsetDate(14), inst._getDefaultDate());
-	$.datepicker.reconfigureFor('#dp', {defaultDate: '+2  w'});
+	$('#dp').changeDatepicker({defaultDate: '+2  w'});
 	assertDateEquals('Invalid default date - +2  w', offsetDate(14), inst._getDefaultDate());
-	$.datepicker.reconfigureFor('#dp', {defaultDate: '-2 W'});
+	$('#dp').changeDatepicker({defaultDate: '-2 W'});
 	assertDateEquals('Invalid default date - -2 W', offsetDate(-14), inst._getDefaultDate());
-	$.datepicker.reconfigureFor('#dp', {defaultDate: '3m'});
+	$('#dp').changeDatepicker({defaultDate: '3m'});
 	assertDateEquals('Invalid default date - 3m', offsetMonth(3), inst._getDefaultDate());
-	$.datepicker.reconfigureFor('#dp', {defaultDate: '+3  m'});
+	$('#dp').changeDatepicker({defaultDate: '+3  m'});
 	assertDateEquals('Invalid default date - +3  m', offsetMonth(3), inst._getDefaultDate());
-	$.datepicker.reconfigureFor('#dp', {defaultDate: '-3 M'});
+	$('#dp').changeDatepicker({defaultDate: '-3 M'});
 	assertDateEquals('Invalid default date - -3 M', offsetMonth(-3), inst._getDefaultDate());
-	$.datepicker.reconfigureFor('#dp', {defaultDate: '4y'});
+	$('#dp').changeDatepicker({defaultDate: '4y'});
 	assertDateEquals('Invalid default date - 4y', offsetMonth(48), inst._getDefaultDate());
-	$.datepicker.reconfigureFor('#dp', {defaultDate: '+4  y'});
+	$('#dp').changeDatepicker({defaultDate: '+4  y'});
 	assertDateEquals('Invalid default date - +4  y', offsetMonth(48), inst._getDefaultDate());
-	$.datepicker.reconfigureFor('#dp', {defaultDate: '-4 Y'});
+	$('#dp').changeDatepicker({defaultDate: '-4 Y'});
 	assertDateEquals('Invalid default date - -4 Y', offsetMonth(-48), inst._getDefaultDate());
 	// as error offsets
 	date = new Date();
-	$.datepicker.reconfigureFor('#dp', {defaultDate: '2days'});
+	$('#dp').changeDatepicker({defaultDate: '2days'});
 	assertDateEquals('Invalid default date - 2days', date, inst._getDefaultDate());
-	$.datepicker.reconfigureFor('#dp', {defaultDate: 'now'});
+	$('#dp').changeDatepicker({defaultDate: 'now'});
 	assertDateEquals('Invalid default date - now', date, inst._getDefaultDate());
-	$.datepicker.reconfigureFor('#dp', {defaultDate: '2f'});
+	$('#dp').changeDatepicker({defaultDate: '2f'});
 	assertDateEquals('Invalid default date - 2f', date, inst._getDefaultDate());
 }
 
 function testAdjustDate() {
 	var inst = $.datepicker._inst[1];
 	inst._rangeStart = null;
-	$.datepicker.reconfigureFor('#adj', {minDate: null, maxDate: null});
+	$('#adj').changeDatepicker({minDate: null, maxDate: null});
 	$.datepicker.setDateFor('#adj', new Date(2001, 2 - 1, 3));
 	var adjusts = [[0, 'D', 2001, 2, 3], [1, 'D', 2001, 2, 4],
 		[7, 'D', 2001, 2, 11], [-8, 'D', 2001, 2, 3],
@@ -380,7 +380,7 @@ function testAdjustDate() {
 			inst._selectedDay == adjusts[i][4]);
 	}
 	// with minimum
-	$.datepicker.reconfigureFor('#adj', {minDate: new Date(2001, 1 - 1, 1)});
+	$('#adj').changeDatepicker({minDate: new Date(2001, 1 - 1, 1)});
 	$.datepicker.setDateFor('#adj', new Date(2001, 2 - 1, 3));
 	adjusts = [[0, 'D', 2001, 2, 3], [7, 'D', 2001, 2, 10],
 		[-88, 'D', 2001, 1, 1], [5, 'D', 2001, 1, 6],
@@ -395,7 +395,7 @@ function testAdjustDate() {
 			inst._selectedDay == adjusts[i][4]);
 	}
 	// with maximum
-	$.datepicker.reconfigureFor('#adj', {minDate: null, maxDate: new Date(2001, 6 - 1, 30)});
+	$('#adj').changeDatepicker({minDate: null, maxDate: new Date(2001, 6 - 1, 30)});
 	$.datepicker.setDateFor('#adj', new Date(2001, 2 - 1, 3));
 	adjusts = [[0, 'D', 2001, 2, 3], [7, 'D', 2001, 2, 10],
 		[200, 'D', 2001, 6, 30], [-184, 'D', 2000, 12, 28],
@@ -414,51 +414,51 @@ function testAdjustDate() {
 function testGetNumberOfMonths() {
 	var inst = $.datepicker._inst[0];
 	assertArrayEquals('Invalid number of months (default)', [1, 1], inst._getNumberOfMonths());
-	$.datepicker.reconfigureFor('#dp', {numberOfMonths: null});
+	$('#dp').changeDatepicker({numberOfMonths: null});
 	assertArrayEquals('Invalid number of months (null)', [1, 1], inst._getNumberOfMonths());
-	$.datepicker.reconfigureFor('#dp', {numberOfMonths: 2});
+	$('#dp').changeDatepicker({numberOfMonths: 2});
 	assertArrayEquals('Invalid number of months (2)', [1, 2], inst._getNumberOfMonths());
-	$.datepicker.reconfigureFor('#dp', {numberOfMonths: [3, 4]});
+	$('#dp').changeDatepicker({numberOfMonths: [3, 4]});
 	assertArrayEquals('Invalid number of months (3,4)', [3, 4], inst._getNumberOfMonths());
-	$.datepicker.reconfigureFor('#dp', {numberOfMonths: 1});
+	$('#dp').changeDatepicker({numberOfMonths: 1});
 }
 
 function testGetMinMaxDate() {
 	var inst = $.datepicker._inst[1];
-	$.datepicker.reconfigureFor('#adj', {minDate: null, maxDate: null});
+	$('#adj').changeDatepicker({minDate: null, maxDate: null});
 	assertNull('Invalid min date (null)', inst._getMinMaxDate('min'));
 	assertNull('Invalid min date (null,false)', inst._getMinMaxDate('min', false));
 	assertUndefined('Invalid min date (null,true)', inst._getMinMaxDate('min', true));
 	assertNull('Invalid max date (null)', inst._getMinMaxDate('max'));
 	var date = new Date();
 	date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-	$.datepicker.reconfigureFor('#adj', {minDate: new Date()});
+	$('#adj').changeDatepicker({minDate: new Date()});
 	assertDateEquals('Invalid min date', date, inst._getMinMaxDate('min'));
 	assertDateEquals('Invalid min date (false)', date, inst._getMinMaxDate('min', false));
 	assertDateEquals('Invalid min date (true)', date, inst._getMinMaxDate('min', true));
 	inst._rangeStart = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 7);
 	assertDateEquals('Invalid min date (range,false)', date, inst._getMinMaxDate('min', false));
 	assertDateEquals('Invalid min date (range,true)', date, inst._getMinMaxDate('min', true));
-	$.datepicker.reconfigureFor('#adj', {maxDate: new Date()});
+	$('#adj').changeDatepicker({maxDate: new Date()});
 	assertDateEquals('Invalid max date', date, inst._getMinMaxDate('max'));
-	$.datepicker.reconfigureFor('#adj', {minDate: null});
+	$('#adj').changeDatepicker({minDate: null});
 	assertNull('Invalid min date (null,range,false)', inst._getMinMaxDate('min', false));
 	assertDateEquals('Invalid min date (null,range,true)', inst._rangeStart, inst._getMinMaxDate('min', true));
 	// as relative numeric offsets
-	$.datepicker.reconfigureFor('#adj', {minDate: -7});
+	$('#adj').changeDatepicker({minDate: -7});
 	assertDateEquals('Invalid min date (-7)', offsetDate(-7), inst._getMinMaxDate('min'));
-	$.datepicker.reconfigureFor('#adj', {maxDate: +14});
+	$('#adj').changeDatepicker({maxDate: +14});
 	assertDateEquals('Invalid max date (+14)', offsetDate(14), inst._getMinMaxDate('max'));
 	// as relative string offsets
-	$.datepicker.reconfigureFor('#adj', {minDate: '3 w'});
+	$('#adj').changeDatepicker({minDate: '3 w'});
 	assertDateEquals('Invalid min date (3 w)', offsetDate(21), inst._getMinMaxDate('min'));
-	$.datepicker.reconfigureFor('#adj', {maxDate: '2M'});
+	$('#adj').changeDatepicker({maxDate: '2M'});
 	assertDateEquals('Invalid max date (2M)', offsetMonth(2), inst._getMinMaxDate('max'));
 	// as error offsets
 	date = new Date();
-	$.datepicker.reconfigureFor('#adj', {minDate: 'now'});
+	$('#adj').changeDatepicker({minDate: 'now'});
 	assertDateEquals('Invalid min date (now)', date, inst._getMinMaxDate('min'));
-	$.datepicker.reconfigureFor('#adj', {maxDate: '2f'});
+	$('#adj').changeDatepicker({maxDate: '2f'});
 	assertDateEquals('Invalid max date (2f)', date, inst._getMinMaxDate('max'));
 }
 
