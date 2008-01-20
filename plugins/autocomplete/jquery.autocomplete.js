@@ -662,7 +662,7 @@ $.Autocompleter.Select = function (options, input, select, config) {
 	function init() {
 		if (!needsInit)
 			return;
-		element = $("<div>")
+		element = $("<div/>")
 		.hide()
 		.addClass(options.resultsClass)
 		.css("position", "absolute")
