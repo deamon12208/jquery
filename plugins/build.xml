@@ -38,9 +38,17 @@
 
     <target name="zip" description="Do not call directly.">
         <echo message="Zipping ${plugin}" />
+    	<property name="tempdir" value=".anttemp" />
+    	<property name="zipdir" value="${tempdir}/jquery-${plugin}" />
+		<mkdir dir="${tempdir}" />
+    	<mkdir dir="${zipdir}" />
+    	<copy todir="${zipdir}">
+    		<fileset dir="${SRC_DIR}${plugin}" excludes="*.zip" />
+    	</copy>
         <zip destfile="${SRC_DIR}${plugin}/jquery.${plugin}.zip">
-            <zipfileset dir="${SRC_DIR}${plugin}" excludes="*.zip" />
+            <zipfileset dir="${tempdir}" excludes="*.zip" />
         </zip>
+    	<delete dir="${tempdir}" />
         <echo message="${plugin} zipped" />
     </target>
 

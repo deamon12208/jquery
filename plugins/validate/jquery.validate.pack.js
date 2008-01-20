@@ -6,7 +6,7 @@
  *
  * Copyright (c) 2006 - 2008 Jörn Zaefferer
  *
- * $Id: jquery.validate.js 4479 2008-01-18 14:28:00Z joern.zaefferer $
+ * $Id: jquery.validate.js 4484 2008-01-20 13:52:02Z joern.zaefferer $
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
