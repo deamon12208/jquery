@@ -687,7 +687,7 @@ $("#setInlineRange").click(function() {
 				</div>
 				<div id="compat" class="tab_group1 container">
 					<h3>Compatibility</h3>
-					<p>The date picker has been refactored from jQuery Calendar to better fit
+					<p>The date picker has been refactored to better fit
 						within the <a href="http://ui.jquery.com">jQuery UI</a> project.
 						This has involved renaming the main function and some properties,
 						resulting in current uses of the plugin no longer functioning correctly.
@@ -702,6 +702,14 @@ $("#setInlineRange").click(function() {
 					<p>Download the <a href="compatibility/jquery-calendar-compatibility.js" target="_blank">jquery-calendar-compatibility.js</a></p>
 					<p>To migrate fully, the following steps need to be taken:</p>
 					<ul>
+						<li>Replace references to the <code>datepicker</code>
+							with <code>attachDatepicker</code>.</li>
+						<li>Replace references to the <code>$.datpicker.reconfigureFor</code>
+							with <code>changeDatepicker</code>.</li>
+						<li>Replace references to the <code>$.datpicker.enableFor</code>
+							with <code>enableDatepicker</code>.</li>
+						<li>Replace references to the <code>$.datpicker.disableFor</code>
+							with <code>disableDatepicker</code>.</li>
 						<li>Replace references to the <code>jquery-calendar*</code>
 							files with <code>ui.datepicker*</code>.</li>
 						<li>Replace references to the <code>popUpCal</code>
