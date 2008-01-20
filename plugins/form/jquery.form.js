@@ -1,6 +1,6 @@
 /*
  * jQuery Form Plugin
- * version: 2.02 (12/16/2007)
+ * version: 2.03 (01/20/2008)
  * @requires jQuery v1.1 or later
  *
  * Examples at: http://malsup.com/jquery/form/
@@ -293,7 +293,7 @@ $.fn.ajaxSubmit = function(options) {
         setTimeout(function() {
             // make sure form attrs are set
             var encAttr = form.encoding ? 'encoding' : 'enctype';
-            var t = $form.attr('target');
+            var t = $form.attr('target'), a = $form.attr('action');
             $form.attr({
                 target:   id,
                 method:  'POST',
@@ -309,7 +309,8 @@ $.fn.ajaxSubmit = function(options) {
             $io.appendTo('body');
             io.attachEvent ? io.attachEvent('onload', cb) : io.addEventListener('load', cb, false);
             form.submit();
-            $form.attr('target', t); // reset target
+            // reset attrs
+            $form.attr({ action: a, target: t });
         }, 10);
 
         function cb() {
