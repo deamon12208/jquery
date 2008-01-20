@@ -1,11 +1,8 @@
-1.2
----
-
-- spread release candidate
-
 1.3
 ---
 
+- rewrite required-method to use jQuery's extended val() on selects[/radios/checkboxes]
+- consider a field-validator object that encapsulates a single element and all methods working on it
 - export API browser
 - gather list of sites using the plugin (eg. newsweek.com)
 - add example/support for other URL schemes like svn://....

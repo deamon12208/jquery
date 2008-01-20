@@ -31,16 +31,17 @@ $(document).ready(function() {
 			},
 			password: {
 				required: true,
-				minLength: 5
+				minlength: 5
 			},
 			password_confirm: {
 				required: true,
-				minLength: 5,
+				minlength: 5,
 				equalTo: "#password"
 			},
 			email: {
 				required: true,
-				email: true
+				email: true,
+				remote: "emails.php"
 			},
 			dateformat: "required",
 			terms: "required"
@@ -55,16 +56,19 @@ $(document).ready(function() {
 			},
 			password: {
 				required: "Provide a password",
-				minLength: jQuery.format("Enter at least {0} characters")
+				rangelength: jQuery.format("Enter at least {0} characters")
 			},
 			password_confirm: {
 				required: "Repeat your password",
 				minLength: jQuery.format("Enter at least {0} characters"),
 				equalTo: "Enter the same password as above"
 			},
-			email: "Please enter a valid email address",
+			email: {
+				required: "Please enter a valid email address",
+				minLength: "Please enter a valid email address",
+				remote: jQuery.format("{0} is already in use")
+			},
 			dateformat: "Choose your preferred dateformat",
-			// a whitespace is required to remove the default message for terms
 			terms: " "
 		},
 		// the errorPlacement has to take the table layout into account
@@ -121,7 +125,7 @@ $(document).ready(function() {
         </ul>
       </div>
       <div id="signupwrap">
-      		<form id="signupform" autocomplete="off" method="post" action="">
+      		<form id="signupform" autocomplete="off" method="get" action="">
 	  		  <table>
 	  		  <tr>
 	  		  	<td class="label"><label id="lfirstname" for="firstname">First Name</label></td>
@@ -222,7 +226,7 @@ $(document).ready(function() {
 	var script = $("<code class='mix'>").html( $("#demo").html() ).wrap("<pre></pre>").parent().hide().appendTo("body");
 	var serverscript;
 	$.get("users.phps", function(response) {
-		serverscript = $("<pre>").html( response ).hide().appendTo("body");
+		serverscript = $("<pre>").hide().html( response ).appendTo("body");
 	})
 	
 });

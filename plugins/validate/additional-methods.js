@@ -7,7 +7,7 @@ jQuery.validator.addMethod("minWords", function(value, element, params) {
 }, "Please enter at least {0} words."); 
  
 jQuery.validator.addMethod("rangeWords", function(value, element, params) { 
-    return this.optional(element) || value.match(/bw+b/g).length >= params[0] && $(element).val().match(/bw+b/g).length < params[1]; 
+    return this.optional(element) || value.match(/bw+b/g).length >= params[0] && value.match(/bw+b/g).length < params[1]; 
 }, "Please enter between {0} and {1} words.");
 
 
@@ -149,6 +149,7 @@ jQuery.validator.addMethod("phone", function(phone_number, element) {
 		phone_number.match(/^(1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/);
 }, "Please specify a valid phone number");
 
-$.validator.addMethod("strippedminlength", function(value, element, param) {
-	return $(value).text().length >= param;
-}, $.format("Please enter at least {0} characters"));
+// TODO check if value starts with <, otherwise don't try stripping anything
+jQuery.validator.addMethod("strippedminlength", function(value, element, param) {
+	return jQuery(value).text().length >= param;
+}, jQuery.format("Please enter at least {0} characters"));

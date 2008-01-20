@@ -1,5 +1,5 @@
 /*
- * jQuery validation plug-in v1.2 Release Candidate 1
+ * jQuery validation plug-in v1.2
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-validation/
  * http://docs.jquery.com/Plugins/Validation
@@ -83,17 +83,17 @@ jQuery.extend(jQuery.fn, {
 	// http://docs.jquery.com/Plugins/Validation/rules
 	rules: function() {
 		var element = this[0];
-		var data = $.validator.normalizeRules(
-		$.extend(
-			$.validator.metadataRules(element),
-			$.validator.classRules(element),
-			$.validator.attributeRules(element),
-			$.validator.staticRules(element)
+		var data = jQuery.validator.normalizeRules(
+		jQuery.extend(
+			jQuery.validator.metadataRules(element),
+			jQuery.validator.classRules(element),
+			jQuery.validator.attributeRules(element),
+			jQuery.validator.staticRules(element)
 		), element);
 	
 	// convert from object to array
 	var rules = [];
-	$.each(data, function(method, value) {
+	jQuery.each(data, function(method, value) {
 		rules.push({
 			method: method,
 			parameters: value
@@ -279,7 +279,7 @@ jQuery.extend(jQuery.validator, {
 				// add items to error list and map
 				jQuery.extend( this.errorMap, errors );
 				this.errorList = [];
-				for ( name in errors ) {
+				for ( var name in errors ) {
 					this.errorList.push({
 						message: errors[name],
 						element: this.findByName(name)[0]
@@ -345,7 +345,7 @@ jQuery.extend(jQuery.validator, {
 			var rulesCache = {};
 			
 			// select all valid inputs inside the form (no submit or reset buttons)
-			// workaround with $([]).add until http://dev.jquery.com/ticket/2114 is solved
+			// workaround with jQuery([]).add until http://dev.jquery.com/ticket/2114 is solved
 			return jQuery([]).add(this.currentForm.elements)
 			.filter("input, select, textarea")
 			.not(":submit, :reset, [disabled]")
@@ -616,15 +616,15 @@ jQuery.extend(jQuery.validator, {
 	addClassRules: function(className, rules) {
 		className.constructor == String ?
 			this.classRuleSettings[className] = rules :
-			$.extend(this.classRuleSettings, className);
+			jQuery.extend(this.classRuleSettings, className);
 	},
 	
 	classRules: function(element) {
 		var rules = {};
-		var classes = $(element).attr('class');
-		classes && $.each(classes.split(' '), function() {
-			if (this in $.validator.classRuleSettings) {
-				$.extend(rules, $.validator.classRuleSettings[this]);
+		var classes = jQuery(element).attr('class');
+		classes && jQuery.each(classes.split(' '), function() {
+			if (this in jQuery.validator.classRuleSettings) {
+				jQuery.extend(rules, jQuery.validator.classRuleSettings[this]);
 			}
 		});
 		return rules;
@@ -632,9 +632,9 @@ jQuery.extend(jQuery.validator, {
 	
 	attributeRules: function(element) {
 		var rules = {};
-		var $element = $(element);
+		var $element = jQuery(element);
 		
-		for (method in $.validator.methods) {
+		for (method in jQuery.validator.methods) {
 			var value = $element.attr(method);
 			// allow 0 but neither undefined nor empty string
 			if (value !== undefined && value !== '') {
@@ -653,26 +653,26 @@ jQuery.extend(jQuery.validator, {
 	},
 	
 	metadataRules: function(element) {
-		if (!$.metadata) return {};
+		if (!jQuery.metadata) return {};
 		
-		var meta = $.data(element.form, 'validator').settings.meta;
+		var meta = jQuery.data(element.form, 'validator').settings.meta;
 		return meta ?
-			$(element).metadata()[meta] :
-			$(element).metadata();
+			jQuery(element).metadata()[meta] :
+			jQuery(element).metadata();
 	},
 	
 	staticRules: function(element) {
 		var rules = {};
-		var validator = $.data(element.form, 'validator');
+		var validator = jQuery.data(element.form, 'validator');
 		if (validator.settings.rules) {
-			rules = $.validator.normalizeRule(validator.settings.rules[element.name]) || {};
+			rules = jQuery.validator.normalizeRule(validator.settings.rules[element.name]) || {};
 		}
 		return rules;
 	},
 	
 	normalizeRules: function(rules, element) {
 		// convert deprecated rules
-		$.each({
+		jQuery.each({
 			minLength: 'minlength',
 			maxLength: 'maxlength',
 			rangeLength: 'rangelength',
@@ -687,17 +687,17 @@ jQuery.extend(jQuery.validator, {
 		});
 		
 		// evaluate parameters
-		$.each(rules, function(rule, parameter) {
-			rules[rule] = $.isFunction(parameter) ? parameter(element) : parameter;
+		jQuery.each(rules, function(rule, parameter) {
+			rules[rule] = jQuery.isFunction(parameter) ? parameter(element) : parameter;
 		});
 		
 		// clean number parameters
-		$.each(['minlength', 'maxlength', 'min', 'max'], function() {
+		jQuery.each(['minlength', 'maxlength', 'min', 'max'], function() {
 			if (rules[this]) {
 				rules[this] = Number(rules[this]);
 			}
 		});
-		$.each(['rangelength', 'range'], function() {
+		jQuery.each(['rangelength', 'range'], function() {
 			if (rules[this]) {
 				rules[this] = [Number(rules[this][0]), Number(rules[this][1])];
 			}
@@ -756,6 +756,7 @@ jQuery.extend(jQuery.validator, {
 			}
 		},
 		
+		// http://docs.jquery.com/Plugins/Validation/Methods/remote
 		remote: function(value, element, param) {
 			if ( this.optional(element) )
 				return true;
@@ -771,16 +772,18 @@ jQuery.extend(jQuery.validator, {
 				jQuery.ajax({
 					url: param,
 					mode: "abort",
-					port: "validate",
+					port: "validate" + element.name,
 					dataType: "json",
 					data: data,
 					success: function(response) {
-						if ( typeof response == "string" || !response ) {
+						if ( !response ) {
 							var errors = {};
 							errors[element.name] =  response || validator.defaultMessage( element, "remote" );
 							validator.showErrors(errors);
 						} else {
+							var submitted = validator.formSubmitted;
 							validator.prepareElement(element);
+							validator.formSubmitted = submitted;
 							validator.successList.push(element);
 							validator.showErrors();
 						}
