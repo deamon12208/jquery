@@ -2,7 +2,7 @@ var inlineRange = null;
 var inlineFrom = null;
 var inlineTo = null;
 
-$(document).ready(function () {
+$(function () {
 	$('#alt').attr({ 'disabled':'disabled' });
 	tabs.init();
 	// Restore default language after loading French localisation
@@ -152,21 +152,14 @@ function updateInlineRange() {
 	var inlineTo = $('#inlineTo')[0];
 	var dateFrom = popUpCal.getDateFor(inlineFrom);
 	var dateTo = popUpCal.getDateFor(inlineTo);
-	$('#inlineRange').val(formatDate(dateFrom) + ' to ' + formatDate(dateTo));
+	$('#inlineRange').val(popUpCal.formatDate(dateFrom) + ' to ' + popUpCal.formatDate(dateTo));
 	popUpCal.reconfigureFor(inlineFrom, {maxDate: dateTo});
 	popUpCal.reconfigureFor(inlineTo, {minDate: dateFrom});
 }
 
 function updateInlineRange2(dateStr) {
 	$('#inlineRange2').val(dateStr ? dateStr :
-		formatDate(popUpCal.getDateFor('#rangeInline')));
-}
-
-function formatDate(date) {
-	var day = date.getDate();
-	var month = date.getMonth() + 1;
-	return (day < 10 ? '0' : '') + day + '/' +
-		(month < 10 ? '0' : '') + month + '/' + date.getFullYear();
+		popUpCal.formatDate(popUpCal.getDateFor('#rangeInline')));
 }
 
 function localise() {

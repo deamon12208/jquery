@@ -16,7 +16,7 @@ $(document).ready(function () {
 		$('.languageSelect').change(localise);
 	}
 	// Stylesheets
-	$('#altStyle').datepicker({buttonImage: 'img/calendar2.gif',
+	$('#altStyle').attachDatepicker({buttonImage: 'img/calendar2.gif',
 		prevText: '<img src="img/prev.gif" style="vertical-align: middle;"/> Prev',
 		nextText: 'Next <img src="img/next.gif" style="vertical-align: middle;"/>'});
 	$('#button3').click(function() { 

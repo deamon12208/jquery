@@ -38,7 +38,7 @@ $.extend(PopUpCal.prototype, {
 	                   object - jQuery collection of input fields
 	   @return void */
 	enableFor: function(inputs) {
-		$.datepicker.enableFor(inputs);
+		$(inputs).enableDatepicker();
 	},
 
 	/* Disable the input field(s) from entry.
@@ -47,7 +47,7 @@ $.extend(PopUpCal.prototype, {
 	                   object - jQuery collection of input fields
 	   @return void */
 	disableFor: function(inputs) {
-		$.datepicker.disableFor(inputs);
+		$(inputs).disableDatepicker();
 	},
 
 	/* Update the settings for a calendar attached to an input field or division.
@@ -56,7 +56,7 @@ $.extend(PopUpCal.prototype, {
 	   @param  settings  object - the new settings to update
 	   @return void */
 	reconfigureFor: function(control, settings) {
-		$.datepicker.reconfigureFor(control, convertSettings(settings));
+		$(control).changeDatepicker(convertSettings(settings));
 	},
 
 	/* Set the date for a calendar attached to an input field or division.
@@ -98,6 +98,12 @@ $.extend(PopUpCal.prototype, {
 	   @return [boolean, string] - is this date selectable?, what is its CSS class? */
 	noWeekends: function(date) {
 		return $.datepicker.noWeekends(date);
+	},
+	
+	/* Format a date object into a string value.
+	   @param  date  Date - the date to customise */
+	formatDate: function(date) {
+		return $.datepicker.formatDate(date);
 	}
 });
 
@@ -124,7 +130,7 @@ function convertSettings(settings) {
    Convert to use the new jQuery Date Picker functionality.
    @param  settings  object - the new settings to use for this calendar instance (anonymous)
    @return jQuery object - for chaining further calls */
-$.fn.calendar = function(settings) {
+compatFunction = function(settings) {
 	this.each(function() {
 		for (attrName in $.datepicker._defaults) {
 			var attrValue = this.getAttribute('cal:' + attrName);
@@ -134,8 +140,10 @@ $.fn.calendar = function(settings) {
 			}
 		}
 	});
-	return this.datepicker(convertSettings(settings));
+	return this.attachDatepicker(convertSettings(settings));
 };
+$.fn.calendar = compatFunction;
+$.fn.datepicker = compatFunction;
 
 /* Initialise the calendar. */
 $(document).ready(function() {

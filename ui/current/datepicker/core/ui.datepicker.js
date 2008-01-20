@@ -287,43 +287,6 @@ $.extend(Datepicker.prototype, {
 		return this;
 	},
 
-	/* Enable the input field(s) for entry.
-	   @param  inputs  element - single input field or
-	                   string - the ID or other jQuery selector of the input field(s) or
-	                   object - jQuery collection of input fields
-	   @return the manager object */
-	enableFor: function(inputs) {
-		inputs = (inputs.jquery ? inputs : $(inputs));
-		inputs.each(function() {
-			this.disabled = false;
-			$(this).siblings('button.datepicker_trigger').each(function() { this.disabled = false; });
-			$(this).siblings('img.datepicker_trigger').css({opacity: '1.0', cursor: ''});
-			var $this = this;
-			$.datepicker._disabledInputs = $.map($.datepicker._disabledInputs,
-				function(value) { return (value == $this ? null : value); }); // delete entry
-		});
-		return this;
-	},
-
-	/* Disable the input field(s) from entry.
-	   @param  inputs  element - single input field or
-	                   string - the ID or other jQuery selector of the input field(s) or
-	                   object - jQuery collection of input fields
-	   @return the manager object */
-	disableFor: function(inputs) {
-		inputs = (inputs.jquery ? inputs : $(inputs));
-		inputs.each(function() {
-			this.disabled = true;
-			$(this).siblings('button.datepicker_trigger').each(function() { this.disabled = true; });
-			$(this).siblings('img.datepicker_trigger').css({opacity: '0.5', cursor: 'default'});
-			var $this = this;
-			$.datepicker._disabledInputs = $.map($.datepicker._disabledInputs,
-				function(value) { return (value == $this ? null : value); }); // delete entry
-			$.datepicker._disabledInputs[$.datepicker._disabledInputs.length] = this;
-		});
-		return this;
-	},
-
 	/* Is the input field disabled?
 	   @param  input  element - single input field or
 	                  string - the ID or other jQuery selector of the input field or
@@ -337,23 +300,6 @@ $.extend(Datepicker.prototype, {
 			}
 		}
 		return false;
-	},
-
-	/* Update the settings for a date picker attached to an input field or division.
-	   @param  control   element - the input field or div/span attached to the date picker or
-	                     string - the ID or other jQuery selector of the input field or
-	                     object - jQuery object for input field or div/span
-	   @param  settings  object - the new settings to update
-	   @return the manager object */
-	reconfigureFor: function(control, settings) {
-		control = (control.jquery ? control[0] :
-			(typeof control == 'string' ? $(control)[0] : control));
-		var inst = this._getInst(control._calId);
-		if (inst) {
-			extendRemove(inst._settings, settings || {});
-			this._updateDatepicker(inst);
-		}
-		return this;
 	},
 
 	/* Set the date for a date picker attached to an input field or division.
@@ -1475,7 +1421,7 @@ function extendRemove(target, props) {
 /* Attach the date picker to a jQuery selection.
    @param  settings  object - the new settings to use for this date picker instance (anonymous)
    @return jQuery object - for chaining further calls */
-$.fn.datepicker = function(settings) {
+$.fn.attachDatepicker = function(settings) {
 	return this.each(function() {
 		// check for settings on the control itself - in namespace 'date:'
 		var inlineSettings = null;
@@ -1508,6 +1454,46 @@ $.fn.datepicker = function(settings) {
 	});
 };
 
+/* Enable the date picker to a jQuery selection.
+   @return jQuery object - for chaining further calls */
+$.fn.enableDatepicker = function() {
+	return this.each(function() {
+		this.disabled = false;
+		$(this).siblings('button.datepicker_trigger').each(function() { this.disabled = false; });
+		$(this).siblings('img.datepicker_trigger').css({opacity: '1.0', cursor: ''});
+		var $this = this;
+		$.datepicker._disabledInputs = $.map($.datepicker._disabledInputs,
+			function(value) { return (value == $this ? null : value); }); // delete entry
+	});
+}
+
+/* Disable the date picker to a jQuery selection.
+   @return jQuery object - for chaining further calls */
+$.fn.disableDatepicker = function() {
+	return this.each(function() {
+		this.disabled = true;
+		$(this).siblings('button.datepicker_trigger').each(function() { this.disabled = true; });
+		$(this).siblings('img.datepicker_trigger').css({opacity: '0.5', cursor: 'default'});
+		var $this = this;
+		$.datepicker._disabledInputs = $.map($.datepicker._disabledInputs,
+			function(value) { return (value == $this ? null : value); }); // delete entry
+		$.datepicker._disabledInputs[$.datepicker._disabledInputs.length] = this;
+	});
+}
+
+/* Update the settings for a date picker attached to an input field or division.
+	   @param  settings  object - the new settings to update
+	   @return jQuery object - for chaining further calls */
+$.fn.changeDatepicker = function(settings) {
+	return this.each(function() {
+		var inst = $.datepicker._getInst(this._calId);
+		if (inst) {
+			extendRemove(inst._settings, settings || {});
+			$.datepicker._updateDatepicker(inst);
+		}
+	});
+}
+	
 /* Initialise the date picker. */
 $(document).ready(function() {
 	$.datepicker = new Datepicker(); // singleton instance
