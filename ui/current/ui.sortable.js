@@ -113,7 +113,7 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			
 			$(this.options.items, this.element).each(function() {
 				var res = (this.getAttribute(o.attribute || 'id') || '').match(o.expression || /(.+)[-=_](.+)/);
-				if(res) str += res[1]+'='+res[2];				
+				if(res) str += res[1]+'[]='+res[2];				
 			});
 			
 			return str;
@@ -194,8 +194,8 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			this.refresh(); this.refreshPositions();
 
 			//Create and append the visible helper
-			this.helper = this.currentItem.clone().appendTo(this.currentItem[0].parentNode);
-			this.helper.css('position', 'absolute');
+			this.helper = typeof o.helper == 'function' ? $(o.helper.apply(this.element[0], [e, this.currentItem])) : this.currentItem.clone();
+			this.helper.appendTo(this.currentItem[0].parentNode).css('position', 'absolute');
 
 			//Find out the next positioned parent
 			this.offsetParent = (function(cp) {

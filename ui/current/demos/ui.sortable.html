@@ -18,6 +18,7 @@
 
 <script type="text/javascript" src="../ui.mouse.js"></script>
 <script type="text/javascript" src="../ui.sortable.js"></script>
+<script type="text/javascript" src="../ui.sortable.ext.js"></script>
 
 <style type="text/css">
 .hover { background: #000; }
@@ -27,16 +28,25 @@
 
 <h2>1. Default, no options</h2>
 <div class="playground">
-	<ul id="example1" style="cursor: hand; cursor: pointer;">
+	<ul id="example1" style="cursor: hand; cursor: pointer; float: left;">
+		<li id='ex_1'>Drag us</li>
+		<li id='ex_2'>around</li>
+		<li id='ex_3'>and change</li>
+		<li id='ex_4'>our</li>
+		<li id='ex_5'>positions</li>
+	</ul>
+	
+	<ul id="example1_2" style="cursor: hand; cursor: pointer; float: left;">
 		<li>Drag us</li>
 		<li>around</li>
 		<li>and change</li>
 		<li>our</li>
 		<li>positions</li>
 	</ul>
-	<br />
-	<button onclick="$('#example1').sortableEnable()">Enable</button>
-	<button onclick="$('#example1').sortableDisable()">Disable</button>
+	<br style='clear: both;' />
+	<button onclick="$('#example1').enableSortable()">Enable</button>
+	<button onclick="$('#example1').disableSortable()">Disable</button>
+	<button onclick="alert($('#example1').changeSortable('serialize'))">Serialize!</button>
 </div>
 
 <h2>2. Default, no options (Floats)</h2>
@@ -94,10 +104,12 @@ if(!window.console) {
 $(window).bind("load",function(){
 
 
-	$("#example1").sortable();
-	$("#example2").sortable();
-	$("#example3").sortable({ items: "li" });
-	$("#example4").sortable({ hoverClass: "hover" });
+	$("#example1").makeSortable({ connectWith: ['#example1_2'], revert: true, containment: 'document' });
+	$("#example1_2").makeSortable({ connectWith: ['#example1'] });
+	
+	$("#example2").makeSortable();
+	$("#example3").makeSortable({ items: "li" });
+	$("#example4").makeSortable({ hoverClass: "hover" });
 
 });
 </script>
