@@ -9,11 +9,30 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 	//Make nodes selectable by expression
 	$.extend($.expr[':'], { sortable: "(' '+a.className+' ').indexOf(' ui-sortable ')" });
 
-	$.fn.sortable = function(o) {
-		return this.each(function() {
-			new $.ui.sortable(this,o);	
-		});
-	};
+	$.fn.extend({
+		makeSortable: function(o) {
+			return this.each(function() {
+				if(!$.data(this, "ui-sortable")) new $.ui.sortable(this,o);	
+			});
+		},
+		removeSortable: function() {
+			return this.each(function() { if($.data(this, "ui-sortable")) $.data(this, "ui-sortable").destroy(); });
+		},
+		changeSortable: function(key,value) {
+			var ret = null;
+			this.each(function() {
+				if($.data(this, "ui-sortable")) ret = $.data(this, "ui-sortable")[key](value);
+			});
+			return ret || this;
+		},
+		enableSortable: function() {
+			return this.each(function() { if($.data(this, "ui-sortable")) $.data(this, "ui-sortable").enable(); });
+		},
+		disableSortable: function() {
+			return this.each(function() { if($.data(this, "ui-sortable")) $.data(this, "ui-sortable").disable(); });
+		}
+	});
+
 	
 	$.ui.sortable = function(element,options) {
 	
@@ -86,13 +105,27 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			$.ui.plugin.call(this, n, [e, this.ui()]);
 			this.element.triggerHandler(n == "sort" ? n : "sort"+n, [e, this.ui()], this.options[n]);
 		},
+		serialize: function(o) {
+			
+			var items = $(this.options.items, this.element); //Only the items of the sortable itself
+			var str = '';
+			o = o || {};
+			
+			$(this.options.items, this.element).each(function() {
+				var res = (this.getAttribute(o.attribute || 'id') || '').match(o.expression || /(.+)[-=_](.+)/);
+				if(res) str += res[1]+'='+res[2];				
+			});
+			
+			return str;
+			
+		},
 		intersectsWith: function(item) {
 			
 			var x1 = this.positionAbs.left, x2 = x1 + this.helperProportions.width,
 			    y1 = this.positionAbs.top, y2 = y1 + this.helperProportions.height;
 			var l = item.left, r = l + item.width, 
 			    t = item.top,  b = t + item.height;
-
+			
 			return (   l < x1 + (this.helperProportions.width  / 2)        // Right Half
 				&&     x2 - (this.helperProportions.width  / 2) < r    // Left Half
 				&& t < y1 + (this.helperProportions.height / 2)        // Bottom Half
@@ -100,6 +133,7 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			
 		},
 		refresh: function() {
+			
 			this.items = [];
 			var items = this.items;
 			var queries = [$(this.options.items, this.element)];
@@ -107,9 +141,7 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			if(this.options.connectWith) {
 				for (var i = this.options.connectWith.length - 1; i >= 0; i--){
 					var inst = $.data($(this.options.connectWith[i])[0], 'ui-sortable');
-					if(inst) {
-						queries.push($(inst.options.items, inst.element));
-					}
+					if(inst) queries.push($(inst.options.items, inst.element));
 				};
 			}
 			
@@ -135,8 +167,16 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			};
 		},
 		destroy: function() {
+			
 			this.element.removeClass("ui-sortable ui-sortable-disabled");
 			this.element.removeMouseInteraction();
+			
+			for (var i = this.items.length - 1; i >= 0; i--) {
+				$.data(this.items[i].item[0], 'ui-sortable-item', null);
+			};
+			
+			$.data(this.element[0], 'ui-sortable', null);
+			
 		},
 		enable: function() {
 			this.element.removeClass("ui-sortable-disabled");
@@ -149,6 +189,9 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 		start: function(e) {
 			
 			var o = this.options;
+
+			//Refresh the droppable items
+			this.refresh(); this.refreshPositions();
 
 			//Create and append the visible helper
 			this.helper = this.currentItem.clone().appendTo(this.currentItem[0].parentNode);
@@ -192,9 +235,6 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			
 			//Set the original element visibility to hidden to still fill out the white space	
 			$(this.currentItem).css('visibility', 'hidden');
-			
-			//Refresh the droppable positions
-			this.refreshPositions();
 
 			return false;
 						
