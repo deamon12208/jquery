@@ -12,6 +12,7 @@
 function setUpPage() {
 	$('#dp').attachDatepicker({clearText: 'Erase'});
 	$('#adj').attachDatepicker();
+	$('#rem').attachDatepicker({showOn: 'both'});
 	setUpPageStatus = "complete";
 }
 
@@ -22,20 +23,25 @@ function testSetDefaults() {
 	$.datepicker.setDefaults({showOn: 'focus'});
 }
 
+function testRemove() {
+	var rem = $('#rem');
+	assertEquals('Missing ID', 2, rem[0]._calId);
+	assertTrue('Missing wrapper', rem.parent('.datepicker_wrap').length > 0);
+	assertTrue('Missing marker class', rem.is('.hasDatepicker'));
+	rem.removeDatepicker();
+	rem = $('#rem');
+	assertUndefined('ID still there', rem[0]._calId);
+	assertFalse('Wrapper still there', rem.parent('.datepicker_wrap').length > 0);
+	assertFalse('Marker class still there', rem.is('.hasDatepicker'));
+}
+
 function testDisableEnable() {
-	assertFalse('Control is disabled', $.datepicker.isDisabled('#dp'));
+	var dp = $('#dp');
+	assertFalse('Control is disabled', dp.isDisabledDatepicker());
 	$('#dp').disableDatepicker();
-	assertTrue('Control is enabled by ID', $.datepicker.isDisabled($('#dp')));
+	assertTrue('Control is enabled by ID', dp.isDisabledDatepicker());
 	$('#dp').enableDatepicker();
-	assertFalse('Control is disabled by ID', $.datepicker.isDisabled($('#dp')[0]));
-	$('#dp').disableDatepicker();
-	assertTrue('Control is enabled by jQuery', $.datepicker.isDisabled($('#dp')));
-	$('#dp').enableDatepicker();
-	assertFalse('Control is disabled by jQuery', $.datepicker.isDisabled($('#dp')[0]));
-	$('#dp:first').disableDatepicker();
-	assertTrue('Control is enabled by element', $.datepicker.isDisabled('#dp'));
-	$('#dp:first').enableDatepicker();
-	assertFalse('Control is disabled by element', $.datepicker.isDisabled('#dp'));
+	assertFalse('Control is disabled by ID', dp.isDisabledDatepicker());
 }
 
 function testChange() {
@@ -53,22 +59,25 @@ function testChange() {
 	$('#dp:first').changeDatepicker({clearText: null});
 	assertNull('Invalid instance clearText', $.datepicker._inst[0]._settings.clearText);
 	$('#dp').changeDatepicker({clearText: 'Erase'});
+	assertEquals('Invalid instance clearText', 'Erase',
+		$.datepicker._inst[0]._settings.clearText);
+	$('#dp').changeDatepicker('clearText', 'X1');
+	assertEquals('Invalid instance clearText', 'X1',
+		$.datepicker._inst[0]._settings.clearText);
+	$('#dp:first').changeDatepicker('clearText', null);
+	assertNull('Invalid instance clearText', $.datepicker._inst[0]._settings.clearText);
+	$('#dp').changeDatepicker('clearText', 'Erase');
+	assertEquals('Invalid instance clearText', 'Erase',
+		$.datepicker._inst[0]._settings.clearText);
 }
 
 function testSetGetDateFor() {
-	assertNull('Invalid date set', $.datepicker.getDateFor('#dp'));
+	var dp = $('#dp');
+	assertNull('Invalid date set', dp.getDatepickerDate());
 	var date = new Date(2001, 2 - 1, 3);
-	$.datepicker.setDateFor('#dp', date);
-	assertEquals('Invalid date set/get by ID', date.toString(),
-		$.datepicker.getDateFor('#dp').toString());
-	date = new Date(2002, 3 - 1, 4);
-	$.datepicker.setDateFor($('#dp'), date);
+	dp.setDatepickerDate(date);
 	assertEquals('Invalid date set/get by jQuery', date.toString(), 
-		$.datepicker.getDateFor($('#dp')).toString());
-	date = new Date(2003, 4 - 1, 5);
-	$.datepicker.setDateFor($('#dp')[0], date);
-	assertEquals('Invalid date set/get by element', date.toString(),
-		$.datepicker.getDateFor($('#dp')[0]).toString());
+		dp.getDatepickerDate().toString());
 }
 
 function testNoWeekends() {
@@ -361,10 +370,11 @@ function testGetDefaultDate() {
 }
 
 function testAdjustDate() {
+	var adj = $('#adj');
 	var inst = $.datepicker._inst[1];
 	inst._rangeStart = null;
-	$('#adj').changeDatepicker({minDate: null, maxDate: null});
-	$.datepicker.setDateFor('#adj', new Date(2001, 2 - 1, 3));
+	adj.changeDatepicker({minDate: null, maxDate: null}).
+		setDatepickerDate(new Date(2001, 2 - 1, 3));
 	var adjusts = [[0, 'D', 2001, 2, 3], [1, 'D', 2001, 2, 4],
 		[7, 'D', 2001, 2, 11], [-8, 'D', 2001, 2, 3],
 		[-8, 'D', 2001, 1, 26], [+5, 'D', 2001, 1, 31],
@@ -380,8 +390,8 @@ function testAdjustDate() {
 			inst._selectedDay == adjusts[i][4]);
 	}
 	// with minimum
-	$('#adj').changeDatepicker({minDate: new Date(2001, 1 - 1, 1)});
-	$.datepicker.setDateFor('#adj', new Date(2001, 2 - 1, 3));
+	adj.changeDatepicker({minDate: new Date(2001, 1 - 1, 1)}).
+		setDatepickerDate(new Date(2001, 2 - 1, 3));
 	adjusts = [[0, 'D', 2001, 2, 3], [7, 'D', 2001, 2, 10],
 		[-88, 'D', 2001, 1, 1], [5, 'D', 2001, 1, 6],
 		[0, 'M', 2001, 1, 6], [13, 'M', 2002, 2, 6],
@@ -395,8 +405,8 @@ function testAdjustDate() {
 			inst._selectedDay == adjusts[i][4]);
 	}
 	// with maximum
-	$('#adj').changeDatepicker({minDate: null, maxDate: new Date(2001, 6 - 1, 30)});
-	$.datepicker.setDateFor('#adj', new Date(2001, 2 - 1, 3));
+	adj.changeDatepicker({minDate: null, maxDate: new Date(2001, 6 - 1, 30)}).
+		setDatepickerDate(new Date(2001, 2 - 1, 3));
 	adjusts = [[0, 'D', 2001, 2, 3], [7, 'D', 2001, 2, 10],
 		[200, 'D', 2001, 6, 30], [-184, 'D', 2000, 12, 28],
 		[0, 'M', 2000, 12, 28], [3, 'M', 2001, 3, 28],
@@ -517,5 +527,6 @@ function assertDateEquals(msg, date1, date2) {
 	To see them, take a look at the source.</p>
 <p><input type="text" id="dp"/></p>
 <p><input type="text" id="adj"/></p>
+<p><input type="text" id="rem"/></p>
 </body>
 </html>
