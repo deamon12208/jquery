@@ -21,11 +21,11 @@
 		
 		//Prepare the passed options
 		this.options = $.extend({
-			proxy: "proxy",
 			preventDefault: true,
 			animate: false,
 			duration: 'fast',
-			easing: 'swing'
+			easing: 'swing',
+			autohide: false
 		}, options);
 		
 		//Force proxy if animate is enable
@@ -36,13 +36,15 @@
 		//Position the node
 		if(!o.proxy && (this.element.css('position') == 'static' || this.element.css('position') == ''))
 			this.element.css('position', 'relative');
-
+		
+		var nodeName = element.nodeName;
+		
 		//Wrap the element if it cannot hold child nodes
-		if(element.nodeName.match(/textarea|input|select|button|img/i)) {
+		if(nodeName.match(/textarea|input|select|button|img/i)) {
 			
 			//Create a wrapper element and set the wrapper to the new current internal element
 			this.element.wrap('<div class="ui-wrapper"  style="position: relative; width: '+this.element.outerWidth()+'px; height: '+this.element.outerHeight()+';"></div>');
-			var oel = this.element; element = element.parentNode; this.element = $(element);
+			oel = this.element; element = element.parentNode; this.element = $(element);
 			
 			//Move margins to the wrapper
 			this.element.css({
@@ -54,33 +56,31 @@
 			
 			oel.css({ marginLeft: 0, marginTop: 0, marginRight: 0, marginBottom: 0});
 			
-			var b = [parseInt(oel.css('borderTopWidth')),parseInt(oel.css('borderRightWidth')),parseInt(oel.css('borderBottomWidth')),parseInt(oel.css('borderLeftWidth'))];
-			
 			//Prevent Safari textarea resize
 			if ($.browser.safari && o.preventDefault) oel.css('resize', 'none');
 			
 			o.proportionallyResize = o.proportionallyResize || [];
 			o.proportionallyResize.push(oel);
 			
-		} else {
-			var b = [0,0,0,0];	
 		}
 		
 		if(!o.handles) o.handles = !$('.ui-resizable-handle', element).length ? "e,s,se" : { n: '.ui-resizable-n', e: '.ui-resizable-e', s: '.ui-resizable-s', w: '.ui-resizable-w', se: '.ui-resizable-se', sw: '.ui-resizable-sw', ne: '.ui-resizable-ne', nw: '.ui-resizable-nw' };
 		if(o.handles.constructor == String) {
 
-			if(o.handles == 'all') o.handles = 'n,e,s,w,se,sw,ne,nw';
+			if(o.handles == 'all')
+				o.handles = 'n,e,s,w,se,sw,ne,nw';
+				
 			var n = o.handles.split(","); o.handles = {};
 			
 			var insertions = {
-				n: 'top: '+b[0]+'px;',
-				e: 'right: '+b[1]+'px;'+(o.zIndex ? 'z-index: '+o.zIndex+';' : ''),
-				s: 'bottom: '+b[1]+'px;'+(o.zIndex ? 'z-index: '+o.zIndex+';' : ''),
-				w: 'left: '+b[3]+'px;',
-				se: 'bottom: '+b[2]+'px; right: '+b[1]+'px;'+(o.zIndex ? 'z-index: '+o.zIndex+';' : ''),
-				sw: 'bottom: '+b[2]+'px; left: '+b[3]+'px;',
-				ne: 'top: '+b[0]+'px; right: '+b[1]+'px;',
-				nw: 'top: '+b[0]+'px; left: '+b[3]+'px;'
+				n: 'top: 0px;',
+				e: 'right: 0px;'+(o.zIndex ? 'z-index: '+o.zIndex+';' : ''),
+				s: 'bottom: 0px;'+(o.zIndex ? 'z-index: '+o.zIndex+';' : ''),
+				w: 'left: 0px;',
+				se: 'bottom: 0px; right: 0px;'+(o.zIndex ? 'z-index: '+o.zIndex+';' : ''),
+				sw: 'bottom: 0px; left: 0px;',
+				ne: 'top: 0px; right: 0px;',
+				nw: 'top: 0px; left: 0px;'
 			};
 			
 			for(var i=0; i<n.length;i++) {
@@ -88,26 +88,19 @@
 				this.element.append("<div class='ui-resizable-"+dir+" ui-resizable-handle' style='"+insertions[dir]+"'></div>");
 				o.handles[dir] = '.ui-resizable-'+dir;
 			}
-
 		}
 		
-		this._renderAxis = function() {
-			for(var i in o.handles) {
-				if(o.handles[i].constructor == String) o.handles[i] = $(o.handles[i], element).show();		
-				if(!$(o.handles[i]).length) continue;
-			}
-		};
-		
-		this._applyAxisOffset = function(target) {
+		this._renderAxis = function(target) {
 			target = target || this.element;
 			
 			for(var i in o.handles) {
 				if(o.handles[i].constructor == String) o.handles[i] = $(o.handles[i], element).show();
 				
-				//Apply pad to wrapper element, needed to fix axis position (textarea, scrolls)
-				if (this.element.is('.ui-wrapper')) {
+				//Apply pad to wrapper element, needed to fix axis position (textarea, inputs, scrolls)
+				if (this.element.is('.ui-wrapper') && 
+					nodeName.match(/textarea|input|select|button/i)) {
+						
 					var axis = $(o.handles[i], element), padWrapper = 0;
-					
 					//Checking the correct pad
 					padWrapper = axis.css(/sw|ne|nw|se|n|s/.test(i) ? 'height' : 'width');
 					
@@ -116,16 +109,23 @@
 						/ne|nw|n/.test(i) ? 'Top' :
 						/se|sw|s/.test(i) ? 'Bottom' : 
 						/^e$/.test(i) ? 'Right' : 'Left' ].join(""); 
-					
+
 					target.css(padPos, padWrapper);
 				}
-				
 				if(!$(o.handles[i]).length) continue;
 			}
 		};
 		
-		this._renderAxis();
-		this._applyAxisOffset(this.element);
+		this._renderAxis(this.element);
+
+		//If we want to auto hide the elements
+		if(o.autohide) $(self.element).addClass("ui-resizable-autohide").hover(function() {
+			$(this).removeClass("ui-resizable-autohide");
+		},
+		function() {
+			if (!self.options.resizing)
+				$(this).addClass("ui-resizable-autohide");
+		});
 	
 		//Initialize mouse events for interaction
 		this.element.mouseInteraction({
@@ -144,9 +144,7 @@
 				return false;
 			}
 		});
-		
 	}
-	
 	$.extend($.ui.resizable.prototype, {
 		plugins: {},
 		ui: function() {
@@ -156,11 +154,34 @@
 				options: this.options
 			};			
 		},
+		_stripUnit: function(s) {
+			return parseInt([s].join("").replace(/(in|cm|mm|pt|pc|px|em|ex|%)$/, ""))||0;
+		},
+		_proportionallyResize: function() {
+			var o = this.options, self = this;
+			if (o.proportionallyResize && o.proportionallyResize.length) {
+				$.each(o.proportionallyResize, function(x, prel) {
+					var b = [ prel.css('borderTopWidth'), prel.css('borderRightWidth'),	prel.css('borderBottomWidth'), prel.css('borderLeftWidth') ];
+					var p = [ prel.css('paddingTop'), prel.css('paddingRight'),	prel.css('paddingBottom'), prel.css('paddingLeft') ];
+					
+					o.borderDif = o.borderDif || $.map(b, function(v, i) {
+						var border = self._stripUnit(v), padding = self._stripUnit(p[i]);
+						return border + padding; 
+					});
+					prel.css({
+						display: 'block', //Needed to fix height autoincrement
+						height: (self.element.height() - o.borderDif[0] - o.borderDif[2]) + "px",
+						width: (self.element.width() - o.borderDif[1] - o.borderDif[3]) + "px"
+					});
+				});
+			}
+		},
+		
 		_renderProxy: function() {
 			var el = this.element;
+			this.offset = el.offset();
 			
 			if(this.options.proxy) {
-				this.offset = el.offset();
 				this.helper = this.helper || $('<div></div>');
 				
 				this.helper.addClass(this.options.proxy).css({
@@ -193,7 +214,7 @@
 			this.disabled = true;
 		},
 		start: function(e) {
-			
+			this.options.resizing = true;
 			var iniPos = this.element.position(), ele = this.element;
 			
 			if (ele.is('.ui-draggable') || /absolute/.test(ele.css('position')))
@@ -212,6 +233,7 @@
 			//Axis, default = se
 			this.options.axis = axis && axis[1] ? axis[1] : 'se';
 			
+			
 			//Store needed variables
 			$.extend(this.options, {
 				currentSize: { width: this.element.outerWidth(), height: this.element.outerHeight() },
@@ -227,15 +249,16 @@
 			return false;
 			
 		},
-		stop: function(e) {			
+		stop: function(e) {
+			this.options.resizing = false;
 			var o = this.options;
 
 			if(o.proxy) {
 				var style = { 
-				  width: this.helper.width() - o.currentSizeDiff.width,
-				  height: this.helper.height() - o.currentSizeDiff.height,
-				  top: (parseInt(this.element.css('top')) || 0) + (parseInt(this.helper.css('top')) - this.offset.top),
-				  left: (parseInt(this.element.css('left')) || 0) + (parseInt(this.helper.css('left')) - this.offset.left)
+				  width: (this.helper.width() - o.currentSizeDiff.width) + "px",
+				  height: (this.helper.height() - o.currentSizeDiff.height) + "px",
+				  top: ((parseInt(this.element.css('top')) || 0) + ((parseInt(this.helper.css('top')) - this.offset.top)||0)),
+				  left: ((parseInt(this.element.css('left')) || 0) + ((parseInt(this.helper.css('left')) - this.offset.left)||0))
 				};
 				
 				if (o.animate) {
@@ -244,39 +267,7 @@
 				} else {
 					this.element.css(style);
 				}
-				
-				// TODO
-				if (o.proportionallyResize && 
-						o.proportionallyResize.constructor == Array) {
-					
-					var prTrigger = function(x, prel) {
-						var b = [ parseInt(prel.css('borderTopWidth')), parseInt(prel.css('borderRightWidth')),	parseInt(prel.css('borderBottomWidth')), parseInt(prel.css('borderLeftWidth')) ];
-						var p = [ parseInt(prel.css('paddingTop')), parseInt(prel.css('paddingRight')),	parseInt(prel.css('paddingBottom')), parseInt(prel.css('paddingLeft')) ];
-						
-						var diff = $.map(b, function(i){
-							return b[i] + p[i]; 
-						});
-						
-						console.log(diff);
-						
-						prel.css({ 
-							width: this.element.outerWidth()  + "px",
-							height: this.element.outerHeight() + "px",
-							top: (parseInt(this.element.css('top')) || 0) + (parseInt(this.helper.css('top')) - this.offset.top), 
-							left: (parseInt(this.element.css('left')) || 0) + (parseInt(this.helper.css('left')) - this.offset.left)
-						});
-						
-						this._applyAxisOffset(prel);
-						//prel.css({ marginLeft: 0, marginTop: 0, marginRight: 0, marginBottom: 0});
-						//this._renderAxis();
-						
-					}, that = this;
-					
-					$.each(o.proportionallyResize, function(x, prel) {
-						prTrigger.apply(that, [x, prel]);
-					});
-				}
-				
+				if (o.proxy) this._proportionallyResize();
 				this.helper.remove();
 			}
 			
@@ -286,7 +277,7 @@
 		},
 		drag: function(e) {
 
-			var el = this.helper, o = this.options, props = {};
+			var el = this.helper, o = this.options, props = {}, self = this;
 			
 			var change = function(a,b) {
 				//Parsing regex once, increase performance
@@ -300,7 +291,10 @@
 				
 				var mod = (e[pageAxis] - o.startPosition[startPos]) * (b ? -1 : 1);
 				
-				el.css(a, o[curSizePos][a] - mod);
+				el.css(a, o[curSizePos][a] - mod - (
+						o.proportionallyResize && !o.proxy ? o.currentSizeDiff.width : 0
+					)
+				);
 			};
 			
 			//Change the height
@@ -338,9 +332,9 @@
 			if(o.minWidth && curleft >= (o.currentPosition.left + (o.currentSize.width - o.minWidth))) el.css('left', (o.currentPosition.left + (o.currentSize.width - o.minWidth)));
 			if(o.maxWidth && curleft <= (o.currentPosition.left + (o.currentSize.width - o.maxWidth))) el.css('left', (o.currentPosition.left + (o.currentSize.width - o.maxWidth)));
 			
+			if (!o.proxy) this._proportionallyResize();
 			this.propagate("resize", e);	
 			return false;
-			
 		}
 	});
 

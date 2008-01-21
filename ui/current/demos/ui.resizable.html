@@ -19,6 +19,18 @@
 <script type="text/javascript" src="../ui.mouse.js"></script>
 <script type="text/javascript" src="../ui.resizable.js"></script>
 
+<style>
+
+.proxy {
+	border: 1px solid #50A029;
+	background-color: #E6F7D4;
+	opacity: 0.3;
+	alpha: 0.3;
+	filter:progid:DXImageTransform.Microsoft.Alpha(opacity=30);
+}
+
+</style>
+
 </head>
 <body class="flora">
 
@@ -76,8 +88,8 @@ $(window).bind("load",function(){
 	$('#example1').resizable();
 	$('#example2').resizable({ autohide: true, minHeight: 100, minWidth: 200, maxHeight: 300, maxWidth: 800 });
 	$('#example3').resizable({ minHeight: 100, minWidth: 200, maxHeight: 300, maxWidth: 800 });
-	$('#example32').resizable({ minHeight: 100, minWidth: 200 });
-	$('#example4').resizable({ minHeight: 100, minWidth: 200, maxHeight: 300, maxWidth: 800 });
+	$('#example32').resizable({ handles: 'all', autohide: true, minHeight: 100, minWidth: 200 });
+	$('#example4').resizable({ autohide: true, proxy:'proxy', minHeight: 100, minWidth: 200, maxHeight: 300, maxWidth: 800 });
 	
 	
 

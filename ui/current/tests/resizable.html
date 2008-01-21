@@ -37,10 +37,10 @@ body
 
 .ui-resizable-handle { position: absolute; background: #D0E3FC; display: none; }
 .ui-resizable .ui-resizable-handle { display: block }
-.ui-resizable-n { cursor: n-resize; height: 8px; left: 10px; right: 10px; }
-.ui-resizable-e { cursor: e-resize; width: 8px; top: 10px; bottom: 10px; }
-.ui-resizable-s { cursor: s-resize; height: 8px; left: 10px; right: 10px; }
-.ui-resizable-w { cursor: w-resize; width: 8px; top: 10px; bottom: 10px; }
+.ui-resizable-n { cursor: n-resize; height: 8px; left: 8px; right: 8px; }
+.ui-resizable-e { cursor: e-resize; width: 8px; top: 8px; bottom: 8px; }
+.ui-resizable-s { cursor: s-resize; height: 8px; left: 8px; right: 8px; }
+.ui-resizable-w { cursor: w-resize; width: 8px; top: 8px; bottom: 8px; }
 
 .ui-resizable-se { cursor: se-resize; width: 8px; height: 8px; }
 .ui-resizable-sw { cursor: sw-resize; width: 8px; height: 8px; }
@@ -69,7 +69,7 @@ body
 <div id="log">log</div>
 
 <div style='width: 300px; height: 200px; margin: 20px; position: relative;'>
-	<textarea id='textarea' style='width: 400px; height: 200px; border: 2px solid #F0F1F3; margin: 0px;'>
+	<textarea id='textarea' style='width: 400px; height: 200px; border: 2px solid #F0F1F3; margin: 0px; padding:0px;'>
 	I was made resizable with this code only: $('#textarea').resizable();
 	
 	Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed leo. Proin commodo. Nullam nisl ipsum, sagittis sit amet, mattis id, aliquam ac, purus. Suspendisse dignissim lorem id odio. Duis tortor nisl, imperdiet placerat, accumsan eu, lacinia sit amet, mauris. Mauris tellus erat, ullamcorper in, faucibus ut, consectetuer quis, mi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean mollis lectus lacinia augue. Nam eget leo. Fusce magna. Etiam eros. Quisque eget dui. Donec fringilla, libero non rhoncus bibendum, nibh turpis varius orci, quis bibendum metus justo quis nibh. Proin blandit. Suspendisse feugiat consequat lectus. Etiam pharetra suscipit velit. Donec imperdiet quam sit amet erat pretium ullamcorper. Donec quis nisl vitae lacus accumsan faucibus. Vivamus velit turpis, tristique sit amet, malesuada id, molestie et, magna.
@@ -77,9 +77,19 @@ body
 	</textarea>
 </div>
 
-<div style='width: 300px; height: 200px; margin: 20px; position: relative;'>
-	<img id="image" src="images/houses.jpg" style='width: 300px; height: 200px;'> 
+<div style='width: 300px; height: 200px; margin: 20px; position: relative; top:100px;'>
+	<img id="image" src="images/houses.jpg" style='width: 200px; height:100px;border: 2px solid #F0F1F3; margin: 0px;'> 
 </div>
+
+<div style='width: 300px; height: 200px; margin: 20px; position: relative;top:30px;'>
+	<img id="image2" src="images/bamboo.jpg" style='width: 300px; height:100px;border: 2px solid #F0F1F3; margin: 0px;'> 
+</div>
+
+
+<div style='width: 300px; height: 200px; margin: 20px; position: relative;top:30px;'>
+	<input id="input" type="text" value="Input text test" style='width:300px; height:50px;'> 
+</div>
+
 
 <div id='resizeme' style='width: 300px; height: 200px; border: 1px solid black; margin: 20px; position: relative;'>
 <div class='ui-resizable-n ui-resizable-handle' style='height: 10px; top: 0px; left: 30px; right: 30px;'></div>
@@ -132,7 +142,7 @@ body
 </div>
 
 <div id='resizeme5' style='width: 300px; height: 200px; border: 1px solid black; position: relative; position: absolute; bottom: 20px; right: 550px;'>
-	<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'><b>Animated Resize</b><br>Absolute position with proxy (all directions enabled), ah, and I'm draggable, too!<br><br>
+	<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'><b>Animated Resizing</b><br>Absolute position with proxy (all directions enabled), ah, and I'm draggable, too!<br><br>
 		$('#resizable5').resizable({ <br>animate: { opacity:.5, fontSize: '0.8em' }, <br>duration: 'slow', <br>easing: 'swing' <br>});</div>
 </div>
 	
@@ -149,8 +159,8 @@ if(!window.console) {
 $(document).ready(function(){
 
 	$('#textarea').resizable({
-		proxy: "proxy",
-		handles: 'e,se,s',
+		//proxy: "proxy",
+		handles: 'all',
 		containment: 'parent',
 		aspectRatio: 'preserve',
 		preventDefault: true
@@ -162,6 +172,22 @@ $(document).ready(function(){
 		containment: 'parent',
 		aspectRatio: 'preserve'
 	});
+	
+	$('#image2').resizable({
+		//proxy: "proxy",
+		handles: 'all',
+		containment: 'parent',
+		aspectRatio: 'preserve'
+	});
+	
+
+	$('#input').resizable({
+		proxy: "proxy",
+		handles: 'e,se,s',
+		containment: 'parent',
+		aspectRatio: 'preserve'
+	});
+	
 	
 	$('#resizeme, #resizeme2').resizable({
 		//proxy: "proxy",
