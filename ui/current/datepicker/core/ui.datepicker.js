@@ -53,6 +53,7 @@ function Datepicker() {
 	this._defaults = { // Global defaults for all the date picker instances
 		showOn: 'focus', // 'focus' for popup on focus,
 			// 'button' for trigger button, or 'both' for either
+		showAnim: 'show', // Name of jQuery animation for popup
 		defaultDate: null, // Used when field is blank: actual date,
 			// +/-number for offset from today, null for today
 		appendText: '', // Display text following the input box, e.g. showing the format
@@ -287,52 +288,6 @@ $.extend(Datepicker.prototype, {
 		return this;
 	},
 
-	/* Is the input field disabled?
-	   @param  input  element - single input field or
-	                  string - the ID or other jQuery selector of the input field or
-	                  object - jQuery collection of input field
-	   @return boolean - true if disabled, false if enabled */
-	isDisabled: function(input) {
-		input = (input.jquery ? input[0] : (typeof input == 'string' ? $(input)[0] : input));
-		for (var i = 0; i < $.datepicker._disabledInputs.length; i++) {
-			if ($.datepicker._disabledInputs[i] == input) {
-				return true;
-			}
-		}
-		return false;
-	},
-
-	/* Set the date for a date picker attached to an input field or division.
-	   @param  control  element - the input field or div/span attached to the date picker or
-	                    string - the ID or other jQuery selector of the input field or
-	                    object - jQuery object for input field or div/span
-	   @param  date     Date - the new date
-	   @param  endDate  Date - the new end date for a range (optional)
-	   @return the manager object */
-	setDateFor: function(control, date, endDate) {
-		control = (control.jquery ? control[0] :
-			(typeof control == 'string' ? $(control)[0] : control));
-		var inst = this._getInst(control._calId);
-		if (inst) {
-			inst._setDate(date, endDate);
-			this._updateDatepicker(inst);
-		}
-		return this;
-	},
-
-	/* Retrieve the date for a date picker attached to an input field or division.
-	   @param  control  element - the input field or div/span attached to the date picker or
-	                    string - the ID or other jQuery selector of the input field or
-	                    object - jQuery object for input field or div/span
-	   @return Date - the current date or
-	           Date[2] - the current dates for a range*/
-	getDateFor: function(control) {
-		control = (control.jquery ? control[0] :
-			(typeof control == 'string' ? $(control)[0] : control));
-		var inst = this._getInst(control._calId);
-		return (inst ? inst._getDate() : null);
-	},
-
 	/* Pop-up the date picker for a given input field.
 	   @param  control  element - the input field attached to the date picker or
 	                    string - the ID or other jQuery selector of the input field or
@@ -348,7 +303,7 @@ $.extend(Datepicker.prototype, {
 		if ($.datepicker._lastInput == input) { // already here
 			return;
 		}
-		if ($.datepicker.isDisabled(input)) {
+		if ($(input).isDisabledDatepicker()) {
 			return;
 		}
 		var inst = $.datepicker._getInst(input._calId);
@@ -391,7 +346,8 @@ $.extend(Datepicker.prototype, {
 				$.datepicker._datepickerShowing = true;
 				$.datepicker._afterShow(inst);
 			};
-			inst._datepickerDiv.show(speed, postProcess);
+			var showAnim = inst._get('showAnim') || 'show';
+			inst._datepickerDiv[showAnim](speed, postProcess);
 			if (speed == '') {
 				postProcess();
 			}
@@ -1454,6 +1410,41 @@ $.fn.attachDatepicker = function(settings) {
 	});
 };
 
+/* Detach a datepicker from its control.
+   @return jQuery object - for chaining further calls */
+$.fn.removeDatepicker = function() {
+	var jq = this.each(function() {
+		var $this = $(this);
+		var nodeName = this.nodeName.toLowerCase();
+		var calId = this._calId;
+		this._calId = null;
+		if (nodeName == 'input') {
+			$this.siblings('.datepicker_append').replaceWith('');
+			$this.siblings('.datepicker_trigger').replaceWith('');
+			$this.removeClass($.datepicker.markerClassName).
+				unbind('focus', $.datepicker.showFor).
+				unbind('keydown', $.datepicker._doKeyDown).
+				unbind('keypress', $.datepicker._doKeyPress);
+			var wrapper = $this.parents('.datepicker_wrap');
+			if (wrapper) {
+				wrapper.replaceWith(wrapper.html());
+			}
+		} 
+		else if (nodeName == 'div' || nodeName == 'span') {
+			$this.removeClass($.datepicker.markerClassName).empty();
+		}
+		if ($('input[_calId=' + calId + ']').length == 0) {
+			// clean up if last for this ID
+			$.datepicker._inst[calId] = null;
+		}
+	});
+	if ($('input.hasDatepicker').length == 0) {
+		// clean up if last input 
+		$.datepicker._datepickerDiv.replaceWith('');
+	}
+	return jq;
+};
+
 /* Enable the date picker to a jQuery selection.
    @return jQuery object - for chaining further calls */
 $.fn.enableDatepicker = function() {
@@ -1465,7 +1456,7 @@ $.fn.enableDatepicker = function() {
 		$.datepicker._disabledInputs = $.map($.datepicker._disabledInputs,
 			function(value) { return (value == $this ? null : value); }); // delete entry
 	});
-}
+};
 
 /* Disable the date picker to a jQuery selection.
    @return jQuery object - for chaining further calls */
@@ -1479,20 +1470,70 @@ $.fn.disableDatepicker = function() {
 			function(value) { return (value == $this ? null : value); }); // delete entry
 		$.datepicker._disabledInputs[$.datepicker._disabledInputs.length] = this;
 	});
-}
+};
+
+/* Is the first field in a jQuery collection disabled as a datepicker?
+   @return boolean - true if disabled, false if enabled */
+$.fn.isDisabledDatepicker = function() {
+	if (this.length == 0) {
+		return false;
+	}
+	for (var i = 0; i < $.datepicker._disabledInputs.length; i++) {
+		if ($.datepicker._disabledInputs[i] == this[0]) {
+			return true;
+		}
+	}
+	return false;
+};
 
 /* Update the settings for a date picker attached to an input field or division.
-	   @param  settings  object - the new settings to update
-	   @return jQuery object - for chaining further calls */
-$.fn.changeDatepicker = function(settings) {
+   @param  name   string - the name of the setting to change
+                  object - the new settings to update
+   @param  value  any - the new value for the setting (omit if above is a map)
+   @return jQuery object - for chaining further calls */
+$.fn.changeDatepicker = function(name, value) {
+	var settings = name || {};
+	if (typeof name == 'string') {
+		settings = {};
+		settings[name] = value;
+	}
 	return this.each(function() {
 		var inst = $.datepicker._getInst(this._calId);
 		if (inst) {
-			extendRemove(inst._settings, settings || {});
+			extendRemove(inst._settings, settings);
 			$.datepicker._updateDatepicker(inst);
 		}
 	});
-}
+};
+
+/* Show the date picker attached to the first entry in a jQuery selection.
+   @return jQuery object - for chaining further calls */
+$.fn.showDatepicker = function() {
+	$.datepicker.showFor(this);
+	return this;
+};
+
+/* Set the dates for a jQuery selection.
+   @param  date     Date - the new date
+   @param  endDate  Date - the new end date for a range (optional)
+   @return jQuery object - for chaining further calls */
+$.fn.setDatepickerDate = function(date, endDate) {
+	return this.each(function() {
+		var inst = $.datepicker._getInst(this._calId);
+		if (inst) {
+			inst._setDate(date, endDate);
+			$.datepicker._updateDatepicker(inst);
+		}
+	});
+};
+
+/* Get the date(s) for the first entry in a jQuery selection.
+   @return Date - the current date or
+           Date[2] - the current dates for a range*/
+$.fn.getDatepickerDate = function() {
+	var inst = (this.length > 0 ? $.datepicker._getInst(this[0]._calId) : null);
+	return (inst ? inst._getDate() : null);
+};
 	
 /* Initialise the date picker. */
 $(document).ready(function() {
