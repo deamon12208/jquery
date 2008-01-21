@@ -22,6 +22,9 @@
 		//Prepare the passed options
 		this.options = $.extend({
 			preventDefault: true,
+			transparent: false,
+			minWidth: 10,
+			minHeight: 10,
 			animate: false,
 			duration: 'fast',
 			easing: 'swing',
@@ -94,7 +97,11 @@
 			target = target || this.element;
 			
 			for(var i in o.handles) {
-				if(o.handles[i].constructor == String) o.handles[i] = $(o.handles[i], element).show();
+				if(o.handles[i].constructor == String) 
+					o.handles[i] = $(o.handles[i], element).show();
+				
+				if (o.transparent)
+					o.handles[i].css({opacity:0})
 				
 				//Apply pad to wrapper element, needed to fix axis position (textarea, inputs, scrolls)
 				if (this.element.is('.ui-wrapper') && 
@@ -110,7 +117,8 @@
 						/se|sw|s/.test(i) ? 'Bottom' : 
 						/^e$/.test(i) ? 'Right' : 'Left' ].join(""); 
 
-					target.css(padPos, padWrapper);
+					if (!o.transparent)
+						target.css(padPos, padWrapper);
 				}
 				if(!$(o.handles[i]).length) continue;
 			}

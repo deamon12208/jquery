@@ -138,7 +138,7 @@ body
 </div>
 
 <div id='resizeme3' style='width: 300px; height: 200px; border: 1px solid black; position: relative; position: absolute; bottom: 20px; right: 20px;'>
-	<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Absolute position with proxy (all directions enabled), ah, and I'm draggable, too!</div>
+	<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'><b>Transparent axis</b><br>Absolute position with proxy (all directions enabled), ah, and I'm draggable, too!</div>
 </div>
 
 <div id='resizeme5' style='width: 300px; height: 200px; border: 1px solid black; position: relative; position: absolute; bottom: 20px; right: 550px;'>
@@ -215,6 +215,7 @@ $(document).ready(function(){
 		minHeight: 100,
 		maxWidth: 500,
 		maxHeight: 300,
+		transparent: true,
 		
 		//handles: "s, se, e",
 		
@@ -286,7 +287,7 @@ $(document).ready(function(){
 		}		
 	});
 	
-	$('#resizeme3, #resizeme5').draggable({ handle: "div:not(.ui-resizable-handle)" });
+	$('#resizeme3, #resizeme5, .ui-wrapper:parent').draggable({ handle: "div:not(.ui-resizable-handle)" });
 
 	//$("#resizeme3").animate({ height: 500, width: 500, opacity: 'hide' }, "easein");
 
