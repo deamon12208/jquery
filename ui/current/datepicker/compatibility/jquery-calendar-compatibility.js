@@ -1,4 +1,4 @@
-/* jQuery UI Date Picker v3.0 - compatibility with jQuery Calendar v2.7
+/* jQuery UI Date Picker v3.3 - compatibility with jQuery Calendar v2.7
    Written by Marc Grabanski (m@marcgrabanski.com) and Keith Wood (kbwood@iprimus.com.au).
 
    Copyright (c) 2007 Marc Grabanski (http://marcgrabanski.com/code/jquery-calendar)
@@ -38,7 +38,7 @@ $.extend(PopUpCal.prototype, {
 	                   object - jQuery collection of input fields
 	   @return void */
 	enableFor: function(inputs) {
-		$(inputs).enableDatepicker();
+		(inputs.jquery ? inputs : $(inputs)).enableDatepicker();
 	},
 
 	/* Disable the input field(s) from entry.
@@ -47,7 +47,7 @@ $.extend(PopUpCal.prototype, {
 	                   object - jQuery collection of input fields
 	   @return void */
 	disableFor: function(inputs) {
-		$(inputs).disableDatepicker();
+		(inputs.jquery ? inputs : $(inputs)).disableDatepicker();
 	},
 
 	/* Update the settings for a calendar attached to an input field or division.
@@ -65,7 +65,7 @@ $.extend(PopUpCal.prototype, {
 	   @param  date     Date - the new date
 	   @return void */
 	setDateFor: function(control, date) {
-		$.datepicker.setDateFor(control, date);
+		$(control).setDatepickerDate(date);
 	},
 
 	/* Retrieve the date for a calendar attached to an input field or division.
@@ -73,7 +73,7 @@ $.extend(PopUpCal.prototype, {
 	                    string - the ID or other jQuery selector of the input field
 	   @return Date - the current date */
 	getDateFor: function(control) {
-		return $.datepicker.getDateFor(control);
+		return $(control).getDatepickerDate();
 	},
 
 	/* Pop-up the calendar for a given input field.
@@ -90,7 +90,7 @@ $.extend(PopUpCal.prototype, {
 	   @param  speed  string - the speed at which to close the calendar
 	   @return void */
 	hideCalendar: function(id, speed) {
-		$.datepicker.hideDatepicker(id, speed);
+		$.datepicker.hideDatepicker(speed);
 	},
 
 	/* Set as customDate function to prevent selection of weekends.
@@ -103,7 +103,7 @@ $.extend(PopUpCal.prototype, {
 	/* Format a date object into a string value.
 	   @param  date  Date - the date to customise */
 	formatDate: function(date) {
-		return $.datepicker.formatDate(date);
+		return $.datepicker.formatDate($.datepicker._defaults.dateFormat, date);
 	}
 });
 
@@ -130,7 +130,7 @@ function convertSettings(settings) {
    Convert to use the new jQuery Date Picker functionality.
    @param  settings  object - the new settings to use for this calendar instance (anonymous)
    @return jQuery object - for chaining further calls */
-compatFunction = function(settings) {
+$.fn.calendar = function(settings) {
 	this.each(function() {
 		for (attrName in $.datepicker._defaults) {
 			var attrValue = this.getAttribute('cal:' + attrName);
@@ -142,8 +142,8 @@ compatFunction = function(settings) {
 	});
 	return this.attachDatepicker(convertSettings(settings));
 };
-$.fn.calendar = compatFunction;
-$.fn.datepicker = compatFunction;
+
+$.fn.datepicker = $.fn.calendar;
 
 /* Initialise the calendar. */
 $(document).ready(function() {

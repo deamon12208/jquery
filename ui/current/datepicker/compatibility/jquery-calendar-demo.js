@@ -8,7 +8,7 @@ $(function () {
 	// Restore default language after loading French localisation
 	popUpCal.setDefaults(popUpCal.regional['']);
 	// Set calendar global defaults - invoke via focus and image button
-	popUpCal.setDefaults({autoPopUp: 'both', buttonImageOnly: true,
+	popUpCal.setDefaults({dateFormat: 'dd/mm/yy', autoPopUp: 'both', buttonImageOnly: true,
 		buttonImage: '../img/calendar.gif', buttonText: 'Calendar'});
 	// Defaults
 	$('#defaultFocus').calendar({autoPopUp: 'focus'});
@@ -157,9 +157,11 @@ function updateInlineRange() {
 	popUpCal.reconfigureFor(inlineTo, {minDate: dateFrom});
 }
 
-function updateInlineRange2(dateStr) {
-	$('#inlineRange2').val(dateStr ? dateStr :
-		popUpCal.formatDate(popUpCal.getDateFor('#rangeInline')));
+function updateInlineRange2(dates) {
+//	$('#inlineRange2').val(dates ? dates :
+//		popUpCal.formatDate(popUpCal.getDateFor('#rangeInline')));
+	dates = dates || popUpCal.getDateFor('#rangeInline');
+	$('#inlineRange2').val(popUpCal.formatDate(dates[0]) + ' to ' + popUpCal.formatDate(dates[1]));
 }
 
 function localise() {
