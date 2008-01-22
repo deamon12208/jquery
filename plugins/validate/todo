@@ -1,6 +1,7 @@
 1.3
 ---
 
+- checkout datejs.com for a proper date implementation
 - provide method to validate form/field without UI side-effects
 jQuery.fn.validForm = function() {
 	var validator = this.validate();
@@ -183,5 +184,8 @@ http://www.fyneworks.com/jquery/FCKEditor/
 2.0
 ---
 - (re)move current addMethod implementation
-- (re)move rules plugin option
-- (re)move metadata support
+- move rules plugin option
+- move metadata support
+- make validate method chainable
+  -> provide an accessor for the validator if necessary at all 
+- move a few default methods to additionals, eg. dateXXX, creditcard, definitely accept
