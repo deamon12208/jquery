@@ -10,7 +10,7 @@
  * Thanks to Kenton Simpson for contributing some good ideas!
  *
  * $Id$
- * @version: 3.00  01/20/2008
+ * @version: 3.01  01/22/2008
  * @requires jQuery v1.1.2 or later
  */
 
@@ -19,7 +19,7 @@
 $.taconite = function(xml) { processDoc(xml); };
 
 $.taconite.debug = 0;  // set to true to enable debug logging to Firebug
-$.taconite.version = '3.00';
+$.taconite.version = '3.01';
 $.taconite.defaults = {
     cdataWrap: 'div'
 };
@@ -158,20 +158,19 @@ function go(xml) {
                     els[j] = createNode(cmdNode.childNodes[j]);
                 a.push(trimHash[cmd] ? cleanse(els) : els);
             }
-            else {
-                // remain backward compat with pre 2.0.9 versions
-                var n = cmdNode.getAttribute('name');
-                var v = cmdNode.getAttribute('value');
-                if (n !== null) a.push(n);
-                if (v !== null) a.push(v);
 
-                // @since: 2.0.9: support arg1, arg2, arg3...
-                for (var j=1; true; j++) {
-                    v = cmdNode.getAttribute('arg'+j);
-                    if (v === null)
-                        break;
-                    a.push(v);
-                }
+            // remain backward compat with pre 2.0.9 versions
+            var n = cmdNode.getAttribute('name');
+            var v = cmdNode.getAttribute('value');
+            if (n !== null) a.push(n);
+            if (v !== null) a.push(v);
+
+            // @since: 2.0.9: support arg1, arg2, arg3...
+            for (var j=1; true; j++) {
+                v = cmdNode.getAttribute('arg'+j);
+                if (v === null)
+                    break;
+                a.push(v);
             }
 
             if ($.taconite.debug) {
