@@ -1,6 +1,6 @@
 /*
  * jQuery clueTip plugin
- * Version 0.9.3.2  (12/05/2007)
+ * Version 0.9.5  (01/22/2008)
  * @requires jQuery v1.1.1+
  * @requires Dimensions plugin 
  *
@@ -55,7 +55,7 @@
  * 
  * More examples can be found at http://plugins.learningjquery.com/cluetip/demo/
  * 
- * Full list of options/settings can be found at the bottom of this file
+ * Full list of options/settings can be found at the bottom of this file and at http://plugins.learningjquery.com/cluetip/
  */
 
   var $cluetip, $cluetipInner, $cluetipOuter, $cluetipTitle, $cluetipArrows, $dropShadow, imgCount;
@@ -82,14 +82,14 @@
       // start out with no contents (for ajax activation)
       var cluetipContents = false;
       var cluezIndex = parseInt(opts.cluezIndex, 10)-1;
-      var isActive = false;
-      
+      var isActive = false, closeOnDelay = 0;
+
       // create the cluetip divs
       if (!$cluetip) {
         $cluetipInner = $('<div id="cluetip-inner"></div>');
         $cluetipTitle = $('<h3 id="cluetip-title"></h3>');        
         $cluetipOuter = $('<div id="cluetip-outer"></div>').append($cluetipInner).prepend($cluetipTitle);
-        $cluetip = $('<div></div>').attr({'id': 'cluetip'}).css({zIndex: opts.cluezIndex})
+        $cluetip = $('<div id="cluetip"></div>').css({zIndex: opts.cluezIndex})
         .append($cluetipOuter).append('<div id="cluetip-extra"></div>')[insertionType](insertionElement).hide();
         $('<div id="cluetip-waitimage"></div>').css({position: 'absolute', zIndex: cluezIndex-1})
         .insertBefore('#cluetip').hide();
@@ -115,7 +115,7 @@
       // vertical measurement variables
       var tipHeight, wHeight;
       var defHeight = isNaN(parseInt(opts.height, 10)) ? 'auto' : (/\D/g).test(opts.height) ? opts.height : opts.height + 'px';
-      var sTop, linkTop, posY, tipY, mouseY;
+      var sTop, linkTop, posY, tipY, mouseY, baseline;
       // horizontal measurement variables
       var tipWidth = parseInt(opts.width, 10) + parseInt($cluetip.css('paddingLeft')) + parseInt($cluetip.css('paddingRight')) + dropShadowSteps;
       if( isNaN(tipWidth) ) tipWidth = 275;
@@ -126,11 +126,12 @@
       var tipParts;
       var tipTitle = (opts.attribute != 'title') ? $this.attr(opts.titleAttribute) : '';
       if (opts.splitTitle) {
-        if(tipTitle == undefined){ tipTitle = '';}
+        if(tipTitle == undefined) {tipTitle = '';}
         tipParts = tipTitle.split(opts.splitTitle);
         tipTitle = tipParts.shift();
       }
       var localContent;
+      
 
 /***************************************      
 * ACTIVATION
@@ -186,7 +187,8 @@
 * subsequent delimiters place clueTip body text on separate lines
 ***************************************/
       if (tipParts) {
-        for (var i=0; i < tipParts.length; i++){
+        var tpl = tipParts.length;
+        for (var i=0; i < tpl; i++){
           if (i == 0) {
             $cluetipInner.html(tipParts[i]);
           } else { 
@@ -210,7 +212,7 @@
             $cluetipOuter.children().empty();
             if (opts.waitImage) {
               $('#cluetip-waitimage')
-              .css({top: mouseY+20, left: mouseX})
+              .css({top: mouseY+20, left: mouseX+20})
               .show();
             }
           };
@@ -282,19 +284,20 @@
       var direction = '';
       $cluetipOuter.css({overflow: defHeight == 'auto' ? 'visible' : 'auto', height: defHeight});
       tipHeight = defHeight == 'auto' ? $cluetip.outerHeight() : parseInt(defHeight,10);   
-      tipY = posY;      
+      tipY = posY;
+      baseline = sTop + wHeight;
       if (opts.positionBy == 'fixed') {
         tipY = posY - opts.dropShadowSteps + tOffset;
       } else if ( (posX < mouseX && Math.max(posX, 0) + tipWidth > mouseX) || opts.positionBy == 'bottomTop') {
-        if (posY + tipHeight + tOffset > sTop + wHeight && mouseY - sTop > tipHeight + tOffset) { 
+        if (posY + tipHeight + tOffset > baseline && mouseY - sTop > tipHeight + tOffset) { 
           tipY = mouseY - tipHeight - tOffset;
           direction = 'top';
         } else { 
           tipY = mouseY + tOffset;
           direction = 'bottom';
         }
-      } else if ( posY + tipHeight + tOffset > sTop + wHeight ) {
-        tipY = (tipHeight >= wHeight) ? sTop : sTop + wHeight - tipHeight - tOffset;
+      } else if ( posY + tipHeight + tOffset > baseline ) {
+        tipY = (tipHeight >= wHeight) ? sTop : baseline - tipHeight - tOffset;
       } else if ($this.css('display') == 'block' || $this[0].tagName.toLowerCase() == 'area' || opts.positionBy == "mouse") {
         tipY = bpY - tOffset;
       } else {
@@ -316,8 +319,13 @@
       $cluetip.hide()[opts.fx.open](opts.fx.open != 'show' && opts.fx.openSpeed);
       if (opts.dropShadow) $dropShadow.css({height: tipHeight, width: opts.width}).show();
       if ($.fn.bgiframe) { $cluetip.bgiframe(); }
-      // trigger the optional onShow function      
+      // trigger the optional onShow function
+      if (opts.delayedClose > 0) {
+        closeOnDelay = setTimeout(cluetipClose, opts.delayedClose);
+      }
+
       opts.onShow($cluetip, $cluetipInner);
+      
     };
 
 /***************************************
@@ -328,6 +336,7 @@
       $('#cluetip-waitimage').hide();
       if (!opts.sticky || (/click|toggle/).test(opts.activation) ) {
         cluetipClose();
+clearTimeout(closeOnDelay);        
       };
       if (opts.hoverClass) {
         $this.removeClass(opts.hoverClass);
@@ -389,7 +398,8 @@
           }
         };
         if ($.fn.hoverIntent && opts.hoverIntent) {
-          $this.hoverIntent({
+          $this.mouseover(function() {$this.attr('title',''); })
+          .hoverIntent({
             sensitivity: opts.hoverIntent.sensitivity,
             interval: opts.hoverIntent.interval,  
             over: function(event) {
@@ -453,7 +463,8 @@
                                 // set to 'focus' to show on focus of a form element and hide on blur
     clickThrough:     false,    // if true, and activation is not 'click', then clicking on link will take user to the link's href,
                                 // even if href and tipAttribute are equal
-    tracking:         false,    // if true, clueTip will track mouse movement
+    tracking:         false,    // if true, clueTip will track mouse movement (experimental)
+    delayedClose:     0,        // close clueTip on a timed delay (experimental)
     closePosition:    'top',    // location of close text for sticky cluetips; can be 'top' or 'bottom' or 'title'
     closeText:        'Close',  // text (or HTML) to to be clicked to close sticky clueTips
     truncate:         0,        // number of characters to truncate clueTip's contents. if 0, no truncation occurs
@@ -482,7 +493,7 @@
 
     // process data retrieved via xhr before it's displayed
     ajaxProcess:      function(data) {
-                        data = $(data).not('style, meta, link, script, title');
+                        data = data.replace(/<s(cript|tyle)(.|\s)*?\/s(cript|tyle)>/g, '').replace(/<link(.|\s)*?\/link>/g,'');
                         return data;
     },                
 
@@ -491,7 +502,7 @@
                       dataType: 'html'
     }
   };
-  
+
 
 /*
  * Global defaults for clueTips. Apply to all calls to the clueTip plugin.
