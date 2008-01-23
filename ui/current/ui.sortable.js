@@ -141,7 +141,7 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			if(this.options.connectWith) {
 				for (var i = this.options.connectWith.length - 1; i >= 0; i--){
 					var inst = $.data($(this.options.connectWith[i])[0], 'ui-sortable');
-					if(inst) queries.push($(inst.options.items, inst.element));
+					if(inst && !inst.disabled) queries.push($(inst.options.items, inst.element));
 				};
 			}
 			
