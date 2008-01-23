@@ -39,8 +39,8 @@
 		},
 		removeMouseInteraction: function(o) {
 			return this.each(function() {
-				if($.data(this.element, "ui-mouse"))
-					$.data(this.element, "ui-mouse").destroy();
+				if($.data(this, "ui-mouse"))
+					$.data(this, "ui-mouse").destroy();
 			});
 		}
 	});
