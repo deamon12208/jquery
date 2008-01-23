@@ -220,7 +220,11 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			};
 			
 			//Generate a flexible offset that will later be subtracted from e.pageX/Y
-			this.offset = {left: e.pageX - this.originalPosition.left, top: e.pageY - this.originalPosition.top };
+			//I hate margins - they need to be removed before positioning the element absolutely..
+			this.offset = {
+				left: e.pageX - this.originalPosition.left + (parseInt(this.currentItem.css('marginLeft')) || 0),
+				top: e.pageY - this.originalPosition.top + (parseInt(this.currentItem.css('marginTop')) || 0)
+			};
 
 			//Save the first time position
 			this.position = { top: e.pageY - this.offset.top, left: e.pageX - this.offset.left };
