@@ -45,9 +45,13 @@
 			var self = ui.instance;
 			self.cancelHelperRemoval = true;
 			var cur = self.currentItem.offset();
-			$(ui.helper).animate({ left: cur.left - self.offsetParentOffset.left, top: cur.top - self.offsetParentOffset.top }, parseInt(ui.options.revert, 10) || 500, function() {
-				self.helper.remove();
-				$(self.currentItem).css('visibility', 'visible');
+
+			$(ui.helper).animate({
+				left: cur.left - self.offsetParentOffset.left - (parseInt(self.currentItem.css('marginLeft')) || 0),
+				top: cur.top - self.offsetParentOffset.top - (parseInt(self.currentItem.css('marginTop')) || 0)
+			}, parseInt(ui.options.revert, 10) || 500, function() {
+				self.currentItem.css('visibility', 'visible');
+				window.setTimeout(function() { self.helper.remove(); }, 50);
 			});
 		}
 	});
