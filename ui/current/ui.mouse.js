@@ -61,7 +61,7 @@
 	
 	$.extend($.ui.mouseInteraction.prototype, {
 		
-		destroy: function() { this.element.unbind('mousedown.draggable'); },
+		destroy: function() { $(this.element).unbind('mousedown.draggable'); },
 		trigger: function() { return this.click.apply(this, arguments); },
 		click: function(e) {
 			
