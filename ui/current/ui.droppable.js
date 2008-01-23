@@ -3,11 +3,26 @@
 	//Make nodes selectable by expression
 	$.extend($.expr[':'], { droppable: "(' '+a.className+' ').indexOf(' ui-droppable ')" });
 
-	$.fn.droppable = function(o) {
-		return this.each(function() {
-			new $.ui.droppable(this,o);
-		});
-	};
+	$.fn.extend({
+		makeDroppable: function(o) {
+			return this.each(function() { if(!$.data(this, "ui-droppable")) new $.ui.droppable(this,o);	});
+		},
+		removeDroppable: function() {
+			return this.each(function() { if($.data(this, "ui-droppable")) $.data(this, "ui-droppable").destroy(); });
+		},
+		changeDroppable: function(key,value) {
+			var ret = null;
+			this.each(function() { if($.data(this, "ui-droppable")) ret = $.data(this, "ui-droppable")[key](value); });
+			return ret || this;
+		},
+		enableDroppable: function() {
+			return this.each(function() { if($.data(this, "ui-droppable")) $.data(this, "ui-droppable").enable(); });
+		},
+		disableDroppable: function() {
+			return this.each(function() { if($.data(this, "ui-droppable")) $.data(this, "ui-droppable").disable(); });
+		}
+	});
+
 	
 	$.ui.droppable = function(element, options) {
 
