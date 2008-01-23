@@ -1,12 +1,3 @@
-$.fn.accordion = function(o) {
-    return this.each(function() {
-        new $.ui.accordion(this,o);
-    });
-};
-
-- fix unaccordion implementation to remove only own events
-- allow custom regex for location matching
-  eg. example.com/products/ matches both example.com/products/ and example.com/products/?id=453
-- fix padding flickering in IE6
-- fix activate to open only, not behave like toggle?
-- http://www.fromustoyou.de/externdownloads/sandbox/accordiontest/
+- update documentation
+  - new option navigationFilter: Callback
+  	eg. example.com/products/ matches both example.com/products/ and example.com/products/?id=453

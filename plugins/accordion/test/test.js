@@ -12,18 +12,18 @@ test("basics", function() {
 });
 
 test("autoheight", function() {
-	$('#navigation').accordion({ header: '.head',autoheight: false });
+	$('#navigation').makeAccordion({ header: '.head', autoheight: false });
 	equals( 90, $('#navigation ul:first').height() );
 	equals( 126, $('#navigation ul:eq(1)').height() );
 	equals( 54, $('#navigation ul:last').height() );
-	$('#navigation').unaccordion().accordion({ header: '.head',autoheight: true });
+	$('#navigation').removeAccordion().makeAccordion({ header: '.head',autoheight: true });
 	equals( 126, $('#navigation ul:first').height() );
 	equals( 126, $('#navigation ul:eq(1)').height() );
 	equals( 126, $('#navigation ul:last').height() );
 });
 
 test("activate, numeric", function() {
-	var ac = $('#list1').accordion({ active: 1 });
+	var ac = $('#list1').makeAccordion({ active: 1 });
 	state(ac, 0, 1, 0);
 	ac.activate(2);
 	state(ac, 0, 0, 1);
@@ -38,7 +38,7 @@ test("activate, numeric", function() {
 });
 
 test("activate, boolean and numeric, alwaysOpen:false", function() {
-	var ac = $('#list1').accordion({alwaysOpen: false}).activate(2);
+	var ac = $('#list1').makeAccordion({alwaysOpen: false}).activate(2);
 	state(ac, 0, 0, 1);
 	ok("x", "----")
 	ac.activate(0);
@@ -49,14 +49,14 @@ test("activate, boolean and numeric, alwaysOpen:false", function() {
 });
 
 test("activate, boolean, alwaysOpen:true", function() {
-	var ac = $('#list1').accordion().activate(2);
+	var ac = $('#list1').makeAccordion().activate(2);
 	state(ac, 0, 0, 1);
 	ac.activate(-1);
 	state(ac, 0, 0, 1);
 });
 
 test("activate, string expression", function() {
-	var ac = $('#list1').accordion({ active: ":last" });
+	var ac = $('#list1').makeAccordion({ active: ":last" });
 	state(ac, 0, 0, 1);
 	ac.activate(":first");
 	state(ac, 1, 0, 0);
@@ -67,7 +67,7 @@ test("activate, string expression", function() {
 });
 
 test("activate, jQuery or DOM element", function() {
-	var ac = $('#list1').accordion({ active: $("#list1 a:last") });
+	var ac = $('#list1').makeAccordion({ active: $("#list1 a:last") });
 	state(ac, 0, 0, 1);
 	ac.activate($("#list1 a:first"));
 	state(ac, 1, 0, 0);

@@ -16,14 +16,13 @@
 	<script type="text/javascript">
 	jQuery().ready(function(){
 		// simple accordion
-		jQuery('#list1a').accordion();
-		jQuery('#list1b').accordion({
+		jQuery('#list1a').makeAccordion();
+		jQuery('#list1b').makeAccordion({
 			autoheight: false
 		});
 		
-		
 		// second simple accordion with special markup
-		jQuery('#navigation').accordion({
+		jQuery('#navigation').makeAccordion({
 			active: false,
 			header: '.head',
 			navigation: true,
@@ -33,18 +32,18 @@
 		});
 		
 		// highly customized accordion
-		jQuery('#list2').accordion({
+		jQuery('#list2').makeAccordion({
 			event: 'mouseover',
 			active: '.selected',
 			selectedClass: 'active',
 			animated: "bounceslide",
 			header: "dt"
-		}).change(function(event, newHeader, oldHeader, newContent, oldContent) {
+		}).bind("changed.ui-accordion", function(event, newHeader, oldHeader, newContent, oldContent) {
 			jQuery('<div>' + oldHeader.text() + ' hidden, ' + newHeader.text() + ' shown</div>').appendTo('#log');
 		});
 		
 		// first simple accordion with special markup
-		jQuery('#list3').accordion({
+		jQuery('#list3').makeAccordion({
 			header: 'div.title',
 			active: false,
 			alwaysOpen: false,
@@ -52,7 +51,7 @@
 			autoheight: false
 		});
 		
-		var wizard = $("#wizard").accordion({
+		var wizard = $("#wizard").makeAccordion({
 			header: '.title',
 			event: false
 		});
@@ -63,22 +62,32 @@
 			.children(":button")
 			.filter(".next, .previous")
 			.click(function() {
-				wizard.activate(index + ($(this).is(".next") ? 1 : -1))
+				wizard.changeAccordion("activate", index + ($(this).is(".next") ? 1 : -1))
 			});
 		});
 		
 		// bind to change event of select to control first and seconds accordion
 		// similar to tab's plugin triggerTab(), without an extra method
+		var accordions = jQuery('#list1a, #list1b, #list2, #list3, #navigation, #wizard');
+		
 		jQuery('#switch select').change(function() {
-			jQuery('#list1a, #list1b, #list2, #list3, #navigation').activate( this.selectedIndex-1 );
+			accordions.changeAccordion("activate", this.selectedIndex-1 );
 		});
 		jQuery('#close').click(function() {
-			jQuery('#list1a, #list1b, #list2, #list3, #navigation').activate(-1);
+			accordions.changeAccordion("activate", -1);
 		});
 		jQuery('#switch2').change(function() {
-			jQuery('#list1a, #list1b, #list2, #list3, #navigation').activate(this.value);
+			accordions.changeAccordion("activate", this.value);
 		});
-		
+		jQuery('#enable').click(function() {
+			accordions.enableAccordion();
+		});
+		jQuery('#disable').click(function() {
+			accordions.disableAccordion();
+		});
+		jQuery('#remove').click(function() {
+			accordions.removeAccordion();
+		});
 	});
 	</script>
 
@@ -92,8 +101,8 @@
 		<legend>Standard, container is a div, header is h3 and content div and nested p</legend>	
 
 		<h3>Code</h3>
-		<pre><code class="mix">jQuery('#list1a').accordion();
-jQuery('#list1b').accordion({
+		<pre><code class="mix">jQuery('#list1a').makeAccordion();
+jQuery('#list1b').makeAccordion({
 	autoheight: false
 });</code></pre>
 
@@ -176,7 +185,7 @@ jQuery('#list1b').accordion({
 		<p>Location-based state-saving: The active element is choosen based on location.hash: Click one of the links, then reload the page to see it in action.</p>
 
 		<h3>Code</h3>
-		<pre><code class="mix">jQuery('#navigation').accordion({
+		<pre><code class="mix">jQuery('#navigation').makeAccordion({
 	active: false,
 	header: '.head',
 	navigation: true,
@@ -228,14 +237,14 @@ jQuery('#list1b').accordion({
 		<legend>With options, container is a definition list, header dt, content dd</legend>
 		
 		<h3>Code</h3>
-		<pre><code class="mix">// highly customized accordion
-jQuery('#list2').accordion({
+		<pre><code class="mix">jQuery('#list2').makeAccordion({
 	event: 'mouseover',
 	active: '.selected',
 	selectedClass: 'active',
-	animated: "bounceslide"
-}).change(function(event, newHeader, oldHeader, newContent, oldContent) {
-	jQuery('&lt;div&gt;' + oldHeader.text() + ' hidden, ' + newHeader.text() + ' shown&lt;/div&gt;').appendTo('#log');
+	animated: "bounceslide",
+	header: "dt"
+}).bind("changed.ui-accordion", function(event, newHeader, oldHeader, newContent, oldContent) {
+	jQuery('<div>' + oldHeader.text() + ' hidden, ' + newHeader.text() + ' shown</div>').appendTo('#log');
 });</code></pre>
 
 		<dl id="list2">
@@ -260,12 +269,13 @@ jQuery('#list2').accordion({
 		content, no active on startup and can be completely closed</legend>
 		
 		<h3>Code</h3>
-		<pre><code class="mix">jQuery('#list3').accordion({
-		header: 'div.title',
-		active: false,
-		alwaysOpen: false,
-		animated: false
-	});</code></pre>
+		<pre><code class="mix">jQuery('#list3').makeAccordion({
+	header: 'div.title',
+	active: false,
+	alwaysOpen: false,
+	animated: false,
+	autoheight: false
+});</code></pre>
 
 		<div id="list3">
 			<div>
@@ -301,7 +311,7 @@ jQuery('#list2').accordion({
 		<legend>accordion wizard</legend>
 		
 		<h3>Code</h3>
-		<pre><code class="mix">var wizard = $("#wizard").accordion({
+		<pre><code class="mix">var wizard = $("#wizard").makeAccordion({
 	header: '.title',
 	event: false
 });
@@ -312,7 +322,7 @@ $("div.title", wizard).each(function(index) {
 	.children(":button")
 	.filter(".next, .previous")
 	.click(function() {
-		wizard.activate(index + ($(this).is(".next") ? 1 : -1))
+		wizard.changeAccordion("activate", index + ($(this).is(".next") ? 1 : -1))
 	});
 });</code></pre>
 	
@@ -355,6 +365,9 @@ $("div.title", wizard).each(function(index) {
 			<option value="3">3</option>
 		</select>
 		<button id="close">Close all</button>
+		<button id="enable">Enable all</button>
+		<button id="disable">Disable all</button>
+		<button id="remove">Remove all</button>
 		Activate via selector, eg. ':first' or ':eq(1)': <input id="switch2" />
 	</div>
 
