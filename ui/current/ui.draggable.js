@@ -3,11 +3,26 @@
 	//Make nodes selectable by expression
 	$.extend($.expr[':'], { draggable: "(' '+a.className+' ').indexOf(' ui-draggable ')" });
 
-	$.fn.draggable = function(o) {
-		return this.each(function() {
-			if(!$(this).is(".ui-draggable")) new $.ui.draggable(this, o);
-		});
-	};
+	$.fn.extend({
+		makeDraggable: function(o) {
+			return this.each(function() { if(!$.data(this, "ui-draggable")) new $.ui.draggable(this,o);	});
+		},
+		removeDraggable: function() {
+			return this.each(function() { if($.data(this, "ui-draggable")) $.data(this, "ui-draggable").destroy(); });
+		},
+		changeDraggable: function(key,value) {
+			var ret = null;
+			this.each(function() { if($.data(this, "ui-draggable")) ret = $.data(this, "ui-draggable")[key](value); });
+			return ret || this;
+		},
+		enableDraggable: function() {
+			return this.each(function() { if($.data(this, "ui-draggable")) $.data(this, "ui-draggable").enable(); });
+		},
+		disableDraggable: function() {
+			return this.each(function() { if($.data(this, "ui-draggable")) $.data(this, "ui-draggable").disable(); });
+		}
+	});
+
 	
 	$.ui.draggable = function(element, options) {
 	
