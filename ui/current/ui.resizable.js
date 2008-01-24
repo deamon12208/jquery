@@ -286,10 +286,6 @@
 				}
 			});
 			
-			//Aspect Ratio
-			if (o.aspectRatio||e.shiftKey) o.ratio = o.ratio || o.currentSize.width / o.currentSize.height;
-			
-			
 			$('body').css('cursor', o.axis + '-resize');
 			this.propagate("start", e);		
 			return false;
@@ -325,16 +321,20 @@
 		drag: function(e) {
 			var el = this.helper, o = this.options, props = {}, self = this;
 			
+			//Aspect Ratio
+			if (o.aspectRatio||e.shiftKey) o.ratio = o.ratio || o.currentSize.width / o.currentSize.height;
+			
 			var change = function(a,b) {
 				//Increase performance
-				var isTopHeight = (a == "top"||a == "height"), isHeightWidth = (a == "width"||a == "height"); 
+				var isTopHeight = (a == "top"||a == "height"), isHeightWidth = (a == "width"||a == "height"), 
+					defAxis = (o.axis == "se"||o.axis == "s"||o.axis == "e"); 
 				
 				//Concatenation performance
 				var	pageAxis = isTopHeight ? 'pageY' : 'pageX', startPos = isTopHeight ? 'top' : 'left',
 						curSizePos = isHeightWidth ? 'currentSize' : 'currentPosition';
 				
 				var mod = (e[pageAxis] - o.startPosition[startPos]) * (b ? -1 : 1);
-				var val = o[curSizePos][a] - mod - (o.proportionallyResize && !o.proxy && /se|s|e/.test(o.axis) ? o.currentSizeDiff.width : 0);
+				var val = o[curSizePos][a] - mod - (o.proportionallyResize && !o.proxy && defAxis ? o.currentSizeDiff.width : 0);
 				
 				el.css(a, val);
 				
