@@ -89,20 +89,11 @@ body
 
 
 <div id='resizeme' style='width: 300px; height: 200px; border: 1px solid black; margin: 20px; position: relative;'>
-<div class='ui-resizable-n ui-resizable-handle' style='height: 10px; top: 0px; left: 30px; right: 30px;'></div>
-<div class='ui-resizable-e ui-resizable-handle' style='width: 10px; bottom: 30px; right: 0px; top: 30px;'></div>	
-<div class='ui-resizable-s ui-resizable-handle' style='height: 10px; bottom: 0px; left: 30px; right: 30px;'></div>
-<div class='ui-resizable-w ui-resizable-handle' style='width: 10px; bottom: 30px; left: 0px; top: 30px;'></div>
-
-<div class='ui-resizable-se ui-resizable-handle' style='width: 10px; height: 10px; bottom: 0px; right: 0px;'></div>
-<div class='ui-resizable-sw ui-resizable-handle' style='width: 10px; height: 10px; bottom: 0px; left: 0px;'></div>
-<div class='ui-resizable-ne ui-resizable-handle' style='width: 10px; height: 10px; top: 0px; right: 0px;'></div>
-<div class='ui-resizable-nw ui-resizable-handle' style='width: 10px; height: 10px; top: 0px; left: 0px;'></div>
-
 <div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Relative position without proxy (w,nw,n automatically disabled)</div>
 </div>
 
 <div id='resizeme4' style='width: 300px; height: 200px; border: 1px solid black; margin: 20px; position: relative;'>
+
 <div class='ui-resizable-n ui-resizable-handle' style='height: 10px; top: 0px; left: 30px; right: 30px;'></div>
 <div class='ui-resizable-e ui-resizable-handle' style='width: 10px; bottom: 30px; right: 0px; top: 30px;'></div>	
 <div class='ui-resizable-s ui-resizable-handle' style='height: 10px; bottom: 0px; left: 30px; right: 30px;'></div>
@@ -116,21 +107,7 @@ body
 <div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Relative position with proxy (all directions enabled)</div>
 </div>
 
-
-
-
-
 <div id='resizeme2' style='width: 300px; height: 200px; border: 1px solid black; position: relative; position: absolute; top: 20px; right: 400px;'>
-<div class='ui-resizable-n ui-resizable-handle' style='height: 10px; top: 0px; left: 30px; right: 30px;'></div>
-<div class='ui-resizable-e ui-resizable-handle' style='width: 10px; bottom: 30px; right: 0px; top: 30px;'></div>	
-<div class='ui-resizable-s ui-resizable-handle' style='height: 10px; bottom: 0px; left: 30px; right: 30px;'></div>
-<div class='ui-resizable-w ui-resizable-handle' style='width: 10px; bottom: 30px; left: 0px; top: 30px;'></div>
-
-<div class='ui-resizable-se ui-resizable-handle' style='width: 10px; height: 10px; bottom: 0px; right: 0px;'></div>
-<div class='ui-resizable-sw ui-resizable-handle' style='width: 10px; height: 10px; bottom: 0px; left: 0px;'></div>
-<div class='ui-resizable-ne ui-resizable-handle' style='width: 10px; height: 10px; top: 0px; right: 0px;'></div>
-<div class='ui-resizable-nw ui-resizable-handle' style='width: 10px; height: 10px; top: 0px; left: 0px;'></div>
-
 <div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Absolute position without proxy (all directions enabled)</div>
 </div>
 
@@ -160,7 +137,7 @@ $(document).ready(function(){
 		handles: 'all',
 		autohide: true,
 		containment: 'parent',
-		aspectRatio: 'preserve',
+		//aspectRatio: 'preserve',
 		preventDefault: true
 	});
 	

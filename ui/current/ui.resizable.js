@@ -24,6 +24,7 @@
 			transparent: false,
 			minWidth: 10,
 			minHeight: 10,
+			aspectRatio: false,
 			animate: false,
 			duration: 'fast',
 			easing: 'swing',
@@ -285,6 +286,10 @@
 				}
 			});
 			
+			//Aspect Ratio
+			if (o.aspectRatio||e.shiftKey) o.ratio = o.ratio || o.currentSize.width / o.currentSize.height;
+			
+			
 			$('body').css('cursor', o.axis + '-resize');
 			this.propagate("start", e);		
 			return false;
@@ -321,19 +326,21 @@
 			var el = this.helper, o = this.options, props = {}, self = this;
 			
 			var change = function(a,b) {
-				//Parsing regex once, increase performance
-				var isTopHeight = /(top|height)/.test(a); 
+				//Increase performance
+				var isTopHeight = (a == "top"||a == "height"), isHeightWidth = (a == "width"||a == "height"); 
 				
-				//Avoid opera's syntax bug
 				//Concatenation performance
-				var	pageAxis = ['page', (isTopHeight ? 'Y' : 'X')].join(""), startPos = (isTopHeight ? 'top' : 'left'),
-						curSizePos = ['current', (/(height|width)/.test(a) ? 'Size' : 'Position')].join("");
+				var	pageAxis = isTopHeight ? 'pageY' : 'pageX', startPos = isTopHeight ? 'top' : 'left',
+						curSizePos = isHeightWidth ? 'currentSize' : 'currentPosition';
 				
 				var mod = (e[pageAxis] - o.startPosition[startPos]) * (b ? -1 : 1);
+				var val = o[curSizePos][a] - mod - (o.proportionallyResize && !o.proxy && /se|s|e/.test(o.axis) ? o.currentSizeDiff.width : 0);
 				
-				el.css(a, o[curSizePos][a] - mod - (
-					o.proportionallyResize && !o.proxy && /se|s|e/.test(o.axis) ? o.currentSizeDiff.width : 0)
-				);
+				el.css(a, val);
+				
+				//Preserve ratio
+				if (isHeightWidth && (o.aspectRatio||e.shiftKey))
+					el.css( !isTopHeight ? "height" : "width", val * Math.pow(o.ratio, !isTopHeight ? -1 : 1));
 			};
 			
 			//Change the height
