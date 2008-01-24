@@ -10,7 +10,6 @@
 	}
 	
 	$.ui.resizable = function(element, options) {
-
 		//Initialize needed constants
 		var self = this;
 		
@@ -33,8 +32,23 @@
 		
 		//Force proxy if animate is enable
 		this.options.proxy = this.options.animate ? "proxy" : this.options.proxy;
-
 		var o = this.options;
+		
+		//Default Theme
+		var aBorder = '1px solid #DEDEDE';
+		
+		o.defaultTheme = {
+			'ui-resizable': { display: 'block' },
+			'ui-resizable-handle': { position: 'absolute', background: '#F5F5F5' },
+			'ui-resizable-n': { cursor: 'n-resize', height: '4px', left: '0px', right: '0px', borderTop: aBorder },
+			'ui-resizable-s': { cursor: 's-resize', height: '4px', left: '0px', right: '0px', borderBottom: aBorder },
+			'ui-resizable-e': { cursor: 'e-resize', width: '4px', top: '0px', bottom: '0px', borderRight: aBorder },
+			'ui-resizable-w': { cursor: 'w-resize', width: '4px', top: '0px', bottom: '0px', borderLeft: aBorder },
+			'ui-resizable-se': { cursor: 'se-resize', width: '4px', height: '4px', borderRight: aBorder, borderBottom: aBorder },
+			'ui-resizable-sw': { cursor: 'sw-resize', width: '4px', height: '4px', borderBottom: aBorder, borderLeft: aBorder },
+			'ui-resizable-ne': { cursor: 'ne-resize', width: '4px', height: '4px', borderRight: aBorder, borderTop: aBorder },
+			'ui-resizable-nw': { cursor: 'nw-resize', width: '4px', height: '4px', borderLeft: aBorder, borderTop: aBorder }
+		};
 		
 		//Position the node
 		if(!o.proxy && (this.element.css('position') == 'static' || this.element.css('position') == ''))
@@ -47,14 +61,11 @@
 			
 			//Create a wrapper element and set the wrapper to the new current internal element
 			this.element.wrap('<div class="ui-wrapper"  style="position: relative; width: '+this.element.outerWidth()+'px; height: '+this.element.outerHeight()+';"></div>');
-			oel = this.element; element = element.parentNode; this.element = $(element);
+			var oel = this.element; element = element.parentNode; this.element = $(element);
 			
 			//Move margins to the wrapper
-			this.element.css({
-				marginLeft: oel.css("marginLeft"),
-				marginTop: oel.css("marginTop"),
-				marginRight: oel.css("marginRight"),
-				marginBottom: oel.css("marginBottom")
+			this.element.css({ marginLeft: oel.css("marginLeft"), marginTop: oel.css("marginTop"),
+				marginRight: oel.css("marginRight"), marginBottom: oel.css("marginBottom")
 			});
 			
 			oel.css({ marginLeft: 0, marginTop: 0, marginRight: 0, marginBottom: 0});
@@ -64,7 +75,6 @@
 			
 			o.proportionallyResize = o.proportionallyResize || [];
 			o.proportionallyResize.push(oel);
-			
 		}
 		
 		if(!o.handles) o.handles = !$('.ui-resizable-handle', element).length ? "e,s,se" : { n: '.ui-resizable-n', e: '.ui-resizable-e', s: '.ui-resizable-s', w: '.ui-resizable-w', se: '.ui-resizable-se', sw: '.ui-resizable-sw', ne: '.ui-resizable-ne', nw: '.ui-resizable-nw' };
@@ -75,21 +85,31 @@
 				
 			var n = o.handles.split(","); o.handles = {};
 			
+			o.zIndex = o.zIndex || 1000;
+			
 			var insertions = {
 				n: 'top: 0px;',
-				e: 'right: 0px;'+(o.zIndex ? 'z-index: '+o.zIndex+';' : ''),
-				s: 'bottom: 0px;'+(o.zIndex ? 'z-index: '+o.zIndex+';' : ''),
+				e: 'right: 0px;',
+				s: 'bottom: 0px;',
 				w: 'left: 0px;',
-				se: 'bottom: 0px; right: 0px;'+(o.zIndex ? 'z-index: '+o.zIndex+';' : ''),
+				se: 'bottom: 0px; right: 0px;',
 				sw: 'bottom: 0px; left: 0px;',
 				ne: 'top: 0px; right: 0px;',
 				nw: 'top: 0px; left: 0px;'
 			};
 			
-			for(var i=0; i<n.length;i++) {
-				var dir = $.trim(n[i]);
-				this.element.append("<div class='ui-resizable-"+dir+" ui-resizable-handle' style='"+insertions[dir]+"'></div>");
-				o.handles[dir] = '.ui-resizable-'+dir;
+			for(var i = 0; i < n.length; i++) {
+				var d = jQuery.trim(n[i]), t = o.defaultTheme, hname = 'ui-resizable-'+d;
+				
+				var rcss = $.extend(t[hname], t['ui-resizable-handle']), 
+						axis = $(["<div class='",hname," ui-resizable-handle' style='",insertions[d],"'></div>"].join("")).css(/sw|se|ne|nw/.test(d) ? { zIndex: ++o.zIndex } : {});
+				
+				o.handles[d] = '.ui-resizable-'+d;
+				
+				this.element.append(
+					//Theme detection, if not loaded, load o.defaultTheme
+					axis.css( !$.ui.css(hname) ? rcss : {} )
+				);
 			}
 		}
 		
@@ -108,15 +128,15 @@
 					nodeName.match(/textarea|input|select|button/i)) {
 						
 					var axis = $(o.handles[i], element), padWrapper = 0;
-					//Checking the correct pad
-					padWrapper = axis.css(/sw|ne|nw|se|n|s/.test(i) ? 'height' : 'width');
+					//Checking the correct pad and border
+					padWrapper = /sw|ne|nw|se|n|s/.test(i) ? axis.outerHeight() : axis.outerWidth();
 					
 					//The padding type i have to apply...
 					var padPos = [ 'padding', 
 						/ne|nw|n/.test(i) ? 'Top' :
 						/se|sw|s/.test(i) ? 'Bottom' : 
 						/^e$/.test(i) ? 'Right' : 'Left' ].join(""); 
-
+					
 					if (!o.transparent)
 						target.css(padPos, padWrapper);
 				}
@@ -125,15 +145,33 @@
 		};
 		
 		this._renderAxis(this.element);
-
-		//If we want to auto hide the elements
-		if(o.autohide) $(self.element).addClass("ui-resizable-autohide").hover(function() {
-			$(this).removeClass("ui-resizable-autohide");
-		},
-		function() {
-			if (!self.options.resizing)
-				$(this).addClass("ui-resizable-autohide");
+		var handlers = $('.ui-resizable-handle', self.element);
+		
+		//Matching axis name
+		handlers.mouseover(function() {
+			if (!o.resizing) {
+				if (this.className) 
+					var axis = this.className.match(/ui-resizable-(se|sw|ne|nw|n|e|s|w)/i);
+				//Axis, default = se
+				o.axis = axis && axis[1] ? axis[1] : 'se';
+			}
 		});
+				
+		//If we want to auto hide the elements
+		if (o.autohide) {
+			var tLoaded = $.ui.css('ui-resizable-s') || $.ui.css('ui-resizable-e');
+			if (!tLoaded) handlers.hide();
+			
+			$(self.element).addClass("ui-resizable-autohide").hover(function(){
+				if (!tLoaded) handlers.show();
+				$(this).removeClass("ui-resizable-autohide");
+			}, function(){
+				if (!o.resizing) {
+					if (!tLoaded) handlers.hide();
+					$(this).addClass("ui-resizable-autohide");
+				}
+			});
+		}
 	
 		//Initialize mouse events for interaction
 		this.element.mouseInteraction({
@@ -153,6 +191,7 @@
 			}
 		});
 	}
+	
 	$.extend($.ui.resizable.prototype, {
 		plugins: {},
 		ui: function() {
@@ -186,18 +225,19 @@
 		},
 		
 		_renderProxy: function() {
-			var el = this.element;
+			var el = this.element, o = this.options;
 			this.offset = el.offset();
 			
-			if(this.options.proxy) {
+			if(o.proxy) {
 				this.helper = this.helper || $('<div></div>');
 				
-				this.helper.addClass(this.options.proxy).css({
+				this.helper.addClass(o.proxy).css({
 					width: el.outerWidth(),
 					height: el.outerHeight(),
 					position: 'absolute',
 					left: this.offset.left +'px',
-					top: this.offset.top +'px'
+					top: this.offset.top +'px',
+					zIndex: ++o.zIndex
 				});
 				
 				this.helper.appendTo("body");
@@ -222,8 +262,8 @@
 			this.disabled = true;
 		},
 		start: function(e) {
-			this.options.resizing = true;
-			var iniPos = this.element.position(), ele = this.element;
+			var o = this.options, iniPos = this.element.position(), ele = this.element;
+			o.resizing = true;
 			
 			if (ele.is('.ui-draggable') || /absolute/.test(ele.css('position')))
 				ele.css({ position: 'absolute', top: iniPos['top'], left: iniPos['left'] });
@@ -234,16 +274,8 @@
 			
 			this._renderProxy();
 			
-			//Matching axis name
-			if (e.target && e.target.className)
-				var axis = e.target.className.match(/ui-resizable-(se|sw|ne|nw|n|e|s|w)/i);
-			
-			//Axis, default = se
-			this.options.axis = axis && axis[1] ? axis[1] : 'se';
-			
-			
 			//Store needed variables
-			$.extend(this.options, {
+			$.extend(o, {
 				currentSize: { width: this.element.outerWidth(), height: this.element.outerHeight() },
 				currentSizeDiff: { width: this.element.outerWidth() - this.element.width(), height: this.element.outerHeight() - this.element.height() },
 				startPosition: { left: e.pageX, top: e.pageY },
@@ -253,6 +285,7 @@
 				}
 			});
 			
+			$('body').css('cursor', o.axis + '-resize');
 			this.propagate("start", e);		
 			return false;
 			
@@ -260,7 +293,7 @@
 		stop: function(e) {
 			this.options.resizing = false;
 			var o = this.options;
-
+			
 			if(o.proxy) {
 				var style = { 
 				  width: (this.helper.width() - o.currentSizeDiff.width) + "px",
@@ -279,12 +312,12 @@
 				this.helper.remove();
 			}
 			
+			$('body').css('cursor', 'auto');
 			this.propagate("stop", e);	
 			return false;
 			
 		},
 		drag: function(e) {
-
 			var el = this.helper, o = this.options, props = {}, self = this;
 			
 			var change = function(a,b) {
@@ -293,15 +326,13 @@
 				
 				//Avoid opera's syntax bug
 				//Concatenation performance
-				var	curSizePos = ['current', (/(height|width)/.test(a) ? 'Size' : 'Position')].join(""),
-						pageAxis = ['page', (isTopHeight ? 'Y' : 'X')].join(""),
-						startPos = (isTopHeight ? 'top' : 'left');
+				var	pageAxis = ['page', (isTopHeight ? 'Y' : 'X')].join(""), startPos = (isTopHeight ? 'top' : 'left'),
+						curSizePos = ['current', (/(height|width)/.test(a) ? 'Size' : 'Position')].join("");
 				
 				var mod = (e[pageAxis] - o.startPosition[startPos]) * (b ? -1 : 1);
 				
 				el.css(a, o[curSizePos][a] - mod - (
-						o.proportionallyResize && !o.proxy ? o.currentSizeDiff.width : 0
-					)
+					o.proportionallyResize && !o.proxy && /se|s|e/.test(o.axis) ? o.currentSizeDiff.width : 0)
 				);
 			};
 			
