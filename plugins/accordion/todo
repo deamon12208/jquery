@@ -1,3 +1,0 @@
-- update documentation
-  - new option navigationFilter: Callback
-  	eg. example.com/products/ matches both example.com/products/ and example.com/products/?id=453

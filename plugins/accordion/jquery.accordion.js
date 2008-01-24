@@ -1,9 +1,9 @@
 /*
- * Accordion 1.6pre - jQuery menu widget
+ * jQuery UI Accordion 1.1
  * 
  * Copyright (c) 2007 Jörn Zaefferer
  *
- * http://bassistance.de/jquery-plugins/jquery-plugin-accordion/
+ * http://docs.jquery.com/UI/Accordion
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
