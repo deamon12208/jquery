@@ -1,6 +1,6 @@
 /*
  * jQuery clueTip plugin
- * Version 0.9.5  (01/22/2008)
+ * Version 0.9.5  (01/24/2008)
  * @requires jQuery v1.1.1+
  * @requires Dimensions plugin 
  *
@@ -117,8 +117,8 @@
       var defHeight = isNaN(parseInt(opts.height, 10)) ? 'auto' : (/\D/g).test(opts.height) ? opts.height : opts.height + 'px';
       var sTop, linkTop, posY, tipY, mouseY, baseline;
       // horizontal measurement variables
-      var tipWidth = parseInt(opts.width, 10) + parseInt($cluetip.css('paddingLeft')) + parseInt($cluetip.css('paddingRight')) + dropShadowSteps;
-      if( isNaN(tipWidth) ) tipWidth = 275;
+      var tipInnerWidth = isNaN(parseInt(opts.width, 10)) ? 275 : parseInt(opts.width, 10);
+      var tipWidth = tipInnerWidth + parseInt($cluetip.css('paddingLeft')) + parseInt($cluetip.css('paddingRight')) + dropShadowSteps;
       var linkWidth = this.offsetWidth;
       var linkLeft, posX, tipX, mouseX, winWidth;
             
@@ -143,7 +143,7 @@
         return false;
       }
       isActive = true;
-      $cluetip.removeClass().css({width: opts.width});
+      $cluetip.removeClass().css({width: tipInnerWidth});
       if (tipAttribute == $this.attr('href')) {
         $this.css('cursor', opts.cursor);
       }
@@ -274,8 +274,16 @@
           return false;
         });
         if (opts.mouseOutClose) {
-          $cluetip.hover(function() {doNothing(); }, 
-          function() {$closeLink.trigger('click'); });
+          if ($.fn.hoverIntent && opts.hoverIntent) { 
+            $cluetip.hoverIntent({
+              over: doNothing, 
+              timeout: opts.hoverIntent.timeout,  
+              out: function() { $closeLink.trigger('click'); }
+            });
+          } else {
+            $cluetip.hover(doNothing, 
+            function() {$closeLink.trigger('click'); });
+          }
         } else {
           $cluetip.unbind('mouseout');
         }
