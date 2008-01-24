@@ -190,8 +190,11 @@
                             return false; // break
                         }
                     } else if (o.cookie) {
-                        o.initial = parseInt($.cookie( $.ui.tabs.INSTANCE_KEY + $.data(self.source) )) || 0;
-                        return false; // break
+                        var p = parseInt($.cookie($.ui.tabs.INSTANCE_KEY + $.data(self.source)));
+                        if (p && self.$tabs[p]) {
+                            o.initial = p;
+                            return false; // break
+                        }
                     } else if ( self.$lis.eq(i).hasClass(o.selectedClass) ) {
                         o.initial = i;
                         return false; // break
