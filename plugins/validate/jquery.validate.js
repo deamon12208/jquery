@@ -1,5 +1,5 @@
 /*
- * jQuery validation plug-in v1.2
+ * jQuery validation plug-in v1.2.1pre
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-validation/
  * http://docs.jquery.com/Plugins/Validation
@@ -159,7 +159,7 @@ jQuery.extend(jQuery.validator, {
 				
 			// hide error label and remove error class on focus if enabled
 			if ( this.settings.focusCleanup && !this.blockFocusCleanup ) {
-				this.settings.unhighlight.call( this, element, this.settings.errorClass );
+				this.settings.unhighlight && this.settings.unhighlight.call( this, element, this.settings.errorClass );
 				this.errorsFor(element).hide();
 			}
 		},
@@ -391,7 +391,7 @@ jQuery.extend(jQuery.validator, {
 	
 		check: function( element ) {
 			element = this.clean( element );
-			this.settings.unhighlight.call( this, element, this.settings.errorClass );
+			this.settings.unhighlight && this.settings.unhighlight.call( this, element, this.settings.errorClass );
 			var rules = jQuery(element).rules();
 			for( var i = 0; rules[i]; i++) {
 				var rule = rules[i];
@@ -466,7 +466,7 @@ jQuery.extend(jQuery.validator, {
 		defaultShowErrors: function() {
 			for ( var i = 0; this.errorList[i]; i++ ) {
 				var error = this.errorList[i];
-				this.settings.highlight.call( this, error.element, this.settings.errorClass );
+				this.settings.highlight && this.settings.highlight.call( this, error.element, this.settings.errorClass );
 				this.showLabel( error.element, error.message );
 			}
 			if( this.errorList.length ) {
