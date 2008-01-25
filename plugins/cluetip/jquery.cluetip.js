@@ -503,7 +503,7 @@ clearTimeout(closeOnDelay);
 
     // process data retrieved via xhr before it's displayed
     ajaxProcess:      function(data) {
-                        data = data.replace(/<s(cript|tyle)(.|\s)*?\/s(cript|tyle)>/g, '').replace(/<link(.|\s)*?\/link>/g,'');
+                        data = data.replace(/<s(cript|tyle)(.|\s)*?\/s(cript|tyle)>/g, '').replace(/<(link|title)(.|\s)*?\/(link|title)>/g,'');
                         return data;
     },                
 
