@@ -16,6 +16,7 @@
 * fixed annoyance (reported at http://plugins.jquery.com/node/1081): default title attributes showing before cluetip when using long interval in hoverIntent.
 * fixed bug where hoverIntent's timeout setting wasn't working with mouseoutClose when user moused out of the clueTip
 * fixed problem with setting width option to "auto". Now, non-number widths such as 'auto' default to 275px.
+* fixed bug with activation by click where it wouldn't show clueTip under certain circumstances
 
 == 0.9.3 == 
 

@@ -349,6 +349,7 @@ clearTimeout(closeOnDelay);
       if (opts.hoverClass) {
         $this.removeClass(opts.hoverClass);
       }
+      $('.cluetip-clicked').removeClass('cluetip-clicked');
     };
 // close cluetip and reset some things
     var cluetipClose = function() {
@@ -368,13 +369,14 @@ clearTimeout(closeOnDelay);
   // activate by click
       if ( (/click|toggle/).test(opts.activation) ) {
         $this.click(function(event) {
-          if ($cluetip.is(':hidden') || !$(this).is('.cluetip-clicked')) {
+          if ($cluetip.is(':hidden') || !$this.is('.cluetip-clicked')) {
             activate(event);
             $('.cluetip-clicked').removeClass('cluetip-clicked');
             $this.addClass('cluetip-clicked');
 
           } else {
             inactivate(event);
+
           }
           this.blur();
           return false;
