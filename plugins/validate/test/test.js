@@ -266,6 +266,20 @@ test("option: (un)highlight, default", function() {
 	ok( !e.hasClass("error") );
 });
 
+test("option: (un)highlight, nothing", function() {
+	expect(3);
+	$("#testForm1").validate({
+		highlight: false,
+		unhighlight: false
+	});
+	var e = $("#firstname")
+	ok( !e.hasClass("error") );
+	e.valid()
+	ok( !e.hasClass("error") );
+	e.valid()
+	ok( !e.hasClass("error") );
+});
+
 test("option: (un)highlight, custom", function() {
 	expect(6);
 	$("#testForm1").validate({
@@ -1098,6 +1112,8 @@ test("validate via remote method", function() {
 	ok( !v.element(e), "still invalid, because remote validation must block until it returns" );
 });
 
+/*
+// deferred
 test("validate via remote method and serverside message", function() {
 	expect(5);
 	stop();
@@ -1129,3 +1145,4 @@ test("validate via remote method and serverside message", function() {
 	e.val("asdf");
 	ok( !v.element(e), "still invalid, because remote validation must block until it returns" );
 });
+*/
