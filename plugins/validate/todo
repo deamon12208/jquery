@@ -183,6 +183,8 @@ http://www.fyneworks.com/jquery/FCKEditor/
 
 2.0
 ---
+- consider adapating component naming from UI, eg. attachValidation
+  -> validate() would run validation and display messages, valid() wouldn't
 - (re)move current addMethod implementation
 - move rules plugin option
 - move metadata support

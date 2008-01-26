@@ -301,6 +301,31 @@ test("option: (un)highlight, custom", function() {
 	ok( e.is(":visible") );
 });
 
+test("option: (un)highlight, custom2", function() {
+	expect(6);
+	$("#testForm1").validate({
+		highlight: function(element, errorClass) {
+			$(element).addClass(errorClass);
+			$(element.form).find("label[for=" + element.id + "]").addClass(errorClass);
+		},
+		unhighlight: function(element, errorClass) {
+			$(element).removeClass(errorClass);
+			$(element.form).find("label[for=" + element.id + "]").removeClass(errorClass);
+		},
+		errorClass: "invalid"
+	});
+	var e = $("#firstname")
+	var l = $("#errorFirstname")
+	ok( !e.is(".invalid") );
+	ok( !l.is(".invalid") );
+	e.valid()
+	ok( e.is(".invalid") );
+	ok( l.is(".invalid") );
+	e.val("hithere").valid()
+	ok( !e.is(".invalid") );
+	ok( !l.is(".invalid") );
+});
+
 test("rules() - internal - input", function() {
 	expect(4);
 	var element = $('#firstname')[0];
