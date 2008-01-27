@@ -325,7 +325,7 @@
 // (first hide, then) ***SHOW THE CLUETIP***
       $dropShadow.hide();
       $cluetip.hide()[opts.fx.open](opts.fx.open != 'show' && opts.fx.openSpeed);
-      if (opts.dropShadow) $dropShadow.css({height: tipHeight, width: opts.width}).show();
+      if (opts.dropShadow) $dropShadow.css({height: tipHeight, width: tipInnerWidth}).show();
       if ($.fn.bgiframe) { $cluetip.bgiframe(); }
       // trigger the optional onShow function
       if (opts.delayedClose > 0) {

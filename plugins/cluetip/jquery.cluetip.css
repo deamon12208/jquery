@@ -2,6 +2,9 @@
 #cluetip-close img {
   border: 0;
 }
+#cluetip-title {
+  overflow: hidden;
+}
 #cluetip-title #cluetip-close {
   float: right;
   position: relative;
