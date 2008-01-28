@@ -15,6 +15,7 @@
 <script type="text/javascript" src="../ui.mouse.js"></script>
 <script type="text/javascript" src="../ui.resizable.js"></script>
 <script type="text/javascript" src="../ui.draggable.js"></script>
+<link rel="stylesheet" href="../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
 <style type="text/css" media="all">
 
 body
@@ -61,9 +62,30 @@ body
 
 </style>
 </head>
-<body class="flora">
+<body >
 
 <div id="log">log</div>
+
+
+
+<div id='containment_parent' style='width: 400px; height: 300px; margin: 20px; position: relative; background:#F7FFEF;border:2px solid #E6F7D4;'>
+	<div id='resizeme_containment' style='width: 200px; height: 100px; border: 1px solid black; position: absolute; background:#fff; padding:0px;'>
+		<div style='position: relative;'>Relative position, containment enabled.</div>
+	</div>
+</div>
+
+<div style='width: 400px; height: 300px; margin: 20px; position: relative; background:#F7FFEF;border:2px solid #E6F7D4;'>
+	<img id="resizeme_containment_image" src="images/houses.jpg" style='width: 200px; height:100px;border: 2px solid #F0F1F3; margin: 0px;'> 
+</div>
+
+<div style='width: 400px; height: 300px; margin: 20px; position: relative; background:#F7FFEF;border:2px solid #E6F7D4;'>
+	<textarea id='resizeme_containment_prop' style='width: 300px; height: 200px;  margin: 0px; padding:0px; border:1px solid #ccc;'>
+	I was made resizable with this code only: $('#textarea').resizable();
+	
+	Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed leo. Proin commodo. Nullam nisl ipsum, sagittis sit amet, mattis id, aliquam ac, purus. Suspendisse dignissim lorem id odio. Duis tortor nisl, imperdiet placerat, accumsan eu, lacinia sit amet, mauris. Mauris tellus erat, ullamcorper in, faucibus ut, consectetuer quis, mi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean mollis lectus lacinia augue. Nam eget leo. Fusce magna. Etiam eros. Quisque eget dui. Donec fringilla, libero non rhoncus bibendum, nibh turpis varius orci, quis bibendum metus justo quis nibh. Proin blandit. Suspendisse feugiat consequat lectus. Etiam pharetra suscipit velit. Donec imperdiet quam sit amet erat pretium ullamcorper. Donec quis nisl vitae lacus accumsan faucibus. Vivamus velit turpis, tristique sit amet, malesuada id, molestie et, magna.
+	Nullam blandit, odio rutrum sagittis consectetuer, metus nulla malesuada eros, sit amet aliquam sem leo at augue. Quisque gravida. In et augue ac neque ultricies dictum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Ut est ante, egestas eget, dignissim quis, elementum vel, nunc. Suspendisse potenti. Suspendisse mattis feugiat ipsum. Proin at lorem sit amet erat auctor pharetra. Vivamus sit amet augue. Pellentesque consequat ligula in erat. In aliquam porttitor nisl. Donec sed quam. Aliquam accumsan mi nec diam. Etiam imperdiet vehicula nisl. 
+	</textarea>
+</div>
 
 <div style='width: 300px; height: 200px; margin: 20px; position: relative;'>
 	<textarea id='textarea' style='width: 400px; height: 200px;  margin: 0px; padding:0px; border:1px solid #ccc;'>
@@ -93,17 +115,6 @@ body
 </div>
 
 <div id='resizeme4' style='width: 300px; height: 200px; border: 1px solid black; margin: 20px; position: relative;'>
-
-<div class='ui-resizable-n ui-resizable-handle' style='height: 10px; top: 0px; left: 30px; right: 30px;'></div>
-<div class='ui-resizable-e ui-resizable-handle' style='width: 10px; bottom: 30px; right: 0px; top: 30px;'></div>	
-<div class='ui-resizable-s ui-resizable-handle' style='height: 10px; bottom: 0px; left: 30px; right: 30px;'></div>
-<div class='ui-resizable-w ui-resizable-handle' style='width: 10px; bottom: 30px; left: 0px; top: 30px;'></div>
-
-<div class='ui-resizable-se ui-resizable-handle' style='width: 10px; height: 10px; bottom: 0px; right: 0px;'></div>
-<div class='ui-resizable-sw ui-resizable-handle' style='width: 10px; height: 10px; bottom: 0px; left: 0px;'></div>
-<div class='ui-resizable-ne ui-resizable-handle' style='width: 10px; height: 10px; top: 0px; right: 0px;'></div>
-<div class='ui-resizable-nw ui-resizable-handle' style='width: 10px; height: 10px; top: 0px; left: 0px;'></div>
-
 <div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Relative position with proxy (all directions enabled)</div>
 </div>
 
@@ -132,19 +143,36 @@ if(!window.console) {
 
 $(document).ready(function(){
 
+	$('#resizeme_containment, #resizeme_containment_prop, #resizeme_containment_image').resizable({
+		//proxy: "proxy",
+		handles: 'all',
+		//autohide: true,
+		
+		//containment: 'document',
+		//containment:$('#containment_parent'),
+		containment:'parent',
+		
+		//aspectRatio: 'preserve',
+		preventDefault: true,
+		preserveCursor: true,
+		disableSelection: true
+	});
+
 	$('#textarea').resizable({
 		//proxy: "proxy",
 		handles: 'all',
 		autohide: true,
-		containment: 'parent',
+		//containment: 'document',
 		//aspectRatio: 'preserve',
-		preventDefault: true
+		preventDefault: true,
+		preserveCursor: true,
+		disableSelection: true
 	});
-	
+
 	$('#image').resizable({
 		proxy: "proxy",
 		handles: 'all',
-		containment: 'parent',
+		//containment: 'parent',
 		aspectRatio: 'preserve',
 		autohide: true
 	});
@@ -152,7 +180,7 @@ $(document).ready(function(){
 	$('#image2').resizable({
 		//proxy: "proxy",
 		handles: 'e,se,s',
-		containment: 'parent',
+		//containment: 'parent',
 		aspectRatio: 'preserve'
 	});
 	
@@ -160,7 +188,7 @@ $(document).ready(function(){
 	$('#input').resizable({
 		proxy: "proxy",
 		handles: 'e,se,s',
-		containment: 'parent',
+		//containment: 'parent',
 		aspectRatio: 'preserve'
 	});
 	
@@ -242,7 +270,7 @@ $(document).ready(function(){
 		minHeight: 100,
 		//maxWidth: 500,
 		//maxHeight: 300,
-		handles: {
+		/*handles: {
 			n: '.ui-resizable-n',
 			e: '.ui-resizable-e',
 			s: '.ui-resizable-s',
@@ -251,7 +279,7 @@ $(document).ready(function(){
 			sw: '.ui-resizable-sw',
 			ne: '.ui-resizable-ne',
 			nw: '.ui-resizable-nw'
-		},
+		},*/
 		start: function(e,ui) {
 			//console.log('start ', ui);	
 		},
@@ -264,7 +292,9 @@ $(document).ready(function(){
 	});
 	
 	$('#resizeme3, #resizeme5, .ui-wrapper:parent').makeDraggable({ handle: "div:not(.ui-resizable-handle)" });
-
+	
+	//$('#resizeme_containment').makeDraggable({containment: 'parent'});
+	
 	//$("#resizeme3").animate({ height: 500, width: 500, opacity: 'hide' }, "easein");
 
 
