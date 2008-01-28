@@ -587,7 +587,7 @@ test("error containers, with labelcontainer", function() {
 	ok( container.is(":visible"), "Check that the container is visible" );
 	ok( labelcontainer.is(":visible"), "Check that the labelcontainer is visible" );
 	labelcontainer.find("label").each(function() {
-		ok( $(this).is(":visible"), "Check that each label is visible" );
+		ok( $(this).is(":visible"), "Check that each label is visible1" );
 		equals( "li", $(this).parent()[0].tagName.toLowerCase(), "Check that each label is wrapped in an li" );
 		ok( $(this).parent("li").is(":visible"), "Check that each parent li is visible" );
 	});
@@ -602,7 +602,7 @@ test("error containers, with labelcontainer", function() {
 	ok( container.is(":hidden"), "Check that the container is hidden" );
 	ok( labelcontainer.is(":hidden"), "Check that the labelcontainer is hidden" );
 	labelcontainer.find("label").each(function() {
-		ok( $(this).is(":hidden"), "Check that each label is visible" );
+		ok( $(this).is(":hidden"), "Check that each label is visible2" );
 		equals( "li", $(this).parent()[0].tagName.toLowerCase(), "Check that each label is wrapped in an li" );
 		ok( $(this).parent("li").is(":hidden"), "Check that each parent li is visible" );
 	});

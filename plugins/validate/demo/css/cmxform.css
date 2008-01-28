@@ -35,7 +35,6 @@ form.cmxform fieldset p, form.cmxform fieldset fieldset {
 
 form.cmxform label.error, label.error {
 	/* remove the next line when you have trouble in IE6 with labels in list */
-	display: none;
 	color: red;
 	font-style: italic
 }
