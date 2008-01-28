@@ -12,7 +12,7 @@
       var direction = o.options.direction || 'up'; // Default direction
       var distance = o.options.distance || 20; // Default distance
       var times = o.options.times || 5; // Default # of times
-      var speed = o.options.speed || 250; // Default speed per bounce
+      var speed = o.options.duration || 250; // Default speed per bounce
       
       // Adjust
       $.ec.save(el, props); el.show(); // Save & Show
@@ -39,6 +39,7 @@
         el.animate(animation1, speed / 2, o.options.easing).animate(animation2, speed / 2, o.options.easing);
         distance = (mode == 'hide') ? distance * 2 : distance / 2;
       };
+      el.dequeue();
       if (mode == 'hide') { // Last Bounce
         var animation = {opacity: 0};
         animation[ref] = (motion == 'pos' ? '-=' : '+=')  + distance;
