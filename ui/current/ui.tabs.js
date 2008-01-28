@@ -39,8 +39,7 @@
     $.fn.tabsSelected = function() {
         var selected = -1;
         if (this[0]) {
-            var instance = $.ui.tabs.getInstance(this[0]),
-                $lis = $('li', this);
+            var instance = $.ui.tabs.getInstance(this[0]), $lis = $('li', this);
             selected = $lis.index( $lis.filter('.' + instance.options.selectedClass)[0] );
         }
         return selected >= 0 ? ++selected : -1;
@@ -497,9 +496,10 @@
                 });
                 self.xhr = null;
             };
+            var successHandler = o.ajaxOptions.success; // preserve a given success handler
             var ajaxOptions = $.extend(o.ajaxOptions, {
                 url: url,
-                success: function(r) {
+                success: function(r, s) {
                     $(a.hash).html(r);
                     finish();
                     // This callback is required because the switch has to take 
@@ -511,6 +511,7 @@
                         $.removeData(a, 'href'); // if loaded once do not load them again
                     }
                     o.load(self.$tabs[position - 1], self.$panels[position - 1]); // callback
+                    successHandler && successHandler(r, s);
                 }
             });
             if (this.xhr) {
