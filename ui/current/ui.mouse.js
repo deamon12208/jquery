@@ -43,6 +43,18 @@
 			);
 			try { $('body').get(0).removeChild(tmp.get(0));	} catch(e){}
 			return $.ui.cssCache[name];
+		},
+		disableSelection: function(e) {
+			if (!e) return;
+			e.unselectable = "on";
+			e.onselectstart = function() {	return false; };
+			if (e.style) e.style.MozUserSelect = "none";
+		},
+		enableSelection: function(e) {
+			if (!e) return;
+			e.unselectable = "off";
+			e.onselectstart = function() { return true; };
+			if (e.style) e.style.MozUserSelect = "";
 		}
 	});
 	
