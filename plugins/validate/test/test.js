@@ -9,6 +9,10 @@ test("Constructor", function() {
 	equals( 2, v1.elements().length, "validator must have two elements" );
 });
 
+test("validate() without elements, with non-form elements", function() {
+	$("#doesn'texist").validate();
+});
+
 test("valid() plugin method", function() {
 	var form = $("#userForm");
 	form.validate();
