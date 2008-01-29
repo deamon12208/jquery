@@ -120,8 +120,8 @@
     // instance methods
     $.extend($.ui.tabs.prototype, {
         tabId: function(a) {
-            return a.title ? a.title.replace(/\s/g, '_')
-                : this.options.idPrefix + $.data(a);
+            return a.title && a.title.replace(/\s/g, '_').replace(/[^A-Za-z0-9\-_:\.]/g, '')
+                || this.options.idPrefix + $.data(a);
         },
         tabify: function(init) {
 
@@ -496,8 +496,7 @@
                 });
                 self.xhr = null;
             };
-            var successHandler = o.ajaxOptions.success; // preserve a given success handler
-            var ajaxOptions = $.extend(o.ajaxOptions, {
+            var ajaxOptions = $.extend({}, o.ajaxOptions, {
                 url: url,
                 success: function(r, s) {
                     $(a.hash).html(r);
@@ -511,7 +510,7 @@
                         $.removeData(a, 'href'); // if loaded once do not load them again
                     }
                     o.load(self.$tabs[position - 1], self.$panels[position - 1]); // callback
-                    successHandler && successHandler(r, s);
+                    o.ajaxOptions.success && o.ajaxOptions.success(r, s);
                 }
             });
             if (this.xhr) {
