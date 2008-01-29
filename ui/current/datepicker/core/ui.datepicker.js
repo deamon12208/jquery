@@ -649,8 +649,7 @@ $.extend(Datepicker.prototype, {
 	   @param  inst  the current datepicker instance
 	   @return  the status display text for this date */
 	dateStatus: function(date, inst) {
-		return $.datepicker.formatDate(inst._get('dateStatus'), date, inst._get('dayNamesShort'),
-			inst._get('dayNames'), inst._get('monthNamesShort'), inst._get('monthNames'));
+		return $.datepicker.formatDate(inst._get('dateStatus'), date, inst._getFormatConfig());
 	},
 
 	/* Parse a string value into a date object.
@@ -670,13 +669,14 @@ $.extend(Datepicker.prototype, {
 
 	   @param  format           String - the expected format of the date
 	   @param  value            String - the date in the above format
-	   @param  shortYearCutoff  Number - the cutoff year for determining the century (optional)
-	   @param  dayNamesShort    String[7] - abbreviated names of the days from Sunday (optional)
-	   @param  dayNames         String[7] - names of the days from Sunday (optional)
-	   @param  monthNamesShort  String[12] - abbreviated names of the months (optional)
-	   @param  monthNames       String[12] - names of the months (optional)
+	   @param  settings  Object - attributes include:
+	                     shortYearCutoff  Number - the cutoff year for determining the century (optional)
+	                     dayNamesShort    String[7] - abbreviated names of the days from Sunday (optional)
+	                     dayNames         String[7] - names of the days from Sunday (optional)
+	                     monthNamesShort  String[12] - abbreviated names of the months (optional)
+	                     monthNames       String[12] - names of the months (optional)
 	   @return  Date - the extracted date value or null if value is blank */
-	parseDate: function (format, value, shortYearCutoff, dayNamesShort, dayNames, monthNamesShort, monthNames) {
+	parseDate: function (format, value, settings) {
 		if (format == null || value == null) {
 			throw 'Invalid arguments';
 		}
@@ -685,10 +685,11 @@ $.extend(Datepicker.prototype, {
 		if (value == '') {
 			return null;
 		}
-		dayNamesShort = dayNamesShort || this._defaults.dayNamesShort;
-		dayNames = dayNames || this._defaults.dayNames;
-		monthNamesShort = monthNamesShort || this._defaults.monthNamesShort;
-		monthNames = monthNames || this._defaults.monthNames;
+		var shortYearCutoff = (settings ? settings.shortYearCutoff : null) || this._defaults.shortYearCutoff;
+		var dayNamesShort = (settings ? settings.dayNamesShort : null) || this._defaults.dayNamesShort;
+		var dayNames = (settings ? settings.dayNames : null) || this._defaults.dayNames;
+		var monthNamesShort = (settings ? settings.monthNamesShort : null) || this._defaults.monthNamesShort;
+		var monthNames = (settings ? settings.monthNames : null) || this._defaults.monthNames;
 		var year = -1;
 		var month = -1;
 		var day = -1;
@@ -809,22 +810,23 @@ $.extend(Datepicker.prototype, {
 	   '...' - literal text
 	   '' - single quote
 
-	   @param  format           String - the desired format of the date
-	   @param  date             Date - the date value to format
-	   @param  dayNamesShort    String[7] - abbreviated names of the days from Sunday (optional)
-	   @param  dayNames         String[7] - names of the days from Sunday (optional)
-	   @param  monthNamesShort  String[12] - abbreviated names of the months (optional)
-	   @param  monthNames       String[12] - names of the months (optional)
+	   @param  format    String - the desired format of the date
+	   @param  date      Date - the date value to format
+	   @param  settings  Object - attributes include:
+	                     dayNamesShort    String[7] - abbreviated names of the days from Sunday (optional)
+	                     dayNames         String[7] - names of the days from Sunday (optional)
+	                     monthNamesShort  String[12] - abbreviated names of the months (optional)
+	                     monthNames       String[12] - names of the months (optional)
 	   @return  String - the date in the above format */
-	formatDate: function (format, date, dayNamesShort, dayNames, monthNamesShort, monthNames) {
+	formatDate: function (format, date, settings) {
 		if (!date) {
 			return '';
 		}
 //		format = dateFormats[format] || format;
-		dayNamesShort = dayNamesShort || this._defaults.dayNamesShort;
-		dayNames = dayNames || this._defaults.dayNames;
-		monthNamesShort = monthNamesShort || this._defaults.monthNamesShort;
-		monthNames = monthNames || this._defaults.monthNames;
+		var dayNamesShort = (settings ? settings.dayNamesShort : null) || this._defaults.dayNamesShort;
+		var dayNames = (settings ? settings.dayNames : null) || this._defaults.dayNames;
+		var monthNamesShort = (settings ? settings.monthNamesShort : null) || this._defaults.monthNamesShort;
+		var monthNames = (settings ? settings.monthNames : null) || this._defaults.monthNames;
 		// Check whether a format character is doubled
 		var lookAhead = function(match) {
 			var matches = (iFormat + 1 < format.length && format.charAt(iFormat + 1) == match);
@@ -959,25 +961,17 @@ $.extend(DatepickerInstance.prototype, {
 		var dateFormat = this._get('dateFormat');
 		var dates = this._input ? this._input.val().split(this._get('rangeSeparator')) : null; 
 		this._endDay = this._endMonth = this._endYear = null;
-		var shortYearCutoff = this._get('shortYearCutoff');
-		shortYearCutoff = (typeof shortYearCutoff != 'string' ? shortYearCutoff :
-			new Date().getFullYear() % 100 + parseInt(shortYearCutoff, 10));
 		var date = defaultDate = this._getDefaultDate();
 		if (dates.length > 0) {
-			var dayNamesShort = this._get('dayNamesShort');
-			var dayNames = this._get('dayNames');
-			var monthNamesShort = this._get('monthNamesShort');
-			var monthNames = this._get('monthNames');
+			var settings = this._getFormatConfig();
 			if (dates.length > 1) {
-				date = $.datepicker.parseDate(dateFormat, dates[1], shortYearCutoff,
-					dayNamesShort, dayNames, monthNamesShort, monthNames) || defaultDate;
+				date = $.datepicker.parseDate(dateFormat, dates[1], settings) || defaultDate;
 				this._endDay = date.getDate();
 				this._endMonth = date.getMonth();
 				this._endYear = date.getFullYear();
 			}
 			try {
-				date = $.datepicker.parseDate(dateFormat, dates[0], shortYearCutoff,
-					dayNamesShort, dayNames, monthNamesShort, monthNames) ||defaultDate;
+				date = $.datepicker.parseDate(dateFormat, dates[0], settings) || defaultDate;
 			}
 			catch (e) {
 				$.datepicker.log(e);
@@ -1347,6 +1341,16 @@ $.extend(DatepickerInstance.prototype, {
 		var maxDate = this._getMinMaxDate('max');
 		return ((!minDate || date >= minDate) && (!maxDate || date <= maxDate));
 	},
+	
+	/* Provide the configuration settings for formatting/parsing. */
+	_getFormatConfig: function() {
+		var shortYearCutoff = this._get('shortYearCutoff');
+		shortYearCutoff = (typeof shortYearCutoff != 'string' ? shortYearCutoff :
+			new Date().getFullYear() % 100 + parseInt(shortYearCutoff, 10));
+		return {shortYearCutoff: shortYearCutoff,
+			dayNamesShort: this._get('dayNamesShort'), dayNames: this._get('dayNames'),
+			monthNamesShort: this._get('monthNamesShort'), monthNames: this._get('monthNames')};
+	},
 
 	/* Format the given date for display. */
 	_formatDate: function(day, month, year) {
@@ -1357,9 +1361,7 @@ $.extend(DatepickerInstance.prototype, {
 		}
 		var date = (day ? (typeof day == 'object' ? day : new Date(year, month, day)) :
 			new Date(this._currentYear, this._currentMonth, this._currentDay));
-		return $.datepicker.formatDate(this._get('dateFormat'), date,
-			this._get('dayNamesShort'), this._get('dayNames'),
-			this._get('monthNamesShort'), this._get('monthNames'));
+		return $.datepicker.formatDate(this._get('dateFormat'), date, this._getFormatConfig());
 	}
 });
 
