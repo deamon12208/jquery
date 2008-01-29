@@ -2,7 +2,8 @@
 -----
 
 * Allow false/null for highlight/unhighlight options instead of forcing a do-nothing-callback even when nothing needs to be highlighted
-* Fixed validate() call with no elements selected, returning undefined instead of throwing an error 
+* Fixed validate() call with no elements selected, returning undefined instead of throwing an error
+* Improved demo, replacing metadata with classes/attributes for specifying rules
 
 1.2
 ---
