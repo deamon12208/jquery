@@ -97,7 +97,7 @@
 			if(
 				   e.which != 1 //only left click starts dragging
 				|| $.inArray(e.target.nodeName.toLowerCase(), this.options.dragPrevention) != -1 // Prevent execution on defined elements
-				|| (this.options.condition && !this.options.condition.apply(this.options.executor || this, [e])) //Prevent execution on condition
+				|| (this.options.condition && !this.options.condition.apply(this.options.executor || this, [e, this.element])) //Prevent execution on condition
 			) return true;
 			
 			var self = this;
@@ -123,7 +123,7 @@
 			var o = this.options;
 			if(!this.initialized) return $(document).unbind('mouseup.draggable').unbind('mousemove.draggable');
 
-			if(this.options.stop) this.options.stop.call(this.options.executor || this, e);
+			if(this.options.stop) this.options.stop.call(this.options.executor || this, e, this.element);
 			$(document).unbind('mouseup.draggable').unbind('mousemove.draggable');
 			this.initialized = false;
 			return false;
@@ -135,13 +135,13 @@
 			if ($.browser.msie && !e.button) return this.stop.apply(this, [e]); // IE mouseup check
 			
 			if(!this.initialized && (Math.abs(this._MP.left-e.pageX) >= o.distance || Math.abs(this._MP.top-e.pageY) >= o.distance)) {
-				if(this.options.start) this.options.start.call(this.options.executor || this, e);
+				if(this.options.start) this.options.start.call(this.options.executor || this, e, this.element);
 				this.initialized = true;
 			} else {
 				if(!this.initialized) return false;
 			}
 
-			if(o.drag) o.drag.call(this.options.executor || this, e);
+			if(o.drag) o.drag.call(this.options.executor || this, e, this.element);
 			return false;
 			
 		}

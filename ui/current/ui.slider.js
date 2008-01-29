@@ -1,290 +1,153 @@
 (function($) {
 
-	//Web Forms 2.0
-	if(window['webforms']) {
-		$(document).ready(function() {
-			
-			$("input").each(function() {
-				if(this.getAttribute("type") == "range") {
-					var cur = $(this);
-					var slider = $("<div class='ui-slider'></div>").css({ width: cur.innerWidth()+"px", height: cur.innerHeight()+"px" }).insertAfter(cur);
-					var handle = $("<div class='ui-slider-handle'></div>").appendTo(slider);
-
-
-					slider.css({
-						"position": cur.css("position") == "absolute" ? "absolute" : "relative",
-						"left": cur.css("left"),
-						"right": cur.css("right"),
-						"zIndex": cur.css("zIndex"),
-						"float": cur.css("float"),
-						"clear": cur.css("clear")
-					});
-					cur.css({ position: "absolute", opacity: 0, top: "-1000px", left: "-1000px" });
-					
-					slider.slider({
-						maxValue: cur.attr("max"),
-						minValue: cur.attr("min"),
-						startValue: this.getAttribute("value"),
-						stepping: cur.attr("step"),
-						change: function(e, ui) { cur[0].value = ui.value; cur[0].setAttribute("value", ui.value); }
-					});
-					
-					slider = slider.sliderInstance();
-					
-					cur.bind("keydown", function(e) {
-						var o = slider.interaction.options;
-						switch(e.keyCode) {
-							case 37:
-								slider.moveTo(slider.interaction.curValue+o.minValue-(o.stepping || 1));
-								break;
-							case 39:
-								slider.moveTo(slider.interaction.curValue+o.minValue+(o.stepping || 1));
-								break;	
-						}
-						if(e.keyCode != 9) return false;
-					});
-					
-				};	
-			});
-				
-		});
-	}
-
 	//Make nodes selectable by expression
 	$.extend($.expr[':'], { slider: "(' '+a.className+' ').indexOf(' ui-slider ') != -1" });
+
+	$.fn.extend({
+		becomesSlider: function(o) {
+			return this.each(function() { if(!$.data(this, "ui-slider")) new $.ui.slider(this,o);	});
+		},
+		removeSlider: function() {
+			return this.each(function() { if($.data(this, "ui-slider")) $.data(this, "ui-slider").destroy(); });
+		},
+		changeSlider: function(key,value) {
+			var ret = null;
+			this.each(function() { if($.data(this, "ui-slider")) ret = $.data(this, "ui-slider")[key](value); });
+			return ret || this;
+		},
+		enableSlider: function() {
+			return this.each(function() { if($.data(this, "ui-slider")) $.data(this, "ui-slider").enable(); });
+		},
+		disableSlider: function() {
+			return this.each(function() { if($.data(this, "ui-slider")) $.data(this, "ui-slider").disable(); });
+		}
+	});
 	
-	$.fn.slider = function(o) {
-		return this.each(function() {
-			new $.ui.slider(this, o);
-		});
-	}
-	
-	//Macros for external methods that support chaining
-	var methods = "destroy,enable,disable,moveTo".split(",");
-	for(var i=0;i<methods.length;i++) {
-		var cur = methods[i], f;
-		eval('f = function() { var a = arguments; return this.each(function() { if(jQuery(this).is(".ui-slider")) jQuery.data(this, "ui-slider")["'+cur+'"](a); }); }');
-		$.fn["slider"+cur.substr(0,1).toUpperCase()+cur.substr(1)] = f;
-	};
-	
-	//get instance method
-	$.fn.sliderInstance = function() {
-		if($(this[0]).is(".ui-slider")) return $.data(this[0], "ui-slider");
-		return false;
-	};
-	
-	$.ui.slider = function(el, o) {
+	$.ui.slider = function(element, options) {
+
+
+		//Initialize needed constants
+		var self = this;
+		this.element = $(element);
+		$.data(element, "ui-slider", this);
+		this.element.addClass("ui-slider");
 		
-		var options = {};
-		o = o || {};
-		$.extend(options, o);
-		$.extend(options, {
-			axis: o.axis || (el.offsetWidth < el.offsetHeight ? 'vertical' : 'horizontal'),
+		//Prepare the passed options
+		this.options = $.extend({}, options);
+		var o = this.options;
+		$.extend(o, {
+			axis: o.axis || (element.offsetWidth < element.offsetHeight ? 'vertical' : 'horizontal'),
 			maxValue: parseInt(o.maxValue) || 100,
 			minValue: parseInt(o.minValue) || 0,
-			startValue: parseInt(o.startValue) || 0,
-			_start: function(h, p, c, t, e) {
-				self.start.apply(t, [self, e]); // Trigger the start callback				
-			},
-			_beforeStop: function(h, p, c, t, e) {
-				self.stop.apply(t, [self, e]); // Trigger the start callback
-			},
-			_drag: function(h, p, c, t, e) {
-				self.drag.apply(t, [self, e]); // Trigger the start callback
-			},
-			startCondition: function() {
-				return !self.disabled;
-			}			
+			startValue: parseInt(o.startValue) || 0		
 		});
-
-		var self = this;
-		var o = options;
-		$.data(el, "ui-slider", this);
 		o.stepping = parseInt(o.stepping) || (o.steps ? o.maxValue/o.steps : 0);
-		o.realValue = (o.maxValue - o.minValue);
-
-
-		this.handle = options.handle ? $(options.handle, el) : $('.ui-slider-handle', el);
-		if(this.handle.length == 1) {
-			this.interaction = new $.ui.mouseInteraction(this.handle[0], options);
-			this.multipleHandles = false;
-		} else {
-			this.interactions = [];
-			this.handle.each(function() {
-				self.interactions.push(new $.ui.mouseInteraction(this, options));
-			});
-			this.multipleHandles = true;
-		}
 		
-		this.element = el;
-		$(this.element).addClass("ui-slider");
+		
+		//Initialize mouse events for interaction
+		this.handle = o.handle ? $(o.handle, element) : $('.ui-slider-handle', element);
+		$(this.handle).mouseInteraction({
+			executor: this,
+			delay: o.delay,
+			distance: o.distance || 0,
+			dragPrevention: o.prevention ? o.prevention.toLowerCase().split(',') : ['input','textarea','button','select','option'],
+			start: this.start,
+			stop: this.stop,
+			drag: this.drag,
+			condition: function(e) { return !this.disabled; }
+		});
+		
+		//Position the node
+		if(o.helper == 'original' && (this.element.css('position') == 'static' || this.element.css('position') == ''))
+			this.element.css('position', 'relative');
+
 		
 		
 		if(o.axis == 'horizontal') {
-			this.parentSize = $(this.element).outerWidth() - this.handle.outerWidth();
-			this.prop = 'left';
+			this.size = this.element.outerWidth();
+			this.properties = ['left', 'width'];
+		} else {
+			this.size = this.element.outerHeight();
+			this.properties = ['top', 'height'];
 		}
 		
-		if(o.axis == 'vertical') {
-			this.parentSize = $(this.element).outerHeight() - this.handle.outerHeight();
-			this.prop = 'top';
-		}
+		//Bind the click to the slider itself
+		this.element.bind('click', function(e) { self.click.apply(self, [e]); });
 		
-		if(!this.multipleHandles) {
-			$(el).bind('click', function(e) { self.click.apply(self, [e]); });
-			if(!isNaN(o.startValue)) this.moveTo(o.startValue,options.realValue, null, false);
-		}
+		//Move the first handle to the startValue
+		if(!isNaN(o.startValue)) this.moveTo(o.startValue, 0);
 		
-	}
+	};
 	
 	$.extend($.ui.slider.prototype, {
-		currentTarget: null,
-		lastTarget: null,
+		plugins: {},
+		ui: function(e) {
+			return {
+				instance: this,
+				options: this.options					
+			};
+		},
+		propagate: function(n,e) {
+			$.ui.plugin.call(this, n, [e, this.ui()]);
+			this.element.triggerHandler(n == "slide" ? n : "slide"+n, [e, this.ui()], this.options[n]);
+		},
 		destroy: function() {
-			$(this.element).removeClass("ui-slider").removeClass("ui-slider-disabled");
-			this.interaction.destroy();
+			this.element.removeClass("ui-slider ui-slider-disabled");
+			this.handles.removeMouseInteraction();
 		},
 		enable: function() {
-			$(this.element).removeClass("ui-slider-disabled");
+			this.element.removeClass("ui-slider-disabled");
 			this.disabled = false;
 		},
 		disable: function() {
-			$(this.element).addClass("ui-slider-disabled");
+			this.element.addClass("ui-slider-disabled");
 			this.disabled = true;
 		},
-		nonvalidRange: function(self) {
-
-			for(var i=0;i<this.interactions.length;i++) {
-				if(self == this.interactions[i]) {
-					if(this.interactions[i-1]) {
-						if(this.interactions[i-1].curValue > this.interactions[i].curValue) return this.interactions[i-1].curValue;
-					}
-					
-					if(this.interactions[i+1]) {
-						if(this.interactions[i+1].curValue < this.interactions[i].curValue) return this.interactions[i+1].curValue;
-					}
-				}
-			}
-			
-			return false;
-			
-		},
-		prepareCallbackObj: function(self,m) {
-			
-			var cur = this;
-			var func = function() {
-				var retVal = [];
-				for(var i=0;i<cur.interactions.length;i++) {
-					retVal.push((cur.interactions[i].curValue || 0)+self.options.minValue);
-				}
-				return retVal;
-			};
-			
-			return {
-				handle: self.helper,
-				pixel: m,
-				value: self.curValue+self.options.minValue,
-				values: this.multipleHandles ? func() : self.curValue+self.options.minValue,
-				slider: self	
-			}			
-		},
 		click: function(e) {
-			var o = this.interaction.options;
+			
 			var pointer = [e.pageX,e.pageY];
-			var offset = $(this.interaction.element).offsetParent().offset({ border: false });
-			if(this.interaction.element == e.target || this.disabled) return;
+			var clickedHandle = false;
+			this.handle.each(function() { if(this == e.target) clickedHandle = true;  });
+			if(clickedHandle || this.disabled) return;
 			
-			this.interaction.pickValue = this.interaction.curValue;
-			this.drag.apply(this.interaction, [this, e, [pointer[0]-offset.left-this.handle[0].offsetWidth/2,pointer[1]-offset.top-this.handle[0].offsetHeight/2]]);
+			//Move focussed handle to the clicked position
 			
-			if(this.interaction.pickValue != this.interaction.curValue)
-				$(this.element).triggerHandler("slidechange", [e, this.prepareCallbackObj(this.interaction)], o.change);
 				
 		},
-		start: function(that, e) {
+		start: function(e, handle) {
 			
 			var o = this.options;
-			$(that.element).triggerHandler("slidestart", [e, that.prepareCallbackObj(this)], o.start);
-			this.pickValue = this.curValue;
+			this.$handle = $(handle);
+			
+			this.offset = this.element.offset();
+			this.handleOffset = this.$handle.offset();
+			this.clickOffset = { top: e.pageY - this.handleOffset.top, left: e.pageX - this.handleOffset.left };
+			this.handleSize = this.$handle['outer'+this.properties[1].substr(0,1).toUpperCase()+this.properties[1].substr(1)]();
 			
 			return false;
 						
 		},
-		stop: function(that, e) {			
+		stop: function(e) {			
 			
 			var o = this.options;
-			$(that.element).triggerHandler("slidestop", [e, that.prepareCallbackObj(this)], o.stop);
-			if(this.pickValue != this.curValue) $(that.element).triggerHandler("slidechange", [e, that.prepareCallbackObj(this)], o.change);
-
 			return false;
 			
 		},
-		drag: function(that, e, pos) {
+		drag: function(e, handle) {
 
 			var o = this.options;
-			this.pos = pos || [this.pos[0]-this.element.offsetWidth/2, this.pos[1]-this.element.offsetHeight/2];
-			
-			if(o.axis == 'horizontal') var m = this.pos[0];
-			if(o.axis == 'vertical')   var m = this.pos[1];
-			
-			
-			var p = that.parentSize;
-			var prop = that.prop;
+			var position = { top: e.pageY - this.offset.top - this.clickOffset.top, left: e.pageX - this.offset.left - this.clickOffset.left};
 
-			if(m < 0) m = 0;
-			if(m > p) m = p;
-
-			this.curValue = (Math.round((m/p)*o.realValue));
-			if(o.stepping) {
-				this.curValue = Math.round(this.curValue/o.stepping)*o.stepping;
-				m = ((this.curValue)/o.realValue) * p;
-			}
+			var modifier = position[this.properties[0]];
+			if(modifier >= this.size - this.handleSize) modifier = this.size - this.handleSize;
+			if(modifier <= 0) modifier = 0;
 			
-			if(that.interactions) {
-				nonvalidRange = that.nonvalidRange(this);
-				if(nonvalidRange) {
-					this.curValue = nonvalidRange;
-					m = ((this.curValue)/o.realValue) * p;
-				}
-			}
-			
-			$(this.element).css(prop, m+'px');
-			$(that.element).triggerHandler("slide", [e, that.prepareCallbackObj(this,m)], o.slide);
+			this.$handle.css(this.properties[0], modifier);
 			return false;
 			
 		},
-		moveTo: function(value,scale,changeslide,p) {	// renamed from goto to moveTo as goto is reserved javascript word
+		moveTo: function(value,handle) {	// renamed from goto to moveTo as goto is reserved javascript word
 			
-			if(this.multipleHandles) return false; //TODO: Multiple handle moveTo function
-			
-			var o = this.interaction.options;
-			var offset = $(this.interaction.element).offsetParent().offset({ border: false });
-			this.interaction.pickValue = this.interaction.curValue;
-			value = value-o.minValue;
-			
-			var modifier = scale || o.realValue;
-			
-			if(!p) var p = this.parentSize;
-			var prop = this.prop;
-			
-			var m = Math.round(((value)/modifier) * p);
-
-			if(m < 0) m = 0;
-			if(m > p) m = p;
-			
-			this.interaction.curValue = (Math.round((m/p)*o.realValue));
-			if(o.stepping) {
-				this.interaction.curValue = Math.round(this.interaction.curValue/o.stepping)*o.stepping;
-				m = ((this.interaction.curValue)/o.realValue) * p;
-			}
-
-			$(this.interaction.element).css(prop, m+'px');
-			
-			if(!changeslide && this.interaction.pickValue != this.interaction.curValue && !p)
-				$(this.element).triggerHandler("slidechange", [null, this.prepareCallbackObj(this.interaction)], o.change);
-			
-			if(changeslide)
-				$(this.element).triggerHandler("slide", [null, this.prepareCallbackObj(this.interaction)], o.slide);
 
 		}
 	});
