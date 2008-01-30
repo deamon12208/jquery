@@ -68,13 +68,14 @@ body
 
 
 
-<div id='containment_parent' style='width: 400px; height: 300px; margin: 20px; position: relative; background:#F7FFEF;border:2px solid #E6F7D4;'>
-	<div id='resizeme_containment' style='width: 200px; height: 100px; border: 1px solid black; position: absolute; background:#fff; padding:0px;'>
+<div id='containment_parent' style='width: 400px; height: 300px; margin: 20px; position: relative; background:#F7FFEF;border:20px solid #E6F7D4; overflow:auto;'>
+	<div id='resizeme_containment' style='width: 200px; height: 100px; border: 1px solid black; position: absolute; background:#fff; padding:10px;'>
 		<div style='position: relative;'>Relative position, containment enabled.</div>
 	</div>
+	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> 
 </div>
 
-<div style='width: 400px; height: 300px; margin: 20px; position: relative; background:#F7FFEF;border:2px solid #E6F7D4;'>
+<div style='width: 400px; height: 300px; margin: 20px; position: relative; background:#F7FFEF;border:20px solid #E6F7D4;'>
 	<img id="resizeme_containment_image" src="images/houses.jpg" style='width: 200px; height:100px;border: 2px solid #F0F1F3; margin: 0px;'> 
 </div>
 
@@ -148,6 +149,9 @@ $(document).ready(function(){
 		handles: 'all',
 		//autohide: true,
 		
+		minWidth: 100,
+		minHeight: 50,
+		
 		//containment: 'document',
 		//containment:$('#containment_parent'),
 		containment:'parent',
@@ -161,7 +165,13 @@ $(document).ready(function(){
 	$('#textarea').resizable({
 		//proxy: "proxy",
 		handles: 'all',
+		
 		autohide: true,
+		
+		minWidth: 100,
+		minHeight: 50,
+		
+		containment: document,
 		//containment: 'document',
 		//aspectRatio: 'preserve',
 		preventDefault: true,

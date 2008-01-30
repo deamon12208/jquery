@@ -301,15 +301,20 @@
 				var oc = o.containment,
 					 ce = (oc instanceof jQuery) ? oc.get(0) : 
 							(/parent/.test(oc)) ? el.parent().get(0) : null;
-				
 				if (ce) {
+					
+					var scroll = function(e, a) {
+						var scroll = /top/.test(a||"top") ? 'scrollTop' : 'scrollLeft', has = false;
+						if (e[scroll] > 0) return true; e[scroll] = 1;
+						has = e[scroll] > 0 ? true : false;
+						return has; 
+					};
+					
 					var co = $(ce).offset(), ch = $(ce).innerHeight(), cw = $(ce).innerWidth();
-					o.cdata = { e: ce, l: co.left, t: co.top, w: (cw > ce.scrollWidth ? cw : ce.scrollWidth), h: (ch > ce.scrollHeight ? ch : ce.scrollHeight) };
+					o.cdata = { e: ce, l: co.left, t: co.top, w: (scroll(ce, "left") ? ce.scrollWidth : cw ), h: (scroll(ce) ? ce.scrollHeight : ch) };
 				}
-				
-				if (/document/.test(oc)) o.cdata = { e: document, l: 0, t: 0, w: $(document).width(), h: $(document).height() };
+				if (/document/.test(oc) || oc == document) o.cdata = { e: document, l: 0, t: 0, w: $(document).width(), h: $(document).height() };
 			}
-			
 			this.propagate("start", e);		
 			return false;
 			
@@ -355,7 +360,7 @@
 					defAxis = (o.axis == "se" || o.axis == "s" || o.axis == "e"); 
 				
 				var mod = (e[isTopHeight?'pageY':'pageX'] - o.startPosition[isTopHeight?'top':'left']) * (b ? -1 : 1);
-				var val = o[isHeightWidth?'currentSize':'currentPosition'][a] - mod - (/*o.proportionallyResize &&*/ !o.proxy && defAxis ? o.currentSizeDiff.width : 0);
+				var val = o[isHeightWidth?'currentSize':'currentPosition'][a] - mod - (!o.proxy && defAxis ? o.currentSizeDiff.width : 0);
 				
 				el.css(a, val);
 				
