@@ -495,9 +495,7 @@ jQuery.extend(jQuery.validator, {
 				label.removeClass().addClass( this.settings.errorClass );
 			
 				// check if we have a generated label, replace the message then
-				if( this.settings.overrideErrors || label.attr("generated") ) {
-					label.html(message);
-				}
+				label.attr("generated") && label.html(message);
 			} else {
 				// create label
 				label = jQuery("<" + this.settings.errorElement + "/>")
@@ -767,15 +765,12 @@ jQuery.extend(jQuery.validator, {
 			if ( this.optional(element) )
 				return true;
 			
-			if (!jQuery.ajaxQueue) {
-				alert("Error: ajaxQueue plugin not loaded, required for remote validation");
-				return false;
-			}
-			
 			var previous = this.previousValue(element);
+			
 			if (!this.settings.messages[element.name] )
 				this.settings.messages[element.name] = {};
 			this.settings.messages[element.name].remote = typeof previous.message == "function" ? previous.message(value) : previous.message;
+			
 			if ( previous.old !== value ) {
 				previous.old = value;
 				var validator = this;
@@ -953,3 +948,20 @@ jQuery.extend(jQuery.validator, {
 	}
 	
 });
+
+;(function($) {
+	var ajax = $.ajax;
+	var pendingRequests = {};
+	$.ajax = function(settings) {
+		// create settings for compatibility with ajaxSetup
+		settings = jQuery.extend(settings, jQuery.extend({}, jQuery.ajaxSettings, settings));
+		var port = settings.port;
+		if (settings.mode == "abort") {
+			if ( pendingRequests[port] ) {
+				pendingRequests[port].abort();
+			}
+			return pendingRequests[port] = ajax.apply(this, arguments);
+		}
+		return ajax.apply(this, arguments);
+	};
+})(jQuery);

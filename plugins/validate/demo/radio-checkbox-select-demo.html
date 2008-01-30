@@ -28,6 +28,11 @@ $(document).ready(function() {
 });
 </script>
 
+<style type="text/css">
+.block { display: block; }
+form.cmxform label.error { display: none; }	
+</style>
+
 </head>
 <body>
 
@@ -71,7 +76,9 @@ $(document).ready(function() {
 		</fieldset>
 		<p>
 			<label for="agree">Please agree to our policy</label>
-			<input type="checkbox" id="agree" title="Please agree to our policy!" name="agree" validate="required:true" />
+			<input type="checkbox" id="agree" name="agree" validate="required:true" />
+			<br/>
+			<label for="agree" class="error block">Please agree to our policy!</label>
 		</p>
 		<fieldset>
 			<legend>Spam</legend>

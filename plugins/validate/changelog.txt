@@ -5,7 +5,7 @@
 * Fixed validate() call with no elements selected, returning undefined instead of throwing an error
 * Improved demo, replacing metadata with classes/attributes for specifying rules
 * Fixed error when no custom message is used for remote validation
-* Changed remote validation to require ajaxQueue plugin to guarantee synchronization
+* Improved remote validation to include parts from the ajaxQueue plugin for proper synchronization (no additional plugin necessary)
 
 1.2
 ---

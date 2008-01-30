@@ -29,6 +29,11 @@ div.container { display: none }
 	display: inline;
 }
 form.cmxform { width: 30em; }
+form.cmxform label.error {
+	display: block;
+	margin-left: 1em;
+	width: auto;
+}
 </style>
 
 <script type="text/javascript">
@@ -50,8 +55,7 @@ $().ready(function() {
 		errorContainer: container,
 		errorLabelContainer: $("ol", container),
 		wrapper: 'li',
-		meta: "validate",
-		event: "keyup"
+		meta: "validate"
 	});
 });
 </script>
