@@ -766,8 +766,15 @@ jQuery.extend(jQuery.validator, {
 		remote: function(value, element, param) {
 			if ( this.optional(element) )
 				return true;
-				
+			
+			if (!jQuery.ajaxQueue) {
+				alert("Error: ajaxQueue plugin not loaded, required for remote validation");
+				return false;
+			}
+			
 			var previous = this.previousValue(element);
+			if (!this.settings.messages[element.name] )
+				this.settings.messages[element.name] = {};
 			this.settings.messages[element.name].remote = typeof previous.message == "function" ? previous.message(value) : previous.message;
 			if ( previous.old !== value ) {
 				previous.old = value;

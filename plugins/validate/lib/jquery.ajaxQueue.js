@@ -46,6 +46,9 @@ $(function(){
 
 ;(function($) {
 	
+	// make it detectable
+	$.ajaxQueue = {};
+	
 	var ajax = $.ajax;
 	
 	var pendingRequests = {};

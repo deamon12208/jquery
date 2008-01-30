@@ -4,6 +4,8 @@
 * Allow false/null for highlight/unhighlight options instead of forcing a do-nothing-callback even when nothing needs to be highlighted
 * Fixed validate() call with no elements selected, returning undefined instead of throwing an error
 * Improved demo, replacing metadata with classes/attributes for specifying rules
+* Fixed error when no custom message is used for remote validation
+* Changed remote validation to require ajaxQueue plugin to guarantee synchronization
 
 1.2
 ---
