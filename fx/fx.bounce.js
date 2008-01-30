@@ -1,19 +1,20 @@
 (function($) {
-  
+
   $.ec.bounce = function(o) {
 
     return this.queue(function() {
 
       // Create element
-      var el = $(this), props = ['position','top','left','opacity'];
-      
+      var el = $(this), props = ['position','top','left'];
+
       // Set options
       var mode = o.options.mode || 'effect'; // Default Mode
       var direction = o.options.direction || 'up'; // Default direction
       var distance = o.options.distance || 20; // Default distance
       var times = o.options.times || 5; // Default # of times
       var speed = o.options.duration || 250; // Default speed per bounce
-      
+      if (/show|hide/.test(mode)) props.push('opacity'); // Avoid touching opacity to prevent clearType and PNG issues in IE
+
       // Adjust
       $.ec.save(el, props); el.show(); // Save & Show
       $.ec.createWrapper(el); // Create Wrapper
@@ -23,7 +24,7 @@
       if (mode == 'show') el.css('opacity', 0).css(ref, motion == 'pos' ? -distance : distance); // Shift
       if (mode == 'hide') distance = distance / (times * 2);
       if (mode != 'hide') times--;
-      
+
       // Animate
       if (mode == 'show') { // Show Bounce
         var animation = {opacity: 1};
@@ -59,9 +60,9 @@
           el.dequeue();
         });
       };
-      
+
     });
-    
+
   };
-  
+
 })(jQuery);
