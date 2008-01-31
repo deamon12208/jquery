@@ -1,13 +1,13 @@
 (function(){
 /*
- * jQuery 1.2.2b2 - New Wave Javascript
+ * jQuery 1.2.2 - New Wave Javascript
  *
  * Copyright (c) 2007 John Resig (jquery.com)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
- * $Date: 2007-12-20 14:36:56 +0100 (Don, 20 Dez 2007) $
- * $Rev: 4251 $
+ * $Date: 2008-01-14 17:56:07 -0500 (Mon, 14 Jan 2008) $
+ * $Rev: 4454 $
  */
 
 // Map over jQuery in case of overwrite
@@ -101,7 +101,7 @@ jQuery.fn = jQuery.prototype = {
 	},
 	
 	// The current version of jQuery being used
-	jquery: "@VERSION",
+	jquery: "1.2.2",
 
 	// The number of elements contained in the matched element set
 	size: function() {
@@ -324,6 +324,8 @@ jQuery.fn = jQuery.prototype = {
 		// Copy the events from the original to the clone
 		if ( events === true )
 			this.find("*").andSelf().each(function(i){
+				if (this.nodeType == 3)
+					return;
 				var events = jQuery.data( this, "events" );
 
 				for ( var type in events )
@@ -598,8 +600,7 @@ jQuery.extend({
 		return jQuery;
 	},
 
-	// This may seem like some crazy code, but trust me when I say that this
-	// is the only cross-browser way to do this. --John
+	// See test/unit/core.js for details concerning this function.
 	isFunction: function( fn ) {
 		return !!fn && typeof fn != "string" && !fn.nodeName && 
 			fn.constructor != Array && /function/i.test( fn + "" );
@@ -707,20 +708,22 @@ jQuery.extend({
 	// args is for internal usage only
 	each: function( object, callback, args ) {
 		if ( args ) {
-			if ( object.length == undefined )
+			if ( object.length == undefined ) {
 				for ( var name in object )
-					callback.apply( object[ name ], args );
-			else
+					if ( callback.apply( object[ name ], args ) === false )
+						break;
+			} else
 				for ( var i = 0, length = object.length; i < length; i++ )
 					if ( callback.apply( object[ i ], args ) === false )
 						break;
 
 		// A special, fast, case for the most common use of each
 		} else {
-			if ( object.length == undefined )
+			if ( object.length == undefined ) {
 				for ( var name in object )
-					callback.call( object[ name ], name, object[ name ] );
-			else
+					if ( callback.call( object[ name ], name, object[ name ] ) === false )
+						break;
+			} else
 				for ( var i = 0, length = object.length, value = object[0]; 
 					i < length && callback.call( value, i, value ) !== false; value = object[++i] ){}
 		}
@@ -836,7 +839,7 @@ jQuery.extend({
 		if ( name.match( /float/i ) )
 			name = styleFloat;
 
-		if ( !force && elem.style[ name ] )
+		if ( !force && elem.style && elem.style[ name ] )
 			ret = elem.style[ name ];
 
 		else if ( document.defaultView && document.defaultView.getComputedStyle ) {
@@ -933,7 +936,7 @@ jQuery.extend({
 			if ( typeof elem == "string" ) {
 				// Fix "XHTML"-style tags in all browsers
 				elem = elem.replace(/(<(\w+)[^>]*?)\/>/g, function(all, front, tag){
-					return tag.match(/^(abbr|br|col|img|input|link|meta|param|hr|area)$/i) ?
+					return tag.match(/^(abbr|br|col|img|input|link|meta|param|hr|area|embed)$/i) ?
 						all :
 						front + "></" + tag + ">";
 				});
@@ -1840,10 +1843,14 @@ jQuery.event = {
 				if ( typeof jQuery == "undefined" || jQuery.event.triggered )
 					return val;
 		
-				val = jQuery.event.handle.apply(elem, arguments);
+				val = jQuery.event.handle.apply(arguments.callee.elem, arguments);
 		
 				return val;
 			});
+		// Add elem as a property of the handle function
+		// This is to prevent a memory leak with non-native
+		// event in IE.
+		handle.elem = elem;
 			
 			// Handle multiple events seperated by a space
 			// jQuery(...).bind("mouseover mouseout", fn);
@@ -1878,6 +1885,9 @@ jQuery.event = {
 				// Keep track of which events have been used, for global triggering
 				jQuery.event.global[type] = true;
 			});
+		
+		// Nullify elem to prevent memory leaks in IE
+		elem = null;
 	},
 
 	guid: 1,
@@ -1941,6 +1951,8 @@ jQuery.event = {
 			// Remove the expando if it's no longer used
 			for ( ret in events ) break;
 			if ( !ret ) {
+				var handle = jQuery.data( elem, "handle" );
+				if ( handle ) handle.elem = null;
 				jQuery.removeData( elem, "events" );
 				jQuery.removeData( elem, "handle" );
 			}
@@ -1989,7 +2001,7 @@ jQuery.event = {
 			// Handle triggering of extra function
 			if ( extra && jQuery.isFunction( extra ) ) {
 				// call the extra function and tack the current return value on the end for possible inspection
-				var ret = extra.apply( elem, data.concat( val ) );
+				ret = extra.apply( elem, val == null ? data : data.concat( val ) );
 				// if anything is returned, give it precedence and have it overwrite the previous value
 				if (ret !== undefined)
 					val = ret;
@@ -2054,17 +2066,10 @@ jQuery.event = {
 	},
 
 	fix: function(event) {
-		// Short-circuit if the event has already been fixed by jQuery.event.fix
-		if ( event[ expando ] )
-			return event;
-			
 		// store a copy of the original event object 
 		// and clone to set read-only properties
 		var originalEvent = event;
 		event = jQuery.extend({}, originalEvent);
-		
-		// Mark the event as fixed by jQuery.event.fix
-		event[ expando ] = true;
 		
 		// add preventDefault and stopPropagation since 
 		// they will not work on the clone
@@ -2103,7 +2108,7 @@ jQuery.event = {
 		}
 			
 		// Add which for key events
-		if ( !event.which && (event.charCode || event.keyCode) )
+		if ( !event.which && ((event.charCode || event.charCode === 0) ? event.charCode : event.keyCode) )
 			event.which = event.charCode || event.keyCode;
 		
 		// Add metaKey to non-Mac browsers (use ctrl for PC's and Meta for Macs)
@@ -2269,7 +2274,7 @@ jQuery.extend({
 			}
 		
 			// Trigger any bound ready events
-			$(document).triggerHandler("ready");
+			jQuery(document).triggerHandler("ready");
 		}
 	}
 });
@@ -2352,7 +2357,7 @@ var withinElement = function(event, elem) {
 	// Check if mouse(over|out) are still within the same parent element
 	var parent = event.relatedTarget;
 	// Traverse up the tree
-	while ( parent && parent != elem ) try { parent = parent.parentNode } catch(error) { parent = elem; };
+	while ( parent && parent != elem ) try { parent = parent.parentNode; } catch(error) { parent = elem; }
 	// Return true if we actually just moused on to a sub-element
 	return parent == elem;
 };
@@ -2509,7 +2514,17 @@ jQuery.extend({
 		contentType: "application/x-www-form-urlencoded",
 		processData: true,
 		async: true,
-		data: null
+		data: null,
+		username: null,
+		password: null,
+		accepts: {
+			xml: "application/xml, text/xml",
+			html: "text/html",
+			script: "text/javascript, application/javascript",
+			json: "application/json, text/javascript",
+			text: "text/plain",
+			_default: "*/*"
+		}
 	},
 	
 	// Last-Modified header cache for next request
@@ -2623,7 +2638,7 @@ jQuery.extend({
 		var xml = window.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest();
 
 		// Open the socket
-		xml.open(s.type, s.url, s.async);
+		xml.open(s.type, s.url, s.async, s.username, s.password);
 
 		// Need an extra try/catch for cross domain requests in Firefox 3
 		try {
@@ -2638,6 +2653,11 @@ jQuery.extend({
 
 			// Set header so the called script knows that it's an XMLHttpRequest
 			xml.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+
+			// Set the Accepts header for the server, depending on the dataType
+			xml.setRequestHeader("Accept", s.dataType && s.accepts[ s.dataType ] ?
+				s.accepts[ s.dataType ] + ", */*" :
+				s.accepts._default );
 		} catch(e){}
 
 		// Allow custom headers/mimetypes
@@ -2853,6 +2873,9 @@ jQuery.fn.extend({
 				if ( jQuery.css(this,"display") == "none" ) {
 					var elem = jQuery("<" + this.tagName + " />").appendTo("body");
 					this.style.display = elem.css("display");
+					// handle an edge condition where css is - div { display:none; } or similar
+					if (this.style.display == "none")
+						this.style.display = "block";
 					elem.remove();
 				}
 			}).end();
@@ -2982,9 +3005,6 @@ jQuery.fn.extend({
 			return queue( this[0], type );
 
 		return this.each(function(){
-			if ( this.nodeType != 1)
-				return;
-
 			if ( fn.constructor == Array )
 				queue(this, type, fn);
 			else {

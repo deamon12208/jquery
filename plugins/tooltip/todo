@@ -1,10 +1,9 @@
-* add demo: http://www.kentuckygolfing.com/gallery
-* add "bottom" and/or "right" classes to tooltip when moving tooltip at viewport borders, for displaying different backgrounds
-* add delay on hide
-* add stick on hover of tooltip (with track:false)
-* Add and test Footip
-* Add stop-queue stuff for fadein/out without nasty queues
-* Seperate plugin and demo styles into their own files
-* Expose id="tooltip" as an option?
+1.3
+---
+
 * leverage advanced background-styling, eg. see http://www.google.com/intl/en_ALL/mapfiles/iw2.png
 * add ability to display remote tooltip for other elements, eg. an invalid input
+* Add stop-queue stuff for fadein/out without nasty queues
+* add delay on hide
+* add stick on hover of tooltip (with track:false)
+* offer hoverIntent support

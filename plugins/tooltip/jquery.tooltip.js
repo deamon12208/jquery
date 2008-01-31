@@ -1,115 +1,20 @@
 /*
- * jQuery Tooltip plugin 1.1
+ * jQuery Tooltip plugin 1.2pre
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-tooltip/
  *
- * Copyright (c) 2006 Jörn Zaefferer, Stefan Petre
+ * Copyright (c) 2006-2008 Jörn Zaefferer
  *
+ * $Id$
+ * 
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
- *
- * Revision: $Id$
- *
- */
-
-/**
- * Display a customized tooltip instead of the default one
- * for every selected element. The tooltip behaviour mimics
- * the default one, but lets you style the tooltip and
- * specify the delay before displaying it. In addition, it displays the
- * href value, if it is available.
- *
- * Requires dimensions plugin. 
- *
- * When used on a page with select elements, include the bgiframe plugin. It is used if present.
- *
- * To style the tooltip, use these selectors in your stylesheet:
- *
- * #tooltip - The tooltip container
- *
- * #tooltip h3 - The tooltip title
- *
- * #tooltip div.body - The tooltip body, shown when using showBody
- *
- * #tooltip div.url - The tooltip url, shown when using showURL
- *
- *
- * @example $('a, input, img').Tooltip();
- * @desc Shows tooltips for anchors, inputs and images, if they have a title
- *
- * @example $('label').Tooltip({
- *   delay: 0,
- *   track: true,
- *   event: "click"
- * });
- * @desc Shows tooltips for labels with no delay, tracking mousemovement, displaying the tooltip when the label is clicked.
- *
- * @example // modify global settings
- * $.extend($.fn.Tooltip.defaults, {
- * 	track: true,
- * 	delay: 0,
- * 	showURL: false,
- * 	showBody: " - ",
- *  fixPNG: true
- * });
- * // setup fancy tooltips
- * $('a.pretty').Tooltip({
- * 	 extraClass: "fancy"
- * });
- $('img.pretty').Tooltip({
- * 	 extraClass: "fancy-img",
- * });
- * @desc This example starts with modifying the global settings, applying them to all following Tooltips; Afterwards, Tooltips for anchors with class pretty are created with an extra class for the Tooltip: "fancy" for anchors, "fancy-img" for images
- *
- * @param Object settings (optional) Customize your Tooltips
- * @option Number delay The number of milliseconds before a tooltip is display. Default: 250
- * @option Boolean track If true, let the tooltip track the mousemovement. Default: false
- * @option Boolean showURL If true, shows the href or src attribute within p.url. Defaul: true
- * @option String showBody If specified, uses the String to split the title, displaying the first part in the h3 tag, all following in the p.body tag, separated with <br/>s. Default: null
- * @option String extraClass If specified, adds the class to the tooltip helper. Default: null
- * @option Boolean fixPNG If true, fixes transparent PNGs in IE. Default: false
- * @option Function bodyHandler If specified its called to format the tooltip-body, hiding the title-part. Default: none
- * @option Number top The top-offset for the tooltip position. Default: 15
- * @option Number left The left-offset for the tooltip position. Default: 15
- *
- * @name Tooltip
- * @type jQuery
- * @cat Plugins/Tooltip
- * @author Jörn Zaefferer (http://bassistance.de)
  */
  
-/**
- * A global flag to disable all tooltips.
- *
- * @example $("button.openModal").click(function() {
- *   $.Tooltip.blocked = true;
- *   // do some other stuff, eg. showing a modal dialog
- *   $.Tooltip.blocked = false;
- * });
- * 
- * @property
- * @name $.Tooltip.blocked
- * @type Boolean
- * @cat Plugins/Tooltip
- */
- 
-/**
- * Global defaults for tooltips. Apply to all calls to the Tooltip plugin after modifying  the defaults.
- *
- * @example $.extend($.Tooltip.defaults, {
- *   track: true,
- *   delay: 0
- * });
- * 
- * @property
- * @name $.Tooltip.defaults
- * @type Map
- * @cat Plugins/Tooltip
- */
-(function($) {
+;(function($) {
 	
-	// the tooltip element
+		// the tooltip element
 	var helper = {},
 		// the current tooltipped element
 		current,
@@ -122,26 +27,27 @@
 		// flag for mouse tracking
 		track = false;
 	
-	$.Tooltip = {
+	$.tooltip = {
 		blocked: false,
 		defaults: {
 			delay: 200,
 			showURL: true,
 			extraClass: "",
 			top: 15,
-			left: 15
+			left: 15,
+			id: "tooltip"
 		},
 		block: function() {
-			$.Tooltip.blocked = !$.Tooltip.blocked;
+			$.tooltip.blocked = !$.tooltip.blocked;
 		}
 	};
 	
 	$.fn.extend({
-		Tooltip: function(settings) {
-			settings = $.extend({}, $.Tooltip.defaults, settings);
-			createHelper();
+		tooltip: function(settings) {
+			settings = $.extend({}, $.tooltip.defaults, settings);
+			createHelper(settings);
 			return this.each(function() {
-					this.tSettings = settings;
+					$.data(this, "tooltip-settings", settings);
 					// copy tooltip into its own expando and remove the title
 					this.tooltipText = this.title;
 					$(this).removeAttr("title");
@@ -182,16 +88,16 @@
 		}
 	});
 	
-	function createHelper() {
+	function createHelper(settings) {
 		// there can be only one tooltip helper
 		if( helper.parent )
 			return;
 		// create the helper, h3 for title, div for url
-		helper.parent = $('<div id="tooltip"><h3></h3><div class="body"></div><div class="url"></div></div>')
-			// hide it at first
-			.hide()
+		helper.parent = $('<div id="' + settings.id + '"><h3></h3><div class="body"></div><div class="url"></div></div>')
 			// add to document
-			.appendTo('body');
+			.appendTo(document.body)
+			// hide it at first
+			.hide();
 			
 		// apply bgiframe if available
 		if ( $.fn.bgiframe )
@@ -203,17 +109,21 @@
 		helper.url = $('div.url', helper.parent);
 	}
 	
+	function settings(element) {
+		return $.data(element, "tooltip-settings");
+	}
+	
 	// main event handler to start showing tooltips
 	function handle(event) {
 		// show helper, either with timeout or on instant
-		if( this.tSettings.delay )
-			tID = setTimeout(show, this.tSettings.delay);
+		if( settings(this).delay )
+			tID = setTimeout(show, settings(this).delay);
 		else
 			show();
 		
 		// if selected, update the helper position when the mouse moves
-		track = !!this.tSettings.track;
-		$('body').bind('mousemove', update);
+		track = !!settings(this).track;
+		$(document.body).bind('mousemove', update);
 			
 		// update at least once
 		update(event);
@@ -222,18 +132,24 @@
 	// save elements title before the tooltip is displayed
 	function save() {
 		// if this is the current source, or it has no title (occurs with click event), stop
-		if ( $.Tooltip.blocked || this == current || !this.tooltipText )
+		if ( $.tooltip.blocked || this == current || (!this.tooltipText && !settings(this).bodyHandler) )
 			return;
 
 		// save current
 		current = this;
 		title = this.tooltipText;
 		
-		if ( this.tSettings.bodyHandler ) {
+		if ( settings(this).bodyHandler ) {
 			helper.title.hide();
-			helper.body.html( this.tSettings.bodyHandler.call(this) ).show();
-		} else if ( this.tSettings.showBody ) {
-			var parts = title.split(this.tSettings.showBody);
+			var bodyContent = settings(this).bodyHandler.call(this);
+			if (bodyContent.nodeType || bodyContent.jquery) {
+				helper.body.empty().append(bodyContent)
+			} else {
+				helper.body.html( bodyContent );
+			}
+			helper.body.show();
+		} else if ( settings(this).showBody ) {
+			var parts = title.split(settings(this).showBody);
 			helper.title.html(parts.shift()).show();
 			helper.body.empty();
 			for(var i = 0, part; part = parts[i]; i++) {
@@ -248,16 +164,16 @@
 		}
 		
 		// if element has href or src, add and show it, otherwise hide it
-		if( this.tSettings.showURL && $(this).url() )
+		if( settings(this).showURL && $(this).url() )
 			helper.url.html( $(this).url().replace('http://', '') ).show();
 		else 
 			helper.url.hide();
 		
 		// add an optional class for this tip
-		helper.parent.addClass(this.tSettings.extraClass);
+		helper.parent.addClass(settings(this).extraClass);
 
 		// fix PNG background for IE
-		if (this.tSettings.fixPNG )
+		if (settings(this).fixPNG )
 			helper.parent.fixPNG();
 			
 		handle.apply(this, arguments);
@@ -276,41 +192,46 @@
 	 * removes itself when no current element
 	 */
 	function update(event)	{
-		if($.Tooltip.blocked)
+		if($.tooltip.blocked)
 			return;
 		
 		// stop updating when tracking is disabled and the tooltip is visible
 		if ( !track && helper.parent.is(":visible")) {
-			$('body').unbind('mousemove', update)
+			$(document.body).unbind('mousemove', update)
 		}
 		
 		// if no current element is available, remove this listener
 		if( current == null ) {
-			$('body').unbind('mousemove', update);
+			$(document.body).unbind('mousemove', update);
 			return;	
 		}
+		
+		// remove position helper classes
+		helper.parent.removeClass("viewport-right").removeClass("viewport-bottom");
+		
 		var left = helper.parent[0].offsetLeft;
 		var top = helper.parent[0].offsetTop;
 		if(event) {
 			// position the helper 15 pixel to bottom right, starting from mouse position
-			left = event.pageX + current.tSettings.left;
-			top = event.pageY + current.tSettings.top;
+			left = event.pageX + settings(current).left;
+			top = event.pageY + settings(current).top;
 			helper.parent.css({
 				left: left + 'px',
 				top: top + 'px'
 			});
 		}
+		
 		var v = viewport(),
 			h = helper.parent[0];
 		// check horizontal position
 		if(v.x + v.cx < h.offsetLeft + h.offsetWidth) {
-			left -= h.offsetWidth + 20 + current.tSettings.left;
-			helper.parent.css({left: left + 'px'});
+			left -= h.offsetWidth + 20 + settings(current).left;
+			helper.parent.css({left: left + 'px'}).addClass("viewport-right");
 		}
 		// check vertical position
 		if(v.y + v.cy < h.offsetTop + h.offsetHeight) {
-			top -= h.offsetHeight + 20 + current.tSettings.top;
-			helper.parent.css({top: top + 'px'});
+			top -= h.offsetHeight + 20 + settings(current).top;
+			helper.parent.css({top: top + 'px'}).addClass("viewport-bottom");
 		}
 	}
 	
@@ -325,7 +246,7 @@
 	
 	// hide helper and restore added classes and the title
 	function hide(event) {
-		if($.Tooltip.blocked)
+		if($.tooltip.blocked)
 			return;
 		// clear timeout if possible
 		if(tID)
@@ -333,10 +254,12 @@
 		// no more current element
 		current = null;
 		
-		helper.parent.hide().removeClass( this.tSettings.extraClass );
+		helper.parent.hide().removeClass( settings(this).extraClass );
 		
-		if( this.tSettings.fixPNG )
+		if( settings(this).fixPNG )
 			helper.parent.unfixPNG();
 	}
+	
+	$.fn.Tooltip = $.fn.tooltip;
 	
 })(jQuery);
