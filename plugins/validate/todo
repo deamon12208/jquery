@@ -1,3 +1,12 @@
+1.2.1
+-----
+
+* Fix optional-methods to not highlight anything at all if the field is blank, that is, don't trigger success
+* Bundle delegeate plugin with validate
+* Fix email validation to include tld validation and add current to additionals, same goes for url
+
+* how to change rules to make that Forgotten password submit work without validating the password: http://www.janepatrick.co.uk/admin/test/login.php
+
 1.3
 ---
 
