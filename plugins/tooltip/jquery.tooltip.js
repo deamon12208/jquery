@@ -1,9 +1,10 @@
 /*
- * jQuery Tooltip plugin 1.2pre
+ * jQuery Tooltip plugin 1.2
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-tooltip/
+ * http://docs.jquery.com/Plugins/Tooltip
  *
- * Copyright (c) 2006-2008 Jörn Zaefferer
+ * Copyright (c) 2006 - 2008 Jörn Zaefferer
  *
  * $Id$
  * 
