@@ -25,12 +25,12 @@ test("url", function() {
 	ok( method( "http://bassistance.de/jquery/plugin.php?bla=blu" ), "Valid url" );
 	ok( method( "https://bassistance.de/jquery/plugin.php?bla=blu" ), "Valid url" );
 	ok( method( "ftp://bassistance.de/jquery/plugin.php?bla=blu" ), "Valid url" );
-	ok( method( "http://bassistance" ), "Valid url" );
 	ok( method( "http://www.føtex.dk/" ), "Valid url, danish unicode characters" );
 	ok( method( "http://bösendorfer.de/" ), "Valid url, german unicode characters" );
-	ok( method( "http://bassistance." ), "Valid url" );
 	ok( method( "http://192.168.8.5" ), "Valid IP Address" )
 	ok(!method( "http://192.168.8." ), "Invalid IP Address" )
+	ok(!method( "http://bassistance" ), "Invalid url" ); // valid
+	ok(!method( "http://bassistance." ), "Invalid url" ); // valid
 	ok(!method( "http://bassistance,de" ), "Invalid url" );
 	ok(!method( "http://bassistance;de" ), "Invalid url" );
 	ok(!method( "http://.bassistancede" ), "Invalid url" );
@@ -47,14 +47,14 @@ test("email", function() {
 	ok( method( "ole@føtex.dk"), "Valid email" );
 	ok( method( "jörn@bassistance.de"), "Valid email" );
 	ok( method( "bla.blu@g.mail.com"), "Valid email" );
-	ok( method( "name@domain" ), "Valid email" );
 	ok( method( "\"Scott Gonzalez\"@example.com" ), "Valid email" );
 	ok( method( "\"Scott González\"@example.com" ), "Valid email" );
-	ok( method( "\"name.\"@domain" ), "Valid email" );
-	ok( method( "\"name,\"@domain" ), "Valid email" );
-	ok( method( "\"name;\"@domain" ), "Valid email" );
+	ok( method( "\"name.\"@domain.tld" ), "Valid email" ); // valid without top label
+	ok( method( "\"name,\"@domain.tld" ), "Valid email" ); // valid without top label
+	ok( method( "\"name;\"@domain.tld" ), "Valid email" ); // valid without top label
 	ok(!method( "name" ), "Invalid email" );
 	ok(!method( "name@" ), "Invalid email" );
+	ok(!method( "name@domain" ), "Invalid email" ); // valid
 	ok(!method( "name.@domain.tld" ), "Invalid email" );
 	ok(!method( "name,@domain.tld" ), "Invalid email" );
 	ok(!method( "name;@domain.tld" ), "Invalid email" );

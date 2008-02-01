@@ -6,6 +6,7 @@
 * Improved demo, replacing metadata with classes/attributes for specifying rules
 * Fixed error when no custom message is used for remote validation
 * Improved remote validation to include parts from the ajaxQueue plugin for proper synchronization (no additional plugin necessary)
+* Modified email and url validation to require domain label and top label
 
 1.2
 ---
