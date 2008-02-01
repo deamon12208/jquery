@@ -3,9 +3,10 @@
 	//Make nodes selectable by expression
 	$.extend($.expr[':'], { resizable: "(' '+a.className+' ').indexOf(' ui-resizable ')" });
 	
-	$.fn.resizable = function(o) {
+	$.fn.resizable = function(options) {
 		return this.each(function() {
-			if(!$(this).is(".ui-resizable")) new $.ui.resizable(this,o);	
+			if(!$(this).is(".ui-resizable"))
+				new $.ui.resizable(this, options);
 		});
 	}
 	

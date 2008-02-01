@@ -4,27 +4,15 @@
 	$.extend($.expr[':'], { slider: "(' '+a.className+' ').indexOf(' ui-slider ') != -1" });
 
 	$.fn.extend({
-		becomesSlider: function(o) {
-			return this.each(function() { if(!$.data(this, "ui-slider")) new $.ui.slider(this,o);	});
-		},
-		removeSlider: function() {
-			return this.each(function() { if($.data(this, "ui-slider")) $.data(this, "ui-slider").destroy(); });
-		},
-		changeSlider: function(key,value) {
-			var ret = null;
-			this.each(function() { if($.data(this, "ui-slider")) ret = $.data(this, "ui-slider")[key](value); });
-			return ret || this;
-		},
-		enableSlider: function() {
-			return this.each(function() { if($.data(this, "ui-slider")) $.data(this, "ui-slider").enable(); });
-		},
-		disableSlider: function() {
-			return this.each(function() { if($.data(this, "ui-slider")) $.data(this, "ui-slider").disable(); });
+		slider: function(options) {
+			return this.each(function() {
+				if(!$.data(this, "ui-slider"))
+					new $.ui.slider(this, options);
+			});
 		}
 	});
 	
 	$.ui.slider = function(element, options) {
-
 
 		//Initialize needed constants
 		var self = this;
@@ -42,8 +30,7 @@
 			startValue: parseInt(o.startValue) || 0		
 		});
 		o.stepping = parseInt(o.stepping) || (o.steps ? o.maxValue/o.steps : 0);
-		
-		
+
 		//Initialize mouse events for interaction
 		this.handle = o.handle ? $(o.handle, element) : $('.ui-slider-handle', element);
 		$(this.handle).mouseInteraction({
@@ -60,8 +47,6 @@
 		//Position the node
 		if(o.helper == 'original' && (this.element.css('position') == 'static' || this.element.css('position') == ''))
 			this.element.css('position', 'relative');
-
-		
 		
 		if(o.axis == 'horizontal') {
 			this.size = this.element.outerWidth();
@@ -76,7 +61,7 @@
 		
 		//Move the first handle to the startValue
 		if(!isNaN(o.startValue)) this.moveTo(o.startValue, 0);
-		
+	
 	};
 	
 	$.extend($.ui.slider.prototype, {
@@ -146,7 +131,7 @@
 			return false;
 			
 		},
-		moveTo: function(value,handle) {	// renamed from goto to moveTo as goto is reserved javascript word
+		moveTo: function(value, handle) {	// renamed from goto to moveTo as goto is reserved javascript word
 			
 
 		}

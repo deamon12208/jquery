@@ -1,44 +1,21 @@
-(function($)
-{
+(function($) {
+
 	//If the UI scope is not available, add it
 	$.ui = $.ui || {};
 
-	$.fn.dialog = function(o) {
-		return this.dialogInit(o).dialogOpen();
-	}
-	$.fn.dialogInit = function(o) {
-		return this.each(function() {
-			if (!$(this).is(".ui-dialog-content")) {
-				new $.ui.dialogInit(this, o);
-			}			
-		});
-	}
-	$.fn.dialogOpen = function() {
-		return this.each(function() {
-			var contentEl;
-			if ($(this).parents(".ui-dialog").length) contentEl = this;
-			if (!contentEl && $(this).is(".ui-dialog")) contentEl = $('.ui-dialog-content', this)[0];
-			$.ui.dialogOpen(contentEl)
-		});
-	}
-	$.fn.dialogClose = function() {
-		return this.each(function() {
-			var contentEl;
-			var closeEl = $(this);
-			if (closeEl.is('.ui-dialog-content')) {
-				var contentEl = closeEl;
-			} else if (closeEl.hasClass('ui-dialog')) {
-				contentEl = closeEl.find('.ui-dialog-content');
-			} else {
-				contentEl = closeEl.parents('.ui-dialog:first').find('.ui-dialog-content');
-			}
-			$.ui.dialogClose(contentEl[0]);
-		});
-	}
+	$.fn.extend({
+		dialog: function(options) {
+			return this.each(function() {
+				if (!$(this).is(".ui-dialog-content"))
+					new $.ui.dialog(this, options);
+			});
+		}
+	});
 
-	$.ui.dialogInit = function(el, o) {
+	$.ui.dialog = function(el, options) {
 		
-		var options = {
+		var defaults = {
+			autoOpen: true,
 			width: 300,
 			height: 200,
 			minWidth: 150,
@@ -48,7 +25,7 @@
 			draggable: true,
 			resizable: true
 		};
-		var o = o || {}; $.extend(options, o); //Extend and copy options
+		options = $.extend({}, defaults, options); //Extend and copy options
 		this.element = el; var self = this; //Do bindings
 		$.data(this.element, "ui-dialog", this);
 
@@ -172,15 +149,10 @@
 			};
 			$(this.element).triggerHandler("dialogclose", [closeEV, closeUI], options.close);
 		};
+		
+		if (options.autoOpen)
+			this.open();
 
-	}
-
-	$.ui.dialogOpen = function(el) {
-		$.data(el, "ui-dialog").open();
-	}
-
-	$.ui.dialogClose = function(el) {
-		$.data(el, "ui-dialog").close();
 	}
 
 })(jQuery);

@@ -39,8 +39,8 @@
 	<div id='example1' class="ui-wrapper example">
 		<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Resize me</div>
 	</div><br />
-	<button onclick="$('#example1').resizableEnable()">Enable</button>
-	<button onclick="$('#example1').resizableDisable()">Disable</button>
+	<button onclick="$('#example1').trigger('resizable.enable')">Enable</button>
+	<button onclick="$('#example1').trigger('resizable.disable')">Disable</button>
 </div>
 
 <h2>2. Autohiding handles</h2>

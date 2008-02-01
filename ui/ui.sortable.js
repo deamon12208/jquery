@@ -10,31 +10,15 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 	$.extend($.expr[':'], { sortable: "(' '+a.className+' ').indexOf(' ui-sortable ')" });
 
 	$.fn.extend({
-		makeSortable: function(o) {
+		sortable: function(options) {
 			return this.each(function() {
-				if(!$.data(this, "ui-sortable")) new $.ui.sortable(this,o);	
+				if(!$.data(this, "ui-sortable"))
+					new $.ui.sortable(this, options);
 			});
 		},
-		removeSortable: function() {
-			return this.each(function() { if($.data(this, "ui-sortable")) $.data(this, "ui-sortable").destroy(); });
-		},
-		changeSortable: function(key,value) {
-			var ret = null;
-			this.each(function() {
-				if($.data(this, "ui-sortable")) ret = $.data(this, "ui-sortable")[key](value);
-			});
-			return ret || this;
-		},
-		enableSortable: function() {
-			return this.each(function() { if($.data(this, "ui-sortable")) $.data(this, "ui-sortable").enable(); });
-		},
-		disableSortable: function() {
-			return this.each(function() { if($.data(this, "ui-sortable")) $.data(this, "ui-sortable").disable(); });
-		}
 	});
-
 	
-	$.ui.sortable = function(element,options) {
+	$.ui.sortable = function(element, options) {
 	
 		//Initialize needed constants
 		var self = this;

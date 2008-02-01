@@ -28,8 +28,8 @@
 	<div class='ui-slider-handle'></div>	
 	</div>
 	<br />
-	<button onclick="$('#example1').sliderEnable()">Enable</button>
-	<button onclick="$('#example1').sliderDisable()">Disable</button>
+	<button onclick="$('#example1').trigger('slider.enable')">Enable</button>
+	<button onclick="$('#example1').trigger('slider.disable')">Disable</button>
 </div>
 
 <h2>2. Stepping</h2>
@@ -58,9 +58,9 @@ if(!window.console) {
 
 $(window).bind("load",function(){
 
-	$('#example1').becomesSlider();
-	$('#example2').becomesSlider({ steps: 10 });
-	$('#example3').becomesSlider({ steps: 10 });
+	$('#example1').slider();
+	$('#example2').slider({ steps: 10 });
+	$('#example3').slider({ steps: 10 });
 
 });
 </script>

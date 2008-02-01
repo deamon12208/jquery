@@ -1,26 +1,18 @@
 (function($) {
 
+	//If the UI scope is not available, add it
+	$.ui = $.ui || {};
+
 	//Make nodes selectable by expression
 	$.extend($.expr[':'], { droppable: "(' '+a.className+' ').indexOf(' ui-droppable ')" });
 
 	$.fn.extend({
-		makeDroppable: function(o) {
-			return this.each(function() { if(!$.data(this, "ui-droppable")) new $.ui.droppable(this,o);	});
+		droppable: function(options) {
+			return this.each(function() {
+				if(!$.data(this, "ui-droppable"))
+					new $.ui.droppable(this, options);
+			});
 		},
-		removeDroppable: function() {
-			return this.each(function() { if($.data(this, "ui-droppable")) $.data(this, "ui-droppable").destroy(); });
-		},
-		changeDroppable: function(key,value) {
-			var ret = null;
-			this.each(function() { if($.data(this, "ui-droppable")) ret = $.data(this, "ui-droppable")[key](value); });
-			return ret || this;
-		},
-		enableDroppable: function() {
-			return this.each(function() { if($.data(this, "ui-droppable")) $.data(this, "ui-droppable").enable(); });
-		},
-		disableDroppable: function() {
-			return this.each(function() { if($.data(this, "ui-droppable")) $.data(this, "ui-droppable").disable(); });
-		}
 	});
 
 	

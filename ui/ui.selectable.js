@@ -1,28 +1,20 @@
-(function($)
-{
-	//Macros for external methods that support chaining
-	var methods = "destroy,enable,disable,toggle,refresh".split(",");
-	for(var i = 0; i < methods.length; i++) {
-		var cur = methods[i], f;
-		eval('f = function() {' +
-			'var a = arguments;' +
-			'return this.each(function() {' +
-				'if(jQuery(this).is(".ui-selectable"))' +
-					'jQuery.data(this, "ui-selectable")["'+cur+'"](a);' +
-			'});' +
-		'}');
-		$.fn["selectable" + cur.substr(0, 1).toUpperCase() + cur.substr(1)] = f;
-	};
+(function($) {
+
+	//If the UI scope is not available, add it
+	$.ui = $.ui || {};
 
 	//Make nodes selectable by expression
 	$.extend($.expr[':'], { selectable: "(' '+a.className+' ').indexOf(' ui-selectable ')" });
 	$.extend($.expr[':'], { selectee: "(' '+a.className+' ').indexOf(' ui-selectee ')" });
 
-	$.fn.selectable = function(o) {
-		return this.each(function() {
-			if (!$(this).is(".ui-selectable")) new $.ui.selectable(this, o);
-		});
-	}
+	$.fn.extend({
+		selectable: function(options) {
+			return this.each(function() {
+				if(!$.data(this, "ui-selectable"))
+					new $.ui.selectable(this, options);
+			});
+		}
+	});
 
 	$.ui.selectable = function(el, o) {
 		

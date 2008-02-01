@@ -52,6 +52,10 @@ $(function() {
 				"detached" : "$('<div/>').dialog();"
 			},
 			"options": {
+				"autoOpen" : {
+					"true" : "",
+					"false" : "",
+				},
 				"buttons" : {
 					"OkCancel" : "$('#foo').dialog({ width: 650, height: 300,\n\tbuttons: {\n\t\t'Ok': function() {\n\t\t\t$(this).dialogClose();\n\t\t},\n\t\t'Cancel': function() {\n\t\t\t$(this).dialogClose();\n\t\t}\n\t}\n});"
 				},
@@ -106,14 +110,13 @@ $(function() {
 			"callbacks": {
 			},
 			"methods": {
-				"dialogInit" : "$('#foo').dialogInit();\nsetTimeout(\"$('#foo').dialogOpen();\", 1000);",
-				"dialogOpen" : "$('#foo').dialog({ width: 450 }).dialogClose();\n setTimeout(\"$('#foo').dialogOpen();\", 1000)",
-				"dialogClose" : "$('#foo').dialog({ width: 450 });\n setTimeout(\"$('#foo').dialogClose();\", 1000);"
+				"dialog.open" : "$('#foo').dialog({ autoOpen: false });\n setTimeout(\"$('#foo').trigger('dialog.open');\", 1000)",
+				"dialog.close" : "$('#foo').dialog();\n setTimeout(\"$('#foo').trigger('dialog.close');\", 1000);"
 			}
 		}
 	};
 
-	
+
 	$('body').append('<div id="blackhole"/>');
 	$('#blackhole').css({width: 0, height: 0, overflow: 'hidden'});
 
