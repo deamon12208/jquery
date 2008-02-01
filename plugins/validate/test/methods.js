@@ -37,6 +37,23 @@ test("url", function() {
 	ok(!method( "bassistance.de" ), "Invalid url" );
 });
 
+test("url2 (tld optional)", function() {
+	var method = methodTest("url2");
+	ok( method( "http://bassistance.de/jquery/plugin.php?bla=blu" ), "Valid url" );
+	ok( method( "https://bassistance.de/jquery/plugin.php?bla=blu" ), "Valid url" );
+	ok( method( "ftp://bassistance.de/jquery/plugin.php?bla=blu" ), "Valid url" );
+	ok( method( "http://www.føtex.dk/" ), "Valid url, danish unicode characters" );
+	ok( method( "http://bösendorfer.de/" ), "Valid url, german unicode characters" );
+	ok( method( "http://192.168.8.5" ), "Valid IP Address" )
+	ok(!method( "http://192.168.8." ), "Invalid IP Address" )
+	ok( method( "http://bassistance" ), "Invalid url" );
+	ok( method( "http://bassistance." ), "Invalid url" );
+	ok(!method( "http://bassistance,de" ), "Invalid url" );
+	ok(!method( "http://bassistance;de" ), "Invalid url" );
+	ok(!method( "http://.bassistancede" ), "Invalid url" );
+	ok(!method( "bassistance.de" ), "Invalid url" );
+});
+
 test("email", function() {
 	var method = methodTest("email");
 	ok( method( "name@domain.tld" ), "Valid email" );
@@ -54,7 +71,30 @@ test("email", function() {
 	ok( method( "\"name;\"@domain.tld" ), "Valid email" ); // valid without top label
 	ok(!method( "name" ), "Invalid email" );
 	ok(!method( "name@" ), "Invalid email" );
-	ok(!method( "name@domain" ), "Invalid email" ); // valid
+	ok(!method( "name@domain" ), "Invalid email" );
+	ok(!method( "name.@domain.tld" ), "Invalid email" );
+	ok(!method( "name,@domain.tld" ), "Invalid email" );
+	ok(!method( "name;@domain.tld" ), "Invalid email" );
+});
+
+test("email2 (tld optional)", function() {
+	var method = methodTest("email2");
+	ok( method( "name@domain.tld" ), "Valid email" );
+	ok( method( "name@domain.tl" ), "Valid email" );
+	ok( method( "bart+bart@tokbox.com" ), "Valid email" );
+	ok( method( "bart+bart@tokbox.travel" ), "Valid email" );
+	ok( method( "n@d.tld" ), "Valid email" );
+	ok( method( "ole@føtex.dk"), "Valid email" );
+	ok( method( "jörn@bassistance.de"), "Valid email" );
+	ok( method( "bla.blu@g.mail.com"), "Valid email" );
+	ok( method( "\"Scott Gonzalez\"@example.com" ), "Valid email" );
+	ok( method( "\"Scott González\"@example.com" ), "Valid email" );
+	ok( method( "\"name.\"@domain.tld" ), "Valid email" ); // valid without top label
+	ok( method( "\"name,\"@domain.tld" ), "Valid email" ); // valid without top label
+	ok( method( "\"name;\"@domain.tld" ), "Valid email" ); // valid without top label
+	ok(!method( "name" ), "Invalid email" );
+	ok(!method( "name@" ), "Invalid email" );
+	ok( method( "name@domain" ), "Invalid email" );
 	ok(!method( "name.@domain.tld" ), "Invalid email" );
 	ok(!method( "name,@domain.tld" ), "Invalid email" );
 	ok(!method( "name;@domain.tld" ), "Invalid email" );

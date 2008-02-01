@@ -1,12 +1,17 @@
 1.2.1
 -----
 
+* Bundled delegeate plugin with validate plugin - its always required anyway
+* Added jQuery.validator.autoCreateRanges property, defaults to false, enable to convert min/max to range and minlength/maxlength to rangelength; this basically fixes the issue introduced by automatically creating ranges in 1.2
+* Fixed optional-methods to not highlight anything at all if the field is blank, that is, don't trigger success
 * Allow false/null for highlight/unhighlight options instead of forcing a do-nothing-callback even when nothing needs to be highlighted
 * Fixed validate() call with no elements selected, returning undefined instead of throwing an error
 * Improved demo, replacing metadata with classes/attributes for specifying rules
 * Fixed error when no custom message is used for remote validation
 * Improved remote validation to include parts from the ajaxQueue plugin for proper synchronization (no additional plugin necessary)
 * Modified email and url validation to require domain label and top label
+* Fixed url and email validation to require TLD (actually to require domain label); 1.2 version (TLD is optional) is moved to additionals as url2 and email2
+* Fixed dynamic-totals demo in IE6/7 and improved templating, using textarea to store multiline template and string interpolation
 
 1.2
 ---

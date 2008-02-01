@@ -91,21 +91,27 @@ jQuery.extend(jQuery.fn, {
 		var element = this[0];
 		var data = jQuery.validator.normalizeRules(
 		jQuery.extend(
+			{},
 			jQuery.validator.metadataRules(element),
 			jQuery.validator.classRules(element),
 			jQuery.validator.attributeRules(element),
 			jQuery.validator.staticRules(element)
 		), element);
 	
-	// convert from object to array
-	var rules = [];
-	jQuery.each(data, function(method, value) {
-		rules.push({
-			method: method,
-			parameters: value
+		// convert from object to array
+		var rules = [];
+		// make sure required is at front
+		if (data.required) {
+			rules.push({method:'required', parameters: data.required});
+			delete data.required;
+		}
+		jQuery.each(data, function(method, value) {
+			rules.push({
+				method: method,
+				parameters: value
+			});
 		});
-	});
-	return rules;
+		return rules;
 	},
 	// destructive add
 	push: function( t ) {
@@ -223,6 +229,8 @@ jQuery.extend(jQuery.validator, {
 		minValue: jQuery.format("Please enter a value greater than or equal to {0}."),
 		min: jQuery.format("Please enter a value greater than or equal to {0}.")
 	},
+	
+	autoCreateRanges: false,
 	
 	prototype: {
 		
@@ -404,7 +412,7 @@ jQuery.extend(jQuery.validator, {
 				try {
 					var result = jQuery.validator.methods[rule.method].call( this, jQuery.trim(element.value), element, rule.parameters );
 					if ( result == "dependency-mismatch" )
-						break;
+						return;
 					if ( result == "pending" ) {
 						this.toHide = this.toHide.not( this.errorsFor(element) );
 						return;
@@ -576,7 +584,7 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		optional: function(element) {
-			return !jQuery.validator.methods.required.call(this, jQuery.trim(element.value), element);
+			return !jQuery.validator.methods.required.call(this, jQuery.trim(element.value), element) && "dependency-mismatch";
 		},
 		
 		startRequest: function(element) {
@@ -707,16 +715,18 @@ jQuery.extend(jQuery.validator, {
 			}
 		});
 		
-		// auto-create ranges
-		if (rules.min && rules.max) {
-			rules.range = [rules.min, rules.max];
-			delete rules.min;
-			delete rules.max;
-		}
-		if (rules.minlength && rules.maxlength) {
-			rules.rangelength = [rules.minlength, rules.maxlength];
-			delete rules.minlength;
-			delete rules.maxlength;
+		if (jQuery.validator.autoCreateRanges) {
+			// auto-create ranges
+			if (rules.min && rules.max) {
+				rules.range = [rules.min, rules.max];
+				delete rules.min;
+				delete rules.max;
+			}
+			if (rules.minlength && rules.maxlength) {
+				rules.rangelength = [rules.minlength, rules.maxlength];
+				delete rules.minlength;
+				delete rules.maxlength;
+			}
 		}
 		
 		return rules;
@@ -949,6 +959,9 @@ jQuery.extend(jQuery.validator, {
 	
 });
 
+// ajax mode: abort
+// usage: $.ajax({ mode: "abort"[, port: "uniqueport"]});
+// if mode:"abort" is used, the previous request on that port (port can be undefined) is aborted via XMLHttpRequest.abort() 
 ;(function($) {
 	var ajax = $.ajax;
 	var pendingRequests = {};
@@ -964,4 +977,63 @@ jQuery.extend(jQuery.validator, {
 		}
 		return ajax.apply(this, arguments);
 	};
+})(jQuery);
+
+// provides cross-browser focusin and focusout events
+// IE has native support, in other browsers, use event caputuring (neither bubbles)
+
+// provides delegate(type: String, delegate: Selector, handler: Callback) plugin for easier event delegation
+// handler is only called when $(event.target).is(delegate), in the scope of the jQuery-object for event.target 
+
+// provides triggerEvent(type: String, target: Element) to trigger delegated events
+;(function($) {
+	$.extend($.event.special, {
+		focusin: {
+			setup: function() {
+				if ($.browser.msie)
+					return false;
+				this.addEventListener("focus", $.event.special.focusin.handler, true);
+			},
+			teardown: function() {
+				if ($.browser.msie)
+					return false;
+				this.removeEventListener("focus", $.event.special.focusin.handler, true);
+			},
+			handler: function(event) {
+				var args = Array.prototype.slice.call( arguments, 1 );
+				args.unshift($.extend($.event.fix(event), { type: "focusin" }));
+				return $.event.handle.apply(this, args);
+			}
+		},
+		focusout: {
+			setup: function() {
+				if ($.browser.msie)
+					return false;
+				this.addEventListener("blur", $.event.special.focusout.handler, true);
+			},
+			teardown: function() {
+				if ($.browser.msie)
+					return false;
+				this.removeEventListener("blur", $.event.special.focusout.handler, true);
+			},
+			handler: function(event) {
+				var args = Array.prototype.slice.call( arguments, 1 );
+				args.unshift($.extend($.event.fix(event), { type: "focusout" }));
+				return $.event.handle.apply(this, args);
+			}
+		}
+	});
+	$.extend($.fn, {
+		delegate: function(type, delegate, handler) {
+			return this.bind(type, function(event) {
+				var target = $(event.target);
+				if (target.is(delegate)) {
+					return handler.apply(target, arguments);
+				}
+			});
+		},
+		triggerEvent: function(type, target) {
+			return this.triggerHandler(type, [jQuery.event.fix({ type: type, target: target })]);
+		}
+	})
 })(jQuery);

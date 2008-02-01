@@ -50,7 +50,7 @@ test("addMethod2", function() {
 	var rule = $.validator.methods.complicatedPassword,
 		e = $('#text1')[0];
 	e.value = "";
-	ok( v.element(e), "Rule is optional, valid" );
+	ok( v.element(e) === undefined, "Rule is optional, valid" );
 	equals( 0, v.size() );
 	e.value = "ko";
 	ok( !v.element(e), "Invalid, doesn't contain one of the required characters" );
@@ -402,6 +402,7 @@ test("rules() - internal - input", function() {
 });
 
 test("rules(), merge min/max to range, minlength/maxlength to rangelength", function() {
+	jQuery.validator.autoCreateRanges = true;
 	var v = $("#testForm1clean").validate({
 		rules: {
 			firstname: {
@@ -423,6 +424,33 @@ test("rules(), merge min/max to range, minlength/maxlength to rangelength", func
 	equals( "rangelength", lengthRules[0].method );
 	equals( 2, lengthRules[0].parameters[0] );
 	equals( 8, lengthRules[0].parameters[1] );
+	jQuery.validator.autoCreateRanges = false;
+});
+
+test("rules(), gurantee that required is at front", function() {
+	$("#testForm1").validate();
+	$("#v2").validate();
+	$("#subformRequired").validate();
+	function flatRules(element) {
+		return jQuery.map($(element).rules(), function(x) { return x.method }).join(" "); 
+	}
+	equals( "required minlength", flatRules("#firstname") );
+	equals( "required maxlength minlength", flatRules("#v2-i6") );
+	equals( "required maxlength", flatRules("#co_name") );
+	
+	reset();
+	jQuery.validator.autoCreateRanges = true;
+	$("#v2").validate();
+	equals( "required rangelength", flatRules("#v2-i6") );
+	
+	$("#subformRequired").validate({
+		rules: {
+			co_name: "required"
+		}
+	});
+	$("#co_name").removeClass();
+	equals( "required maxlength", flatRules("#co_name") );
+	jQuery.validator.autoCreateRanges = false;
 });
 
 test("rules(), evaluate dynamic parameters", function() {
@@ -481,8 +509,10 @@ test("rules(), class and attribute combinations", function() {
 	compare( $("#v2-i2").rules(), [{ method: "required", parameters: true }, { method: "email", parameters: true }]);
 	compare( $("#v2-i3").rules(), [{ method: "url", parameters: true }]);
 	compare( $("#v2-i4").rules(), [{ method: "required", parameters: true }, { method: "minlength", parameters: 2 }]);
+	jQuery.validator.autoCreateRanges = true;
 	compare( $("#v2-i5").rules(), [{ method: "required", parameters: true }, { method: "customMethod1", parameters: "123" }, { method: "rangelength", parameters: [2, 5] }]);
 	compare( $("#v2-i6").rules(), [{ method: "required", parameters: true }, { method: "customMethod2", parameters: true }, { method: "rangelength", parameters: [2, 5] }]);
+	jQuery.validator.autoCreateRanges = false;
 	compare( $("#v2-i7").rules(), [{ method: "required", parameters: true }, { method: "minlength", parameters: 2 }, { method: "customMethod", parameters: true }]);
 	
 	delete $.validator.methods.customMethod1;
@@ -817,6 +847,26 @@ test("successlist", function() {
 	var v = $("#form").validate({ success: "xyz" });
 	v.form();
 	equals(0, v.successList.length);
+});
+
+test("success isn't called for optional elements", function() {
+	expect(4);
+	equals( "", $("#firstname").removeClass().val() );
+	$("#lastname").remove();
+	$("#errorFirstname").remove();
+	var v = $("#testForm1").validate({
+		success: function() {
+			ok( false, "don't call success for optional elements!" );
+		},
+		rules: {
+			firstname: "email"
+		}
+	});
+	equals( 0, $("#testForm1 label").size() );
+	v.form();
+	equals( 0, $("#testForm1 label").size() );
+	$("#firstname").valid();
+	equals( 0, $("#testForm1 label").size() );
 });
 
 test("messages", function() {
