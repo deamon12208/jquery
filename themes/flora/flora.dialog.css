@@ -10,9 +10,13 @@
 	border-bottom: 1px solid #d8d2aa;
 	background: #ff9900 url(i/dialog-title.gif) repeat-x;
 	padding: 0px;
-	cursor: move;
 	height: 28px;
 	_height: 29px;
+}
+
+.flora .ui-dialog.ui-draggable .ui-dialog-titlebar,
+.flora.ui-dialog.ui-draggable .ui-dialog-titlebar {
+	cursor: move;
 }
 
 .flora .ui-dialog .ui-dialog-titlebar-close,
