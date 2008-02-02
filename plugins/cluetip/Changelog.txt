@@ -1,6 +1,12 @@
 
 == New and Noteworthy ==
 
+== 0.9.6 ==
+
+* fixed tip width measurement bug, which affected Safari
+* fixed dropShadow not appearing in edge cases. added overflow: hidden; to clueTip title
+* added title tag to list of tags to strip before serving up the requested file
+
 == 0.9.5 == 
 
 * added clickThrough option to allow click to go to page, even if href and tipAttribute are equal. 

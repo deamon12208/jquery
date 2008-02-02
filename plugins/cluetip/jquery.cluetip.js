@@ -1,6 +1,6 @@
 /*
  * jQuery clueTip plugin
- * Version 0.9.5  (01/24/2008)
+ * Version 0.9.6  (02/02/2008)
  * @requires jQuery v1.1.1+
  * @requires Dimensions plugin 
  *
