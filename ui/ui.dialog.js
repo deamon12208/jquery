@@ -4,10 +4,21 @@
 	$.ui = $.ui || {};
 
 	$.fn.extend({
-		dialog: function(options) {
+		dialog: function(options, data) {
 			return this.each(function() {
-				if (!$(this).is(".ui-dialog-content"))
-					new $.ui.dialog(this, options);
+				if (!!options && options.constructor == String) {
+					var method = options;
+					var dialog = $.data(this, "ui-dialog");
+					if (!dialog) {
+						dialog = $.data($(this).parents(".ui-dialog:first").find(".ui-dialog-content")[0], "ui-dialog");
+					}
+					dialog[method].apply(dialog, data);
+				} else {
+					if (!$(this).is(".ui-dialog-content")) {
+						// INIT with optional options
+						new $.ui.dialog(this, options);
+					}
+				}
 			});
 		}
 	});
@@ -26,7 +37,9 @@
 			resizable: true
 		};
 		options = $.extend({}, defaults, options); //Extend and copy options
-		this.element = el; var self = this; //Do bindings
+		this.element = el;
+		var self = this; //Do bindings
+
 		$.data(this.element, "ui-dialog", this);
 
 		var uiDialogContent = $(el).addClass('ui-dialog-content');
@@ -40,7 +53,8 @@
 		var uiDialogContainer = uiDialogContent.parent().addClass('ui-dialog-container').css({position: 'relative'});
 		var uiDialog = uiDialogContainer.parent().hide()
 			.addClass('ui-dialog')
-			.css({position: 'absolute', width: options.width, height: options.height, overflow: 'hidden'});
+			.css({position: 'absolute', width: options.width, height: options.height, overflow: 'hidden'})
+			.css("z-index", $('.ui-dialog:visible').size()); 
 
 		var classNames = uiDialogContent.attr('className').split(' ');
 
@@ -89,8 +103,19 @@
 		}
 	
 		if (options.draggable) {
-			uiDialog.draggable({ handle: '.ui-dialog-titlebar' });
+			uiDialog.draggable({
+				handle: '.ui-dialog-titlebar',
+				start: function() {
+					self.activate();
+				}
+			});
 		}
+		uiDialog.mousedown(function() {
+			self.activate();
+		});
+		uiDialogTitlebar.click(function() {
+			self.activate();
+		});
 	
 		this.open = function() {
 			uiDialog.appendTo('body');
@@ -130,6 +155,7 @@
 			top = top < doc.scrollTop() ? doc.scrollTop() : top;
 			uiDialog.css({top: top, left: left});
 			uiDialog.show();
+			self.activate();
 
 			// CALLBACK: open
 			var openEV = null;
@@ -137,6 +163,15 @@
 				options: options
 			};
 			$(this.element).triggerHandler("dialogopen", [openEV, openUI], options.open);
+		};
+
+		this.activate = function() {
+			var maxZ = curZ = 0;
+			$('.ui-dialog:visible').each(function() {
+				var z = parseInt($(this).css("z-index"));
+				maxZ = z > maxZ ? z : maxZ;
+			});
+			uiDialog.css("z-index", maxZ + 1);
 		};
 
 		this.close = function() {

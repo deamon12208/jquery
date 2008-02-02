@@ -9,7 +9,7 @@
 			},
 			"options": {
 				"buttons" : {
-					"OkCancel" : "$('#foo').dialog({ width: 650, height: 300,\n\tbuttons: {\n\t\t'Ok': function() {\n\t\t\t$(this).trigger('dialog.close');\n\t\t},\n\t\t'Cancel': function() {\n\t\t\t$(this).trigger('dialog-close');\n\t\t}\n\t}\n});"
+					"OkCancel" : "$('#foo').dialog({ width: 650, height: 300,\n\tbuttons: {\n\t\t'Ok': function() {\n\t\t\t$(this).dialog('close');\n\t\t},\n\t\t'Cancel': function() {\n\t\t\t$(this).dialog('close');\n\t\t}\n\t}\n});"
 				},
 				"draggable" : {
 					"true" : "$('#foo').dialog({\n\t draggable: true \n});",
@@ -68,8 +68,8 @@
 				"close" : "$('#foo').dialog({\n  close: function() {\n    alert('closed');\n  }\n});"
 			},
 			"methods": {
-				"dialogOpen" : "$('#foo').dialog({ autoOpen: false, width: 450 });\n setTimeout(\"$('#foo').trigger('dialog-open');\", 1000)",
-				"dialogClose" : "$('#foo').dialog({ width: 450 });\n setTimeout(\"$('#foo').trigger('dialog-close');\", 1000);"
+				"dialogOpen" : "$('#foo').dialog({ width: 450, autoOpen: false });\n setTimeout(\"$('#foo').dialog('open');\", 1000)",
+				"dialogClose" : "$('#foo').dialog({ width: 450 });\n setTimeout(\"$('#foo').dialog('close');\", 1000);"
 			},
 			"tickets": {
 				"1876" : "$('#foo').hide().dialog({width:800});"
