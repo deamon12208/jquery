@@ -118,7 +118,7 @@
       var sTop, linkTop, posY, tipY, mouseY, baseline;
       // horizontal measurement variables
       var tipInnerWidth = isNaN(parseInt(opts.width, 10)) ? 275 : parseInt(opts.width, 10);
-      var tipWidth = tipInnerWidth + parseInt($cluetip.css('paddingLeft')) + parseInt($cluetip.css('paddingRight')) + dropShadowSteps;
+      var tipWidth = tipInnerWidth + (parseInt($cluetip.css('paddingLeft'))||0) + (parseInt($cluetip.css('paddingRight'))||0) + dropShadowSteps;
       var linkWidth = this.offsetWidth;
       var linkLeft, posX, tipX, mouseX, winWidth;
             
