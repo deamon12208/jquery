@@ -8,6 +8,10 @@
 				"detached" : "$('<'+'div/>').draggable();"
 			},
 			"options": {
+				"appendTo" : {
+					"body" : "$('#foo').draggable({ helper: 'clone', appendTo: 'body' });",
+					"''" : "$('#foo').draggable({ helper: 'clone' });"
+				},
 				"axis" : {
 					"x" : "$('#foo').draggable({ axis: 'x' });",
 					"y" : "$('#foo').draggable({ axis: 'y' });"
@@ -24,8 +28,14 @@
 					"top2left2" : "$('#foo').draggable({ cursorAt: {top: 2, left: 2} });",
 					"bottom20right14" : "$('#foo').draggable({ cursorAt: {bottom: 20, right: 14} });"
 				},
+				"distance" : {
+					"40" : "$('#foo').draggable({ distance: 40 });"
+				},
 				"dragPrevention" : {
-					"a,input,textarea" : "$('#foo').draggable({ dragPrevention: 'a,input,textarea' });"
+					"div" : "$('#foo').draggable({ dragPrevention: 'div' });",
+					"code" : "$('#foo').draggable({ dragPrevention: 'code' });",
+					"div,code" : "$('#foo').draggable({ dragPrevention: 'div,code' });",
+					"*" : "$('#foo').draggable({ dragPrevention: '*' });"
 				},
 				"grid" : {
 					"x50y10" : "$('#foo').draggable({ grid: [50, 10] });",
@@ -44,8 +54,8 @@
 					"0.3" : "$('#foo').draggable({ opacity: 0.3 });",
 					"0.4helperclone" : "$('#foo').draggable({ opacity: 0.4, helper: 'clone' });"
 				},
-				"preventionDistance" : {
-					"40" : "$('#foo').draggable({ preventionDistance: 40 });"
+				"preventionTimeout" : {
+					"40" : "$('#foo').draggable({ preventionTimeout: 50 });"
 				},
 				"revert" : {
 					"true" : "$('#foo').draggable({ revert: true });",
@@ -55,9 +65,19 @@
 					"true" : "$('#foo').draggable({ scroll: true });",
 					"false" : "$('#foo').draggable({ scroll: false });"
 				},
-				"appendTo" : {
-					"body" : "$('#foo').draggable({ helper: 'clone', appendTo: 'body' });",
-					"''" : "$('#foo').draggable({ helper: 'clone' });"
+				"scrollSensitivity" : {
+					"2" : "$('#foo').draggable({ scrollSensitivity: 1 });",
+					"20" : "$('#foo').draggable({ scrollSensitivity: 20 });",
+					"200" : "$('#foo').draggable({ scrollSensitivity: 200 });"
+				},
+				"scrollSpeed" : {
+					"2" : "$('#foo').draggable({ scrollSpeed: 2 });",
+					"20" : "$('#foo').draggable({ scrollSpeed: 20 });",
+					"200" : "$('#foo').draggable({ scrollSpeed: 200 });"
+				},
+				"zIndex" : {
+					"1" : "$('#foo').draggable({ zIndex: 1 });",
+					"100" : "$('#foo').draggable({ zIndex: 100 });"
 				}
 			},
 			"callbacks": {
