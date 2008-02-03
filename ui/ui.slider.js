@@ -6,17 +6,22 @@
 	$.fn.extend({
 		slider: function(options) {
 			return this.each(function() {
-				if(!$.data(this, "ui-slider"))
+				if (typeof options == "string") {
+					var slider = $.data(this, "ui-slider");
+					slider[options].apply(slider, args);
+
+				} else if(!$.data(this, "ui-slider"))
 					new $.ui.slider(this, options);
 			});
 		}
 	});
 	
 	$.ui.slider = function(element, options) {
-
 		//Initialize needed constants
 		var self = this;
+		
 		this.element = $(element);
+		
 		$.data(element, "ui-slider", this);
 		this.element.addClass("ui-slider");
 		
@@ -30,6 +35,12 @@
 			startValue: parseInt(o.startValue) || 0		
 		});
 		o.stepping = parseInt(o.stepping) || (o.steps ? o.maxValue/o.steps : 0);
+		
+		$(element).bind("setData.slider", function(event, key, value){
+			self.options[key] = value;
+		}).bind("getData.slider", function(event, key){
+			return self.options[key];
+		});
 
 		//Initialize mouse events for interaction
 		this.handle = o.handle ? $(o.handle, element) : $('.ui-slider-handle', element);
@@ -77,7 +88,10 @@
 			this.element.triggerHandler(n == "slide" ? n : "slide"+n, [e, this.ui()], this.options[n]);
 		},
 		destroy: function() {
-			this.element.removeClass("ui-slider ui-slider-disabled");
+			this.element
+				.removeClass("ui-slider ui-slider-disabled")
+				.removeData("ul-slider")
+				.unbind(".slider");
 			this.handles.removeMouseInteraction();
 		},
 		enable: function() {
