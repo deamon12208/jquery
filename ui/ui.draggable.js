@@ -85,6 +85,7 @@
 			//Create and append the visible helper
 			this.helper = typeof o.helper == 'function' ? $(o.helper.apply(this.element[0], [e])) : (o.helper == 'clone' ? this.element.clone().appendTo((o.appendTo == 'parent' ? this.element[0].parentNode : o.appendTo)) : this.element);
 			if(this.helper[0] != this.element[0]) this.helper.css('position', 'absolute');
+			if(!this.helper.parents('body').length) this.helper.appendTo((o.appendTo == 'parent' ? this.element[0].parentNode : o.appendTo))
 
 			//Find out the next positioned parent
 			this.offsetParent = (function(cp) {
