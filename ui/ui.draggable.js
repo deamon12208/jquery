@@ -63,7 +63,7 @@
 		},
 		propagate: function(n,e) {
 			$.ui.plugin.call(this, n, [e, this.ui()]);
-			this.element.triggerHandler(n == "drag" ? n : "drag"+n, [e, this.ui()], this.options[n]);
+			return this.element.triggerHandler(n == "drag" ? n : "drag"+n, [e, this.ui()], this.options[n]);
 		},
 		destroy: function() {
 			this.element.removeClass("ui-draggable ui-draggable-disabled");
@@ -157,8 +157,8 @@
 			this.position = { top: e.pageY - this.offset.top, left: e.pageX - this.offset.left };
 			this.positionAbs = { left: e.pageX - this.clickOffset.left, top: e.pageY - this.clickOffset.top };
 
-			//Call plugins and callbacks
-			this.propagate("drag", e);
+			//Call plugins and callbacks			
+			this.position = this.propagate("drag", e) || this.position;
 			
 			this.helper.css({ left: this.position.left+'px', top: this.position.top+'px' }); // Stick the helper to the cursor
 			if($.ui.ddmanager) $.ui.ddmanager.drag(this, e);
