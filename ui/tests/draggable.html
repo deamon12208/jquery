@@ -122,18 +122,6 @@ div.todo div.todo-desc
 	    	<div id="draggable-dragPrevention" class='draggable'><a href="index.php">Drag me</a><input type="text" value="select me" style="width: 90px; font-size: 10px;" /></div>
 	    </li>
 	    <li>
-	    	effect: ['fade', '']
-	    	<div id="draggable-effect-fade-none" class='draggable'>Drag me</div>
-	    </li>
-	    <li>
-	    	effect: ['', 'fade']
-	    	<div id="draggable-effect-none-fade" class='draggable'>Drag me</div>
-	    </li>
-	    <li>
-	    	effect: ['fade', 'fade']
-	    	<div id="draggable-effect-fade-fade" class='draggable'>Drag me</div>
-	    </li>
-	    <li>
 	    	grid: [50, 50]
 	    	<div id="draggable-grid-50-50" class='draggable'>Drag me</div>
 	    </li>
@@ -272,21 +260,6 @@ $(document).ready(function(){
 		dragPrevention: 'a,input,textarea'
 	});
 
-	$('#draggable-effect-fade-none').draggable({
-		effect: ['fade', ''],
-		helper: 'clone'
-	});
-
-	$('#draggable-effect-none-fade').draggable({
-		effect: ['', 'fade'],
-		helper: 'clone'
-	});
-
-	$('#draggable-effect-fade-fade').draggable({
-		effect: ['fade', 'fade'],
-		helper: 'clone'
-	});
-
 	$('#draggable-grid-50-50').draggable({
 		grid: [50, 50]
 	});
@@ -346,13 +319,11 @@ $(document).ready(function(){
 	
 	$('#draggable-helperClone-withAppendTo').draggable({
 		helper: 'clone',
-		appendTo: 'body',
-		effect: ['fade', 'fade']
+		appendTo: 'body'
 	});
 
 	$('#draggable-helperClone-withoutAppendTo').draggable({
-		helper: 'clone',
-		effect: ['fade', 'fade']
+		helper: 'clone'
 	});
 
 	// Callbacks

@@ -27,11 +27,6 @@
 				"dragPrevention" : {
 					"a,input,textarea" : "$('#foo').draggable({ dragPrevention: 'a,input,textarea' });"
 				},
-				"effect" : {
-					"fadein" : "$('#foo').draggable({ effect: ['fade',''], helper: 'clone' });",
-					"fadeout" : "$('#foo').draggable({ effect: ['','fade'], helper: 'clone' });",
-					"fadeinfadeout" : "$('#foo').draggable({ effect: ['fade','fade'], helper: 'clone' });"
-				},
 				"grid" : {
 					"x50y10" : "$('#foo').draggable({ grid: [50, 10] });",
 					"x10y50" : "$('#foo').draggable({ grid: [10, 50] });"
