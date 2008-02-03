@@ -2,7 +2,7 @@
 
   $.ec.bounce = function(o) {
 
-    return this.each(function() {
+    return this.queue(function() {
 
       // Create element
       var el = $(this), props = ['position','top','left'];
@@ -58,7 +58,7 @@
         });
       };
       el.queue('fx', function() { el.dequeue(); })
-     
+      el.dequeue();
     });
     
   };

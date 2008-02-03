@@ -29,7 +29,6 @@
         if(o.callback) o.callback.apply(this, arguments); // Callback
         el.dequeue();
       });
-
       
     });
     
