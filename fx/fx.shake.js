@@ -2,7 +2,7 @@
   
   $.ec.shake = function(o) {
 
-    return this.queue(function() {
+    return this.each(function() {
 
       // Create element
       var el = $(this), props = ['position','top','left'];
@@ -35,9 +35,8 @@
       animate(animation, speed / 2, o.options.easing, function(){ // Last shake
         $.ec.restore(el, props); $.ec.removeWrapper(el); // Restore
         if(o.callback) o.callback.apply(this, arguments); // Callback
-        el.dequeue();
       });
-      
+      el.queue('fx', function() { el.dequeue(); })
     });
     
   };

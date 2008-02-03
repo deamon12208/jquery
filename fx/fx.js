@@ -31,6 +31,8 @@
       return {x: x, y: y};
     },
     createWrapper: function(el) {
+      if (el.parent().attr('id') == 'fxWrapper')
+        return el;
       var props = {width: el.outerWidth({margin:true}), height: el.outerHeight({margin:true}), 'float': el.css('float')};
       el.wrap('<div id="fxWrapper"></div>');
       var wrapper = el.parent();
@@ -47,7 +49,9 @@
       return wrapper;
     },
     removeWrapper: function(el) {
-      return el.parent().replaceWith(el);
+      if (el.parent().attr('id') == 'fxWrapper')
+        return el.parent().replaceWith(el);
+      return el;
     },
     setTransition: function(el, list, factor, val) {
       val = val || {};

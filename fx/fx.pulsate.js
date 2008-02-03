@@ -2,7 +2,7 @@
   
   $.ec.pulsate = function(o) {
 
-    return this.queue(function() {
+    return this.each(function() {
       
       // Create element
       var el = $(this);
@@ -33,9 +33,9 @@
       } else {
         el.animate({opacity: 0}, o.speed / 2, o.options.easing).animate({opacity: 1}, o.speed / 2, o.options.easing, function(){
           if(o.callback) o.callback.apply(this, arguments); // Callback
-          el.dequeue();
         });
       };
+      el.queue('fx', function() { el.dequeue(); })
     });
     
   };

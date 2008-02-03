@@ -2,7 +2,7 @@
 
   $.ec.bounce = function(o) {
 
-    return this.queue(function() {
+    return this.each(function() {
 
       // Create element
       var el = $(this), props = ['position','top','left'];
@@ -24,7 +24,7 @@
       if (mode == 'show') el.css('opacity', 0).css(ref, motion == 'pos' ? -distance : distance); // Shift
       if (mode == 'hide') distance = distance / (times * 2);
       if (mode != 'hide') times--;
-
+      
       // Animate
       if (mode == 'show') { // Show Bounce
         var animation = {opacity: 1};
@@ -40,7 +40,6 @@
         el.animate(animation1, speed / 2, o.options.easing).animate(animation2, speed / 2, o.options.easing);
         distance = (mode == 'hide') ? distance * 2 : distance / 2;
       };
-      el.dequeue();
       if (mode == 'hide') { // Last Bounce
         var animation = {opacity: 0};
         animation[ref] = (motion == 'pos' ? '-=' : '+=')  + distance;
@@ -48,7 +47,6 @@
           el.hide(); // Hide
           $.ec.restore(el, props); $.ec.removeWrapper(el); // Restore
           if(o.callback) o.callback.apply(this, arguments); // Callback
-          el.dequeue();
         });
       } else {
         var animation1 = {}, animation2 = {};
@@ -57,12 +55,12 @@
         el.animate(animation1, speed / 2, o.options.easing).animate(animation2, speed / 2, o.options.easing, function(){
           $.ec.restore(el, props); $.ec.removeWrapper(el); // Restore
           if(o.callback) o.callback.apply(this, arguments); // Callback
-          el.dequeue();
         });
       };
-
+      el.queue('fx', function() { el.dequeue(); })
+     
     });
-
+    
   };
 
 })(jQuery);
