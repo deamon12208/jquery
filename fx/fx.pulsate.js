@@ -34,7 +34,7 @@
           if(o.callback) o.callback.apply(this, arguments); // Callback
         });
       };
-      el.queue('fx', function() { el.dequeue(); })
+      el.queue('fx', function() { el.dequeue(); });
       el.dequeue();
     });
     
