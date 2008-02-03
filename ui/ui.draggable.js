@@ -40,6 +40,8 @@
 		
 		$(element).bind("setData.draggable", function(event, key, value){
 			self.options[key] = value;
+		}).bind("getData.draggable", function(event, key){
+			return self.options[key];
 		});
 		
 		//Initialize mouse events for interaction
@@ -80,7 +82,7 @@
 			this.element
 				.removeClass("ui-draggable ui-draggable-disabled")
 				.removeData("ui-draggable")
-				.unbind("setData.draggable");
+				.unbind(".draggable");
 		},
 		enable: function() {
 			this.element.removeClass("ui-draggable-disabled");

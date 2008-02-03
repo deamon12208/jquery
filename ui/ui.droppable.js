@@ -41,6 +41,8 @@
 		
 		$(element).bind("setData.draggable", function(event, key, value){
 			o[key] = value;
+		}).bind("getData.draggable", function(event, key){
+			return o[key];
 		});
 		
 		//Store the droppable's proportions
@@ -73,7 +75,7 @@
 			this.element
 				.removeClass("ui-droppable ui-droppable-disabled")
 				.removeData("ui-droppable")
-				.unbind("setData.droppable");
+				.unbind(".droppable");
 		},
 		enable: function() {
 			this.element.removeClass("ui-droppable-disabled");

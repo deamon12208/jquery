@@ -43,6 +43,8 @@
 		
 		$(element).bind("setData.resizable", function(event, key, value){
 			self.options[key] = value;
+		}).bind("getData.resizable", function(event, key){
+			return self.options[key];
 		});
 		
 		//Force proxy if animate is enable
@@ -276,7 +278,7 @@
 				.removeClass("ui-resizable ui-resizable-disabled")
 				.removeMouseInteraction()
 				.removeData("ui-resizable")
-				.unbind("setData.resizable");
+				.unbind(".resizable");
 		},
 		enable: function() {
 			this.element.removeClass("ui-resizable-disabled");
