@@ -38,6 +38,10 @@
 		var self = this; //Do bindings
 
 		$.data(this.element, "ui-dialog", this);
+		
+		$(el).bind("setData.dialog", function(event, key, value){
+			options[key] = value;
+		});
 
 		var uiDialogContent = $(el).addClass('ui-dialog-content');
 
