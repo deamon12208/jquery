@@ -15,7 +15,7 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 				if(!$.data(this, "ui-sortable"))
 					new $.ui.sortable(this, options);
 			});
-		},
+		}
 	});
 	
 	$.ui.sortable = function(element, options) {
@@ -142,10 +142,10 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			};
 
 		},
-		refreshPositions: function() {
+		refreshPositions: function(fast) {
 			for (var i = this.items.length - 1; i >= 0; i--){
-				this.items[i].width = this.items[i].item.outerWidth();
-				this.items[i].height = this.items[i].item.outerHeight();
+				if(!fast) this.items[i].width = this.items[i].item.outerWidth();
+				if(!fast) this.items[i].height = this.items[i].item.outerHeight();
 				var p = this.items[i].item.offset();
 				this.items[i].left = p.left;
 				this.items[i].top = p.top;
@@ -263,10 +263,10 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 
 			//Rearrange
 			for (var i = this.items.length - 1; i >= 0; i--) {
-				if(this.intersectsWith(this.items[i]) && this.items[i].item[0] != this.currentItem[0] && !this.currentItem[0].contains(this.items[i].item[0])) {
+				if(this.intersectsWith(this.items[i]) && this.items[i].item[0] != this.currentItem[0] && (this.options.tree ? !this.currentItem[0].contains(this.items[i].item[0]) : true)) {
 					//Rearrange the DOM
 					this.items[i].item[this.direction == 'down' ? 'before' : 'after'](this.currentItem);
-					this.refreshPositions(); //Precompute after each DOM insertion, NOT on mousemove
+					this.refreshPositions(true); //Precompute after each DOM insertion, NOT on mousemove
 					if(this.placeholderElement) this.placeholder.css(this.placeholderElement.offset());
 					this.propagate("change", e); //Call plugins and callbacks
 					break;
