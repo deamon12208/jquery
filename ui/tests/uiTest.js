@@ -3,6 +3,10 @@ function uiTest(testSet) {
 	deserializeTests(testSet, $('#tests'), "");
 }
 
+function uiTestLog(msg) {
+	$('#foo-container').prepend('<div class="log-entry">' + msg + '</div>');
+}
+
 $(function() {
 
 	$('body').append('<div id="blackhole"/>');
