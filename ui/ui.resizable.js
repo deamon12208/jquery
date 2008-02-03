@@ -5,8 +5,15 @@
 	
 	$.fn.resizable = function(options) {
 		return this.each(function() {
-			if(!$(this).is(".ui-resizable"))
-				new $.ui.resizable(this, options);
+			var args = Array.prototype.slice.call(arguments, 1);
+			
+			return this.each(function() {
+				if (typeof options == "string") {
+					var resize = $.data(this, "ui-resizable");
+					resize[options].apply(resize, args);
+
+				} else if(!$(this).is(".ui-resizable"))
+					new $.ui.resizable(this, options);
 		});
 	}
 	
@@ -33,6 +40,10 @@
 			easing: 'swing',
 			autohide: false
 		}, options);
+		
+		$(element).bind("setData.resizable", function(event, key, value){
+			self.options[key] = value;
+		});
 		
 		//Force proxy if animate is enable
 		this.options.proxy = this.options.animate ? "proxy" : this.options.proxy;
@@ -261,7 +272,11 @@
 			this.element.triggerHandler(n == "resize" ? n : "resize"+n, [e, this.ui()], this.options[n]);
 		},
 		destroy: function() {
-			this.element.removeClass("ui-resizable ui-resizable-disabled").removeMouseInteraction();
+			this.element
+				.removeClass("ui-resizable ui-resizable-disabled")
+				.removeMouseInteraction()
+				.removeData("ui-resizable")
+				.unbind("setData.resizable");
 		},
 		enable: function() {
 			this.element.removeClass("ui-resizable-disabled");
