@@ -11,6 +11,9 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 
 	$.fn.extend({
 		sortable: function(options) {
+			if ( options == "serialize" )
+				return $.data(this, "ui-sortable").serialize();
+			
 			return this.each(function() {
 				if (typeof options == "string") {
 					var sort = $.data(this, "ui-sortable");
