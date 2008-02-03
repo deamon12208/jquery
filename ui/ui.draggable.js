@@ -8,8 +8,14 @@
 
 	$.fn.extend({
 		draggable: function(options) {
+			var args = Array.prototype.slice.call(arguments, 1);
+			
 			return this.each(function() {
-				if(!$.data(this, "ui-draggable"))
+				if (typeof options == "string") {
+					var drag = $.data(this, "ui-draggable");
+					drag[options].apply(drag, args);
+
+				} else if(!$.data(this, "ui-draggable"))
 					new $.ui.draggable(this, options);
 			});
 		}
@@ -30,6 +36,10 @@
 			helper: o.ghosting == true ? 'clone' : (o.helper || 'original'),
 			handle : o.handle ? ($(o.handle, element)[0] ? $(o.handle, element) : this.element) : this.element,
 			appendTo: o.appendTo || 'parent'		
+		});
+		
+		$(element).bind("setData.draggable", function(event, key, value){
+			self.options[key] = value;
 		});
 		
 		//Initialize mouse events for interaction
@@ -66,8 +76,11 @@
 			return this.element.triggerHandler(n == "drag" ? n : "drag"+n, [e, this.ui()], this.options[n]);
 		},
 		destroy: function() {
-			this.element.removeClass("ui-draggable ui-draggable-disabled");
 			this.handle.removeMouseInteraction();
+			this.element
+				.removeClass("ui-draggable ui-draggable-disabled")
+				.removeData("ui-draggable")
+				.unbind("setData.draggable");
 		},
 		enable: function() {
 			this.element.removeClass("ui-draggable-disabled");
