@@ -10,29 +10,33 @@
 	$.fn.extend({
 		selectable: function(options) {
 			return this.each(function() {
-				if(!$.data(this, "ui-selectable"))
+				if (typeof options == "string") {
+					var select = $.data(this, "ui-selectable");
+					select[options].apply(select, args);
+
+				} else if(!$.data(this, "ui-selectable"))
 					new $.ui.selectable(this, options);
 			});
 		}
 	});
 
-	$.ui.selectable = function(el, o) {
+	$.ui.selectable = function(element, options) {
+		var self = this;
 		
-		var options = {
+		this.element = $(element);
+		
+		$.data(this.element, "ui-selectable", this);
+		this.element.addClass("ui-selectable");
+		
+		this.options = $.extend({
 			appendTo: 'body',
 			autoRefresh: true,
 			filter: '*',
 			tolerance: 'touch'
-		};
-		//Extend and copy options
-		var o = o || {}; $.extend(options, o); 
-		//Do bindings
-		this.element = el; var self = this;
-		$.data(this.element, "ui-selectable", this);
-		self.dragged = false;
-
-		$.extend(options, {
-			helper: function() { return $(document.createElement('div')).css({border:'1px dotted black'}); },
+		}, options, {
+			helper: function() {
+				return $(document.createElement('div')).css({border:'1px dotted black'});
+			},
 			_start: function(h,p,c,t,e) {
 				// Trigger the start callback
 				self.start.apply(t, [self, e]);
@@ -48,6 +52,14 @@
 				self.dragged = false;
 			}
 		});
+		
+		$(element).bind("setData.selectable", function(event, key, value){
+			self.options[key] = value;
+		}).bind("getData.selectable", function(event, key){
+			return self.options[key];
+		});
+		
+		this.dragged = false;
 
 		// cache selectee children based on filter
 		var selectees;
@@ -72,16 +84,11 @@
 		}
 		this.refresh();
 
-		this.selectees = selectees;
+		this.selectees = selectees.addClass("ui-selectee");
 
 		//Initialize mouse interaction
 		this.mouse = new $.ui.mouseInteraction(el, options);
-
-		//Add the class for themeing
-		$(this.element).addClass("ui-selectable");
-		this.selectees.addClass("ui-selectee");
-
-	}
+	};
 
 	$.extend($.ui.selectable.prototype, {
 		toggle: function() {
@@ -92,15 +99,18 @@
 			}
 		},
 		destroy: function() {
-			$(this.element).removeClass("ui-selectable").removeClass("ui-selectable-disabled");
+			this.element
+				.removeClass("ui-selectable ui-selectable-disabled")
+				.removeData("ui-selectable")
+				.unbind(".selectable");
 			this.mouse.destroy();
 		},
 		enable: function() {
-			$(this.element).removeClass("ui-selectable-disabled");
+			this.element.removeClass("ui-selectable-disabled");
 			this.disabled = false;
 		},
 		disable: function() {
-			$(this.element).addClass("ui-selectable-disabled");
+			this.element.addClass("ui-selectable-disabled");
 			this.disabled = true;
 		},
 		start: function(self, ev) {
