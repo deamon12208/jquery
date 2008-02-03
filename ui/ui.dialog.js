@@ -6,19 +6,14 @@
 	$.fn.extend({
 		dialog: function(options, data) {
 			return this.each(function() {
-				if (!!options && options.constructor == String) {
-					var method = options;
-					var dialog = $.data(this, "ui-dialog");
-					if (!dialog) {
-						dialog = $.data($(this).parents(".ui-dialog:first").find(".ui-dialog-content")[0], "ui-dialog");
-					}
-					dialog[method].apply(dialog, data);
-				} else {
-					if (!$(this).is(".ui-dialog-content")) {
-						// INIT with optional options
-						new $.ui.dialog(this, options);
-					}
-				}
+				if (typeof options == "string") {
+					var dialog = $.data(this, "ui-dialog") ||
+						$.data($(this).parents(".ui-dialog:first").find(".ui-dialog-content")[0], "ui-dialog");
+					dialog[options].apply(dialog, Array.prototype.slice.apply(arguments, 1));
+
+				// INIT with optional options
+				} else if (!$(this).is(".ui-dialog-content"))
+					new $.ui.dialog(this, options);
 			});
 		}
 	});
