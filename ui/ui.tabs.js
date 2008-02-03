@@ -13,6 +13,8 @@
 
     // tabs initialization
     $.fn.tabs = function(initial, options) {
+    	var args = Array.prototype.slice.call(arguments, 1);
+    	
         if (initial && initial.constructor == Object) { // shift arguments
             options = initial;
             initial = null;
@@ -22,11 +24,17 @@
         initial = initial && initial.constructor == Number && --initial || 0;
 
         return this.each(function() {
-            new $.ui.tabs(this, $.extend(options, { initial: initial }));
+			if (typeof initial == "string") {
+				var tabs = $.data(this, "ui-tabs");
+				tabs[initial].apply(tabs, args);
+
+			} else
+				new $.ui.tabs(this, $.extend(options, { initial: initial }));
         });
     };
 
     // other chainable tabs methods
+    // deprecated, use .tabs("method")
     $.each(['Add', 'Remove', 'Enable', 'Disable', 'Click', 'Load', 'Href'], function(i, method) {
         $.fn['tabs' + method] = function() {
             var args = arguments;
@@ -36,6 +44,8 @@
             });
         };
     });
+    
+    // deprecated, use .data("selected")
     $.fn.tabsSelected = function() {
         var selected = -1;
         if (this[0]) {
@@ -47,6 +57,7 @@
 
     // tabs class
     $.ui.tabs = function(el, options) {
+    	var self = this;
 
         this.source = el;
 
@@ -103,6 +114,18 @@
 
         this.options.event += '.ui-tabs'; // namespace event
         this.options.cookie = $.cookie && $.cookie.constructor == Function && this.options.cookie;
+        
+		$(el).bind("setData.tabs", function(event, key, value){
+			self.options[key] = value;
+		}).bind("getData.tabs", function(event, key){
+			if ( key == "selected" ) {
+				var $lis = $('li', this),
+					selected = $lis.index( $lis.filter('.' + self.options.selectedClass)[0] );
+				return selected >= 0 ? ++selected : -1;
+			}
+			
+			return self.options[key];
+		});
 
         // save instance for later
         $.data(el, $.ui.tabs.INSTANCE_KEY, this);
