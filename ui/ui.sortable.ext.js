@@ -124,6 +124,55 @@
 		}
 	});
 
+	$.ui.plugin.add("sortable", "scroll", {
+		start: function(e,ui) {
+			var o = ui.options;
+			o.scrollSensitivity	= o.scrollSensitivity || 20;
+			o.scrollSpeed		= o.scrollSpeed || 20;
+
+			ui.instance.overflowY = function(el) {
+				do { if(/auto|scroll/.test(el.css('overflow')) || /auto|scroll/.test(el.css('overflow-y'))) return el; el = el.parent(); } while (el[0].parentNode);
+				return $(document);
+			}(this);
+			ui.instance.overflowX = function(el) {
+				do { if(/auto|scroll/.test(el.css('overflow')) || /auto|scroll/.test(el.css('overflow-x'))) return el; el = el.parent(); } while (el[0].parentNode);
+				return $(document);
+			}(this);
+		},
+		sort: function(e,ui) {
+			
+			var o = ui.options;
+			var i = ui.instance;
+
+			if(i.overflowY[0] != document && i.overflowY[0].tagName != 'HTML') {
+				if(i.overflowY[0].offsetHeight - (ui.position.top - i.overflowY[0].scrollTop + i.clickOffset.top) < o.scrollSensitivity)
+					i.overflowY[0].scrollTop = i.overflowY[0].scrollTop + o.scrollSpeed;
+				if((ui.position.top - i.overflowY[0].scrollTop + i.clickOffset.top) < o.scrollSensitivity)
+					i.overflowY[0].scrollTop = i.overflowY[0].scrollTop - o.scrollSpeed;				
+			} else {
+				//$(document.body).append('<p>'+(e.pageY - $(document).scrollTop())+'</p>');
+				if(e.pageY - $(document).scrollTop() < o.scrollSensitivity)
+					$(document).scrollTop($(document).scrollTop() - o.scrollSpeed);
+				if($(window).height() - (e.pageY - $(document).scrollTop()) < o.scrollSensitivity)
+					$(document).scrollTop($(document).scrollTop() + o.scrollSpeed);
+			}
+			
+			if(i.overflowX[0] != document && i.overflowX[0].tagName != 'HTML') {
+				if(i.overflowX[0].offsetWidth - (ui.position.left - i.overflowX[0].scrollLeft + i.clickOffset.left) < o.scrollSensitivity)
+					i.overflowX[0].scrollLeft = i.overflowX[0].scrollLeft + o.scrollSpeed;
+				if((ui.position.top - i.overflowX[0].scrollLeft + i.clickOffset.left) < o.scrollSensitivity)
+					i.overflowX[0].scrollLeft = i.overflowX[0].scrollLeft - o.scrollSpeed;				
+			} else {
+				if(e.pageX - $(document).scrollLeft() < o.scrollSensitivity)
+					$(document).scrollLeft($(document).scrollLeft() - o.scrollSpeed);
+				if($(window).width() - (e.pageX - $(document).scrollLeft()) < o.scrollSensitivity)
+					$(document).scrollLeft($(document).scrollLeft() + o.scrollSpeed);
+			}
+			
+			ui.instance.recallOffset(e);
+
+		}
+	});
 
 })(jQuery);
 

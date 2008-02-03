@@ -142,55 +142,57 @@
 		}
 	});
 
-
-/*** THE FOLLOWING TWO PLUGINS ARE NOT WORKING AT THIS POINT! ***/
-
-
-	$.ui.plugin.add("draggable", "scroll", function(e,ui) {
-		drag: function(e,ui) {
-
+	$.ui.plugin.add("draggable", "scroll", {
+		start: function(e,ui) {
 			var o = ui.options;
 			o.scrollSensitivity	= o.scrollSensitivity || 20;
 			o.scrollSpeed		= o.scrollSpeed || 20;
 
-			if(o.pp && o.ppOverflow) { // If we have a positioned parent, we only scroll in this one
-				// TODO: Extremely strange issues are waiting here..handle with care
-			} else {
-				if((ui.draggable.rpos[1] - $(window).height()) - $(document).scrollTop() > -o.scrollSensitivity) window.scrollBy(0,o.scrollSpeed);
-				if(ui.draggable.rpos[1] - $(document).scrollTop() < o.scrollSensitivity) window.scrollBy(0,-o.scrollSpeed);
-				if((ui.draggable.rpos[0] - $(window).width()) - $(document).scrollLeft() > -o.scrollSensitivity) window.scrollBy(o.scrollSpeed,0);
-				if(ui.draggable.rpos[0] - $(document).scrollLeft() < o.scrollSensitivity) window.scrollBy(-o.scrollSpeed,0);
-			}
-
-		}
-	});
-
-	$.ui.plugin.add("draggable", "drag", "wrapHelper", {
+			ui.instance.overflowY = function(el) {
+				do { if(/auto|scroll/.test(el.css('overflow')) || /auto|scroll/.test(el.css('overflow-y'))) return el; el = el.parent(); } while (el[0].parentNode);
+				return $(document);
+			}(this);
+			ui.instance.overflowX = function(el) {
+				do { if(/auto|scroll/.test(el.css('overflow')) || /auto|scroll/.test(el.css('overflow-x'))) return el; el = el.parent(); } while (el[0].parentNode);
+				return $(document);
+			}(this);
+		},
 		drag: function(e,ui) {
-
+			
 			var o = ui.options;
-			if(o.cursorAtIgnore) return;
-			var t = ui.helper;
+			var i = ui.instance;
 
-			if(!o.pp || !o.ppOverflow) {
-				var wx = $(window).width() - ($.browser.mozilla ? 20 : 0);
-				var sx = $(document).scrollLeft();
-
-				var wy = $(window).height();
-				var sy = $(document).scrollTop();	
+			if(i.overflowY[0] != document && i.overflowY[0].tagName != 'HTML') {
+				if(i.overflowY[0].offsetHeight - (ui.position.top - i.overflowY[0].scrollTop + i.clickOffset.top) < o.scrollSensitivity)
+					i.overflowY[0].scrollTop = i.overflowY[0].scrollTop + o.scrollSpeed;
+				if((ui.position.top - i.overflowY[0].scrollTop + i.clickOffset.top) < o.scrollSensitivity)
+					i.overflowY[0].scrollTop = i.overflowY[0].scrollTop - o.scrollSpeed;				
 			} else {
-				var wx = o.pp.offsetWidth + o.po.left - 20;
-				var sx = o.pp.scrollLeft;
-
-				var wy = o.pp.offsetHeight + o.po.top - 20;
-				var sy = o.pp.scrollTop;						
+				//$(document.body).append('<p>'+(e.pageY - $(document).scrollTop())+'</p>');
+				if(e.pageY - $(document).scrollTop() < o.scrollSensitivity)
+					$(document).scrollTop($(document).scrollTop() - o.scrollSpeed);
+				if($(window).height() - (e.pageY - $(document).scrollTop()) < o.scrollSensitivity)
+					$(document).scrollTop($(document).scrollTop() + o.scrollSpeed);
 			}
-
-			ui.draggable.pos[0] -= ((ui.draggable.rpos[0]-o.cursorAt.left - wx + t.offsetWidth+o.margins.right) - sx > 0 || (ui.draggable.rpos[0]-o.cursorAt.left+o.margins.left) - sx < 0) ? (t.offsetWidth+o.margins.left+o.margins.right - o.cursorAt.left * 2) : 0;
-			ui.draggable.pos[1] -= ((ui.draggable.rpos[1]-o.cursorAt.top - wy + t.offsetHeight+o.margins.bottom) - sy > 0 || (ui.draggable.rpos[1]-o.cursorAt.top+o.margins.top) - sy < 0) ? (t.offsetHeight+o.margins.top+o.margins.bottom - o.cursorAt.top * 2) : 0;
+			
+			if(i.overflowX[0] != document && i.overflowX[0].tagName != 'HTML') {
+				if(i.overflowX[0].offsetWidth - (ui.position.left - i.overflowX[0].scrollLeft + i.clickOffset.left) < o.scrollSensitivity)
+					i.overflowX[0].scrollLeft = i.overflowX[0].scrollLeft + o.scrollSpeed;
+				if((ui.position.top - i.overflowX[0].scrollLeft + i.clickOffset.left) < o.scrollSensitivity)
+					i.overflowX[0].scrollLeft = i.overflowX[0].scrollLeft - o.scrollSpeed;				
+			} else {
+				if(e.pageX - $(document).scrollLeft() < o.scrollSensitivity)
+					$(document).scrollLeft($(document).scrollLeft() - o.scrollSpeed);
+				if($(window).width() - (e.pageX - $(document).scrollLeft()) < o.scrollSensitivity)
+					$(document).scrollLeft($(document).scrollLeft() + o.scrollSpeed);
+			}
+			
+			ui.instance.recallOffset(e);
 
 		}
 	});
+
+	//TODO: wrapHelper, snap
 
 })(jQuery);
 

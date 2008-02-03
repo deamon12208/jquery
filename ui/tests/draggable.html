@@ -159,9 +159,16 @@ div.todo div.todo-desc
 		helper: 'original'
 	    	<div id="draggable-revert-helperOriginal" class='draggable'>Drag me</div>
 	    </li>
-	    <li>
+	    <li style='overflow: visible;'>
 		scroll: true
 	    	<div id="draggable-scroll-true" class='draggable'>Drag me</div>
+	    <br>sdfsf
+	    <br>sgsfgsfgsfg
+	    <br>erwryshdt
+	    <br>erwryshdt
+	    <br>erwryshdt
+	    <br>erwryshdt
+	    <br>erwryshdt
 	    </li>
 	    <li>
 		scroll: false
@@ -225,7 +232,10 @@ $(document).ready(function(){
 
 	$('#draggable-axis-x').draggable({
 		axis:'x',
-		name: 'axis-x'
+		name: 'axis-x',
+		drag: function(e,ui) {
+			return ui.position;
+		}
 	});
 
 	$('#draggable-axis-y').draggable({

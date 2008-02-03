@@ -7,24 +7,17 @@
 	$.extend($.ui, {
 		plugin: {
 			add: function(module, option, set) {
-				
 				var proto = $.ui[module].prototype;
 				for(var i in set) {
 					proto.plugins[i] = proto.plugins[i] || [];
 					proto.plugins[i].push([option, set[i]]);
 				}
-				
 			},
 			call: function(instance, name, arguments) {
-				
-				var c = instance.plugins[name]; if(!c) return;
-				var o = instance.interaction ? instance.interaction.options : instance.options;
-				var e = instance.interaction ? instance.interaction.element : instance.element;
-				
-				for (var i = 0; i < c.length; i++) {
-					if (o[c[i][0]]) c[i][1].apply(e, arguments);
+				var set = instance.plugins[name]; if(!set) return;
+				for (var i = 0; i < set.length; i++) {
+					if (instance.options[set[i][0]]) set[i][1].apply(instance.element, arguments);
 				}
-					
 			}	
 		},
 		cssCache: {},

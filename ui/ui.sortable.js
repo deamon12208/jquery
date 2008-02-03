@@ -193,6 +193,24 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 				.css({ width: this.placeholderElement.outerWidth(), height: this.placeholderElement.outerHeight() })
 				;
 		},
+		recallOffset: function(e) {
+
+			var elementPosition = { left: this.elementOffset.left - this.offsetParentOffset.left, top: this.elementOffset.top - this.offsetParentOffset.top };
+			var r = this.helper.css('position') == 'relative';
+
+			//Generate the original position
+			this.originalPosition = {
+				left: (r ? parseInt(this.helper.css('left')) || 0 : elementPosition.left + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollLeft)),
+				top: (r ? parseInt(this.helper.css('top')) || 0 : elementPosition.top + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollTop))
+			};
+			
+			//Generate a flexible offset that will later be subtracted from e.pageX/Y
+			this.offset = {
+				left: this._pageX - this.originalPosition.left + (parseInt(this.currentItem.css('marginLeft')) || 0),
+				top: this._pageY - this.originalPosition.top + (parseInt(this.currentItem.css('marginTop')) || 0)
+			};
+			
+		},
 		start: function(e) {
 			
 			var o = this.options;
