@@ -12,17 +12,22 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 	$.fn.extend({
 		sortable: function(options) {
 			return this.each(function() {
-				if(!$.data(this, "ui-sortable"))
+				if (typeof options == "string") {
+					var sort = $.data(this, "ui-sortable");
+					sort[options].apply(sort, args);
+
+				} else if(!$.data(this, "ui-sortable"))
 					new $.ui.sortable(this, options);
 			});
 		}
 	});
 	
 	$.ui.sortable = function(element, options) {
-	
 		//Initialize needed constants
 		var self = this;
+		
 		this.element = $(element);
+		
 		$.data(element, "ui-sortable", this);
 		this.element.addClass("ui-sortable");
 
@@ -35,6 +40,12 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			startCondition: function() {
 				return !self.disabled;	
 			}		
+		});
+		
+		$(element).bind("setData.sortable", function(event, key, value){
+			self.options[key] = value;
+		}).bind("getData.sortable", function(event, key){
+			return self.options[key];
 		});
 		
 		//Get the items
@@ -152,16 +163,14 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			};
 		},
 		destroy: function() {
+			this.element
+				.removeClass("ui-sortable ui-sortable-disabled")
+				.removeData("ui-sortable")
+				.unbind(".sortable")
+				.removeMouseInteraction();
 			
-			this.element.removeClass("ui-sortable ui-sortable-disabled");
-			this.element.removeMouseInteraction();
-			
-			for (var i = this.items.length - 1; i >= 0; i--) {
-				$.data(this.items[i].item[0], 'ui-sortable-item', null);
-			};
-			
-			$.data(this.element[0], 'ui-sortable', null);
-			
+			for ( var i = this.items.length - 1; i >= 0; i-- )
+				this.items[i].item.removeData("ui-sortable-item");
 		},
 		enable: function() {
 			this.element.removeClass("ui-sortable-disabled");
