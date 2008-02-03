@@ -5,11 +5,13 @@
 
 	$.fn.extend({
 		dialog: function(options, data) {
+			var args = Array.prototype.slice.call(arguments, 1);
+
 			return this.each(function() {
 				if (typeof options == "string") {
 					var dialog = $.data(this, "ui-dialog") ||
 						$.data($(this).parents(".ui-dialog:first").find(".ui-dialog-content")[0], "ui-dialog");
-					dialog[options].apply(dialog, Array.prototype.slice.apply(arguments, 1));
+					dialog[options].apply(dialog, args);
 
 				// INIT with optional options
 				} else if (!$(this).is(".ui-dialog-content"))
