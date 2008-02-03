@@ -22,10 +22,11 @@
 	});
 	
 	$.ui.draggable = function(element, options) {
-	
 		//Initialize needed constants
 		var self = this;
+		
 		this.element = $(element);
+		
 		$.data(element, "ui-draggable", this);
 		this.element.addClass("ui-draggable");
 		
