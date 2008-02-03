@@ -1,32 +1,38 @@
 ;(function($) {
 
 $.fn.extend({
-	makeAccordion: function(settings) {
-		return this.each(function() {
-			$.data(this, "ui-accordion") || $.data(this, "ui-accordion", new $.ui.accordion(this, settings));
-	    });
+	accordion: function(settings, value) {
+		return typeof settings == "string" ?
+			this.trigger(settings + ".ui-accordion", [value]) :
+			this.each(function() {
+				$.data(this, "ui-accordion") || $.data(this, "ui-accordion", new $.ui.accordion(this, settings));
+			});
 	},
+	// deprecated, use .accordion()
+	makeAccordion: function() {
+		return this.accordion.apply( this, arguments );
+	},
+	// deprecated, use .accordion("activate", index)
 	changeAccordion: function(key, value) {
 		return this.trigger(key + ".ui-accordion", [value]);
 	},
+	// deprecated, use .accordion("enable")
 	enableAccordion: function() {
 		return this.trigger("enable.ui-accordion");
 	},
+	// deprecated, use .accordion("disable")
 	disableAccordion: function() {
 		return this.trigger("disable.ui-accordion");
 	},
+	// deprecated, use .accordion("remove")
 	removeAccordion: function() {
 		return this.trigger("remove.ui-accordion");
 	},
-	// deprecated, use makeAccordion instead
-	accordion: function() {
-		return this.makeAccordion.apply(this, arguments);
-	},
-	// deprecated, use changeAccordion("activate", index) instead
+	// deprecated, use .accordion("activate", index)
 	activate: function(index) {
 		return this.changeAccordion("activate", index);
 	},
-	// deprecated, use removeAccordion instead
+	// deprecated, use .accordion("remove")
 	unaccordion: function() {
 		return this.removeAccordion.apply(this, arguments);
 	}
