@@ -79,6 +79,7 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 		ui: function() {
 			return {
 				helper: this.helper,
+				placeholder: this.placeholder || $([]),
 				position: this.position,
 				absolutePosition: this.positionAbs,
 				instance: this,
@@ -170,6 +171,16 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			this.element.addClass("ui-sortable-disabled");
 			this.disabled = true;
 		},
+		createPlaceholder: function() {
+			this.placeholderElement = this.options.placeholderElement ? $(this.options.placeholderElement, this.currentItem) : this.currentItem;
+			this.placeholder = $('<div></div>')
+				.addClass(this.options.placeholder)
+				.appendTo('body')
+				.css({ position: 'absolute' })
+				.css(this.placeholderElement.offset())
+				.css({ width: this.placeholderElement.outerWidth(), height: this.placeholderElement.outerHeight() })
+				;
+		},
 		start: function(e) {
 			
 			var o = this.options;
@@ -179,7 +190,7 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 
 			//Create and append the visible helper
 			this.helper = typeof o.helper == 'function' ? $(o.helper.apply(this.element[0], [e, this.currentItem])) : this.currentItem.clone();
-			this.helper.appendTo(this.currentItem[0].parentNode).css('position', 'absolute');
+			this.helper.appendTo(this.currentItem[0].parentNode).css('position', 'absolute').css('float', 'none').css('clear', 'both');
 
 			//Find out the next positioned parent
 			this.offsetParent = (function(cp) {
@@ -215,6 +226,9 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			this.positionAbs = { left: e.pageX - this.clickOffset.left, top: e.pageY - this.clickOffset.top };
 			this.positionDOM = this.currentItem.prev()[0];
 
+			//If o.placeholder is used, create a new element at the given position with the class
+			if(o.placeholder) this.createPlaceholder();
+
 			//Call plugins and callbacks
 			this.propagate("start", e);
 
@@ -234,6 +248,7 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 			
 			if(this.cancelHelperRemoval) return false;			
 			$(this.currentItem).css('visibility', 'visible');
+			if(this.placeholder) this.placeholder.remove();
 			this.helper.remove();
 
 			return false;
@@ -252,6 +267,7 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 					//Rearrange the DOM
 					this.items[i].item[this.direction == 'down' ? 'before' : 'after'](this.currentItem);
 					this.refreshPositions(); //Precompute after each DOM insertion, NOT on mousemove
+					if(this.placeholderElement) this.placeholder.css(this.placeholderElement.offset());
 					this.propagate("change", e); //Call plugins and callbacks
 					break;
 				}

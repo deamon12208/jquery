@@ -19,7 +19,7 @@
 
 	$.ui.plugin.add("sortable", "zIndex", {
 		start: function(e,ui) {
-			var t = $(ui.helper);
+			var t = ui.helper;
 			if(t.css("zIndex")) ui.options._zIndex = t.css("zIndex");
 			t.css('zIndex', ui.options.zIndex);
 		},
@@ -30,7 +30,7 @@
 
 	$.ui.plugin.add("sortable", "opacity", {
 		start: function(e,ui) {
-			var t = $(ui.helper);
+			var t = ui.helper;
 			if(t.css("opacity")) ui.options._opacity = t.css("opacity");
 			t.css('opacity', ui.options.opacity);
 		},
@@ -45,13 +45,21 @@
 			var self = ui.instance;
 			self.cancelHelperRemoval = true;
 			var cur = self.currentItem.offset();
+			if(ui.instance.options.zIndex) ui.helper.css('zIndex', ui.instance.options.zIndex); //Do the zIndex again because it already was resetted by the plugin above on stop
 
-			$(ui.helper).animate({
+			//Also animate the placeholder if we have one
+			if(ui.instance.placeholder) ui.instance.placeholder.animate({ opacity: 'hide' }, parseInt(ui.options.revert, 10) || 500);
+			
+			ui.helper.animate({
 				left: cur.left - self.offsetParentOffset.left - (parseInt(self.currentItem.css('marginLeft')) || 0),
 				top: cur.top - self.offsetParentOffset.top - (parseInt(self.currentItem.css('marginTop')) || 0)
 			}, parseInt(ui.options.revert, 10) || 500, function() {
 				self.currentItem.css('visibility', 'visible');
-				window.setTimeout(function() { self.helper.remove(); }, 50);
+				window.setTimeout(function() {
+					if(self.placeholder) self.placeholder.remove();
+					self.helper.remove();
+					if(ui.options._zIndex) ui.helper.css('zIndex', ui.options._zIndex);
+				}, 50);
 			});
 		}
 	});
