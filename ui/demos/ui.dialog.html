@@ -32,8 +32,8 @@
 	<div id="example1">Hello, World!</div>
 	<br />
 	<button onclick="$('#example1').dialog();$(this).hide().next().show();">Create Dialog</button>
-	<button onclick="$('#example1').trigger('dialog.open')" style="display:none;">Open</button>
-	<button onclick="$('#example1').trigger('dialog.open')">Close</button>
+	<button onclick="$('#example1').dialog('open')" style="display:none;">Open</button>
+	<button onclick="$('#example1').dialog('close')">Close</button>
 </div>
 
 <h2>2. Title, Width &amp; Height</h2>
@@ -41,8 +41,8 @@
 	<div id="example2" title="dialog title">I have a title and I'm big</div>
 	<br />
 	<button onclick="$('#example2').dialog({width: 600, height: 300});$(this).hide().next().show();">Create Dialog</button>
-	<button onclick="$('#example2').trigger('dialog.open')" style="display:none;">Open</button>
-	<button onclick="$('#example2').trigger('dialog.close')">Close</button>
+	<button onclick="$('#example2').dialog('open')" style="display:none;">Open</button>
+	<button onclick="$('#example2').dialog('close')">Close</button>
 </div>
 
 <h2>3. Buttons</h2>
@@ -52,12 +52,12 @@
 	<button onclick="$('#example3').dialog({
 		title: 'Are you sure?',
 		buttons: {
-			'Yes': function() { $(this).trigger('dialog.close'); alert('You clicked \'Yes\''); },
-			'No': function() { $(this).trigger('dialog.close'); alert('You clicked \'No\''); }
+			'Yes': function() { $(this).dialog('close'); alert('You clicked \'Yes\''); },
+			'No': function() { $(this).dialog('close'); alert('You clicked \'No\''); }
 		}
 	});$(this).hide().next().show();">Create Dialog</button>
-	<button onclick="$('#example3').trigger('dialog.open')" style="display:none;">Open</button>
-	<button onclick="$('#example3').trigger('dialog.close')">Close</button>
+	<button onclick="$('#example3').dialog('open')" style="display:none;">Open</button>
+	<button onclick="$('#example3').dialog('close')">Close</button>
 </div>
 
 <script type="text/javascript">

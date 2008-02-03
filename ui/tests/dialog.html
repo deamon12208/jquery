@@ -110,8 +110,8 @@ $(function() {
 			"callbacks": {
 			},
 			"methods": {
-				"dialog.open" : "$('#foo').dialog({ autoOpen: false });\n setTimeout(\"$('#foo').trigger('dialog.open');\", 1000)",
-				"dialog.close" : "$('#foo').dialog();\n setTimeout(\"$('#foo').trigger('dialog.close');\", 1000);"
+				"dialog.open" : "$('#foo').dialog({ autoOpen: false });\n setTimeout(\"$('#foo').dialog('open');\", 1000)",
+				"dialog.close" : "$('#foo').dialog();\n setTimeout(\"$('#foo').dialog('close');\", 1000);"
 			}
 		}
 	};
