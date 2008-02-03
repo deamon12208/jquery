@@ -8,8 +8,14 @@
 
 	$.fn.extend({
 		droppable: function(options) {
+			var args = Array.prototype.slice.call(arguments, 1);
+			
 			return this.each(function() {
-				if(!$.data(this, "ui-droppable"))
+				if (typeof options == "string") {
+					var drop = $.data(this, "ui-droppable");
+					drop[options].apply(drop, args);
+
+				} else if(!$.data(this, "ui-droppable"))
 					new $.ui.droppable(this, options);
 			});
 		},
@@ -31,6 +37,10 @@
 				return $(d).is(accept);	
 			},
 			tolerance: o.tolerance || 'intersect'		
+		});
+		
+		$(element).bind("setData.draggable", function(event, key, value){
+			o[key] = value;
 		});
 		
 		//Store the droppable's proportions
@@ -55,19 +65,22 @@
 			};		
 		},
 		destroy: function() {
+			var drop = $.ui.ddmanager.droppables;
+			for ( var i = 0; i < drop.length; i++ )
+				if ( drop[i].item == this )
+					drop.splice(i, 1);
 			
-			$(this.element).removeClass("ui-droppable ui-droppable-disabled");
-			for(var i=0;i<$.ui.ddmanager.droppables.length;i++) {
-				if($.ui.ddmanager.droppables[i].item == this) $.ui.ddmanager.droppables.splice(i,1);
-			}
-			
+			this.element
+				.removeClass("ui-droppable ui-droppable-disabled")
+				.removeData("ui-droppable")
+				.unbind("setData.droppable");
 		},
 		enable: function() {
-			$(this.element).removeClass("ui-droppable-disabled");
+			this.element.removeClass("ui-droppable-disabled");
 			this.disabled = false;
 		},
 		disable: function() {
-			$(this.element).addClass("ui-droppable-disabled");
+			this.element.addClass("ui-droppable-disabled");
 			this.disabled = true;
 		},
 		over: function(e) {
@@ -77,7 +90,7 @@
 			
 			if (this.options.accept(draggable.element)) {
 				$.ui.plugin.call(this, 'over', [e, this.ui(draggable)]);
-				$(this.element).triggerHandler("dropover", [e, this.ui(draggable)], this.options.over);
+				this.element.triggerHandler("dropover", [e, this.ui(draggable)], this.options.over);
 			}
 			
 		},
@@ -88,7 +101,7 @@
 
 			if (this.options.accept(draggable.element)) {
 				$.ui.plugin.call(this, 'out', [e, this.ui(draggable)]);
-				$(this.element).triggerHandler("dropout", [e, this.ui(draggable)], this.options.out);
+				this.element.triggerHandler("dropout", [e, this.ui(draggable)], this.options.out);
 			}
 			
 		},
@@ -99,7 +112,7 @@
 			
 			if(this.options.accept(draggable.element)) {
 				$.ui.plugin.call(this, 'drop', [e, this.ui(draggable)]);
-				$(this.element).triggerHandler("drop", [e, this.ui(draggable)], this.options.drop);
+				this.element.triggerHandler("drop", [e, this.ui(draggable)], this.options.drop);
 			}
 			
 		},
@@ -107,14 +120,14 @@
 
 			var draggable = $.ui.ddmanager.current;
 			$.ui.plugin.call(this, 'activate', [e, this.ui(draggable)]);
-			if(draggable) $(this.element).triggerHandler("dropactivate", [e, this.ui(draggable)], this.options.activate);
+			if(draggable) this.element.triggerHandler("dropactivate", [e, this.ui(draggable)], this.options.activate);
 				
 		},
 		deactivate: function(e) {
 			
 			var draggable = $.ui.ddmanager.current;
 			$.ui.plugin.call(this, 'deactivate', [e, this.ui(draggable)]);
-			if(draggable) $(this.element).triggerHandler("dropdeactivate", [e, this.ui(draggable)], this.options.deactivate);
+			if(draggable) this.element.triggerHandler("dropdeactivate", [e, this.ui(draggable)], this.options.deactivate);
 			
 		}
 	});
