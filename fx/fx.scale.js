@@ -2,7 +2,7 @@
   
   $.ec.puff = function(o) {
   
-    return this.each(function() {
+    return this.queue(function() {
   
       // Create element
       var el = $(this);
@@ -24,14 +24,14 @@
     
       // Animate
       el.effect('scale', o.options, o.duration, o.callback);
-     
+      el.dequeue();
     });
     
   };
 
   $.ec.scale = function(o) {
     
-    return this.each(function() {
+    return this.queue(function() {
     
       // Create element
       var el = $(this);
@@ -71,14 +71,14 @@
     
       // Animate
       el.effect('size', o.options, o.duration, o.callback);
-      
+      el.dequeue();
     });
     
   };
   
   $.ec.size = function(o) {
 
-    return this.each(function() {
+    return this.queue(function() {
       
       // Create element
       var el = $(this), props = ['position','top','left','width','height','overflow','opacity'];
@@ -151,11 +151,12 @@
       };
       
       // Animate
-      el.animate(el.to, o.duration, o.options.easing, function() {
+      el.animate(el.to, { queue: false, duration: o.duration, easing: o.options.easing, complete: function() {
         if(mode == 'hide') el.hide(); // Hide
         $.ec.restore(el, restore ? props : props1); $.ec.removeWrapper(el); // Restore
         if(o.callback) o.callback.apply(this, arguments); // Callback
-      }); 
+        el.dequeue();
+      }}); 
       
     });
 
