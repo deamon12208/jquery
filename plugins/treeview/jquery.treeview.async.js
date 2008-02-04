@@ -13,12 +13,15 @@
  *
  */
 
-(function($) {
+;(function($) {
 
 function load(settings, root, child, container) {
 	$.getJSON(settings.url, {root: root}, function(response) {
 		function createNode(parent) {
 			var current = $("<li/>").attr("id", this.id || "").html("<span>" + this.text + "</span>").appendTo(parent);
+			if (this.classes) {
+				current.children("span").addClass(this.classes);
+			}
 			if (this.expanded) {
 				current.addClass("open");
 			}
@@ -50,7 +53,7 @@ $.fn.treeview = function(settings) {
 	var container = this;
 	load(settings, "source", this, container);
 	var userToggle = settings.toggle;
-	return proxied.apply(this, [$.extend({}, settings, {
+	return proxied.call(this, $.extend({}, settings, {
 		collapsed: true,
 		toggle: function() {
 			var $this = $(this);
@@ -63,7 +66,7 @@ $.fn.treeview = function(settings) {
 				userToggle.apply(this, arguments);
 			}
 		}
-	})]);
+	}));
 };
 
 })(jQuery);

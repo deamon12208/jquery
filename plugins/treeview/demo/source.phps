@@ -5,6 +5,7 @@ if ($_REQUEST['root'] == "source"):
 	{
 		"text": "1. Pre Lunch (120 min)",
 		"expanded": true,
+		"classes": "important",
 		"children":
 		[
 			{
