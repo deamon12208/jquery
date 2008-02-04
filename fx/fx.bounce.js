@@ -8,11 +8,11 @@
       var el = $(this), props = ['position','top','left'];
 
       // Set options
-      var mode = o.options.mode || 'effect'; // Default Mode
+      var mode = $.ec.setMode(el, o.options.mode || 'effect'); // Set Mode
       var direction = o.options.direction || 'up'; // Default direction
       var distance = o.options.distance || 20; // Default distance
       var times = o.options.times || 5; // Default # of times
-      var speed = o.options.duration || 250; // Default speed per bounce
+      var speed = o.duration || 250; // Default speed per bounce
       if (/show|hide/.test(mode)) props.push('opacity'); // Avoid touching opacity to prevent clearType and PNG issues in IE
 
       // Adjust

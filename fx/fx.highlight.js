@@ -8,7 +8,7 @@
       var el = $(this), props = ['backgroundImage','backgroundColor','opacity'];
       
       // Set options
-      var mode = o.options.mode || 'show'; // Default mode
+      var mode = $.ec.setMode(el, o.options.mode || 'show'); // Set Mode
       var color = o.options.color || "#ffff99"; // Default highlight color
       
       // Adjust

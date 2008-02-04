@@ -8,7 +8,8 @@
       var el = $(this), props = ['opacity'];
       
       // Set options
-      var mode = o.options.mode || 'effect'; // Default mode
+      var mode = $.ec.setMode(el, o.options.mode || 'effect'); // Set Mode
+      if (mode == 'toggle') mode = el.is(':hidden') ? 'show' : 'hide'; // Set for toggle
       var opacity = o.options.opacity || 0; // Default fade opacity
       
       // Adjust

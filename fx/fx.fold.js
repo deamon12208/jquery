@@ -8,7 +8,7 @@
       var el = $(this), props = ['position'];
       
       // Set options
-      var mode = o.options.mode || 'hide'; // Default Mode
+      var mode = $.ec.setMode(el, o.options.mode || 'hide'); // Set Mode
       var size = o.options.size || 15; // Default fold size
       
       // Adjust
@@ -24,8 +24,8 @@
       animation2[ref[1]] = mode == 'show' ? distance[1] : 0;
       
       // Animate
-      wrapper.animate(animation1, o.speed / 2, o.options.easing)
-      .animate(animation2, o.speed / 2, o.options.easing, function() {
+      wrapper.animate(animation1, o.duration / 2, o.options.easing)
+      .animate(animation2, o.duration / 2, o.options.easing, function() {
         if(mode == 'hide') el.hide(); // Hide
         $.ec.restore(el, props); $.ec.removeWrapper(el); // Restore
         if(o.callback) o.callback.apply(this, arguments); // Callback

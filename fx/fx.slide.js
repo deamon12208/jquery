@@ -8,7 +8,7 @@
       var el = $(this), props = ['position','top','left'];
       
       // Set options
-      var mode = o.options.mode || 'show'; // Default Mode
+      var mode = $.ec.setMode(el, o.options.mode || 'show'); // Set Mode
       var direction = o.options.direction || 'left'; // Default Direction
       
       // Adjust

@@ -8,7 +8,7 @@
       var el = $(this);
     
       // Set options
-      var mode = o.options.mode || 'hide'; // Set default mode
+      var mode = $.ec.setMode(el, o.options.mode || 'hide'); // Set Mode
       var percent = parseInt(o.options.percent) || 150; // Set default puff percent
       o.options.fade = true; // It's not a puff if it doesn't fade! :)
       var original = {height: el.height(), width: el.width()}; // Save original
@@ -23,7 +23,7 @@
       o.options.mode = mode;
     
       // Animate
-      el.effect('scale', o.options, o.speed, o.callback);
+      el.effect('scale', o.options, o.duration, o.callback);
      
     });
     
@@ -37,7 +37,7 @@
       var el = $(this);
 
       // Set options
-      var mode = o.options.mode || 'effect'; // Set default mode
+      var mode = $.ec.setMode(el, o.options.mode || 'effect'); // Set Mode
       var percent = parseInt(o.options.percent) || (parseInt(o.options.percent) == 0 ? 0 : (mode == 'hide' ? 0 : 100)); // Set default scaling percent
       var direction = o.options.direction || 'both'; // Set default axis
       var origin = o.options.origin; // The origin of the scaling
@@ -70,7 +70,7 @@
       o.options.from = el.from; o.options.to = el.to;
     
       // Animate
-      el.effect('size', o.options, o.speed, o.callback);
+      el.effect('size', o.options, o.duration, o.callback);
       
     });
     
@@ -89,7 +89,7 @@
       var hProps = ['borderLeftWidth', 'borderRightWidth', 'paddingLeft', 'paddingRight'];
       
       // Set options
-      var mode = o.options.mode || 'effect'; // Set default mode
+      var mode = $.ec.setMode(el, o.options.mode || 'effect'); // Set Mode
       var restore = o.options.restore || false; // Default restore
       var scale = o.options.scale || 'both'; // Default scale mode
       var original = {height: el.height(), width: el.width()}; // Save original
@@ -144,14 +144,14 @@
             child.to = $.ec.setTransition(child, hProps, factor.to.x, child.to);
           };
           child.css(child.from); // Shift children
-          child.animate(child.to, o.speed, o.options.easing, function(){
+          child.animate(child.to, o.duration, o.options.easing, function(){
             if (restore) $.ec.restore(child, props2); // Restore children
           }); // Animate children
         });
       };
       
       // Animate
-      el.animate(el.to, o.speed, o.options.easing, function() {
+      el.animate(el.to, o.duration, o.options.easing, function() {
         if(mode == 'hide') el.hide(); // Hide
         $.ec.restore(el, restore ? props : props1); $.ec.removeWrapper(el); // Restore
         if(o.callback) o.callback.apply(this, arguments); // Callback

@@ -13,6 +13,10 @@
         if(set[i] !== null) el.css(set[i], $.data(el[0], "ec.storage."+set[i]));
       }
     },
+    setMode: function(el, mode) {
+      if (mode == 'toggle') mode = el.is(':hidden') ? 'show' : 'hide'; // Set for toggle
+      return mode;
+    },
     getBaseline: function(origin, original) { // Translates a [top,left] array into a baseline value
       // this should be a little more flexible in the future to handle a string & hash
       var y, x;
@@ -129,8 +133,12 @@
       }
     },
     toggle: function(){
-      var a = arguments;
-      return this.each(function() { var $this = $(this); $this.is(':hidden') ? $this.show.apply($this, a) : $this.hide.apply($this, a); });
+      if(!arguments[0] || (arguments[0].constructor == Number || /(slow|fast)/.test(arguments[0])))
+        return this._toggle.apply(this, arguments);
+      else {
+        var o = arguments[1] || {}; o['mode'] = 'toggle';
+        return this.effect.apply(this, [arguments[0], o, arguments[2] || o.duration, arguments[3] || o.callback]);
+      }
     },
     addClass: function(classNames,speed,easing,callback) {
       return speed ? $.ec.animateClass.apply(this, [{ add: classNames },speed,easing,callback]) : this._addClass(classNames);
@@ -158,11 +166,11 @@
     }
   });
   
-	/*
-	 * jQuery Color Animations
-	 * Copyright 2007 John Resig
-	 * Released under the MIT and GPL licenses.
-	 */
+  /*
+   * jQuery Color Animations
+   * Copyright 2007 John Resig
+   * Released under the MIT and GPL licenses.
+   */
 
     // We override the animation for all of these color styles
     jQuery.each(['backgroundColor', 'borderBottomColor', 'borderLeftColor', 'borderRightColor', 'borderTopColor', 'color', 'outlineColor'], function(i,attr){
