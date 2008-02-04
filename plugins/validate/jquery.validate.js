@@ -773,7 +773,7 @@ jQuery.extend(jQuery.validator, {
 		// http://docs.jquery.com/Plugins/Validation/Methods/remote
 		remote: function(value, element, param) {
 			if ( this.optional(element) )
-				return true;
+				return "dependency-mismatch";
 			
 			var previous = this.previousValue(element);
 			
@@ -923,7 +923,7 @@ jQuery.extend(jQuery.validator, {
 		// based on http://en.wikipedia.org/wiki/Luhn
 		creditcard: function(value, element) {
 			if ( this.optional(element) )
-				return true;
+				return "dependency-mismatch";
 			var nCheck = 0,
 				nDigit = 0,
 				bEven = false;
