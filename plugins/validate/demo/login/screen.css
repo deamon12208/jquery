@@ -23,10 +23,10 @@
 	}
 	
 	/* Zero default margin & padding around common elements */
-	body, dd, dl, dt, form, h1, h2, h3, h4, h5, h6, ul, ol, li, p,
+	body, dd, dl, dt, form, h1, h2, h3, h4, h5, h6, ul, ol, li, p
 		{
 		margin: 0;
-		border: 0 none transparent;
+		border: none;
 		padding: 0;
 		}
 	
@@ -414,14 +414,13 @@
 		background-image:url(images/required_star.gif);
 		background-position:right;
 		background-repeat:no-repeat;
-		background-position: right -20%;
 		}
 	
 	form span.required{
 		padding-right:15px;
 		}
 		
-	form .clean,
+	form .clean
 		{
 		border:none;
 		}
@@ -446,7 +445,6 @@
 	
 	form .highlight{
 		background-color:#e2e2e2;
-		background-image:url(images/highlight.gif);
 		}
 	
 	.off{

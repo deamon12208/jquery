@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<title>Jane Patrick - Login</title>
+	<title>Login Form with Email Password Link</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link rel="stylesheet" type="text/css" media="screen" href="screen.css" />
 	
@@ -13,7 +13,8 @@
 	<script type="text/javascript">
 		
 	$(function() {
-		var elements = $("input[type!='submit']").add("textarea").add("select")
+		// highlight 
+		var elements = $("input[type!='submit'], textarea, select");
 		elements.focus(function(){
 			$(this).parents('li').addClass('highlight');
 		});
@@ -43,7 +44,6 @@
 <body>
 	<div id="page">
 
-	
 		<div id="header">
 			<h1>Login</h1>
 		</div>
@@ -54,18 +54,15 @@
 				<fieldset>
 					<legend>User details</legend>
 					<ul>
-
 						<li>
-
-							<label><span class="required">Email address</span></label>
+							<label for="email"><span class="required">Email address</span></label>
 							<input id="email" name="email" class="text" type="text"  validation="required:true, email:true"/>
 							<label for="email" class="error">This must be a valid email address</label>
 						</li>
 						
 						<li>
-							<label><span class="required">Password</span></label>
+							<label for="password"><span class="required">Password</span></label>
 							<input name="password" type="password" class="text" id="password" maxlength="20" validation="passwordRequired:true, minlength:4, maxlength:20"/>
-
 						</li>
 
 						<li>
@@ -76,10 +73,8 @@
 				
 				<fieldset class="submit">
 					<input type="submit" class="button" value="Login..." />
-
 				</fieldset>
 				
-
 				<div class="clear"></div>
 			</form>
 			
