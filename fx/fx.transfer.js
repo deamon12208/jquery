@@ -11,13 +11,20 @@
       var mode = $.ec.setMode(el, o.options.mode || 'effect'); // Set Mode
       var target = $(document.getElementById(o.options.to)); // Find Target
       var position = el.position();
-      var props = {top: position['top'], left: position['left'], width: el.outerWidth({margin:true}), height: el.outerHeight({margin:true}), position: 'absolute'};
-      
       $('body', document).append('<div id="fxTransfer"></div>');
       var transfer = $('#fxTransfer');
-      transfer.css(props);
-      transfer.addClass(o.options.className);
       
+      // Set target css
+      transfer.addClass(o.options.className);
+      transfer.css({
+        top: position['top'],
+        left: position['left'],
+        height: el.outerHeight({margin:true}) - parseInt(transfer.css('borderTopWidth')) - parseInt(transfer.css('borderBottomWidth')),
+        width: el.outerWidth({margin:true}) - parseInt(transfer.css('borderLeftWidth')) - parseInt(transfer.css('borderRightWidth')),
+        position: 'absolute'
+      });
+      
+      // Animation
       position = target.position();
       animation = {
         top: position['top'],
