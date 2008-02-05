@@ -24,7 +24,7 @@
 			return this;
 		},
 		replaceClass: function(c1, c2) {
-			return this.filter('.' + c1).removeClass(c1).addClass(c2);
+			return this.filter('.' + c1).removeClass(c1).addClass(c2).end();
 		},
 		hoverClass: function(className) {
 			className = className || "hover";
@@ -149,6 +149,11 @@
 				if ( settings.unique ) {
 					$(this).parent()
 						.siblings()
+						// swap classes for hitarea
+						.find(">.hitarea")
+							.replaceClass( CLASSES.collapsableHitarea, CLASSES.expandableHitarea )
+							.replaceClass( CLASSES.lastCollapsableHitarea, CLASSES.lastExpandableHitarea )
+						.end()
 						.replaceClass( CLASSES.collapsable, CLASSES.expandable )
 						.replaceClass( CLASSES.lastCollapsable, CLASSES.lastExpandable )
 						.find( ">ul" )
