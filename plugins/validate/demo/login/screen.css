@@ -410,7 +410,7 @@
 		
 /*** SUPPORTING CLASSES ***/
 
-	form .required{
+	form label.required{
 		background-image:url(images/required_star.gif);
 		background-position:right;
 		background-repeat:no-repeat;

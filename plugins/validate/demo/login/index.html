@@ -8,8 +8,6 @@
 	<script type="text/javascript" src="../../lib/jquery.js"></script>
 	<script type="text/javascript" src="../../jquery.validate.js"></script>
 
-	<script type="text/javascript" src="../../lib/jquery.metadata.js"></script>
-	
 	<script type="text/javascript">
 		
 	$(function() {
@@ -22,20 +20,13 @@
 			$(this).parents('li').removeClass('highlight');
 		});
 		
-		// define custom method to make password optional when "Email my password" is clicked
-		var validatePassword = true;
-		$.validator.addMethod("passwordRequired", function(value, element) {
-		  return validatePassword ? !this.optional(element) : "dependency-mismatch";
-		}, $.validator.messages.required);
-		
 		$("#forgotpassword").click(function() {
-			validatePassword = false;
+			$("#password").removeClass("required");
 			$("#login").submit();
-			validatePassword = true;
+			$("#password").addClass("required");
 			return false;
 		});
 		
-		$.metadata.setType("attr", "validation");
 		$("#login").validate()
 	});
 	</script>
@@ -56,13 +47,13 @@
 					<ul>
 						<li>
 							<label for="email"><span class="required">Email address</span></label>
-							<input id="email" name="email" class="text" type="text"  validation="required:true, email:true"/>
+							<input id="email" name="email" class="text required email" type="text" />
 							<label for="email" class="error">This must be a valid email address</label>
 						</li>
 						
 						<li>
 							<label for="password"><span class="required">Password</span></label>
-							<input name="password" type="password" class="text" id="password" maxlength="20" validation="passwordRequired:true, minlength:4, maxlength:20"/>
+							<input name="password" type="password" class="text required" id="password" minlength="4" maxlength="20" />
 						</li>
 
 						<li>
