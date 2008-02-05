@@ -195,5 +195,11 @@
             <param name="name" value="metadata" />
         </antcall>
     </target>
+	
+	<target name="tooltip" description="Build tooltip plugin.">
+        <antcall target="generic">
+            <param name="name" value="tooltip" />
+        </antcall>
+    </target>
 
 </project>
