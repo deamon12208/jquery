@@ -16,13 +16,13 @@
 	<script type="text/javascript">
 	jQuery().ready(function(){
 		// simple accordion
-		jQuery('#list1a').makeAccordion();
-		jQuery('#list1b').makeAccordion({
+		jQuery('#list1a').accordion();
+		jQuery('#list1b').accordion({
 			autoheight: false
 		});
 		
 		// second simple accordion with special markup
-		jQuery('#navigation').makeAccordion({
+		jQuery('#navigation').accordion({
 			active: false,
 			header: '.head',
 			navigation: true,
@@ -32,7 +32,7 @@
 		});
 		
 		// highly customized accordion
-		jQuery('#list2').makeAccordion({
+		jQuery('#list2').accordion({
 			event: 'mouseover',
 			active: '.selected',
 			selectedClass: 'active',
@@ -43,7 +43,7 @@
 		});
 		
 		// first simple accordion with special markup
-		jQuery('#list3').makeAccordion({
+		jQuery('#list3').accordion({
 			header: 'div.title',
 			active: false,
 			alwaysOpen: false,
@@ -51,19 +51,20 @@
 			autoheight: false
 		});
 		
-		var wizard = $("#wizard").makeAccordion({
+		var wizard = $("#wizard").accordion({
 			header: '.title',
 			event: false
 		});
 		
+		var wizardButtons = $([]);
 		$("div.title", wizard).each(function(index) {
-			$(this)
+			wizardButtons = wizardButtons.add($(this)
 			.next()
 			.children(":button")
 			.filter(".next, .previous")
 			.click(function() {
-				wizard.changeAccordion("activate", index + ($(this).is(".next") ? 1 : -1))
-			});
+				wizard.accordion("activate", index + ($(this).is(".next") ? 1 : -1))
+			}));
 		});
 		
 		// bind to change event of select to control first and seconds accordion
@@ -71,22 +72,23 @@
 		var accordions = jQuery('#list1a, #list1b, #list2, #list3, #navigation, #wizard');
 		
 		jQuery('#switch select').change(function() {
-			accordions.changeAccordion("activate", this.selectedIndex-1 );
+			accordions.accordion("activate", this.selectedIndex-1 );
 		});
 		jQuery('#close').click(function() {
-			accordions.changeAccordion("activate", -1);
+			accordions.accordion("activate", -1);
 		});
 		jQuery('#switch2').change(function() {
-			accordions.changeAccordion("activate", this.value);
+			accordions.accordion("activate", this.value);
 		});
 		jQuery('#enable').click(function() {
-			accordions.enableAccordion();
+			accordions.accordion("enable");
 		});
 		jQuery('#disable').click(function() {
-			accordions.disableAccordion();
+			accordions.accordion("disable");
 		});
 		jQuery('#remove').click(function() {
-			accordions.removeAccordion();
+			accordions.accordion("destroy");
+			wizardButtons.unbind("click");
 		});
 	});
 	</script>
@@ -101,8 +103,8 @@
 		<legend>Standard, container is a div, header is h3 and content div and nested p</legend>	
 
 		<h3>Code</h3>
-		<pre><code class="mix">jQuery('#list1a').makeAccordion();
-jQuery('#list1b').makeAccordion({
+		<pre><code class="mix">jQuery('#list1a').accordion();
+jQuery('#list1b').accordion({
 	autoheight: false
 });</code></pre>
 
@@ -185,7 +187,7 @@ jQuery('#list1b').makeAccordion({
 		<p>Location-based state-saving: The active element is choosen based on location.hash: Click one of the links, then reload the page to see it in action.</p>
 
 		<h3>Code</h3>
-		<pre><code class="mix">jQuery('#navigation').makeAccordion({
+		<pre><code class="mix">jQuery('#navigation').accordion({
 	active: false,
 	header: '.head',
 	navigation: true,
@@ -237,7 +239,7 @@ jQuery('#list1b').makeAccordion({
 		<legend>With options, container is a definition list, header dt, content dd</legend>
 		
 		<h3>Code</h3>
-		<pre><code class="mix">jQuery('#list2').makeAccordion({
+		<pre><code class="mix">jQuery('#list2').accordion({
 	event: 'mouseover',
 	active: '.selected',
 	selectedClass: 'active',
@@ -269,7 +271,7 @@ jQuery('#list1b').makeAccordion({
 		content, no active on startup and can be completely closed</legend>
 		
 		<h3>Code</h3>
-		<pre><code class="mix">jQuery('#list3').makeAccordion({
+		<pre><code class="mix">jQuery('#list3').accordion({
 	header: 'div.title',
 	active: false,
 	alwaysOpen: false,
@@ -311,7 +313,7 @@ jQuery('#list1b').makeAccordion({
 		<legend>accordion wizard</legend>
 		
 		<h3>Code</h3>
-		<pre><code class="mix">var wizard = $("#wizard").makeAccordion({
+		<pre><code class="mix">var wizard = $("#wizard").accordion({
 	header: '.title',
 	event: false
 });
