@@ -1,6 +1,6 @@
 /*
  * jQuery Form Plugin
- * version: 2.03 (01/20/2008)
+ * version: 2.04 (02/05/2008)
  * @requires jQuery v1.1 or later
  *
  * Examples at: http://malsup.com/jquery/form/
@@ -192,10 +192,10 @@ $.fn.ajaxSubmit = function(options) {
     if (veto.veto) return this;
 
     var a = this.formToArray(options.semantic);
-	if (options.data) {
-	    for (var n in options.data)
-	        a.push( { name: n, value: options.data[n] } );
-	}
+    if (options.data) {
+        for (var n in options.data)
+            a.push( { name: n, value: options.data[n] } );
+    }
 
     // give pre-submit callback an opportunity to abort the submit
     if (options.beforeSubmit && options.beforeSubmit(a, this, options) === false) return this;
@@ -326,23 +326,19 @@ $.fn.ajaxSubmit = function(options) {
                 doc = io.contentWindow ? io.contentWindow.document : io.contentDocument ? io.contentDocument : io.document;
                 xhr.responseText = doc.body ? doc.body.innerHTML : null;
                 xhr.responseXML = doc.XMLDocument ? doc.XMLDocument : doc;
+                xhr.getResponseHeader = function(header){
+                    var headers = {'content-type': opts.dataType};
+                    return headers[header];
+                };
 
                 if (opts.dataType == 'json' || opts.dataType == 'script') {
                     var ta = doc.getElementsByTagName('textarea')[0];
-                    data = ta ? ta.value : xhr.responseText;
-                    if (opts.dataType == 'json')
-                        eval("data = " + data);
-                    else
-                        $.globalEval(data);
+                    xhr.responseText = ta ? ta.value : xhr.responseText;
                 }
-                else if (opts.dataType == 'xml') {
-                    data = xhr.responseXML;
-                    if (!data && xhr.responseText != null)
-                        data = toXml(xhr.responseText);
+                else if (opts.dataType == 'xml' && !xhr.responseXML && xhr.responseText != null) {
+                    xhr.responseXML = toXml(xhr.responseText);
                 }
-                else {
-                    data = xhr.responseText;
-                }
+                data = $.httpData(xhr, opts.dataType);
             }
             catch(e){
                 ok = false;

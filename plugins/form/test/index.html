@@ -151,7 +151,7 @@ test("clearForm (text input)", function() {
     ok( 'MyName1' == val, 'beforeSubmit: ' + val);
     $('#form1').clearForm();
     val = $el.val();
-    ok( '' == val, 'success: ' + val);
+    ok( !val, 'success: ' + val);
 });
 
 // test resetForm
