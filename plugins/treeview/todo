@@ -1,3 +1,4 @@
+* fix last hitarea in IE
 * adjust css sprite to handle large list items (eg. caused by large font-size or multilines)
 
 * lazy-loading: render the complete tree, but only apply hitzones and hiding of children to the first level on load

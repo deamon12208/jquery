@@ -1,11 +1,12 @@
-.treeview ul {
-	background-color: white;
-}
-
 .treeview, .treeview ul { 
 	padding: 0;
 	margin: 0;
 	list-style: none;
+}
+
+.treeview ul {
+	background-color: white;
+	margin-top: 4px;
 }
 
 .treeview .hitarea {
