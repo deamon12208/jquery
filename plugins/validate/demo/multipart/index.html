@@ -38,7 +38,7 @@ $(document).ready(function(){
 		if (match(0) || match(1) || match(2)) {
 			return !this.optional(element);
 		}
-		return true;
+		return "dependency-mismatch";
 	}, $.validator.messages.required)
 	
 	var v = $("#cmaForm").validate({
