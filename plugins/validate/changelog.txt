@@ -13,6 +13,7 @@
 * Fixed url and email validation to require TLD (actually to require domain label); 1.2 version (TLD is optional) is moved to additionals as url2 and email2
 * Fixed dynamic-totals demo in IE6/7 and improved templating, using textarea to store multiline template and string interpolation
 * Added login form example with "Email password" link that makes the password field optional
+* Enhanced dynamic-totals demo with an example of a single message for two fields
 
 1.2
 ---

@@ -18,11 +18,18 @@ $.validator.setDefaults({
 	}
 });
 $.validator.messages.max = jQuery.format("Your totals musn't exceed {0}!");
-	
+
+$.validator.addMethod("quantity", function(value, element) {
+	return !this.optional(element) && !this.optional($(element).parent().prev().children("select")[0]);
+}, "Please select both the item and its amount.");
+
 $().ready(function() {
 	$("#orderform").validate({
 		errorPlacement: function(error, element) {
-			error.appendTo( element.parent().parent().next().find("td." + element.parent().attr("class") + "-error") );
+			error.appendTo( element.parent().next() );
+		},
+		highlight: function(element, errorClass) {
+			$(element).addClass(errorClass).parent().prev().children("select").addClass(errorClass);
 		}
 	});
 	
@@ -69,6 +76,9 @@ form.cmxform input.submit {
 }
 em.error { color: black; }
 #warning { display: none; }
+select.error {
+	border: 1px dotted red;
+}
 </style>
 
 </head>
@@ -83,7 +93,7 @@ em.error { color: black; }
 			<label>{0}. Item</label>
 		</td>
 		<td class='type'>
-			<select class="required" name="item-type-{0}">
+			<select name="item-type-{0}">
 				<option value="">Select...</option>
 				<option value="0">Learning jQuery</option>
 				<option value="1">jQuery Reference Guide</option>
@@ -93,14 +103,9 @@ em.error { color: black; }
 			</select>
 		</td>
 		<td class='quantity'>
-			<input size='4' class="quantity required" min="1" name="item-quantity-{0}" />
+			<input size='4' class="quantity" min="1" id="item-quantity-{0}" name="item-quantity-{0}" />
 		</td>
-	</tr>
-	<tr>
-		<!-- keep empty label to avoid height changes when showing error messages -->
-		<td><label style="visibility:hidden">&nbsp;</label></td>
-		<td class='type-error'>&nbsp;</td>
-		<td class='quantity-error'>&nbsp;</td>
+		<td class='quantity-error'></td>
 	</tr>
 </textarea>
 
@@ -117,9 +122,6 @@ em.error { color: black; }
 				<tr>
 					<td colspan="2"><label>Totals (max 25)</label></td>
 					<td class="totals"><input id="totals" name="totals" value="0" max="25" readonly="readonly" size='4' /></td>
-				</tr>
-				<tr>
-					<td colspan="2">&nbsp;</td>
 					<td class="totals-error"></td>
 				</tr>
 				<tr>
