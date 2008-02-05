@@ -28,6 +28,9 @@
 					"top2left2" : "$('#foo').draggable({ cursorAt: {top: 2, left: 2} });",
 					"bottom20right14" : "$('#foo').draggable({ cursorAt: {bottom: 20, right: 14} });"
 				},
+				"delay" : {
+					"400" : "$('#foo').draggable({ delay: 400 });"
+				},
 				"distance" : {
 					"40" : "$('#foo').draggable({ distance: 40 });"
 				},
@@ -53,9 +56,6 @@
 					"0.6" : "$('#foo').draggable({ opacity: 0.6 });",
 					"0.3" : "$('#foo').draggable({ opacity: 0.3 });",
 					"0.4helperclone" : "$('#foo').draggable({ opacity: 0.4, helper: 'clone' });"
-				},
-				"preventionTimeout" : {
-					"40" : "$('#foo').draggable({ preventionTimeout: 50 });"
 				},
 				"revert" : {
 					"true" : "$('#foo').draggable({ revert: true });",
