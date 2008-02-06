@@ -70,7 +70,7 @@
 				uiDialog.addClass(className);
 		});
 		
-		if (options.resizable) {
+		if (options.resizable && $.fn.resizable) {
 			uiDialog.append("<div class='ui-resizable-n ui-resizable-handle'></div>")
 				.append("<div class='ui-resizable-s ui-resizable-handle'></div>")
 				.append("<div class='ui-resizable-e ui-resizable-handle'></div>")
@@ -113,7 +113,7 @@
 			});
 		}
 	
-		if (options.draggable) {
+		if (options.draggable && $.fn.draggable) {
 			uiDialog.draggable({
 				handle: '.ui-dialog-titlebar',
 				start: function() {
