@@ -219,24 +219,38 @@
 				.addClass('ui-dialog-overlay').css($.extend({
 					borderWidth: 0, margin: 0, padding: 0,
 					position: 'absolute', top: 0, left: 0,
-					width: (this.ie6 ? this.overlayWidth() : $(document).width()) + 'px',
-					height: (this.ie6 ? this.overlayHeight() : $(document).height()) + 'px'
+					width: (this.ie6 ? this.overlayWidth() : '100%'),
+					height: (this.ie6 ? this.overlayHeight() : '100%')
 				}, css));
 			
+			// prevent use of anchors and inputs
 			$('a, :input').bind(this.events, function() {
 				if ($(this).parents('.ui-dialog').length == 0) {
 					dialog.uiDialogTitlebarClose.focus();
 					return false;
 				}
 			});
+			
+			// allow closing by pressing the escape key
 			$(document).bind('keydown.ui-dialog-overlay', function(e) {
 				var ESC = 27;
 				e.keyCode && e.keyCode == ESC && dialog.close(); 
 			});
+			
+			if (this.ie6) {
+				$overlay = this.$el;
+				function resize() {
+					$overlay.css({
+						width: overlay.overlayWidth(),
+						height: overlay.overlayHeight()
+					});
+				};
+				$(window).bind('resize.ui-dialog-overlay', resize);
+			}
 		},
 		
 		hide: function() {
-			$('a, :input').add(document).unbind('.ui-dialog-overlay');
+			$('a, :input').add([document, window]).unbind('.ui-dialog-overlay');
 			this.ie6 && this.selects.css('visibility', 'visible');
 			this.$el = null;
 			$('.ui-dialog-overlay').remove();
@@ -246,12 +260,12 @@
 		ie6: $.browser.msie && $.browser.version < 7,
 		selects: null,
 		overlayHeight: function() {
-			return $(document.body).height() < $(window).height() ?
-				$(window).height() : $(document).height();
+			return ($(document.body).height() < $(window).height() ?
+				$(window).height() : $(document).height()) + 'px';
 		},
 		overlayWidth: function() {
-			return $(document.body).width() < $(window).width() ?
-				$(window).width() : $(document).width();
+			return ($(document.body).width() < $(window).width() ?
+				$(window).width() : $(document).width()) + 'px';
 		}
 	};
 
