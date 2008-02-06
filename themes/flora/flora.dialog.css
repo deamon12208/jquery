@@ -30,6 +30,11 @@
 	cursor: default;
 }
 
+.flora .ui-dialog .ui-dialog-titlebar-close span,
+.flora.ui-dialog .ui-dialog-titlebar-close span {
+	display: none;
+}
+
 .flora .ui-dialog .ui-dialog-titlebar-close-hover,
 .flora.ui-dialog .ui-dialog-titlebar-close-hover {
 	background: url(i/dialog-titlebar-close-hover.png) no-repeat;

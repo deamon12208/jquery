@@ -39,6 +39,11 @@
 					"400" : "$('#foo').dialog({\n\t minWidth: 400 \n});",
 					"600" : "$('#foo').dialog({\n\t minWidth: 600 \n});"
 				},
+				"modal" : {
+					"false" : "$('#foo').dialog({\n\t modal: false \n});",
+					"true" : "$('#foo').dialog({\n\t modal: true \n});",
+					"Css-BgWhiteOpacity0.5" : "$('#foo').dialog({\n\t modal: { backgroundColor: 'white', opacity: 0.5 } \n})"
+				},
 				"position" : {
 					"center" : "$('#foo').dialog({\n\t position: 'center' \n});",
 					"top" : "$('#foo').dialog({\n\t position: 'top' \n});",

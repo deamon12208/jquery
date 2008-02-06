@@ -1,5 +1,5 @@
 (function($) {
-
+	
 	//If the UI scope is not available, add it
 	$.ui = $.ui || {};
 
@@ -31,9 +31,12 @@
 			position: 'center',
 			buttons: [],
 			draggable: true,
-			resizable: true
+			resizable: true,
+			modal: false
 		};
-		options = $.extend({}, defaults, options); //Extend and copy options
+		options = options || {};
+		var defaultOverrides = options.modal ? {resizable: false} : {};
+		options = $.extend({}, defaults, defaultOverrides, options); //Extend and copy options
 		this.element = el;
 		var self = this; //Do bindings
 
@@ -83,8 +86,8 @@
 		var uiDialogTitlebar = $('.ui-dialog-titlebar', uiDialogContainer);
 		var title = (options.title) ? options.title : (uiDialogContent.attr('title')) ? uiDialogContent.attr('title') : '';
 		uiDialogTitlebar.append('<span class="ui-dialog-title">' + title + '</span>');
-		uiDialogTitlebar.append('<div class="ui-dialog-titlebar-close"></div>');
-		$('.ui-dialog-titlebar-close', uiDialogTitlebar)
+		uiDialogTitlebar.append('<a href="#" class="ui-dialog-titlebar-close"><span>X</span></a>');
+		this.uiDialogTitlebarClose = $('.ui-dialog-titlebar-close', uiDialogTitlebar)
 			.hover(function() { $(this).addClass('ui-dialog-titlebar-close-hover'); }, 
 			       function() { $(this).removeClass('ui-dialog-titlebar-close-hover'); })
 			.mousedown(function(ev) {
@@ -92,6 +95,11 @@
 			})
 			.click(function() {
 				self.close();
+				return false;
+			})
+			.keydown(function(ev) {
+				var ESC = 27;
+				ev.keyCode && ev.keyCode == ESC && self.close(); 
 			});
 
 		var l = 0;
@@ -121,6 +129,7 @@
 		});
 	
 		this.open = function() {
+			options.modal && overlay.show(self, options.modal);
 			uiDialog.appendTo('body');
 			var wnd = $(window), doc = $(document), top = doc.scrollTop(), left = doc.scrollLeft();
 			if (options.position.constructor == Array) {
@@ -165,19 +174,21 @@
 			var openUI = {
 				options: options
 			};
+			this.uiDialogTitlebarClose.focus();
 			$(this.element).triggerHandler("dialogopen", [openEV, openUI], options.open);
 		};
 
 		this.activate = function() {
-			var maxZ = curZ = 0;
+			var maxZ = 0;
 			$('.ui-dialog:visible').each(function() {
-				var z = parseInt($(this).css("z-index"));
-				maxZ = z > maxZ ? z : maxZ;
+				maxZ = Math.max(maxZ, parseInt($(this).css("z-index")));
 			});
-			uiDialog.css("z-index", maxZ + 1);
+			overlay.$el && overlay.$el.css('z-index', ++maxZ);
+			uiDialog.css("z-index", ++maxZ);
 		};
 
 		this.close = function() {
+			options.modal && overlay.hide();
 			uiDialog.hide();
 
 			// CALLBACK: close
@@ -192,5 +203,48 @@
 			this.open();
 
 	}
+
+	// This is a port of relevant pieces of Mike Alsup's blockUI plugin (http://www.malsup.com/jquery/block/)
+	// duplicated here for minimal overlay functionality and no dependency on a non-UI plugin
+	var overlay = {
+		$el: null,
+		events: $.map('focus,mousedown,mouseup,keydown,keypress,click'.split(','),
+			function(e) { return e + '.ui-dialog-overlay'; }).join(' '),
+		
+		show: function(dialog, css) {
+			if (this.$el) return;
+			
+			this.selects = this.ie6 && $('select:visible').css('visibility', 'hidden');
+			this.$el = $('<div"/>').appendTo(document.body)
+				.addClass('ui-dialog-overlay').css($.extend({
+					borderWidth: 0, margin: 0, padding: 0,
+					position: 'absolute', top: 0, left: 0,
+					width: $(document).width(), // TODO: fix
+					height: $(document).height() // TODO: fix
+				}, css));
+			
+			$('a, :input').bind(this.events, function() {
+				if ($(this).parents('.ui-dialog').length == 0) {
+					dialog.uiDialogTitlebarClose.focus();
+					return false;
+				}
+			});
+			$(document).bind('keydown.ui-dialog-overlay', function(e) {
+				var ESC = 27;
+				e.keyCode && e.keyCode == ESC && dialog.close(); 
+			});
+		},
+		
+		hide: function() {
+			$('a, :input').add(document).unbind('.ui-dialog-overlay');
+			this.ie6 && this.selects.css('visibility', 'visible');
+			this.$el = null;
+			$('.ui-dialog-overlay').remove();
+		},
+		
+		// IE 6 compatibility
+		ie6: $.browser.msie && $.browser.version < 7,
+		selects: null
+	};
 
 })(jQuery);
