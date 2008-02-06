@@ -215,12 +215,12 @@
 			if (this.$el) return;
 			
 			this.selects = this.ie6 && $('select:visible').css('visibility', 'hidden');
-			this.$el = $('<div"/>').appendTo(document.body)
+			this.$el = $('<div/>').appendTo(document.body)
 				.addClass('ui-dialog-overlay').css($.extend({
 					borderWidth: 0, margin: 0, padding: 0,
 					position: 'absolute', top: 0, left: 0,
-					width: $(document).width(), // TODO: fix
-					height: $(document).height() // TODO: fix
+					width: (this.ie6 ? this.overlayWidth() : $(document).width()) + 'px',
+					height: (this.ie6 ? this.overlayHeight() : $(document).height()) + 'px'
 				}, css));
 			
 			$('a, :input').bind(this.events, function() {
@@ -244,7 +244,15 @@
 		
 		// IE 6 compatibility
 		ie6: $.browser.msie && $.browser.version < 7,
-		selects: null
+		selects: null,
+		overlayHeight: function() {
+			return $(document.body).height() < $(window).height() ?
+				$(window).height() : $(document).height();
+		},
+		overlayWidth: function() {
+			return $(document.body).width() < $(window).width() ?
+				$(window).width() : $(document).width();
+		}
 	};
 
 })(jQuery);
