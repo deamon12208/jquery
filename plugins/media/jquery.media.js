@@ -8,7 +8,7 @@
  * http://www.gnu.org/licenses/gpl.html
  *
  * @author: M. Alsup
- * @version: 0.73 (12/04/2007)
+ * @version: 0.74 (02/06/2008)
  * @requires jQuery v1.1.2 or later
  * $Id$
  *
@@ -301,7 +301,7 @@ function getSettings(el, options) {
     if (cls) meta.cls = cls;
 
     var a = $.fn.media.defaults;
-    var b = $.meta && $.fn.media.defaults.preferMeta ? options : meta;
+    var b = (($.meta || $.metadata) && $.fn.media.defaults.preferMeta) ? options : meta;
     var c = b == options ? meta : options;
 
     var p = { params: { bgColor: options.bgColor || $.fn.media.defaults.bgColor } };
