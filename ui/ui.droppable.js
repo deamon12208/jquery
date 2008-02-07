@@ -88,7 +88,7 @@
 		over: function(e) {
 
 			var draggable = $.ui.ddmanager.current;
-			if (!draggable || draggable.element == this.element) return; // Bail if draggable and droppable are same element
+			if (!draggable || draggable.element[0] == this.element[0]) return; // Bail if draggable and droppable are same element
 			
 			if (this.options.accept(draggable.element)) {
 				$.ui.plugin.call(this, 'over', [e, this.ui(draggable)]);
@@ -99,7 +99,7 @@
 		out: function(e) {
 
 			var draggable = $.ui.ddmanager.current;
-			if (!draggable || draggable.element == this.element) return; // Bail if draggable and droppable are same element
+			if (!draggable || draggable.element[0] == this.element[0]) return; // Bail if draggable and droppable are same element
 
 			if (this.options.accept(draggable.element)) {
 				$.ui.plugin.call(this, 'out', [e, this.ui(draggable)]);
@@ -110,7 +110,7 @@
 		drop: function(e) {
 
 			var draggable = $.ui.ddmanager.current;
-			if (!draggable || draggable.element == this.element) return; // Bail if draggable and droppable are same element
+			if (!draggable || draggable.element[0] == this.element[0]) return; // Bail if draggable and droppable are same element
 			
 			if(this.options.accept(draggable.element)) {
 				$.ui.plugin.call(this, 'drop', [e, this.ui(draggable)]);
@@ -185,7 +185,7 @@
 				if(m[i].item.disabled) continue;
 				m[i].offset = $(m[i].item.element).offset();
 				
-				if (t && m[i].item.options.accept(t.element)) //Activate the droppable if used directly from draggables
+				if (t && m[i].item.options.accept.call(m[i].item.element,t.element)) //Activate the droppable if used directly from draggables
 					m[i].item.activate.call(m[i].item, e);
 					
 			}
