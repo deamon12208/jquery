@@ -36,7 +36,7 @@
 		};
 		options = options || {};
 		var defaultOverrides = options.modal ? {resizable: false} : {};
-		options = $.extend({}, defaults, defaultOverrides, options); //Extend and copy options
+		options = this.options = $.extend({}, defaults, defaultOverrides, options); //Extend and copy options
 		this.element = el;
 		var self = this; //Do bindings
 
@@ -57,10 +57,9 @@
 			.wrap(document.createElement('div'))
 			.wrap(document.createElement('div'));
 		var uiDialogContainer = uiDialogContent.parent().addClass('ui-dialog-container').css({position: 'relative'});
-		var uiDialog = uiDialogContainer.parent().hide()
+		var uiDialog = this.uiDialog = uiDialogContainer.parent().hide()
 			.addClass('ui-dialog')
-			.css({position: 'absolute', width: options.width, height: options.height, overflow: 'hidden'})
-			.css("z-index", $('.ui-dialog:visible').size()); 
+			.css({position: 'absolute', width: options.width, height: options.height, overflow: 'hidden'}); 
 
 		var classNames = uiDialogContent.attr('className').split(' ');
 
@@ -215,12 +214,13 @@
 			if (this.$el) return;
 			
 			this.selects = this.ie6 && $('select:visible').css('visibility', 'hidden');
+			var width = this.width();
+			var height = this.height();
 			this.$el = $('<div/>').appendTo(document.body)
 				.addClass('ui-dialog-overlay').css($.extend({
 					borderWidth: 0, margin: 0, padding: 0,
 					position: 'absolute', top: 0, left: 0,
-					width: (this.ie6 ? this.overlayWidth() : '100%'),
-					height: (this.ie6 ? this.overlayHeight() : '100%')
+					width: width, height: height
 				}, css));
 			
 			// prevent use of anchors and inputs
@@ -237,16 +237,27 @@
 				e.keyCode && e.keyCode == ESC && dialog.close(); 
 			});
 			
-			if (this.ie6) {
-				$overlay = this.$el;
-				function resize() {
-					$overlay.css({
-						width: overlay.overlayWidth(),
-						height: overlay.overlayHeight()
-					});
-				};
-				$(window).bind('resize.ui-dialog-overlay', resize);
-			}
+			// handle window resizing
+			var $overlay = this.$el;
+			function resize() {
+				// If the dialog is draggable and the user drags it past the
+				// right edge of the window, the document becomes wider so we
+				// need to stretch the overlay.  If the user then drags the
+				// dialog back to the left, the document will become narrower,
+				// so we need to shrink the overlay to the appropriate size.
+				// This is handled by resetting the overlay to its original
+				// size before setting it to the full document size.
+				$overlay.css({
+					width: width,
+					height: height
+				}).css({
+					width: overlay.width(),
+					height: overlay.height()
+				});
+			};
+			$(window).bind('resize.ui-dialog-overlay', resize);
+			dialog.uiDialog.is(':draggable') && dialog.uiDialog.data('stop.draggable', resize);
+			dialog.uiDialog.is(':resizable') && dialog.uiDialog.data('stop.resizable', resize);
 		},
 		
 		hide: function() {
@@ -256,17 +267,31 @@
 			$('.ui-dialog-overlay').remove();
 		},
 		
+		height: function() {
+			var height;
+			if (this.ie6) {
+				height = $(document.body).height() < $(window).height() ?
+					$(window).height() : $(document).height();
+			} else {
+				height = $(document).height();
+			}
+			return height + 'px';
+		},
+		
+		width: function() {
+			var width;
+			if (this.ie6) {
+				width = $(document.body).width() < $(window).width() ?
+					$(window).width() : $(document).width();
+			} else {
+				width = $(document).width();
+			}
+			return width + 'px';
+		},
+		
 		// IE 6 compatibility
 		ie6: $.browser.msie && $.browser.version < 7,
-		selects: null,
-		overlayHeight: function() {
-			return ($(document.body).height() < $(window).height() ?
-				$(window).height() : $(document).height()) + 'px';
-		},
-		overlayWidth: function() {
-			return ($(document.body).width() < $(window).width() ?
-				$(window).width() : $(document).width()) + 'px';
-		}
+		selects: null
 	};
 
 })(jQuery);
