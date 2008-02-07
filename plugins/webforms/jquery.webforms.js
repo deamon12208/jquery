@@ -388,4 +388,6 @@ $(document).ready(function() {
 	});
 });
 
+$.webforms = $.webForms;
+
 })(jQuery);
