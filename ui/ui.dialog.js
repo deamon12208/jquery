@@ -213,6 +213,7 @@
 		show: function(dialog, css) {
 			if (this.$el) return;
 			
+			this.dialog = dialog;
 			this.selects = this.ie6 && $('select:visible').css('visibility', 'hidden');
 			var width = this.width();
 			var height = this.height();
@@ -220,7 +221,8 @@
 				.addClass('ui-dialog-overlay').css($.extend({
 					borderWidth: 0, margin: 0, padding: 0,
 					position: 'absolute', top: 0, left: 0,
-					width: width, height: height
+					width: width,
+					height: height
 				}, css));
 			
 			// prevent use of anchors and inputs
@@ -238,7 +240,7 @@
 			});
 			
 			// handle window resizing
-			var $overlay = this.$el;
+			$overlay = this.$el;
 			function resize() {
 				// If the dialog is draggable and the user drags it past the
 				// right edge of the window, the document becomes wider so we
@@ -269,9 +271,15 @@
 		
 		height: function() {
 			var height;
-			if (this.ie6) {
-				height = $(document.body).height() < $(window).height() ?
-					$(window).height() : $(document).height();
+			if (this.ie6
+				// body is smaller than window
+				&& ($(document.body).height() < $(window).height())
+				// dialog is above the fold
+				&& !(document.documentElement.scrollTop
+					|| (this.dialog.uiDialog.offset().top
+						+ this.dialog.uiDialog.height())
+						> $(window).height())) {
+				height = $(window).height();
 			} else {
 				height = $(document).height();
 			}
@@ -280,9 +288,15 @@
 		
 		width: function() {
 			var width;
-			if (this.ie6) {
-				width = $(document.body).width() < $(window).width() ?
-					$(window).width() : $(document).width();
+			if (this.ie6
+				// body is smaller than window
+				&& ($(document.body).width() < $(window).width())
+				// dialog is off to the right
+				&& !(document.documentElement.scrollLeft
+					|| (this.dialog.uiDialog.offset().left
+						+ this.dialog.uiDialog.width())
+						> $(window).width())) {
+				width = $(window).width();
 			} else {
 				width = $(document).width();
 			}
