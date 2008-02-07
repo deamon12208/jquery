@@ -1,7 +1,7 @@
 /*
  * Web Forms 0.4.0 - jQuery plugin
  * 
- * Copyright (c) 2007 - 2008 Scott Gonzalez
+ * Copyright (c) 2007 - 2008 Scott González
  * 
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -14,9 +14,9 @@
 We have to use the wftype attribute instead of the type attribute because using custom type attributes doesn't work.
 
 Test results from Firefox 2:
-$('<select'>).attr('type', 'foo').is('[type="foo"]') === false
-$('<select'>).attr('type', 'foo').attr('type') === 'foo'
-$('<select'>).attr('type', 'foo')[0].type === 'select-one'
+$('<select>').attr('type', 'foo').is('[type="foo"]') === false
+$('<select>').attr('type', 'foo').attr('type') === 'foo'
+$('<select>').attr('type', 'foo')[0].type === 'select-one'
 */
 
 ;(function($) {
