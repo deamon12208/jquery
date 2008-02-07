@@ -18,7 +18,7 @@
 				} else if(!$.data(this, "ui-droppable"))
 					new $.ui.droppable(this, options);
 			});
-		},
+		}
 	});
 
 	
