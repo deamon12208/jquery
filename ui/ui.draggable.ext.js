@@ -191,6 +191,62 @@
 
 		}
 	});
+	
+	$.ui.plugin.add("draggable", "snap", {
+		start: function(e,ui) {
+			
+			ui.instance.snapElements = [];
+			$(ui.options.snap === true ? '.ui-draggable' : ui.options.snap).each(function() {
+				var $t = $(this); var $o = $t.offset();
+				if(this != ui.instance.element[0]) ui.instance.snapElements.push({
+					item: this,
+					width: $t.outerWidth(),
+					height: $t.outerHeight(),
+					top: $o.top,
+					left: $o.left
+				});
+			});
+			
+		},
+		drag: function(e,ui) {
+
+			var d = ui.options.snapTolerance || 20;
+			var x1 = ui.absolutePosition.left, x2 = x1 + ui.instance.helperProportions.width,
+			    y1 = ui.absolutePosition.top, y2 = y1 + ui.instance.helperProportions.height;
+
+			for (var i = ui.instance.snapElements.length - 1; i >= 0; i--){
+
+				var l = ui.instance.snapElements[i].left, r = l + ui.instance.snapElements[i].width, 
+				    t = ui.instance.snapElements[i].top,  b = t + ui.instance.snapElements[i].height;
+
+				//Yes, I know, this is insane ;)
+				if(!((l-d < x1 && x1 < r+d && t-d < y1 && y1 < b+d) || (l-d < x1 && x1 < r+d && t-d < y2 && y2 < b+d) || (l-d < x2 && x2 < r+d && t-d < y1 && y1 < b+d) || (l-d < x2 && x2 < r+d && t-d < y2 && y2 < b+d))) continue;
+
+				if(ui.options.snapMode != 'inner') {
+					var ts = Math.abs(t - y2) <= 20
+					var bs = Math.abs(b - y1) <= 20;
+					var ls = Math.abs(l - x2) <= 20
+					var rs = Math.abs(r - x1) <= 20;
+					if(ts) ui.position.top = t - ui.instance.offset.top + ui.instance.clickOffset.top - ui.instance.helperProportions.height;
+					if(bs) ui.position.top = b - ui.instance.offset.top + ui.instance.clickOffset.top;
+					if(ls) ui.position.left = l - ui.instance.offset.left + ui.instance.clickOffset.left - ui.instance.helperProportions.width;
+					if(rs) ui.position.left = r - ui.instance.offset.left + ui.instance.clickOffset.left;
+				}
+				
+				if(ui.options.snapMode != 'outer') {
+					var ts = Math.abs(t - y1) <= 20
+					var bs = Math.abs(b - y2) <= 20;
+					var ls = Math.abs(l - x1) <= 20
+					var rs = Math.abs(r - x2) <= 20;
+					if(ts) ui.position.top = t - ui.instance.offset.top + ui.instance.clickOffset.top;
+					if(bs) ui.position.top = b - ui.instance.offset.top + ui.instance.clickOffset.top - ui.instance.helperProportions.height;
+					if(ls) ui.position.left = l - ui.instance.offset.left + ui.instance.clickOffset.left;
+					if(rs) ui.position.left = r - ui.instance.offset.left + ui.instance.clickOffset.left - ui.instance.helperProportions.width;
+				}
+
+			};
+		}
+	});
 
 	//TODO: wrapHelper, snap
 
