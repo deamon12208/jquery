@@ -12,7 +12,7 @@ if (window.Node && Node.prototype && !Node.prototype.contains) {
 	$.fn.extend({
 		sortable: function(options) {
 			if ( options == "serialize" )
-				return $.data(this, "ui-sortable").serialize();
+				return $.data(this[0], "ui-sortable").serialize();
 			
 			return this.each(function() {
 				if (typeof options == "string") {
