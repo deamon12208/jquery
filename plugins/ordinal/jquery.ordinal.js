@@ -8,7 +8,7 @@
  *   http://www.gnu.org/licenses/gpl.html
  */
 
-(function($) {
+;(function($) {
 
 $.fn.extend({
 	ordinal: function(childExpr, parentExpr) {
