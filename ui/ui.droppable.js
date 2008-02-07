@@ -90,7 +90,7 @@
 			var draggable = $.ui.ddmanager.current;
 			if (!draggable || draggable.element[0] == this.element[0]) return; // Bail if draggable and droppable are same element
 			
-			if (this.options.accept(draggable.element)) {
+			if (this.options.accept.call(this.element,draggable.element)) {
 				$.ui.plugin.call(this, 'over', [e, this.ui(draggable)]);
 				this.element.triggerHandler("dropover", [e, this.ui(draggable)], this.options.over);
 			}
@@ -101,7 +101,7 @@
 			var draggable = $.ui.ddmanager.current;
 			if (!draggable || draggable.element[0] == this.element[0]) return; // Bail if draggable and droppable are same element
 
-			if (this.options.accept(draggable.element)) {
+			if (this.options.accept.call(this.element,draggable.element)) {
 				$.ui.plugin.call(this, 'out', [e, this.ui(draggable)]);
 				this.element.triggerHandler("dropout", [e, this.ui(draggable)], this.options.out);
 			}
@@ -112,7 +112,7 @@
 			var draggable = $.ui.ddmanager.current;
 			if (!draggable || draggable.element[0] == this.element[0]) return; // Bail if draggable and droppable are same element
 			
-			if(this.options.accept(draggable.element)) {
+			if(this.options.accept.call(this.element,draggable.element)) {
 				$.ui.plugin.call(this, 'drop', [e, this.ui(draggable)]);
 				this.element.triggerHandler("drop", [e, this.ui(draggable)], this.options.drop);
 			}
@@ -198,7 +198,7 @@
 				if (!this.item.disabled && $.ui.intersect(draggable, this, this.item.options.tolerance))
 					this.item.drop.call(this.item, e);
 					
-				if (!this.item.disabled && this.item.options.accept(draggable.element)) {
+				if (!this.item.disabled && this.item.options.accept.call(this.item.element,draggable.element)) {
 					this.out = 1; this.over = 0;
 					this.item.deactivate.call(this.item, e);
 				}
