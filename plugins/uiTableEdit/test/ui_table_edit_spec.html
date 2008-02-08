@@ -4,16 +4,16 @@
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
 <title>JSSpec results</title>
 <link rel="stylesheet" type="text/css" href="JSSpec.css" />
-<script type="text/javascript" src="../../public/javascripts/jquery.js"></script>
-<script type="text/javascript" src="../../public/javascripts/jquery.debug.js"></script>
-<!-- -->
-<script type="text/javascript" src="../../public/javascripts/jquery.iterators.js"></script>
-<script type="text/javascript" src="../../public/javascripts/jquery.uitableedit.js"></script>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="../jquery.uitableedit.js"></script>
 <script type="text/javascript" src="diff_match_patch.js"></script>
 <script type="text/javascript" src="JSSpec.js"></script>
 <script type="text/javascript">// <![CDATA[
 
 // note that the same error should be seen several times
+/*td.find("input:text").get(0) has no properties
+[Break on this error] function focus_text(){ td.find('input:text').get(0).focus() }
+*/
 // this is from a thread that is created to focus the input field after a small delay
 // for the user.  In testing, we are moving much faster than the delay
 var V = value_of;
@@ -23,8 +23,8 @@ describe('uiTableEdit', {
     td = t.find("tbody > tr:first > td:first")
   },
   "after each" : function(){
-    $.log("after each")
-    $.log(td)
+    //$.log("after each")
+    //$.log(td)
     V($.uiTableEdit(t, {off : true})).should_be(t)
   },
   // need to check total number of assertions
@@ -32,17 +32,17 @@ describe('uiTableEdit', {
   "should call callbacks" : function(){
   V($.uiTableEdit(t, {
       dataVerify : function(){
-        $.log("verify")
-        $.log(this)
+        //$.log("verify")
+        //$.log(this)
         V( $(this).find(':text').val() ).should_be("turtle")
-        $.log("verify")
+        //$.log("verify")
       },
       mouseDown : function(){
-        $.log("down")
+        //$.log("down")
         V( $(this).text() ).should_be("turtle")
       },
       editDone : function(a,b){
-        $.log("done")
+        //$.log("done")
         V(a).should_be(b)
       }
     })).should_be(t)

@@ -38,7 +38,7 @@ jQuery.uiTableEdit = function(jq, options){
     return jq;
   }
 
- function bind_mouse_down( mouseDn ){
+  function bind_mouse_down( mouseDn ){
     unbind().bind('mousedown.uiTableEdit', mouseDn )
   }
   function td_edit(){
@@ -53,7 +53,7 @@ jQuery.uiTableEdit = function(jq, options){
       td.html( "" );
       td.text( val );
       if( options.editDone ) options.editDone(val,orig_text)
-      bind_mouse_down( td_edit );
+      bind_mouse_down( td_edit_wrapper );
     }
     var orig_text = td.text();
     var w = td.width();
@@ -65,15 +65,16 @@ jQuery.uiTableEdit = function(jq, options){
       w  + 'px;">' + '</input></form>' )
       .find('form').submit( restore ).mousedown(restore)
 
-    // focus bug (seen in FF) fixed by small delay
+    // focus bug (seen in FireFox) fixed by small delay
     function focus_text(){ td.find('input:text').get(0).focus() }
     bind_mouse_down( restore );
     setTimeout(focus_text, 50);
   }
 
-  bind_mouse_down( !options.mouseDown ? td_edit : function(){
+  var td_edit_wrapper = !options.mouseDown ? td_edit : function(){
     if( options.mouseDown.apply(this,arguments) == false ) return false;
     td_edit.apply(this,arguments);
-  });
+  };
+  bind_mouse_down( td_edit_wrapper );
   return jq;
 }
