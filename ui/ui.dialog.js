@@ -117,7 +117,7 @@
 		});
 	
 		this.open = function() {
-			options.modal && overlay.show(self, options.modal);
+			options.modal && overlay.show(self, options.overlay);
 			uiDialog.appendTo('body');
 			var wnd = $(window), doc = $(document), top = doc.scrollTop(), left = doc.scrollLeft();
 			if (options.position.constructor == Array) {
@@ -200,6 +200,7 @@
 			minHeight: 100,
 			minWidth: 150,
 			modal: false,
+			overlay: {},
 			position: 'center',
 			resizable: true,
 			width: 300
