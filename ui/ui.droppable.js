@@ -1,11 +1,5 @@
 (function($) {
 
-	//If the UI scope is not available, add it
-	$.ui = $.ui || {};
-
-	//Make nodes selectable by expression
-	$.extend($.expr[':'], { droppable: "(' '+a.className+' ').indexOf(' ui-droppable ')" });
-
 	$.fn.extend({
 		droppable: function(options) {
 			var args = Array.prototype.slice.call(arguments, 1);

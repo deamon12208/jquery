@@ -1,11 +1,5 @@
 (function($) {
 
-	//If the UI scope is not available, add it
-	$.ui = $.ui || {};
-
-	//Make nodes selectable by expression
-	$.extend($.expr[':'], { draggable: "(' '+a.className+' ').indexOf(' ui-draggable ')" });
-
 	$.fn.extend({
 		draggable: function(options) {
 			var args = Array.prototype.slice.call(arguments, 1);

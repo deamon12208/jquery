@@ -1,8 +1,5 @@
 (function($) {
 
-	//Make nodes selectable by expression
-	$.extend($.expr[':'], { slider: "(' '+a.className+' ').indexOf(' ui-slider ') != -1" });
-
 	$.fn.extend({
 		slider: function(options) {
 			return this.each(function() {

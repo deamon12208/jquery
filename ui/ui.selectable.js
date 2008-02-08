@@ -3,10 +3,6 @@
 	//If the UI scope is not available, add it
 	$.ui = $.ui || {};
 
-	//Make nodes selectable by expression
-	$.extend($.expr[':'], { selectable: "(' '+a.className+' ').indexOf(' ui-selectable ')" });
-	$.extend($.expr[':'], { selectee: "(' '+a.className+' ').indexOf(' ui-selectee ')" });
-
 	$.fn.extend({
 		selectable: function(options) {
 			return this.each(function() {
