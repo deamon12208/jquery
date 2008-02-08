@@ -1,7 +1,4 @@
 (function($) {
-	
-	//Make nodes selectable by expression
-	$.extend($.expr[':'], { magnifier: "(' '+a.className+' ').indexOf(' fx-magnifier ')" });
 
 	//Macros for external methods that support chaining
 	var methods = "destroy,enable,disable,reset".split(",");
