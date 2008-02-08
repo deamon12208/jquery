@@ -1,4 +1,4 @@
-(function($) {
+;(function($) {
 	
 	//If the UI scope is not available, add it
 	$.ui = $.ui || {};
@@ -22,21 +22,10 @@
 
 	$.ui.dialog = function(el, options) {
 		
-		var defaults = {
-			autoOpen: true,
-			width: 300,
-			height: 200,
-			minWidth: 150,
-			minHeight: 100,
-			position: 'center',
-			buttons: [],
-			draggable: true,
-			resizable: true,
-			modal: false
-		};
-		options = options || {};
-		var defaultOverrides = options.modal ? {resizable: false} : {};
-		options = this.options = $.extend({}, defaults, defaultOverrides, options); //Extend and copy options
+		this.options = options = $.extend({},
+			$.ui.dialog.defaults,
+			options && options.modal ? {resizable: false} : {},
+			options);
 		this.element = el;
 		var self = this; //Do bindings
 
@@ -200,9 +189,23 @@
 		
 		if (options.autoOpen)
 			this.open();
-
 	}
-
+	
+	$.extend($.ui.dialog, {
+		defaults: {
+			autoOpen: true,
+			buttons: [],
+			draggable: true,
+			height: 200,
+			minHeight: 100,
+			minWidth: 150,
+			modal: false,
+			position: 'center',
+			resizable: true,
+			width: 300
+		}
+	});
+	
 	// This is a port of relevant pieces of Mike Alsup's blockUI plugin (http://www.malsup.com/jquery/block/)
 	// duplicated here for minimal overlay functionality and no dependency on a non-UI plugin
 	var overlay = {
