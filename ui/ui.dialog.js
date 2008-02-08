@@ -258,8 +258,8 @@
 				});
 			};
 			$(window).bind('resize.ui-dialog-overlay', resize);
-			dialog.uiDialog.is(':draggable') && dialog.uiDialog.data('stop.draggable', resize);
-			dialog.uiDialog.is(':resizable') && dialog.uiDialog.data('stop.resizable', resize);
+			dialog.uiDialog.is('.ui-draggable') && dialog.uiDialog.data('stop.draggable', resize);
+			dialog.uiDialog.is('.ui-resizable') && dialog.uiDialog.data('stop.resizable', resize);
 		},
 		
 		hide: function() {
