@@ -176,11 +176,10 @@
 			var m = $.ui.ddmanager.droppables;
 			for (var i = 0; i < m.length; i++) {
 				
-				if(m[i].item.disabled) continue;
+				if(m[i].item.disabled || (t && !m[i].item.options.accept.call(m[i].item.element,t.element))) continue;
 				m[i].offset = $(m[i].item.element).offset();
 				
-				if (t && m[i].item.options.accept.call(m[i].item.element,t.element)) //Activate the droppable if used directly from draggables
-					m[i].item.activate.call(m[i].item, e);
+				if(t) m[i].item.activate.call(m[i].item, e); //Activate the droppable if used directly from draggables
 					
 			}
 			
