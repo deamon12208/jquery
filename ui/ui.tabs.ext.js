@@ -22,9 +22,9 @@
             }
             // start interval
             if (ms) {
-                var t = this.options.initial + 1;
+                var t = this.options.selected;
                 this.rotation = setInterval(function() {
-                    t = ++t <= self.$tabs.length ? t : 1;
+                    t = ++t < self.$tabs.length ? t : 0;
                     self.click(t);
                 }, ms);
                 this.$tabs.bind(this.options.event, stop);
@@ -36,11 +36,5 @@
             }
         }
     });
-
-    $.fn.tabsRotate = function(ms) {
-        return this.each(function() {
-            $.ui.tabs.getInstance(this).rotate(ms);
-        });
-    };
 
 })(jQuery);

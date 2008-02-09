@@ -11,66 +11,39 @@
     // if the UI scope is not availalable, add it
     $.ui = $.ui || {};
 
-    // tabs initialization
-    $.fn.tabs = function(initial, options) {
-    	var args = Array.prototype.slice.call(arguments, 1);
-    	
-        if (initial && initial.constructor == Object) { // shift arguments
-            options = initial;
-            initial = null;
-        }
-        options = options || {};
-
-        initial = initial && initial.constructor == Number && --initial || 0;
-
+    // tabs API methods
+    $.fn.tabs = function() {
+        var method = typeof arguments[0] == 'string' && arguments[0];
+        var args = method && Array.prototype.slice.call(arguments, 1) || arguments;
+        
         return this.each(function() {
-			if (typeof initial == "string") {
-				var tabs = $.data(this, "ui-tabs");
-				tabs[initial].apply(tabs, args);
-
-			} else
-				new $.ui.tabs(this, $.extend(options, { initial: initial }));
+            if (method) {
+                var tabs = $.data(this, 'ui-tabs');
+                tabs[method].apply(tabs, args);
+            } else 
+                new $.ui.tabs(this, args[0] || {});
         });
     };
-
-    // other chainable tabs methods
-    // deprecated, use .tabs("method")
-    $.each(['Add', 'Remove', 'Enable', 'Disable', 'Click', 'Load', 'Href'], function(i, method) {
-        $.fn['tabs' + method] = function() {
-            var args = arguments;
-            return this.each(function() {
-                var instance = $.ui.tabs.getInstance(this);
-                instance[method.toLowerCase()].apply(instance, args);
-            });
-        };
-    });
     
-    // deprecated, use .data("selected")
-    $.fn.tabsSelected = function() {
-        var selected = -1;
-        if (this[0]) {
-            var instance = $.ui.tabs.getInstance(this[0]), $lis = $('li', this);
-            selected = $lis.index( $lis.filter('.' + instance.options.selectedClass)[0] );
-        }
-        return selected >= 0 ? ++selected : -1;
-    };
-
+    // TODO make add object literal based?
+    // TODO implement destroy method 
+    // TODO callbacks
+    
     // tabs class
     $.ui.tabs = function(el, options) {
-    	var self = this;
+        var self = this;
 
         this.source = el;
 
         this.options = $.extend({
 
             // basic setup
-            initial: 0,
+            selected: 0,
+            unselect: options.selected === null,
             event: 'click',
             disabled: [],
             cookie: null, // pass options object as expected by cookie plugin: { expires: 7, path: '/', domain: 'jquery.com', secure: true }
             // TODO bookmarkable: $.ajaxHistory ? true : false,
-            unselected: false,
-            unselect: options.unselected ? true : false,
 
             // Ajax
             spinner: 'Loading&#8230;',
@@ -115,29 +88,18 @@
         this.options.event += '.ui-tabs'; // namespace event
         this.options.cookie = $.cookie && $.cookie.constructor == Function && this.options.cookie;
         
-		$(el).bind("setData.tabs", function(event, key, value){
-			self.options[key] = value;
-		}).bind("getData.tabs", function(event, key){
-			if ( key == "selected" ) {
-				var $lis = $('li', this),
-					selected = $lis.index( $lis.filter('.' + self.options.selectedClass)[0] );
-				return selected >= 0 ? ++selected : -1;
-			}
-			
-			return self.options[key];
-		});
+        $(el).bind("setData.ui-tabs", function(event, key, value) {
+            self.options[key] = value;
+            this.tabify();
+        }).bind("getData.ui-tabs", function(event, key) {
+            return self.options[key];
+        });
 
         // save instance for later
-        $.data(el, $.ui.tabs.INSTANCE_KEY, this);
+        $.data(el, 'ui-tabs', this);
         
         // create tabs
         this.tabify(true);
-    };
-
-    // static
-    $.ui.tabs.INSTANCE_KEY = 'ui_tabs_instance';
-    $.ui.tabs.getInstance = function(el) {
-        return $.data(el, $.ui.tabs.INSTANCE_KEY);
     };
 
     // instance methods
@@ -161,7 +123,7 @@
                 }
                 // remote tab
                 else if ($(a).attr('href') != '#') { // prevent loading the page itself if href is just "#"
-                    $.data(a, 'href', a.href);
+                    $.data(a, 'href.ui-tabs', a.href);
                     var id = self.tabId(a);
                     a.href = '#' + id;
                     self.$panels = self.$panels.add(
@@ -170,9 +132,8 @@
                     );
                 }
                 // invalid tab href
-                else {
+                else
                     o.disabled.push(i + 1);
-                }
             });
 
             if (init) {
@@ -185,20 +146,19 @@
                 });
                 
                 // disabled tabs
-                for (var i = 0, position; position = o.disabled[i]; i++) {
+                for (var i = 0, position; position = o.disabled[i]; i++)
                     this.disable(position);
-                }
                 
-                // Try to retrieve initial tab:
+                // Try to retrieve selected tab:
                 // 1. from fragment identifier in url if present
                 // 2. from cookie
                 // 3. from selected class attribute on <li>
-                // 4. otherwise use given initial argument
+                // 4. otherwise use given "selected" option
                 // 5. check if tab is disabled
                 this.$tabs.each(function(i, a) {
                     if (location.hash) {
                         if (a.hash == location.hash) {
-                            o.initial = i;
+                            o.selected = i;
                             // prevent page scroll to fragment
                             //if (($.browser.msie || $.browser.opera) && !o.remote) {
                             if ($.browser.msie || $.browser.opera) {
@@ -212,43 +172,40 @@
                             return false; // break
                         }
                     } else if (o.cookie) {
-                        var p = parseInt($.cookie($.ui.tabs.INSTANCE_KEY + $.data(self.source)));
+                        var p = parseInt($.cookie('ui-tabs' + $.data(self.source)));
                         if (p && self.$tabs[p]) {
-                            o.initial = p;
+                            o.selected = p;
                             return false; // break
                         }
                     } else if ( self.$lis.eq(i).hasClass(o.selectedClass) ) {
-                        o.initial = i;
+                        o.selected = i;
                         return false; // break
                     }
                 });
                 var n = this.$lis.length;
-                while (this.$lis.eq(o.initial).hasClass(o.disabledClass) && n) {
-                    o.initial = ++o.initial < this.$lis.length ? o.initial : 0;
+                while (this.$lis.eq(o.selected).hasClass(o.disabledClass) && n) {
+                    o.selected = ++o.selected < this.$lis.length ? o.selected : 0;
                     n--;
                 }
-                if (!n) { // all tabs disabled, set option unselected to true
-                    o.unselected = o.unselect = true;
-                }
+                if (!n) // all tabs disabled, set option unselect to true
+                    o.unselect = true;
 
                 // highlight selected tab
                 this.$panels.addClass(o.hideClass);
                 this.$lis.removeClass(o.selectedClass);
-                if (!o.unselected) {
-                    this.$panels.eq(o.initial).show().removeClass(o.hideClass); // use show and remove class to show in any case no matter how it has been hidden before
-                    this.$lis.eq(o.initial).addClass(o.selectedClass);
+                if (!o.unselect) {
+                    this.$panels.eq(o.selected).show().removeClass(o.hideClass); // use show and remove class to show in any case no matter how it has been hidden before
+                    this.$lis.eq(o.selected).addClass(o.selectedClass);
                 }
 
                 // load if remote tab
-                var href = !o.unselected && $.data(this.$tabs[o.initial], 'href');
-                if (href) {
-                    this.load(o.initial + 1, href);
-                }
+                var href = !o.unselect && $.data(this.$tabs[o.selected], 'href.ui-tabs');
+                if (href)
+                    this.load(o.selected, href);
                 
                 // disable click if event is configured to something else
-                if (!/^click/.test(o.event)) {
+                if (!/^click/.test(o.event))
                     this.$tabs.bind('click', function(e) { e.preventDefault(); });
-                }
 
             }
 
@@ -281,9 +238,8 @@
 
             // reset some styles to maintain print style sheets etc.
             var resetCSS = { display: '', overflow: '', height: '' };
-            if (!$.browser.msie) { // not in IE to prevent ClearType font issue
+            if (!$.browser.msie) // not in IE to prevent ClearType font issue
                 resetCSS['opacity'] = '';
-            }
 
             // Hide a tab, animation prevents browser scrolling to fragment,
             // $show is optional.
@@ -341,13 +297,12 @@
                     return false;
                 }
                 
-                if (o.cookie) {
-                    $.cookie($.ui.tabs.INSTANCE_KEY + $.data(self.source), self.$tabs.index(this), o.cookie);
-                }
+                self.options.selected = self.$tabs.index(this);
                     
                 // if tab may be closed
                 if (o.unselect) {
                     if ($li.hasClass(o.selectedClass)) {
+                        self.options.selected = null;
                         $li.removeClass(o.selectedClass);
                         self.$panels.stop();
                         hideTab(this, $hide);
@@ -355,9 +310,9 @@
                         return false;
                     } else if (!$hide.length) {
                         self.$panels.stop();
-                        if ($.data(this, 'href')) { // remote tab
+                        if ($.data(this, 'href.ui-tabs')) { // remote tab
                             var a = this;
-                            self.load(self.$tabs.index(this) + 1, $.data(this, 'href'), function() {
+                            self.load(self.$tabs.index(this), $.data(this, 'href.ui-tabs'), function() {
                                 $li.addClass(o.selectedClass).addClass(o.unselectClass);
                                 showTab(a, $show);
                             });
@@ -369,6 +324,9 @@
                         return false;
                     }
                 }
+                
+                if (o.cookie)
+                    $.cookie('ui-tabs' + $.data(self.source), self.options.selected, o.cookie);
 
                 // stop possibly running animations
                 self.$panels.stop();
@@ -385,9 +343,9 @@
                         }, 0);
                     }*/
 
-                    if ($.data(this, 'href')) { // remote tab
+                    if ($.data(this, 'href.ui-tabs')) { // remote tab
                         var a = this;
-                        self.load(self.$tabs.index(this) + 1, $.data(this, 'href'), function() {
+                        self.load(self.$tabs.index(this), $.data(this, 'href.ui-tabs'), function() {
                             switchTab(a, $li, $hide, $show);
                         });
                     } else {
@@ -401,17 +359,15 @@
                         scrollTo(scrollX, scrollY);
                     }, 0);*/
 
-                } else {
+                } else
                     throw 'jQuery UI Tabs: Mismatching fragment identifier.';
-                }
 
                 // Prevent IE from keeping other link focussed when using the back button
                 // and remove dotted border from clicked link. This is controlled in modern
                 // browsers via CSS, also blur removes focus from address bar in Firefox
                 // which can become a usability and annoying problem with tabsRotate.
-                if ($.browser.msie) {
+                if ($.browser.msie)
                     this.blur(); 
-                }
 
                 //return o.bookmarkable && !!trueClick; // convert trueClick == undefined to Boolean required in IE
                 return false;
@@ -436,8 +392,8 @@
                     $li.appendTo(this.source);
                     $panel.appendTo(this.source.parentNode);
                 } else {
-                    $li.insertBefore(this.$lis[position - 1]);
-                    $panel.insertBefore(this.$panels[position - 1]);
+                    $li.insertBefore(this.$lis[position]);
+                    $panel.insertBefore(this.$panels[position]);
                 }
                 
                 this.tabify();
@@ -445,32 +401,29 @@
                 if (this.$tabs.length == 1) {
                      $li.addClass(o.selectedClass);
                      $panel.removeClass(o.hideClass);
-                     var href = $.data(this.$tabs[0], 'href');
-                     if (href) {
-                         this.load(position + 1, href);
-                     }
+                     var href = $.data(this.$tabs[0], 'href.ui-tabs');
+                     if (href)
+                         this.load(position, href);
                 }
                 o.add(this.$tabs[position], this.$panels[position]); // callback
-            } else {
+            } else
                 throw 'jQuery UI Tabs: Not enough arguments to add tab.';
-            }
         },
         remove: function(position) {
             if (position && position.constructor == Number) {                
-                var o = this.options, $li = this.$lis.eq(position - 1).remove(),
-                    $panel = this.$panels.eq(position - 1).remove();
+                var o = this.options, $li = this.$lis.eq(position).remove(),
+                    $panel = this.$panels.eq(position).remove();
                     
                 // If selected tab was removed focus tab to the right or
                 // tab to the left if last tab was removed.
-                if ($li.hasClass(o.selectedClass) && this.$tabs.length > 1) {
+                if ($li.hasClass(o.selectedClass) && this.$tabs.length > 1)
                     this.click(position + (position < this.$tabs.length ? 1 : -1));
-                }
                 this.tabify();
                 o.remove($li.end()[0], $panel[0]); // callback
             }
         },
         enable: function(position) {
-            var o = this.options, $li = this.$lis.eq(position - 1);
+            var o = this.options, $li = this.$lis.eq(position);
             $li.removeClass(o.disabledClass);
             if ($.browser.safari) { // fix disappearing tab (that used opacity indicating disabling) after enabling in Safari 2...
                 $li.css('display', 'inline-block');
@@ -478,19 +431,19 @@
                     $li.css('display', 'block')
                 }, 0)
             }
-            o.enable(this.$tabs[position - 1], this.$panels[position - 1]); // callback
+            o.enable(this.$tabs[position], this.$panels[position]); // callback
         },
         disable: function(position) {
             var o = this.options;      
-            this.$lis.eq(position - 1).addClass(o.disabledClass);
-            o.disable(this.$tabs[position - 1], this.$panels[position - 1]); // callback
+            this.$lis.eq(position).addClass(o.disabledClass);
+            o.disable(this.$tabs[position], this.$panels[position]); // callback
         },
         click: function(position) {
-            this.$tabs.eq(position - 1).trigger(this.options.event);
+            this.$tabs.eq(position).trigger(this.options.event);
         },
         load: function(position, url, callback) {
             var self = this, o = this.options,
-                $a = this.$tabs.eq(position - 1), a = $a[0], $span = $('span', a);
+                $a = this.$tabs.eq(position), a = $a[0], $span = $('span', a);
             
             // shift arguments
             if (url && url.constructor == Function) {
@@ -500,9 +453,9 @@
 
             // set new URL or get existing
             if (url) {
-                $.data(a, 'href', url);
+                $.data(a, 'href.ui-tabs', url);
             } else {
-                url = $.data(a, 'href');
+                url = $.data(a, 'href.ui-tabs');
             }
 
             // load
@@ -530,9 +483,9 @@
                         callback();
                     }
                     if (o.cache) {
-                        $.removeData(a, 'href'); // if loaded once do not load them again
+                        $.removeData(a, 'href.ui-tabs'); // if loaded once do not load them again
                     }
-                    o.load(self.$tabs[position - 1], self.$panels[position - 1]); // callback
+                    o.load(self.$tabs[position], self.$panels[position]); // callback
                     o.ajaxOptions.success && o.ajaxOptions.success(r, s);
                 }
             });
@@ -548,7 +501,7 @@
             
         },
         href: function(position, href) {
-            $.data(this.$tabs.eq(position - 1)[0], 'href', href);
+            $.data(this.$tabs.eq(position)[0], 'href.ui-tabs', href);
         }
     });
 
