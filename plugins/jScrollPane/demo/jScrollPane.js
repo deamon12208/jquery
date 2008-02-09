@@ -29,6 +29,7 @@
  *								animateInterval	-	The interval in milliseconds to update an animating scrollPane (default 100)
  *								animateStep		-	The amount to divide the remaining scroll distance by when animating (default 3)
  *								maintainPosition-	Whether you want the contents of the scroll pane to maintain it's position when you re-initialise it - so it doesn't scroll as you add more content (default true)
+ *								scrollbarOnLeft	-	Display the scrollbar on the left side?  (needs stylesheet changes, see examples.html)
  * @return jQuery
  * @cat Plugins/jScrollPane
  * @author Kelvin Luck (kelvin AT kelvinluck DOT com || http://www.kelvinluck.com)
@@ -50,7 +51,8 @@ jQuery.fn.jScrollPane = function(settings)
 			dragMaxHeight : 99999,
 			animateInterval : 100,
 			animateStep: 3,
-			maintainPosition: true
+			maintainPosition: true,
+			scrollbarOnLeft: false
 		}, settings
 	);
 	return this.each(
@@ -98,13 +100,20 @@ jQuery.fn.jScrollPane = function(settings)
 				);
 			}
 			var p = this.originalSidePaddingTotal;
-			$this.css(
-				{
-					'height':'auto',
-					'width':paneWidth - settings.scrollbarWidth - settings.scrollbarMargin - p + 'px',
-					'paddingRight':settings.scrollbarMargin + 'px'
-				}
-			);
+			
+			var cssToApply = {
+				'height':'auto',
+				'width':paneWidth - settings.scrollbarWidth - settings.scrollbarMargin - p + 'px'
+			}
+
+			if(settings.scrollbarOnLeft) {
+				cssToApply.paddingLeft = settings.scrollbarMargin + settings.scrollbarWidth + 'px';
+			} else {
+				cssToApply.paddingRight = settings.scrollbarMargin + 'px';
+			}
+
+			$this.css(cssToApply);
+
 			var contentHeight = $this.outerHeight();
 			var percentInView = paneHeight / contentHeight;
 
