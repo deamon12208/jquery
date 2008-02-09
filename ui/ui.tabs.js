@@ -4,6 +4,8 @@
  * Copyright (c) 2007 Klaus Hartl (stilbuero.de)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
+ *
+ * http://docs.jquery.com/UI/Tabs
  */
 
 (function($) {
