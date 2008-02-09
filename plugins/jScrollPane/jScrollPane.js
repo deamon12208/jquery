@@ -137,7 +137,7 @@ jQuery.fn.jScrollPane = function(settings)
 					};
 					var onArrowMouseUp = function(event)
 					{
-						jQuery('body').unbind('mouseup', onArrowMouseUp);
+						jQuery('html').unbind('mouseup', onArrowMouseUp);
 						currentArrowButton.removeClass('jScrollActiveArrowButton');
 						clearInterval(currentArrowInterval);
 						//console.log($(event.target));
@@ -146,7 +146,7 @@ jQuery.fn.jScrollPane = function(settings)
 					var onArrowMouseDown = function() {
 						//console.log(direction);
 						//currentArrowButton = $(this);
-						jQuery('body').bind('mouseup', onArrowMouseUp);
+						jQuery('html').bind('mouseup', onArrowMouseUp);
 						currentArrowButton.addClass('jScrollActiveArrowButton');
 						currentArrowInc = 0;
 						whileArrowButtonDown();
@@ -222,18 +222,18 @@ jQuery.fn.jScrollPane = function(settings)
 				{
 					initDrag();
 					dragMiddle = getPos(event, 'Y') - dragPosition - currentOffset.top;
-					jQuery('body').bind('mouseup', onStopDrag).bind('mousemove', updateScroll);
+					jQuery('html').bind('mouseup', onStopDrag).bind('mousemove', updateScroll);
 					if (jQuery.browser.msie) {
-						jQuery('body').bind('dragstart', ignoreNativeDrag).bind('selectstart', ignoreNativeDrag);
+						jQuery('html').bind('dragstart', ignoreNativeDrag).bind('selectstart', ignoreNativeDrag);
 					}
 					return false;
 				};
 				var onStopDrag = function()
 				{
-					jQuery('body').unbind('mouseup', onStopDrag).unbind('mousemove', updateScroll);
+					jQuery('html').unbind('mouseup', onStopDrag).unbind('mousemove', updateScroll);
 					dragMiddle = percentInView*paneHeight/2;
 					if (jQuery.browser.msie) {
-						jQuery('body').unbind('dragstart', ignoreNativeDrag).unbind('selectstart', ignoreNativeDrag);
+						jQuery('html').unbind('dragstart', ignoreNativeDrag).unbind('selectstart', ignoreNativeDrag);
 					}
 				};
 				var positionDrag = function(destY)
@@ -269,7 +269,7 @@ jQuery.fn.jScrollPane = function(settings)
 				var onStopTrackClick = function()
 				{
 					clearInterval(trackScrollInterval);
-					jQuery('body').unbind('mouseup', onStopTrackClick).unbind('mousemove', onTrackMouseMove);
+					jQuery('html').unbind('mouseup', onStopTrackClick).unbind('mousemove', onTrackMouseMove);
 				};
 				var onTrackMouseMove = function(event)
 				{
@@ -280,7 +280,7 @@ jQuery.fn.jScrollPane = function(settings)
 					initDrag();
 					onTrackMouseMove(event);
 					trackScrollInc = 0;
-					jQuery('body').bind('mouseup', onStopTrackClick).bind('mousemove', onTrackMouseMove);
+					jQuery('html').bind('mouseup', onStopTrackClick).bind('mousemove', onTrackMouseMove);
 					trackScrollInterval = setInterval(doTrackScroll, 100);
 					doTrackScroll();
 				};
