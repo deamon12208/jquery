@@ -188,14 +188,16 @@ jQuery.fn.jScrollPane = function(settings)
 									return false;
 								})
 						);
+					var $upArrow = jQuery('>.jScrollArrowUp', $container);
+					var $downArrow = jQuery('>.jScrollArrowDown', $container);
 					if (settings.arrowSize) {
 						trackHeight = paneHeight - settings.arrowSize - settings.arrowSize;
 						$track
 							.css({'height': trackHeight+'px', top:settings.arrowSize+'px'})
 					} else {
-						var topArrowHeight = jQuery('>.jScrollArrowUp', $container).height();
+						var topArrowHeight = $upArrow.height();
 						settings.arrowSize = topArrowHeight;
-						trackHeight = paneHeight - topArrowHeight - jQuery('>.jScrollArrowDown', $container).height();
+						trackHeight = paneHeight - topArrowHeight - $downArrow.height();
 						$track
 							.css({'height': trackHeight+'px', top:topArrowHeight+'px'})
 					}
@@ -253,6 +255,10 @@ jQuery.fn.jScrollPane = function(settings)
 					var p = destY / maxY;
 					$pane.css({'top':((paneHeight-contentHeight)*p) + 'px'});
 					$this.trigger('scroll');
+					if (settings.showArrows) {
+						$upArrow[destY == 0 ? 'addClass' : 'removeClass']('disabled');
+						$downArrow[destY == maxY ? 'addClass' : 'removeClass']('disabled');
+					}
 				};
 				var updateScroll = function(e)
 				{
