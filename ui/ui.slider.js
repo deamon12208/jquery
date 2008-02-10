@@ -49,7 +49,7 @@
 		});
 
 		//Initialize mouse and key events for interaction
-		this.handle = o.handle ? $(o.handle, element) : $('.ui-slider-handle', element);
+		this.handle = o.handle ? $(o.handle, element) : $('> *', element);
 		$(this.handle)
 			.mouseInteraction({
 				executor: this,
