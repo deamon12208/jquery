@@ -28,29 +28,25 @@
                 $('#container-2 > ul').tabs({ selected: 1 });
                 $('#container-3 > ul').tabs({ selected: 2, cookie: { expires: 365 }, fxSlide: true });
                 $('#container-4 > ul').tabs({ fxFade: true, fxSpeed: 'fast' });
-                $('#container-5 > ul').tabs({ fxSlide: true, fxFade: true, fxSpeed: 'normal' });
-                $('#container-6 > ul').tabs({
-                    fxFade: true,
-                    fxSpeed: 'fast',
-                    click: function() {
-                        alert('click callback');
-                    },
-                    hide: function() {
-                        alert('hide callback');
-                    },
-                    show: function() {
-                        alert('show callback');
-                    }
+                $('#container-5 > ul').tabs({ fxSlide: true, fxFade: true });
+                $('#container-6 > ul').tabs({ fxFade: true, fxSpeed: 'fast' });
+                $('#container-6 > ul').bind('select.ui-tabs', function(e, ui) {
+                    alert('event: ' + e.type);
+                    //console.log(ui);
                 });
-                $('#container-7 > ul').tabs({ fxShow: { height: 'show', opacity: 'show' }, fxSpeed: 'normal' });
-                $('#container-8 > ul').tabs({ cache: true, unselected: false });
+                $('#container-6 > ul').bind('show.ui-tabs', function(e, ui) {
+                    alert('event: ' + e.type);
+                    //console.log(ui);
+                });
+                $('#container-7 > ul').tabs({ fxShow: { height: 'show', opacity: 'show' } });
+                $('#container-8 > ul').tabs({ cache: true });
                 $('#container-9 > ul').tabs({ disabled: [2], cookie: { expires: 365 } });
                 $('<p><a href="#">Remove tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
                     $('#container-9 > ul').tabs('remove', 3);
                     return false;
                 });
                 $('<p><a href="#">Add tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
-                    $('#container-9 > ul').tabs('add', '#new-tab', 'New Tab', 3);
+                    $('#container-9 > ul').tabs('add', '#new-tab', 'New Tab');
                     return false;
                 });
                 $('<p><a href="#">Disable third tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
