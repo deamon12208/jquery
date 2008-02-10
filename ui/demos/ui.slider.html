@@ -60,7 +60,7 @@ $(window).bind("load",function(){
 
 	$('#example1').slider( { minValue: -100, maxValue: 100 } );
 	$('#example2').slider({ steps: 10 });
-	$('#example3').slider({ steps: 10 });
+	$('#example3').slider({ steps: 10, range: true, change: function(e,ui) { console.log(ui.range); } });
 
 });
 </script>

@@ -65,7 +65,6 @@
 						this.focus(handle,1);
 						return !this.disabled;
 					}
-						
 				}
 			})
 			.wrap('<a href="javascript:void(0)"></a>')
@@ -98,17 +97,36 @@
 		
 		//If we only have one handle, set the previous handle to this one to allow clicking before selecting the handle
 		if(this.handle.length == 1) this.previousHandle = this.handle;
+		
+		
+		if(this.handle.length == 2 && o.range) this.createRange();
 	
 	};
 	
 	$.extend($.ui.slider.prototype, {
 		plugins: {},
+		createRange: function() {
+			this.rangeElement = $('<div></div>')
+				.addClass('ui-slider-range')
+				.css({ position: 'absolute' })
+				.css(this.properties[0], parseInt($(this.handle[0]).css(this.properties[0])) + this.handleSize(0)/2)
+				.css(this.properties[1], parseInt($(this.handle[1]).css(this.properties[0])) - parseInt($(this.handle[0]).css(this.properties[0])))
+				.appendTo(this.element);
+		},
+		updateRange: function() {
+				this.rangeElement.css(this.properties[0], parseInt($(this.handle[0]).css(this.properties[0])) + this.handleSize(0)/2);
+				this.rangeElement.css(this.properties[1], parseInt($(this.handle[1]).css(this.properties[0])) - parseInt($(this.handle[0]).css(this.properties[0])));
+		},
+		getRange: function() {
+			return this.convertValue(parseInt(this.rangeElement.css(this.properties[1])));
+		},
 		ui: function(e) {
 			return {
 				instance: this,
 				options: this.options,
 				handle: this.currentHandle,
-				value: this.value()
+				value: this.value(),
+				range: this.getRange()
 			};
 		},
 		propagate: function(n,e) {
@@ -148,8 +166,8 @@
 		translateValue: function(value) {
 			return ((value - this.options.minValue) / this.options.realMaxValue) * (this.size - this.handleSize());
 		},
-		handleSize: function() {
-			return this.currentHandle['outer'+this.properties[1].substr(0,1).toUpperCase()+this.properties[1].substr(1)]();	
+		handleSize: function(handle) {
+			return $(handle != undefined ? this.handle[handle] : this.currentHandle)['outer'+this.properties[1].substr(0,1).toUpperCase()+this.properties[1].substr(1)]();	
 		},
 		click: function(e) {
 		
@@ -167,7 +185,7 @@
 			//Move focussed handle to the clicked position
 			this.offset = this.element.offset();
 			this.moveTo(this.convertValue(e[this.properties[0] == 'top' ? 'pageY' : 'pageX'] - this.offset[this.properties[0]] - this.handleSize()/2));
-				
+			
 		},
 		start: function(e, handle) {
 			
@@ -200,9 +218,15 @@
 				var value = this.convertValue(modifier);
 				value = Math.round(value / o.stepping) * o.stepping;
 				modifier = this.translateValue(value);	
-			}		
+			}
+
+			if(this.rangeElement) {
+				if(this.currentHandle[0] == this.handle[0] && modifier >= this.translateValue(this.value(1))) modifier = this.translateValue(this.value(1));
+				if(this.currentHandle[0] == this.handle[1] && modifier <= this.translateValue(this.value(0))) modifier = this.translateValue(this.value(0));
+			}	
 			
 			this.currentHandle.css(this.properties[0], modifier);
+			if(this.rangeElement) this.updateRange();
 			this.propagate('slide', e);
 			return false;
 			
@@ -220,8 +244,13 @@
 
 			if(value >= this.size - this.handleSize()) value = this.size - this.handleSize();
 			if(value <= 0) value = 0;
+			if(this.rangeElement) {
+				if(this.currentHandle[0] == this.handle[0] && value >= this.translateValue(this.value(1))) value = this.translateValue(this.value(1));
+				if(this.currentHandle[0] == this.handle[1] && value <= this.translateValue(this.value(0))) value = this.translateValue(this.value(0));
+			}
 			
 			this.currentHandle.css(this.properties[0], value);
+			if(this.rangeElement) this.updateRange();
 			
 			this.propagate('start', null);
 			this.propagate('stop', null);
