@@ -3,6 +3,7 @@
 
 * Bundled delegeate plugin with validate plugin - its always required anyway
 * Improved remote validation to include parts from the ajaxQueue plugin for proper synchronization (no additional plugin necessary)
+* Fixed stopRequest to prevent pendingRequest < 0
 * Added jQuery.validator.autoCreateRanges property, defaults to false, enable to convert min/max to range and minlength/maxlength to rangelength; this basically fixes the issue introduced by automatically creating ranges in 1.2
 * Fixed optional-methods to not highlight anything at all if the field is blank, that is, don't trigger success
 * Allow false/null for highlight/unhighlight options instead of forcing a do-nothing-callback even when nothing needs to be highlighted
