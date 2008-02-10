@@ -95,7 +95,6 @@
 			
 			var self = this;
 			var initialize = function() {
-				window.focus();
 				self._MP = { left: e.pageX, top: e.pageY }; // Store the click mouse position
 				$(document).bind('mouseup.draggable', function() { return self.stop.apply(self, arguments); });
 				$(document).bind('mousemove.draggable', function() { return self.drag.apply(self, arguments); });

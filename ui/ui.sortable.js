@@ -12,7 +12,7 @@
 			var args = Array.prototype.slice.call(arguments, 1);
 			
 			if ( options == "serialize" )
-				return $.data(this[0], "ui-sortable").serialize();
+				return $.data(this[0], "ui-sortable").serialize(arguments[1]);
 			
 			return this.each(function() {
 				if (typeof options == "string") {

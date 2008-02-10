@@ -51,14 +51,14 @@
 if(!window.console) {
  window.console = {
  	log: function() {
- 		alert(arguments[0]);	
+ 		//alert(arguments[0]);	
  	}	
  }	
 }
 
 $(window).bind("load",function(){
 
-	$('#example1').slider();
+	$('#example1').slider( { minValue: -100, maxValue: 100 } );
 	$('#example2').slider({ steps: 10 });
 	$('#example3').slider({ steps: 10 });
 
