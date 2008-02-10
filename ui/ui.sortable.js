@@ -78,7 +78,7 @@
 				var currentItem = null, nodes = $(e.target).parents().andSelf().each(function() {
 					if($.data(this, 'ui-sortable-item')) currentItem = $(this);
 				});
-				if(currentItem) {
+				if(currentItem && (!this.options.handle || $(e.target).parents().andSelf().is(this.options.handle))) {
 					this.currentItem = currentItem;
 					return true;
 				} else return false; 
