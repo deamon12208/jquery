@@ -13,6 +13,8 @@ var _config = {
 	asyncTimeout: 2 // seconds for async timeout
 };
 
+var isLocal = !!(window.location.protocol == 'file:');
+
 $(function() {
 	$('#userAgent').html(navigator.userAgent);
 	runTest();	
@@ -39,20 +41,23 @@ function stop(allowFailure) {
 		ok( false, "Test timed out" );
 		start();
 	};
-	_config.timeout = setTimeout(handler, _config.asyncTimeout * 1000);
+	// Disabled, caused too many random errors
+	//_config.timeout = setTimeout(handler, _config.asyncTimeout * 1000);
 }
 function start() {
-	if(_config.timeout)
-		clearTimeout(_config.timeout);
-	_config.blocking = false;
-	process();
+	// A slight delay, to avoid any current callbacks
+	setTimeout(function(){
+		if(_config.timeout)
+			clearTimeout(_config.timeout);
+		_config.blocking = false;
+		process();
+	}, 13);
 }
 
 function runTest() {
 	_config.blocking = false;
 	var time = new Date();
 	_config.fixture = document.getElementById('main').innerHTML;
-	reset();
 	synchronize(function() {
 		time = new Date() - time;
 		$("<div>").html(['<p class="result">Tests completed in ',
@@ -69,7 +74,7 @@ function test(name, callback, nowait) {
 		name = _config.currentModule + " module: " + name;
 		
 	var filter = location.search.slice(1);
-	if ( filter && encodeURIComponent(name) != filter )
+	if ( filter && encodeURIComponent(name).indexOf(filter) == -1 )
 		return;
 		
 	synchronize(function() {
@@ -83,7 +88,6 @@ function test(name, callback, nowait) {
 				console.warn(callback.toString());
 			}
 			_config.Test.push( [ false, "Died on test #" + (_config.Test.length+1) + ": " + e ] );
-			throw e;
 		}
 	});
 	synchronize(function() {
@@ -157,7 +161,7 @@ function expect(asserts) {
  * Resets the test setup. Useful for tests that modify the DOM.
  */
 function reset() {
-	document.getElementById('main').innerHTML = _config.fixture;
+	$("#main").html( _config.fixture );
 }
 
 /**

@@ -1,5 +1,5 @@
 /*
- * jQuery UI Accordion 1.1
+ * jQuery UI Accordion 1.5
  * 
  * Copyright (c) 2007 Jörn Zaefferer
  *
@@ -107,7 +107,7 @@ $.ui.accordion.prototype = {
 			this.options.headers.next().css("height", "");
 		}
 		$.removeData(this.element, "ui-accordion");
-		$(this.element).unbind(".ui-accordion");
+		$(this.element).removeClass("ui-accordion").unbind(".ui-accordion");
 	}
 }
 
@@ -121,7 +121,8 @@ function completed(cancel) {
 	// if removed while animated data can be empty
 	if (!$.data(this, "ui-accordion"))
 		return;
-	var options = $.data(this, "ui-accordion").options;
+	var instance = $.data(this, "ui-accordion");
+	var options = instance.options;
 	options.running = cancel ? 0 : --options.running;
 	if ( options.running )
 		return;
@@ -131,7 +132,7 @@ function completed(cancel) {
 			overflow: ""
 		});
 	}
-	$(this).trigger("changed.ui-accordion", options.data);
+	$(this).triggerHandler("change.ui-accordion", [options.data], options.change);
 }
 
 function toggle(toShow, toHide, data, clickedActive, down) {
@@ -181,9 +182,17 @@ function clickHandler(event) {
 	// called only when using activate(false) to close all parts programmatically
 	if ( !event.target && !options.alwaysOpen ) {
 		options.active.parent().andSelf().toggleClass(options.selectedClass);
-		var toHide = options.active.next();
-		var toShow = options.active = $([]);
-		toggle.call(this, toShow, toHide );
+		var toHide = options.active.next(),
+			data = {
+				instance: this,
+				options: options,
+				newHeader: jQuery([]),
+				oldHeader: options.active,
+				newContent: jQuery([]),
+				oldContent: toHide
+			},
+			toShow = options.active = $([]);
+		toggle.call(this, toShow, toHide, data );
 		return false;
 	}
 	// get the click target
@@ -212,7 +221,15 @@ function clickHandler(event) {
 	// find elements to show and hide
 	var toShow = clicked.next(),
 		toHide = options.active.next(),
-		data = [clicked, options.active, toShow, toHide],
+		//data = [clicked, options.active, toShow, toHide],
+		data = {
+			instance: this,
+			options: options,
+			newHeader: clicked,
+			oldHeader: options.active,
+			newContent: toShow,
+			oldContent: toHide
+		},
 		down = options.headers.index( options.active[0] ) > options.headers.index( clicked[0] );
 	
 	options.active = clickedActive ? $([]) : clicked;
