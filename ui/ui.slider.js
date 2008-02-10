@@ -118,7 +118,7 @@
 				this.rangeElement.css(this.properties[1], parseInt($(this.handle[1]).css(this.properties[0])) - parseInt($(this.handle[0]).css(this.properties[0])));
 		},
 		getRange: function() {
-			return this.convertValue(parseInt(this.rangeElement.css(this.properties[1])));
+			return this.rangeElement ? this.convertValue(parseInt(this.rangeElement.css(this.properties[1]))) : null;
 		},
 		ui: function(e) {
 			return {
