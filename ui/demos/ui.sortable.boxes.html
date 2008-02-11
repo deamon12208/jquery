@@ -60,7 +60,7 @@ body,html {
 <div id='container'>
 	<div class="box">
 		<div class='inner'>
-			Box 1
+			<p>Box 1<p>
 		</div>
 	</div>
 	<div class="box">
@@ -133,6 +133,7 @@ function addItems(e) {
 $(window).bind("load",function(){
 
 	$("#container").sortable({
+		handle: 'p',
 		revert: true,
 		scroll: true,
 		placeholder: 'hover', //the class te placeholder should have

@@ -107,15 +107,15 @@
 		serialize: function(o) {
 			
 			var items = $(this.options.items, this.element); //Only the items of the sortable itself
-			var str = '';
+			var str = [];
 			o = o || {};
 			
 			$(this.options.items, this.element).each(function() {
 				var res = (this.getAttribute(o.attribute || 'id') || '').match(o.expression || /(.+)[-=_](.+)/);
-				if(res) str += res[1]+'[]='+res[2];				
+				if(res) str.push(res[1]+'[]='+res[2]);				
 			});
 			
-			return str;
+			return str.join('&');
 			
 		},
 		intersectsWith: function(item) {
