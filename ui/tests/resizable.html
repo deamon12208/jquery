@@ -170,6 +170,8 @@ $(document).ready(function(){
 		
 		autohide: true,
 		
+		maxHeight: 500,
+		maxWidth: 500,
 		minWidth: 100,
 		minHeight: 50,
 		
@@ -184,6 +186,10 @@ $(document).ready(function(){
 	$('#image').resizable({
 		//proxy: "proxy",
 		handles: 'all',
+		minWidth: 50,
+		minHeight: 50,
+		maxHeight: 200,
+		maxWidth: 300,
 		//containment: 'parent',
 		aspectRatio: 'preserve',
 		autohide: true
@@ -193,6 +199,10 @@ $(document).ready(function(){
 		proxy: "proxy",
 		handles: 'all',
 		//containment: 'parent',
+			minWidth: 50,
+		minHeight: 50,
+		maxHeight: 250,
+		maxWidth: 300,
 		aspectRatio: 'preserve'
 		//aspectRatio: false
 		//aspectRatio: 1.1
