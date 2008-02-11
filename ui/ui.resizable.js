@@ -38,6 +38,8 @@
       autohide: false
     }, options);
     
+		this.options._aspectRatio = !!(this.options.aspectRatio);
+		
     $(element).bind("setData.resizable", function(event, key, value){
       self.options[key] = value;
     }).bind("getData.resizable", function(event, key){
@@ -288,9 +290,15 @@
     start: function(e) {
       var o = this.options, iniPos = this.element.position(), el = this.element;
       o.resizing = true;
-      
-      if (el.is('.ui-draggable') || /absolute/.test(el.css('position')))
-        el.css({ position: 'absolute', top: iniPos['top'], left: iniPos['left'] });
+			o.documentScroll = { top: $(document).scrollTop(),	left: $(document).scrollLeft() };
+			
+			// buf fix #1749
+      if (el.is('.ui-draggable') || /absolute/.test(el.css('position'))) {
+				// sOffset decides if document scrollOffset will be added to the top/left of the resizable element
+				var sOffset = $.browser.msie && !o.containment && /absolute/.test(el.css('position')) && !/relative/.test(el.parent().css('position'));
+				var dscrollt = sOffset ? o.documentScroll.top : 0, dscrolll = sOffset ? o.documentScroll.left : 0;
+	  		el.css({ position: 'absolute', top: (iniPos.top + dscrollt),	left: (iniPos.left + dscrolll)	});
+	  	}
       
       //Opera fixing relative position
       if (/relative/.test(el.css('position')) && $.browser.opera)
@@ -308,7 +316,12 @@
           top: parseInt(this.helper.css('top')) || 0
         }
       });
-      
+
+			//Aspect Ratio
+			var iswlt = o.currentSize.width < o.currentSize.height;
+ 			o.aspectRatio = (typeof o.aspectRatio == 'number') ? o.aspectRatio : Math.pow(o.currentSize.width / o.currentSize.height, iswlt ? 1 : -1);
+			o.aspectRatioTarget = iswlt ? "width" : "height";
+			
       if (o.preserveCursor)
         $('body').css('cursor', o.axis + '-resize');
       
@@ -321,7 +334,7 @@
           var scroll = function(e, a) {
             var scroll = /top/.test(a||"top") ? 'scrollTop' : 'scrollLeft', has = false;
             if (e[scroll] > 0) return true; e[scroll] = 1;
-            has = e[scroll] > 0 ? true : false;
+            has = e[scroll] > 0 ? true : false; e[scroll] = 0;
             return has; 
           };
           
@@ -366,22 +379,26 @@
     drag: function(e) {
       var el = this.helper, o = this.options, props = {}, self = this;
       
-      //Aspect Ratio
-      if (o.aspectRatio||e.shiftKey) o.ratio = o.ratio || o.currentSize.width / o.currentSize.height;
-      
       var change = function(a,b) {
         //Increase performance, avoid regex
-        var isTopHeight = (a == "top" || a == "height"), isHeightWidth = (a == "width" || a == "height"), 
-          defAxis = (o.axis == "se" || o.axis == "s" || o.axis == "e"); 
+        var isth = (a == "top"||a == "height"), ishw = (a == "width"||a == "height"), 
+         			 defAxis = (o.axis == "se"||o.axis == "s"||o.axis == "e"); 
         
-        var mod = (e[isTopHeight?'pageY':'pageX'] - o.startPosition[isTopHeight?'top':'left']) * (b ? -1 : 1);
-        var val = o[isHeightWidth?'currentSize':'currentPosition'][a] - mod - (!o.proxy && defAxis ? o.currentSizeDiff.width : 0);
-        
-        el.css(a, val);
-        
+        var mod = (e[isth ? 'pageY' : 'pageX'] - o.startPosition[isth ? 'top' : 'left']) * (b ? -1 : 1);
+        var val = o[ishw?'currentSize':'currentPosition'][a] - mod - (!o.proxy && defAxis ? o.currentSizeDiff.width : 0);
+				        
         //Preserve ratio
-        if (isHeightWidth && (o.aspectRatio||e.shiftKey))
-          el.css( !isTopHeight ? "height" : "width", val * Math.pow(o.ratio, !isTopHeight ? -1 : 1));
+        if ((o._aspectRatio || e.shiftKey)) {
+					if (ishw)
+						el.css(isth ? "width" : "height", val * Math.pow(o.aspectRatio, (isth ? -1 : 1) * (o.aspectRatioTarget == 'height' ? 1 : -1)));
+					
+					if (a == "top" && (o.axis == "ne" || o.axis == "nw")) {
+						//el.css('top',  curtop/*o.startPosition.top - Math.abs(o.currentSize.height - curheight)*/);
+						return;
+					}
+				}
+				
+				el.css(a, val);
       };
       
       //Change the height
@@ -389,25 +406,24 @@
       if(/(s|se|sw)/.test(o.axis)) change("height", 1);
       
       //Measure the new height and correct against min/maxHeight
-      var curheight = parseInt(el.css('height'))||0;      
+			var curheight = parseInt(el.css('height'))||0;
       if(o.minHeight && curheight <= o.minHeight) el.css('height', o.minHeight);  
       if(o.maxHeight && curheight >= o.maxHeight) el.css('height', o.maxHeight);
       
       //Change the top position when picking a handle at north
       if(/n|ne|nw/.test(o.axis)) change("top", 1);
-      
+	  
       //Measure the new top position and correct against min/maxHeight
-      var curtop = parseInt(el.css('top'))||0;
+			var curtop = parseInt(el.css('top'))||0
       if(o.minHeight && curtop >= (o.currentPosition.top + (o.currentSize.height - o.minHeight))) el.css('top', (o.currentPosition.top + (o.currentSize.height - o.minHeight)));
       if(o.maxHeight && curtop <= (o.currentPosition.top + (o.currentSize.height - o.maxHeight))) el.css('top', (o.currentPosition.top + (o.currentSize.height - o.maxHeight)));
-
-
+		
       //Change the width
       if(/(e|se|ne)/.test(o.axis)) change("width", 1);
       if(/(sw|w|nw)/.test(o.axis)) change("width");
       
       //Measure the new width and correct against min/maxWidth
-      var curwidth = parseInt(el.css('width'))||0;      
+			var curwidth = parseInt(el.css('width'))||0
       if(o.minWidth && curwidth <= o.minWidth) el.css('width', o.minWidth);  
       if(o.maxWidth && curwidth >= o.maxWidth) el.css('width', o.maxWidth);
       
@@ -415,7 +431,7 @@
       if(/(sw|w|nw)/.test(o.axis)) change("left", 1);
       
       //Measure the new left position and correct against min/maxWidth
-      var curleft = parseInt(el.css('left'))||0;
+			var curleft = parseInt(el.css('left'))||0
       if(o.minWidth && curleft >= (o.currentPosition.left + (o.currentSize.width - o.minWidth))) el.css('left', (o.currentPosition.left + (o.currentSize.width - o.minWidth)));
       if(o.maxWidth && curleft <= (o.currentPosition.left + (o.currentSize.width - o.maxWidth))) el.css('left', (o.currentPosition.left + (o.currentSize.width - o.maxWidth)));
       
