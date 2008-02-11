@@ -1,90 +1,21 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-
-<html lang="en">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <meta http-equiv="Content-Style-Type" content="text/css">
-        <meta http-equiv="Content-Script-Type" content="text/javascript">
-
+        <meta http-equiv="Content-Language" content="en" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>Tabs Demo</title>
+        <link rel="stylesheet" href="../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
+        <link rel="stylesheet" href="css/style.css" type="text/css" />
 
-        <link rel="stylesheet" href="../../themes/flora/flora.all.css" type="text/css" media="projection, screen">
-        <link rel="stylesheet" href="css/style.css" type="text/css" media="projection, screen">
         <script type="text/javascript" src="../../jquery/src/core.js"></script>
         <script type="text/javascript" src="../../jquery/src/selector.js"></script>
         <script type="text/javascript" src="../../jquery/src/event.js"></script>
         <script type="text/javascript" src="../../jquery/src/ajax.js"></script>
         <script type="text/javascript" src="../../jquery/src/fx.js"></script>
-	<script type="text/javascript" src="../../jquery/src/offset.js"></script>
+        <script type="text/javascript" src="../../jquery/src/offset.js"></script>
+
         <script type="text/javascript" src="../ui.tabs.js"></script>
-        <script type="text/javascript">
-            $(function() {
-                $('#container-1 ul').tabs();
-                $('#container-2 ul').tabs(2);
-                $('#container-3 ul').tabs({ fxSlide: true });
-                $('#container-4 ul').tabs({ fxFade: true, fxSpeed: 'fast' });
-                $('#container-5 ul').tabs({ fxSlide: true, fxFade: true, fxSpeed: 'normal' });
-                $('#container-6 ul').tabs({
-                    fxFade: true,
-                    fxSpeed: 'fast',
-                    click: function() {
-                        alert('click callback');
-                    },
-                    hide: function() {
-                        alert('hide callback');
-                    },
-                    show: function() {
-                        alert('show callback');
-                    }
-                });
-                $('#container-7 ul').tabs({ fxShow: { height: 'show', opacity: 'show' }, fxSpeed: 'normal' });
-                $('#container-8 ul').tabs({ cache: false });
-                $('#container-9 ul').tabs({ disabled: [3] });
-                $('<p><a href="#">Remove tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
-                    $('#container-9 ul').tabsRemove(4);
-                    return false;
-                });
-                $('<p><a href="#">Add tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
-                    $('#container-9 ul').tabsAdd('#new-tab', 'New Tab', 4);
-                    return false;
-                });
-                $('<p><a href="#">Disable third tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
-                    $('#container-9 ul').tabsDisable(3);
-                    return false;
-                });
-                $('<p><a href="#">Enable third tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
-                    $('#container-9 ul').tabsEnable(3);
-                    return false;
-                });
-                $('<p><a href="#">Click third tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
-                    $('#container-9 ul').tabsClick(3);
-                    return false;
-                });
-                $('<p><a href="#">Get selected tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
-                    alert( $('#container-9 ul').tabsSelected() );
-                    return false;
-                });
-                $('#container-10 ul').tabs({ unselected: true });
-                $('#container-11 ul').tabs({ event: 'mouseover' }).find('a').click(function() {
-                    return false;
-                });
-
-            });
-        </script>
-
-
-        <style type="text/css" media="screen, projection">
-            /* Not required for Tabs, just to make this demo look better... */
-            p {
-                margin: 0;
-            }
-            pre, pre+p, p+p {
-                margin: 1em 0 0;
-            }
-            code {
-                font-family: "Courier New", Courier, monospace;
-            }
-        </style>
     </head>
     <body class="flora">
 
@@ -98,7 +29,7 @@
             </ul>
             <div id="fragment-1">
                 <p>First tab is active by default:</p>
-                <pre><code>$('#container').tabs();</code></pre>
+                <pre><code>$('#container-1 > ul').tabs();</code></pre>
             </div>
             <div id="fragment-2">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -124,15 +55,16 @@
             </div>
             <div id="fragment-5">
                 <p>Second tab is active:</p>
-                <pre><code>$('#container').tabs(2);</code></pre>
+                <pre><code>$('#container-2 > ul').tabs({ selected: 1 });</code></pre>
                 <p>
-                    Two alternative ways to specify the active tab will overrule this argument. First a li element
-                    (representing one single tab) belonging to the selected tab class, e.g. set the selected tab
-                    class (default: "tabs-selected", see option selectedClass) for one of the unordered li elements
-                    in the HTML source. In addition if a fragment identifier/hash in the URL of the page refers
-                    to the id of a tab container of a tab interface the corresponding tab will  be activated and both
-                    the initial argument as well as an eventually declared class attribute will be overruled.
-                </p>
+                    Alternative ways to specify the active tab will overrule this argument, listed in the order of their precedence:</p>
+                <ol>
+                    <li>If a fragment identifier (hash) in the URL of the page refers to the id of a tab panel of a tab interface the corresponding tab will become the initial tab.</li>
+                    <li>Same if you use the cookie option to save the latest selected tab in.</li>
+                    <li>Last not least you can set the selected tab by attaching the selected tab class
+                    class (default: "ui-tabs-selected") to one of the <code>li</code> elements
+                    representing a single tab.</li>
+                </ol>
             </div>
             <div id="fragment-6">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -157,7 +89,7 @@
                     <code>normal</code>, <code>fast</code>) or an integer value specifying the duration for the animation
                     in milliseconds. If omitted it defaults to <code>normal</code>.
                 </p>
-                <pre><code>$('#container').tabs({ fxSlide: true });</code></pre>
+                <pre><code>$('#container-3 > ul').tabs({ fxSlide: true });</code></pre>
             </div>
             <div id="fragment-8">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -186,7 +118,7 @@
                     <code>normal</code>, <code>fast</code>) or an integer value specifying the duration for the animation
                     in milliseconds. If omitted it defaults to <code>normal</code>.
                 </p>
-                <pre><code>$('#container').tabs({ fxFade: true, fxSpeed: 'fast' });</code></pre>
+                <pre><code>$('#container-4 > ul').tabs({ fxFade: true, fxSpeed: 'fast' });</code></pre>
             </div>
             <div id="fragment-11">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -209,7 +141,7 @@
             </ul>
             <div id="fragment-13">
                 <p>Use a combined slide and fade effect to switch tabs:</p>
-                <pre><code>$('#container').tabs({ fxSlide: true, fxFade: true, fxSpeed: 'fast' });</code></pre>
+                <pre><code>$('#container-5 > ul').tabs({ fxSlide: true, fxFade: true });</code></pre>
             </div>
             <div id="fragment-14">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -233,24 +165,17 @@
             <div id="fragment-16">
                 <p>
                     Define callback functions that are invoked at different points in time during the tab switch process.
-                    These functions are invoked with three arguments: the first one being the clicked tab (the
-                    <code>a</code> element), the second one being the <code>div</code> element that holds the content of
-                    the clicked tab and the third one being the <code>div</code> element belonging to the tab that gets hidden.
-                    <br>
-                    If the onClick callback returns false, the tab switch is canceled. This is especially useful if switching
+                    <br />
+                    If the select callback returns false, the clicked tab won't be selected. This is useful if switching
                     tabs requires form validation before for example.
                 </p>
-                <pre><code>$('#container').tabs({
-    click: function() {
-        alert('click callback');
-    },
-    hide: function() {
-        alert('hide callback');
-    },
-    show: function() {
-        alert('show callback');
-    }
-});</code></pre>
+                <pre><code>$('#container-6 > ul').tabs({ fxFade: true, fxSpeed: 'fast' })
+   .bind('select.ui-tabs', function(e, ui) {
+        alert('event: ' + e.type);
+    })
+    .bind('show.ui-tabs', function(e, ui) {
+        alert('event: ' + e.type);
+    });</code></pre>
             </div>
             <div id="fragment-17">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -273,7 +198,7 @@
             </ul>
             <div id="fragment-19">
                 <p>Define your own custom animation:</p>
-                <pre><code>$('#container').tabs({ fxShow: { height: 'show', opacity: 'show' } });</code></pre>
+                <pre><code>$('#container-7 > ul').tabs({ fxShow: { height: 'show', opacity: 'show' } });</code></pre>
             </div>
             <div id="fragment-20">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -290,9 +215,9 @@
 
         <div id="container-8">
             <ul>
-                <li><a href="ahah_1.html" title="Tab one"><span>One</span></a></li>
-                <li><a href="ahah_2.html" title="Tab two"><span>Two</span></a></li>
-                <li><a href="ahah_3.html"><span>Three</span></a></li>
+                <li><a href="ui.tabs.ahah.html" title="Tab one"><span>One</span></a></li>
+                <li><a href="ui.tabs.ahah.html" title="Tab two"><span>Two</span></a></li>
+                <li><a href="ui.tabs.ahah.html"><span>Three</span></a></li>
             </ul>
         </div>
 
@@ -304,18 +229,19 @@
                 <li><a href="#fragment-24"><span>Three</span></a></li>
             </ul>
             <div id="fragment-22">
-                <pre><code>$('#container').tabsClick(3); // simulate click on 3rd tab
-$('#container').tabsEnable(3); // enable 3rd tab
-$('#container').tabsDisable(3); // disable 3rd tab
-$('#container').tabsAdd('#new-tab', 'New Tab', 4); // add new 4th tab
-$('#container').tabsRemove(4); // remove 4th tab</code></pre>
+                <pre><code>$('#container-9 > ul').tabs('click', 2); // simulate click on 3rd tab
+$('#container-9 > ul').tabs('enable', 2); // enable 3rd tab
+$('#container-9 > ul').tabs('disable, 2); // disable 3rd tab
+$('#container-9 > ul').tabs('add', '#new-tab', 'New Tab'); // add new tab at the end
+$('#container-9 > ul').tabs('add', '#new-tab', 'New Tab', 1); // add new tab at 2nd position
+$('#container-9 > ul').tabs('remove', 3); // remove 4th tab</code></pre>
                 <p>
                     One or more tabs can also be disabled immediatly by simply setting the disabling class for the <code class="html">li</code> element
-                    representing that particular tab or by using the <code>disabled</code> option.
+                    representing that particular tab:
                 </p>
-                <pre><code>&lt;li class=&quot;ui-tabs-disabled&quot;&gt&#8230;&lt;/li&gt;
-
-$('#container').tabs({ disabled: [2, 3] });</code></pre>
+                <pre><code class="html">&lt;li class=&quot;ui-tabs-disabled&quot;&gt;&#8230;&lt;/li&gt;</code></pre>
+                <p>Or by using the <code>disabled</code> option:</p>
+                <pre><code class="javascript">$('#container-9 > ul').tabs({ disabled: [1, 2] });</code></pre>
             </div>
             <div id="fragment-23">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -337,10 +263,10 @@ $('#container').tabs({ disabled: [2, 3] });</code></pre>
                 <li><a href="#fragment-27"><span>Three</span></a></li>
             </ul>
             <div id="fragment-25">
-                <pre><code>$('#container').tabs({ unselected: true }); // start with all tabs hidden
-$('#container').tabs({ unselect: true }); // selected tab closes on click</code></pre>
+                <pre><code>$('#container-10 > ul').tabs({ selected: null }); // start with all tabs hidden
+$('#container-10 > ul').tabs({ unselect: true }); // selected tab closes on click</code></pre>
                 <p>
-                    Setting <code class="javascript">unselected</code> option to <code class="javascript">true</code> automatically sets <code class="javascript">unselect</code> as well.
+                    Setting <code class="javascript">selected</code> option to <code class="javascript">null</code> automatically sets <code class="javascript">unselect</code> to true.
                 </p>
             </div>
             <div id="fragment-26">
@@ -364,7 +290,7 @@ $('#container').tabs({ unselect: true }); // selected tab closes on click</code>
             </ul>
             <div id="fragment-28">
                 <p>Define mouseover event to switch tabs (or any other reasonable event)</p>
-                <pre><code>$('#container').tabs({ event: 'mouseover' });</code></pre>
+                <pre><code>$('#container-11 > ul').tabs({ event: 'mouseover' });</code></pre>
             </div>
             <div id="fragment-29">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -376,6 +302,57 @@ $('#container').tabs({ unselect: true }); // selected tab closes on click</code>
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
             </div>
         </div>
-
+        
+        <script type="text/javascript">
+            // <![CDATA[
+            $(window).bind('load', function() {
+                $('#container-1 > ul').tabs();
+                $('#container-2 > ul').tabs({ selected: 1 });
+                $('#container-3 > ul').tabs({ fxSlide: true });
+                $('#container-4 > ul').tabs({ fxFade: true, fxSpeed: 'fast' });
+                $('#container-5 > ul').tabs({ fxSlide: true, fxFade: true });
+                $('#container-6 > ul').tabs({ fxFade: true, fxSpeed: 'fast' })
+                    .bind('select.ui-tabs', function(e, ui) {
+                        alert('event: ' + e.type);
+                    })
+                    .bind('show.ui-tabs', function(e, ui) {
+                        alert('event: ' + e.type);
+                    });
+                $('#container-7 > ul').tabs({ fxShow: { height: 'show', opacity: 'show' } });
+                $('#container-8 > ul').tabs();
+                $('#container-9 > ul').tabs({ disabled: [2] });
+                $('<p><a href="#">Remove 4th tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
+                    $('#container-9 > ul').tabs('remove', 3);
+                    return false;
+                });
+                $('<p><a href="#">Insert new tab at 2nd position<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
+                    $('#container-9 > ul').tabs('add', '#inserted-tab', 'New Tab', 1);
+                    return false;
+                });
+                $('<p><a href="#">Append new tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
+                    $('#container-9 > ul').tabs('add', '#appended-tab', 'New Tab');
+                    return false;
+                });
+                $('<p><a href="#">Disable 3rd tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
+                    $('#container-9 > ul').tabs('disable', 2);
+                    return false;
+                });
+                $('<p><a href="#">Enable 3rd tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
+                    $('#container-9 > ul').tabs('enable', 2);
+                    return false;
+                });
+                $('<p><a href="#">Click 3rd tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
+                    $('#container-9 > ul').tabs('click', 2);
+                    return false;
+                });
+                $('<p><a href="#">Get selected tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
+                    alert( $('#container-9 > ul').data('selected.ui-tabs') );
+                    return false;
+                });
+                $('#container-10 > ul').tabs({ selected: null });
+                $('#container-11 > ul').tabs({ event: 'mouseover' });
+            });
+            // ]]>
+        </script>
     </body>
 </html>
