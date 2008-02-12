@@ -229,7 +229,7 @@
                 <li><a href="#fragment-24"><span>Three</span></a></li>
             </ul>
             <div id="fragment-22">
-                <pre><code>$('#container-9 > ul').tabs('click', 2); // simulate click on 3rd tab
+                <pre><code>$('#container-9 > ul').tabs('select', 2); // simulate click on 3rd tab
 $('#container-9 > ul').tabs('enable', 2); // enable 3rd tab
 $('#container-9 > ul').tabs('disable, 2); // disable 3rd tab
 $('#container-9 > ul').tabs('add', '#new-tab', 'New Tab'); // add new tab at the end
@@ -341,8 +341,8 @@ $('#container-10 > ul').tabs({ unselect: true }); // selected tab closes on clic
                     $('#container-9 > ul').tabs('enable', 2);
                     return false;
                 });
-                $('<p><a href="#">Click 3rd tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
-                    $('#container-9 > ul').tabs('click', 2);
+                $('<p><a href="#">Select 3rd tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
+                    $('#container-9 > ul').tabs('select', 2);
                     return false;
                 });
                 $('<p><a href="#">Get selected tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {

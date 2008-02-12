@@ -464,7 +464,7 @@
             );
 
         },
-        click: function(position) {
+        select: function(position) {
             this.$tabs.eq(position).trigger(this.options.event);
         },
         load: function(position, url, callback) {
@@ -528,8 +528,8 @@
             }, 0);
 
         },
-        href: function(position, href) {
-            $.data(this.$tabs.eq(position)[0], 'load.ui-tabs', href);
+        url: function(position, url) {
+            $.data(this.$tabs.eq(position)[0], 'load.ui-tabs', url);
         },
         destroy: function() {
             var o = this.options;
