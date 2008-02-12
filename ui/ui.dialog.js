@@ -115,7 +115,10 @@
 		uiDialogTitlebar.click(function() {
 			self.activate();
 		});
-	
+		
+		// TODO: determine if this is necessary for modal dialogs
+		options.bgiframe && $.fn.bgiframe && uiDialog.bgiframe();
+		
 		this.open = function() {
 			options.modal && overlay.show(self, options.overlay);
 			uiDialog.appendTo('body');
@@ -194,6 +197,7 @@
 	$.extend($.ui.dialog, {
 		defaults: {
 			autoOpen: true,
+			bgiframe: false,
 			buttons: [],
 			draggable: true,
 			height: 200,
