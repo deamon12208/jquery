@@ -20,15 +20,7 @@
 <script type="text/javascript" src="../ui.resizable.js"></script>
 
 <style>
-
-.proxy {
-	border: 1px solid #50A029;
-	background-color: #E6F7D4;
-	opacity: 0.3;
-	alpha: 0.3;
-	filter:progid:DXImageTransform.Microsoft.Alpha(opacity=30);
-}
-
+.proxy { border: 1px dotted #000; };
 </style>
 
 </head>
@@ -36,65 +28,114 @@
 
 <h2>1. Default, no options, three handles</h2>
 <div class="playground">
-	<div id='example1' class="ui-wrapper example">
-		<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Resize me</div>
+	<div id='simpleResize' class="ui-wrapper example" style="height:100px; width: 350px;">
+		<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>
+			Resize me<br/>
+			I was made resizable with this code only:<br/> $('div').resizable({ minHeight: 100, minWidth: 350 });
+		</div>
 	</div><br />
-	<button onclick="$('#example1').resizable('enable')">Enable</button>
-	<button onclick="$('#example1').resizable('disable')">Disable</button>
+	<button onclick="$('#simpleResize').resizable('enable')">Enable</button>
+	<button onclick="$('#simpleResize').resizable('disable')">Disable</button>
 </div>
 
-<h2>2. Autohiding handles</h2>
+<h2>2. Autohiding handles (all directions)</h2>
 <div class="playground">
-	<div id='example2' class="ui-wrapper example">
-		<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Resize me</div>
+	<div id='autoHideAllHandles' class="ui-wrapper example" style="height:100px; width: 350px; position:relative;">
+		<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>
+			Resize me<br/>
+			I was made resizable with this code only:<br/> $('div').resizable({ handles: 'all', autohide: true, minHeight: 100, minWidth: 350 });
+		</div>
 	</div>
 </div>
 
 
-<h2>3. Textareas and images</h2>
+<h2>3. Textareas and Inputs</h2>
 
 <div class="playground">
-	<textarea id='example3' style='margin: 0px; padding: 0px;' class="example" rows="6" cols="19">I was made resizable with this code only: $('div').resizable({ autohide: true, minHeight: 100, minWidth: 200 });</textarea>
-	<br /><img style='margin: 0;' id="example32" src="images/resizable.jpg" alt="" /><br>
-	<textarea id='example33' style='margin: 0px; padding: 0px;' class="example" rows="6" cols="19">I was made resizable with this code only: $('#example33').resizable({ transparent: true, proxy:'proxy' });</textarea>
+	
+<textarea id='simpleTextarea' style='margin: 0px; padding: 0px; height:100px; width: 350px;' class="example">Resize me
+	
+I was made resizable with this code only:
+$('#simpleTextarea').resizable({ minHeight: 50, minWidth: 150 });</textarea>
+
+<br />
+
+<textarea id='autohideTextarea' style='margin: 0px; padding: 0px; height:100px; width: 350px;' class="example">Resize me
+	
+I was made resizable with this code only:
+$('#autohideTextarea').resizable({ autohide: true, minHeight: 50, minWidth: 150 });</textarea>
+
+<br />
+
+<textarea id='transparentTextarea' style='margin: 0px; padding: 0px; height:100px; width: 350px;' class="example">Resize me
+	
+I was made resizable with this code only:
+$('#transparentTextarea').resizable({ transparent: true, handles: 'all', minHeight: 50, minWidth: 150 });</textarea>
+
+<br />
+
+<textarea id='allHandlesTextarea' style='margin: 0px; padding: 0px; height:100px; width: 350px;' class="example">Resize me
+	
+I was made resizable with this code only:
+$('#allHandlesTextarea').resizable({ handles: 'all', proxy:'proxy', minHeight: 50, minWidth: 150 });</textarea>
+
+<br />
+
+<input id="simpleInputText" type="text" value="Input Text Resizing example!" class="example" style="margin: 0px; padding: 0px; width: 200px; height: 30px;">
+
+<br />
+
+<input id="simpleInputButton" type="button" value="Button Resizing!" style="margin: 0px; padding: 0px; height: 30px;">
+
+
 </div>
 
 
-<h2>4. All directions</h2>
-<div class="playground" style="height: 110px;">
-	<div id='example4' class="ui-wrapper example" style='position: absolute; top: 10px; left: 10px; background: #fff;'>
-	<div class='ui-resizable-n ui-resizable-handle'></div>
-	<div class='ui-resizable-e ui-resizable-handle'></div>	
-	<div class='ui-resizable-s ui-resizable-handle'></div>
-	<div class='ui-resizable-w ui-resizable-handle'></div>
+<h2>4. Images</h2>
+<div class="playground">
 	
-	<div class='ui-resizable-se ui-resizable-handle'></div>
-	<div class='ui-resizable-sw ui-resizable-handle'></div>
-	<div class='ui-resizable-ne ui-resizable-handle'></div>
-	<div class='ui-resizable-nw ui-resizable-handle'></div>
+	<b>4.1 Preserve Aspect Ratio</b><br>
+	$('#preserveRatioImage').resizable({ aspectRatio: 'preserve' }); <br><br>
 	
-	<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Absolute position without proxy (all directions enabled)</div>
-	</div>
+	<img style='margin: 0;' id="preserveRatioImage" src="images/resizable.jpg" title="$('#preserveRatioImage').resizable({aspectRatio: 'preserve' });" /><br>
+	
+	<b>4.2 Image Resize with a helper (proxy) - Increases Performance!</b><br>
+	$('#proxyImage').resizable({ proxy: 'proxy', aspectRatio: 'preserve' }); <br><br>
+	
+	<img style='margin: 0;' id="proxyImage" src="images/resizable.jpg" title="$('#proxyImage').resizable({proxy: 'proxy' });" /><br>
+	
+	<b>4.3 Transparent Handles</b><br>
+	$('#transparentImage').resizable({ transparent: true, proxy: 'proxy' }); <br><br>
+	
+	<img style='margin: 0;' id="transparentImage" src="images/resizable.jpg" title="$('#simpleImage').resizable();" /><br>
+	
+	<b>4.4 Simple Image Resize without a helper (proxy)</b><br>
+	$('#simpleImage').resizable(); <br><br>
+	
+	<img style='margin: 0;' id="simpleImage" src="images/resizable.jpg" title="$('#simpleImage').resizable();" /><br>
+
+	
 </div>
 <script type="text/javascript">
-if(!window.console) {
- window.console = {
- 	log: function() {
- 		alert(arguments[0]);	
- 	}	
- }	
-}
 
 $(window).bind("load",function(){
 
-	$('#example1').resizable();
-	$('#example2').resizable({ autohide: true, minHeight: 100, minWidth: 200, maxHeight: 300, maxWidth: 800 });
-	$('#example3').resizable({ minHeight: 100, minWidth: 200, maxHeight: 300, maxWidth: 800 });
-	$('#example32').resizable({ proxy: 'proxy', handles: 'all', autohide: true, minHeight: 100, minWidth: 200, maxWidth: 400, maxHeight: 400 });
-	$('#example4').resizable({ autohide: true, proxy:'proxy', minHeight: 100, minWidth: 200, maxHeight: 300, maxWidth: 800 });
-	$('#example33').resizable({ transparent: true, proxy:'proxy', minHeight: 100, minWidth: 200, maxHeight: 300, maxWidth: 800 });
+	$('#simpleResize').resizable({ minHeight: 100, minWidth: 350 });
+	$('#autoHideAllHandles').resizable({ handles: 'all', autohide: true, minHeight: 100, minWidth: 350 });
+	$('#simpleTextarea').resizable({ minHeight: 50, minWidth: 150 });
+	$('#autohideTextarea').resizable({ autohide: true, minHeight: 50, minWidth: 150 });
+	$('#transparentTextarea').resizable({ transparent: true, handles: 'all', minHeight: 50, minWidth: 150 });
+	$('#allHandlesTextarea').resizable({ handles: 'all', proxy:'proxy', minHeight: 50, minWidth: 150 });
+	$('#simpleInputText').resizable();
+	$('#simpleInputButton').resizable();
 	
+	$('#preserveRatioImage').resizable({ aspectRatio: 'preserve' });
+	$('#proxyImage').resizable({proxy: 'proxy', aspectRatio: 'preserve' });
+	$('#transparentImage').resizable({ transparent: true, proxy: 'proxy' });
+	$('#simpleImage').resizable();
 	
+	//$('#allHandlesTextarea').resizable({ autohide: true, handles: 'all', autohide: true, minHeight: 100, minWidth: 200, maxWidth: 400, maxHeight: 400 });
+	//$('#transparentTextarea').resizable({ autohide: true, proxy:'proxy', minHeight: 100, minWidth: 200, maxHeight: 300, maxWidth: 800 });
 
 });
 </script>
