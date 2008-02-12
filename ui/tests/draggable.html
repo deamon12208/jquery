@@ -82,6 +82,10 @@ div.todo div.todo-desc
 </style>
 </head>
 <body>
+
+<div class='fixed' style='position: fixed; bottom: 10px; left: 10px; background: black; width: 100px; height: 50px; z-index: 10; color: white;'> I am fixed</div>
+	
+	
 	<fieldset>
 	<legend>options</legend>
 	<ul>
@@ -219,6 +223,7 @@ div.todo div.todo-desc
 <script type="text/javascript">
 $(document).ready(function(){
 
+	$('div.fixed').draggable();
 	$('#simpledraggable').draggable();
 	$('#simpledraggable-withclone').draggable({
 		helper: 'clone'

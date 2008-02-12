@@ -134,6 +134,12 @@
 				top: (r ? parseInt(this.helper.css('top')) || 0 : elementPosition.top + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollTop))
 			};
 			
+			//If we have a fixed element, we must subtract the scroll offset again
+			if(this.element.css('position') == 'fixed') {
+				this.originalPosition.top -= this.offsetParent[0] == document.body ? $(document).scrollTop() : this.offsetParent[0].scrollTop;
+				this.originalPosition.left -= this.offsetParent[0] == document.body ? $(document).scrollLeft() : this.offsetParent[0].scrollLeft;
+			}
+			
 			//Generate a flexible offset that will later be subtracted from e.pageX/Y
 			this.offset = {left: e.pageX - this.originalPosition.left, top: e.pageY - this.originalPosition.top };
 			
