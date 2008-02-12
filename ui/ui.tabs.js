@@ -16,14 +16,14 @@
     // tabs API methods
     $.fn.tabs = function() {
         var method = typeof arguments[0] == 'string' && arguments[0];
-        var args = method && Array.prototype.slice.call(arguments, 1) || arguments;
+        var args = method && Array.prototype.slice.call(arguments, 1) || arguments;
 
         return this.each(function() {
             if (method) {
                 var tabs = $.data(this, 'ui-tabs');
                 tabs[method].apply(tabs, args);
             } else
-                new $.ui.tabs(this, args[0] || {});
+                new $.ui.tabs(this, args[0] || {});
         });
     };
 
@@ -108,7 +108,7 @@
         tabify: function(init) {
 
             this.$lis = $('li:has(a[href])', this.element);
-            this.$tabs = this.$lis.map(function() { return $('a', this)[0] });
+            this.$tabs = this.$lis.map(function() { return $('a', this)[0]; });
             this.$panels = $([]);
 
             var self = this, o = this.options;
@@ -172,7 +172,7 @@
                             return false; // break
                         }
                     } else if (o.cookie) {
-                        var index = parseInt($.cookie('ui-tabs' + $.data(self.element)));
+                        var index = parseInt($.cookie('ui-tabs' + $.data(self.element)),10);
                         if (index && self.$tabs[index]) {
                             o.selected = index;
                             return false; // break
@@ -204,7 +204,7 @@
                     this.load(o.selected, href);
 
                 // disable click if event is configured to something else
-                if (!/^click/.test(o.event))
+                if (!(/^click/).test(o.event))
                     this.$tabs.bind('click', function(e) { e.preventDefault(); });
 
             }
@@ -439,8 +439,8 @@
             if ($.browser.safari) { // fix disappearing tab (that used opacity indicating disabling) after enabling in Safari 2...
                 $li.css('display', 'inline-block');
                 setTimeout(function() {
-                    $li.css('display', 'block')
-                }, 0)
+                    $li.css('display', 'block');
+                }, 0);
             }
 
             o.disabled = $.map(this.$lis.filter('.' + o.disabledClass),

@@ -58,7 +58,7 @@
 		this.floating = /left|right/.test(this.items[0].item.css('float'));
 		
 		//Let's determine the parent's offset
-		if(!/(relative|absolute|fixed)/.test(this.element.css('position'))) this.element.css('position', 'relative');
+		if(!(/(relative|absolute|fixed)/).test(this.element.css('position'))) this.element.css('position', 'relative');
 		this.offset = this.element.offset({ border: false });
 
 		//Initialize mouse events for interaction
@@ -111,7 +111,7 @@
 			o = o || {};
 			
 			items.each(function() {
-				var res = (this.getAttribute(o.attribute || 'id') || '').match(o.expression || /(.+)[-=_](.+)/);
+				var res = (this.getAttribute(o.attribute || 'id') || '').match(o.expression || (/(.+)[-=_](.+)/));
 				if(res) str.push(res[1]+'[]='+res[2]);				
 			});
 			
@@ -200,14 +200,14 @@
 
 			//Generate the original position
 			this.originalPosition = {
-				left: (r ? parseInt(this.helper.css('left')) || 0 : elementPosition.left + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollLeft)),
-				top: (r ? parseInt(this.helper.css('top')) || 0 : elementPosition.top + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollTop))
+				left: (r ? parseInt(this.helper.css('left'),10) || 0 : elementPosition.left + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollLeft)),
+				top: (r ? parseInt(this.helper.css('top'),10) || 0 : elementPosition.top + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollTop))
 			};
 			
 			//Generate a flexible offset that will later be subtracted from e.pageX/Y
 			this.offset = {
-				left: this._pageX - this.originalPosition.left + (parseInt(this.currentItem.css('marginLeft')) || 0),
-				top: this._pageY - this.originalPosition.top + (parseInt(this.currentItem.css('marginTop')) || 0)
+				left: this._pageX - this.originalPosition.left + (parseInt(this.currentItem.css('marginLeft'),10) || 0),
+				top: this._pageY - this.originalPosition.top + (parseInt(this.currentItem.css('marginTop'),10) || 0)
 			};
 			
 		},
@@ -220,7 +220,7 @@
 
 			//Create and append the visible helper
 			this.helper = typeof o.helper == 'function' ? $(o.helper.apply(this.element[0], [e, this.currentItem])) : this.currentItem.clone();
-			this.helper.appendTo(this.currentItem[0].parentNode).css({ position: 'absolute', clear: 'both', float: 'none' }).addClass('ui-sortable-helper');
+			this.helper.appendTo(this.currentItem[0].parentNode).css({ position: 'absolute', clear: 'both' }).addClass('ui-sortable-helper');
 
 			//Find out the next positioned parent
 			this.offsetParent = (function(cp) {
@@ -240,15 +240,15 @@
 			
 			//Generate the original position
 			this.originalPosition = {
-				left: (r ? parseInt(this.helper.css('left')) || 0 : elementPosition.left + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollLeft)),
-				top: (r ? parseInt(this.helper.css('top')) || 0 : elementPosition.top + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollTop))
+				left: (r ? parseInt(this.helper.css('left'),10) || 0 : elementPosition.left + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollLeft)),
+				top: (r ? parseInt(this.helper.css('top'),10) || 0 : elementPosition.top + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollTop))
 			};
 			
 			//Generate a flexible offset that will later be subtracted from e.pageX/Y
 			//I hate margins - they need to be removed before positioning the element absolutely..
 			this.offset = {
-				left: e.pageX - this.originalPosition.left + (parseInt(this.currentItem.css('marginLeft')) || 0),
-				top: e.pageY - this.originalPosition.top + (parseInt(this.currentItem.css('marginTop')) || 0)
+				left: e.pageX - this.originalPosition.left + (parseInt(this.currentItem.css('marginLeft'),10) || 0),
+				top: e.pageY - this.originalPosition.top + (parseInt(this.currentItem.css('marginTop'),10) || 0)
 			};
 
 			//Save the first time position

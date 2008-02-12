@@ -109,13 +109,13 @@ $.ui.accordion.prototype = {
 		$.removeData(this.element, "ui-accordion");
 		$(this.element).removeClass("ui-accordion").unbind(".ui-accordion");
 	}
-}
+};
 
 function scopeCallback(callback, scope) {
 	return function() {
 		return callback.apply(scope, arguments);
 	};
-}
+};
 
 function completed(cancel) {
 	// if removed while animated data can be empty
@@ -303,7 +303,7 @@ $.extend($.ui.accordion, {
 			this.slide(options, {
 				easing: "easeinout",
 				duration: 700
-			})
+			});
 		}
 	}
 });

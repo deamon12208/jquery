@@ -59,7 +59,7 @@
 					unselecting: $this.hasClass('ui-unselecting')
 				});
 			});
-		}
+		};
 		this.refresh();
 
 		this.selectees = selectees.addClass("ui-selectee");

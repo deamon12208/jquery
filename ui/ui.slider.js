@@ -31,16 +31,16 @@
 		var o = this.options;
 		$.extend(o, {
 			axis: o.axis || (element.offsetWidth < element.offsetHeight ? 'vertical' : 'horizontal'),
-			maxValue: !isNaN(parseInt(o.maxValue)) ? parseInt(o.maxValue) :  100,
-			minValue: parseInt(o.minValue) || 0,
-			startValue: parseInt(o.startValue) || 'none'		
+			maxValue: !isNaN(parseInt(o.maxValue,10)) ? parseInt(o.maxValue,10) :  100,
+			minValue: parseInt(o.minValue,10) || 0,
+			startValue: parseInt(o.startValue,10) || 'none'		
 		});
 		
 		//Prepare the real maxValue
 		o.realMaxValue = o.maxValue - o.minValue;
 		
 		//Calculate stepping based on steps
-		o.stepping = parseInt(o.stepping) || (o.steps ? o.realMaxValue/o.steps : 0);
+		o.stepping = parseInt(o.stepping,10) || (o.steps ? o.realMaxValue/o.steps : 0);
 		
 		$(element).bind("setData.slider", function(event, key, value){
 			self.options[key] = value;
@@ -109,16 +109,16 @@
 			this.rangeElement = $('<div></div>')
 				.addClass('ui-slider-range')
 				.css({ position: 'absolute' })
-				.css(this.properties[0], parseInt($(this.handle[0]).css(this.properties[0])) + this.handleSize(0)/2)
-				.css(this.properties[1], parseInt($(this.handle[1]).css(this.properties[0])) - parseInt($(this.handle[0]).css(this.properties[0])))
+				.css(this.properties[0], parseInt($(this.handle[0]).css(this.properties[0]),10) + this.handleSize(0)/2)
+				.css(this.properties[1], parseInt($(this.handle[1]).css(this.properties[0]),10) - parseInt($(this.handle[0]).css(this.properties[0]),10))
 				.appendTo(this.element);
 		},
 		updateRange: function() {
-				this.rangeElement.css(this.properties[0], parseInt($(this.handle[0]).css(this.properties[0])) + this.handleSize(0)/2);
-				this.rangeElement.css(this.properties[1], parseInt($(this.handle[1]).css(this.properties[0])) - parseInt($(this.handle[0]).css(this.properties[0])));
+				this.rangeElement.css(this.properties[0], parseInt($(this.handle[0]).css(this.properties[0]),10) + this.handleSize(0)/2);
+				this.rangeElement.css(this.properties[1], parseInt($(this.handle[1]).css(this.properties[0]),10) - parseInt($(this.handle[0]).css(this.properties[0]),10));
 		},
 		getRange: function() {
-			return this.rangeElement ? this.convertValue(parseInt(this.rangeElement.css(this.properties[1]))) : null;
+			return this.rangeElement ? this.convertValue(parseInt(this.rangeElement.css(this.properties[1]),10)) : null;
 		},
 		ui: function(e) {
 			return {
@@ -158,7 +158,7 @@
 		},
 		value: function(handle) {
 			if(this.handle.length == 1) this.currentHandle = this.handle;
-			return ((parseInt($(handle != undefined ? this.handle[handle] || handle : this.currentHandle).css(this.properties[0])) / (this.size - this.handleSize())) * this.options.realMaxValue) + this.options.minValue;
+			return ((parseInt($(handle != undefined ? this.handle[handle] || handle : this.currentHandle).css(this.properties[0]),10) / (this.size - this.handleSize())) * this.options.realMaxValue) + this.options.minValue;
 		},
 		convertValue: function(value) {
 			return (value / (this.size - this.handleSize())) * this.options.realMaxValue;
@@ -238,7 +238,7 @@
 			if(handle == undefined && !this.currentHandle) handle = 0; //If only one handle is available, use it
 			if(handle != undefined) this.currentHandle = this.previousHandle = $(this.handle[handle] || handle);
 
-			if(value.constructor == String) value = /\-\=/.test(value) ? this.value() - parseInt(value.replace('-=', '')) : this.value() + parseInt(value.replace('+=', ''));
+			if(value.constructor == String) value = /\-\=/.test(value) ? this.value() - parseInt(value.replace('-=', ''),10) : this.value() + parseInt(value.replace('+=', ''),10);
 			if(o.stepping) value = Math.round(value / o.stepping) * o.stepping;
 			value = this.translateValue(value);
 

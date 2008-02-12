@@ -169,7 +169,7 @@
 		this.activate = function() {
 			var maxZ = 0;
 			$('.ui-dialog:visible').each(function() {
-				maxZ = Math.max(maxZ, parseInt($(this).css("z-index")));
+				maxZ = Math.max(maxZ, parseInt($(this).css("z-index"),10));
 			});
 			overlay.$el && overlay.$el.css('z-index', ++maxZ);
 			uiDialog.css("z-index", ++maxZ);
@@ -189,7 +189,7 @@
 		
 		if (options.autoOpen)
 			this.open();
-	}
+	};
 	
 	$.extend($.ui.dialog, {
 		defaults: {

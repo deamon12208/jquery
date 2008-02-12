@@ -51,8 +51,8 @@
 			if(ui.instance.placeholder) ui.instance.placeholder.animate({ opacity: 'hide' }, parseInt(ui.options.revert, 10) || 500);
 			
 			ui.helper.animate({
-				left: cur.left - self.offsetParentOffset.left - (parseInt(self.currentItem.css('marginLeft')) || 0),
-				top: cur.top - self.offsetParentOffset.top - (parseInt(self.currentItem.css('marginTop')) || 0)
+				left: cur.left - self.offsetParentOffset.left - (parseInt(self.currentItem.css('marginLeft'),10) || 0),
+				top: cur.top - self.offsetParentOffset.top - (parseInt(self.currentItem.css('marginTop'),10) || 0)
 			}, parseInt(ui.options.revert, 10) || 500, function() {
 				self.currentItem.css('visibility', 'visible');
 				window.setTimeout(function() {
@@ -131,11 +131,11 @@
 			o.scrollSpeed		= o.scrollSpeed || 20;
 
 			ui.instance.overflowY = function(el) {
-				do { if(/auto|scroll/.test(el.css('overflow')) || /auto|scroll/.test(el.css('overflow-y'))) return el; el = el.parent(); } while (el[0].parentNode);
+				do { if((/auto|scroll/).test(el.css('overflow')) || (/auto|scroll/).test(el.css('overflow-y'))) return el; el = el.parent(); } while (el[0].parentNode);
 				return $(document);
 			}(this);
 			ui.instance.overflowX = function(el) {
-				do { if(/auto|scroll/.test(el.css('overflow')) || /auto|scroll/.test(el.css('overflow-x'))) return el; el = el.parent(); } while (el[0].parentNode);
+				do { if((/auto|scroll/).test(el.css('overflow')) || (/auto|scroll/).test(el.css('overflow-x'))) return el; el = el.parent(); } while (el[0].parentNode);
 				return $(document);
 			}(this);
 		},

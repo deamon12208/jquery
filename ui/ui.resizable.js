@@ -140,7 +140,7 @@
           o.handles[i] = $(o.handles[i], element).show();
         
         if (o.transparent)
-          o.handles[i].css({opacity:0})
+          o.handles[i].css({opacity:0});
         
         //Apply pad to wrapper element, needed to fix axis position (textarea, inputs, scrolls)
         if (this.element.is('.ui-wrapper') && 
@@ -213,7 +213,7 @@
         return false;
       }
     });
-  }
+  };
   
   $.extend($.ui.resizable.prototype, {
     plugins: {},
@@ -236,7 +236,7 @@
       var p = [ prel.css('paddingTop'), prel.css('paddingRight'), prel.css('paddingBottom'), prel.css('paddingLeft') ];
       
       o.borderDif = o.borderDif || $.map(b, function(v, i) {
-        var border = parseInt(v)||0, padding = parseInt(p[i])||0;
+        var border = parseInt(v,10)||0, padding = parseInt(p[i],10)||0;
         return border + padding; 
       });
 			
@@ -299,9 +299,9 @@
 			o.documentScroll = { top: $(document).scrollTop(),	left: $(document).scrollLeft() };
 			
 			// buf fix #1749
-      if (el.is('.ui-draggable') || /absolute/.test(el.css('position'))) {
+      if (el.is('.ui-draggable') || (/absolute/).test(el.css('position'))) {
 				// sOffset decides if document scrollOffset will be added to the top/left of the resizable element
-				var sOffset = $.browser.msie && !o.containment && /absolute/.test(el.css('position')) && !/relative/.test(el.parent().css('position'));
+				var sOffset = $.browser.msie && !o.containment && (/absolute/).test(el.css('position')) && !(/relative/).test(el.parent().css('position'));
 				var dscrollt = sOffset ? o.documentScroll.top : 0, dscrolll = sOffset ? o.documentScroll.left : 0;
 	  		el.css({ position: 'absolute', top: (iniPos.top + dscrollt),	left: (iniPos.left + dscrolll)	});
 	  	}
@@ -318,8 +318,8 @@
         currentSizeDiff: { width: el.outerWidth() - el.width(), height: el.outerHeight() - el.height() },
         startPosition: { left: e.pageX, top: e.pageY },
         currentPosition: {
-          left: parseInt(this.helper.css('left')) || 0,
-          top: parseInt(this.helper.css('top')) || 0
+          left: parseInt(this.helper.css('left'),10) || 0,
+          top: parseInt(this.helper.css('top'),10) || 0
         }
       });
 
@@ -361,8 +361,8 @@
         var style = { 
           width: (this.helper.width() - o.currentSizeDiff.width) + "px",
           height: (this.helper.height() - o.currentSizeDiff.height) + "px",
-          top: ((parseInt(this.element.css('top')) || 0) + ((parseInt(this.helper.css('top')) - this.offset.top)||0)),
-          left: ((parseInt(this.element.css('left')) || 0) + ((parseInt(this.helper.css('left')) - this.offset.left)||0))
+          top: ((parseInt(this.element.css('top'),10) || 0) + ((parseInt(this.helper.css('top'),10) - this.offset.top)||0)),
+          left: ((parseInt(this.element.css('left'),10) || 0) + ((parseInt(this.helper.css('left'),10) - this.offset.left)||0))
         };
         
         if (o.animate) {
@@ -405,7 +405,7 @@
 					
 					if (a == "top" && (o.axis == "ne" || o.axis == "nw")) {
 						//el.css('top', o.currentPosition['top'] - (el.outerHeight() - o.currentSize.height) );
-						/*TODO*/ return
+						/*TODO*/ return;
 					};
 				}
 				el.css(a, val);
@@ -418,7 +418,7 @@
       if(a=="s"||a=="se"||a=="sw") change("height", 1);
       
       //Measure the new height and correct against min/maxHeight
-			var curheight = parseInt(el.css('height'))||0;
+			var curheight = parseInt(el.css('height'),10)||0;
       if(o.minHeight && curheight <= o.minHeight) el.css('height', o.minHeight);  
       if(o.maxHeight && curheight >= o.maxHeight) el.css('height', o.maxHeight);
       
@@ -426,10 +426,10 @@
       if(a=="n"||a=="ne"||a=="nw") change("top", 1);
 	  
       //Measure the new top position and correct against min/maxHeight
-			var curtop = parseInt(el.css('top'))||0;
+			var curtop = parseInt(el.css('top'),10)||0;
 			
-			tminval = (o.currentPosition.top + (o.currentSize.height - o.minHeight)), 
-				tmaxval = (o.currentPosition.top + (o.currentSize.height - o.maxHeight));
+			tminval = (o.currentPosition.top + (o.currentSize.height - o.minHeight));
+			tmaxval = (o.currentPosition.top + (o.currentSize.height - o.maxHeight));
       if(o.minHeight && curtop >= tminval) el.css('top', tminval);
       if(o.maxHeight && curtop <= tmaxval) el.css('top', tmaxval);
 		
@@ -438,7 +438,7 @@
       if(a=="sw"||a=="w"||a=="nw") change("width");
       
       //Measure the new width and correct against min/maxWidth
-			var curwidth = parseInt(el.css('width'))||0;
+			var curwidth = parseInt(el.css('width'),10)||0;
       if(o.minWidth && curwidth <= o.minWidth) el.css('width', o.minWidth);  
       if(o.maxWidth && curwidth >= o.maxWidth) el.css('width', o.maxWidth);
       
@@ -446,10 +446,10 @@
       if(a=="sw"||a=="w"||a=="nw") change("left", 1);
       
       //Measure the new left position and correct against min/maxWidth
-			var curleft = parseInt(el.css('left'))||0;
+			var curleft = parseInt(el.css('left'),10)||0;
 			
-			tminval = (o.currentPosition.left + (o.currentSize.width - o.minWidth)), 
-				tmaxval = (o.currentPosition.left + (o.currentSize.width - o.maxWidth));
+			tminval = (o.currentPosition.left + (o.currentSize.width - o.minWidth));
+			tmaxval = (o.currentPosition.left + (o.currentSize.width - o.maxWidth));
       if(o.minWidth && curleft >= tminval) el.css('left', tminval);
       if(o.maxWidth && curleft <= tmaxval) el.css('left', tmaxval);
       

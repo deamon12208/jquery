@@ -149,11 +149,11 @@
 			o.scrollSpeed		= o.scrollSpeed || 20;
 
 			ui.instance.overflowY = function(el) {
-				do { if(/auto|scroll/.test(el.css('overflow')) || /auto|scroll/.test(el.css('overflow-y'))) return el; el = el.parent(); } while (el[0].parentNode);
+				do { if(/auto|scroll/.test(el.css('overflow')) || (/auto|scroll/).test(el.css('overflow-y'))) return el; el = el.parent(); } while (el[0].parentNode);
 				return $(document);
 			}(this);
 			ui.instance.overflowX = function(el) {
-				do { if(/auto|scroll/.test(el.css('overflow')) || /auto|scroll/.test(el.css('overflow-x'))) return el; el = el.parent(); } while (el[0].parentNode);
+				do { if(/auto|scroll/.test(el.css('overflow')) || (/auto|scroll/).test(el.css('overflow-x'))) return el; el = el.parent(); } while (el[0].parentNode);
 				return $(document);
 			}(this);
 		},
@@ -223,9 +223,9 @@
 				if(!((l-d < x1 && x1 < r+d && t-d < y1 && y1 < b+d) || (l-d < x1 && x1 < r+d && t-d < y2 && y2 < b+d) || (l-d < x2 && x2 < r+d && t-d < y1 && y1 < b+d) || (l-d < x2 && x2 < r+d && t-d < y2 && y2 < b+d))) continue;
 
 				if(ui.options.snapMode != 'inner') {
-					var ts = Math.abs(t - y2) <= 20
+					var ts = Math.abs(t - y2) <= 20;
 					var bs = Math.abs(b - y1) <= 20;
-					var ls = Math.abs(l - x2) <= 20
+					var ls = Math.abs(l - x2) <= 20;
 					var rs = Math.abs(r - x1) <= 20;
 					if(ts) ui.position.top = t - ui.instance.offset.top + ui.instance.clickOffset.top - ui.instance.helperProportions.height;
 					if(bs) ui.position.top = b - ui.instance.offset.top + ui.instance.clickOffset.top;
@@ -234,9 +234,9 @@
 				}
 				
 				if(ui.options.snapMode != 'outer') {
-					var ts = Math.abs(t - y1) <= 20
+					var ts = Math.abs(t - y1) <= 20;
 					var bs = Math.abs(b - y2) <= 20;
-					var ls = Math.abs(l - x1) <= 20
+					var ls = Math.abs(l - x1) <= 20;
 					var rs = Math.abs(r - x2) <= 20;
 					if(ts) ui.position.top = t - ui.instance.offset.top + ui.instance.clickOffset.top;
 					if(bs) ui.position.top = b - ui.instance.offset.top + ui.instance.clickOffset.top - ui.instance.helperProportions.height;
