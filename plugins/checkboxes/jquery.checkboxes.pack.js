@@ -1,8 +1,8 @@
 /*
  *
- * Copyright (c) 2006/2007 Sam Collett (http://www.texotela.co.uk)
- * Licensed under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
+ * Copyright (c) 2006-2008 Sam Collett (http://www.texotela.co.uk)
+ * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
+ * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
  * 
  * Version 2.0.1
  * Demo: http://www.texotela.co.uk/code/jquery/checkboxes/
