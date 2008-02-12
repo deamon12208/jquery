@@ -59,14 +59,14 @@
 		});
 		
 		if (options.resizable && $.fn.resizable) {
-			uiDialog.append("<div class='ui-resizable-n ui-resizable-handle'></div>")
-				.append("<div class='ui-resizable-s ui-resizable-handle'></div>")
-				.append("<div class='ui-resizable-e ui-resizable-handle'></div>")
-				.append("<div class='ui-resizable-w ui-resizable-handle'></div>")
-				.append("<div class='ui-resizable-ne ui-resizable-handle'></div>")
-				.append("<div class='ui-resizable-se ui-resizable-handle'></div>")
-				.append("<div class='ui-resizable-sw ui-resizable-handle'></div>")
-				.append("<div class='ui-resizable-nw ui-resizable-handle'></div>");
+			uiDialog.append('<div class="ui-resizable-n ui-resizable-handle"></div>')
+				.append('<div class="ui-resizable-s ui-resizable-handle"></div>')
+				.append('<div class="ui-resizable-e ui-resizable-handle"></div>')
+				.append('<div class="ui-resizable-w ui-resizable-handle"></div>')
+				.append('<div class="ui-resizable-ne ui-resizable-handle"></div>')
+				.append('<div class="ui-resizable-se ui-resizable-handle"></div>')
+				.append('<div class="ui-resizable-sw ui-resizable-handle"></div>')
+				.append('<div class="ui-resizable-nw ui-resizable-handle"></div>');
 			uiDialog.resizable({ maxWidth: options.maxWidth, maxHeight: options.maxHeight, minWidth: options.minWidth, minHeight: options.minHeight });
 		}
 
