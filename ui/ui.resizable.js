@@ -121,7 +121,7 @@
         var d = jQuery.trim(n[i]), t = o.defaultTheme, hname = 'ui-resizable-'+d;
         
         var rcss = $.extend(t[hname], t['ui-resizable-handle']), 
-            axis = $(["<div class='",hname," ui-resizable-handle' style='",insertions[d], insertions.handle,"'></div>"].join("")).css(/sw|se|ne|nw/.test(d) ? { zIndex: ++o.zIndex } : {});
+            axis = $(["<div class=\"",hname," ui-resizable-handle\" style=\"",insertions[d], insertions.handle,"\"></div>"].join("")).css(/sw|se|ne|nw/.test(d) ? { zIndex: ++o.zIndex } : {});
         
         o.handles[d] = '.ui-resizable-'+d;
           

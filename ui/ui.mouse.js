@@ -24,7 +24,7 @@
 		css: function(name) {
 			if ($.ui.cssCache[name]) return $.ui.cssCache[name];
 			
-			var tmp = $("<div class='ui-resizable-gen'>").addClass(name).css(
+			var tmp = $('<div class="ui-resizable-gen">').addClass(name).css(
 				{position:'absolute', top:'-5000px', left:'-5000px', display:'block'}
 			).appendTo('body');
 			
