@@ -89,7 +89,7 @@
                     <code>normal</code>, <code>fast</code>) or an integer value specifying the duration for the animation
                     in milliseconds. If omitted it defaults to <code>normal</code>.
                 </p>
-                <pre><code>$('#container-3 > ul').tabs({ fxSlide: true });</code></pre>
+                <pre><code>$('#container-3 > ul').tabs({ fx: { height: 'toggle' } });</code></pre>
             </div>
             <div id="fragment-8">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -118,7 +118,7 @@
                     <code>normal</code>, <code>fast</code>) or an integer value specifying the duration for the animation
                     in milliseconds. If omitted it defaults to <code>normal</code>.
                 </p>
-                <pre><code>$('#container-4 > ul').tabs({ fxFade: true, fxSpeed: 'fast' });</code></pre>
+                <pre><code>$('#container-4 > ul').tabs({ fx: { opacity: 'toggle' } });</code></pre>
             </div>
             <div id="fragment-11">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -141,7 +141,7 @@
             </ul>
             <div id="fragment-13">
                 <p>Use a combined slide and fade effect to switch tabs:</p>
-                <pre><code>$('#container-5 > ul').tabs({ fxSlide: true, fxFade: true });</code></pre>
+                <pre><code>$('#container-5 > ul').tabs({ fx: { height: 'toggle', opacity: 'toggle' } });</code></pre>
             </div>
             <div id="fragment-14">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -169,7 +169,7 @@
                     If the select callback returns false, the clicked tab won't be selected. This is useful if switching
                     tabs requires form validation before for example.
                 </p>
-                <pre><code>$('#container-6 > ul').tabs({ fxFade: true, fxSpeed: 'fast' })
+                <pre><code>$('#container-6 > ul').tabs({ fx: { opacity: 'toggle', duration: 'fast' } })
    .bind('select.ui-tabs', function(e, ui) {
         alert('event: ' + e.type);
     })
@@ -198,7 +198,7 @@
             </ul>
             <div id="fragment-19">
                 <p>Define your own custom animation:</p>
-                <pre><code>$('#container-7 > ul').tabs({ fxShow: { height: 'show', opacity: 'show' } });</code></pre>
+                <pre><code>$('#container-7 > ul').tabs({ fx: [null, { height: 'show', opacity: 'show' }] });</code></pre>
             </div>
             <div id="fragment-20">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -308,17 +308,17 @@ $('#container-10 > ul').tabs({ unselect: true }); // selected tab closes on clic
             $(window).bind('load', function() {
                 $('#container-1 > ul').tabs();
                 $('#container-2 > ul').tabs({ selected: 1 });
-                $('#container-3 > ul').tabs({ fxSlide: true });
-                $('#container-4 > ul').tabs({ fxFade: true, fxSpeed: 'fast' });
-                $('#container-5 > ul').tabs({ fxSlide: true, fxFade: true });
-                $('#container-6 > ul').tabs({ fxFade: true, fxSpeed: 'fast' })
+                $('#container-3 > ul').tabs({ fx: { height: 'toggle' } });
+                $('#container-4 > ul').tabs({ fx: { opacity: 'toggle' } });
+                $('#container-5 > ul').tabs({ fx: { height: 'toggle', opacity: 'toggle' } });
+                $('#container-6 > ul').tabs({ fx: { opacity: 'toggle', duration: 'fast' } })
                     .bind('select.ui-tabs', function(e, ui) {
                         alert('event: ' + e.type);
                     })
                     .bind('show.ui-tabs', function(e, ui) {
                         alert('event: ' + e.type);
                     });
-                $('#container-7 > ul').tabs({ fxShow: { height: 'show', opacity: 'show' } });
+                $('#container-7 > ul').tabs({ fx: [null, { height: 'show', opacity: 'show' }] });
                 $('#container-8 > ul').tabs();
                 $('#container-9 > ul').tabs({ disabled: [2] });
                 $('<p><a href="#">Remove 4th tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {

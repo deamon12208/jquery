@@ -50,14 +50,7 @@
             ajaxOptions: {},
 
             // animations
-            fx: null,
-            /*fxFade: null,
-            fxSlide: null,
-            fxShow: null,
-            fxHide: null,*/
-            fxSpeed: 'normal',
-            /*fxShowSpeed: null,
-            fxHideSpeed: null,*/
+            fx: null, /* e.g. { height: 'toggle', opacity: 'toggle', duration: 200 } */
 
             // templates
             tabTemplate: '<li><a href="#{href}"><span>#{label}</span></a></li>',
@@ -209,44 +202,23 @@
 
             }
 
-            // setup animations
-            var showAnim = {}, showSpeed = o.fxShowSpeed || o.fxSpeed,
-                hideAnim = {}, hideSpeed = o.fxHideSpeed || o.fxSpeed;
-            if (o.fxSlide || o.fxFade) {
-                if (o.fxSlide) {
-                    showAnim['height'] = 'show';
-                    hideAnim['height'] = 'hide';
-                }
-                if (o.fxFade) {
-                    showAnim['opacity'] = 'show';
-                    hideAnim['opacity'] = 'hide';
-                }
-            } else {
-                if (o.fxShow)
-                    showAnim = o.fxShow;
-                else { // use some kind of animation to prevent browser scrolling to the tab
-                    showAnim['min-width'] = 0; // avoid opacity, causes flicker in Firefox
-                    showSpeed = 1; // as little as 1 is sufficient
-                }
-                if (o.fxHide)
-                    hideAnim = o.fxHide;
-                else { // use some kind of animation to prevent browser scrolling to the tab
-                    hideAnim['min-width'] = 0; // avoid opacity, causes flicker in Firefox
-                    hideSpeed = 1; // as little as 1 is sufficient
-                }
-            }
+            var hideFx, showFx, baseFx = { 'min-width': 0, duration: 1 }, baseDuration = 'normal';
+            if (o.fx && o.fx.constructor == Array)
+                hideFx = o.fx[0] || baseFx, showFx = o.fx[1] || baseFx;
+            else
+                hideFx = showFx = o.fx || baseFx;
 
             // reset some styles to maintain print style sheets etc.
             var resetCSS = { display: '', overflow: '', height: '' };
             if (!$.browser.msie) // not in IE to prevent ClearType font issue
-                resetCSS['opacity'] = '';
+                resetCSS.opacity = '';
 
             // Hide a tab, animation prevents browser scrolling to fragment,
             // $show is optional.
             function hideTab(clicked, $hide, $show) {
-                $hide.animate(hideAnim, hideSpeed, function() { //
+                $hide.animate(hideFx, hideFx.duration || baseDuration, function() { //
                     $hide.addClass(o.hideClass).css(resetCSS); // maintain flexible height and accessibility in print etc.
-                    if ($.browser.msie && hideAnim['opacity'])
+                    if ($.browser.msie && hideFx.opacity)
                         $hide[0].style.filter = '';
                     if ($show)
                         showTab(clicked, $show, $hide);
@@ -254,13 +226,13 @@
             }
 
             // Show a tab, animation prevents browser scrolling to fragment,
-            // $hide is optional
+            // $hide is optional.
             function showTab(clicked, $show, $hide) {
-                if (!(o.fxSlide || o.fxFade || o.fxShow))
+                if (showFx === baseFx)
                     $show.css('display', 'block'); // prevent occasionally occuring flicker in Firefox cause by gap between showing and hiding the tab panels
-                $show.animate(showAnim, showSpeed, function() {
+                $show.animate(showFx, showFx.duration || baseDuration, function() {
                     $show.removeClass(o.hideClass).css(resetCSS); // maintain flexible height and accessibility in print etc.
-                    if ($.browser.msie && showAnim['opacity'])
+                    if ($.browser.msie && showFx.opacity)
                         $show[0].style.filter = '';
 
                     // callback
