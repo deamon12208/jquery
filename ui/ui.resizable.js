@@ -32,9 +32,6 @@
       aspectRatio: false,
       disableSelection: true,
       preserveCursor: true,
-      animate: false,
-      duration: 'fast',
-      easing: 'swing',
       autohide: false
     }, options);
     
@@ -46,8 +43,6 @@
       return self.options[key];
     });
     
-    //Force proxy if animate is enable
-    this.options.proxy = this.options.animate ? "proxy" : this.options.proxy;
     var o = this.options;
     
     //Default Theme
@@ -312,15 +307,15 @@
       
       this._renderProxy();
       
+			var curleft = parseInt(this.helper.css('left'),10) || 0, curtop = parseInt(this.helper.css('top'),10) || 0;
+			
       //Store needed variables
       $.extend(o, {
         currentSize: { width: el.outerWidth(), height: el.outerHeight() },
         currentSizeDiff: { width: el.outerWidth() - el.width(), height: el.outerHeight() - el.height() },
-        startPosition: { left: e.pageX, top: e.pageY },
-        currentPosition: {
-          left: parseInt(this.helper.css('left'),10) || 0,
-          top: parseInt(this.helper.css('top'),10) || 0
-        }
+        startMousePosition: { left: e.pageX, top: e.pageY },
+        startPosition: { left: curleft, top: curtop },
+        currentPosition: { left: curleft,top: curtop }
       });
 
 			//Aspect Ratio
@@ -364,13 +359,7 @@
           top: ((parseInt(this.element.css('top'),10) || 0) + ((parseInt(this.helper.css('top'),10) - this.offset.top)||0)),
           left: ((parseInt(this.element.css('left'),10) || 0) + ((parseInt(this.helper.css('left'),10) - this.offset.left)||0))
         };
-        
-        if (o.animate) {
-          $.extend(style, (typeof o.animate == 'object') ? o.animate : {} );
-          this.element.animate(style, { duration: o.duration, easing: o.easing });          
-        } else {
-          this.element.css(style);
-        }
+       	this.element.css(style);
         if (o.proxy) this._proportionallyResize();
         this.helper.remove();
       }
@@ -391,8 +380,8 @@
         var isth = (a=="top"||a=="height"), ishw = (a=="width"||a=="height"),
 							defAxis = (o.axis=="se"||o.axis=="s"||o.axis=="e");
 								 
-        var mod = (e[isth ? 'pageY' : 'pageX'] - o.startPosition[isth ? 'top' : 'left']) * (b ? -1 : 1);
-        var val = o[ishw ? 'currentSize' : 'currentPosition'][a] - mod - (!o.proxy && defAxis ? o.currentSizeDiff.width : 0);
+        var mod = (e[isth ? 'pageY' : 'pageX'] - o.startMousePosition[isth ? 'top' : 'left']) * (b ? -1 : 1);
+        var val = o[ishw ? 'currentSize' : 'startPosition'][a] - mod - (!o.proxy && defAxis ? o.currentSizeDiff.width : 0);
 				
 				//Preserve ratio
         if (pRatio) {
@@ -404,7 +393,7 @@
 					if (ishw && !locked)	el.css(isth ? "width" : "height", v);
 					
 					if (a == "top" && (o.axis == "ne" || o.axis == "nw")) {
-						//el.css('top', o.currentPosition['top'] - (el.outerHeight() - o.currentSize.height) );
+						//el.css('top', o.startPosition['top'] - (el.outerHeight() - o.currentSize.height) );
 						/*TODO*/ return;
 					};
 				}
@@ -428,8 +417,8 @@
       //Measure the new top position and correct against min/maxHeight
 			var curtop = parseInt(el.css('top'),10)||0;
 			
-			tminval = (o.currentPosition.top + (o.currentSize.height - o.minHeight));
-			tmaxval = (o.currentPosition.top + (o.currentSize.height - o.maxHeight));
+			tminval = (o.startPosition.top + (o.currentSize.height - o.minHeight));
+			tmaxval = (o.startPosition.top + (o.currentSize.height - o.maxHeight));
       if(o.minHeight && curtop >= tminval) el.css('top', tminval);
       if(o.maxHeight && curtop <= tmaxval) el.css('top', tmaxval);
 		
@@ -448,8 +437,8 @@
       //Measure the new left position and correct against min/maxWidth
 			var curleft = parseInt(el.css('left'),10)||0;
 			
-			tminval = (o.currentPosition.left + (o.currentSize.width - o.minWidth));
-			tmaxval = (o.currentPosition.left + (o.currentSize.width - o.maxWidth));
+			tminval = (o.startPosition.left + (o.currentSize.width - o.minWidth));
+			tmaxval = (o.startPosition.left + (o.currentSize.width - o.maxWidth));
       if(o.minWidth && curleft >= tminval) el.css('left', tminval);
       if(o.maxWidth && curleft <= tmaxval) el.css('left', tmaxval);
       
@@ -467,7 +456,7 @@
         if (curheight + o.currentSizeDiff.height + curtop >= o.cdata.h)
 					el.css('height', o.cdata.h - o.currentSizeDiff.height - (curtop < 0 ? 0 : curtop));
       }
-			
+			o.currentPosition = { left: curleft, top: curtop };
       if (!o.proxy) this._proportionallyResize();
       this.propagate("resize", e);  
       return false;
