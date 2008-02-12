@@ -1,6 +1,6 @@
 {
 	"name": "jQuery-Validation",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"author": [
 		"Jörn Zaefferer <joern.zaefferer@gmail.com>"
 	],
@@ -12,7 +12,7 @@
 	},
 	"provides": {
 		"jQuery.validate": {
-			"version": "1.2.0",
+			"version": "1.2.1",
 			"file": "jquery.validate.js"
 		}
 	},

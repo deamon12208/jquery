@@ -1,5 +1,5 @@
 /*
- * jQuery validation plug-in v1.2.1pre
+ * jQuery validation plug-in v1.2.1
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-validation/
  * http://docs.jquery.com/Plugins/Validation
@@ -657,8 +657,8 @@ jQuery.extend(jQuery.validator, {
 			}
 		}
 		
-		// maxlength may be returned as -1, 2147483647 (IE) and 1024 (safari) for text inputs
-		if (rules.maxlength && /-1|2147483647|1024/.test(rules.maxlength)) {
+		// maxlength may be returned as -1, 2147483647 (IE) and 524288 (safari) for text inputs
+		if (rules.maxlength && /-1|2147483647|524288/.test(rules.maxlength)) {
 			delete rules.maxlength;
 			// deprecated
 			delete rules.maxLength;
