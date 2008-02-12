@@ -246,8 +246,8 @@
       this.offset = el.offset();
       
       if(o.proxy) {
-        this.helper = this.helper || $('<div></div>');
-        
+        this.helper = this.helper || $('<div style="overflow:hidden;"></div>');
+				
 				// fix ie6 offset
 				var ie6offset = ($.browser.msie && $.browser.version < 7 ? 3 : 0);
 				
