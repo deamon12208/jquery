@@ -76,7 +76,7 @@
     if(nodeName.match(/textarea|input|select|button|img/i)) {
       
       //Create a wrapper element and set the wrapper to the new current internal element
-      this.element.wrap('<div class="ui-wrapper"  style="position: relative; width: '+this.element.outerWidth()+'px; height: '+this.element.outerHeight()+';"></div>');
+      this.element.wrap('<div class="ui-wrapper"  style="overflow: hidden; position: relative; width: '+this.element.outerWidth()+'px; height: '+this.element.outerHeight()+';"></div>');
       var oel = this.element; element = element.parentNode; this.element = $(element);
       
       //Move margins to the wrapper
@@ -89,8 +89,10 @@
       //Prevent Safari textarea resize
       if ($.browser.safari && o.preventDefault) oel.css('resize', 'none');
       
-      o.proportionallyResize = o.proportionallyResize || [];
-      o.proportionallyResize.push(oel);
+      o.proportionallyResize = oel.css('position', 'static');
+			
+			// fix handlers offset
+			this._proportionallyResize();
     }
     
     if(!o.handles) o.handles = !$('.ui-resizable-handle', element).length ? "e,s,se" : { n: '.ui-resizable-n', e: '.ui-resizable-e', s: '.ui-resizable-s', w: '.ui-resizable-w', se: '.ui-resizable-se', sw: '.ui-resizable-sw', ne: '.ui-resizable-ne', nw: '.ui-resizable-nw' };
@@ -104,21 +106,22 @@
       o.zIndex = o.zIndex || 1000;
       
       var insertions = {
-        n: 'top: 0px;',
-        e: 'right: 0px;',
-        s: 'bottom: 0px;',
-        w: 'left: 0px;',
-        se: 'bottom: 0px; right: 0px;',
-        sw: 'bottom: 0px; left: 0px;',
-        ne: 'top: 0px; right: 0px;',
-        nw: 'top: 0px; left: 0px;'
+				handle: 'overflow:hidden; position:absolute;',
+        n: 'top: 0pt; width:100%;',
+        e: 'right: 0pt; height:100%;',
+        s: 'bottom: 0pt; width:100%;',
+        w: 'left: 0pt; height:100%;',
+        se: 'bottom: 0pt; right: 0px;',
+        sw: 'bottom: 0pt; left: 0px;',
+        ne: 'top: 0pt; right: 0px;',
+        nw: 'top: 0pt; left: 0px;'
       };
       
       for(var i = 0; i < n.length; i++) {
         var d = jQuery.trim(n[i]), t = o.defaultTheme, hname = 'ui-resizable-'+d;
         
         var rcss = $.extend(t[hname], t['ui-resizable-handle']), 
-            axis = $(["<div class='",hname," ui-resizable-handle' style='",insertions[d],"'></div>"].join("")).css(/sw|se|ne|nw/.test(d) ? { zIndex: ++o.zIndex } : {});
+            axis = $(["<div class='",hname," ui-resizable-handle' style='",insertions[d], insertions.handle,"'></div>"].join("")).css(/sw|se|ne|nw/.test(d) ? { zIndex: ++o.zIndex } : {});
         
         o.handles[d] = '.ui-resizable-'+d;
           
@@ -221,27 +224,27 @@
         options: this.options
       };      
     },
-    _stripUnit: function(s) {
-      return parseInt([s].join("").replace(/(in|cm|mm|pt|pc|px|em|ex|%)$/, ""))||0;
-    },
     _proportionallyResize: function() {
-      var o = this.options, self = this;
-      if (o.proportionallyResize && o.proportionallyResize.length) {
-        $.each(o.proportionallyResize, function(x, prel) {
-          var b = [ prel.css('borderTopWidth'), prel.css('borderRightWidth'), prel.css('borderBottomWidth'), prel.css('borderLeftWidth') ];
-          var p = [ prel.css('paddingTop'), prel.css('paddingRight'), prel.css('paddingBottom'), prel.css('paddingLeft') ];
-          
-          o.borderDif = o.borderDif || $.map(b, function(v, i) {
-            var border = self._stripUnit(v), padding = self._stripUnit(p[i]);
-            return border + padding; 
-          });
-          prel.css({
-            display: 'block', //Needed to fix height autoincrement
-            height: (self.element.height() - o.borderDif[0] - o.borderDif[2]) + "px",
-            width: (self.element.width() - o.borderDif[1] - o.borderDif[3]) + "px"
-          });
-        });
-      }
+			var o = this.options;
+
+			if (!o.proportionallyResize)
+				return;
+			
+			var prel = o.proportionallyResize;
+			
+      var b = [ prel.css('borderTopWidth'), prel.css('borderRightWidth'), prel.css('borderBottomWidth'), prel.css('borderLeftWidth') ];
+      var p = [ prel.css('paddingTop'), prel.css('paddingRight'), prel.css('paddingBottom'), prel.css('paddingLeft') ];
+      
+      o.borderDif = o.borderDif || $.map(b, function(v, i) {
+        var border = parseInt(v)||0, padding = parseInt(p[i])||0;
+        return border + padding; 
+      });
+			
+      prel.css({
+        display: 'block', //Needed to fix height autoincrement
+        height: (this.element.height() - o.borderDif[0] - o.borderDif[2]) + "px",
+        width: (this.element.width() - o.borderDif[1] - o.borderDif[3]) + "px"
+      });
     },
     _renderProxy: function() {
       var el = this.element, o = this.options;
@@ -250,12 +253,15 @@
       if(o.proxy) {
         this.helper = this.helper || $('<div></div>');
         
+				// fix ie6 offset
+				var ie6offset = ($.browser.msie && $.browser.version < 7 ? 3 : 0);
+				
         this.helper.addClass(o.proxy).css({
           width: el.outerWidth(),
           height: el.outerHeight(),
           position: 'absolute',
-          left: this.offset.left +'px',
-          top: this.offset.top +'px',
+          left: this.offset.left - ie6offset +'px',
+          top: this.offset.top - ie6offset +'px',
           zIndex: ++o.zIndex
         });
         
@@ -377,33 +383,39 @@
       
     },
     drag: function(e) {
-      var el = this.helper, o = this.options, props = {}, self = this;
-      
+      //Increase performance, avoid regex
+      var el = this.helper, o = this.options, props = {}, 
+						self = this, pRatio = o._aspectRatio || e.shiftKey;
+			
       var change = function(a,b) {
-        //Increase performance, avoid regex
-        var isth = (a == "top"||a == "height"), ishw = (a == "width"||a == "height"), 
-         			 defAxis = (o.axis == "se"||o.axis == "s"||o.axis == "e"); 
-        
+        var isth = (a=="top"||a=="height"), ishw = (a=="width"||a=="height"),
+							defAxis = (o.axis=="se"||o.axis=="s"||o.axis=="e");
+								 
         var mod = (e[isth ? 'pageY' : 'pageX'] - o.startPosition[isth ? 'top' : 'left']) * (b ? -1 : 1);
-        var val = o[ishw?'currentSize':'currentPosition'][a] - mod - (!o.proxy && defAxis ? o.currentSizeDiff.width : 0);
-				        
-        //Preserve ratio
-        if ((o._aspectRatio || e.shiftKey)) {
-					if (ishw)
-						el.css(isth ? "width" : "height", val * Math.pow(o.aspectRatio, (isth ? -1 : 1) * (o.aspectRatioTarget == 'height' ? 1 : -1)));
-					
-					if (a == "top" && (o.axis == "ne" || o.axis == "nw")) {
-						//el.css('top',  curtop/*o.startPosition.top - Math.abs(o.currentSize.height - curheight)*/);
-						return;
-					}
-				}
+        var val = o[ishw ? 'currentSize' : 'currentPosition'][a] - mod - (!o.proxy && defAxis ? o.currentSizeDiff.width : 0);
 				
+				//Preserve ratio
+        if (pRatio) {
+					var v = val * Math.pow(o.aspectRatio, (isth ? -1 : 1) * (o.aspectRatioTarget == 'height' ? 1 : -1));
+					
+					if (isth && v >= o.maxWidth || !isth && v >= o.maxHeight)
+						return;
+					if (isth && v <= o.minWidth || !isth && v <= o.minHeight)
+						return;
+						
+					if (ishw)	el.css(isth ? "width" : "height", v);
+					if (a == "top" && (o.axis == "ne" || o.axis == "nw")) {
+						/*TODO*/ return
+					};
+				}
 				el.css(a, val);
       };
       
+			var a = o.axis, tminval = 0, tmaxval;
+			
       //Change the height
-      if(/(n|ne|nw)/.test(o.axis)) change("height");
-      if(/(s|se|sw)/.test(o.axis)) change("height", 1);
+      if(a=="n"||a=="ne"||a=="nw") change("height");
+      if(a=="s"||a=="se"||a=="sw") change("height", 1);
       
       //Measure the new height and correct against min/maxHeight
 			var curheight = parseInt(el.css('height'))||0;
@@ -411,29 +423,35 @@
       if(o.maxHeight && curheight >= o.maxHeight) el.css('height', o.maxHeight);
       
       //Change the top position when picking a handle at north
-      if(/n|ne|nw/.test(o.axis)) change("top", 1);
+      if(a=="n"||a=="ne"||a=="nw") change("top", 1);
 	  
       //Measure the new top position and correct against min/maxHeight
-			var curtop = parseInt(el.css('top'))||0
-      if(o.minHeight && curtop >= (o.currentPosition.top + (o.currentSize.height - o.minHeight))) el.css('top', (o.currentPosition.top + (o.currentSize.height - o.minHeight)));
-      if(o.maxHeight && curtop <= (o.currentPosition.top + (o.currentSize.height - o.maxHeight))) el.css('top', (o.currentPosition.top + (o.currentSize.height - o.maxHeight)));
+			var curtop = parseInt(el.css('top'))||0;
+			
+			tminval = (o.currentPosition.top + (o.currentSize.height - o.minHeight)), 
+				tmaxval = (o.currentPosition.top + (o.currentSize.height - o.maxHeight));
+      if(o.minHeight && curtop >= tminval) el.css('top', tminval);
+      if(o.maxHeight && curtop <= tmaxval) el.css('top', tmaxval);
 		
       //Change the width
-      if(/(e|se|ne)/.test(o.axis)) change("width", 1);
-      if(/(sw|w|nw)/.test(o.axis)) change("width");
+      if(a=="e"||a=="se"||a=="ne") change("width", 1);
+      if(a=="sw"||a=="w"||a=="nw") change("width");
       
       //Measure the new width and correct against min/maxWidth
-			var curwidth = parseInt(el.css('width'))||0
+			var curwidth = parseInt(el.css('width'))||0;
       if(o.minWidth && curwidth <= o.minWidth) el.css('width', o.minWidth);  
       if(o.maxWidth && curwidth >= o.maxWidth) el.css('width', o.maxWidth);
       
       //Change the left position when picking a handle at west
-      if(/(sw|w|nw)/.test(o.axis)) change("left", 1);
+      if(a=="sw"||a=="w"||a=="nw") change("left", 1);
       
       //Measure the new left position and correct against min/maxWidth
-			var curleft = parseInt(el.css('left'))||0
-      if(o.minWidth && curleft >= (o.currentPosition.left + (o.currentSize.width - o.minWidth))) el.css('left', (o.currentPosition.left + (o.currentSize.width - o.minWidth)));
-      if(o.maxWidth && curleft <= (o.currentPosition.left + (o.currentSize.width - o.maxWidth))) el.css('left', (o.currentPosition.left + (o.currentSize.width - o.maxWidth)));
+			var curleft = parseInt(el.css('left'))||0;
+			
+			tminval = (o.currentPosition.left + (o.currentSize.width - o.minWidth)), 
+				tmaxval = (o.currentPosition.left + (o.currentSize.width - o.maxWidth));
+      if(o.minWidth && curleft >= tminval) el.css('left', tminval);
+      if(o.maxWidth && curleft <= tmaxval) el.css('left', tmaxval);
       
       if (o.containment && o.cdata.e) {
         if (curleft < 0) {
@@ -444,10 +462,12 @@
           el.css('top', 0);
           el.css('height', curheight + curtop);
         }
-        if (curwidth + o.currentSizeDiff.width + curleft >= o.cdata.w) el.css('width', o.cdata.w - o.currentSizeDiff.width - (curleft < 0 ? 0 : curleft));
-        if (curheight + o.currentSizeDiff.height + curtop >= o.cdata.h) el.css('height', o.cdata.h - o.currentSizeDiff.height - (curtop < 0 ? 0 : curtop));
+        if (curwidth + o.currentSizeDiff.width + curleft >= o.cdata.w) 
+					el.css('width', o.cdata.w - o.currentSizeDiff.width - (curleft < 0 ? 0 : curleft));
+        if (curheight + o.currentSizeDiff.height + curtop >= o.cdata.h)
+					el.css('height', o.cdata.h - o.currentSizeDiff.height - (curtop < 0 ? 0 : curtop));
       }
-      
+			
       if (!o.proxy) this._proportionallyResize();
       this.propagate("resize", e);  
       return false;

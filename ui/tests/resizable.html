@@ -28,11 +28,11 @@ body
 }
 
 .proxy {
-	border: 1px solid #3399ff;
-	background-color: #b7d3ef;
-	opacity: 0.3;
+	border: 1px dotted #000/*#3399ff*/;
+	/*background-color: #b7d3ef;*/
+	/*opacity: 0.3;
 	alpha: 0.3;
-	filter:progid:DXImageTransform.Microsoft.Alpha(opacity=30);
+	filter:progid:DXImageTransform.Microsoft.Alpha(opacity=30);*/
 }
 
 
@@ -116,7 +116,18 @@ body
 </div>
 
 <div id='resizeme4' style='width: 300px; height: 200px; border: 1px solid black; margin: 20px; position: relative;'>
-<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Relative position with proxy (all directions enabled)</div>
+<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>Relative position with proxy (all directions enabled, manual handlers)</div>
+
+<div class='ui-resizable-n ui-resizable-handle'></div>
+	<div class='ui-resizable-e ui-resizable-handle'></div>	
+	<div class='ui-resizable-s ui-resizable-handle'></div>
+	<div class='ui-resizable-w ui-resizable-handle'></div>
+	
+	<div class='ui-resizable-se ui-resizable-handle'></div>
+	<div class='ui-resizable-sw ui-resizable-handle'></div>
+	<div class='ui-resizable-ne ui-resizable-handle'></div>
+	<div class='ui-resizable-nw ui-resizable-handle'></div>
+
 </div>
 
 <div id='resizeme2' style='width: 300px; height: 200px; border: 1px solid black; position: absolute; top: 100px; right: 400px;'>
@@ -165,7 +176,7 @@ $(document).ready(function(){
 	});
 
 	$('#textarea').resizable({
-		//proxy: "proxy",
+		proxy: "proxy",
 		handles: 'all',
 		
 		autohide: true,
@@ -184,12 +195,12 @@ $(document).ready(function(){
 	});
 
 	$('#image').resizable({
-		//proxy: "proxy",
+		proxy: "proxy",
 		handles: 'all',
 		minWidth: 50,
 		minHeight: 50,
-		maxHeight: 200,
-		maxWidth: 300,
+		maxHeight: 300,
+		maxWidth: 100,
 		//containment: 'parent',
 		aspectRatio: 'preserve',
 		autohide: true
@@ -201,8 +212,8 @@ $(document).ready(function(){
 		//containment: 'parent',
 			minWidth: 50,
 		minHeight: 50,
-		maxHeight: 250,
-		maxWidth: 300,
+		maxHeight: 200,
+		maxWidth: 400,
 		aspectRatio: 'preserve'
 		//aspectRatio: false
 		//aspectRatio: 1.1
@@ -294,7 +305,7 @@ $(document).ready(function(){
 		minHeight: 100,
 		//maxWidth: 500,
 		//maxHeight: 300,
-		/*handles: {
+		handles: {
 			n: '.ui-resizable-n',
 			e: '.ui-resizable-e',
 			s: '.ui-resizable-s',
@@ -303,7 +314,7 @@ $(document).ready(function(){
 			sw: '.ui-resizable-sw',
 			ne: '.ui-resizable-ne',
 			nw: '.ui-resizable-nw'
-		},*/
+		},
 		start: function(e,ui) {
 			//console.log('start ', ui);	
 		},

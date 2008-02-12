@@ -54,9 +54,9 @@
 <h2>3. Textareas and images</h2>
 
 <div class="playground">
-	<textarea id='example3' style='margin: 0px; padding: 10px;' class="example" rows="6" cols="19">I was made resizable with this code only: $('div').resizable({ autohide: true, minHeight: 100, minWidth: 200 });</textarea>
+	<textarea id='example3' style='margin: 0px; padding: 0px;' class="example" rows="6" cols="19">I was made resizable with this code only: $('div').resizable({ autohide: true, minHeight: 100, minWidth: 200 });</textarea>
 	<br /><img style='margin: 0;' id="example32" src="images/resizable.jpg" alt="" /><br>
-	<textarea id='example33' style='margin: 0px; padding: 10px;' class="example" rows="6" cols="19">I was made resizable with this code only: $('#example33').resizable({ transparent: true, proxy:'proxy' });</textarea>
+	<textarea id='example33' style='margin: 0px; padding: 0px;' class="example" rows="6" cols="19">I was made resizable with this code only: $('#example33').resizable({ transparent: true, proxy:'proxy' });</textarea>
 </div>
 
 
@@ -90,7 +90,7 @@ $(window).bind("load",function(){
 	$('#example1').resizable();
 	$('#example2').resizable({ autohide: true, minHeight: 100, minWidth: 200, maxHeight: 300, maxWidth: 800 });
 	$('#example3').resizable({ minHeight: 100, minWidth: 200, maxHeight: 300, maxWidth: 800 });
-	$('#example32').resizable({ handles: 'all', autohide: true, minHeight: 100, minWidth: 200 });
+	$('#example32').resizable({ proxy: 'proxy', handles: 'all', autohide: true, minHeight: 100, minWidth: 200, maxWidth: 400, maxHeight: 400 });
 	$('#example4').resizable({ autohide: true, proxy:'proxy', minHeight: 100, minWidth: 200, maxHeight: 300, maxWidth: 800 });
 	$('#example33').resizable({ transparent: true, proxy:'proxy', minHeight: 100, minWidth: 200, maxHeight: 300, maxWidth: 800 });
 	
