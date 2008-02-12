@@ -216,7 +216,7 @@
             // Hide a tab, animation prevents browser scrolling to fragment,
             // $show is optional.
             function hideTab(clicked, $hide, $show) {
-                $hide.animate(hideFx, hideFx.duration || baseDuration, function() { //
+                $hide.animate(hideFx, hideFx.duration || baseDuration, function() { //
                     $hide.addClass(o.hideClass).css(resetCSS); // maintain flexible height and accessibility in print etc.
                     if ($.browser.msie && hideFx.opacity)
                         $hide[0].style.filter = '';
@@ -230,7 +230,7 @@
             function showTab(clicked, $show, $hide) {
                 if (showFx === baseFx)
                     $show.css('display', 'block'); // prevent occasionally occuring flicker in Firefox cause by gap between showing and hiding the tab panels
-                $show.animate(showFx, showFx.duration || baseDuration, function() {
+                $show.animate(showFx, showFx.duration || baseDuration, function() {
                     $show.removeClass(o.hideClass).css(resetCSS); // maintain flexible height and accessibility in print etc.
                     if ($.browser.msie && showFx.opacity)
                         $show[0].style.filter = '';
@@ -280,16 +280,11 @@
                         return false;
                     } else if (!$hide.length) {
                         self.$panels.stop();
-                        if ($.data(this, 'load.ui-tabs')) { // remote tab
-                            var a = this;
-                            self.load(self.$tabs.index(this), $.data(this, 'load.ui-tabs'), function() {
-                                $li.addClass(o.selectedClass).addClass(o.unselectClass);
-                                showTab(a, $show);
-                            });
-                        } else {
+                        var a = this;
+                        self.load(self.$tabs.index(this), function() {
                             $li.addClass(o.selectedClass).addClass(o.unselectClass);
-                            showTab(this, $show);
-                        }
+                            showTab(a, $show);
+                        });
                         this.blur();
                         return false;
                     }
@@ -313,13 +308,10 @@
                         }, 0);
                     }*/
 
-                    if ($.data(this, 'load.ui-tabs')) { // uncached remote tab
-                        var a = this;
-                        self.load(self.$tabs.index(this), $.data(this, 'load.ui-tabs'), function() {
-                            switchTab(a, $li, $hide, $show);
-                        });
-                    } else
-                        switchTab(this, $li, $hide, $show);
+                    var a = this;
+                    self.load(self.$tabs.index(this), function() {
+                        switchTab(a, $li, $hide, $show);
+                    });
 
                     // Set scrollbar to saved position - need to use timeout with 0 to prevent browser scroll to target of hash
                     /*var scrollX = window.pageXOffset || document.documentElement && document.documentElement.scrollLeft || document.body.scrollLeft || 0;
@@ -442,25 +434,21 @@
                 index = this.$tabs.index( this.$tabs.filter('[href$=' + index + ']')[0] );
             this.$tabs.eq(index).trigger(this.options.event);
         },
-        load: function(index, url, callback) { // callback and url is for internal usage only TODO remove the need for url completely
+        load: function(index, callback) { // callback is for internal usage only
             var self = this, o = this.options,
-                $a = this.$tabs.eq(index), a = $a[0], $span = $('span', a);
+                $a = this.$tabs.eq(index), a = $a[0];
 
-            // shift arguments
-            if (url && url.constructor == Function) {
-                callback = url;
-                url = null;
+            var url = $a.data('load.ui-tabs');
+
+            // no remote - just finish with callback
+            if (!url) {
+                typeof callback == 'function' && callback();
+                return;
             }
 
-            // set new URL or get existing
-            if (url)
-                $.data(a, 'load.ui-tabs', url);
-            else
-                url = $.data(a, 'load.ui-tabs');
-
-            // load
+            // load remote from here on
             if (o.spinner) {
-                var label = $span.html();
+                var $span = $('span', a), label = $span.html();
                 $span.html('<em>' + o.spinner + '</em>');
             }
             var finish = function() {
@@ -478,8 +466,7 @@
                     finish();
                     // This callback is required because the switch has to take
                     // place after loading has completed.
-                    if (callback && callback.constructor == Function)
-                        callback();
+                    typeof callback == 'function' && callback();
 
                     if (o.cache)
                         $.removeData(a, 'load.ui-tabs'); // if loaded once do not load them again
@@ -493,7 +480,7 @@
                 }
             });
             if (this.xhr) {
-                // terminate pending requests from other tabs and restore title
+                // terminate pending requests from other tabs and restore tab label
                 this.xhr.abort();
                 finish();
             }
@@ -504,7 +491,7 @@
 
         },
         url: function(index, url) {
-            $.data(this.$tabs.eq(index)[0], 'load.ui-tabs', url);
+            this.$tabs.eq(index).data('load.ui-tabs', url);
         },
         destroy: function() {
             var o = this.options;
@@ -517,17 +504,12 @@
                 $(this).unbind('.ui-tabs')
                     .removeData('href.ui-tabs').removeData('load.ui-tabs');
             });
-            this.$lis.each(function() {
+            this.$lis.add(this.$panels).each(function() {
                 if ($.data(this, 'destroy.ui-tabs'))
                     $(this).remove();
                 else
-                    $(this).removeClass([o.selectedClass, o.unselectClass, o.disabledClass].join(' '));
-            });
-            this.$panels.each(function() {
-                if ($.data(this, 'destroy.ui-tabs'))
-                    $(this).remove();
-                else
-                    $(this).removeClass([o.panelClass, o.hideClass].join(' '));
+                    $(this).removeClass([o.selectedClass, o.unselectClass,
+                        o.disabledClass, o.panelClass, o.hideClass].join(' '));
             });
         }
     });
