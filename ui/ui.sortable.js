@@ -106,11 +106,11 @@
 		},
 		serialize: function(o) {
 			
-			var items = $(this.options.items, this.element); //Only the items of the sortable itself
+			var items = $(this.options.items, this.element).not('.ui-sortable-helper'); //Only the items of the sortable itself
 			var str = [];
 			o = o || {};
 			
-			$(this.options.items, this.element).each(function() {
+			items.each(function() {
 				var res = (this.getAttribute(o.attribute || 'id') || '').match(o.expression || /(.+)[-=_](.+)/);
 				if(res) str.push(res[1]+'[]='+res[2]);				
 			});
@@ -220,7 +220,7 @@
 
 			//Create and append the visible helper
 			this.helper = typeof o.helper == 'function' ? $(o.helper.apply(this.element[0], [e, this.currentItem])) : this.currentItem.clone();
-			this.helper.appendTo(this.currentItem[0].parentNode).css('position', 'absolute').css('float', 'none').css('clear', 'both');
+			this.helper.appendTo(this.currentItem[0].parentNode).css({ position: 'absolute', clear: 'both', float: 'none' }).addClass('ui-sortable-helper');
 
 			//Find out the next positioned parent
 			this.offsetParent = (function(cp) {
