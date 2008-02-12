@@ -277,7 +277,7 @@
 			if(this.positionDOM != this.currentItem.prev()[0]) this.propagate("update", e);
 			
 			if(this.cancelHelperRemoval) return false;			
-			$(this.currentItem).css('visibility', 'visible');
+			$(this.currentItem).css('visibility', '');
 			if(this.placeholder) this.placeholder.remove();
 			this.helper.remove();
 
