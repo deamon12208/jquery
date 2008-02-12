@@ -396,15 +396,15 @@
 				
 				//Preserve ratio
         if (pRatio) {
-					var v = val * Math.pow(o.aspectRatio, (isth ? -1 : 1) * (o.aspectRatioTarget == 'height' ? 1 : -1));
+					var v = val * Math.pow(o.aspectRatio, (isth ? -1 : 1) * (o.aspectRatioTarget == 'height' ? 1 : -1)), locked = false;
 					
-					if (isth && v >= o.maxWidth || !isth && v >= o.maxHeight)
-						return;
-					if (isth && v <= o.minWidth || !isth && v <= o.minHeight)
-						return;
+					if (isth && v >= o.maxWidth || !isth && v >= o.maxHeight)	locked = true;
+					if (isth && v <= o.minWidth || !isth && v <= o.minHeight)	locked = true;
 						
-					if (ishw)	el.css(isth ? "width" : "height", v);
+					if (ishw && !locked)	el.css(isth ? "width" : "height", v);
+					
 					if (a == "top" && (o.axis == "ne" || o.axis == "nw")) {
+						//el.css('top', o.currentPosition['top'] - (el.outerHeight() - o.currentSize.height) );
 						/*TODO*/ return
 					};
 				}
