@@ -112,7 +112,7 @@
 			
 			items.each(function() {
 				var res = (this.getAttribute(o.attribute || 'id') || '').match(o.expression || (/(.+)[-=_](.+)/));
-				if(res) str.push(res[1]+'[]='+res[2]);				
+				if(res) str.push((o.key || res[1])+'[]='+(o.key ? res[1] : res[2]));				
 			});
 			
 			return str.join('&');
