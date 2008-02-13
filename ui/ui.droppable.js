@@ -51,9 +51,8 @@
 		plugins: {},
 		ui: function(c) {
 			return {
-				draggable: c,
 				instance: this,
-				element: c.element,
+				draggable: c.element,
 				helper: c.helper,
 				position: c.position,
 				absolutePosition: c.positionAbs,
