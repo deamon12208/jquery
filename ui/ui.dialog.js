@@ -120,7 +120,7 @@
 		options.bgiframe && $.fn.bgiframe && uiDialog.bgiframe();
 		
 		this.open = function() {
-			options.modal && overlay.show(self, options.overlay);
+			this.overlay = options.modal ? new $.ui.dialog.overlay(self) : null;
 			uiDialog.appendTo('body');
 			var wnd = $(window), doc = $(document), top = doc.scrollTop(), left = doc.scrollLeft();
 			if (options.position.constructor == Array) {
@@ -183,14 +183,14 @@
 		this.moveToTop = function() {
 			var maxZ = options.zIndex;
 			$('.ui-dialog:visible').each(function() {
-				maxZ = Math.max(maxZ, parseInt($(this).css("z-index"), 10) || options.zIndex);
+				maxZ = Math.max(maxZ, parseInt($(this).css('z-index'), 10) || options.zIndex);
 			});
-			options.modal && overlay.$el && overlay.$el.css('z-index', ++maxZ);
+			this.overlay && this.overlay.$el.css('z-index', ++maxZ);
 			uiDialog.css('z-index', ++maxZ);
 		};
 		
 		this.close = function() {
-			options.modal && overlay.hide();
+			this.overlay && this.overlay.destroy();
 			uiDialog.hide();
 
 			// CALLBACK: close
@@ -220,114 +220,124 @@
 			resizable: true,
 			width: 300,
 			zIndex: 1000
+		},
+		
+		overlay: function(dialog) {
+			this.$el = $.ui.dialog.overlay.create(dialog);
 		}
 	});
 	
-	// This is a port of relevant pieces of Mike Alsup's blockUI plugin (http://www.malsup.com/jquery/block/)
-	// duplicated here for minimal overlay functionality and no dependency on a non-UI plugin
-	var overlay = {
-		$el: null,
+	$.extend($.ui.dialog.overlay, {
+		instances: [],
 		events: $.map('focus,mousedown,mouseup,keydown,keypress,click'.split(','),
 			function(e) { return e + '.ui-dialog-overlay'; }).join(' '),
-		
-		show: function(dialog, css) {
-			if (this.$el) return;
+		create: function(dialog) {
+			if (this.instances.length === 0) {
+				// TODO: don't get selects inside dialogs
+				this.selects = this.ie6 && $('select:visible').css('visibility', 'hidden');
+				
+				// prevent use of anchors and inputs
+				$('a, :input').bind(this.events, function() {
+					// allow use of the element if inside a dialog and
+					// - there are no modal dialogs
+					// - there are modal dialogs, but we are in front of the
+					//   topmost modal dialog
+					var allow = false;
+					var $dialog = $(this).parents('.ui-dialog');
+					if ($dialog.length) {
+						var $overlays = $('.ui-dialog-overlay');
+						if ($overlays.length) {
+							var maxZ = parseInt($overlays.css('z-index'), 10);
+							$overlays.each(function() {
+								maxZ = Math.max(maxZ, parseInt($(this).css('z-index'), 10));
+							});
+							allow = parseInt($dialog.css('z-index'), 10) > maxZ;
+						} else {
+							allow = true;
+						}
+					}
+					return allow;
+				});
+				
+				// allow closing by pressing the escape key
+				$(document).bind('keydown.ui-dialog-overlay', function(e) {
+					var ESC = 27;
+					e.keyCode && e.keyCode == ESC && dialog.close(); 
+				});
+				
+				// handle window resize
+				$(window).bind('resize.ui-dialog-overlay', $.ui.dialog.overlay.resize);
+			}
 			
-			this.dialog = dialog;
-			this.selects = this.ie6 && $('select:visible').css('visibility', 'hidden');
-			var width = this.width();
-			var height = this.height();
-			this.$el = $('<div/>').appendTo(document.body)
+			$el = $('<div/>').appendTo(document.body)
 				.addClass('ui-dialog-overlay').css($.extend({
 					borderWidth: 0, margin: 0, padding: 0,
 					position: 'absolute', top: 0, left: 0,
-					width: width,
-					height: height
-				}, css));
+					width: this.width(),
+					height: this.height()
+				}, dialog.options.overlay));
 			
-			// prevent use of anchors and inputs
-			$('a, :input').bind(this.events, function() {
-				// TODO: if there is a modal, check myZ >= maxZ
-				// add comment to describe logic (all 4 cases)
-				if ($(this).parents('.ui-dialog').length == 0) {
-					dialog.uiDialogTitlebarClose.focus();
-					return false;
-				}
-			});
+			// handle document resize from dragging/resizing
+			dialog.uiDialog.is('.ui-draggable')
+				&& dialog.uiDialog.data('stop.draggable', $.ui.dialog.overlay.resize);
+			dialog.uiDialog.is('.ui-resizable')
+				&& dialog.uiDialog.data('stop.resizable', $.ui.dialog.overlay.resize);
 			
-			// allow closing by pressing the escape key
-			$(document).bind('keydown.ui-dialog-overlay', function(e) {
-				var ESC = 27;
-				e.keyCode && e.keyCode == ESC && dialog.close(); 
-			});
-			
-			// handle window resizing
-			$overlay = this.$el;
-			function resize() {
-				// If the dialog is draggable and the user drags it past the
-				// right edge of the window, the document becomes wider so we
-				// need to stretch the overlay.  If the user then drags the
-				// dialog back to the left, the document will become narrower,
-				// so we need to shrink the overlay to the appropriate size.
-				// This is handled by resetting the overlay to its original
-				// size before setting it to the full document size.
-				$overlay.css({
-					width: width,
-					height: height
-				}).css({
-					width: overlay.width(),
-					height: overlay.height()
-				});
-			};
-			$(window).bind('resize.ui-dialog-overlay', resize);
-			dialog.uiDialog.is('.ui-draggable') && dialog.uiDialog.data('stop.draggable', resize);
-			dialog.uiDialog.is('.ui-resizable') && dialog.uiDialog.data('stop.resizable', resize);
+			this.instances.push($el);
+			return $el;
 		},
 		
-		hide: function() {
-			$('a, :input').add([document, window]).unbind('.ui-dialog-overlay');
-			this.ie6 && this.selects.css('visibility', 'visible');
-			this.$el = null;
-			$('.ui-dialog-overlay').remove();
+		destroy: function($el) {
+			this.instances.splice($.inArray(this.instances, $el), 1);
+			
+			if (this.instances.length === 0) {
+				$('a, :input').add([document, window]).unbind('.ui-dialog-overlay');
+				this.ie6 && this.selects.css('visibility', 'visible');
+			}
+			
+			$el.remove();
 		},
 		
+		// TODO: fix for IE 6
 		height: function() {
-			var height;
-			if (this.ie6
-				// body is smaller than window
-				&& ($(document.body).height() < $(window).height())
-				// dialog is above the fold
-				&& !(document.documentElement.scrollTop
-					|| (this.dialog.uiDialog.offset().top
-						+ this.dialog.uiDialog.height())
-						> $(window).height())) {
-				height = $(window).height();
-			} else {
-				height = $(document).height();
-			}
-			return height + 'px';
+			return $(document).height() + 'px';
 		},
 		
+		// TODO: fix for IE 6
 		width: function() {
-			var width;
-			if (this.ie6
-				// body is smaller than window
-				&& ($(document.body).width() < $(window).width())
-				// dialog is off to the right
-				&& !(document.documentElement.scrollLeft
-					|| (this.dialog.uiDialog.offset().left
-						+ this.dialog.uiDialog.width())
-						> $(window).width())) {
-				width = $(window).width();
-			} else {
-				width = $(document).width();
-			}
-			return width + 'px';
+			return $(document).width() + 'px';
+		},
+		
+		resize: function() {
+			// If the dialog is draggable and the user drags it past the
+			// right edge of the window, the document becomes wider so we
+			// need to stretch the overlay.  If the user then drags the
+			// dialog back to the left, the document will become narrower,
+			// so we need to shrink the overlay to the appropriate size.
+			// This is handled by shrinking the overlay before setting it
+			// to the full document size.
+			var $overlays = $([]);
+			$.each($.ui.dialog.overlay.instances, function() {
+				$overlays = $overlays.add(this);
+			});
+			
+			$overlays.css({
+				width: 0,
+				height: 0
+			}).css({
+				width: $.ui.dialog.overlay.width(),
+				height: $.ui.dialog.overlay.height()
+			});
 		},
 		
 		// IE 6 compatibility
 		ie6: $.browser.msie && $.browser.version < 7,
 		selects: null
-	};
-
+	});
+	
+	$.extend($.ui.dialog.overlay.prototype, {
+		destroy: function() {
+			$.ui.dialog.overlay.destroy(this.$el);
+		}
+	});
 })(jQuery);
