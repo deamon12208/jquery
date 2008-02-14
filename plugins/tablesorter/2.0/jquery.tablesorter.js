@@ -610,8 +610,14 @@
 						//set css for headers
 						setHeadersCss(this,$headers,sortList,sortCSS);
 						
+						// trigger sortstart
+						$this.trigger("sortStart");
+						
 						// sort the table and append it to the dom
 						appendToTable(this,multisort(this,sortList,cache));
+						
+						// trigger sortstart
+						$this.trigger("sortEnd");
 						
 					}).bind("appendCache",function() {
 						
