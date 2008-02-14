@@ -380,22 +380,19 @@
                 throw 'jQuery UI Tabs: Not enough arguments to add tab.';
         },
         remove: function(index) {
-            if (index && index.constructor == Number) {
-                var o = this.options, $li = this.$lis.eq(index).remove(),
-                    $panel = this.$panels.eq(index).remove();
+            var o = this.options, $li = this.$lis.eq(index).remove(),
+                $panel = this.$panels.eq(index).remove();
 
-                // If selected tab was removed focus tab to the right or
-                // tab to the left if last tab was removed.
-                if ($li.hasClass(o.selectedClass) && this.$tabs.length > 1)
-                    this.click(index + (index < this.$tabs.length ? 1 : -1));
-                this.tabify();
+            // If selected tab was removed focus tab to the right or
+            // tab to the left if last tab was removed.
+            if ($li.hasClass(o.selectedClass) && this.$tabs.length > 1)
+                this.click(index + (index < this.$tabs.length ? 1 : -1));
+            this.tabify();
 
-                // callback
-                $(this.element).triggerHandler("remove.ui-tabs",
-                    [this.ui($li.find('a')[0], $panel[0])]
-                );
-
-            }
+            // callback
+            $(this.element).triggerHandler("remove.ui-tabs",
+                [this.ui($li.find('a')[0], $panel[0])]
+            );
         },
         enable: function(index) {
             var self = this, o = this.options, $li = this.$lis.eq(index);
