@@ -158,8 +158,9 @@
 			top = top < doc.scrollTop() ? doc.scrollTop() : top;
 			uiDialog.css({top: top, left: left});
 			uiDialog.show();
+			self.moveToTop();
 			self.activate();
-
+			
 			// CALLBACK: open
 			var openEV = null;
 			var openUI = {
@@ -170,14 +171,24 @@
 		};
 
 		this.activate = function() {
-			var maxZ = initZ = 0;
-			$('.ui-dialog:visible').each(function() {
-				maxZ = Math.max(maxZ, parseInt($(this).css("z-index"), 10) || initZ);
-			});
-			overlay.$el && overlay.$el.css('z-index', ++maxZ);
-			uiDialog.css("z-index", ++maxZ);
+			// Move modeless dialogs to the top when they're activated.  Even
+			// if there is a modal dialog in the window, the modeless dialog
+			// should be on top because it must have been opened after the modal
+			// dialog.  Modal dialogs don't get moved to the top because that
+			// would make any modeless dialogs that it spawned unusable until
+			// the modal dialog is closed.
+			!options.modal && this.moveToTop();
 		};
-
+		
+		this.moveToTop = function() {
+			var maxZ = options.zIndex;
+			$('.ui-dialog:visible').each(function() {
+				maxZ = Math.max(maxZ, parseInt($(this).css("z-index"), 10) || options.zIndex);
+			});
+			options.modal && overlay.$el && overlay.$el.css('z-index', ++maxZ);
+			uiDialog.css('z-index', ++maxZ);
+		};
+		
 		this.close = function() {
 			options.modal && overlay.hide();
 			uiDialog.hide();
@@ -207,7 +218,8 @@
 			overlay: {},
 			position: 'center',
 			resizable: true,
-			width: 300
+			width: 300,
+			zIndex: 1000
 		}
 	});
 	
@@ -235,6 +247,8 @@
 			
 			// prevent use of anchors and inputs
 			$('a, :input').bind(this.events, function() {
+				// TODO: if there is a modal, check myZ >= maxZ
+				// add comment to describe logic (all 4 cases)
 				if ($(this).parents('.ui-dialog').length == 0) {
 					dialog.uiDialogTitlebarClose.focus();
 					return false;
