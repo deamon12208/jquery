@@ -204,9 +204,9 @@
 
             var hideFx, showFx, baseFx = { 'min-width': 0, duration: 1 }, baseDuration = 'normal';
             if (o.fx && o.fx.constructor == Array)
-                hideFx = o.fx[0] || baseFx, showFx = o.fx[1] || baseFx;
+                hideFx = o.fx[0] || baseFx, showFx = o.fx[1] || baseFx;
             else
-                hideFx = showFx = o.fx || baseFx;
+                hideFx = showFx = o.fx || baseFx;
 
             // reset some styles to maintain print style sheets etc.
             var resetCSS = { display: '', overflow: '', height: '' };
