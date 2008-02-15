@@ -1,3 +1,4 @@
+- convert custom selectors to functions
 - improve demo
 - create test suite
 - complete list of todo's per section of the spec
