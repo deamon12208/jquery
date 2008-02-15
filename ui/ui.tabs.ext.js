@@ -7,9 +7,9 @@
  *
  * http://docs.jquery.com/UI/TabsExtensions
  */
- 
+
 (function($) {
-    
+
     /*
      * Rotate
      */
@@ -27,7 +27,7 @@
                 var t = this.options.selected;
                 this.rotation = setInterval(function() {
                     t = ++t < self.$tabs.length ? t : 0;
-                    self.click(t);
+                    self.select(t);
                 }, ms);
                 this.$tabs.bind(this.options.event, stop);
             }

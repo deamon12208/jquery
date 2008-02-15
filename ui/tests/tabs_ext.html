@@ -23,7 +23,7 @@
             document.write('<link rel="stylesheet" href="../../themes/' + theme + '/' + theme + '.tabs.css" type="text/css" media="print, projection, screen">');
             
             $(function() {
-                $('#rotate ul').tabs({ fxFade: true }).tabsRotate(2000);
+                $('#rotate ul').tabs({ fx: { opacity: 'toggle' } }).tabs('rotate', 2000);
             });
 
         </script> 
