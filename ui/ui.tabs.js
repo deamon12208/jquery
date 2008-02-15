@@ -384,9 +384,10 @@
                 $panel = this.$panels.eq(index).remove();
 
             // If selected tab was removed focus tab to the right or
-            // tab to the left if last tab was removed.
+            // in case the last tab was removed the tab to the left.
             if ($li.hasClass(o.selectedClass) && this.$tabs.length > 1)
-                this.click(index + (index < this.$tabs.length ? 1 : -1));
+                this.select(index + (index + 1 < this.$tabs.length ? 1 : -1));
+            
             this.tabify();
 
             // callback
