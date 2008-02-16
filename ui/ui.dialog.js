@@ -22,10 +22,7 @@
 
 	$.ui.dialog = function(el, options) {
 		
-		this.options = options = $.extend({},
-			$.ui.dialog.defaults,
-			options && options.modal ? {resizable: false} : {},
-			options);
+		this.options = options = $.extend({}, $.ui.dialog.defaults, options);
 		this.element = el;
 		var self = this; //Do bindings
 
