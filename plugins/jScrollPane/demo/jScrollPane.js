@@ -344,11 +344,11 @@ jQuery.fn.jScrollPane = function(settings)
 					}
 					ceaseAnimation();
 					var destDragPosition = -pos/(paneHeight-contentHeight) * maxY;
-					if (!preventAni || settings.animateTo) {
+					if (preventAni || !settings.animateTo) {
+						positionDrag(destDragPosition);
+					} else {
 						_animateToPosition = destDragPosition;
 						_animateToInterval = setInterval(animateToPosition, settings.animateInterval);
-					} else {
-						positionDrag(destDragPosition);
 					}
 				};
 				$this[0].scrollTo = scrollTo;
