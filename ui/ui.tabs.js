@@ -139,8 +139,8 @@
                 });
 
                 // disabled tabs
-                for (var i = 0, index; index = o.disabled[i]; i++)
-                    this.disable(index);
+                for (var i = 0, k = o.disabled.length; i < k; i++)
+                    this.$lis.eq(o.disabled[i]).addClass(o.disabledClass);
 
                 // Try to retrieve selected tab:
                 // 1. from fragment identifier in url if present
