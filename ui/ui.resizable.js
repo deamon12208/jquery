@@ -427,11 +427,11 @@
 			
 			if (ismaxw || isminw) {
 				if (pRatio) { data.height = null; data.top = null; }
-	  		data.width = ismaxw ? o.maxWidth : o.minWidth;
+	  		data.width = null;
 	  	}
 			if (ismaxh || isminh) {
 				if (pRatio) {	data.width = null; data.left = null; }
-	  		data.height = ismaxh ? o.maxHeight : o.minHeight;
+	  		data.height = null;
 	  	}
 			if (ismaxh || isminh) data.top = null;
 			if (ismaxw || isminw) data.left = null;
