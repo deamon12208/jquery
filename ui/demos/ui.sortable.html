@@ -47,6 +47,7 @@
 	<button onclick="$('#example1').sortable('enable')">Enable</button>
 	<button onclick="$('#example1').sortable('disable')">Disable</button>
 	<button onclick="alert($('#example1').sortable('serialize'))">Serialize!</button>
+	<button onclick="console.log($('#example1').sortable('toArray'))">ID's to Array!</button>
 </div>
 
 <h2>2. Default, no options (Floats)</h2>
@@ -104,7 +105,7 @@ if(!window.console) {
 $(window).bind("load",function(){
 
 
-	$("#example1").sortable({ connectWith: ['#example1_2'], revert: true, containment: 'document' });
+	$("#example1").sortable({ connectWith: ['#example1_2'], revert: true, containment: 'document', update: function(e,ui) { } });
 	$("#example1_2").sortable({ connectWith: ['#example1'], revert: true });
 	
 	$("#example2").sortable({ revert: true });

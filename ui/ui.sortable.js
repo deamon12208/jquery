@@ -11,8 +11,8 @@
 			
 			var args = Array.prototype.slice.call(arguments, 1);
 			
-			if ( options == "serialize" )
-				return $.data(this[0], "ui-sortable").serialize(arguments[1]);
+			if (options == "serialize" || options == "toArray")
+				return $.data(this[0], "ui-sortable")[options](arguments[1]);
 			
 			return this.each(function() {
 				if (typeof options == "string") {
@@ -116,6 +116,18 @@
 			});
 			
 			return str.join('&');
+			
+		},
+		toArray: function(attr) {
+			
+			var items = $(this.options.items, this.element).not('.ui-sortable-helper'); //Only the items of the sortable itself
+			var ret = [];
+			
+			items.each(function() {
+				ret.push(this.getAttribute(attr || 'id'));				
+			});
+			
+			return ret;
 			
 		},
 		intersectsWith: function(item) {
