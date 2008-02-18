@@ -48,7 +48,13 @@
 			e.unselectable = "off";
 			e.onselectstart = function() { return true; };
 			if (e.style) e.style.MozUserSelect = "";
-		}
+		},
+		hasScroll: function(e, a) {
+      var scroll = /top/.test(a||"top") ? 'scrollTop' : 'scrollLeft', has = false;
+      if (e[scroll] > 0) return true; e[scroll] = 1;
+      has = e[scroll] > 0 ? true : false; e[scroll] = 0;
+      return has; 
+    }
 	});
 	
 	/********************************************************************************************************/
