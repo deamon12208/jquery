@@ -116,7 +116,7 @@
         var d = jQuery.trim(n[i]), t = o.defaultTheme, hname = 'ui-resizable-'+d;
         
         var rcss = $.extend(t[hname], t['ui-resizable-handle']), 
-            axis = $(["<div class=\"",hname," ui-resizable-handle\" style=\"",insertions[d], insertions.handle,"\"></div>"].join("")).css(/sw|se|ne|nw/.test(d) ? { zIndex: ++o.zIndex } : {});
+            axis = $(["<div class=\"ui-resizable-handle ",hname,"\" style=\"",insertions[d], insertions.handle,"\"></div>"].join("")).css(/sw|se|ne|nw/.test(d) ? { zIndex: ++o.zIndex } : {});
         
         o.handles[d] = '.ui-resizable-'+d;
           
@@ -162,13 +162,13 @@
     };
     
     this._renderAxis(this.element);
-    var handlers = $('.ui-resizable-handle', self.element);
+    o._handles = $('.ui-resizable-handle', self.element);
     
     if (o.disableSelection)
-      handlers.each(function(i, e) { $.ui.disableSelection(e); });
+      o._handles.each(function(i, e) { $.ui.disableSelection(e); });
     
     //Matching axis name
-    handlers.mouseover(function() {
+    o._handles.mouseover(function() {
       if (!o.resizing) {
         if (this.className) 
           var axis = this.className.match(/ui-resizable-(se|sw|ne|nw|n|e|s|w)/i);
@@ -179,18 +179,17 @@
         
     //If we want to auto hide the elements
     if (o.autohide) {
-      var tLoaded = $.ui.css('ui-resizable-s') || $.ui.css('ui-resizable-e');
-      if (!tLoaded) handlers.hide();
-      
+      o._handles.hide();
       $(self.element).addClass("ui-resizable-autohide").hover(function(){
-        if (!tLoaded) handlers.show();
-        $(this).removeClass("ui-resizable-autohide");
-      }, function(){
-        if (!o.resizing) {
-          if (!tLoaded) handlers.hide();
-          $(this).addClass("ui-resizable-autohide");
-        }
-      });
+      	$(this).removeClass("ui-resizable-autohide");
+      	o._handles.show();
+    	},
+			function(){
+     	 if (!o.resizing) {
+       	 $(this).addClass("ui-resizable-autohide");
+       	 o._handles.hide();
+      	}
+    	});
     }
   
     //Initialize mouse events for interaction
@@ -428,14 +427,16 @@
 			
 			if (ismaxw || isminw) {
 				if (pRatio) { data.height = null; data.top = null; }
-	  		data.width = null;
+	  		data.width = ismaxw ? o.maxWidth : o.minWidth;
 	  	}
 			if (ismaxh || isminh) {
 				if (pRatio) {	data.width = null; data.left = null; }
-	  		data.height = null;
+	  		data.height = ismaxh ? o.maxHeight : o.minHeight;
 	  	}
 			if (ismaxh || isminh) data.top = null;
 			if (ismaxw || isminw) data.left = null;
+			
+			//console.log(dx + ":" + dy)
 			
 			el.css(data);
 			
