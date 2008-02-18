@@ -60,6 +60,8 @@
 			http://dean.edwards.name/download/#packer
 			http://homepages.nildram.co.uk/~9jack9/download/packer.wsh.zip
 		-->
+		
+		<delete dir="${js.build.dir}/${js.packed.folder.name}/" />
 		<mkdir dir="${js.build.dir}/${js.packed.folder.name}/" />
 			<apply executable="cmd" parallel="false">
 				<filelist dir="${js.build.dir}/${js.min.folder.name}/" files="${js.concatenated.name}.min.js" />
