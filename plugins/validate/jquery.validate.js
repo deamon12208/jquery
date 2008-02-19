@@ -990,41 +990,26 @@ jQuery.extend(jQuery.validator, {
 
 // provides triggerEvent(type: String, target: Element) to trigger delegated events
 ;(function($) {
-	$.extend($.event.special, {
-		focusin: {
-			setup: function() {
-				if ($.browser.msie)
-					return false;
-				this.addEventListener("focus", $.event.special.focusin.handler, true);
+	$.each({
+		focus: 'focusin',
+		blur: 'focusout'	
+	}, function( original, fix ){
+		$.event.special[fix] = {
+			setup:function() {
+				if ( $.browser.msie ) return false;
+				this.addEventListener( original, $.event.special[fix].handler, true );
 			},
-			teardown: function() {
-				if ($.browser.msie)
-					return false;
-				this.removeEventListener("focus", $.event.special.focusin.handler, true);
+			teardown:function() {
+				if ( $.browser.msie ) return false;
+				this.removeEventListener( original,
+				$.event.special[fix].handler, true );
 			},
-			handler: function(event) {
-				var args = Array.prototype.slice.call( arguments, 1 );
-				args.unshift($.extend($.event.fix(event), { type: "focusin" }));
-				return $.event.handle.apply(this, args);
+			handler: function(e) {
+				arguments[0] = $.event.fix(e);
+				arguments[0].type = fix;
+				return $.event.handle.apply(this, arguments);
 			}
-		},
-		focusout: {
-			setup: function() {
-				if ($.browser.msie)
-					return false;
-				this.addEventListener("blur", $.event.special.focusout.handler, true);
-			},
-			teardown: function() {
-				if ($.browser.msie)
-					return false;
-				this.removeEventListener("blur", $.event.special.focusout.handler, true);
-			},
-			handler: function(event) {
-				var args = Array.prototype.slice.call( arguments, 1 );
-				args.unshift($.extend($.event.fix(event), { type: "focusout" }));
-				return $.event.handle.apply(this, args);
-			}
-		}
+		};
 	});
 	$.extend($.fn, {
 		delegate: function(type, delegate, handler) {
