@@ -97,7 +97,8 @@
 				position: this.position,
 				absolutePosition: this.positionAbs,
 				instance: this,
-				options: this.options
+				options: this.options,
+				element: this.element
 			};		
 		},
 		propagate: function(n,e) {

@@ -56,7 +56,8 @@
 				helper: c.helper,
 				position: c.position,
 				absolutePosition: c.positionAbs,
-				options: this.options	
+				options: this.options,
+				element: this.element	
 			};		
 		},
 		destroy: function() {
