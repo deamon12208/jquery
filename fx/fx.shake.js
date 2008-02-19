@@ -12,7 +12,7 @@
       var direction = o.options.direction || 'left'; // Default direction
       var distance = o.options.distance || 20; // Default distance
       var times = o.options.times || 3; // Default # of times
-      var speed = o.duration || 140; // Default speed per shake
+      var speed = o.duration || o.options.duration || 140; // Default speed per shake
       
       // Adjust
       $.ec.save(el, props); el.show(); // Save & Show
