@@ -144,6 +144,13 @@
 			//Generate a flexible offset that will later be subtracted from e.pageX/Y
 			this.offset = {left: e.pageX - this.originalPosition.left, top: e.pageY - this.originalPosition.top };
 			
+			//Substract margins
+			if(this.element[0] != this.helper[0]) {
+				this.offset.left += parseInt(this.element.css('marginLeft'),10) || 0;
+				this.offset.top += parseInt(this.element.css('marginTop'),10) || 0;
+			}
+
+			
 			//Call plugins and callbacks
 			this.propagate("start", e);
 
