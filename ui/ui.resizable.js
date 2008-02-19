@@ -293,10 +293,12 @@
       $.extend(o, {
         originalSize: { width: el.outerWidth(), height: el.outerHeight() },
         currentSize: { width: el.outerWidth(), height: el.outerHeight() },
+        _currentSize: { width: el.outerWidth(), height: el.outerHeight() },
         currentSizeDiff: { width: el.outerWidth() - el.width(), height: el.outerHeight() - el.height() },
         startMousePosition: { left: e.pageX, top: e.pageY },
         startPosition: { left: curleft, top: curtop },
-        currentPosition: { left: curleft,top: curtop }
+        currentPosition: { left: curleft,top: curtop },
+        _currentPosition: { left: curleft,top: curtop }
       });
 
 			//Aspect Ratio
@@ -387,24 +389,24 @@
 			if (data.width)	data.width = data.width - (!o.proxy && !ie6 ? o.currentSizeDiff.width : 0);
 			if (data.height)	data.height = data.height - (!o.proxy && !ie6 ? o.currentSizeDiff.height : 0);
 			
-			// Update current information
-			if (data.left) o.currentPosition.left = data.left;
-			if (data.top) o.currentPosition.top = data.top;
-			if (data.height) o.currentSize.height = data.height;
-			if (data.width) o.currentSize.width = data.width;
+			// Update internal current information
+			if (data.left) o._currentPosition.left = data.left;
+			if (data.top) o._currentPosition.top = data.top;
+			if (data.height) o._currentSize.height = data.height;
+			if (data.width) o._currentSize.width = data.width;
 			
 			// Ratio preservation
 			if (pRatio) {
-		  	if (data.height) data.width = o.currentSize.height / o.aspectRatio;
-		  	else if (data.width) 	data.height = o.currentSize.width * o.aspectRatio;
+		  	if (data.height) data.width = o._currentSize.height / o.aspectRatio;
+		  	else if (data.width) 	data.height = o._currentSize.width * o.aspectRatio;
 
 	  		if (o.axis == 'sw') {
-					data.left = o.currentPosition.left + (o.currentSize.width - data.width);
+					data.left = o._currentPosition.left + (o._currentSize.width - data.width);
 					data.top = null;
 				}
 	  		if (o.axis == 'nw') { 
-					data.top = o.currentPosition.top + (o.currentSize.height - data.height);
-					data.left = o.currentPosition.left + (o.currentSize.width - data.width);
+					data.top = o._currentPosition.top + (o._currentSize.height - data.height);
+					data.left = o._currentPosition.left + (o._currentSize.width - data.width);
 				}
 	  	}
 			
@@ -416,7 +418,7 @@
 			if (o.containment && o.cdata.e) {
 				if (data.left && data.left < 0) { data.left = 0; data.width = null;	}
 				if (data.top && data.top < 0) { data.top = 0; data.height = null;	}
-				var woset = o.currentPosition.left + o.currentSizeDiff.width, hoset = o.currentPosition.top + o.currentSizeDiff.height;
+				var woset = o._currentPosition.left + o.currentSizeDiff.width, hoset = o._currentPosition.top + o.currentSizeDiff.height;
 				if (data.width && woset + data.width >= o.cdata.w) data.width = o.cdata.w - woset;
 				if (data.height && hoset + data.height >= o.cdata.h) data.height = o.cdata.h - hoset;
 			}
@@ -426,21 +428,30 @@
 						isminw = data.width && o.minWidth && o.minWidth >= data.width, isminh = data.height && o.minHeight && o.minHeight >= data.height;
 			
 			if (ismaxw || isminw) {
+	  		data.width = null; data.left = null;
 				if (pRatio) { data.height = null; data.top = null; }
-	  		data.width = null;
 	  	}
 			if (ismaxh || isminh) {
+	  		data.height = null; data.top = null;
 				if (pRatio) {	data.width = null; data.left = null; }
-	  		data.height = null;
 	  	}
-			if (ismaxh || isminh) data.top = null;
-			if (ismaxw || isminw) data.left = null;
-			
-			//console.log(dx + ":" + dy)
-			
+			// fixing jump error on top/left - bug #2330
+			var isNotwh = !data.width && !data.height;
+			if (isNotwh && !data.left && data.top) data.top = null;
+			else if (isNotwh && !data.top && data.left) data.left = null;
+
+			//console.log(data)
+
 			el.css(data);
 			
-			if (!o.proxy) this._proportionallyResize();
+			if (!o.proxy)
+				this._proportionallyResize();
+			
+			// Update current information
+			if (data.left) o.currentPosition.left = data.left;
+			if (data.top) o.currentPosition.top = data.top;
+			if (data.height) o.currentSize.height = data.height;
+			if (data.width) o.currentSize.width = data.width;
       this.propagate("resize", e);  
       return false;
     },
