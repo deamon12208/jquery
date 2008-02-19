@@ -129,7 +129,7 @@ accept: function(draggable) {<br/>
 			draggable
 			<div class="className">.red</div>
 		</div>
-		<div class="draggable green">
+		<div class="draggable green" style="margin: 50px;">
 			draggable
 			<div class="className">.green</div>
 		</div>
@@ -236,7 +236,7 @@ $(document).ready(function(){
 			activeClass: 'droppable-active',
 			hoverClass: 'droppable-hover',
 			drop: function(ev, ui) {
-				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
+				$(this).append($(document.createElement('div')).text($(ui.draggable).text()));
 			}
 		});
 
@@ -246,7 +246,7 @@ $(document).ready(function(){
 			activeClass: 'droppable-active',
 			hoverClass: 'droppable-hover',
 			drop: function(ev, ui) {
-				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
+				$(this).append($(document.createElement('div')).text($(ui.draggable).text()));
 			}
 		});
 
@@ -255,7 +255,7 @@ $(document).ready(function(){
 			accept: '.gray.activeClass',
 			activeClass: 'silver',
 			drop: function(ev, ui) {
-				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
+				$(this).append($(document.createElement('div')).text($(ui.draggable).text()));
 			}
 		});
 
@@ -266,7 +266,7 @@ $(document).ready(function(){
 			hoverClass: 'droppable-hover',
 			greedy: false,
 			drop: function(ev, ui) {
-				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
+				$(this).append($(document.createElement('div')).text($(ui.draggable).text()));
 			}
 		});
 
@@ -277,7 +277,7 @@ $(document).ready(function(){
 			hoverClass: 'droppable-hover',
 			greedy: false,
 			drop: function(ev, ui) {
-				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
+				$(this).append($(document.createElement('div')).text($(ui.draggable).text()));
 			}
 		});
 
@@ -288,7 +288,7 @@ $(document).ready(function(){
 			hoverClass: 'droppable-hover',
 			greedy: true,
 			drop: function(ev, ui) {
-				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
+				$(this).append($(document.createElement('div')).text($(ui.draggable).text()));
 			}
 		});
 
@@ -299,7 +299,7 @@ $(document).ready(function(){
 			hoverClass: 'droppable-hover',
 			greedy: true,
 			drop: function(ev, ui) {
-				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
+				$(this).append($(document.createElement('div')).text($(ui.draggable).text()));
 			}
 		});
 
@@ -308,7 +308,7 @@ $(document).ready(function(){
 			accept: '.gray.hoverClass',
 			hoverClass: 'silver',
 			drop: function(ev, ui) {
-				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
+				$(this).append($(document.createElement('div')).text($(ui.draggable).text()));
 			}
 		});
 
@@ -318,7 +318,7 @@ $(document).ready(function(){
 			hoverClass: 'silver',
 			tolerance: 'fit',
 			drop: function(ev, ui) {
-				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
+				$(this).append($(document.createElement('div')).text($(ui.draggable).text()));
 			}
 		});
 
@@ -328,7 +328,7 @@ $(document).ready(function(){
 			hoverClass: 'silver',
 			tolerance: 'intersect',
 			drop: function(ev, ui) {
-				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
+				$(this).append($(document.createElement('div')).text($(ui.draggable).text()));
 			}
 		});
 
@@ -350,7 +350,7 @@ $(document).ready(function(){
 			hoverClass: 'silver',
 			tolerance: 'pointer',
 			drop: function(ev, ui) {
-				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
+				$(this).append($(document.createElement('div')).text($(ui.draggable).text()));
 			}
 		});
 
@@ -360,7 +360,7 @@ $(document).ready(function(){
 			hoverClass: 'silver',
 			tolerance: 'touch',
 			drop: function(ev, ui) {
-				$(this).append($(document.createElement('div')).text($(ui.draggable.element).text()));
+				$(this).append($(document.createElement('div')).text($(ui.draggable).text()));
 			}
 		});
 
