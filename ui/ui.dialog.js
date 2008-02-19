@@ -64,7 +64,13 @@
 				.append('<div class="ui-resizable-se ui-resizable-handle"></div>')
 				.append('<div class="ui-resizable-sw ui-resizable-handle"></div>')
 				.append('<div class="ui-resizable-nw ui-resizable-handle"></div>');
-			uiDialog.resizable({ maxWidth: options.maxWidth, maxHeight: options.maxHeight, minWidth: options.minWidth, minHeight: options.minHeight });
+			uiDialog.resizable({
+				maxWidth: options.maxWidth,
+				maxHeight: options.maxHeight,
+				minWidth: options.minWidth,
+				minHeight: options.minHeight,
+				stop: $.ui.dialog.overlay.resize
+			});
 		}
 
 		uiDialogContainer.prepend('<div class="ui-dialog-titlebar"></div>');
@@ -103,7 +109,8 @@
 				handle: '.ui-dialog-titlebar',
 				start: function() {
 					self.activate();
-				}
+				},
+				stop: $.ui.dialog.overlay.resize
 			});
 		}
 		uiDialog.mousedown(function() {
@@ -196,6 +203,7 @@
 				options: options
 			};
 			$(this.element).triggerHandler("dialogclose", [closeEV, closeUI], options.close);
+			$.ui.dialog.overlay.resize();
 		};
 		
 		if (options.autoOpen)
@@ -274,12 +282,6 @@
 					height: this.height()
 				}, dialog.options.overlay));
 			
-			// handle document resize from dragging/resizing
-			dialog.uiDialog.is('.ui-draggable')
-				&& dialog.uiDialog.data('stop.draggable', $.ui.dialog.overlay.resize);
-			dialog.uiDialog.is('.ui-resizable')
-				&& dialog.uiDialog.data('stop.resizable', $.ui.dialog.overlay.resize);
-			
 			this.instances.push($el);
 			return $el;
 		},
@@ -295,14 +297,46 @@
 			$el.remove();
 		},
 		
-		// TODO: fix for IE 6
 		height: function() {
-			return $(document).height() + 'px';
+			if (this.ie6) {
+				var scrollHeight = Math.max(
+					document.documentElement.scrollHeight,
+					document.body.scrollHeight
+				);
+				var offsetHeight = Math.max(
+					document.documentElement.offsetHeight,
+					document.body.offsetHeight
+				);
+				
+				if (scrollHeight < offsetHeight) {
+					return $(window).height() + 'px';
+				} else {
+					return scrollHeight + 'px';
+				}
+			} else {
+				return $(document).height() + 'px';
+			}
 		},
 		
-		// TODO: fix for IE 6
 		width: function() {
-			return $(document).width() + 'px';
+			if (this.ie6) {
+				var scrollWidth = Math.max(
+					document.documentElement.scrollWidth,
+					document.body.scrollWidth
+				);
+				var offsetWidth = Math.max(
+					document.documentElement.offsetWidth,
+					document.body.offsetWidth
+				);
+				
+				if (scrollWidth < offsetWidth) {
+					return $(window).width() + 'px';
+				} else {
+					return scrollWidth + 'px';
+				}
+			} else {
+				return $(document).width() + 'px';
+			}
 		},
 		
 		resize: function() {
