@@ -251,7 +251,7 @@
     },
     propagate: function(n,e) {
       $.ui.plugin.call(this, n, [e, this.ui()]);
-      this.element.triggerHandler(n == "resize" ? n : "resize"+n, [e, this.ui()], this.options[n]);
+      return this.element.triggerHandler(n == "resize" ? n : ["resize", n].join(""), [e, this.ui()], this.options[n]);
     },
     destroy: function() {
       this.element
@@ -292,12 +292,12 @@
       //Store needed variables
       $.extend(o, {
         originalSize: { width: el.outerWidth(), height: el.outerHeight() },
+        originalPosition: { left: curleft, top: curtop },
         currentSize: { width: el.outerWidth(), height: el.outerHeight() },
-        _currentSize: { width: el.outerWidth(), height: el.outerHeight() },
-        currentSizeDiff: { width: el.outerWidth() - el.width(), height: el.outerHeight() - el.height() },
-        startMousePosition: { left: e.pageX, top: e.pageY },
-        startPosition: { left: curleft, top: curtop },
         currentPosition: { left: curleft,top: curtop },
+        currentSizeDiff: { width: el.outerWidth() - el.width(), height: el.outerHeight() - el.height() },
+        originalMousePosition: { left: e.pageX, top: e.pageY },
+        _currentSize: { width: el.outerWidth(), height: el.outerHeight() },
         _currentPosition: { left: curleft,top: curtop }
       });
 
@@ -349,11 +349,11 @@
 				return { width: this.options.originalSize.width + dx };
 			},
 			w: function(e, dx, dy) {
-				var o = this.options, cs = o.originalSize, sp = o.startPosition;
+				var o = this.options, cs = o.originalSize, sp = o.originalPosition;
 				return { left: sp.left + dx, width: cs.width - dx };
 			},
 			n: function(e, dx, dy) {
-				var o = this.options, cs = o.originalSize, sp = o.startPosition;
+				var o = this.options, cs = o.originalSize, sp = o.originalPosition;
 				return { top: sp.top + dy, height: cs.height - dy };
 			},
 			s: function(e, dx, dy) {
@@ -376,7 +376,7 @@
     drag: function(e) {
       //Increase performance, avoid regex
       var el = this.helper, o = this.options, props = {}, pRatio = o._aspectRatio || e.shiftKey, 
-						self = this, pRatio = o._aspectRatio || e.shiftKey, smp = o.startMousePosition;
+						self = this, pRatio = o._aspectRatio || e.shiftKey, smp = o.originalMousePosition;
 			
 			var dx = (e.pageX-smp.left)||0, dy = (e.pageY-smp.top)||0;
 			var trigger = this.change[o.axis];
@@ -439,9 +439,9 @@
 			var isNotwh = !data.width && !data.height;
 			if (isNotwh && !data.left && data.top) data.top = null;
 			else if (isNotwh && !data.top && data.left) data.left = null;
-
-			//console.log(data)
-
+			
+			this.propagate("resize", e);
+			
 			el.css(data);
 			
 			if (!o.proxy)
@@ -452,7 +452,6 @@
 			if (data.top) o.currentPosition.top = data.top;
 			if (data.height) o.currentSize.height = data.height;
 			if (data.width) o.currentSize.width = data.width;
-      this.propagate("resize", e);  
       return false;
     },
 		

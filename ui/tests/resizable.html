@@ -14,6 +14,7 @@
 <script type="text/javascript" src="../../plugins/dimensions/jquery.dimensions.js"></script>
 <script type="text/javascript" src="../ui.mouse.js"></script>
 <script type="text/javascript" src="../ui.resizable.js"></script>
+<script type="text/javascript" src="../ui.resizable.ext.js"></script>
 <script type="text/javascript" src="../ui.draggable.js"></script>
 <link rel="stylesheet" href="../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
 <style type="text/css" media="all">
@@ -143,6 +144,14 @@ body
 		$('#resizable5').resizable({ <br>animate: { opacity:.5, fontSize: '0.8em' }, <br>duration: 'slow', <br>easing: 'swing' <br>});</div>
 </div>
 	
+
+<div id='resizeme6' style='position: relative;'>
+	<table border='1'><tr><td><div style="padding:10px;" id="tdResize">Resize-me!</div></td><td>Teste</td></td></tr></table>
+</div>
+
+<br><br><br><br>
+
+
 <script type="text/javascript">
 if(!window.console) {
  window.console = {
@@ -155,7 +164,7 @@ if(!window.console) {
 
 $(document).ready(function(){
 
-	//$('#log').resizable();
+	$('#tdResize').resizable();
 
 	$('#resizeme_containment, #resizeme_containment_prop, #resizeme_containment_image').resizable({
 		//proxy: "proxy",
@@ -164,6 +173,18 @@ $(document).ready(function(){
 		
 		minWidth: 100,
 		minHeight: 50,
+		
+		start: function() {
+			//console.log('start')
+		},
+		
+		resize: function() {
+			//console.log('resize')
+		},
+		
+		stop: function() {
+			//console.log('stop')
+		},
 		
 		//containment: 'document',
 		//containment:$('#containment_parent'),
@@ -186,6 +207,9 @@ $(document).ready(function(){
 		minWidth: 100,
 		minHeight: 50,
 		
+		grid: [50, 50],
+		//grid: 50,
+		
 		containment: document,
 		//containment: 'document',
 		//aspectRatio: 'preserve',
@@ -199,6 +223,9 @@ $(document).ready(function(){
 		handles: 'all',
 		minWidth: 50,
 		minHeight: 50,
+		
+		
+		
 		//maxHeight: 300,
 		//maxWidth: 100,
 		//containment: 'parent',
