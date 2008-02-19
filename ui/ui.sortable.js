@@ -90,20 +90,22 @@
 	
 	$.extend($.ui.sortable.prototype, {
 		plugins: {},
-		ui: function() {
+		ui: function(inst) {
 			return {
-				helper: this.helper,
-				placeholder: this.placeholder || $([]),
-				position: this.position,
-				absolutePosition: this.positionAbs,
+				helper: (inst || this)["helper"],
+				placeholder: (inst || this)["placeholder"] || $([]),
+				position: (inst || this)["position"],
+				absolutePosition: (inst || this)["positionAbs"],
 				instance: this,
 				options: this.options,
-				element: this.element
+				element: this.element,
+				item: (inst || this)["currentItem"],
+				sender: inst ? inst.element : null
 			};		
 		},
-		propagate: function(n,e) {
-			$.ui.plugin.call(this, n, [e, this.ui()]);
-			this.element.triggerHandler(n == "sort" ? n : "sort"+n, [e, this.ui()], this.options[n]);
+		propagate: function(n,e,inst) {
+			$.ui.plugin.call(this, n, [e, this.ui(inst)]);
+			this.element.triggerHandler(n == "sort" ? n : "sort"+n, [e, this.ui(inst)], this.options[n]);
 		},
 		serialize: function(o) {
 			
@@ -288,6 +290,16 @@
 
 			this.propagate("stop", e); //Call plugins and trigger callbacks
 			if(this.positionDOM != this.currentItem.prev()[0]) this.propagate("update", e);
+			if(!this.element[0].contains(this.currentItem[0])) { //Node was moved out of the current element
+				this.propagate("remove", e);
+				for (var i = this.options.connectWith.length - 1; i >= 0; i--){
+					var inst = $.data($(this.options.connectWith[i])[0], 'ui-sortable');
+					if(inst.element[0].contains(this.currentItem[0])) {
+						inst.propagate("update", e, this);
+						inst.propagate("receive", e, this);
+					}
+				};				
+			};
 			
 			if(this.cancelHelperRemoval) return false;			
 			$(this.currentItem).css('visibility', '');

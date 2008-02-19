@@ -105,8 +105,8 @@ if(!window.console) {
 $(window).bind("load",function(){
 
 
-	$("#example1").sortable({ connectWith: ['#example1_2'], revert: true, containment: 'document', update: function(e,ui) { } });
-	$("#example1_2").sortable({ connectWith: ['#example1'], revert: true });
+	$("#example1").sortable({ connectWith: ['#example1_2'], revert: true, containment: 'document', remove: function(e,ui) { console.log("removed ", ui.item); } });
+	$("#example1_2").sortable({ connectWith: ['#example1'], revert: true, receive: function(e,ui) { console.log("received ", ui.item, " from ", ui.sender); } });
 	
 	$("#example2").sortable({ revert: true });
 	$("#example3").sortable({ items: "li", revert: true, tree: true });
