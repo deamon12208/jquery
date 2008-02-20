@@ -84,7 +84,7 @@
       //Prevent Safari textarea resize
       if ($.browser.safari && o.preventDefault) oel.css('resize', 'none');
       
-      o.proportionallyResize = oel.css('position', 'static');
+      o.proportionallyResize = oel.css({ position: 'static', zoom: 1, display: 'block' });
 			
 			// fix handlers offset
 			this._proportionallyResize();
@@ -293,10 +293,10 @@
       $.extend(o, {
         originalSize: { width: el.outerWidth(), height: el.outerHeight() },
         originalPosition: { left: curleft, top: curtop },
+        originalMousePosition: { left: e.pageX, top: e.pageY },
         currentSize: { width: el.outerWidth(), height: el.outerHeight() },
         currentPosition: { left: curleft,top: curtop },
         currentSizeDiff: { width: el.outerWidth() - el.width(), height: el.outerHeight() - el.height() },
-        originalMousePosition: { left: e.pageX, top: e.pageY },
         _currentSize: { width: el.outerWidth(), height: el.outerHeight() },
         _currentPosition: { left: curleft,top: curtop }
       });
@@ -383,30 +383,31 @@
 			if (!trigger) return false;
 			
 			// Calculate the attrs that will be change
-  		var data = trigger.apply(this, [e, dx, dy]), ie6 = $.browser.msie && $.browser.version < 7;
+  		var data = trigger.apply(this, [e, dx, dy]), ie6 = $.browser.msie && $.browser.version < 7, csdif = o.currentSizeDiff;
 			
 			// Adjust currentSizeDiff on resize
-			if (data.width)	data.width = data.width - (!o.proxy && !ie6 ? o.currentSizeDiff.width : 0);
-			if (data.height)	data.height = data.height - (!o.proxy && !ie6 ? o.currentSizeDiff.height : 0);
+			if (data.width)	data.width = data.width - (!o.proxy && !ie6 ? csdif.width : 0);
+			if (data.height)	data.height = data.height - (!o.proxy && !ie6 ? csdif.height : 0);
 			
 			// Update internal current information
-			if (data.left) o._currentPosition.left = data.left;
-			if (data.top) o._currentPosition.top = data.top;
-			if (data.height) o._currentSize.height = data.height;
-			if (data.width) o._currentSize.width = data.width;
+			var cpos = o._currentPosition, csize = o._currentSize;
+			if (data.left) cpos.left = data.left;
+			if (data.top) cpos.top = data.top;
+			if (data.height) csize.height = data.height;
+			if (data.width) csize.width = data.width;
 			
 			// Ratio preservation
 			if (pRatio) {
-		  	if (data.height) data.width = o._currentSize.height / o.aspectRatio;
-		  	else if (data.width) 	data.height = o._currentSize.width * o.aspectRatio;
+		  	if (data.height) data.width = csize.height / o.aspectRatio;
+		  	else if (data.width) 	data.height = csize.width * o.aspectRatio;
 
 	  		if (o.axis == 'sw') {
-					data.left = o._currentPosition.left + (o._currentSize.width - data.width);
+					data.left = cpos.left + (csize.width - data.width);
 					data.top = null;
 				}
 	  		if (o.axis == 'nw') { 
-					data.top = o._currentPosition.top + (o._currentSize.height - data.height);
-					data.left = o._currentPosition.left + (o._currentSize.width - data.width);
+					data.top = cpos.top + (csize.height - data.height);
+					data.left = cpos.left + (csize.width - data.width);
 				}
 	  	}
 			
@@ -418,7 +419,7 @@
 			if (o.containment && o.cdata.e) {
 				if (data.left && data.left < 0) { data.left = 0; data.width = null;	}
 				if (data.top && data.top < 0) { data.top = 0; data.height = null;	}
-				var woset = o._currentPosition.left + o.currentSizeDiff.width, hoset = o._currentPosition.top + o.currentSizeDiff.height;
+				var woset = cpos.left + csdif.width, hoset = cpos.top + csdif.height;
 				if (data.width && woset + data.width >= o.cdata.w) data.width = o.cdata.w - woset;
 				if (data.height && hoset + data.height >= o.cdata.h) data.height = o.cdata.h - hoset;
 			}
@@ -440,38 +441,39 @@
 			if (isNotwh && !data.left && data.top) data.top = null;
 			else if (isNotwh && !data.top && data.left) data.left = null;
 			
+			this.cssData = data;
 			this.propagate("resize", e);
 			
-			el.css(data);
+			el.css(this.cssData);
 			
-			if (!o.proxy)
+			if (!o.proxy && o.proportionallyResize)
 				this._proportionallyResize();
 			
 			// Update current information
-			if (data.left) o.currentPosition.left = data.left;
-			if (data.top) o.currentPosition.top = data.top;
-			if (data.height) o.currentSize.height = data.height;
-			if (data.width) o.currentSize.width = data.width;
+			if (data.left) o.currentPosition.left = this.cssData.left;
+			if (data.top) o.currentPosition.top = this.cssData.top;
+			if (data.height) o.currentSize.height = this.cssData.height;
+			if (data.width) o.currentSize.width = this.cssData.width;
       return false;
     },
 		
 		_proportionallyResize: function() {
 			var o = this.options;
 			if (!o.proportionallyResize) return;
-			var prel = o.proportionallyResize;
+			var prel = o.proportionallyResize, el = this.element;
 			
-      var b = [ prel.css('borderTopWidth'), prel.css('borderRightWidth'), prel.css('borderBottomWidth'), prel.css('borderLeftWidth') ];
-      var p = [ prel.css('paddingTop'), prel.css('paddingRight'), prel.css('paddingBottom'), prel.css('paddingLeft') ];
-      
-      o.borderDif = o.borderDif || $.map(b, function(v, i) {
-        var border = parseInt(v,10)||0, padding = parseInt(p[i],10)||0;
-        return border + padding; 
-      });
-			
+			if (!o.borderDif) {
+	  		var b = [prel.css('borderTopWidth'), prel.css('borderRightWidth'), prel.css('borderBottomWidth'), prel.css('borderLeftWidth')],
+							p = [prel.css('paddingTop'), prel.css('paddingRight'), prel.css('paddingBottom'), prel.css('paddingLeft')];
+							
+    	  o.borderDif = $.map(b, function(v, i) {
+    	    var border = parseInt(v,10)||0, padding = parseInt(p[i],10)||0;
+  	      return border + padding; 
+	      });
+	  	}
       prel.css({
-        display: 'block', //Needed to fix height autoincrement
-        height: (this.element.height() - o.borderDif[0] - o.borderDif[2]) + "px",
-        width: (this.element.width() - o.borderDif[1] - o.borderDif[3]) + "px"
+        height: (el.height() - o.borderDif[0] - o.borderDif[2]) + "px",
+        width: (el.width() - o.borderDif[1] - o.borderDif[3]) + "px"
       });
     }
   });
