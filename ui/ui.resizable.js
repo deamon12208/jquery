@@ -372,10 +372,10 @@
 		},
 		
 		drag: function(e) {
-				//Increase performance, avoid regex
+			//Increase performance, avoid regex
 			var el = this.helper, o = this.options, props = {}, pRatio = o._aspectRatio || e.shiftKey, 
 			self = this, pRatio = o._aspectRatio || e.shiftKey, smp = o.originalMousePosition;
-		 
+
 			var dx = (e.pageX-smp.left)||0, dy = (e.pageY-smp.top)||0;
 			var trigger = this.change[o.axis];
 			if (!trigger) return false;
@@ -411,17 +411,26 @@
 			// Avoid set height/width to 0 on misscalculation
 			data.width = data.width || null;
 			data.height = data.height || null;
-	
-		 // Containment
-		 if (o.containment && o.cdata.e) {
-				if (data.left && data.left < 0) { data.left = 0; data.width = null; }
-				if (data.top && data.top < 0) { data.top = 0; data.height = null; }
+			
+			this.cssData = data;
+			this.propagate("resize", e);
+			data = this.cssData;
+			
+			// Containment
+			if (o.containment && o.cdata.e) {
+				if (data.left && data.left < 0) {
+					data.left = 0; data.width = null;
+				}
+				if (data.top && data.top < 0) {
+					data.top = 0;	data.height = null;
+				}
 				var woset = cpos.left + csdif.width, hoset = cpos.top + csdif.height;
 				if (data.width && woset + data.width >= o.cdata.w) data.width = o.cdata.w - woset;
 				if (data.height && hoset + data.height >= o.cdata.h) data.height = o.cdata.h - hoset;
+				
 			}
 		 
-		 // Max/Min width/height control
+			// Max/Min width/height control
 			var ismaxw = data.width && o.maxWidth && o.maxWidth <= data.width, ismaxh = data.height && o.maxHeight && o.maxHeight <= data.height,
 				isminw = data.width && o.minWidth && o.minWidth >= data.width, isminh = data.height && o.minHeight && o.minHeight >= data.height;
 	
@@ -439,8 +448,7 @@
 			else if (isNotwh && !data.top && data.left) data.left = null;
 		 
 			this.cssData = data;
-			this.propagate("resize", e);
-		 
+			
 			el.css(this.cssData);
 		 
 			if (!o.proxy && o.proportionallyResize)
