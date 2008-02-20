@@ -270,7 +270,7 @@
 				$(window).bind('resize.ui-dialog-overlay', $.ui.dialog.overlay.resize);
 			}
 			
-			$el = $('<div/>').appendTo(document.body)
+			var $el = $('<div/>').appendTo(document.body)
 				.addClass('ui-dialog-overlay').css($.extend({
 					borderWidth: 0, margin: 0, padding: 0,
 					position: 'absolute', top: 0, left: 0,
