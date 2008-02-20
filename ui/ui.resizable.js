@@ -258,7 +258,7 @@
 			.removeClass("ui-resizable ui-resizable-disabled")
 			.removeMouseInteraction()
 			.removeData("ui-resizable")
-			unbind(".resizable");
+			.unbind(".resizable");
 		},
 		enable: function() {
 			this.element.removeClass("ui-resizable-disabled");
