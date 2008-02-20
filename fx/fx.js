@@ -117,7 +117,7 @@
       return $.ec[fx] ? $.ec[fx].call(this, {method: fx, options: o || {}, duration: speed, callback: callback }) : null;
     },
     show: function() {
-      if(!arguments[0] || (arguments[0].constructor == Number || /(slow|fast)/.test(arguments[0])))
+      if(!arguments[0] || (arguments[0].constructor == Number || /(slow|normal|fast)/.test(arguments[0])))
         return this._show.apply(this, arguments);
       else {
         var o = arguments[1] || {}; o['mode'] = 'show';
@@ -125,7 +125,7 @@
       }
     },
     hide: function() {
-      if(!arguments[0] || (arguments[0].constructor == Number || /(slow|fast)/.test(arguments[0])))
+      if(!arguments[0] || (arguments[0].constructor == Number || /(slow|normal|fast)/.test(arguments[0])))
         return this._hide.apply(this, arguments);
       else {
         var o = arguments[1] || {}; o['mode'] = 'hide';
@@ -133,7 +133,7 @@
       }
     },
     toggle: function(){
-      if(!arguments[0] || (arguments[0].constructor == Number || /(slow|fast)/.test(arguments[0])))
+      if(!arguments[0] || (arguments[0].constructor == Number || /(slow|normal|fast)/.test(arguments[0])))
         return this._toggle.apply(this, arguments);
       else {
         var o = arguments[1] || {}; o['mode'] = 'toggle';
@@ -165,7 +165,7 @@
       return val;
     }
   });
-  
+
   /*
    * jQuery Color Animations
    * Copyright 2007 John Resig

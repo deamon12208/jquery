@@ -82,7 +82,7 @@ function Datepicker() {
 			// takes date and instance as parameters, returns display text
 		minDate: null, // The earliest selectable date, or null for no limit
 		maxDate: null, // The latest selectable date, or null for no limit
-		speed: 'medium', // Speed of display/closure
+		speed: 'normal', // Speed of display/closure
 		beforeShowDay: null, // Function that takes a date and returns an array with
 			// [0] = true if selectable, false if not,
 			// [1] = custom CSS class name(s) or '', e.g. $.datepicker.noWeekends
