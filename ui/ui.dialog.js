@@ -120,7 +120,6 @@
 			self.activate();
 		});
 		
-		// TODO: determine if this is necessary for modal dialogs
 		options.bgiframe && $.fn.bgiframe && uiDialog.bgiframe();
 		
 		this.open = function() {
@@ -238,9 +237,6 @@
 			function(e) { return e + '.ui-dialog-overlay'; }).join(' '),
 		create: function(dialog) {
 			if (this.instances.length === 0) {
-				// TODO: don't get selects inside dialogs
-				this.selects = this.ie6 && $('select:visible').css('visibility', 'hidden');
-				
 				// prevent use of anchors and inputs
 				$('a, :input').bind(this.events, function() {
 					// allow use of the element if inside a dialog and
@@ -282,6 +278,8 @@
 					height: this.height()
 				}, dialog.options.overlay));
 			
+			dialog.options.bgiframe && $.fn.bgiframe && $el.bgiframe();
+			
 			this.instances.push($el);
 			return $el;
 		},
@@ -291,14 +289,13 @@
 			
 			if (this.instances.length === 0) {
 				$('a, :input').add([document, window]).unbind('.ui-dialog-overlay');
-				this.ie6 && this.selects.css('visibility', 'visible');
 			}
 			
 			$el.remove();
 		},
 		
 		height: function() {
-			if (this.ie6) {
+			if ($.browser.msie && $.browser.version < 7) {
 				var scrollHeight = Math.max(
 					document.documentElement.scrollHeight,
 					document.body.scrollHeight
@@ -319,7 +316,7 @@
 		},
 		
 		width: function() {
-			if (this.ie6) {
+			if ($.browser.msie && $.browser.version < 7) {
 				var scrollWidth = Math.max(
 					document.documentElement.scrollWidth,
 					document.body.scrollWidth
@@ -359,11 +356,7 @@
 				width: $.ui.dialog.overlay.width(),
 				height: $.ui.dialog.overlay.height()
 			});
-		},
-		
-		// IE 6 compatibility
-		ie6: $.browser.msie && $.browser.version < 7,
-		selects: null
+		}
 	});
 	
 	$.extend($.ui.dialog.overlay.prototype, {
