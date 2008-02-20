@@ -8,7 +8,7 @@
  * http://www.gnu.org/licenses/gpl.html
  *
  * @author: M. Alsup
- * @version: 0.74 (02/06/2008)
+ * @version: 0.75 (02/20/2008)
  * @requires jQuery v1.1.2 or later
  * $Id$
  *
@@ -27,6 +27,7 @@
  *     Other: bmp, html, pdf, psd, qif, qtif, qti, tif, tiff, xaml
  *
  * Thanks to Mark Hicken and Brent Pedersen for helping me debug this on the Mac!
+ * Thanks to Dan Rossi for numerous bug reports and code bits!
  */
 (function($) {
 
@@ -155,6 +156,7 @@ $.fn.media.defaults = {
     attrs:         {},        // added to object and embed elements as attrs
     flashvars:     {},        // added to flash content as flashvars param/attr
     flashVersion:  '7',       // required flash version
+    expressInstaller: null,
     
     // MediaBox options
     boxTitle:      null,      // MediaBox titlebar
@@ -341,6 +343,8 @@ $.fn.media.swf = function(el, opts) {
     $(el).after($div).remove();
 
     var so = new SWFObject(opts.src, 'movie_player_' + counter++, opts.width, opts.height, opts.flashVersion, opts.bgColor);
+    if (opts.expressInstaller) so.useExpressInstall(opts.expressInstaller);    
+
     for (var p in opts.params)
         if (p != 'bgColor') so.addParam(p, opts.params[p]);
     for (var f in opts.flashvars)
