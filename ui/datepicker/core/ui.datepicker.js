@@ -210,12 +210,18 @@ $.extend(Datepicker.prototype, {
 			else {
 				input.after(trigger);
 			}
-			trigger.click(this.showFor);
-		}
+			trigger.click(function() {
+				if ($.datepicker._datepickerShowing && $.datepicker._lastInput == input[0]) {
+					$.datepicker.hideDatepicker();
+				} else {
+					$.datepicker.showFor(input);
+				}
+			});
+        }
 		input.addClass(this.markerClassName).keydown(this._doKeyDown).keypress(this._doKeyPress);
-		input.bind('setData.datepicker', function(event, key, value){
+		input.bind("setData.datepicker", function(event, key, value) {
 			inst._settings[key] = value;
-		}).bind('getData.datepicker', function(event, key){
+		}).bind("getData.datepicker", function(event, key) {
 			return inst._get(key);
 		});
 		input[0]._calId = inst._id;
@@ -228,9 +234,9 @@ $.extend(Datepicker.prototype, {
 			return;
 		}
 		input.addClass(this.markerClassName).append(inst._datepickerDiv);
-		input.bind('setData.datepicker', function(event, key, value){
+		input.bind("setData.datepicker", function(event, key, value){
 			inst._settings[key] = value;
-		}).bind('getData.datepicker', function(event, key){
+		}).bind("getData.datepicker", function(event, key){
 			return inst._get(key);
 		});
 		input[0]._calId = inst._id;
@@ -990,7 +996,12 @@ $.extend(DatepickerInstance.prototype, {
 	
 	/* Retrieve the default date shown on opening. */
 	_getDefaultDate: function() {
-		return this._determineDate('defaultDate', new Date());
+		var date = this._determineDate('defaultDate', new Date());
+		var minDate = this._getMinMaxDate('min', true);
+		var maxDate = this._getMinMaxDate('max');
+		date = (minDate && date < minDate ? minDate : date);
+		date = (maxDate && date > maxDate ? maxDate : date);
+		return date;
 	},
 
 	/* A date may be specified as an exact value or a relative one. */
