@@ -644,8 +644,8 @@ $.extend(Datepicker.prototype, {
 		var date = new Date();
 		var inst = this._getInst(id);
 		inst._selectedDay = date.getDate();
-		inst._selectedMonth = date.getMonth();
-		inst._selectedYear = date.getFullYear();
+		inst._drawMonth = inst._selectedMonth = date.getMonth();
+		inst._drawYear = inst._selectedYear = date.getFullYear();
 		this._adjustDate(inst);
 	},
 
@@ -653,7 +653,7 @@ $.extend(Datepicker.prototype, {
 	_selectMonthYear: function(id, select, period) {
 		var inst = this._getInst(id);
 		inst._selectingMonthYear = false;
-		inst[period == 'M' ? '_selectedMonth' : '_selectedYear'] =
+		inst[period == 'M' ? '_drawMonth' : '_drawYear'] =
 			select.options[select.selectedIndex].value - 0;
 		this._adjustDate(inst);
 	},
@@ -688,9 +688,9 @@ $.extend(Datepicker.prototype, {
 			} 
 			this._stayOpen = !this._stayOpen;
 		}
-		inst._currentDay = $('a', td).html();
-		inst._currentMonth = month;
-		inst._currentYear = year;
+		inst._selectedDay = inst._currentDay = $('a', td).html();
+		inst._selectedMonth = inst._currentMonth = month;
+		inst._selectedYear = inst._currentYear = year;
 		this._selectDate(id, inst._formatDate(
 			inst._currentDay, inst._currentMonth, inst._currentYear));
 		if (this._stayOpen) {
@@ -1075,9 +1075,11 @@ $.extend(Datepicker.prototype, {
    Instances are managed and manipulated through the Datepicker manager. */
 function DatepickerInstance(settings, inline) {
 	this._id = $.datepicker._register(this);
-	this._selectedDay = 0;
+	this._selectedDay = 0; // Current date for selection
 	this._selectedMonth = 0; // 0-11
 	this._selectedYear = 0; // 4-digit year
+	this._drawMonth = 0; // Current month at start of datepicker
+	this._drawYear = 0;
 	this._input = null; // The attached input field
 	this._inline = inline; // True if showing inline, false if used in a popup
 	this._datepickerDiv = (!inline ? $.datepicker._datepickerDiv :
@@ -1118,9 +1120,12 @@ $.extend(DatepickerInstance.prototype, {
 				date = defaultDate;
 			}
 		}
-		this._selectedDay = this._currentDay = date.getDate();
-		this._selectedMonth = this._currentMonth = date.getMonth();
-		this._selectedYear = this._currentYear = date.getFullYear();
+		this._selectedDay = date.getDate();
+		this._drawMonth = this._selectedMonth = date.getMonth();
+		this._drawYear = this._selectedYear = date.getFullYear();
+		this._currentDay = (dates[0] ? date.getDate() : 0);
+		this._currentMonth = (dates[0] ? date.getMonth() : 0);
+		this._currentYear = (dates[0] ? date.getFullYear() : 0);
 		this._adjustDate();
 	},
 	
@@ -1175,8 +1180,8 @@ $.extend(DatepickerInstance.prototype, {
 	/* Set the date(s) directly. */
 	_setDate: function(date, endDate) {
 		this._selectedDay = this._currentDay = date.getDate();
-		this._selectedMonth = this._currentMonth = date.getMonth();
-		this._selectedYear = this._currentYear = date.getFullYear();
+		this._drawMonth = this._selectedMonth = this._currentMonth = date.getMonth();
+		this._drawYear = this._selectedYear = this._currentYear = date.getFullYear();
 		if (this._get('rangeSelect')) {
 			if (endDate) {
 				this._endDay = endDate.getDate();
@@ -1228,8 +1233,8 @@ $.extend(DatepickerInstance.prototype, {
 		var isMultiMonth = (numMonths[0] != 1 || numMonths[1] != 1);
 		var minDate = this._getMinMaxDate('min', true);
 		var maxDate = this._getMinMaxDate('max');
-		var drawMonth = this._selectedMonth;
-		var drawYear = this._selectedYear;
+		var drawMonth = this._drawMonth;
+		var drawYear = this._drawYear;
 		if (maxDate) {
 			var maxDraw = new Date(maxDate.getFullYear(),
 				maxDate.getMonth() - numMonths[1] + 1, maxDate.getDate());
@@ -1292,7 +1297,8 @@ $.extend(DatepickerInstance.prototype, {
 				this._selectedDay = Math.min(this._selectedDay, daysInMonth);
 			}
 			var leadDays = (this._getFirstDayOfMonth(drawYear, drawMonth) - firstDay + 7) % 7;
-			var currentDate = new Date(this._currentYear, this._currentMonth, this._currentDay);
+			var currentDate = (!this._currentDay ? new Date(9999, 9, 9) :
+				new Date(this._currentYear, this._currentMonth, this._currentDay));
 			var endDate = this._endDay ? new Date(this._endYear, this._endMonth, this._endDay) : currentDate;
 			var printDate = new Date(drawYear, drawMonth, 1 - leadDays);
 			var numRows = (isMultiMonth ? 6 : Math.ceil((leadDays + daysInMonth) / 7)); // calculate the number of rows to generate
@@ -1317,8 +1323,8 @@ $.extend(DatepickerInstance.prototype, {
 						(unselectable ? ' datepicker_unselectable' : '') +  // highlight unselectable days
 						(otherMonth && !showOtherMonths ? '' : ' ' + daySettings[1] + // highlight custom dates
 						(printDate.getTime() >= currentDate.getTime() && printDate.getTime() <= endDate.getTime() ?  // in current range
-						' datepicker_currentDay' : // highlight selected day
-						(printDate.getTime() == today.getTime() ? ' datepicker_today' : ''))) + '"' + // highlight today (if different)
+						' datepicker_currentDay' : '') + // highlight selected day
+						(printDate.getTime() == today.getTime() ? ' datepicker_today' : '')) + '"' + // highlight today (if different)
 						(unselectable ? '' : ' onmouseover="jQuery(this).addClass(\'datepicker_daysCellOver\');' +
 						(!showStatus || (otherMonth && !showOtherMonths) ? '' : 'jQuery(\'#datepicker_status_' +
 						this._id + '\').html(\'' + (dateStatus.apply((this._input ? this._input[0] : null),
@@ -1423,8 +1429,8 @@ $.extend(DatepickerInstance.prototype, {
 
 	/* Adjust one of the date sub-fields. */
 	_adjustDate: function(offset, period) {
-		var year = this._selectedYear + (period == 'Y' ? offset : 0);
-		var month = this._selectedMonth + (period == 'M' ? offset : 0);
+		var year = this._drawYear + (period == 'Y' ? offset : 0);
+		var month = this._drawMonth + (period == 'M' ? offset : 0);
 		var day = Math.min(this._selectedDay, this._getDaysInMonth(year, month)) +
 			(period == 'D' ? offset : 0);
 		var date = new Date(year, month, day);
@@ -1434,8 +1440,8 @@ $.extend(DatepickerInstance.prototype, {
 		date = (minDate && date < minDate ? minDate : date);
 		date = (maxDate && date > maxDate ? maxDate : date);
 		this._selectedDay = date.getDate();
-		this._selectedMonth = date.getMonth();
-		this._selectedYear = date.getFullYear();
+		this._drawMonth = this._selectedMonth = date.getMonth();
+		this._drawYear = this._selectedYear = date.getFullYear();
 	},
 	
 	/* Determine the number of months to show. */
