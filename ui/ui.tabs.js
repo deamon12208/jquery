@@ -40,7 +40,7 @@
             unselect: options.selected === null,
             event: 'click',
             disabled: [],
-            cookie: null, // pass options object as expected by cookie plugin: { expires: 7, path: '/', domain: 'jquery.com', secure: true }
+            cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
             // TODO bookmarkable: $.ajaxHistory ? true : false,
 
             // Ajax
@@ -50,7 +50,7 @@
             ajaxOptions: {},
 
             // animations
-            fx: null, /* e.g. { height: 'toggle', opacity: 'toggle', duration: 200 } */
+            fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
 
             // templates
             tabTemplate: '<li><a href="#{href}"><span>#{label}</span></a></li>',
@@ -67,12 +67,20 @@
 
         }, options);
 
+        // doesn't extend with null
+        if (options.selected === null)
+            this.options.selected = null;
+
         this.options.event += '.ui-tabs'; // namespace event
         this.options.cookie = $.cookie && $.cookie.constructor == Function && this.options.cookie;
 
         $(el).bind('setData.ui-tabs', function(event, key, value) {
-            self.options[key] = value;
-            this.tabify();
+            if ((/^selected/).test(key))
+                self.select(value);
+            else {
+                self.options[key] = value;
+                self.tabify();
+            }
         }).bind('getData.ui-tabs', function(event, key) {
             return self.options[key];
         });
@@ -138,10 +146,6 @@
                     $this.hasClass(o.panelClass) || $this.addClass(o.panelClass);
                 });
 
-                // disabled tabs
-                for (var i = 0, k = o.disabled.length; i < k; i++)
-                    this.$lis.eq(o.disabled[i]).addClass(o.disabledClass);
-
                 // Try to retrieve selected tab:
                 // 1. from fragment identifier in url if present
                 // 2. from cookie
@@ -175,13 +179,6 @@
                         return false; // break
                     }
                 });
-                var n = this.$lis.length;
-                while (this.$lis.eq(o.selected).hasClass(o.disabledClass) && n) {
-                    o.selected = ++o.selected < this.$lis.length ? o.selected : 0;
-                    n--;
-                }
-                if (!n) // all tabs disabled, set option unselect to true
-                    o.unselect = true;
 
                 // highlight selected tab
                 this.$panels.addClass(o.hideClass);
@@ -196,12 +193,20 @@
                 if (href)
                     this.load(o.selected, href);
 
-                // disable click if event is configured to something else
-                if (!(/^click/).test(o.event))
-                    this.$tabs.bind('click', function(e) { e.preventDefault(); });
+                // Take disabling tabs via class attribute from HTML
+                // into account and update option properly...
+                o.disabled = $.unique(o.disabled.concat(
+                    $.map(this.$lis.filter('.' + o.disabledClass),
+                        function(n, i) { return self.$lis.index(n); } )
+                )).sort();
 
             }
 
+            // disable tabs
+            for (var i = 0, li; li = this.$lis[i]; i++)
+                $(li)[$.inArray(i, o.disabled) != -1 ? 'addClass' : 'removeClass'](o.disabledClass);
+
+            // set up animations
             var hideFx, showFx, baseFx = { 'min-width': 0, duration: 1 }, baseDuration = 'normal';
             if (o.fx && o.fx.constructor == Array)
                 hideFx = o.fx[0] || baseFx, showFx = o.fx[1] || baseFx;
@@ -252,7 +257,7 @@
             }
 
             // attach tab event handler, unbind to avoid duplicates from former tabifying...
-            this.$tabs.unbind(o.event).bind(o.event, function() {
+            this.$tabs.unbind('.ui-tabs').bind(o.event, function() {
 
                 //var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
                 var $li = $(this).parents('li:eq(0)'),
@@ -335,6 +340,10 @@
 
             });
 
+            // disable click if event is configured to something else
+            if (!(/^click/).test(o.event))
+                this.$tabs.bind('click.ui-tabs', function() { return false; });
+
         },
         add: function(url, label, index) {
             if (url && label) {
@@ -387,7 +396,7 @@
             // in case the last tab was removed the tab to the left.
             if ($li.hasClass(o.selectedClass) && this.$tabs.length > 1)
                 this.select(index + (index + 1 < this.$tabs.length ? 1 : -1));
-            
+
             this.tabify();
 
             // callback
@@ -405,8 +414,7 @@
                 }, 0);
             }
 
-            o.disabled = $.map(this.$lis.filter('.' + o.disabledClass),
-                function(n, i) { return self.$lis.index(n); } );
+            o.disabled = o.disabled.splice(index, 1);
 
             // callback
             $(this.element).triggerHandler("enable.ui-tabs",
@@ -416,16 +424,17 @@
         },
         disable: function(index) {
             var self = this, o = this.options;
-            this.$lis.eq(index).addClass(o.disabledClass);
+            if (index != o.selected) { // cannot disable already selected tab
+                this.$lis.eq(index).addClass(o.disabledClass);
 
-            o.disabled = $.map(this.$lis.filter('.' + o.disabledClass),
-                function(n, i) { return self.$lis.index(n); } );
+                o.disabled.push(index);
+                o.disabled.sort();
 
-            // callback
-            $(this.element).triggerHandler("disable.ui-tabs",
-                [this.ui(this.$tabs[index], this.$panels[index])]
-            );
-
+                // callback
+                $(this.element).triggerHandler("disable.ui-tabs",
+                    [this.ui(this.$tabs[index], this.$panels[index])]
+                );
+            }
         },
         select: function(index) {
             if (typeof index == 'string')
