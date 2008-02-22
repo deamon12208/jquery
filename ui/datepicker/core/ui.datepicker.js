@@ -429,17 +429,11 @@ $.extend(Datepicker.prototype, {
 			obj = obj.nextSibling;
 		}
 		var curleft = curtop = 0;
-		if (obj && obj.offsetParent) {
-			curleft = obj.offsetLeft;
-			curtop = obj.offsetTop;
-			while (obj = obj.offsetParent) {
-				var origcurleft = curleft;
+		if (obj.offsetParent) {
+			do {
 				curleft += obj.offsetLeft;
-				if (curleft < 0) {
-					curleft = origcurleft;
-				}
 				curtop += obj.offsetTop;
-			}
+			} while (obj = obj.offsetParent);
 		}
 		return [curleft,curtop];
 	},
