@@ -59,7 +59,7 @@
 					<p><span class="demoLabel">Default date picker:</span>
 						<input type="text" size="30" value="click to show datepicker" id="defaultFocus"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#defaultFocus').attachDatepicker();	
+$('#defaultFocus').datepicker();	
 </script>
 					<p><span class="demoLabel">IE select issue:</span>
 						<select><option>Show how the date picker covers a select in IE</option></select></p>
@@ -96,26 +96,26 @@ $.datepicker.setDefaults({showOn: 'both', buttonImageOnly: true,
 						<input type="text" size="10" id="invokeFocus"/>
 						<input type="button" id="enableFocus" value="Disable"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#invokeFocus').attachDatepicker({showOn: 'focus'});	
+$('#invokeFocus').datepicker({showOn: 'focus'});	
 </script>
 					<p><span class="demoLabel">Appears via text button:</span>
 						<input type="text" size="10" id="invokeButton"/>
 						<input type="button" id="enableButton" value="Disable"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#invokeButton').attachDatepicker({showOn: 'button', buttonText: '...',
+$('#invokeButton').datepicker({showOn: 'button', buttonText: '...',
 	buttonImage: '', buttonImageOnly: false});
 </script>
 					<p style="clear:both"><span class="demoLabel">Appears both ways:</span>
 						<input type="text" size="10" class="invokeBoth"/>
 						<input type="button" id="enableBoth" value="Disable"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('.invokeBoth').attachDatepicker({showOn: 'both', buttonImage: 'img/calendar.gif', buttonImageOnly: true});
+$('.invokeBoth').datepicker({showOn: 'both', buttonImage: 'img/calendar.gif', buttonImageOnly: true});
 </script>
 					<p>You can embed the trigger image within the input area via CSS.</p>
 					<p style="clear:both"><span class="demoLabel">Embedded button:</span>
 						<input type="text" size="10" id="embedButton"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#embedButton').attachDatepicker({showOn: 'button', buttonImage: 'img/calendar.gif', buttonImageOnly: true});
+$('#embedButton').datepicker({showOn: 'button', buttonImage: 'img/calendar.gif', buttonImageOnly: true});
 
 // CSS
 // #embedButton + img { position: relative; left: -21px; top: -1px; }
@@ -123,21 +123,21 @@ $('#embedButton').attachDatepicker({showOn: 'button', buttonImage: 'img/calendar
 					<p>Enable and disable datepicker with enableFor and disableFor.</p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
 $('#enableFocus').toggle(
-	function () { this.value = 'Enable'; $('#invokeFocus').disableDatepicker(); },
-	function () { this.value = 'Disable'; $('#invokeFocus').enableDatepicker(); });
+	function () { this.value = 'Enable'; $('#invokeFocus').datepicker("disable"); },
+	function () { this.value = 'Disable'; $('#invokeFocus').datepicker("enable"); });
 $('#enableButton').toggle(
-	function () { this.value = 'Enable'; $('#invokeButton').disableDatepicker(); },
-	function () { this.value = 'Disable'; $('#invokeButton').enableDatepicker(); });
+	function () { this.value = 'Enable'; $('#invokeButton').datepicker("disable"); },
+	function () { this.value = 'Disable'; $('#invokeButton').datepicker("enable"); });
 $('#enableBoth').toggle(
-	function () { this.value = 'Enable'; $('.invokeBoth:first').disableDatepicker(); },
-	function () { this.value = 'Disable'; $('.invokeBoth:first').enableDatepicker(); });
+	function () { this.value = 'Enable'; $('.invokeBoth:first').datepicker("disable"); },
+	function () { this.value = 'Disable'; $('.invokeBoth:first').datepicker("enable"); });
 </script>
 					<p>The date picker can also be triggered externally for a particular input.</p>
 					<p><span class="demoLabel">External trigger:</span>
 						<button id="button1">Open date picker</button></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
 $('#button1').click(function() { 
-	$('#invokeFocus').showDatepicker();
+	$('#invokeFocus').datepicker("show");
 });	
 </script>	
 					<p>Or even opened as a "dialog". If the <em>blockUI</em> plugin is available,
@@ -182,7 +182,7 @@ function setDateFromDialog(date) {
 					<p><span class="demoLabel">Restricted functionality:</span>
 						<input type="text" size="10" id="restrictControls"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#restrictControls').attachDatepicker({firstDay: 1, changeFirstDay: false,
+$('#restrictControls').datepicker({firstDay: 1, changeFirstDay: false,
 	changeMonth: false, changeYear: false});
 </script>
 					<p>You can also limit the range of dates selectable within the date picker.
@@ -190,7 +190,7 @@ $('#restrictControls').attachDatepicker({firstDay: 1, changeFirstDay: false,
 					<p><span class="demoLabel">Limited dates:</span>
 						<input type="text" size="10" id="restrictDates"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#restrictDates').attachDatepicker({minDate: new Date(2005, 1 - 1, 26),
+$('#restrictDates').datepicker({minDate: new Date(2005, 1 - 1, 26),
 	maxDate: new Date(2007, 1 - 1, 26)});
 </script>
 					<p>Or set a range relative to today by specifying a number
@@ -198,14 +198,14 @@ $('#restrictDates').attachDatepicker({minDate: new Date(2005, 1 - 1, 26),
 					<p><span class="demoLabel">Limited dates (relative):</span>
 						<input type="text" size="10" id="relativeDates"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#relativeDates').attachDatepicker({minDate: 0, maxDate: 365});
+$('#relativeDates').datepicker({minDate: 0, maxDate: 365});
 </script>
 					<p>The relative dates can also be specified as a number and a period -
 						'd' for days, 'w' for weeks, 'm' for months, or 'y' for years.</p>
 					<p><span class="demoLabel">Limited dates (extended):</span>
 						<input type="text" size="10" id="extendedDates"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#extendedDates').attachDatepicker({minDate: '-1d', maxDate: '6y'});
+$('#extendedDates').datepicker({minDate: '-1d', maxDate: '6y'});
 </script>
 					<p>Note that the range of selectable months and years changes appropriately. Also,
 						note that the <em>Today</em> link is no longer available as today is not in the range.
@@ -220,17 +220,17 @@ $('#extendedDates').attachDatepicker({minDate: '-1d', maxDate: '6y'});
 					<p><span class="demoLabel">Medium format:</span>
 						<input type="text" size="10" id="mediumFormat"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#mediumFormat').attachDatepicker({dateFormat: 'M d, yy'});
+$('#mediumFormat').datepicker({dateFormat: 'M d, yy'});
 </script>
 					<p><span class="demoLabel">Long format:</span>
 						<input type="text" size="20" id="longFormat"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#longFormat').attachDatepicker({dateFormat: 'MM d, yy'});
+$('#longFormat').datepicker({dateFormat: 'MM d, yy'});
 </script>
 					<p><span class="demoLabel">Full format:</span>
 						<input type="text" size="30" id="fullFormat"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#fullFormat').attachDatepicker({dateFormat: 'DD, MM d, yy'});
+$('#fullFormat').datepicker({dateFormat: 'DD, MM d, yy'});
 </script>
 					<p>Display dates without the century. The century is then determined based on the
 						<code>shortYearCutoff</code> setting, which defaults to 10 years in the future ('+10').
@@ -239,17 +239,17 @@ $('#fullFormat').attachDatepicker({dateFormat: 'DD, MM d, yy'});
 					<p><span class="demoLabel">No century:</span>
 						<input type="text" size="10" id="noCentury"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#noCentury').attachDatepicker({dateFormat: 'dd/mm/y'});
+$('#noCentury').datepicker({dateFormat: 'dd/mm/y'});
 </script>
 					<p><span class="demoLabel">ISO date format:</span>
 						<input type="text" size="10" id="isoFormat"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#isoFormat').attachDatepicker({dateFormat: 'yy-mm-dd'});
+$('#isoFormat').datepicker({dateFormat: 'yy-mm-dd'});
 </script>
 					<p><span class="demoLabel">French full format:</span>
 						<input type="text" size="30" id="frFullFormat"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#frFullFormat').attachDatepicker($.datepicker.regional['fr']);
+$('#frFullFormat').datepicker($.datepicker.regional['fr']);
 $('#frFullFormat').changeDatepicker({dateFormat: 'DD, MM d, yy'});
 </script>
 					<p>The formatting codes are:</p>
@@ -278,14 +278,14 @@ $('#frFullFormat').changeDatepicker({dateFormat: 'DD, MM d, yy'});
 					<p><span class="demoLabel">No weekends:</span>
 						<input type="text" size="10" id="noWeekends"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#noWeekends').attachDatepicker({beforeShowDay: $.datepicker.noWeekends});
+$('#noWeekends').datepicker({beforeShowDay: $.datepicker.noWeekends});
 </script>
 					<p>Or you can provide your own function. The one below highlights and
 						prevents selection of a set of national days.</p>
 					<p><span class="demoLabel">National days:</span>
 						<input type="text" size="10" id="nationalDays"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#nationalDays').attachDatepicker({beforeShowDay: nationalDays});
+$('#nationalDays').datepicker({beforeShowDay: nationalDays});
 
 // Highlight certain national days on the calendar
 var natDays = [[1, 26, 'au'], [2, 6, 'nz'], [3, 17, 'ie'], [4, 27, 'za'], [5, 25, 'ar'], [6, 6, 'se'],
@@ -350,8 +350,8 @@ function nationalDays(date) {
 <pre><code class="javascript">$.datepicker.setDefaults($.datepicker.regional['']);</code></pre>
 					<p>And then configure the language per date picker instance.</p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#l10nDatepicker').attachDatepicker($.extend({showStatus: true}, $.datepicker.regional['fr']));
-$('#rtlDatepicker').attachDatepicker($.extend({showStatus: true}, $.datepicker.regional['he']));
+$('#l10nDatepicker').datepicker($.extend({showStatus: true}, $.datepicker.regional['fr']));
+$('#rtlDatepicker').datepicker($.extend({showStatus: true}, $.datepicker.regional['he']));
 </script>
 					<p><strong>Localisation packages:</strong></p>
 					<p>Localisation packages can be found below under <a href="#documentation">Settings and Documentation</a>.</p>
@@ -365,7 +365,7 @@ $('#rtlDatepicker').attachDatepicker($.extend({showStatus: true}, $.datepicker.r
 						<input type="text" size="10" class="dateRange" id="dFrom"/> to
 						<input type="text" size="10" class="dateRange" id="dTo"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('.dateRange').attachDatepicker({beforeShow: customRange});
+$('.dateRange').datepicker({beforeShow: customRange});
 
 // Customize two date pickers to work as a date range
 function customRange(input) {
@@ -380,17 +380,17 @@ function customRange(input) {
 						<input type="text" size="25" id="rangeSelect"/></p>
 
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#rangeSelect').attachDatepicker({rangeSelect: true});
+$('#rangeSelect').datepicker({rangeSelect: true});
 </script>
 					<p><span class="demoLabel">Two months with range select:</span>
 						<input type="text" size="25" id="rangeSelect2Months"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#rangeSelect2Months').attachDatepicker({rangeSelect: true, numberOfMonths: 2});
+$('#rangeSelect2Months').datepicker({rangeSelect: true, numberOfMonths: 2});
 </script>
 					<p><span class="demoLabel">Six months with range select:</span>
 						<input type="text" size="25" id="rangeSelect6Months"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#rangeSelect6Months').attachDatepicker({rangeSelect: true, numberOfMonths: [2, 3],
+$('#rangeSelect6Months').datepicker({rangeSelect: true, numberOfMonths: [2, 3],
 	stepMonths: 3, prevText: '&lt;&lt; Previous Months', nextText: 'Next Months &gt;&gt;'});
 </script>
 				</div>
@@ -400,19 +400,19 @@ $('#rangeSelect6Months').attachDatepicker({rangeSelect: true, numberOfMonths: [2
 					<p><span class="demoLabel">Open at 01-Jan-2007:</span>
 						<input type="text" size="10" id="openDateJan01"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#openDateJan01').attachDatepicker({defaultDate: new Date(2007, 1 - 1, 1)});
+$('#openDateJan01').datepicker({defaultDate: new Date(2007, 1 - 1, 1)});
 </script>
 					<p><span class="demoLabel">Open at 7 days from today:</span>
 						<input type="text" size="10" id="openDatePlus7"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#openDatePlus7').attachDatepicker({defaultDate: +7});
+$('#openDatePlus7').datepicker({defaultDate: +7});
 </script>
 					<p>Or specify a period from today - 'd' for days,
 						'w' for weeks, 'm' for months, or 'y' for years.</span>
 					<p><span class="demoLabel">Open at 2 weeks from today:</span>
 						<input type="text" size="10" id="openDate2Weeks"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#openDate2Weeks').attachDatepicker({defaultDate: '2w'});
+$('#openDate2Weeks').datepicker({defaultDate: '2w'});
 </script>
 					<p>Show the weeks of the year. Defaults to the ISO 8601 definition (weeks start 
 						on Mondays and the first week of the year contains January 4). Change the 
@@ -421,7 +421,7 @@ $('#openDate2Weeks').attachDatepicker({defaultDate: '2w'});
 					<p><span class="demoLabel">Show week of the year:</span>
 						<input type="text" size="10" id="showWeeks"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#showWeeks').attachDatepicker({showWeeks: true, firstDay: 1, changeFirstDay: false, showOtherMonths: true});
+$('#showWeeks').datepicker({showWeeks: true, firstDay: 1, changeFirstDay: false, showOtherMonths: true});
 </script>
 					<p>Additional settings let you move the <em>Clear</em>/<em>Close</em> controls
 						to the bottom, hide the <em>Clear</em> control to make the date mandatory,
@@ -433,7 +433,7 @@ $('#showWeeks').attachDatepicker({showWeeks: true, firstDay: 1, changeFirstDay: 
 					<p><span class="demoLabel">Additional settings:</span>
 						<input type="text" size="10" id="addSettings"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#addSettings').attachDatepicker({
+$('#addSettings').datepicker({
 	closeAtTop: false, 
 	mandatory: true,
 	showOtherMonths: true, 
@@ -465,14 +465,14 @@ function highlightToday(date, inst) {
 						<span class="removeDatepicker"></span></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
 var opts = {beforeShowDay: $.datepicker.noWeekends};
-$('.removeDatepicker').attachDatepicker(opts);
+$('.removeDatepicker').datepicker(opts);
 $('#removeButton').toggle(function() {
 		$(this).text('Re-attach');
-		$('.removeDatepicker').removeDatepicker();
+		$('.removeDatepicker').datepicker("remove");
 	},
 	function() {
 		$(this).text('Remove');
-		$('.removeDatepicker').attachDatepicker(opts);
+		$('.removeDatepicker').datepicker(opts);
 	}
 );
 </script>
@@ -508,7 +508,7 @@ $('#removeButton').toggle(function() {
 							<option value="2009">2009</option><option value="2010">2010</option></select>
 						<input type="hidden" size="10" id="linkedDates" disabled="disabled"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#linkedDates').attachDatepicker({
+$('#linkedDates').datepicker({
 	minDate: new Date(2001, 1 - 1, 1), 
 	maxDate: new Date(2010, 12 - 1, 31), 
 	beforeShow: readLinked,	
@@ -568,10 +568,10 @@ function checkLinkedDays() {
 						<input type="text" size="10" id="changeDP"/></p>
 					<p>When the option in the select changes, the following function is called:</p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#changeDP').attachDatepicker();
+$('#changeDP').datepicker();
 // Change the datepicker to selected speed.
 $("#animSelector,#speedSelector").change(function() {
-	$('#changeDP').changeDatepicker({'showAnim': $('#animSelector').val(),
+	$('#changeDP').datepicker("change", {'showAnim': $('#animSelector').val(),
 		'speed': $('#speedSelector').val()});
 });
 </script>
@@ -599,7 +599,7 @@ Example #2:
 */
 
 // Invoke inline configured datepickers
-$('.inlineConfig').attachDatepicker();
+$('.inlineConfig').datepicker();
 </script>
 				</div>
 				<div id="inline" class="tab_group1 container">
@@ -610,7 +610,7 @@ $('.inlineConfig').attachDatepicker();
 					<div style="clear:both;height:1em"></div>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
 // HTML &lt;span id="inlineDemo">&lt;/span>
-$('#inlineDemo').attachDatepicker({
+$('#inlineDemo').datepicker({
 	onSelect: function(date) {
 		alert(date);
 	}
@@ -626,7 +626,7 @@ $('#inlineDemo').attachDatepicker({
 						<input type="text" size="25" id="inlineRange" readonly="readonly"/>
 					</p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
-$('#rangeInline').attachDatepicker({rangeSelect: true, rangeSeparator: ' to ',
+$('#rangeInline').datepicker({rangeSelect: true, rangeSeparator: ' to ',
 	numberOfMonths: 2, onSelect: updateInlineRange});
 $('#rangeInline').find('div:first').width(370); // Unfortunately not automatic
 
@@ -739,7 +739,7 @@ $("#setInlineRange").click(function() {
 						<li>Replace references to the <code>popUpCal</code>
 							object with <code>$.datepicker</code>.</li>
 						<li>Replace references to the <code>calendar</code>
-							function with <code>attachDatepicker</code>.</li>
+							function with <code>datepicker</code>.</li>
 						<li>Replace references to the <code>autoPopUp</code>
 							setting with <code>showOn</code>.</li>
 						<li>Replace references to the <code>fieldSettings</code>
@@ -787,7 +787,7 @@ $("#setInlineRange").click(function() {
 					<p>To migrate fully, the following steps need to be taken:</p>
 					<ul>
 						<li>Replace references to the <code>datepicker</code>
-							function with <code>attachDatepicker</code>.</li>
+							function with <code>datepicker</code>.</li>
 						<li>Replace references to the <code>$.datepicker.reconfigureFor(selector, ...)</code>
 							function with <code>$(selector).changeDatepicker(...)</code>.</li>
 						<li>Replace references to the <code>$.datepicker.enableFor(selector)</code>
@@ -803,7 +803,7 @@ $("#setInlineRange").click(function() {
 <pre><code class="javascript">$('inputs').<b>datepicker</b>();
 $.<b>datepicker.reconfigureFor</b>('inputs', {...});</code></pre>
 					<p>becomes:</p>
-<pre><code class="javascript">$('inputs').<b>attachDatepicker</b>();
+<pre><code class="javascript">$('inputs').<b>datepicker</b>();
 $('input').<b>changeDatepicker</b>({...});</code></pre>
 				</div>
 <!--DEMO				
@@ -826,8 +826,8 @@ $('input').<b>changeDatepicker</b>({...});</code></pre>
 						<li>Initialize the date picker using the jQuery selector followed by the <code>datepicker</code> function.
 							Customize each calendar with <a href="http://docs.jquery.com/UI/Datepicker/datepicker#options" target="_blank">additional settings</a>
 							as part of the initialization if necessary.
-<pre><code class="javascript">$('input selector').attachDatepicker();
-$('input selector').attachDatepicker({defaultDate: +7});</code></pre>
+<pre><code class="javascript">$('input selector').datepicker();
+$('input selector').datepicker({defaultDate: +7});</code></pre>
 						</li>
 					</ol>
 				</div>
