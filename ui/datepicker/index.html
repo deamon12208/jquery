@@ -719,16 +719,73 @@ $("#setInlineRange").click(function() {
 				</div>
 				<div id="compat" class="tab_group1 container">
 					<h3>Compatibility</h3>
-					<h4>v3.3 to 3.4</h4>
-					<p>Name changes were made to simplify the API and better fit with <a href="http://ui.jquery.com">jQuery UI</a> v1.5</p>
+					<h4>v3.3 to v3.4</h4>
+					<p>The jQuery UI interfaces changed again, so here's another compatibility module.</p>
+					<p>Users of v3.3 of the datepicker should use the following
+						header code to work with their existing implementation:</p>
+<pre><code class="html">&lt;link rel="stylesheet" type="text/css" href="<b>ui.datepicker.css</b>"/&gt;
+&lt;script type="text/javascript" src="<b>ui.datepicker.js</b>"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="<b>ui.datepicker.compatibility-3.3.js</b>"&gt;&lt;/script&gt;</code></pre>
+					<p>Download the <a href="compatibility/ui.datepicker.compatibility-3.3.js" target="_blank">ui.datepicker.compatibility-3.3.js</a> module.</p>
+					<p>To migrate fully, the following steps need to be taken:</p>
 					<ul>
-						<li>Replace attachDatepicker with datepicker</li>
-						<li>Replace changeDatepicker with datepicker("change")</li>
-						<li>Replace disableDatepicker with datepicker("disable")</li>
-						<li>Replace enableDatepicker with datepicker("enable")</li>
-						<li>Replace removeDatepicker with datepicker("remove")</li>
-						<li>Replace showDatepicker with datepicker("show")</li>
+						<li>Replace references to the <code>$(selector).attachDatepicker(...)</code>
+							function with <code>$(selector).datepicker(...)</code>.</li>
+						<li>Replace references to the <code>$(selector).removeDatepicker()</code>
+							function with <code>$(selector).datepicker('destroy')</code>.</li>
+						<li>Replace references to the <code>$(selector).datepicker.changDatepicker(...)</code>
+							function with <code>$(selector).datepicker('change', ...)</code>.</li>
+						<li>Replace references to the <code>$(selector).datepicker.enableDatepicker()</code>
+							function with <code>$(selector).datepicker('enable')</code>.</li>
+						<li>Replace references to the <code>$(selector).disableDatepicker()</code>
+							function with <code>$(selector).datepicker('disable')</code>.</li>
+						<li>Replace references to the <code>$(selector).isDisabledDatepicker()</code>
+							function with <code>$(selector).datepicker('isDisabled')</code>.</li>
+						<li>Replace references to the <code>$(selector).showDatepicker()</code>
+							function with <code>$(selector).datepicker('show')</code>.</li>
+						<li>Replace references to the <code>$(selector).getDatepickerDate()</code>
+							function with <code>$(selector).datepicker('getDate')</code>.</li>
+						<li>Replace references to the <code>$(selector).setDatepickerDate(...)</code>
+							function with <code>$(selector).datepicker('setDate', ...)</code>.</li>
 					</ul>
+					<p>For example, this old style code:</p>
+<pre><code class="javascript">$('inputs').<b>attachDatepicker</b>(...);
+$('inputs').<b>changeDatepicker</b>(...);</code></pre>
+					<p>becomes:</p>
+<pre><code class="javascript">$('inputs').<b>datepicker</b>(...);
+$('inputs').<b>datepicker('change',</b> ...);</code></pre>
+
+					<h4>v3.2 to v3.4</h4>
+					<p>To align the datepicker more closely with other jQuery UI components,
+					further changes were made in v3.3, resulting in another compatibility module.</p>
+					<p>Users of v3.2 of the datepicker should use the following
+						header code to work with their existing implementation:</p>
+<pre><code class="html">&lt;link rel="stylesheet" type="text/css" href="<b>ui.datepicker.css</b>"/&gt;
+&lt;script type="text/javascript" src="<b>ui.datepicker.js</b>"&gt;&lt;/script&gt;
+&lt;script type="text/javascript" src="<b>ui.datepicker.compatibility-3.2.js</b>"&gt;&lt;/script&gt;</code></pre>
+					<p>Download the <a href="compatibility/ui.datepicker.compatibility-3.2.js" target="_blank">ui.datepicker.compatibility-3.2.js</a> module.</p>
+					<p>To migrate fully, the following steps need to be taken:</p>
+					<ul>
+						<li>Replace references to the <code>$.datepicker.reconfigureFor(selector, ...)</code>
+							function with <code>$(selector).datepicker('change', ...)</code>.</li>
+						<li>Replace references to the <code>$.datepicker.enableFor(selector)</code>
+							function with <code>$(selector).datepicker('enable')</code>.</li>
+						<li>Replace references to the <code>$.datepicker.disableFor(selector)</code>
+							function with <code>$(selector).datepicker('disable')</code>.</li>
+						<li>Replace references to the <code>$.datepicker.isDisabled(selector)</code>
+							function with <code>$(selector).datepicker('isDisabled')</code>.</li>
+						<li>Replace references to the <code>$.datepicker.showFor(selector)</code>
+							function with <code>$(selector).datepicker('show')</code>.</li>
+						<li>Replace references to the <code>$.datepicker.getDateFor(selector)</code>
+							function with <code>$(selector).datepicker('getDate')</code>.</li>
+						<li>Replace references to the <code>$.datepicker.setDateFor(selector, ...)</code>
+							function with <code>$(selector).datepicker('setDate', ...)</code>.</li>
+					</ul>
+					<p>For example, this old style code:</p>
+<pre><code class="javascript">$.<b>datepicker.reconfigureFor</b>('inputs', {...});</code></pre>
+					<p>becomes:</p>
+<pre><code class="javascript">$('inputs').<b>datepicker('change',</b> {...});</code></pre>
+
 					<h4>v2.x to v3.3</h4>
 					<p>The date picker has been refactored to better fit
 						within the <a href="http://ui.jquery.com">jQuery UI</a> project.
@@ -788,37 +845,6 @@ $("#setInlineRange").click(function() {
 	<b>beforeShowDay</b>: <b>$.datepicker</b>.noWeekends});
 	
 &lt;input type="text" id="inlineConfig" <b>date:</b>defaultDate="+7"/&gt;</code></pre>
-					<h4>v3.2 to v3.4</h4>
-					<p>To align the datepicker more closely with other jQuery UI components,
-					further changes were made in v3.3, resulting in another compatibility module.</p>
-					<p>Users of v3.2 of the datepicker should use the following
-						header code to work with their existing implementation:</p>
-<pre><code class="html">&lt;link rel="stylesheet" type="text/css" href="<b>ui.datepicker.css</b>"/&gt;
-&lt;script type="text/javascript" src="<b>ui.datepicker.js</b>"&gt;&lt;/script&gt;
-&lt;script type="text/javascript" src="<b>ui.datepicker.compatibility-3.2.js</b>"&gt;&lt;/script&gt;</code></pre>
-					<p>Download the <a href="compatibility/ui.datepicker.compatibility-3.2.js" target="_blank">ui.datepicker.compatibility-3.2.js</a> module.</p>
-					<p>To migrate fully, the following steps need to be taken:</p>
-					<ul>
-						<li>Replace references to the <code>$.datepicker.reconfigureFor(selector, ...)</code>
-							function with <code>$(selector).datepicker('change', ...)</code>.</li>
-						<li>Replace references to the <code>$.datepicker.enableFor(selector)</code>
-							function with <code>$(selector).datepicker('enable')</code>.</li>
-						<li>Replace references to the <code>$.datepicker.disableFor(selector)</code>
-							function with <code>$(selector).datepicker('disable')</code>.</li>
-						<li>Replace references to the <code>$.datepicker.isDisabled(selector)</code>
-							function with <code>$(selector).datepicker('isDisabled')</code>.</li>
-						<li>Replace references to the <code>$.datepicker.showFor(selector)</code>
-							function with <code>$(selector).datepicker('show')</code>.</li>
-						<li>Replace references to the <code>$.datepicker.getDateFor(selector)</code>
-							function with <code>$(selector).datepicker('getDate')</code>.</li>
-						<li>Replace references to the <code>$.datepicker.setDateFor(selector, ...)</code>
-							function with <code>$(selector).datepicker('setDate', ...)</code>.</li>
-					</ul>
-					<p>For example, this old style code:</p>
-<pre><code class="javascript">$.<b>datepicker.reconfigureFor</b>('inputs', {...});</code></pre>
-					<p>becomes:</p>
-<pre><code class="javascript">$('input').<b>datepicker('change',</b> {...});</code></pre>
-
 				</div>
 <!--DEMO				
 				<h2 style="margin-top:2em">Use jQuery UI Datepicker</h2>
