@@ -427,9 +427,10 @@ $('#showWeeks').datepicker({showWeeks: true, firstDay: 1, changeFirstDay: false,
 						to the bottom, hide the <em>Clear</em> control to make the date mandatory,
 						display the days in other months (non-selectable),
 						and show a status bar (with a custom display for today).
-						A callback function is also added to operate when a date is selected.
-						If no callback is specified, the <code>onchange</code> event of the
-						input field is triggered.</p>
+						Callback functions are also added to operate when a date
+						is selected and when the datepicker is closed. 
+						If no <code>onSelect</code> callback is specified, the
+						<code>onchange</code> event of the input field is triggered.</p>
 					<p><span class="demoLabel">Additional settings:</span>
 						<input type="text" size="10" id="addSettings"/></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
@@ -653,7 +654,7 @@ nextWeek.setDate(nextWeek.getDate() + 7);
 var lastWeek = new Date();
 lastWeek.setDate(lastWeek.getDate() - 7);
 
-$("#setInlineRange").click(function() {
+$('#setInlineRange').click(function() {
 	// Set Inline Date Range Selection
 	$('#rangeInline').datepicker('setDate', lastWeek, nextWeek);
 	

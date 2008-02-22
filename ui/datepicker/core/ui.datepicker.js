@@ -89,6 +89,7 @@ function Datepicker() {
 		beforeShow: null, // Function that takes an input field and
 			// returns a set of custom settings for the date picker
 		onSelect: null, // Define a callback function when a date is selected
+		onClose: null, // Define a callback function when the datepicker is closed
 		numberOfMonths: 1, // Number of months to show at a time
 		stepMonths: 1, // Number of months to step back/forward
 		rangeSelect: false, // Allows for selecting a date range on one date picker
@@ -589,6 +590,11 @@ $.extend(Datepicker.prototype, {
 			});
 			if (speed == '') {
 				this._tidyDialog(inst);
+			}
+			var onClose = inst._get('onClose');
+			if (onClose) {
+				onClose.apply((inst._input ? inst._input[0] : null),
+					[inst._getDate(), inst]);  // trigger custom callback
 			}
 			this._datepickerShowing = false;
 			this._lastInput = null;
