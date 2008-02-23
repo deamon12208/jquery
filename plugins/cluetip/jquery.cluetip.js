@@ -9,7 +9,7 @@
  * http://www.gnu.org/licenses/gpl.html
  *
  */
-(function($) { 
+;(function($) { 
 /*
  * @name clueTip
  * @type jQuery
