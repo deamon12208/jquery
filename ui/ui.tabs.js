@@ -201,6 +201,12 @@
                     $.map(this.$lis.filter('.' + o.disabledClass),
                         function(n, i) { return self.$lis.index(n); } )
                 )).sort();
+                
+                // clean up to avoid memory leaks in certain versions of IE 6
+                $(window).bind('unload', function() {
+                    self.$tabs.unbind('.ui-tabs');
+                    self.$lis = self.$tabs = self.$panels = null;
+                });
 
             }
 
