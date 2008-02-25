@@ -76,8 +76,13 @@ body
 	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> 
 </div>
 
-<div style='width: 300px; height: 300px; margin: 20px; position: relative; background:#F7FFEF;border:20px solid #E6F7D4;'>
+<div style='width: 300px; height: 300px; margin: 20px; position: relative; background:#F7FFEF;border:0px solid #E6F7D4;'>
 	<img id="resizeme_containment_image" src="images/houses.jpg" style='width: 70px; height:70px;border: 0px solid #F0F1F3; margin: 0px;'> 
+</div>
+
+<div id="resizeme_containment_div_wrapper" style='width: 460px; height: 306px; margin: 20px; position: relative; display: block; background:#F7FFEF;'>
+	<div id="resizeme_containment_wrap_image" style='width: 460px; height: 306px;background: transparent url(../../fx/images/very-cute-puppy.jpg) no-repeat scroll 0%;'></div>
+	<div id="resizeme_containment_div" style='top:0px; left:0px; width: 150px; height:150px; position: absolute; background: transparent url(../../fx/images/very-cute-puppy.jpg) no-repeat scroll 0%;'></div>
 </div>
 
 <div style='width: 400px; height: 300px; margin: 20px; position: relative; background:#F7FFEF;border:2px solid #E6F7D4;'>
@@ -166,6 +171,30 @@ $(document).ready(function(){
 
 	$('#tdResize').resizable();
 
+	$('#resizeme_containment_div').resizable({
+		containment: $('#resizeme_containment_div_wrapper'),
+		handles: 'all',
+		transparent: true,
+		//aspectRatio: true,
+		//autohide: true,
+		minWidth: 100,
+		minHeight: 100,
+		maxWidth: 400,
+		maxHeight: 400,
+		resize: function(e, ui) {
+  		this.style.backgroundPosition = '-' + (ui.options.currentPosition.left) + 'px -' + (ui.options.currentPosition.top) + 'px';
+  	}
+	})
+	.draggable({
+		containment: $('#resizeme_containment_div_wrapper'),
+		drag: function(e, ui) {
+			this.style.backgroundPosition = '-' + (ui.position.left) + 'px -' + (ui.position.top) + 'px';
+		}
+	});
+	
+	$('#resizeme_containment_wrap_image').css({ opacity: 0.5 });
+	
+	
 	$('#resizeme_containment, #resizeme_containment_prop, #resizeme_containment_image').resizable({
 		//proxy: "proxy",
 		handles: 'all',
