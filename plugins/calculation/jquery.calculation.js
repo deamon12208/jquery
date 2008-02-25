@@ -7,10 +7,15 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- * Revision: 1
- * Version: 0.1
+ * Revision: 3
+ * Version: 0.2
  *
  * Revision History
+ * v0.2
+ * - Fixed bug in sMethod in calc() (was using getValue, should have been setValue)
+ * - Added arguments for sum() to allow auto-binding with callbacks
+ * - Added arguments for avg() to allow auto-binding with callbacks
+ * 
  * v0.1a
  * - Added semi-colons after object declaration (for min protection)
  * 
@@ -32,7 +37,7 @@
 
 	// set default options
 	$.Calculation = {
-		version: "0.1",
+		version: "0.2",
 		setDefaults: function(options){
 			$.extend(defaults, options);
 		}
@@ -128,7 +133,7 @@
 				// get a pointer to the current element
 				$el = $(this);
 				// determine what method to get it's value
-				sMethod = ($el.is(":input") ? (defaults.useFieldPlugin ? "getValue" : "val") : "text");
+				sMethod = ($el.is(":input") ? (defaults.useFieldPlugin ? "setValue" : "val") : "text");
 
 				// initialize the hash vars
 				hVars = {};
@@ -187,13 +192,54 @@
 	 * $("input[@name='price1'], input[@name='price2'], input[@name='price3']").sum();
 	 * > This would return the sum of all the fields named price1, price2 or price3
 	 *
+	 * $("input[@name^=sum]").sum("keyup", "#totalSum");
+	 * > This would update the element with the id "totalSum" with the sum of all the 
+	 * > fields whose name started with "sum" anytime the keyup event is triggered on
+	 * > those field.
+	 *
 	 */
 	// the sum() method -- break the chain
-	$.fn.sum = function(){
-		// TODO: add arguments to allow automatic binding with a callback
+	$.fn.sum = function(bind, selector){
+		// if no arguments, return the sum() of the values
+		if( arguments.length == 0 )
+			return sum(this.parseNumber());
+
+		// if the selector is an options object, get the options
+		var bSelOpt = selector && selector.constructor == Object && !(selector instanceof jQuery);
 		
-		// return the values as a comma-delimited string
-		return sum(this.parseNumber());
+		// TODO: add arguments to allow automatic binding with a callback
+		var opt = bind && bind.constructor == Object ? bind : {
+			  bind: "keyup"
+			, selector: (!bSelOpt) ? selector : null
+			, oncalc: null
+		};
+
+		// if the selector is an options object, extend	the options
+		if( bSelOpt ) opt = jQuery.extend(opt, selector);
+		
+		// if the selector exists, make sure it's a jQuery object
+		if( !!opt.selector ) opt.selector = $(opt.selector);
+		
+		var self = this
+			, sMethod
+			, calcSum = function (){
+				var value = self.sum();
+				// check to make sure we have a selector				
+				if( !!opt.selector ){
+					// determine how to set the value for the selector
+					sMethod = (opt.selector.is(":input") ? (defaults.useFieldPlugin ? "setValue" : "val") : "text");
+					// update the value
+					opt.selector[sMethod](value);
+				}
+				// if there's a callback, run it now
+				if( jQuery.isFunction(opt.oncalc) ) opt.oncalc.apply(self, [value, opt]);
+			};
+		
+		// run the calcSum function now to make sure we're updated
+		calcSum();
+		
+		// bind the calcSum function to run each time a key is pressed
+		return self.bind(opt.bind, calcSum);
 	};
 
 	/*
@@ -210,13 +256,53 @@
 	 * $("input[@name='price1'], input[@name='price2'], input[@name='price3']").avg();
 	 * > This would return the average of all the fields named price1, price2 or price3
 	 *
+	 * $("input[@name^=sum]").avg("keyup", "#totalSum");
+	 * > This would update the element with the id "totalSum" with the sum of all the 
+	 * > fields whose name started with "sum" anytime the keyup event is triggered on
+	 * > those field.
+	 *
 	 */
 	// the avg() method -- break the chain
-	$.fn.avg = function(){
-		// TODO: add arguments to allow automatic binding with a callback
+	$.fn.avg = function(bind, selector){
+		// if no arguments, return the avg() of the values
+		if( arguments.length == 0 )
+			return avg(this.parseNumber());
 
-		// return the values as a comma-delimited string
-		return avg(this.parseNumber());
+		// if the selector is an options object, get the options
+		var bSelOpt = selector && selector.constructor == Object && !(selector instanceof jQuery);
+		
+		var opt = bind && bind.constructor == Object ? bind : {
+			  bind: "keyup"
+			, selector: (!bSelOpt) ? selector : null
+			, oncalc: null
+		};
+
+		// if the selector is an options object, extend	the options
+		if( bSelOpt ) opt = jQuery.extend(opt, selector);
+		
+		// if the selector exists, make sure it's a jQuery object
+		if( !!opt.selector ) opt.selector = $(opt.selector);
+		
+		var self = this
+			, sMethod
+			, calcAvg = function (){
+				var value = self.avg();
+				// check to make sure we have a selector				
+				if( !!opt.selector ){
+					// determine how to set the value for the selector
+					sMethod = (opt.selector.is(":input") ? (defaults.useFieldPlugin ? "setValue" : "val") : "text");
+					// update the value
+					opt.selector[sMethod](value);
+				}
+				// if there's a callback, run it now
+				if( jQuery.isFunction(opt.oncalc) ) opt.oncalc.apply(self, [value, opt]);
+			};
+		
+		// run the calcAvg function now to make sure we're updated
+		calcAvg();
+		
+		// bind the calcAvg function to run each time a key is pressed
+		return self.bind(opt.bind, calcAvg);
 	};
 
 	/*

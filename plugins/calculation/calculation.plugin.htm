@@ -22,45 +22,33 @@
 			// run the calculation function now
 			recalc();
 
-			// this function calculates the sum
-			var cbSum = function (){
-				var sum = $("input[@name^=sum]").sum();
+			// automatically update the "#totalSum" field every time
+			// the values are changes via the keyup event
+			$("input[@name^=sum]").sum("keyup", "#totalSum");
 
-				$("#totalSum").setValue(sum);
-			};
-
-			// recalculate the some on each keypress
-			$("input[@name^=sum]").bind("keyup", cbSum);
-			// sum the values now
-			cbSum();
-
-			// this function calculates the sum
-			var cbAvg = function (){
-				var avg = $("input[@name^=avg]").avg()
-
-				$("#totalAvg").setValue(avg);
-			};
-
-			// recalculate the some on each keypress
-			$("input[@name^=avg]").bind("keyup", cbAvg);
-			// avg the values now
-			cbAvg();
+			// automatically update the "#totalAvg" field every time
+			// the values are changes via the keyup event
+			$("input[@name^=avg]").avg("keyup", "#totalAvg");
 
 			// this calculates the sum for some text nodes
 			$("#idTotalTextSum").click(
 				function (){
-					var sum = $(".textSum").sum().toString();
+					// get the sum of the elements
+					var sum = $(".textSum").sum();
 
-					$("#totalTextSum").text("$" + sum);
+					// update the total
+					$("#totalTextSum").text("$" + sum.toString());
 				}
 			);
 
 			// this calculates the average for some text nodes
 			$("#idTotalTextAvg").click(
 				function (){
-					var avg = $(".textAvg").avg().toString();
+					// get the average of the elements
+					var avg = $(".textAvg").avg();
 
-					$("#totalTextAvg").text(avg);
+					// update the total
+					$("#totalTextAvg").text(avg.toString());
 				}
 			);
 
@@ -211,11 +199,11 @@
 
 			<p id="ex-avg-span">
 				Numbers:
-				<span class="textAvg">3,294</span>
+				<span class="textAvg">3,294.75</span>
 				+
-				<span class="textAvg">85.7</span>
+				<span class="textAvg">85.97</span>
 				+
-				<span class="textAvg">2974</span>
+				<span class="textAvg">2974.25</span>
 				+
 				<span class="textAvg">$6,502.03</span>
 				&nbsp;&nbsp;
@@ -302,16 +290,31 @@
 		<code>$("input[@name^='price']").parseNumber();</code><br />
 		This would return an array of potential number for every match in the selector
 	</li>
+
 	<li>
-		<code>$(&quot;input[@name^=&#039;sum&#039;]&quot;).sum();</code><br />
+		<code>$("input[@name^='sum']").sum();</code><br />
 		Returns the sum of all the input objects that start with a name attribute
-		of "sum".
+		of "sum". This breaks the jQuery chain.
 	</li>
 
 	<li>
-		<code>$(&quot;input[@name^=&#039;avg&#039;]&quot;).avg();</code><br />
+		<code>$("input[@name^=';sum']").sum("keyup", "#totalSum");</code><br />
+		Updates the "#totalSum" element with the sum of all the input objects that
+		start with the name attribute of "sum" anytime the keyup event occurs within
+		those fields. This does <strong>not</strong> break the jQuery chain.
+	</li>
+
+	<li>
+		<code>$("input[@name^='avg']").avg();</code><br />
 		Returns the average of all the input objects that start with a name attribute
 		of "avg".
+	</li>
+
+	<li>
+		<code>$("input[@name^='avg']").avg("keyup", "#totalAvg");</code><br />
+		Updates the "#totalAvg" element with the average of all the input objects that
+		start with the name attribute of "avg" anytime the keyup event occurs within
+		those fields. This does <strong>not</strong> break the jQuery chain.
 	</li>
 	
 	<li>
