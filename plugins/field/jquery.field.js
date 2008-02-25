@@ -7,8 +7,8 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- * Revision: 12
- * Version: 0.9
+ * Revision: 13
+ * Version: 0.9.1
  *
  * NOTES: The getValue() and setValue() methods are designed to be
  * executed on single field (i.e. any field that would share the same
@@ -16,6 +16,10 @@
  * elements, etc.)
  *
  * Revision History
+ * v0.9.1
+ * - Optimized the createCheckboxRange to reduced complexity and code size.
+ *   Functionality has not changed.
+ * 
  * v0.9
  * - Removed createCheckboxRange custom event, this fixes problems with
  *   older jQuery versions that have problems with the trigger
@@ -79,7 +83,7 @@
 
 	// set default options
 	$.Field = {
-		version: "0.9",
+		version: "0.9.1",
 		setDefaults: function(options){
 			$.extend(defaults, options);
 		},
@@ -583,61 +587,37 @@
 	$.fn.createCheckboxRange = function(callback){
 		var iLastSelection = 0, self = this, bCallback = $.isFunction(callback);
 
-		// this finds the position of the current element in the array
-		var findArrayPos = function (el){
-			var pos = -1;
-			$("input[@name='"+self[0].name+"']").each(
-				function (i){
-					if( this == el ){
-						pos = i;
-						return false;
-					}
-				}
-			);
-
-			return pos;
-		};
-		
 		// if there's a call back, bind it now and run it
 		if( bCallback ) 
 			this.each(function (){callback.apply(this, [$(this).is(":checked")])});
 		
 		// loop through each checkbox and return the jQuery object
 		return this.each(
-			function (lc){
+			function (){
 				// only perform this action on checkboxes
 				if( this.type != "checkbox" ) return false;
 				var el = this;
 
 				var updateLastCheckbox = function (e){
-					iLastSelection = findArrayPos(e.target);
+					iLastSelection = self.index(e.target);
 				};
 
 				var checkboxClicked = function (e){
-					var bSetChecked = this.checked, current = findArrayPos(e.target), range;
+					var bSetChecked = this.checked, current = self.index(e.target), low = Math.min(iLastSelection, current), high = Math.max(iLastSelection, current);
 					// run the callback for the clicked item
 					if( bCallback ) $(this).each(function (){callback.apply(this, [bSetChecked])});
 					// if we don't detect the keypress, exit function
 					if( !e[defaults.checkboxRangeKeyBinding] ) return;
 
-					// figure out which is the highest and which is the lowest value
-					if( iLastSelection > current ){
-						// get from low to high
-						range = ":lt(" + (iLastSelection+1) + "):gt(" + current + ")";
-					} else {
-						// get from high to low
-						range = ":gt(" + (iLastSelection-1) + "):lt(" + (current-iLastSelection) + ")";
+					// loop through the items in the selected range
+					for( var i=low; i < high; i++ ){
+						// make sure to correctly set the checked status
+						var item = self.eq(i).attr("checked", bSetChecked ? "checked" : "");
+						// run the callback
+						if( bCallback ) callback.apply(item[0], [bSetChecked]);
 					}
 					
-					// toggle each option
-					var items = $("input[@name='"+el.name+"']" + range)
-						// toggle each option
-						.attr("checked", bSetChecked ? "checked" : "");
-					
-					// if there's a callback, run it now
-					if( bCallback )
-						// trigger the custom callback
-						items.each(function (){callback.apply(this, [bSetChecked])});
+					return true;
 				};
 				
 				$(this)
@@ -645,7 +625,7 @@
 					.unbind("blur", updateLastCheckbox)
 					.unbind("click", checkboxClicked)
 
-					// bind the functions
+					// bind the functions, we bind on blur for keyboard selected items
 					.bind("blur", updateLastCheckbox)
 					.bind("click", checkboxClicked)
 					;
