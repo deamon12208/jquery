@@ -374,10 +374,10 @@
 		drag: function(e) {
 			//Increase performance, avoid regex
 			var el = this.helper, o = this.options, props = {}, pRatio = o._aspectRatio || e.shiftKey, 
-			self = this, pRatio = o._aspectRatio || e.shiftKey, smp = o.originalMousePosition;
+			self = this, pRatio = o._aspectRatio || e.shiftKey, smp = o.originalMousePosition, a = o.axis;
 
 			var dx = (e.pageX-smp.left)||0, dy = (e.pageY-smp.top)||0;
-			var trigger = this.change[o.axis];
+			var trigger = this.change[a];
 			if (!trigger) return false;
 		 
 			// Calculate the attrs that will be change
@@ -399,11 +399,11 @@
 				if (data.height) data.width = csize.height / o.aspectRatio;
 				else if (data.width)  data.height = csize.width * o.aspectRatio;
 	
-				if (o.axis == 'sw') {
+				if (a == 'sw') {
 					data.left = cpos.left + (csize.width - data.width);
 					data.top = null;
 				}
-				if (o.axis == 'nw') { 
+				if (a == 'nw') { 
 					data.top = cpos.top + (csize.height - data.height);
 					data.left = cpos.left + (csize.width - data.width);
 				}
@@ -419,36 +419,51 @@
 			// Containment
 			if (o.containment && o.cdata.e) {
 				if (data.left && data.left < 0) {
-					data.left = 0; data.width = null;
+					data.left = 0; data.width = null; 
+					if (pRatio) {	data.height = null; data.top = null; }
 				}
 				if (data.top && data.top < 0) {
-					data.top = 0;	data.height = null;
+					data.top = 0;	data.height = null; 
+					if (pRatio) {	data.width = null; data.left = null; } 
 				}
 				var woset = cpos.left + csdif.width, hoset = cpos.top + csdif.height;
-				if (data.width && woset + data.width >= o.cdata.w) data.width = o.cdata.w - woset;
-				if (data.height && hoset + data.height >= o.cdata.h) data.height = o.cdata.h - hoset;
-				
+				if (data.width && woset + data.width >= o.cdata.w) {
+						if (pRatio) { data.height = null; data.top = null; }
+						data.width = o.cdata.w - woset;
+				}
+				if (data.height && hoset + data.height >= o.cdata.h) {
+						if (pRatio) {	data.width = null; data.left = null; }
+						data.height = o.cdata.h - hoset;
+				}
 			}
-		 
-			// Max/Min width/height control
+			
 			var ismaxw = data.width && o.maxWidth && o.maxWidth <= data.width, ismaxh = data.height && o.maxHeight && o.maxHeight <= data.height,
-				isminw = data.width && o.minWidth && o.minWidth >= data.width, isminh = data.height && o.minHeight && o.minHeight >= data.height;
-	
-			if (ismaxw || isminw) {
-				data.width = null; data.left = null;
-				if (pRatio) { data.height = null; data.top = null; }
-			}
-			if (ismaxh || isminh) {
-				data.height = null; data.top = null;
-				if (pRatio) { data.width = null; data.left = null; }
-			}
+						isminw = data.width && o.minWidth && o.minWidth >= data.width, isminh = data.height && o.minHeight && o.minHeight >= data.height;
+			
+			if (isminw) data.width = o.minWidth;
+			if (isminh) data.height = o.minHeight;
+			if (ismaxw) data.width = o.maxWidth;
+			if (ismaxh) data.height = o.maxHeight;
+			
+			var dw = o.originalPosition.left + o.originalSize.width, dh = o.currentPosition.top + o.currentSize.height;
+			var cw = /sw|nw|w/.test(a), ch = /nw|ne|n/.test(a);
+			
+			if (isminw && cw) data.left = dw - o.minWidth;
+			if (ismaxw && cw) data.left = dw - o.maxWidth;
+			if (isminh && ch)	data.top = dh - o.minHeight;
+			if (ismaxh && ch)	data.top = dh - o.maxHeight;
+			
+			if (pRatio && ismaxw) { data.height = null; data.top = null; }
+			if (pRatio && ismaxh) {	data.width = null; data.left = null; }
+			if (pRatio && isminw) { data.height = null; data.top = null; }
+			if (pRatio && isminh) {	data.width = null; data.left = null; }
+			
 			// fixing jump error on top/left - bug #2330
 			var isNotwh = !data.width && !data.height;
 			if (isNotwh && !data.left && data.top) data.top = null;
 			else if (isNotwh && !data.top && data.left) data.left = null;
-		 
-			this.cssData = data;
 			
+			this.cssData = data;
 			el.css(this.cssData);
 		 
 			if (!o.proxy && o.proportionallyResize)
