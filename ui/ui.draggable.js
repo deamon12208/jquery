@@ -74,6 +74,7 @@
 			return this.element.triggerHandler(n == "drag" ? n : "drag"+n, [e, this.ui()], this.options[n]);
 		},
 		destroy: function() {
+			if(!$.data(this.element[0], 'ui-draggable')) return;
 			this.handle.removeMouseInteraction();
 			this.element
 				.removeClass("ui-draggable ui-draggable-disabled")
