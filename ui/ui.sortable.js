@@ -30,6 +30,7 @@
 		var self = this;
 		
 		this.element = $(element);
+		this.containerCache = {};
 		
 		$.data(element, "ui-sortable", this);
 		this.element.addClass("ui-sortable");
@@ -149,16 +150,25 @@
 		refresh: function() {
 			
 			this.items = [];
+			this.containers = [this];
 			var items = this.items;
 			var queries = [$(this.options.items, this.element)];
 			
 			if(this.options.connectWith) {
 				for (var i = this.options.connectWith.length - 1; i >= 0; i--){
-					var inst = $.data($(this.options.connectWith[i])[0], 'ui-sortable');
-					if(inst && !inst.disabled) queries.push($(inst.options.items, inst.element));
+					
+					var cur = $(this.options.connectWith[i]);
+					for (var j = cur.length - 1; j >= 0; j--){
+						var inst = $.data(cur[j], 'ui-sortable');
+						if(inst && !inst.disabled) {
+							queries.push($(inst.options.items, inst.element));
+							this.containers.push(inst);
+						}
+					};
+
 				};
 			}
-			
+
 			for (var i = queries.length - 1; i >= 0; i--){
 				queries[i].each(function() {
 					$.data(this, 'ui-sortable-item', true); // Data for target checking (mouse manager)
@@ -173,11 +183,18 @@
 		},
 		refreshPositions: function(fast) {
 			for (var i = this.items.length - 1; i >= 0; i--){
-				if(!fast) this.items[i].width = this.items[i].item.outerWidth();
-				if(!fast) this.items[i].height = this.items[i].item.outerHeight();
+				if(!fast) this.items[i].width 			= this.items[i].item.outerWidth();
+				if(!fast) this.items[i].height 			= this.items[i].item.outerHeight();
 				var p = this.items[i].item.offset();
-				this.items[i].left = p.left;
-				this.items[i].top = p.top;
+				this.items[i].left 						= p.left;
+				this.items[i].top 						= p.top;
+			};
+			for (var i = this.containers.length - 1; i >= 0; i--){
+				var p =this.containers[i].element.offset();
+				this.containers[i].containerCache.left 	= p.left;
+				this.containers[i].containerCache.top 	= p.top;
+				this.containers[i].containerCache.width	= this.containers[i].element.outerWidth();
+				this.containers[i].containerCache.height= this.containers[i].element.outerHeight();
 			};
 		},
 		destroy: function() {
@@ -283,6 +300,12 @@
 			//Set the original element visibility to hidden to still fill out the white space	
 			$(this.currentItem).css('visibility', 'hidden');
 
+			//Post events to possible containers
+			for (var i = this.containers.length - 1; i >= 0; i--) {
+				this.containers[i].propagate("activate", e, this);
+			}
+
+			this.dragging = true;
 			return false;
 						
 		},
@@ -292,15 +315,24 @@
 			if(this.positionDOM != this.currentItem.prev()[0]) this.propagate("update", e);
 			if(!this.element[0].contains(this.currentItem[0])) { //Node was moved out of the current element
 				this.propagate("remove", e);
-				for (var i = this.options.connectWith.length - 1; i >= 0; i--){
-					var inst = $.data($(this.options.connectWith[i])[0], 'ui-sortable');
-					if(inst.element[0].contains(this.currentItem[0])) {
-						inst.propagate("update", e, this);
-						inst.propagate("receive", e, this);
+				for (var i = this.containers.length - 1; i >= 0; i--){
+					if(this.containers[i].element[0].contains(this.currentItem[0])) {
+						this.containers[i].propagate("update", e, this);
+						this.containers[i].propagate("receive", e, this);
 					}
 				};				
 			};
 			
+			//Post events to containers
+			for (var i = this.containers.length - 1; i >= 0; i--){
+				this.containers[i].propagate("deactivate", e, this);
+				if(this.containers[i].containerCache.over) {
+					this.containers[i].propagate("out", e, this);
+					this.containers[i].containerCache.over = 0;
+				}
+			}
+			
+			this.dragging = false;
 			if(this.cancelHelperRemoval) return false;			
 			$(this.currentItem).css('visibility', '');
 			if(this.placeholder) this.placeholder.remove();
@@ -327,6 +359,32 @@
 					break;
 				}
 			}
+			
+			//Post events to containers
+			for (var i = this.containers.length - 1; i >= 0; i--){
+
+				if(this.intersectsWith(this.containers[i].containerCache)) {
+					if(!this.containers[i].containerCache.over) {
+						
+						if(this.containers[i].options.dropOnEmpty && !$(this.containers[i].options.items, this.containers[i].element).length) {
+							this.containers[i].element.append(this.currentItem);
+							this.refreshPositions(true); //Precompute after each DOM insertion, NOT on mousemove
+							if(this.placeholderElement) this.placeholder.css(this.placeholderElement.offset());
+							this.propagate("change", e); //Call plugins and callbacks
+							break;
+						}
+						
+						this.containers[i].propagate("over", e, this);
+						this.containers[i].containerCache.over = 1;
+					}
+				} else {
+					if(this.containers[i].containerCache.over) {
+						this.containers[i].propagate("out", e, this);
+						this.containers[i].containerCache.over = 0;
+					}
+				}
+				
+			};
 
 			this.propagate("sort", e); //Call plugins and callbacks
 			this.helper.css({ left: this.position.left+'px', top: this.position.top+'px' }); // Stick the helper to the cursor
