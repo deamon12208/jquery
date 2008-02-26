@@ -207,7 +207,7 @@
 			//Run through all draggables and check their positions based on specific tolerance options
 			$.each($.ui.ddmanager.droppables, function() {
 
-				if(this.item.disabled) return false; 
+				if(this.item.disabled) return; 
 				var intersects = $.ui.intersect(draggable, this, this.item.options.tolerance);
 
 				var c = !intersects && this.over == 1 ? 'out' : (intersects && this.over == 0 ? 'over' : null);
