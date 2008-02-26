@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Language" content="en" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Test for ""</title>
+	
+	<style type="text/css" media="all">
+	
+	body {
+		background: #fff;
+		margin: 0;
+		padding: 0;
+		font-family: Arial;
+		font-size: 12px;
+	}
+	
+	fieldset {
+		margin: 20px;
+	}
+	
+	ul {
+		background: #eee;
+		margin: 10px;
+		padding: 10px;
+	}
+	
+	.dropzone {
+		background: #bbb;
+	}
+	
+	.target {
+		border: 2px dotted black;
+	}
+	
+	</style>
+
+	<script type="text/javascript" src="../../jquery/src/core.js"></script>
+	<script type="text/javascript" src="../../jquery/src/selector.js"></script>
+	<script type="text/javascript" src="../../jquery/src/event.js"></script>
+	<script type="text/javascript" src="../../jquery/src/ajax.js"></script>
+	<script type="text/javascript" src="../../jquery/src/fx.js"></script>
+	<script type="text/javascript" src="../../jquery/src/offset.js"></script>
+	<script type="text/javascript" src="../../plugins/dimensions/jquery.dimensions.js"></script>
+	<script type="text/javascript" src="../ui.mouse.js"></script>
+	<script type="text/javascript" src="../ui.draggable.js"></script>
+	<script type="text/javascript" src="../ui.draggable.ext.js"></script>
+	<script type="text/javascript" src="../ui.droppable.js"></script>
+	<script type="text/javascript" src="../ui.droppable.ext.js"></script>
+	<script type="text/javascript" src="../ui.sortable.js"></script>
+	<script type="text/javascript" src="../ui.sortable.ext.js"></script>
+	<script type="text/javascript" src="../ui.resizable.js"></script>
+	<script type="text/javascript" src="../ui.resizable.ext.js"></script>
+	<script type="text/javascript" src="../ui.slider.js"></script>
+
+	<script type="text/javascript">
+	$(document).ready(function(){
+	
+		$('ul').sortable({
+			dropOnEmpty: true,
+			connectWith: ['ul'],
+			over: function(e, ui) {
+				//console.log('entered possible container ', this);
+				$(this).addClass('target');
+			},
+			out: function(e, ui) {
+				//console.log('moved out from possible container ', this);
+				$(this).removeClass('target');
+			},
+			activate: function() {
+				//Possible drop zone
+				$(this).addClass('dropzone');
+			},
+			deactivate: function() {
+				//Possible drop zone
+				$(this).removeClass('dropzone');
+			}
+		});
+	
+	});
+	</script>
+</head>
+<body>
+
+	<fieldset>
+	<legend>Test for ""</legend>
+
+		<ul>
+		    <li>Item 1</li>
+		    <li>Item 2</li>
+		    <li>Item 3</li>
+		    <li>Item 4</li>
+		    <li>Item 5</li>
+		</ul>
+		
+		<ul>
+		    <li>Item 1</li>
+		    <li>Item 2</li>
+		    <li>Item 3</li>
+		    <li>Item 4</li>
+		    <li>Item 5</li>
+		</ul>
+		
+		<ul>
+		    <li>Item 1</li>
+		    <li>Item 2</li>
+		    <li>Item 3</li>
+		    <li>Item 4</li>
+		    <li>Item 5</li>
+		</ul>
+
+	</fieldset>
+
+</body>
+</html>
+
