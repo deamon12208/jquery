@@ -274,13 +274,13 @@ $.extend(Datepicker.prototype, {
 		var inst = $.datepicker._getInst(this._calId);
 		if ($.datepicker._datepickerShowing) {
 			switch (e.keyCode) {
-				case 9:  $.datepicker.hideDatepicker('');
+				case 9:  $.datepicker._hideDatepicker(null, '');
 						break; // hide on tab out
 				case 13: $.datepicker._selectDay(inst, inst._selectedMonth, inst._selectedYear,
 							$('td.datepicker_daysCellOver', inst._datepickerDiv)[0]);
 						return false; // don't submit the form
 						break; // select the value on enter
-				case 27: $.datepicker.hideDatepicker(inst._get('speed'));
+				case 27: $.datepicker._hideDatepicker(null, inst._get('speed'));
 						break; // hide on escape
 				case 33: $.datepicker._adjustDate(inst,
 							(e.ctrlKey ? -1 : -inst._get('stepMonths')), (e.ctrlKey ? 'Y' : 'M'));
@@ -352,7 +352,7 @@ $.extend(Datepicker.prototype, {
 			}
 			trigger.click(function() {
 				if ($.datepicker._datepickerShowing && $.datepicker._lastInput == target) {
-					$.datepicker.hideDatepicker();
+					$.datepicker._hideDatepicker();
 				} else {
 					$.datepicker._showDatepicker(target);
 				}
@@ -394,6 +394,7 @@ $.extend(Datepicker.prototype, {
 	}, 
 
 	/* Pop-up the date picker in a "dialog" box.
+	   @param  input     element - ignored
 	   @param  dateText  string - the initial date to display (in the current format)
 	   @param  onSelect  function - the function(dateText) to call when a date is selected
 	   @param  settings  object - update the dialog date picker instance's settings (anonymous object)
@@ -401,7 +402,7 @@ $.extend(Datepicker.prototype, {
 	                     event - with x/y coordinates or
 	                     leave empty for default (screen centre)
 	   @return the manager object */
-	dialogDatepicker: function(dateText, onSelect, settings, pos) {
+	_dialogDatepicker: function(input, dateText, onSelect, settings, pos) {
 		var inst = this._dialogInst; // internal instance
 		if (!inst) {
 			inst = this._dialogInst = new DatepickerInstance({}, false);
@@ -454,7 +455,7 @@ $.extend(Datepicker.prototype, {
 		var inst = $.datepicker._getInst(input._calId);
 		var beforeShow = inst._get('beforeShow');
 		extendRemove(inst._settings, (beforeShow ? beforeShow.apply(input, [input, inst]) : {}));
-		$.datepicker.hideDatepicker('');
+		$.datepicker._hideDatepicker(null, '');
 		$.datepicker._lastInput = input;
 		inst._setDateFromField(input);
 		if ($.datepicker._inDialog) { // hide cursor
@@ -568,9 +569,9 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Hide the date picker from view.
-	   @param  speed  string - the speed at which to close the date picker
-	   @return void */
-	hideDatepicker: function(speed) {
+	   @param  input  element - the input field attached to the date picker
+	   @param  speed  string - the speed at which to close the date picker */
+	_hideDatepicker: function(input, speed) {
 		var inst = this._curInst;
 		if (!inst) {
 			return;
@@ -628,7 +629,7 @@ $.extend(Datepicker.prototype, {
 		if ((target.parents("#datepicker_div").length == 0) &&
 				(target.attr('class') != 'datepicker_trigger') &&
 				$.datepicker._datepickerShowing && !($.datepicker._inDialog && $.blockUI)) {
-			$.datepicker.hideDatepicker('');
+			$.datepicker._hideDatepicker(null, '');
 		}
 	},
 
@@ -715,6 +716,9 @@ $.extend(Datepicker.prototype, {
 	/* Erase the input field and hide the date picker. */
 	_clearDate: function(id) {
 		var inst = this._getInst(id);
+		if (inst._get('mandatory')) {
+			return;
+		}
 		this._stayOpen = false;
 		inst._endDay = inst._endMonth = inst._endYear = inst._rangeStart = null;
 		this._selectDate(inst, '');
@@ -744,7 +748,7 @@ $.extend(Datepicker.prototype, {
 		}
 		else {
 			if (!this._stayOpen) {
-				this.hideDatepicker(inst._get('speed'));
+				this._hideDatepicker(null, inst._get('speed'));
 				this._lastInput = inst._input[0];
 				if (typeof(inst._input[0]) != 'object') {
 					inst._input[0].focus(); // restore focus
@@ -1222,7 +1226,7 @@ $.extend(DatepickerInstance.prototype, {
 			(showStatus ? this._addStatus(this._get('clearStatus') || '&#xa0;') : '') + '>' +
 			this._get('clearText') + '</a></div>');
 		var controls = '<div class="datepicker_control">' + (isRTL ? '' : clear) +
-			'<div class="datepicker_close"><a onclick="jQuery.datepicker.hideDatepicker();"' +
+			'<div class="datepicker_close"><a onclick="jQuery.datepicker._hideDatepicker();"' +
 			(showStatus ? this._addStatus(this._get('closeStatus') || '&#xa0;') : '') + '>' +
 			this._get('closeText') + '</a></div>' + (isRTL ? clear : '')  + '</div>';
 		var prompt = this._get('prompt');
