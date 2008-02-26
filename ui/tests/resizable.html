@@ -157,7 +157,9 @@ body
 <br><br><br><br>
 
 
+
 <script type="text/javascript">
+	
 if(!window.console) {
  window.console = {
  	log: function() {
@@ -169,12 +171,13 @@ if(!window.console) {
 
 $(document).ready(function(){
 
+
 	$('#tdResize').resizable();
 
 	$('#resizeme_containment_div').resizable({
 		containment: $('#resizeme_containment_div_wrapper'),
 		handles: 'all',
-		transparent: true,
+		//transparent: true,
 		//aspectRatio: true,
 		//autohide: true,
 		minWidth: 100,
