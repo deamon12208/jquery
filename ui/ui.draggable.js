@@ -75,7 +75,7 @@
 		},
 		destroy: function() {
 			if(!$.data(this.element[0], 'ui-draggable')) return;
-			this.handle.removeMouseInteraction();
+			this.options.handle.removeMouseInteraction();
 			this.element
 				.removeClass("ui-draggable ui-draggable-disabled")
 				.removeData("ui-draggable")
