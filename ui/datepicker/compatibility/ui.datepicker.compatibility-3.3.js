@@ -8,6 +8,16 @@
 
 (function($) { // hide the namespace
 
+$(document).ready(function() {
+	$.datepicker.hideDatepicker = function(speed) {
+		$(document).datepicker('hide');
+	};
+
+	$.datepicker.dialogDatepicker = function(dateText, onSelect, settings, pos) {
+		$(document).datepicker('dialog', dateText, onSelect, settings, pos);
+	};
+});
+
 $.fn.attachDatepicker = function(settings) {
 	return this.datepicker(settings);
 };

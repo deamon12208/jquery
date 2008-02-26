@@ -134,10 +134,14 @@ $('#enableBoth').toggle(
 </script>
 					<p>The date picker can also be triggered externally for a particular input.</p>
 					<p><span class="demoLabel">External trigger:</span>
-						<button id="button1">Open date picker</button></p>
+						<button id="button1">Open date picker</button>&nbsp;
+						<button id="button0">Close date picker</button></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
 $('#button1').click(function() { 
 	$('#invokeFocus').showDatepicker();
+});	
+$('#button0').click(function() {
+	$.datepicker.hideDatepicker();
 });	
 </script>	
 					<p>Or even opened as a "dialog". If the <em>blockUI</em> plugin is available,

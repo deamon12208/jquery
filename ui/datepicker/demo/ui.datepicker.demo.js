@@ -21,7 +21,7 @@ $(document).ready(function () {
 		prevText: '<img src="img/prev.gif" style="vertical-align: middle;"/> Prev',
 		nextText: 'Next <img src="img/next.gif" style="vertical-align: middle;"/>'});
 	$('#button3').click(function() { 
-		$.datepicker.dialogDatepicker($('#altDialog').val(),
+		$(this).datepicker('dialog', $('#altDialog').val(),
 		setAltDateFromDialog, {prompt: 'Choose a date', speed: '',
 		prevText: '<img src="img/prev.gif" style="vertical-align: middle;"/> Prev',
 		nextText: 'Next <img src="img/next.gif" style="vertical-align: middle;"/>'});

@@ -147,7 +147,7 @@ $('#button1').click(function() {
 						<button id="button2">Open dialog</button></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
 $('#button2').click(function() { 
-	$.datepicker.dialogDatepicker($('#invokeDialog').val(),
+	$(this).datepicker('dialog', $('#invokeDialog').val(),
 	setDateFromDialog, {prompt: 'Choose a date', speed: ''});
 });	
 
@@ -460,14 +460,21 @@ function highlightToday(date, inst) {
 				</div>
 				<div id="misc2" class="tab_group1 container">
 					<h3>Miscellaneous 2</h3>
-					<p>Remove the datepicker if you've finished with it.</p>
+					<p>Hide the datepicker on demand (press <em>alt-h</em> here) or
+						remove the datepicker altogether if you've finished with it.</p>
 					<p><span class="demoLabel">Remove popup datepicker:</span>
-						<input type="text" size="10" class="removeDatepicker"/><button id="removeButton">Remove</button></p>
+						<input type="text" size="10" id="hideDatepicker" class="removeDatepicker"/>&nbsp;
+						<button id="removeButton">Remove</button></p>
 					<p><span class="demoLabel">Remove inline datepicker:</span>
 						<span class="removeDatepicker"></span></p>
 <script type="text/jsdemo" charset="utf-8" class="demojs">
 var opts = {beforeShowDay: $.datepicker.noWeekends};
 $('.removeDatepicker').datepicker(opts);
+$('#hideDatepicker').keypress(function(e) {
+	if (e.altKey && (e.charCode || e.keyCode) == 104) {
+		$('#hideDatepicker').datepicker('hide');
+	}
+});
 $('#removeButton').toggle(function() {
 		$(this).text('Re-attach');
 		$('.removeDatepicker').datepicker('destroy');
@@ -744,6 +751,8 @@ $('#setInlineRange').click(function() {
 							function with <code>$(selector).datepicker('isDisabled')</code>.</li>
 						<li>Replace references to the <code>$(selector).showDatepicker()</code>
 							function with <code>$(selector).datepicker('show')</code>.</li>
+						<li>Replace references to the <code>$.datepicker.hideDatepicker()</code>
+							function with <code>$(selector).datepicker('hide')</code>.</li>
 						<li>Replace references to the <code>$(selector).getDatepickerDate()</code>
 							function with <code>$(selector).datepicker('getDate')</code>.</li>
 						<li>Replace references to the <code>$(selector).setDatepickerDate(...)</code>
