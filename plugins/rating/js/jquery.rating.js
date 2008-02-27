@@ -35,8 +35,8 @@ jQuery.fn.rating = function(){
 
         var averageRating = this.title.split(/:\s*/)[1].split("."),
             url = this.action,
-            averageIndex = averageRating[0],
-            averagePercent = averageRating[1];
+            averageIndex = parseInt(averageRating[0]),
+            averagePercent = parseInt(averageRating[1]);
 
         // hover events and focus events added
         var stars = div.find("div.star")
@@ -58,7 +58,7 @@ jQuery.fn.rating = function(){
         function drainAdd(){ drain(); jQuery(this).addClass('on'); }
 
         function click(){
-            averageIndex = stars.index(this) + 1;
+            averageIndex   = stars.index(this) + 1;
             averagePercent = 0;
 
             if ( averageIndex == 0 )
@@ -74,7 +74,7 @@ jQuery.fn.rating = function(){
         // fill to the current mouse position.
         function fill( elem ){
             stars.find("a").css("width", "100%");
-            stars.lt( stars.index(elem) + 1 ).addClass("hover");
+            stars.slice(0, stars.index(elem) + 1).addClass("hover");
         }
     
         // drain all the stars.
@@ -84,11 +84,12 @@ jQuery.fn.rating = function(){
 
         // Reset the stars to the default index.
         function reset(){
-            stars.lt(averageIndex).addClass("on");
+            stars.slice(0, averageIndex).addClass("on");
 
             var percent = averagePercent ? averagePercent * 10 : 0;
             if (percent > 0)
-                stars.eq(averageIndex).addClass("on").children("a").css("width", percent + "%");
+                stars.slice(averageIndex, averageIndex + 1).addClass("on")
+                    .children("a").css("width", percent + "%");
         }
     }).remove();
 };
