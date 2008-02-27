@@ -147,6 +147,11 @@
 				&&     y2 - (this.helperProportions.height / 2) < b ); // Top Half
 			
 		},
+		inEmptyZone: function(container) {
+			var last = $(container.options.items, container.element).not('.ui-sortable-helper'); last = $(last[last.length-1]);
+			var top = last.offset()[this.floating ? 'left' : 'top'] + last[0][this.floating ? 'offsetWidth' : 'offsetHeight'];
+			return (this.positionAbs[this.floating ? 'left' : 'top'] > top);
+		},
 		refresh: function() {
 			
 			this.items = [];
@@ -351,11 +356,7 @@
 			//Rearrange
 			for (var i = this.items.length - 1; i >= 0; i--) {
 				if(this.intersectsWith(this.items[i]) && this.items[i].item[0] != this.currentItem[0] && (this.options.tree ? !this.currentItem[0].contains(this.items[i].item[0]) : true)) {
-					//Rearrange the DOM
-					this.items[i].item[this.direction == 'down' ? 'before' : 'after'](this.currentItem);
-					this.refreshPositions(true); //Precompute after each DOM insertion, NOT on mousemove
-					if(this.placeholderElement) this.placeholder.css(this.placeholderElement.offset());
-					this.propagate("change", e); //Call plugins and callbacks
+					this.rearrange(e, this.items[i]);
 					break;
 				}
 			}
@@ -366,12 +367,8 @@
 				if(this.intersectsWith(this.containers[i].containerCache)) {
 					if(!this.containers[i].containerCache.over) {
 						
-						if(this.containers[i].options.dropOnEmpty && !$(this.containers[i].options.items, this.containers[i].element).length) {
-							this.containers[i].element.append(this.currentItem);
-							this.refreshPositions(true); //Precompute after each DOM insertion, NOT on mousemove
-							if(this.placeholderElement) this.placeholder.css(this.placeholderElement.offset());
-							this.propagate("change", e); //Call plugins and callbacks
-							break;
+						if(this.inEmptyZone(this.containers[i]) || (this.containers[i].options.dropOnEmpty && !$(this.containers[i].options.items, this.containers[i].element).length)) {
+							this.rearrange(e, null, this.containers[i].element);
 						}
 						
 						this.containers[i].propagate("over", e, this);
@@ -390,6 +387,12 @@
 			this.helper.css({ left: this.position.left+'px', top: this.position.top+'px' }); // Stick the helper to the cursor
 			return false;
 			
+		},
+		rearrange: function(e, i, a) {
+			a ? a.append(this.currentItem) : i.item[this.direction == 'down' ? 'before' : 'after'](this.currentItem);
+			this.refreshPositions(true); //Precompute after each DOM insertion, NOT on mousemove
+			if(this.placeholderElement) this.placeholder.css(this.placeholderElement.offset());
+			this.propagate("change", e); //Call plugins and callbacks			
 		}
 	});
 
