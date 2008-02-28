@@ -26,7 +26,7 @@ $.each( [ 'Height', 'Width' ], function(i, name){
 		var torl = name == 'Height' ? 'Top'    : 'Left',  // top or left
 		    borr = name == 'Height' ? 'Bottom' : 'Right'; // bottom or right
 		
-		return this.is(':visible') ? this[0]['client' + name] : num( this, name.toLowerCase() ) + num(this, 'padding' + torl) + num(this, 'padding' + borr);
+		return this.css('display') != 'none' ? this[0]['client' + name] : num( this, name.toLowerCase() ) + num(this, 'padding' + torl) + num(this, 'padding' + borr);
 	};
 	
 	// outerHeight and outerWidth
@@ -38,7 +38,7 @@ $.each( [ 'Height', 'Width' ], function(i, name){
 		
 		options = $.extend({ margin: false }, options || {});
 		
-		var val = this.is(':visible') ? 
+		var val = this.css('display') != 'none' ? 
 				this[0]['offset' + name] : 
 				num( this, name.toLowerCase() )
 					+ num(this, 'border' + torl + 'Width') + num(this, 'border' + borr + 'Width')
