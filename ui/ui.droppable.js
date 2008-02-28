@@ -178,6 +178,7 @@
 				
 				if(m[i].item.disabled || (t && !m[i].item.options.accept.call(m[i].item.element,t.element))) continue;
 				m[i].offset = $(m[i].item.element).offset();
+				m[i].item.proportions = { width: m[i].item.element.outerWidth(), height: m[i].item.element.outerHeight() };
 				
 				if(t) m[i].item.activate.call(m[i].item, e); //Activate the droppable if used directly from draggables
 					
