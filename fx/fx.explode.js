@@ -7,6 +7,7 @@
 		var rows = o.options.pieces ? Math.round(Math.sqrt(o.options.pieces)) : 3;
 		var cells = o.options.pieces ? Math.round(Math.sqrt(o.options.pieces)) : 3;
 		
+		o.options.mode = o.options.mode == 'toggle' ? ($(this).is(':visible') ? 'hide' : 'show') : o.options.mode;
 		var el = $(this).show().css('visibility', 'hidden');
 		var offset = el.offset();
 		var width = el.outerWidth();

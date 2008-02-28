@@ -133,7 +133,7 @@
       }
     },
     toggle: function(){
-      if(!arguments[0] || (arguments[0].constructor == Number || /(slow|normal|fast)/.test(arguments[0])))
+      if(!arguments[0] || (arguments[0].constructor == Number || /(slow|normal|fast)/.test(arguments[0])) || (arguments[0].constructor == Function))
         return this._toggle.apply(this, arguments);
       else {
         var o = arguments[1] || {}; o['mode'] = 'toggle';
