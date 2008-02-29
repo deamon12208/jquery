@@ -1,7 +1,7 @@
 /*
  * jQuery Form Plugin
- * version: 2.04 (02/05/2008)
- * @requires jQuery v1.1 or later
+ * version: 2.05 (02/29/2008)
+ * @requires jQuery v1.2.2 or later
  *
  * Examples at: http://malsup.com/jquery/form/
  * Dual licensed under the MIT and GPL licenses:
@@ -188,7 +188,7 @@ $.fn.ajaxSubmit = function(options) {
     // hook for manipulating the form data before it is extracted;
     // convenient for use with rich editors like tinyMCE or FCKEditor
     var veto = {};
-    $.event.trigger('form.pre.serialize', [this, options, veto]);
+    this.trigger('form-pre-serialize', [this, options, veto]);
     if (veto.veto) return this;
 
     var a = this.formToArray(options.semantic);
@@ -201,10 +201,10 @@ $.fn.ajaxSubmit = function(options) {
     if (options.beforeSubmit && options.beforeSubmit(a, this, options) === false) return this;
 
     // fire vetoable 'validate' event
-    $.event.trigger('form.submit.validate', [a, this, options, veto]);
+    this.trigger('form-submit-validate', [a, this, options, veto]);
     if (veto.veto) return this;
 
-    var q = $.param(a);//.replace(/%20/g,'+');
+    var q = $.param(a);
 
     if (options.type.toUpperCase() == 'GET') {
         options.url += (options.url.indexOf('?') >= 0 ? '&' : '?') + q;
@@ -221,10 +221,7 @@ $.fn.ajaxSubmit = function(options) {
     if (!options.dataType && options.target) {
         var oldSuccess = options.success || function(){};
         callbacks.push(function(data) {
-            if (this.evalScripts)
-                $(options.target).attr("innerHTML", data).evalScripts().each(oldSuccess, arguments);
-            else // jQuery v1.1.4
-                $(options.target).html(data).each(oldSuccess, arguments);
+            $(options.target).html(data).each(oldSuccess, arguments);
         });
     }
     else if (options.success)
@@ -255,7 +252,7 @@ $.fn.ajaxSubmit = function(options) {
        $.ajax(options);
 
     // fire 'notify' event
-    $.event.trigger('form.submit.notify', [this, options]);
+    this.trigger('form-submit-notify', [this, options]);
     return this;
 
 
@@ -264,7 +261,7 @@ $.fn.ajaxSubmit = function(options) {
         var form = $form[0];
         var opts = $.extend({}, $.ajaxSettings, options);
 
-        var id = 'jqFormIO' + $.fn.ajaxSubmit.counter++;
+        var id = 'jqFormIO' + (new Date().getTime());
         var $io = $('<iframe id="' + id + '" name="' + id + '" />');
         var io = $io[0];
         var op8 = $.browser.opera && window.opera.version() < 9;
@@ -373,7 +370,6 @@ $.fn.ajaxSubmit = function(options) {
         };
     };
 };
-$.fn.ajaxSubmit.counter = 0; // used to create unique iframe ids
 
 /**
  * ajaxForm() provides a mechanism for fully automating form submission.
@@ -434,44 +430,33 @@ $.fn.ajaxSubmit.counter = 0; // used to create unique iframe ids
  * @type   jQuery
  */
 $.fn.ajaxForm = function(options) {
-    return this.ajaxFormUnbind().submit(submitHandler).each(function() {
+    return this.ajaxFormUnbind().bind('submit.form-plugin',function() {
+        $(this).ajaxSubmit(options);
+        return false;
+    }).each(function() {
         // store options in hash
-        this.formPluginId = $.fn.ajaxForm.counter++;
-        $.fn.ajaxForm.optionHash[this.formPluginId] = options;
-        $(":submit,input:image", this).click(clickHandler);
+        $(":submit,input:image", this).bind('click.form-plugin',function(e) {
+            var $form = this.form;
+            $form.clk = this;
+            if (this.type == 'image') {
+                if (e.offsetX != undefined) {
+                    $form.clk_x = e.offsetX;
+                    $form.clk_y = e.offsetY;
+                } else if (typeof $.fn.offset == 'function') { // try to use dimensions plugin
+                    var offset = $(this).offset();
+                    $form.clk_x = e.pageX - offset.left;
+                    $form.clk_y = e.pageY - offset.top;
+                } else {
+                    $form.clk_x = e.pageX - this.offsetLeft;
+                    $form.clk_y = e.pageY - this.offsetTop;
+                }
+            }
+            // clear form vars
+            setTimeout(function() { $form.clk = $form.clk_x = $form.clk_y = null; }, 10);
+        });
     });
 };
 
-$.fn.ajaxForm.counter = 1;
-$.fn.ajaxForm.optionHash = {};
-
-function clickHandler(e) {
-    var $form = this.form;
-    $form.clk = this;
-    if (this.type == 'image') {
-        if (e.offsetX != undefined) {
-            $form.clk_x = e.offsetX;
-            $form.clk_y = e.offsetY;
-        } else if (typeof $.fn.offset == 'function') { // try to use dimensions plugin
-            var offset = $(this).offset();
-            $form.clk_x = e.pageX - offset.left;
-            $form.clk_y = e.pageY - offset.top;
-        } else {
-            $form.clk_x = e.pageX - this.offsetLeft;
-            $form.clk_y = e.pageY - this.offsetTop;
-        }
-    }
-    // clear form vars
-    setTimeout(function() { $form.clk = $form.clk_x = $form.clk_y = null; }, 10);
-};
-
-function submitHandler() {
-    // retrieve options from hash
-    var id = this.formPluginId;
-    var options = $.fn.ajaxForm.optionHash[id];
-    $(this).ajaxSubmit(options);
-    return false;
-};
 
 /**
  * ajaxFormUnbind unbinds the event handlers that were bound by ajaxForm
@@ -482,9 +467,9 @@ function submitHandler() {
  * @type   jQuery
  */
 $.fn.ajaxFormUnbind = function() {
-    this.unbind('submit', submitHandler);
+    this.unbind('submit.form-plugin');
     return this.each(function() {
-        $(":submit,input:image", this).unbind('click', clickHandler);
+        $(":submit,input:image", this).unbind('click.form-plugin');
     });
 
 };
@@ -589,19 +574,19 @@ $.fn.formSerialize = function(semantic) {
  * 'successful' controls (per http://www.w3.org/TR/html4/interact/forms.html#successful-controls).
  * The default value of the successful argument is true.
  *
- * @example var data = $("input").formSerialize();
+ * @example var data = $("input").fieldSerialize();
  * @desc Collect the data from all successful input elements into a query string
  *
- * @example var data = $(":radio").formSerialize();
+ * @example var data = $(":radio").fieldSerialize();
  * @desc Collect the data from all successful radio input elements into a query string
  *
- * @example var data = $("#myForm :checkbox").formSerialize();
+ * @example var data = $("#myForm :checkbox").fieldSerialize();
  * @desc Collect the data from all successful checkbox input elements in myForm into a query string
  *
- * @example var data = $("#myForm :checkbox").formSerialize(false);
+ * @example var data = $("#myForm :checkbox").fieldSerialize(false);
  * @desc Collect the data from all checkbox elements in myForm (even the unchecked ones) into a query string
  *
- * @example var data = $(":input").formSerialize();
+ * @example var data = $(":input").fieldSerialize();
  * @desc Collect the data from all successful input, select, textarea and button elements into a query string
  *
  * @name fieldSerialize
@@ -842,7 +827,7 @@ $.fn.enable = function(b) {
  * Checks/unchecks any matching checkboxes or radio buttons and
  * selects/deselects and matching option elements.
  *
- * @example $(':checkbox').selected();
+ * @example $(':checkbox').select();
  * @desc Checks all checkboxes
  *
  * @name select
