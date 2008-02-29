@@ -392,7 +392,7 @@
 								}
 							}
 							
-							this.rearrange(e, itemWithLeastDistance);
+							itemWithLeastDistance ? this.rearrange(e, itemWithLeastDistance) : this.rearrange(e, null, this.containers[i].element);
 							this.propagate("change", e); //Call plugins and callbacks
 							this.containers[i].propagate("change", e, this); //Call plugins and callbacks
 						}
