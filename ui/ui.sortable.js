@@ -360,7 +360,13 @@
 
 			//Rearrange
 			for (var i = this.items.length - 1; i >= 0; i--) {
-				if(this.intersectsWith(this.items[i]) && this.items[i].item[0] != this.currentItem[0] && (this.options.tree ? !this.currentItem[0].contains(this.items[i].item[0]) : true)) {
+				if(
+						this.intersectsWith(this.items[i]) //items must intersect
+					&& 	this.items[i].item[0] != this.currentItem[0] //cannot intersect with itself
+					&&	this.items[i].item[this.direction == 'down' ? 'prev' : 'next']()[0] != this.currentItem[0] //no useless actions that have been done before
+					&&	!this.currentItem[0].contains(this.items[i].item[0]) //no action if the item moved is the parent of the item checked
+				) {
+					
 					this.rearrange(e, this.items[i]);
 					this.propagate("change", e); //Call plugins and callbacks
 					break;
@@ -373,8 +379,20 @@
 				if(this.intersectsWith(this.containers[i].containerCache)) {
 					if(!this.containers[i].containerCache.over) {
 						
-						if(this.inEmptyZone(this.containers[i])) {
-							this.rearrange(e, null, this.containers[i].element);
+
+						if(!this.containers[i].element[0].contains(this.currentItem[0])) {
+							
+							//When entering a new container, we will find the item with the least distance and append our item near it
+							var dist = 10000; var itemWithLeastDistance = null; var base = this.positionAbs[this.containers[i].floating ? 'left' : 'top'];
+							for (var j = this.items.length - 1; j >= 0; j--) {
+								if(!this.containers[i].element[0].contains(this.items[j].item[0])) continue;
+								var cur = this.items[j][this.containers[i].floating ? 'left' : 'top'];
+								if(Math.abs(cur - base) < dist) {
+									dist = Math.abs(cur - base); itemWithLeastDistance = this.items[j];
+								}
+							}
+							
+							this.rearrange(e, itemWithLeastDistance);
 							this.propagate("change", e); //Call plugins and callbacks
 							this.containers[i].propagate("change", e, this); //Call plugins and callbacks
 						}
