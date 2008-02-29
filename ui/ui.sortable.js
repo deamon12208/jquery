@@ -362,6 +362,7 @@
 			for (var i = this.items.length - 1; i >= 0; i--) {
 				if(this.intersectsWith(this.items[i]) && this.items[i].item[0] != this.currentItem[0] && (this.options.tree ? !this.currentItem[0].contains(this.items[i].item[0]) : true)) {
 					this.rearrange(e, this.items[i]);
+					this.propagate("change", e); //Call plugins and callbacks
 					break;
 				}
 			}
@@ -374,6 +375,8 @@
 						
 						if(this.inEmptyZone(this.containers[i])) {
 							this.rearrange(e, null, this.containers[i].element);
+							this.propagate("change", e); //Call plugins and callbacks
+							this.containers[i].propagate("change", e, this); //Call plugins and callbacks
 						}
 						
 						this.containers[i].propagate("over", e, this);
@@ -396,8 +399,7 @@
 		rearrange: function(e, i, a) {
 			a ? a.append(this.currentItem) : i.item[this.direction == 'down' ? 'before' : 'after'](this.currentItem);
 			this.refreshPositions(true); //Precompute after each DOM insertion, NOT on mousemove
-			if(this.placeholderElement) this.placeholder.css(this.placeholderElement.offset());
-			this.propagate("change", e); //Call plugins and callbacks			
+			if(this.placeholderElement) this.placeholder.css(this.placeholderElement.offset());			
 		}
 	});
 
