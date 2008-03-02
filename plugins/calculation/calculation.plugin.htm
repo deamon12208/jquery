@@ -16,6 +16,17 @@
 		function (){
 			// update the plug-in version
 			$("#idPluginVersion").text($.Calculation.version);
+
+/*			
+			$.Calculation.setDefaults({
+				onParseError: function(){
+					this.css("backgroundColor", "#cc0000")
+				}
+				, onParseClear: function (){
+					this.css("backgroundColor", "");
+				}
+			});
+*/
 			
 			// bind the recalc function to the quantity fields
 			$("input[@name^=qty_item_]").bind("keyup", recalc);
@@ -25,10 +36,29 @@
 			// automatically update the "#totalSum" field every time
 			// the values are changes via the keyup event
 			$("input[@name^=sum]").sum("keyup", "#totalSum");
-
+			
 			// automatically update the "#totalAvg" field every time
 			// the values are changes via the keyup event
-			$("input[@name^=avg]").avg("keyup", "#totalAvg");
+			$("input[@name^=avg]").avg({
+				bind:"keyup"
+				, selector: "#totalAvg"
+				// if an invalid character is found, change the background color
+				, onParseError: function(){
+					this.css("backgroundColor", "#cc0000")
+				}
+				// if the error has been cleared, reset the bgcolor
+				, onParseClear: function (){
+					this.css("backgroundColor", "");
+				}
+			});
+
+			// automatically update the "#minNumber" field every time
+			// the values are changes via the keyup event
+			$("input[@name^=min]").min("keyup", "#numberMin");
+
+			// automatically update the "#minNumber" field every time
+			// the values are changes via the keyup event
+			$("input[@name^=max]").max("keyup", "#numberMax");
 
 			// this calculates the sum for some text nodes
 			$("#idTotalTextSum").click(
@@ -131,7 +161,7 @@
 
 <p>
 	Numbers are parsed from the element using parseNumber() method&#151;which
-	uses a regular expression (<code>/\d+(,\d{3})*(\.\d{1,})?/g</code>) to
+	uses a regular expression (<code>/-?\d+(,\d{3})*(\.\d{1,})?/g</code>) to
 	parse out the numeric value. You can change the regular expression that's
 	used to determine what's consider a number by changing the default regular
 	expression.
@@ -141,7 +171,9 @@
 </h2>
 
 <p>
-	Download the plug-in: <a href="./jquery.calculation.js">jquery.calculation.js</a>
+	Download the plug-in: <br />
+	<a href="./jquery.calculation.js">jquery.calculation.js</a> <br />
+	<a href="./jquery.calculation.min.js">jquery.calculation.min.js</a>
 </p>
 
 <h2>
@@ -179,6 +211,37 @@
 				&nbsp;&nbsp;
 				Average:
 				<input type="text" name="totalAvg" id="totalAvg" value="" size="2" readonly="readonly" />
+				(Change the values for dynamic calculations.)
+			</p>
+			
+			<blockquote>
+				<strong>NOTE:</strong>
+				The above example uses the onParseError and onParseClear methods to change the background
+				of any field in which it can not correctly parse the number from. To test this, try changing
+				a field to all numeric values.
+			</blockquote>
+
+			<p id="ex-min">
+				Numbers:
+				<input type="text" name="min" value="67" size="2" />
+				<input type="text" name="min" value="-12" size="2" />
+				<input type="text" name="min" value="41" size="2" />
+				<input type="text" name="min_alt" value="69" size="2" />
+				&nbsp;&nbsp;
+				Min:
+				<input type="text" name="numberMin" id="numberMin" value="" size="2" readonly="readonly" />
+				(Change the values for dynamic calculations.)
+			</p>
+
+			<p id="ex-max">
+				Numbers:
+				<input type="text" name="max" value="67" size="2" />
+				<input type="text" name="max" value="-12" size="2" />
+				<input type="text" name="max" value="41" size="2" />
+				<input type="text" name="max_alt" value="69" size="2" />
+				&nbsp;&nbsp;
+				Max:
+				<input type="text" name="numberMax" id="numberMax" value="" size="2" readonly="readonly" />
 				(Change the values for dynamic calculations.)
 			</p>
 
@@ -316,6 +379,18 @@
 		start with the name attribute of "avg" anytime the keyup event occurs within
 		those fields. This does <strong>not</strong> break the jQuery chain.
 	</li>
+
+	<li>
+		<code>$("input[@name^='min']").min();</code><br />
+		Returns the minimum value of all the input objects that start with a name attribute
+		of "min".
+	</li>
+
+	<li>
+		<code>$("input[@name^='max']").max();</code><br />
+		Returns the maximum value of all the input objects that start with a name attribute
+		of "max".
+	</li>
 	
 	<li>
 <pre><code>$("[@id^=total_item]").calc(
@@ -347,13 +422,18 @@
 	</li>
 	<li>
 <pre><code>$.Calculation.setDefaults({
-	// regular expression used to detect numbers
-	reNumbers: /\d+(,\d{3})*(\.\d{1,})?/g,
-	// the character that indicates the delimiter used for separating numbers 
-	// (US 1,000 = comma, UK = 1.000 = period)
-	comma: ",",
+	// regular expression used to detect numbers, if you want to force the field to contain
+	// numbers, you can add a ^ to the beginning or $ to the end of the regex to force the
+	// the regex to match the entire string: /^-?\d+(,\d{3})*(\.\d{1,})?$/g
+	reNumbers: /-?\d+(,\d{3})*(\.\d{1,})?/g
+	// the character that indicates the delimiter used for separating numbers (US 1,000 = comma, UK = 1.000 = period)
+	, comma: ","
 	// should the Field plug-in be used for getting values of :input elements?
-	useFieldPlugin: true/false
+	, useFieldPlugin: (!!$.fn.getValue)
+	// a callback function to run when an parsing error occurs
+	, onParseError: null
+	// a callback function to run once a parsing error has cleared
+	, onParseClear: null
 });</code></pre>
 	Use the setDefaults() method to change the default parameters for the Calculation
 	Plug-in. If the <a href="http://jquery.com/plugins/project/field">Field Plug-in</a> 
