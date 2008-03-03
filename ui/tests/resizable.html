@@ -16,6 +16,7 @@
 <script type="text/javascript" src="../ui.resizable.js"></script>
 <script type="text/javascript" src="../ui.resizable.ext.js"></script>
 <script type="text/javascript" src="../ui.draggable.js"></script>
+<script type="text/javascript" src="../ui.draggable.ext.js"></script>
 <link rel="stylesheet" href="../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
 <style type="text/css" media="all">
 
@@ -82,7 +83,7 @@ body
 
 <div id="resizeme_containment_div_wrapper" style='width: 460px; height: 306px; margin: 20px; position: relative; display: block; background:#F7FFEF;'>
 	<div id="resizeme_containment_wrap_image" style='width: 460px; height: 306px;background: transparent url(../../fx/images/very-cute-puppy.jpg) no-repeat scroll 0%;'></div>
-	<div id="resizeme_containment_div" style='top:0px; left:0px; width: 150px; height:150px; position: absolute; background: transparent url(../../fx/images/very-cute-puppy.jpg) no-repeat scroll 0%;'></div>
+	<div id="resizeme_containment_div" style='top:0px; left:0px; width: 150px; height:150px; position: absolute; background: transparent url(../../fx/images/very-cute-puppy.jpg) no-repeat scroll 0px 0px;'></div>
 </div>
 
 <div style='width: 400px; height: 300px; margin: 20px; position: relative; background:#F7FFEF;border:2px solid #E6F7D4;'>
@@ -175,20 +176,30 @@ $(document).ready(function(){
 	$('#tdResize').resizable();
 
 	$('#resizeme_containment_div').resizable({
+		
 		containment: $('#resizeme_containment_div_wrapper'),
+		
+		//proxy: 'proxy',
+		
+		//ghost: true,
+		
 		handles: 'all',
 		//transparent: true,
-		//aspectRatio: true,
+		aspectRatio: true,
 		//autohide: true,
 		minWidth: 100,
 		minHeight: 100,
-		maxWidth: 400,
-		maxHeight: 400,
+		maxWidth: 250,
+		maxHeight: 250,
 		resize: function(e, ui) {
-  		this.style.backgroundPosition = '-' + (ui.options.currentPosition.left) + 'px -' + (ui.options.currentPosition.top) + 'px';
+  		this.style.backgroundPosition = '-' + (ui.instance.position.left) + 'px -' + (ui.instance.position.top) + 'px';
+  	},
+		stop: function(e, ui) {
+  		this.style.backgroundPosition = '-' + (ui.instance.position.left) + 'px -' + (ui.instance.position.top) + 'px';
   	}
 	})
 	.draggable({
+		cursor: 'move',
 		containment: $('#resizeme_containment_div_wrapper'),
 		drag: function(e, ui) {
 			this.style.backgroundPosition = '-' + (ui.position.left) + 'px -' + (ui.position.top) + 'px';
@@ -206,7 +217,9 @@ $(document).ready(function(){
 		minWidth: 50,
 		minHeight: 50,
 		
-		//grid: [20,20],
+		//ghost: true,
+		
+		//grid: [40,40],
 		
 		start: function() {
 			//console.log('start')
@@ -231,8 +244,12 @@ $(document).ready(function(){
 	});
 
 	$('#textarea').resizable({
-		proxy: "proxy",
+		
+		//proxy: "proxy",
+		
 		handles: 'all',
+		
+		ghost: true,
 		
 		autohide: true,
 		
@@ -243,8 +260,8 @@ $(document).ready(function(){
 		
 		grid: [50, 50],
 		
-		containment: document,
-		//containment: 'document',
+		//containment: document,
+		containment: 'document',
 		//aspectRatio: 'preserve',
 		preventDefault: true,
 		preserveCursor: true,
@@ -258,6 +275,9 @@ $(document).ready(function(){
 		minHeight: 50,
 		
 		//grid: [50, 50],
+		
+		ghost: 'ghost',
+		
 		
 		maxHeight: 400,
 		maxWidth: 400,
@@ -283,6 +303,7 @@ $(document).ready(function(){
 	$('#input').resizable({
 		proxy: "proxy",
 		handles: 'e,se,s',
+		//ghost: true,
 		//containment: 'parent',
 		aspectRatio: 'preserve'
 	});
@@ -337,6 +358,8 @@ $(document).ready(function(){
 		minHeight: 100,
 		maxWidth: 500,
 		maxHeight: 300,
+		
+		ghost: true,
 		
 		handles: "all",
 		

@@ -37,6 +37,9 @@
 		
 		this.options._aspectRatio = !!(this.options.aspectRatio);
 		
+		// force proxy if helper is enabled
+		this.options.proxy = this.options.proxy || this.options.ghost ? 'proxy' : null; 
+		
 		$(element).bind("setData.resizable", function(event, key, value){
 			self.options[key] = value;
 		}).bind("getData.resizable", function(event, key){
@@ -113,10 +116,8 @@
 			};
 	
 			for(var i = 0; i < n.length; i++) {
-				var d = jQuery.trim(n[i]), t = o.defaultTheme, hname = 'ui-resizable-'+d;
-	
-				var rcss = $.extend(t[hname], t['ui-resizable-handle']), 
-						axis = $(["<div class=\"ui-resizable-handle ",hname,"\" style=\"",insertions[d], insertions.handle,"\"></div>"].join("")).css(/sw|se|ne|nw/.test(d) ? { zIndex: ++o.zIndex } : {});
+				var d = jQuery.trim(n[i]), t = o.defaultTheme, hname = 'ui-resizable-'+d, rcss = $.extend(t[hname], t['ui-resizable-handle']), 
+							axis = $(['<div class="ui-resizable-handle ', hname, '" style="',insertions[d], insertions.handle, '"></div>'].join('')).css(/sw|se|ne|nw/.test(d) ? { zIndex: ++o.zIndex } : {});
 	
 				o.handles[d] = '.ui-resizable-'+d;
 	
@@ -222,24 +223,24 @@
 		},
 		_renderProxy: function() {
 			var el = this.element, o = this.options;
-			this.offset = el.offset();
+			this.elementOffset = el.offset();
 	
 			if(o.proxy) {
 				this.helper = this.helper || $('<div style="overflow:hidden;"></div>');
 	
 				// fix ie6 offset
-				var ie6 = $.browser.msie && $.browser.version  < 7, ie6offset = (ie6 ? 3 : 0),
+				var ie6 = $.browser.msie && $.browser.version  < 7, ie6offset = (ie6 ? 1 : 0),
 				pxyoffset = ( ie6 ? 2 : -1 );
 	
 				this.helper.addClass(o.proxy).css({
 					width: el.outerWidth() + pxyoffset,
 					height: el.outerHeight() + pxyoffset,
 					position: 'absolute',
-					left: this.offset.left - ie6offset +'px',
-					top: this.offset.top - ie6offset +'px',
+					left: this.elementOffset.left - ie6offset +'px',
+					top: this.elementOffset.top - ie6offset +'px',
 					zIndex: ++o.zIndex
 				});
-	
+				
 				this.helper.appendTo("body");
 	
 				if (o.disableSelection)
@@ -251,7 +252,7 @@
 		},
 		propagate: function(n,e) {
 			$.ui.plugin.call(this, n, [e, this.ui()]);
-			return this.element.triggerHandler(n == "resize" ? n : ["resize", n].join(""), [e, this.ui()], this.options[n]);
+			this.element.triggerHandler(n == "resize" ? n : ["resize", n].join(""), [e, this.ui()], this.options[n]);
 		},
 		destroy: function() {
 			this.element
@@ -289,34 +290,21 @@
 	
 			var curleft = parseInt(this.helper.css('left'),10) || 0, curtop = parseInt(this.helper.css('top'),10) || 0;
 	
-				//Store needed variables
-			$.extend(o, {
-				originalSize: { width: el.outerWidth(), height: el.outerHeight() },
-				originalPosition: { left: curleft, top: curtop },
-				originalMousePosition: { left: e.pageX, top: e.pageY },
-				currentSize: { width: el.outerWidth(), height: el.outerHeight() },
-				currentPosition: { left: curleft,top: curtop },
-				currentSizeDiff: { width: el.outerWidth() - el.width(), height: el.outerHeight() - el.height() },
-				_currentSize: { width: el.outerWidth(), height: el.outerHeight() },
-				_currentPosition: { left: curleft,top: curtop }
-			});
-	
+			//Store needed variables
+			this.offset = this.helper.offset();
+			this.position = { left: curleft, top: curtop };
+			this.size = o.proxy ? { width: el.outerWidth(), height: el.outerHeight() } : { width: el.width(), height: el.height() };
+			this.originalSize = o.proxy ? { width: el.outerWidth(), height: el.outerHeight() } : { width: el.width(), height: el.height() };
+			this.originalPosition = { left: curleft, top: curtop };
+			this.sizeDiff = { width: el.outerWidth() - el.width(), height: el.outerHeight() - el.height() };
+			this.originalMousePosition = { left: e.pageX, top: e.pageY };
+			
 			//Aspect Ratio
-			o.aspectRatio = (typeof o.aspectRatio == 'number') ? o.aspectRatio : ((o.originalSize.height / o.originalSize.width)||1);
+			o.aspectRatio = (typeof o.aspectRatio == 'number') ? o.aspectRatio : ((this.originalSize.height / this.originalSize.width)||1);
 	
 			if (o.preserveCursor)
 				$('body').css('cursor', o.axis + '-resize');
 				
-			if (o.containment) {
-					var oc = o.containment,
-						ce = (oc instanceof jQuery) ? oc.get(0) : 
-							(/parent/.test(oc)) ? el.parent().get(0) : null;
-				if (ce) {
-					var co = $(ce).offset(), ch = $(ce).innerHeight(), cw = $(ce).innerWidth();
-					o.cdata = { e: ce, l: co.left, t: co.top, w: ($.ui.hasScroll(ce, "left") ? ce.scrollWidth : cw ), h: ($.ui.hasScroll(ce) ? ce.scrollHeight : ch) };
-				}
-				if (/document/.test(oc) || oc == document) o.cdata = { e: document, l: 0, t: 0, w: $(document).width(), h: $(document).height() };
-			}
 			this.propagate("start", e); 	
 			return false;
 		},
@@ -325,127 +313,102 @@
 			var o = this.options;
 	
 			if(o.proxy) {
-				var style = { 
-					width: (this.helper.width() - o.currentSizeDiff.width) + "px",
-					height: (this.helper.height() - o.currentSizeDiff.height) + "px",
-					top: ((parseInt(this.element.css('top'),10) || 0) + ((parseInt(this.helper.css('top'),10) - this.offset.top)||0)),
-					left: ((parseInt(this.element.css('left'),10) || 0) + ((parseInt(this.helper.css('left'),10) - this.offset.left)||0))
+				var pr = o.proportionallyResize, ista = pr && /textarea/i.test(pr.get(0).nodeName), 
+							soffseth = ista && $.ui.hasScroll(pr.get(0), 'left') /* TODO - jump height */ ? 0 : this.sizeDiff.height,
+							soffsetw = ista ? 0 : this.sizeDiff.width;
+				
+				var style = {
+					width: (this.helper.width() - soffsetw) + "px",
+					height: (this.helper.height() - soffseth) + "px",
+					top: ((parseInt(this.element.css('top'),10) || 0) + ((parseInt(this.helper.css('top'),10) - this.elementOffset.top)||0)),
+					left: ((parseInt(this.element.css('left'),10) || 0) + ((parseInt(this.helper.css('left'),10) - this.elementOffset.left)||0))
 				};
 				this.element.css(style);
 				if (o.proxy) this._proportionallyResize();
 				this.helper.remove();
 			}
-	
+
 			if (o.preserveCursor)
 			$('body').css('cursor', 'auto');
 	
 			this.propagate("stop", e);	
 			return false;
 		},
-		change: {
-			e: function(e, dx, dy) {
-				return { width: this.options.originalSize.width + dx };
-			},
-			w: function(e, dx, dy) {
-				var o = this.options, cs = o.originalSize, sp = o.originalPosition;
-				return { left: sp.left + dx, width: cs.width - dx };
-			},
-			n: function(e, dx, dy) {
-				var o = this.options, cs = o.originalSize, sp = o.originalPosition;
-				return { top: sp.top + dy, height: cs.height - dy };
-			},
-			s: function(e, dx, dy) {
-				return { height: this.options.originalSize.height + dy };
-			},
-			se: function(e, dx, dy) {
-				return $.extend(this.change.s.apply(this, arguments), this.change.e.apply(this, [e, dx, dy]));
-			},
-			sw: function(e, dx, dy) {
-				return $.extend(this.change.s.apply(this, arguments), this.change.w.apply(this, [e, dx, dy]));
-			},
-			ne: function(e, dx, dy) {
-				return $.extend(this.change.n.apply(this, arguments), this.change.e.apply(this, [e, dx, dy]));
-			},
-			nw: function(e, dx, dy) {
-				return $.extend(this.change.n.apply(this, arguments), this.change.w.apply(this, [e, dx, dy]));
-			}
-		},
-		
 		drag: function(e) {
 			//Increase performance, avoid regex
-			var el = this.helper, o = this.options, props = {}, pRatio = o._aspectRatio || e.shiftKey, 
-			self = this, pRatio = o._aspectRatio || e.shiftKey, smp = o.originalMousePosition, a = o.axis;
+			var el = this.helper, o = this.options, props = {},
+				self = this, smp = this.originalMousePosition, a = o.axis;
 
 			var dx = (e.pageX-smp.left)||0, dy = (e.pageY-smp.top)||0;
 			var trigger = this.change[a];
 			if (!trigger) return false;
 		 
 			// Calculate the attrs that will be change
-			var data = trigger.apply(this, [e, dx, dy]), ie6 = $.browser.msie && $.browser.version < 7, csdif = o.currentSizeDiff;
+			var data = trigger.apply(this, [e, dx, dy]), ie6 = $.browser.msie && $.browser.version < 7, csdif = this.sizeDiff;
 		 
 			// Adjust currentSizeDiff on resize
-			if (data.width) data.width = data.width - (!o.proxy && !ie6 ? csdif.width : 0);
-			if (data.height) data.height = data.height - (!o.proxy && !ie6 ? csdif.height : 0);
+			if (data.width) data.width = data.width + (!o.proxy && ie6 ? csdif.width : 0);
+			if (data.height) data.height = data.height + (!o.proxy && ie6 ? csdif.height : 0);
 		 
-			// Update internal current information
-			var cpos = o._currentPosition, csize = o._currentSize;
-			if (data.left) cpos.left = data.left;
-			if (data.top) cpos.top = data.top;
-			if (data.height) csize.height = data.height;
-			if (data.width) csize.width = data.width;
-		 
-			// Ratio preservation
-			if (pRatio) {
-				if (data.height) data.width = csize.height / o.aspectRatio;
-				else if (data.width)  data.height = csize.width * o.aspectRatio;
-	
-				if (a == 'sw') {
-					data.left = cpos.left + (csize.width - data.width);
-					data.top = null;
-				}
-				if (a == 'nw') { 
-					data.top = cpos.top + (csize.height - data.height);
-					data.left = cpos.left + (csize.width - data.width);
-				}
-			}
-			// Avoid set height/width to 0 on misscalculation
-			data.width = data.width || null;
-			data.height = data.height || null;
+			if (o._aspectRatio || e.shiftKey)
+				data = this._updateRatio(data, e);
 			
-			this.cssData = data;
+			data = this._respectSize(data, e);
+			
 			this.propagate("resize", e);
-			data = this.cssData;
 			
-			// Containment
-			if (o.containment && o.cdata.e) {
-				if (data.left && data.left < 0) {
-					data.left = 0; data.width = null; 
-					if (pRatio) {	data.height = null; data.top = null; }
-				}
-				if (data.top && data.top < 0) {
-					data.top = 0;	data.height = null; 
-					if (pRatio) {	data.width = null; data.left = null; } 
-				}
-				var woset = cpos.left + csdif.width, hoset = cpos.top + csdif.height;
-				if (data.width && woset + data.width >= o.cdata.w) {
-						if (pRatio) { data.height = null; data.top = null; }
-						data.width = o.cdata.w - woset;
-				}
-				if (data.height && hoset + data.height >= o.cdata.h) {
-						if (pRatio) {	data.width = null; data.left = null; }
-						data.height = o.cdata.h - hoset;
-				}
+			el.css({
+				top: this.position.top + "px", left: this.position.left + "px", 
+				width: this.size.width + "px", height: this.size.height + "px"
+			});
+			
+			if (!o.proxy && o.proportionallyResize)
+				this._proportionallyResize();
+			
+			this._updateCache(data);
+			
+			return false;
+		},
+		
+		_updateCache: function(data) {
+			var o = this.options;
+			this.offset = this.helper.offset();
+			if (data.left) this.position.left = data.left;
+			if (data.top) this.position.top = data.top;
+			if (data.height) this.size.height = data.height;
+			if (data.width) this.size.width = data.width;
+		},
+		
+		_updateRatio: function(data, e) {
+			var o = this.options, cpos = this.position, csize = this.size, a = o.axis;
+			
+			if (data.height) data.width = csize.height / o.aspectRatio;
+			else if (data.width) data.height = csize.width * o.aspectRatio;
+			
+			if (a == 'sw') {
+				data.left = cpos.left + (csize.width - data.width);
+				data.top = null;
+			}
+			if (a == 'nw') { 
+				data.top = cpos.top + (csize.height - data.height);
+				data.left = cpos.left + (csize.width - data.width);
 			}
 			
-			var ismaxw = data.width && o.maxWidth && o.maxWidth <= data.width, ismaxh = data.height && o.maxHeight && o.maxHeight <= data.height,
-						isminw = data.width && o.minWidth && o.minWidth >= data.width, isminh = data.height && o.minHeight && o.minHeight >= data.height;
+			return data;
+		},
+		
+		_respectSize: function(data, e) {
+			
+			var el = this.helper, o = this.options, pRatio = o._aspectRatio || e.shiftKey,  a = o.axis, 
+					ismaxw = data.width && o.maxWidth && o.maxWidth < data.width, ismaxh = data.height && o.maxHeight && o.maxHeight < data.height,
+						isminw = data.width && o.minWidth && o.minWidth > data.width, isminh = data.height && o.minHeight && o.minHeight > data.height;
 			
 			if (isminw) data.width = o.minWidth;
 			if (isminh) data.height = o.minHeight;
 			if (ismaxw) data.width = o.maxWidth;
 			if (ismaxh) data.height = o.maxHeight;
 			
-			var dw = o.originalPosition.left + o.originalSize.width, dh = o.currentPosition.top + o.currentSize.height;
+			var dw = this.originalPosition.left + this.originalSize.width, dh = this.position.top + this.size.height;
 			var cw = /sw|nw|w/.test(a), ch = /nw|ne|n/.test(a);
 			
 			if (isminw && cw) data.left = dw - o.minWidth;
@@ -453,34 +416,18 @@
 			if (isminh && ch)	data.top = dh - o.minHeight;
 			if (ismaxh && ch)	data.top = dh - o.maxHeight;
 			
-			if (pRatio && ismaxw) { data.height = null; data.top = null; }
-			if (pRatio && ismaxh) {	data.width = null; data.left = null; }
-			if (pRatio && isminw) { data.height = null; data.top = null; }
-			if (pRatio && isminh) {	data.width = null; data.left = null; }
-			
 			// fixing jump error on top/left - bug #2330
 			var isNotwh = !data.width && !data.height;
 			if (isNotwh && !data.left && data.top) data.top = null;
 			else if (isNotwh && !data.top && data.left) data.left = null;
 			
-			this.cssData = data;
-			el.css(this.cssData);
-		 
-			if (!o.proxy && o.proportionallyResize)
-				this._proportionallyResize();
-		 
-			// Update current information
-			if (data.left) o.currentPosition.left = this.cssData.left;
-			if (data.top) o.currentPosition.top = this.cssData.top;
-			if (data.height) o.currentSize.height = this.cssData.height;
-			if (data.width) o.currentSize.width = this.cssData.width;
-			return false;
+			return data;
 		},
 		
 		_proportionallyResize: function() {
 			var o = this.options;
 			if (!o.proportionallyResize) return;
-			var prel = o.proportionallyResize, el = this.element;
+			var prel = o.proportionallyResize, el = this.helper || this.element;
 		 
 			if (!o.borderDif) {
 				var b = [prel.css('borderTopWidth'), prel.css('borderRightWidth'), prel.css('borderBottomWidth'), prel.css('borderLeftWidth')],
@@ -495,7 +442,36 @@
 				height: (el.height() - o.borderDif[0] - o.borderDif[2]) + "px",
 				width: (el.width() - o.borderDif[1] - o.borderDif[3]) + "px"
 			});
+		},
+		
+		change: {
+			e: function(e, dx, dy) {
+				return { width: this.originalSize.width + dx };
+			},
+			w: function(e, dx, dy) {
+				var o = this.options, cs = this.originalSize, sp = this.originalPosition;
+				return { left: sp.left + dx, width: cs.width - dx };
+			},
+			n: function(e, dx, dy) {
+				var o = this.options, cs = this.originalSize, sp = this.originalPosition;
+				return { top: sp.top + dy, height: cs.height - dy };
+			},
+			s: function(e, dx, dy) {
+				return { height: this.originalSize.height + dy };
+			},
+			se: function(e, dx, dy) {
+				return $.extend(this.change.s.apply(this, arguments), this.change.e.apply(this, [e, dx, dy]));
+			},
+			sw: function(e, dx, dy) {
+				return $.extend(this.change.s.apply(this, arguments), this.change.w.apply(this, [e, dx, dy]));
+			},
+			ne: function(e, dx, dy) {
+				return $.extend(this.change.n.apply(this, arguments), this.change.e.apply(this, [e, dx, dy]));
+			},
+			nw: function(e, dx, dy) {
+				return $.extend(this.change.n.apply(this, arguments), this.change.w.apply(this, [e, dx, dy]));
 			}
-		});
+		}
+	});
 
 })(jQuery);
