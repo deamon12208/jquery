@@ -1,6 +1,6 @@
 /*
  * jQuery Form Plugin
- * version: 2.05 (02/29/2008)
+ * version: 2.06 (03/03/2008)
  * @requires jQuery v1.2.2 or later
  *
  * Examples at: http://malsup.com/jquery/form/
@@ -193,6 +193,7 @@ $.fn.ajaxSubmit = function(options) {
 
     var a = this.formToArray(options.semantic);
     if (options.data) {
+        options.extraData = options.data;
         for (var n in options.data)
             a.push( { name: n, value: options.data[n] } );
     }
@@ -289,25 +290,41 @@ $.fn.ajaxSubmit = function(options) {
         // take a breath so that pending repaints get some cpu time before the upload starts
         setTimeout(function() {
             // make sure form attrs are set
-            var encAttr = form.encoding ? 'encoding' : 'enctype';
             var t = $form.attr('target'), a = $form.attr('action');
             $form.attr({
                 target:   id,
+                enctype: 'multipart/form-data',
                 method:  'POST',
                 action:   opts.url
             });
-            form[encAttr] = 'multipart/form-data';
 
             // support timout
             if (opts.timeout)
                 setTimeout(function() { timedOut = true; cb(); }, opts.timeout);
 
-            // add iframe to doc and submit the form
-            $io.appendTo('body');
-            io.attachEvent ? io.attachEvent('onload', cb) : io.addEventListener('load', cb, false);
-            form.submit();
-            // reset attrs
-            $form.attr({ action: a, target: t });
+            // add "extra" data to form if provided in options
+            var extraInputs;
+            try {
+                if (options.extraData) {
+                    extraInputs = [];
+                    for (var n in options.extraData) {
+                        extraInputs.push(
+                            $('<input type="hidden" name="'+n+'" value="'+options.extraData[n]+'" />')
+                                .appendTo(form)[0]);
+                    }
+                }
+            
+                // add iframe to doc and submit the form
+                $io.appendTo('body');
+                io.attachEvent ? io.attachEvent('onload', cb) : io.addEventListener('load', cb, false);
+                form.submit();
+            }
+            finally {
+                // reset attrs and remove "extra" input elements
+                $form.attr({ action: a, target: t });
+                if (extraInputs)
+                    $(extraInputs).remove();
+            }
         }, 10);
 
         function cb() {
