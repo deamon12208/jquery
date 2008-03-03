@@ -17,6 +17,11 @@
 <script type="text/javascript" src="../ui.resizable.ext.js"></script>
 <script type="text/javascript" src="../ui.draggable.js"></script>
 <script type="text/javascript" src="../ui.draggable.ext.js"></script>
+
+<script type="text/javascript" src="../../fx/fx.js"></script>
+<script type="text/javascript" src="../../fx/fx.bounce.js"></script>
+<script type="text/javascript" src="../../fx/fx.scale.js"></script>
+
 <link rel="stylesheet" href="../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
 <style type="text/css" media="all">
 
@@ -272,6 +277,8 @@ $(document).ready(function(){
 		
 		grid: [50, 50],
 		
+		animate: true,
+		
 		//containment: document,
 		containment: 'document',
 		//aspectRatio: 'preserve',
@@ -306,9 +313,15 @@ $(document).ready(function(){
 		minHeight: 50,
 		maxHeight: 200,
 		maxWidth: 400,
+		
+		animate: true,
+		animateDuration: 'slow',
+		animateEasing: 'swing',
+		
 		aspectRatio: 'preserve'
 		//aspectRatio: false
 		//aspectRatio: 1.1
+		
 	});
 	
 
@@ -364,6 +377,8 @@ $(document).ready(function(){
 		}		
 	});
 	
+	
+	
 	$('#resizeme5').resizable({
 		//proxy: "proxy",
 		minWidth: 200,
@@ -379,9 +394,9 @@ $(document).ready(function(){
 		
 		//animate: true,
 		//animate: false,
-		animate: { opacity:.5, fontSize: '0.8em' },
-		duration: 'slow',
-		easing: 'swing',
+		animate: true,
+		animateDuration: 'slow',
+		animateEasing: 'swing',
 		
 		start: function(e,ui) {
 			//console.log('start ', ui);	

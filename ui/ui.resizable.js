@@ -288,7 +288,9 @@
 	
 			this._renderProxy();
 	
-			var curleft = parseInt(this.helper.css('left'),10) || 0, curtop = parseInt(this.helper.css('top'),10) || 0;
+			//var curleft = parseInt(this.helper.css('left'),10) || 0, curtop = parseInt(this.helper.css('top'),10) || 0;
+			
+			var curleft = this.helper.get(0).offsetLeft, curtop = this.helper.get(0).offsetTop;
 	
 			//Store needed variables
 			this.offset = this.helper.offset();
@@ -323,8 +325,11 @@
 					top: ((parseInt(this.element.css('top'),10) || 0) + ((parseInt(this.helper.css('top'),10) - this.elementOffset.top)||0)),
 					left: ((parseInt(this.element.css('left'),10) || 0) + ((parseInt(this.helper.css('left'),10) - this.elementOffset.left)||0))
 				};
-				this.element.css(style);
-				if (o.proxy) this._proportionallyResize();
+				
+				if (!o.animate)
+					this.element.css(style);
+				
+				if (o.proxy && !o.animate) this._proportionallyResize();
 				this.helper.remove();
 			}
 
