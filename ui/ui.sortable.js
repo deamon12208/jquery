@@ -73,7 +73,7 @@
 			drag: this.drag,
 			condition: function(e) {
 
-				if(this.disabled) return false;
+				if(this.disabled || this.options.type == 'static') return false;
 
 				//Find out if the clicked node (or one of its parents) is a actual item in this.items
 				var currentItem = null, nodes = $(e.target).parents().andSelf().each(function() {
@@ -299,7 +299,9 @@
 			this.positionDOM = this.currentItem.prev()[0];
 
 			//If o.placeholder is used, create a new element at the given position with the class
-			if(o.placeholder) this.createPlaceholder();
+			if(o.placeholder && o.placeholder != 'clone') this.createPlaceholder();
+			this.placeholderElement = this.placeholderElement || this.currentItem;
+			this.placeholder = this.placeholder || this.currentItem;
 
 			//Call plugins and callbacks
 			this.propagate("start", e);
@@ -308,7 +310,7 @@
 			this.helperProportions = { width: this.helper.outerWidth(), height: this.helper.outerHeight() };
 			
 			//Set the original element visibility to hidden to still fill out the white space	
-			$(this.currentItem).css('visibility', 'hidden');
+			if(this.options.placeholder != 'clone') $(this.currentItem).css('visibility', 'hidden');
 
 			//Post events to possible containers
 			for (var i = this.containers.length - 1; i >= 0; i--) {
@@ -365,6 +367,7 @@
 					&& 	this.items[i].item[0] != this.currentItem[0] //cannot intersect with itself
 					&&	this.items[i].item[this.direction == 'down' ? 'prev' : 'next']()[0] != this.currentItem[0] //no useless actions that have been done before
 					&&	!this.currentItem[0].contains(this.items[i].item[0]) //no action if the item moved is the parent of the item checked
+					&& (this.options.type == 'semi-dynamic' ? !this.element[0].contains(this.items[i].item[0]) : true)
 				) {
 					
 					this.rearrange(e, this.items[i]);
