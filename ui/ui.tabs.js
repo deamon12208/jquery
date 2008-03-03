@@ -193,7 +193,7 @@
                 // load if remote tab
                 var href = !o.unselect && $.data(this.$tabs[o.selected], 'load.ui-tabs');
                 if (href)
-                    this.load(o.selected, href);
+                    this.load(o.selected);
 
                 // Take disabling tabs via class attribute from HTML
                 // into account and update option properly...
@@ -214,6 +214,10 @@
             for (var i = 0, li; li = this.$lis[i]; i++)
                 $(li)[$.inArray(i, o.disabled) != -1 && !$(li).hasClass(o.selectedClass) ? 'addClass' : 'removeClass'](o.disabledClass);
 
+            // reset cache if switching from cached to not cached
+            if (o.cache === false)
+                this.$tabs.removeData('cache.ui-tabs');
+            
             // set up animations
             var hideFx, showFx, baseFx = { 'min-width': 0, duration: 1 }, baseDuration = 'normal';
             if (o.fx && o.fx.constructor == Array)
@@ -249,7 +253,7 @@
                         $show[0].style.filter = '';
 
                     // callback
-                    $(self.element).triggerHandler("show.ui-tabs", [self.ui(clicked, $show[0])]);
+                    $(self.element).triggerHandler('show.ui-tabs', [self.ui(clicked, $show[0])]);
 
                 });
             }
@@ -275,7 +279,7 @@
                 // If tab is already selected and not unselectable or tab disabled or click callback returns false stop here.
                 // Check if click handler returns false last so that it is not executed for a disabled tab!
                 if (($li.hasClass(o.selectedClass) && !o.unselect) || $li.hasClass(o.disabledClass)
-                    || $(self.element).triggerHandler("select.ui-tabs", [self.ui(this, $show[0])]) === false) {
+                    || $(self.element).triggerHandler('select.ui-tabs', [self.ui(this, $show[0])]) === false) {
                     this.blur();
                     return false;
                 }
@@ -392,7 +396,7 @@
             }
 
             // callback
-            $(this.element).triggerHandler("add.ui-tabs",
+            $(this.element).triggerHandler('add.ui-tabs',
                 [this.ui(this.$tabs[index], this.$panels[index])]
             );
         },
@@ -411,7 +415,7 @@
             this.tabify();
 
             // callback
-            $(this.element).triggerHandler("remove.ui-tabs",
+            $(this.element).triggerHandler('remove.ui-tabs',
                 [this.ui($li.find('a')[0], $panel[0])]
             );
         },
@@ -431,7 +435,7 @@
             o.disabled = $.grep(o.disabled, function(n, i) { return n != index; });
 
             // callback
-            $(this.element).triggerHandler("enable.ui-tabs",
+            $(this.element).triggerHandler('enable.ui-tabs',
                 [this.ui(this.$tabs[index], this.$panels[index])]
             );
 
@@ -445,7 +449,7 @@
                 o.disabled.sort();
 
                 // callback
-                $(this.element).triggerHandler("disable.ui-tabs",
+                $(this.element).triggerHandler('disable.ui-tabs',
                     [this.ui(this.$tabs[index], this.$panels[index])]
                 );
             }
@@ -456,14 +460,15 @@
             this.$tabs.eq(index).trigger(this.options.event);
         },
         load: function(index, callback) { // callback is for internal usage only
-            var self = this, o = this.options,
-                $a = this.$tabs.eq(index), a = $a[0];
+            
+            var self = this, o = this.options, $a = this.$tabs.eq(index), a = $a[0],
+                    bypassCache = callback == undefined || callback === false, url = $a.data('load.ui-tabs');
 
-            var url = $a.data('load.ui-tabs');
-
-            // no remote - just finish with callback
-            if (!url) {
-                typeof callback == 'function' && callback();
+            callback = callback || function() {};
+            
+            // no remote or from cache - just finish with callback
+            if (!url || ($.data(a, 'cache.ui-tabs') && !bypassCache)) {
+                callback();
                 return;
             }
 
@@ -485,15 +490,16 @@
                 success: function(r, s) {
                     $(a.hash).html(r);
                     finish();
+                    
                     // This callback is required because the switch has to take
                     // place after loading has completed.
-                    typeof callback == 'function' && callback();
+                    callback();
 
                     if (o.cache)
-                        $.removeData(a, 'load.ui-tabs'); // if loaded once do not load them again
+                        $.data(a, 'cache.ui-tabs', true); // if loaded once do not load them again
 
                     // callback
-                    $(self.element).triggerHandler("load.ui-tabs",
+                    $(self.element).triggerHandler('load.ui-tabs',
                         [self.ui(self.$tabs[index], self.$panels[index])]
                     );
 
@@ -512,7 +518,7 @@
 
         },
         url: function(index, url) {
-            this.$tabs.eq(index).data('load.ui-tabs', url);
+            this.$tabs.eq(index).removeData('cache.ui-tabs').data('load.ui-tabs', url);
         },
         destroy: function() {
             var o = this.options;
@@ -522,8 +528,10 @@
                 var href = $.data(this, 'href.ui-tabs');
                 if (href)
                     this.href = href;
-                $(this).unbind('.ui-tabs')
-                    .removeData('href.ui-tabs').removeData('load.ui-tabs');
+                var $this = $(this).unbind('.ui-tabs');
+                $.each(['href', 'load', 'cache'], function(i, prefix) {
+                      $this.removeData(prefix + '.ui-tabs');
+                });
             });
             this.$lis.add(this.$panels).each(function() {
                 if ($.data(this, 'destroy.ui-tabs'))
