@@ -225,14 +225,14 @@
 			this.element.addClass("ui-sortable-disabled");
 			this.disabled = true;
 		},
-		createPlaceholder: function() {
-			this.placeholderElement = this.options.placeholderElement ? $(this.options.placeholderElement, this.currentItem) : this.currentItem;
-			this.placeholder = $('<div></div>')
+		createPlaceholder: function(that) {
+			(that || this).placeholderElement = this.options.placeholderElement ? $(this.options.placeholderElement, (that || this).currentItem) : (that || this).currentItem;
+			(that || this).placeholder = $('<div></div>')
 				.addClass(this.options.placeholder)
 				.appendTo('body')
 				.css({ position: 'absolute' })
-				.css(this.placeholderElement.offset())
-				.css({ width: this.placeholderElement.outerWidth(), height: this.placeholderElement.outerHeight() })
+				.css((that || this).placeholderElement.offset())
+				.css({ width: (that || this).placeholderElement.outerWidth(), height: (that || this).placeholderElement.outerHeight() })
 				;
 		},
 		recallOffset: function(e) {
@@ -253,7 +253,7 @@
 			};
 			
 		},
-		start: function(e) {
+		start: function(e,el,helper) {
 			
 			var o = this.options;
 
@@ -261,8 +261,12 @@
 			this.refresh(); this.refreshPositions();
 
 			//Create and append the visible helper
-			this.helper = typeof o.helper == 'function' ? $(o.helper.apply(this.element[0], [e, this.currentItem])) : this.currentItem.clone();
-			this.helper.appendTo(this.currentItem[0].parentNode).css({ position: 'absolute', clear: 'both' }).addClass('ui-sortable-helper');
+			if(helper) {
+				this.helper = helper.addClass('ui-sortable-helper');
+			} else {
+				this.helper = typeof o.helper == 'function' ? $(o.helper.apply(this.element[0], [e, this.currentItem])) : this.currentItem.clone();
+				this.helper.appendTo(o.appendTo || this.currentItem[0].parentNode).css({ position: 'absolute', clear: 'both' }).addClass('ui-sortable-helper');
+			}
 
 			//Find out the next positioned parent
 			this.offsetParent = (function(cp) {
@@ -299,9 +303,7 @@
 			this.positionDOM = this.currentItem.prev()[0];
 
 			//If o.placeholder is used, create a new element at the given position with the class
-			if(o.placeholder && o.placeholder != 'clone') this.createPlaceholder();
-			this.placeholderElement = this.placeholderElement || this.currentItem;
-			this.placeholder = this.placeholder || this.currentItem;
+			if(o.placeholder) this.createPlaceholder();
 
 			//Call plugins and callbacks
 			this.propagate("start", e);
@@ -394,6 +396,16 @@
 									dist = Math.abs(cur - base); itemWithLeastDistance = this.items[j];
 								}
 							}
+							
+							//We also need to exchange the placeholder
+							if(this.placeholder) this.placeholder.remove();
+							if(this.containers[i].options.placeholder) {
+								this.containers[i].createPlaceholder(this);
+							} else {
+								this.placeholder = null;
+								this.placeholderElement = null;
+							}
+							
 							
 							itemWithLeastDistance ? this.rearrange(e, itemWithLeastDistance) : this.rearrange(e, null, this.containers[i].element);
 							this.propagate("change", e); //Call plugins and callbacks

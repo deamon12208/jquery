@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Language" content="en" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Test for ""</title>
+	
+	<style type="text/css" media="all">
+	
+	body {
+		background: #fff;
+		margin: 0;
+		padding: 0;
+		font-family: Arial;
+		font-size: 12px;
+	}
+	
+	ul.static {
+		position: absolute; top: 10px; right: 10px;
+		margin: 0;
+	}
+	
+	ul.static li {
+		background: #aaa;
+		padding: 3px;
+		margin: 2px;
+		list-style-type: none;
+		float: left;
+	}
+	
+	ul.dynamic {
+		background: #eee;
+		margin: 10px;
+		margin-top: 50px;
+		padding: 10px;
+		height: 600px;
+	}
+	
+	ul.dynamic li {
+
+		width: 33%;
+		height: 100px;
+		float: left;
+		list-style-type: none;
+	}
+	
+	ul.dynamic li div {
+		background: #aaa;
+		margin: 10px;
+		height: 80px;
+		border: 1px solid black;
+	}
+	
+	.dropzone {
+		background: #bbb;
+	}
+	
+	.target {
+		border: 2px dotted black;
+	}
+	
+	.placeholder {
+		background: blue;
+	}
+	
+	</style>
+
+	<script type="text/javascript" src="../../jquery/src/core.js"></script>
+	<script type="text/javascript" src="../../jquery/src/selector.js"></script>
+	<script type="text/javascript" src="../../jquery/src/event.js"></script>
+	<script type="text/javascript" src="../../jquery/src/ajax.js"></script>
+	<script type="text/javascript" src="../../jquery/src/fx.js"></script>
+	<script type="text/javascript" src="../../jquery/src/offset.js"></script>
+	<script type="text/javascript" src="../../plugins/dimensions/jquery.dimensions.js"></script>
+	<script type="text/javascript" src="../ui.mouse.js"></script>
+	<script type="text/javascript" src="../ui.draggable.js"></script>
+	<script type="text/javascript" src="../ui.draggable.ext.js"></script>
+	<script type="text/javascript" src="../ui.droppable.js"></script>
+	<script type="text/javascript" src="../ui.droppable.ext.js"></script>
+	<script type="text/javascript" src="../ui.sortable.js"></script>
+	<script type="text/javascript" src="../ui.sortable.ext.js"></script>
+	<script type="text/javascript" src="../ui.resizable.js"></script>
+	<script type="text/javascript" src="../ui.resizable.ext.js"></script>
+	<script type="text/javascript" src="../ui.slider.js"></script>
+
+	<script type="text/javascript">
+	$(document).ready(function(){
+	
+		//First, we initialize the sortable
+		$('ul.dynamic').sortable({
+			dropOnEmpty: true,
+			placeholder: "placeholder",
+			placeholderElement: 'div',
+			revert: true,
+			//appendTo: 'body',
+			change: function(e, ui) {
+				console.log('change event on ', ui.instance.element);	
+			},
+			over: function(e, ui) {
+				$(this).addClass('target'); //Adding a class that will add a border
+				ui.placeholder.css($.data(ui.sender[0], 'ui-sortable').placeholderElement.offset()); //So I have to relocate the placeholder by two pixels
+			},
+			out: function(e, ui) {
+				$(this).removeClass('target');
+			},
+			activate: function() {
+				$(this).addClass('dropzone'); //Possible drop zone
+			},
+			deactivate: function() {
+				$(this).removeClass('dropzone'); //Possible drop zone
+			},
+		});
+		
+		
+		
+		//Now we cache our sortable instance into something we can later use
+		var inst = $.data($('ul.dynamic')[0], 'ui-sortable');
+		
+		//Now we initialize the draggables in the List Group
+		$('ul.static li').draggable({
+			helper: 'clone',
+			//revert: true,
+			start: function(e,ui) {
+				//We cache the offset of the sortable
+				ui.instance.sortableOffset = inst.element.offset();
+			},
+			drag: function(e,ui) {
+				
+				//This is handy: We reuse the intersectsWith method for checking if the current draggable helper
+				//intersects with the sortable container
+				if(inst.intersectsWith.call(ui.instance, {
+					left: ui.instance.sortableOffset.left, top: ui.instance.sortableOffset.top,
+					width: inst.element.outerWidth(), height: inst.element.outerWidth()
+				})) {
+					
+					//If it intersects, we use a little isOver variable and set it once, so our move-in stuff gets fired only once
+					if(!inst.isOver) {
+						inst.isOver = 1;
+						
+						//Do a nifty little helper animation: Animate it to the portlet's size (just takes the first 'li' element in the sortable now)
+						ui.helper.css('border', '1px solid black').animate({ height: $('li div', inst.element)[0].offsetHeight, width: $('li div', inst.element)[0].offsetWidth }, 500);
+						
+						//Now we fake the start of dragging for the sortable instance,
+						//by cloning the list group item, appending it to the sortable and using it as inst.currentItem
+						//We can then fire the start event of the sortable with our passed browser event, and our own helper (so it doesn't create a new one)
+						inst.currentItem = $(this).clone().appendTo(inst.element);
+						inst.start(e,null,ui.helper);
+						
+						//Because the browser event is way off the new appended portlet, we modify a couple of variables to reflect the changes
+						inst.offset.left -= ui.absolutePosition.left - inst.positionAbs.left;
+						inst.offset.top -= ui.absolutePosition.top - inst.positionAbs.top;
+						inst.clickOffset.left -= ui.absolutePosition.left - inst.positionAbs.left;
+						inst.clickOffset.top -= ui.absolutePosition.top - inst.positionAbs.top;
+						
+					}
+					
+					//Provided we did all the previous steps, we can fire the drag event of the sortable on every draggable drag, when it intersects with the sortable
+					if(inst.currentItem) inst.drag(e);
+					
+				} else {
+					
+					//If it doesn't intersect with the sortable, and it intersected before,
+					//we fake the drag stop of the sortable, but make sure it doesn't remove the helper by using cancelHelperRemoval
+					if(inst.isOver) {
+						inst.isOver = 0;
+						inst.cancelHelperRemoval = true;
+						inst.options.revert = false; //No revert here
+						inst.stop(e);
+						
+						//Now we remove our currentItem, the list group clone again, and the placeholder, and animate the helper back to it's original size
+						inst.currentItem.remove();
+						inst.placeholder.remove();
+						ui.helper.css('border', '0px').animate({ height: this.offsetHeight, width: this.offsetWidth }, 500);
+					}
+					
+				};
+			
+			},
+			stop: function(e,ui) {
+				
+				//If we are still over the sortable, we fake the stop event of the sortable, but also remove helper
+				if(inst.isOver) {
+					inst.isOver = 0;
+					ui.instance.cancelHelperRemoval = true; //Don't remove the helper in the draggable instance
+					inst.cancelHelperRemoval = false; //Remove it in the sortable instance (so sortable plugins like revert still work)
+					inst.options.revert = true; //revert here
+					inst.stop(e);
+				}
+				
+			}
+		});
+	
+	});
+	</script>
+</head>
+<body>
+
+
+		<ul class='dynamic'>
+		    <li><div>Portlet 1</div></li>
+		    <li><div>Portlet 2</div></li>
+		    <li><div>Portlet 3</div></li>
+		    <li><div>Portlet 4</div></li>
+		    <li><div>Portlet 5</div></li>
+		    <li><div>Portlet 6</div></li>
+		</ul>
+		
+		<ul class='static'>
+		    <li><div>List Group Item 1</div></li>
+		    <li><div>List Group Item 2</div></li>
+		    <li><div>List Group Item 3</div></li>
+		    <li><div>List Group Item 4</div></li>
+		    <li><div>List Group Item 5</div></li>
+		</ul>
+
+
+</body>
+</html>
+
