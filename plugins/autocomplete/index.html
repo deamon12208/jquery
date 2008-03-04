@@ -93,6 +93,16 @@ $().ready(function() {
 			return value.split(".")[0];
 		}
 	});
+	$("#tags").autocomplete(["c++", "java", "php", "coldfusion", "javascript", "asp"], {
+		width: 320,
+		max: 4,
+		highlight: false,
+		multiple: true,
+		multipleSeparator: " ",
+		scroll: true,
+		scrollHeight: 300
+	});
+	
 	
 	$(":text, textarea").result(findValueCallback).next().click(function() {
 		$(this).prev().search();
@@ -214,9 +224,14 @@ function changeToMonths(){
 			<label>Hidden input</label>
 			<textarea></textarea>
 		</p>
-        <p>
+    <p>
 			<label>Image search (remote):</label>
 			<input type="text" id='imageSearch' />
+			<input type="button" value="Get Value" />
+		</p>
+    <p>
+			<label>Tags (local):</label>
+			<input type="text" id='tags' />
 			<input type="button" value="Get Value" />
 		</p>
 		<p>
