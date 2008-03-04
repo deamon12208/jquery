@@ -1,6 +1,6 @@
 /*
  * jQuery Expander plugin
- * Version 0.1.1  (02/102/2008)
+ * Version 0.1.1  (02/02/2008)
  * @requires jQuery v1.1.1+
  *
  * Dual licensed under the MIT and GPL licenses:
@@ -10,7 +10,7 @@
  */
 
 
-(function($) {
+;(function($) {
 
   $.fn.expander = function(options) {
 
@@ -59,7 +59,7 @@
               }
             }
           }
-          endText = cleanedTag + endText;
+          endText = cleanedTag ? cleanedTag + endText : endText;
         }
      	  $this.html([
      		startText,
