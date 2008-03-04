@@ -1,6 +1,6 @@
 /*
  * jQuery Form Plugin
- * version: 2.06 (03/03/2008)
+ * version: 2.07 (03/04/2008)
  * @requires jQuery v1.2.2 or later
  *
  * Examples at: http://malsup.com/jquery/form/
@@ -293,8 +293,9 @@ $.fn.ajaxSubmit = function(options) {
             var t = $form.attr('target'), a = $form.attr('action');
             $form.attr({
                 target:   id,
-                enctype: 'multipart/form-data',
-                method:  'POST',
+                encoding: 'multipart/form-data',
+                enctype:  'multipart/form-data',
+                method:   'POST',
                 action:   opts.url
             });
 
@@ -303,16 +304,13 @@ $.fn.ajaxSubmit = function(options) {
                 setTimeout(function() { timedOut = true; cb(); }, opts.timeout);
 
             // add "extra" data to form if provided in options
-            var extraInputs;
+            var extraInputs = [];
             try {
-                if (options.extraData) {
-                    extraInputs = [];
-                    for (var n in options.extraData) {
+                if (options.extraData)
+                    for (var n in options.extraData)
                         extraInputs.push(
                             $('<input type="hidden" name="'+n+'" value="'+options.extraData[n]+'" />')
                                 .appendTo(form)[0]);
-                    }
-                }
             
                 // add iframe to doc and submit the form
                 $io.appendTo('body');
@@ -321,9 +319,9 @@ $.fn.ajaxSubmit = function(options) {
             }
             finally {
                 // reset attrs and remove "extra" input elements
-                $form.attr({ action: a, target: t });
-                if (extraInputs)
-                    $(extraInputs).remove();
+                $form.attr('action', a);
+                t ? $form.attr('target', t) : $form.removeAttr('target');
+                $(extraInputs).remove();
             }
         }, 10);
 
