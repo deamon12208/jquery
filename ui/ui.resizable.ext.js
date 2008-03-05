@@ -102,31 +102,27 @@
 		
 		stop: function(e, ui) {
 			var o = ui.options, self =  ui.instance;
-			
+
 			var pr = o.proportionallyResize, ista = pr && /textarea/i.test(pr.get(0).nodeName), 
 							soffseth = ista && $.ui.hasScroll(pr.get(0), 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
 								soffsetw = ista ? 0 : self.sizeDiff.width;
 			
-			
-			/*console.log({
-						width: (self.size.width - soffsetw), height: (self.size.height - soffseth),
-						top: self.position.top, left: self.position.left
-					})*/
-			
 			var style = { width: (self.size.width - soffsetw), height: (self.size.height - soffseth) },
-						oanim = { duration: o.animateDuration || "slow", easing: o.animateEasing || "swing" };
+						left = parseInt(self.element.css('left'), 10) + (self.position.left - self.originalPosition.left), 
+							top = parseInt(self.element.css('top'), 10) + (self.position.top - self.originalPosition.top); 
 			
-			//self.element.css({position: 'absolute'});
-			//console.log(self.element)
-			//console.log(self.element.css('position'))
-			
-			//if (pr) pr.animate(style,	oanim);
-			
-			self.element.animate($.extend(style, /* /absolute/.test(self.element.css('position')) ? { top: self.position.top, left: self.position.left } :*/ {}),	oanim);
-			
-			
+			self.element.animate(
+				$.extend(style, { top: top, left: left }),
+				{ 
+					duration: o.animateDuration || "slow", 
+					easing: o.animateEasing || "swing", 
+					step: function() {
+						if (pr) pr.css({ width: self.element.css('width'), height: self.element.css('height') });
+					}
+				}
+			);
 		}
-	
+		
 	});
 	
 	$.ui.plugin.add("resizable", "ghost", {

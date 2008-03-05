@@ -40,6 +40,9 @@
 		// force proxy if helper is enabled
 		this.options.proxy = this.options.proxy || this.options.ghost ? 'proxy' : null; 
 		
+		// force proxy if animation is enabled
+		this.options.proxy = this.options.proxy || this.options.animate ? 'proxy' : null; 
+		
 		$(element).bind("setData.resizable", function(event, key, value){
 			self.options[key] = value;
 		}).bind("getData.resizable", function(event, key){
@@ -288,10 +291,8 @@
 	
 			this._renderProxy();
 	
-			//var curleft = parseInt(this.helper.css('left'),10) || 0, curtop = parseInt(this.helper.css('top'),10) || 0;
+			var curleft = parseInt(this.helper.css('left'),10) || 0, curtop = parseInt(this.helper.css('top'),10) || 0;
 			
-			var curleft = this.helper.get(0).offsetLeft, curtop = this.helper.get(0).offsetTop;
-	
 			//Store needed variables
 			this.offset = this.helper.offset();
 			this.position = { left: curleft, top: curtop };
