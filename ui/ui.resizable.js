@@ -21,7 +21,10 @@
 		this.element = $(element);
 		
 		$.data(element, "ui-resizable", this);
-		this.element.addClass("ui-resizable");
+		
+		// simulate .ui-resizable { position: relative; }
+		var elpos = this.element.css('position');
+		this.element.addClass("ui-resizable").css({ position: /static/.test(elpos) ? 'relative' : elpos });
 		
 		//Prepare the passed options
 		this.options = $.extend({
@@ -56,7 +59,7 @@
 	
 		o.defaultTheme = {
 			'ui-resizable': { display: 'block' },
-			'ui-resizable-handle': { position: 'absolute', background: '#F5F5F5' },
+			'ui-resizable-handle': { position: 'absolute', background: '#F5F5F5', fontSize: '0.1px' },
 			'ui-resizable-n': { cursor: 'n-resize', height: '4px', left: '0px', right: '0px', borderTop: aBorder },
 			'ui-resizable-s': { cursor: 's-resize', height: '4px', left: '0px', right: '0px', borderBottom: aBorder },
 			'ui-resizable-e': { cursor: 'e-resize', width: '4px', top: '0px', bottom: '0px', borderRight: aBorder },
@@ -123,7 +126,7 @@
 							axis = $(['<div class="ui-resizable-handle ', hname, '" style="',insertions[d], insertions.handle, '"></div>'].join('')).css(/sw|se|ne|nw/.test(d) ? { zIndex: ++o.zIndex } : {});
 	
 				o.handles[d] = '.ui-resizable-'+d;
-	
+				
 				this.element.append(
 					//Theme detection, if not loaded, load o.defaultTheme
 					axis.css( !$.ui.css(hname) ? rcss : {} )

@@ -22,7 +22,7 @@
 <script type="text/javascript" src="../../fx/fx.bounce.js"></script>
 <script type="text/javascript" src="../../fx/fx.scale.js"></script>
 
-<link rel="stylesheet" href="../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
+
 <style type="text/css" media="all">
 body {
 	background: #fff;
@@ -45,9 +45,9 @@ body {
  width: 900px;
 }
 #faux {
- overflow: auto;
+ overflow: hidden;
  width: 900px;
- height: 500px;
+ background: #E8EEF7;
 }
 #header {
  color: #333;
@@ -65,17 +65,13 @@ body {
  background: #ABBEBE;
 }
 #content { 
- float: left;
+ /*float: left;*/
  color: #333;
  padding: 0px;
- width: 700px;
  height: 400px;
  display: inline;
  position: relative;
- background: #E8EEF7;
 }
-
-
 .clear { clear: both; background: none; }
 </style>
 </head>
@@ -106,11 +102,15 @@ body {
 	$(function() {
 		
 		$('#leftcolumn').resizable({
-			handles: 'e'
+			handles: 'e',
+			maxWidth: 300,
+			animate: true
 		});
 		
 		$('#header').resizable({
-			handles: 's'
+			handles: 's',
+			animate: true,
+			ghost: true
 		});
 		
 	});
