@@ -105,11 +105,12 @@ body {
 	
 	$(function() {
 		
-		$('div[id$=column], #content, #header').resizable({
-			
-			animate: true,
-			ghost: true
-			
+		$('#leftcolumn').resizable({
+			handles: 'e'
+		});
+		
+		$('#header').resizable({
+			handles: 's'
 		});
 		
 	});
