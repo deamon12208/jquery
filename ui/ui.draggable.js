@@ -7,7 +7,7 @@
 			return this.each(function() {
 				if (typeof options == "string") {
 					var drag = $.data(this, "ui-draggable");
-					drag[options].apply(drag, args);
+					if(drag) drag[options].apply(drag, args);
 
 				} else if(!$.data(this, "ui-draggable"))
 					new $.ui.draggable(this, options);
