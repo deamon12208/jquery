@@ -150,7 +150,6 @@
 				this.offset.left += parseInt(this.element.css('marginLeft'),10) || 0;
 				this.offset.top += parseInt(this.element.css('marginTop'),10) || 0;
 			}
-
 			
 			//Call plugins and callbacks
 			this.propagate("start", e);

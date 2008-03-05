@@ -7,7 +7,7 @@
 			return this.each(function() {
 				if (typeof options == "string") {
 					var drop = $.data(this, "ui-droppable");
-					drop[options].apply(drop, args);
+					if(drop) drop[options].apply(drop, args);
 
 				} else if(!$.data(this, "ui-droppable"))
 					new $.ui.droppable(this, options);
