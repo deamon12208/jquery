@@ -318,6 +318,10 @@
 			for (var i = this.containers.length - 1; i >= 0; i--) {
 				this.containers[i].propagate("activate", e, this);
 			}
+			
+			//Prepare possible droppables
+			if($.ui.ddmanager) $.ui.ddmanager.current = this;
+			if ($.ui.ddmanager && !o.dropBehaviour) $.ui.ddmanager.prepareOffsets(this, e);
 
 			this.dragging = true;
 			return false;
@@ -345,6 +349,10 @@
 					this.containers[i].containerCache.over = 0;
 				}
 			}
+			
+			//If we are using droppables, inform the manager about the drop
+			if ($.ui.ddmanager && !this.options.dropBehaviour)
+				$.ui.ddmanager.drop(this, e);
 			
 			this.dragging = false;
 			if(this.cancelHelperRemoval) return false;			
@@ -423,6 +431,9 @@
 				}
 				
 			};
+			
+			//Interconnect with droppables
+			if($.ui.ddmanager) $.ui.ddmanager.drag(this, e);
 
 			this.propagate("sort", e); //Call plugins and callbacks
 			this.helper.css({ left: this.position.left+'px', top: this.position.top+'px' }); // Stick the helper to the cursor

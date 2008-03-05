@@ -52,7 +52,7 @@
 		ui: function(c) {
 			return {
 				instance: this,
-				draggable: c.element,
+				draggable: (c.currentItem || c.element),
 				helper: c.helper,
 				position: c.position,
 				absolutePosition: c.positionAbs,
@@ -82,9 +82,9 @@
 		over: function(e) {
 
 			var draggable = $.ui.ddmanager.current;
-			if (!draggable || draggable.element[0] == this.element[0]) return; // Bail if draggable and droppable are same element
+			if (!draggable || (draggable.currentItem || draggable.element)[0] == this.element[0]) return; // Bail if draggable and droppable are same element
 			
-			if (this.options.accept.call(this.element,draggable.element)) {
+			if (this.options.accept.call(this.element,(draggable.currentItem || draggable.element))) {
 				$.ui.plugin.call(this, 'over', [e, this.ui(draggable)]);
 				this.element.triggerHandler("dropover", [e, this.ui(draggable)], this.options.over);
 			}
@@ -93,9 +93,9 @@
 		out: function(e) {
 
 			var draggable = $.ui.ddmanager.current;
-			if (!draggable || draggable.element[0] == this.element[0]) return; // Bail if draggable and droppable are same element
+			if (!draggable || (draggable.currentItem || draggable.element)[0] == this.element[0]) return; // Bail if draggable and droppable are same element
 
-			if (this.options.accept.call(this.element,draggable.element)) {
+			if (this.options.accept.call(this.element,(draggable.currentItem || draggable.element))) {
 				$.ui.plugin.call(this, 'out', [e, this.ui(draggable)]);
 				this.element.triggerHandler("dropout", [e, this.ui(draggable)], this.options.out);
 			}
@@ -104,9 +104,9 @@
 		drop: function(e) {
 
 			var draggable = $.ui.ddmanager.current;
-			if (!draggable || draggable.element[0] == this.element[0]) return; // Bail if draggable and droppable are same element
+			if (!draggable || (draggable.currentItem || draggable.element)[0] == this.element[0]) return; // Bail if draggable and droppable are same element
 			
-			if(this.options.accept.call(this.element,draggable.element)) {
+			if(this.options.accept.call(this.element,(draggable.currentItem || draggable.element))) {
 				$.ui.plugin.call(this, 'drop', [e, this.ui(draggable)]);
 				this.element.triggerHandler("drop", [e, this.ui(draggable)], this.options.drop);
 			}
@@ -176,7 +176,7 @@
 			var m = $.ui.ddmanager.droppables;
 			for (var i = 0; i < m.length; i++) {
 				
-				if(m[i].item.disabled || (t && !m[i].item.options.accept.call(m[i].item.element,t.element))) continue;
+				if(m[i].item.disabled || (t && !m[i].item.options.accept.call(m[i].item.element,(t.currentItem || t.element)))) continue;
 				m[i].offset = $(m[i].item.element).offset();
 				m[i].item.proportions = { width: m[i].item.element.outerWidth(), height: m[i].item.element.outerHeight() };
 				
@@ -192,7 +192,7 @@
 				if (!this.item.disabled && $.ui.intersect(draggable, this, this.item.options.tolerance))
 					this.item.drop.call(this.item, e);
 					
-				if (!this.item.disabled && this.item.options.accept.call(this.item.element,draggable.element)) {
+				if (!this.item.disabled && this.item.options.accept.call(this.item.element,(draggable.currentItem || draggable.element))) {
 					this.out = 1; this.over = 0;
 					this.item.deactivate.call(this.item, e);
 				}
