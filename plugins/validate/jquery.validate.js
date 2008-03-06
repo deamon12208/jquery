@@ -701,6 +701,26 @@ jQuery.extend(jQuery.validator, {
 			}
 		});
 		
+		// handle dependency check
+		$.each(rules, function(prop, val) {
+			if (val.param) {
+				var keepRule = true;
+				switch (typeof val.depends) {
+					case "string":
+						keepRule = !!jQuery(val.depends, element.form).length;
+						break;
+					case "function":
+						keepRule = val.depends.call(element, element);
+						break;
+				}
+				if (keepRule) {
+					rules[prop] = val.param;
+				} else {
+					delete rules[prop];
+				}
+			}
+		});
+		
 		// evaluate parameters
 		jQuery.each(rules, function(rule, parameter) {
 			rules[rule] = jQuery.isFunction(parameter) ? parameter(element) : parameter;

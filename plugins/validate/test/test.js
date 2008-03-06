@@ -521,6 +521,40 @@ test("rules(), class and attribute combinations", function() {
 	delete $.validator.messages.customMethod2;
 });
 
+test("rules(), dependency checks", function() {
+	expect(5);
+	var v = $("#testForm1clean").validate({
+		rules: {
+			firstname: {
+				min: {
+					param: 5,
+					depends: function(el) {
+						return /^a/.test($(el).val());
+					}
+				}
+			},
+			
+			lastname: {
+				max: {
+					param: 12
+				}
+			}
+		}
+	});
+	
+	var rules = v.rules($("#firstnamec")[0]);
+	equals( 0, rules.length );
+	
+	$("#firstnamec").val('ab');
+	var rules = v.rules($("#firstnamec")[0]);
+	equals( "min", rules[0].method );
+	equals( 5, rules[0].parameters );
+	
+	var rules = v.rules($("#lastnamec")[0]);
+	equals( "max", rules[0].method );
+	equals( 12, rules[0].parameters );
+});
+
 test("defaultMessage(), empty title is ignored", function() {
 	var v = $("#userForm").validate();
 	equals( "This field is required.", v.defaultMessage($("#username")[0], "required") );
