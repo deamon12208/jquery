@@ -9,7 +9,7 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- * Revision: $Id: jquery.accordion.js 4529 2008-01-24 18:41:30Z joern.zaefferer $
+ * Revision: $Id$
  *
  */
 
