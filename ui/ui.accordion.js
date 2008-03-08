@@ -84,7 +84,7 @@ $.ui.accordion = function(container, options) {
 	options.active.parent().andSelf().addClass(options.selectedClass);
 	
 	if (options.event)
-		$(container).bind((options.event || "") + ".ui-accordion", clickHandler);
+		$(container).bind((options.event) + ".ui-accordion", clickHandler);
 };
 
 $.ui.accordion.prototype = {
