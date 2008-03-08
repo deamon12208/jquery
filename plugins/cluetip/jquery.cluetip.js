@@ -61,24 +61,25 @@
   var $cluetip, $cluetipInner, $cluetipOuter, $cluetipTitle, $cluetipArrows, $dropShadow, imgCount;
   $.fn.cluetip = function(options) {
 
-    var opts = $.extend({},$.fn.cluetip.defaults, options);
-
-    if (options && options.ajaxSettings) {
-      $.extend(opts.ajaxSettings, options.ajaxSettings);
-      delete options.ajaxSettings;
-    }
-    
-    if (options && options.hoverIntent) {
-      $.extend(opts.hoverIntent, options.hoverIntent);
-      delete options.hoverIntent;
-    }    
-
-    if (options && options.fx) {
-      $.extend(opts.fx, options.fx);
-      delete options.fx;
-    }
-    
     return this.each(function(index) {
+      // support metadata plugin (v1.0 and 2.0)
+      var opts = $.extend({}, $.fn.cluetip.defaults, options || {}, $.metadata ? $cont.metadata() : $.meta ? $cont.data() : {});
+
+      if (options && options.ajaxSettings) {
+        $.extend(opts.ajaxSettings, options.ajaxSettings);
+        delete options.ajaxSettings;
+      }
+
+      if (options && options.hoverIntent) {
+        $.extend(opts.hoverIntent, options.hoverIntent);
+        delete options.hoverIntent;
+      }    
+
+      if (options && options.fx) {
+        $.extend(opts.fx, options.fx);
+        delete options.fx;
+      }
+
       // start out with no contents (for ajax activation)
       var cluetipContents = false;
       var cluezIndex = parseInt(opts.cluezIndex, 10)-1;
@@ -291,7 +292,7 @@
 // now that content is loaded, finish the positioning 
       var direction = '';
       $cluetipOuter.css({overflow: defHeight == 'auto' ? 'visible' : 'auto', height: defHeight});
-      tipHeight = defHeight == 'auto' ? $cluetip.outerHeight() : parseInt(defHeight,10);   
+      tipHeight = defHeight == 'auto' ? Math.max($cluetip.outerHeight(),$cluetip.height()) : parseInt(defHeight,10);   
       tipY = posY;
       baseline = sTop + wHeight;
       if (opts.positionBy == 'fixed') {
@@ -331,7 +332,10 @@
       if (opts.delayedClose > 0) {
         closeOnDelay = setTimeout(cluetipClose, opts.delayedClose);
       }
-
+      if (opts.debug) {
+        var positions = 'posY: ' + posY + ', tipHeight: ' + tipHeight + ', baseline: ' + baseline + ' (sTop: ' + sTop + ', wHeight: ' + wHeight + ')';
+        if (window.console && console.log) { console.log(positions); }
+      }
       opts.onShow($cluetip, $cluetipInner);
       
     };
@@ -510,7 +514,8 @@ clearTimeout(closeOnDelay);
     // can pass in standard $.ajax() parameters, not including error, complete, success, and url
     ajaxSettings: {   
                       dataType: 'html'
-    }
+    },
+    debug: false
   };
 
 
