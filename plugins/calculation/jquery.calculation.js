@@ -12,6 +12,7 @@
  *
  * Revision History
  * v0.4
+ * - Added support for -$.99 values
  * - Fixed regex so that decimal values without leading zeros are correctly
  *   parsed
  * - Removed defaults.comma setting
