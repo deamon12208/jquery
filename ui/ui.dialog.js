@@ -208,7 +208,7 @@
 
 		this.destroy = function() {
 			uiDialog.hide();
-			$(el).removeClass('ui-dialog-content').hide().appendTo('body');
+			$(el).unbind('.dialog').removeClass('ui-dialog-content').hide().appendTo('body');
 			uiDialog.remove();
 			$.removeData(this.element, "ui-dialog");
 		};
