@@ -53,8 +53,8 @@ $(function() {
 			},
 			"options": {
 				"autoOpen" : {
-					"true" : "",
-					"false" : ""
+					"true" : "$('#foo').dialog({\n\t autoOpen: true \n});",
+					"false" : "$('#foo').dialog({\n\t autoOpen: false \n})\n setTimeout(\"$('#foo').dialog('open');\", 1000);"
 				},
 				"buttons" : {
 					"OkCancel" : "$('#foo').dialog({ width: 650, height: 300,\n\tbuttons: {\n\t\t'Ok': function() {\n\t\t\t$(this).dialogClose();\n\t\t},\n\t\t'Cancel': function() {\n\t\t\t$(this).dialogClose();\n\t\t}\n\t}\n});"

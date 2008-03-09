@@ -8,6 +8,10 @@
 				"detached" : "$('<div/>').dialog();"
 			},
 			"options": {
+				"autoOpen" : {
+					"true" : "$('#foo').dialog({\n\t autoOpen: true \n});",
+					"false" : "$('#foo').dialog({\n\t autoOpen: false \n})\n setTimeout(\"$('#foo').dialog('open');\", 1000);"
+				},
 				"buttons" : {
 					"OkCancel" : "$('#foo').dialog({ width: 650, height: 300,\n\tbuttons: {\n\t\t'Ok': function() {\n\t\t\t$(this).dialog('close');\n\t\t},\n\t\t'Cancel': function() {\n\t\t\t$(this).dialog('close');\n\t\t}\n\t}\n});"
 				},
@@ -75,8 +79,9 @@
 				"close" : "$('#foo').dialog({\n  close: function() {\n    alert('closed');\n  }\n});"
 			},
 			"methods": {
-				"dialogOpen" : "$('#foo').dialog({ width: 450, autoOpen: false });\n setTimeout(\"$('#foo').dialog('open');\", 1000)",
-				"dialogClose" : "$('#foo').dialog({ width: 450 });\n setTimeout(\"$('#foo').dialog('close');\", 1000);"
+				"open" : "$('#foo').dialog({ width: 450, autoOpen: false });\n setTimeout(\"$('#foo').dialog('open');\", 1000)",
+				"close" : "$('#foo').dialog({ width: 450 });\n setTimeout(\"$('#foo').dialog('close');\", 1000);",
+				"destroy" : "$('#foo').dialog({ width: 450 });\n setTimeout(\"$('#foo').dialog('destroy');\", 1000);"
 			},
 			"tickets": {
 				"1876" : "$('#foo').hide().dialog({width:800});"

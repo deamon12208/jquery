@@ -11,7 +11,8 @@
 				if (typeof options == "string") {
 					var dialog = $.data(this, "ui-dialog") ||
 						$.data($(this).parents(".ui-dialog:first").find(".ui-dialog-content")[0], "ui-dialog");
-					dialog[options].apply(dialog, args);
+					if (dialog[options])
+						dialog[options].apply(dialog, args);
 
 				// INIT with optional options
 				} else if (!$(this).is(".ui-dialog-content"))
@@ -204,9 +205,17 @@
 			$(this.element).triggerHandler("dialogclose", [closeEV, closeUI], options.close);
 			$.ui.dialog.overlay.resize();
 		};
+
+		this.destroy = function() {
+			uiDialog.hide();
+			$(el).removeClass('ui-dialog-content').hide().appendTo('body');
+			uiDialog.remove();
+			$.removeData(this.element, "ui-dialog");
+		};
 		
-		if (options.autoOpen)
+		if (options.autoOpen) {
 			this.open();
+		};
 	};
 	
 	$.extend($.ui.dialog, {
@@ -337,13 +346,14 @@
 		},
 		
 		resize: function() {
-			// If the dialog is draggable and the user drags it past the
-			// right edge of the window, the document becomes wider so we
-			// need to stretch the overlay.  If the user then drags the
-			// dialog back to the left, the document will become narrower,
-			// so we need to shrink the overlay to the appropriate size.
-			// This is handled by shrinking the overlay before setting it
-			// to the full document size.
+			/* If the dialog is draggable and the user drags it past the
+			 * right edge of the window, the document becomes wider so we
+			 * need to stretch the overlay.  If the user then drags the
+			 * dialog back to the left, the document will become narrower,
+			 * so we need to shrink the overlay to the appropriate size.
+			 * This is handled by shrinking the overlay before setting it
+			 * to the full document size.
+			 */
 			var $overlays = $([]);
 			$.each($.ui.dialog.overlay.instances, function() {
 				$overlays = $overlays.add(this);
