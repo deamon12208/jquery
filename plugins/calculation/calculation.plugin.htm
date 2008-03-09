@@ -247,13 +247,13 @@
 
 			<p id="ex-sum-span">
 				Numbers:
-				<span class="textSum">$19.99</span>
+				<span class="textSum">-$19.99</span>
 				+
-				<span class="textSum">$7.99</span>
+				<span class="textSum">-$7.99</span>
 				+
-				<span class="textSum">$.99</span>
+				<span class="textSum">-$.99</span>
 				+
-				<span class="textSum">$49.99</span>
+				<span class="textSum">-$49.99</span>
 				&nbsp;&nbsp;
 				Sum:
 				<span id="totalTextSum">????</span>
@@ -424,12 +424,10 @@
 <pre><code>$.Calculation.setDefaults({
 	// regular expression used to detect numbers, if you want to force the field to contain
 	// numbers, you can add a ^ to the beginning or $ to the end of the regex to force the
-	// the regex to match the entire string: /^-?\d+(,\d{3})*(\.\d{1,})?$/g
-	reNumbers: /-?\d+(,\d{3})*(\.\d{1,})?/g
-	// the character that indicates the delimiter used for separating numbers (US 1,000 = comma, UK = 1.000 = period)
-	, comma: ","
+	// the regex to match the entire string: /^(-|-\$)?(\d+(,\d{3})*(\.\d{1,})?|\.\d{1,})$/g
+	reNumbers: /(-|-\$)?(\d+(,\d{3})*(\.\d{1,})?|\.\d{1,})?/g
 	// should the Field plug-in be used for getting values of :input elements?
-	, useFieldPlugin: (!!$.fn.getValue)
+	, useFieldPlugin: true/false
 	// a callback function to run when an parsing error occurs
 	, onParseError: null
 	// a callback function to run once a parsing error has cleared

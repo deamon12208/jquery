@@ -7,10 +7,17 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- * Revision: 4
- * Version: 0.3
+ * Revision: 5
+ * Version: 0.4
  *
  * Revision History
+ * v0.4
+ * - Fixed regex so that decimal values without leading zeros are correctly
+ *   parsed
+ * - Removed defaults.comma setting
+ * - Changed secondary regex that cleans additional formatting from parsed
+ *   number
+ * 
  * v0.3
  * - Refactored the aggregate methods (since they all use the same core logic)
  *   to use the $.extend() method
@@ -37,10 +44,8 @@
 	var defaults = {
 		// regular expression used to detect numbers, if you want to force the field to contain
 		// numbers, you can add a ^ to the beginning or $ to the end of the regex to force the
-		// the regex to match the entire string: /^-?\d+(,\d{3})*(\.\d{1,})?$/g
-		reNumbers: /-?\d+(,\d{3})*(\.\d{1,})?/g
-		// the character that indicates the delimiter used for separating numbers (US 1,000 = comma, UK = 1.000 = period)
-		, comma: ","
+		// the regex to match the entire string: /^(-|-\$)?(\d+(,\d{3})*(\.\d{1,})?|\.\d{1,})$/g
+		reNumbers: /(-|-\$)?(\d+(,\d{3})*(\.\d{1,})?|\.\d{1,})/g
 		// should the Field plug-in be used for getting values of :input elements?
 		, useFieldPlugin: (!!$.fn.getValue)
 		// a callback function to run when an parsing error occurs
@@ -48,10 +53,10 @@
 		// a callback function to run once a parsing error has cleared
 		, onParseClear: null
 	};
-
+	
 	// set default options
 	$.Calculation = {
-		version: "0.3",
+		version: "0.4",
 		setDefaults: function(options){
 			$.extend(defaults, options);
 		}
@@ -95,7 +100,8 @@
 					$.data($el[0], "calcParseError", true);
 				// otherwise we take the number we found and remove any commas
 				} else {
-					v = v[0].replace(new RegExp(options.comma, "g"), "");
+					// clense the number one more time to remove extra data (like commas and dollar signs)
+					v = v[0].replace(/[^0-9.\-]/g, "");
 					// if there's a clear callback, execute it
 					if( $.data($el[0], "calcParseError") && jQuery.isFunction(options.onParseClear) ){
 						options.onParseClear.apply($el, [sMethod]);
@@ -145,14 +151,6 @@
 		for( var k in vars ){
 			if( !!vars[k] && !!vars[k].jquery ){
 				parsedVars[k] = vars[k].parseNumber();
-/*
-				vars[k].filter(":input").bind(
-					"blur",
-					function (){
-						console.log("blur!");
-					}
-				);
-*/
 			} else {
 				parsedVars[k] = vars[k];
 			}
@@ -301,10 +299,11 @@
 		// sum an array
 		sum: function (a){
 			var total = 0;
-	
+			
+			// loop through the value and total them
 			$.each(a, function (i, v){
 				// we add 0 to the value to ensure we get a numberic value
-				total += parseFloat("0"+v, 10);
+				total += v;
 			});
 	
 			// return the values as a comma-delimited string
