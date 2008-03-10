@@ -60,7 +60,7 @@
 		$tests = dir("tests");
 		$test_array = array();
 		while($file = $tests->read()) {
-		  if($file != ".." && $file != "." && $file != "index.inc.php") {
+		  if($file != ".." && $file != "." && $file != "index.inc.php" && $file != ".svn") {
 		  	$test_array[] = $file;
 		  }
 		}
