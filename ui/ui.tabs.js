@@ -462,26 +462,28 @@
         load: function(index, callback) { // callback is for internal usage only
             
             var self = this, o = this.options, $a = this.$tabs.eq(index), a = $a[0],
-                    bypassCache = callback == undefined || callback === false, url = $a.data('load.ui-tabs');
+                    bypassCache = callback == undefined || callback === false, url = $a.data('load.ui-tabs');
 
-            callback = callback || function() {};
+            callback = callback || function() {};
             
             // no remote or from cache - just finish with callback
-            if (!url || ($.data(a, 'cache.ui-tabs') && !bypassCache)) {
+            if (!url || ($.data(a, 'cache.ui-tabs') && !bypassCache)) {
                 callback();
                 return;
             }
 
             // load remote from here on
             if (o.spinner) {
-                var $span = $('span', a), label = $span.html();
-                $span.html('<em>' + o.spinner + '</em>');
+                var $span = $('span', a);
+                $span.data('label.ui-tabs', $span.html()).html('<em>' + o.spinner + '</em>');
             }
             var finish = function() {
                 self.$tabs.filter('.' + o.loadingClass).each(function() {
                     $(this).removeClass(o.loadingClass);
-                    if (o.spinner)
-                        $('span', this).html(label);
+                    if (o.spinner) {
+                        var $span = $('span', this);
+                        $span.html($span.data('label.ui-tabs')).removeData('label.ui-tabs');
+                    }
                 });
                 self.xhr = null;
             };
