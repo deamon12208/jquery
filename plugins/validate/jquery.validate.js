@@ -703,7 +703,7 @@ jQuery.extend(jQuery.validator, {
 		
 		// handle dependency check
 		$.each(rules, function(prop, val) {
-			if (val.param) {
+			if (val.param || val.depends) {
 				var keepRule = true;
 				switch (typeof val.depends) {
 					case "string":
@@ -713,8 +713,9 @@ jQuery.extend(jQuery.validator, {
 						keepRule = val.depends.call(element, element);
 						break;
 				}
+				
 				if (keepRule) {
-					rules[prop] = val.param;
+					rules[prop] = val.param !== undefined ? val.param : true;
 				} else {
 					delete rules[prop];
 				}

@@ -522,7 +522,7 @@ test("rules(), class and attribute combinations", function() {
 });
 
 test("rules(), dependency checks", function() {
-	expect(5);
+	expect(7);
 	var v = $("#testForm1clean").validate({
 		rules: {
 			firstname: {
@@ -537,6 +537,9 @@ test("rules(), dependency checks", function() {
 			lastname: {
 				max: {
 					param: 12
+				},
+				email: {
+					depends: function() { return true; }
 				}
 			}
 		}
@@ -553,6 +556,8 @@ test("rules(), dependency checks", function() {
 	var rules = v.rules($("#lastnamec")[0]);
 	equals( "max", rules[0].method );
 	equals( 12, rules[0].parameters );
+	equals( "email", rules[1].method );
+	equals( true, rules[1].parameters );
 });
 
 test("defaultMessage(), empty title is ignored", function() {
