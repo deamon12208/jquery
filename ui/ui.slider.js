@@ -161,7 +161,7 @@
 			return ((parseInt($(handle != undefined ? this.handle[handle] || handle : this.currentHandle).css(this.properties[0]),10) / (this.size - this.handleSize())) * this.options.realMaxValue) + this.options.minValue;
 		},
 		convertValue: function(value) {
-			return (value / (this.size - this.handleSize())) * this.options.realMaxValue;
+			return this.options.minValue + (value / (this.size - this.handleSize())) * this.options.realMaxValue;
 		},
 		translateValue: function(value) {
 			return ((value - this.options.minValue) / this.options.realMaxValue) * (this.size - this.handleSize());
