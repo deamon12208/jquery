@@ -101,9 +101,9 @@
 			}
 			
 		},
-		drop: function(e) {
+		drop: function(e,custom) {
 
-			var draggable = $.ui.ddmanager.current;
+			var draggable = custom || $.ui.ddmanager.current;
 			if (!draggable || (draggable.currentItem || draggable.element)[0] == this.element[0]) return; // Bail if draggable and droppable are same element
 			
 			if(this.options.accept.call(this.element,(draggable.currentItem || draggable.element))) {
