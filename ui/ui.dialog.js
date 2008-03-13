@@ -30,6 +30,28 @@
 		$.data(this.element, "ui-dialog", this);
 		
 		$(el).bind("setData.dialog", function(event, key, value){
+			switch (key) {
+				case "draggable":
+					uiDialog.draggable(value ? 'enable' : 'disable');
+					break;
+				case "height":
+					uiDialog.height(value);
+					break;
+				case "maxHeight": case "minHeight": case "maxWidth": case "minWidth":
+					uiDialog.data(key + ".resizable", value);
+					break;
+				case "position":
+					self.position(value);
+					break;
+				case "resizable":
+					uiDialog.resizable(value ? 'enable' : 'disable');
+					break;
+				case "title":
+					$(".ui-dialog-title", uiDialogTitlebar).text(value);
+					break;
+				case "width":
+					break;
+			}
 			options[key] = value;
 		}).bind("getData.dialog", function(event, key){
 			return options[key];
@@ -55,8 +77,8 @@
 			if (className != 'ui-dialog-content')
 				uiDialog.addClass(className);
 		});
-		
-		if (options.resizable && $.fn.resizable) {
+
+		if ($.fn.resizable) {
 			uiDialog.append('<div class="ui-resizable-n ui-resizable-handle"></div>')
 				.append('<div class="ui-resizable-s ui-resizable-handle"></div>')
 				.append('<div class="ui-resizable-e ui-resizable-handle"></div>')
@@ -72,6 +94,8 @@
 				minHeight: options.minHeight,
 				stop: $.ui.dialog.overlay.resize
 			});
+			if (!options.resizable)
+				uiDialog.resizable('disable');
 		}
 
 		uiDialogContainer.prepend('<div class="ui-dialog-titlebar"></div>');
@@ -104,8 +128,8 @@
 				uiDialogButtonPane.append(btn);
 			});
 		}
-	
-		if (options.draggable && $.fn.draggable) {
+
+		if ($.fn.draggable) {
 			uiDialog.draggable({
 				handle: '.ui-dialog-titlebar',
 				start: function() {
@@ -113,7 +137,10 @@
 				},
 				stop: $.ui.dialog.overlay.resize
 			});
+			if (!options.draggable)
+				uiDialog.draggable('disable')
 		}
+	
 		uiDialog.mousedown(function() {
 			self.activate();
 		});
@@ -122,17 +149,15 @@
 		});
 		
 		options.bgiframe && $.fn.bgiframe && uiDialog.bgiframe();
-		
-		this.open = function() {
-			this.overlay = options.modal ? new $.ui.dialog.overlay(self) : null;
-			uiDialog.appendTo('body');
+
+		this.position = function(pos) {
 			var wnd = $(window), doc = $(document), top = doc.scrollTop(), left = doc.scrollLeft();
-			if (options.position.constructor == Array) {
+			if (pos.constructor == Array) {
 				// [x, y]
-				top += options.position[1];
-				left += options.position[0];
+				top += pos[1];
+				left += pos[0];
 			} else {
-				switch (options.position) {
+				switch (pos) {
 					case 'center':
 						top += (wnd.height() / 2) - (uiDialog.height() / 2);
 						left += (wnd.width() / 2) - (uiDialog.width() / 2);
@@ -161,6 +186,12 @@
 			}
 			top = top < doc.scrollTop() ? doc.scrollTop() : top;
 			uiDialog.css({top: top, left: left});
+		}
+		
+		this.open = function() {
+			this.overlay = options.modal ? new $.ui.dialog.overlay(self) : null;
+			uiDialog.appendTo('body');
+			this.position(options.position);
 			uiDialog.show();
 			self.moveToTop();
 			self.activate();
