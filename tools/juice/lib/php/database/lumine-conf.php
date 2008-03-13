@@ -1,7 +1,7 @@
 <?php
 $lumineConfig = array (
 	'configuration' => array (
-		'class-path' => 'D:/Eduardo/htdocs/jQuery-trunk/tools/juice/lib/php/database',
+		'class-path' => dirname(__FILE__),
 		'host' => 'localhost',
 		'database' => 'juice',
 		'dialect' => 'mysqli',
@@ -10,7 +10,7 @@ $lumineConfig = array (
 		'password' => 'odraude',
 		'package' => 'juice',
 		'maps' => 'juice',
-		'use-cache' => 'D:/Eduardo/htdocs/jQuery-trunk/tools/juice/lib/php/database/dbCache',
+		'use-cache' => dirname(__FILE__).'/dbCache',
 		'crypt-pass' => '',
 		'lembrar' => '1',
 		'create-classes' => '1',
