@@ -1,7 +1,10 @@
+<?php
+	require_once("init.php");
+?>
 <html>
 <head>
 	<title>jUIce - The jQuery UI Testing Center</title>
-	<link rel="stylesheet" href="style.css" type="text/css" media="screen">
+	<link rel="stylesheet" href="lib/css/style.css" type="text/css" media="screen">
 	
 	<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 	<script src="../../plugins/corner/jquery.corner.js" type="text/javascript"></script>
@@ -28,7 +31,7 @@
 
 	
 	
-	<script src="juice.js"></script>
+	<script src="lib/js/juice.js"></script>
 	
 	
 	
@@ -37,14 +40,8 @@
 	
 <div id="topbar">
 	<div id="instructions"><strong>Current instructions:</strong> <span id="instruction_field"></span></div>
-	<div id="loginstatus">Not logged in. <a href="javascript:login()">Login now!</a></div>
-	<div id="loginbar">
-		<label for="username">Username</label>
-		<input type="text" name="username" value="" id="username">
-		<label for="password">Password</label>
-		<input type="text" name="password" value="" id="password">
-		<input type="submit" name="login" value="Login!" id="login">
-	</div>
+	<?php include("content/loginstatus.php"); ?>
+	<?php include("content/loginbar.php"); ?>
 </div>
 	
 <?php
