@@ -66,9 +66,9 @@
 					"false" : "$('#foo').draggable({ scroll: false });"
 				},
 				"scrollSensitivity" : {
-					"2" : "$('#foo').draggable({ scrollSensitivity: 1 });",
-					"20" : "$('#foo').draggable({ scrollSensitivity: 20 });",
-					"200" : "$('#foo').draggable({ scrollSensitivity: 200 });"
+					"2" : "$('#foo').draggable({ scroll: true, scrollSensitivity: 1 });",
+					"20" : "$('#foo').draggable({ scroll: true, scrollSensitivity: 20 });",
+					"200" : "$('#foo').draggable({ scroll: true, scrollSensitivity: 200 });"
 				},
 				"scrollSpeed" : {
 					"2" : "$('#foo').draggable({ scrollSpeed: 2 });",
