@@ -427,11 +427,6 @@
 			/* sorting methods */
 			function multisort(table,sortList,cache) {
 				
-				// trigger sortstart
-				setTimeout(function() {
-					$(table).trigger("sortStart");	
-				},0);
-					
 				if(table.config.debug) { var sortTime = new Date(); }
 				
 				var dynamicExp = "var sortWrapper = function(a,b) {", l = sortList.length;
@@ -525,9 +520,13 @@
 					// this is to big, perhaps break it out?
 					$headers.click(function(e) {
 						
+						$this.trigger("sortStart");
+						
 						var totalRows = ($this[0].tBodies[0] && $this[0].tBodies[0].rows.length) || 0;
 						
 						if(!this.sortDisabled && totalRows > 0) {
+							
+							
 							// store exp, for speed
 							var $cell = $(this);
 	
@@ -574,12 +573,11 @@
 									config.sortList.push([i,this.order]);
 								}
 							};
-							
-							//set css for headers
-							setHeadersCss($this[0],$headers,config.sortList,sortCSS);
-							
-							appendToTable($this[0],multisort($this[0],config.sortList,cache));
-							
+							setTimeout(function() {
+								//set css for headers
+								setHeadersCss($this[0],$headers,config.sortList,sortCSS);
+								appendToTable($this[0],multisort($this[0],config.sortList,cache));
+							},1);
 							// stop normal event by returning false
 							return false;
 						}
@@ -601,7 +599,9 @@
 						cache = buildCache(this);
 						
 					}).bind("sorton",function(e,list) {
-					
+						
+						$(this).trigger("sortStart");
+						
 						config.sortList = list;
 						
 						// update and store the sortlist
