@@ -89,6 +89,18 @@
 			this.element.addClass("ui-draggable-disabled");
 			this.disabled = true;
 		},
+		setContrains: function(minLeft,maxLeft,minTop,maxTop) {
+			this.minLeft = minLeft; this.maxLeft = maxLeft;
+			this.minTop = minTop; this.maxTop = maxTop;
+			this.constrainsSet = true;
+		},
+		checkConstrains: function() {
+			if(!this.constrainsSet) return;
+			if(this.position.left < this.minLeft) this.position.left = this.minLeft;
+			if(this.position.left > this.maxLeft - this.helperProportions.width) this.position.left = this.maxLeft - this.helperProportions.width;
+			if(this.position.top < this.minTop) this.position.top = this.minTop;
+			if(this.position.top > this.maxTop - this.helperProportions.height) this.position.top = this.maxTop - this.helperProportions.height;
+		},
 		recallOffset: function(e) {
 
 			var elementPosition = { left: this.elementOffset.left - this.offsetParentOffset.left, top: this.elementOffset.top - this.offsetParentOffset.top };
@@ -199,6 +211,7 @@
 
 			//Call plugins and callbacks			
 			this.position = this.propagate("drag", e) || this.position;
+			this.checkConstrains();
 			
 			this.helper.css({ left: this.position.left+'px', top: this.position.top+'px' }); // Stick the helper to the cursor
 			if($.ui.ddmanager) $.ui.ddmanager.drag(this, e);
