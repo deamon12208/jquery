@@ -9,11 +9,12 @@
 
 			return this.each(function() {
 				if (typeof options == "string") {
-					var dialog = $.data(this, "ui-dialog") ||
-						$.data($(this).parents(".ui-dialog:first").find(".ui-dialog-content")[0], "ui-dialog");
+					var elem = $(this).is('.ui-dialog')
+						? this
+						: $(this).parents(".ui-dialog:first").find(".ui-dialog-content")[0];
+					var dialog = elem ? $.data(elem, "ui-dialog") : {};
 					if (dialog[options])
 						dialog[options].apply(dialog, args);
-
 				// INIT with optional options
 				} else if (!$(this).is(".ui-dialog-content"))
 					new $.ui.dialog(this, options);
