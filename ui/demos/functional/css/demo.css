@@ -1,0 +1,121 @@
+body, h1, h2, h3, h4, h5, h6, hr, form, div, span, dl, ul, ol,li, dt, dd, p, address,a, blockquote{margin:0;padding:0;}
+h1, h2, h3, h4, h5, h6{font-size:100%; font-weight:normal;}
+
+body, html {
+	height: 100%;
+	font-family: sans-serif;
+	font-size: 13px;
+	overflow-x: hidden;
+	text-align: center;
+}
+
+h1, h2 {
+	font-size:2em;
+	font-weight: bold;
+}
+
+h2, .menutitle {
+	font-size:1.1em;
+	padding: 2px;
+}
+
+.menutitle {
+	border-bottom: 1px solid #E8EEF7;
+	text-align: left;
+	font-weight: bold;
+}
+
+.proxy {
+		border: 1px dashed #000;
+}
+
+.lightblue-bg, #topbar {
+	background: #E8EEF7;
+}
+
+.blue-bg {
+	background: #C3D9FF;
+}
+
+.green-bg, #bottombar {
+	background: #74DD82;
+}
+
+.link {
+	width:100%;
+	border-bottom: 1px solid #E8EEF7;
+	display:block;
+	padding: 3px;
+	text-align: left;
+	font-size: 95%;
+	text-decoration: none;
+	color: #000;
+}
+
+.link:hover {
+	background: #C3D9FF;
+}
+
+#leftbar a:focus {
+	background: #C3D9FF;
+}
+
+* #leftbar a:active{
+	background: #C3D9FF;
+}
+
+#leftbar .link {
+	padding-left: 8px;
+}
+
+#topbar {
+	padding: 5px;
+	height: auto;
+	border-bottom: 1px solid #ccc;
+}
+
+#bottombar {
+	position: absolute;
+	padding: 5px;
+	height: auto;
+	border-top: 1px solid #000;
+	width: 100%;
+	right: 0px;
+	bottom: 0px;
+}
+
+
+#leftbar {
+	position: absolute; 
+	top: 0; 
+	left: 0; 
+	width: 198px;
+	height: 100%;
+	overflow: hidden;
+	border: 1px solid #ccc;
+}
+
+#maincontent {
+	position: fixed; 
+	top: 0;
+	left: 200px;
+	right: 0px;
+	bottom: 0px;
+	overflow-x: hidden; 
+	overflow-y: auto; 
+	background: #fff;
+}
+
+.innertube {
+	margin: 5px;
+	text-align: left;
+}
+
+* html body{ /*IE6 hack*/
+	padding: 0 0 0 200px;
+}
+
+* html #maincontent{ /*IE6 hack*/
+	height: 100%; 
+	width: 100%; 
+}
