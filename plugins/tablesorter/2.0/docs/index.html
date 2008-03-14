@@ -31,17 +31,21 @@
 		<script src="http://digg.com/tools/diggthis.js" type="text/javascript"></script>
 	</div>
 	<p>
-	  	<strong>Author:</strong> <a class="external" href="http://lovepeacenukes.com">Christian Bach</a> | <a class="external" href="https://www.amazon.com/gp/registry/wishlist/3VAOWCL63NEA6/ref=wl_web/">Amazon Wish List</a><br />
-		<strong>Version:</strong> 2.0.1 (<a href="../changelog">changelog</a>)<br />
+	  	<strong>Author:</strong> <a class="external" href="http://lovepeacenukes.com">Christian Bach</a><br />
+		<strong>Version:</strong> 2.0.2 (<a href="../changelog">changelog</a>)<br />
 		<strong>Licence:</strong> 
 		Dual licensed under <a class="external" href="http://www.opensource.org/licenses/mit-license.php">MIT</a>
 		or <a class="external" href="http://www.opensource.org/licenses/gpl-license.php">GPL</a> licenses.
+	</p>
+	
+	<p class="tip">
+	<em>Helping out!</em> If you like tablesorter and you're feeling generous, take a look at my <a  class="external" href="http://www.amazon.com/gp/registry/wishlist/3VAOWCL63NEA6/ref=wl_web/">Amazon Wish List</a>
 	</p>
 
 	<p>Comments and love letters can be sent to: <span class="email">christian at tablesorter dot com</span>.</p>
 	
 	<p> </p>
-	
+	<!--
 	<p class="tip">
 		<em>Help!</em> keep tablesorter.com up and running. If you like tablesorter, have a couple of bucks over or just feel like it. Please donate.</p>
 	</p>
@@ -54,10 +58,9 @@
 	<input type="hidden" name="amount" value="10.00">
 	<input type="image" src="https://www.paypal.com/en_US/i/btn/x-click-but04.gif" border="0" name="submit" alt="Make payments with PayPal - it's fast, free and secure!">
 	</form>
-	
-	<!--
-	<p>If you like tablesorter and you're feeling generous, take a look at my <a href="https://www.amazon.com/gp/registry/wishlist/3VAOWCL63NEA6/ref=wl_web/">Amazon.com Wish List</a></p>
 	-->
+	
+	
 	
 	<a name="Contents"></a>
 	<h1>Contents</h1>
@@ -90,7 +93,9 @@
   		<li>Support for ROWSPAN and COLSPAN on TH elements</li>
   		<li>Support secondary "hidden" sorting (e.g., maintain alphabetical sort when sorting on other criteria)</li>
   		<li>Extensibility via <a href="example-widgets.html">widget system</a></li>
-  		<li>Small code size (7,4kb <a href="http://dean.edwards.name/packer/" class="external">packed</a>)</li>
+  		<li>Cross-browser: IE 6.0+, FF 2+, Safari 2.0+, Opera 9.0+</li>	
+		<li>Small code size</li>
+
   	</ul>
   
 	<a name="Demo"></a>
@@ -104,6 +109,7 @@
 				<th>Age</th>
 				<th>Total</th>
 				<th>Discount</th>
+				<th>Difference</th>
 				<th>Date</th>
 			</tr>
 		</thead>
@@ -113,7 +119,8 @@
 				<td>Parker</td>
 				<td>28</td>
 				<td>$9.99</td>
-				<td>20%</td>
+				<td>20.9%</td>
+				<td>+12.1</td>
 				<td>Jul 6, 2006 8:14 AM</td>
 			</tr>
 			<tr>
@@ -122,6 +129,7 @@
 				<td>33</td>
 				<td>$19.99</td>
 				<td>25%</td>
+				<td>+12</td>
 				<td>Dec 10, 2002 5:14 AM</td>
 			</tr>
 			<tr>
@@ -130,6 +138,7 @@
 				<td>18</td>
 				<td>$15.89</td>
 				<td>44%</td>
+				<td>-26</td>
 				<td>Jan 12, 2003 11:14 AM</td>
 			</tr>
 			<tr>
@@ -137,8 +146,8 @@
 				<td>Almighty</td>
 				<td>45</td>
 				<td>$153.19</td>
-				<td>44%</td>
-				
+				<td>44.7%</td>
+				<td>+77</td>
 				<td>Jan 18, 2001 9:12 AM</td>
 			</tr>
 			<tr>
@@ -147,6 +156,7 @@
 				<td>22</td>
 				<td>$13.19</td>
 				<td>11%</td>
+				<td>-100.9</td>
 				<td>Jan 18, 2007 9:12 AM</td>
 			</tr>
 		</tbody>
@@ -167,7 +177,7 @@
 	
 <pre class="javascript">
 &lt;script type=&quot;text/javascript&quot; src=&quot;/path/to/jquery-latest.js&quot;&gt;&lt;/script&gt;
-&lt;script type=&quot;text/javascript&quot; src=&quot;/path/to/jquery.tablesorter.pack.js&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;/path/to/jquery.tablesorter.js&quot;&gt;&lt;/script&gt;
 </pre>
 
 
@@ -265,12 +275,11 @@ $(document).ready(function()
     <strong>Basic</strong>
 	<ul>
 		<li><a href="example-option-sort-list.html">Set a initial sorting order using options</a></li>
+		<li><a href="example-option-digits.html">Dealing with digits!</a></li>
 		<li><a href="example-options-headers.html">Disable header using options</a></li>
 		<li><a href="example-trigger-sort.html">Sort table using a link outside the table</a></li>	
 		<li><a href="example-option-sort-force.html">Force a default sorting order</a></li>
-		<li><a href="example-option-sort-key.html">Change the default multi-sorting key</a></li>
-		
-	
+		<li><a href="example-option-sort-key.html">Change the default multi-sorting key</a></li>	
 	</ul>
 	<strong>Metadata - setting inline options</strong>
 	<ul>
@@ -476,16 +485,16 @@ th.headerSortDown {
 	<ul>
 		<li><a class="external" href="http://docs.jquery.com/Downloading_jQuery#Download_jQuery">jQuery</a> (1.2.1 or higher)</li>
 		<li><a href="../jquery.tablesorter.min.js">jquery.tablesorter.min.js</a> (12kb, Minified for production)</li>
-		<li><a href="../jquery.tablesorter.pack.js">jquery.tablesorter.pack.js</a> (7,4kb, <a href="http://dean.edwards.name/packer/" class="external">packed</a> for production)</li>
 	</ul>  
 		
 	<strong id="Download-Addons">Optional/Add-Ons:</strong>
 	<ul>
 		<li><a class="external" href="http://jquery.com/dev/svn/trunk/plugins/metadata/lib/jQuery/metadata.js?format=raw">metadata.js</a> (3,7kb <strong>Required for setting <a href="#Examples">inline options</a></strong>)</li>
 		<!--
-		<li><a class="external" href="http://dev.jquery.com/browser/trunk/plugins/dimensions/jquery.dimensions.pack.js?format=raw">jquery.dimensions.pack.js</a> (5,1kb, <a href="http://dean.edwards.name/packer/" class="external">packed</a>, for production. <strong>Required: for the <a href="example-pager.html">tablesorter pagination plugin</a></strong>)</li>
+		<li><a class="external" href="http://dev.jquery.com/browser/trunk/plugins/dimensions/jquery.dimensions.
+.js?format=raw">jquery.dimensions.pack.js</a> (5,1kb, <a href="http://dean.edwards.name/packer/" class="external">packed</a>, for production. <strong>Required: for the <a href="example-pager.html">tablesorter pagination plugin</a></strong>)</li>
 		-->
-		<li><a href="../jquery.tablesorter.js">jquery.tablesorter.js</a> (17,7kb, unpacked for development)</li>
+		<li><a href="../jquery.tablesorter.js">jquery.tablesorter.js</a> (17,7kb, for development)</li>
 		<li><a href="../addons/pager/jquery.tablesorter.pager.js">jquery.tablesorter.pager.js</a> (3,6kb, <a href="example-pager.html">tablesorter pagination plugin</a>)</li>
 	</ul>  
 	
@@ -505,7 +514,7 @@ th.headerSortDown {
 
     <p>tablesorter has been tested successfully in the following browsers with Javascript enabled:</p>
     <ul>
-    	<li>Firefox 1.5+</li>
+    	<li>Firefox 2+</li>
     	<li>Internet Explorer 6+</li>
     	<li>Safari 2+</li>
     	<li>Opera 9+</li>

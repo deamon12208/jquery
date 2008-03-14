@@ -2,6 +2,20 @@ tablesorter changelog
 ======================
 http://tablesorter.com
 
+Changes in version 2.0.2 (2008-03-14)
+-------------------------------------
+
+General
+* Added support for the new metadata plugin
+* Added support for jQuery 1.2.3
+* Added support for decimal numbers and negative and positive digits
+* Added new Minified version of tablesorter
+* Updated documenation and website with new examples
+* Removed packed version.
+
+Bug fixes
+* Sort force (Thanks to David Lynch)
+
 
 Changes in version 2.0.1 (2007-09-17)
 -------------------------------------

@@ -1,5 +1,4 @@
-<project name="Tablesorter" default="default" basedir=".">
-
+<project name="tablesorter" default="default" basedir=".">
 
     <!-- SETUP -->
 	<property description="Files for parsing etc." name="BUILD_DIR" value="build" />
@@ -8,11 +7,8 @@
     <!-- Files names for distribution -->
     <property name="TS" value="jquery.tablesorter.js" />
 	<property name="TS_MIN" value="jquery.tablesorter.min.js" />
-	<property name="TS_PACK" value="jquery.tablesorter.pack.js" />
-	
-    <!-- MAIN -->
 
- 
+    <!-- MAIN -->
 	<target name="min">
         <echo message="Building ${TS_MIN}" />
         <java jar="${JAR}" fork="true">
@@ -23,19 +19,8 @@
         <echo message="${TS_MIN} built." />
     </target>
 
-	<target name="pack">
-        <echo message="Building ${TS_PACK}" />
-        <java jar="${JAR}" fork="true">
-            <arg value="${BUILD_DIR}/pack.js" />
-            <arg value="${TS}" />
-            <arg value="${TS_PACK}" />
-        </java>
-        <echo message="${TS_PACK} built." />
-    </target>
-
    <target name="default">
 		<antcall target="min"/>
-		<antcall target="pack"/>
     </target>
 	
 </project>
