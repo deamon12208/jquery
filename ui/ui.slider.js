@@ -32,8 +32,7 @@
 		$.extend(o, {
 			axis: o.axis || (element.offsetWidth < element.offsetHeight ? 'vertical' : 'horizontal'),
 			maxValue: !isNaN(parseInt(o.maxValue,10)) ? parseInt(o.maxValue,10) :  100,
-			minValue: parseInt(o.minValue,10) || 0,
-			startValue: parseInt(o.startValue,10) || 'none'		
+			minValue: parseInt(o.minValue,10) || 0
 		});
 		
 		//Prepare the real maxValue
@@ -72,8 +71,9 @@
 				.bind('focus', function(e) { self.focus(this.firstChild); })
 				.bind('blur', function(e) { self.blur(this.firstChild); })
 				.bind('keydown', function(e) {
-					if(/(37|39)/.test(e.keyCode))
+					if(/(37|39)/.test(e.keyCode)) {
 						self.moveTo((e.keyCode == 37 ? '-' : '+')+'='+(self.options.stepping ? self.options.stepping : (self.options.realMaxValue / self.size)*5),this.firstChild);
+					}
 				})
 		;
 		
@@ -93,7 +93,12 @@
 		this.element.bind('click', function(e) { self.click.apply(self, [e]); });
 		
 		//Move the first handle to the startValue
-		if(!isNaN(o.startValue)) this.moveTo(o.startValue, 0);
+		if (o.startValue && o.startValue.length) {
+			$.each(o.startValue, function(index, value) {
+				self.moveTo(value, index, true);
+			});
+		} else if (!isNaN(o.startValue))
+			this.moveTo(o.startValue, 0, true);
 		
 		//If we only have one handle, set the previous handle to this one to allow clicking before selecting the handle
 		if(this.handle.length == 1) this.previousHandle = this.handle;
@@ -136,9 +141,9 @@
 		destroy: function() {
 			this.element
 				.removeClass("ui-slider ui-slider-disabled")
-				.removeData("ul-slider")
+				.removeData("ui-slider")
 				.unbind(".slider");
-			this.handles.removeMouseInteraction();
+			this.handle.removeMouseInteraction();
 		},
 		enable: function() {
 			this.element.removeClass("ui-slider-disabled");
@@ -231,14 +236,20 @@
 			return false;
 			
 		},
-		moveTo: function(value, handle) {
-
+		moveTo: function(value, handle, noPropagation) {
 			var o = this.options;
 			if(handle == undefined && !this.currentHandle && this.handle.length != 1) return false; //If no handle has been passed, no current handle is available and we have multiple handles, return false
 			if(handle == undefined && !this.currentHandle) handle = 0; //If only one handle is available, use it
 			if(handle != undefined) this.currentHandle = this.previousHandle = $(this.handle[handle] || handle);
-
-			if(value.constructor == String) value = /\-\=/.test(value) ? this.value() - parseInt(value.replace('-=', ''),10) : this.value() + parseInt(value.replace('+=', ''),10);
+	
+			if(value.constructor == String) {
+				if (/^\-\=/.test(value) ) {
+					value = this.value() - parseInt(value.replace('-=', ''), 10)
+				} else if (/^\+\=/.test(value) ) {
+					value = this.value() + parseInt(value.replace('+=', ''), 10)
+				}
+			}
+			
 			if(o.stepping) value = Math.round(value / o.stepping) * o.stepping;
 			value = this.translateValue(value);
 
@@ -252,10 +263,11 @@
 			this.currentHandle.css(this.properties[0], value);
 			if(this.rangeElement) this.updateRange();
 			
-			this.propagate('start', null);
-			this.propagate('stop', null);
-			this.propagate('change', null);
-
+			if (!noPropagation) {
+				this.propagate('start', null);
+				this.propagate('stop', null);
+				this.propagate('change', null);
+			}
 		}
 	});
 
