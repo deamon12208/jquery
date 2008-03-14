@@ -18,12 +18,12 @@ $(function() {
 	function deserializeTests( jsObj, dl, path ) {
 		$.each( jsObj, function(name, value) {
 			if ( typeof value == 'object' ) {
-				dl.append('<dt>' + ((name.length) ? name : '[default]') + '</dt>');
+				dl.append('<dt id="' + path + ((name.length) ? name : '') + '">' + ((name.length) ? name : '[default]') + '</dt>');
 				var dd = $( document.createElement( 'dd' ) ).appendTo( dl );
 				var newDl = $( document.createElement( 'dl' ) ).appendTo( dd );
 				deserializeTests( value, newDl, path + name + '-' );
 			} else {
-				dl.append('<dt>' + ((name.length) ? path + name : '[default]') + '</dt>');
+				dl.append('<dt id="' + path + ((name.length) ? name : '') + '">' + ((name.length) ? path + name : '[default]') + '</dt>');
 				var dd = $( document.createElement( 'dd' ) ).appendTo( dl );
 				var link = $( document.createElement( 'a' ) ).appendTo( dd );
 				link
