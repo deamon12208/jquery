@@ -35,10 +35,22 @@
 				case "draggable":
 					uiDialog.draggable(value ? 'enable' : 'disable');
 					break;
+				case "dragStart":
+					uiDialog.data('start.draggable', value);
+					break;
+				case "drag":
+					uiDialog.data('drag.draggable', value);
+					break;
+				case "dragStop":
+					uiDialog.data('stop.draggable', value);
+					break;
 				case "height":
 					uiDialog.height(value);
 					break;
-				case "maxHeight": case "minHeight": case "maxWidth": case "minWidth":
+				case "maxHeight":
+				case "minHeight":
+				case "maxWidth":
+				case "minWidth":
 					uiDialog.data(key + ".resizable", value);
 					break;
 				case "position":
@@ -46,6 +58,15 @@
 					break;
 				case "resizable":
 					uiDialog.resizable(value ? 'enable' : 'disable');
+					break;
+				case "resizeStart":
+					uiDialog.data('start.resizable', value);
+					break;
+				case "resize":
+					uiDialog.data('resize.resizable', value);
+					break;
+				case "resizeStop":
+					uiDialog.data('stop.resizable', value);
 					break;
 				case "title":
 					$(".ui-dialog-title", uiDialogTitlebar).text(value);
@@ -93,7 +114,12 @@
 				maxHeight: options.maxHeight,
 				minWidth: options.minWidth,
 				minHeight: options.minHeight,
-				stop: $.ui.dialog.overlay.resize
+				start: options.resizeStart,
+				resize: options.resize,
+				stop: function(e, ui) {
+					options.resizeStop && options.resizeStop.apply(this, arguments);
+					$.ui.dialog.overlay.resize();
+				}
 			});
 			if (!options.resizable)
 				uiDialog.resizable('disable');
@@ -133,10 +159,15 @@
 		if ($.fn.draggable) {
 			uiDialog.draggable({
 				handle: '.ui-dialog-titlebar',
-				start: function() {
+				start: function(e, ui) {
 					self.activate();
+					options.dragStart && options.dragStart.apply(this, arguments);
 				},
-				stop: $.ui.dialog.overlay.resize
+				drag: options.drag,
+				stop: function(e, ui) {
+					options.dragStop && options.dragStop.apply(this, arguments);
+					$.ui.dialog.overlay.resize();
+				}
 			});
 			if (!options.draggable)
 				uiDialog.draggable('disable')
