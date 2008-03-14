@@ -132,7 +132,7 @@ function completed(cancel) {
 			overflow: ""
 		});
 	}
-	$(this).triggerHandler("change.ui-accordion", [options.data], options.change);
+	$(this).triggerHandler("accordionchange", [options.data], options.change);
 }
 
 function toggle(toShow, toHide, data, clickedActive, down) {
