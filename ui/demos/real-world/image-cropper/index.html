@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Language" content="en" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Resizables Test Page</title>
+<script type="text/javascript" src="../../../../jquery/src/core.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/selector.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/event.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/ajax.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/fx.js"></script>
+<script type="text/javascript" src="../../../../jquery/src/offset.js"></script>
+<script type="text/javascript" src="../../../../plugins/dimensions/jquery.dimensions.js"></script>
+<script type="text/javascript" src="../../../ui.mouse.js"></script>
+<script type="text/javascript" src="../../../ui.resizable.js"></script>
+<script type="text/javascript" src="../../../ui.resizable.ext.js"></script>
+<script type="text/javascript" src="../../../ui.draggable.js"></script>
+<script type="text/javascript" src="../../../ui.draggable.ext.js"></script>
+
+<script type="text/javascript" src="../../../../fx/fx.js"></script>
+<script type="text/javascript" src="../../../../fx/fx.bounce.js"></script>
+<script type="text/javascript" src="../../../../fx/fx.scale.js"></script>
+
+<link rel="stylesheet" href="../../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
+
+<style type="text/css">
+  body { padding: 0; margin: 0; overflow-y: hidden; height: auto;}
+  
+  #top { background-color: #C3D9FF; border-bottom: 1px solid; margin:0; padding: 5px; }
+  
+  #top h2 { margin: 0;}
+  
+  #left { float: left; width: 160px; height: auto; padding: 0; border-right: 1px solid; }
+
+  #content { text-align: center; position: relative; }
+  
+  #img-container { margin: 50px 0 0 180px; float: left; position: relative;}
+
+  .thumb { height: 70px; width: 70px; display: block; margin: 25px auto; }
+  
+  .thumb:hover { height: 100px; width: 100px; }	
+
+ /* .img-active { border: 5px solid; height: 90px; width: 100px; margin: 10px auto; }*/
+ 
+ /* Cropper CSS */
+ 
+ #resizeme_containment_wrap_image { width: 460px; height: 306px; }
+ 
+ #resizeme_containment_div {  top:0px; left:0px; width: 150px; height:150px; position: absolute; }
+ 
+ #resizeme_containment_div_wrapper { position: relative; }
+ 
+</style>
+<script type="text/javascript">
+  $().ready(function(){
+  
+    $('#resizeme_containment_wrap_image').css({ opacity: 0.5 });
+	
+	$('#resizeme_containment_div').resizable({
+		
+		containment: $('#resizeme_containment_div_wrapper'),
+		
+		//proxy: 'proxy',
+		
+		//ghost: true,
+		
+		//animate:true,
+		
+		handles: 'all',
+		//transparent: true,
+		//aspectRatio: true,
+		//autohide: true,
+		minWidth: 100,
+		minHeight: 100,
+		maxWidth: 250,
+		maxHeight: 250,
+		resize: function(e, ui) {
+  		this.style.backgroundPosition = '-' + (ui.instance.position.left) + 'px -' + (ui.instance.position.top) + 'px';
+  	},
+		stop: function(e, ui) {
+  		this.style.backgroundPosition = '-' + (ui.instance.position.left) + 'px -' + (ui.instance.position.top) + 'px';
+  	}
+	})
+	.draggable({
+		cursor: 'move',
+		containment: $('#resizeme_containment_div_wrapper'),
+		drag: function(e, ui) {
+			this.style.backgroundPosition = '-' + (ui.position.left) + 'px -' + (ui.position.top) + 'px';
+		}
+	});
+	
+	
+	
+	$('.thumb').click(function(e){
+	  
+	  $('#resizeme_containment_div').css('top', '0');
+	  $('#resizeme_containment_div').css('left', '0');
+	  	  
+	  $('#resizeme_containment_wrap_image').css('background', 'transparent url('+$(this).attr("src")+') no-repeat scroll 0%;');
+	  
+	  $('#resizeme_containment_div').css('background', 'transparent url('+$(this).attr("src")+') no-repeat scroll 0px 0px;');
+	  
+	});
+  });
+</script>
+
+</head>
+
+  <body>
+  
+    <div id="top">
+    
+       <h2>jQuery</h2
+       
+    </div>
+    <div id="left">
+    
+      <img src="img01.jpeg" class="thumb" />
+      <img src="img02.jpeg" class="thumb" />
+      <img src="img03.jpeg" class="thumb" />
+      <img src="img04.jpeg" class="thumb" />
+      <img src="img05.jpeg" class="thumb" />
+      
+    </div>
+
+    <div id="content">
+    
+      <div id="img-container">
+      
+        <div id="resizeme_containment_div_wrapper">
+        
+			<div id="resizeme_containment_wrap_image"></div>
+		    <div id="resizeme_containment_div"></div>
+		    
+		</div>
+		
+      </div>
+      
+    </div>
+    
+  </body>
+  
+</html>
