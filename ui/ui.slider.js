@@ -93,7 +93,7 @@
 		this.element.bind('click', function(e) { self.click.apply(self, [e]); });
 		
 		//Move the first handle to the startValue
-		if (o.startValue && o.startValue.length) {
+		if (o.startValue && o.startValue.constructor == Array) {
 			$.each(o.startValue, function(index, value) {
 				self.moveTo(value, index, true);
 			});
@@ -190,7 +190,7 @@
 			//Move focussed handle to the clicked position
 			this.offset = this.element.offset();
 			this.moveTo(this.convertValue(e[this.properties[0] == 'top' ? 'pageY' : 'pageX'] - this.offset[this.properties[0]] - this.handleSize()/2));
-			
+			this.propagate("slide", e);
 		},
 		start: function(e, handle) {
 			
@@ -244,9 +244,9 @@
 	
 			if(value.constructor == String) {
 				if (/^\-\=/.test(value) ) {
-					value = this.value() - parseInt(value.replace('-=', ''), 10)
+					value = this.value() - parseInt(value.replace('-=', ''), 10);
 				} else if (/^\+\=/.test(value) ) {
-					value = this.value() + parseInt(value.replace('+=', ''), 10)
+					value = this.value() + parseInt(value.replace('+=', ''), 10);
 				}
 			}
 			
