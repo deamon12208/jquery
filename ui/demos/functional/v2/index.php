@@ -36,7 +36,7 @@
         	<h1>jQuery UI 1.5 - Demos</h1>
         </div>
         <div id="content">
-     		<?
+     		<?php
                 if (file_exists($demo)){
                     include($demo);
                 }
