@@ -14,7 +14,7 @@
         @import "css/demo.css";
     </style>
     <?php
-    	include_once("init.php");
+    	include_once("../init.php");
     ?>
 </head>
 <body>
@@ -36,6 +36,7 @@
         	<h1>jQuery UI 1.5 - Demos</h1>
         </div>
         <div id="content">
+            <div id="containerDemo">
      		<?php
                 if (file_exists($demo)){
                     include($demo);
@@ -45,6 +46,7 @@
                 }
 
             ?>
+            </div>
         </div>
     </div>
 
