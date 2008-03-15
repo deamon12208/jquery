@@ -276,10 +276,15 @@
                     $hide = self.$panels.filter(':visible'),
                     $show = $(this.hash);
 
-                // If tab is already selected and not unselectable or tab disabled or click callback returns false stop here.
-                // Check if click handler returns false last so that it is not executed for a disabled tab!
-                if (($li.hasClass(o.selectedClass) && !o.unselect) || $li.hasClass(o.disabledClass)
-                    || $(self.element).triggerHandler('tabsselect', [self.ui(this, $show[0])], o.select) === false) {
+                // If tab is already selected and not unselectable or tab disabled or 
+                // or is already loading or click callback returns false stop here.
+                // Check if click handler returns false last so that it is not executed
+                // for a disabled or loading tab!
+                if (($li.hasClass(o.selectedClass) && !o.unselect)
+                    || $li.hasClass(o.disabledClass) 
+                    || $(this).hasClass(o.loadingClass)
+                    || $(self.element).triggerHandler('tabsselect', [self.ui(this, $show[0])], o.select) === false
+                    ) {
                     this.blur();
                     return false;
                 }
