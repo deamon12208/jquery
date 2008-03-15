@@ -71,6 +71,15 @@
                 });
                 $('#container-10 > ul').tabs({ selected: null });
                 $('#container-11 > ul').tabs({ event: 'mouseover' });
+                $('#container-12 > ul').tabs();
+                $('#fragment-31 > ul').tabs({
+                	navClass: "ui-tabs-sub-nav",
+            		selectedClass: 'ui-tabs-sub-selected',
+            		unselectClass: 'ui-tabs-sub-unselect',
+            		disabledClass: 'ui-tabs-sub-disabled',
+            		panelClass: 'ui-tabs-sub-panel',
+            		loadingClass: 'ui-tabs-sub-loading'
+                });
             });
         </script>
     </head>
@@ -300,6 +309,45 @@
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
             </div>
             <div id="fragment-30">
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+            </div>
+        </div>
+        
+        <h2>Nested</h2>
+        
+        <div id="container-12">
+            <ul>
+                <li><a href="#fragment-31"><span>One</span></a></li>
+                <li><a href="#fragment-32"><span>Two</span></a></li>
+                <li><a href="#fragment-33"><span>Three</span></a></li>
+            </ul>
+            <div id="fragment-31">
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                <ul>
+                    <li><a href="#fragment-31-1"><span>One</span></a></li>
+                    <li><a href="#fragment-31-2"><span>Two</span></a></li>
+                    <li><a href="#fragment-31-3"><span>Three</span></a></li>
+                </ul>
+                <div id="fragment-31-1">
+                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                </div>
+                <div id="fragment-31-2">
+                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                </div>
+                <div id="fragment-31-3">
+                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                </div>
+            </div>
+            <div id="fragment-32">
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+            </div>
+            <div id="fragment-33">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
