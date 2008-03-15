@@ -1,4 +1,5 @@
 <!-- jQuery UI -->
+	<script src="../../ui/ui.base.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../../ui/ui.mouse.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../../ui/ui.draggable.js" type="text/javascript" charset="utf-8"></script>
 	<script src="../../ui/ui.draggable.ext.js" type="text/javascript" charset="utf-8"></script>
