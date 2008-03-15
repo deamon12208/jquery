@@ -48,15 +48,15 @@ $demo = $_GET['demo'].".php";
 		</div>
 
 		<div id="main" class="innertube" style="padding: 10px;">
-			<?
-                if (file_exists($demo)){
-                    include($demo);
-                }
-                else {
-                    echo("<p>Welcome to jQuery UI Demo's, an interactive page for looking at and playing with each jQuery UI component.</p>");
-                }
+			<?php
+          if (file_exists($demo)){
+              include($demo);
+          }
+          else {
+              echo("<p>Welcome to jQuery UI Demo's, an interactive page for looking at and playing with each jQuery UI component.</p>");
+          }
 
-            ?>
+     ?>
 		</div>
 
 	</div>
