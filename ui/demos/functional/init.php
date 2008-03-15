@@ -20,4 +20,8 @@
 
 <script src="js/demo.js" type="text/javascript" charset="utf-8"></script>
 
+<style type="text/css">
+	@import "css/demo.css";
+</style>
+
 <link rel="stylesheet" href="../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
