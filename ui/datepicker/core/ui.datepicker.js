@@ -770,7 +770,7 @@ $.extend(Datepicker.prototype, {
 	   @param  date  Date - the date to get the week for
 	   @return  number - the number of the week within the year that contains this date */
 	iso8601Week: function(date) {
-		var checkDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+		var checkDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), (date.getTimezoneOffset() / -60));
 		var firstMon = new Date(checkDate.getFullYear(), 1 - 1, 4); // First week always contains 4 Jan
 		var firstDay = firstMon.getDay() || 7; // Day of week: Mon = 1, ..., Sun = 7
 		firstMon.setDate(firstMon.getDate() + 1 - firstDay); // Preceding Monday
