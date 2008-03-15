@@ -115,29 +115,30 @@ body, html {
 /*************************************/
 /* Viewer: models                    */
 
-#main #content #containerDemo {
-    margin:10px 10px 0px 10px;
-}
 #main #content h1 {
     font-size:1.4em;
+    margin:10px 10px 0px 10px;
 }
 #main #content .menutitle {
+    margin:0px 10px;
     padding: 2px 2px 6px 8px;
     border-bottom: 1px solid #E8EEF7;
     text-align: left;
   	font-size:1.1em;
     font-weight: bold;
 }
+#main #content .ui-wrapper {
+    margin:0px 10px;
+}
 #main #content .details {
 	border-bottom: 1px #E8EEF7 solid;
-	margin-bottom: 10px;
+    margin:0px 10px 10px 10px;
 }
 
 #main #content .demo-options {
 	background: #E8EEF7;
 	border-bottom: 1px #C3D9FF solid;
 	padding: 10px;
-	margin-top: 10px;
 }
 
 #main #content .demo-view-code {
