@@ -93,8 +93,11 @@
 			//Prevent Safari textarea resize
 			if ($.browser.safari && o.preventDefault) oel.css('resize', 'none');
 	
-			o.proportionallyResize = oel.css({ position: 'static', zoom: 1, display: 'block' });
-	
+			o.proportionallyResize = oel.css({ /*position: 'static',*/ zoom: 1, display: 'block' });
+			
+			// avoid IE jump
+			this.element.css({ margin: oel.css('margin') });
+			
 			// fix handlers offset
 			this._proportionallyResize();
 		}
