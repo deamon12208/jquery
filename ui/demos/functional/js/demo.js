@@ -40,12 +40,13 @@ var uiRenderDemo = function(model) {
 		});
 
 		var a = $('<a>View Source</a>').attr('href', 'javascript:void(0);').addClass('link-view-source').click(function() {
+            el = this;
 			spanCode.slideToggle("slow", function(){
-                var text = $(this).text();
+                var text = $(el).text();
                 if(text.toLowerCase()=="view source"){
-                    $(this).text("Hide Source");
+                    $(el).text("Hide Source");
                 }else{
-                    $(this).text("View Source");
+                    $(el).text("View Source");
                 }
             });
 		});
