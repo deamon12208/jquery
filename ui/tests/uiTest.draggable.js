@@ -86,6 +86,9 @@
 				"stop" : "$('#foo').draggable({ stop: function() {\n\t uiTestLog('stop'); \n} });"
 			},
 			"methods": {
+				"disable" : "$('#foo').draggable({}).draggable('disable');",
+				"enable" : "$('#foo').draggable({}).draggable('disable').draggable('enable');",
+				"destory" : "$('#foo').draggable({}).draggable('destroy');"
 			}
 		}
 	};
