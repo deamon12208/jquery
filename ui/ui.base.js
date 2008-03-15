@@ -59,7 +59,7 @@
 	
 	//Modify native plugins
 	var old = $.fn.remove;
-	$.fn.remove = function(){ this.trigger("remove"); return old.call(this, arguments ); };
+	$.fn.remove = function(){ this.trigger("remove"); return old.apply(this, arguments ); };
 
 	
  })(jQuery);
