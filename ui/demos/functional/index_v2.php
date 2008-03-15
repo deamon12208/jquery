@@ -35,13 +35,12 @@
         	<h1>jQuery UI 1.5 - Demos</h1>
         </div>
         <div id="content">
-     		<?
+     		<?php
                 echo("File: " . $demo);
 
                 if (file_exists($demo)){
                     include($demo);
-                }
-                else {
+                } else{
                     echo("<p>Welcome to Demo Viewer, an interactive page for looking at and playing with each jQuery UI component.</p>");
                 }
 
