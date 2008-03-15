@@ -1,3 +1,8 @@
+<?php
+
+$demo = $_GET['demo'].".php";
+
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
@@ -19,25 +24,20 @@
 	<div id="leftbar">
 		<div class="innertube" style="margin: 2px;">
 			
-			<div class="menutitle">Component</div>
+			<div class="menutitle">Components</div>
 			
-			<a class="link" href="#Resizable">Resizable</a>
-			<a class="link" href="#Draggable">Draggable</a>
-			<a class="link" href="#Droppable">Droppable</a>
-			<a class="link" href="#Sortable">Sortable</a>
-			<a class="link" href="#Selectable">Selectable</a>
-			<a class="link" href="#Accordion">Accordion</a>
-			<a class="link" href="#Dialog">Dialog</a>
-			<a class="link" href="#Slider">Slider</a>
-			<a class="link" href="#Tabs">Tabs</a>
+			<a class="link" href="?demo=ui.resizable">Resizable</a>
+			<a class="link" href="?demo=ui.draggable">Draggable</a>
+			<a class="link" href="?demo=ui.droppable">Droppable</a>
+			<a class="link" href="?demo=ui.sortable">Sortable</a>
+			<a class="link" href="?demo=ui.selectable">Selectable</a>
+			<a class="link" href="?demo=ui.accordion">Accordion</a>
+			<a class="link" href="?demo=ui.dialog">Dialog</a>
+			<a class="link" href="?demo=ui.slider">Slider</a>
+			<a class="link" href="?demo=ui.tabs">Tabs</a>
 		
 			<br/><br/>
 			
-			<div class="menutitle">Options</div>
-			<div id="options">
-				<a class="link" href="#Droppable">Droppable</a>
-				<a class="link" href="#Sortable">Sortable</a>
-			</div>
 		</div>
 	</div>
 	
@@ -47,17 +47,10 @@
 			<h1>jQuery UI 1.5 - Demos</h1>
 		</div>
 		
-		<div class="innertube">
-			<p>dsfasdf sadf asd</p><p>dsfasdf sadf asd</p><p>dsfasdf sadf asd</p><p>dsfasdf sadf asd</p><p>dsfasdf sadf asd</p><p>dsfasdf sadf asd</p><p>dsfasdf sadf asd</p><p>dsfasdf sadf asd</p>
-			<p>dsfasdf sadf asd</p><p>dsfasdf sadf asd</p><p>dsfasdf sadf asd</p><p>dsfasdf sadf asd</p><p>dsfasdf sadf asd</p><p>dsfasdf sadf asd</p><p>dsfasdf sadf asd</p><p>dsfasdf sadf asd</p><p>dsfasdf sadf asd</p>
-			<p>dsfasdf sadf asd</p><p>dsfasdf sadf asd</p><p>dsfasdf sadf asd</p><p>dsfasdf sadf asd</p>
+		<div id="main" class="innertube" style="padding: 10px;">
+			<? if (file_exists($demo)) include($demo); ?>
 		</div>
 
-		<div id="bottombar">
-			<h1>jQuery UI 1.5 - Demos</h1>
-			teste
-		</div>
-		
 	</div>
 		
 	</body>
@@ -67,8 +60,6 @@
 <script type="text/javascript">
 	
 	$(function() {
-		
-		$('#topbar').resizable({transparent:true});
 		
 		
 	});

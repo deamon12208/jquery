@@ -6,6 +6,7 @@ body, html {
 	font-family: sans-serif;
 	font-size: 13px;
 	overflow-x: hidden;
+	overflow-y: hidden;
 	text-align: center;
 }
 
@@ -23,6 +24,7 @@ h2, .menutitle {
 	border-bottom: 1px solid #E8EEF7;
 	text-align: left;
 	font-weight: bold;
+	padding: 10px 3px 10px 3px;
 }
 
 .proxy {
@@ -37,7 +39,7 @@ h2, .menutitle {
 	background: #C3D9FF;
 }
 
-.green-bg, #bottombar {
+.green-bg {
 	background: #74DD82;
 }
 
@@ -74,6 +76,8 @@ h2, .menutitle {
 	border-bottom: 1px solid #ccc;
 }
 
+<<<<<<< .mine
+=======
 #bottombar {
 	position: absolute;
 	padding: 5px 0px;
@@ -84,6 +88,7 @@ h2, .menutitle {
 	bottom: 0px;
 }
 
+>>>>>>> .r4923
 
 #leftbar {
 	position: absolute;
@@ -117,6 +122,40 @@ h2, .menutitle {
 }
 
 * html #maincontent{ /*IE6 hack*/
+<<<<<<< .mine
+	height: 100%; 
+	width: 100%; 
+}
+
+/* models */
+
+.details {
+	border-bottom: 1px #E8EEF7 solid;
+	margin-bottom: 10px;
+}
+
+.demo-options {
+	background: #E8EEF7;
+	border-bottom: 1px #C3D9FF solid;
+	padding: 10px;
+	margin-top: 10px;
+}
+
+.demo-view-code {
+	background: url('../img/bgcode.gif');
+	border-left: 6px solid #39F;
+	color: #555;
+	display: block;
+	font: normal 0.9em "Lucida Sans Unicode",serif;
+	margin-bottom: 12px;
+	padding: 8px 10px;
+	white-space: pre;
+}
+
+.link-view-source {
+	margin-left: 5px;
+}=======
 	height: 100%;
 	width: 100%;
 }
+>>>>>>> .r4923

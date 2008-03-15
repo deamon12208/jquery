@@ -18,4 +18,6 @@
 <script src="../../../ui/ui.accordion.js" type="text/javascript" charset="utf-8"></script>
 <script src="../../../ui/datepicker/core/ui.datepicker.js" type="text/javascript" charset="utf-8"></script>
 
+<script src="js/demo.js" type="text/javascript" charset="utf-8"></script>
+
 <link rel="stylesheet" href="../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
