@@ -11,3 +11,12 @@ code { font-family: "Courier New", Courier, monospace; }
 .error {
 	color: red;
 }
+
+#tests {
+	margin-bottom: 1000px;
+}
+
+#test-container {
+	height: 250px;
+	border: 1px solid #eee;
+}

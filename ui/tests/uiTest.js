@@ -4,7 +4,7 @@ function uiTest(testSet) {
 }
 
 function uiTestLog(msg) {
-	$('#foo-container').prepend('<div class="log-entry">' + msg + '</div>');
+	$('#test-container').prepend('<div class="log-entry">' + msg + '</div>');
 }
 
 $(function() {
@@ -30,14 +30,15 @@ $(function() {
 					.attr( 'href', '#' )
 					.text( value )
 					.click(function() {
-						$( '#foo-container' ).remove();
+						$( '#test-container' ).remove();
 						$( '#foo' ).remove();
-						$( '#blackhole' ).append( '<div id="foo"/>' );
+						$( '#bar' ).remove();
+						$( '#blackhole' ).append( '<div id="foo"/>' ).append( '<div id="bar"/>' );
 						$( '#foo' )
 							.html( '<pre><code>' + value + '</code></pre>' )
 							.prepend( '<div>' + path + ((name.length) ? name : '[default]') + '</div><hr>' );
-						$( this ).after( '<div id="foo-container"/>' );
-						$( '#foo-container' ).append( $( '#foo' ) );
+						$( this ).after( '<div id="test-container"/>' );
+						$( '#test-container' ).append( $( '#foo' ) ).append( $( '#bar' ) );
 						try {
 							eval( value );
 						} catch ( err ) {
