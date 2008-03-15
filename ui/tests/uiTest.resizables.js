@@ -28,7 +28,17 @@
 				},
 				"minWidth" : {
 					"10px" : "$('#foo').resizable({ minWidth: 10 });"
-				}
+				},
+				"proxy" : {
+					".bar" : "$('#foo').resizable({ proxy: 'bar' });"
+				},
+				"destructive" : {
+					"true" : "$('#foo').resizable({ destructive: true });",
+					"false" : "$('#foo').resizable({ destructive: false });"
+				},
+				"proportionallyResize" : {
+					"bar" : "$('#foo').resizable({ proportionallyResize: [$('#bar')] });"
+				},
 			},
 			"callbacks": {
 				"start" : "$('#foo').resizable({ start: function() {\n\t uiTestLog('start'); \n} });",
