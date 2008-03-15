@@ -19,11 +19,11 @@
         var args = method && Array.prototype.slice.call(arguments, 1) || arguments;
 
         return method == 'length' ?
-            $.data(this[0], 'ui-tabs').$tabs.length :
+            $.data(this[0], 'tabs').$tabs.length :
             this.each(function() {
                 if (method) {
-                    var tabs = $.data(this, 'ui-tabs');
-                    tabs[method].apply(tabs, args);
+                    var tabs = $.data(this, 'tabs');
+                    if (tabs) tabs[method].apply(tabs, args);
                 } else
                     new $.ui.tabs(this, args[0] || {});
             });
@@ -73,22 +73,22 @@
         if (options.selected === null)
             this.options.selected = null;
 
-        this.options.event += '.ui-tabs'; // namespace event
+        this.options.event += '.tabs'; // namespace event
         this.options.cookie = $.cookie && $.cookie.constructor == Function && this.options.cookie;
 
-        $(el).bind('setData.ui-tabs', function(event, key, value) {
+        $(el).bind('setData.tabs', function(event, key, value) {
             if ((/^selected/).test(key))
                 self.select(value);
             else {
                 self.options[key] = value;
                 self.tabify();
             }
-        }).bind('getData.ui-tabs', function(event, key) {
+        }).bind('getData.tabs', function(event, key) {
             return self.options[key];
         });
 
         // save instance for later
-        $.data(el, 'ui-tabs', this);
+        $.data(el, 'tabs', this);
 
         // create tabs
         this.tabify(true);
@@ -122,15 +122,15 @@
                     self.$panels = self.$panels.add(a.hash);
                 // remote tab
                 else if ($(a).attr('href') != '#') { // prevent loading the page itself if href is just "#"
-                    $.data(a, 'href.ui-tabs', a.href); // required for restore on destroy
-                    $.data(a, 'load.ui-tabs', a.href); // mutable
+                    $.data(a, 'href.tabs', a.href); // required for restore on destroy
+                    $.data(a, 'load.tabs', a.href); // mutable
                     var id = self.tabId(a);
                     a.href = '#' + id;
                     var $panel = $('#' + id);
                     if (!$panel.length) {
                         $panel = $(o.panelTemplate).attr('id', id).addClass(o.panelClass)
                             .insertAfter( self.$panels[i - 1] || self.element );
-                        $panel.data('destroy.ui-tabs', true);
+                        $panel.data('destroy.tabs', true);
                     }
                     self.$panels = self.$panels.add( $panel );
                 }
@@ -191,7 +191,7 @@
                 }
 
                 // load if remote tab
-                var href = !o.unselect && $.data(this.$tabs[o.selected], 'load.ui-tabs');
+                var href = !o.unselect && $.data(this.$tabs[o.selected], 'load.tabs');
                 if (href)
                     this.load(o.selected);
 
@@ -204,7 +204,7 @@
                 
                 // clean up to avoid memory leaks in certain versions of IE 6
                 $(window).bind('unload', function() {
-                    self.$tabs.unbind('.ui-tabs');
+                    self.$tabs.unbind('.tabs');
                     self.$lis = self.$tabs = self.$panels = null;
                 });
 
@@ -216,7 +216,7 @@
 
             // reset cache if switching from cached to not cached
             if (o.cache === false)
-                this.$tabs.removeData('cache.ui-tabs');
+                this.$tabs.removeData('cache.tabs');
             
             // set up animations
             var hideFx, showFx, baseFx = { 'min-width': 0, duration: 1 }, baseDuration = 'normal';
@@ -253,7 +253,7 @@
                         $show[0].style.filter = '';
 
                     // callback
-                    $(self.element).triggerHandler('show.ui-tabs', [self.ui(clicked, $show[0])]);
+                    $(self.element).triggerHandler('tabsshow', [self.ui(clicked, $show[0])], o.show);
 
                 });
             }
@@ -269,7 +269,7 @@
             }
 
             // attach tab event handler, unbind to avoid duplicates from former tabifying...
-            this.$tabs.unbind('.ui-tabs').bind(o.event, function() {
+            this.$tabs.unbind('.tabs').bind(o.event, function() {
 
                 //var trueClick = e.clientX; // add to history only if true click occured, not a triggered click
                 var $li = $(this).parents('li:eq(0)'),
@@ -279,7 +279,7 @@
                 // If tab is already selected and not unselectable or tab disabled or click callback returns false stop here.
                 // Check if click handler returns false last so that it is not executed for a disabled tab!
                 if (($li.hasClass(o.selectedClass) && !o.unselect) || $li.hasClass(o.disabledClass)
-                    || $(self.element).triggerHandler('select.ui-tabs', [self.ui(this, $show[0])]) === false) {
+                    || $(self.element).triggerHandler('tabsselect', [self.ui(this, $show[0])], o.select) === false) {
                     this.blur();
                     return false;
                 }
@@ -354,7 +354,7 @@
 
             // disable click if event is configured to something else
             if (!(/^click/).test(o.event))
-                this.$tabs.bind('click.ui-tabs', function() { return false; });
+                this.$tabs.bind('click.tabs', function() { return false; });
 
         },
         add: function(url, label, index) {
@@ -363,7 +363,7 @@
 
             var o = this.options;
             var $li = $(o.tabTemplate.replace(/#\{href\}/, url).replace(/#\{label\}/, label));
-            $li.data('destroy.ui-tabs', true);
+            $li.data('destroy.tabs', true);
 
             var id = url.indexOf('#') == 0 ? url.replace('#', '') : this.tabId( $('a:first-child', $li)[0] );
 
@@ -372,7 +372,7 @@
             if (!$panel.length) {
                 $panel = $(o.panelTemplate).attr('id', id)
                     .addClass(o.panelClass).addClass(o.hideClass);
-                $panel.data('destroy.ui-tabs', true);
+                $panel.data('destroy.tabs', true);
             }
             if (index >= this.$lis.length) {
                 $li.appendTo(this.element);
@@ -390,14 +390,14 @@
             if (this.$tabs.length == 1) {
                  $li.addClass(o.selectedClass);
                  $panel.removeClass(o.hideClass);
-                 var href = $.data(this.$tabs[0], 'load.ui-tabs');
+                 var href = $.data(this.$tabs[0], 'load.tabs');
                  if (href)
                      this.load(index, href);
             }
 
             // callback
-            $(this.element).triggerHandler('add.ui-tabs',
-                [this.ui(this.$tabs[index], this.$panels[index])]
+            $(this.element).triggerHandler('tabsadd',
+                [this.ui(this.$tabs[index], this.$panels[index])], o.add
             );
         },
         remove: function(index) {
@@ -415,8 +415,8 @@
             this.tabify();
 
             // callback
-            $(this.element).triggerHandler('remove.ui-tabs',
-                [this.ui($li.find('a')[0], $panel[0])]
+            $(this.element).triggerHandler('tabsremove',
+                [this.ui($li.find('a')[0], $panel[0])], o.remove
             );
         },
         enable: function(index) {
@@ -435,8 +435,8 @@
             o.disabled = $.grep(o.disabled, function(n, i) { return n != index; });
 
             // callback
-            $(this.element).triggerHandler('enable.ui-tabs',
-                [this.ui(this.$tabs[index], this.$panels[index])]
+            $(this.element).triggerHandler('tabsenable',
+                [this.ui(this.$tabs[index], this.$panels[index])], o.enable
             );
 
         },
@@ -449,8 +449,8 @@
                 o.disabled.sort();
 
                 // callback
-                $(this.element).triggerHandler('disable.ui-tabs',
-                    [this.ui(this.$tabs[index], this.$panels[index])]
+                $(this.element).triggerHandler('tabsdisable',
+                    [this.ui(this.$tabs[index], this.$panels[index])], o.disable
                 );
             }
         },
@@ -462,12 +462,12 @@
         load: function(index, callback) { // callback is for internal usage only
             
             var self = this, o = this.options, $a = this.$tabs.eq(index), a = $a[0],
-                    bypassCache = callback == undefined || callback === false, url = $a.data('load.ui-tabs');
+                    bypassCache = callback == undefined || callback === false, url = $a.data('load.tabs');
 
             callback = callback || function() {};
             
             // no remote or from cache - just finish with callback
-            if (!url || ($.data(a, 'cache.ui-tabs') && !bypassCache)) {
+            if (!url || ($.data(a, 'cache.tabs') && !bypassCache)) {
                 callback();
                 return;
             }
@@ -475,14 +475,14 @@
             // load remote from here on
             if (o.spinner) {
                 var $span = $('span', a);
-                $span.data('label.ui-tabs', $span.html()).html('<em>' + o.spinner + '</em>');
+                $span.data('label.tabs', $span.html()).html('<em>' + o.spinner + '</em>');
             }
             var finish = function() {
                 self.$tabs.filter('.' + o.loadingClass).each(function() {
                     $(this).removeClass(o.loadingClass);
                     if (o.spinner) {
                         var $span = $('span', this);
-                        $span.html($span.data('label.ui-tabs')).removeData('label.ui-tabs');
+                        $span.html($span.data('label.tabs')).removeData('label.tabs');
                     }
                 });
                 self.xhr = null;
@@ -498,11 +498,11 @@
                     callback();
 
                     if (o.cache)
-                        $.data(a, 'cache.ui-tabs', true); // if loaded once do not load them again
+                        $.data(a, 'cache.tabs', true); // if loaded once do not load them again
 
                     // callback
-                    $(self.element).triggerHandler('load.ui-tabs',
-                        [self.ui(self.$tabs[index], self.$panels[index])]
+                    $(self.element).triggerHandler('tabsload',
+                        [self.ui(self.$tabs[index], self.$panels[index])], o.load
                     );
 
                     o.ajaxOptions.success && o.ajaxOptions.success(r, s);
@@ -520,23 +520,23 @@
 
         },
         url: function(index, url) {
-            this.$tabs.eq(index).removeData('cache.ui-tabs').data('load.ui-tabs', url);
+            this.$tabs.eq(index).removeData('cache.tabs').data('load.tabs', url);
         },
         destroy: function() {
             var o = this.options;
-            $(this.element).unbind('.ui-tabs')
-                .removeClass(o.navClass).removeData('ui-tabs');
+            $(this.element).unbind('.tabs')
+                .removeClass(o.navClass).removeData('tabs');
             this.$tabs.each(function() {
-                var href = $.data(this, 'href.ui-tabs');
+                var href = $.data(this, 'href.tabs');
                 if (href)
                     this.href = href;
-                var $this = $(this).unbind('.ui-tabs');
+                var $this = $(this).unbind('.tabs');
                 $.each(['href', 'load', 'cache'], function(i, prefix) {
-                      $this.removeData(prefix + '.ui-tabs');
+                      $this.removeData(prefix + '.tabs');
                 });
             });
             this.$lis.add(this.$panels).each(function() {
-                if ($.data(this, 'destroy.ui-tabs'))
+                if ($.data(this, 'destroy.tabs'))
                     $(this).remove();
                 else
                     $(this).removeClass([o.selectedClass, o.unselectClass,

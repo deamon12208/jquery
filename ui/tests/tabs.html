@@ -29,13 +29,15 @@
                 $('#container-3 > ul').tabs({ cookie: { expires: 365 }, fx: { height: 'toggle' } });
                 $('#container-4 > ul').tabs({ fx: { opacity: 'toggle' } });
                 $('#container-5 > ul').tabs({ fx: { height: 'toggle', opacity: 'toggle' } });
-                $('#container-6 > ul').tabs({ fx: { opacity: 'toggle', duration: 'fast' } })
-                    .bind('select.ui-tabs', function(e, ui) {
+                $('#container-6 > ul').tabs({
+                    fx: { opacity: 'toggle', duration: 'fast' },
+                    select: function(e, ui) {
                         alert('event: ' + e.type);
-                    })
-                    .bind('show.ui-tabs', function(e, ui) {
+                    },
+                    show: function(e, ui) {
                         alert('event: ' + e.type);
-                    });
+                    }
+                });
                 $('#container-7 > ul').tabs({ fx: [null, { height: 'show', opacity: 'show' }] });
                 $('#container-8 > ul').tabs({ cache: true });
                 $('#container-9 > ul').tabs({ disabled: [2], cookie: { expires: 365 } });
@@ -64,7 +66,7 @@
                     return false;
                 });
                 $('<p><a href="#">Get selected tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
-                    alert( $('#container-9 > ul').data('selected.ui-tabs') );
+                    alert( $('#container-9 > ul').data('selected.tabs') );
                     return false;
                 });
                 $('#container-10 > ul').tabs({ selected: null });
