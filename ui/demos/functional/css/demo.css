@@ -88,11 +88,12 @@ h2, .menutitle {
 #leftbar {
 	position: absolute;
 	top: 0;
-    bottom:0px;
 	left: 0;
+    height:100%;
 	width: 198px;
 	overflow: hidden;
 	border: 1px solid #ccc;
+    border-width:0px 1px;
 }
 
 #maincontent {
