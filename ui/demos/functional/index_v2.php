@@ -36,12 +36,15 @@
         </div>
         <div id="content">
      		<?
+                echo("File: " . $demo);
+
                 if (file_exists($demo)){
                     include($demo);
                 }
                 else {
                     echo("<p>Welcome to Demo Viewer, an interactive page for looking at and playing with each jQuery UI component.</p>");
                 }
+
 
             ?>
         </div>
