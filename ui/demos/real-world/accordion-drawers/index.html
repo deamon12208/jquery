@@ -69,14 +69,19 @@ blockquote, q {
         width:100%;
         /*position:absolute;*/
         z-index:100;
+        margin:0px;
+        padding:0px;
     }
     .capt {
+        position:absolute;
         background-position:0 -4px;
     }
     .capb {
         margin-top:-19px;
     }
-
+    #content {
+        float:left;
+    }
     .drawers-wrapper {
         position: relative;
         width: 188px;
@@ -102,7 +107,7 @@ blockquote, q {
                     height:25px;
                     line-height:25px;
                     text-indent:15px;
-                    font-size:15px;
+                    font-size:12px;
                     width:100%;
                 }
                     .drawer-handle.open {
@@ -113,7 +118,7 @@ blockquote, q {
 
                 /* nasty, but it fixes the indent on the first one. */
                     h2.drawer-handle span {
-                        margin:0 0 0 15px;
+                        
                     }
                 .drawer ul {
                     padding: 0 12px;
@@ -169,13 +174,15 @@ blockquote, q {
     </script>
 </head>
 <body id="page">
-    <h1>Fixed drawer slide out demo (using accordion plugin)</h1>
-    <p>This example demonstrates the Apple downloads slider/accordion effect using the jQuery Accordion plugin.</p>
-    <p>Mouse over the headings to reveal the list of available links.</p>
+    <div id="content">
+        <h1>Fixed drawer slide out demo (using accordion plugin)</h1>
+        <p>This example demonstrates the Apple downloads slider/accordion effect using the jQuery Accordion plugin.</p>
+        <p>Mouse over the headings to reveal the list of available links.</p>
 
-    <p>
-        <a href="http://jqueryfordesigners.com/slide-out-and-drawer-effect/">Read the article this demonstration relates to</a>
-    </p>
+        <p>
+            <a href="http://jqueryfordesigners.com/slide-out-and-drawer-effect/">Read the article this demonstration relates to</a>
+        </p>
+    </div>
     <div class="drawers-wrapper">
         <ul class="drawers">
             <li class="drawer">
