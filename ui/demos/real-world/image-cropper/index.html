@@ -28,9 +28,9 @@
 <style type="text/css">
   body { padding: 0; margin: 0; overflow-y: hidden; height: auto; font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;}
   
-  #top { background-color: #C3D9FF; border-bottom: 1px solid; margin:0; padding: 5px; }
+  #top { background-color: #E8EEF7; border-bottom: 1px solid; margin:0; padding: 5px; }
   
-  #top h2 { margin: 0 0 0 30px;}
+  #top h2 { margin: 0 0 0 25px;}
   
   #left { float: left; width: 160px; height: 1000px; padding: 15px 0 0 0; border-right: 1px solid; }
   
@@ -38,10 +38,10 @@
 
   .thumb { height: 75px; width: 75px; display: block; margin: 1px auto 1px auto; }
   
-  .thumb:hover { height: 130px; width: 130px; margin: 0 auto 0 auto; border: 5px solid; }
+  .thumb:hover { height: 130px; width: 130px; margin: 0 auto 0 auto; border: 5px solid #E0E0F3; }
   
-  #log { background-color: #C3D9FF; position: fixed; bottom: 0; left: 0; width: 100%; border-top: 1px solid;  padding: 10px 0; }
-  
+  #log { background-color: #E8EEF7; position: fixed; bottom: 0; left: 0; width: 100%; border-top: 1px solid;  padding: 10px 0; }
+
   .log-property { margin: 0 10px 0 144px; *margin: 0 10px 0 132px; }
  
  /* Cropper CSS */
@@ -55,9 +55,7 @@
 </style>
 <script type="text/javascript">
   $().ready(function(){
-  
-    $('#resizeme_containment_wrap_image').css({ opacity: 0.5 });
-	
+	var left = $("#log-left");
 	$('#resizeme_containment_div').resizable({
 		
 		containment: $('#resizeme_containment_div_wrapper'),
@@ -110,6 +108,9 @@
 		drag: function(e, ui) {
 			
 			this.style.backgroundPosition = '-' + (ui.position.left) + 'px -' + (ui.position.top) + 'px';
+			 
+			//$("#log-top").html(ui.instance.position.top);
+		    left.html(ui.instance.position.left);
 			
 		}
 		
@@ -127,6 +128,11 @@
 	  $('#resizeme_containment_div').css('background', 'transparent url('+$(this).attr("src")+') no-repeat scroll 0px 0px;');
 	  
 	});
+	
+	$('#resizeme_containment_wrap_image').css({ opacity: 0.5 });
+	//$('#resizeme_containment_wrap_image').css('background', 'transparent url(img01.jpeg) no-repeat scroll 0%;');	  
+    //$('#resizeme_containment_div').css('background', 'transparent url(img01.jpeg) no-repeat scroll 0px 0px;');
+	
   });
 </script>
 
