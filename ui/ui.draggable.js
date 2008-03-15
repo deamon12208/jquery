@@ -213,7 +213,8 @@
 			this.position = { top: e.pageY - this.offset.top, left: e.pageX - this.offset.left };
 			this.positionAbs = { left: e.pageX - this.clickOffset.left, top: e.pageY - this.clickOffset.top };
 
-			//Call plugins and callbacks			
+			//Call plugins and callbacks
+			this.checkConstrains();			
 			this.position = this.propagate("drag", e) || this.position;
 			this.checkConstrains();
 			
