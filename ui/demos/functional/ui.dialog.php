@@ -38,7 +38,7 @@
 
 	};
 
-	$(function(){
+	$(window).load(function(){
 
 		uiRenderDemo(model);
 
