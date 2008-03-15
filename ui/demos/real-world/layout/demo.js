@@ -33,6 +33,7 @@
 	};
 	
 	var emptyTrashCan = function(item){
+		//alert(item.name);
 		item.remove();
 	};
 	
@@ -40,13 +41,13 @@
 		if(ui.sender){
 			var w = ui.element.width();
 			ui.placeholder.width(w);
-			console.log(w, ui.placeholder)
+			//console.log(w, ui.placeholder)
 		}
 	};
 	
 	var sortableUpdate = function(e, ui){
 		if(ui.element[0].id == 'trashcan'){
-			console.log(ui);
+			//console.log(ui);
 			emptyTrashCan(ui.item);
 		} else {
 			updateUpDown(ui.element[0]);
