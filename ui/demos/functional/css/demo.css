@@ -76,7 +76,7 @@ h2, .menutitle {
 
 #bottombar {
 	position: absolute;
-	padding: 5px;
+	padding: 5px 0px;
 	height: auto;
 	border-top: 1px solid #000;
 	width: 100%;
