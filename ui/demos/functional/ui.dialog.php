@@ -12,7 +12,7 @@
 
 			{
 				title: 'Simple Dialog',
-				html: '<div id="foo" class="ui-dialog-content"><div>dialog-default-[default]</div><hr/>Dialog Text...</div>',
+				html: '<div id="divDialog" class="ui-dialog-content"><div>dialog-default-[default]</div><hr/>Dialog Text...</div>',
 				destroy: '$("#divDialog").dialog("destroy");',
 
 				options: [
