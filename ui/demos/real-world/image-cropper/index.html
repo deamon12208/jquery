@@ -34,9 +34,9 @@
   
   #left { float: left; width: 160px; height: auto; padding: 0; border-right: 1px solid; }
 
-  #content { text-align: center; position: relative; }
+  #content { text-align: center; }
   
-  #img-container { margin: 50px 0 0 180px; float: left; position: relative;}
+  #img-container { margin: 50px 0 0 180px; float: left;}
 
   .thumb { height: 70px; width: 70px; display: block; margin: 25px auto; }
   
@@ -66,29 +66,47 @@
 		
 		//ghost: true,
 		
-		//animate:true,
+		animate:true,
 		
 		handles: 'all',
+		
 		//transparent: true,
+		
 		//aspectRatio: true,
+		
 		//autohide: true,
+		
 		minWidth: 100,
+		
 		minHeight: 100,
+		
 		maxWidth: 250,
+		
 		maxHeight: 250,
+		
 		resize: function(e, ui) {
-  		this.style.backgroundPosition = '-' + (ui.instance.position.left) + 'px -' + (ui.instance.position.top) + 'px';
-  	},
+			
+  		  this.style.backgroundPosition = '-' + (ui.instance.position.left) + 'px -' + (ui.instance.position.top) + 'px';
+		
+  	    },
 		stop: function(e, ui) {
-  		this.style.backgroundPosition = '-' + (ui.instance.position.left) + 'px -' + (ui.instance.position.top) + 'px';
-  	}
+			
+  		  this.style.backgroundPosition = '-' + (ui.instance.position.left) + 'px -' + (ui.instance.position.top) + 'px';
+  	    }
 	})
+	
 	.draggable({
+		
 		cursor: 'move',
+		
 		containment: $('#resizeme_containment_div_wrapper'),
+		
 		drag: function(e, ui) {
+			
 			this.style.backgroundPosition = '-' + (ui.position.left) + 'px -' + (ui.position.top) + 'px';
+			
 		}
+		
 	});
 	
 	
