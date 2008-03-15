@@ -21,7 +21,7 @@
                     {	desc: 'Simple Empty Dialog',	source: '$("#divDialog").dialog();' }
                     {	desc: 'Simple Detached Dialog',	source: '$("<div/>").dialog();' }
 				]
-			},
+			}
 /*
 			{
 				title: 'Simple image drag',
