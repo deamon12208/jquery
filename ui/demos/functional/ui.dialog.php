@@ -17,8 +17,8 @@
 
 				options: [
 					{	desc: 'Simple Dialog',	source: '$("#divDialog").dialog();' },
-					{	desc: 'Simple Cloned Dialog',	source: '$("#divDialog").clone().dialog();' }
-                    {	desc: 'Simple Empty Dialog',	source: '$("#divDialog").dialog();' }
+					{	desc: 'Simple Cloned Dialog',	source: '$("#divDialog").clone().dialog();' },
+                    {	desc: 'Simple Empty Dialog',	source: '$("#divDialog").dialog();' },
                     {	desc: 'Simple Detached Dialog',	source: '$("<div/>").dialog();' }
 				]
 			}
