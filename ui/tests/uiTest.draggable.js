@@ -16,6 +16,12 @@
 					"x" : "$('#foo').draggable({ axis: 'x' });",
 					"y" : "$('#foo').draggable({ axis: 'y' });"
 				},
+				"cancel" : {
+					"div" : "$('#foo').draggable({ cancel: 'div' });",
+					"code" : "$('#foo').draggable({ cancel: 'code' });",
+					"div,code" : "$('#foo').draggable({ cancel: 'div,code' });",
+					"*" : "$('#foo').draggable({ cancel: '*' });"
+				},
 				"containment" : {
 					"document" : "$('#foo').draggable({ containment: 'document' });",
 					"parent" : "$('#foo').draggable({ containment: 'parent' });"
@@ -33,12 +39,6 @@
 				},
 				"distance" : {
 					"40" : "$('#foo').draggable({ distance: 40 });"
-				},
-				"dragPrevention" : {
-					"div" : "$('#foo').draggable({ dragPrevention: 'div' });",
-					"code" : "$('#foo').draggable({ dragPrevention: 'code' });",
-					"div,code" : "$('#foo').draggable({ dragPrevention: 'div,code' });",
-					"*" : "$('#foo').draggable({ dragPrevention: '*' });"
 				},
 				"grid" : {
 					"x50y10" : "$('#foo').draggable({ grid: [50, 10] });",
