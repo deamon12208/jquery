@@ -30,7 +30,7 @@
   
   #top { background-color: #E8EEF7; border-bottom: 1px solid; margin:0; padding: 5px; }
   
-  #top h2 { margin: 0 0 0 25px;}
+  #top h2 { margin: 0 0 0 25px; }
   
   #left { float: left; width: 160px; height: 1000px; padding: 15px 0 0 0; border-right: 1px solid; }
   
@@ -38,7 +38,7 @@
 
   .thumb { height: 75px; width: 75px; display: block; margin: 1px auto 1px auto; }
   
-  .thumb:hover { height: 130px; width: 130px; margin: 0 auto 0 auto; border: 5px solid #E0E0F3; }
+  .thumb:hover { height: 130px; width: 130px; margin: 0 auto 0 auto; border: 5px solid #CCCFFF; }
   
   #log { background-color: #E8EEF7; position: fixed; bottom: 0; left: 0; width: 100%; border-top: 1px solid;  padding: 10px 0; }
 
@@ -55,7 +55,7 @@
 </style>
 <script type="text/javascript">
   $().ready(function(){
-	var left = $("#log-left");
+  	
 	$('#resizeme_containment_div').resizable({
 		
 		containment: $('#resizeme_containment_div_wrapper'),
@@ -87,9 +87,11 @@
   		  this.style.backgroundPosition = '-' + (ui.instance.position.left) + 'px -' + (ui.instance.position.top) + 'px';
 		  
 		  $("#log-top").html(ui.instance.position.top);
+		  
 		  $("#log-left").html(ui.instance.position.left);
 		  
 		  $("#log-height").html(ui.instance.size.height);
+		  
 		  $("#log-width").html(ui.instance.size.width);
 		
   	    },
@@ -109,8 +111,9 @@
 			
 			this.style.backgroundPosition = '-' + (ui.position.left) + 'px -' + (ui.position.top) + 'px';
 			 
-			//$("#log-top").html(ui.instance.position.top);
-		    left.html(ui.instance.position.left);
+			$("#log-top").html(ui.instance.position.top);
+			
+		    $("#log-left").html(ui.instance.position.left);
 			
 		}
 		
@@ -121,6 +124,7 @@
 	$('.thumb').click(function(e){
 	  
 	  $('#resizeme_containment_div').css('top', '0');
+	  
 	  $('#resizeme_containment_div').css('left', '0');
 	  	  
 	  $('#resizeme_containment_wrap_image').css('background', 'transparent url('+$(this).attr("src")+') no-repeat scroll 0%;');
@@ -130,8 +134,11 @@
 	});
 	
 	$('#resizeme_containment_wrap_image').css({ opacity: 0.5 });
-	//$('#resizeme_containment_wrap_image').css('background', 'transparent url(img01.jpeg) no-repeat scroll 0%;');	  
-    //$('#resizeme_containment_div').css('background', 'transparent url(img01.jpeg) no-repeat scroll 0px 0px;');
+	
+	$('#resizeme_containment_wrap_image').css('background', 'transparent url(img01.jpeg) no-repeat scroll 0%;');
+	  
+	$('#resizeme_containment_div').css('background', 'transparent url(img01.jpeg) no-repeat scroll 0px 0px;');
+	  
 	
   });
 </script>
@@ -142,7 +149,7 @@
   
     <div id="top">
     
-       <h2>jQuery</h2
+       <h2>jQuery - image cropper demo</h2
        
     </div>
     <div id="left">
@@ -155,10 +162,7 @@
       
     </div>
 
- 
-    
     <div id="img-container">
-      
       <div id="resizeme_containment_div_wrapper">
        
 	    <div id="resizeme_containment_wrap_image"></div>
@@ -169,10 +173,10 @@
     </div>
 	
 	<div id="log">
-	  <font class="log-property">width:</font><label id="log-width">x</label>
-	  <font class="log-property">height:</font><label id="log-height">x</label>
-	  <font class="log-property">top:</font><label id="log-top">x</label>
-	  <font class="log-property">left:</font><label id="log-left">x</label>
+	  <font class="log-property">width:</font><label id="log-width">0</label>
+	  <font class="log-property">height:</font><label id="log-height">0</label>
+	  <font class="log-property">top:</font><label id="log-top">0</label>
+	  <font class="log-property">left:</font><label id="log-left">0</label>
 	</div>
     
   </body>
