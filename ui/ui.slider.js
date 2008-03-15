@@ -163,7 +163,12 @@
 		},
 		value: function(handle) {
 			if(this.handle.length == 1) this.currentHandle = this.handle;
-			return ((parseInt($(handle != undefined ? this.handle[handle] || handle : this.currentHandle).css(this.properties[0]),10) / (this.size - this.handleSize())) * this.options.realMaxValue) + this.options.minValue;
+			var value = ((parseInt($(handle != undefined ? this.handle[handle] || handle : this.currentHandle).css(this.properties[0]),10) / (this.size - this.handleSize())) * this.options.realMaxValue) + this.options.minValue;
+                        var o = this.options;
+                        if (o.stepping) {
+                            value = Math.round(value / o.stepping) * o.stepping;
+                        }
+                        return value
 		},
 		convertValue: function(value) {
 			return this.options.minValue + (value / (this.size - this.handleSize())) * this.options.realMaxValue;
