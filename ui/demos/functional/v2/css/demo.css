@@ -79,7 +79,7 @@ body, html {
         font-weight:bold;
     }
     #main #content {
-        padding:10px;
+
     }
 #sidebar {
     float:left;
@@ -92,7 +92,7 @@ body, html {
         line-height:1.2em;
     }
         #sidebar ul li a{
-            border-bottom: 1px solid #C3D9FF;
+            border-bottom: 1px solid #E8EEF7;
             display:block;
             padding: 3px 3px 3px 12px;
         	font-size: 95%;
@@ -101,7 +101,8 @@ body, html {
         }
             #sidebar ul li a:hover,
             #sidebar ul li a:focus{
-                background: #C3D9FF;
+                background: #E8EEF7;
+                border-color: #C3D9FF;
             }
         #sidebar ul li.title {
             padding: 2px 2px 6px 8px;
@@ -110,3 +111,50 @@ body, html {
           	font-size:1.1em;
             font-weight: bold;
         }
+
+/*************************************/
+/* Viewer: models                    */
+#main #content h1 {
+    font-size:1.4em;
+}
+#main #content .details {
+	border-bottom: 1px #E8EEF7 solid;
+	margin-bottom: 10px;
+}
+
+#main #content .demo-options {
+	background: #E8EEF7;
+	border-bottom: 1px #C3D9FF solid;
+	padding: 10px;
+	margin-top: 10px;
+}
+
+#main #content .demo-view-code {
+	background: url('../../img/bgcode.gif');
+	border-left: 6px solid #39F;
+	color: #555;
+	display: block;
+	font: normal 0.9em "Lucida Sans Unicode",serif;
+	margin-bottom: 12px;
+	padding: 8px 10px;
+	white-space: pre;
+}
+#main #content .link-view-source {
+	margin-left: 5px;
+}
+#main #content .proxy {
+		border: 1px dashed #000;
+}
+
+#main #content .lightblue-bg{
+	background: #E8EEF7;
+}
+#main #content .blue-bg {
+	background: #C3D9FF;
+}
+#main #content .green-bg {
+	background: #74DD82;
+}
+#main #content a {
+    color:#000;
+}

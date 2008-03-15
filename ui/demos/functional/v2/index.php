@@ -36,6 +36,7 @@
 <script src="../js/demo.js" type="text/javascript" charset="utf-8"></script>
 
 <link rel="stylesheet" href="../../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
+
 </head>
 <body>
     <div id="sidebar">
@@ -56,8 +57,7 @@
         	<h1>jQuery UI 1.5 - Demos</h1>
         </div>
         <div id="content">
-            <div id="containerDemo">
-     		<?php
+            <?php
                 if (file_exists($demo)){
                     include($demo);
                 }
@@ -66,7 +66,6 @@
                 }
 
             ?>
-            </div>
         </div>
     </div>
 
