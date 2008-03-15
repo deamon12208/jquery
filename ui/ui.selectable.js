@@ -5,10 +5,12 @@
 
 	$.fn.extend({
 		selectable: function(options) {
+			var args = Array.prototype.slice.call(arguments, 1); 
+			
 			return this.each(function() {
 				if (typeof options == "string") {
 					var select = $.data(this, "selectable");
-					select[options].apply(select, args);
+					if (select) select[options].apply(select, args);
 
 				} else if(!$.data(this, "selectable"))
 					new $.ui.selectable(this, options);
@@ -21,7 +23,7 @@
 		
 		this.element = $(element);
 		
-		$.data(this.element, "selectable", this);
+		$.data(element, "selectable", this); 
 		this.element.addClass("ui-selectable");
 		
 		this.options = $.extend({
@@ -91,8 +93,8 @@
 			this.element
 				.removeClass("ui-selectable ui-selectable-disabled")
 				.removeData("selectable")
-				.unbind(".selectable");
-			this.removeMouseInteraction();
+				.unbind(".selectable")
+				.removeMouseInteraction();
 		},
 		enable: function() {
 			this.element.removeClass("ui-selectable-disabled");
