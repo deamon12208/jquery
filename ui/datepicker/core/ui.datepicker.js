@@ -555,17 +555,8 @@ $.extend(Datepicker.prototype, {
 	
 	/* Find an object's position on the screen. */
 	_findPos: function(obj) {
-		while (obj && (obj.type == 'hidden' || obj.nodeType != 1)) {
-			obj = obj.nextSibling;
-		}
-		var curleft = curtop = 0;
-		if (obj.offsetParent) {
-			do {
-				curleft += obj.offsetLeft;
-				curtop += obj.offsetTop;
-			} while (obj = obj.offsetParent);
-		}
-		return [curleft,curtop];
+	    var position = $(obj).position();
+	    return [position.left, position.top];
 	},
 
 	/* Hide the date picker from view.
