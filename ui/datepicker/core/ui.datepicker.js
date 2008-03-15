@@ -555,7 +555,11 @@ $.extend(Datepicker.prototype, {
 	
 	/* Find an object's position on the screen. */
 	_findPos: function(obj) {
-	    var position = $(obj).position();
+        while (obj && (obj.type == 'hidden' || obj.nodeType != 1)) {
+            obj = obj.nextSibling;
+        }
+
+        var position = $(obj).offset();
 	    return [position.left, position.top];
 	},
 
