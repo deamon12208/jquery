@@ -41,7 +41,7 @@
 <body>
     <div id="sidebar">
         <ul>
-            <li class="title">Components</li>
+            <li class="menutitle">Components</li>
             <li><a href="?demo=ui.accordian" title="Goto Accordian's Component Page">Accordian</a></li>
             <li><a href="?demo=ui.dialog" title="Goto Dialog's Component Page">Dialog</a></li>
             <li><a href="?demo=ui.draggable" title="Goto Draggable's Component Page">Draggable</a></li>
@@ -57,7 +57,8 @@
         	<h1>jQuery UI 1.5 - Demos</h1>
         </div>
         <div id="content">
-            <?php
+            <div id="containerDemo">
+     		<?php
                 if (file_exists($demo)){
                     include($demo);
                 }
@@ -66,6 +67,7 @@
                 }
 
             ?>
+            </div>
         </div>
     </div>
 
