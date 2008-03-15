@@ -1,0 +1,49 @@
+<style>
+
+.draggable {
+	width: 100px;
+	height: 40px;
+	top: 10px;
+	right: 10px;
+	background-color: #68BFEF;
+	border: 2px solid #0090DF;
+	padding: 5px;	
+}
+
+</style>
+
+<div id="containerDemo"></div>
+
+<script type="text/javascript">
+	
+	var model = {
+		
+		renderAt: '#containerDemo',
+		
+		title: 'Accordion Demos',
+		
+		desc: 'Simple accordion',
+		
+		demos: [
+			
+			{
+				title: 'Simple accordion',
+				html: { url: 'ui.accordion.data.html' },
+				destroy: '$("#accordionDemo").accordion("destroy");',
+				
+				options: [ 
+					{ desc: 'Simple Accordion', source: '$("#accordionDemo").accordion();' },
+					{ desc: 'Simple Accordion Mouse over', source: '$("#accordionDemo").accordion({event: "mouseover"});' }
+				]
+			}			
+		]
+		
+	};
+	
+	$(function(){
+	
+		uiRenderDemo(model);
+		
+	});
+	
+</script>

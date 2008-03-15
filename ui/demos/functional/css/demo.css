@@ -117,7 +117,8 @@ body, html {
 /* Viewer: models                    */
 
 #main #content h1 {
-    font-size:1.4em;
+    font-size:1.5em;
+	font-weight: bold;
     margin:10px 10px 0px 10px;
 }
 #main #content .menutitle {
@@ -151,6 +152,9 @@ body, html {
 	margin-bottom: 12px;
 	padding: 8px 10px;
 	white-space: pre;
+}
+#main #content .demo-description {
+	margin-bottom: 20px;
 }
 #main #content .link-view-source {
 	margin-left: 5px;

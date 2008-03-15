@@ -2,7 +2,7 @@ var uid = 0;
 
 var uiRenderDemo = function(model) {
 
-	var title = model.title, container = $(model.renderAt);
+	var title = model.title, container = $(model.renderAt), html = $('<div class="ui-html-demo"></div>');
 
 	container.append('<h1>' + title + '</h1><br>');
 
@@ -14,12 +14,28 @@ var uiRenderDemo = function(model) {
 		var details = $(
 			'<br><div class="details"><div class="menutitle">' + demo.title + '</div></div>'
 		);
-
+		
+		var desc = $('<div class="demo-description">'+ (demo.desc || '') +'</div>');
+		
 		var ocontainer = $(
 			'<div class=" demo-options"><label for="select-' + _uid + '">More options:</label></div>'
 		);
-
-		var html = $(demo.html);
+		
+		// Render simple HTML
+		if (typeof demo.html == 'string') {
+			html = demo.html;
+		}
+		// Render data html by URL
+		if (typeof demo.html == 'object' && demo.html.url) {
+			$.get(demo.html.url, function(data) {
+				html.html(data);
+				
+				$.each(demo.options, function(x, o) {
+					// eval the first source of <select>
+					if (!x) jQuery.globalEval(o.source);
+				});
+			});
+		}
 
 		var spanCode = $('<span id="code-'+ _uid +'">').css({ display: 'none' });
 
@@ -49,7 +65,7 @@ var uiRenderDemo = function(model) {
 		});
 
 		generated.append(
-			details, html, ocontainer.append(
+			details, desc, html, ocontainer.append(
 				select, a, '<br>', spanCode.append('<br>', source)
 			)
 		);
@@ -62,5 +78,17 @@ var uiRenderDemo = function(model) {
 	  			jQuery.globalEval(o.source);
 	  		}
 		});
+	});
+};
+
+var loadDemo = function(comp) {
+	$('#containerDemo').html("<img src='img/loading.gif'>");
+	
+	 $("#containerDemo").ajaxError(function(request, settings){ 
+	   $(this).html("<b>Ops!</b> There is no template file for this component."); 
+	 });
+	
+	$.get(comp+'.html', function(data) {
+		$('#containerDemo').html(data);
 	});
 };
