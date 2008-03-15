@@ -1549,9 +1549,10 @@ $.fn.datepicker = function(options){
 	
 /* Initialise the date picker. */
 $(document).ready(function() {
-	$.datepicker = new Datepicker(); // singleton instance
 	$(document.body).append($.datepicker._datepickerDiv).
 		mousedown($.datepicker._checkExternalClick);
 });
+
+$.datepicker = new Datepicker(); // singleton instance
 
 })(jQuery);
