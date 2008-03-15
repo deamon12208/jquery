@@ -1,5 +1,6 @@
 <?php
     $demo = $_GET['demo'] . ".php";
+    $demo = "../" . $demo;
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -37,7 +38,7 @@
         <div id="content">
      		<?
                 if (file_exists($demo)){
-                    include("../" . $demo);
+                    include($demo);
                 }
                 else {
                     echo("<p>Welcome to Demo Viewer, an interactive page for looking at and playing with each jQuery UI component.</p>");
