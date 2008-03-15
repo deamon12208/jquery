@@ -14,7 +14,7 @@
         @import "css/demo.css";
     </style>
     <?php
-    	include_once("../init.php");
+    	include_once("init.php");
     ?>
 </head>
 <body>
