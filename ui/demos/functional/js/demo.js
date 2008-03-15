@@ -42,12 +42,9 @@ var uiRenderDemo = function(model) {
 		var a = $('<a>View Source</a>').attr('href', 'javascript:void(0);').addClass('link-view-source').click(function() {
             el = this;
 			spanCode.slideToggle("slow", function(){
-                var text = $(el).text();
-                if(text.toLowerCase()=="view source"){
-                    $(el).text("Hide Source");
-                }else{
-                    $(el).text("View Source");
-                }
+	            var text = $(el).text();
+	            if(/view source/i.test(text)) $(el).text("Hide Source");
+	            else $(el).text("View Source");
             });
 		});
 
@@ -62,8 +59,8 @@ var uiRenderDemo = function(model) {
 			// eval the first source of <select>
 			if (!x) {
 				source.html(o.source);
-	  		jQuery.globalEval(o.source);
-	  	}
+	  			jQuery.globalEval(o.source);
+	  		}
 		});
 	});
 };
