@@ -6,6 +6,15 @@
         <meta http-equiv="Content-Style-Type" content="text/css">
         <meta http-equiv="Content-Script-Type" content="text/javascript">
 
+	<script type="text/javascript">
+		/* Fix for IE6 background-image flicker
+		 * See http://www.mister-pixel.com/#Content__state=is_that_simple
+		 */
+		try {
+			document.execCommand("BackgroundImageCache", false, true);
+		} catch(err) {}
+	</script>
+
         <title>jQuery UI Tabs</title>
         
         <script type="text/javascript" src="../../jquery/src/core.js"></script>
