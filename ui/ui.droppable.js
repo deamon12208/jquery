@@ -106,6 +106,13 @@
 			var draggable = custom || $.ui.ddmanager.current;
 			if (!draggable || (draggable.currentItem || draggable.element)[0] == this.element[0]) return; // Bail if draggable and droppable are same element
 			
+			var childrenIntersection = false;
+			this.element.children(".ui-droppable").each(function() {
+				var inst = $.data(this, 'droppable');
+				if(inst.options.greedy && $.ui.intersect(draggable, { item: inst, offset: inst.element.offset() }, inst.options.tolerance)) childrenIntersection = true;
+			});
+			if(childrenIntersection) return;
+			
 			if(this.options.accept.call(this.element,(draggable.currentItem || draggable.element))) {
 				$.ui.plugin.call(this, 'drop', [e, this.ui(draggable)]);
 				this.element.triggerHandler("drop", [e, this.ui(draggable)], this.options.drop);
@@ -131,7 +138,7 @@
 	$.ui.intersect = function(draggable, droppable, toleranceMode) {
 
 		if (!droppable.offset) return false;
-		
+
 		var x1 = draggable.positionAbs.left, x2 = x1 + draggable.helperProportions.width,
 		    y1 = draggable.positionAbs.top, y2 = y1 + draggable.helperProportions.height;
 		var l = droppable.offset.left, r = l + droppable.item.proportions.width, 
