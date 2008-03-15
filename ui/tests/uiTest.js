@@ -36,7 +36,7 @@ $(function() {
 						$( '#foo' )
 							.html( '<pre><code>' + value + '</code></pre>' )
 							.prepend( '<div>' + path + ((name.length) ? name : '[default]') + '</div><hr>' );
-						$( this ).after( '<div id="foo-container"/' );
+						$( this ).after( '<div id="foo-container"/>' );
 						$( '#foo-container' ).append( $( '#foo' ) );
 						try {
 							eval( value );
