@@ -26,25 +26,27 @@
 <link rel="stylesheet" href="../../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
 
 <style type="text/css">
-  body { padding: 0; margin: 0; overflow-y: hidden; height: auto;}
+  body { padding: 0; margin: 0; overflow-y: hidden; height: auto; font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;}
   
   #top { background-color: #C3D9FF; border-bottom: 1px solid; margin:0; padding: 5px; }
   
-  #top h2 { margin: 0;}
+  #top h2 { margin: 0 0 0 30px;}
   
   #left { float: left; width: 160px; height: 1000px; padding: 15px 0 0 0; border-right: 1px solid; }
   
-  #img-container { margin: 80px 0 0 180px; float: left;}
+  #img-container { margin: 80px 0 0 190px; float: left;}
 
   .thumb { height: 75px; width: 75px; display: block; margin: 1px auto 1px auto; }
   
   .thumb:hover { height: 130px; width: 130px; margin: 0 auto 0 auto; border: 5px solid; }
   
-  #log { height: 50px; background-color: #C3D9FF; position: absolute; bottom: 0; left: 0; width: 100%; border-top: 1px solid;  }
+  #log { background-color: #C3D9FF; position: fixed; bottom: 0; left: 0; width: 100%; border-top: 1px solid;  padding: 10px 0; }
+  
+  .log-property { margin: 0 10px 0 144px; *margin: 0 10px 0 132px; }
  
  /* Cropper CSS */
  
- #resizeme_containment_wrap_image { width: 460px; height: 306px; }
+ #resizeme_containment_wrap_image { width: 480px; height: 315px; }
  
  #resizeme_containment_div {  top:0px; left:0px; width: 150px; height:150px; position: absolute; }
  
@@ -85,6 +87,12 @@
 		resize: function(e, ui) {
 			
   		  this.style.backgroundPosition = '-' + (ui.instance.position.left) + 'px -' + (ui.instance.position.top) + 'px';
+		  
+		  $("#log-top").html(ui.instance.position.top);
+		  $("#log-left").html(ui.instance.position.left);
+		  
+		  $("#log-height").html(ui.instance.size.height);
+		  $("#log-width").html(ui.instance.size.width);
 		
   	    },
 		stop: function(e, ui) {
@@ -124,7 +132,7 @@
 
 </head>
 
-  <body>
+  <body scroll="no">
   
     <div id="top">
     
@@ -155,7 +163,10 @@
     </div>
 	
 	<div id="log">
-	  <font>width:</font><label>x</label>
+	  <font class="log-property">width:</font><label id="log-width">x</label>
+	  <font class="log-property">height:</font><label id="log-height">x</label>
+	  <font class="log-property">top:</font><label id="log-top">x</label>
+	  <font class="log-property">left:</font><label id="log-left">x</label>
 	</div>
     
   </body>
