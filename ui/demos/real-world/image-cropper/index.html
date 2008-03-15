@@ -12,7 +12,6 @@
 <script type="text/javascript" src="../../../../jquery/src/fx.js"></script>
 <script type="text/javascript" src="../../../../jquery/src/offset.js"></script>
 <script type="text/javascript" src="../../../../plugins/dimensions/jquery.dimensions.js"></script>
-<script type="text/javascript" src="../../../ui.base.js"></script>
 <script type="text/javascript" src="../../../ui.mouse.js"></script>
 <script type="text/javascript" src="../../../ui.resizable.js"></script>
 <script type="text/javascript" src="../../../ui.resizable.ext.js"></script>
@@ -32,17 +31,23 @@
   
   #top h2 { margin: 0;}
   
-  #left { float: left; width: 160px; height: auto; padding: 0; border-right: 1px solid; }
-
+  #left { float: left; width: 160px; height: 1000px; padding: 65px 0; border-right: 1px solid; }
+    
+  #left a { height: 70px; width: 70px; display: block; margin: 1px auto 1px auto; padding: 0; }
+  
+  #left a:hover { height: 120px; width: 120px; border: 1px solid; }
+  
+  #left a:active { height: 120px; width: 120px; border: 1px solid; }
+  
+  #left a:focus { height: 120px; width: 120px; border: 1px solid; }
+  	
   #content { text-align: center; }
   
-  #img-container { margin: 50px 0 0 180px; float: left;}
+  #img-container { margin: 80px 0 0 180px; float: left;}
 
-  .thumb { height: 70px; width: 70px; display: block; margin: 25px auto; }
+  .thumb { height: 100%; width: 100%; }
   
-  .thumb:hover { height: 100px; width: 100px; }	
-
- /* .img-active { border: 5px solid; height: 90px; width: 100px; margin: 10px auto; }*/
+  /*.thumb:hover { margin: 0 auto 0 auto; border: 5px solid; }*/
  
  /* Cropper CSS */
  
@@ -50,7 +55,7 @@
  
  #resizeme_containment_div {  top:0px; left:0px; width: 150px; height:150px; position: absolute; }
  
- #resizeme_containment_div_wrapper { position: relative; }
+ #resizeme_containment_div_wrapper { position: relative; border: 1px dashed; }
  
 </style>
 <script type="text/javascript">
@@ -66,7 +71,7 @@
 		
 		//ghost: true,
 		
-		animate:true,
+		//animate:true,
 		
 		handles: 'all',
 		
@@ -135,11 +140,11 @@
     </div>
     <div id="left">
     
-      <img src="img01.jpeg" class="thumb" />
-      <img src="img02.jpeg" class="thumb" />
-      <img src="img03.jpeg" class="thumb" />
-      <img src="img04.jpeg" class="thumb" />
-      <img src="img05.jpeg" class="thumb" />
+      <a href="#"><img src="img01.jpeg" class="thumb" /></a>
+      <a href="#"><img src="img02.jpeg" class="thumb" /></a>
+      <a href="#"><img src="img03.jpeg" class="thumb" /></a>
+      <a href="#"><img src="img04.jpeg" class="thumb" /></a>
+      <a href="#"><img src="img05.jpeg" class="thumb" /></a>
       
     </div>
 
