@@ -54,6 +54,10 @@
 		//Position the node
 		if(o.helper == 'original' && (this.element.css('position') == 'static' || this.element.css('position') == ''))
 			this.element.css('position', 'relative');
+			
+		//Prepare cursorAt
+		if(o.cursorAt && o.cursorAt.constructor == Array)
+			o.cursorAt = { left: o.cursorAt[0], top: o.cursorAt[1] };
 		
 	};
 	
