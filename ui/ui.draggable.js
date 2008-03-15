@@ -6,10 +6,10 @@
 			
 			return this.each(function() {
 				if (typeof options == "string") {
-					var drag = $.data(this, "ui-draggable");
+					var drag = $.data(this, "draggable");
 					if(drag) drag[options].apply(drag, args);
 
-				} else if(!$.data(this, "ui-draggable"))
+				} else if(!$.data(this, "draggable"))
 					new $.ui.draggable(this, options);
 			});
 		}
@@ -21,7 +21,7 @@
 		
 		this.element = $(element);
 		
-		$.data(element, "ui-draggable", this);
+		$.data(element, "draggable", this);
 		this.element.addClass("ui-draggable");
 		
 		//Prepare the passed options
@@ -74,11 +74,11 @@
 			return this.element.triggerHandler(n == "drag" ? n : "drag"+n, [e, this.ui()], this.options[n]);
 		},
 		destroy: function() {
-			if(!$.data(this.element[0], 'ui-draggable')) return;
+			if(!$.data(this.element[0], 'draggable')) return;
 			this.options.handle.removeMouseInteraction();
 			this.element
 				.removeClass("ui-draggable ui-draggable-disabled")
-				.removeData("ui-draggable")
+				.removeData("draggable")
 				.unbind(".draggable");
 		},
 		enable: function() {

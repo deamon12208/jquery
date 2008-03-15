@@ -12,14 +12,14 @@
 			var args = Array.prototype.slice.call(arguments, 1);
 			
 			if (options == "serialize" || options == "toArray")
-				return $.data(this[0], "ui-sortable")[options](arguments[1]);
+				return $.data(this[0], "sortable")[options](arguments[1]);
 			
 			return this.each(function() {
 				if (typeof options == "string") {
-					var sort = $.data(this, "ui-sortable");
+					var sort = $.data(this, "sortable");
 					sort[options].apply(sort, args);
 
-				} else if(!$.data(this, "ui-sortable"))
+				} else if(!$.data(this, "sortable"))
 					new $.ui.sortable(this, options);
 			});
 		}
@@ -32,7 +32,7 @@
 		this.element = $(element);
 		this.containerCache = {};
 		
-		$.data(element, "ui-sortable", this);
+		$.data(element, "sortable", this);
 		this.element.addClass("ui-sortable");
 
 		//Prepare the passed options
@@ -77,7 +77,7 @@
 
 				//Find out if the clicked node (or one of its parents) is a actual item in this.items
 				var currentItem = null, nodes = $(e.target).parents().andSelf().each(function() {
-					if($.data(this, 'ui-sortable-item')) currentItem = $(this);
+					if($.data(this, 'sortable-item')) currentItem = $(this);
 				});
 				if(currentItem && (!this.options.handle || $(e.target).parents().andSelf().is(this.options.handle))) {
 					this.currentItem = currentItem;
@@ -169,7 +169,7 @@
 					
 					var cur = $(this.options.connectWith[i]);
 					for (var j = cur.length - 1; j >= 0; j--){
-						var inst = $.data(cur[j], 'ui-sortable');
+						var inst = $.data(cur[j], 'sortable');
 						if(inst && !inst.disabled) {
 							queries.push($(inst.options.items, inst.element));
 							this.containers.push(inst);
@@ -181,7 +181,7 @@
 
 			for (var i = queries.length - 1; i >= 0; i--){
 				queries[i].each(function() {
-					$.data(this, 'ui-sortable-item', true); // Data for target checking (mouse manager)
+					$.data(this, 'sortable-item', true); // Data for target checking (mouse manager)
 					items.push({
 						item: $(this),
 						width: 0, height: 0,
@@ -210,12 +210,12 @@
 		destroy: function() {
 			this.element
 				.removeClass("ui-sortable ui-sortable-disabled")
-				.removeData("ui-sortable")
+				.removeData("sortable")
 				.unbind(".sortable")
 				.removeMouseInteraction();
 			
 			for ( var i = this.items.length - 1; i >= 0; i-- )
-				this.items[i].item.removeData("ui-sortable-item");
+				this.items[i].item.removeData("sortable-item");
 		},
 		enable: function() {
 			this.element.removeClass("ui-sortable-disabled");

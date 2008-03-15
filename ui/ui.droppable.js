@@ -6,10 +6,10 @@
 			
 			return this.each(function() {
 				if (typeof options == "string") {
-					var drop = $.data(this, "ui-droppable");
+					var drop = $.data(this, "droppable");
 					if(drop) drop[options].apply(drop, args);
 
-				} else if(!$.data(this, "ui-droppable"))
+				} else if(!$.data(this, "droppable"))
 					new $.ui.droppable(this, options);
 			});
 		}
@@ -20,7 +20,7 @@
 
 		//Initialize needed constants			
 		this.element = $(element);
-		$.data(element, "ui-droppable", this);
+		$.data(element, "droppable", this);
 		this.element.addClass("ui-droppable");		
 		
 		//Prepare the passed options
@@ -68,7 +68,7 @@
 			
 			this.element
 				.removeClass("ui-droppable ui-droppable-disabled")
-				.removeData("ui-droppable")
+				.removeData("droppable")
 				.unbind(".droppable");
 		},
 		enable: function() {

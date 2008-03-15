@@ -5,14 +5,14 @@
 			var args = Array.prototype.slice.call(arguments, 1);
 			
 			if ( options == "value" )
-				return $.data(this[0], "ui-slider").value(arguments[1]);
+				return $.data(this[0], "slider").value(arguments[1]);
 			
 			return this.each(function() {
 				if (typeof options == "string") {
-					var slider = $.data(this, "ui-slider");
+					var slider = $.data(this, "slider");
 					slider[options].apply(slider, args);
 
-				} else if(!$.data(this, "ui-slider"))
+				} else if(!$.data(this, "slider"))
 					new $.ui.slider(this, options);
 			});
 		}
@@ -23,7 +23,7 @@
 		//Initialize needed constants
 		var self = this;
 		this.element = $(element);
-		$.data(element, "ui-slider", this);
+		$.data(element, "slider", this);
 		this.element.addClass("ui-slider");
 		
 		//Prepare the passed options
@@ -141,7 +141,7 @@
 		destroy: function() {
 			this.element
 				.removeClass("ui-slider ui-slider-disabled")
-				.removeData("ui-slider")
+				.removeData("slider")
 				.unbind(".slider");
 			this.handle.removeMouseInteraction();
 		},

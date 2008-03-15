@@ -12,7 +12,7 @@
 					var elem = $(this).is('.ui-dialog')
 						? this
 						: $(this).parents(".ui-dialog:first").find(".ui-dialog-content")[0];
-					var dialog = elem ? $.data(elem, "ui-dialog") : {};
+					var dialog = elem ? $.data(elem, "dialog") : {};
 					if (dialog[options])
 						dialog[options].apply(dialog, args);
 				// INIT with optional options
@@ -28,7 +28,7 @@
 		this.element = el;
 		var self = this; //Do bindings
 
-		$.data(this.element, "ui-dialog", this);
+		$.data(this.element, "dialog", this);
 		
 		$(el).bind("setData.dialog", function(event, key, value){
 			switch (key) {
@@ -273,7 +273,7 @@
 			uiDialog.hide();
 			$(el).unbind('.dialog').removeClass('ui-dialog-content').hide().appendTo('body');
 			uiDialog.remove();
-			$.removeData(this.element, "ui-dialog");
+			$.removeData(this.element, "dialog");
 		};
 		
 		if (options.autoOpen) {
@@ -306,7 +306,7 @@
 	$.extend($.ui.dialog.overlay, {
 		instances: [],
 		events: $.map('focus,mousedown,mouseup,keydown,keypress,click'.split(','),
-			function(e) { return e + '.ui-dialog-overlay'; }).join(' '),
+			function(e) { return e + '.dialog-overlay'; }).join(' '),
 		create: function(dialog) {
 			if (this.instances.length === 0) {
 				// prevent use of anchors and inputs
@@ -333,13 +333,13 @@
 				});
 				
 				// allow closing by pressing the escape key
-				$(document).bind('keydown.ui-dialog-overlay', function(e) {
+				$(document).bind('keydown.dialog-overlay', function(e) {
 					var ESC = 27;
 					e.keyCode && e.keyCode == ESC && dialog.close(); 
 				});
 				
 				// handle window resize
-				$(window).bind('resize.ui-dialog-overlay', $.ui.dialog.overlay.resize);
+				$(window).bind('resize.dialog-overlay', $.ui.dialog.overlay.resize);
 			}
 			
 			var $el = $('<div/>').appendTo(document.body)
@@ -360,7 +360,7 @@
 			this.instances.splice($.inArray(this.instances, $el), 1);
 			
 			if (this.instances.length === 0) {
-				$('a, :input').add([document, window]).unbind('.ui-dialog-overlay');
+				$('a, :input').add([document, window]).unbind('.dialog-overlay');
 			}
 			
 			$el.remove();

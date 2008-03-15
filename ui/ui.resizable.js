@@ -5,7 +5,7 @@
 			var args = Array.prototype.slice.call(arguments, 1);
 			
 			if (typeof options == "string") {
-				var resize = $.data(this, "ui-resizable");
+				var resize = $.data(this, "resizable");
 				resize[options].apply(resize, args);
 
 			} else if(!$(this).is(".ui-resizable"))
@@ -20,7 +20,7 @@
 		
 		this.element = $(element);
 		
-		$.data(element, "ui-resizable", this);
+		$.data(element, "resizable", this);
 		
 		// simulate .ui-resizable { position: relative; }
 		var elpos = this.element.css('position');
@@ -267,7 +267,7 @@
 			this.element
 			.removeClass("ui-resizable ui-resizable-disabled")
 			.removeMouseInteraction()
-			.removeData("ui-resizable")
+			.removeData("resizable")
 			.unbind(".resizable").find('.ui-resizable-handle').remove();
 		},
 		enable: function() {

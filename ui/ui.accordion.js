@@ -24,11 +24,11 @@ $.fn.extend({
 
 		return this.each(function() {
 			if (typeof options == "string") {
-				var accordion = $.data(this, "ui-accordion");
+				var accordion = $.data(this, "accordion");
 				accordion[options].apply(accordion, args);
 			// INIT with optional options
 			} else if (!$(this).is(".ui-accordion"))
-				$.data(this, "ui-accordion", new $.ui.accordion(this, options));
+				$.data(this, "accordion", new $.ui.accordion(this, options));
 		});
 	},
 	// deprecated, use accordion("activate", index) instead
@@ -84,7 +84,7 @@ $.ui.accordion = function(container, options) {
 	options.active.parent().andSelf().addClass(options.selectedClass);
 	
 	if (options.event)
-		$(container).bind((options.event) + ".ui-accordion", clickHandler);
+		$(container).bind((options.event) + ".accordion", clickHandler);
 };
 
 $.ui.accordion.prototype = {
@@ -106,8 +106,8 @@ $.ui.accordion.prototype = {
 		if ( this.options.fillSpace || this.options.autoHeight ) {
 			this.options.headers.next().css("height", "");
 		}
-		$.removeData(this.element, "ui-accordion");
-		$(this.element).removeClass("ui-accordion").unbind(".ui-accordion");
+		$.removeData(this.element, "accordion");
+		$(this.element).removeClass("ui-accordion").unbind(".accordion");
 	}
 };
 
@@ -119,9 +119,9 @@ function scopeCallback(callback, scope) {
 
 function completed(cancel) {
 	// if removed while animated data can be empty
-	if (!$.data(this, "ui-accordion"))
+	if (!$.data(this, "accordion"))
 		return;
-	var instance = $.data(this, "ui-accordion");
+	var instance = $.data(this, "accordion");
 	var options = instance.options;
 	options.running = cancel ? 0 : --options.running;
 	if ( options.running )
@@ -136,7 +136,7 @@ function completed(cancel) {
 }
 
 function toggle(toShow, toHide, data, clickedActive, down) {
-	var options = $.data(this, "ui-accordion").options;
+	var options = $.data(this, "accordion").options;
 	options.toShow = toShow;
 	options.toHide = toHide;
 	options.data = data;
@@ -175,7 +175,7 @@ function toggle(toShow, toHide, data, clickedActive, down) {
 }
 
 function clickHandler(event) {
-	var options = $.data(this, "ui-accordion").options;
+	var options = $.data(this, "accordion").options;
 	if (options.disabled)
 		return false;
 	
