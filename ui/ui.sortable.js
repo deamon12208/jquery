@@ -17,7 +17,7 @@
 			return this.each(function() {
 				if (typeof options == "string") {
 					var sort = $.data(this, "sortable");
-					sort[options].apply(sort, args);
+					if (sort) sort[options].apply(sort, args);
 
 				} else if(!$.data(this, "sortable"))
 					new $.ui.sortable(this, options);

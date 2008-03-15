@@ -10,7 +10,7 @@
 			return this.each(function() {
 				if (typeof options == "string") {
 					var slider = $.data(this, "slider");
-					slider[options].apply(slider, args);
+					if (slider) slider[options].apply(slider, args);
 
 				} else if(!$.data(this, "slider"))
 					new $.ui.slider(this, options);

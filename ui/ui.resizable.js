@@ -6,7 +6,7 @@
 			
 			if (typeof options == "string") {
 				var resize = $.data(this, "resizable");
-				resize[options].apply(resize, args);
+				if (resize) resize[options].apply(resize, args);
 
 			} else if(!$(this).is(".ui-resizable"))
 				new $.ui.resizable(this, options);
