@@ -65,7 +65,14 @@ blockquote, q {
 body, html {
 	height: 100%;
 }
-
+#header {
+    height:auto;
+    padding:10px;
+    border-bottom:1px solid #ccc;
+    background: #E8EEF7;
+    font-size:2em;
+    font-weight:bold;
+}
 #main {
     margin:0 0 0 200px;
     padding:10px;
