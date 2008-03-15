@@ -5,6 +5,7 @@
 	
 	//Add methods that are vital for all mouse interaction stuff (plugin registering)
 	$.extend($.ui, {
+		
 		plugin: {
 			add: function(module, option, set) {
 				var proto = $.ui[module].prototype;
@@ -61,5 +62,13 @@
 	var old = $.fn.remove;
 	$.fn.remove = function(){ this.trigger("remove"); return old.apply(this, arguments ); };
 
+	// Create scrollLeft and scrollTop methods (if not coming from dimensions already)
+	$.each( ['Left', 'Top'], function(i, name) {
+		if(!$.fn['scroll'+name]) $.fn['scroll'+name] = function() {
+			return this[0] == window || this[0] == document ?
+				self[(name == 'Left' ? 'pageXOffset' : 'pageYOffset')] || $.boxModel && document.documentElement['scroll'+name] || document.body['scroll'+name] :
+			this[0][ 'scroll' + name ];
+		};
+	});
 	
  })(jQuery);
