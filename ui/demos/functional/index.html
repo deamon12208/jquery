@@ -62,14 +62,21 @@
     <script type="text/javascript">
     	$(function() {
 			
-			$('#component-links a').click(function() {
-				var comp = $(this).attr('href').replace(/^#/, "");
-				
+			var loadDemo = function(comp) {
 				$.get(comp+'.html', function(data) {
 					$('#containerDemo').html(data);
 				});
-
+			};
+			
+			$('#component-links a').click(function() {
+				var comp = $(this).attr('href').replace(/^#/, "");
+				loadDemo(comp);
 			});
+			
+			// hash listener
+			if (location.hash) {
+				loadDemo(location.hash.replace(/^#/, ""));
+			}
 			
     	});
     </script>
