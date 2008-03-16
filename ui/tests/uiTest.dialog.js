@@ -123,6 +123,8 @@
 			"methods": {
 				"open" : "$('#foo').dialog({ width: 450, autoOpen: false });\n setTimeout(\"$('#foo').dialog('open');\", 1000)",
 				"close" : "$('#foo').dialog({ width: 450 });\n setTimeout(\"$('#foo').dialog('close');\", 1000);",
+				"enable" : "$('#foo').dialog({ width: 450 }).dialog('disable');\n setTimeout(\"$('#foo').dialog('enable');\", 3000)",
+				"disable" : "$('#foo').dialog({ width: 450 });\n setTimeout(\"$('#foo').dialog('disable');\", 3000)",
 				"destroy" : "$('#foo').dialog({ width: 450 });\n setTimeout(\"$('#foo').dialog('destroy');\", 1000);"
 			},
 			"tickets": {
