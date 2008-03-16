@@ -26,32 +26,181 @@
 <link rel="stylesheet" href="../../../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
 
 <style type="text/css">
-  body { padding: 0; margin: 0; overflow-y: hidden; height: auto; font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;}
+<!--
+/*************************************/
+/* Blueprint: reset.css              */
 
-  #top { background-color: #E8EEF7; border-bottom: 1px solid; margin:0; padding: 5px; }
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	font-size: 100%;
+	font-family: inherit;
+	vertical-align: baseline;
+}
 
-  #top h2 { margin: 0 0 0 25px; }
+/* Remember to define focus styles! */
+:focus {
+	outline: 0;
+}
+body {
+	line-height: 1;
+	color: black;
+	background: white;
+}
+ol, ul {
+	list-style: none;
+}
 
-  #left { float: left; width: 160px; height: 1000px; padding: 15px 0 0 0; border-right: 1px solid; }
+/* Tables still need 'cellspacing="0"' in the markup. */
+table {
+	border-collapse: separate;
+	border-spacing: 0;
+}
+caption, th, td {
+	text-align: left;
+	font-weight: normal;
+}
 
-  #img-container { margin: 80px 0 0 190px; float: left;}
+/* Remove possible quote marks (") from <q>, <blockquote>. */
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: "";
+}
+blockquote, q {
+	quotes: "" "";
+}
 
-  .thumb { height: 75px; width: 75px; display: block; margin: 1px auto 1px auto; }
+.clear {
+    clear:both;
+}
 
-  .thumb:hover { height: 130px; width: 130px; margin: 0 auto 0 auto; border: 5px solid #CCCFFF; }
+/*************************************/
+/* Layout                            */
+body, html {
+	height: 100%;
+    font-family:sans-serif;
+    font-size:13px;
+    margin:0px;
+    padding:0px;
+}
+body, html {
+	height: 100%;
+    font-family:sans-serif;
+    font-size:13px;
+}
+#main {
+    height:auto;
+    background: #E8EEF7;
+    border-left:1px solid #ccc;
+    border-bottom:1px solid #ccc;
+    margin:0 0 0 200px;
+}
+	#header {
+	    height:30px;
+	    padding:10px;
+	    font-size:2em;
+	    font-weight:bold;
+		text-align: center;
+	    border-bottom:1px solid #ccc;
+        background: #E8EEF7;
+	}
+	#main #content {
+	    padding:10px;
+        background: #FFF;
+	}
+    #main #break {
+	    padding:10px;
+	    border-top:1px solid #ccc;
+    }
+#sidebar {
+    float:left;
+    width:200px;
+    height:100%;
+    border-right:1px solid #ccc;
+}
+    #sidebar div {
+        padding:10px;
+    }
 
-  #log { background-color: #E8EEF7; position: fixed; bottom: 0; left: 0; width: 100%; border-top: 1px solid;  padding: 10px 0; }
 
-  .log-property { margin: 0 10px 0 144px; *margin: 0 10px 0 132px; }
+/*************************************/
+/* Demo CSS                          */
 
- /* Cropper CSS */
+#img-container {
+    margin: 0px;
+    width: 480px;
+    height: 315px;
+    position: relative;
+}
+#sidebar div {
+    text-align:center;
+}
+.thumb ul {
+    padding:10px 0 0 0;
+}
+.thumbs li {
+    margin:4px 20px;
+}
+.thumbs li a,
+.thumbs li a img{
+    height: 75px;
+    width: 75px;
+    display: block;
+}
+.thumbs li a:hover,
+.thumbs li a:hover img{
+    height: 130px;
+    width: 130px;
+}
+.thumbs li a:hover {
+    border: 4px solid #E8EEF7;
+}
 
- #resizeme_containment_wrap_image { width: 480px; height: 315px; }
+#break strong {
+    margin:0 0 4px 0;
+}
+#break ul {
+    padding:6px;
+}
+#break ul li {
+    padding:3px 0px;
+    font-style: italic;
+}
+#break ul li span {
+    font-style: normal;
+}
 
- #resizeme_containment_div {  top:0px; left:0px; width: 150px; height:150px; position: absolute; }
 
- #resizeme_containment_div_wrapper { position: relative; border: 1px dashed; }
+/*************************************/
+/* Cropper CSS                       */
 
+#resizeme_containment_wrap_image {
+    width: 480px;
+    height: 315px;
+}
+#resizeme_containment_div {
+    position: absolute;
+    top:0px;
+    left:0px;
+    width: 150px;
+    height:150px;
+}
+#resizeme_containment_div_wrapper {
+    position: relative;
+    width: 480px;
+    height: 315px;
+    border: 1px dashed;
+}
+-->
 </style>
 <script type="text/javascript">
   $().ready(function(){
@@ -123,64 +272,59 @@
     $("#log-width").html($('#resizeme_containment_div').width()+"px");
 
 
-	$('.thumb').click(function(e){
+	$('.thumbs').find("li a").click(function(e){
 
 	  $('#resizeme_containment_div').css('top', '0');
 
 	  $('#resizeme_containment_div').css('left', '0');
 
-	  $('#resizeme_containment_wrap_image').css('background', 'transparent url('+$(this).attr("src")+') no-repeat scroll 0%;');
+	  $('#resizeme_containment_wrap_image').css('background', 'transparent url('+$(this).find("img").attr("src")+') no-repeat scroll 0%');
 
-	  $('#resizeme_containment_div').css('background', 'transparent url('+$(this).attr("src")+') no-repeat scroll 0px 0px;');
-
+	  $('#resizeme_containment_div').css('background', 'transparent url('+$(this).find("img").attr("src")+') no-repeat scroll 0px 0px');
+        return false;
 	});
 
 	$('#resizeme_containment_wrap_image').css({ opacity: 0.5 });
 
-	$('#resizeme_containment_wrap_image').css('background', 'transparent url(img01.jpeg) no-repeat scroll 0%;');
+	$('#resizeme_containment_wrap_image').css('background', 'transparent url(img01.jpeg) no-repeat scroll 0%');
 
-	$('#resizeme_containment_div').css('background', 'transparent url(img01.jpeg) no-repeat scroll 0px 0px;');
+	$('#resizeme_containment_div').css('background', 'transparent url(img01.jpeg) no-repeat scroll 0px 0px');
 
 
   });
 </script>
-
 </head>
-
-  <body scroll="no">
-
-    <div id="top">
-
-       <h2>jQuery - image cropper demo</h2
-
+<body>
+    <div id="sidebar">
+        <ul class="thumbs">
+            <li><a href="#" title="Open This Image"><img src="img01.jpeg"/></a></li>
+            <li><a href="#" title="Open This Image"><img src="img02.jpeg"/></a></li>
+            <li><a href="#" title="Open This Image"><img src="img03.jpeg"/></a></li>
+            <li><a href="#" title="Open This Image"><img src="img04.jpeg"/></a></li>
+            <li><a href="#" title="Open This Image"><img src="img05.jpeg"/></a></li>
+        </div>
     </div>
-    <div id="left">
-
-      <img src="img01.jpeg" class="thumb" />
-      <img src="img02.jpeg" class="thumb" />
-      <img src="img03.jpeg" class="thumb" />
-      <img src="img04.jpeg" class="thumb" />
-      <img src="img05.jpeg" class="thumb" />
-
+    <div id="main">
+        <div id="header">
+            <h2>jQuery - image cropper demo</h2>
+        </div>
+        <div id="content">
+            <div id="img-container">
+                <div id="resizeme_containment_div_wrapper">
+                    <div id="resizeme_containment_wrap_image"></div>
+                    <div id="resizeme_containment_div"></div>
+                </div>
+            </div>
+        </div>
+        <div id="break">
+            <strong>Properties:</strong>
+            <ul>
+                <li>width: <span id="log-width">0px</span></li>
+                <li>height: <span id="log-height">0px</span></li>
+                <li>top: <span id="log-top">0px</span></li>
+                <li>left: <span id="log-left">0px</span></li>
+            </ul>
+        </div>
     </div>
-
-    <div id="img-container">
-      <div id="resizeme_containment_div_wrapper">
-
-	    <div id="resizeme_containment_wrap_image"></div>
-		<div id="resizeme_containment_div"></div>
-
-	  </div>
-
-    </div>
-
-	<div id="log">
-	  <font class="log-property">width:</font><label id="log-width">0px</label>
-	  <font class="log-property">height:</font><label id="log-height">0px</label>
-	  <font class="log-property">top:</font><label id="log-top">0px</label>
-	  <font class="log-property">left:</font><label id="log-left">0px</label>
-	</div>
-
-  </body>
-
+</body>
 </html>
