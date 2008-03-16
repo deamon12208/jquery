@@ -27,7 +27,7 @@ $(function() {
 				var dd = $( document.createElement( 'dd' ) ).appendTo( dl );
 				var link = $( document.createElement( 'a' ) ).appendTo( dd );
 				link
-					.attr( 'href', '#' )
+					.attr( 'href', '#' + path + ((name.length) ? name : '') )
 					.text( value )
 					.click(function() {
 						$( '#test-container' ).remove();
