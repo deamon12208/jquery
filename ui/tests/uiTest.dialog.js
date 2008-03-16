@@ -72,6 +72,10 @@
 				"width" : {
 					"400" : "$('#foo').dialog({\n\t width: 400 \n});",
 					"600" : "$('#foo').dialog({\n\t width: 600 \n});"
+				},
+				"zIndex" : {
+					"1" : "$('#foo').dialog({\n\t zIndex: 1 \n});",
+					"101" : "$('#foo').dialog({\n\t zIndex: 101 \n});"
 				}
 			},
 			"dataSet": {
@@ -108,6 +112,10 @@
 				"width" : {
 					"400" : "$('#foo').dialog();\nsetTimeout(\n\t\"$('#foo').data('width.dialog', 400);\"\n, 3000);",
 					"600" : "$('#foo').dialog();\nsetTimeout(\n\t\"$('#foo').data('width.dialog', 600);\"\n, 3000);"
+				},
+				"zIndex" : {
+					"1" : "$('#foo').dialog();\nsetTimeout(\n\t\"$('#foo').data('zIndex.dialog', 1);\"\n, 3000);",
+					"100" : "$('#foo').dialog();\nsetTimeout(\n\t\"$('#foo').data('zIndex.dialog', 100);\"\n, 3000);"
 				}
 			},
 			"callbacks": {
@@ -123,8 +131,6 @@
 			"methods": {
 				"open" : "$('#foo').dialog({ width: 450, autoOpen: false });\n setTimeout(\"$('#foo').dialog('open');\", 1000)",
 				"close" : "$('#foo').dialog({ width: 450 });\n setTimeout(\"$('#foo').dialog('close');\", 1000);",
-				"enable" : "$('#foo').dialog({ width: 450 }).dialog('disable');\n setTimeout(\"$('#foo').dialog('enable');\", 3000)",
-				"disable" : "$('#foo').dialog({ width: 450 });\n setTimeout(\"$('#foo').dialog('disable');\", 3000)",
 				"destroy" : "$('#foo').dialog({ width: 450 });\n setTimeout(\"$('#foo').dialog('destroy');\", 1000);"
 			},
 			"tickets": {
