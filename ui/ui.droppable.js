@@ -181,14 +181,14 @@
 		prepareOffsets: function(t, e) {
 
 			var m = $.ui.ddmanager.droppables;
+			var type = e ? e.type : null; // workaround for #2317
 			for (var i = 0; i < m.length; i++) {
 				
 				if(m[i].item.disabled || (t && !m[i].item.options.accept.call(m[i].item.element,(t.currentItem || t.element)))) continue;
 				m[i].offset = $(m[i].item.element).offset();
 				m[i].item.proportions = { width: m[i].item.element.outerWidth(), height: m[i].item.element.outerHeight() };
 				
-				if(t) m[i].item.activate.call(m[i].item, e); //Activate the droppable if used directly from draggables
-					
+				if(type == "dragstart") m[i].item.activate.call(m[i].item, e); //Activate the droppable if used directly from draggables
 			}
 			
 		},
@@ -210,9 +210,9 @@
 		drag: function(draggable, e) {
 			
 			//If you have a highly dynamic page, you might try this option. It renders positions every time you move the mouse.
-			if(draggable.options.refreshPositions) $.ui.ddmanager.prepareOffsets();
+			if(draggable.options.refreshPositions) $.ui.ddmanager.prepareOffsets(draggable, e);
 		
-			//Run through all draggables and check their positions based on specific tolerance options
+			//Run through all droppables and check their positions based on specific tolerance options
 			$.each($.ui.ddmanager.droppables, function() {
 
 				if(this.item.disabled) return; 
