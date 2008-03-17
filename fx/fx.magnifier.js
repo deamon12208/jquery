@@ -7,12 +7,6 @@
 		eval('f = function() { var a = arguments; return this.each(function() { if(jQuery(this).is(".fx-magnifier")) jQuery.data(this, "fx-magnifier")["'+cur+'"](a); }); }');
 		$.fn["magnifier"+cur.substr(0,1).toUpperCase()+cur.substr(1)] = f;
 	};
-
-	//get instance method
-	$.fn.magnifierInstance = function() {
-		if($(this[0]).is(".fx-magnifier")) return $.data(this[0], "fx-magnifier");
-		return false;
-	};
 	
 	$.fn.magnifier = function(options) {
 		return this.each(function() {
