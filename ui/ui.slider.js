@@ -203,7 +203,6 @@
 			//Move focussed handle to the clicked position
 			this.offset = this.element.offset();
 			this.moveTo(this.convertValue(e[this.properties[0] == 'top' ? 'pageY' : 'pageX'] - this.offset[this.properties[0]] - this.handleSize()/2));
-			this.propagate("slide", e);
 		},
 		start: function(e, handle) {
 			
@@ -280,6 +279,7 @@
 				this.propagate('start', null);
 				this.propagate('stop', null);
 				this.propagate('change', null);
+				this.propagate("slide", null);
 			}
 		}
 	});
