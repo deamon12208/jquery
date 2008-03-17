@@ -151,7 +151,7 @@
 							p = getParserById(table.config.headers[i].sorter);
 						}
 						if(!p) {
-							p = detectParserForColumn(table.config,cells[i]);
+							p = detectParserForColumn(table,cells[i]);
 						}
 	
 						if(table.config.debug) { parsersDebug += "column:" + i + " parser:" +p.id + "\n"; }
@@ -165,14 +165,13 @@
 				return list;
 			};
 			
-			function detectParserForColumn(config,node) {
+			function detectParserForColumn(table,node) {
 				var l = parsers.length;
 				for(var i=1; i < l; i++) {
-					if(parsers[i].is($.trim(getElementText(config,node)),config)) {
+					if(parsers[i].is($.trim(getElementText(table.config,node)),table,node)) {
 						return parsers[i];
 					}
 				}
-				
 				// 0 is always the generic parser (text)
 				return parsers[0];
 			}
@@ -706,7 +705,8 @@
 	
 	ts.addParser({
 		id: "digit",
-		is: function(s,c) {
+		is: function(s,table) {
+			var c = table.config;
 			return $.tablesorter.isDigit(s,c);
 		},
 		format: function(s) {
