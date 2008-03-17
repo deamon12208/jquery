@@ -1,5 +1,5 @@
 /*
- * jQuery UI Accordion 1.5
+ * jQuery UI Accordion
  * 
  * Copyright (c) 2007 Jörn Zaefferer
  *
@@ -25,7 +25,8 @@ $.fn.extend({
 		return this.each(function() {
 			if (typeof options == "string") {
 				var accordion = $.data(this, "accordion");
-				if (accordion) accordion[options].apply(accordion, args);
+				if (accordion)
+					accordion[options].apply(accordion, args);
 			// INIT with optional options
 			} else if (!$(this).is(".ui-accordion"))
 				$.data(this, "accordion", new $.ui.accordion(this, options));

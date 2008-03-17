@@ -18,7 +18,7 @@
 		// simple accordion
 		jQuery('#list1a').accordion();
 		jQuery('#list1b').accordion({
-			autoheight: false
+			autoHeight: false
 		});
 		
 		// second simple accordion with special markup
@@ -38,7 +38,7 @@
 			selectedClass: 'active',
 			animated: "bounceslide",
 			header: "dt"
-		}).bind("change.ui-accordion", function(event, ui) {
+		}).bind("changeaccordion", function(event, ui) {
 			jQuery('<div>' + ui.oldHeader.text() + ' hidden, ' + ui.newHeader.text() + ' shown</div>').appendTo('#log');
 		});
 		
@@ -48,7 +48,7 @@
 			active: false,
 			alwaysOpen: false,
 			animated: false,
-			autoheight: false
+			autoHeight: false
 		});
 		
 		var wizard = $("#wizard").accordion({
@@ -105,7 +105,7 @@
 		<h3>Code</h3>
 		<pre><code class="mix">jQuery('#list1a').accordion();
 jQuery('#list1b').accordion({
-	autoheight: false
+	autoHeight: false
 });</code></pre>
 
 		<div class="basic" style="float:left;"  id="list1a">
@@ -276,7 +276,7 @@ jQuery('#list1b').accordion({
 	active: false,
 	alwaysOpen: false,
 	animated: false,
-	autoheight: false
+	autoHeight: false
 });</code></pre>
 
 		<div id="list3">
