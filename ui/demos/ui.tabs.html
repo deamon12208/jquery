@@ -8,13 +8,21 @@
         <link rel="stylesheet" href="../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
         <link rel="stylesheet" href="css/style.css" type="text/css" />
 
+        <script type="text/javascript">
+            /* Fix for IE6 background-image flicker
+             * See http://www.mister-pixel.com/#Content__state=is_that_simple
+             */
+            try {
+                document.execCommand('BackgroundImageCache', false, true);
+            } catch(err) {}
+        </script>
+
         <script type="text/javascript" src="../../jquery/src/core.js"></script>
         <script type="text/javascript" src="../../jquery/src/selector.js"></script>
         <script type="text/javascript" src="../../jquery/src/event.js"></script>
         <script type="text/javascript" src="../../jquery/src/ajax.js"></script>
         <script type="text/javascript" src="../../jquery/src/fx.js"></script>
         <script type="text/javascript" src="../../jquery/src/offset.js"></script>
-
         <script type="text/javascript" src="../ui.tabs.js"></script>
     </head>
     <body class="flora">
@@ -169,13 +177,14 @@
                     If the select callback returns false, the clicked tab won't be selected. This is useful if switching
                     tabs requires form validation before for example.
                 </p>
-                <pre><code>$('#container-6 > ul').tabs({ fx: { opacity: 'toggle', duration: 'fast' } })
-   .bind('select.ui-tabs', function(e, ui) {
-        alert('event: ' + e.type);
-    })
-    .bind('show.ui-tabs', function(e, ui) {
-        alert('event: ' + e.type);
-    });</code></pre>
+                <pre><code>$('#container-6 > ul').tabs({
+    select: function(ui) {
+        alert('select');
+    },
+    show: function(ui) {
+        alert('show');
+    }
+});</code></pre>
             </div>
             <div id="fragment-17">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -265,9 +274,6 @@ $('#container-9 > ul').tabs('remove', 3); // remove 4th tab</code></pre>
             <div id="fragment-25">
                 <pre><code>$('#container-10 > ul').tabs({ selected: null }); // start with all tabs hidden
 $('#container-10 > ul').tabs({ unselect: true }); // selected tab closes on click</code></pre>
-                <p>
-                    Setting <code class="javascript">selected</code> option to <code class="javascript">null</code> automatically sets <code class="javascript">unselect</code> to true.
-                </p>
             </div>
             <div id="fragment-26">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
@@ -289,7 +295,7 @@ $('#container-10 > ul').tabs({ unselect: true }); // selected tab closes on clic
                 <li><a href="#fragment-30"><span>Three</span></a></li>
             </ul>
             <div id="fragment-28">
-                <p>Define mouseover event to switch tabs (or any other reasonable event)</p>
+                <p>Define mouseover event to switch tabs</p>
                 <pre><code>$('#container-11 > ul').tabs({ event: 'mouseover' });</code></pre>
             </div>
             <div id="fragment-29">
@@ -311,13 +317,15 @@ $('#container-10 > ul').tabs({ unselect: true }); // selected tab closes on clic
                 $('#container-3 > ul').tabs({ fx: { height: 'toggle' } });
                 $('#container-4 > ul').tabs({ fx: { opacity: 'toggle' } });
                 $('#container-5 > ul').tabs({ fx: { height: 'toggle', opacity: 'toggle' } });
-                $('#container-6 > ul').tabs({ fx: { opacity: 'toggle', duration: 'fast' } })
-                    .bind('select.ui-tabs', function(e, ui) {
-                        alert('event: ' + e.type);
-                    })
-                    .bind('show.ui-tabs', function(e, ui) {
-                        alert('event: ' + e.type);
-                    });
+                $('#container-6 > ul').tabs({
+                    fx: { opacity: 'toggle', duration: 'fast' },
+                    select: function(ui) {
+                        alert('select');
+                    },
+                    show: function(ui) {
+                        alert('show');
+                    }
+                });
                 $('#container-7 > ul').tabs({ fx: [null, { height: 'show', opacity: 'show' }] });
                 $('#container-8 > ul').tabs();
                 $('#container-9 > ul').tabs({ disabled: [2] });
@@ -349,7 +357,7 @@ $('#container-10 > ul').tabs({ unselect: true }); // selected tab closes on clic
                     alert( $('#container-9 > ul').data('selected.ui-tabs') );
                     return false;
                 });
-                $('#container-10 > ul').tabs({ selected: null });
+                $('#container-10 > ul').tabs({ selected: null, unselect: true });
                 $('#container-11 > ul').tabs({ event: 'mouseover' });
             });
             // ]]>
