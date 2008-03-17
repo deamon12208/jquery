@@ -54,6 +54,10 @@ var uiRenderDemo = function(model) {
 			'<pre></pre>'
 		);
 		
+		var codeTmpl = $(
+			'<code></code>'
+		);
+		
 		var htmlCode = '', sourceHtml = sourceTmpl.clone(), sourceJs = sourceTmpl.clone(), entitiesHtml = function(html) {
 			return html.replace(/</g,"&lt;").replace(/>/g,"&gt;");
 		};
@@ -75,7 +79,7 @@ var uiRenderDemo = function(model) {
 					htmlCode = data;
 					
 					// set html code view
-					sourceHtml.html(preTmpl.clone().html( entitiesHtml(htmlCode) ));
+					sourceHtml.html(preTmpl.clone().html( codeTmpl.clone().html(entitiesHtml(htmlCode)) ));
 					
 					$.each(demo.options, function(x, o) {
 						// eval the first source of <select>
@@ -89,7 +93,7 @@ var uiRenderDemo = function(model) {
 			
 		}
 		// set html code view
-		sourceHtml.html(preTmpl.clone().html(entitiesHtml(htmlCode)));
+		sourceHtml.html(preTmpl.clone().html( codeTmpl.clone().html(entitiesHtml(htmlCode)) ));
 
 		var select = $('<select id="select-'+ gid+'">').change(function() {
 			var ecode = $(this).val();
