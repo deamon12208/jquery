@@ -1,5 +1,5 @@
 /*
- * jQuery validation plug-in v1.2.1
+ * jQuery validation plug-in pre-1.2.2
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-validation/
  * http://docs.jquery.com/Plugins/Validation
@@ -263,7 +263,8 @@ jQuery.extend(jQuery.validator, {
 			}
 			jQuery.extend(this.submitted, this.errorMap);
 			this.invalid = jQuery.extend({}, this.errorMap);
-			jQuery(this.currentForm).triggerHandler("invalid-form.validate", [this]);
+			if (!this.valid())
+				jQuery(this.currentForm).triggerHandler("invalid-form.validate", [this]);
 			this.showErrors();
 			return this.valid();
 		},

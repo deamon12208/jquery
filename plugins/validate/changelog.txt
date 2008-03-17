@@ -1,6 +1,6 @@
-xxx
+1.2.2
 ---
-
+* Fixed invalid-form event, now only triggered when form is invalid
 * Added spanish localization (messages_es.js)
 
 1.2.1

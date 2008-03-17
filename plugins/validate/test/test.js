@@ -678,7 +678,7 @@ test("error containers, with labelcontainer", function() {
 });
 
 test("errorcontainer, show/hide only on submit", function() {
-	expect(12);
+	expect(14);
 	var container = $("#container");
 	var labelContainer = $("#labelcontainer");
 	var v = $("#testForm1").bind("invalid-form.validate", function() {
@@ -706,6 +706,9 @@ test("errorcontainer, show/hide only on submit", function() {
 	$("#testForm1").triggerHandler("keyup", [jQuery.event.fix({ type: "keyup", target: $("#firstname")[0] })]);
 	equals( 1, labelContainer.find("label:visible").length );
 	equals( "There are 1 errors in your form.", container.html() );
+	
+	$("#lastname").val("abc");
+	ok( v.form(), "Form now valid, trigger showErrors but not invalid-form" );
 });
 
 test("findByName()", function() {
