@@ -95,7 +95,7 @@ input {
 if(!window.console) {
  window.console = {
  	log: function() {
- 		alert(arguments[0]);	
+ 		//alert(arguments[0]);	
  	}	
  }	
 }
@@ -122,7 +122,7 @@ $(document).ready(function(){
 	$('#slider3').slider();
 	
 	$('#slider1').slider({
-		stepping: 20,
+		stepping: 10,
 		maxValue: 100,
 		minValue: -100, 
 		range: true,
@@ -131,7 +131,11 @@ $(document).ready(function(){
 		},
 		slide: function(e,ui) {
 			$('#slider1_value')[0].value = ui.value;
-		}
+		},
+		handles: [
+			{start: -60, min: -100, max: 0},
+			{start: 10, min: -20, max: 100}
+		]
 	});
 	
 	$('#slider2').slider();

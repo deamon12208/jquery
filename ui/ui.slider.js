@@ -235,7 +235,19 @@
 				if (this.currentHandle[0] == this.handle[1] && value <= this.translateValue(this.value(0)))
 					value = this.translateValue(this.value(0) + this.oneStep());
 			}
+			if (this.options.handles) {
+				var handle = this.options.handles[this.handleIndex()];
+				if (value < this.translateValue(handle.min)) {
+					value = this.translateValue(handle.min);
+				} else if (value > this.translateValue(handle.max)) {
+					value = this.translateValue(handle.max);
+				}
+			}
 			return value;
+		},
+		
+		handleIndex: function() {
+			return this.handle.index(this.currentHandle[0])
 		},
 		
 		translateLimits: function(value) {
