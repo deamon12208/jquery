@@ -31,7 +31,7 @@
 		var o = this.options;
 		$.extend(o, {
 			axis: o.axis || (element.offsetWidth < element.offsetHeight ? 'vertical' : 'horizontal'),
-			maxValue: !isNaN(parseInt(o.maxValue,10)) ? parseInt(o.maxValue,10) :  100,
+			maxValue: !isNaN(parseInt(o.maxValue,10)) ? parseInt(o.maxValue, 10) :  100,
 			minValue: parseInt(o.minValue,10) || 0
 		});
 		
@@ -39,7 +39,7 @@
 		o.realMaxValue = o.maxValue - o.minValue;
 		
 		//Calculate stepping based on steps
-		o.stepping = parseInt(o.stepping,10) || (o.steps ? o.realMaxValue/o.steps : 0);
+		o.stepping = parseInt(o.stepping, 10) || (o.steps ? o.realMaxValue/o.steps : 0);
 		
 		$(element).bind("setData.slider", function(event, key, value){
 			self.options[key] = value;
@@ -50,7 +50,7 @@
 		//Initialize mouse and key events for interaction
 		this.handle = $(o.handle, element);
 		if (!this.handle.length) {
-			self.handle = $(o.handles || [0]).map(function() {
+			self.handle = self.generated = $(o.handles || [0]).map(function() {
 				var handle = $("<div/>").addClass("ui-slider-handle").appendTo(element);
 				if (this.id)
 					handle.attr("id", this.id);
@@ -98,7 +98,7 @@
 		}
 		
 		//Bind the click to the slider itself
-		this.element.bind('click', function(e) { self.click.apply(self, [e]); });
+		this.element.bind('click.slider', function(e) { self.click.apply(self, [e]); });
 		
 		//Move the first handle to the startValue
 		$.each(o.handles || [], function(index, handle) {
@@ -151,6 +151,7 @@
 				.removeData("slider")
 				.unbind(".slider");
 			this.handle.removeMouseInteraction();
+			this.generated && this.generated.remove();
 		},
 		enable: function() {
 			this.element.removeClass("ui-slider-disabled");
