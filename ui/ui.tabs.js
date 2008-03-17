@@ -32,49 +32,15 @@
     // tabs class
     $.ui.tabs = function(el, options) {
         var self = this;
-
+        
+        this.options = $.extend({}, $.ui.tabs.defaults, options);
         this.element = el;
-
-        this.options = $.extend({
-
-            // basic setup
-            selected: 0,
-            unselect: options.selected === null,
-            event: 'click',
-            disabled: [],
-            cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
-            // TODO bookmarkable: $.ajaxHistory ? true : false,
-
-            // Ajax
-            spinner: 'Loading&#8230;',
-            cache: false,
-            idPrefix: 'ui-tabs-',
-            ajaxOptions: {},
-
-            // animations
-            fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
-
-            // templates
-            tabTemplate: '<li><a href="#{href}"><span>#{label}</span></a></li>',
-            panelTemplate: '<div></div>',
-
-            // CSS classes
-            navClass: 'ui-tabs-nav',
-            selectedClass: 'ui-tabs-selected',
-            unselectClass: 'ui-tabs-unselect',
-            disabledClass: 'ui-tabs-disabled',
-            panelClass: 'ui-tabs-panel',
-            hideClass: 'ui-tabs-hide',
-            loadingClass: 'ui-tabs-loading'
-
-        }, options);
 
         // doesn't extend with null
         if (options.selected === null)
             this.options.selected = null;
 
         this.options.event += '.tabs'; // namespace event
-        this.options.cookie = $.cookie && $.cookie.constructor == Function && this.options.cookie;
 
         $(el).bind('setData.tabs', function(event, key, value) {
             if ((/^selected/).test(key))
@@ -92,6 +58,38 @@
 
         // create tabs
         this.tabify(true);
+    };
+    
+    $.ui.tabs.defaults = {
+        // basic setup
+        selected: 0,
+        unselect: false,
+        event: 'click',
+        disabled: [],
+        cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
+        // TODO history: false,
+
+        // Ajax
+        spinner: 'Loading&#8230;',
+        cache: false,
+        idPrefix: 'ui-tabs-',
+        ajaxOptions: {},
+
+        // animations
+        fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
+
+        // templates
+        tabTemplate: '<li><a href="#{href}"><span>#{label}</span></a></li>',
+        panelTemplate: '<div></div>',
+
+        // CSS classes
+        navClass: 'ui-tabs-nav',
+        selectedClass: 'ui-tabs-selected',
+        unselectClass: 'ui-tabs-unselect',
+        disabledClass: 'ui-tabs-disabled',
+        panelClass: 'ui-tabs-panel',
+        hideClass: 'ui-tabs-hide',
+        loadingClass: 'ui-tabs-loading'
     };
 
     // instance methods
@@ -185,13 +183,13 @@
                 // highlight selected tab
                 this.$panels.addClass(o.hideClass);
                 this.$lis.removeClass(o.selectedClass);
-                if (!o.unselect) {
+                if (o.selected !== null) {
                     this.$panels.eq(o.selected).show().removeClass(o.hideClass); // use show and remove class to show in any case no matter how it has been hidden before
                     this.$lis.eq(o.selected).addClass(o.selectedClass);
                 }
 
                 // load if remote tab
-                var href = !o.unselect && $.data(this.$tabs[o.selected], 'load.tabs');
+                var href = o.selected !== null && $.data(this.$tabs[o.selected], 'load.tabs');
                 if (href)
                     this.load(o.selected);
 
@@ -331,9 +329,15 @@
                     }*/
 
                     var a = this;
-                    self.load(self.$tabs.index(this), function() {
-                        switchTab(a, $li, $hide, $show);
-                    });
+                    self.load(self.$tabs.index(this), $hide.length ? 
+                        function() {
+                            switchTab(a, $li, $hide, $show);
+                        } :
+                        function() {
+                            $li.addClass(o.selectedClass);
+                            showTab(a, $show);
+                        }
+                    );
 
                     // Set scrollbar to saved position - need to use timeout with 0 to prevent browser scroll to target of hash
                     /*var scrollX = window.pageXOffset || document.documentElement && document.documentElement.scrollLeft || document.body.scrollLeft || 0;

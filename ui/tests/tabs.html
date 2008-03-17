@@ -48,7 +48,7 @@
                     }
                 });
                 $('#container-7 > ul').tabs({ fx: [null, { height: 'show', opacity: 'show' }] });
-                $('#container-8 > ul').tabs({ cache: true });
+                $('#container-8 > ul').tabs({ cache: false });
                 $('#container-9 > ul').tabs({ disabled: [2], cookie: { expires: 365 } });
                 $('<p><a href="#">Remove 4th tab<\/a><\/p>').prependTo('#fragment-22').find('a').click(function() {
                     $('#container-9 > ul').tabs('remove', 3);
@@ -78,7 +78,7 @@
                     alert( $('#container-9 > ul').data('selected.tabs') );
                     return false;
                 });
-                $('#container-10 > ul').tabs({ selected: null });
+                $('#container-10 > ul').tabs({ selected: null, unselect: true });
                 $('#container-11 > ul').tabs({ event: 'mouseover' });
                 $('#container-12 > ul').tabs();
                 $('#fragment-31 > ul').tabs({
