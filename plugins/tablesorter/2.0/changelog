@@ -5,6 +5,13 @@ http://tablesorter.com
 Changes in version 2.0.2 (2008-03-14)
 -------------------------------------
 
+Bug fixes
+* Missing semicolon, broke the minified version
+
+
+Changes in version 2.0.2 (2008-03-14)
+-------------------------------------
+
 General
 * Added support for the new metadata plugin
 * Added support for jQuery 1.2.3
