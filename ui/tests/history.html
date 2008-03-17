@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta http-equiv="Content-Style-Type" content="text/css">
+        <meta http-equiv="Content-Script-Type" content="text/javascript">
+        <title>jQuery UI History</title>
+        
+        
+        <script type="text/javascript" src="../../jquery/src/core.js"></script>
+        <script type="text/javascript" src="../../jquery/src/selector.js"></script>
+        <script type="text/javascript" src="../../jquery/src/event.js"></script>
+        <script type="text/javascript" src="../../jquery/src/ajax.js"></script>
+        <script type="text/javascript" src="../../jquery/src/fx.js"></script>
+		<script type="text/javascript" src="../../jquery/src/offset.js"></script>
+        <script type="text/javascript" src="../ui.history.js"></script>
+        <script type="text/javascript">
+            $(function() {
+                
+                $.ui.history('add', 'show', function() {
+                    //alert('show in go');
+                    $('#show-hide').show();
+                });
+                $.ui.history('add', 'hide', function() {
+                    $('#show-hide').hide();
+                });
+                
+                $('#example-1 a').eq(0).
+                    click(function() {
+                        $.ui.history('go', 'show');
+                        return false;
+                    }).
+                    end().eq(1).
+                    click(function() {
+                        $.ui.history('go', 'hide'); 
+                        return false;
+                    });
+                    
+                $.ui.history('enable');
+                
+                
+            });
+        </script>
+        
+    </head>
+    <body>
+        <h1>History tests</h1>
+        <!--
+        <h2>Hijax</h2>
+        <p>
+            <strong><a class="remote" href="chapter-1.html" title="Chapter 1">Load Chapter 1</a></strong><br>
+            <strong><a class="remote" href="chapter-2.html" title="Chapter 2">Load Chapter 2</a></strong><br>
+            <strong><a class="remote" href="chapter-3.html" title="Chapter 3">Load Chapter 3</a></strong>
+        </p>
+        -->
+        <h2>Enable history</h2>
+        <p id="example-1">
+            <strong><a href="#show">Show next paragraph</a></strong><br>
+            <strong><a href="#hide">Hide next paragraph</a></strong>
+        </p>
+        <p id="show-hide">
+            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+        </p>
+    </body>
+</html>
