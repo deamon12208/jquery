@@ -13,7 +13,7 @@ h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
 del, dfn, em, font, img, ins, kbd, q, s, samp,
 small, strike, strong, sub, sup, tt, var,
-dl, dt, dd, ol, ul, li,
+dl, dt, dd, ol,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td {
 	margin: 0;
@@ -25,6 +25,30 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 	font-size: 100%;
 	font-family: inherit;
 	vertical-align: baseline;
+}
+
+#sidebar  ul, #sidebar li {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	list-style: none;
+}
+
+.sortable-container li {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	list-style: circle;
+	background: #E8EEF7;
+	margin:2px;
+	padding: 5px;
+	width: 100px;
+}
+
+label {
+	margin-right: 5px;
 }
 
 /* Remember to define focus styles! */
@@ -99,6 +123,7 @@ body, html {
         	font-size: 95%;
         	text-decoration: none;
         	color: #000;
+					height: 15px;
         }
             #sidebar ul li a:hover,
             #sidebar ul li a:focus{
@@ -122,8 +147,8 @@ body, html {
     margin:10px 10px 0px 10px;
 }
 #main #content .menutitle {
-    margin:0px 10px;
-    padding: 2px 2px 6px 8px;
+    margin:0px 0px;
+    padding: 2px 2px 6px 0;
     text-align: left;
   	font-size:1.1em;
     font-weight: bold;
@@ -132,7 +157,7 @@ body, html {
     margin:0px 10px;
 }
 #main #content .details {
-    margin:0px 10px 10px 0px;
+  margin:0px 10px 10px 0px;
 	border-bottom: 2px solid #E8EEF7;
 }
 
@@ -140,7 +165,7 @@ body, html {
 	background: #E8EEF7;
 	border-bottom: 1px #C3D9FF solid;
 	padding: 10px;
-	margin-top: 10px;
+	margin: 10px 0 20px 0;
 }
 
 #main #content .demo-view-code {
@@ -154,7 +179,7 @@ body, html {
 	white-space: pre;
 }
 #main #content .demo-description {
-	margin-bottom: 20px;
+	margin-bottom: 10px;
 }
 #main #content .link-view-source {
 	margin-left: 5px;
@@ -174,4 +199,99 @@ body, html {
 }
 #main #content a {
     color:#000;
+}
+
+/*************************************/
+/* Components                        */
+
+.draggable {
+	width: 100px;
+	height: 40px;
+	top: 10px;
+	right: 10px;
+	background-color: #68BFEF;
+	border: 2px solid #0090DF;
+	padding: 5px;	
+	margin: 0 0 12px 12px;
+}
+
+div.drag-handle
+{
+	cursor: move;
+	background-color: #900;
+	height: 15px;
+}
+
+.block { 
+   border: 2px solid #0090DF;
+   background-color: #68BFEF;
+   width: 75px; 
+   height: 75px;
+   margin: 10px;
+   z-index: 100;
+}
+.drop { 
+	background-color: #e9b96e;
+	border: 3px double #c17d11;
+	width: 150px; 
+	margin: 10px;
+	min-height: 200px;
+	min-height:200px;
+  height:auto !important;
+  height:200px;
+  opacity: 0.7;
+	filter:alpha(opacity:70);
+	text-align: center;
+}
+.droppable-active {
+	opacity: 1.0;
+	filter:alpha(opacity:100);
+}
+.droppable-hover {
+	outline: 1px dotted black;
+	background-color: #73d216;
+	border-color: #4e9a06;
+}
+.silver {
+	background-color: #fafafa;
+	border-color: silver;
+}
+.draggable.green {
+	background-color: #73d216;
+	border-color: #4e9a06;
+}
+
+.draggable.red {
+	background-color: #ef2929;
+	border-color: #cc0000;
+}
+
+.ui-selecting {
+  background-color: #eee;
+}
+.ui-selected {
+  background-color: #E6F7D4;
+}
+.sortable-container #example1 li {
+	background: #E8EEF7;
+}
+
+.sortable-container #example2 li {
+	background: none;
+}
+
+.sortable-container #example3 li {
+	list-style: none;
+}
+.droppable-photos-container {
+	background: #E8EEF7;
+	border: 2px #ccc dotted;
+	width:144px;
+	height: 108px;
+	float:left;
+	margin-top: 2px;
+	padding: 2px;
+}
+.droppable-img-content {
+	float: left; padding: 5px;
 }
