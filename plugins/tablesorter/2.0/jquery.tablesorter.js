@@ -670,7 +670,7 @@
 				var DECIMAL = '\\' + config.decimal;
 				var exp = '/(^[+]?0(' + DECIMAL +'0+)?$)|(^([-+]?[1-9][0-9]*)$)|(^([-+]?((0?|[1-9][0-9]*)' + DECIMAL +'(0*[1-9][0-9]*)))$)|(^[-+]?[1-9]+[0-9]*' + DECIMAL +'0+$)/';
 				return RegExp(exp).test($.trim(s));
-			}
+			};
 			
 			this.clearTableBody = function(table) {
 				if($.browser.msie) {
@@ -848,5 +848,5 @@
 	        .removeClass(table.config.widgetZebra.css[0]).addClass(table.config.widgetZebra.css[1]);
 			if(table.config.debug) { $.tablesorter.benchmark("Applying Zebra widget", time); }
 		}
-	});
+	});	
 })(jQuery);
