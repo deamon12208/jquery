@@ -121,9 +121,8 @@
 			this.rangeElement = $('<div></div>')
 				.addClass('ui-slider-range')
 				.css({ position: 'absolute' })
-				.css(this.properties[0], parseInt($(this.handle[0]).css(this.properties[0]),10) + this.handleSize(0)/2)
-				.css(this.properties[1], parseInt($(this.handle[1]).css(this.properties[0]),10) - parseInt($(this.handle[0]).css(this.properties[0]),10))
 				.appendTo(this.element);
+			this.updateRange();
 		},
 		updateRange: function() {
 				this.rangeElement.css(this.properties[0], parseInt($(this.handle[0]).css(this.properties[0]),10) + this.handleSize(0)/2);
