@@ -27,7 +27,7 @@
 		this.element.addClass("ui-slider");
 		
 		//Prepare the passed options
-		this.options = $.extend({}, options);
+		this.options = $.extend({}, $.ui.slider.defaults, options);
 		var o = this.options;
 		$.extend(o, {
 			axis: o.axis || (element.offsetWidth < element.offsetHeight ? 'vertical' : 'horizontal'),
@@ -48,7 +48,15 @@
 		});
 
 		//Initialize mouse and key events for interaction
-		this.handle = o.handle ? $(o.handle, element) : $('> *', element);
+		this.handle = $(o.handle, element);
+		if (!this.handle.length) {
+			self.handle = $(o.handles || [0]).map(function() {
+				var handle = $("<div/>").addClass("ui-slider-handle").appendTo(element);
+				if (this.id)
+					handle.attr("id", this.id);
+				return handle[0];
+			});
+		}
 		$(this.handle)
 			.mouseInteraction({
 				executor: this,
@@ -93,11 +101,10 @@
 		this.element.bind('click', function(e) { self.click.apply(self, [e]); });
 		
 		//Move the first handle to the startValue
-		if (o.startValue && o.startValue.constructor == Array) {
-			$.each(o.startValue, function(index, value) {
-				self.moveTo(value, index, true);
-			});
-		} else if (!isNaN(o.startValue))
+		$.each(o.handles || [], function(index, handle) {
+			self.moveTo(handle.start, index, true);
+		});
+		if (!isNaN(o.startValue))
 			this.moveTo(o.startValue, 0, true);
 		
 		//If we only have one handle, set the previous handle to this one to allow clicking before selecting the handle
@@ -275,5 +282,9 @@
 			}
 		}
 	});
+	
+	$.ui.slider.defaults = {
+		handle: ".ui-slider-handle"
+	};
 
 })(jQuery);

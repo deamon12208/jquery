@@ -53,15 +53,10 @@ test("moveTo, relative negative value", assertChange(1, 20, 10, function() {
 }))
 
 test("options update min/max", function() {
-	//expect(1);
+	expect(2);
 	var slider = $("#slider3").slider({
 		stepping: 1,
-		startValue: 1,
-		minValue: 0,
-		maxValue: 100,
-		change: function(e, ui) {
-			//equals(ui.value, result, "changed to " + ui.value);
-		}
+		startValue: 1
 	});
 	slider.slider("moveTo", "-=10");
 	equals(slider.slider("value"), 0);
@@ -70,19 +65,34 @@ test("options update min/max", function() {
 	equals(slider.slider("value"), -10);
 })
 
+module("setup and teardown");
+
 test("destroy and recreate", function() {
+	expect(3)
 	var slider = $("#slider3").slider();
 	slider.slider("moveTo", "+=20");
 	equals(slider.slider("value"), 20);
 	slider.slider("destroy");
-	try {
-		slider.slider("moveTo", "+=30");
-		ok(false, "must throw error when destroyed");
-	} catch(e) {
-		ok(true, "can't move a destroyed slider");
-	}
+	
+	slider.slider("moveTo", "+=30");
+	ok(true, "nothing happens after slider is destroyed");
+	
 	slider.slider().slider("moveTo", "30");
 	
 	equals(Math.round(slider.slider("value")), 30);
-	
+})
+
+test("handle creation", function() {
+	var slider = $("#slider1");
+	equals(slider.children().size(), 0);
+	slider.slider({
+		handles: [
+			{ start: 0 },
+			{ start: 10 }
+		]
+	});
+	equals(slider.children().size(), 2);
+	var instance = $.data(slider[0], "slider")
+	equals(instance.handle.length, 2);
+	ok(instance.handle.jquery, "handle must be a jquery object")
 })
