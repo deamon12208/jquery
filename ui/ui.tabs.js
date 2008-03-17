@@ -280,7 +280,7 @@
                 // for a disabled or loading tab!
                 if (($li.hasClass(o.selectedClass) && !o.unselect)
                     || $li.hasClass(o.disabledClass) 
-                    || $(this).hasClass(o.loadingClass)
+                    || $(this).hasClass(o.loadingClass)
                     || $(self.element).triggerHandler('tabsselect', [self.ui(this, $show[0])], o.select) === false
                     ) {
                     this.blur();
