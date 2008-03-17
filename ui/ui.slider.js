@@ -80,7 +80,7 @@
 				.bind('blur', function(e) { self.blur(this.firstChild); })
 				.bind('keydown', function(e) {
 					if(/(37|39)/.test(e.keyCode)) {
-						self.moveTo((e.keyCode == 37 ? '-' : '+')+'='+(self.options.stepping ? self.options.stepping : (self.options.realMaxValue / self.size)*5),this.firstChild);
+						self.moveTo((e.keyCode == 37 ? '-' : '+') + '=' + self.oneStep(),this.firstChild);
 					}
 				})
 		;
@@ -172,11 +172,11 @@
 		value: function(handle) {
 			if(this.handle.length == 1) this.currentHandle = this.handle;
 			var value = ((parseInt($(handle != undefined ? this.handle[handle] || handle : this.currentHandle).css(this.properties[0]),10) / (this.size - this.handleSize())) * this.options.realMaxValue) + this.options.minValue;
-                        var o = this.options;
-                        if (o.stepping) {
-                            value = Math.round(value / o.stepping) * o.stepping;
-                        }
-                        return value
+			var o = this.options;
+			if (o.stepping) {
+			    value = Math.round(value / o.stepping) * o.stepping;
+			}
+			return value;
 		},
 		convertValue: function(value) {
 			return this.options.minValue + (value / (this.size - this.handleSize())) * this.options.realMaxValue;
@@ -219,40 +219,64 @@
 		},
 		stop: function(e) {
 			this.propagate('stop', e);
-			if(this.firstValue != this.value()) this.propagate('change', e);
+			if (this.firstValue != this.value())
+				this.propagate('change', e);
 			return false;
 		},
+		
+		oneStep: function() {
+			return this.options.stepping ? this.options.stepping : (this.options.realMaxValue / this.size) * 5;
+		},
+		
+		translateRange: function(value) {
+			if (this.rangeElement) {
+				if (this.currentHandle[0] == this.handle[0] && value >= this.translateValue(this.value(1)))
+					value = this.translateValue(this.value(1) - this.oneStep());
+				if (this.currentHandle[0] == this.handle[1] && value <= this.translateValue(this.value(0)))
+					value = this.translateValue(this.value(0) + this.oneStep());
+			}
+			return value;
+		},
+		
+		translateLimits: function(value) {
+			if (value >= this.size - this.handleSize())
+				value = this.size - this.handleSize();
+			if (value <= 0)
+				value = 0;
+			return value;
+		},
+		
 		drag: function(e, handle) {
-
 			var o = this.options;
 			var position = { top: e.pageY - this.offset.top - this.clickOffset.top, left: e.pageX - this.offset.left - this.clickOffset.left};
 
-			var modifier = position[this.properties[0]];			
-			if(modifier >= this.size - this.handleSize()) modifier = this.size - this.handleSize();
-			if(modifier <= 0) modifier = 0;
+			var modifier = position[this.properties[0]];
 			
-			if(o.stepping) {
+			modifier = this.translateLimits(modifier);
+			
+			if (o.stepping) {
 				var value = this.convertValue(modifier);
 				value = Math.round(value / o.stepping) * o.stepping;
 				modifier = this.translateValue(value);	
 			}
-
-			if(this.rangeElement) {
-				if(this.currentHandle[0] == this.handle[0] && modifier >= this.translateValue(this.value(1))) modifier = this.translateValue(this.value(1));
-				if(this.currentHandle[0] == this.handle[1] && modifier <= this.translateValue(this.value(0))) modifier = this.translateValue(this.value(0));
-			}	
+			
+			modifier = this.translateRange(modifier);
 			
 			this.currentHandle.css(this.properties[0], modifier);
-			if(this.rangeElement) this.updateRange();
+			if (this.rangeElement)
+				this.updateRange();
 			this.propagate('slide', e);
 			return false;
-			
 		},
+		
 		moveTo: function(value, handle, noPropagation) {
 			var o = this.options;
-			if(handle == undefined && !this.currentHandle && this.handle.length != 1) return false; //If no handle has been passed, no current handle is available and we have multiple handles, return false
-			if(handle == undefined && !this.currentHandle) handle = 0; //If only one handle is available, use it
-			if(handle != undefined) this.currentHandle = this.previousHandle = $(this.handle[handle] || handle);
+			if (handle == undefined && !this.currentHandle && this.handle.length != 1)
+				return false; //If no handle has been passed, no current handle is available and we have multiple handles, return false
+			if (handle == undefined && !this.currentHandle)
+				handle = 0; //If only one handle is available, use it
+			if (handle != undefined)
+				this.currentHandle = this.previousHandle = $(this.handle[handle] || handle);
 	
 			if(value.constructor == String) {
 				if (/^\-\=/.test(value) ) {
@@ -262,18 +286,15 @@
 				}
 			}
 			
-			if(o.stepping) value = Math.round(value / o.stepping) * o.stepping;
+			if(o.stepping)
+				value = Math.round(value / o.stepping) * o.stepping;
 			value = this.translateValue(value);
-
-			if(value >= this.size - this.handleSize()) value = this.size - this.handleSize();
-			if(value <= 0) value = 0;
-			if(this.rangeElement) {
-				if(this.currentHandle[0] == this.handle[0] && value >= this.translateValue(this.value(1))) value = this.translateValue(this.value(1));
-				if(this.currentHandle[0] == this.handle[1] && value <= this.translateValue(this.value(0))) value = this.translateValue(this.value(0));
-			}
+			value = this.translateLimits(value);
+			value = this.translateRange(value);
 			
 			this.currentHandle.css(this.properties[0], value);
-			if(this.rangeElement) this.updateRange();
+			if (this.rangeElement)
+				this.updateRange();
 			
 			if (!noPropagation) {
 				this.propagate('start', null);

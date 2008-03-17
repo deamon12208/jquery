@@ -38,6 +38,25 @@ input {
 }
 
 
+.zoom { position: relative }
+
+.handle{
+	position: absolute; 
+    height: 5px;
+    width: 21px;
+    margin-left: -3px;
+    background-color: #6EA8FE;
+    border: solid 1px #000;
+    cursor: pointer;
+    font-size: 1px;
+}
+
+.slider{
+    background: url(images/zoom_bar.png);
+    height: 137px;
+    width: 18px;
+}
+
 
 </style>
 </head>
@@ -64,6 +83,12 @@ input {
 
 <div id='slider2' style="position: absolute; top: 0px; right: 0px; margin: 20px; height: 400px; width: 20px; background: #ccc;">
 	<div class='ui-slider-handle' style='height: 20px; background: #888;'></div>	
+</div>
+
+<div class="zoom">
+    <img src="images/zoom_plus.png" height="16" width="18" class="theme_backgroundColor" /><br/>
+    <div class="slider"><div class="handle"></div></div><br/>
+    <img src="images/zoom_minus.png" height="15" width="18" class="theme_backgroundColor" style="position: absolute; top: 160px;" />
 </div>
 	
 <script type="text/javascript">
@@ -112,6 +137,18 @@ $(document).ready(function(){
 	$('#slider2').slider();
 	
 	$(".range").rangeSlider();
+	
+	 $(".slider").slider({
+        handle: '.handle',
+        steps: 10,
+        startValue: 70
+    });
+    $(".zoom img:first").click(function(){
+        $(".slider").slider("moveTo", "-=10" );
+    });
+    $(".zoom img:last").click(function(){
+        $(".slider").slider("moveTo", "+=10");
+    });
 
 });
 </script>
