@@ -16,7 +16,6 @@ General
 * Added support for the new metadata plugin
 * Added support for jQuery 1.2.3
 * Added support for decimal numbers and negative and positive digits
-* Added new Minified version of tablesorter
 * Updated documenation and website with new examples
 * Removed packed version.
 
