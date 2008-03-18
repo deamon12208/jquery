@@ -17,6 +17,7 @@
 					"y" : "$('#foo').draggable({ axis: 'y' });"
 				},
 				"cancel" : {
+					"(empty)" : "$('#foo').append('<' + 'input type=\"text\"/>').draggable({ cancel: '' });",
 					"div" : "$('#foo').draggable({ cancel: 'div' });",
 					"code" : "$('#foo').draggable({ cancel: 'code' });",
 					"div,code" : "$('#foo').draggable({ cancel: 'div,code' });",
