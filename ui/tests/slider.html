@@ -62,7 +62,7 @@ input {
 </head>
 <body class="flora">
 
-<div style='background: #eee;'>
+<div id="hidden" style='display:none;background: #eee;'>
 
 <input class="range" step="10" max="200" min="-200" name="n" value="0"> I'm a range input!
 </div>
@@ -119,6 +119,7 @@ $.fn.rangeSlider = function() {
 }
 
 $(document).ready(function(){
+	
 	$('#slider3').slider();
 	
 	$('#slider1').slider({
@@ -141,6 +142,8 @@ $(document).ready(function(){
 	$('#slider2').slider();
 	
 	$(".range").rangeSlider();
+	$("#hidden").show();
+	
 	
 	 $(".slider").slider({
         handle: '.handle',

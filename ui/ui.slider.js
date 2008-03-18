@@ -90,10 +90,10 @@
 		
 		//Prepare dynamic properties for later use
 		if(o.axis == 'horizontal') {
-			this.size = this.element.outerWidth();
+			this.actualSize = this.element.outerWidth();
 			this.properties = ['left', 'width'];
 		} else {
-			this.size = this.element.outerHeight();
+			this.actualSize = this.element.outerHeight();
 			this.properties = ['top', 'height'];
 		}
 		
@@ -170,7 +170,7 @@
 		},
 		value: function(handle) {
 			if(this.handle.length == 1) this.currentHandle = this.handle;
-			var value = ((parseInt($(handle != undefined ? this.handle[handle] || handle : this.currentHandle).css(this.properties[0]),10) / (this.size - this.handleSize())) * this.options.realMaxValue) + this.options.minValue;
+			var value = ((parseInt($(handle != undefined ? this.handle[handle] || handle : this.currentHandle).css(this.properties[0]),10) / (this.size() - this.handleSize())) * this.options.realMaxValue) + this.options.minValue;
 			var o = this.options;
 			if (o.stepping) {
 			    value = Math.round(value / o.stepping) * o.stepping;
@@ -178,13 +178,17 @@
 			return value;
 		},
 		convertValue: function(value) {
-			return this.options.minValue + (value / (this.size - this.handleSize())) * this.options.realMaxValue;
+			return this.options.minValue + (value / (this.size() - this.handleSize())) * this.options.realMaxValue;
 		},
 		translateValue: function(value) {
-			return ((value - this.options.minValue) / this.options.realMaxValue) * (this.size - this.handleSize());
+			return ((value - this.options.minValue) / this.options.realMaxValue) * (this.size() - this.handleSize());
 		},
 		handleSize: function(handle) {
 			return $(handle != undefined ? this.handle[handle] : this.currentHandle)['outer'+this.properties[1].substr(0,1).toUpperCase()+this.properties[1].substr(1)]();	
+		},
+		size: function() {
+			// if actualSize is 0, the slider was hidden during initialization
+			return this.actualSize || (this.actualSize = this.element.outerWidth());
 		},
 		click: function(e) {
 		
@@ -224,7 +228,7 @@
 		},
 		
 		oneStep: function() {
-			return this.options.stepping ? this.options.stepping : (this.options.realMaxValue / this.size) * 5;
+			return this.options.stepping ? this.options.stepping : (this.options.realMaxValue / this.size()) * 5;
 		},
 		
 		translateRange: function(value) {
@@ -250,8 +254,8 @@
 		},
 		
 		translateLimits: function(value) {
-			if (value >= this.size - this.handleSize())
-				value = this.size - this.handleSize();
+			if (value >= this.size() - this.handleSize())
+				value = this.size() - this.handleSize();
 			if (value <= 0)
 				value = 0;
 			return value;
