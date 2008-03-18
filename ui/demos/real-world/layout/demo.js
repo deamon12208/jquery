@@ -33,7 +33,6 @@
 	};
 	
 	var emptyTrashCan = function(item){
-		//alert(item.name);
 		item.remove();
 	};
 	
@@ -41,13 +40,11 @@
 		if(ui.sender){
 			var w = ui.element.width();
 			ui.placeholder.width(w);
-			//console.log(w, ui.placeholder)
 		}
 	};
 	
 	var sortableUpdate = function(e, ui){
 		if(ui.element[0].id == 'trashcan'){
-			//console.log(ui);
 			emptyTrashCan(ui.item);
 		} else {
 			updateUpDown(ui.element[0]);
@@ -74,7 +71,12 @@
 			items: '> dl',
 			handle: 'dt',
 			cursor: 'move',
-			placeholder: 'placeholder',
+			cursorAt: { top: 2, left: 2 },
+			//opacity: 0.8,
+			//helper: 'clone',
+			appendTo: 'body',
+			//placeholder: 'clone',
+			//placeholder: 'placeholder',
 			connectWith: els,
 			change: sortableChange,
 			update: sortableUpdate
