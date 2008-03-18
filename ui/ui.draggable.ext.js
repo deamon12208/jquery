@@ -131,7 +131,10 @@
 		drag: function(e,ui) {
 			var o = ui.options;
 			if(o.constraint) o.axis = o.constraint; //Legacy check
-			o.axis == 'x' ? ui.instance.position.top = ui.instance.originalPosition.top : ui.instance.position.left = ui.instance.originalPosition.left;
+			switch (o.axis) {
+				case 'x' : ui.instance.position.top = ui.instance.originalPosition.top; break;
+				case 'y' : ui.instance.position.left = ui.instance.originalPosition.left; break;
+			}
 		}
 	});
 
