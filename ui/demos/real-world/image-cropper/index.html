@@ -11,7 +11,9 @@
 <script type="text/javascript" src="../../../../jquery/src/ajax.js"></script>
 <script type="text/javascript" src="../../../../jquery/src/fx.js"></script>
 <script type="text/javascript" src="../../../../jquery/src/offset.js"></script>
+
 <script type="text/javascript" src="../../../../plugins/dimensions/jquery.dimensions.js"></script>
+
 <script type="text/javascript" src="../../../ui.base.js"></script>
 <script type="text/javascript" src="../../../ui.mouse.js"></script>
 <script type="text/javascript" src="../../../ui.resizable.js"></script>
@@ -28,6 +30,7 @@
 <!--
 /*************************************/
 /* Real-World CSS                    */
+
 @import "../../css/real-world.css";
 
 /*************************************/
@@ -79,6 +82,7 @@
 /* Cropper CSS                       */
 
 #resizeme_containment_wrap_image {
+  position: relative;
 }
 #resizeme_containment_div {
     position: absolute;
@@ -98,7 +102,7 @@
 <script type="text/javascript">
     var getSizeImg = function(src) {
         var timg = $('<img>').attr('src', src).css({ position: 'absolute', top: '-1000px', left: '-1000px' }).appendTo('body');
-        var size = [ timg.css('width'), timg.css('height') ];
+        var size = [ timg.get(0).offsetWidth, timg.get(0).offsetHeight ];
         
         try { document.body.removeChild(timg[0]); }
         catch(e) {};
@@ -203,6 +207,8 @@
        	$('#resizeme_containment_div').css('background', 'transparent url(img/img01.jpg) no-repeat scroll 0px 0px');
        	$('#resizeme_containment_div_wrapper').css( { width: size[0], height: size[1] } );
         $('#resizeme_containment_wrap_image').css( { width: size[0], height: size[1], background: 'transparent url(img/img01.jpg) no-repeat scroll 0%' } );
+        alert(size);
+
        });
 </script>
 </head>
