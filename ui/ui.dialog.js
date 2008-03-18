@@ -29,6 +29,10 @@
 		var self = this; //Do bindings
 
 		$.data(this.element, "dialog", this);
+
+		$(el).bind("remove", function() {
+			self.destroy();
+		});
 		
 		$(el).bind("setData.dialog", function(event, key, value){
 			switch (key) {
