@@ -79,7 +79,6 @@
 /* Cropper CSS                       */
 
 #resizeme_containment_wrap_image {
-    position: relative;
 }
 #resizeme_containment_div {
     position: absolute;
@@ -88,14 +87,25 @@
     width: 150px;
     height:150px;
 }
+
 #resizeme_containment_div_wrapper {
-    position: relative;
+   position: relative;
 }
 
 
 -->
 </style>
 <script type="text/javascript">
+    var getSizeImg = function(src) {
+        var timg = $('<img>').attr('src', src).css({ position: 'absolute', top: '-1000px', left: '-1000px' }).appendTo('body');
+        var size = [ timg.css('width'), timg.css('height') ];
+        
+        try { document.body.removeChild(timg[0]); }
+        catch(e) {};
+
+        return size;
+    };
+
   $().ready(function(){
 
 	$('#resizeme_containment_div').resizable({
@@ -163,47 +173,37 @@
 
 	});
 
-    var getSizeImg = function(src) {
-        var timg = $('<img>').attr('src', src).css({ position: 'absolute', top: '-1000px', left: '-1000px' }).appendTo('body');
-        var size = [ timg.css('width'), timg.css('height') ];
-        
-        try { document.body.removeChild(timg[0]); }
-        catch(e) {};
-
-        return size;
-    };
-
-    $("#log-height").html($('#resizeme_containment_div').height()+"px");
-    $("#log-width").html($('#resizeme_containment_div').width()+"px");
-
-
     	$('.thumbs').find("li a").click(function(e){
     
     	  $('#resizeme_containment_div').css('top', '0');
-    
+
     	  $('#resizeme_containment_div').css('left', '0');
           
           var size = getSizeImg($(this).find("img").attr("src"));
 
     	  $('#resizeme_containment_wrap_image').css( { width: size[0], height: size[1], background: 'transparent url('+$(this).find("img").attr("src")+') no-repeat scroll 0%' } );
-
+          $('#resizeme_containment_div_wrapper').css( { width: size[0], height: size[1] } );
     	  $('#resizeme_containment_div').css('background', 'transparent url('+$(this).find("img").attr("src")+') no-repeat scroll 0px 0px');
 
           return false;
+
     	});
 
 
     	$('#resizeme_containment_wrap_image').css({ opacity: 0.5 });
 
-        var size = getSizeImg("img/img01.jpg");
-        
-       	$('#resizeme_containment_div').css('background', 'transparent url(img/img01.jpg) no-repeat scroll 0px 0px');
+        $("#log-height").html($('#resizeme_containment_div').height()+"px");
 
-        $('#resizeme_containment_wrap_image').css( { width: size[0], height: size[1], background: 'transparent url(img/img01.jpg) no-repeat scroll 0%' } );
+        $("#log-width").html($('#resizeme_containment_div').width()+"px");
 
-
-    	
      });
+     
+     $(window).load(function(){
+        var size = getSizeImg("img/img01.jpg");
+       	$('#resizeme_containment_div').css('background', 'transparent url(img/img01.jpg) no-repeat scroll 0px 0px');
+       	$('#resizeme_containment_div_wrapper').css( { width: size[0], height: size[1] } );
+        $('#resizeme_containment_wrap_image').css( { width: size[0], height: size[1], background: 'transparent url(img/img01.jpg) no-repeat scroll 0%' } );
+       });
 </script>
 </head>
 <body>
