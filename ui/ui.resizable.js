@@ -35,7 +35,8 @@
 			aspectRatio: false,
 			disableSelection: true,
 			preserveCursor: true,
-			autohide: false
+			autohide: false,
+			knobHandles: false
 		}, options);
 		
 		this.options._aspectRatio = !!(this.options.aspectRatio);
@@ -45,6 +46,9 @@
 		
 		// force proxy if animation is enabled
 		this.options.proxy = this.options.proxy || this.options.animate ? 'proxy' : null; 
+		
+		// if knobHandles equals true set to ui-resizable-knob-handle
+		this.options.knobHandles = this.options.knobHandles === true ? 'ui-resizable-knob-handle' : this.options.knobHandles;
 		
 		$(element).bind("setData.resizable", function(event, key, value){
 			self.options[key] = value;
@@ -59,7 +63,7 @@
 	
 		o.defaultTheme = {
 			'ui-resizable': { display: 'block' },
-			'ui-resizable-handle': { position: 'absolute', background: '#F5F5F5', fontSize: '0.1px' },
+			'ui-resizable-handle': { position: 'absolute', background: '#F2F2F2', fontSize: '0.1px' },
 			'ui-resizable-n': { cursor: 'n-resize', height: '4px', left: '0px', right: '0px', borderTop: aBorder },
 			'ui-resizable-s': { cursor: 's-resize', height: '4px', left: '0px', right: '0px', borderBottom: aBorder },
 			'ui-resizable-e': { cursor: 'e-resize', width: '4px', top: '0px', bottom: '0px', borderRight: aBorder },
@@ -68,6 +72,18 @@
 			'ui-resizable-sw': { cursor: 'sw-resize', width: '4px', height: '4px', borderBottom: aBorder, borderLeft: aBorder },
 			'ui-resizable-ne': { cursor: 'ne-resize', width: '4px', height: '4px', borderRight: aBorder, borderTop: aBorder },
 			'ui-resizable-nw': { cursor: 'nw-resize', width: '4px', height: '4px', borderLeft: aBorder, borderTop: aBorder }
+		};
+		
+		o.knobTheme = {
+			'ui-resizable-handle': { background: '#F2F2F2', border: '1px solid #808080', height: '7px', width: '7px' },
+			'ui-resizable-n': { cursor: 'n-resize', top: '-4px', left: '45%' },
+			'ui-resizable-s': { cursor: 's-resize', bottom: '-4px', left: '45%' },
+			'ui-resizable-e': { cursor: 'e-resize', right: '-4px', top: '45%' },
+			'ui-resizable-w': { cursor: 'w-resize', left: '-4px', top: '45%' },
+			'ui-resizable-se': { cursor: 'se-resize', right: '-4px', bottom: '-4px' },
+			'ui-resizable-sw': { cursor: 'sw-resize', left: '-4px', bottom: '-4px' },
+			'ui-resizable-nw': { cursor: 'nw-resize', left: '-4px', top: '-4px' },
+			'ui-resizable-ne': { cursor: 'ne-resize', right: '-4px', top: '-4px' }
 		};
 	
 		//Position the node
@@ -111,9 +127,10 @@
 			var n = o.handles.split(","); o.handles = {};
 	
 			o.zIndex = o.zIndex || 1000;
-	
-			var insertions = {
-				handle: 'overflow:hidden; position:absolute;',
+			
+			// insertions are applied when don't have theme loaded
+			var insertionsDefault = {
+				handle: 'position: absolute; display: none; overflow:hidden;',
 				n: 'top: 0pt; width:100%;',
 				e: 'right: 0pt; height:100%;',
 				s: 'bottom: 0pt; width:100%;',
@@ -125,16 +142,25 @@
 			};
 	
 			for(var i = 0; i < n.length; i++) {
-				var d = jQuery.trim(n[i]), t = o.defaultTheme, hname = 'ui-resizable-'+d, rcss = $.extend(t[hname], t['ui-resizable-handle']), 
-							axis = $(['<div class="ui-resizable-handle ', hname, '" style="',insertions[d], insertions.handle, '"></div>'].join('')).css(/sw|se|ne|nw/.test(d) ? { zIndex: ++o.zIndex } : {});
-	
-				o.handles[d] = '.ui-resizable-'+d;
+				var handle = jQuery.trim(n[i]), dt = o.defaultTheme, hname = 'ui-resizable-'+handle, loadDefault = !$.ui.css(hname) && !o.knobHandles, userKnobClass = $.ui.css('ui-resizable-knob-handle'), 
+							allDefTheme = $.extend(dt[hname], dt['ui-resizable-handle']), allKnobTheme = $.extend(o.knobTheme[hname], !userKnobClass ? o.knobTheme['ui-resizable-handle'] : {});
+				
+				// increase zIndex of sw, se, ne, nw axis
+				var applyZIndex = /sw|se|ne|nw/.test(handle) ? { zIndex: ++o.zIndex } : {};
+				
+				var defCss = (loadDefault ? insertionsDefault[handle] : ''), 
+					axis = $(['<div class="ui-resizable-handle ', hname, '" style="', defCss, insertionsDefault.handle, '"></div>'].join('')).css( applyZIndex );
+				o.handles[handle] = '.ui-resizable-'+handle;
 				
 				this.element.append(
 					//Theme detection, if not loaded, load o.defaultTheme
-					axis.css( !$.ui.css(hname) ? rcss : {} )
+					axis.css( loadDefault ? allDefTheme : {} )
+						// Load the knobHandle css, fix width, height, top, left...
+						.css( o.knobHandles ? allKnobTheme : {} ).addClass('ui-resizable-knob-handle').addClass(o.knobHandles)
 				);
 			}
+			
+			if (o.knobHandles) this.element.addClass('ui-resizable-knob').css( !$.ui.css('ui-resizable-knob') ? { /*border: '1px #fff dashed'*/ } : {} );
 		}
 	
 		this._renderAxis = function(target) {
