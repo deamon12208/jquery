@@ -33,12 +33,6 @@
 /*************************************/
 /* Demo CSS                          */
 
-#img-container {
-    margin: 0px;
-    width: 480px;
-    height: 315px;
-    position: relative;
-}
 #sidebar div {
     text-align:center;
 }
@@ -85,8 +79,7 @@
 /* Cropper CSS                       */
 
 #resizeme_containment_wrap_image {
-    width: 480px;
-    height: 315px;
+    position: relative;
 }
 #resizeme_containment_div {
     position: absolute;
@@ -97,8 +90,6 @@
 }
 #resizeme_containment_div_wrapper {
     position: relative;
-    width: 480px;
-    height: 315px;
 }
 
 
@@ -125,7 +116,7 @@
 
 		//aspectRatio: true,
 
-		//autohide: true,
+		autohide: true,
 
 		minWidth: 100,
 
@@ -172,40 +163,57 @@
 
 	});
 
+    var getSizeImg = function(src) {
+        var timg = $('<img>').attr('src', src).css({ position: 'absolute', top: '-1000px', left: '-1000px' }).appendTo('body');
+        var size = [ timg.css('width'), timg.css('height') ];
+        
+        try { document.body.removeChild(timg[0]); }
+        catch(e) {};
+
+        return size;
+    };
+
     $("#log-height").html($('#resizeme_containment_div').height()+"px");
     $("#log-width").html($('#resizeme_containment_div').width()+"px");
 
 
-	$('.thumbs').find("li a").click(function(e){
+    	$('.thumbs').find("li a").click(function(e){
+    
+    	  $('#resizeme_containment_div').css('top', '0');
+    
+    	  $('#resizeme_containment_div').css('left', '0');
+          
+          var size = getSizeImg($(this).find("img").attr("src"));
 
-	  $('#resizeme_containment_div').css('top', '0');
+    	  $('#resizeme_containment_wrap_image').css( { width: size[0], height: size[1], background: 'transparent url('+$(this).find("img").attr("src")+') no-repeat scroll 0%' } );
 
-	  $('#resizeme_containment_div').css('left', '0');
+    	  $('#resizeme_containment_div').css('background', 'transparent url('+$(this).find("img").attr("src")+') no-repeat scroll 0px 0px');
 
-	  $('#resizeme_containment_wrap_image').css('background', 'transparent url('+$(this).find("img").attr("src")+') no-repeat scroll 0%');
-
-	  $('#resizeme_containment_div').css('background', 'transparent url('+$(this).find("img").attr("src")+') no-repeat scroll 0px 0px');
-        return false;
-	});
-
-	$('#resizeme_containment_wrap_image').css({ opacity: 0.5 });
-
-	$('#resizeme_containment_wrap_image').css('background', 'transparent url(img01.jpeg) no-repeat scroll 0%');
-
-	$('#resizeme_containment_div').css('background', 'transparent url(img01.jpeg) no-repeat scroll 0px 0px');
+          return false;
+    	});
 
 
-  });
+    	$('#resizeme_containment_wrap_image').css({ opacity: 0.5 });
+
+        var size = getSizeImg("img/img01.jpg");
+        
+       	$('#resizeme_containment_div').css('background', 'transparent url(img/img01.jpg) no-repeat scroll 0px 0px');
+
+        $('#resizeme_containment_wrap_image').css( { width: size[0], height: size[1], background: 'transparent url(img/img01.jpg) no-repeat scroll 0%' } );
+
+
+    	
+     });
 </script>
 </head>
 <body>
     <div id="sidebar">
         <ul class="thumbs">
-            <li><a href="#" title="Open This Image"><img src="img01.jpeg"/></a></li>
-            <li><a href="#" title="Open This Image"><img src="img02.jpeg"/></a></li>
-            <li><a href="#" title="Open This Image"><img src="img03.jpeg"/></a></li>
-            <li><a href="#" title="Open This Image"><img src="img04.jpeg"/></a></li>
-            <li><a href="#" title="Open This Image"><img src="img05.jpeg"/></a></li>
+            <li><a href="#" title="Open This Image"><img src="img/img01.jpg"/></a></li>
+            <li><a href="#" title="Open This Image"><img src="img/img02.jpg"/></a></li>
+            <li><a href="#" title="Open This Image"><img src="img/img03.jpg"/></a></li>
+            <li><a href="#" title="Open This Image"><img src="img/img04.jpg"/></a></li>
+            <li><a href="#" title="Open This Image"><img src="img/img05.jpg"/></a></li>
         </div>
     </div>
     <div id="main">
@@ -213,13 +221,10 @@
             <h2>jQuery Real-world Demo: Image Cropper</h2>
         </div>
         <div id="content">
-            <div id="img-container">
                 <div id="resizeme_containment_div_wrapper">
                     <div id="resizeme_containment_wrap_image"></div>
-                    <div id="resizeme_containment_div">
-                    </div>
+                    <div id="resizeme_containment_div"></div>
                 </div>
-            </div>
         </div>
         <div id="break">
             <strong>Properties:</strong>
