@@ -1,15 +1,13 @@
-<div id="containerDemo"></div>
-
 <script type="text/javascript">
-	
+
 	var model = {
-		
+
 		renderAt: '#containerDemo',
-		
+
 		title: 'Doppable Demos',
-		
+
 		demos: [
-			
+
 			{
 				title: 'Droppable',
 				desc: 'With few lines of code you could make an element droppable. You can try more options on the fly!',
@@ -68,22 +66,22 @@
 				]
 			}
 		],
-		
+
 		onRenderEnd: function() {
 			$(".block, .green, .red").draggable({helper: "clone"});
-			
+
 			$('ul.droppable-gallery img').addClass('img_content').draggable({
 				helper: 'clone'
 			});
-			
+
 		}
-		
+
 	};
-	
+
 	$(function(){
-	
+
 		uiRenderDemo(model);
-		
+
 	});
-	
+
 </script>
