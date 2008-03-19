@@ -58,9 +58,8 @@
 	<script type="text/javascript" src="../../jquery/src/ajax.js"></script>
 	<script type="text/javascript" src="../../jquery/src/fx.js"></script>
 	<script type="text/javascript" src="../../jquery/src/offset.js"></script>
-	<script type="text/javascript" src="../../plugins/dimensions/jquery.dimensions.js"></script>
+
 	<script type="text/javascript" src="../ui.base.js"></script>
-	<script type="text/javascript" src="../ui.mouse.js"></script>
 	<script type="text/javascript" src="../ui.draggable.js"></script>
 	<script type="text/javascript" src="../ui.draggable.ext.js"></script>
 	<script type="text/javascript" src="../ui.droppable.js"></script>
@@ -83,8 +82,8 @@
 	});
 	
 	function drop() {
-		var droppable = $.data($("#droppable")[0], "ui-droppable"); // Get the droppable's instance
-		var draggable = $.data($("#draggable")[0], "ui-draggable"); // Get the draggable's instance
+		var droppable = $.data($("#droppable")[0], "droppable"); // Get the droppable's instance
+		var draggable = $.data($("#draggable")[0], "draggable"); // Get the draggable's instance
 		droppable.drop(null, draggable);
 	}
 		

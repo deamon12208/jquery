@@ -30,7 +30,7 @@
 					"10px" : "$('#foo').resizable({ minWidth: 10 });"
 				},
 				"proxy" : {
-					".bar" : "$('#foo').resizable({ proxy: 'bar' });"
+					".bar" : "$('#foo').resizable({ proxy: '#bar' });"
 				},
 				"destructive" : {
 					"true" : "$('#foo').resizable({ destructive: true });",

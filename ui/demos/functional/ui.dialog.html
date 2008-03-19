@@ -12,14 +12,11 @@
 
 			{
 				title: 'Simple Dialog',
-				html: '<div id="divDialog" class="ui-dialog-content"><div>dialog-default-[default]</div><hr/>Dialog Text...</div>',
+				html: '<div id="divDialog">Dialog Text...</div>',
 				destroy: '$("#divDialog").dialog("destroy");',
 
 				options: [
-					{	desc: 'Simple Dialog',	source: '$("#divDialog").dialog();' },
-					{	desc: 'Simple Cloned Dialog',	source: '$("#divDialog").clone().dialog();' },
-                    {	desc: 'Simple Empty Dialog',	source: '$("#divDialog").dialog();' },
-                    {	desc: 'Simple Detached Dialog',	source: '$("<div/>").dialog();' }
+					{	desc: 'Simple Dialog',	source: '$("#divDialog").dialog();' }
 				]
 			}
 /*

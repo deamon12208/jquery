@@ -26,14 +26,12 @@
 				}
 			},
 			"callbacks": {
+				"start" : "$('#foo').html(content).selectable({start: function(){uiTestLog('start') }});",
 				"selected" : "$('#foo').html(content).selectable({selected: function(){uiTestLog('selected') }});",
 				"selecting" : "$('#foo').html(content).selectable({selecting: function(){uiTestLog('selecting') }});",
 				"unselected" : "$('#foo').html(content).selectable({unselected: function(){uiTestLog('unselected') }});",
 				"unselecting" : "$('#foo').html(content).selectable({unselecting: function(){uiTestLog('unselecting') }});",
-				"draggable" : {
-					"start" : "$('#foo').html(content).selectable({start: function(){uiTestLog('start') }});",
-					"stop" : "$('#foo').html(content).selectable({stop: function(){uiTestLog('stop') }});"
-				}
+				"stop" : "$('#foo').html(content).selectable({stop: function(){uiTestLog('stop') }});"
 			},
 			"methods": {
 				"chained" : {
