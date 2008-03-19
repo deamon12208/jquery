@@ -1,5 +1,5 @@
 /*
- * jQuery validation plug-in pre-1.3.0
+ * jQuery validation plug-in pre-1.2.2
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-validation/
  * http://docs.jquery.com/Plugins/Validation
@@ -86,6 +86,16 @@ jQuery.extend(jQuery.fn, {
             return valid;
         }
     },
+	// attributes: space seperated list of attributes to retrieve and remove
+	removeAttrs: function(attributes) {
+		var result = {},
+			$element = this;
+		$.each(attributes.split(/\s/), function() {
+			result[this] = $element.attr(this);
+			$element.removeAttr(this);
+		});
+		return result;
+	},
 	// http://docs.jquery.com/Plugins/Validation/rules
 	rules: function(command, argument) {
 		var element = this[0];
@@ -97,57 +107,15 @@ jQuery.extend(jQuery.fn, {
 			jQuery.validator.attributeRules(element),
 			jQuery.validator.staticRules(element)
 		), element);
-	
-		switch(command) {
-		case "remove":
-			if (!argument) {
-				$.each(data, function(method, param) {
-					$(element).removeClass(method).removeAttr(method);
-				});
-			} else {
-				var filtered = {};
-				$.each(argument.split(/\s/), function() {
-					$(element).removeClass(this).removeAttr(this);
-					filtered[this] = data[this];
-				});
-				data = filtered;
-			}
-			break;
-		case "add":
-			function add(method, param) {
-				if (typeof param == "boolean") {
-					$(element).addClass(method);
-				} else {
-					$(element).attr(method, param);
-				}
-			} 
-			// add flat rules as returned by this method 
-			if (argument.constructor == Array) {
-				$.each(argument, function() {
-					add(this.method, this.parameters);
-				});
-			} else {
-				$.each(argument, add);
-			}
-			break;
-		}
-		
-		// convert from object to array
-		var rules = [];
 		
 		// make sure required is at front
 		if (data.required) {
-			rules.push({method:'required', parameters: data.required});
+			var param = data.required;
 			delete data.required;
+			data = $.extend({required: param}, data);
 		}
-		
-		jQuery.each(data, function(method, value) {
-			rules.push({
-				method: method,
-				parameters: value
-			});
-		});
-		return rules;
+	
+		return data;
 	},
 	// destructive add
 	push: function( t ) {
@@ -356,8 +324,12 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		numberOfInvalids: function() {
+			return this.objectLength(this.invalid);
+		},
+		
+		objectLength: function( obj ) {
 			var count = 0;
-			for ( var i in this.invalid )
+			for ( var i in obj )
 				count++;
 			return count;
 		},
@@ -405,7 +377,7 @@ jQuery.extend(jQuery.validator, {
 				!this.name && validator.settings.debug && window.console && console.error( "%o has no name assigned", this);
 			
 				// select only the first element for each name, and only those with rules specified
-				if ( this.name in rulesCache || !jQuery(this).rules().length )
+				if ( this.name in rulesCache || !validator.objectLength($(this).rules()) )
 					return false;
 				
 				rulesCache[this.name] = true;
@@ -443,11 +415,11 @@ jQuery.extend(jQuery.validator, {
 		check: function( element ) {
 			element = this.clean( element );
 			this.settings.unhighlight && this.settings.unhighlight.call( this, element, this.settings.errorClass );
-			var rules = jQuery(element).rules();
-			for( var i = 0; rules[i]; i++) {
-				var rule = rules[i];
+			var rules = $(element).rules();
+			for( method in rules ) {
+				var rule = { method: method, parameters: rules[method] };
 				try {
-					var result = jQuery.validator.methods[rule.method].call( this, jQuery.trim(element.value), element, rule.parameters );
+					var result = jQuery.validator.methods[method].call( this, jQuery.trim(element.value), element, rule.parameters );
 					if ( result == "dependency-mismatch" )
 						return;
 					if ( result == "pending" ) {
@@ -464,7 +436,7 @@ jQuery.extend(jQuery.validator, {
 					throw e;
 				}
 			}
-			if ( rules.length )
+			if ( this.objectLength(rules) )
 				this.successList.push(element);
 			return true;
 		},
@@ -572,10 +544,6 @@ jQuery.extend(jQuery.validator, {
 		
 		idOrName: function(element) {
 			return this.checkable(element) ? element.name : element.id || element.name;
-		},
-
-		rules: function( element ) {
-			return jQuery(element).rules();
 		},
 
 		checkable: function( element ) {

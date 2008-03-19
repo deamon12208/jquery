@@ -5,6 +5,42 @@
 1.3
 ---
 
+extend rules() to add and remove static rules, something like this:
+
+		switch(command) {
+		case "remove":
+			if (!argument) {
+				$.each(data, function(method, param) {
+					$(element).removeClass(method).removeAttr(method);
+				});
+			} else {
+				var filtered = {};
+				$.each(argument.split(/\s/), function() {
+					$(element).removeClass(this).removeAttr(this);
+					filtered[this] = data[this];
+				});
+				data = filtered;
+			}
+			break;
+		case "add":
+			function add(method, param) {
+				if (typeof param == "boolean") {
+					$(element).addClass(method);
+				} else {
+					$(element).attr(method, param);
+				}
+			} 
+			// add flat rules as returned by this method 
+			if (argument.constructor == Array) {
+				$.each(argument, function() {
+					add(this.method, this.parameters);
+				});
+			} else {
+				$.each(argument, add);
+			}
+			break;
+		}
+
 - figure out how to deal with array like structures
 	- http://www.janepatrick.co.uk/admin/test/associative.php
 	- http://www.janepatrick.co.uk/admin/test/associative-select.php
