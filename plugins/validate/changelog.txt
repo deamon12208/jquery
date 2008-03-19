@@ -1,7 +1,7 @@
 1.3.0
 ---
 * Fixed invalid-form event, now only triggered when form is invalid
-* Added spanish localization (messages_es.js)
+* Added spanish (es) and polish (pl) localization
 * Extended rules() with add and remove commands
 
 1.2.1
