@@ -332,9 +332,9 @@ test("option: (un)highlight, custom2", function() {
 
 test("rules() - internal - input", function() {
 	expect(4);
-	var element = $('#firstname')[0];
+	var element = $('#firstname');
 	var v = $('#testForm1').validate();
-	var rule = v.rules(element);
+	var rule = element.rules();
 	equals( "required", rule[0].method );
 	equals( true, rule[0].parameters );
 	equals( "minlength", rule[1].method );
@@ -343,22 +343,22 @@ test("rules() - internal - input", function() {
 
 test("rules() - internal - select", function() {
 	expect(2);
-	var element = $('#meal')[0];
+	var element = $('#meal');
 	var v = $('#testForm3').validate();
-	var rule = v.rules(element);
+	var rule = element.rules();
 	equals( "required", rule[0].method );
 	ok( rule[0].parameters );
 });
 
 test("rules() - external", function() {
 	expect( 4 );
-	var element = $('#text1')[0];
+	var element = $('#text1');
 	var v = $('#form').validate({
 		rules: {
 			action: {date: true, min: 5}
 		}
 	});
-	var rule = v.rules(element);
+	var rule = element.rules();
 	equals( "date", rule[0].method );
 	ok( rule[0].parameters );
 	equals( "min", rule[1].method );
@@ -375,7 +375,6 @@ test("rules() - external - complete form", function() {
 		ok( true, "method executed" );
 		return true;
 	});
-	var element = $('#text1')[0];
 	var v = $('#form').validate({
 		rules: {
 			action: {verifyTest: true}
@@ -389,9 +388,9 @@ test("rules() - external - complete form", function() {
 
 test("rules() - internal - input", function() {
 	expect(7);
-	var element = $('#form8input')[0];
+	var element = $('#form8input');
 	var v = $('#testForm8').validate();
-	var rule = v.rules(element);
+	var rule = element.rules();
 	equals( "required", rule[0].method );
 	equals( true, rule[0].parameters );
 	equals( "number", rule[1].method );
@@ -415,12 +414,12 @@ test("rules(), merge min/max to range, minlength/maxlength to rangelength", func
 			}
 		}
 	});
-	var rangeRules = v.rules($("#firstnamec")[0]);
+	var rangeRules = $("#firstnamec").rules();
 	equals( "range", rangeRules[0].method );
 	equals( 5, rangeRules[0].parameters[0] );
 	equals( 12, rangeRules[0].parameters[1] );
 	
-	var lengthRules = v.rules($("#lastnamec")[0]);
+	var lengthRules = $("#lastnamec").rules();
 	equals( "rangelength", lengthRules[0].method );
 	equals( 2, lengthRules[0].parameters[0] );
 	equals( 8, lengthRules[0].parameters[1] );
@@ -470,7 +469,7 @@ test("rules(), evaluate dynamic parameters", function() {
 	equals( 12, rules[0].parameters );
 });
 
-test("rules(), class and attribute combinations", function() {
+(function() {
 	function compare(a, b, msg) {
 		var ret = true;
 		if ( a && b && a.length != undefined && a.length == b.length ) {
@@ -489,76 +488,105 @@ test("rules(), class and attribute combinations", function() {
 		} else
 			ret = false;
 		ok( ret, msg + " expected: " + serialArray(b) + " result: " + serialArray(a) );
+		console.log(ret, msg + " expected: ", b, " result: ", a)
 	}
-	$.validator.addMethod("customMethod1", function() {
-		return false;
-	}, "");
-	$.validator.addMethod("customMethod2", function() {
-		return false;
-	}, "");
-	$("#v2").validate({
-		rules: {
-			'v2-i7': {
-				required: true,
-				minlength: 2,
-				customMethod: true
-			}
-		}
-	});
-	compare( $("#v2-i1").rules(), [{ method: "required", parameters: true }]);
-	compare( $("#v2-i2").rules(), [{ method: "required", parameters: true }, { method: "email", parameters: true }]);
-	compare( $("#v2-i3").rules(), [{ method: "url", parameters: true }]);
-	compare( $("#v2-i4").rules(), [{ method: "required", parameters: true }, { method: "minlength", parameters: 2 }]);
-	jQuery.validator.autoCreateRanges = true;
-	compare( $("#v2-i5").rules(), [{ method: "required", parameters: true }, { method: "customMethod1", parameters: "123" }, { method: "rangelength", parameters: [2, 5] }]);
-	compare( $("#v2-i6").rules(), [{ method: "required", parameters: true }, { method: "customMethod2", parameters: true }, { method: "rangelength", parameters: [2, 5] }]);
-	jQuery.validator.autoCreateRanges = false;
-	compare( $("#v2-i7").rules(), [{ method: "required", parameters: true }, { method: "minlength", parameters: 2 }, { method: "customMethod", parameters: true }]);
-	
-	delete $.validator.methods.customMethod1;
-	delete $.validator.messages.customMethod1;
-	delete $.validator.methods.customMethod2;
-	delete $.validator.messages.customMethod2;
-});
 
-test("rules(), dependency checks", function() {
-	expect(7);
-	var v = $("#testForm1clean").validate({
-		rules: {
-			firstname: {
-				min: {
-					param: 5,
-					depends: function(el) {
-						return /^a/.test($(el).val());
+
+	test("rules(), class and attribute combinations", function() {
+		
+		$.validator.addMethod("customMethod1", function() {
+			return false;
+		}, "");
+		$.validator.addMethod("customMethod2", function() {
+			return false;
+		}, "");
+		$("#v2").validate({
+			rules: {
+				'v2-i7': {
+					required: true,
+					minlength: 2,
+					customMethod: true
+				}
+			}
+		});
+		compare( $("#v2-i1").rules(), [{ method: "required", parameters: true }]);
+		compare( $("#v2-i2").rules(), [{ method: "required", parameters: true }, { method: "email", parameters: true }]);
+		compare( $("#v2-i3").rules(), [{ method: "url", parameters: true }]);
+		compare( $("#v2-i4").rules(), [{ method: "required", parameters: true }, { method: "minlength", parameters: 2 }]);
+		compare( $("#v2-i5").rules(), [{ method: "required", parameters: true }, { method: "minlength", parameters: 2 }, {method: "maxlength", parameters: 5}, { method: "customMethod1", parameters: "123" }]);
+		jQuery.validator.autoCreateRanges = true;
+		compare( $("#v2-i5").rules(), [{ method: "required", parameters: true }, { method: "customMethod1", parameters: "123" }, { method: "rangelength", parameters: [2, 5] }]);
+		compare( $("#v2-i6").rules(), [{ method: "required", parameters: true }, { method: "customMethod2", parameters: true }, { method: "rangelength", parameters: [2, 5] }]);
+		jQuery.validator.autoCreateRanges = false;
+		compare( $("#v2-i7").rules(), [{ method: "required", parameters: true }, { method: "minlength", parameters: 2 }, { method: "customMethod", parameters: true }]);
+		
+		delete $.validator.methods.customMethod1;
+		delete $.validator.messages.customMethod1;
+		delete $.validator.methods.customMethod2;
+		delete $.validator.messages.customMethod2;
+	});
+	
+	test("rules(), dependency checks", function() {
+		expect(7);
+		var v = $("#testForm1clean").validate({
+			rules: {
+				firstname: {
+					min: {
+						param: 5,
+						depends: function(el) {
+							return /^a/.test($(el).val());
+						}
+					}
+				},
+				lastname: {
+					max: {
+						param: 12
+					},
+					email: {
+						depends: function() { return true; }
 					}
 				}
-			},
-			
-			lastname: {
-				max: {
-					param: 12
-				},
-				email: {
-					depends: function() { return true; }
-				}
 			}
-		}
+		});
+		
+		var rules = v.rules($("#firstnamec")[0]);
+		equals( 0, rules.length );
+		
+		$("#firstnamec").val('ab');
+		var rules = v.rules($("#firstnamec")[0]);
+		equals( "min", rules[0].method );
+		equals( 5, rules[0].parameters );
+		
+		var rules = v.rules($("#lastnamec")[0]);
+		equals( "max", rules[0].method );
+		equals( 12, rules[0].parameters );
+		equals( "email", rules[1].method );
+		equals( true, rules[1].parameters );
 	});
 	
-	var rules = v.rules($("#firstnamec")[0]);
-	equals( 0, rules.length );
+	test("rules(), add and remove", function() {
+		$.validator.addMethod("customMethod1", function() {
+			return false;
+		}, "");
+		$("#v2").validate();
+		var removedRules = $("#v2-i5").rules("remove", "required minlength maxlength");
+		compare( $("#v2-i5").rules(), [{ method: "customMethod1", parameters: "123" }]);
+		compare( removedRules, [{ method: "required", parameters: true }, { method: "minlength", parameters: 2 }, {method: "maxlength", parameters: 5}]);
+		
+		$("#v2-i5").rules("add", removedRules);
+		compare( $("#v2-i5").rules(), [{ method: "required", parameters: true }, { method: "minlength", parameters: 2 }, {method: "maxlength", parameters: 5}, { method: "customMethod1", parameters: "123" }]);
+		
+		$("#v2-i5").rules("add", {email:true, min: 5});
+		compare( $("#v2-i5").rules(), [{ method: "required", parameters: true }, { method: "email", parameters: true }, { method: "minlength", parameters: 2 }, {method: "maxlength", parameters: 5}, { method: "min", parameters: "5" }, { method: "customMethod1", parameters: "123" }]);
+		
+		$("#v2-i5").rules("remove");
+		compare( $("#v2-i5").rules(), []);
+		
+		delete $.validator.methods.customMethod1;
+		delete $.validator.messages.customMethod1;
+	});
 	
-	$("#firstnamec").val('ab');
-	var rules = v.rules($("#firstnamec")[0]);
-	equals( "min", rules[0].method );
-	equals( 5, rules[0].parameters );
-	
-	var rules = v.rules($("#lastnamec")[0]);
-	equals( "max", rules[0].method );
-	equals( 12, rules[0].parameters );
-	equals( "email", rules[1].method );
-	equals( true, rules[1].parameters );
-});
+})();
 
 test("defaultMessage(), empty title is ignored", function() {
 	var v = $("#userForm").validate();

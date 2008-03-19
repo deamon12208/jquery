@@ -1,5 +1,5 @@
 /*
- * jQuery validation plug-in pre-1.2.2
+ * jQuery validation plug-in pre-1.3.0
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-validation/
  * http://docs.jquery.com/Plugins/Validation
@@ -87,7 +87,7 @@ jQuery.extend(jQuery.fn, {
         }
     },
 	// http://docs.jquery.com/Plugins/Validation/rules
-	rules: function() {
+	rules: function(command, argument) {
 		var element = this[0];
 		var data = jQuery.validator.normalizeRules(
 		jQuery.extend(
@@ -98,13 +98,49 @@ jQuery.extend(jQuery.fn, {
 			jQuery.validator.staticRules(element)
 		), element);
 	
+		switch(command) {
+		case "remove":
+			if (!argument) {
+				$.each(data, function(method, param) {
+					$(element).removeClass(method).removeAttr(method);
+				});
+			} else {
+				var filtered = {};
+				$.each(argument.split(/\s/), function() {
+					$(element).removeClass(this).removeAttr(this);
+					filtered[this] = data[this];
+				});
+				data = filtered;
+			}
+			break;
+		case "add":
+			function add(method, param) {
+				if (typeof param == "boolean") {
+					$(element).addClass(method);
+				} else {
+					$(element).attr(method, param);
+				}
+			} 
+			// add flat rules as returned by this method 
+			if (argument.constructor == Array) {
+				$.each(argument, function() {
+					add(this.method, this.parameters);
+				});
+			} else {
+				$.each(argument, add);
+			}
+			break;
+		}
+		
 		// convert from object to array
 		var rules = [];
+		
 		// make sure required is at front
 		if (data.required) {
 			rules.push({method:'required', parameters: data.required});
 			delete data.required;
 		}
+		
 		jQuery.each(data, function(method, value) {
 			rules.push({
 				method: method,
