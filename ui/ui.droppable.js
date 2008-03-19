@@ -14,7 +14,6 @@
 			});
 		}
 	});
-
 	
 	$.ui.droppable = function(element, options) {
 
@@ -24,18 +23,17 @@
 		this.element.addClass("ui-droppable");		
 		
 		//Prepare the passed options
-		this.options = $.extend({}, options);
-		var o = this.options; var accept = o.accept;
-		$.extend(o, {
+		var o = this.options = options = $.extend({}, $.ui.droppable.defaults, options);
+		var accept = o.accept;
+		o = $.extend(o, {
 			accept: o.accept && o.accept.constructor == Function ? o.accept : function(d) {
 				return $(d).is(accept);	
-			},
-			tolerance: o.tolerance || 'intersect'		
+			}
 		});
 		
-		$(element).bind("setData.draggable", function(event, key, value){
+		$(element).bind("setData.droppable", function(event, key, value){
 			o[key] = value;
-		}).bind("getData.draggable", function(event, key){
+		}).bind("getData.droppable", function(event, key){
 			return o[key];
 		});
 		
@@ -47,6 +45,13 @@
 			
 	};
 	
+	$.extend($.ui.droppable, {
+		defaults: {
+			disabled: false,
+			tolerance: 'intersect'
+		}
+	});
+
 	$.extend($.ui.droppable.prototype, {
 		plugins: {},
 		ui: function(c) {
@@ -73,11 +78,11 @@
 		},
 		enable: function() {
 			this.element.removeClass("ui-droppable-disabled");
-			this.disabled = false;
+			this.disabled = this.options.disabled = false;
 		},
 		disable: function() {
 			this.element.addClass("ui-droppable-disabled");
-			this.disabled = true;
+			this.disabled = this.options.disabled = true;
 		},
 		over: function(e) {
 
