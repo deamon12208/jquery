@@ -40,6 +40,7 @@
 		if(ui.sender){
 			var w = ui.element.width();
 			ui.placeholder.width(w);
+			ui.helper.css("width",ui.element.children().width());
 		}
 	};
 	
@@ -71,13 +72,16 @@
 			items: '> dl',
 			handle: 'dt',
 			cursor: 'move',
-			cursorAt: { top: 2, left: 2 },
+			//cursorAt: { top: 2, left: 2 },
 			//opacity: 0.8,
 			//helper: 'clone',
 			appendTo: 'body',
 			//placeholder: 'clone',
 			//placeholder: 'placeholder',
 			connectWith: els,
+			start: function(e,ui) {
+				ui.helper.css("width", ui.item.width());
+			},
 			change: sortableChange,
 			update: sortableUpdate
 		});
