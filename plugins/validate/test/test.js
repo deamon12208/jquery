@@ -24,6 +24,18 @@ test("valid() plugin method", function() {
 	ok ( input.valid(), "Input is valid, too" );
 });
 
+test("valid() plugin method, special handling for checkable groups", function() {
+	// rule is defined on first checkbox, must apply to others, too
+	var checkable = $("#checkable2");
+	ok( !checkable.valid(), "must be invalid, not checked yet" );
+	checkable.attr("checked", true);
+	ok( checkable.valid(), "valid, is now checked" );
+	checkable.attr("checked", false);
+	ok( !checkable.valid(), "invalid again" );
+	$("#checkable3").attr("checked", true);
+	ok( checkable.valid(), "valid, third box is checked" );
+});
+
 test("addMethod", function() {
 	expect( 3 );
 	$.validator.addMethod("hi", function(value) {

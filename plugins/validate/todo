@@ -1,7 +1,3 @@
-1.2.2
------
-- fix checkbox minlength:2 (see /demo/radio-checkbox-select-demo.html, check one, submit, uncheck -> message disappears, wrong)
-
 1.3
 ---
 

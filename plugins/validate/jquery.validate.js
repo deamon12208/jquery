@@ -78,10 +78,10 @@ jQuery.extend(jQuery.fn, {
         if ( jQuery(this[0]).is('form')) {
             return this.validate().form();
         } else {
-            var valid = true;
+            var valid = false;
             var validator = jQuery(this[0].form).validate();
             this.each(function() {
-                valid = validator.element(this) && valid;
+				valid |= validator.element(this);
             });
             return valid;
         }
@@ -362,10 +362,8 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		elements: function() {
-			var validator = this;
-			
-			
-			var rulesCache = {};
+			var validator = this,
+				rulesCache = {};
 			
 			// select all valid inputs inside the form (no submit or reset buttons)
 			// workaround with jQuery([]).add until http://dev.jquery.com/ticket/2114 is solved
@@ -409,12 +407,18 @@ jQuery.extend(jQuery.validator, {
 		
 		prepareElement: function( element ) {
 			this.reset();
-			this.toHide = this.errorsFor( this.clean(element) );
+			this.toHide = this.errorsFor(element);
 		},
 	
 		check: function( element ) {
 			element = this.clean( element );
 			this.settings.unhighlight && this.settings.unhighlight.call( this, element, this.settings.errorClass );
+			
+			// if radio/checkbox, validate first element in group instead
+			if (this.checkable(element)) {
+				element = this.findByName( element.name )[0];
+			}
+			
 			var rules = $(element).rules();
 			for( method in rules ) {
 				var rule = { method: method, parameters: rules[method] };
@@ -554,8 +558,7 @@ jQuery.extend(jQuery.validator, {
 			// select by name and filter by form for performance over form.find("[name=...]")
 			var form = this.currentForm;
 			return jQuery(document.getElementsByName(name)).map(function(index, element) {
-				return element.form == form && element || null;
-				//  && element.name == name
+				return element.form == form && element.name == name && element  || null;
 			});
 		},
 		
