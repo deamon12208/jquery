@@ -420,16 +420,25 @@ jQuery.extend(jQuery.validator, {
 			}
 			
 			var rules = $(element).rules();
+			var dependencyMismatch = false;
 			for( method in rules ) {
 				var rule = { method: method, parameters: rules[method] };
 				try {
 					var result = jQuery.validator.methods[method].call( this, jQuery.trim(element.value), element, rule.parameters );
-					if ( result == "dependency-mismatch" )
-						return;
+					
+					// if a method indicates that the field is optional and therefore valid,
+					// don't mark it as valid when there are no other rules
+					if ( result == "dependency-mismatch" ) {
+						dependencyMismatch = true;
+						continue;
+					}
+					dependencyMismatch = false;
+					
 					if ( result == "pending" ) {
 						this.toHide = this.toHide.not( this.errorsFor(element) );
 						return;
 					}
+					
 					if( !result ) {
 						this.formatAndAdd( element, rule );
 						return false;
@@ -440,6 +449,8 @@ jQuery.extend(jQuery.validator, {
 					throw e;
 				}
 			}
+			if (dependencyMismatch)
+				return;
 			if ( this.objectLength(rules) )
 				this.successList.push(element);
 			return true;

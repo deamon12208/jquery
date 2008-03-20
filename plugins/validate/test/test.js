@@ -903,6 +903,30 @@ test("success isn't called for optional elements", function() {
 	equals( 0, $("#testForm1 label").size() );
 });
 
+test("all rules are evaluated even if one returns a dependency-mistmatch", function() {
+	expect(6);
+	equals( "", $("#firstname").removeClass().val() );
+	$("#lastname").remove();
+	$("#errorFirstname").remove();
+	$.validator.addMethod("custom1", function() {
+		ok( true, "custom method must be evaluated" );
+		return true;
+	}, "");
+	var v = $("#testForm1").validate({
+		rules: {
+			firstname: {email:true, custom1: true}
+		}
+	});
+	equals( 0, $("#testForm1 label").size() );
+	v.form();
+	equals( 0, $("#testForm1 label").size() );
+	$("#firstname").valid();
+	equals( 0, $("#testForm1 label").size() );
+	
+	delete $.validator.methods.custom1;
+	delete $.validator.messages.custom1;
+});
+
 test("messages", function() {
 	var m = jQuery.validator.messages;
 	equals( "Please enter no more than 0 characters.", m.maxLength(0) );
