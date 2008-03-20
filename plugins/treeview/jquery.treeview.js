@@ -1,5 +1,5 @@
 /*
- * Treeview 1.4 - jQuery plugin to hide and show branches of a tree
+ * Treeview pre-1.4.1 - jQuery plugin to hide and show branches of a tree
  * 
  * http://bassistance.de/jquery-plugins/jquery-plugin-treeview/
  * http://docs.jquery.com/Plugins/Treeview
@@ -64,7 +64,9 @@
 		},
 		applyClasses: function(settings, toggler) {
 			this.filter(":has(>ul):not(:has(>a))").find(">span").click(function(event) {
-				toggler.apply($(this).next());
+				// don't handle click events on children, eg. checkboxes
+				if ( this == event.target )
+					toggler.apply($(this).next());
 			}).add( $("a", this) ).hoverClass();
 			
 			if (!settings.prerendered) {
