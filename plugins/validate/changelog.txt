@@ -1,7 +1,7 @@
 1.2.2
 ---
 * Fixed invalid-form event, now only triggered when form is invalid
-* Added spanish (es) and polish (pl) localization
+* Added spanish (es), russian (ru) and polish (pl) localization
 * Added removeAttrs plugin to facilate adding and removing multiple attributes
 * Fixed checkbox group validation with inline rules: As long as the rules are specified on the first element, the group is now properly validated on click
 * Fixed #2473, ignoring all rules with an explicit parameter of boolean-false, eg. required:false is the same as not specifying required at all (it was handled as required:true so far)
