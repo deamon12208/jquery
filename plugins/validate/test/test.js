@@ -348,6 +348,16 @@ test("rules() - internal - input", function() {
 	compare2( element.rules(), { required: true, minlength: 2 } );
 });
 
+test("rules(), ignore method:false", function() {
+	var element = $('#firstnamec');
+	var v = $('#testForm1clean').validate({
+		rules: {
+			firstname: { required: false, minlength: 2 }	
+		}
+	});
+	compare2( element.rules(), { minlength: 2 } );
+});
+
 test("rules() - internal - select", function() {
 	var element = $('#meal');
 	var v = $('#testForm3').validate();

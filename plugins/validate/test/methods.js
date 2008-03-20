@@ -181,8 +181,8 @@ test("dateDE", function() {
 });
 
 test("required", function() {
-	var v = jQuery("#form").validate();
-	var method = $.validator.methods.required;
+	var v = jQuery("#form").validate(),
+		method = $.validator.methods.required,
 		e = $('#text1, #hidden2, #select1, #select2');
 	ok( method.call( v, e[0].value, e[0]), "Valid text input" );
 	ok(!method.call( v, e[1].value, e[1]), "Invalid text input" );
@@ -212,8 +212,8 @@ test("required", function() {
 });
 
 test("required with dependencies", function() {
-	var v = jQuery("#form").validate();
-	var method = $.validator.methods.required;
+	var v = jQuery("#form").validate(),
+		method = $.validator.methods.required,
     	e = $('#hidden2, #select1, #area2, #radio1, #check2');
 	ok( method.call( v, e[0].value, e[0], "asffsaa"), "Valid text input due to depencie not met" );
 	ok(!method.call( v, e[0].value, e[0], "input"), "Invalid text input" );
@@ -230,8 +230,8 @@ test("required with dependencies", function() {
 });
 
 test("minLength", function() {
-	var v = jQuery("#form").validate();
-	var method = $.validator.methods.minLength,
+	var v = jQuery("#form").validate(),
+		method = $.validator.methods.minLength,
 		param = 2,
 		e = $('#text1, #text2, #text3');
 	ok( method.call( v, e[0].value, e[0], param), "Valid text input" );
