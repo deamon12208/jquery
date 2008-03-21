@@ -65,7 +65,7 @@
 		};
 	});
 
-	var old = $.fn.remove;
+	var _remove = $.fn.remove;
 	$.fn.extend({
 		position: function() {
 			var offset       = this.offset();
@@ -94,7 +94,10 @@
 					$.data(this, "ui-mouse").destroy();
 			});
 		},
-		remove: function(){ this.trigger("remove"); return old.apply(this, arguments ); }
+		remove: function() {
+			this.trigger("remove");
+			return _remove.apply(this, arguments );
+		}
 	});
 	
 	function num(el, prop) {
