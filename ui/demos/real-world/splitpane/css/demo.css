@@ -41,6 +41,7 @@ body {
 	background: white;
 	font-family: Arial,Sans-serif; font-size: 0.9em;
 	background-color: white;
+	overflow: hidden;
 }
 ol, ul {
 	list-style: none;
