@@ -68,9 +68,81 @@ blockquote, q {
 /*************************************/
 /* Viewer: Layout                    */
 
+#wrapper {
+	background: #e1e7f2 url(../images/bg_gradient.gif) repeat-x;
+	}
+	#header {
+		padding: 10px;
+		background: #67A7E3; color: #fff;
+		position: relative;
+	}
+	#container {
+		height: 500px;
+		}
+		#container td {
+			overflow: hidden;
+			}
+			#container td div {
+				overflow: hidden;
+				padding: 0 15px 0 10px;
+				background: #fff;
+				height:475px;
+				font-size: 90%;
+			}
+		#container .ui-split-side-box {
+			width: 200px;
+			}
+			#container .ui-split-side {
+				overflow: hidden;
+				}
+				#container .ui-split-side ul {
+					margin: 0; padding: 0; padding-top: 3px;
+					}					
+					#container .ui-split-side li {
+						margin: 0; padding: 0;	border: 0; outline: 0;
+						list-style: none;
+					}
+					#container .ui-split-side li a {
+						height: 15px;
+			            display:block;
+			            padding: 3px 3px 3px 12px;
+						border-bottom: 1px solid #E8EEF7;
+			        	color: #000;
+			        	font-size: 90%;
+			        	text-decoration: none;
+					}
+					#container .ui-split-side li a:hover {
+						background: #E8EEF7;
+            			border-color: #C3D9FF;
+					}
+		#container .ui-split-main-box {
+			
+			}
 
-/*************************************/
-/* Viewer: models                    */
+		#container .ui-resizable-e {
+			width: 10px; height: 475px;
+			background:#e1e7f2 url(../images/splitpane_handle-ew.gif) no-repeat scroll 75% 50% !important;
+			cursor:col-resize !important;
+			border-left: #bbb 1px solid;
+			padding: 3px;
+		}
+		#container .ui-resizable-n {
+			height: 10px;
+			background:#e1e7f2 url(../images/splitpane_handle-sn.gif) no-repeat scroll 50% 55% !important;
+			border-top: #bbb 1px solid;
+			padding: 3px;
+		}
+	
+	
 
+	.ui-toolbar-item-hide-icon { 
+		padding-left: 16px; height: 16px;
+		background-image: url(../images/icons_2.png);
+		background-repeat: no-repeat; margin: 0 2px;
+		display: inline-block;
+	}
 
+	.ui-toolbar-item-hide-icon { background-position: -64px 50%; } 
+	
+	.proxy { border: 1px dashed #000; };
 
