@@ -156,7 +156,7 @@
 					//Theme detection, if not loaded, load o.defaultTheme
 					axis.css( loadDefault ? allDefTheme : {} )
 						// Load the knobHandle css, fix width, height, top, left...
-						.css( o.knobHandles ? allKnobTheme : {} ).addClass('ui-resizable-knob-handle').addClass(o.knobHandles)
+						.css( o.knobHandles ? allKnobTheme : {} ).addClass(o.knobHandles ? 'ui-resizable-knob-handle' : '').addClass(o.knobHandles)
 				);
 			}
 			
