@@ -75,7 +75,7 @@
 		};
 		
 		o.knobTheme = {
-			'ui-resizable-handle': { background: '#F2F2F2', border: '1px solid #808080', height: '7px', width: '7px' },
+			'ui-resizable-handle': { background: '#F2F2F2', border: '1px solid #808080', height: '8px', width: '8px' },
 			'ui-resizable-n': { cursor: 'n-resize', top: '-4px', left: '45%' },
 			'ui-resizable-s': { cursor: 's-resize', bottom: '-4px', left: '45%' },
 			'ui-resizable-e': { cursor: 'e-resize', right: '-4px', top: '45%' },
