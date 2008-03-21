@@ -1,4 +1,4 @@
-(function($) {
+;(function($) {
 
 	if (window.Node && Node.prototype && !Node.prototype.contains) {
 		Node.prototype.contains = function (arg) {

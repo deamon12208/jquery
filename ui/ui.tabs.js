@@ -8,7 +8,7 @@
  * http://docs.jquery.com/UI/Tabs
  */
 
-(function($) {
+;(function($) {
 
     // if the UI scope is not availalable, add it
     $.ui = $.ui || {};

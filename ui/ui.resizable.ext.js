@@ -4,7 +4,7 @@
  * 2.argument: ui object
  */
 
-(function($) {
+;(function($) {
 
 	$.ui.plugin.add("resizable", "containment", {
 		

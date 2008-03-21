@@ -1,4 +1,4 @@
-(function($) {
+;(function($) {
 
 	$.fn.extend({
 		draggable: function(options) {

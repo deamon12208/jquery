@@ -1,4 +1,4 @@
-(function($) {
+;(function($) {
 
 	$.fn.extend({
 		droppable: function(options) {

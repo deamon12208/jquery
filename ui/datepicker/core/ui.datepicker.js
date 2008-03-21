@@ -11,7 +11,7 @@
    Settings for (groups of) date pickers are maintained in an instance object
    (DatepickerInstance), allowing multiple different settings on the same page. */
    
-(function($) { // hide the namespace
+;(function($) { // hide the namespace
 
 function Datepicker() {
 	this.debug = false; // Change this to true to start debugging

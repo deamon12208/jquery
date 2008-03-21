@@ -4,7 +4,7 @@
  * 2.argument: ui object
  */
 
-(function($) {
+;(function($) {
 
 	$.ui.plugin.add("sortable", "cursor", {
 		start: function(e,ui) {
@@ -175,4 +175,3 @@
 	});
 
 })(jQuery);
-

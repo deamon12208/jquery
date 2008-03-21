@@ -8,7 +8,7 @@
  * http://docs.jquery.com/UI/TabsExtensions
  */
 
-(function($) {
+;(function($) {
 
     /*
      * Rotate

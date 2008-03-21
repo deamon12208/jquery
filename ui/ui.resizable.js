@@ -1,4 +1,4 @@
-(function($) {
+;(function($) {
 	
 	$.fn.resizable = function(options) {
 		return this.each(function() {
