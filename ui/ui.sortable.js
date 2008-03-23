@@ -42,8 +42,8 @@
 			items: this.options.items || '> *',
 			zIndex: this.options.zIndex || 1000,
 			startCondition: function() {
-				return !self.disabled;	
-			}		
+				return !self.disabled;
+			}
 		});
 		
 		$(element).bind("setData.sortable", function(event, key, value){
@@ -82,11 +82,14 @@
 				if(currentItem && (!this.options.handle || $(e.target).parents().andSelf().is(this.options.handle))) {
 					this.currentItem = currentItem;
 					return true;
-				} else return false; 
+				} else return false;
 
 			}
 		});
-
+		
+		//Prepare cursorAt
+		if(o.cursorAt && o.cursorAt.constructor == Array)
+			o.cursorAt = { left: o.cursorAt[0], top: o.cursorAt[1] };
 	};
 	
 	$.extend($.ui.sortable.prototype, {
@@ -116,7 +119,7 @@
 			
 			items.each(function() {
 				var res = (this.getAttribute(o.attribute || 'id') || '').match(o.expression || (/(.+)[-=_](.+)/));
-				if(res) str.push((o.key || res[1])+'[]='+(o.key ? res[1] : res[2]));				
+				if(res) str.push((o.key || res[1])+'[]='+(o.key ? res[1] : res[2]));
 			});
 			
 			return str.join('&');
@@ -128,7 +131,7 @@
 			var ret = [];
 			
 			items.each(function() {
-				ret.push(this.getAttribute(attr || 'id'));				
+				ret.push(this.getAttribute(attr || 'id'));
 			});
 			
 			return ret;
@@ -141,7 +144,7 @@
 			var l = item.left, r = l + item.width, 
 			    t = item.top,  b = t + item.height;
 			
-			return (   l < x1 + (this.helperProportions.width  / 2)        // Right Half
+			return (   l < x1 + (this.helperProportions.width  / 2)    // Right Half
 				&&     x2 - (this.helperProportions.width  / 2) < r    // Left Half
 				&& t < y1 + (this.helperProportions.height / 2)        // Bottom Half
 				&&     y2 - (this.helperProportions.height / 2) < b ); // Top Half
@@ -311,7 +314,19 @@
 			//Save and store the helper proportions
 			this.helperProportions = { width: this.helper.outerWidth(), height: this.helper.outerHeight() };
 			
-			//Set the original element visibility to hidden to still fill out the white space	
+			//If we have something in cursorAt, we'll use it
+			if(o.cursorAt) {
+				if(o.cursorAt.top != undefined || o.cursorAt.bottom != undefined) {
+					this.offset.top -= this.clickOffset.top - (o.cursorAt.top != undefined ? o.cursorAt.top : (this.helperProportions.height - o.cursorAt.bottom));
+					this.clickOffset.top = (o.cursorAt.top != undefined ? o.cursorAt.top : (this.helperProportions.height - o.cursorAt.bottom));
+				}
+				if(o.cursorAt.left != undefined || o.cursorAt.right != undefined) {
+					this.offset.left -= this.clickOffset.left - (o.cursorAt.left != undefined ? o.cursorAt.left : (this.helperProportions.width - o.cursorAt.right));
+					this.clickOffset.left = (o.cursorAt.left != undefined ? o.cursorAt.left : (this.helperProportions.width - o.cursorAt.right));
+				}
+			}
+			
+			//Set the original element visibility to hidden to still fill out the white space
 			if(this.options.placeholder != 'clone') $(this.currentItem).css('visibility', 'hidden');
 
 			//Post events to possible containers
@@ -325,7 +340,7 @@
 
 			this.dragging = true;
 			return false;
-						
+			
 		},
 		stop: function(e) {
 
@@ -338,7 +353,7 @@
 						this.containers[i].propagate("update", e, this);
 						this.containers[i].propagate("receive", e, this);
 					}
-				};				
+				};
 			};
 			
 			//Post events to containers
@@ -355,7 +370,7 @@
 				$.ui.ddmanager.drop(this, e);
 			
 			this.dragging = false;
-			if(this.cancelHelperRemoval) return false;			
+			if(this.cancelHelperRemoval) return false;
 			$(this.currentItem).css('visibility', '');
 			if(this.placeholder) this.placeholder.remove();
 			this.helper.remove();
@@ -443,7 +458,7 @@
 		rearrange: function(e, i, a) {
 			a ? a.append(this.currentItem) : i.item[this.direction == 'down' ? 'before' : 'after'](this.currentItem);
 			this.refreshPositions(true); //Precompute after each DOM insertion, NOT on mousemove
-			if(this.placeholderElement) this.placeholder.css(this.placeholderElement.offset());			
+			if(this.placeholderElement) this.placeholder.css(this.placeholderElement.offset());
 		}
 	});
 
