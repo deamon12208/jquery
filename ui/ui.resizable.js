@@ -209,7 +209,7 @@
 				if (this.className) 
 					var axis = this.className.match(/ui-resizable-(se|sw|ne|nw|n|e|s|w)/i);
 				//Axis, default = se
-				o.axis = axis && axis[1] ? axis[1] : 'se';
+				self.axis = o.axis = axis && axis[1] ? axis[1] : 'se';
 			}
 		});
 				
@@ -305,31 +305,34 @@
 			this.disabled = true;
 		},
 		start: function(e) {
-			var o = this.options, iniPos = this.element.position(), el = this.element;
+			var o = this.options, iniPos = this.element.position(), el = this.element, 
+				num = function(v) { return parseInt(v, 10) || 0; }, ie6 = $.browser.msie && $.browser.version < 7;
 			o.resizing = true;
 			o.documentScroll = { top: $(document).scrollTop(), left: $(document).scrollLeft() };
 	
-			// buf fix #1749
+			// bugfix #1749
 			if (el.is('.ui-draggable') || (/absolute/).test(el.css('position'))) {
+				
 				// sOffset decides if document scrollOffset will be added to the top/left of the resizable element
 				var sOffset = $.browser.msie && !o.containment && (/absolute/).test(el.css('position')) && !(/relative/).test(el.parent().css('position'));
 				var dscrollt = sOffset ? o.documentScroll.top : 0, dscrolll = sOffset ? o.documentScroll.left : 0;
+				
 				el.css({ position: 'absolute', top: (iniPos.top + dscrollt), left: (iniPos.left + dscrolll) });
 			}
-	
+			
 			//Opera fixing relative position
 			if (/relative/.test(el.css('position')) && $.browser.opera)
 			el.css({ position: 'relative', top: 'auto', left: 'auto' });
 	
 			this._renderProxy();
 	
-			var curleft = parseInt(this.helper.css('left'),10) || 0, curtop = parseInt(this.helper.css('top'),10) || 0;
+			var curleft = num(this.helper.css('left')), curtop = num(this.helper.css('top'));
 			
 			//Store needed variables
 			this.offset = this.helper.offset();
 			this.position = { left: curleft, top: curtop };
-			this.size = o.proxy ? { width: el.outerWidth(), height: el.outerHeight() } : { width: el.width(), height: el.height() };
-			this.originalSize = o.proxy ? { width: el.outerWidth(), height: el.outerHeight() } : { width: el.width(), height: el.height() };
+			this.size = o.proxy || ie6 ? { width: el.outerWidth(), height: el.outerHeight() } : { width: el.width(), height: el.height() };
+			this.originalSize = o.proxy || ie6 ? { width: el.outerWidth(), height: el.outerHeight() } : { width: el.width(), height: el.height() };
 			this.originalPosition = { left: curleft, top: curtop };
 			this.sizeDiff = { width: el.outerWidth() - el.width(), height: el.outerHeight() - el.height() };
 			this.originalMousePosition = { left: e.pageX, top: e.pageY };
@@ -338,29 +341,26 @@
 			o.aspectRatio = (typeof o.aspectRatio == 'number') ? o.aspectRatio : ((this.originalSize.height / this.originalSize.width)||1);
 	
 			if (o.preserveCursor)
-				$('body').css('cursor', o.axis + '-resize');
+				$('body').css('cursor', this.axis + '-resize');
 				
 			this.propagate("start", e); 	
 			return false;
 		},
 		stop: function(e) {
 			this.options.resizing = false;
-			var o = this.options;
+			var o = this.options, num = function(v) { return parseInt(v, 10) || 0; }, self = this;
 	
 			if(o.proxy) {
 				var pr = o.proportionallyResize, ista = pr && /textarea/i.test(pr.get(0).nodeName), 
-							soffseth = ista && $.ui.hasScroll(pr.get(0), 'left') /* TODO - jump height */ ? 0 : this.sizeDiff.height,
-							soffsetw = ista ? 0 : this.sizeDiff.width;
-				
-				var style = {
-					width: (this.helper.width() - soffsetw) + "px",
-					height: (this.helper.height() - soffseth) + "px",
-					top: ((parseInt(this.element.css('top'),10) || 0) + ((parseInt(this.helper.css('top'),10) - this.elementOffset.top)||0)),
-					left: ((parseInt(this.element.css('left'),10) || 0) + ((parseInt(this.helper.css('left'),10) - this.elementOffset.left)||0))
-				};
+							soffseth = ista && $.ui.hasScroll(pr.get(0), 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
+								soffsetw = ista ? 0 : self.sizeDiff.width;
+			
+				var style = { width: (self.size.width - soffsetw), height: (self.size.height - soffseth) },
+						left = parseInt(self.element.css('left'), 10) + (self.position.left - self.originalPosition.left), 
+							top = parseInt(self.element.css('top'), 10) + (self.position.top - self.originalPosition.top);
 				
 				if (!o.animate)
-					this.element.css(style);
+					this.element.css($.extend(style, { top: top, left: left }));
 				
 				if (o.proxy && !o.animate) this._proportionallyResize();
 				this.helper.remove();
@@ -375,7 +375,7 @@
 		drag: function(e) {
 			//Increase performance, avoid regex
 			var el = this.helper, o = this.options, props = {},
-				self = this, smp = this.originalMousePosition, a = o.axis;
+				self = this, smp = this.originalMousePosition, a = this.axis;
 
 			var dx = (e.pageX-smp.left)||0, dy = (e.pageY-smp.top)||0;
 			var trigger = this.change[a];
@@ -383,10 +383,6 @@
 		 
 			// Calculate the attrs that will be change
 			var data = trigger.apply(this, [e, dx, dy]), ie6 = $.browser.msie && $.browser.version < 7, csdif = this.sizeDiff;
-		 
-			// Adjust currentSizeDiff on resize
-			if (data.width) data.width = data.width + (!o.proxy && ie6 ? csdif.width : 0);
-			if (data.height) data.height = data.height + (!o.proxy && ie6 ? csdif.height : 0);
 		 
 			if (o._aspectRatio || e.shiftKey)
 				data = this._updateRatio(data, e);
@@ -418,10 +414,10 @@
 		},
 		
 		_updateRatio: function(data, e) {
-			var o = this.options, cpos = this.position, csize = this.size, a = o.axis;
+			var o = this.options, cpos = this.position, csize = this.size, a = this.axis;
 			
-			if (data.height) data.width = csize.height / o.aspectRatio;
-			else if (data.width) data.height = csize.width * o.aspectRatio;
+			if (data.height) data.width = Math.round(csize.height / o.aspectRatio);
+			else if (data.width) data.height = Math.round(csize.width * o.aspectRatio);
 			
 			if (a == 'sw') {
 				data.left = cpos.left + (csize.width - data.width);
@@ -437,7 +433,7 @@
 		
 		_respectSize: function(data, e) {
 			
-			var el = this.helper, o = this.options, pRatio = o._aspectRatio || e.shiftKey,  a = o.axis, 
+			var el = this.helper, o = this.options, pRatio = o._aspectRatio || e.shiftKey,  a = this.axis, 
 					ismaxw = data.width && o.maxWidth && o.maxWidth < data.width, ismaxh = data.height && o.maxHeight && o.maxHeight < data.height,
 						isminw = data.width && o.minWidth && o.minWidth > data.width, isminh = data.height && o.minHeight && o.minHeight > data.height;
 			

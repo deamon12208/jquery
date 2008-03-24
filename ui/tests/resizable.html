@@ -297,7 +297,7 @@ $(document).ready(function(){
 	});
 
 	$('#image').resizable({
-		//proxy: "proxy",
+		proxy: "proxy",
 		handles: 'all',
 		minWidth: 50,
 		minHeight: 50,
@@ -305,6 +305,8 @@ $(document).ready(function(){
 		//grid: [50, 50],
 		
 		ghost: 'ghost',
+		
+		knobHandles: true,
 		
 		animate: true,
 		
