@@ -153,6 +153,30 @@
 				&&     y2 - (this.helperProportions.height / 2) < b ); // Top Half
 			
 		},
+		intersectsWithEdge: function(item) {
+			
+			var x1 = this.position.absolute.left, x2 = x1 + this.helperProportions.width,
+			    y1 = this.position.absolute.top, y2 = y1 + this.helperProportions.height;
+			var l = item.left, r = l + item.width, 
+			    t = item.top,  b = t + item.height;
+
+
+			if (!(   l < x1 + (this.helperProportions.width  / 2)    // Right Half
+				&&     x2 - (this.helperProportions.width  / 2) < r    // Left Half
+				&& t < y1 + (this.helperProportions.height / 2)        // Bottom Half
+				&&     y2 - (this.helperProportions.height / 2) < b )) return false; // Top Half
+			
+			if(this.floating) {
+				if(x2 > l && x1 < l) return 1; //Crosses left edge
+				if(x1 < r && x2 > r) return 2; //Crosses right edge
+			} else {
+				if(y2 > t && y1 < t) return 1; //Crosses top edge
+				if(y1 < b && y2 > b) return 2; //Crosses bottom edge
+			}
+			
+			return false;
+			
+		},
 		//This method checks approximately if the item is dragged in a container, but doesn't touch any items
 		inEmptyZone: function(container) {
 
@@ -235,31 +259,6 @@
 				.css((that || this).placeholderElement.offset())
 				.css({ width: (that || this).placeholderElement.outerWidth(), height: (that || this).placeholderElement.outerHeight() })
 				;
-		},
-		recallOffset: function(e) {
-
-			//Prepare variables for position generation
-			$.extend(this, {
-				offsetParent: this.helper.offsetParent(),
-				offsets: {
-					absolute: this.currentItem.offset(),
-					relative: this.currentItem.position()
-				}
-			});
-
-			//Generate the original position
-			var r = this.helper.css('position') == 'relative';
-			this.originalPosition = {
-				left: (r ? parseInt(this.helper.css('left'),10) || 0 : this.offsets.relative.left + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollLeft)),
-				top: (r ? parseInt(this.helper.css('top'),10) || 0 : this.offsets.relative.top + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollTop))
-			};
-			
-			//Generate a flexible offset that will later be subtracted from e.pageX/Y
-			this.offset = {
-				left: this.mouse.start.left - this.originalPosition.left,
-				top: this.mouse.start.top - this.originalPosition.top
-			};
-			
 		},
 		contactContainers: function(e) {
 			for (var i = this.containers.length - 1; i >= 0; i--){
@@ -430,14 +429,16 @@
 
 			//Rearrange
 			for (var i = this.items.length - 1; i >= 0; i--) {
-				if(
-						this.intersectsWith(this.items[i]) //items must intersect
-					&& 	this.items[i].item[0] != this.currentItem[0] //cannot intersect with itself
+				var intersection = this.intersectsWithEdge(this.items[i]);
+				if(!intersection) continue;
+				
+				if(     this.items[i].item[0] != this.currentItem[0] //cannot intersect with itself
 					&&	this.items[i].item[this.direction == 'down' ? 'prev' : 'next']()[0] != this.currentItem[0] //no useless actions that have been done before
 					&&	!this.currentItem[0].contains(this.items[i].item[0]) //no action if the item moved is the parent of the item checked
 					&& (this.options.type == 'semi-dynamic' ? !this.element[0].contains(this.items[i].item[0]) : true)
 				) {
 					
+					this.direction = intersection == 1 ? "down" : "up";
 					this.rearrange(e, this.items[i]);
 					this.propagate("change", e); //Call plugins and callbacks
 					break;

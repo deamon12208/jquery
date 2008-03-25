@@ -140,6 +140,10 @@
 				do { if((/auto|scroll/).test(el.css('overflow')) || (/auto|scroll/).test(el.css('overflow-x'))) return el; el = el.parent(); } while (el[0].parentNode);
 				return $(document);
 			}(this);
+			
+			if(ui.instance.overflowY[0] != document && ui.instance.overflowY[0].tagName != 'HTML') ui.instance.overflowYstart = ui.instance.overflowY[0].scrollTop;
+			if(ui.instance.overflowX[0] != document && ui.instance.overflowX[0].tagName != 'HTML') ui.instance.overflowXstart = ui.instance.overflowX[0].scrollLeft;
+			
 		},
 		sort: function(e,ui) {
 			
@@ -171,7 +175,11 @@
 					$(document).scrollLeft($(document).scrollLeft() + o.scrollSpeed);
 			}
 			
-			ui.instance.recallOffset(e);
+			//ui.instance.recallOffset(e);
+			i.offset = {
+				left: i.mouse.start.left - i.originalPosition.left + (i.overflowXstart !== undefined ? i.overflowXstart - i.overflowX[0].scrollLeft : 0),
+				top: i.mouse.start.top - i.originalPosition.top + (i.overflowYstart !== undefined ? i.overflowYstart - i.overflowX[0].scrollTop : 0)
+			};
 
 		}
 	});
