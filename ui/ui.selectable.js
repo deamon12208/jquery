@@ -75,7 +75,14 @@
 			dragPrevention: ['input','textarea','button','select','option'],
 			start: this.start,
 			stop: this.stop,
-			drag: this.drag
+			drag: this.drag,
+			condition: function(e) {
+				var isSelectee = false;
+				$(e.target).parents().andSelf().each(function() {
+					if($.data(this, "selectable-item")) isSelectee = true;
+				});
+				return this.options.keyboard ? !isSelectee : true;
+			}
 		});
 		
 		this.helper = $(document.createElement('div')).css({border:'1px dotted black'});
