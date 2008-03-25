@@ -76,9 +76,13 @@
 				if(this.options.disabled || this.options.type == 'static') return false;
 
 				//Find out if the clicked node (or one of its parents) is a actual item in this.items
-				var currentItem = null, nodes = $(e.target).parents().andSelf().each(function() {
-					if($.data(this, 'sortable-item')) currentItem = $(this);
+				var currentItem = null, nodes = $(e.target).parents().each(function() {	
+					if($.data(this, 'sortable-item')) {
+						currentItem = $(this);
+						return false;
+					}
 				});
+				if($.data(e.target, 'sortable-item')) currentItem = $(e.target);
 				
 				if(!currentItem) return false;	
 				if(this.options.handle) {
