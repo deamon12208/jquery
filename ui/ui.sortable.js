@@ -79,10 +79,16 @@
 				var currentItem = null, nodes = $(e.target).parents().andSelf().each(function() {
 					if($.data(this, 'sortable-item')) currentItem = $(this);
 				});
-				if(currentItem && (!this.options.handle || $(e.target).parents().andSelf().is(this.options.handle))) {
-					this.currentItem = currentItem;
-					return true;
-				} else return false;
+				
+				if(!currentItem) return false;	
+				if(this.options.handle) {
+					var validHandle = false;
+					$(this.options.handle, currentItem).each(function() { if(this == e.target) validHandle = true; });
+					if(!validHandle) return false;
+				}
+					
+				this.currentItem = currentItem;
+				return true;
 
 			}
 		});
