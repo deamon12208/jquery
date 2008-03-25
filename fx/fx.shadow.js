@@ -66,7 +66,7 @@
 			
 			if ( options.monitor ) {
 				function rearrangeShadow() {
-					var $element = $(this), $shadow = $element.next();
+					var $element = $(this), $shadow = $element.next("div.ui-shadow");
 					// $shadow.css( $element.position() );
 					$shadow.css({
 						top:  parseInt($element.css("top"))  +"px",
