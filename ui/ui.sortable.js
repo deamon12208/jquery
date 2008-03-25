@@ -123,7 +123,7 @@
 			var str = []; o = o || {};
 			
 			items.each(function() {
-				var res = (this.getAttribute(o.attribute || 'id') || '').match(o.expression || (/(.+)[-=_](.+)/));
+				var res = ($(this).attr(o.attribute || 'id') || '').match(o.expression || (/(.+)[-=_](.+)/));
 				if(res) str.push((o.key || res[1])+'[]='+(o.key ? res[1] : res[2]));
 			});
 			
@@ -134,7 +134,7 @@
 			var items = $(this.options.items, this.element).not('.ui-sortable-helper'); //Only the items of the sortable itself
 			var ret = [];
 
-			items.each(function() { ret.push(this.getAttribute(attr || 'id')); });
+			items.each(function() { ret.push($(this).attr(attr || 'id')); });
 			return ret;
 		},
 		enable: function() {
