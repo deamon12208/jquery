@@ -212,7 +212,7 @@
 		
 		var left = helper.parent[0].offsetLeft;
 		var top = helper.parent[0].offsetTop;
-		if(event) {
+		if (event) {
 			// position the helper 15 pixel to bottom right, starting from mouse position
 			left = event.pageX + settings(current).left;
 			top = event.pageY + settings(current).top;
@@ -225,12 +225,12 @@
 		var v = viewport(),
 			h = helper.parent[0];
 		// check horizontal position
-		if(v.x + v.cx < h.offsetLeft + h.offsetWidth) {
+		if (v.x + v.cx < h.offsetLeft + h.offsetWidth) {
 			left -= h.offsetWidth + 20 + settings(current).left;
 			helper.parent.css({left: left + 'px'}).addClass("viewport-right");
 		}
 		// check vertical position
-		if(v.y + v.cy < h.offsetTop + h.offsetHeight) {
+		if (v.y + v.cy < h.offsetTop + h.offsetHeight) {
 			top -= h.offsetHeight + 20 + settings(current).top;
 			helper.parent.css({top: top + 'px'}).addClass("viewport-bottom");
 		}
