@@ -42,7 +42,7 @@
 			items: this.options.items || '> *',
 			zIndex: this.options.zIndex || 1000,
 			startCondition: function() {
-				return !self.disabled;
+				return !self.options.disabled;
 			}
 		});
 		
@@ -73,7 +73,7 @@
 			drag: this.drag,
 			condition: function(e) {
 
-				if(this.disabled || this.options.type == 'static') return false;
+				if(this.options.disabled || this.options.type == 'static') return false;
 
 				//Find out if the clicked node (or one of its parents) is a actual item in this.items
 				var currentItem = null, nodes = $(e.target).parents().andSelf().each(function() {
@@ -139,11 +139,11 @@
 		},
 		enable: function() {
 			this.element.removeClass("ui-sortable-disabled");
-			this.disabled = false;
+			this.options.disabled = false;
 		},
 		disable: function() {
 			this.element.addClass("ui-sortable-disabled");
-			this.disabled = true;
+			this.options.disabled = true;
 		},
 		/* Be careful with the following core functions */
 		intersectsWith: function(item) {
@@ -210,7 +210,7 @@
 					var cur = $(this.options.connectWith[i]);
 					for (var j = cur.length - 1; j >= 0; j--){
 						var inst = $.data(cur[j], 'sortable');
-						if(inst && !inst.disabled) {
+						if(inst && !inst.options.disabled) {
 							queries.push($(inst.options.items, inst.element));
 							this.containers.push(inst);
 						}

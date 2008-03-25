@@ -78,11 +78,11 @@
 		},
 		enable: function() {
 			this.element.removeClass("ui-droppable-disabled");
-			this.disabled = this.options.disabled = false;
+			this.options.disabled = false;
 		},
 		disable: function() {
 			this.element.addClass("ui-droppable-disabled");
-			this.disabled = this.options.disabled = true;
+			this.options.disabled = true;
 		},
 		over: function(e) {
 
@@ -151,8 +151,16 @@
 
 		switch (toleranceMode) {
 			case 'fit':
-				return (   l < x1 && x2 < r
-					&& t < y1 && y2 < b);
+				
+				if(!((y2-(draggable.helperProportions.height/2) > t && y1 < t) || (y1 < b && y2 > b) || (x2 > l && x1 < l) || (x1 < r && x2 > r))) return false;
+				
+				if(y2-(draggable.helperProportions.height/2) > t && y1 < t) return 1; //Crosses top edge
+				if(y1 < b && y2 > b) return 2; //Crosses bottom edge
+				if(x2 > l && x1 < l) return 1; //Crosses left edge
+				if(x1 < r && x2 > r) return 2; //Crosses right edge
+				
+				//return (   l < x1 && x2 < r
+				//	&& t < y1 && y2 < b);
 				break;
 			case 'intersect':
 				return (   l < x1 + (draggable.helperProportions.width  / 2)        // Right Half
@@ -189,7 +197,7 @@
 			var type = e ? e.type : null; // workaround for #2317
 			for (var i = 0; i < m.length; i++) {
 				
-				if(m[i].item.disabled || (t && !m[i].item.options.accept.call(m[i].item.element,(t.currentItem || t.element)))) continue;
+				if(m[i].item.options.disabled || (t && !m[i].item.options.accept.call(m[i].item.element,(t.currentItem || t.element)))) continue;
 				m[i].offset = $(m[i].item.element).offset();
 				m[i].item.proportions = { width: m[i].item.element.outerWidth(), height: m[i].item.element.outerHeight() };
 				
@@ -201,10 +209,10 @@
 			
 			$.each($.ui.ddmanager.droppables, function() {
 				
-				if (!this.item.disabled && $.ui.intersect(draggable, this, this.item.options.tolerance))
+				if (!this.item.options.disabled && $.ui.intersect(draggable, this, this.item.options.tolerance))
 					this.item.drop.call(this.item, e);
 					
-				if (!this.item.disabled && this.item.options.accept.call(this.item.element,(draggable.currentItem || draggable.element))) {
+				if (!this.item.options.disabled && this.item.options.accept.call(this.item.element,(draggable.currentItem || draggable.element))) {
 					this.out = 1; this.over = 0;
 					this.item.deactivate.call(this.item, e);
 				}
@@ -220,7 +228,7 @@
 			//Run through all droppables and check their positions based on specific tolerance options
 			$.each($.ui.ddmanager.droppables, function() {
 
-				if(this.item.disabled) return; 
+				if(this.item.options.disabled) return; 
 				var intersects = $.ui.intersect(draggable, this, this.item.options.tolerance);
 
 				var c = !intersects && this.over == 1 ? 'out' : (intersects && this.over == 0 ? 'over' : null);

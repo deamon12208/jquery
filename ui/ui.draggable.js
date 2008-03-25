@@ -48,7 +48,7 @@
 			start: this.start,
 			stop: this.stop,
 			drag: this.drag,
-			condition: function(e) { return !(e.target.className.indexOf("ui-resizable-handle") != -1 || this.disabled); }
+			condition: function(e) { return !(e.target.className.indexOf("ui-resizable-handle") != -1 || this.options.disabled); }
 		});
 		
 		//Position the node
@@ -87,11 +87,11 @@
 		},
 		enable: function() {
 			this.element.removeClass("ui-draggable-disabled");
-			this.disabled = false;
+			this.options.disabled = false;
 		},
 		disable: function() {
 			this.element.addClass("ui-draggable-disabled");
-			this.disabled = true;
+			this.options.disabled = true;
 		},
 		setContrains: function(minLeft,maxLeft,minTop,maxTop) {
 			this.minLeft = minLeft; this.maxLeft = maxLeft;
