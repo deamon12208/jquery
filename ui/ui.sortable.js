@@ -320,31 +320,26 @@
 			this.helper = typeof o.helper == 'function' ? $(o.helper.apply(this.element[0], [e, this.currentItem])) : this.currentItem.clone();
 			if(!this.helper.parents('body').length) this.helper.appendTo(o.appendTo || this.currentItem[0].parentNode); //Add the helper to the DOM if that didn't happen already
 			this.helper.css({ position: 'absolute', clear: 'both' }).addClass('ui-sortable-helper'); //Position it absolutely and add a helper class
-
 			
 			//Prepare variables for position generation
 			$.extend(this, {
 				offsetParent: this.helper.offsetParent(),
 				offsets: {
-					absolute: this.currentItem.offset(),
-					relative: this.currentItem.position()
+					absolute: this.currentItem.offset()
 				},
 				mouse: {
 					start: { top: e.pageY, left: e.pageX }
 				}
 			});
 			
-			
 			//The relative click offset
+			this.offsets.parent = this.offsetParent.offset();
 			this.clickOffset = { left: e.pageX - this.offsets.absolute.left, top: e.pageY - this.offsets.absolute.top };
 			
-			
-			//Generate the original position
-			var r = this.helper.css('position') == 'relative';
 			this.originalPosition = {
-				left: (r ? parseInt(this.helper.css('left'),10) || 0 : this.offsets.relative.left + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollLeft)),
-				top: (r ? parseInt(this.helper.css('top'),10) || 0 : this.offsets.relative.top + (this.offsetParent[0] == document.body ? 0 : this.offsetParent[0].scrollTop))
-			};
+				left: this.offsets.absolute.left - this.offsets.parent.left,
+				top: this.offsets.absolute.top - this.offsets.parent.top
+			}
 			
 			//Generate a flexible offset that will later be subtracted from e.pageX/Y
 			//I hate margins - they need to be removed before positioning the element absolutely..
