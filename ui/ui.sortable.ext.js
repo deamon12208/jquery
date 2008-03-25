@@ -45,14 +45,16 @@
 			var self = ui.instance;
 			self.cancelHelperRemoval = true;
 			var cur = self.currentItem.offset();
+			var op = self.helper.offsetParent().offset();
 			if(ui.instance.options.zIndex) ui.helper.css('zIndex', ui.instance.options.zIndex); //Do the zIndex again because it already was resetted by the plugin above on stop
 
 			//Also animate the placeholder if we have one
 			if(ui.instance.placeholder) ui.instance.placeholder.animate({ opacity: 'hide' }, parseInt(ui.options.revert, 10) || 500);
 			
+			
 			ui.helper.animate({
-				left: cur.left - self.offsetParentOffset.left - (parseInt(self.currentItem.css('marginLeft'),10) || 0),
-				top: cur.top - self.offsetParentOffset.top - (parseInt(self.currentItem.css('marginTop'),10) || 0)
+				left: cur.left - op.left - (parseInt(self.currentItem.css('marginLeft'),10) || 0),
+				top: cur.top - op.top - (parseInt(self.currentItem.css('marginTop'),10) || 0)
 			}, parseInt(ui.options.revert, 10) || 500, function() {
 				self.currentItem.css('visibility', 'visible');
 				window.setTimeout(function() {
@@ -102,10 +104,10 @@
 			var self = ui.instance;
 			
 			if(c.constructor == Array) {
-				if((ui.absolutePosition.left < c[0])) self.position.left = c[0] - (self.offset.left - self.clickOffset.left);
-				if((ui.absolutePosition.top < c[1])) self.position.top = c[1] - (self.offset.top - self.clickOffset.top);
-				if(ui.absolutePosition.left - c[2] + self.helperProportions.width >= 0) self.position.left = c[2] - (self.offset.left - self.clickOffset.left) - self.helperProportions.width;
-				if(ui.absolutePosition.top - c[3] + self.helperProportions.height >= 0) self.position.top = c[3] - (self.offset.top - self.clickOffset.top) - self.helperProportions.height;
+				if((ui.position.absolute.left < c[0])) self.position.current.left = c[0] - (self.offsets.absolute.left - self.clickOffset.left);
+				if((ui.position.absolute.top < c[1])) self.position.current.top = c[1] - (self.offsets.absolute.top - self.clickOffset.top);
+				if(ui.position.absolute.left - c[2] + self.helperProportions.width >= 0) self.position.left = c[2] - (self.offset.left - self.clickOffset.left) - self.helperProportions.width;
+				if(ui.position.absolute.top - c[3] + self.helperProportions.height >= 0) self.position.top = c[3] - (self.offset.top - self.clickOffset.top) - self.helperProportions.height;
 			} else {
 				if((ui.position.left < c.left)) self.position.left = c.left;
 				if((ui.position.top < c.top)) self.position.top = c.top;

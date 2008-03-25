@@ -99,7 +99,7 @@
 			},
 			over: function(e, ui) {
 				$(this).addClass('target'); //Adding a class that will add a border
-				ui.placeholder.css($.data(ui.sender[0], 'ui-sortable').placeholderElement.offset()); //So I have to relocate the placeholder by two pixels
+				ui.placeholder.css($.data(ui.sender[0], 'sortable').placeholderElement.offset()); //So I have to relocate the placeholder by two pixels
 			},
 			out: function(e, ui) {
 				$(this).removeClass('target');
@@ -115,7 +115,7 @@
 		
 		
 		//Now we cache our sortable instance into something we can later use
-		var inst = $.data($('ul.dynamic')[0], 'ui-sortable');
+		var inst = $.data($('ul.dynamic')[0], 'sortable');
 		
 		//Now we initialize the draggables in the List Group
 		$('ul.static li').draggable({
@@ -129,6 +129,7 @@
 				
 				//This is handy: We reuse the intersectsWith method for checking if the current draggable helper
 				//intersects with the sortable container
+				ui.instance.position.absolute = ui.absolutePosition; //SOrry, this is an ugly API fix
 				if(inst.intersectsWith.call(ui.instance, {
 					left: ui.instance.sortableOffset.left, top: ui.instance.sortableOffset.top,
 					width: inst.element.outerWidth(), height: inst.element.outerWidth()
@@ -145,13 +146,14 @@
 						//by cloning the list group item, appending it to the sortable and using it as inst.currentItem
 						//We can then fire the start event of the sortable with our passed browser event, and our own helper (so it doesn't create a new one)
 						inst.currentItem = $(this).clone().appendTo(inst.element);
-						inst.start(e,null,ui.helper);
+						inst.options.helper = function() { return ui.helper[0]; };
+						inst.start(e);
 						
 						//Because the browser event is way off the new appended portlet, we modify a couple of variables to reflect the changes
-						inst.offset.left -= ui.absolutePosition.left - inst.positionAbs.left;
-						inst.offset.top -= ui.absolutePosition.top - inst.positionAbs.top;
-						inst.clickOffset.left -= ui.absolutePosition.left - inst.positionAbs.left;
-						inst.clickOffset.top -= ui.absolutePosition.top - inst.positionAbs.top;
+						inst.offset.left -= ui.absolutePosition.left - inst.position.absolute.left;
+						inst.offset.top -= ui.absolutePosition.top - inst.position.absolute.top;
+						inst.clickOffset.left -= ui.absolutePosition.left - inst.position.absolute.left;
+						inst.clickOffset.top -= ui.absolutePosition.top - inst.position.absolute.top;
 						
 					}
 					
@@ -167,6 +169,7 @@
 						inst.cancelHelperRemoval = true;
 						inst.options.revert = false; //No revert here
 						inst.stop(e);
+						inst.helper = "original";
 						
 						//Now we remove our currentItem, the list group clone again, and the placeholder, and animate the helper back to it's original size
 						inst.currentItem.remove();

@@ -79,7 +79,7 @@
 				console.log('entered possible container ', this);
 				
 				$(this).addClass('target'); //Adding a class that will add a border
-				ui.placeholder.css($.data(ui.sender[0], 'ui-sortable').placeholderElement.offset()); //So I have to relocate the placeholder by two pixels
+				ui.placeholder.css($.data(ui.sender[0], 'sortable').placeholderElement.offset()); //So I have to relocate the placeholder by two pixels
 			},
 			out: function(e, ui) {
 				//console.log('moved out from possible container ', this);
