@@ -1,3 +1,4 @@
+// $Id$
 ;(function($) {
 
 	//If the UI scope is not available, add it
