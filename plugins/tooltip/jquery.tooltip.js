@@ -48,7 +48,7 @@
 			settings = $.extend({}, $.tooltip.defaults, settings);
 			createHelper(settings);
 			return this.each(function() {
-					$.data(this, "tooltip-settings", settings);
+					this.tSettings = settings;
 					// copy tooltip into its own expando and remove the title
 					this.tooltipText = this.title;
 					$(this).removeAttr("title");
@@ -111,7 +111,7 @@
 	}
 	
 	function settings(element) {
-		return $.data(element, "tooltip-settings");
+		return element.tSettings;
 	}
 	
 	// main event handler to start showing tooltips

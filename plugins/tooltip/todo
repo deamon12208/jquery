@@ -8,3 +8,4 @@
 * add stick on hover of tooltip (with track:false)
 * offer hoverIntent support
 * add image map support (see http://test.learningjquery.com/clue/chic-test.html)
+* remove $.Tooltip/$.fn.Tooltip
