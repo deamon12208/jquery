@@ -10,31 +10,20 @@
  *   http://www.gnu.org/licenses/gpl.html
  *
  * Revision: $Id$
- *
  */
 
 ;(function($) {
-	
-// If the UI scope is not available, add it
-$.ui = $.ui || {};
 
 $.fn.extend({
 	accordion: function(options, data) {
-		var args = Array.prototype.slice.call(arguments, 1);
-
 		return this.each(function() {
-			if (typeof options == "string") {
-				var accordion = $.data(this, "accordion");
-				if (accordion)
-					accordion[options].apply(accordion, args);
-			// INIT with optional options
-			} else if (!$(this).is(".ui-accordion"))
+			var instance = $.data(this, "accordion");
+			if (!instance) {
 				$.data(this, "accordion", new $.ui.accordion(this, options));
+			} else if (typeof options == "string") {
+				instance[options](data);
+			}
 		});
-	},
-	// deprecated, use accordion("activate", index) instead
-	activate: function(index) {
-		return this.accordion("activate", index);
 	}
 });
 
@@ -308,5 +297,10 @@ $.extend($.ui.accordion, {
 		}
 	}
 });
+
+// deprecated, use accordion("activate", index) instead
+$.fn.activate = function(index) {
+	return this.accordion("activate", index);
+};
 
 })(jQuery);
