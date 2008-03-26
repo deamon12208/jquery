@@ -39,6 +39,10 @@ $('#yahoo a').tooltip({
 	showBody: " - "
 });
 
+$("select").tooltip({
+	left: 25
+});
+
 $("#fancy, #fancy2").tooltip({
 	track: true,
 	delay: 0,
@@ -71,10 +75,6 @@ $('#right a').tooltip({
 $('#right2 a').tooltip({ showURL: false });
 
 $("#block").click($.tooltip.block);
-
-$("#remote").click(function() {
-	$("#username").tooltipFor();
-});
 
 });
 </script>
@@ -182,6 +182,15 @@ $('#pretty').tooltip({
 	opacity: 0.95,
 	left: -120
 });</code></pre>
+	</fieldset>
+	
+	<fieldset>
+		<legend>Selects</legend>
+		<select title="fancy select with a tooltip">
+			<option>1. option</option>
+			<option>2. option</option>
+			<option>3. option</option>
+		</select>
 	</fieldset>
 	
 	<fieldset>

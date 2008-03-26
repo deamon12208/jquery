@@ -196,6 +196,10 @@
 		if($.tooltip.blocked)
 			return;
 		
+		if (event && event.target.tagName == "OPTION") {
+			return;
+		}
+		
 		// stop updating when tracking is disabled and the tooltip is visible
 		if ( !track && helper.parent.is(":visible")) {
 			$(document.body).unbind('mousemove', update)
