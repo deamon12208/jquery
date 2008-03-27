@@ -46,18 +46,3 @@
 	background-color: #0A246A;
 	color: HighlightText;
 }
-
-.ac_moreItems {
-	text-align: center;
-	background-color: InactiveCaption;
-	color: InactiveCaptionText;
-	margin: 0px;
-	padding: 0px 5px;
-	cursor: default;
-	display: block;
-	width: 100%;
-	font: bold menu 12px;
-	overflow: hidden;
-	-moz-user-select: none;
-	-khtml-user-select: none;
-}
