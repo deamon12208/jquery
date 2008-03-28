@@ -32,15 +32,21 @@
 		var o = this.options;
 		$.extend(o, {
 			axis: o.axis || (element.offsetWidth < element.offsetHeight ? 'vertical' : 'horizontal'),
-			maxValue: !isNaN(parseInt(o.maxValue,10)) ? parseInt(o.maxValue, 10) :  100,
-			minValue: parseInt(o.minValue,10) || 0
+			max: !isNaN(parseInt(o.max,10)) ? { x: parseInt(o.max, 10), y: parseInt(o.max, 10)  } : ({ x: o.max && o.max.x || 100, y:  o.max && o.max.y || 100 }),
+			min: !isNaN(parseInt(o.min,10)) ? { x: parseInt(o.min, 10), y: parseInt(o.min, 10)  } : ({ x: o.min && o.min.x || 0, y:  o.min && o.min.y || 0 })
 		});
-		
+	
 		//Prepare the real maxValue
-		o.realMaxValue = o.maxValue - o.minValue;
+		o.realMax = {
+			x: o.max.x - o.min.x,
+			y: o.max.y - o.min.y
+		};
 		
 		//Calculate stepping based on steps
-		o.stepping = parseInt(o.stepping, 10) || (o.steps ? o.realMaxValue/o.steps : 0);
+		o.stepping = {
+			x: o.stepping && o.stepping.x || parseInt(o.stepping, 10) || (o.steps && o.steps.x ? o.realMax.x/o.steps.x : 0),
+			y: o.stepping && o.stepping.y || parseInt(o.stepping, 10) || (o.steps && o.steps.y ? o.realMax.y/o.steps.y : 0)
+		};
 		
 		$(element).bind("setData.slider", function(event, key, value){
 			self.options[key] = value;
@@ -80,25 +86,23 @@
 				.bind('focus', function(e) { self.focus(this.firstChild); })
 				.bind('blur', function(e) { self.blur(this.firstChild); })
 				.bind('keydown', function(e) {
-					if(/(37|39)/.test(e.keyCode)) {
-						self.moveTo((e.keyCode == 37 ? '-' : '+') + '=' + self.oneStep(),this.firstChild);
+					if(/(37|38|39|40)/.test(e.keyCode)) {
+						self.moveTo({
+							x: /(37|39)/.test(e.keyCode) ? (e.keyCode == 37 ? '-' : '+') + '=' + self.oneStep(1) : null,
+							y: /(38|40)/.test(e.keyCode) ? (e.keyCode == 38 ? '-' : '+') + '=' + self.oneStep(2) : null
+						}, this.firstChild);
 					}
 				})
 		;
 		
 		//Prepare dynamic properties for later use
-		if(o.axis == 'horizontal') {
-			this.actualSize = this.element.outerWidth();
-			this.properties = ['left', 'width'];
-		} else {
-			this.actualSize = this.element.outerHeight();
-			this.properties = ['top', 'height'];
-		}
+		this.actualSize = { width: this.element.outerWidth() , height: this.element.outerHeight() };
 		
 		//Bind the click to the slider itself
 		this.element.bind('mousedown.slider', function(e) {
 			self.click.apply(self, [e]);
 			self.currentHandle.data("ui-mouse").trigger(e);
+			self.firstValue = self.firstValue + 1; //This is for always triggering the change event
 		});
 		
 		//Move the first handle to the startValue
@@ -110,8 +114,6 @@
 		
 		//If we only have one handle, set the previous handle to this one to allow clicking before selecting the handle
 		if(this.handle.length == 1) this.previousHandle = this.handle;
-		
-		
 		if(this.handle.length == 2 && o.range) this.createRange();
 	
 	};
@@ -126,18 +128,23 @@
 			this.updateRange();
 		},
 		updateRange: function() {
-				this.rangeElement.css(this.properties[0], parseInt($(this.handle[0]).css(this.properties[0]),10) + this.handleSize(0)/2);
-				this.rangeElement.css(this.properties[1], parseInt($(this.handle[1]).css(this.properties[0]),10) - parseInt($(this.handle[0]).css(this.properties[0]),10));
+				var prop = this.options.axis == "vertical" ? "top" : "left";
+				var size = this.options.axis == "vertical" ? "height" : "width";
+				this.rangeElement.css(prop, parseInt($(this.handle[0]).css(prop),10) + this.handleSize(0, this.options.axis == "vertical" ? 2 : 1)/2);
+				this.rangeElement.css(size, parseInt($(this.handle[1]).css(prop),10) - parseInt($(this.handle[0]).css(prop),10));
 		},
 		getRange: function() {
-			return this.rangeElement ? this.convertValue(parseInt(this.rangeElement.css(this.properties[1]),10)) : null;
+			return this.rangeElement ? this.convertValue(parseInt(this.rangeElement.css(this.options.axis == "vertical" ? "height" : "width"),10)) : null;
 		},
 		ui: function(e) {
 			return {
 				instance: this,
 				options: this.options,
 				handle: this.currentHandle,
-				value: this.value(),
+				value: this.options.axis != "both" || !this.options.axis ? Math.round(this.value(null,this.options.axis == "vertical" ? 2 : 1)) : {
+					x: Math.round(this.value(null,1)),
+					y: Math.round(this.value(null,2))
+				},
 				range: this.getRange()
 			};
 		},
@@ -169,27 +176,29 @@
 			$(handle).removeClass('ui-slider-handle-active');
 			if(this.currentHandle && this.currentHandle[0] == handle) { this.previousHandle = this.currentHandle; this.currentHandle = null; };
 		},
-		value: function(handle) {
+		value: function(handle, axis) {
 			if(this.handle.length == 1) this.currentHandle = this.handle;
-			var value = ((parseInt($(handle != undefined ? this.handle[handle] || handle : this.currentHandle).css(this.properties[0]),10) / (this.size() - this.handleSize())) * this.options.realMaxValue) + this.options.minValue;
+			if(!axis) axis = this.options.axis == "vertical" ? 2 : 1;
+			
+			var value = ((parseInt($(handle != undefined && handle !== null ? this.handle[handle] || handle : this.currentHandle).css(axis == 1 ? "left" : "top"),10) / (this.actualSize[axis == 1 ? "width" : "height"] - this.handleSize(null,axis))) * this.options.realMax[axis == 1 ? "x" : "y"]) + this.options.min[axis == 1 ? "x" : "y"];
+			
 			var o = this.options;
-			if (o.stepping) {
-			    value = Math.round(value / o.stepping) * o.stepping;
+			if (o.stepping[axis == 1 ? "x" : "y"]) {
+			    value = Math.round(value / o.stepping[axis == 1 ? "x" : "y"]) * o.stepping[axis == 1 ? "x" : "y"];
 			}
 			return value;
 		},
-		convertValue: function(value) {
-			return this.options.minValue + (value / (this.size() - this.handleSize())) * this.options.realMaxValue;
+		convertValue: function(value,axis) {
+			if(!axis) axis = this.options.axis == "vertical" ? 2 : 1;
+			return this.options.min[axis == 1 ? "x" : "y"] + (value / (this.actualSize[axis == 1 ? "width" : "height"] - this.handleSize(null,axis))) * this.options.realMax[axis == 1 ? "x" : "y"];
 		},
-		translateValue: function(value) {
-			return ((value - this.options.minValue) / this.options.realMaxValue) * (this.size() - this.handleSize());
+		translateValue: function(value,axis) {
+			if(!axis) axis = this.options.axis == "vertical" ? 2 : 1;
+			return ((value - this.options.min[axis == 1 ? "x" : "y"]) / this.options.realMax[axis == 1 ? "x" : "y"]) * (this.actualSize[axis == 1 ? "width" : "height"] - this.handleSize(null,axis));
 		},
-		handleSize: function(handle) {
-			return $(handle != undefined ? this.handle[handle] : this.currentHandle)['outer'+this.properties[1].substr(0,1).toUpperCase()+this.properties[1].substr(1)]();	
-		},
-		size: function() {
-			// if actualSize is 0, the slider was hidden during initialization
-			return this.actualSize || (this.actualSize = this.element.outerWidth());
+		handleSize: function(handle,axis) {
+			if(!axis) axis = this.options.axis == "vertical" ? 2 : 1;
+			return $(handle != undefined && handle !== null ? this.handle[handle] : this.currentHandle)[axis == 1 ? "outerWidth" : "outerHeight"]();	
 		},
 		click: function(e) {
 		
@@ -206,12 +215,15 @@
 			
 			//Move focussed handle to the clicked position
 			this.offset = this.element.offset();
-			this.moveTo(this.convertValue(e[this.properties[0] == 'top' ? 'pageY' : 'pageX'] - this.offset[this.properties[0]] - this.handleSize()/2), null, true);
+			this.moveTo({
+				y: this.convertValue(e.pageY - this.offset.top - this.currentHandle.outerHeight()/2),
+				x: this.convertValue(e.pageX - this.offset.left - this.currentHandle.outerWidth()/2)
+			}, null, true);
 		},
 		start: function(e, handle) {
 		
 			var o = this.options;
-			if(!this.currentHandle) this.currentHandle = this.previousHandle; //This is a especially ugly fix for strange blur events happening on mousemove events
+			if(!this.currentHandle) this.focus(this.previousHandle, true); //This is a especially ugly fix for strange blur events happening on mousemove events
 
 			this.offset = this.element.offset();
 			this.handleOffset = this.currentHandle.offset();
@@ -226,26 +238,28 @@
 			this.propagate('stop', e);
 			if (this.firstValue != this.value())
 				this.propagate('change', e);
+			this.focus(this.currentHandle, true); //This is a especially ugly fix for strange blur events happening on mousemove events
 			return false;
 		},
 		
-		oneStep: function() {
-			return this.options.stepping ? this.options.stepping : (this.options.realMaxValue / this.size()) * 5;
+		oneStep: function(axis) {
+			if(!axis) axis = this.options.axis == "vertical" ? 2 : 1;
+			return this.options.stepping[axis == 1 ? "x" : "y"] ? this.options.stepping[axis == 1 ? "x" : "y"] : (this.options.realMax[axis == 1 ? "x" : "y"] / this.actualSize[axis == 1 ? "width" : "height"]) * 5;
 		},
 		
-		translateRange: function(value) {
+		translateRange: function(value,axis) {
 			if (this.rangeElement) {
-				if (this.currentHandle[0] == this.handle[0] && value >= this.translateValue(this.value(1)))
-					value = this.translateValue(this.value(1) - this.oneStep());
-				if (this.currentHandle[0] == this.handle[1] && value <= this.translateValue(this.value(0)))
-					value = this.translateValue(this.value(0) + this.oneStep());
+				if (this.currentHandle[0] == this.handle[0] && value >= this.translateValue(this.value(1),axis))
+					value = this.translateValue(this.value(1,axis) - this.oneStep(axis), axis);
+				if (this.currentHandle[0] == this.handle[1] && value <= this.translateValue(this.value(0),axis))
+					value = this.translateValue(this.value(0,axis) + this.oneStep(axis));
 			}
 			if (this.options.handles) {
 				var handle = this.options.handles[this.handleIndex()];
-				if (value < this.translateValue(handle.min)) {
-					value = this.translateValue(handle.min);
-				} else if (value > this.translateValue(handle.max)) {
-					value = this.translateValue(handle.max);
+				if (value < this.translateValue(handle.min,axis)) {
+					value = this.translateValue(handle.min,axis);
+				} else if (value > this.translateValue(handle.max,axis)) {
+					value = this.translateValue(handle.max,axis);
 				}
 			}
 			return value;
@@ -255,32 +269,41 @@
 			return this.handle.index(this.currentHandle[0])
 		},
 		
-		translateLimits: function(value) {
-			if (value >= this.size() - this.handleSize())
-				value = this.size() - this.handleSize();
+		translateLimits: function(value,axis) {
+			if(!axis) axis = this.options.axis == "vertical" ? 2 : 1;
+			if (value >= this.actualSize[axis == 1 ? "width" : "height"] - this.handleSize(null,axis))
+				value = this.actualSize[axis == 1 ? "width" : "height"] - this.handleSize(null,axis);
 			if (value <= 0)
 				value = 0;
 			return value;
 		},
 		
 		drag: function(e, handle) {
+
 			var o = this.options;
 			var position = { top: e.pageY - this.offset.top - this.clickOffset.top, left: e.pageX - this.offset.left - this.clickOffset.left};
-			if(!this.currentHandle) this.currentHandle = this.previousHandle; //This is a especially ugly fix for strange blur events happening on mousemove events
+			if(!this.currentHandle) this.focus(this.previousHandle, true); //This is a especially ugly fix for strange blur events happening on mousemove events
 
-			var modifier = position[this.properties[0]];
+			position.left = this.translateLimits(position.left,1);
+			position.top = this.translateLimits(position.top,2);
 			
-			modifier = this.translateLimits(modifier);
-			
-			if (o.stepping) {
-				var value = this.convertValue(modifier);
-				value = Math.round(value / o.stepping) * o.stepping;
-				modifier = this.translateValue(value);	
+			if (o.stepping.x) {
+				var value = this.convertValue(position.left,1);
+				value = Math.round(value / o.stepping.x) * o.stepping.x;
+				position.left = this.translateValue(value, 1);	
+			}
+			if (o.stepping.y) {
+				var value = this.convertValue(position.top,2);
+				value = Math.round(value / o.stepping.y) * o.stepping.y;
+				position.top = this.translateValue(value, 2);	
 			}
 			
-			modifier = this.translateRange(modifier);
+			position.left = this.translateRange(position.left, 1);
+			position.top = this.translateRange(position.top, 2);
 
-			this.currentHandle.css(this.properties[0], modifier);
+			if(o.axis != "vertical") this.currentHandle.css({ left: position.left });
+			if(o.axis != "horizontal") this.currentHandle.css({ top: position.top });
+			
 			if (this.rangeElement)
 				this.updateRange();
 			this.propagate('slide', e);
@@ -295,22 +318,48 @@
 				handle = 0; //If only one handle is available, use it
 			if (handle != undefined)
 				this.currentHandle = this.previousHandle = $(this.handle[handle] || handle);
-	
-			if(value.constructor == String) {
-				if (/^\-\=/.test(value) ) {
-					value = this.value() - parseInt(value.replace('-=', ''), 10);
-				} else if (/^\+\=/.test(value) ) {
-					value = this.value() + parseInt(value.replace('+=', ''), 10);
+
+
+
+			if(value.x !== undefined && value.y !== undefined) {
+				var x = value.x;
+				var y = value.y;
+			} else {
+				var x = value, y = value;
+			}
+
+			if(x && x.constructor != Number) {
+				if (/^\-\=/.test(x) ) {
+					x = this.value(null,1) - parseInt(x.replace('-=', ''), 10);
+				} else if (/^\+\=/.test(x) ) {
+					x = this.value(null,1) + parseInt(x.replace('+=', ''), 10);
 				}
 			}
 			
-			if(o.stepping)
-				value = Math.round(value / o.stepping) * o.stepping;
-			value = this.translateValue(value);
-			value = this.translateLimits(value);
-			value = this.translateRange(value);
+			if(y && y.constructor != Number) {
+				if (/^\-\=/.test(y) ) {
+					y = this.value(null,2) - parseInt(y.replace('-=', ''), 10);
+				} else if (/^\+\=/.test(y) ) {
+					y = this.value(null,2) + parseInt(y.replace('+=', ''), 10);
+				}
+			}
+
+			if(o.axis != "vertical" && x) {
+				if(o.stepping.x) x = Math.round(x / o.stepping.x) * o.stepping.x;
+				x = this.translateValue(x, 1);
+				x = this.translateLimits(x, 1);
+				x = this.translateRange(x, 1);
+				this.currentHandle.css({ left: x });
+			}
+
+			if(o.axis != "horizontal" && y) {
+				if(o.stepping.y) y = Math.round(y / o.stepping.y) * o.stepping.y;
+				y = this.translateValue(y, 2);
+				y = this.translateLimits(y, 2);
+				y = this.translateRange(y, 2);
+				this.currentHandle.css({ top: y });
+			}
 			
-			this.currentHandle.css(this.properties[0], value);
 			if (this.rangeElement)
 				this.updateRange();
 			

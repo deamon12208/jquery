@@ -140,6 +140,7 @@
 				
 				if(!self.initalized && Math.abs(self._MP.left-e.pageX) >= self.options.distance || Math.abs(self._MP.top-e.pageY) >= self.options.distance) {				
 					if(self.options.start) self.options.start.call(self.options.executor || self, e, self.element);
+					if(self.options.drag) self.options.drag.call(self.options.executor || self, e, this.element); //This is actually not correct, but expected
 					self.initialized = true;
 				}
 			};
