@@ -18,7 +18,7 @@
 		//Initialize needed constants
 		var self = this;
 		this.element = $(element);
-		var o = $.extend({}, this.options);
+		var o = this.options = $.extend({}, options);
 		
 		$.data(element, "colorpicker", this);
 		this.element.addClass("ui-colorpicker")
@@ -57,10 +57,14 @@
 			slide : function(e, ui) {
 				self.lastValues = [parseInt(ui.value.x * 255/100),parseInt(ui.value.y * 255/100)];
 				self.setGradientColor();
+				self.propagate("picking", e);
 			},
-			change : function() {
+			change : function(e) {
 				self.colorfieldLast.css("backgroundColor", 'rgb(' + self.currentColor.r + ',' + self.currentColor.g + ',' + self.currentColor.b + ')');
-			}
+				self.propagate("change", e);
+			},
+			stop: function(e) { self.propagate("pick", e); },
+			start: function(e) { self.propagate("start", e); }
 		});
 
 		$('div.ui-colorpicker-hue', this.element).slider({
@@ -68,10 +72,14 @@
 			slide : function(e, ui) {
 				self.setVertColor(parseInt(ui.value * 255 / 100));
 				self.setGradientColor();
+				self.propagate("picking", e);
 			},
-			change : function() {
+			change : function(e) {
 				self.colorfieldLast.css("backgroundColor", 'rgb(' + self.currentColor.r + ',' + self.currentColor.g + ',' + self.currentColor.b + ')');
-			}
+				self.propagate("change", e);
+			},
+			stop: function(e) { self.propagate("pick", e); },
+			start: function(e) { self.propagate("start", e); }
 		});		
 		
 		
@@ -83,7 +91,9 @@
 			return {
 				instance: this,
 				options: this.options,
-				element: this.element				
+				element: this.element,
+				rgb: this.currentColor,
+				hex: (this.toHex(this.currentColor.r) + this.toHex(this.currentColor.g) + this.toHex(this.currentColor.b)).toUpperCase()
 			};
 		},
 		propagate: function(n,e) {
@@ -124,7 +134,7 @@
 			$('input.ui-colorpicker-rgbG', this.element)[0].value = g;
 			$('input.ui-colorpicker-rgbB', this.element)[0].value = b;
 			$('input.ui-colorpicker-hex', this.element)[0].value = (this.toHex(r) + this.toHex(g) + this.toHex(b)).toUpperCase();
-			currentColor = {r:r,g:g,b:b};
+			this.currentColor = {r:r,g:g,b:b};
 		},
 		toHex: function(color){
 			color=parseInt(color).toString(16);
