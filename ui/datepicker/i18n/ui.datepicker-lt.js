@@ -3,8 +3,6 @@
  *
  * @author Arturas Paleicikas <arturas@avalon.lt>
  */
-
-
 jQuery(function($){
 	$.datepicker.regional['lt'] = {clearText: 'Išvalyti', clearStatus: '',
 		closeText: 'Uždaryti', closeStatus: '',
