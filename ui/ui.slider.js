@@ -75,7 +75,7 @@
 					}
 				}
 			})
-			.wrap('<a href="javascript:void(0)"></a>')
+			.wrap('<a href="javascript:void(0)" style="cursor:default;"></a>')
 			.parent()
 				.bind('focus', function(e) { self.focus(this.firstChild); })
 				.bind('blur', function(e) { self.blur(this.firstChild); })
@@ -85,9 +85,6 @@
 					}
 				})
 		;
-		
-		//Position the node
-		if(o.helper == 'original' && (this.element.css('position') == 'static' || this.element.css('position') == '')) this.element.css('position', 'relative');
 		
 		//Prepare dynamic properties for later use
 		if(o.axis == 'horizontal') {
@@ -99,7 +96,10 @@
 		}
 		
 		//Bind the click to the slider itself
-		this.element.bind('click.slider', function(e) { self.click.apply(self, [e]); });
+		this.element.bind('mousedown.slider', function(e) {
+			self.click.apply(self, [e]);
+			self.currentHandle.data("ui-mouse").trigger(e);
+		});
 		
 		//Move the first handle to the startValue
 		$.each(o.handles || [], function(index, handle) {
@@ -206,12 +206,13 @@
 			
 			//Move focussed handle to the clicked position
 			this.offset = this.element.offset();
-			this.moveTo(this.convertValue(e[this.properties[0] == 'top' ? 'pageY' : 'pageX'] - this.offset[this.properties[0]] - this.handleSize()/2));
+			this.moveTo(this.convertValue(e[this.properties[0] == 'top' ? 'pageY' : 'pageX'] - this.offset[this.properties[0]] - this.handleSize()/2), null, true);
 		},
 		start: function(e, handle) {
-			
+		
 			var o = this.options;
-			
+			if(!this.currentHandle) this.currentHandle = this.previousHandle; //This is a especially ugly fix for strange blur events happening on mousemove events
+
 			this.offset = this.element.offset();
 			this.handleOffset = this.currentHandle.offset();
 			this.clickOffset = { top: e.pageY - this.handleOffset.top, left: e.pageX - this.handleOffset.left };
@@ -265,6 +266,7 @@
 		drag: function(e, handle) {
 			var o = this.options;
 			var position = { top: e.pageY - this.offset.top - this.clickOffset.top, left: e.pageX - this.offset.left - this.clickOffset.left};
+			if(!this.currentHandle) this.currentHandle = this.previousHandle; //This is a especially ugly fix for strange blur events happening on mousemove events
 
 			var modifier = position[this.properties[0]];
 			
@@ -277,7 +279,7 @@
 			}
 			
 			modifier = this.translateRange(modifier);
-			
+
 			this.currentHandle.css(this.properties[0], modifier);
 			if (this.rangeElement)
 				this.updateRange();

@@ -131,12 +131,17 @@
 				|| $.inArray(e.target.nodeName.toLowerCase(), this.options.dragPrevention || []) != -1 // Prevent execution on defined elements
 				|| (this.options.condition && !this.options.condition.apply(this.options.executor || this, [e, this.element])) //Prevent execution on condition
 			) return true;
-			
+				
 			var self = this;
 			var initialize = function() {
 				self._MP = { left: e.pageX, top: e.pageY }; // Store the click mouse position
 				$(document).bind('mouseup.draggable', function() { return self.stop.apply(self, arguments); });
 				$(document).bind('mousemove.draggable', function() { return self.drag.apply(self, arguments); });
+				
+				if(!self.initalized && Math.abs(self._MP.left-e.pageX) >= self.options.distance || Math.abs(self._MP.top-e.pageY) >= self.options.distance) {				
+					if(self.options.start) self.options.start.call(self.options.executor || self, e, self.element);
+					self.initialized = true;
+				}
 			};
 
 			if(this.options.delay) {
@@ -145,7 +150,7 @@
 			} else {
 				initialize();
 			}
-			
+				
 			return false;
 			
 		},
@@ -165,7 +170,7 @@
 			var o = this.options;
 			if ($.browser.msie && !e.button) return this.stop.apply(this, [e]); // IE mouseup check
 			
-			if(!this.initialized && (Math.abs(this._MP.left-e.pageX) >= o.distance || Math.abs(this._MP.top-e.pageY) >= o.distance)) {
+			if(!this.initialized && (Math.abs(this._MP.left-e.pageX) >= o.distance || Math.abs(this._MP.top-e.pageY) >= o.distance)) {				
 				if(this.options.start) this.options.start.call(this.options.executor || this, e, this.element);
 				this.initialized = true;
 			} else {
