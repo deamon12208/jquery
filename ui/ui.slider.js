@@ -1,4 +1,14 @@
-// $Id$
+/*
+ * jQuery UI Slider
+ *
+ * Copyright (c) 2008 Paul Bakaus
+ * Dual licensed under the MIT (MIT-LICENSE.txt)
+ * and GPL (GPL-LICENSE.txt) licenses.
+ * 
+ * http://docs.jquery.com/UI/Slider
+ *
+ * Revision: $Id$
+ */
 ;(function($) {
 
 	$.fn.extend({

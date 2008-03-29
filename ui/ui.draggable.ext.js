@@ -1,47 +1,42 @@
-/*
- * 'this' -> original element
- * 1. argument: browser event
- * 2.argument: ui object
- */
-
+// Revision: $Id$
 ;(function($) {
 
 	$.ui.plugin.add("draggable", "cursor", {
-		start: function(e,ui) {
+		start: function(e, ui) {
 			var t = $('body');
 			if (t.css("cursor")) ui.options._cursor = t.css("cursor");
 			t.css("cursor", ui.options.cursor);
 		},
-		stop: function(e,ui) {
+		stop: function(e, ui) {
 			if (ui.options._cursor) $('body').css("cursor", ui.options._cursor);
 		}
 	});
 
 	$.ui.plugin.add("draggable", "zIndex", {
-		start: function(e,ui) {
+		start: function(e, ui) {
 			var t = $(ui.helper);
 			if(t.css("zIndex")) ui.options._zIndex = t.css("zIndex");
 			t.css('zIndex', ui.options.zIndex);
 		},
-		stop: function(e,ui) {
+		stop: function(e, ui) {
 			if(ui.options._zIndex) $(ui.helper).css('zIndex', ui.options._zIndex);
 		}
 	});
 
 	$.ui.plugin.add("draggable", "opacity", {
-		start: function(e,ui) {
+		start: function(e, ui) {
 			var t = $(ui.helper);
 			if(t.css("opacity")) ui.options._opacity = t.css("opacity");
 			t.css('opacity', ui.options.opacity);
 		},
-		stop: function(e,ui) {
+		stop: function(e, ui) {
 			if(ui.options._opacity) $(ui.helper).css('opacity', ui.options._opacity);
 		}
 	});
 
 
 	$.ui.plugin.add("draggable", "revert", {
-		stop: function(e,ui) {
+		stop: function(e, ui) {
 			var self = ui.instance;
 			self.cancelHelperRemoval = true;
 			$(ui.helper).animate({ left: self.originalPosition.left, top: self.originalPosition.top }, parseInt(ui.options.revert, 10) || 500, function() {
@@ -52,7 +47,7 @@
 	});
 
 	$.ui.plugin.add("draggable", "iframeFix", {
-		start: function(e,ui) {
+		start: function(e, ui) {
 
 			var o = ui.options;
 			if(ui.instance.slowMode) return; // Make clones on top of iframes (only if we are not in slowMode)
@@ -70,13 +65,13 @@
 			}
 
 		},
-		stop: function(e,ui) {
+		stop: function(e, ui) {
 			if(ui.options.iframeFix) $("div.DragDropIframeFix").each(function() { this.parentNode.removeChild(this); }); //Remove frame helpers	
 		}
 	});
 	
 	$.ui.plugin.add("draggable", "containment", {
-		start: function(e,ui) {
+		start: function(e, ui) {
 
 			var o = ui.options;
 			var self = ui.instance;
@@ -116,7 +111,7 @@
 	});
 
 	$.ui.plugin.add("draggable", "grid", {
-		drag: function(e,ui) {
+		drag: function(e, ui) {
 			var o = ui.options;
 			var newLeft = ui.instance.originalPosition.left + Math.round((e.pageX - ui.instance._pageX) / o.grid[0]) * o.grid[0];
 			var newTop = ui.instance.originalPosition.top + Math.round((e.pageY - ui.instance._pageY) / o.grid[1]) * o.grid[1];
@@ -128,7 +123,7 @@
 	});
 
 	$.ui.plugin.add("draggable", "axis", {
-		drag: function(e,ui) {
+		drag: function(e, ui) {
 			var o = ui.options;
 			if(o.constraint) o.axis = o.constraint; //Legacy check
 			switch (o.axis) {
@@ -139,7 +134,7 @@
 	});
 
 	$.ui.plugin.add("draggable", "scroll", {
-		start: function(e,ui) {
+		start: function(e, ui) {
 			var o = ui.options;
 			o.scrollSensitivity	= o.scrollSensitivity || 20;
 			o.scrollSpeed		= o.scrollSpeed || 20;
@@ -153,7 +148,7 @@
 				return $(document);
 			}(this);
 		},
-		drag: function(e,ui) {
+		drag: function(e, ui) {
 			
 			var o = ui.options;
 			var i = ui.instance;
@@ -189,7 +184,7 @@
 	});
 	
 	$.ui.plugin.add("draggable", "snap", {
-		start: function(e,ui) {
+		start: function(e, ui) {
 			
 			ui.instance.snapElements = [];
 			$(ui.options.snap === true ? '.ui-draggable' : ui.options.snap).each(function() {
@@ -204,7 +199,7 @@
 			});
 			
 		},
-		drag: function(e,ui) {
+		drag: function(e, ui) {
 
 			var d = ui.options.snapTolerance || 20;
 			var x1 = ui.absolutePosition.left, x2 = x1 + ui.instance.helperProportions.width,
@@ -247,4 +242,3 @@
 	//TODO: wrapHelper, snap
 
 })(jQuery);
-

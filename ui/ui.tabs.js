@@ -1,13 +1,14 @@
 /*
- * Tabs 3 - New Wave Tabs
+ * jQuery UI Tabs
  *
  * Copyright (c) 2007 Klaus Hartl (stilbuero.de)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
  * http://docs.jquery.com/UI/Tabs
+ *
+ * Revision: $Id$
  */
-
 ;(function($) {
 
     // if the UI scope is not availalable, add it

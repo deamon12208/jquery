@@ -1,13 +1,14 @@
 /*
- * History - New Wave Browser History Management
+ * jQuery UI History
  *
  * Copyright (c) 2008 Klaus Hartl (stilbuero.de)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
  * http://docs.jquery.com/UI/History
+ *
+ * Revision: $Id$
  */
- 
 ;(function($) {
 
     // if the UI scope is not availalable, add it
@@ -114,4 +115,3 @@
     };
     
 })(jQuery);
-

@@ -1,47 +1,42 @@
-/*
- * 'this' -> original element
- * 1. argument: browser event
- * 2.argument: ui object
- */
-
+// Revision: $Id$
 ;(function($) {
 
 	$.ui.plugin.add("sortable", "cursor", {
-		start: function(e,ui) {
+		start: function(e, ui) {
 			var t = $('body');
 			if (t.css("cursor")) ui.options._cursor = t.css("cursor");
 			t.css("cursor", ui.options.cursor);
 		},
-		stop: function(e,ui) {
+		stop: function(e, ui) {
 			if (ui.options._cursor) $('body').css("cursor", ui.options._cursor);
 		}
 	});
 
 	$.ui.plugin.add("sortable", "zIndex", {
-		start: function(e,ui) {
+		start: function(e, ui) {
 			var t = ui.helper;
 			if(t.css("zIndex")) ui.options._zIndex = t.css("zIndex");
 			t.css('zIndex', ui.options.zIndex);
 		},
-		stop: function(e,ui) {
+		stop: function(e, ui) {
 			if(ui.options._zIndex) $(ui.helper).css('zIndex', ui.options._zIndex);
 		}
 	});
 
 	$.ui.plugin.add("sortable", "opacity", {
-		start: function(e,ui) {
+		start: function(e, ui) {
 			var t = ui.helper;
 			if(t.css("opacity")) ui.options._opacity = t.css("opacity");
 			t.css('opacity', ui.options.opacity);
 		},
-		stop: function(e,ui) {
+		stop: function(e, ui) {
 			if(ui.options._opacity) $(ui.helper).css('opacity', ui.options._opacity);
 		}
 	});
 
 
 	$.ui.plugin.add("sortable", "revert", {
-		stop: function(e,ui) {
+		stop: function(e, ui) {
 			var self = ui.instance;
 			self.cancelHelperRemoval = true;
 			var cur = self.currentItem.offset();
@@ -68,7 +63,7 @@
 
 	
 	$.ui.plugin.add("sortable", "containment", {
-		start: function(e,ui) {
+		start: function(e, ui) {
 
 			var o = ui.options;
 			if((o.containment.left != undefined || o.containment.constructor == Array) && !o._containment) return;
@@ -96,7 +91,7 @@
 			}
 
 		},
-		sort: function(e,ui) {
+		sort: function(e, ui) {
 
 			var o = ui.options;
 			var h = ui.helper;
@@ -119,7 +114,7 @@
 	});
 
 	$.ui.plugin.add("sortable", "axis", {
-		sort: function(e,ui) {
+		sort: function(e, ui) {
 			var o = ui.options;
 			if(o.constraint) o.axis = o.constraint; //Legacy check
 			o.axis == 'x' ? ui.instance.position.top = ui.instance.originalPosition.top : ui.instance.position.left = ui.instance.originalPosition.left;
@@ -127,7 +122,7 @@
 	});
 
 	$.ui.plugin.add("sortable", "scroll", {
-		start: function(e,ui) {
+		start: function(e, ui) {
 			var o = ui.options;
 			o.scrollSensitivity	= o.scrollSensitivity || 20;
 			o.scrollSpeed		= o.scrollSpeed || 20;
@@ -145,7 +140,7 @@
 			if(ui.instance.overflowX[0] != document && ui.instance.overflowX[0].tagName != 'HTML') ui.instance.overflowXstart = ui.instance.overflowX[0].scrollLeft;
 			
 		},
-		sort: function(e,ui) {
+		sort: function(e, ui) {
 			
 			var o = ui.options;
 			var i = ui.instance;

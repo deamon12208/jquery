@@ -1,19 +1,31 @@
+/*
+ * jQuery UI Resizable
+ *
+ * Copyright (c) 2008 Paul Bakaus
+ * Dual licensed under the MIT (MIT-LICENSE.txt)
+ * and GPL (GPL-LICENSE.txt) licenses.
+ * 
+ * http://docs.jquery.com/UI/Resizables
+ *
+ * Revision: $Id$
+ */
 ;(function($) {
 	
-	$.fn.resizable = function(options) {
-		return this.each(function() {
+	$.fn.extend({
+		resizable: function(options, data) {
 			var args = Array.prototype.slice.call(arguments, 1);
 			
-			if (typeof options == "string") {
-				var resize = $.data(this, "resizable");
-				if (resize) resize[options].apply(resize, args);
-
-			} else if(!$(this).is(".ui-resizable"))
-				new $.ui.resizable(this, options);
-				
-		});
-	};
+			return this.each(function() {
+				if (typeof options == "string") {
+					var resize = $.data(this, "resizable");
+					if (resize) resize[options].apply(resize, args);
 	
+				} else if(!$(this).is(".ui-resizable"))
+					new $.ui.resizable(this, options);
+			});
+		}
+	});
+
 	$.ui.resizable = function(element, options) {
 		//Initialize needed constants
 		var self = this;

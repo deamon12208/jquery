@@ -1,9 +1,4 @@
-/*
- * 'this' -> original element
- * 1. argument: browser event
- * 2.argument: ui object
- */
-
+// Revision: $Id$
 ;(function($) {
 
 	$.ui.plugin.add("resizable", "containment", {

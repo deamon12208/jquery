@@ -1,10 +1,18 @@
+/*
+ * jQuery UI Dialog
+ *
+ * Copyright (c) 2008 Richard D. Worth (rdworth.org)
+ * Dual licensed under the MIT (MIT-LICENSE.txt)
+ * and GPL (GPL-LICENSE.txt) licenses.
+ * 
+ * http://docs.jquery.com/UI/Dialog
+ *
+ * Revision: $Id$
+ */
 ;(function($) {
 	
-	//If the UI scope is not available, add it
-	$.ui = $.ui || {};
-
 	$.fn.extend({
-		dialog: function(options, data) {
+		dialog: function(options) {
 			var args = Array.prototype.slice.call(arguments, 1);
 
 			return this.each(function() {
@@ -441,4 +449,5 @@
 			$.ui.dialog.overlay.destroy(this.$el);
 		}
 	});
+
 })(jQuery);

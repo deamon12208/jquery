@@ -1,4 +1,15 @@
-// $Id$
+/*
+ * jQuery UI @VERSION
+ *
+ * Copyright (c) 2008 Paul Bakaus (ui.jquery.com)
+ * Dual licensed under the MIT (MIT-LICENSE.txt)
+ * and GPL (GPL-LICENSE.txt) licenses.
+ *
+ * http://docs.jquery.com/UI
+ *
+ * $Date$
+ * $Rev$
+ */
 ;(function($) {
 
 	//If the UI scope is not available, add it
@@ -184,4 +195,5 @@
 		}
 	});
 	
- })(jQuery);
+})(jQuery);
+ 

@@ -1,25 +1,26 @@
+// Revision: $Id$
 ;(function($) {
 
 	$.ui.plugin.add("droppable", "activeClass", {
-		activate: function(e,ui) {
+		activate: function(e, ui) {
 			$(this).addClass(ui.options.activeClass);
 		},
-		deactivate: function(e,ui) {
+		deactivate: function(e, ui) {
 			$(this).removeClass(ui.options.activeClass);
 		},
-		drop: function(e,ui) {
+		drop: function(e, ui) {
 			$(this).removeClass(ui.options.activeClass);
 		}
 	});
 
 	$.ui.plugin.add("droppable", "hoverClass", {
-		over: function(e,ui) {
+		over: function(e, ui) {
 			$(this).addClass(ui.options.hoverClass);
 		},
-		out: function(e,ui) {
+		out: function(e, ui) {
 			$(this).removeClass(ui.options.hoverClass);
 		},
-		drop: function(e,ui) {
+		drop: function(e, ui) {
 			$(this).removeClass(ui.options.hoverClass);
 		}
 	});	
