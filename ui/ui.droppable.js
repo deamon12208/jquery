@@ -257,7 +257,7 @@
 
 				var instance = $.data(this.item.element[0], 'droppable'); 
 				if (instance.options.greedy) { 
-				    this.item.element.parents('.ui-droppable').each(function() { 
+				    this.item.element.parents('.ui-droppable:eq(0)').each(function() { 
 				        var parent = this; 
 				        $.each($.ui.ddmanager.droppables, function() { 
 				            if (this.item.element[0] != parent) return; 
