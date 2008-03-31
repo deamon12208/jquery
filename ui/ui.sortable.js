@@ -584,10 +584,10 @@
 			var self = ui.instance;
 			
 			if(c.constructor == Array) {
-				if((ui.position.absolute.left < c[0])) self.position.current.left = c[0] - (self.offsets.absolute.left - self.clickOffset.left);
-				if((ui.position.absolute.top < c[1])) self.position.current.top = c[1] - (self.offsets.absolute.top - self.clickOffset.top);
-				if(ui.position.absolute.left - c[2] + self.helperProportions.width >= 0) self.position.left = c[2] - (self.offset.left - self.clickOffset.left) - self.helperProportions.width;
-				if(ui.position.absolute.top - c[3] + self.helperProportions.height >= 0) self.position.top = c[3] - (self.offset.top - self.clickOffset.top) - self.helperProportions.height;
+				if((self.position.absolute.left < c[0])) self.position.current.left = c[0] - (self.offsets.absolute.left - self.clickOffset.left);
+				if((self.position.absolute.top < c[1])) self.position.current.top = c[1] - (self.offsets.absolute.top - self.clickOffset.top);
+				if(self.position.absolute.left - c[2] + self.helperProportions.width >= 0) self.position.left = c[2] - (self.offset.left - self.clickOffset.left) - self.helperProportions.width;
+				if(self.position.absolute.top - c[3] + self.helperProportions.height >= 0) self.position.top = c[3] - (self.offset.top - self.clickOffset.top) - self.helperProportions.height;
 			} else {
 				if((ui.position.left < c.left)) self.position.left = c.left;
 				if((ui.position.top < c.top)) self.position.top = c.top;
