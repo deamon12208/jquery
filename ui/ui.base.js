@@ -123,12 +123,17 @@
 	
 		var self = this;
 		this.element = element;
+
 		$.data(this.element, "ui-mouse", this);
 		this.options = $.extend({}, options);
 		
 		$(element).bind('mousedown.draggable', function() { return self.click.apply(self, arguments); });
 		if($.browser.msie) $(element).attr('unselectable', 'on'); //Prevent text selection in IE
 		
+		// prevent draggable-options-delay bug #2553
+		$(element).mouseup(function() {
+			if(self.timer) clearInterval(self.timer);
+		});
 	};
 	
 	$.extend($.ui.mouseInteraction.prototype, {
