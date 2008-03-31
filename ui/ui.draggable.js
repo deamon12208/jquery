@@ -55,7 +55,7 @@
 			executor: this,
 			delay: o.delay,
 			distance: o.distance || 0,
-			dragPrevention: o.cancel ? o.cancel.toLowerCase().split(',') : ['input','textarea','button','select','option'],
+			dragPrevention: o.cancel || o.cancel === '' ? o.cancel.toLowerCase().split(',') : ['input','textarea','button','select','option'],
 			start: this.start,
 			stop: this.stop,
 			drag: this.drag,
