@@ -186,10 +186,14 @@
 					&& t < (draggable.positionAbs.top + draggable.clickOffset.top) && (draggable.positionAbs.top + draggable.clickOffset.top) < b);
 				break;
 			case 'touch':
-				return (   (l < x1 && x1 < r && t < y1 && y1 < b)    // Top-Left Corner
-					|| (l < x1 && x1 < r && t < y2 && y2 < b)    // Bottom-Left Corner
-					|| (l < x2 && x2 < r && t < y1 && y1 < b)    // Top-Right Corner
-					|| (l < x2 && x2 < r && t < y2 && y2 < b) ); // Bottom-Right Corner
+				return ( (y1 >= t && y1 <= b) ||	// Top edge touching
+						 (y2 >= t && y2 <= b) ||	// Bottom edge touching
+						 (y1 < t && y2 > b)		// Surrounded vertically
+						 ) && (
+						 (x1 >= l && x1 <= r) ||	// Left edge touching
+						 (x2 >= l && x2 <= r) ||	// Right edge touching
+						 (x1 < l && x2 > r)		// Surrounded horizontally
+						);
 				break;
 			default:
 				return false;
