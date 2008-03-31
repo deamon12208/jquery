@@ -57,7 +57,7 @@
 		$(o.handle).mouseInteraction({
 			executor: this,
 			delay: o.delay,
-			distance: o.distance || 0,
+			distance: o.distance || 1,
 			dragPrevention: o.cancel || o.cancel === '' ? o.cancel.toLowerCase().split(',') : ['input','textarea','button','select','option'],
 			start: this.start,
 			stop: this.stop,
