@@ -7,6 +7,11 @@
  * 
  * http://docs.jquery.com/UI/Dialog
  *
+ * Depends:
+ *   ui.base.js
+ *   ui.draggable.js
+ *   ui.resizable.js
+ *
  * Revision: $Id$
  */
 ;(function($) {

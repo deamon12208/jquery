@@ -7,12 +7,12 @@
  *
  * http://docs.jquery.com/UI/Tabs
  *
+ * Depends:
+ *   ui.base.js
+ *
  * Revision: $Id$
  */
 ;(function($) {
-
-    // if the UI scope is not availalable, add it
-    $.ui = $.ui || {};
 
     // tabs API methods
     $.fn.tabs = function() {

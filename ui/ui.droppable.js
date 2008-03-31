@@ -7,6 +7,10 @@
  * 
  * http://docs.jquery.com/UI/Droppables
  *
+ * Depends:
+ *   ui.base.js
+ *   ui.draggable.js
+ *
  * Revision: $Id$
  */
 ;(function($) {

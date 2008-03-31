@@ -7,6 +7,9 @@
  * 
  * http://docs.jquery.com/UI/Draggables
  *
+ * Depends:
+ *   ui.base.js
+ *
  * Revision: $Id$
  */
 ;(function($) {

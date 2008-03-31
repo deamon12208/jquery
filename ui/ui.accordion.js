@@ -7,6 +7,9 @@
  *
  * http://docs.jquery.com/UI/Accordion
  *
+ * Depends:
+ *   ui.base.js
+ *
  * Revision: $Id$
  */
 
