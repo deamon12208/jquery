@@ -38,13 +38,13 @@
 			.append('<div class="ui-spinner-up"></div>')
 			.find("div.ui-spinner-up")
 				.bind("mousedown", function() { if(!self.counter) self.counter = 1; self.mousedown(100, "up"); })
-				.bind("mouseup", function() { self.counter = 0; if(self.timer) window.clearInterval(self.timer); self.element[0].focus(); })
+				.bind("mouseup", function(e) { self.counter = 0; if(self.timer) window.clearInterval(self.timer); self.element[0].focus(); self.propagate("change", e); })
 				.css({ height: pickerHeight, top: parseInt(this.element.css("borderTopWidth"),10)+1, right: parseInt(this.element.css("borderRightWidth"),10)+1 })
 			.end()
 			.append('<div class="ui-spinner-down"></div>')
 			.find("div.ui-spinner-down")
 				.bind("mousedown", function() { if(!self.counter) self.counter = 1; self.mousedown(100, "down"); })
-				.bind("mouseup", function() { self.counter = 0; if(self.timer) window.clearInterval(self.timer); self.element[0].focus(); })
+				.bind("mouseup", function(e) { self.counter = 0; if(self.timer) window.clearInterval(self.timer); self.element[0].focus(); self.propagate("change", e); })
 				.css({ height: pickerHeight, bottom: parseInt(this.element.css("borderBottomWidth"),10)+1, right: parseInt(this.element.css("borderRightWidth"),10)+1 })
 			.end()
 		;
@@ -54,9 +54,10 @@
 			if(!self.counter) self.counter = 1;
 			self.keydown.call(self, e);
 		})
-		.bind("keyup", function() {
+		.bind("keyup", function(e) {
 			self.counter = 0;
 			self.cleanUp();
+			self.propagate("change", e);
 		})
 		;
 		
@@ -79,17 +80,19 @@
 			this.element[0].value = this.element[0].value.replace(/[^0-9\-]/g, '');
 			this.constrain();
 		},
-		down: function() {
+		down: function(e) {
 			if(isNaN(parseInt(this.element[0].value,10))) this.element[0].value = this.options.start;
 			this.element[0].value -= (this.options.incremental && this.counter > 100 ? (this.counter > 200 ? 100 : 10) : 1) * this.options.stepping;
 			this.constrain();
 			if(this.counter) this.counter++;
+			this.propagate("spin", e);
 		},
-		up: function() {
+		up: function(e) {
 			if(isNaN(parseInt(this.element[0].value,10))) this.element[0].value = this.options.start;
 			this.element[0].value = parseFloat(this.element[0].value) + (this.options.incremental && this.counter > 100 ? (this.counter > 200 ? 100 : 10) : 1) * this.options.stepping;
 			this.constrain();
 			if(this.counter) this.counter++;
+			this.propagate("spin", e);
 		},
 		mousedown: function(i, d) {
 			var self = this;
