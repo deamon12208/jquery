@@ -132,7 +132,6 @@
 			
 		},
 		start: function(e) {
-			
 			var o = this.options;
 			if($.ui.ddmanager) $.ui.ddmanager.current = this;
 			
@@ -140,7 +139,8 @@
 			this.helper = typeof o.helper == 'function' ? $(o.helper.apply(this.element[0], [e])) : (o.helper == 'clone' ? this.element.clone().appendTo((o.appendTo == 'parent' ? this.element[0].parentNode : o.appendTo)) : this.element);
 			if(this.helper[0] != this.element[0]) this.helper.css('position', 'absolute');
 			if(!this.helper.parents('body').length) this.helper.appendTo((o.appendTo == 'parent' ? this.element[0].parentNode : o.appendTo));
-
+			
+			
 			//Find out the next positioned parent
 			this.offsetParent = (function(cp) {
 				while(cp) {
@@ -229,7 +229,7 @@
 			this.position = this.propagate("drag", e) || this.position;
 			this.checkConstrains();
 			
-			this.helper.css({ left: this.position.left+'px', top: this.position.top+'px' }); // Stick the helper to the cursor
+			$(this.helper).css({ left: this.position.left+'px', top: this.position.top+'px' }); // Stick the helper to the cursor
 			if($.ui.ddmanager) $.ui.ddmanager.drag(this, e);
 			return false;
 			

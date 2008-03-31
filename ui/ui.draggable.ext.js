@@ -37,11 +37,12 @@
 
 	$.ui.plugin.add("draggable", "revert", {
 		stop: function(e, ui) {
-			var self = ui.instance;
+			var self = ui.instance, helper = $(self.helper);
 			self.cancelHelperRemoval = true;
+			
 			$(ui.helper).animate({ left: self.originalPosition.left, top: self.originalPosition.top }, parseInt(ui.options.revert, 10) || 500, function() {
-				if(ui.options.helper != 'original') self.helper.remove();
-				self.clear();
+				if(ui.options.helper != 'original') helper.remove();
+				if (!helper) self.clear();
 			});
 		}
 	});
