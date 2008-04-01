@@ -107,7 +107,7 @@
 			});
 		},
 		remove: function() {
-			this.trigger("remove");
+			jQuery("*", this).add(this).trigger("remove");
 			return _remove.apply(this, arguments );
 		}
 	});
