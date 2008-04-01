@@ -64,7 +64,6 @@ body
 }
 
 #myul3 li {
- list-style-type: none;
  border: 1px solid #999;
  margin: 5px; padding: 10px;
  background: #fff;
@@ -102,7 +101,7 @@ body
 	    <li>Item 10</li>
 	</ul>
 	
-	<ul id='myul3'>
+	<ol id='myul3'>
 	    <li>Item 1</li>
 	    <li>Item 2</li>
 	    <li>Item 3</li>
@@ -113,7 +112,7 @@ body
 	    <li>Item 8</li>
 	    <li>Item 9</li>
 	    <li>Item 10</li>
-	</ul>
+	</ol>
 
 	<br style='clear: both;' />
 	<br />
@@ -168,7 +167,7 @@ $(document).ready(function(){
 		//onChange: function() { console.log('Position change during drag'); },
 		//onUpdate: function() { console.log('Position changed'); }
 	});
-	$('#myul2').sortable( { items: 'li', containment: 'sortable', hoverClass: 'hover' } );
+	$('#myul2').sortable( { items: 'li', containment: 'parent', hoverClass: 'hover' } );
 	$('#myul3').sortable({
 		animated: true
 	});
