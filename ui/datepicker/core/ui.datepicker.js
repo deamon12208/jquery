@@ -318,10 +318,9 @@ $.extend(Datepicker.prototype, {
 			input.wrap('<span class="datepicker_wrap">');
 			var buttonText = inst._get('buttonText');
 			var buttonImage = inst._get('buttonImage');
-			var trigger = $(inst._get('buttonImageOnly') ? $('<img>').addClass('datepicker_trigger')
-					.attr({ src:buttonImage, alt:buttonText, title:buttonText }) :
-				$('<button>').addClass('datepicker_trigger').attr('type', 'button')
-					.html(buttonImage != '' ? 
+			var trigger = $(inst._get('buttonImageOnly') ? 
+				$('<img>').addClass('datepicker_trigger').attr({ src: buttonImage, alt: buttonText, title: buttonText }) :
+				$('<button>').addClass('datepicker_trigger').attr({ type: 'button' }).html(buttonImage != '' ? 
 						$('img').attr({ src:buttonImage, alt:buttonText, title:buttonText }) : buttonText));
 			if (isRTL)
 				input.before(trigger);
