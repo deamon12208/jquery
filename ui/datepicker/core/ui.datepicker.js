@@ -187,7 +187,6 @@ $.extend(Datepicker.prototype, {
 	   @param  target    element - the target input field or division or span */
 	_enableDatepicker: function(target) {
 		target.disabled = false;
-		console.log(target, $(target), $(target).siblings('button.datepicker_trigger'));
 		$(target).siblings('button.datepicker_trigger').each(function() { this.disabled = false; }).end()
 			.siblings('img.datepicker_trigger').css({opacity: '1.0', cursor: ''});
 		this._disabledInputs = $.map(this._disabledInputs,
@@ -211,9 +210,10 @@ $.extend(Datepicker.prototype, {
 	_isDisabledDatepicker: function(target) {
 		if (!target)
 			return false;
-		for (var i = 0; i < this._disabledInputs.length; i++)
+		for (var i = 0; i < this._disabledInputs.length; i++) {
 			if (this._disabledInputs[i] == target)
 				return true;
+		}
 		return false;
 	},
 
