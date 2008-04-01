@@ -99,10 +99,6 @@
 				cookieId: "treeview"
 			}, settings);
 			
-			if (settings.add) {
-				return this.trigger("add", [settings.add]);
-			}
-			
 			if ( settings.toggle ) {
 				var callback = settings.toggle;
 				settings.toggle = function() {
@@ -162,6 +158,7 @@
 						.heightHide( settings.animated, settings.toggle );
 				}
 			}
+			this.data("toggler", toggler);
 			
 			function serialize() {
 				function binary(arg) {
@@ -217,16 +214,7 @@
 				$(settings.control).show();
 			}
 			
-			return this.bind("add", function(event, branches) {
-				$(branches).prev()
-					.removeClass(CLASSES.last)
-					.removeClass(CLASSES.lastCollapsable)
-					.removeClass(CLASSES.lastExpandable)
-				.find(">.hitarea")
-					.removeClass(CLASSES.lastCollapsableHitarea)
-					.removeClass(CLASSES.lastExpandableHitarea);
-				$(branches).find("li").andSelf().prepareBranches(settings).applyClasses(settings, toggler);
-			});
+			return this;
 		}
 	});
 	
