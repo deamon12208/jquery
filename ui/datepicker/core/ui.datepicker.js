@@ -148,8 +148,8 @@ $.extend(Datepicker.prototype, {
 		}
 		var nodeName = target.nodeName.toLowerCase();
 		if (nodeName == 'input') {
-			var instSettings = (inlineSettings ? $.extend($.extend({}, settings || {}),
-				inlineSettings || {}) : settings); // clone and customise
+			var instSettings = (inlineSettings ? 
+				$.extend({}, settings || {}, inlineSettings || {}) : settings);
 			var inst = (inst && !inlineSettings ? inst :
 				new DatepickerInstance(instSettings, false));
 			this._connectDatepicker(target, inst);
