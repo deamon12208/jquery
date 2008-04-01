@@ -547,8 +547,7 @@ $.extend(Datepicker.prototype, {
 			this._lastInput = null;
 			inst._settings.prompt = null;
 			if (this._inDialog) {
-				this._dialogInput.css('position', 'absolute').
-					css('left', '0px').css('top', '-100px');
+				this._dialogInput.css({ position: 'absolute', left: '0', top: '-100px' });
 				if ($.blockUI) {
 					$.unblockUI();
 					$('body').append(this._datepickerDiv);
@@ -561,8 +560,7 @@ $.extend(Datepicker.prototype, {
 
 	/* Tidy up after a dialog display. */
 	_tidyDialog: function(inst) {
-		inst._datepickerDiv.removeClass('datepicker_dialog').
-			unbind('.datepicker');
+		inst._datepickerDiv.removeClass('datepicker_dialog').unbind('.datepicker');
 		$('.datepicker_prompt', inst._datepickerDiv).remove();
 	},
 
