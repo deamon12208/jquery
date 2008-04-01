@@ -1,4 +1,4 @@
-/* jQuery UI Date Picker v3.4.2 (previously jQuery Calendar)
+/* jQuery UI Date Picker v3.4.3 (previously jQuery Calendar)
    Written by Marc Grabanski (m@marcgrabanski.com) and Keith Wood (kbwood@virginbroadband.com.au).
 
    Copyright (c) 2007 Marc Grabanski (http://marcgrabanski.com/code/ui-datepicker)
@@ -148,7 +148,7 @@ $.extend(Datepicker.prototype, {
 		}
 		var nodeName = target.nodeName.toLowerCase();
 		var instSettings = (inlineSettings ? 
-			$.extend({}, settings || {}, inlineSettings || {}) : settings);
+			$.extend(settings || {}, inlineSettings || {}) : settings);
 		if (nodeName == 'input') {
 			var inst = (inst && !inlineSettings ? inst :
 				new DatepickerInstance(instSettings, false));
@@ -982,7 +982,7 @@ function DatepickerInstance(settings, inline) {
 	this._datepickerDiv = (!inline ? $.datepicker._datepickerDiv :
 		$('<div id="datepicker_div_' + this._id + '" class="datepicker_inline">'));
 	// customise the date picker object - uses manager defaults if not overridden
-	this._settings = extendRemove({}, settings || {}); // clone
+	this._settings = extendRemove(settings || {}); // clone
 	if (inline)
 		this._setDate(this._getDefaultDate());
 }
@@ -990,7 +990,7 @@ function DatepickerInstance(settings, inline) {
 $.extend(DatepickerInstance.prototype, {
 	/* Get a setting value, defaulting if necessary. */
 	_get: function(name) {
-		return (this._settings[name] != null ? this._settings[name] : $.datepicker._defaults[name]);
+		return this._settings[name] || $.datepicker._defaults[name];
 	},
 
 	/* Parse existing date and initialise date picker. */

@@ -1,5 +1,5 @@
 #tab_menu1 { margin:0.5em 0 0 0; padding:0; font-size:1em; }
-.tab_group1 { clear:left; padding-top:0; }
+.tab_group1 { clear:left; padding-top:0; display:none; }
 .demoLabel { float: left; width: 18em; }
 .ar_day { color: white !important; background: #eee url(../img/ar.gif) no-repeat center !important; }
 .au_day { color: blue !important; background: #eee url(../img/au.gif) no-repeat center !important; }

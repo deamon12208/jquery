@@ -11,11 +11,10 @@ $(document).ready(function () {
 		eval( $(this).html() );
 	});
 	// Localization
-	if ($.browser.safari) {
+	if ($.browser.safari)
 		$('.languageSelect,.l10nDatepicker,#frFullFormat').attr({ disabled: 'disabled' });
-	} else {
+	else
 		$('.languageSelect').change(localise);
-	}
 	// Stylesheets
 	$('#altStyle').datepicker({buttonImage: 'img/calendar2.gif',
 		prevText: '<img src="img/prev.gif" style="vertical-align: middle;"/> Prev',
