@@ -187,6 +187,7 @@ $.extend(Datepicker.prototype, {
 	   @param  target    element - the target input field or division or span */
 	_enableDatepicker: function(target) {
 		target.disabled = false;
+		console.log(target, $(target), $(target).siblings('button.datepicker_trigger'));
 		$(target).siblings('button.datepicker_trigger').each(function() { this.disabled = false; }).end()
 			.siblings('img.datepicker_trigger').css({opacity: '1.0', cursor: ''});
 		this._disabledInputs = $.map(this._disabledInputs,
@@ -197,11 +198,10 @@ $.extend(Datepicker.prototype, {
 	   @param  target    element - the target input field or division or span */
 	_disableDatepicker: function(target) {
 		target.disabled = true;
-		$(target).siblings('button.datepicker_trigger').each(function() { this.disabled = true; });
-		$(target).siblings('img.datepicker_trigger').css({opacity: '0.5', cursor: 'default'});
-		var $target = target;
+		$(target).siblings('button.datepicker_trigger').each(function() { this.disabled = true; }).end()
+			.siblings('img.datepicker_trigger').css({opacity: '0.5', cursor: 'default'});
 		this._disabledInputs = $.map($.datepicker._disabledInputs,
-			function(value) { return (value == $target ? null : value); }); // delete entry
+			function(value) { return (value == target ? null : value); }); // delete entry
 		this._disabledInputs[$.datepicker._disabledInputs.length] = target;
 	},
 
@@ -315,14 +315,14 @@ $.extend(Datepicker.prototype, {
 		if (showOn == 'focus' || showOn == 'both') // pop-up date picker when in the marked field
 			input.focus(this._showDatepicker);
 		if (showOn == 'button' || showOn == 'both') { // pop-up date picker when button clicked
+			input.wrap('<span class="datepicker_wrap">');
 			var buttonText = inst._get('buttonText');
 			var buttonImage = inst._get('buttonImage');
-			var trigger = $(inst._get('buttonImageOnly') ? '<img class="datepicker_trigger" src="' +
-				buttonImage + '" alt="' + buttonText + '" title="' + buttonText + '"/>' :
-				'<button type="button" class="datepicker_trigger">' + (buttonImage != '' ?
-				'<img src="' + buttonImage + '" alt="' + buttonText + '" title="' + buttonText + '"/>' :
-				buttonText) + '</button>');
-			input.wrap('<span class="datepicker_wrap">');
+			var trigger = $(inst._get('buttonImageOnly') ? $('<img>').addClass('datepicker_trigger')
+					.attr({ src:buttonImage, alt:buttonText, title:buttonText }) :
+				$('<button>').addClass('datepicker_trigger').attr('type', 'button')
+					.html(buttonImage != '' ? 
+						$('img').attr({ src:buttonImage, alt:buttonText, title:buttonText }) : buttonText));
 			if (isRTL)
 				input.before(trigger);
 			else
