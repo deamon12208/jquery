@@ -147,15 +147,13 @@ $.extend(Datepicker.prototype, {
 			}
 		}
 		var nodeName = target.nodeName.toLowerCase();
+		var instSettings = (inlineSettings ? 
+			$.extend({}, settings || {}, inlineSettings || {}) : settings);
 		if (nodeName == 'input') {
-			var instSettings = (inlineSettings ? 
-				$.extend({}, settings || {}, inlineSettings || {}) : settings);
 			var inst = (inst && !inlineSettings ? inst :
 				new DatepickerInstance(instSettings, false));
 			this._connectDatepicker(target, inst);
 		} else if (nodeName == 'div' || nodeName == 'span') {
-			var instSettings = $.extend($.extend({}, settings || {}),
-				inlineSettings || {}); // clone and customise
 			var inst = new DatepickerInstance(instSettings, true);
 			this._inlineDatepicker(target, inst);
 		}
@@ -189,8 +187,7 @@ $.extend(Datepicker.prototype, {
 	   @param  target    element - the target input field or division or span */
 	_enableDatepicker: function(target) {
 		target.disabled = false;
-		$(target)
-			.siblings('button.datepicker_trigger').each(function() { this.disabled = false; })
+		$(target).siblings('button.datepicker_trigger').each(function() { this.disabled = false; }).end()
 			.siblings('img.datepicker_trigger').css({opacity: '1.0', cursor: ''});
 		this._disabledInputs = $.map(this._disabledInputs,
 			function(value) { return (value == target ? null : value); }); // delete entry
