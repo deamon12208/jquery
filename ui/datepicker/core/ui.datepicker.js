@@ -167,9 +167,9 @@ $.extend(Datepicker.prototype, {
 		target._calId = null;
 		var $target = $(target);
 		if (nodeName == 'input') {
-			$target.siblings('.datepicker_append').replaceWith('');
-			$target.siblings('.datepicker_trigger').replaceWith('');
-			$target.removeClass(this.markerClassName)
+			$target.siblings('.datepicker_append').replaceWith('').end()
+				.siblings('.datepicker_trigger').replaceWith('').end()
+				.removeClass(this.markerClassName)
 				.unbind('focus', this._showDatepicker)
 				.unbind('keydown', this._doKeyDown)
 				.unbind('keypress', this._doKeyPress);
