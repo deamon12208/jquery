@@ -321,7 +321,7 @@ $.extend(Datepicker.prototype, {
 			var trigger = $(inst._get('buttonImageOnly') ? 
 				$('<img>').addClass('datepicker_trigger').attr({ src: buttonImage, alt: buttonText, title: buttonText }) :
 				$('<button>').addClass('datepicker_trigger').attr({ type: 'button' }).html(buttonImage != '' ? 
-						$('img').attr({ src:buttonImage, alt:buttonText, title:buttonText }) : buttonText));
+						$('<img>').attr({ src:buttonImage, alt:buttonText, title:buttonText }) : buttonText));
 			if (isRTL)
 				input.before(trigger);
 			else
