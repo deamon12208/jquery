@@ -32,7 +32,8 @@
 	
 	$.ui.droppable = function(element, options) {
 
-		//Initialize needed constants			
+		//Initialize needed constants
+		var instance = this;			
 		this.element = $(element);
 		$.data(element, "droppable", this);
 		this.element.addClass("ui-droppable");		
@@ -50,6 +51,8 @@
 			o[key] = value;
 		}).bind("getData.droppable", function(event, key){
 			return o[key];
+		}).bind('remove', function() {
+			instance.destroy();
 		});
 		
 		//Store the droppable's proportions
