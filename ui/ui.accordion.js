@@ -32,12 +32,10 @@
 		
 		// setup configuration
 		this.options = options = $.extend({}, $.ui.accordion.defaults, options);
-		this.element = container;
-		
-		$(container).addClass("ui-accordion");
+		this.element = $(container);
 		
 		if ( options.navigation ) {
-			var current = $(container).find("a").filter(options.navigationFilter);
+			var current = this.element.find("a").filter(options.navigationFilter);
 			if ( current.length ) {
 				if ( current.filter(options.header).length ) {
 					options.active = current;
@@ -49,11 +47,18 @@
 		}
 		
 		// calculate active if not specified, using the first header
-		options.headers = $(container).find(options.header);
+		options.headers = this.element.find(options.header);
 		options.active = findActive(options.headers, options.active);
+		
+		if (!this.element.hasClass("ui-accordion")) {
+			this.element.addClass("ui-accordion");
+			$("<span class='ui-accordion-left'/>").insertBefore(options.headers);
+			$("<span class='ui-accordion-right'/>").appendTo(options.headers);
+			options.headers.addClass("ui-accordion-header").attr("tabindex", "0");
+		}
 	
 		if ( options.fillSpace ) {
-			var maxHeight = $(container).parent().height();
+			var maxHeight = this.element.parent().height();
 			options.headers.each(function() {
 				maxHeight -= $(this).outerHeight();
 			});
@@ -75,13 +80,13 @@
 		options.active.parent().andSelf().addClass(options.selectedClass);
 		
 		if (options.event)
-			$(container).bind((options.event) + ".accordion", clickHandler);
+			this.element.bind((options.event) + ".accordion", clickHandler);
 	};
 	
 	$.ui.accordion.prototype = {
 		activate: function(index) {
 			// call clickHandler with custom event
-			clickHandler.call(this.element, {
+			clickHandler.call(this.element[0], {
 				target: findActive( this.options.headers, index )[0]
 			});
 		},
@@ -97,8 +102,8 @@
 			if ( this.options.fillSpace || this.options.autoHeight ) {
 				this.options.headers.next().css("height", "");
 			}
-			$.removeData(this.element, "accordion");
-			$(this.element).removeClass("ui-accordion").unbind(".accordion");
+			$.removeData(this.element[0], "accordion");
+			this.element.removeClass("ui-accordion").unbind(".accordion");
 		}
 	};
 	
