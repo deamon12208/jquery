@@ -347,6 +347,10 @@
 				},
 				mouse: {
 					start: { top: e.pageY, left: e.pageX }
+				},
+				margins: {
+					top: parseInt(this.currentItem.css("marginTop")) || 0,
+					left: parseInt(this.currentItem.css("marginLeft")) || 0
 				}
 			});
 			
@@ -355,8 +359,8 @@
 			this.clickOffset = { left: e.pageX - this.offsets.absolute.left, top: e.pageY - this.offsets.absolute.top };
 			
 			this.originalPosition = {
-				left: this.offsets.absolute.left - this.offsets.parent.left,
-				top: this.offsets.absolute.top - this.offsets.parent.top
+				left: this.offsets.absolute.left - this.offsets.parent.left - this.margins.left,
+				top: this.offsets.absolute.top - this.offsets.parent.top - this.margins.top
 			}
 			
 			//Generate a flexible offset that will later be subtracted from e.pageX/Y
@@ -533,8 +537,8 @@
 			
 			
 			ui.helper.animate({
-				left: cur.left - op.left - (parseInt(self.currentItem.css('marginLeft'),10) || 0),
-				top: cur.top - op.top - (parseInt(self.currentItem.css('marginTop'),10) || 0)
+				left: cur.left - op.left - self.margins.left,
+				top: cur.top - op.top - self.margins.top
 			}, parseInt(ui.options.revert, 10) || 500, function() {
 				self.currentItem.css('visibility', 'visible');
 				window.setTimeout(function() {
@@ -555,6 +559,7 @@
 			if(!o._containment) o._containment = o.containment;
 
 			if(o._containment == 'parent') o._containment = this[0].parentNode;
+			if(o._containment == 'sortable') o._containment = this[0];
 			if(o._containment == 'document') {
 				o.containment = [
 					0,
@@ -564,14 +569,14 @@
 				];
 			} else { //I'm a node, so compute top/left/right/bottom
 
-				var ce = $(o._containment)[0];
-				var co = $(o._containment).offset();
+				var ce = $(o._containment);
+				var co = ce.offset();
 
 				o.containment = [
 					co.left,
 					co.top,
-					co.left+(ce.offsetWidth || ce.scrollWidth),
-					co.top+(ce.offsetHeight || ce.scrollHeight)
+					co.left+(ce.outerWidth() || ce[0].scrollWidth),
+					co.top+(ce.outerHeight() || ce[0].scrollHeight)
 				];
 			}
 
@@ -582,17 +587,21 @@
 			var h = ui.helper;
 			var c = o.containment;
 			var self = ui.instance;
+			var borderLeft = (parseInt(self.offsetParent.css("borderLeftWidth"), 10) || 0);
+			var borderRight = (parseInt(self.offsetParent.css("borderRightWidth"), 10) || 0);
+			var borderTop = (parseInt(self.offsetParent.css("borderTopWidth"), 10) || 0);
+			var borderBottom = (parseInt(self.offsetParent.css("borderBottomWidth"), 10) || 0);
 			
 			if(c.constructor == Array) {
-				if((self.position.absolute.left < c[0])) self.position.current.left = c[0] - (self.offsets.absolute.left - self.clickOffset.left);
-				if((self.position.absolute.top < c[1])) self.position.current.top = c[1] - (self.offsets.absolute.top - self.clickOffset.top);
-				if(self.position.absolute.left - c[2] + self.helperProportions.width >= 0) self.position.left = c[2] - (self.offset.left - self.clickOffset.left) - self.helperProportions.width;
-				if(self.position.absolute.top - c[3] + self.helperProportions.height >= 0) self.position.top = c[3] - (self.offset.top - self.clickOffset.top) - self.helperProportions.height;
+				if((self.position.absolute.left < c[0])) self.position.current.left = c[0] - self.offsets.parent.left - self.margins.left;
+				if((self.position.absolute.top < c[1])) self.position.current.top = c[1] - self.offsets.parent.top - self.margins.top;
+				if(self.position.absolute.left - c[2] + self.helperProportions.width >= 0) self.position.current.left = c[2] - self.offsets.parent.left - self.helperProportions.width - self.margins.left - borderLeft - borderRight;
+				if(self.position.absolute.top - c[3] + self.helperProportions.height >= 0) self.position.current.top = c[3] - self.offsets.parent.top - self.helperProportions.height - self.margins.top - borderTop - borderBottom;
 			} else {
-				if((ui.position.left < c.left)) self.position.left = c.left;
-				if((ui.position.top < c.top)) self.position.top = c.top;
-				if(ui.position.left - self.offsetParent.innerWidth() + self.helperProportions.width + c.right + (parseInt(self.offsetParent.css("borderLeftWidth"), 10) || 0) + (parseInt(self.offsetParent.css("borderRightWidth"), 10) || 0) >= 0) self.position.left = self.offsetParent.innerWidth() - self.helperProportions.width - c.right - (parseInt(self.offsetParent.css("borderLeftWidth"), 10) || 0) - (parseInt(self.offsetParent.css("borderRightWidth"), 10) || 0);
-				if(ui.position.top - self.offsetParent.innerHeight() + self.helperProportions.height + c.bottom + (parseInt(self.offsetParent.css("borderTopWidth"), 10) || 0) + (parseInt(self.offsetParent.css("borderBottomWidth"), 10) || 0) >= 0) self.position.top = self.offsetParent.innerHeight() - self.helperProportions.height - c.bottom - (parseInt(self.offsetParent.css("borderTopWidth"), 10) || 0) - (parseInt(self.offsetParent.css("borderBottomWidth"), 10) || 0);
+				if((ui.position.left < c.left)) self.position.current.left = c.left;
+				if((ui.position.top < c.top)) self.position.current.top = c.top;
+				if(ui.position.left - self.offsetParent.innerWidth() + self.helperProportions.width + c.right + borderLeft + borderRight >= 0) self.position.current.left = self.offsetParent.innerWidth() - self.helperProportions.width - c.right - borderLeft - borderRight;
+				if(ui.position.top - self.offsetParent.innerHeight() + self.helperProportions.height + c.bottom + borderTop + borderBottom >= 0) self.position.current.top = self.offsetParent.innerHeight() - self.helperProportions.height - c.bottom - borderTop - borderBottom;
 			}
 
 		}
