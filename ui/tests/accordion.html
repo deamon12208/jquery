@@ -4,7 +4,7 @@
 <head>
 	<title>jQuery UI Accordion Test Suite</title>
 	
-	<link rel="stylesheet" href="../../jquery/build/test/data/testsuite.css"/>
+	<link rel="stylesheet" href="../../jquery/test/data/testsuite.css"/>
 	<script type="text/javascript" src="../../jquery/src/core.js"></script>
 	<script type="text/javascript" src="../../jquery/src/selector.js"></script>
 	<script type="text/javascript" src="../../jquery/src/event.js"></script>
@@ -15,7 +15,7 @@
 	<script type="text/javascript" src="../ui.base.js"></script>
 	<script type="text/javascript" src="../ui.accordion.js"></script>
 
-	<script type="text/javascript" src="../../jquery/build/test/data/testrunner.js"></script>
+	<script type="text/javascript" src="../../jquery/test/data/testrunner.js"></script>
 	<script type="text/javascript" src="accordion.js"></script>
 	<style type="text/css">
 		.xerror, .error { display: none }
@@ -35,31 +35,35 @@
 		<legend>Standard, container is a div, header is h3 and content p</legend>	
 
 		<div id="list1">
-			<h3>There is one obvious advantage:</h3>
-			<p>
-				You've seen it coming!<br/>
-				Buy now and get nothing for free!<br/>
-				Well, at least no free beer. Perhaps a bear, if you can afford it.
-			</p>
-			<h3>Now that you've got...</h3>
-			<p>
-				your bear, you have to admit it!<br/>
-				No, we aren't selling bears.
-			</p>
-			<p>
-				We could talk about renting one.
-			</p>
-			<h3>Rent one bear, ...</h3>
-			<p>
-				get two for three beer.
-			</p>
-			<p>
-				And now, for something completely different.
-			</p>
+			<a>There is one obvious advantage:</a>
+			<div>
+				<p>
+					You've seen it coming!<br/>
+					Buy now and get nothing for free!<br/>
+					Well, at least no free beer. Perhaps a bear, if you can afford it.
+				</p>
+			</div>
+			<a>Now that you've got...</a>
+			<div>
+				<p>
+					your bear, you have to admit it!<br/>
+					No, we aren't selling bears.
+				</p>
+				<p>
+					We could talk about renting one.
+				</p>
+			</div>
+			<a>Rent one bear, ...</a>
+			<div>
+				<p>
+					get two for three beer.
+				</p>
+				<p>
+					And now, for something completely different.
+				</p>
+			</div>
 		</div>
 		
-		<h3>Code</h3>
-		<pre><code class="mix">jQuery('#list1').Accordion();</code></pre>
 	</fieldset>
 	
 	<fieldset>
@@ -101,13 +105,6 @@
 			</li>
 		</ul>
 		
-		<h3>Code</h3>
-		<pre><code class="mix">jQuery('#navigation').Accordion({
-	active: false,
-	header: '.head',
-	alwaysOpen: false,
-	navigation: true
-});</code></pre>
 	</fieldset>
 
 	<fieldset>
@@ -128,18 +125,6 @@
 			</dd>
 		</dl>
 		
-		<h3>Code</h3>
-		<pre><code class="mix">function simpleLog(message) {
-	jQuery('&lt;div&gt;' + message + '&lt;/div&gt;').appendTo('#log');
-}
-jQuery('#list2').Accordion({
-	event: "mouseover",
-	active: 'dt.selected',
-	selectedClass: "active"
-}).change(function(event, newHeader, oldHeader, newContent, oldContent) {
-	simpleLog(oldHeader.text() + ' hidden');
-	simpleLog(newHeader.text() + ' shown');
-});</code></pre>
 	</fieldset>
 
 	<fieldset>
@@ -171,15 +156,6 @@ jQuery('#list2').Accordion({
 			</div>
 		</div>
 		
-		<h3>Code</h3>
-		<pre><code class="mix">jQuery('#list3').Accordion({
-	showSpeed: 1000,
-	hideSpeed: 150,
-	header: 'div.title',
-	active: false,
-	alwaysOpen: false,
-	animated: false
-});</code></pre>
 	</fieldset>
 		
 		<div id="switch">
