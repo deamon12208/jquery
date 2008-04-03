@@ -109,9 +109,23 @@
 	
 		//Wrap the element if it cannot hold child nodes
 		if(o._nodeName.match(/textarea|input|select|button|img/i)) {
-	
+			var el = this.element;
+			
+			//Opera fixing relative position
+			if (/relative/.test(el.css('position')) && $.browser.opera)
+				el.css({ position: 'relative', top: 'auto', left: 'auto' });
+			
 			//Create a wrapper element and set the wrapper to the new current internal element
-			this.element.wrap('<div class="ui-wrapper"	style="overflow: hidden; position: relative; width: '+this.element.outerWidth()+'px; height: '+this.element.outerHeight()+';"></div>');
+			el.wrap(
+				$('<div class="ui-wrapper"	style="overflow: hidden;"></div>').css( {
+					position: el.css('position'),
+					width: el.outerWidth(),
+					height: el.outerHeight(),
+					top: el.css('top'),
+					left: el.css('left')
+				})
+			);
+			
 			var oel = this.element; element = element.parentNode; this.element = $(element);
 	
 			//Move margins to the wrapper
@@ -124,7 +138,7 @@
 			//Prevent Safari textarea resize
 			if ($.browser.safari && o.preventDefault) oel.css('resize', 'none');
 	
-			o.proportionallyResize = oel.css({ /*position: 'static',*/ zoom: 1, display: 'block' });
+			o.proportionallyResize = oel.css({ position: 'static', zoom: 1, display: 'block' });
 			
 			// avoid IE jump
 			this.element.css({ margin: oel.css('margin') });
@@ -136,8 +150,7 @@
 		if(!o.handles) o.handles = !$('.ui-resizable-handle', element).length ? "e,s,se" : { n: '.ui-resizable-n', e: '.ui-resizable-e', s: '.ui-resizable-s', w: '.ui-resizable-w', se: '.ui-resizable-se', sw: '.ui-resizable-sw', ne: '.ui-resizable-ne', nw: '.ui-resizable-nw' };
 		if(o.handles.constructor == String) {
 	
-			if(o.handles == 'all')
-				o.handles = 'n,e,s,w,se,sw,ne,nw';
+			if(o.handles == 'all') o.handles = 'n,e,s,w,se,sw,ne,nw';
 	
 			var n = o.handles.split(","); o.handles = {};
 	
@@ -305,17 +318,28 @@
 			this.element.triggerHandler(n == "resize" ? n : ["resize", n].join(""), [e, this.ui()], this.options[n]);
 		},
 		destroy: function() {
-			var el = this.element, wrapped = el.children(".ui-resizable");
+			var el = this.element, wrapped = el.children(".ui-resizable").get(0),
 			
-			el.removeClass("ui-resizable ui-resizable-disabled")
-				.removeMouseInteraction()
-				.removeData("resizable")
-				.unbind(".resizable").find('.ui-resizable-handle').remove();
+			_destroy = function(exp) {
+				$(exp).removeClass("ui-resizable ui-resizable-disabled")
+					.removeMouseInteraction().removeData("resizable").unbind(".resizable");
+			};
 			
-			if (el.is('.ui-wrapper') && el.children(".ui-resizable").length) {
-				el.parent().append(wrapped).end().remove();
-			}
+			_destroy(el);
 			
+			if (el.is('.ui-wrapper') && wrapped) {
+		  	el.parent().append(
+					$(wrapped).css({
+			  		position: el.css('position'),
+			  		width: el.outerWidth(),
+			  		height: el.outerHeight(),
+			  		top: el.css('top'),
+			  		left: el.css('left')
+		  		})
+				).end().remove();
+				
+				_destroy(wrapped);
+	  	}
 		},
 		enable: function() {
 			this.element.removeClass("ui-resizable-disabled");
@@ -343,7 +367,7 @@
 			
 			//Opera fixing relative position
 			if (/relative/.test(el.css('position')) && $.browser.opera)
-			el.css({ position: 'relative', top: 'auto', left: 'auto' });
+				el.css({ position: 'relative', top: 'auto', left: 'auto' });
 	
 			this._renderProxy();
 	
