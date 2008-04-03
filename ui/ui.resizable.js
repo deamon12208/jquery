@@ -102,7 +102,7 @@
 		};
 	
 		//Position the node
-		if(!o.proxy && (this.element.css('position') == 'static' || this.element.css('position') == ''))
+		if(!o.proxy && (this.element.css('position') == 'static' || this.element.css('position') === ''))
 			this.element.css('position', 'relative');
 	
 		o._nodeName = element.nodeName;
@@ -305,11 +305,17 @@
 			this.element.triggerHandler(n == "resize" ? n : ["resize", n].join(""), [e, this.ui()], this.options[n]);
 		},
 		destroy: function() {
-			this.element
-			.removeClass("ui-resizable ui-resizable-disabled")
-			.removeMouseInteraction()
-			.removeData("resizable")
-			.unbind(".resizable").find('.ui-resizable-handle').remove();
+			var el = this.element, wrapped = el.children(".ui-resizable");
+			
+			el.removeClass("ui-resizable ui-resizable-disabled")
+				.removeMouseInteraction()
+				.removeData("resizable")
+				.unbind(".resizable").find('.ui-resizable-handle').remove();
+			
+			if (el.is('.ui-wrapper') && el.children(".ui-resizable").length) {
+				el.parent().append(wrapped).end().remove();
+			}
+			
 		},
 		enable: function() {
 			this.element.removeClass("ui-resizable-disabled");

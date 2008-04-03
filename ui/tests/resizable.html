@@ -154,7 +154,15 @@ body
 
 <div id='resizeme5' style='width: 300px; height: 200px; border: 1px solid black; position: relative; position: absolute; bottom: 20px; right: 550px;'>
 	<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'><b>Animated Resizing</b><br>Absolute position with proxy (all directions enabled), ah, and I'm draggable, too!<br><br>
-		$('#resizable5').resizable({ <br>animate: { opacity:.5, fontSize: '0.8em' }, <br>duration: 'slow', <br>easing: 'swing' <br>});</div>
+		
+		$('#resizable5').resizable({ <br>animate: { opacity:.5, fontSize: '0.8em' }, <br>duration: 'slow', <br>easing: 'swing' <br>});
+		
+		<br>
+		<button onclick="$('#resizeme5').resizable({ animate: true, animateDuration: 'slow', animateEasing: 'swing' });">Enable</button>
+		<button onclick="$('#resizeme5').resizable('destroy');">Disable</button>
+		
+		</div>
+		
 </div>
 	
 
