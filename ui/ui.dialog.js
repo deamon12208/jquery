@@ -287,6 +287,7 @@
 		};
 
 		this.destroy = function() {
+			this.overlay && this.overlay.destroy();
 			uiDialog.hide();
 			$(el).unbind('.dialog').removeClass('ui-dialog-content').hide().appendTo('body');
 			uiDialog.remove();
