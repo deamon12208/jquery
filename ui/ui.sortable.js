@@ -191,8 +191,8 @@
 				&&     y2 - (this.helperProportions.height / 2) < b )) return false; // Top Half
 			
 			if(this.floating) {
-				if(x2 > l && x1 < l) return 1; //Crosses left edge
-				if(x1 < r && x2 > r) return 2; //Crosses right edge
+				if(x2 > l && x1 < l) return 2; //Crosses left edge
+				if(x1 < r && x2 > r) return 1; //Crosses right edge
 			} else {
 				if(y2 > t && y1 < t) return 1; //Crosses top edge
 				if(y1 < b && y2 > b) return 2; //Crosses bottom edge
@@ -462,6 +462,7 @@
 				) {
 					
 					this.direction = intersection == 1 ? "down" : "up";
+					if((this.direction == "down" && this.currentItem.next()[0] == this.items[i].item[0]) || (this.direction == "up" && this.currentItem.prev()[0] == this.items[i].item[0])) continue;
 					this.rearrange(e, this.items[i]);
 					this.propagate("change", e); //Call plugins and callbacks
 					break;
