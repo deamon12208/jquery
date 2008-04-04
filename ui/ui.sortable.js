@@ -177,8 +177,7 @@
 				&&     y2 - (this.helperProportions.height / 2) < b ); // Top Half
 			
 		},
-		intersectsWithEdge: function(item) {
-			
+		intersectsWithEdge: function(item) {	
 			var x1 = this.position.absolute.left, x2 = x1 + this.helperProportions.width,
 			    y1 = this.position.absolute.top, y2 = y1 + this.helperProportions.height;
 			var l = item.left, r = l + item.width, 
@@ -291,7 +290,7 @@
 					if(!this.containers[i].containerCache.over) {
 						
 
-						if(!this.containers[i].element[0].contains(this.currentItem[0])) {
+						if(this.currentContainer != this.containers[i]) {
 							
 							//When entering a new container, we will find the item with the least distance and append our item near it
 							var dist = 10000; var itemWithLeastDistance = null; var base = this.position.absolute[this.containers[i].floating ? 'left' : 'top'];
@@ -315,6 +314,8 @@
 							itemWithLeastDistance ? this.rearrange(e, itemWithLeastDistance) : this.rearrange(e, null, this.containers[i].element);
 							this.propagate("change", e); //Call plugins and callbacks
 							this.containers[i].propagate("change", e, this); //Call plugins and callbacks
+							this.currentContainer = this.containers[i];
+
 						}
 						
 						this.containers[i].propagate("over", e, this);
