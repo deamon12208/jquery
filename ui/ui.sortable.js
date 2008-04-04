@@ -446,7 +446,6 @@
 		drag: function(e) {
 
 			//Compute the helpers position
-			this.direction = (this.floating && this.position.absolute.left > e.pageX - this.clickOffset.left) || (this.position.absolute.top > e.pageY - this.clickOffset.top) ? 'down' : 'up';
 			this.position.current = { top: e.pageY - this.offset.top, left: e.pageX - this.offset.left };
 			this.position.absolute = { left: e.pageX - this.clickOffset.left, top: e.pageY - this.clickOffset.top };
 
@@ -456,13 +455,12 @@
 				if(!intersection) continue;
 				
 				if(     this.items[i].item[0] != this.currentItem[0] //cannot intersect with itself
-					&&	this.items[i].item[this.direction == 'down' ? 'prev' : 'next']()[0] != this.currentItem[0] //no useless actions that have been done before
+					&&	this.currentItem[intersection == 1 ? "next" : "prev"][0] != this.items[i].item[0] //no useless actions that have been done before
 					&&	!this.currentItem[0].contains(this.items[i].item[0]) //no action if the item moved is the parent of the item checked
 					&& (this.options.type == 'semi-dynamic' ? !this.element[0].contains(this.items[i].item[0]) : true)
 				) {
 					
 					this.direction = intersection == 1 ? "down" : "up";
-					if((this.direction == "down" && this.currentItem.next()[0] == this.items[i].item[0]) || (this.direction == "up" && this.currentItem.prev()[0] == this.items[i].item[0])) continue;
 					this.rearrange(e, this.items[i]);
 					this.propagate("change", e); //Call plugins and callbacks
 					break;
