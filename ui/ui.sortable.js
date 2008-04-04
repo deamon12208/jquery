@@ -455,7 +455,7 @@
 				if(!intersection) continue;
 				
 				if(     this.items[i].item[0] != this.currentItem[0] //cannot intersect with itself
-					&&	this.currentItem[intersection == 1 ? "next" : "prev"][0] != this.items[i].item[0] //no useless actions that have been done before
+					&&	this.currentItem[intersection == 1 ? "next" : "prev"]()[0] != this.items[i].item[0] //no useless actions that have been done before
 					&&	!this.currentItem[0].contains(this.items[i].item[0]) //no action if the item moved is the parent of the item checked
 					&& (this.options.type == 'semi-dynamic' ? !this.element[0].contains(this.items[i].item[0]) : true)
 				) {
