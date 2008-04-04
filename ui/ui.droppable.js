@@ -164,8 +164,8 @@
 		
 		if (!droppable.offset) return false;
 		
-		var x1 = draggable.positionAbs.left, x2 = x1 + draggable.helperProportions.width,
-		    y1 = draggable.positionAbs.top, y2 = y1 + draggable.helperProportions.height;
+		var x1 = (draggable.positionAbs || draggable.position.absolute).left, x2 = x1 + draggable.helperProportions.width,
+		    y1 = (draggable.positionAbs || draggable.position.absolute).top, y2 = y1 + draggable.helperProportions.height;
 		var l = droppable.offset.left, r = l + droppable.item.proportions.width,
 		    t = droppable.offset.top,  b = t + droppable.item.proportions.height;
 		
@@ -189,8 +189,8 @@
 					&&     y2 - (draggable.helperProportions.height / 2) < b ); // Top Half
 				break;
 			case 'pointer':
-				return (   l < (draggable.positionAbs.left + draggable.clickOffset.left) && (draggable.positionAbs.left + draggable.clickOffset.left) < r
-					&& t < (draggable.positionAbs.top + draggable.clickOffset.top) && (draggable.positionAbs.top + draggable.clickOffset.top) < b);
+				return (   l < ((draggable.positionAbs || draggable.position.absolute).left + draggable.clickOffset.left) && ((draggable.positionAbs || draggable.position.absolute).left + draggable.clickOffset.left) < r
+					&& t < ((draggable.positionAbs || draggable.position.absolute).top + draggable.clickOffset.top) && ((draggable.positionAbs || draggable.position.absolute).top + draggable.clickOffset.top) < b);
 				break;
 			case 'touch':
 				return ( (y1 >= t && y1 <= b) ||	// Top edge touching
