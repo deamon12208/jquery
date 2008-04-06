@@ -187,7 +187,7 @@
 			this.selectees.each(function() {
 				var selectee = $.data(this, "selectable-item");
 				//prevent helper from being selected if appendTo: selectable
-				if (selectee.element == element)
+				if (!selectee || selectee.element == element)
 					return;
 				var hit = false;
 				if (options.tolerance == 'touch') {
