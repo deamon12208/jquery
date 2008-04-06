@@ -322,7 +322,7 @@
 			
 			_destroy = function(exp) {
 				$(exp).removeClass("ui-resizable ui-resizable-disabled")
-					.removeMouseInteraction().removeData("resizable").unbind(".resizable");
+					.removeMouseInteraction().removeData("resizable").unbind(".resizable").find('.ui-resizable-handle').remove();
 			};
 			
 			_destroy(el);
