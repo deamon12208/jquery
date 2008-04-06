@@ -328,7 +328,7 @@
 			_destroy(el);
 			
 			if (el.is('.ui-wrapper') && wrapped) {
-		  	el.parent().append(
+		  		el.parent().append(
 					$(wrapped).css({
 			  		position: el.css('position'),
 			  		width: el.outerWidth(),
@@ -339,7 +339,7 @@
 				).end().remove();
 				
 				_destroy(wrapped);
-	  	}
+	  		}
 		},
 		enable: function() {
 			this.element.removeClass("ui-resizable-disabled");
