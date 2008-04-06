@@ -7,7 +7,7 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- * Revision: $Id: jquery.autocomplete.js 4485 2008-01-20 13:52:47Z joern.zaefferer $
+ * Revision: $Id: jquery.autocomplete.js 5206 2008-04-06 17:08:47Z dswitzer $
  *
  */
 
@@ -455,6 +455,8 @@ $.Autocompleter = function(input, options) {
 				}
 			});
 		} else {
+			// if we have a failure, we need to empty the list -- this prevents the the [TAB] key from selecting the last successful match
+			select.emptyList();
 			failure(term);
 		}
 	};
@@ -821,6 +823,9 @@ $.Autocompleter.Select = function (options, input, select, config) {
 		selected: function() {
 			var selected = listItems && listItems.filter("." + CLASSES.ACTIVE).removeClass(CLASSES.ACTIVE);
 			return selected && selected.length && $.data(selected[0], "ac_data");
+		},
+		emptyList: function (){
+			list.empty();
 		},
 		unbind: function() {
 			element && element.remove();
