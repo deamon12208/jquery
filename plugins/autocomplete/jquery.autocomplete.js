@@ -825,7 +825,8 @@ $.Autocompleter.Select = function (options, input, select, config) {
 			return selected && selected.length && $.data(selected[0], "ac_data");
 		},
 		emptyList: function (){
-			list.empty();
+			// only empty the list if it doesn't exist
+			if( list ) list.empty();
 		},
 		unbind: function() {
 			element && element.remove();
