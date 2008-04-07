@@ -163,7 +163,7 @@ $(function() {
 			
 			wait: 'loop',
 			
-      duration: 1000,
+      duration: 2000,
 			
       increment: 5,
 			
@@ -178,7 +178,7 @@ $(function() {
 			},
 			
 			start: function() {
-				//console.log('user start');
+				console.log('user start');
 			}
 			
 		});
@@ -216,7 +216,23 @@ $(function() {
 	}).trigger("click");
 	
 	
-	$('#p3-create').click(function() { $('#p3').progressbar(); }).trigger('click');
+	$('#p3-create').click(function() { $('#p3').progressbar({
+		
+		duration: 2000,
+		
+		increment: 30,
+		
+		stop: function(s, ui) {
+				console.log('stop:' + ui.instance.inprogress);
+		},
+		progress: function(range, ui) {
+			//console.log(ui.pixelRange);
+			//console.log(range);
+		},
+		start: function() {
+			console.log('user start');
+		}
+	}); }).trigger('click');
 	
 });
 

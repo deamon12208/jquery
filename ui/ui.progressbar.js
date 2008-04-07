@@ -111,7 +111,7 @@
 					self.waitThread = null;
 				}, o.wait);
 			
-			var frames = Math.round(100/o.increment) || 0, ms = o.duration/frames || 0,
+			var frames = Math.ceil(100/o.increment) || 0, ms = o.duration/frames || 0,
 			
 			render = function(step, t) { return function() {
 					clearInterval(t);
@@ -164,18 +164,28 @@
 			var o = this.options, el = this.element, bar = this.bar;
 			if (this.disabled) return false;
 			
-			this._step = Math.round(range/o.increment);
-			this.rangeValue = Math.round(o.increment * this._step);
-			var elw = el.innerWidth() - (el.outerWidth() - el.innerWidth()) - (bar.outerWidth() - bar.innerWidth()), range = Math.round( ((range/100)||0) * elw );
-			this.bar.css({ width: range + 'px' });
+			range = parseInt(range, 10);
+			this.rangeValue = this._fixRange(range);
 			
-			this.pixelRange = range;
+			var elw = el.innerWidth() - (el.outerWidth() - el.innerWidth()) - (bar.outerWidth() - bar.innerWidth());
+			
+			this.pixelRange = Math.round( ((this.rangeValue/100)||0) * elw );
+			
+			this.bar.css({ width: this.pixelRange + 'px' });
+			
 			if (!o.text && o.range) this.text(this.rangeValue + '%');
 			this.propagate('progress', this.rangeValue);
 			return false;
 		},
 		text: function(text) {
 			this.textEl.html(text);
+		},
+		_fixRange: function(range) {
+			var o = this.options;
+			this._step = Math.ceil(range/o.increment);
+			this.rangeValue = Math.round(o.increment * this._step);
+			this.rangeValue = (this.rangeValue) >= 100 ? 100 : this.rangeValue;
+			return this.rangeValue;
 		}
 	});
 	
