@@ -1,5 +1,5 @@
 /*
- * jQuery UI Slider
+ * jQuery UI ProgressBar
  *
  * Copyright (c) 2008 Eduardo Lundgren (braeker)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
@@ -10,7 +10,7 @@
  * Depends:
  *   ui.base.js
  *
- * Revision: $Id: ui.progressbar.js 5196 2008-04-04 12:52:32Z paul.bakaus $
+ * Revision: $Id: ui.progressbar.js 5196 2008-04-04 12:52:32Z braeker $
  */
 ;(function($) {
 
