@@ -51,11 +51,16 @@
 		
 		var text = o.text ? o.text : (o.range ? '0%' : '');
 		
-		this.textEl = $("<div>")
-			.addClass('ui-progressbar-text').addClass(o.textClass).css({ width: el.css('width') }).html(text);
+		el.css({overflow: 'hidden'});
+		
+		this.wrapper = $("<div>")
+			.addClass('ui-progressbar-wrap').css({ height: 'auto', width: 'auto' }).appendTo(el);
 		
 		this.bar = $("<div>")
-			.addClass('ui-progressbar-inner').addClass(o.addClass).html(this.textEl).css({ width: '0px' }).appendTo(el);
+			.addClass('ui-progressbar-inner').addClass(o.addClass).css({ width: '0px', 'float': o.align || null }).appendTo(this.wrapper);
+			
+		this.textEl = $("<div>")
+			.addClass('ui-progressbar-text').addClass(o.textClass).css({ width: el.css('width'), zIndex: 99 }).html(text).appendTo(this.wrapper);
 	};
 	
 	$.extend($.ui.progressbar.prototype, {

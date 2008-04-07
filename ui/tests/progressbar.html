@@ -51,8 +51,19 @@ body
 }
 
 .ui-progressbar-text {
-	padding-left: 2px;
-	color: #fff;
+	color:#FFFFFF;
+	font-size:11px;
+	font-weight:bold;
+	left:0pt;
+	overflow:hidden;
+	padding:0px 5px;
+	position:absolute;
+	text-align:left;
+}
+
+.ui-progressbar-text.right-align {
+	text-align: right;
+	padding: 0 5px 0 0;
 }
 
 .ui-progressbar-inner {
@@ -62,14 +73,7 @@ body
 	border-top:1px solid #D1E4FD;
 	height:18px;
 	width:0pt;
-}
-
-.ui-progressbar-inner-custom {
-	background: url(images/custom-bar.gif) repeat-x scroll left center;
-	border-bottom:1px solid #EFEFEF;
-	border-right:0pt none;
-	border-top:1px solid #BEBEBE;
-	height:15px;
+	float: left;
 }
 
 .ui-progressbar-disabled {
@@ -77,9 +81,14 @@ body
 	filter:Alpha(Opacity=50);
 }
 
-.ui-progressbar-text-custom {
-	padding-left: 2px;
-	color: #000;
+
+/* custom */
+.ui-progressbar-inner-custom {
+	background: url(images/custom-bar.gif) repeat-x scroll left center;
+	border-bottom:1px solid #EFEFEF;
+	border-right:0pt none;
+	border-top:1px solid #BEBEBE;
+	height:15px;
 }
 
 </style>
@@ -148,7 +157,9 @@ $(function() {
 			
 			//addClass: 'ui-progressbar-inner-custom teste',
 			
-			//textClass: 'ui-progressbar-text-custom',
+			textClass: 'right-align',
+			
+			align: 'right',
 			
 			wait: 'loop',
 			
