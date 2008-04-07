@@ -86,7 +86,7 @@
 			this.element
 				.removeClass("ui-progressbar ui-progressbar-disabled")
 				.removeData("progressbar").unbind(".progressbar")
-				.find('.ui-progressbar-inner').remove();
+				.find('.ui-progressbar-wrap').remove();
 		},
 		enable: function() {
 			this.element.removeClass("ui-progressbar-disabled");
