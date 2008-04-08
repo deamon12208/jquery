@@ -3,6 +3,7 @@
 * Fixed invalid-form event, now only triggered when form is invalid
 * Added spanish (es), russian (ru), portuguese brazilian (ptbr) and polish (pl) localization
 * Added removeAttrs plugin to facilate adding and removing multiple attributes
+* Enhanced rules() for adding and removing (static) rules: rules("add", "method"/{method1:param[, method_n:param]}) and rules("remove"[, "method1[, method_n]") 
 * Fixed checkbox group validation with inline rules: As long as the rules are specified on the first element, the group is now properly validated on click
 * Fixed #2473, ignoring all rules with an explicit parameter of boolean-false, eg. required:false is the same as not specifying required at all (it was handled as required:true so far)
 * Fixed #2424, with a modified patch from #2473: Methods returning a dependency-mismatch don't stop other rules from being evaluated anymore; still, success isn't applied for optional fields

@@ -273,6 +273,17 @@ function compare2(a, b, msg) {
 				ret = false
 			}
 		}
+		for(key in b) {
+			if (b[key].constructor == Array) {
+				for (var arrayKey in b[key]) {
+					if (a[key][arrayKey] != b[key][arrayKey]) {
+						ret = false;
+					}
+				}
+			} else if (a[key] != b[key]) {
+				ret = false
+			}
+		}
 	} else
 		ret = false;
 	ok( ret, msg + " expected: " + serialObject(b) + " result: " + serialObject(a) );

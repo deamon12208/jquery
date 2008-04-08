@@ -99,6 +99,29 @@ jQuery.extend(jQuery.fn, {
 	// http://docs.jquery.com/Plugins/Validation/rules
 	rules: function(command, argument) {
 		var element = this[0];
+		
+		if (command) {
+			var staticRules = jQuery.data(element.form, 'validator').settings.rules;
+			var existingRules = jQuery.validator.staticRules(element);
+			switch(command) {
+			case "add":
+				$.extend(existingRules, jQuery.validator.normalizeRule(argument));
+				staticRules[element.name] = existingRules;
+				break;
+			case "remove":
+				if (!argument) {
+					delete staticRules[element.name];
+					return existingRules;
+				}
+				var filtered = {};
+				$.each(argument.split(/\s/), function(index, method) {
+					filtered[method] = existingRules[method];
+					delete existingRules[method];
+				});
+				return filtered;
+			}
+		}
+		
 		var data = jQuery.validator.normalizeRules(
 		jQuery.extend(
 			{},
@@ -114,7 +137,7 @@ jQuery.extend(jQuery.fn, {
 			delete data.required;
 			data = $.extend({required: param}, data);
 		}
-	
+		
 		return data;
 	},
 	// destructive add
