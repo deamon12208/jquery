@@ -21,7 +21,7 @@
 	</target>
 
 	<target name="load.properties.release" depends="load.properties">
-		<property description="The release version to be built" name="release.version" value="1.5b" />
+		<property description="The release version to be built" name="release.version" value="1.5b2" />
 		<property name="js.src.dir" value="../" />
 		<property name="js.build.dir" value="build/${release.version}" />
 		<property name="js.min.sufix.name" value="min" />
@@ -81,6 +81,15 @@
 		<copy overwrite="true" todir="${js.build.dir}/datepicker/" >
 			<fileset dir="${js.src.dir}/datepicker/" />
 		</copy>
+		
+		<copy overwrite="true" todir="${js.build.dir}/demos/" >
+			<fileset dir="${js.src.dir}/demos/" />
+		</copy>
+		
+		<copy overwrite="true" todir="${js.build.dir}/tests/" >
+			<fileset dir="${js.src.dir}/tests/" />
+		</copy>
+		
 	</target>
 	
 </project>
