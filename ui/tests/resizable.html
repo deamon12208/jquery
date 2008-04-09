@@ -16,10 +16,6 @@
 <script type="text/javascript" src="../ui.resizable.js"></script>
 <script type="text/javascript" src="../ui.draggable.js"></script>
 
-<script type="text/javascript" src="../../fx/fx.js"></script>
-<script type="text/javascript" src="../../fx/fx.bounce.js"></script>
-<script type="text/javascript" src="../../fx/fx.scale.js"></script>
-
 <link rel="stylesheet" href="../../themes/flora/flora.all.css" type="text/css" media="screen" title="Flora (Default)" />
 <style type="text/css" media="all">
 
@@ -195,9 +191,9 @@ if(!window.console) {
  }	
 }
 
-$(".package").resizable({ handles: 'w, e', autohide: true, minWidth: 10, containment: 'parent'});
 
 $(document).ready(function(){
+	$(".package").resizable({ handles: 'w, e', autohide: true, minWidth: 10, containment: 'parent'});
 
 
 	$('#tdResize').resizable();

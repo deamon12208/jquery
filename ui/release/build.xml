@@ -36,6 +36,7 @@
 		<concat destfile="${js.build.dir}/${js.concatenated.name}.js">
 			<filelist dir="${js.src.dir}/" files="${js.core.files}" />
 			<fileset dir="${js.src.dir}/" includes="ui.*.js" excludes="${js.core.files}" />
+			<fileset dir="${js.src.dir}/datepicker/core/" includes="ui.*.js" excludes="${js.core.files}" />
 		</concat>
 	</target>
 
@@ -44,6 +45,7 @@
 		<apply executable="java" parallel="false">
 			<filelist dir="${js.build.dir}/" files="${js.concatenated.name}.js" />
 			<fileset dir="${js.src.dir}/" includes="ui.*.js" excludes="*.min.js" />
+			<fileset dir="${js.src.dir}/datepicker/core/" includes="ui.*.js" excludes="*.min.js" />
 			<arg line="-jar" />
 			<arg path="lib/yuicompressor-last.jar" />
 			<srcfile />
@@ -88,6 +90,10 @@
 		
 		<copy overwrite="true" todir="${js.build.dir}/tests/" >
 			<fileset dir="${js.src.dir}/tests/" />
+		</copy>
+		
+		<copy overwrite="true" todir="${js.build.dir}/themes/flora/" >
+			<fileset dir="${js.src.dir}/../themes/flora/" />
 		</copy>
 		
 	</target>
