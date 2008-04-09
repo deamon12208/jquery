@@ -342,17 +342,19 @@
 			}
 
 			if(x && x.constructor != Number) {
-				if (/^\-\=/.test(x) ) {
+				var me = /^\-\=/.test(x), pe = /^\+\=/.test(x);
+				if (me) {
 					x = this.value(null,1) - parseInt(x.replace('-=', ''), 10);
-				} else if (/^\+\=/.test(x) ) {
+				} else if (pe) {
 					x = this.value(null,1) + parseInt(x.replace('+=', ''), 10);
 				}
 			}
 			
 			if(y && y.constructor != Number) {
-				if (/^\-\=/.test(y) ) {
+				var me = /^\-\=/.test(y), pe = /^\+\=/.test(y);
+				if (me) {
 					y = this.value(null,2) - parseInt(y.replace('-=', ''), 10);
-				} else if (/^\+\=/.test(y) ) {
+				} else if (pe) {
 					y = this.value(null,2) + parseInt(y.replace('+=', ''), 10);
 				}
 			}
