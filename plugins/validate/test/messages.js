@@ -5,7 +5,7 @@ test("group error messages", function() {
 		requiredDateRange: {required:true, date:true, dateRange:true}
 	});
 	$.validator.addMethod("dateRange", function() {
-		return new Date($("#fromDate").val()).getTime() < new Date($("#toDate").val());
+		return new Date($("#fromDate").val()) < new Date($("#toDate").val());
 	}, "Please specify a correct date range.");
 	var form = $("#dateRangeForm");
 	form.validate({
