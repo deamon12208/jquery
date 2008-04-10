@@ -146,7 +146,6 @@ jQuery.fn.validForm = function() {
 - AND depedency: specify multiple expressions as an array
 
 - add custom events for form and elements instead of more callbacks (additional options/callbacks)
- - onsubmit: Boolean, default true - validate on form submit (similar to onkeyup/onblur)
  - beforeValidation: Callback, called before doing any validation
  - beforeSubmit: Callback, called before submitting the form (default submit or calling submitHandler, if specified) 
 

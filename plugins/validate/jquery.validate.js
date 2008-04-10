@@ -186,6 +186,7 @@ jQuery.extend(jQuery.validator, {
 
 	defaults: {
 		messages: {},
+		groups: {},
 		errorClass: "error",
 		errorElement: "label",
 		focusInvalid: true,
@@ -271,6 +272,14 @@ jQuery.extend(jQuery.validator, {
 			this.pending = {};
 			this.invalid = {};
 			this.reset();
+			
+			var groups;
+			groups = this.groups = {};
+			$.each(this.settings.groups, function(key, value) {
+				$.each(value.split(/\s/), function(index, name) {
+					groups[name] = key;
+				});
+			});
 			
 			function delegate(event) {
 				var validator = jQuery.data(this[0].form, "validator");
@@ -467,7 +476,7 @@ jQuery.extend(jQuery.validator, {
 						return false;
 					}
 				} catch(e) {
-					this.settings.debug && window.console && console.warn("exception occured when checking element " + element.id
+					this.settings.debug && window.console && console.log("exception occured when checking element " + element.id
 						 + ", check the '" + rule.method + "' method");
 					throw e;
 				}
@@ -581,7 +590,7 @@ jQuery.extend(jQuery.validator, {
 		},
 		
 		idOrName: function(element) {
-			return this.checkable(element) ? element.name : element.id || element.name;
+			return this.groups[element.name] || (this.checkable(element) ? element.name : element.id || element.name);
 		},
 
 		checkable: function( element ) {
@@ -1043,7 +1052,7 @@ jQuery.extend(jQuery.validator, {
 			if ( pendingRequests[port] ) {
 				pendingRequests[port].abort();
 			}
-			return pendingRequests[port] = ajax.apply(this, arguments);
+			return (pendingRequests[port] = ajax.apply(this, arguments));
 		}
 		return ajax.apply(this, arguments);
 	};
