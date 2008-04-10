@@ -273,8 +273,7 @@ jQuery.extend(jQuery.validator, {
 			this.invalid = {};
 			this.reset();
 			
-			var groups;
-			groups = this.groups = {};
+			var groups = (this.groups = {});
 			$.each(this.settings.groups, function(key, value) {
 				$.each(value.split(/\s/), function(index, name) {
 					groups[name] = key;
