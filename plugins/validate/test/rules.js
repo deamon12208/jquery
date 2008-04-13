@@ -211,28 +211,36 @@ test("rules(), add and remove", function() {
 });
 	
 test("rules(), add and remove static rules", function() {
-	$("#testForm1clean").validate({
+	var v = $("#testForm1clean").validate({
 		rules: {
-			firstname: "required"
+			firstname: "required date"
 		}
 	});
-	compare2( $("#firstnamec").rules(), { required: true } );
-	compare2( $("#lastnamec").rules(), {} );
+	compare2( $("#firstnamec").rules(), { required: true, date: true } );
 	
+	$("#firstnamec").rules("remove", "date")
+	//console.log(v.settings.rules.firstname)
+	compare2( $("#firstnamec").rules(), { required: true } );
 	$("#firstnamec").rules("add", "email");
 	compare2( $("#firstnamec").rules(), { required: true, email: true } );
-	
-	$("#lastnamec").rules("add", "required");
-	$("#lastnamec").rules("add", {
-		minlength: 2
-	});
-	compare2( $("#lastnamec").rules(), { required: true, minlength: 2 } );
 	
 	$("#firstnamec").rules("remove", "required");
 	compare2( $("#firstnamec").rules(), { email: true } );
 	
 	compare2( $("#firstnamec").rules("remove"), { email: true } );
 	compare2( $("#firstnamec").rules(), { } );
+	
+	$("#firstnamec").rules("add", "required email");
+	compare2( $("#firstnamec").rules(), { required: true, email: true } );
+	
+	
+	compare2( $("#lastnamec").rules(), {} );
+	$("#lastnamec").rules("add", "required");
+	$("#lastnamec").rules("add", {
+		minlength: 2
+	});
+	compare2( $("#lastnamec").rules(), { required: true, minlength: 2 } );
+	
 	
 	var removedRules = $("#lastnamec").rules("remove", "required email");
 	compare2( $("#lastnamec").rules(), { minlength: 2 } );

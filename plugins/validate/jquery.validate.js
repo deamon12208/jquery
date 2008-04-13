@@ -187,6 +187,7 @@ jQuery.extend(jQuery.validator, {
 	defaults: {
 		messages: {},
 		groups: {},
+		rules: {},
 		errorClass: "error",
 		errorElement: "label",
 		focusInvalid: true,
@@ -274,10 +275,15 @@ jQuery.extend(jQuery.validator, {
 			this.reset();
 			
 			var groups = (this.groups = {});
-			$.each(this.settings.groups, function(key, value) {
-				$.each(value.split(/\s/), function(index, name) {
+			jQuery.each(this.settings.groups, function(key, value) {
+				jQuery.each(value.split(/\s/), function(index, name) {
 					groups[name] = key;
 				});
+			});
+			var rules = this.settings.rules;
+			jQuery.each(rules, function(key, value) {
+				//console.log("this: %o, key: %o, value: %o", this, key, value)
+				rules[key] = jQuery.validator.normalizeRule(value);
 			});
 			
 			function delegate(event) {
@@ -814,7 +820,9 @@ jQuery.extend(jQuery.validator, {
 	normalizeRule: function(data) {
 		if( typeof data == "string" ) {
 			var transformed = {};
-			transformed[data] = true;
+			jQuery.each(data.split(/\s/), function() {
+				transformed[this] = true;
+			});
 			data = transformed;
 		}
 		return data;

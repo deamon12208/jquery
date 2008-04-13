@@ -412,8 +412,8 @@ test("error containers, simple", function() {
 	});
 });
 
-test("error containers, with labelcontainer", function() {
-	expect(28);
+test("error containers, with labelcontainer I", function() {
+	expect(16);
 	var container = $("#container"),
 		labelcontainer = $("#labelcontainer");
 	var v = $("#form").validate({
@@ -422,13 +422,11 @@ test("error containers, with labelcontainer", function() {
 		wrapper: "li"
 	});
 	
-	v.prepareForm();
 	ok( v.valid(), "form is valid" );
 	equals( 0, container.find("label").length, "There should be no error labels in the container" );
 	equals( 0, labelcontainer.find("label").length, "There should be no error labels in the labelcontainer" );
 	equals( 0, labelcontainer.find("li").length, "There should be no lis labels in the labelcontainer" );
 	
-	v.prepareForm();
 	v.errorList = [{message:"bar", element: {name:"foo"}}, {name: "required", message: "necessary", element: {name:"required"}}];
 	ok( !v.valid(), "form is not valid after adding errors manually" );
 	v.showErrors();
@@ -437,25 +435,10 @@ test("error containers, with labelcontainer", function() {
 	equals( 2, labelcontainer.find("li").length, "There should be two error lis in the labelcontainer" );
 	ok( container.is(":visible"), "Check that the container is visible" );
 	ok( labelcontainer.is(":visible"), "Check that the labelcontainer is visible" );
-	labelcontainer.find("label").each(function() {
+	var labels = labelcontainer.find("label").each(function() {
 		ok( $(this).is(":visible"), "Check that each label is visible1" );
 		equals( "li", $(this).parent()[0].tagName.toLowerCase(), "Check that each label is wrapped in an li" );
 		ok( $(this).parent("li").is(":visible"), "Check that each parent li is visible" );
-	});
-	
-	
-	v.prepareForm();
-	ok( v.valid(), "form is not valid after adding errors manually" );
-	v.showErrors();
-	equals( 0, container.find("label").length, "There should be no error label in the container" );
-	equals( 2, labelcontainer.find("label").length, "There should be two error labels in the labelcontainer" );
-	equals( 2, labelcontainer.find("li").length, "There should be two error lis in the labelcontainer" );
-	ok( container.is(":hidden"), "Check that the container is hidden" );
-	ok( labelcontainer.is(":hidden"), "Check that the labelcontainer is hidden" );
-	labelcontainer.find("label").each(function() {
-		ok( $(this).is(":hidden"), "Check that each label is visible2" );
-		equals( "li", $(this).parent()[0].tagName.toLowerCase(), "Check that each label is wrapped in an li" );
-		ok( $(this).parent("li").is(":hidden"), "Check that each parent li is visible" );
 	});
 });
 
