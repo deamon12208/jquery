@@ -80,7 +80,7 @@
 		this.element.mouseInteraction({
 			executor: this,
 			delay: o.delay,
-			distance: o.distance || 0,
+			distance: o.distance || 1,
 			dragPrevention: o.prevention ? o.prevention.toLowerCase().split(',') : ['input','textarea','button','select','option'],
 			start: this.start,
 			stop: this.stop,
