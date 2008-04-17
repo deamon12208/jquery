@@ -564,7 +564,21 @@
 				
 			};
 		}
-	})
+	});
+	
+	$.ui.plugin.add("draggable", "stack", {
+		start: function(e,ui) {
+			var group = $.makeArray($(ui.options.stack.group)).sort(function(a,b) {
+				return (parseInt($(a).css("zIndex")) || ui.options.stack.min) - (parseInt($(b).css("zIndex")) || ui.options.stack.min);
+			});
+			
+			$(group).each(function(i) {
+				this.style.zIndex = ui.options.stack.min + i;
+			});
+			
+			this[0].style.zIndex = ui.options.stack.min + group.length;
+		}
+	});
 
 	//TODO: wrapHelper
 
