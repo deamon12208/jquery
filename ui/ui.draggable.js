@@ -341,10 +341,10 @@
 				var co = $(o._containment).offset();
 
 				o.containment = [
-					co.left,
-					co.top,
-					co.left+(ce.offsetWidth || ce.scrollWidth),
-					co.top+(ce.offsetHeight || ce.scrollHeight)
+					co.left + parseInt($(ce).css("borderLeftWidth")),
+					co.top + parseInt($(ce).css("borderTopWidth")),
+					co.left+(ce.offsetWidth || ce.scrollWidth) - parseInt($(ce).css("borderRightWidth")),
+					co.top+(ce.offsetHeight || ce.scrollHeight) - parseInt($(ce).css("borderBottomWidth"))
 				];
 			}
 			
