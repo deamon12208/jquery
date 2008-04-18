@@ -260,24 +260,31 @@
 				var c = !intersects && this.isover == 1 ? 'isout' : (intersects && this.isover == 0 ? 'isover' : null);
 				if(!c) return;
 				
-				var instance = $.data(this.element[0], 'droppable');
-				if (instance.options.greedy) {
-					this.element.parents('.ui-droppable:eq(0)').each(function() {
-						var parent = this;
-						$.each($.ui.ddmanager.droppables, function() {
-							if (this.element[0] != parent) return;
-							this[c] = 0;
-							this[c == 'isout' ? 'isover' : 'isout'] = 1;
-							this.greedyChild = (c == 'isover' ? 1 : 0);
-							this[c == 'isout' ? 'over' : 'out'].call(this, e);
-							return false;
-						});
-					});
+				var parentInstance;
+				if (this.options.greedy) {
+					var parent = this.element.parents('.ui-droppable:eq(0)');
+					if (parent.length) {
+						parentInstance = $.data(parent[0], 'droppable');
+						parentInstance.greedyChild = (c == 'isover' ? 1 : 0);
+					}
+				}
+				
+				// we just moved into a greedy child
+				if (parentInstance && c == 'isover') {
+					parentInstance['isover'] = 0;
+					parentInstance['isout'] = 1;
+					parentInstance.out.call(parentInstance, e);
 				}
 				
 				this[c] = 1; this[c == 'isout' ? 'isover' : 'isout'] = 0;
 				this[c == "isover" ? "over" : "out"].call(this, e);
 				
+				// we just moved out of a greedy child
+				if (parentInstance && c == 'isout') {
+					parentInstance['isout'] = 0;
+					parentInstance['isover'] = 1;
+					parentInstance.over.call(parentInstance, e);
+				}
 			});
 			
 		}
