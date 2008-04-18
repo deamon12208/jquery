@@ -1,11 +1,11 @@
-(function($) {
+﻿(function($) {
   
   $.ec.fold = function(o) {
 
     return this.queue(function() {
 
       // Create element
-      var el = $(this), props = ['position'];
+      var el = $(this), props = ['position','top','left'];
       
       // Set options
       var mode = $.ec.setMode(el, o.options.mode || 'hide'); // Set Mode
