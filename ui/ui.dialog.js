@@ -17,24 +17,20 @@
 ;(function($) {
 	
 	$.fn.extend({
-		dialog: function(options) {
-			var args = Array.prototype.slice.call(arguments, 1);
-
+		dialog: function(options, data) {
 			return this.each(function() {
-				if (typeof options == "string") {
-					var elem = $(this).is('.ui-dialog')
-						? this
-						: $(this).parents(".ui-dialog:first").find(".ui-dialog-content")[0];
-					var dialog = elem ? $.data(elem, "dialog") : {};
-					if (dialog[options])
-						dialog[options].apply(dialog, args);
-				// INIT with optional options
-				} else if (!$(this).is(".ui-dialog-content"))
-					new $.ui.dialog(this, options);
+				var isMethodCall = (typeof options == "string");
+				var instance = $.data(this, "dialog");
+				
+				if (!instance && !isMethodCall) {
+					$.data(this, "dialog", new $.ui.dialog(this, options));
+				} else if (isMethodCall) {
+					instance[options](data);
+				}
 			});
 		}
 	});
-
+	
 	$.ui.dialog = function(el, options) {
 		
 		this.options = options = $.extend({}, $.ui.dialog.defaults, options);
@@ -161,18 +157,20 @@
 				var ESC = 27;
 				ev.keyCode && ev.keyCode == ESC && self.close(); 
 			});
-
-		var l = 0;
-		$.each(options.buttons, function() { l = 1; return false; });
-		if (l == 1) {
-			uiDialog.append('<div class="ui-dialog-buttonpane"></div>');
-			var uiDialogButtonPane = $('.ui-dialog-buttonpane', uiDialog);
-			$.each(options.buttons, function(name, value) {
-				var btn = $(document.createElement('button')).text(name).click(value);
-				uiDialogButtonPane.append(btn);
+		
+		var hasButtons = false;
+		$.each(options.buttons, function() { return !(hasButtons = true); });
+		if (hasButtons) {
+			var uiDialogButtonPane = $('<div class="ui-dialog-buttonpane"/>')
+				.appendTo(uiDialog);
+			$.each(options.buttons, function(name, fn) {
+				$(document.createElement('button'))
+					.text(name)
+					.click(function() { fn.apply(el, arguments) })
+					.appendTo(uiDialogButtonPane);
 			});
 		}
-
+		
 		if ($.fn.draggable) {
 			uiDialog.draggable({
 				handle: '.ui-dialog-titlebar',
@@ -303,7 +301,7 @@
 		defaults: {
 			autoOpen: true,
 			bgiframe: false,
-			buttons: [],
+			buttons: {},
 			draggable: true,
 			height: 200,
 			minHeight: 100,
