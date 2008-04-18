@@ -25,10 +25,11 @@
 		o.magnification = o.magnification || 2;
 		o.baseline = o.baseline || 0;
 		o.verticalLine =  o.verticalLine != undefined ? o.verticalLine : -0.5;
+		o.items = o.items || '> *';
 		
 		this.pp = $(el).offset({ border: false });
 		
-		$('> *', el).each(function() {
+		$(o.items, el).each(function() {
 			var co = $(this).offset({ border: false });
 			if(self.options.overlap) var cp = $(this).position();
 			self.items.push([this, co, [$(this).width(),$(this).height()], (cp || null)]);
