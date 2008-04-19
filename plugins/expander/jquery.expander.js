@@ -81,6 +81,7 @@
  	        .next('span.details')[o.expandEffect](o.expandSpeed, function() {
             var $self = $(this);
             $self.css({zoom: ''});
+            o.onExpand();
             if (o.collapseTimer) {
               delayedCollapse = setTimeout(function() {  
                 reCollapse($self);
@@ -100,6 +101,7 @@
           clearTimeout(delayedCollapse);
           var $spanCollapse = $(this).parent();
           reCollapse($spanCollapse);
+          o.onCollapse();
           return false;
         });
       }
@@ -127,6 +129,8 @@
     expandEffect:     'fadeIn',
     expandSpeed:      '',   // speed in milliseconds of the animation effect for expanding the text
     userCollapse:     true, // allow the user to re-collapse the expanded text.
-    userCollapseText: '[collapse expanded text]'  // text to use for the link to re-collapse the text
+    userCollapseText: '[collapse expanded text]',  // text to use for the link to re-collapse the text
+    onExpand: function() {},
+    onCollapse: function() {}
   };
 })(jQuery);
