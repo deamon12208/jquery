@@ -152,11 +152,20 @@
 			.click(function() {
 				self.close();
 				return false;
-			})
-			.keydown(function(ev) {
-				var ESC = 27;
-				ev.keyCode && ev.keyCode == ESC && self.close(); 
 			});
+		
+		uiDialog.click(function() {
+			$(this).find(
+				'.ui-dialog-content :input,' +
+				'.ui-dialog-buttonpane :input,' +
+				'.ui-dialog-titlebar-close')
+				.eq(0).focus();
+		}).keydown(function(ev) {
+			if (options.closeOnEscape) {
+				var ESC = 27;
+				ev.keyCode && ev.keyCode == ESC && self.close();
+			}
+		});
 		
 		var hasButtons = false;
 		$.each(options.buttons, function() { return !(hasButtons = true); });
@@ -302,6 +311,7 @@
 			autoOpen: true,
 			bgiframe: false,
 			buttons: {},
+			closeOnEscape: true,
 			draggable: true,
 			height: 200,
 			minHeight: 100,
