@@ -26,12 +26,14 @@
 		// IE 5.5 or 6
 		IE = $.browser.msie && /MSIE\s(5\.5|6\.)/.test(navigator.userAgent),
 		// flag for mouse tracking
-		track = false;
+		track = false,
+		fading = false;
 	
 	$.tooltip = {
 		blocked: false,
 		defaults: {
 			delay: 200,
+			fade: false,
 			showURL: true,
 			extraClass: "",
 			top: 15,
@@ -153,7 +155,7 @@
 			var parts = title.split(settings(this).showBody);
 			helper.title.html(parts.shift()).show();
 			helper.body.empty();
-			for(var i = 0, part; part = parts[i]; i++) {
+			for(var i = 0, part; (part = parts[i]); i++) {
 				if(i > 0)
 					helper.body.append("<br/>");
 				helper.body.append(part);
@@ -183,7 +185,14 @@
 	// delete timeout and show helper
 	function show() {
 		tID = null;
-		helper.parent.show();
+		if (settings(current).fade) {
+			if (!helper.parent.is(":animated"))
+				helper.parent.fadeIn();
+			else
+				helper.parent.stop();
+		} else {
+			helper.parent.show();
+		}
 		update();
 	}
 	
@@ -259,7 +268,13 @@
 		// no more current element
 		current = null;
 		
-		helper.parent.hide().removeClass( settings(this).extraClass );
+		var tsettings = settings(this);
+		if (tsettings.fade)
+			helper.parent.stop().fadeOut(tsettings.fade, function() {
+				helper.parent.removeClass( tsettings.extraClass ).css("opacity", "");
+			});
+		else
+			helper.parent.hide().removeClass( tsettings.extraClass );
 		
 		if( settings(this).fixPNG )
 			helper.parent.unfixPNG();

@@ -36,7 +36,8 @@ $('#yahoo a').tooltip({
 	track: true,
 	delay: 0,
 	showURL: false,
-	showBody: " - "
+	showBody: " - ",
+	fade: 150
 });
 
 $("select").tooltip({
@@ -49,7 +50,6 @@ $("#fancy, #fancy2").tooltip({
 	track: true,
 	delay: 0,
 	showURL: false,
-	opacity: 1,
 	fixPNG: true,
 	showBody: " - ",
 	extraClass: "pretty fancy",
@@ -64,7 +64,6 @@ $('#pretty').tooltip({
 	showBody: " - ",
 	extraClass: "pretty",
 	fixPNG: true,
-	opacity: 0.95,
 	left: -120
 });
 
@@ -132,7 +131,7 @@ $("#block").click($.tooltip.block);
 	</fieldset>
 	
 	<fieldset>
-		<legend>The next four links have no delay with tracking, with extra content:</legend>
+		<legend>The next four links have no delay with tracking and fading, with extra content:</legend>
 		<div id="yahoo">
 			<a title="Yahoo doo - more content" href="http://yahoo.com">Link to yahoo</a>
 			<a title="Yahoo doo2 - wohooo" href="http://yahoo.com">Link to yahoo1</a>
@@ -146,7 +145,7 @@ $("#block").click($.tooltip.block);
 	delay: 0,
 	showURL: false,
 	showBody: " - ",
-	opacity: 0.85
+	fade: 150
 });</code></pre>
 	</fieldset>
 	
