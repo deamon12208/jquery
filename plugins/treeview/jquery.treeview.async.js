@@ -31,7 +31,6 @@ function load(settings, root, child, container) {
 					current.addClass("hasChildren");
 					createNode.call({
 						text:"placeholder",
-						id:"placeholder",
 						children:[]
 					}, branch);
 				}
@@ -51,7 +50,8 @@ $.fn.treeview = function(settings) {
 		return proxied.apply(this, arguments);
 	}
 	var container = this;
-	load(settings, "source", this, container);
+	if (!container.children().size())
+		load(settings, "source", this, container);
 	var userToggle = settings.toggle;
 	return proxied.call(this, $.extend({}, settings, {
 		collapsed: true,

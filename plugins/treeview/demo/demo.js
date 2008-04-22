@@ -1,14 +1,14 @@
 $(document).ready(function(){
-		
+	
 	// first example
+	$("#browser").treeview();
+	
+	// second example
 	$("#navigation").treeview({
 		persist: "location",
 		collapsed: true,
 		unique: true
 	});
-	
-	// second example
-	$("#browser").treeview();
 	
 	// third example
 	$("#red").treeview({
