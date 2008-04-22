@@ -9,10 +9,9 @@
       
       // Set options
       var mode = $.ec.setMode(el, o.options.mode || 'effect'); // Set Mode
-      var target = $(document.getElementById(o.options.to)); // Find Target
+      var target = $(o.options.to); // Find Target
       var position = el.position();
-      $('body', document).append('<div id="fxTransfer"></div>');
-      var transfer = $('#fxTransfer');
+	  var transfer = $('<div id="fxTransfer"></div>').appendTo(document.body)
       
       // Set target css
       transfer.addClass(o.options.className);
