@@ -28,7 +28,7 @@
 	
 	<style type="text/css" media="screen">
 		.drop {
-			border: 1px dotted blue;
+			background: #eee !important;
 		}
 		.bar {
 			border-bottom: 1px dotted blue;
@@ -59,19 +59,13 @@
 	
 	
 		$(function() {
+
 			$("#browser").treeview().sortable({
 				items: 'li',
 				start: function(event, ui) {
 					
 					//ui.item.removeClass();
 					$("#browser").treeview({update: ui.item});
-					$("#browser .expandable").droppable({
-						hoverClass: "drop",
-						accept: 'li'
-					}); //Make all closed nodes droppable (because you can't drop in them)
-
-					//TODO: Make all expanded nodes without children droppable
-					//TODO: In drop event, append node to the tree
 
 				},
 				update: function(event, ui) {
@@ -79,6 +73,11 @@
 					ui.item.removeClass();
 					$("#browser").treeview({add: ui.item});
 				}
+			});
+			
+			$("#browser .folder").droppable({
+				hoverClass: "drop",
+				accept: 'li'
 			});
 			
 			
