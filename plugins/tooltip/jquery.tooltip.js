@@ -187,7 +187,7 @@
 		tID = null;
 		if (settings(current).fade) {
 			if (!helper.parent.is(":animated"))
-				helper.parent.fadeIn();
+				helper.parent.fadeIn(settings(current).fade);
 			else
 				helper.parent.stop();
 		} else {
