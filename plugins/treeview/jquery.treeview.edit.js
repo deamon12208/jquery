@@ -1,5 +1,5 @@
 (function($) {
-	var CLASSES = $.fn.treeview.classes;
+	var CLASSES = $.treeview.classes;
 	var proxied = $.fn.treeview;
 	$.fn.treeview = function(settings) {
 		settings = $.extend({}, settings);

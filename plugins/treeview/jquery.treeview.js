@@ -63,7 +63,7 @@
 			return this.filter(":has(>ul)");
 		},
 		applyClasses: function(settings, toggler) {
-			this.filter(":has(>ul):not(:has(>a))").find(">span").click(function(event) {
+			this.filter(":has(>ul):not(:has(>a))").find(">span").unbind("click.treeview").bind("click.treeview", function(event) {
 				// don't handle click events on children, eg. checkboxes
 				if ( this == event.target )
 					toggler.apply($(this).next());
@@ -80,14 +80,15 @@
 						.addClass(CLASSES.collapsable)
 						.replaceClass(CLASSES.last, CLASSES.lastCollapsable);
 						
-	            // create hitarea
-				this.prepend("<div class=\"" + CLASSES.hitarea + "\"/>").find("div." + CLASSES.hitarea).each(function() {
-					var classes = "";
-					$.each($(this).parent().attr("class").split(" "), function() {
-						classes += this + "-hitarea ";
+	            // create hitarea if not present
+				if (!this.find("div." + CLASSES.hitarea).length)
+					this.prepend("<div class=\"" + CLASSES.hitarea + "\"/>").find("div." + CLASSES.hitarea).each(function() {
+						var classes = "";
+						$.each($(this).parent().attr("class").split(" "), function() {
+							classes += this + "-hitarea ";
+						});
+						$(this).addClass( classes );
 					});
-					$(this).addClass( classes );
-				});
 			}
 			
 			// apply event to hitarea
@@ -220,7 +221,8 @@
 	
 	// classes used by the plugin
 	// need to be styled via external stylesheet, see first example
-	var CLASSES = $.fn.treeview.classes = {
+	$.treeview = {};
+	var CLASSES = ($.treeview.classes = {
 		open: "open",
 		closed: "closed",
 		expandable: "expandable",
@@ -233,7 +235,7 @@
 		lastExpandable: "lastExpandable",
 		last: "last",
 		hitarea: "hitarea"
-	};
+	});
 	
 	// provide backwards compability
 	$.fn.Treeview = $.fn.treeview;
