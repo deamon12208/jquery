@@ -154,13 +154,9 @@
 				return false;
 			});
 		
-		uiDialog.click(function() {
-			$(this).find(
-				'.ui-dialog-content :input,' +
-				'.ui-dialog-buttonpane :input,' +
-				'.ui-dialog-titlebar-close')
-				.eq(0).focus();
-		}).keydown(function(ev) {
+		// setting tabindex makes the div focusable
+		// setting outline to 0 prevents a border on focus in Mozilla
+		uiDialog.attr('tabindex', -1).css('outline', 0).keydown(function(ev) {
 			if (options.closeOnEscape) {
 				var ESC = 27;
 				ev.keyCode && ev.keyCode == ESC && self.close();
