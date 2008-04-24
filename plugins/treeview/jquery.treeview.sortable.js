@@ -68,9 +68,6 @@
 		
 		//Get the items
 		this.refresh();
-
-		//Let's determine if the items are floating
-		this.floating = this.items.length ? (/left|right/).test(this.items[0].item.css('float')) : false;
 		
 		//Let's determine the parent's offset
 		if(!(/(relative|absolute|fixed)/).test(this.element.css('position'))) this.element.css('position', 'relative');
@@ -177,38 +174,18 @@
 			
 		},
 		intersectsWithEdge: function(item) {	
-			var x1 = this.position.absolute.left, x2 = x1 + this.helperProportions.width,
-			    y1 = this.position.absolute.top, y2 = y1 + this.helperProportions.height;
-			var l = item.left, r = l + item.width, 
-			    t = item.top,  b = t + item.height;
+			var y1 = this.position.absolute.top, y2 = y1 + this.helperProportions.height;
+			var t = item.top,  b = t + item.height;
 
 
-			if (!(   l < x1 + (this.helperProportions.width  / 2)    // Right Half
-				&&     x2 - (this.helperProportions.width  / 2) < r    // Left Half
-				&& t < y1 + (this.helperProportions.height / 2)        // Bottom Half
+			if (!( t < y1 + (this.helperProportions.height / 2)        // Bottom Half
 				&&     y2 - (this.helperProportions.height / 2) < b )) return false; // Top Half
-			
-			if(this.floating) {
-				if(x2 > l && x1 < l) return 2; //Crosses left edge
-				if(x1 < r && x2 > r) return 1; //Crosses right edge
-			} else {
-				if(y2 > t && y1 < t) return 1; //Crosses top edge
-				if(y1 < b && y2 > b) return 2; //Crosses bottom edge
-			}
+
+			if(y2 > t && y1 < t) return 1; //Crosses top edge
+			if(y1 < b && y2 > b) return 2; //Crosses bottom edge
 			
 			return false;
 			
-		},
-		//This method checks approximately if the item is dragged in a container, but doesn't touch any items
-		inEmptyZone: function(container) {
-
-			if(!$(container.options.items, container.element).length) {
-				return container.options.dropOnEmpty ? true : false;
-			};
-
-			var last = $(container.options.items, container.element).not('.ui-sortable-helper'); last = $(last[last.length-1]);
-			var top = last.offset()[this.floating ? 'left' : 'top'] + last[0][this.floating ? 'offsetWidth' : 'offsetHeight'];
-			return (this.position.absolute[this.floating ? 'left' : 'top'] > top);
 		},
 		refresh: function() {
 			this.refreshItems();
@@ -248,11 +225,8 @@
 		},
 		refreshPositions: function(fast) {
 			for (var i = this.items.length - 1; i >= 0; i--){
-				if(!fast) this.items[i].width 			= this.items[i].item.outerWidth();
 				if(!fast) this.items[i].height 			= this.items[i].item.outerHeight();
-				var p = this.items[i].item.offset();
-				this.items[i].left 						= p.left;
-				this.items[i].top 						= p.top;
+				this.items[i].top 						= this.items[i].item.offset().top;
 			};
 			for (var i = this.containers.length - 1; i >= 0; i--){
 				var p =this.containers[i].element.offset();
@@ -278,14 +252,13 @@
 				if(this.intersectsWith(this.containers[i].containerCache)) {
 					if(!this.containers[i].containerCache.over) {
 						
-
 						if(this.currentContainer != this.containers[i]) {
 							
 							//When entering a new container, we will find the item with the least distance and append our item near it
-							var dist = 10000; var itemWithLeastDistance = null; var base = this.position.absolute[this.containers[i].floating ? 'left' : 'top'];
+							var dist = 10000; var itemWithLeastDistance = null; var base = this.position.absolute.top;
 							for (var j = this.items.length - 1; j >= 0; j--) {
 								if(!this.containers[i].element[0].contains(this.items[j].item[0])) continue;
-								var cur = this.items[j][this.containers[i].floating ? 'left' : 'top'];
+								var cur = this.items[j].top;
 								if(Math.abs(cur - base) < dist) {
 									dist = Math.abs(cur - base); itemWithLeastDistance = this.items[j];
 								}
@@ -389,19 +362,10 @@
 		},
 		stop: function(e) {
 
-			if(this.options.addCondition.call(this.currentItem, this.newPositionAt)) {
-				if(this.newPositionAt.find("ul").length) {
-					this.newPositionAt.find("ul").append(this.currentItem); //Append to element to its new position
-				} else {
-					this.newPositionAt.append(this.currentItem); //Append to element to its new position
-				}
-				
-			} else {
-				this.newPositionAt[this.direction == 'down' ? 'before' : 'after'](this.currentItem); //Append to element to its new position
-			}
-			
+
+
+
 			this.options.sortIndication.remove.call(this.currentItem, this.newPositionAt); //remove sort indicator
-			this.options.addIndication.remove.call(this.currentItem, this.newPositionAt); //remove add indicator
 			this.propagate("stop", e); //Call plugins and trigger callbacks
 			
 			if(this.position.dom != this.currentItem.prev()[0]) this.propagate("update", e); //Trigger update callback if the DOM position has changed
@@ -425,7 +389,8 @@
 			}
 			
 			//If we are using droppables, inform the manager about the drop
-			if ($.ui.ddmanager && !this.options.dropBehaviour) $.ui.ddmanager.drop(this, e);
+			var dropped = ($.ui.ddmanager && !this.options.dropBehaviour) ? $.ui.ddmanager.drop(this, e) : false;
+			if(!dropped) this.newPositionAt[this.direction == 'down' ? 'before' : 'after'](this.currentItem); //Append to element to its new position
 			
 			this.dragging = false;
 			if(this.cancelHelperRemoval) return false;
@@ -440,22 +405,30 @@
 			this.position.current = { top: e.pageY - this.offset.top, left: e.pageX - this.offset.left };
 			this.position.absolute = { left: e.pageX - this.clickOffset.left, top: e.pageY - this.clickOffset.top };
 
-			//Rearrange
-			for (var i = this.items.length - 1; i >= 0; i--) {
-				var intersection = this.intersectsWithEdge(this.items[i]);
-				if(!intersection) continue;
+			//Interconnect with droppables
+			if($.ui.ddmanager) $.ui.ddmanager.drag(this, e);
+			var intersectsWithDroppable = false;
+			$.each($.ui.ddmanager.droppables, function() {
+				if(this.isover) intersectsWithDroppable = true;
+			});
 
-				this.direction = intersection == 1 ? "down" : "up";
-				this.rearrange(e, this.items[i]);
-				this.propagate("change", e); //Call plugins and callbacks
-				break;
+			//Rearrange
+			if(intersectsWithDroppable) {
+				if(this.newPositionAt) this.options.sortIndication.remove.call(this.currentItem, this.newPositionAt);
+			} else {
+				for (var i = this.items.length - 1; i >= 0; i--) {
+					var intersection = this.intersectsWithEdge(this.items[i]);
+					if(!intersection) continue;
+	
+					this.direction = intersection == 1 ? "down" : "up";
+					this.rearrange(e, this.items[i]);
+					this.propagate("change", e); //Call plugins and callbacks
+					break;
+				}
 			}
 			
 			//Post events to containers
 			this.contactContainers(e);
-			
-			//Interconnect with droppables
-			if($.ui.ddmanager) $.ui.ddmanager.drag(this, e);
 
 			this.propagate("sort", e); //Call plugins and callbacks
 			this.helper.css({ left: this.position.current.left+'px', top: this.position.current.top+'px' }); // Stick the helper to the cursor
@@ -464,25 +437,12 @@
 		},
 		rearrange: function(e, i, a) {
 			if(i) {
-				if(this.newPositionAt) {
-					this.options.sortIndication.remove.call(this.currentItem, this.newPositionAt);
-					this.options.addIndication.remove.call(this.currentItem, this.newPositionAt);
-				}
-				
-				if(this.options.addCondition.call(this.currentItem, i.item)) {
-					this.newPositionAt = i.item;
-					this.options.addIndication.add.call(this.currentItem, this.newPositionAt);
-
-				} else {
-					this.newPositionAt = i.item;
-					this.options.sortIndication[this.direction].call(this.currentItem, this.newPositionAt);
-				}
+				if(this.newPositionAt) this.options.sortIndication.remove.call(this.currentItem, this.newPositionAt);
+				this.newPositionAt = i.item;
+				this.options.sortIndication[this.direction].call(this.currentItem, this.newPositionAt);
 			} else {
 				//Append
 			}
-			
-			
-
 		}
 	});
 	
