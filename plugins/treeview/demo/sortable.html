@@ -62,23 +62,43 @@
 
 			$("#browser").treeview().sortable({
 				items: 'li',
+				revert: true,
+				sortIndication: {
+					down: function(item) {
+						item.css("border-top", "1px dotted black");
+					},
+					up: function(item) {
+						item.css("border-bottom", "1px dotted black");
+					},
+					remove: function(item) {
+						item.css("border-bottom", "0px").css("border-top", "0px");
+					}
+				},
+				addCondition: function(item) {	
+					return item.children(".folder").length;
+				},
+				addIndication: {
+					add: function(item) {
+						item.find(".folder").css("background-color", "#eee");
+					},
+					remove: function(item) {
+						item.find(".folder").css("background-color", "");
+					}
+				},
 				start: function(event, ui) {
-					
-					//ui.item.removeClass();
 					$("#browser").treeview({update: ui.item});
 
 				},
 				update: function(event, ui) {
-					//TODO: refresh the tree's design
 					ui.item.removeClass();
 					$("#browser").treeview({add: ui.item});
 				}
 			});
 			
-			$("#browser .folder").droppable({
+			/*$("#browser .folder").droppable({
 				hoverClass: "drop",
 				accept: 'li'
-			});
+			}); */
 			
 			
 		})
