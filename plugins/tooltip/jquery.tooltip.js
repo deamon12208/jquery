@@ -186,10 +186,10 @@
 	function show() {
 		tID = null;
 		if (settings(current).fade) {
-			if (!helper.parent.is(":animated"))
-				helper.parent.fadeIn(settings(current).fade);
+			if (helper.parent.is(":animated"))
+				helper.parent.stop().fadeTo(settings(current).fade, 1);
 			else
-				helper.parent.stop();
+				helper.parent.fadeIn(settings(current).fade);
 		} else {
 			helper.parent.show();
 		}
@@ -269,12 +269,16 @@
 		current = null;
 		
 		var tsettings = settings(this);
-		if (tsettings.fade)
-			helper.parent.stop().fadeOut(tsettings.fade, function() {
-				helper.parent.removeClass( tsettings.extraClass ).css("opacity", "");
-			});
-		else
-			helper.parent.hide().removeClass( tsettings.extraClass );
+		function complete() {
+			helper.parent.removeClass( tsettings.extraClass )//.css("opacity", "");
+		}
+		if (tsettings.fade) {
+			if (helper.parent.is(':animated'))
+				helper.parent.stop().fadeTo(tsettings.fade, 0, complete);
+			else
+				helper.parent.stop().fadeOut(tsettings.fade, complete);
+		} else
+			complete();
 		
 		if( settings(this).fixPNG )
 			helper.parent.unfixPNG();
