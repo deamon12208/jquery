@@ -602,13 +602,19 @@
 					
 					// apply easy methods that trigger binded events
 					$this.bind("update",function() {
-						
-						// rebuild parsers.
-						this.config.parsers = buildParserCache(this,$headers);
-						
-						// rebuild the cache map
-						cache = buildCache(this);
-						
+						setTimeout(function() {				
+							// rebuild parsers.
+							this.config.parsers = buildParserCache(this,$headers);
+							// rebuild the cache map
+							cache = buildCache(this);
+						},1);
+					}).bind("updateCell",function(e,cell) {
+						var config = this.config;		
+						// get position from the dom.
+						var pos = [(cell.parentNode.rowIndex - 1),cell.cellIndex];
+						// update cache
+						cache.normalized[pos[0]][pos[1]] = config.parsers[pos[1]].format(getElementText(config,cell),cell);				
+					
 					}).bind("sorton",function(e,list) {
 						
 						$(this).trigger("sortStart");
