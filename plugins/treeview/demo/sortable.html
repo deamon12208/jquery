@@ -62,7 +62,7 @@
 
 			$("#browser").treeview().sortable({
 				items: 'li',
-				revert: true,
+				//revert: true,
 				sortIndication: {
 					down: function(item) {
 						item.css("border-top", "1px dotted black");
@@ -94,11 +94,6 @@
 					$("#browser").treeview({add: ui.item});
 				}
 			});
-			
-			/*$("#browser .folder").droppable({
-				hoverClass: "drop",
-				accept: 'li'
-			}); */
 			
 			
 		})
