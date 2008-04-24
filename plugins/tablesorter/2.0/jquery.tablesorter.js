@@ -24,7 +24,7 @@
  * @example $('table').tablesorter({ headers: { 0: { sorter: false}, 1: {sorter: false} } });
  * @desc Create a tablesorter interface and disableing the first and secound column headers.
  * 
- * @example $('table').tablesorter({ 0: {sorter:"integer"}, 1: {sorter:"currency"} });
+ * @example $('table').tablesorter({ headers: { 0: {sorter: "digit"}, 1: {sorter: "currency"} } });
  * @desc Create a tablesorter interface and set a column parser for the first and secound column.
  * 
  * 
@@ -95,6 +95,7 @@
 				cssHeader: "header",
 				cssAsc: "headerSortUp",
 				cssDesc: "headerSortDown",
+				cssChildRow: "expand-child",
 				sortInitialOrder: "asc",
 				sortMultiSortKey: "shiftKey",
 				sortForce: null,
@@ -110,6 +111,7 @@
 				headerList: [],
 				dateFormat: "us",
 				decimal: '.',
+				onRenderHeader: null,
 				debug: false
 			};
 			
@@ -198,21 +200,28 @@
 					cache = {row: [], normalized: []};
 				
 					for (var i=0;i < totalRows; ++i) {
-					
+						
 						/** Add the table data to main data array */
-						var c = table.tBodies[0].rows[i], cols = [];
+						var c = $(table.tBodies[0].rows[i]), cols = [];
 					
-						cache.row.push($(c));
+						// if this is a child row, add it to the last row's children and continue to the next row
+						if( c.hasClass(table.config.cssChildRow) ){
+							cache.row[cache.row.length-1] = cache.row[cache.row.length-1].add(c);
+							// go to the next for loop
+							continue;
+						}
+					
+						cache.row.push(c);
 						
 						for(var j=0; j < totalCells; ++j) {
-							cols.push(parsers[j].format(getElementText(table.config,c.cells[j]),table,c.cells[j]));	
+							cols.push(parsers[j].format(getElementText(table.config,c[0].cells[j]),table,c[0].cells[j]));	
 						}
 												
-						cols.push(i); // add position for rowCache
+						cols.push(cache.normalized.length); // add position for rowCache
 						cache.normalized.push(cols);
 						cols = null;
 					};
-				
+					
 				if(table.config.debug) { benchmark("Building cache for " + totalRows + " rows:", cacheTime); }
 				
 				return cache;
@@ -253,17 +262,16 @@
 					rows = [];
 				
 				for (var i=0;i < totalRows; i++) {
-					rows.push(r[n[i][checkCell]]);	
+					var pos = n[i][checkCell];
+					rows.push(r[pos]);	
 					if(!table.config.appender) {
 						
-						var o = r[n[i][checkCell]];
+						var o = r[pos];
 						var l = o.length;
 						for(var j=0; j < l; j++) {
-							
 							tableBody[0].appendChild(o[j]);
-						
 						}
-						
+
 						//tableBody.append(r[n[i][checkCell]]);
 					}
 				}	
@@ -306,7 +314,8 @@
 					if(checkHeaderMetadata(this) || checkHeaderOptions(table,index)) this.sortDisabled = true;
 					
 					if(!this.sortDisabled) {
-						$(this).addClass(table.config.cssHeader);
+						var $th = $(this).addClass(table.config.cssHeader);
+						if( table.config.onRenderHeader ) table.config.onRenderHeader.apply($th);
 					}
 					
 					// add cell to headerList
@@ -499,6 +508,9 @@
 					// store common expression for speed					
 					$this = $(this);
 					
+					// save the settings where they read
+					$.data(this, "tablesorter", config);
+					
 					// build headers
 					$headers = buildHeaders(this);
 					
@@ -519,12 +531,12 @@
 					// this is to big, perhaps break it out?
 					$headers.click(function(e) {
 						
-						$this.trigger("sortStart");
-						
 						var totalRows = ($this[0].tBodies[0] && $this[0].tBodies[0].rows.length) || 0;
 						
 						if(!this.sortDisabled && totalRows > 0) {
 							
+							// Only call sortStart if sorting is enabled.
+							$this.trigger("sortStart");
 							
 							// store exp, for speed
 							var $cell = $(this);
@@ -612,7 +624,6 @@
 						//set css for headers
 						setHeadersCss(this,$headers,sortList,sortCSS);
 						
-						
 						// sort the table and append it to the dom
 						appendToTable(this,multisort(this,sortList,cache));
 
@@ -667,7 +678,7 @@
 			
 			this.isDigit = function(s,config) {
 				var DECIMAL = '\\' + config.decimal;
-				var exp = '/(^[+]?0(' + DECIMAL +'0+)?$)|(^([-+]?[1-9][0-9]*)$)|(^([-+]?((0?|[1-9][0-9]*)' + DECIMAL +'(0*[1-9][0-9]*)))$)|(^[-+]?[1-9]+[0-9]*' + DECIMAL +'0+$)/';
+				var exp = '/(^[+]?0(' + DECIMAL +'0+)?$)|(^([-+]?[0-9]*)$)|(^([-+]?((0?[0-9]*)' + DECIMAL +'(0*[0-9]*)))$)|(^[-+]?[0-9]*' + DECIMAL +'0+$)/';
 				return RegExp(exp).test($.trim(s));
 			};
 			
@@ -689,6 +700,7 @@
         tablesorter: $.tablesorter.construct
 	});
 	
+	// make shortcut
 	var ts = $.tablesorter;
 	
 	// add default parsers
@@ -718,7 +730,7 @@
 	ts.addParser({
 		id: "currency",
 		is: function(s) {
-			return /^[£$€?.]/.test(s);
+			return /^[Â£$â‚¬?.]/.test(s);
 		},
 		format: function(s) {
 			return $.tablesorter.formatFloat(s.replace(new RegExp(/[^0-9.]/g),""));
@@ -823,7 +835,6 @@
 	  type: "numeric"
 	});
 	
-	
 	ts.addParser({
 	    id: "metadata",
 	    is: function(s) {
@@ -841,11 +852,15 @@
 		id: "zebra",
 		format: function(table) {
 			if(table.config.debug) { var time = new Date(); }
-			$("tr:visible",table.tBodies[0])
-	        .filter(':even')
-	        .removeClass(table.config.widgetZebra.css[1]).addClass(table.config.widgetZebra.css[0])
-	        .end().filter(':odd')
-	        .removeClass(table.config.widgetZebra.css[0]).addClass(table.config.widgetZebra.css[1]);
+			var $tr, row = -1, odd;
+			// loop through the visible rows
+			$("tr:visible",table.tBodies[0]).each(function (i){
+				$tr = $(this);
+				// style children rows the same way the parent row was styled
+				if( !$tr.hasClass(table.config.cssChildRow) ) row++;
+				odd = (row%2 == 0);
+				$tr.removeClass(table.config.widgetZebra.css[odd?0:1]).addClass(table.config.widgetZebra.css[odd?1:0])
+			});
 			if(table.config.debug) { $.tablesorter.benchmark("Applying Zebra widget", time); }
 		}
 	});	
