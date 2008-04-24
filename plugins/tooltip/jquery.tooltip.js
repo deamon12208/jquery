@@ -189,7 +189,7 @@
 			if (helper.parent.is(":animated"))
 				helper.parent.stop().fadeTo(settings(current).fade, 1);
 			else
-				helper.parent.fadeIn(settings(current).fade);
+				helper.parent.is(':visible') ? helper.parent.fadeTo(settings(current).fade, 1) : helper.parent.fadeIn(settings(current).fade);
 		} else {
 			helper.parent.show();
 		}
