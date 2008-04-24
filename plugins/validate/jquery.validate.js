@@ -282,7 +282,6 @@ jQuery.extend(jQuery.validator, {
 			});
 			var rules = this.settings.rules;
 			jQuery.each(rules, function(key, value) {
-				//console.log("this: %o, key: %o, value: %o", this, key, value)
 				rules[key] = jQuery.validator.normalizeRule(value);
 			});
 			
