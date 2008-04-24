@@ -128,7 +128,7 @@
 		drop: function(e,custom) {
 			
 			var draggable = custom || $.ui.ddmanager.current;
-			if (!draggable || (draggable.currentItem || draggable.element)[0] == this.element[0]) return; // Bail if draggable and droppable are same element
+			if (!draggable || (draggable.currentItem || draggable.element)[0] == this.element[0]) return false; // Bail if draggable and droppable are same element
 			
 			var childrenIntersection = false;
 			this.element.find(".ui-droppable").each(function() {
@@ -137,12 +137,15 @@
 					childrenIntersection = true; return false;
 				}
 			});
-			if(childrenIntersection) return;
+			if(childrenIntersection) return false;
 			
 			if(this.options.accept.call(this.element,(draggable.currentItem || draggable.element))) {
 				$.ui.plugin.call(this, 'drop', [e, this.ui(draggable)]);
 				this.element.triggerHandler("drop", [e, this.ui(draggable)], this.options.drop);
+				return true;
 			}
+			
+			return false;
 			
 		},
 		activate: function(e) {
@@ -233,10 +236,11 @@
 		},
 		drop: function(draggable, e) {
 			
+			var dropped = false;
 			$.each($.ui.ddmanager.droppables, function() {
 				
 				if (!this.options.disabled && this.visible && $.ui.intersect(draggable, this, this.options.tolerance))
-					this.drop.call(this, e);
+					dropped = this.drop.call(this, e);
 				
 				if (!this.options.disabled && this.visible && this.options.accept.call(this.element,(draggable.currentItem || draggable.element))) {
 					this.isout = 1; this.isover = 0;
@@ -244,6 +248,7 @@
 				}
 				
 			});
+			return dropped;
 			
 		},
 		drag: function(draggable, e) {
