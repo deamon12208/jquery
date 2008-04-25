@@ -330,6 +330,10 @@
 
 			if(this.newPositionAt) this.options.sortIndication.remove.call(this.currentItem, this.newPositionAt); //remove sort indicator
 			this.propagate("stop", e); //Call plugins and trigger callbacks
+
+			//If we are using droppables, inform the manager about the drop
+			var dropped = ($.ui.ddmanager && !this.options.dropBehaviour) ? $.ui.ddmanager.drop(this, e) : false;
+			if(!dropped && this.newPositionAt) this.newPositionAt[this.direction == 'down' ? 'before' : 'after'](this.currentItem); //Append to element to its new position
 			
 			if(this.position.dom != this.currentItem.prev()[0]) this.propagate("update", e); //Trigger update callback if the DOM position has changed
 			if(!this.element[0].contains(this.currentItem[0])) { //Node was moved out of the current element
@@ -350,10 +354,6 @@
 					this.containers[i].containerCache.over = 0;
 				}
 			}
-			
-			//If we are using droppables, inform the manager about the drop
-			var dropped = ($.ui.ddmanager && !this.options.dropBehaviour) ? $.ui.ddmanager.drop(this, e) : false;
-			if(!dropped && this.newPositionAt) this.newPositionAt[this.direction == 'down' ? 'before' : 'after'](this.currentItem); //Append to element to its new position
 			
 			this.dragging = false;
 			if(this.cancelHelperRemoval) return false;
