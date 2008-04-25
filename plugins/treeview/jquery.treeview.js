@@ -81,14 +81,16 @@
 						.replaceClass(CLASSES.last, CLASSES.lastCollapsable);
 						
 	            // create hitarea if not present
-				if (!this.find("div." + CLASSES.hitarea).length)
-					this.prepend("<div class=\"" + CLASSES.hitarea + "\"/>").find("div." + CLASSES.hitarea).each(function() {
-						var classes = "";
-						$.each($(this).parent().attr("class").split(" "), function() {
-							classes += this + "-hitarea ";
-						});
-						$(this).addClass( classes );
+				var hitarea = this.find("div." + CLASSES.hitarea);
+				if (!hitarea.length)
+					hitarea = this.prepend("<div class=\"" + CLASSES.hitarea + "\"/>").find("div." + CLASSES.hitarea);
+				hitarea.removeClass().addClass(CLASSES.hitarea).each(function() {
+					var classes = "";
+					$.each($(this).parent().attr("class").split(" "), function() {
+						classes += this + "-hitarea ";
 					});
+					$(this).addClass( classes );
+				})
 			}
 			
 			// apply event to hitarea
