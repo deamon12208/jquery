@@ -161,9 +161,9 @@
 		},
 		/* Be careful with the following core functions */
 		intersectsWith: function(item) {
-			
-			var x1 = this.position.absolute.left, x2 = x1 + this.helperProportions.width,
-			    y1 = this.position.absolute.top, y2 = y1 + this.helperProportions.height;
+					
+			var x1 = this.position.absolute.left - 10, x2 = x1 + 10,
+			    y1 = this.position.absolute.top - 10, y2 = y1 + 10;
 			var l = item.left, r = l + item.width, 
 			    t = item.top,  b = t + item.height;
 			
@@ -174,9 +174,10 @@
 			
 		},
 		intersectsWithEdge: function(item) {	
-			var y1 = this.position.absolute.top, y2 = y1 + this.helperProportions.height;
+			var y1 = this.position.absolute.top - 10, y2 = y1 + 10;
 			var t = item.top,  b = t + item.height;
 
+			if(!this.intersectsWith(item.item.parents(".ui-sortable").data("sortable").containerCache)) return false;
 
 			if (!( t < y1 + (this.helperProportions.height / 2)        // Bottom Half
 				&&     y2 - (this.helperProportions.height / 2) < b )) return false; // Top Half
@@ -291,66 +292,31 @@
 
 			//Create and append the visible helper
 			this.helper = typeof o.helper == 'function' ? $(o.helper.apply(this.element[0], [e, this.currentItem])) : this.currentItem.clone();
-			if(!this.helper.parents('body').length) this.helper.appendTo(o.appendTo || this.currentItem[0].parentNode); //Add the helper to the DOM if that didn't happen already
+			if(!this.helper.parents('body').length) this.helper.appendTo("body"); //Add the helper to the DOM if that didn't happen already
 			this.helper.css({ position: 'absolute', clear: 'both' }).addClass('ui-sortable-helper'); //Position it absolutely and add a helper class
 			
 			//Prepare variables for position generation
 			$.extend(this, {
 				offsetParent: this.helper.offsetParent(),
-				offsets: {
-					absolute: this.currentItem.offset()
-				},
-				mouse: {
-					start: { top: e.pageY, left: e.pageX }
-				},
-				margins: {
-					top: parseInt(this.currentItem.css("marginTop")) || 0,
-					left: parseInt(this.currentItem.css("marginLeft")) || 0
-				}
+				offsets: { absolute: this.currentItem.offset() }
 			});
-			
-			//The relative click offset
-			this.offsets.parent = this.offsetParent.offset();
-			this.clickOffset = { left: e.pageX - this.offsets.absolute.left, top: e.pageY - this.offsets.absolute.top };
-			
-			this.originalPosition = {
-				left: this.offsets.absolute.left - this.offsets.parent.left - this.margins.left,
-				top: this.offsets.absolute.top - this.offsets.parent.top - this.margins.top
-			}
-			
-			//Generate a flexible offset that will later be subtracted from e.pageX/Y
-			//I hate margins - they need to be removed before positioning the element absolutely..
-			this.offset = {
-				left: e.pageX - this.originalPosition.left,
-				top: e.pageY - this.originalPosition.top
-			};
 
 			//Save the first time position
 			$.extend(this, {
 				position: {
-					current: { top: e.pageY - this.offset.top, left: e.pageX - this.offset.left },
-					absolute: { left: e.pageX - this.clickOffset.left, top: e.pageY - this.clickOffset.top },
+					current: { left: e.pageX, top: e.pageY },
+					absolute: { left: e.pageX, top: e.pageY },
 					dom: this.currentItem.prev()[0]
-				}
+				},
+				clickOffset: { left: -5, top: -5 }
 			});
 
 			this.propagate("start", e); //Call plugins and callbacks
 			this.helperProportions = { width: this.helper.outerWidth(), height: this.helper.outerHeight() }; //Save and store the helper proportions
 
-			//If we have something in cursorAt, we'll use it
-			if(o.cursorAt) {
-				if(o.cursorAt.top != undefined || o.cursorAt.bottom != undefined) {
-					this.offset.top -= this.clickOffset.top - (o.cursorAt.top != undefined ? o.cursorAt.top : (this.helperProportions.height - o.cursorAt.bottom));
-					this.clickOffset.top = (o.cursorAt.top != undefined ? o.cursorAt.top : (this.helperProportions.height - o.cursorAt.bottom));
-				}
-				if(o.cursorAt.left != undefined || o.cursorAt.right != undefined) {
-					this.offset.left -= this.clickOffset.left - (o.cursorAt.left != undefined ? o.cursorAt.left : (this.helperProportions.width - o.cursorAt.right));
-					this.clickOffset.left = (o.cursorAt.left != undefined ? o.cursorAt.left : (this.helperProportions.width - o.cursorAt.right));
-				}
-			}
-
-
-			for (var i = this.containers.length - 1; i >= 0; i--) { this.containers[i].propagate("activate", e, this); } //Post 'activate' events to possible containers
+			for (var i = this.containers.length - 1; i >= 0; i--) {
+				this.containers[i].propagate("activate", e, this);
+			} //Post 'activate' events to possible containers
 			
 			//Prepare possible droppables
 			if($.ui.ddmanager) $.ui.ddmanager.current = this;
@@ -362,10 +328,7 @@
 		},
 		stop: function(e) {
 
-
-
-
-			this.options.sortIndication.remove.call(this.currentItem, this.newPositionAt); //remove sort indicator
+			if(this.newPositionAt) this.options.sortIndication.remove.call(this.currentItem, this.newPositionAt); //remove sort indicator
 			this.propagate("stop", e); //Call plugins and trigger callbacks
 			
 			if(this.position.dom != this.currentItem.prev()[0]) this.propagate("update", e); //Trigger update callback if the DOM position has changed
@@ -390,7 +353,7 @@
 			
 			//If we are using droppables, inform the manager about the drop
 			var dropped = ($.ui.ddmanager && !this.options.dropBehaviour) ? $.ui.ddmanager.drop(this, e) : false;
-			if(!dropped) this.newPositionAt[this.direction == 'down' ? 'before' : 'after'](this.currentItem); //Append to element to its new position
+			if(!dropped && this.newPositionAt) this.newPositionAt[this.direction == 'down' ? 'before' : 'after'](this.currentItem); //Append to element to its new position
 			
 			this.dragging = false;
 			if(this.cancelHelperRemoval) return false;
@@ -402,8 +365,8 @@
 		drag: function(e) {
 
 			//Compute the helpers position
-			this.position.current = { top: e.pageY - this.offset.top, left: e.pageX - this.offset.left };
-			this.position.absolute = { left: e.pageX - this.clickOffset.left, top: e.pageY - this.clickOffset.top };
+			this.position.current = { top: e.pageY + 5, left: e.pageX + 5 };
+			this.position.absolute = { left: e.pageX + 5, top: e.pageY + 5 };
 
 			//Interconnect with droppables
 			if($.ui.ddmanager) $.ui.ddmanager.drag(this, e);
@@ -417,6 +380,9 @@
 				if(this.newPositionAt) this.options.sortIndication.remove.call(this.currentItem, this.newPositionAt);
 			} else {
 				for (var i = this.items.length - 1; i >= 0; i--) {
+					
+					if(this.currentItem[0].contains(this.items[i].item[0])) continue;
+					
 					var intersection = this.intersectsWithEdge(this.items[i]);
 					if(!intersection) continue;
 	
@@ -445,192 +411,7 @@
 			}
 		}
 	});
-	
-/*
- * Sortable Extensions
- */
-
-	$.ui.plugin.add("sortable", "cursor", {
-		start: function(e, ui) {
-			var t = $('body');
-			if (t.css("cursor")) ui.options._cursor = t.css("cursor");
-			t.css("cursor", ui.options.cursor);
-		},
-		stop: function(e, ui) {
-			if (ui.options._cursor) $('body').css("cursor", ui.options._cursor);
-		}
-	});
-
-	$.ui.plugin.add("sortable", "zIndex", {
-		start: function(e, ui) {
-			var t = ui.helper;
-			if(t.css("zIndex")) ui.options._zIndex = t.css("zIndex");
-			t.css('zIndex', ui.options.zIndex);
-		},
-		stop: function(e, ui) {
-			if(ui.options._zIndex) $(ui.helper).css('zIndex', ui.options._zIndex);
-		}
-	});
-
-	$.ui.plugin.add("sortable", "opacity", {
-		start: function(e, ui) {
-			var t = ui.helper;
-			if(t.css("opacity")) ui.options._opacity = t.css("opacity");
-			t.css('opacity', ui.options.opacity);
-		},
-		stop: function(e, ui) {
-			if(ui.options._opacity) $(ui.helper).css('opacity', ui.options._opacity);
-		}
-	});
 
 
-	$.ui.plugin.add("sortable", "revert", {
-		stop: function(e, ui) {
-			var self = ui.instance;
-			self.cancelHelperRemoval = true;
-			var cur = self.currentItem.offset();
-			var op = self.helper.offsetParent().offset();
-			if(ui.instance.options.zIndex) ui.helper.css('zIndex', ui.instance.options.zIndex); //Do the zIndex again because it already was resetted by the plugin above on stop
-
-			//Also animate the placeholder if we have one
-			if(ui.instance.placeholder) ui.instance.placeholder.animate({ opacity: 'hide' }, parseInt(ui.options.revert, 10) || 500);
-			
-			
-			ui.helper.animate({
-				left: cur.left - op.left - self.margins.left,
-				top: cur.top - op.top - self.margins.top
-			}, parseInt(ui.options.revert, 10) || 500, function() {
-				self.currentItem.css('visibility', 'visible');
-				window.setTimeout(function() {
-					if(self.placeholder) self.placeholder.remove();
-					self.helper.remove();
-					if(ui.options._zIndex) ui.helper.css('zIndex', ui.options._zIndex);
-				}, 50);
-			});
-		}
-	});
-
-	
-	$.ui.plugin.add("sortable", "containment", {
-		start: function(e, ui) {
-
-			var o = ui.options;
-			if((o.containment.left != undefined || o.containment.constructor == Array) && !o._containment) return;
-			if(!o._containment) o._containment = o.containment;
-
-			if(o._containment == 'parent') o._containment = this[0].parentNode;
-			if(o._containment == 'sortable') o._containment = this[0];
-			if(o._containment == 'document') {
-				o.containment = [
-					0,
-					0,
-					$(document).width(),
-					($(document).height() || document.body.parentNode.scrollHeight)
-				];
-			} else { //I'm a node, so compute top/left/right/bottom
-
-				var ce = $(o._containment);
-				var co = ce.offset();
-
-				o.containment = [
-					co.left,
-					co.top,
-					co.left+(ce.outerWidth() || ce[0].scrollWidth),
-					co.top+(ce.outerHeight() || ce[0].scrollHeight)
-				];
-			}
-
-		},
-		sort: function(e, ui) {
-
-			var o = ui.options;
-			var h = ui.helper;
-			var c = o.containment;
-			var self = ui.instance;
-			var borderLeft = (parseInt(self.offsetParent.css("borderLeftWidth"), 10) || 0);
-			var borderRight = (parseInt(self.offsetParent.css("borderRightWidth"), 10) || 0);
-			var borderTop = (parseInt(self.offsetParent.css("borderTopWidth"), 10) || 0);
-			var borderBottom = (parseInt(self.offsetParent.css("borderBottomWidth"), 10) || 0);
-			
-			if(c.constructor == Array) {
-				if((self.position.absolute.left < c[0])) self.position.current.left = c[0] - self.offsets.parent.left - self.margins.left;
-				if((self.position.absolute.top < c[1])) self.position.current.top = c[1] - self.offsets.parent.top - self.margins.top;
-				if(self.position.absolute.left - c[2] + self.helperProportions.width >= 0) self.position.current.left = c[2] - self.offsets.parent.left - self.helperProportions.width - self.margins.left - borderLeft - borderRight;
-				if(self.position.absolute.top - c[3] + self.helperProportions.height >= 0) self.position.current.top = c[3] - self.offsets.parent.top - self.helperProportions.height - self.margins.top - borderTop - borderBottom;
-			} else {
-				if((ui.position.left < c.left)) self.position.current.left = c.left;
-				if((ui.position.top < c.top)) self.position.current.top = c.top;
-				if(ui.position.left - self.offsetParent.innerWidth() + self.helperProportions.width + c.right + borderLeft + borderRight >= 0) self.position.current.left = self.offsetParent.innerWidth() - self.helperProportions.width - c.right - borderLeft - borderRight;
-				if(ui.position.top - self.offsetParent.innerHeight() + self.helperProportions.height + c.bottom + borderTop + borderBottom >= 0) self.position.current.top = self.offsetParent.innerHeight() - self.helperProportions.height - c.bottom - borderTop - borderBottom;
-			}
-
-		}
-	});
-
-	$.ui.plugin.add("sortable", "axis", {
-		sort: function(e, ui) {
-			var o = ui.options;
-			if(o.constraint) o.axis = o.constraint; //Legacy check
-			o.axis == 'x' ? ui.instance.position.top = ui.instance.originalPosition.top : ui.instance.position.left = ui.instance.originalPosition.left;
-		}
-	});
-
-	$.ui.plugin.add("sortable", "scroll", {
-		start: function(e, ui) {
-			var o = ui.options;
-			o.scrollSensitivity	= o.scrollSensitivity || 20;
-			o.scrollSpeed		= o.scrollSpeed || 20;
-
-			ui.instance.overflowY = function(el) {
-				do { if((/auto|scroll/).test(el.css('overflow')) || (/auto|scroll/).test(el.css('overflow-y'))) return el; el = el.parent(); } while (el[0].parentNode);
-				return $(document);
-			}(this);
-			ui.instance.overflowX = function(el) {
-				do { if((/auto|scroll/).test(el.css('overflow')) || (/auto|scroll/).test(el.css('overflow-x'))) return el; el = el.parent(); } while (el[0].parentNode);
-				return $(document);
-			}(this);
-			
-			if(ui.instance.overflowY[0] != document && ui.instance.overflowY[0].tagName != 'HTML') ui.instance.overflowYstart = ui.instance.overflowY[0].scrollTop;
-			if(ui.instance.overflowX[0] != document && ui.instance.overflowX[0].tagName != 'HTML') ui.instance.overflowXstart = ui.instance.overflowX[0].scrollLeft;
-			
-		},
-		sort: function(e, ui) {
-			
-			var o = ui.options;
-			var i = ui.instance;
-
-			if(i.overflowY[0] != document && i.overflowY[0].tagName != 'HTML') {
-				if(i.overflowY[0].offsetHeight - (ui.position.top - i.overflowY[0].scrollTop + i.clickOffset.top) < o.scrollSensitivity)
-					i.overflowY[0].scrollTop = i.overflowY[0].scrollTop + o.scrollSpeed;
-				if((ui.position.top - i.overflowY[0].scrollTop + i.clickOffset.top) < o.scrollSensitivity)
-					i.overflowY[0].scrollTop = i.overflowY[0].scrollTop - o.scrollSpeed;				
-			} else {
-				//$(document.body).append('<p>'+(e.pageY - $(document).scrollTop())+'</p>');
-				if(e.pageY - $(document).scrollTop() < o.scrollSensitivity)
-					$(document).scrollTop($(document).scrollTop() - o.scrollSpeed);
-				if($(window).height() - (e.pageY - $(document).scrollTop()) < o.scrollSensitivity)
-					$(document).scrollTop($(document).scrollTop() + o.scrollSpeed);
-			}
-			
-			if(i.overflowX[0] != document && i.overflowX[0].tagName != 'HTML') {
-				if(i.overflowX[0].offsetWidth - (ui.position.left - i.overflowX[0].scrollLeft + i.clickOffset.left) < o.scrollSensitivity)
-					i.overflowX[0].scrollLeft = i.overflowX[0].scrollLeft + o.scrollSpeed;
-				if((ui.position.top - i.overflowX[0].scrollLeft + i.clickOffset.left) < o.scrollSensitivity)
-					i.overflowX[0].scrollLeft = i.overflowX[0].scrollLeft - o.scrollSpeed;				
-			} else {
-				if(e.pageX - $(document).scrollLeft() < o.scrollSensitivity)
-					$(document).scrollLeft($(document).scrollLeft() - o.scrollSpeed);
-				if($(window).width() - (e.pageX - $(document).scrollLeft()) < o.scrollSensitivity)
-					$(document).scrollLeft($(document).scrollLeft() + o.scrollSpeed);
-			}
-			
-			//ui.instance.recallOffset(e);
-			i.offset = {
-				left: i.mouse.start.left - i.originalPosition.left + (i.overflowXstart !== undefined ? i.overflowXstart - i.overflowX[0].scrollLeft : 0),
-				top: i.mouse.start.top - i.originalPosition.top + (i.overflowYstart !== undefined ? i.overflowYstart - i.overflowX[0].scrollTop : 0)
-			};
-
-		}
-	});
 
 })(jQuery);
