@@ -51,6 +51,7 @@
 			createHelper(settings);
 			return this.each(function() {
 					this.tSettings = settings;
+					this.tOpacity = helper.parent.css("opacity")
 					// copy tooltip into its own expando and remove the title
 					this.tooltipText = this.title;
 					$(this).removeAttr("title");
@@ -187,9 +188,9 @@
 		tID = null;
 		if (settings(current).fade) {
 			if (helper.parent.is(":animated"))
-				helper.parent.stop().fadeTo(settings(current).fade, 1);
+				helper.parent.stop().fadeTo(settings(current).fade, current.tOpacity);
 			else
-				helper.parent.is(':visible') ? helper.parent.fadeTo(settings(current).fade, 1) : helper.parent.fadeIn(settings(current).fade);
+				helper.parent.is(':visible') ? helper.parent.fadeTo(settings(current).fade, current.tOpacity) : helper.parent.fadeIn(settings(current).fade);
 		} else {
 			helper.parent.show();
 		}
@@ -270,7 +271,7 @@
 		
 		var tsettings = settings(this);
 		function complete() {
-			helper.parent.removeClass( tsettings.extraClass )//.css("opacity", "");
+			helper.parent.removeClass( tsettings.extraClass ).hide().css("opacity", "");
 		}
 		if (tsettings.fade) {
 			if (helper.parent.is(':animated'))
