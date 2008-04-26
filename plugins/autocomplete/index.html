@@ -49,7 +49,10 @@ $().ready(function() {
 		matchContains: true,
 		autoFill: false,
 		formatItem: function(row, i, max) {
-			return i + "/" + max + ": \"" + row.name + "\" <" + row.to + ">";
+			return i + "/" + max + ": \"" + row.name + "\" [" + row.to + "]";
+		},
+		formatMatch: function(row, i, max) {
+			return row.name + " " + row.to;
 		},
 		formatResult: function(row) {
 			return row.to;

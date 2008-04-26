@@ -7,7 +7,7 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- * Revision: $Id: jquery.autocomplete.js 5206 2008-04-06 17:08:47Z dswitzer $
+ * Revision: $Id: jquery.autocomplete.js 5208 2008-04-06 20:46:44Z dswitzer $
  *
  */
 
@@ -66,6 +66,7 @@
  * @option Object extraParams Extra parameters for the backend. If you were to specify { bar:4 }, the autocompleter would call my_autocomplete_backend.php?q=foo&bar=4 (assuming the input box contains "foo"). The param can be a function that is called to calculate the param before each request. Default: none
  * @option Boolean selectFirst If this is set to true, the first autocomplete value will be automatically selected on tab/return, even if it has not been handpicked by keyboard or mouse action. If there is a handpicked (highlighted) result, that result will take precedence. Default: true
  * @option Function formatItem Provides advanced markup for an item. For each row of results, this function will be called. The returned value will be displayed inside an LI element in the results list. Autocompleter will provide 4 parameters: the results row, the position of the row in the list of results (starting at 1), the number of items in the list of results and the search term. Default: none, assumes that a single row contains a single value.
+ * @option Function formatMatch This defaults to the formatItem (for backwards compatibility) and is supplied with the same arguments. Use this option if you want to limit the data that autocomplete actuall searches for matches. For example, there may be items you want displayed to the user, but don't want included in the data that's searched.
  * @option Function formatResult Similar to formatItem, but provides the formatting for the value to be put into the input field. Again three arguments: Data, position (starting with one) and total number of data. Default: none, assumes either plain data to use as result or uses the same value as provided by formatItem.
  * @option Boolean multiple Whether to allow more than one autocomplted-value to enter. Default: false
  * @option String multipleSeparator Seperator to put between values when using multiple option. Default: ", "
@@ -153,6 +154,9 @@ $.fn.extend({
 		
 		// if highlight is set to false, replace it with a do-nothing function
 		options.highlight = options.highlight || function(value) { return value; };
+		
+		// if the formatMatch option is not specified, then use formatItem for backwards compatibility
+		options.formatMatch = options.formatMatch || options.formatItem;
 		
 		return this.each(function() {
 			new $.Autocompleter(this, options);
@@ -499,6 +503,7 @@ $.Autocompleter.defaults = {
 	extraParams: {},
 	selectFirst: true,
 	formatItem: function(row) { return row[0]; },
+	formatMatch: null,
 	autoFill: false,
 	width: 0,
 	multiple: false,
@@ -552,7 +557,7 @@ $.Autocompleter.Cache = function(options) {
 			// if rawValue is a string, make an array otherwise just reference the array
 			rawValue = (typeof rawValue == "string") ? [rawValue] : rawValue;
 			
-			var value = options.formatItem(rawValue, i+1, options.data.length);
+			var value = options.formatMatch(rawValue, i+1, options.data.length);
 			if ( value === false )
 				continue;
 				
