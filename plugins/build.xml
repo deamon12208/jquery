@@ -110,15 +110,6 @@
     </target>
 	
 	<target name="autocomplete" description="Build autocomplete plugin.">
-		<property name="folder" value="${SRC_DIR}autocomplete${prefix}" />
-		<property name="name" value="autocomplete-bundle" />
-		<concat destfile="${folder}${name}.js">
-            <fileset dir="${SRC_DIR}autocomplete/" includes="jquery.autocomplete.js,jquery.below.js,jquery.bgiframe.min.js" />
-        </concat>
-		<antcall target="pack">
-		    <param name="plugin" value="${folder}${name}.js" />
-            <param name="plugin_pack" value="${folder}${name}.pack.js" />
-        </antcall>
         <antcall target="generic">
             <param name="name" value="autocomplete" />
         </antcall>

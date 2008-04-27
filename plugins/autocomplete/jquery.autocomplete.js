@@ -708,7 +708,7 @@ $.Autocompleter.Select = function (options, input, select, config) {
 	}
 
 	function moveSelect(step) {
-		listItems.slice(active, active + 1).removeClass();
+		listItems.slice(active, active + 1).removeClass(CLASSES.ACTIVE);
 		movePosition(step);
         var activeItem = listItems.slice(active, active + 1).addClass(CLASSES.ACTIVE);
         if(options.scroll) {
@@ -830,8 +830,7 @@ $.Autocompleter.Select = function (options, input, select, config) {
 			return selected && selected.length && $.data(selected[0], "ac_data");
 		},
 		emptyList: function (){
-			// only empty the list if it doesn't exist
-			if( list ) list.empty();
+			list && list.empty();
 		},
 		unbind: function() {
 			element && element.remove();
