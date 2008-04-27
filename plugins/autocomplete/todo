@@ -1,6 +1,9 @@
 
 TODO
 
+- handle up/down keys in textarea (prevent default while select is open?)
+- docs: max:0 works, too, "removing" it(??)
+- fix ac_loading/options.loadingClass
 - support/enable request urls like foo/bar/10 instead of foo/q=10
 - urlencode request term before passing to $.ajax/data; evaluate why $.ajax doesn't handle that itself, if at all; try with umlauts, russian/danish/chinese characeters (see validate)
 - test what happens when an element gets focused programmatically (maybe even before then autcomplete is applied)
