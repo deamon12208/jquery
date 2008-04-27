@@ -1,3 +1,7 @@
+1.0.1
+-----
+* Fixed element creation (<ul> to <ul/> and <li> to </li>)
+
 1.0
 ---
 

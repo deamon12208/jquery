@@ -550,7 +550,7 @@ $.Autocompleter.Select = function (options, input, select, config) {
 		.css("position", "absolute")
 		.appendTo(document.body);
 	
-		list = $("<ul>").appendTo(element).mouseover( function(event) {
+		list = $("<ul/>").appendTo(element).mouseover( function(event) {
 			if(target(event).nodeName && target(event).nodeName.toUpperCase() == 'LI') {
 	            active = $("li", list).removeClass(CLASSES.ACTIVE).index(target(event));
 			    $(target(event)).addClass(CLASSES.ACTIVE);            
@@ -623,7 +623,7 @@ $.Autocompleter.Select = function (options, input, select, config) {
 			var formatted = options.formatItem(data[i].data, i+1, max, data[i].value, term);
 			if ( formatted === false )
 				continue;
-			var li = $("<li>").html( options.highlight(formatted, term) ).addClass(i%2 == 0 ? "ac_event" : "ac_odd").appendTo(list)[0];
+			var li = $("<li/>").html( options.highlight(formatted, term) ).addClass(i%2 == 0 ? "ac_event" : "ac_odd").appendTo(list)[0];
 			$.data(li, "ac_data", data[i]);
 		}
 		listItems = list.find("li");
