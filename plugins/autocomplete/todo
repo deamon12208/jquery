@@ -1,6 +1,8 @@
 
 TODO
 
+- test formatItem implementation that returns (clickable) anchors
+- bug: handle del key; eg. type a letter, remove it using del, type same letter again: nothing happens
 - handle up/down keys in textarea (prevent default while select is open?)
 - docs: max:0 works, too, "removing" it(??)
 - fix ac_loading/options.loadingClass
@@ -10,7 +12,7 @@ TODO
 - check if blur on selecting can be removed
 - fix keyhandling to ignore metakeys, eg. shift; especially important for chinese characters that need more then one key
 - enhance mustMatch: provide event/callback when a value gets deleted
-- handle tab key different then enter, eg. don't blur field or prevent default, just let it move on
+- handle tab key different then enter, eg. don't blur field or prevent default, just let it move on; in any case, no need to blur the field when selecting a value via tab, unlike return
 - prevent redundant requests on
   - superstring returned no result, no need to query again for substring, eg. pete returned nothing, peter won't either
   - previous query mustn't be requested again, eg. pete returns 10 lines, peter nothing, backspace to pete should get the 10 lines from cache (may need TimeToLive setting for cache to invalidate it)
