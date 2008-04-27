@@ -121,7 +121,6 @@ $().ready(function() {
 		width: 310,
 		matchContains: true,
 		highlightItem: false,
-		domElement: '#modalWindow',
 		formatItem: function(row, i, max, term) {
 			return row.name.replace(new RegExp("(" + term + ")", "gi"), "<strong>$1</strong>") + "<br><span style='font-size: 80%;'>Email: &lt;" + row.to + "&gt;</span>";
 		},

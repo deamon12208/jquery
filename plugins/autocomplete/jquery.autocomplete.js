@@ -1,5 +1,5 @@
 /*
- * Autocomplete - jQuery plugin 1.0 Beta
+ * Autocomplete - jQuery plugin 1.0
  *
  * Copyright (c) 2007 Dylan Verheul, Dan G. Switzer, Anjesh Tuladhar, Jörn Zaefferer
  *
@@ -9,135 +9,6 @@
  *
  * Revision: $Id$
  *
- */
-
-/**
- * Provide autocomplete for text-inputs or textareas.
- *
- * Depends on dimensions plugin's offset method for correct positioning of the select box and bgiframe plugin
- * to fix IE's problem with selects.
- *
- * @example $("#input_box").autocomplete("my_autocomplete_backend.php");
- * @before <input id="input_box" />
- * @desc Autocomplete a text-input with remote data. For small to giant datasets.
- *
- * When the user starts typing, a request is send to the specified backend ("my_autocomplete_backend.php"),
- * with a GET parameter named q that contains the current value of the input box and a paremeter "limit" with
- * the value specified for the max option.
- *
- * A value of "foo" would result in this request url: my_autocomplete_backend.php?q=foo&limit=10
- *
- * The result must return with one value on each line. The result is presented in the order
- * the backend sends it.
- *
- * @example $("#input_box").autocomplete(["Cologne", "Berlin", "Munich"]);
- * @before <input id="input_box" />
- * @desc Autcomplete a text-input with local data. For small datasets.
- *
- * @example $.getJSON("my_backend.php", function(data) {
- *   $("#input_box").autocomplete(data);
- * });
- * @before <input id="input_box" />
- * @desc Autcomplete a text-input with data received via AJAX. For small to medium sized datasets.
- *
- * @example $("#mytextarea").autocomplete(["Cologne", "Berlin", "Munich"], {
- *  multiple: true
- * });
- * @before <textarea id="mytextarea" />
- * @desc Autcomplete a textarea with local data (for small datasets). Once the user chooses one
- * value, a separator is appended (by default a comma, see multipleSeparator option) and more values
- * are autocompleted.
- *
- * @name autocomplete
- * @cat Plugins/Autocomplete
- * @type $
- * @param String|Array urlOrData Pass either an URL for remote-autocompletion or an array of data for local auto-completion
- * @param Map options Optional settings
- * @option String inputClass This class will be added to the input box. Default: "ac_input"
- * @option String resultsClass The class for the UL that will contain the result items (result items are LI elements). Default: "ac_results"
- * @option String loadingClass The class for the input box while results are being fetched from the server. Default: "ac_loading"
- * @option Number minChars The minimum number of characters a user has to type before the autocompleter activates. Default: 1
- * @option Number delay The delay in milliseconds the autocompleter waits after a keystroke to activate itself. Default: 400 for remote, 10 for local
- * @option Number cacheLength The number of backend query results to store in cache. If set to 1 (the current result), no caching will happen. Do not set below 1. Default: 10
- * @option Boolean matchSubset Whether or not the autocompleter can use a cache for more specific queries. This means that all matches of "foot" are a subset of all matches for "foo". Usually this is true, and using this options decreases server load and increases performance. Only useful with cacheLength settings bigger than one, like 10. Default: true
- * @option Boolean matchCase Whether or not the comparison is case sensitive. Important only if you use caching. Default: false
- * @option Boolean matchContains Whether or not the comparison looks inside (i.e. does "ba" match "foo bar") the search results. Important only if you use caching. Don't mix with autofill. Default: false
- * @option Booolean mustMatch If set to true, the autocompleter will only allow results that are presented by the backend. Note that illegal values result in an empty input box. Default: false
- * @option Object extraParams Extra parameters for the backend. If you were to specify { bar:4 }, the autocompleter would call my_autocomplete_backend.php?q=foo&bar=4 (assuming the input box contains "foo"). The param can be a function that is called to calculate the param before each request. Default: none
- * @option Boolean selectFirst If this is set to true, the first autocomplete value will be automatically selected on tab/return, even if it has not been handpicked by keyboard or mouse action. If there is a handpicked (highlighted) result, that result will take precedence. Default: true
- * @option Function formatItem Provides advanced markup for an item. For each row of results, this function will be called. The returned value will be displayed inside an LI element in the results list. Autocompleter will provide 4 parameters: the results row, the position of the row in the list of results (starting at 1), the number of items in the list of results and the search term. Default: none, assumes that a single row contains a single value.
- * @option Function formatMatch This defaults to the formatItem (for backwards compatibility) and is supplied with the same arguments. Use this option if you want to limit the data that autocomplete actuall searches for matches. For example, there may be items you want displayed to the user, but don't want included in the data that's searched.
- * @option Function formatResult Similar to formatItem, but provides the formatting for the value to be put into the input field. Again three arguments: Data, position (starting with one) and total number of data. Default: none, assumes either plain data to use as result or uses the same value as provided by formatItem.
- * @option Boolean multiple Whether to allow more than one autocomplted-value to enter. Default: false
- * @option String multipleSeparator Seperator to put between values when using multiple option. Default: ", "
- * @option Number width Specify a custom width for the select box. Default: width of the input element
- * @option Boolean autoFill Fill the textinput while still selecting a value, replacing the value if more is typed or something else is selected. Default: false
- * @option Number max Limit the number of items in the select box. Is also sent as a "limit" parameter with a remote request. Default: 10
- * @option Boolean|Function highlight Whether and how to highlight matches in the select box. Set to false to disable. Set to a function to customize. The function gets the value as the first argument and the search term as the second and must return the formatted value. Default: Wraps the search term in a <strong> element 
- * @option Boolean scroll Whether to scroll when more results than configured via scrollHeight are available. Default: true 
- * @option Number scrollHeight height of scrolled autocomplete control in pixels
- * @option String attachTo The element to attach the autocomplete list to. Useful if used inside a modal window like Thickbox. Default: body -MM
- */
-
-/**
- * Handle the result of a search event. Is executed when the user selects a value or a
- * programmatic search event is triggered (see search()).
- *
- * You can add and remove (using unbind("result")) this event at any time.
- *
- * @example $('input#suggest').result(function(event, data, formatted) {
- *   $("#result").html( !data ? "No match!" : "Selected: " + formatted);
- * });
- * @desc Bind a handler to the result event to display the selected value in a #result element.
- *    The first argument is a generic event object, in this case with type "result".
- *    The second argument refers to the selected data, which can be a plain string value or an array or object.
- *    The third argument is the formatted value that is inserted into the input field.
- *
- * @param Function handler The event handler, gets a default event object as first and
- * 		the selected list item as second argument.
- * @name result
- * @cat Plugins/Autocomplete
- * @type $
- */
-
-/**
- * Trigger a search event. See result(Function) for binding to that event.
- *
- * A search event mimics the same behaviour as when the user selects a value from
- * the list of autocomplete items. You can use it to execute anything that does something
- * with the selected value, beyond simply putting the value into the input and submitting it.
- *
- * @example $('input#suggest').search();
- * @desc Triggers a search event.
- *
- * @name search
- * @cat Plugins/Autocomplete
- * @type $
- */
- 
-/**
- * Flush (empty) the cache of matched input's autocompleters.
- *
- * @example $('input#suggest').flushCache();
- *
- * @name flushCache
- * @cat Plugins/Autocomplete
- * @type $
- */
-
-/**
- * Updates the options for the current autocomplete field. This allows 
- * you to change things like the URL, max items to display, etc. If you're
- * changing the URL, be sure to remember to call the flushCache() method.
- *
- * @example $('input#suggest').setOptions({
- *  max: 15
- * });
- * @desc Changes the maximum number of items to display to 15.
- *
- * @name setOptions
- * @cat Plugins/Autocomplete
- * @type $
  */
 
 ;(function($) {
@@ -517,8 +388,7 @@ $.Autocompleter.defaults = {
 		return value.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + term.replace(/([\^\$\(\)\[\]\{\}\*\.\+\?\|\\])/gi, "\\$1") + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<strong>$1</strong>");
 	},
     scroll: true,
-    scrollHeight: 180,
-	attachTo: 'body'
+    scrollHeight: 180
 };
 
 $.Autocompleter.Cache = function(options) {
@@ -678,7 +548,7 @@ $.Autocompleter.Select = function (options, input, select, config) {
 		.hide()
 		.addClass(options.resultsClass)
 		.css("position", "absolute")
-		.appendTo(options.attachTo);
+		.appendTo(document.body);
 	
 		list = $("<ul>").appendTo(element).mouseover( function(event) {
 			if(target(event).nodeName && target(event).nodeName.toUpperCase() == 'LI') {
