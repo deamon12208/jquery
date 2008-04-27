@@ -1,6 +1,7 @@
 1.0.1
 -----
 * Fixed element creation (<ul> to <ul/> and <li> to </li>)
+* Fixed ac_even class (was ac_event)
 
 1.0
 ---

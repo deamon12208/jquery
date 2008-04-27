@@ -1,6 +1,12 @@
 
 TODO
 
+- support/enable request urls like foo/bar/10 instead of foo/q=10
+- urlencode request term before passing to $.ajax/data; evaluate why $.ajax doesn't handle that itself, if at all; try with umlauts, russian/danish/chinese characeters (see validate)
+- test what happens when an element gets focused programmatically (maybe even before then autcomplete is applied)
+- check if blur on selecting can be removed
+- fix keyhandling to ignore metakeys, eg. shift; especially important for chinese characters that need more then one key
+- enhance mustMatch: provide event/callback when a value gets deleted
 - handle tab key different then enter, eg. don't blur field or prevent default, just let it move on
 - prevent redundant requests on
   - superstring returned no result, no need to query again for substring, eg. pete returned nothing, peter won't either
