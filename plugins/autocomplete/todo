@@ -80,55 +80,6 @@ xml example:
 </ajaxresponse>
   
   
-  
-  
-  
-The issue with the highlight function is that if you insert HTML into
-the formatted strings, the highlight option will parse the HTML as
-well.
-
-EXAMPLE:
-function formatItem(row, pos, num) {
-   return row[0] + "<br><span class='small-text'>Position: " + row[2]
-+ "</span>";
-}
-
-In the previous example we are getting "name|employeeid|title" from
-the server. We want to format the autocomplete selector to display the
-name with the title underneath in small letters. This would seem to
-work.
-
-PROBLEM:
-The hightlight() function becomes a problem if you search for "sp" or
-"cl" or "sm" or "te"...
-
-If you search for 'sp' the output becomes:
-Lisa <strong>Spinach</strong> <br><<strong>sp</strong> class='small-text'>...
-
-'sm' will clobber:
-<span <strong>cl</strong>ss='small-text'>
-
-SOLUTION:
-Add the ability to turn off highlight() and pass the search term to
-the formatItem custom function to do custom highlighting
-
-function formatItem(row, pos, num, term) {
-       return row[0].replace(new RegExp("(" + term + ")", "gi"),
-"<strong>$1</strong>") + "<br><span class='small-text'>Position: " +
-row[2] + "</span>";
-}
-
-This allows to only add the emphasis to the strings before they are
-wrapped with HTML formatting.
-
-
-
-
-
-
-
-
-
 
 Hi all,
 
@@ -138,8 +89,7 @@ columns: user_id and position_id. On new appointment form I have two
 autocomplete text inputs with the following code:
 
    <input type="text" id="user_id" class="ac_input"  tabindex="1" />
-   <input type="text" id="position_id" class="ac_input" tabindex="2" /
-> >
+   <input type="text" id="position_id" class="ac_input" tabindex="2" />
 
 As you can see the inputs do not have a name attribute, and when the
 form is submitted their values are not sent, which is all right since
