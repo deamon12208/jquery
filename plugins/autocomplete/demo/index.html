@@ -76,12 +76,7 @@ $().ready(function() {
 		multiple: true,
 		matchContains: true,
 		formatItem: formatItem,
-		formatResult: formatResult,
-		extraParams: {
-			timestamp: function() {
-				return new Date();
-			}
-		}
+		formatResult: formatResult
 	});
 	$("#imageSearch").autocomplete("images.php", {
 		width: 320,

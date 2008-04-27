@@ -190,7 +190,8 @@ $.Autocompleter = function(input, options) {
 		ESC: 27,
 		COMMA: 188,
 		PAGEUP: 33,
-		PAGEDOWN: 34
+		PAGEDOWN: 34,
+		BACKSPACE: 8
 	};
 
 	// Create $ object for input element
@@ -384,10 +385,12 @@ $.Autocompleter = function(input, options) {
 	}
 	
 	// fills in the input box w/the first match (assumed to be the best match)
+	// q: the term entered
+	// sValue: the first matching result
 	function autoFill(q, sValue){
 		// autofill in the complete box w/the first match as long as the user hasn't entered in more data
 		// if the last user key pressed was backspace, don't autofill
-		if( options.autoFill && (lastWord($input.val()).toLowerCase() == q.toLowerCase()) && lastKeyPressCode != 8 ) {
+		if( options.autoFill && (lastWord($input.val()).toLowerCase() == q.toLowerCase()) && lastKeyPressCode != KEY.BACKSPACE ) {
 			// fill in the value (keep the case the user has typed)
 			$input.val($input.val() + sValue.substring(lastWord(previousValue).length));
 			// select the portion of the value not typed by the user (so the next character will erase)
@@ -436,7 +439,9 @@ $.Autocompleter = function(input, options) {
 		// if an AJAX url has been supplied, try loading the data now
 		} else if( (typeof options.url == "string") && (options.url.length > 0) ){
 			
-			var extraParams = {};
+			var extraParams = {
+				timestamp: +new Date()
+			};
 			$.each(options.extraParams, function(key, param) {
 				extraParams[key] = typeof param == "function" ? param() : param;
 			});

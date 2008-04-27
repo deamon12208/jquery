@@ -11,7 +11,6 @@ TODO
 - allow users to keep their incomplete value when pressing tab, just mimic the default-browser-autocomplete: tab doesn't select any proposed value -> tab closes the select and works normal otherwise
 - small bug in your autocomplete,  When setting autoFill:true I would expect formatResult to be called on autofill, it seems not to be the case.
 - add a callback to allow decoding the response
-- add scrollbars and page down/up
 - allow modification of not-last value in multiple-fields
 @option Number size Limit the number of items to show at once. Default: 
 @option Function parse - TEST AND DOCUMENT ME
@@ -30,17 +29,6 @@ $input.bind("show", function() {
   
 - add option to hide selectbox when no match is found - see comment by Ian on plugin page (14. Juli 2007 04:31)
 - add example for reinitializing an autocomplete using unbind()
-
-Thanks for a powerful and useful script :)
-You may already have provided some sort of option, that I have missed, to counter the following issue. If not, I will suggest the addition of a unique generated anti cache parameter in the request function, like this:
-
-data: jQuery.extend({
-q: lastWord(term),
-limit: options.max,
-antiCache: new Date().getTime()
-}, options.extraParams),
-
-Otherwise especially Internet Explorer will generally reuse a cached page rather than accessing the query script, which albeit can make sense unless the data in question is frequently updated.
 
 - Add option to pass through additional arguments to $.ajax, like type to use POST instead of GET
 
