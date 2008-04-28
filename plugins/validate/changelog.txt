@@ -10,6 +10,7 @@
 * Fixed #2473, ignoring all rules with an explicit parameter of boolean-false, eg. required:false is the same as not specifying required at all (it was handled as required:true so far)
 * Fixed #2424, with a modified patch from #2473: Methods returning a dependency-mismatch don't stop other rules from being evaluated anymore; still, success isn't applied for optional fields
 * Fixed url and email validation to not use trimmed values
+* Fixed creditcard validation to accept only digits and dashes ("asdf" is not a valid creditcard number)
 
 1.2.1
 -----

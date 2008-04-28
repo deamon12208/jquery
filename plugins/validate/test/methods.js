@@ -345,3 +345,9 @@ test("dateITA", function() {
 	ok(!method( "01/13/1990" ), "Invalid date ITA" );
 	ok(!method( "01.01.1900" ), "Invalid date ITA" );
 });
+
+test("creditcard", function() {
+	var method = methodTest("creditcard");
+	ok( method( "446-667-651" ), "Valid creditcard number" );
+	ok( !method( "asdf" ), "Invalid creditcard number" );
+})
