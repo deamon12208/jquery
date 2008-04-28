@@ -188,7 +188,7 @@
 		tID = null;
 		if (settings(current).fade) {
 			if (helper.parent.is(":animated"))
-				helper.parent.stop().fadeTo(settings(current).fade, current.tOpacity);
+				helper.parent.stop().show().fadeTo(settings(current).fade, current.tOpacity);
 			else
 				helper.parent.is(':visible') ? helper.parent.fadeTo(settings(current).fade, current.tOpacity) : helper.parent.fadeIn(settings(current).fade);
 		} else {
