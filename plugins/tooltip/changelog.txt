@@ -3,6 +3,7 @@
 
 * Added fade option for fading in/out tooltips
 * Fixed imagemaps in IE, added back example
+* Added positionLeft-option - positions the tooltip to the left of the cursor
 
 1.2
 ---

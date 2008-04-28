@@ -44,7 +44,7 @@ $("select").tooltip({
 	left: 25
 });
 
-$("map > area").tooltip();
+$("map > area").tooltip({ positionLeft: true });
 
 $("#fancy, #fancy2").tooltip({
 	track: true,
@@ -73,7 +73,7 @@ $('#right a').tooltip({
 	showURL: false,
 	extraClass: "right"
 });
-$('#right2 a').tooltip({ showURL: false });
+$('#right2 a').tooltip({ showURL: false, positionLeft: true });
 
 $("#block").click($.tooltip.block);
 
@@ -231,7 +231,7 @@ $('#pretty').tooltip({
 		        href="http://www.baden-aktuell.de/" alt="Baden" title="Baden">
 		</map>
 		<h3>Code</h3>
-		<pre><code class="mix">$("map *").Tooltip();</code></pre>
+		<pre><code class="mix">$("map *").tooltip({ positionLeft: true });</code></pre>
 	</fieldset>
 	
 	<fieldset>
@@ -253,7 +253,7 @@ $('#pretty').tooltip({
 	showURL: false,
 	extraClass: "right"
 });
-$('#right2 a').tooltip({ showURL: false });</code></pre>
+$('#right2 a').tooltip({ showURL: false, positionLeft: true });</code></pre>
 	</fieldset>
 </div>
 <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">

@@ -230,9 +230,15 @@
 			// position the helper 15 pixel to bottom right, starting from mouse position
 			left = event.pageX + settings(current).left;
 			top = event.pageY + settings(current).top;
+			var right='auto';
+			if (settings(current).positionLeft) {
+				right = $(window).width() - left;
+				left = 'auto';
+			}
 			helper.parent.css({
-				left: left + 'px',
-				top: top + 'px'
+				left: left,
+				right: right,
+				top: top
 			});
 		}
 		
