@@ -105,6 +105,7 @@
     <script type="text/javascript" src="../../../../jquery/src/ajax.js"></script>
     <script type="text/javascript" src="../../../../jquery/src/fx.js"></script>
     <script type="text/javascript" src="../../../../jquery/src/offset.js"></script>
+	<script type="text/javascript" src="../../../../jquery/src/dimensions.js"></script>
 
     <script type="text/javascript" src="../../../ui.base.js"></script>
 
@@ -123,8 +124,8 @@
             var itemsWidth = ul.innerWidth() - container.outerWidth();
             
             $('.slider', container).slider({
-                minValue: 0,
-                maxValue: itemsWidth,
+                min: 0,
+                max: itemsWidth,
                 handle: '.handle',
                 stop: function (event, ui) {
                     ul.animate({'left' : ui.value * -1}, 500);

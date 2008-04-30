@@ -60,7 +60,7 @@ test("options update min/max", function() {
 	});
 	slider.slider("moveTo", "-=10");
 	equals(slider.slider("value"), 0);
-	slider.data("minValue.slider", -10);
+	slider.data("min.slider", -10);
 	slider.slider("moveTo", "-=20");
 	equals(slider.slider("value"), -10);
 })

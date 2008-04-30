@@ -11,6 +11,7 @@
 <script type="text/javascript" src="../../jquery/src/ajax.js"></script>
 <script type="text/javascript" src="../../jquery/src/fx.js"></script>
 <script type="text/javascript" src="../../jquery/src/offset.js"></script>
+<script type="text/javascript" src="../../jquery/src/dimensions.js"></script>
 
 <script type="text/javascript" src="../ui.base.js"></script>
 
@@ -105,8 +106,8 @@ $.fn.rangeSlider = function() {
 	return this.each(function() {
 		$this = $(this);
 		var slider = $("<div><div class='ui-slider-handle'></div></div>").insertAfter(this).slider({
-			minValue: $this.attr("min"),
-			maxValue: $this.attr("max"),
+			min: $this.attr("min"),
+			max: $this.attr("max"),
 			stepping: $this.attr("step"),
 			startValue: $this.attr("value"),
 			slide: function(e, ui) {
@@ -125,8 +126,8 @@ $(document).ready(function(){
 	
 	$('#slider1').slider({
 		stepping: 10,
-		maxValue: 100,
-		minValue: -100, 
+		max: 100,
+		min: -100, 
 		range: true,
 		change: function() {
 			console.log('changed!');	
