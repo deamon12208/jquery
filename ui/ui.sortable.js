@@ -42,7 +42,7 @@
 	$.ui.sortable = function(element, options) {
 		//Initialize needed constants
 		var self = this;
-		
+	
 		this.element = $(element);
 		this.containerCache = {};
 		
@@ -611,7 +611,7 @@
 		sort: function(e, ui) {
 			var o = ui.options;
 			if(o.constraint) o.axis = o.constraint; //Legacy check
-			o.axis == 'x' ? ui.instance.position.top = ui.instance.originalPosition.top : ui.instance.position.left = ui.instance.originalPosition.left;
+			o.axis == 'x' ? ui.instance.position.current.top = ui.instance.originalPosition.top : ui.instance.position.current.left = ui.instance.originalPosition.left;
 		}
 	});
 
