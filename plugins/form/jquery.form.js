@@ -1,6 +1,6 @@
 /*
  * jQuery Form Plugin
- * version: 2.07 (03/04/2008)
+ * version: 2.08 (04/29/2008)
  * @requires jQuery v1.2.2 or later
  *
  * Examples at: http://malsup.com/jquery/form/
@@ -10,7 +10,8 @@
  *
  * Revision: $Id$
  */
- (function($) {
+(function($) {
+
 /**
  * ajaxSubmit() provides a mechanism for submitting an HTML form using AJAX.
  *
@@ -177,6 +178,12 @@
  * @return jQuery
  */
 $.fn.ajaxSubmit = function(options) {
+    // fast fail if nothing selected (http://dev.jquery.com/ticket/2752)
+    if (!this.length) {
+        log('ajaxSubmit: skipping submit process - no element selected');
+        return this;
+    }
+
     if (typeof options == 'function')
         options = { success: options };
 
@@ -189,7 +196,10 @@ $.fn.ajaxSubmit = function(options) {
     // convenient for use with rich editors like tinyMCE or FCKEditor
     var veto = {};
     this.trigger('form-pre-serialize', [this, options, veto]);
-    if (veto.veto) return this;
+    if (veto.veto) {
+        log('ajaxSubmit: submit vetoed via form-pre-serialize trigger');
+        return this;
+   }
 
     var a = this.formToArray(options.semantic);
     if (options.data) {
@@ -199,11 +209,17 @@ $.fn.ajaxSubmit = function(options) {
     }
 
     // give pre-submit callback an opportunity to abort the submit
-    if (options.beforeSubmit && options.beforeSubmit(a, this, options) === false) return this;
+    if (options.beforeSubmit && options.beforeSubmit(a, this, options) === false) {
+        log('ajaxSubmit: submit aborted via beforeSubmit callback');
+        return this;
+    }    
 
     // fire vetoable 'validate' event
     this.trigger('form-submit-validate', [a, this, options, veto]);
-    if (veto.veto) return this;
+    if (veto.veto) {
+        log('ajaxSubmit: submit vetoed via form-submit-validate trigger');
+        return this;
+    }    
 
     var q = $.param(a);
 
@@ -864,6 +880,13 @@ $.fn.select = function(select) {
             this.selected = select;
         }
     });
+};
+
+// helper fn for console logging
+// set $.fn.ajaxSubmit.debug to true to enable debug logging
+function log() {
+    if ($.fn.ajaxSubmit.debug && window.console && window.console.log)
+        window.console.log('[jquery.form] ' + Array.prototype.join.call(arguments,''));
 };
 
 })(jQuery);
