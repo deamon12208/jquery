@@ -482,7 +482,7 @@
 		rearrange: function(e, i, a) {
 			a ? a.append(this.currentItem) : i.item[this.direction == 'down' ? 'before' : 'after'](this.currentItem);
 			this.refreshPositions(true); //Precompute after each DOM insertion, NOT on mousemove
-			if(this.placeholderElement) this.placeholder.css(this.placeholderElement.offset());
+			if(this.placeholderElement) this.placeholder.css(this.placeholderElement.offset()).css({ width: this.placeholderElement.outerWidth(), height: this.placeholderElement.outerHeight() });
 		}
 	});
 	
