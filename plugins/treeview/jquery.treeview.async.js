@@ -30,7 +30,8 @@ function load(settings, root, child, container) {
 				if (this.hasChildren) {
 					current.addClass("hasChildren");
 					createNode.call({
-						text:"placeholder",
+						classes: "placeholder",
+						text: "&nbsp;",
 						children:[]
 					}, branch);
 				}
@@ -39,6 +40,7 @@ function load(settings, root, child, container) {
 				}
 			}
 		}
+		child.empty();
 		$.each(response, createNode, [child]);
         $(container).treeview({add: child});
     });
@@ -59,7 +61,6 @@ $.fn.treeview = function(settings) {
 			var $this = $(this);
 			if ($this.hasClass("hasChildren")) {
 				var childList = $this.removeClass("hasChildren").find("ul");
-				childList.empty();
 				load(settings, this.id, childList, container);
 			}
 			if (userToggle) {
