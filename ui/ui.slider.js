@@ -14,124 +14,101 @@
  */
 ;(function($) {
 
-	$.fn.extend({
-		slider: function(options) {
-			var args = Array.prototype.slice.call(arguments, 1);
-			
-			if ( options == "value" )
-				return $.data(this[0], "slider").value(arguments[1]);
-			
-			return this.each(function() {
-				if (typeof options == "string") {
-					var slider = $.data(this, "slider");
-					if (slider) slider[options].apply(slider, args);
+	$.ui.widget("slider", {
+		init: function() {
+			var self = this;
+			this.element.addClass("ui-slider");
+			this.initBoundaries();
 
-				} else if(!$.data(this, "slider"))
-					new $.ui.slider(this, options);
+			this.element.bind("setData.slider", function(event, key, value) {
+				self.options[key] = value;
+				if (/min|max/.test(key))
+					self.initBoundaries();
+			}).bind("getData.slider", function(event, key){
+				return self.options[key];
 			});
-		}
-	});
 	
-	$.ui.slider = function(element, options) {
-
-		//Initialize needed constants
-		var self = this;
-		this.element = $(element);
-		$.data(element, "slider", this);
-		this.element.addClass("ui-slider");
-		
-		//Prepare the passed options
-		this.options = $.extend({}, $.ui.slider.defaults, options);
-		var o = this.options;
-		$.extend(o, {
-			axis: o.axis || (element.offsetWidth < element.offsetHeight ? 'vertical' : 'horizontal'),
-			max: !isNaN(parseInt(o.max,10)) ? { x: parseInt(o.max, 10), y: parseInt(o.max, 10)  } : ({ x: o.max && o.max.x || 100, y:  o.max && o.max.y || 100 }),
-			min: !isNaN(parseInt(o.min,10)) ? { x: parseInt(o.min, 10), y: parseInt(o.min, 10)  } : ({ x: o.min && o.min.x || 0, y:  o.min && o.min.y || 0 })
-		});
-	
-		//Prepare the real maxValue
-		o.realMax = {
-			x: o.max.x - o.min.x,
-			y: o.max.y - o.min.y
-		};
-		
-		//Calculate stepping based on steps
-		o.stepping = {
-			x: o.stepping && o.stepping.x || parseInt(o.stepping, 10) || (o.steps && o.steps.x ? o.realMax.x/o.steps.x : 0),
-			y: o.stepping && o.stepping.y || parseInt(o.stepping, 10) || (o.steps && o.steps.y ? o.realMax.y/o.steps.y : 0)
-		};
-		
-		$(element).bind("setData.slider", function(event, key, value){
-			self.options[key] = value;
-		}).bind("getData.slider", function(event, key){
-			return self.options[key];
-		});
-
-		//Initialize mouse and key events for interaction
-		this.handle = $(o.handle, element);
-		if (!this.handle.length) {
-			self.handle = self.generated = $(o.handles || [0]).map(function() {
-				var handle = $("<div/>").addClass("ui-slider-handle").appendTo(element);
-				if (this.id)
-					handle.attr("id", this.id);
-				return handle[0];
-			});
-		}
-		$(this.handle)
-			.mouseInteraction({
-				executor: this,
-				delay: o.delay,
-				distance: o.distance != undefined ? o.distance : 1,
-				dragPrevention: o.prevention ? o.prevention.toLowerCase().split(',') : ['input','textarea','button','select','option'],
-				start: this.start,
-				stop: this.stop,
-				drag: this.drag,
-				condition: function(e, handle) {
-					if(!this.disabled) {
-						if(this.currentHandle) this.blur(this.currentHandle);
-						this.focus(handle,1);
-						return !this.disabled;
-					}
-				}
-			})
-			.wrap('<a href="javascript:void(0)" style="cursor:default;"></a>')
-			.parent()
-				.bind('focus', function(e) { self.focus(this.firstChild); })
-				.bind('blur', function(e) { self.blur(this.firstChild); })
-				.bind('keydown', function(e) {
-					if(/(37|38|39|40)/.test(e.keyCode)) {
-						self.moveTo({
-							x: /(37|39)/.test(e.keyCode) ? (e.keyCode == 37 ? '-' : '+') + '=' + self.oneStep(1) : null,
-							y: /(38|40)/.test(e.keyCode) ? (e.keyCode == 38 ? '-' : '+') + '=' + self.oneStep(2) : null
-						}, this.firstChild);
+			// Initialize mouse and key events for interaction
+			this.handle = $(this.options.handle, this.element);
+			if (!this.handle.length) {
+				self.handle = self.generated = $(self.options.handles || [0]).map(function() {
+					var handle = $("<div/>").addClass("ui-slider-handle").appendTo(self.element);
+					if (this.id)
+						handle.attr("id", this.id);
+					return handle[0];
+				});
+			}
+			$(this.handle)
+				.mouseInteraction({
+					executor: this,
+					delay: this.options.delay,
+					distance: this.options.distance,
+					dragPrevention: this.options.prevention ? this.options.prevention.toLowerCase().split(',') : ['input','textarea','button','select','option'],
+					start: this.start,
+					stop: this.stop,
+					drag: this.drag,
+					condition: function(e, handle) {
+						if(!this.disabled) {
+							if(this.currentHandle) this.blur(this.currentHandle);
+							this.focus(handle,1);
+							return !this.disabled;
+						}
 					}
 				})
-		;
-		
-		//Prepare dynamic properties for later use
-		this.actualSize = { width: this.element.outerWidth() , height: this.element.outerHeight() };
-		
-		//Bind the click to the slider itself
-		this.element.bind('mousedown.slider', function(e) {
-			self.click.apply(self, [e]);
-			self.currentHandle.data("ui-mouse").trigger(e);
-			self.firstValue = self.firstValue + 1; //This is for always triggering the change event
-		});
-		
-		//Move the first handle to the startValue
-		$.each(o.handles || [], function(index, handle) {
-			self.moveTo(handle.start, index, true);
-		});
-		if (!isNaN(o.startValue))
-			this.moveTo(o.startValue, 0, true);
-		
-		//If we only have one handle, set the previous handle to this one to allow clicking before selecting the handle
-		if(this.handle.length == 1) this.previousHandle = this.handle;
-		if(this.handle.length == 2 && o.range) this.createRange();
-	
-	};
-	
-	$.extend($.ui.slider.prototype, {
+				.wrap('<a href="javascript:void(0)" style="cursor:default;"></a>')
+				.parent()
+					.bind('focus', function(e) { self.focus(this.firstChild); })
+					.bind('blur', function(e) { self.blur(this.firstChild); })
+					.bind('keydown', function(e) {
+						if(/(37|38|39|40)/.test(e.keyCode)) {
+							self.moveTo({
+								x: /(37|39)/.test(e.keyCode) ? (e.keyCode == 37 ? '-' : '+') + '=' + self.oneStep(1) : null,
+								y: /(38|40)/.test(e.keyCode) ? (e.keyCode == 38 ? '-' : '+') + '=' + self.oneStep(2) : null
+							}, this.firstChild);
+						}
+					})
+			;
+			
+			// Prepare dynamic properties for later use
+			this.actualSize = { width: this.element.outerWidth() , height: this.element.outerHeight() };
+			
+			// Bind the click to the slider itself
+			this.element.bind('mousedown.slider', function(e) {
+				self.click.apply(self, [e]);
+				self.currentHandle.data("ui-mouse").trigger(e);
+				self.firstValue = self.firstValue + 1; //This is for always triggering the change event
+			});
+			
+			// Move the first handle to the startValue
+			$.each(this.options.handles || [], function(index, handle) {
+				self.moveTo(handle.start, index, true);
+			});
+			if (!isNaN(this.options.startValue))
+				this.moveTo(this.options.startValue, 0, true);
+			
+			// If we only have one handle, set the previous handle to this one to allow clicking before selecting the handle
+			if(this.handle.length == 1) this.previousHandle = this.handle;
+			if(this.handle.length == 2 && this.options.range) this.createRange();
+		},
+		initBoundaries: function() {
+			var element = this.element[0];
+			var o = this.options;
+			$.extend(o, {
+				axis: o.axis || (element.offsetWidth < element.offsetHeight ? 'vertical' : 'horizontal'),
+				max: !isNaN(parseInt(o.max,10)) ? { x: parseInt(o.max, 10), y: parseInt(o.max, 10)  } : ({ x: o.max && o.max.x || 100, y:  o.max && o.max.y || 100 }),
+				min: !isNaN(parseInt(o.min,10)) ? { x: parseInt(o.min, 10), y: parseInt(o.min, 10)  } : ({ x: o.min && o.min.x || 0, y:  o.min && o.min.y || 0 })
+			});
+			//Prepare the real maxValue
+			o.realMax = {
+				x: o.max.x - o.min.x,
+				y: o.max.y - o.min.y
+			};
+			//Calculate stepping based on steps
+			o.stepping = {
+				x: o.stepping && o.stepping.x || parseInt(o.stepping, 10) || (o.steps && o.steps.x ? o.realMax.x/o.steps.x : 0),
+				y: o.stepping && o.stepping.y || parseInt(o.stepping, 10) || (o.steps && o.steps.y ? o.realMax.y/o.steps.y : 0)
+			};
+		},
 		plugins: {},
 		createRange: function() {
 			this.rangeElement = $('<div></div>')
@@ -386,9 +363,12 @@
 			}
 		}
 	});
+
+	$.ui.slider.getter = "value";
 	
 	$.ui.slider.defaults = {
-		handle: ".ui-slider-handle"
+		handle: ".ui-slider-handle",
+		distance: 1
 	};
 
 })(jQuery);

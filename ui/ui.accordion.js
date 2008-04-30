@@ -15,26 +15,7 @@
 
 ;(function($) {
 
-	$.fn.extend({
-		accordion: function(options, data) {
-			return this.each(function() {
-				var instance = $.data(this, "accordion");
-				if (!instance) {
-					$.data(this, "accordion", new $.ui.accordion(this, options));
-				} else if (typeof options == "string") {
-					instance[options](data);
-				}
-			});
-		}
-	});
-	
-	$.ui.accordion = function(element, options) {
-		this.options = $.extend({}, $.ui.accordion.defaults, options);
-		this.element = $(element);
-		this.init();
-	};
-	
-	$.ui.accordion.prototype = {
+	$.ui.widget("accordion", {
 		init: function() {
 			var options = this.options;
 			
@@ -108,7 +89,7 @@
 			$.removeData(this.element[0], "accordion");
 			this.element.removeClass("ui-accordion").unbind(".accordion");
 		}
-	};
+	});
 	
 	function scopeCallback(callback, scope) {
 		return function() {
