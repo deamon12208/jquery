@@ -333,6 +333,7 @@
 		start: function(e,el) {
 			
 			var o = this.options;
+			this.currentContainer = this;
 			this.refresh();
 
 			//Create and append the visible helper
@@ -482,7 +483,9 @@
 		rearrange: function(e, i, a) {
 			a ? a.append(this.currentItem) : i.item[this.direction == 'down' ? 'before' : 'after'](this.currentItem);
 			this.refreshPositions(true); //Precompute after each DOM insertion, NOT on mousemove
-			if(this.placeholderElement) this.placeholder.css(this.placeholderElement.offset()).css({ width: this.placeholderElement.outerWidth(), height: this.placeholderElement.outerHeight() });
+			if(this.placeholderElement) this.placeholder.css(this.placeholderElement.offset());
+			if(this.placeholderElement.is(":visible")) this.placeholder.css({ width: this.placeholderElement.outerWidth(), height: this.placeholderElement.outerHeight() });
+			if(this.placeholderElement) this.placeholder.css(this.placeholderElement.offset());
 		}
 	});
 	
