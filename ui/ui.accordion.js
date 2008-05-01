@@ -15,7 +15,7 @@
 
 ;(function($) {
 
-	$.ui.widget("accordion", {
+	$.widget("ui", "accordion", {
 		init: function() {
 			var options = this.options;
 			

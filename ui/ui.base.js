@@ -16,20 +16,18 @@
 	$.ui = $.ui || {};
 	
 	// $.widget is factory to create jQuery plugins, taking some boilerplate code out of the plugin code
-	// created by Scott Gonzales and Jörn Zaefferer
-	
-	$.ui.getter = function(plugin, method) {
-		var methods = $.ui[plugin].getter || [];
+	// created by Scott González and Jörn Zaefferer
+	function getter(namespace, plugin, method) {
+		var methods = $[namespace][plugin].getter || [];
 		methods = (typeof methods == "string" ? methods.split(/,?\s+/) : methods);
 		return ($.inArray(method, methods) != -1);
 	};
-	
-	$.ui.widget = function(name, prototype) {
+	$.widget = function(namespace, name, prototype) {
 		// create plugin method
 		$.fn[name] = function(options, data) {
 			var isMethodCall = (typeof options == 'string');
 			
-			if (isMethodCall && $.ui.getter(name, options)) {
+			if (isMethodCall && getter(namespace, name, options)) {
 				var instance = $.data(this[0], name);
 				return (instance ? instance[options](data) : undefined); 
 			}
@@ -37,20 +35,20 @@
 			return this.each(function() {
 				var instance = $.data(this, name);
 				if (!instance) {
-					$.data(this, name, new $.ui[name](this, options));
+					$.data(this, name, new $[namespace][name](this, options));
 				} else if (isMethodCall) {
 					instance[options](data);
 				}
 			});
 		};
 		// create wiget constructor
-		$.ui[name] = function(element, options) {
-			this.options = $.extend({}, $.ui[name].defaults, options);
+		$[namespace][name] = function(element, options) {
+			this.options = $.extend({}, $[namespace][name].defaults, options);
 			this.element = $(element);
 			this.init();
 		};
 		// add widget prototype, must at least contain init(options)
-		$.ui[name].prototype = prototype || {};
+		$[namespace][name].prototype = prototype || {};
 	};
 	
 	//Add methods that are vital for all mouse interaction stuff (plugin registering)

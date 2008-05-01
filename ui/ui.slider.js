@@ -14,7 +14,7 @@
  */
 ;(function($) {
 
-	$.ui.widget("slider", {
+	$.widget("ui", "slider", {
 		init: function() {
 			var self = this;
 			this.element.addClass("ui-slider");
