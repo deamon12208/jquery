@@ -128,21 +128,23 @@
 			return false;
 
 		},
-		generateAbsolutePosition: function(pos) {
+		convertPositionTo: function(d, pos) {
+			if(!pos) pos = this.position;
+			var mod = d == "absolute" ? 1 : -1;
 			return {
 				top: (
 					pos.top																	// the calculated relative position
-					+ this.offset.relative.top												// Only for relative positioned nodes: Relative offset from element to offset parent
-					+ this.offset.parent.top												// The offsetParent's offset without borders (offset + border)
-					- (this.cssPosition == "fixed" ? 0 : this.offsetParent[0].scrollTop)	// The offsetParent's scroll position, not if the element is fixed
-					+ this.margins.top														//Add the margin (you don't want the margin counting in intersection methods)
+					+ this.offset.relative.top	* mod										// Only for relative positioned nodes: Relative offset from element to offset parent
+					+ this.offset.parent.top * mod											// The offsetParent's offset without borders (offset + border)
+					- (this.cssPosition == "fixed" ? 0 : this.offsetParent[0].scrollTop) * mod	// The offsetParent's scroll position, not if the element is fixed
+					+ this.margins.top * mod												//Add the margin (you don't want the margin counting in intersection methods)
 				),
 				left: (
 					pos.left																// the calculated relative position
-					+ this.offset.relative.left												// Only for relative positioned nodes: Relative offset from element to offset parent
-					+ this.offset.parent.left												// The offsetParent's offset without borders (offset + border)
-					- (this.cssPosition == "fixed" ? 0 : this.offsetParent[0].scrollLeft)	// The offsetParent's scroll position, not if the element is fixed
-					+ this.margins.left														//Add the margin (you don't want the margin counting in intersection methods)
+					+ this.offset.relative.left	* mod										// Only for relative positioned nodes: Relative offset from element to offset parent
+					+ this.offset.parent.left * mod											// The offsetParent's offset without borders (offset + border)
+					- (this.cssPosition == "fixed" ? 0 : this.offsetParent[0].scrollLeft) * mod	// The offsetParent's scroll position, not if the element is fixed
+					+ this.margins.left * mod												//Add the margin (you don't want the margin counting in intersection methods)
 				)
 			};
 		},
@@ -194,7 +196,7 @@
 
 			//Compute the helpers position
 			this.position = this.generatePosition(e);
-			this.positionAbs = this.generateAbsolutePosition(this.position);
+			this.positionAbs = this.convertPositionTo("absolute");
 
 			//Call plugins and callbacks and use the resulting position if something is returned		
 			this.position = this.propagate("drag", e) || this.position;
@@ -226,9 +228,10 @@
 			
 		},
 		clear: function() {
-			if(this.options.helper != 'original') this.helper.remove();
+			if(this.options.helper != 'original' && !this.cancelHelperRemoval) this.helper.remove();
 			if($.ui.ddmanager) $.ui.ddmanager.current = null;
 			this.helper = null;
+			this.cancelHelperRemoval = false;
 		},
 		
 		// From now on bulk stuff - mainly helpers
@@ -237,6 +240,7 @@
 			return {
 				helper: this.helper,
 				position: this.position,
+				absolutePosition: this.positionAbs,
 				options: this.options			
 			};
 		},
@@ -341,39 +345,188 @@
 			var i = $(this).data("draggable");
 
 			if(i.overflowY[0] != document && i.overflowY[0].tagName != 'HTML') {
-
 				if((i.overflowYOffset.top + i.overflowY[0].offsetHeight) - e.pageY < o.scrollSensitivity)
 					i.overflowY[0].scrollTop = i.overflowY[0].scrollTop + o.scrollSpeed;
-	
 				if(e.pageY - i.overflowYOffset.top < o.scrollSensitivity)
 					i.overflowY[0].scrollTop = i.overflowY[0].scrollTop - o.scrollSpeed;
 								
 			} else {
-				
 				if(e.pageY - $(document).scrollTop() < o.scrollSensitivity)
 					$(document).scrollTop($(document).scrollTop() - o.scrollSpeed);
 				if($(window).height() - (e.pageY - $(document).scrollTop()) < o.scrollSensitivity)
 					$(document).scrollTop($(document).scrollTop() + o.scrollSpeed);
-					
 			}
 			
 			if(i.overflowX[0] != document && i.overflowX[0].tagName != 'HTML') {
-
 				if((i.overflowXOffset.left + i.overflowX[0].offsetWidth) - e.pageX < o.scrollSensitivity)
 					i.overflowX[0].scrollLeft = i.overflowX[0].scrollLeft + o.scrollSpeed;
-	
 				if(e.pageX - i.overflowXOffset.left < o.scrollSensitivity)
 					i.overflowX[0].scrollLeft = i.overflowX[0].scrollLeft - o.scrollSpeed;
-			
 			} else {
-				
 				if(e.pageX - $(document).scrollLeft() < o.scrollSensitivity)
 					$(document).scrollLeft($(document).scrollLeft() - o.scrollSpeed);
 				if($(window).width() - (e.pageX - $(document).scrollLeft()) < o.scrollSensitivity)
 					$(document).scrollLeft($(document).scrollLeft() + o.scrollSpeed);
-					
 			}
 
+		}
+	});
+	
+	$.ui.plugin.add("draggable", "snap", {
+		start: function(e, ui) {
+			
+			var inst = $(this).data("draggable");
+			inst.snapElements = [];
+			$(ui.options.snap === true ? '.ui-draggable' : ui.options.snap).each(function() {
+				var $t = $(this); var $o = $t.offset();
+				if(this != inst.element[0]) inst.snapElements.push({
+					item: this,
+					width: $t.outerWidth(), height: $t.outerHeight(),
+					top: $o.top, left: $o.left
+				});
+			});
+			
+		},
+		drag: function(e, ui) {
+
+			var inst = $(this).data("draggable");
+			var d = ui.options.snapTolerance || 20;
+			var x1 = ui.absolutePosition.left, x2 = x1 + inst.helperProportions.width,
+			    y1 = ui.absolutePosition.top, y2 = y1 + inst.helperProportions.height;
+
+			for (var i = inst.snapElements.length - 1; i >= 0; i--){
+
+				var l = inst.snapElements[i].left, r = l + inst.snapElements[i].width, 
+				    t = inst.snapElements[i].top,  b = t + inst.snapElements[i].height;
+
+				//Yes, I know, this is insane ;)
+				if(!((l-d < x1 && x1 < r+d && t-d < y1 && y1 < b+d) || (l-d < x1 && x1 < r+d && t-d < y2 && y2 < b+d) || (l-d < x2 && x2 < r+d && t-d < y1 && y1 < b+d) || (l-d < x2 && x2 < r+d && t-d < y2 && y2 < b+d))) continue;
+
+				if(ui.options.snapMode != 'inner') {
+					var ts = Math.abs(t - y2) <= 20;
+					var bs = Math.abs(b - y1) <= 20;
+					var ls = Math.abs(l - x2) <= 20;
+					var rs = Math.abs(r - x1) <= 20;
+					if(ts) ui.position.top = inst.convertPositionTo("relative", { top: t - inst.helperProportions.height, left: 0 }).top;
+					if(bs) ui.position.top = inst.convertPositionTo("relative", { top: b, left: 0 }).top;
+					if(ls) ui.position.left = inst.convertPositionTo("relative", { top: 0, left: l - inst.helperProportions.width }).left;
+					if(rs) ui.position.left = inst.convertPositionTo("relative", { top: 0, left: r }).left;
+				}
+				
+				if(ui.options.snapMode != 'outer') {
+					var ts = Math.abs(t - y1) <= 20;
+					var bs = Math.abs(b - y2) <= 20;
+					var ls = Math.abs(l - x1) <= 20;
+					var rs = Math.abs(r - x2) <= 20;
+					if(ts) ui.position.top = inst.convertPositionTo("relative", { top: t, left: 0 }).top;
+					if(bs) ui.position.top = inst.convertPositionTo("relative", { top: b - inst.helperProportions.height, left: 0 }).top;
+					if(ls) ui.position.left = inst.convertPositionTo("relative", { top: 0, left: l }).left;
+					if(rs) ui.position.left = inst.convertPositionTo("relative", { top: 0, left: r - inst.helperProportions.width }).left;
+				}
+
+			};
+		}
+	});
+	
+	$.ui.plugin.add("draggable", "connectToSortable", {
+		start: function(e,ui) {
+			var inst = $(this).data("draggable");
+			inst.sortable = $.data($(ui.options.connectToSortable)[0], 'sortable');
+			inst.sortableOffset = inst.sortable.element.offset();
+			inst.sortableOuterWidth = inst.sortable.element.outerWidth();
+			inst.sortableOuterHeight = inst.sortable.element.outerHeight();
+			if(inst.sortable.options.revert) inst.sortable.shouldRevert = true;
+		},
+		stop: function(e,ui) {
+			//If we are still over the sortable, we fake the stop event of the sortable, but also remove helper
+			var instDraggable = $(this).data("draggable");
+			var inst = instDraggable.sortable;
+			
+			if(inst.isOver) {
+				inst.isOver = 0;
+				instDraggable.cancelHelperRemoval = true; //Don't remove the helper in the draggable instance
+				inst.cancelHelperRemoval = false; //Remove it in the sortable instance (so sortable plugins like revert still work)
+				if(inst.shouldRevert) inst.options.revert = true; //revert here
+				inst.stop(e);
+				inst.options.helper = "original";
+			}
+		},
+		drag: function(e,ui) {
+			//This is handy: We reuse the intersectsWith method for checking if the current draggable helper
+			//intersects with the sortable container
+			var instDraggable = $(this).data("draggable");
+			var inst = instDraggable.sortable;
+			instDraggable.position.absolute = ui.absolutePosition; //Sorry, this is an ugly API fix
+			
+			if(inst.intersectsWith.call(instDraggable, {
+				left: instDraggable.sortableOffset.left, top: instDraggable.sortableOffset.top,
+				width: instDraggable.sortableOuterWidth, height: instDraggable.sortableOuterHeight
+			})) {
+				//If it intersects, we use a little isOver variable and set it once, so our move-in stuff gets fired only once
+				if(!inst.isOver) {
+					inst.isOver = 1;
+					
+					//Cache the width/height of the new helper
+					var height = inst.options.placeholderElement ? $(inst.options.placeholderElement, $(inst.options.items, inst.element)).innerHeight() : $(inst.options.items, inst.element).innerHeight();
+					var width = inst.options.placeholderElement ? $(inst.options.placeholderElement, $(inst.options.items, inst.element)).innerWidth() : $(inst.options.items, inst.element).innerWidth();
+
+					//Now we fake the start of dragging for the sortable instance,
+					//by cloning the list group item, appending it to the sortable and using it as inst.currentItem
+					//We can then fire the start event of the sortable with our passed browser event, and our own helper (so it doesn't create a new one)
+					inst.currentItem = $(this).clone().appendTo(inst.element);
+					inst.options.helper = function() { return ui.helper[0]; };
+					inst.start(e);
+					
+					//Because the browser event is way off the new appended portlet, we modify a couple of variables to reflect the changes
+					inst.clickOffset.top = instDraggable.offset.click.top;
+					inst.clickOffset.left = instDraggable.offset.click.left;
+					inst.offset.left -= ui.absolutePosition.left - inst.position.absolute.left;
+					inst.offset.top -= ui.absolutePosition.top - inst.position.absolute.top;
+					
+					//Do a nifty little helper animation: Animate it to the portlet's size (just takes the first 'li' element in the sortable now)
+					inst.helperProportions = { width:  width, height: height}; //We have to reset the helper proportions, because we are doing our animation there
+					ui.helper.animate({ height: height, width: width}, 500);
+					instDraggable.propagate("toSortable", e);
+				
+				}
+
+				//Provided we did all the previous steps, we can fire the drag event of the sortable on every draggable drag, when it intersects with the sortable
+				if(inst.currentItem) inst.drag(e);
+				
+			} else {
+				
+				//If it doesn't intersect with the sortable, and it intersected before,
+				//we fake the drag stop of the sortable, but make sure it doesn't remove the helper by using cancelHelperRemoval
+				if(inst.isOver) {
+					inst.isOver = 0;
+					inst.cancelHelperRemoval = true;
+					inst.options.revert = false; //No revert here
+					inst.stop(e);
+					inst.options.helper = "original";
+					
+					//Now we remove our currentItem, the list group clone again, and the placeholder, and animate the helper back to it's original size
+					inst.currentItem.remove();
+					inst.placeholder.remove();
+					
+					ui.helper.animate({ height: this.innerHeight(), width: this.innerWidth() }, 500);
+					instDraggable.propagate("fromSortable", e);
+				}
+				
+			};
+		}
+	});
+	
+	$.ui.plugin.add("draggable", "stack", {
+		start: function(e,ui) {
+			var group = $.makeArray($(ui.options.stack.group)).sort(function(a,b) {
+				return (parseInt($(a).css("zIndex")) || ui.options.stack.min) - (parseInt($(b).css("zIndex")) || ui.options.stack.min);
+			});
+			
+			$(group).each(function(i) {
+				this.style.zIndex = ui.options.stack.min + i;
+			});
+			
+			this[0].style.zIndex = ui.options.stack.min + group.length;
 		}
 	});
 	
