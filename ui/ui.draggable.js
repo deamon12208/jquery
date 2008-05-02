@@ -48,7 +48,7 @@
 			if($.ui.ddmanager) $.ui.ddmanager.current = this;
 			
 			//Create and append the visible helper
-			this.helper = typeof o.helper == 'function' ? $(o.helper.apply(this.element[0], [e])) : (o.helper == 'clone' ? this.element.clone() : this.element);
+			this.helper = $.isFunction(o.helper) ? $(o.helper.apply(this.element[0], [e])) : (o.helper == 'clone' ? this.element.clone() : this.element);
 			if(!this.helper.parents('body').length) this.helper.appendTo((o.appendTo == 'parent' ? this.element[0].parentNode : o.appendTo));
 
 			/*
@@ -280,6 +280,68 @@
 		},
 		stop: function(e, ui) {
 			$("div.DragDropIframeFix").each(function() { this.parentNode.removeChild(this); }); //Remove frame helpers	
+		}
+	});
+	
+	$.ui.plugin.add("draggable", "scroll", {
+		start: function(e, ui) {
+			var o = ui.options;
+			var i = $(this).data("draggable");
+			o.scrollSensitivity	= o.scrollSensitivity || 20;
+			o.scrollSpeed		= o.scrollSpeed || 20;
+
+			i.overflowY = function(el) {
+				do { if(/auto|scroll/.test(el.css('overflow')) || (/auto|scroll/).test(el.css('overflow-y'))) return el; el = el.parent(); } while (el[0].parentNode);
+				return $(document);
+			}(this);
+			i.overflowX = function(el) {
+				do { if(/auto|scroll/.test(el.css('overflow')) || (/auto|scroll/).test(el.css('overflow-x'))) return el; el = el.parent(); } while (el[0].parentNode);
+				return $(document);
+			}(this);
+			
+			if(i.overflowY[0] != document && i.overflowY[0].tagName != 'HTML') i.overflowYOffset = i.overflowY.offset();
+			if(i.overflowX[0] != document && i.overflowX[0].tagName != 'HTML') i.overflowXOffset = i.overflowX.offset();
+			
+		},
+		drag: function(e, ui) {
+			
+			var o = ui.options;
+			var i = $(this).data("draggable");
+
+			if(i.overflowY[0] != document && i.overflowY[0].tagName != 'HTML') {
+
+				if((i.overflowYOffset.top + i.overflowY[0].offsetHeight) - e.pageY < o.scrollSensitivity)
+					i.overflowY[0].scrollTop = i.overflowY[0].scrollTop + o.scrollSpeed;
+	
+				if(e.pageY - i.overflowYOffset.top < o.scrollSensitivity)
+					i.overflowY[0].scrollTop = i.overflowY[0].scrollTop - o.scrollSpeed;
+								
+			} else {
+				
+				if(e.pageY - $(document).scrollTop() < o.scrollSensitivity)
+					$(document).scrollTop($(document).scrollTop() - o.scrollSpeed);
+				if($(window).height() - (e.pageY - $(document).scrollTop()) < o.scrollSensitivity)
+					$(document).scrollTop($(document).scrollTop() + o.scrollSpeed);
+					
+			}
+			
+			if(i.overflowX[0] != document && i.overflowX[0].tagName != 'HTML') {
+
+				if((i.overflowXOffset.left + i.overflowX[0].offsetWidth) - e.pageX < o.scrollSensitivity)
+					i.overflowX[0].scrollLeft = i.overflowX[0].scrollLeft + o.scrollSpeed;
+	
+				if(e.pageX - i.overflowXOffset.left < o.scrollSensitivity)
+					i.overflowX[0].scrollLeft = i.overflowX[0].scrollLeft - o.scrollSpeed;
+			
+			} else {
+				
+				if(e.pageX - $(document).scrollLeft() < o.scrollSensitivity)
+					$(document).scrollLeft($(document).scrollLeft() - o.scrollSpeed);
+				if($(window).width() - (e.pageX - $(document).scrollLeft()) < o.scrollSensitivity)
+					$(document).scrollLeft($(document).scrollLeft() + o.scrollSpeed);
+					
+			}
+
 		}
 	});
 	
