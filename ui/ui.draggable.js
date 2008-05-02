@@ -50,6 +50,7 @@
 			//Create and append the visible helper
 			this.helper = $.isFunction(o.helper) ? $(o.helper.apply(this.element[0], [e])) : (o.helper == 'clone' ? this.element.clone() : this.element);
 			if(!this.helper.parents('body').length) this.helper.appendTo((o.appendTo == 'parent' ? this.element[0].parentNode : o.appendTo));
+			if(!this.helper.css("position") || this.helper.css("position") == "static") this.helper.css("position", "absolute");
 
 			/*
 			 * - Position generation -
@@ -83,6 +84,13 @@
 			this.originalPosition = this.generatePosition(e);												//Generate the original position
 			this.helperProportions = { width: this.helper.outerWidth(), height: this.helper.outerHeight() };//Cache the helper size
 
+			if(o.cursorAt) {
+				if(o.cursorAt.left != undefined) this.offset.click.left = o.cursorAt.left;
+				if(o.cursorAt.right != undefined) this.offset.click.left = this.helperProportions.width - o.cursorAt.right;
+				if(o.cursorAt.top != undefined) this.offset.click.top = o.cursorAt.top;
+				if(o.cursorAt.bottom != undefined) this.offset.click.top = this.helperProportions.height - o.cursorAt.bottom;
+			}
+
 
 			/*
 			 * - Position constraining -
@@ -92,15 +100,15 @@
 			if(o.containment) {
 				if(o.containment == 'parent') o.containment = this.helper[0].parentNode;
 				if(o.containment == 'document') this.containment = [0,0,$(document).width(), ($(document).height() || document.body.parentNode.scrollHeight)];
-				if(!(/(document|window|parent)/).test(o.containment)) {
+				if(!(/^(document|window|parent)$/).test(o.containment)) {
 					var ce = $(o.containment)[0];
 					var co = $(o.containment).offset();
 
 					this.containment = [
 						co.left + parseInt($(ce).css("borderLeftWidth"),10) - this.offset.relative.left - this.offset.parent.left,
 						co.top + parseInt($(ce).css("borderTopWidth"),10) - this.offset.relative.top - this.offset.parent.top,
-						co.left+Math.max(ce.scrollWidth,ce.offsetWidth) - parseInt($(ce).css("borderRightWidth"),10) - this.offset.relative.left - this.offset.parent.left - this.helperProportions.width - parseInt(this.element.css("marginLeft") || 0,10) - parseInt(this.element.css("marginRight") || 0,10),
-						co.top+Math.max(ce.scrollHeight,ce.offsetHeight) - parseInt($(ce).css("borderBottomWidth"),10) - this.offset.relative.top - this.offset.parent.top - this.helperProportions.height - parseInt(this.element.css("marginTop") || 0,10) - parseInt(this.element.css("marginTop") || 0,10)
+						co.left+Math.max(ce.scrollWidth,ce.offsetWidth) - parseInt($(ce).css("borderLeftWidth"),10) - this.offset.relative.left - this.offset.parent.left - this.helperProportions.width - parseInt(this.element.css("marginLeft") || 0,10) - parseInt(this.element.css("marginRight") || 0,10),
+						co.top+Math.max(ce.scrollHeight,ce.offsetHeight) - parseInt($(ce).css("borderTopWidth"),10) - this.offset.relative.top - this.offset.parent.top - this.helperProportions.height - parseInt(this.element.css("marginTop") || 0,10) - parseInt(this.element.css("marginTop") || 0,10)
 					];
 				}
 			}
