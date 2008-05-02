@@ -55,32 +55,37 @@
 			/*
 			 * - Position generation -
 			 * This block generates everything position related - it's the core of draggables.
-			 */			
-			
+			 */
+			 
+			this.margins = {																				//Cache the margins
+				left: (parseInt(this.element.css("marginLeft"),10) || 0),
+				top: (parseInt(this.element.css("marginTop"),10) || 0)
+			};		
+
 			this.cssPosition = this.helper.css("position");													//Store the helper's css position
 			this.offset = this.element.offset();															//The element's absolute position on the page
 			this.offset = {																					//Substract the margins from the element's absolute offset
-				top: this.offset.top - parseInt(this.element.css("marginTop") || 0,10),
-				left: this.offset.left - parseInt(this.element.css("marginLeft") || 0,10)
+				top: this.offset.top - this.margins.top,
+				left: this.offset.left - this.margins.left
 			};
-			
+
 			this.offset.click = {																			//Where the click happened, relative to the element
 				left: e.pageX - this.offset.left,
 				top: e.pageY - this.offset.top
 			};
-			
+	
 			this.offsetParent = this.helper.offsetParent(); var po = this.offsetParent.offset();			//Get the offsetParent and cache its position
 			this.offset.parent = {																			//Store its position plus border
-				top: po.top + parseInt(this.offsetParent.css("borderTopWidth") || 0,10),
-				left: po.left + parseInt(this.offsetParent.css("borderLeftWidth") || 0,10)
+				top: po.top + (parseInt(this.offsetParent.css("borderTopWidth"),10) || 0),
+				left: po.left + (parseInt(this.offsetParent.css("borderLeftWidth"),10) || 0)
 			};
-			
+	
 			var p = this.element.position();																//This is a relative to absolute position minus the actual position calculation - only used for relative positioned helpers
 			this.offset.relative = this.cssPosition == "relative" ? {
-				top: p.top - parseInt(this.helper.css("top") || 0,10) + this.offsetParent[0].scrollTop,
-				left: p.left - parseInt(this.helper.css("left") || 0,10) + this.offsetParent[0].scrollLeft
+				top: p.top - (parseInt(this.helper.css("top"),10) || 0) + this.offsetParent[0].scrollTop,
+				left: p.left - (parseInt(this.helper.css("left"),10) || 0) + this.offsetParent[0].scrollLeft
 			} : { top: 0, left: 0 };
-			
+		
 			this.originalPosition = this.generatePosition(e);												//Generate the original position
 			this.helperProportions = { width: this.helper.outerWidth(), height: this.helper.outerHeight() };//Cache the helper size
 
@@ -105,10 +110,10 @@
 					var co = $(o.containment).offset();
 
 					this.containment = [
-						co.left + parseInt($(ce).css("borderLeftWidth"),10) - this.offset.relative.left - this.offset.parent.left,
-						co.top + parseInt($(ce).css("borderTopWidth"),10) - this.offset.relative.top - this.offset.parent.top,
-						co.left+Math.max(ce.scrollWidth,ce.offsetWidth) - parseInt($(ce).css("borderLeftWidth"),10) - this.offset.relative.left - this.offset.parent.left - this.helperProportions.width - parseInt(this.element.css("marginLeft") || 0,10) - parseInt(this.element.css("marginRight") || 0,10),
-						co.top+Math.max(ce.scrollHeight,ce.offsetHeight) - parseInt($(ce).css("borderTopWidth"),10) - this.offset.relative.top - this.offset.parent.top - this.helperProportions.height - parseInt(this.element.css("marginTop") || 0,10) - parseInt(this.element.css("marginTop") || 0,10)
+						co.left + (parseInt($(ce).css("borderLeftWidth"),10) || 0) - this.offset.relative.left - this.offset.parent.left,
+						co.top + (parseInt($(ce).css("borderTopWidth"),10) || 0) - this.offset.relative.top - this.offset.parent.top,
+						co.left+Math.max(ce.scrollWidth,ce.offsetWidth) - (parseInt($(ce).css("borderLeftWidth"),10) || 0) - this.offset.relative.left - this.offset.parent.left - this.helperProportions.width - this.margins.left - (parseInt(this.element.css("marginRight"),10) || 0),
+						co.top+Math.max(ce.scrollHeight,ce.offsetHeight) - (parseInt($(ce).css("borderTopWidth"),10) || 0) - this.offset.relative.top - this.offset.parent.top - this.helperProportions.height - this.margins.top - (parseInt(this.element.css("marginBottom"),10) || 0)
 					];
 				}
 			}
@@ -122,6 +127,24 @@
 
 			return false;
 
+		},
+		generateAbsolutePosition: function(pos) {
+			return {
+				top: (
+					pos.top																	// the calculated relative position
+					+ this.offset.relative.top												// Only for relative positioned nodes: Relative offset from element to offset parent
+					+ this.offset.parent.top												// The offsetParent's offset without borders (offset + border)
+					- (this.cssPosition == "fixed" ? 0 : this.offsetParent[0].scrollTop)	// The offsetParent's scroll position, not if the element is fixed
+					+ this.margins.top														//Add the margin (you don't want the margin counting in intersection methods)
+				),
+				left: (
+					pos.left																// the calculated relative position
+					+ this.offset.relative.left												// Only for relative positioned nodes: Relative offset from element to offset parent
+					+ this.offset.parent.left												// The offsetParent's offset without borders (offset + border)
+					- (this.cssPosition == "fixed" ? 0 : this.offsetParent[0].scrollLeft)	// The offsetParent's scroll position, not if the element is fixed
+					+ this.margins.left														//Add the margin (you don't want the margin counting in intersection methods)
+				)
+			};
 		},
 		generatePosition: function(e) {
 			
@@ -142,7 +165,7 @@
 					+ (this.cssPosition == "fixed" ? 0 : this.offsetParent[0].scrollLeft)	// The offsetParent's scroll position, not if the element is fixed
 				)
 			};
-			
+
 			if(!this.originalPosition) return position;										//If we are not dragging yet, we won't check for options
 			
 			
@@ -171,6 +194,7 @@
 
 			//Compute the helpers position
 			this.position = this.generatePosition(e);
+			this.positionAbs = this.generateAbsolutePosition(this.position);
 
 			//Call plugins and callbacks and use the resulting position if something is returned		
 			this.position = this.propagate("drag", e) || this.position;
@@ -182,7 +206,7 @@
 
 		},
 		stop: function(e) {
-			
+		
 			//If we are using droppables, inform the manager about the drop
 			if ($.ui.ddmanager && !this.options.dropBehaviour)
 				$.ui.ddmanager.drop(this, e);
