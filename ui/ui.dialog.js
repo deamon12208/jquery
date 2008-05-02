@@ -206,8 +206,42 @@
 			var wnd = $(window), doc = $(document), top = doc.scrollTop(), left = doc.scrollLeft();
 			if (pos.constructor == Array) {
 				// [x, y]
-				top += pos[1];
-				left += pos[0];
+				if (pos[0].constructor == Number) {
+					left += pos[0];
+				} else {
+					switch (pos[0]) {
+						case 'center':
+							left += (wnd.width() / 2) - (uiDialog.width() / 2);
+							break;
+						case 'left':
+							left += 0;
+							break;
+						case 'right':
+							left += (wnd.width()) - (uiDialog.width());
+							break;
+						default:
+							//center
+							left += (wnd.width() / 2) - (uiDialog.width() / 2);
+					}
+				}
+				if (pos[1].constructor == Number) {
+					top += pos[1];
+				} else {
+					switch (pos[1]) {
+						case 'middle':
+							top += (wnd.height() / 2) - (uiDialog.height() / 2);
+							break;
+						case 'top':
+							top += 0;
+							break;
+						case 'bottom':
+							top += (wnd.height()) - (uiDialog.height());
+							break;
+						default:
+							//middle
+							top += (wnd.height() / 2) - (uiDialog.height() / 2);
+					}
+				}
 			} else {
 				switch (pos) {
 					case 'center':

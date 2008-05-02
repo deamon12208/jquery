@@ -59,6 +59,11 @@
 					"Array-10-20" : "$('#foo').dialog({\n\t position: [10, 20] \n});",
 					"Array-300-80" : "$('#foo').dialog({\n\t position: [300, 80] \n});",
 					"Array-80-300" : "$('#foo').dialog({\n\t position: [80, 300] \n});",
+					"Array-left-50" : "$('#foo').dialog({\n\t position: ['left', 50] \n});",
+					"Array-right-bottom" : "$('#foo').dialog({\n\t position: ['right', 'bottom'] \n});",
+					"Array-80-middle" : "$('#foo').dialog({\n\t position: [80, 'middle'] \n});",
+					"Array-foo-top" : "$('#foo').dialog({\n\t position: ['foo', 'top'] \n});",
+					"Array-100-foo" : "$('#foo').dialog({\n\t position: [100, 'foo'] \n});",
 					"foo" : "$('#foo').dialog({\n\t position: 'foo' \n});"
 				},
 				"resizable" : {
