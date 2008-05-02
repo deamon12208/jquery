@@ -68,17 +68,17 @@
 				top: e.pageY - this.offset.top
 			};
 			
-			var p = this.element.position();																//This is a relative to absolute position minus the actual position calculation - only used for relative positioned helpers
-			this.offset.relative = this.cssPosition == "relative" ? {
-				top: p.top - parseInt(this.helper.css("top") || 0,10),
-				left: p.left - parseInt(this.helper.css("left") || 0,10)
-			} : { top: 0, left: 0 };
-			
 			this.offsetParent = this.helper.offsetParent(); var po = this.offsetParent.offset();			//Get the offsetParent and cache its position
 			this.offset.parent = {																			//Store its position plus border
 				top: po.top + parseInt(this.offsetParent.css("borderTopWidth") || 0,10),
 				left: po.left + parseInt(this.offsetParent.css("borderLeftWidth") || 0,10)
 			};
+			
+			var p = this.element.position();																//This is a relative to absolute position minus the actual position calculation - only used for relative positioned helpers
+			this.offset.relative = this.cssPosition == "relative" ? {
+				top: p.top - parseInt(this.helper.css("top") || 0,10) + this.offsetParent[0].scrollTop,
+				left: p.left - parseInt(this.helper.css("left") || 0,10) + this.offsetParent[0].scrollLeft
+			} : { top: 0, left: 0 };
 			
 			this.originalPosition = this.generatePosition(e);												//Generate the original position
 			this.helperProportions = { width: this.helper.outerWidth(), height: this.helper.outerHeight() };//Cache the helper size
