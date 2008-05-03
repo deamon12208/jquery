@@ -203,74 +203,44 @@
 		options.bgiframe && $.fn.bgiframe && uiDialog.bgiframe();
 
 		this.position = function(pos) {
-			var wnd = $(window), doc = $(document), top = doc.scrollTop(), left = doc.scrollLeft();
-			if (pos.constructor == Array) {
-				// [x, y]
-				if (pos[0].constructor == Number) {
-					left += pos[0];
-				} else {
-					switch (pos[0]) {
-						case 'center':
-							left += (wnd.width() / 2) - (uiDialog.width() / 2);
-							break;
-						case 'left':
-							left += 0;
-							break;
-						case 'right':
-							left += (wnd.width()) - (uiDialog.width());
-							break;
-						default:
-							//center
-							left += (wnd.width() / 2) - (uiDialog.width() / 2);
-					}
-				}
-				if (pos[1].constructor == Number) {
-					top += pos[1];
-				} else {
-					switch (pos[1]) {
-						case 'middle':
-							top += (wnd.height() / 2) - (uiDialog.height() / 2);
-							break;
-						case 'top':
-							top += 0;
-							break;
-						case 'bottom':
-							top += (wnd.height()) - (uiDialog.height());
-							break;
-						default:
-							//middle
-							top += (wnd.height() / 2) - (uiDialog.height() / 2);
-					}
-				}
+			var wnd = $(window), doc = $(document), minTop = top = doc.scrollTop(), left = doc.scrollLeft();
+			if ($.inArray(pos, ['center','top','right','bottom','left']) >= 0) {
+				pos = [pos == 'right' || pos == 'left' ? pos : 'center', pos == 'top' || pos == 'bottom' ? pos : 'middle'];
+			}
+			if (pos.constructor != Array) {
+				pos == ['center', 'middle']
+			}
+			if (pos[0].constructor == Number) {
+				left += pos[0];
 			} else {
-				switch (pos) {
-					case 'center':
-						top += (wnd.height() / 2) - (uiDialog.height() / 2);
-						left += (wnd.width() / 2) - (uiDialog.width() / 2);
-						break;
-					case 'top':
-						top += 0;
-						left += (wnd.width() / 2) - (uiDialog.width() / 2);
-						break;
-					case 'right':
-						top += (wnd.height() / 2) - (uiDialog.height() / 2);
-						left += (wnd.width()) - (uiDialog.width());
-						break;
-					case 'bottom':
-						top += (wnd.height()) - (uiDialog.height());
-						left += (wnd.width() / 2) - (uiDialog.width() / 2);
-						break;
+				switch (pos[0]) {
 					case 'left':
-						top += (wnd.height() / 2) - (uiDialog.height() / 2);
 						left += 0;
 						break;
+					case 'right':
+						left += (wnd.width()) - (uiDialog.width());
+						break;
+					case 'center':
 					default:
-						//center
-						top += (wnd.height() / 2) - (uiDialog.height() / 2);
 						left += (wnd.width() / 2) - (uiDialog.width() / 2);
 				}
 			}
-			top = top < doc.scrollTop() ? doc.scrollTop() : top;
+			if (pos[1].constructor == Number) {
+				top += pos[1];
+			} else {
+				switch (pos[1]) {
+					case 'top':
+						top += 0;
+						break;
+					case 'bottom':
+						top += (wnd.height()) - (uiDialog.height());
+						break;
+					case 'middle':
+					default:
+						top += (wnd.height() / 2) - (uiDialog.height() / 2);
+				}
+			}
+			top = top < minTop ? minTop : top;
 			uiDialog.css({top: top, left: left});
 		}
 		

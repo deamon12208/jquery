@@ -64,6 +64,7 @@
 					"Array-80-middle" : "$('#foo').dialog({\n\t position: [80, 'middle'] \n});",
 					"Array-foo-top" : "$('#foo').dialog({\n\t position: ['foo', 'top'] \n});",
 					"Array-100-foo" : "$('#foo').dialog({\n\t position: [100, 'foo'] \n});",
+					"Array-0--40" : "$('#foo').dialog({\n\t position: [0, -40] \n});",
 					"foo" : "$('#foo').dialog({\n\t position: 'foo' \n});"
 				},
 				"resizable" : {
