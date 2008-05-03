@@ -239,6 +239,7 @@
 			var dropped = false;
 			$.each($.ui.ddmanager.droppables, function() {
 				
+				if(!this.options) return;
 				if (!this.options.disabled && this.visible && $.ui.intersect(draggable, this, this.options.tolerance))
 					dropped = this.drop.call(this, e);
 				
