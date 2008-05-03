@@ -85,6 +85,7 @@
 					$(".ui-dialog-title", uiDialogTitlebar).text(value);
 					break;
 				case "width":
+					uiDialog.width(value);
 					break;
 			}
 			options[key] = value;
