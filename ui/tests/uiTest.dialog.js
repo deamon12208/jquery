@@ -72,7 +72,7 @@
 					"false" : "$('#foo').dialog({\n\t resizable: false \n});"
 				},
 				"title" : {
-					"attribute" : "$('#foo')\n  .attr( 'title', 'Dialog Title' )\n  .dialog();",
+					"attribute" : "$('#foo')\n\t .attr( 'title', 'Dialog Title' )\n\t .dialog();",
 					"option" : "$('#foo').dialog({\n\t title: 'Dialog Title' \n});"
 				},
 				"width" : {
@@ -125,14 +125,14 @@
 				}
 			},
 			"callbacks": {
-				"open" : "$('#foo').dialog({\n  open: function(ev, ui) {\n    uiTestLog('opened');\n  }\n});",
-				"close" : "$('#foo').dialog({\n  close: function(ev, ui) {\n    uiTestLog('closed');\n  }\n});",
-				"dragStart" : "$('#foo').dialog({\n  dragStart: function(ev, ui) {\n    uiTestLog('dragStart');\n  }\n});",
-				"drag" : "$('#foo').dialog({\n  drag: function(ev, ui) {\n    uiTestLog('drag');\n  }\n});",
-				"dragStop" : "$('#foo').dialog({\n  dragStop: function(ev, ui) {\n    uiTestLog('dragStop');\n  }\n});",
-				"resizeStart" : "$('#foo').dialog({\n  resizeStart: function(ev, ui) {\n    uiTestLog('resizeStart');\n  }\n});",
-				"resize" : "$('#foo').dialog({\n  resize: function(ev, ui) {\n    uiTestLog('resize');\n  }\n});",
-				"resizeStop" : "$('#foo').dialog({\n  resizeStop: function(ev, ui) {\n    uiTestLog('resizeStop');\n  }\n});"
+				"open" : "$('#foo').dialog({\n open: function(ev, ui) {\n uiTestLog('opened');\n }\n});",
+				"close" : "$('#foo').dialog({\n close: function(ev, ui) {\n uiTestLog('closed');\n }\n});",
+				"dragStart" : "$('#foo').dialog({\n dragStart: function(ev, ui) {\n uiTestLog('dragStart');\n }\n});",
+				"drag" : "$('#foo').dialog({\n drag: function(ev, ui) {\n uiTestLog('drag');\n }\n});",
+				"dragStop" : "$('#foo').dialog({\n dragStop: function(ev, ui) {\n uiTestLog('dragStop');\n }\n});",
+				"resizeStart" : "$('#foo').dialog({\n resizeStart: function(ev, ui) {\n uiTestLog('resizeStart');\n }\n});",
+				"resize" : "$('#foo').dialog({\n resize: function(ev, ui) {\n uiTestLog('resize');\n }\n});",
+				"resizeStop" : "$('#foo').dialog({\n resizeStop: function(ev, ui) {\n uiTestLog('resizeStop');\n }\n});"
 			},
 			"methods": {
 				"open" : "$('#foo').dialog({ width: 450, autoOpen: false });\n setTimeout(\"$('#foo').dialog('open');\", 1000)",

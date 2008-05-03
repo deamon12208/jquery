@@ -89,7 +89,7 @@ $(window).bind('load', function() {
 	// handle the trash icon behavior
 	$('a.tb_trash').livequery('click', function() {
 		var $this = $(this);
-		var $img  = $this.parent().siblings('img');
+		var $img = $this.parent().siblings('img');
 		var $item = $this.parents('li');
 
 		$item.fadeOut('slow', function() {
@@ -121,7 +121,7 @@ $(window).bind('load', function() {
 
 function createGalleryItem(img) {
 	var title = img.getAttribute('alt');
-	var href  = img.getAttribute('src').replace(/thumbs\//, '');
+	var href = img.getAttribute('src').replace(/thumbs\//, '');
 
 	var $item = $('<li><p>'+title+'</p><div><a href="#" title="Trash me" class="tb_trash">Trash me</a><a href="'+href+'" title="See me supersized" class="tb_supersize">See me supersized</a></div></li>').hide();
 	$item.prepend($(img));

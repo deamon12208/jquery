@@ -8,8 +8,8 @@
  * http://docs.jquery.com/UI/Droppables
  *
  * Depends:
- *   ui.base.js
- *   ui.draggable.js
+ *	ui.base.js
+ *	ui.draggable.js
  *
  * Revision: $Id$
  */
@@ -169,9 +169,9 @@
 		if (!droppable.offset) return false;
 		
 		var x1 = (draggable.positionAbs || draggable.position.absolute).left, x2 = x1 + draggable.helperProportions.width,
-		    y1 = (draggable.positionAbs || draggable.position.absolute).top, y2 = y1 + draggable.helperProportions.height;
+			y1 = (draggable.positionAbs || draggable.position.absolute).top, y2 = y1 + draggable.helperProportions.height;
 		var l = droppable.offset.left, r = l + droppable.proportions.width,
-		    t = droppable.offset.top,  b = t + droppable.proportions.height;
+			t = droppable.offset.top, b = t + droppable.proportions.height;
 		
 		switch (toleranceMode) {
 			case 'fit':
@@ -183,28 +183,29 @@
 				if(x2 > l && x1 < l) return 1; //Crosses left edge
 				if(x1 < r && x2 > r) return 2; //Crosses right edge
 				
-				//return (   l < x1 && x2 < r
+				//return (l < x1 && x2 < r
 				//	&& t < y1 && y2 < b);
 				break;
 			case 'intersect':
-				return (   l < x1 + (draggable.helperProportions.width  / 2)    // Right Half
-					&&     x2 - (draggable.helperProportions.width  / 2) < r    // Left Half
-					&& t < y1 + (draggable.helperProportions.height / 2)        // Bottom Half
-					&&     y2 - (draggable.helperProportions.height / 2) < b ); // Top Half
+				return (l < x1 + (draggable.helperProportions.width / 2) // Right Half
+					&& x2 - (draggable.helperProportions.width / 2) < r // Left Half
+					&& t < y1 + (draggable.helperProportions.height / 2) // Bottom Half
+					&& y2 - (draggable.helperProportions.height / 2) < b ); // Top Half
 				break;
 			case 'pointer':
-				return (   l < ((draggable.positionAbs || draggable.position.absolute).left + (draggable.clickOffset || draggable.offset.click).left) && ((draggable.positionAbs || draggable.position.absolute).left + (draggable.clickOffset || draggable.offset.click).left) < r
+				return (l < ((draggable.positionAbs || draggable.position.absolute).left + (draggable.clickOffset || draggable.offset.click).left) && ((draggable.positionAbs || draggable.position.absolute).left + (draggable.clickOffset || draggable.offset.click).left) < r
 					&& t < ((draggable.positionAbs || draggable.position.absolute).top + (draggable.clickOffset || draggable.offset.click).top) && ((draggable.positionAbs || draggable.position.absolute).top + (draggable.clickOffset || draggable.offset.click).top) < b);
 				break;
 			case 'touch':
-				return ( (y1 >= t && y1 <= b) ||	// Top edge touching
-						 (y2 >= t && y2 <= b) ||	// Bottom edge touching
-						 (y1 < t && y2 > b)		// Surrounded vertically
-						 ) && (
-						 (x1 >= l && x1 <= r) ||	// Left edge touching
-						 (x2 >= l && x2 <= r) ||	// Right edge touching
-						 (x1 < l && x2 > r)		// Surrounded horizontally
-						);
+				return (
+						(y1 >= t && y1 <= b) ||	// Top edge touching
+						(y2 >= t && y2 <= b) ||	// Bottom edge touching
+						(y1 < t && y2 > b)		// Surrounded vertically
+					) && (
+						(x1 >= l && x1 <= r) ||	// Left edge touching
+						(x2 >= l && x2 <= r) ||	// Right edge touching
+						(x1 < l && x2 > r)		// Surrounded horizontally
+					);
 				break;
 			default:
 				return false;

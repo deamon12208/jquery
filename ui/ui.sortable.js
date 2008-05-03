@@ -8,7 +8,7 @@
  * http://docs.jquery.com/UI/Sortables
  *
  * Depends:
- *   ui.base.js
+ *	ui.base.js
  *
  * Revision: $Id$
  */
@@ -167,21 +167,21 @@
 		intersectsWith: function(item) {
 			
 			var x1 = this.position.absolute.left, x2 = x1 + this.helperProportions.width,
-			    y1 = this.position.absolute.top, y2 = y1 + this.helperProportions.height;
+			y1 = this.position.absolute.top, y2 = y1 + this.helperProportions.height;
 			var l = item.left, r = l + item.width, 
-			    t = item.top,  b = t + item.height;
+			t = item.top, b = t + item.height;
 			
-			return (   l < x1 + (this.helperProportions.width  / 2)    // Right Half
-				&&     x2 - (this.helperProportions.width  / 2) < r    // Left Half
-				&& t < y1 + (this.helperProportions.height / 2)        // Bottom Half
-				&&     y2 - (this.helperProportions.height / 2) < b ); // Top Half
+			return (l < x1 + (this.helperProportions.width / 2) // Right Half
+				&& x2 - (this.helperProportions.width / 2) < r // Left Half
+				&& t < y1 + (this.helperProportions.height / 2) // Bottom Half
+				&& y2 - (this.helperProportions.height / 2) < b ); // Top Half
 			
 		},
 		intersectsWithEdge: function(item) {	
 			var x1 = this.position.absolute.left, x2 = x1 + this.helperProportions.width,
-			    y1 = this.position.absolute.top, y2 = y1 + this.helperProportions.height;
+				y1 = this.position.absolute.top, y2 = y1 + this.helperProportions.height;
 			var l = item.left, r = l + item.width, 
-			    t = item.top,  b = t + item.height;
+				t = item.top, b = t + item.height;
 
 			if(this.options.tolerance == "pointer") {
 
@@ -197,10 +197,10 @@
 
 			} else {
 			
-				if (!(   l < x1 + (this.helperProportions.width  / 2)    // Right Half
-					&&     x2 - (this.helperProportions.width  / 2) < r    // Left Half
-					&& t < y1 + (this.helperProportions.height / 2)        // Bottom Half
-					&&     y2 - (this.helperProportions.height / 2) < b )) return false; // Top Half
+				if (!(l < x1 + (this.helperProportions.width / 2) // Right Half
+					&& x2 - (this.helperProportions.width / 2) < r // Left Half
+					&& t < y1 + (this.helperProportions.height / 2) // Bottom Half
+					&& y2 - (this.helperProportions.height / 2) < b )) return false; // Top Half
 				
 				if(this.floating) {
 					if(x2 > l && x1 < l) return 2; //Crosses left edge
@@ -265,18 +265,18 @@
 		refreshPositions: function(fast) {
 			for (var i = this.items.length - 1; i >= 0; i--){
 				var t = this.items[i].item;
-				if(!fast) this.items[i].width 			= (this.options.toleranceElement ? $(this.options.toleranceElement, t) : t).outerWidth();
-				if(!fast) this.items[i].height 			= (this.options.toleranceElement ? $(this.options.toleranceElement, t) : t).outerHeight();
+				if(!fast) this.items[i].width = (this.options.toleranceElement ? $(this.options.toleranceElement, t) : t).outerWidth();
+				if(!fast) this.items[i].height = (this.options.toleranceElement ? $(this.options.toleranceElement, t) : t).outerHeight();
 				var p = (this.options.toleranceElement ? $(this.options.toleranceElement, t) : t).offset();
-				this.items[i].left 						= p.left;
-				this.items[i].top 						= p.top;
+				this.items[i].left = p.left;
+				this.items[i].top = p.top;
 			};
 			for (var i = this.containers.length - 1; i >= 0; i--){
 				var p =this.containers[i].element.offset();
-				this.containers[i].containerCache.left 	= p.left;
-				this.containers[i].containerCache.top 	= p.top;
+				this.containers[i].containerCache.left = p.left;
+				this.containers[i].containerCache.top = p.top;
 				this.containers[i].containerCache.width	= this.containers[i].element.outerWidth();
-				this.containers[i].containerCache.height= this.containers[i].element.outerHeight();
+				this.containers[i].containerCache.height = this.containers[i].element.outerHeight();
 			};
 		},
 		destroy: function() {
@@ -472,7 +472,7 @@
 				var intersection = this.intersectsWithEdge(this.items[i]);
 				if(!intersection) continue;
 				
-				if(     this.items[i].item[0] != this.currentItem[0] //cannot intersect with itself
+				if(this.items[i].item[0] != this.currentItem[0] //cannot intersect with itself
 					&&	this.currentItem[intersection == 1 ? "next" : "prev"]()[0] != this.items[i].item[0] //no useless actions that have been done before
 					&&	!this.currentItem[0].contains(this.items[i].item[0]) //no action if the item moved is the parent of the item checked
 					&& (this.options.type == 'semi-dynamic' ? !this.element[0].contains(this.items[i].item[0]) : true)

@@ -8,7 +8,7 @@
  * http://docs.jquery.com/UI/Selectables
  *
  * Depends:
- *   ui.base.js
+ *	ui.base.js
  *
  * Revision: $Id$
  */

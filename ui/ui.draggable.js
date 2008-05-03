@@ -8,7 +8,7 @@
  * http://docs.jquery.com/UI/Draggables
  *
  * Depends:
- *   ui.base.js
+ *	ui.base.js
  *
  * Revision: $Id$
  */
@@ -56,7 +56,7 @@
 			 * - Position generation -
 			 * This block generates everything position related - it's the core of draggables.
 			 */
-			 
+			
 			this.margins = {																				//Cache the margins
 				left: (parseInt(this.element.css("marginLeft"),10) || 0),
 				top: (parseInt(this.element.css("marginTop"),10) || 0)
@@ -176,12 +176,12 @@
 			 * Constrain the position to a mix of grid, containment.
 			 */
 			if(this.containment) {
-				if(position.left  < this.containment[0]) position.left = this.containment[0];
+				if(position.left < this.containment[0]) position.left = this.containment[0];
 				if(position.top < this.containment[1]) position.top = this.containment[1];
 				if(position.left > this.containment[2]) position.left = this.containment[2];
 				if(position.top > this.containment[3]) position.top = this.containment[3];
 			}
-			 
+			
 			if(o.grid) {
 				var top = this.originalPosition.top + Math.round((position.top - this.originalPosition.top) / o.grid[1]) * o.grid[1];
 				position.top = this.containment ? (!(top < this.containment[1] || top > this.containment[3]) ? top : (!(top < this.containment[1]) ? top - o.grid[1] : top + o.grid[1])) : top;
@@ -392,12 +392,12 @@
 			var inst = $(this).data("draggable");
 			var d = ui.options.snapTolerance || 20;
 			var x1 = ui.absolutePosition.left, x2 = x1 + inst.helperProportions.width,
-			    y1 = ui.absolutePosition.top, y2 = y1 + inst.helperProportions.height;
+				y1 = ui.absolutePosition.top, y2 = y1 + inst.helperProportions.height;
 
 			for (var i = inst.snapElements.length - 1; i >= 0; i--){
 
 				var l = inst.snapElements[i].left, r = l + inst.snapElements[i].width, 
-				    t = inst.snapElements[i].top,  b = t + inst.snapElements[i].height;
+					t = inst.snapElements[i].top, b = t + inst.snapElements[i].height;
 
 				//Yes, I know, this is insane ;)
 				if(!((l-d < x1 && x1 < r+d && t-d < y1 && y1 < b+d) || (l-d < x1 && x1 < r+d && t-d < y2 && y2 < b+d) || (l-d < x2 && x2 < r+d && t-d < y1 && y1 < b+d) || (l-d < x2 && x2 < r+d && t-d < y2 && y2 < b+d))) continue;
@@ -484,8 +484,8 @@
 					inst.offset.top -= ui.absolutePosition.top - inst.position.absolute.top;
 					
 					//Do a nifty little helper animation: Animate it to the portlet's size (just takes the first 'li' element in the sortable now)
-					inst.helperProportions = { width:  width, height: height}; //We have to reset the helper proportions, because we are doing our animation there
-					ui.helper.animate({ height: height, width: width}, 500);
+					inst.helperProportions = {width: width, height: height}; //We have to reset the helper proportions, because we are doing our animation there
+					ui.helper.animate({height: height, width: width}, 500);
 					instDraggable.propagate("toSortable", e);
 				
 				}

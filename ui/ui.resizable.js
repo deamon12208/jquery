@@ -8,7 +8,7 @@
  * http://docs.jquery.com/UI/Resizables
  *
  * Depends:
- *   ui.base.js
+ *	ui.base.js
  *
  * Revision: $Id$
  */
@@ -292,7 +292,7 @@
 				this.helper = this.helper || $('<div style="overflow:hidden;"></div>');
 	
 				// fix ie6 offset
-				var ie6 = $.browser.msie && $.browser.version  < 7, ie6offset = (ie6 ? 1 : 0),
+				var ie6 = $.browser.msie && $.browser.version < 7, ie6offset = (ie6 ? 1 : 0),
 				pxyoffset = ( ie6 ? 2 : -1 );
 	
 				this.helper.addClass(o.proxy).css({
@@ -328,18 +328,18 @@
 			_destroy(el);
 			
 			if (el.is('.ui-wrapper') && wrapped) {
-		  		el.parent().append(
+				El.parent().append(
 					$(wrapped).css({
-			  		position: el.css('position'),
-			  		width: el.outerWidth(),
-			  		height: el.outerHeight(),
-			  		top: el.css('top'),
-			  		left: el.css('left')
-		  		})
+						position: el.css('position'),
+						width: el.outerWidth(),
+						height: el.outerHeight(),
+						top: el.css('top'),
+						left: el.css('left')
+					})
 				).end().remove();
 				
 				_destroy(wrapped);
-	  		}
+			}
 		},
 		enable: function() {
 			this.element.removeClass("ui-resizable-disabled");
@@ -388,7 +388,7 @@
 			if (o.preserveCursor)
 				$('body').css('cursor', this.axis + '-resize');
 				
-			this.propagate("start", e); 	
+			this.propagate("start", e);
 			return false;
 		},
 		stop: function(e) {
@@ -425,10 +425,10 @@
 			var dx = (e.pageX-smp.left)||0, dy = (e.pageY-smp.top)||0;
 			var trigger = this.change[a];
 			if (!trigger) return false;
-		 
+			
 			// Calculate the attrs that will be change
 			var data = trigger.apply(this, [e, dx, dy]), ie6 = $.browser.msie && $.browser.version < 7, csdif = this.sizeDiff;
-		 
+			
 			if (o._aspectRatio || e.shiftKey)
 				data = this._updateRatio(data, e);
 			
@@ -478,7 +478,7 @@
 		
 		_respectSize: function(data, e) {
 			
-			var el = this.helper, o = this.options, pRatio = o._aspectRatio || e.shiftKey,  a = this.axis, 
+			var el = this.helper, o = this.options, pRatio = o._aspectRatio || e.shiftKey, a = this.axis, 
 					ismaxw = data.width && o.maxWidth && o.maxWidth < data.width, ismaxh = data.height && o.maxHeight && o.maxHeight < data.height,
 						isminw = data.width && o.minWidth && o.minWidth > data.width, isminh = data.height && o.minHeight && o.minHeight > data.height;
 			
@@ -507,11 +507,11 @@
 			var o = this.options;
 			if (!o.proportionallyResize) return;
 			var prel = o.proportionallyResize, el = this.helper || this.element;
-		 
+			
 			if (!o.borderDif) {
 				var b = [prel.css('borderTopWidth'), prel.css('borderRightWidth'), prel.css('borderBottomWidth'), prel.css('borderLeftWidth')],
 					p = [prel.css('paddingTop'), prel.css('paddingRight'), prel.css('paddingBottom'), prel.css('paddingLeft')];
-				 
+				
 				o.borderDif = $.map(b, function(v, i) {
 					var border = parseInt(v,10)||0, padding = parseInt(p[i],10)||0;
 					return border + padding; 
@@ -621,7 +621,7 @@
 	$.ui.plugin.add("resizable", "grid", {
 		
 		resize: function(e, ui) {
-			var o = ui.options, self =  ui.instance, cs = self.size, os = self.originalSize, op = self.originalPosition, a = self.axis, ratio = o._aspectRatio || e.shiftKey;
+			var o = ui.options, self = ui.instance, cs = self.size, os = self.originalSize, op = self.originalPosition, a = self.axis, ratio = o._aspectRatio || e.shiftKey;
 			o.grid = typeof o.grid == "number" ? [o.grid, o.grid] : o.grid;
 			var ox = Math.round((cs.width - os.width) / o.grid[0]) * o.grid[0], oy = Math.round((cs.height - os.height) / o.grid[1]) * o.grid[1];
 			
@@ -652,7 +652,7 @@
 	$.ui.plugin.add("resizable", "animate", {
 		
 		stop: function(e, ui) {
-			var o = ui.options, self =  ui.instance;
+			var o = ui.options, self = ui.instance;
 
 			var pr = o.proportionallyResize, ista = pr && /textarea/i.test(pr.get(0).nodeName), 
 							soffseth = ista && $.ui.hasScroll(pr.get(0), 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
@@ -679,7 +679,7 @@
 	$.ui.plugin.add("resizable", "ghost", {
 		
 		start: function(e, ui) {
-			var o = ui.options, self =  ui.instance, pr = o.proportionallyResize, cs = self.size;
+			var o = ui.options, self = ui.instance, pr = o.proportionallyResize, cs = self.size;
 			
 			if (!pr) self.ghost = self.element.clone();
 			else self.ghost = pr.clone();
@@ -694,14 +694,14 @@
 		},
 		
 		resize: function(e, ui){
-			var o = ui.options, self =  ui.instance, pr = o.proportionallyResize;
+			var o = ui.options, self = ui.instance, pr = o.proportionallyResize;
 			
 			if (self.ghost) self.ghost.css({ position: 'relative', height: self.size.height, width: self.size.width });
 			
 		},
 		
 		stop: function(e, ui){
-			var o = ui.options, self =  ui.instance, pr = o.proportionallyResize;
+			var o = ui.options, self = ui.instance, pr = o.proportionallyResize;
 			if (self.ghost && self.helper) self.helper.get(0).removeChild(self.ghost.get(0));
 		}
 		

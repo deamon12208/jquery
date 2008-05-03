@@ -105,12 +105,12 @@ var uiRenderDemo = function(model) {
 		});
 
 		var a = $('<a>View Source</a>').attr('href', 'javascript:void(0);').addClass('link-view-source').click(function() {
-        el = this;
-				codesBox.slideToggle("slow", function(){
-          var text = $(el).text();
-          if(/view source/i.test(text)) $(el).text("Hide Source");
-          else $(el).text("View Source");
-        });
+			El = this;
+			codesBox.slideToggle("slow", function(){
+				var text = $(el).text();
+				if(/view source/i.test(text)) $(el).text("Hide Source");
+				Else $(el).text("View Source");
+			});
 		});
 
 		demoBox.append(
@@ -122,8 +122,8 @@ var uiRenderDemo = function(model) {
 		// population select with the demo options
 		$.each(demo.options, function(x, o) {
 			if (o && o.desc) {
-	  		select.append($('<option>' + o.desc + '</option>').val(o.source));
-	  		// eval the first source of <select>
+				select.append($('<option>' + o.desc + '</option>').val(o.source));
+				// eval the first source of <select>
 				if (!x) {
 					sourceJs.html(preTmpl.html(o.source));
 					jQuery.globalEval(o.source);
@@ -140,9 +140,9 @@ var uiRenderDemo = function(model) {
 var loadDemo = function(comp) {
 	$('#containerDemo').html("<img src='img/loading.gif'>");
 	
-	 $("#containerDemo").ajaxError(function(request, settings){ 
-	   $(this).html("Ops, there is no template file for this component."); 
-	 });
+	$("#containerDemo").ajaxError(function(request, settings){ 
+		$(this).html("Ops, there is no template file for this component."); 
+	});
 	
 	$.get(comp+'.html', function(data) {
 		$('#containerDemo').html(data);

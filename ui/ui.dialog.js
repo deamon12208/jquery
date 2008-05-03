@@ -8,9 +8,9 @@
  * http://docs.jquery.com/UI/Dialog
  *
  * Depends:
- *   ui.base.js
- *   ui.draggable.js
- *   ui.resizable.js
+ *	ui.base.js
+ *	ui.draggable.js
+ *	ui.resizable.js
  *
  * Revision: $Id$
  */
@@ -128,7 +128,8 @@
 			uiDialogTitlebar.append('<a href="#" class="ui-dialog-titlebar-close"><span>X</span></a>');
 			this.uiDialogTitlebarClose = $('.ui-dialog-titlebar-close', uiDialogTitlebar)
 				.hover(function() { $(this).addClass('ui-dialog-titlebar-close-hover'); }, 
-				       function() { $(this).removeClass('ui-dialog-titlebar-close-hover'); })
+					function() { $(this).removeClass('ui-dialog-titlebar-close-hover'); }
+				)
 				.mousedown(function(ev) {
 					ev.stopPropagation();
 				})
@@ -250,10 +251,10 @@
 		},
 	
 		activate: function() {
-			// Move modeless dialogs to the top when they're activated.  Even
+			// Move modeless dialogs to the top when they're activated. Even
 			// if there is a modal dialog in the window, the modeless dialog
 			// should be on top because it must have been opened after the modal
-			// dialog.  Modal dialogs don't get moved to the top because that
+			// dialog. Modal dialogs don't get moved to the top because that
 			// would make any modeless dialogs that it spawned unusable until
 			// the modal dialog is closed.
 			!this.options.modal && this.moveToTop();
@@ -323,8 +324,7 @@
 				$('a, :input').bind(this.events, function() {
 					// allow use of the element if inside a dialog and
 					// - there are no modal dialogs
-					// - there are modal dialogs, but we are in front of the
-					//   topmost modal dialog
+					// - there are modal dialogs, but we are in front of the topmost modal
 					var allow = false;
 					var $dialog = $(this).parents('.ui-dialog');
 					if ($dialog.length) {
@@ -421,7 +421,7 @@
 		resize: function() {
 			/* If the dialog is draggable and the user drags it past the
 			 * right edge of the window, the document becomes wider so we
-			 * need to stretch the overlay.  If the user then drags the
+			 * need to stretch the overlay. If the user then drags the
 			 * dialog back to the left, the document will become narrower,
 			 * so we need to shrink the overlay to the appropriate size.
 			 * This is handled by shrinking the overlay before setting it

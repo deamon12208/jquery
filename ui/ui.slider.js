@@ -8,7 +8,7 @@
  * http://docs.jquery.com/UI/Slider
  *
  * Depends:
- *   ui.base.js
+ *	ui.base.js
  *
  * Revision: $Id$
  */
@@ -95,8 +95,8 @@
 			var o = this.options;
 			$.extend(o, {
 				axis: o.axis || (element.offsetWidth < element.offsetHeight ? 'vertical' : 'horizontal'),
-				max: !isNaN(parseInt(o.max,10)) ? { x: parseInt(o.max, 10), y: parseInt(o.max, 10)  } : ({ x: o.max && o.max.x || 100, y:  o.max && o.max.y || 100 }),
-				min: !isNaN(parseInt(o.min,10)) ? { x: parseInt(o.min, 10), y: parseInt(o.min, 10)  } : ({ x: o.min && o.min.x || 0, y:  o.min && o.min.y || 0 })
+				max: !isNaN(parseInt(o.max,10)) ? { x: parseInt(o.max, 10), y: parseInt(o.max, 10) } : ({ x: o.max && o.max.x || 100, y: o.max && o.max.y || 100 }),
+				min: !isNaN(parseInt(o.min,10)) ? { x: parseInt(o.min, 10), y: parseInt(o.min, 10) } : ({ x: o.min && o.min.x || 0, y: o.min && o.min.y || 0 })
 			});
 			//Prepare the real maxValue
 			o.realMax = {
@@ -174,7 +174,7 @@
 			
 			var o = this.options;
 			if (o.stepping[axis == 1 ? "x" : "y"]) {
-			    value = Math.round(value / o.stepping[axis == 1 ? "x" : "y"]) * o.stepping[axis == 1 ? "x" : "y"];
+				value = Math.round(value / o.stepping[axis == 1 ? "x" : "y"]) * o.stepping[axis == 1 ? "x" : "y"];
 			}
 			return value;
 		},
@@ -197,7 +197,7 @@
 			// - The Slider is not disabled
 			// - There is a current, or previous selected handle (otherwise we wouldn't know which one to move)
 			var pointer = [e.pageX,e.pageY];
-			var clickedHandle = false; this.handle.each(function() { if(this == e.target) clickedHandle = true;  });
+			var clickedHandle = false; this.handle.each(function() { if(this == e.target) clickedHandle = true; });
 			if(clickedHandle || this.disabled || !(this.currentHandle || this.previousHandle)) return;
 
 			//If a previous handle was focussed, focus it again
