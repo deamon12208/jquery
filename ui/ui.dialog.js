@@ -25,43 +25,32 @@
 				self.destroy();
 			});
 			
+			var setDataSwitch = {
+				"dragStart": "start.draggable",
+				"drag": "drag.draggable",
+				"dragStop": "stop.draggable",
+				"maxHeight": "maxHeight.resizable",
+				"minHeight": "minHeight.resizable",
+				"maxWidth": "maxWidth.resizable",
+				"minWidth": "minWidth.resizable",
+				"resizeStart": "start.resizable",
+				"resize": "drag.resizable",
+				"resizeStop": "stop.resizable"
+			}
 			$(this.element).bind("setData.dialog", function(event, key, value){
+				setDataSwitch[key] && uiDialog.data(setDataSwitch[key], value);
 				switch (key) {
 					case "draggable":
 						uiDialog.draggable(value ? 'enable' : 'disable');
 						break;
-					case "dragStart":
-						uiDialog.data('start.draggable', value);
-						break;
-					case "drag":
-						uiDialog.data('drag.draggable', value);
-						break;
-					case "dragStop":
-						uiDialog.data('stop.draggable', value);
-						break;
 					case "height":
 						uiDialog.height(value);
-						break;
-					case "maxHeight":
-					case "minHeight":
-					case "maxWidth":
-					case "minWidth":
-						uiDialog.data(key + ".resizable", value);
 						break;
 					case "position":
 						self.position(value);
 						break;
 					case "resizable":
 						uiDialog.resizable(value ? 'enable' : 'disable');
-						break;
-					case "resizeStart":
-						uiDialog.data('start.resizable', value);
-						break;
-					case "resize":
-						uiDialog.data('resize.resizable', value);
-						break;
-					case "resizeStop":
-						uiDialog.data('stop.resizable', value);
 						break;
 					case "title":
 						$(".ui-dialog-title", uiDialogTitlebar).text(value);
