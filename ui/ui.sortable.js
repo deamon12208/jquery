@@ -183,18 +183,33 @@
 			var l = item.left, r = l + item.width, 
 			    t = item.top,  b = t + item.height;
 
+			if(this.options.tolerance == "pointer") {
 
-			if (!(   l < x1 + (this.helperProportions.width  / 2)    // Right Half
-				&&     x2 - (this.helperProportions.width  / 2) < r    // Left Half
-				&& t < y1 + (this.helperProportions.height / 2)        // Bottom Half
-				&&     y2 - (this.helperProportions.height / 2) < b )) return false; // Top Half
-			
-			if(this.floating) {
-				if(x2 > l && x1 < l) return 2; //Crosses left edge
-				if(x1 < r && x2 > r) return 1; //Crosses right edge
+				if(!(y1 + this.clickOffset.top > t && y1 + this.clickOffset.top < b && x1 + this.clickOffset.left > l && x1 + this.clickOffset.left < r)) return false;
+				
+				if(this.floating) {
+					if(x1 + this.clickOffset.left > l && x1 + this.clickOffset.left < l + item.width/2) return 2;
+					if(x1 + this.clickOffset.left > l+item.width/2 && x1 + this.clickOffset.left < r) return 1;
+				} else {
+					if(y1 + this.clickOffset.top > t && y1 + this.clickOffset.top < t + item.height/2) return 2;
+					if(y1 + this.clickOffset.top > t+item.height/2 && y1 + this.clickOffset.top < b) return 1;
+				}
+
 			} else {
-				if(y2 > t && y1 < t) return 1; //Crosses top edge
-				if(y1 < b && y2 > b) return 2; //Crosses bottom edge
+			
+				if (!(   l < x1 + (this.helperProportions.width  / 2)    // Right Half
+					&&     x2 - (this.helperProportions.width  / 2) < r    // Left Half
+					&& t < y1 + (this.helperProportions.height / 2)        // Bottom Half
+					&&     y2 - (this.helperProportions.height / 2) < b )) return false; // Top Half
+				
+				if(this.floating) {
+					if(x2 > l && x1 < l) return 2; //Crosses left edge
+					if(x1 < r && x2 > r) return 1; //Crosses right edge
+				} else {
+					if(y2 > t && y1 < t) return 1; //Crosses top edge
+					if(y1 < b && y2 > b) return 2; //Crosses bottom edge
+				}
+			
 			}
 			
 			return false;
@@ -249,9 +264,10 @@
 		},
 		refreshPositions: function(fast) {
 			for (var i = this.items.length - 1; i >= 0; i--){
-				if(!fast) this.items[i].width 			= this.items[i].item.outerWidth();
-				if(!fast) this.items[i].height 			= this.items[i].item.outerHeight();
-				var p = this.items[i].item.offset();
+				var t = this.items[i].item;
+				if(!fast) this.items[i].width 			= (this.options.toleranceElement ? $(this.options.toleranceElement, t) : t).outerWidth();
+				if(!fast) this.items[i].height 			= (this.options.toleranceElement ? $(this.options.toleranceElement, t) : t).outerHeight();
+				var p = (this.options.toleranceElement ? $(this.options.toleranceElement, t) : t).offset();
 				this.items[i].left 						= p.left;
 				this.items[i].top 						= p.top;
 			};
