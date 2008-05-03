@@ -11,47 +11,11 @@
  * $Rev$
  */
 ;(function($) {
-
-	//If the UI scope is not available, add it
+	
 	$.ui = $.ui || {};
 	
-	// $.widget is factory to create jQuery plugins, taking some boilerplate code out of the plugin code
-	// created by Scott González and Jörn Zaefferer
-	function getter(namespace, plugin, method) {
-		var methods = $[namespace][plugin].getter || [];
-		methods = (typeof methods == "string" ? methods.split(/,?\s+/) : methods);
-		return ($.inArray(method, methods) != -1);
-	};
-	$.widget = function(namespace, name, prototype) {
-		// create plugin method
-		$.fn[name] = function(options, data) {
-			var isMethodCall = (typeof options == 'string');
-			
-			if (isMethodCall && getter(namespace, name, options)) {
-				var instance = $.data(this[0], name);
-				return (instance ? instance[options](data) : undefined); 
-			}
-			
-			return this.each(function() {
-				var instance = $.data(this, name);
-				if (!instance) {
-					$.data(this, name, new $[namespace][name](this, options));
-				} else if (isMethodCall) {
-					instance[options](data);
-				}
-			});
-		};
-		// create wiget constructor
-		$[namespace][name] = function(element, options) {
-			this.options = $.extend({}, $[namespace][name].defaults, options);
-			this.element = $(element);
-			this.init();
-		};
-		// add widget prototype, must at least contain init(options)
-		$[namespace][name].prototype = prototype || {};
-	};
-	
-	//Add methods that are vital for all mouse interaction stuff (plugin registering)
+	// Add methods that are vital for all mouse interaction stuff
+	// (plugin registering)
 	$.extend($.ui, {
 		plugin: {
 			add: function(module, option, set) {
@@ -106,10 +70,59 @@
 			return has;
 		}
 	});
-
-	/******* fn scope modifications ********/
-
+	
+	
+	/** jQuery core modifications and additions **/
+	
 	var _remove = $.fn.remove;
+	$.fn.remove = function() {
+		$("*", this).add(this).trigger("remove");
+		return _remove.apply(this, arguments );
+	};
+	
+	// $.widget is a factory to create jQuery plugins
+	// taking some boilerplate code out of the plugin code
+	// created by Scott González and Jörn Zaefferer
+	function getter(namespace, plugin, method) {
+		var methods = $[namespace][plugin].getter || [];
+		methods = (typeof methods == "string" ? methods.split(/,?\s+/) : methods);
+		return ($.inArray(method, methods) != -1);
+	};
+	
+	$.widget = function(namespace, name, prototype) {
+		// create plugin method
+		$.fn[name] = function(options, data) {
+			var isMethodCall = (typeof options == 'string');
+			
+			if (isMethodCall && getter(namespace, name, options)) {
+				var instance = $.data(this[0], name);
+				return (instance ? instance[options](data) : undefined); 
+			}
+			
+			return this.each(function() {
+				var instance = $.data(this, name);
+				if (!instance) {
+					$.data(this, name, new $[namespace][name](this, options));
+				} else if (isMethodCall) {
+					instance[options](data);
+				}
+			});
+		};
+		
+		// create widget constructor
+		$[namespace][name] = function(element, options) {
+			this.options = $.extend({}, $[namespace][name].defaults, options);
+			this.element = $(element);
+			this.init();
+		};
+		
+		// add widget prototype, must at least contain init(options)
+		$[namespace][name].prototype = prototype || {};
+	};
+	
+	
+	/** Mouse Interaction Plugin **/
+	
 	$.fn.extend({
 		mouseInteraction: function(o) {
 			return this.each(function() {
@@ -122,15 +135,8 @@
 					$.data(this, "ui-mouse").destroy();
 				}
 			});
-		},
-		remove: function() {
-			jQuery("*", this).add(this).trigger("remove");
-			return _remove.apply(this, arguments );
 		}
 	});
-	
-	
-	/********** Mouse Interaction Plugin *********/
 	
 	$.ui.mouseInteraction = function(element, options) {
 	
@@ -235,4 +241,3 @@
 	});
 	
 })(jQuery);
- 
