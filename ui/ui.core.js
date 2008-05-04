@@ -174,18 +174,19 @@
 		},
 		trigger: function() { return this.click.apply(this, arguments); },
 		click: function(e) {
-			
+		
 			if(    e.which != 1 //only left click starts dragging
 				|| $.inArray(e.target.nodeName.toLowerCase(), this.options.dragPrevention || []) != -1 // Prevent execution on defined elements
 				|| (this.options.condition && !this.options.condition.apply(this.options.executor || this, [e, this.element])) //Prevent execution on condition
 			) { return true; }
-			
+		
 			var self = this;
+			this.initialized = false;
 			var initialize = function() {
 				self._MP = { left: e.pageX, top: e.pageY }; // Store the click mouse position
 				$(document).bind('mouseup.mouse', function() { return self.stop.apply(self, arguments); });
 				$(document).bind('mousemove.mouse', function() { return self.drag.apply(self, arguments); });
-				
+		
 				if(!self.initalized && Math.abs(self._MP.left-e.pageX) >= self.options.distance || Math.abs(self._MP.top-e.pageY) >= self.options.distance) {
 					(self.options.start && self.options.start.call(self.options.executor || self, e, self.element));
 					(self.options.drag && self.options.drag.call(self.options.executor || self, e, this.element)); //This is actually not correct, but expected
