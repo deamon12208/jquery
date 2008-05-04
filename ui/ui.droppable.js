@@ -231,7 +231,7 @@
 				m[i].offset = m[i].element.offset();
 				m[i].proportions = { width: m[i].element.outerWidth(), height: m[i].element.outerHeight() };
 				
-				if(type == "dragstart") m[i].activate.call(m[i], e); //Activate the droppable if used directly from draggables
+				if(type == "dragstart" || type == "sortactivate") m[i].activate.call(m[i], e); //Activate the droppable if used directly from draggables
 			}
 			
 		},
