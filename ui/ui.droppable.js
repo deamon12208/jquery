@@ -16,7 +16,7 @@
 
 ;(function($) {
 
-	$.widget("ui", "droppable", {
+	$.widget("ui.droppable", {
 		init: function() {
 	
 			this.element.addClass("ui-droppable");

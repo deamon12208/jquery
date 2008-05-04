@@ -108,7 +108,9 @@
 		}
 	};
 	
-	$.widget = function(namespace, name, prototype) {
+	$.widget = function(name, prototype) {
+		var namespace = name.split(".")[0];
+		name = name.split(".")[1];
 		// create plugin method
 		$.fn[name] = function(options, data) {
 			var isMethodCall = (typeof options == 'string'),
@@ -154,7 +156,7 @@
 	
 	/** Mouse Interaction Plugin **/
 	
-	$.widget("ui", "mouse", {
+	$.widget("ui.mouse", {
 		init: function() {
 			var self = this;
 			

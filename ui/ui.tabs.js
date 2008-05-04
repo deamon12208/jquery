@@ -1,7 +1,7 @@
 /*
  * jQuery UI Tabs
  *
- * Copyright (c) 2007 Klaus Hartl (stilbuero.de)
+ * Copyright (c) 2007, 2008 Klaus Hartl (stilbuero.de)
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
@@ -14,7 +14,7 @@
  */
 ;(function($) {
 	
-	$.widget("ui", "tabs", {
+	$.widget("ui.tabs", {
 		init: function() {
 			var self = this;
 		

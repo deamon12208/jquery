@@ -29,7 +29,7 @@
 		"resizeStop": "stop.resizable"
 	};
 	
-	$.widget("ui", "dialog", {
+	$.widget("ui.dialog", {
 		init: function() {
 			var self = this;
 			var options = this.options;

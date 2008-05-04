@@ -14,7 +14,7 @@
  */
 ;(function($) {
 
-	$.widget("ui", "selectable", {
+	$.widget("ui.selectable", {
 		init: function() {
 			var instance = this;
 			

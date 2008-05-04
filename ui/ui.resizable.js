@@ -14,7 +14,7 @@
  */
 ;(function($) {
 	
-	$.widget("ui", "resizable", {
+	$.widget("ui.resizable", {
 		init: function() {
 
 			var self = this, o = this.options;

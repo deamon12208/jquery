@@ -15,7 +15,7 @@
 
 ;(function($) {
 	
-	$.widget("ui", "draggable", {
+	$.widget("ui.draggable", {
 		init: function() {
 			
 			//Initialize needed constants

@@ -26,7 +26,7 @@
 	    return false; 
 	};
 	
-	$.widget("ui", "sortable", {
+	$.widget("ui.sortable", {
 		init: function() {
 
 			var o = this.options;

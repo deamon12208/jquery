@@ -1,7 +1,7 @@
 /*
  * jQuery UI Accordion
  * 
- * Copyright (c) 2007 Jörn Zaefferer
+ * Copyright (c) 2007, 2008 Jörn Zaefferer
  * Dual licensed under the MIT (MIT-LICENSE.txt)
  * and GPL (GPL-LICENSE.txt) licenses.
  *
@@ -15,7 +15,7 @@
 
 ;(function($) {
 
-	$.widget("ui", "accordion", {
+	$.widget("ui.accordion", {
 		init: function() {
 			var options = this.options;
 			
