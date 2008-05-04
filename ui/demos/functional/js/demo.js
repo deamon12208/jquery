@@ -105,11 +105,14 @@ var uiRenderDemo = function(model) {
 		});
 
 		var a = $('<a>View Source</a>').attr('href', 'javascript:void(0);').addClass('link-view-source').click(function() {
-			El = this;
+			el = this;
 			codesBox.slideToggle("slow", function(){
 				var text = $(el).text();
-				if(/view source/i.test(text)) $(el).text("Hide Source");
-				Else $(el).text("View Source");
+				if(/view source/i.test(text)) {
+					$(el).text("Hide Source");
+				} else {
+					$(el).text("View Source");
+				}
 			});
 		});
 
