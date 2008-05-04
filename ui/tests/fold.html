@@ -4,16 +4,17 @@
 <head>
 <meta http-equiv="Content-Language" content="en" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Pulsate</title>
+<title>Fold</title>
 <script type="text/javascript" src="../../jquery/src/core.js"></script>
 <script type="text/javascript" src="../../jquery/src/selector.js"></script>
 <script type="text/javascript" src="../../jquery/src/event.js"></script>
 <script type="text/javascript" src="../../jquery/src/ajax.js"></script>
 <script type="text/javascript" src="../../jquery/src/fx.js"></script>
 <script type="text/javascript" src="../../jquery/src/offset.js"></script>
+<script type="text/javascript" src="../../plugins/dimensions/jquery.dimensions.js"></script>
 
 <script type="text/javascript" src="../fx.js"></script>
-<script type="text/javascript" src="../fx.pulsate.js"></script>
+<script type="text/javascript" src="../fx.fold.js"></script>
 
 
 <style type="text/css" media="screen">
@@ -35,8 +36,8 @@ body {
 <div id="container">
   <div class="text">Header Content</div>
   <div id="fx">
-  <div style='padding:2px;'>Pulsate Me!</div>
-  <img src="../images/very-cute-puppy.jpg">
+  <div style='padding:2px;'>Fold Me!</div>
+  <img src="images/very-cute-puppy.jpg">
   <div style='padding:2px;'>What a <b>cute</b> puppy!</div>
   </div>
   <div class="text">Footer Content</div>
@@ -44,12 +45,9 @@ body {
 
 <div class="controls">
   <div>
-    <a href="#" onClick="$('#fx').effect('pulsate', {times: 3 });return false;">Pulsate 3x</a>
-  </div>
-  <div>
-    <a href="#" onClick="$('#fx').hide('pulsate',{times: 3 });return false;">Pulsate 3x Off</a>
-    <a href="#" onClick="$('#fx').show('pulsate',{times: 5 });return false;">Pulsate 5x On</a>
-    <a href="#" onClick="$('#fx').toggle('pulsate');return false;">Pulsate Toggle</a>
+    <a href="#" onClick="$('#fx').hide('fold',{ direction: 'vertical', size: 30 });return false;">Fold to 30 pixels</a>
+    <a href="#" onClick="$('#fx').show('fold',{ direction: 'vertical', size: 50 });return false;">Unfold from 50 pixels</a>
+    <a href="#" onClick="$('#fx').toggle('fold',{ direction: 'vertical' });return false;">Fold Toggle</a>
   </div>
   <div style="clear:both;padding-bottom:5px;"></div>
 </div>
