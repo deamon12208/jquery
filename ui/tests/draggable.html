@@ -14,6 +14,7 @@
 
 	<script type="text/javascript" src="../ui.base.js"></script>
 	<script type="text/javascript" src="../ui.draggable.js"></script>
+	<script type="text/javascript" src="../ui.droppable.js"></script>
 
 
 <style type="text/css" media="all">
@@ -28,13 +29,12 @@ body
 }
 
 .example {
-	width: 200px;
-	height: 200px;
+	width: 100px;
+	height: 100px;
 	background-color: #68BFEF;
-	border: 5px solid #0090DF;
+	border: 10px solid #0090DF;
 	padding: 10px;
-
-
+	margin: 10px;
 }
 
 #parent {
@@ -43,7 +43,7 @@ body
 	border: 20px solid black;
 	position: relative;
 	height: 300px;
-	overflow: auto;
+
 }
 
 #parent2 {
@@ -51,9 +51,13 @@ body
 	background: #eee;
 	border: 20px solid black;
 	position: relative;
-	height: 300px;
-	overflow: auto;
+	height: 400px;
 }
+
+.hover {
+	background: yellow;
+}
+
 </style>
 </head>
 <body>
@@ -66,22 +70,34 @@ body
 	</p>
 	
 	<div class="example">
-		<p class="handle">Pick me here</p>
+		<a href="#" class="handle">Pick me here</a>
 		<input type="text" name="some_name" value="" id="some_name">
 	</div>
 	
-	<div style="height: 1000px;"></div>
+	<div style="height: 1px;"></div>
 	</div>
 
 </div>
+
+<div id="droppable" style="border: 2px solid black; height: 200px; width: 200px; margin: 10px;"></div>
 <script type="text/javascript">
 $(document).ready(function(){
 
 	$('div.example').draggable({
-		handle: "> p",
-		revert: true,
-		containment: "parent",
-		//grid: [20,20]
+		handle: "> a",
+		//revert: true,
+		//helper: "clone",
+		snap: "#droppable"
+		//containment: "#parent"
+		//grid: [20,20],
+		//scroll: true
+		//cursorAt: { top: 0, right: 0 }
+	});
+	
+	$("#droppable").droppable({
+		accept: "div",
+		hoverClass: "hover",
+		tolerance: "touch"
 	});
 
 });
