@@ -176,11 +176,17 @@
 			y1 = this.position.absolute.top, y2 = y1 + this.helperProportions.height;
 			var l = item.left, r = l + item.width, 
 			t = item.top, b = t + item.height;
+
+			if(this.options.tolerance == "pointer") {
+				return (y1 + this.clickOffset.top > t && y1 + this.clickOffset.top < b && x1 + this.clickOffset.left > l && x1 + this.clickOffset.left < r);
+			} else {
 			
-			return (l < x1 + (this.helperProportions.width / 2) // Right Half
-				&& x2 - (this.helperProportions.width / 2) < r // Left Half
-				&& t < y1 + (this.helperProportions.height / 2) // Bottom Half
-				&& y2 - (this.helperProportions.height / 2) < b ); // Top Half
+				return (l < x1 + (this.helperProportions.width / 2) // Right Half
+					&& x2 - (this.helperProportions.width / 2) < r // Left Half
+					&& t < y1 + (this.helperProportions.height / 2) // Bottom Half
+					&& y2 - (this.helperProportions.height / 2) < b ); // Top Half
+			
+			}
 			
 		},
 		intersectsWithEdge: function(item) {	
