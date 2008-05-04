@@ -1238,7 +1238,7 @@ $.extend(DatepickerInstance.prototype, {
 				}
 				html += '</tbody></table></div>';
 			}
-		html += (showStatus ? '<div id="datepicker_status_' + this._id + 
+		html += (showStatus ? '<div style="clear: both;"></div><div id="datepicker_status_' + this._id + 
 			'" class="datepicker_status">' + (this._get('initStatus') || '&#xa0;') + '</div>' : '') +
 			(!closeAtTop && !this._inline ? controls : '') +
 			'<div style="clear: both;"></div>' + 
