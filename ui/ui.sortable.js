@@ -13,12 +13,18 @@
  * Revision: $Id$
  */
 ;(function($) {
-
-	if (window.Node && Node.prototype && !Node.prototype.contains) {
-		Node.prototype.contains = function (arg) {
-			return !!(this.compareDocumentPosition(arg) & 16);
-		};
-	}
+	
+	function contains(a, b) { 
+	    var safari2 = $.browser.safari && $.browser.version < 522; 
+	    if (a.contains && !safari2) { 
+	        return a.contains(b); 
+	    } 
+	    if (a.compareDocumentPosition) 
+	        return !!(a.compareDocumentPosition(b) & 16); 
+	    while (b = b.parentNode) 
+	          if (b == a) return true; 
+	    return false; 
+	};
 
 	$.fn.extend({
 		sortable: function(options) {
@@ -311,7 +317,7 @@
 							//When entering a new container, we will find the item with the least distance and append our item near it
 							var dist = 10000; var itemWithLeastDistance = null; var base = this.position.absolute[this.containers[i].floating ? 'left' : 'top'];
 							for (var j = this.items.length - 1; j >= 0; j--) {
-								if(!this.containers[i].element[0].contains(this.items[j].item[0])) continue;
+								if(!contains(this.containers[i].element[0], this.items[j].item[0])) continue;
 								var cur = this.items[j][this.containers[i].floating ? 'left' : 'top'];
 								if(Math.abs(cur - base) < dist) {
 									dist = Math.abs(cur - base); itemWithLeastDistance = this.items[j];
@@ -430,10 +436,10 @@
 
 			this.propagate("stop", e); //Call plugins and trigger callbacks
 			if(this.position.dom != this.currentItem.prev()[0]) this.propagate("update", e); //Trigger update callback if the DOM position has changed
-			if(!this.element[0].contains(this.currentItem[0])) { //Node was moved out of the current element
+			if(!contains(this.element[0], this.currentItem[0])) { //Node was moved out of the current element
 				this.propagate("remove", e);
 				for (var i = this.containers.length - 1; i >= 0; i--){
-					if(this.containers[i].element[0].contains(this.currentItem[0])) {
+					if(contains(this.containers[i].element[0], this.currentItem[0])) {
 						this.containers[i].propagate("update", e, this);
 						this.containers[i].propagate("receive", e, this);
 					}
@@ -474,8 +480,8 @@
 				
 				if(this.items[i].item[0] != this.currentItem[0] //cannot intersect with itself
 					&&	this.currentItem[intersection == 1 ? "next" : "prev"]()[0] != this.items[i].item[0] //no useless actions that have been done before
-					&&	!this.currentItem[0].contains(this.items[i].item[0]) //no action if the item moved is the parent of the item checked
-					&& (this.options.type == 'semi-dynamic' ? !this.element[0].contains(this.items[i].item[0]) : true)
+					&&	!contains(this.currentItem[0], this.items[i].item[0]) //no action if the item moved is the parent of the item checked
+					&& (this.options.type == 'semi-dynamic' ? !contains(this.element[0], this.items[i].item[0]) : true)
 				) {
 					
 					this.direction = intersection == 1 ? "down" : "up";
