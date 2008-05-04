@@ -31,7 +31,7 @@
 				});
 			}
 			$(this.handle)
-				.mouseInteraction({
+				.mouse({
 					executor: this,
 					delay: this.options.delay,
 					distance: this.options.distance,
@@ -146,7 +146,7 @@
 				.removeClass("ui-slider ui-slider-disabled")
 				.removeData("slider")
 				.unbind(".slider");
-			this.handle.removeMouseInteraction();
+			this.handle.mouse("destroy");
 			this.generated && this.generated.remove();
 		},
 		enable: function() {

@@ -22,7 +22,7 @@
 			var o = this.options;
 
 			//Initialize mouse events for interaction
-			this.element.mouseInteraction({
+			this.element.mouse({
 				executor: this,
 				delay: o.delay,
 				distance: o.distance,
@@ -250,7 +250,7 @@
 		},
 		destroy: function() {
 			if(!this.element.data('draggable')) return;
-			this.element.removeData("draggable").unbind(".draggable").removeMouseInteraction();
+			this.element.removeData("draggable").unbind(".draggable").mouse("destroy");
 		},
 		enable: function() {
 			this.options.disabled = false;

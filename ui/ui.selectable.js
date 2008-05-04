@@ -78,7 +78,7 @@
 		this.selectees = selectees.addClass("ui-selectee");
 
 		//Initialize mouse interaction
-		this.element.mouseInteraction({
+		this.element.mouse({
 			executor: this,
 			appendTo: 'body',
 			delay: 0,
@@ -112,7 +112,7 @@
 				.removeClass("ui-selectable ui-selectable-disabled")
 				.removeData("selectable")
 				.unbind(".selectable")
-				.removeMouseInteraction();
+				.mouse("destroy");
 		},
 		enable: function() {
 			this.element.removeClass("ui-selectable-disabled");

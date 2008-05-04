@@ -257,7 +257,7 @@
 		}
 	
 		//Initialize mouse events for interaction
-		this.element.mouseInteraction({
+		this.element.mouse({
 			executor: this,
 			delay: 0,
 			distance: 0,
@@ -322,7 +322,7 @@
 			
 			_destroy = function(exp) {
 				$(exp).removeClass("ui-resizable ui-resizable-disabled")
-					.removeMouseInteraction().removeData("resizable").unbind(".resizable").find('.ui-resizable-handle').remove();
+					.mouse("destroy").removeData("resizable").unbind(".resizable").find('.ui-resizable-handle').remove();
 			};
 			
 			_destroy(el);
