@@ -75,12 +75,6 @@
 				target: findActive( this.options.headers, index )[0]
 			});
 		},
-		enable: function() {
-			this.options.disabled = false;
-		},
-		disable: function() {
-			this.options.disabled = true;
-		},
 		destroy: function() {
 			this.options.headers.next().css("display", "");
 			if ( this.options.fillSpace || this.options.autoHeight ) {

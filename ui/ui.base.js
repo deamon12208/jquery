@@ -89,6 +89,25 @@
 		return ($.inArray(method, methods) != -1);
 	};
 	
+	var widgetPrototype = {
+		init: function() {},
+		destroy: function() {},
+		
+		getData: function(e, key) {
+			return this.options[key];
+		},
+		setData: function(e, key, value) {
+			this.options[key] = value;
+		},
+		
+		enable: function() {
+			this.setData(null, 'disabled', false);
+		},
+		disable: function() {
+			this.setData(null, 'disabled', true);
+		}
+	};
+	
 	$.widget = function(namespace, name, prototype) {
 		// create plugin method
 		$.fn[name] = function(options, data) {
@@ -111,13 +130,24 @@
 		
 		// create widget constructor
 		$[namespace][name] = function(element, options) {
+			var self = this;
+			
 			this.options = $.extend({}, $[namespace][name].defaults, options);
-			this.element = $(element);
+			this.element = $(element)
+				.bind('setData.' + name, function(e, key, value) {
+					return self.setData(e, key, value);
+				})
+				.bind('getData.' + name, function(e, key) {
+					return self.getData(e, key);
+				})
+				.bind('remove', function() {
+					return self.destroy();
+				});
 			this.init();
 		};
 		
-		// add widget prototype, must at least contain init(options)
-		$[namespace][name].prototype = prototype || {};
+		// add widget prototype
+		$[namespace][name].prototype = $.extend({}, widgetPrototype, prototype);
 	};
 	
 	

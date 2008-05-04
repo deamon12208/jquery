@@ -16,56 +16,26 @@
  */
 ;(function($) {
 	
+	var setDataSwitch = {
+		"dragStart": "start.draggable",
+		"drag": "drag.draggable",
+		"dragStop": "stop.draggable",
+		"maxHeight": "maxHeight.resizable",
+		"minHeight": "minHeight.resizable",
+		"maxWidth": "maxWidth.resizable",
+		"minWidth": "minWidth.resizable",
+		"resizeStart": "start.resizable",
+		"resize": "drag.resizable",
+		"resizeStop": "stop.resizable"
+	};
+	
 	$.widget("ui", "dialog", {
 		init: function() {
 			var self = this;
 			var options = this.options;
-
-			$(this.element).bind("remove", function() {
-				self.destroy();
-			});
 			
-			var setDataSwitch = {
-				"dragStart": "start.draggable",
-				"drag": "drag.draggable",
-				"dragStop": "stop.draggable",
-				"maxHeight": "maxHeight.resizable",
-				"minHeight": "minHeight.resizable",
-				"maxWidth": "maxWidth.resizable",
-				"minWidth": "minWidth.resizable",
-				"resizeStart": "start.resizable",
-				"resize": "drag.resizable",
-				"resizeStop": "stop.resizable"
-			}
-			$(this.element).bind("setData.dialog", function(event, key, value){
-				setDataSwitch[key] && uiDialog.data(setDataSwitch[key], value);
-				switch (key) {
-					case "draggable":
-						uiDialog.draggable(value ? 'enable' : 'disable');
-						break;
-					case "height":
-						uiDialog.height(value);
-						break;
-					case "position":
-						self.position(value);
-						break;
-					case "resizable":
-						uiDialog.resizable(value ? 'enable' : 'disable');
-						break;
-					case "title":
-						$(".ui-dialog-title", uiDialogTitlebar).text(value);
-						break;
-					case "width":
-						uiDialog.width(value);
-						break;
-				}
-				options[key] = value;
-			}).bind("getData.dialog", function(event, key){
-				return options[key];
-			});
-	
 			var uiDialogContent = $(this.element).addClass('ui-dialog-content');
-	
+			
 			if (!uiDialogContent.parent().length) {
 				uiDialogContent.appendTo('body');
 			}
@@ -112,6 +82,7 @@
 	
 			uiDialogContainer.prepend('<div class="ui-dialog-titlebar"></div>');
 			var uiDialogTitlebar = $('.ui-dialog-titlebar', uiDialogContainer);
+			this.uiDialogTitlebar = uiDialogTitlebar;
 			var title = (options.title) ? options.title : (uiDialogContent.attr('title')) ? uiDialogContent.attr('title') : '';
 			uiDialogTitlebar.append('<span class="ui-dialog-title">' + title + '</span>');
 			uiDialogTitlebar.append('<a href="#" class="ui-dialog-titlebar-close"><span>X</span></a>');
@@ -179,7 +150,32 @@
 				this.open();
 			};
 		},
-	
+		
+		setData: function(event, key, value){
+			setDataSwitch[key] && this.uiDialog.data(setDataSwitch[key], value);
+			switch (key) {
+				case "draggable":
+					this.uiDialog.draggable(value ? 'enable' : 'disable');
+					break;
+				case "height":
+					this.uiDialog.height(value);
+					break;
+				case "position":
+					this.position(value);
+					break;
+				case "resizable":
+					this.uiDialog.resizable(value ? 'enable' : 'disable');
+					break;
+				case "title":
+					$(".ui-dialog-title", this.uiDialogTitlebar).text(value);
+					break;
+				case "width":
+					this.uiDialog.width(value);
+					break;
+			}
+			this.options[key] = value;
+		},
+		
 		position: function(pos) {
 			var wnd = $(window), doc = $(document), minTop = top = doc.scrollTop(), left = doc.scrollLeft();
 			if ($.inArray(pos, ['center','top','right','bottom','left']) >= 0) {
@@ -270,7 +266,7 @@
 			$(this.element).triggerHandler("dialogclose", [closeEV, closeUI], this.options.close);
 			$.ui.dialog.overlay.resize();
 		},
-	
+		
 		destroy: function() {
 			this.overlay && this.overlay.destroy();
 			this.uiDialog.hide();

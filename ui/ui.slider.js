@@ -19,15 +19,7 @@
 			var self = this;
 			this.element.addClass("ui-slider");
 			this.initBoundaries();
-
-			this.element.bind("setData.slider", function(event, key, value) {
-				self.options[key] = value;
-				if (/min|max|steps/.test(key))
-					self.initBoundaries();
-			}).bind("getData.slider", function(event, key){
-				return self.options[key];
-			});
-	
+			
 			// Initialize mouse and key events for interaction
 			this.handle = $(this.options.handle, this.element);
 			if (!this.handle.length) {
@@ -89,6 +81,14 @@
 			this.previousHandle = $(this.handle[0]); //set the previous handle to the first to allow clicking before selecting the handle
 			if(this.handle.length == 2 && this.options.range) this.createRange();
 		},
+		
+		setData: function(event, key, value) {
+			this.options[key] = value;
+			if (/min|max|steps/.test(key)) {
+				this.initBoundaries();
+			}
+		},
+		
 		initBoundaries: function() {
 			var element = this.element[0];
 			var o = this.options;
