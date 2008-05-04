@@ -197,10 +197,12 @@
 			// - There is a current, or previous selected handle (otherwise we wouldn't know which one to move)
 			var pointer = [e.pageX,e.pageY];
 			var clickedHandle = false; this.handle.each(function() { if(this == e.target) clickedHandle = true; });
-			if(clickedHandle || this.disabled || !(this.currentHandle || this.previousHandle)) return;
+			if (clickedHandle || this.disabled || !(this.currentHandle || this.previousHandle))
+				return;
 
 			//If a previous handle was focussed, focus it again
-			if(!this.currentHandle && this.previousHandle) this.focus(this.previousHandle, 1);
+			if (!this.currentHandle && this.previousHandle)
+				this.focus(this.previousHandle, 1);
 			
 			//Move focussed handle to the clicked position
 			this.offset = this.element.offset();
