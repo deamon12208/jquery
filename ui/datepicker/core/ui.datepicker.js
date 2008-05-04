@@ -471,7 +471,7 @@ $.extend(Datepicker.prototype, {
 			inst._datepickerDiv.removeClass('datepicker_rtl');
 
 		if (inst._input && inst._input[0].type != 'hidden')
-			inst._input[0].focus();
+			$(inst._input[0]).focus();
 	},
 
 	/* Tidy up after displaying the date picker. */
