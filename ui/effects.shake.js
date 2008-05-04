@@ -1,6 +1,6 @@
 (function($) {
   
-  $.ec.shake = function(o) {
+  $.effects.shake = function(o) {
 
     return this.queue(function() {
 
@@ -8,15 +8,15 @@
       var el = $(this), props = ['position','top','left'];
       
       // Set options
-      var mode = $.ec.setMode(el, o.options.mode || 'effect'); // Set Mode
+      var mode = $.effects.setMode(el, o.options.mode || 'effect'); // Set Mode
       var direction = o.options.direction || 'left'; // Default direction
       var distance = o.options.distance || 20; // Default distance
       var times = o.options.times || 3; // Default # of times
       var speed = o.duration || o.options.duration || 140; // Default speed per shake
       
       // Adjust
-      $.ec.save(el, props); el.show(); // Save & Show
-      $.ec.createWrapper(el); // Create Wrapper
+      $.effects.save(el, props); el.show(); // Save & Show
+      $.effects.createWrapper(el); // Create Wrapper
       var ref = (direction == 'up' || direction == 'down') ? 'top' : 'left';
       var motion = (direction == 'up' || direction == 'left') ? 'pos' : 'neg';
       
@@ -33,7 +33,7 @@
       };
       el.animate(animation1, speed, o.options.easing).
       animate(animation, speed / 2, o.options.easing, function(){ // Last shake
-        $.ec.restore(el, props); $.ec.removeWrapper(el); // Restore
+        $.effects.restore(el, props); $.effects.removeWrapper(el); // Restore
         if(o.callback) o.callback.apply(this, arguments); // Callback
       });
       el.queue('fx', function() { el.dequeue(); });

@@ -1,6 +1,6 @@
 (function($) {
   
-  $.ec.explode = function(o) {
+  $.effects.explode = function(o) {
 
     return this.queue(function() {
 

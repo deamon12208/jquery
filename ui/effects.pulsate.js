@@ -1,6 +1,6 @@
 (function($) {
   
-  $.ec.pulsate = function(o) {
+  $.effects.pulsate = function(o) {
 
     return this.queue(function() {
       
@@ -8,7 +8,7 @@
       var el = $(this);
       
       // Set options
-      var mode = $.ec.setMode(el, o.options.mode || 'show'); // Set Mode
+      var mode = $.effects.setMode(el, o.options.mode || 'show'); // Set Mode
       var times = o.options.times || 5; // Default # of times
       
       // Adjust

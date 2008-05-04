@@ -1,6 +1,6 @@
 (function($) {
   
-  $.ec.puff = function(o) {
+  $.effects.puff = function(o) {
   
     return this.queue(function() {
   
@@ -8,7 +8,7 @@
       var el = $(this);
     
       // Set options
-      var mode = $.ec.setMode(el, o.options.mode || 'hide'); // Set Mode
+      var mode = $.effects.setMode(el, o.options.mode || 'hide'); // Set Mode
       var percent = parseInt(o.options.percent) || 150; // Set default puff percent
       o.options.fade = true; // It's not a puff if it doesn't fade! :)
       var original = {height: el.height(), width: el.width()}; // Save original
@@ -29,7 +29,7 @@
     
   };
 
-  $.ec.scale = function(o) {
+  $.effects.scale = function(o) {
     
     return this.queue(function() {
     
@@ -37,7 +37,7 @@
       var el = $(this);
 
       // Set options
-      var mode = $.ec.setMode(el, o.options.mode || 'effect'); // Set Mode
+      var mode = $.effects.setMode(el, o.options.mode || 'effect'); // Set Mode
       var percent = parseInt(o.options.percent) || (parseInt(o.options.percent) == 0 ? 0 : (mode == 'hide' ? 0 : 100)); // Set default scaling percent
       var direction = o.options.direction || 'both'; // Set default axis
       var origin = o.options.origin; // The origin of the scaling
@@ -55,7 +55,7 @@
       };
       el.to = {height: original.height * factor.y, width: original.width * factor.x}; // Set to state
       if (origin) { // Calculate baseline shifts
-        var baseline = $.ec.getBaseline(origin, original);
+        var baseline = $.effects.getBaseline(origin, original);
         el.from.top = (original.height - el.from.height) * baseline.y;
         el.from.left = (original.width - el.from.width) * baseline.x;
         el.to.top = (original.height - el.to.height) * baseline.y;
@@ -76,7 +76,7 @@
     
   };
   
-  $.ec.size = function(o) {
+  $.effects.size = function(o) {
 
     return this.queue(function() {
       
@@ -89,7 +89,7 @@
       var hProps = ['borderLeftWidth', 'borderRightWidth', 'paddingLeft', 'paddingRight'];
       
       // Set options
-      var mode = $.ec.setMode(el, o.options.mode || 'effect'); // Set Mode
+      var mode = $.effects.setMode(el, o.options.mode || 'effect'); // Set Mode
       var restore = o.options.restore || false; // Default restore
       var scale = o.options.scale || 'both'; // Default scale mode
       var original = {height: el.height(), width: el.width()}; // Save original
@@ -104,24 +104,24 @@
       if (scale == 'box' || scale == 'both') { // Scale the css box
         if (factor.from.y != factor.to.y) { // Vertical props scaling
           props = props.concat(vProps);
-          el.from = $.ec.setTransition(el, vProps, factor.from.y, el.from);
-          el.to = $.ec.setTransition(el, vProps, factor.to.y, el.to);
+          el.from = $.effects.setTransition(el, vProps, factor.from.y, el.from);
+          el.to = $.effects.setTransition(el, vProps, factor.to.y, el.to);
         };
         if (factor.from.x != factor.to.x) { // Horizontal props scaling
           props = props.concat(hProps);
-          el.from = $.ec.setTransition(el, hProps, factor.from.x, el.from);
-          el.to = $.ec.setTransition(el, hProps, factor.to.x, el.to);
+          el.from = $.effects.setTransition(el, hProps, factor.from.x, el.from);
+          el.to = $.effects.setTransition(el, hProps, factor.to.x, el.to);
         };
       };
       if (scale == 'content' || scale == 'both') { // Scale the content
         if (factor.from.y != factor.to.y) { // Vertical props scaling
           props = props.concat(cProps);
-          el.from = $.ec.setTransition(el, cProps, factor.from.y, el.from);
-          el.to = $.ec.setTransition(el, cProps, factor.to.y, el.to);
+          el.from = $.effects.setTransition(el, cProps, factor.from.y, el.from);
+          el.to = $.effects.setTransition(el, cProps, factor.to.y, el.to);
         };
       };
-      $.ec.save(el, restore ? props : props1); el.show(); // Save & Show
-      $.ec.createWrapper(el); // Create Wrapper
+      $.effects.save(el, restore ? props : props1); el.show(); // Save & Show
+      $.effects.createWrapper(el); // Create Wrapper
       el.css('overflow','hidden').css(el.from); // Shift
       
       // Animate
@@ -131,21 +131,21 @@
         props2 = props.concat(vProps).concat(hProps); // Concat
         el.find("*[width]").each(function(){
           child = $(this);
-          if (restore) $.ec.save(child, props2);
+          if (restore) $.effects.save(child, props2);
           var c_original = {height: child.height(), width: child.width()}; // Save original
           child.from = {height: c_original.height * factor.from.y, width: c_original.width * factor.from.x};
           child.to = {height: c_original.height * factor.to.y, width: c_original.width * factor.to.x};
           if (factor.from.y != factor.to.y) { // Vertical props scaling
-            child.from = $.ec.setTransition(child, vProps, factor.from.y, child.from);
-            child.to = $.ec.setTransition(child, vProps, factor.to.y, child.to);
+            child.from = $.effects.setTransition(child, vProps, factor.from.y, child.from);
+            child.to = $.effects.setTransition(child, vProps, factor.to.y, child.to);
           };
           if (factor.from.x != factor.to.x) { // Horizontal props scaling
-            child.from = $.ec.setTransition(child, hProps, factor.from.x, child.from);
-            child.to = $.ec.setTransition(child, hProps, factor.to.x, child.to);
+            child.from = $.effects.setTransition(child, hProps, factor.from.x, child.from);
+            child.to = $.effects.setTransition(child, hProps, factor.to.x, child.to);
           };
           child.css(child.from); // Shift children
           child.animate(child.to, o.duration, o.options.easing, function(){
-            if (restore) $.ec.restore(child, props2); // Restore children
+            if (restore) $.effects.restore(child, props2); // Restore children
           }); // Animate children
         });
       };
@@ -153,7 +153,7 @@
       // Animate
       el.animate(el.to, { queue: false, duration: o.duration, easing: o.options.easing, complete: function() {
         if(mode == 'hide') el.hide(); // Hide
-        $.ec.restore(el, restore ? props : props1); $.ec.removeWrapper(el); // Restore
+        $.effects.restore(el, restore ? props : props1); $.effects.removeWrapper(el); // Restore
         if(o.callback) o.callback.apply(this, arguments); // Callback
         el.dequeue();
       }}); 

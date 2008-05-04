@@ -1,6 +1,6 @@
 ﻿(function($) {
   
-  $.ec.fade = function(o) {
+  $.effects.fade = function(o) {
 
     return this.queue(function() {
       
@@ -8,13 +8,13 @@
       var el = $(this), props = ['opacity'];
       
       // Set options
-      var mode = $.ec.setMode(el, o.options.mode || 'effect'); // Set Mode
+      var mode = $.effects.setMode(el, o.options.mode || 'effect'); // Set Mode
       if (mode == 'toggle') mode = el.is(':hidden') ? 'show' : 'hide'; // Set for toggle
       var opacity = o.options.opacity || 0; // Default fade opacity
       var original_opacity = el.css('opacity');
       
       // Adjust
-      $.ec.save(el, props); el.show(); // Save & Show
+      $.effects.save(el, props); el.show(); // Save & Show
       if(mode == 'show') el.css({opacity: 0}); // Shift
       
       // Animation
@@ -23,7 +23,7 @@
       // Animate
       el.animate(animation, { queue: false, duration: o.duration, easing: o.options.easing, complete: function() {
         if(mode == 'hide') el.hide(); // Hide
-        if(mode == 'hide') $.ec.restore(el, props); // Restore
+        if(mode == 'hide') $.effects.restore(el, props); // Restore
         if(o.callback) o.callback.apply(this, arguments); // Callback
         el.dequeue();
       }});

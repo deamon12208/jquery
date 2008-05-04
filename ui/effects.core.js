@@ -1,8 +1,8 @@
 (function($) {
 
-  $.ec = $.ec || {}; //Add the 'ec' scope
+  $.effects = $.effects || {}; //Add the 'ec' scope
 
-  $.extend($.ec, {
+  $.extend($.effects, {
     save: function(el, set) {
       for(var i=0;i<set.length;i++) {
         if(set[i] !== null) $.data(el[0], "ec.storage."+set[i], el.css(set[i]));
@@ -114,7 +114,7 @@
     _toggleClass: $.fn.toggleClass,
     // New ec methods
     effect: function(fx,o,speed,callback) {
-      return $.ec[fx] ? $.ec[fx].call(this, {method: fx, options: o || {}, duration: speed, callback: callback }) : null;
+      return $.effects[fx] ? $.effects[fx].call(this, {method: fx, options: o || {}, duration: speed, callback: callback }) : null;
     },
     show: function() {
       if(!arguments[0] || (arguments[0].constructor == Number || /(slow|normal|fast)/.test(arguments[0])))
@@ -141,16 +141,16 @@
       }
     },
     addClass: function(classNames,speed,easing,callback) {
-      return speed ? $.ec.animateClass.apply(this, [{ add: classNames },speed,easing,callback]) : this._addClass(classNames);
+      return speed ? $.effects.animateClass.apply(this, [{ add: classNames },speed,easing,callback]) : this._addClass(classNames);
     },
     removeClass: function(classNames,speed,easing,callback) {
-      return speed ? $.ec.animateClass.apply(this, [{ remove: classNames },speed,easing,callback]) : this._removeClass(classNames);
+      return speed ? $.effects.animateClass.apply(this, [{ remove: classNames },speed,easing,callback]) : this._removeClass(classNames);
     },
     toggleClass: function(classNames,speed,easing,callback) {
-      return speed ? $.ec.animateClass.apply(this, [{ toggle: classNames },speed,easing,callback]) : this._toggleClass(classNames);
+      return speed ? $.effects.animateClass.apply(this, [{ toggle: classNames },speed,easing,callback]) : this._toggleClass(classNames);
     },
     morph: function(remove,add,speed,easing,callback) {
-      return $.ec.animateClass.apply(this, [{ add: add, remove: remove },speed,easing,callback]);
+      return $.effects.animateClass.apply(this, [{ add: add, remove: remove },speed,easing,callback]);
     },
     switchClass: function() {
       this.morph.apply(this, arguments);

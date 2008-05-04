@@ -1,6 +1,6 @@
 ﻿(function($) {
   
-  $.ec.blind = function(o) {
+  $.effects.blind = function(o) {
 
     return this.queue(function() {
 
@@ -8,12 +8,12 @@
       var el = $(this), props = ['position','top','left'];
       
       // Set options
-      var mode = $.ec.setMode(el, o.options.mode || 'hide'); // Set Mode
+      var mode = $.effects.setMode(el, o.options.mode || 'hide'); // Set Mode
       var direction = o.options.direction || 'vertical'; // Default direction
       
       // Adjust
-      $.ec.save(el, props); el.show(); // Save & Show
-      var wrapper = $.ec.createWrapper(el).css({overflow:'hidden'}); // Create Wrapper
+      $.effects.save(el, props); el.show(); // Save & Show
+      var wrapper = $.effects.createWrapper(el).css({overflow:'hidden'}); // Create Wrapper
       var ref = (direction == 'vertical') ? 'height' : 'width';
       var distance = (direction == 'vertical') ? wrapper.height() : wrapper.width();
       if(mode == 'show') wrapper.css(ref, 0); // Shift
@@ -25,7 +25,7 @@
       // Animate
       wrapper.animate(animation, o.duration, o.options.easing, function() {
         if(mode == 'hide') el.hide(); // Hide
-        $.ec.restore(el, props); $.ec.removeWrapper(el); // Restore
+        $.effects.restore(el, props); $.effects.removeWrapper(el); // Restore
         if(o.callback) o.callback.apply(this, arguments); // Callback
         el.dequeue();
       });

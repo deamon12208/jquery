@@ -1,6 +1,6 @@
 (function($) {
 
-  $.ec.bounce = function(o) {
+  $.effects.bounce = function(o) {
 
     return this.queue(function() {
 
@@ -8,7 +8,7 @@
       var el = $(this), props = ['position','top','left'];
 
       // Set options
-      var mode = $.ec.setMode(el, o.options.mode || 'effect'); // Set Mode
+      var mode = $.effects.setMode(el, o.options.mode || 'effect'); // Set Mode
       var direction = o.options.direction || 'up'; // Default direction
       var distance = o.options.distance || 20; // Default distance
       var times = o.options.times || 5; // Default # of times
@@ -16,8 +16,8 @@
       if (/show|hide/.test(mode)) props.push('opacity'); // Avoid touching opacity to prevent clearType and PNG issues in IE
 
       // Adjust
-      $.ec.save(el, props); el.show(); // Save & Show
-      $.ec.createWrapper(el); // Create Wrapper
+      $.effects.save(el, props); el.show(); // Save & Show
+      $.effects.createWrapper(el); // Create Wrapper
       var ref = (direction == 'up' || direction == 'down') ? 'top' : 'left';
       var motion = (direction == 'up' || direction == 'left') ? 'pos' : 'neg';
       var distance = o.options.distance || (ref == 'top' ? el.outerHeight({margin:true}) / 3 : el.outerWidth({margin:true}) / 3);
@@ -45,7 +45,7 @@
         animation[ref] = (motion == 'pos' ? '-=' : '+=')  + distance;
         el.animate(animation, speed / 2, o.options.easing, function(){
           el.hide(); // Hide
-          $.ec.restore(el, props); $.ec.removeWrapper(el); // Restore
+          $.effects.restore(el, props); $.effects.removeWrapper(el); // Restore
           if(o.callback) o.callback.apply(this, arguments); // Callback
         });
       } else {
@@ -53,7 +53,7 @@
         animation1[ref] = (motion == 'pos' ? '-=' : '+=') + distance;
         animation2[ref] = (motion == 'pos' ? '+=' : '-=') + distance;
         el.animate(animation1, speed / 2, o.options.easing).animate(animation2, speed / 2, o.options.easing, function(){
-          $.ec.restore(el, props); $.ec.removeWrapper(el); // Restore
+          $.effects.restore(el, props); $.effects.removeWrapper(el); // Restore
           if(o.callback) o.callback.apply(this, arguments); // Callback
         });
       };
