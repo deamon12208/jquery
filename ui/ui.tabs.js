@@ -17,10 +17,6 @@
 	$.widget("ui.tabs", {
 		init: function() {
 			var self = this;
-		
-			// doesn't extend with null
-			if (this.options.selected === null)
-				this.options.selected = null;
 	
 			this.options.event += '.tabs'; // namespace event
 	
