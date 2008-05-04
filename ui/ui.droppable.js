@@ -13,65 +13,30 @@
  *
  * Revision: $Id$
  */
+
 ;(function($) {
+
+	$.widget("ui", "droppable", {
+		init: function() {
 	
-	$.fn.extend({
-		droppable: function(options) {
-			var args = Array.prototype.slice.call(arguments, 1);
+			this.element.addClass("ui-droppable");
+			this.isover = 0; this.isout = 1;
 			
-			return this.each(function() {
-				if (typeof options == "string") {
-					var drop = $.data(this, "droppable");
-					if(drop) drop[options].apply(drop, args);
-					
-				} else if(!$.data(this, "droppable"))
-					new $.ui.droppable(this, options);
+			//Prepare the passed options
+			var o = this.options, accept = o.accept;
+			o = $.extend(o, {
+				accept: o.accept && o.accept.constructor == Function ? o.accept : function(d) {
+					return $(d).is(accept);
+				}
 			});
-		}
-	});
-	
-	$.ui.droppable = function(element, options) {
-		
-		//Initialize needed constants
-		var instance = this;
-		this.element = $(element);
-		$.data(element, "droppable", this);
-		this.element.addClass("ui-droppable");
-		this.isover = 0; this.isout = 1;
-		
-		//Prepare the passed options
-		var o = this.options = options = $.extend({}, $.ui.droppable.defaults, options);
-		var accept = o.accept;
-		o = $.extend(o, {
-			accept: o.accept && o.accept.constructor == Function ? o.accept : function(d) {
-				return $(d).is(accept);
-			}
-		});
-		
-		$(element).bind("setData.droppable", function(event, key, value){
-			o[key] = value;
-		}).bind("getData.droppable", function(event, key){
-			return o[key];
-		}).bind('remove', function() {
-			instance.destroy();
-		});
-		
-		//Store the droppable's proportions
-		this.proportions = { width: this.element.outerWidth(), height: this.element.outerHeight() };
-		
-		// Add the reference and positions to the manager
-		$.ui.ddmanager.droppables.push(this);
-		
-	};
-	
-	$.extend($.ui.droppable, {
-		defaults: {
-			disabled: false,
-			tolerance: 'intersect'
-		}
-	});
-	
-	$.extend($.ui.droppable.prototype, {
+			
+			//Store the droppable's proportions
+			this.proportions = { width: this.element.outerWidth(), height: this.element.outerHeight() };
+			
+			// Add the reference and positions to the manager
+			$.ui.ddmanager.droppables.push(this);
+			
+		},
 		plugins: {},
 		ui: function(c) {
 			return {
@@ -161,6 +126,13 @@
 			$.ui.plugin.call(this, 'deactivate', [e, this.ui(draggable)]);
 			if(draggable) this.element.triggerHandler("dropdeactivate", [e, this.ui(draggable)], this.options.deactivate);
 			
+		}
+	});
+	
+	$.extend($.ui.droppable, {
+		defaults: {
+			disabled: false,
+			tolerance: 'intersect'
 		}
 	});
 	
@@ -324,5 +296,5 @@
 			$(this).removeClass(ui.options.hoverClass);
 		}
 	});
-	
+ 
 })(jQuery);
