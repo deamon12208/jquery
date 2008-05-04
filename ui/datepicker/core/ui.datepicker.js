@@ -990,7 +990,7 @@ function DatepickerInstance(settings, inline) {
 $.extend(DatepickerInstance.prototype, {
 	/* Get a setting value, defaulting if necessary. */
 	_get: function(name) {
-		return this._settings[name] || $.datepicker._defaults[name];
+		return this._settings[name] !== undefined ? this._settings[name] : $.datepicker._defaults[name];
 	},
 
 	/* Parse existing date and initialise date picker. */
