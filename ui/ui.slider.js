@@ -85,9 +85,8 @@
 			});
 			if (!isNaN(this.options.startValue))
 				this.moveTo(this.options.startValue, 0, true);
-			
-			// If we only have one handle, set the previous handle to this one to allow clicking before selecting the handle
-			if(this.handle.length == 1) this.previousHandle = this.handle;
+
+			this.previousHandle = $(this.handle[0]); //set the previous handle to the first to allow clicking before selecting the handle
 			if(this.handle.length == 2 && this.options.range) this.createRange();
 		},
 		initBoundaries: function() {
@@ -201,7 +200,7 @@
 			if(clickedHandle || this.disabled || !(this.currentHandle || this.previousHandle)) return;
 
 			//If a previous handle was focussed, focus it again
-			if(this.previousHandle) this.focus(this.previousHandle, 1);
+			if(!this.currentHandle && this.previousHandle) this.focus(this.previousHandle, 1);
 			
 			//Move focussed handle to the clicked position
 			this.offset = this.element.offset();
