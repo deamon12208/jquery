@@ -14,92 +14,66 @@
  */
 ;(function($) {
 
-	$.fn.extend({
-		selectable: function(options) {
-			var args = Array.prototype.slice.call(arguments, 1); 
+	$.widget("ui", "selectable", {
+		init: function() {
+			var instance = this;
 			
-			return this.each(function() {
-				if (typeof options == "string") {
-					var select = $.data(this, "selectable");
-					if (select) select[options].apply(select, args);
-
-				} else if(!$.data(this, "selectable"))
-					new $.ui.selectable(this, options);
+			this.element.addClass("ui-selectable");
+			
+			this.element.bind("setData.selectable", function(event, key, value){
+				instance.options[key] = value;
+			}).bind("getData.selectable", function(event, key){
+				return instance.options[key];
 			});
-		}
-	});
-
-	$.ui.selectable = function(element, options) {
-		var instance = this;
-		
-		this.element = $(element);
-		
-		$.data(element, "selectable", this); 
-		this.element.addClass("ui-selectable");
-		
-		this.options = $.extend({
-			appendTo: 'body',
-			autoRefresh: true,
-			filter: '*',
-			tolerance: 'touch'
-		}, options);
-		
-		$(element).bind("setData.selectable", function(event, key, value){
-			instance.options[key] = value;
-		}).bind("getData.selectable", function(event, key){
-			return instance.options[key];
-		});
-		
-		this.dragged = false;
-
-		// cache selectee children based on filter
-		var selectees;
-		this.refresh = function() {
-			selectees = $(instance.options.filter, instance.element[0]);
-			selectees.each(function() {
-				var $this = $(this);
-				var pos = $this.offset();
-				$.data(this, "selectable-item", {
-					element: this,
-					$element: $this,
-					left: pos.left,
-					top: pos.top,
-					right: pos.left + $this.width(),
-					bottom: pos.top + $this.height(),
-					startselected: false,
-					selected: $this.hasClass('ui-selected'),
-					selecting: $this.hasClass('ui-selecting'),
-					unselecting: $this.hasClass('ui-unselecting')
+			
+			this.dragged = false;
+	
+			// cache selectee children based on filter
+			var selectees;
+			this.refresh = function() {
+				selectees = $(instance.options.filter, instance.element[0]);
+				selectees.each(function() {
+					var $this = $(this);
+					var pos = $this.offset();
+					$.data(this, "selectable-item", {
+						element: this,
+						$element: $this,
+						left: pos.left,
+						top: pos.top,
+						right: pos.left + $this.width(),
+						bottom: pos.top + $this.height(),
+						startselected: false,
+						selected: $this.hasClass('ui-selected'),
+						selecting: $this.hasClass('ui-selecting'),
+						unselecting: $this.hasClass('ui-unselecting')
+					});
 				});
+			};
+			this.refresh();
+	
+			this.selectees = selectees.addClass("ui-selectee");
+	
+			//Initialize mouse interaction
+			this.element.mouse({
+				executor: this,
+				appendTo: 'body',
+				delay: 0,
+				distance: 0,
+				dragPrevention: ['input','textarea','button','select','option'],
+				start: this.start,
+				stop: this.stop,
+				drag: this.drag,
+				condition: function(e) {
+					var isSelectee = false;
+					$(e.target).parents().andSelf().each(function() {
+						if($.data(this, "selectable-item")) isSelectee = true;
+					});
+					return this.options.keyboard ? !isSelectee : true;
+				}
 			});
-		};
-		this.refresh();
-
-		this.selectees = selectees.addClass("ui-selectee");
-
-		//Initialize mouse interaction
-		this.element.mouse({
-			executor: this,
-			appendTo: 'body',
-			delay: 0,
-			distance: 0,
-			dragPrevention: ['input','textarea','button','select','option'],
-			start: this.start,
-			stop: this.stop,
-			drag: this.drag,
-			condition: function(e) {
-				var isSelectee = false;
-				$(e.target).parents().andSelf().each(function() {
-					if($.data(this, "selectable-item")) isSelectee = true;
-				});
-				return this.options.keyboard ? !isSelectee : true;
-			}
-		});
-		
-		this.helper = $(document.createElement('div')).css({border:'1px dotted black'});
-	};
-
-	$.extend($.ui.selectable.prototype, {
+			
+			this.helper = $(document.createElement('div')).css({border:'1px dotted black'});
+		},
 		toggle: function() {
 			if(this.disabled){
 				this.enable();
@@ -293,5 +267,12 @@
 			this.helper.remove();
 		}
 	});
+	
+	$.ui.selectable.defaults = {
+		appendTo: 'body',
+		autoRefresh: true,
+		filter: '*',
+		tolerance: 'touch'
+	};
 	
 })(jQuery);
