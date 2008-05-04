@@ -162,9 +162,15 @@
 				.bind('mouseup.mouse', function() { (self.timer && clearInterval(self.timer)); })
 				.bind('click.mouse', function() { if(self.initialized) { self.initialized = false; return false; } });
 			//Prevent text selection in IE
-			($.browser.msie && this.element.attr('unselectable', 'on'));
+			if ($.browser.msie) {
+				this.unselectable = this.element.attr('unselectable');
+				this.element.attr('unselectable', 'on');
+			}
 		},
-		destroy: function() { this.element.unbind('mousedown.mouse'); },
+		destroy: function() {
+			this.element.unbind('.mouse');
+			($.browser.msie && this.element.attr('unselectable', this.unselectable));
+		},
 		trigger: function() { return this.click.apply(this, arguments); },
 		click: function(e) {
 			
