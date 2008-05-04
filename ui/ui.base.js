@@ -157,8 +157,10 @@
 		init: function() {
 			var self = this;
 			
-			$(this.element).bind('mousedown.mouse', function() { return self.click.apply(self, arguments); });
-			$(this.element).bind('mouseup.mouse', function() { if(self.timer) { window.clearInterval(self.timer); } });
+			$(this.element)
+				.bind('mousedown.mouse', function() { return self.click.apply(self, arguments); })
+				.bind('mouseup.mouse', function() { if(self.timer) { window.clearInterval(self.timer); } })
+				.bind('click.mouse', function() { if(self.initialized) { self.initialized = false; return false; } });
 			if($.browser.msie) $(element).attr('unselectable', 'on'); //Prevent text selection in IE
 		},
 		destroy: function() { $(this.element).unbind('mousedown.mouse'); },
@@ -202,7 +204,6 @@
 				this.options.stop.call(this.options.executor || this, e, this.element);
 			
 			$(document).unbind('mouseup.mouse').unbind('mousemove.mouse');
-			this.initialized = false;
 			return false;
 			
 		},
