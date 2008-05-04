@@ -111,7 +111,8 @@
 	$.widget = function(namespace, name, prototype) {
 		// create plugin method
 		$.fn[name] = function(options, data) {
-			var isMethodCall = (typeof options == 'string');
+			var isMethodCall = (typeof options == 'string'),
+				args = arguments;
 			
 			if (isMethodCall && getter(namespace, name, options)) {
 				var instance = $.data(this[0], name);
@@ -123,7 +124,7 @@
 				if (!instance) {
 					$.data(this, name, new $[namespace][name](this, options));
 				} else if (isMethodCall) {
-					instance[options](data);
+					instance[options].apply(instance, $.makeArray(args).slice(1));
 				}
 			});
 		};
