@@ -25,104 +25,60 @@
 	          if (b == a) return true; 
 	    return false; 
 	};
-
-	$.fn.extend({
-		sortable: function(options) {
-			
-			var args = Array.prototype.slice.call(arguments, 1);
-			
-			if (options == "serialize" || options == "toArray")
-				return $.data(this[0], "sortable")[options](arguments[1]);
-			
-			return this.each(function() {
-				if (typeof options == "string") {
-					var sort = $.data(this, "sortable");
-					if (sort) sort[options].apply(sort, args);
-
-				} else if(!$.data(this, "sortable"))
-					new $.ui.sortable(this, options);
-			});
-		}
-	});
 	
-	$.ui.sortable = function(element, options) {
-		//Initialize needed constants
-		var self = this;
+	$.widget("ui", "sortable", {
+		init: function() {
+
+			var o = this.options;
+			this.containerCache = {};
+			this.element.addClass("ui-sortable");
+		
+			//Get the items
+			this.refresh();
 	
-		this.element = $(element);
-		this.containerCache = {};
-		
-		$.data(element, "sortable", this);
-		this.element.addClass("ui-sortable");
-
-		//Prepare the passed options
-		this.options = $.extend({}, options);
-		var o = this.options;
-		$.extend(o, {
-			items: this.options.items || '> *',
-			zIndex: this.options.zIndex || 1000,
-			startCondition: function() {
-				return !self.options.disabled;
-			}
-		});
-		
-		$(element).bind("setData.sortable", function(event, key, value){
-			self.options[key] = value;
-		}).bind("getData.sortable", function(event, key){
-			return self.options[key];
-		});
-		
-		//Get the items
-		this.refresh();
-
-		//Let's determine if the items are floating
-		this.floating = this.items.length ? (/left|right/).test(this.items[0].item.css('float')) : false;
-		
-		//Let's determine the parent's offset
-		if(!(/(relative|absolute|fixed)/).test(this.element.css('position'))) this.element.css('position', 'relative');
-		this.offset = this.element.offset();
-
-		//Initialize mouse events for interaction
-		this.element.mouseInteraction({
-			executor: this,
-			delay: o.delay,
-			distance: o.distance || 1,
-			dragPrevention: o.prevention ? o.prevention.toLowerCase().split(',') : ['input','textarea','button','select','option'],
-			start: this.start,
-			stop: this.stop,
-			drag: this.drag,
-			condition: function(e) {
-
-				if(this.options.disabled || this.options.type == 'static') return false;
-
-				//Find out if the clicked node (or one of its parents) is a actual item in this.items
-				var currentItem = null, nodes = $(e.target).parents().each(function() {	
-					if($.data(this, 'sortable-item')) {
-						currentItem = $(this);
-						return false;
-					}
-				});
-				if($.data(e.target, 'sortable-item')) currentItem = $(e.target);
-				
-				if(!currentItem) return false;	
-				if(this.options.handle) {
-					var validHandle = false;
-					$(this.options.handle, currentItem).each(function() { if(this == e.target) validHandle = true; });
-					if(!validHandle) return false;
-				}
+			//Let's determine if the items are floating
+			this.floating = this.items.length ? (/left|right/).test(this.items[0].item.css('float')) : false;
+			
+			//Let's determine the parent's offset
+			if(!(/(relative|absolute|fixed)/).test(this.element.css('position'))) this.element.css('position', 'relative');
+			this.offset = this.element.offset();
+	
+			//Initialize mouse events for interaction
+			this.element.mouse({
+				executor: this,
+				delay: o.delay,
+				distance: o.distance || 1,
+				dragPrevention: o.prevention ? o.prevention.toLowerCase().split(',') : ['input','textarea','button','select','option'],
+				start: this.start,
+				stop: this.stop,
+				drag: this.drag,
+				condition: function(e) {
+	
+					if(this.options.disabled || this.options.type == 'static') return false;
+	
+					//Find out if the clicked node (or one of its parents) is a actual item in this.items
+					var currentItem = null, nodes = $(e.target).parents().each(function() {	
+						if($.data(this, 'sortable-item')) {
+							currentItem = $(this);
+							return false;
+						}
+					});
+					if($.data(e.target, 'sortable-item')) currentItem = $(e.target);
 					
-				this.currentItem = currentItem;
-				return true;
-
-			}
-		});
-		
-		//Prepare cursorAt
-		if(o.cursorAt && o.cursorAt.constructor == Array)
-			o.cursorAt = { left: o.cursorAt[0], top: o.cursorAt[1] };
-	};
+					if(!currentItem) return false;	
+					if(this.options.handle) {
+						var validHandle = false;
+						$(this.options.handle, currentItem).each(function() { if(this == e.target) validHandle = true; });
+						if(!validHandle) return false;
+					}
+						
+					this.currentItem = currentItem;
+					return true;
 	
-	$.extend($.ui.sortable.prototype, {
+				}
+			});
+			
+		},
 		plugins: {},
 		ui: function(inst) {
 			return {
@@ -296,7 +252,7 @@
 				.removeClass("ui-sortable ui-sortable-disabled")
 				.removeData("sortable")
 				.unbind(".sortable")
-				.removeMouseInteraction();
+				.mouse("destroy");
 			
 			for ( var i = this.items.length - 1; i >= 0; i-- )
 				this.items[i].item.removeData("sortable-item");
@@ -359,7 +315,7 @@
 			};			
 		},
 		start: function(e,el) {
-			
+		
 			var o = this.options;
 			this.currentContainer = this;
 			this.refresh();
@@ -515,6 +471,15 @@
 			if(this.placeholderElement && this.placeholderElement.is(":visible")) this.placeholder.css({ width: this.placeholderElement.outerWidth(), height: this.placeholderElement.outerHeight() });
 		}
 	});
+	
+	$.extend($.ui.sortable, {
+		getter: "serialize toArray",
+		defaults: {
+			items: '> *',
+			zIndex: 1000
+		}
+	});
+
 	
 /*
  * Sortable Extensions
