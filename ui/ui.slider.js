@@ -191,21 +191,26 @@
 			return $(handle != undefined && handle !== null ? this.handle[handle] : this.currentHandle)[0][axis == 1 ? "offsetWidth" : "offsetHeight"];	
 		},
 		click: function(e) {
-		
 			// This method is only used if:
 			// - The user didn't click a handle
 			// - The Slider is not disabled
 			// - There is a current, or previous selected handle (otherwise we wouldn't know which one to move)
+			
 			var pointer = [e.pageX,e.pageY];
-			var clickedHandle = false; this.handle.each(function() { if(this == e.target) clickedHandle = true; });
+			
+			var clickedHandle = false;
+			this.handle.each(function() {
+				if(this == e.target)
+					clickedHandle = true;
+			});
 			if (clickedHandle || this.disabled || !(this.currentHandle || this.previousHandle))
 				return;
 
-			//If a previous handle was focussed, focus it again
+			// If a previous handle was focussed, focus it again
 			if (!this.currentHandle && this.previousHandle)
-				this.focus(this.previousHandle, 1);
+				this.focus(this.previousHandle, true);
 			
-			//Move focussed handle to the clicked position
+			// Move focussed handle to the clicked position
 			this.offset = this.element.offset();
 			this.moveTo({
 				y: this.convertValue(e.pageY - this.offset.top - this.currentHandle.outerHeight()/2),
