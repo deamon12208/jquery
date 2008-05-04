@@ -159,7 +159,8 @@
 		},
 		focus: function(handle,hard) {
 			this.currentHandle = $(handle).addClass('ui-slider-handle-active');
-			if(hard) this.currentHandle.parent()[0].focus();
+			if (hard)
+				this.currentHandle.parent()[0].focus();
 		},
 		blur: function(handle) {
 			$(handle).removeClass('ui-slider-handle-active');
@@ -214,7 +215,10 @@
 		start: function(e, handle) {
 		
 			var o = this.options;
-			if(!this.currentHandle) this.focus(this.previousHandle, true); //This is a especially ugly fix for strange blur events happening on mousemove events
+			
+			// This is a especially ugly fix for strange blur events happening on mousemove events
+			if (!this.currentHandle)
+				this.focus(this.previousHandle, true); 
 
 			this.offset = this.element.offset();
 			this.handleOffset = this.currentHandle.offset();
