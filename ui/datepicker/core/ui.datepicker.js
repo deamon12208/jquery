@@ -96,7 +96,7 @@ function Datepicker() {
 		rangeSeparator: ' - ' // Text between two dates in a range
 	};
 	$.extend(this._defaults, this.regional['']);
-	this._datepickerDiv = $('<div id="datepicker_div">');
+	this._datepickerDiv = $('<div id="datepicker_div"></div>');
 }
 
 $.extend(Datepicker.prototype, {
