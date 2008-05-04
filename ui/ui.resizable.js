@@ -14,268 +14,219 @@
  */
 ;(function($) {
 	
-	$.fn.extend({
-		resizable: function(options, data) {
-			var args = Array.prototype.slice.call(arguments, 1);
-			
-			return this.each(function() {
-				if (typeof options == "string") {
-					var resize = $.data(this, "resizable");
-					if (resize) resize[options].apply(resize, args);
-	
-				} else if(!$(this).is(".ui-resizable"))
-					new $.ui.resizable(this, options);
-			});
-		}
-	});
+	$.widget("ui", "resizable", {
+		init: function() {
 
-	$.ui.resizable = function(element, options) {
-		//Initialize needed constants
-		var self = this;
-		
-		this.element = $(element);
-		
-		$.data(element, "resizable", this);
-		
-		// simulate .ui-resizable { position: relative; }
-		var elpos = this.element.css('position');
-		this.element.addClass("ui-resizable").css({ position: /static/.test(elpos) ? 'relative' : elpos });
-		
-		//Prepare the passed options
-		this.options = $.extend({
-			preventDefault: true,
-			transparent: false,
-			minWidth: 10,
-			minHeight: 10,
-			aspectRatio: false,
-			disableSelection: true,
-			preserveCursor: true,
-			autohide: false,
-			knobHandles: false
-		}, options);
-		
-		this.options._aspectRatio = !!(this.options.aspectRatio);
-		
-		// force proxy if helper is enabled
-		this.options.proxy = this.options.proxy || this.options.ghost ? 'proxy' : null; 
-		
-		// force proxy if animation is enabled
-		this.options.proxy = this.options.proxy || this.options.animate ? 'proxy' : null; 
-		
-		// if knobHandles equals true set to ui-resizable-knob-handle
-		this.options.knobHandles = this.options.knobHandles === true ? 'ui-resizable-knob-handle' : this.options.knobHandles;
-		
-		$(element).bind("setData.resizable", function(event, key, value){
-			self.options[key] = value;
-		}).bind("getData.resizable", function(event, key){
-			return self.options[key];
-		});
-	
-		var o = this.options;
-	
-		//Default Theme
-		var aBorder = '1px solid #DEDEDE';
-	
-		o.defaultTheme = {
-			'ui-resizable': { display: 'block' },
-			'ui-resizable-handle': { position: 'absolute', background: '#F2F2F2', fontSize: '0.1px' },
-			'ui-resizable-n': { cursor: 'n-resize', height: '4px', left: '0px', right: '0px', borderTop: aBorder },
-			'ui-resizable-s': { cursor: 's-resize', height: '4px', left: '0px', right: '0px', borderBottom: aBorder },
-			'ui-resizable-e': { cursor: 'e-resize', width: '4px', top: '0px', bottom: '0px', borderRight: aBorder },
-			'ui-resizable-w': { cursor: 'w-resize', width: '4px', top: '0px', bottom: '0px', borderLeft: aBorder },
-			'ui-resizable-se': { cursor: 'se-resize', width: '4px', height: '4px', borderRight: aBorder, borderBottom: aBorder },
-			'ui-resizable-sw': { cursor: 'sw-resize', width: '4px', height: '4px', borderBottom: aBorder, borderLeft: aBorder },
-			'ui-resizable-ne': { cursor: 'ne-resize', width: '4px', height: '4px', borderRight: aBorder, borderTop: aBorder },
-			'ui-resizable-nw': { cursor: 'nw-resize', width: '4px', height: '4px', borderLeft: aBorder, borderTop: aBorder }
-		};
-		
-		o.knobTheme = {
-			'ui-resizable-handle': { background: '#F2F2F2', border: '1px solid #808080', height: '8px', width: '8px' },
-			'ui-resizable-n': { cursor: 'n-resize', top: '-4px', left: '45%' },
-			'ui-resizable-s': { cursor: 's-resize', bottom: '-4px', left: '45%' },
-			'ui-resizable-e': { cursor: 'e-resize', right: '-4px', top: '45%' },
-			'ui-resizable-w': { cursor: 'w-resize', left: '-4px', top: '45%' },
-			'ui-resizable-se': { cursor: 'se-resize', right: '-4px', bottom: '-4px' },
-			'ui-resizable-sw': { cursor: 'sw-resize', left: '-4px', bottom: '-4px' },
-			'ui-resizable-nw': { cursor: 'nw-resize', left: '-4px', top: '-4px' },
-			'ui-resizable-ne': { cursor: 'ne-resize', right: '-4px', top: '-4px' }
-		};
-	
-		//Position the node
-		if(!o.proxy && (this.element.css('position') == 'static' || this.element.css('position') === ''))
-			this.element.css('position', 'relative');
-	
-		o._nodeName = element.nodeName;
-	
-		//Wrap the element if it cannot hold child nodes
-		if(o._nodeName.match(/textarea|input|select|button|img/i)) {
-			var el = this.element;
+			var self = this, o = this.options;
 			
-			//Opera fixing relative position
-			if (/relative/.test(el.css('position')) && $.browser.opera)
-				el.css({ position: 'relative', top: 'auto', left: 'auto' });
 			
-			//Create a wrapper element and set the wrapper to the new current internal element
-			el.wrap(
-				$('<div class="ui-wrapper"	style="overflow: hidden;"></div>').css( {
-					position: el.css('position'),
-					width: el.outerWidth(),
-					height: el.outerHeight(),
-					top: el.css('top'),
-					left: el.css('left')
-				})
-			);
+			var elpos = this.element.css('position'); // simulate .ui-resizable { position: relative; }
+			this.element.addClass("ui-resizable").css({ position: /static/.test(elpos) ? 'relative' : elpos });
 			
-			var oel = this.element; element = element.parentNode; this.element = $(element);
-	
-			//Move margins to the wrapper
-			this.element.css({ marginLeft: oel.css("marginLeft"), marginTop: oel.css("marginTop"),
-				marginRight: oel.css("marginRight"), marginBottom: oel.css("marginBottom")
+			$.extend(o, {
+				_aspectRatio: !!(o.aspectRatio),
+				proxy: o.proxy || o.ghost || o.animate ? 'proxy' : null,
+				knobHandles: o.knobHandles === true ? 'ui-resizable-knob-handle' : o.knobHandles
 			});
+
+			//Default Theme
+			var aBorder = '1px solid #DEDEDE';
 	
-			oel.css({ marginLeft: 0, marginTop: 0, marginRight: 0, marginBottom: 0});
-	
-			//Prevent Safari textarea resize
-			if ($.browser.safari && o.preventDefault) oel.css('resize', 'none');
-	
-			o.proportionallyResize = oel.css({ position: 'static', zoom: 1, display: 'block' });
-			
-			// avoid IE jump
-			this.element.css({ margin: oel.css('margin') });
-			
-			// fix handlers offset
-			this._proportionallyResize();
-		}
-	
-		if(!o.handles) o.handles = !$('.ui-resizable-handle', element).length ? "e,s,se" : { n: '.ui-resizable-n', e: '.ui-resizable-e', s: '.ui-resizable-s', w: '.ui-resizable-w', se: '.ui-resizable-se', sw: '.ui-resizable-sw', ne: '.ui-resizable-ne', nw: '.ui-resizable-nw' };
-		if(o.handles.constructor == String) {
-	
-			if(o.handles == 'all') o.handles = 'n,e,s,w,se,sw,ne,nw';
-	
-			var n = o.handles.split(","); o.handles = {};
-	
-			o.zIndex = o.zIndex || 1000;
-			
-			// insertions are applied when don't have theme loaded
-			var insertionsDefault = {
-				handle: 'position: absolute; display: none; overflow:hidden;',
-				n: 'top: 0pt; width:100%;',
-				e: 'right: 0pt; height:100%;',
-				s: 'bottom: 0pt; width:100%;',
-				w: 'left: 0pt; height:100%;',
-				se: 'bottom: 0pt; right: 0px;',
-				sw: 'bottom: 0pt; left: 0px;',
-				ne: 'top: 0pt; right: 0px;',
-				nw: 'top: 0pt; left: 0px;'
+			o.defaultTheme = {
+				'ui-resizable': { display: 'block' },
+				'ui-resizable-handle': { position: 'absolute', background: '#F2F2F2', fontSize: '0.1px' },
+				'ui-resizable-n': { cursor: 'n-resize', height: '4px', left: '0px', right: '0px', borderTop: aBorder },
+				'ui-resizable-s': { cursor: 's-resize', height: '4px', left: '0px', right: '0px', borderBottom: aBorder },
+				'ui-resizable-e': { cursor: 'e-resize', width: '4px', top: '0px', bottom: '0px', borderRight: aBorder },
+				'ui-resizable-w': { cursor: 'w-resize', width: '4px', top: '0px', bottom: '0px', borderLeft: aBorder },
+				'ui-resizable-se': { cursor: 'se-resize', width: '4px', height: '4px', borderRight: aBorder, borderBottom: aBorder },
+				'ui-resizable-sw': { cursor: 'sw-resize', width: '4px', height: '4px', borderBottom: aBorder, borderLeft: aBorder },
+				'ui-resizable-ne': { cursor: 'ne-resize', width: '4px', height: '4px', borderRight: aBorder, borderTop: aBorder },
+				'ui-resizable-nw': { cursor: 'nw-resize', width: '4px', height: '4px', borderLeft: aBorder, borderTop: aBorder }
 			};
-	
-			for(var i = 0; i < n.length; i++) {
-				var handle = jQuery.trim(n[i]), dt = o.defaultTheme, hname = 'ui-resizable-'+handle, loadDefault = !$.ui.css(hname) && !o.knobHandles, userKnobClass = $.ui.css('ui-resizable-knob-handle'), 
-							allDefTheme = $.extend(dt[hname], dt['ui-resizable-handle']), allKnobTheme = $.extend(o.knobTheme[hname], !userKnobClass ? o.knobTheme['ui-resizable-handle'] : {});
+			
+			o.knobTheme = {
+				'ui-resizable-handle': { background: '#F2F2F2', border: '1px solid #808080', height: '8px', width: '8px' },
+				'ui-resizable-n': { cursor: 'n-resize', top: '-4px', left: '45%' },
+				'ui-resizable-s': { cursor: 's-resize', bottom: '-4px', left: '45%' },
+				'ui-resizable-e': { cursor: 'e-resize', right: '-4px', top: '45%' },
+				'ui-resizable-w': { cursor: 'w-resize', left: '-4px', top: '45%' },
+				'ui-resizable-se': { cursor: 'se-resize', right: '-4px', bottom: '-4px' },
+				'ui-resizable-sw': { cursor: 'sw-resize', left: '-4px', bottom: '-4px' },
+				'ui-resizable-nw': { cursor: 'nw-resize', left: '-4px', top: '-4px' },
+				'ui-resizable-ne': { cursor: 'ne-resize', right: '-4px', top: '-4px' }
+			};
+			
+			o._nodeName = this.element[0].nodeName;
+		
+			//Wrap the element if it cannot hold child nodes
+			if(o._nodeName.match(/textarea|input|select|button|img/i)) {
+				var el = this.element;
 				
-				// increase zIndex of sw, se, ne, nw axis
-				var applyZIndex = /sw|se|ne|nw/.test(handle) ? { zIndex: ++o.zIndex } : {};
+				//Opera fixing relative position
+				if (/relative/.test(el.css('position')) && $.browser.opera)
+					el.css({ position: 'relative', top: 'auto', left: 'auto' });
 				
-				var defCss = (loadDefault ? insertionsDefault[handle] : ''), 
-					axis = $(['<div class="ui-resizable-handle ', hname, '" style="', defCss, insertionsDefault.handle, '"></div>'].join('')).css( applyZIndex );
-				o.handles[handle] = '.ui-resizable-'+handle;
-				
-				this.element.append(
-					//Theme detection, if not loaded, load o.defaultTheme
-					axis.css( loadDefault ? allDefTheme : {} )
-						// Load the knobHandle css, fix width, height, top, left...
-						.css( o.knobHandles ? allKnobTheme : {} ).addClass(o.knobHandles ? 'ui-resizable-knob-handle' : '').addClass(o.knobHandles)
+				//Create a wrapper element and set the wrapper to the new current internal element
+				el.wrap(
+					$('<div class="ui-wrapper"	style="overflow: hidden;"></div>').css( {
+						position: el.css('position'),
+						width: el.outerWidth(),
+						height: el.outerHeight(),
+						top: el.css('top'),
+						left: el.css('left')
+					})
 				);
-			}
-			
-			if (o.knobHandles) this.element.addClass('ui-resizable-knob').css( !$.ui.css('ui-resizable-knob') ? { /*border: '1px #fff dashed'*/ } : {} );
-		}
-	
-		this._renderAxis = function(target) {
-			target = target || this.element;
-	
-			for(var i in o.handles) {
-				if(o.handles[i].constructor == String) 
-					o.handles[i] = $(o.handles[i], element).show();
-	
-				if (o.transparent)
-					o.handles[i].css({opacity:0});
-	
-				//Apply pad to wrapper element, needed to fix axis position (textarea, inputs, scrolls)
-				if (this.element.is('.ui-wrapper') && 
-					o._nodeName.match(/textarea|input|select|button/i)) {
-	
-					var axis = $(o.handles[i], element), padWrapper = 0;
-	
-					//Checking the correct pad and border
-					padWrapper = /sw|ne|nw|se|n|s/.test(i) ? axis.outerHeight() : axis.outerWidth();
-	
-					//The padding type i have to apply...
-					var padPos = [ 'padding', 
-						/ne|nw|n/.test(i) ? 'Top' :
-						/se|sw|s/.test(i) ? 'Bottom' : 
-						/^e$/.test(i) ? 'Right' : 'Left' ].join(""); 
-	
-					if (!o.transparent)
-						target.css(padPos, padWrapper);
-	
-					this._proportionallyResize();
-				}
-				if(!$(o.handles[i]).length) continue;
-			}
-		};
-			
-		this._renderAxis(this.element);
-		o._handles = $('.ui-resizable-handle', self.element);
-		
-		if (o.disableSelection)
-			o._handles.each(function(i, e) { $.ui.disableSelection(e); });
-		
-		//Matching axis name
-		o._handles.mouseover(function() {
-			if (!o.resizing) {
-				if (this.className) 
-					var axis = this.className.match(/ui-resizable-(se|sw|ne|nw|n|e|s|w)/i);
-				//Axis, default = se
-				self.axis = o.axis = axis && axis[1] ? axis[1] : 'se';
-			}
-		});
 				
-		//If we want to auto hide the elements
-		if (o.autohide) {
-			o._handles.hide();
-			$(self.element).addClass("ui-resizable-autohide").hover(function() {
-				$(this).removeClass("ui-resizable-autohide");
-				o._handles.show();
-			},
-			function(){
+				var oel = this.element; this.element = this.element.parent();
+		
+				//Move margins to the wrapper
+				this.element.css({ marginLeft: oel.css("marginLeft"), marginTop: oel.css("marginTop"),
+					marginRight: oel.css("marginRight"), marginBottom: oel.css("marginBottom")
+				});
+		
+				oel.css({ marginLeft: 0, marginTop: 0, marginRight: 0, marginBottom: 0});
+		
+				//Prevent Safari textarea resize
+				if ($.browser.safari && o.preventDefault) oel.css('resize', 'none');
+		
+				o.proportionallyResize = oel.css({ position: 'static', zoom: 1, display: 'block' });
+				
+				// avoid IE jump
+				this.element.css({ margin: oel.css('margin') });
+				
+				// fix handlers offset
+				this._proportionallyResize();
+			}
+			
+			if(!o.handles) o.handles = !$('.ui-resizable-handle', this.element).length ? "e,s,se" : { n: '.ui-resizable-n', e: '.ui-resizable-e', s: '.ui-resizable-s', w: '.ui-resizable-w', se: '.ui-resizable-se', sw: '.ui-resizable-sw', ne: '.ui-resizable-ne', nw: '.ui-resizable-nw' };
+			if(o.handles.constructor == String) {
+		
+				if(o.handles == 'all') o.handles = 'n,e,s,w,se,sw,ne,nw';
+		
+				var n = o.handles.split(","); o.handles = {};
+		
+				o.zIndex = o.zIndex || 1000;
+				
+				// insertions are applied when don't have theme loaded
+				var insertionsDefault = {
+					handle: 'position: absolute; display: none; overflow:hidden;',
+					n: 'top: 0pt; width:100%;',
+					e: 'right: 0pt; height:100%;',
+					s: 'bottom: 0pt; width:100%;',
+					w: 'left: 0pt; height:100%;',
+					se: 'bottom: 0pt; right: 0px;',
+					sw: 'bottom: 0pt; left: 0px;',
+					ne: 'top: 0pt; right: 0px;',
+					nw: 'top: 0pt; left: 0px;'
+				};
+		
+				for(var i = 0; i < n.length; i++) {
+					var handle = jQuery.trim(n[i]), dt = o.defaultTheme, hname = 'ui-resizable-'+handle, loadDefault = !$.ui.css(hname) && !o.knobHandles, userKnobClass = $.ui.css('ui-resizable-knob-handle'), 
+								allDefTheme = $.extend(dt[hname], dt['ui-resizable-handle']), allKnobTheme = $.extend(o.knobTheme[hname], !userKnobClass ? o.knobTheme['ui-resizable-handle'] : {});
+					
+					// increase zIndex of sw, se, ne, nw axis
+					var applyZIndex = /sw|se|ne|nw/.test(handle) ? { zIndex: ++o.zIndex } : {};
+					
+					var defCss = (loadDefault ? insertionsDefault[handle] : ''), 
+						axis = $(['<div class="ui-resizable-handle ', hname, '" style="', defCss, insertionsDefault.handle, '"></div>'].join('')).css( applyZIndex );
+					o.handles[handle] = '.ui-resizable-'+handle;
+					
+					this.element.append(
+						//Theme detection, if not loaded, load o.defaultTheme
+						axis.css( loadDefault ? allDefTheme : {} )
+							// Load the knobHandle css, fix width, height, top, left...
+							.css( o.knobHandles ? allKnobTheme : {} ).addClass(o.knobHandles ? 'ui-resizable-knob-handle' : '').addClass(o.knobHandles)
+					);
+				}
+				
+				if (o.knobHandles) this.element.addClass('ui-resizable-knob').css( !$.ui.css('ui-resizable-knob') ? { /*border: '1px #fff dashed'*/ } : {} );
+			}
+
+			this._renderAxis = function(target) {
+				target = target || this.element;
+		
+				for(var i in o.handles) {
+					if(o.handles[i].constructor == String) 
+						o.handles[i] = $(o.handles[i], this.element).show();
+		
+					if (o.transparent)
+						o.handles[i].css({opacity:0});
+		
+					//Apply pad to wrapper element, needed to fix axis position (textarea, inputs, scrolls)
+					if (this.element.is('.ui-wrapper') && 
+						o._nodeName.match(/textarea|input|select|button/i)) {
+		
+						var axis = $(o.handles[i], this.element), padWrapper = 0;
+		
+						//Checking the correct pad and border
+						padWrapper = /sw|ne|nw|se|n|s/.test(i) ? axis.outerHeight() : axis.outerWidth();
+		
+						//The padding type i have to apply...
+						var padPos = [ 'padding', 
+							/ne|nw|n/.test(i) ? 'Top' :
+							/se|sw|s/.test(i) ? 'Bottom' : 
+							/^e$/.test(i) ? 'Right' : 'Left' ].join(""); 
+		
+						if (!o.transparent)
+							target.css(padPos, padWrapper);
+		
+						this._proportionallyResize();
+					}
+					if(!$(o.handles[i]).length) continue;
+				}
+			};
+			
+			this._renderAxis(this.element);
+			o._handles = $('.ui-resizable-handle', self.element);
+			
+			if (o.disableSelection)
+				o._handles.each(function(i, e) { $.ui.disableSelection(e); });
+			
+			//Matching axis name
+			o._handles.mouseover(function() {
 				if (!o.resizing) {
-					$(this).addClass("ui-resizable-autohide");
-					o._handles.hide();
+					if (this.className) 
+						var axis = this.className.match(/ui-resizable-(se|sw|ne|nw|n|e|s|w)/i);
+					//Axis, default = se
+					self.axis = o.axis = axis && axis[1] ? axis[1] : 'se';
 				}
 			});
-		}
-	
-		//Initialize mouse events for interaction
-		this.element.mouse({
-			executor: this,
-			delay: 0,
-			distance: 0,
-			dragPrevention: ['input','textarea','button','select','option'],
-			start: this.start,
-			stop: this.stop,
-			drag: this.drag,
-			condition: function(e) {
-				if(this.disabled) return false;
-				for(var i in this.options.handles) {
-					if($(this.options.handles[i])[0] == e.target) return true;
-				}
-				return false;
+					
+			//If we want to auto hide the elements
+			if (o.autohide) {
+				o._handles.hide();
+				$(self.element).addClass("ui-resizable-autohide").hover(function() {
+					$(this).removeClass("ui-resizable-autohide");
+					o._handles.show();
+				},
+				function(){
+					if (!o.resizing) {
+						$(this).addClass("ui-resizable-autohide");
+						o._handles.hide();
+					}
+				});
 			}
-		});
-	};
-
-	$.extend($.ui.resizable.prototype, {
+		
+			//Initialize mouse events for interaction
+			this.element.mouse({
+				executor: this,
+				delay: 0,
+				distance: 0,
+				dragPrevention: ['input','textarea','button','select','option'],
+				start: this.start,
+				stop: this.stop,
+				drag: this.drag,
+				condition: function(e) {
+					if(this.disabled) return false;
+					for(var i in this.options.handles) {
+						if($(this.options.handles[i])[0] == e.target) return true;
+					}
+					return false;
+				}
+			});
+			
+		},
 		plugins: {},
 		ui: function() {
 			return {
@@ -396,7 +347,7 @@
 			var o = this.options, num = function(v) { return parseInt(v, 10) || 0; }, self = this;
 	
 			if(o.proxy) {
-				var pr = o.proportionallyResize, ista = pr && /textarea/i.test(pr.get(0).nodeName), 
+				var pr = o.proportionallyResize, ista = pr && (/textarea/i).test(pr.get(0).nodeName), 
 							soffseth = ista && $.ui.hasScroll(pr.get(0), 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
 								soffsetw = ista ? 0 : self.sizeDiff.width;
 			
@@ -552,6 +503,20 @@
 			}
 		}
 	});
+	
+	$.extend($.ui.resizable, {
+		defaults: {
+			preventDefault: true,
+			transparent: false,
+			minWidth: 10,
+			minHeight: 10,
+			aspectRatio: false,
+			disableSelection: true,
+			preserveCursor: true,
+			autohide: false,
+			knobHandles: false
+		}
+	});
 
 /*
  * Resizable Extensions
@@ -575,7 +540,8 @@
 			
 			// i'm a node, so compute top, left, right, bottom
 			else{
-				self.containerOffset = $(ce).offset(), self.containerSize = { height: $(ce).innerHeight(), width: $(ce).innerWidth() };
+				self.containerOffset = $(ce).offset();
+				self.containerSize = { height: $(ce).innerHeight(), width: $(ce).innerWidth() };
 			
 				var co = self.containerOffset, ch = self.containerSize.height,	cw = self.containerSize.width, 
 							width = ($.ui.hasScroll(ce, "left") ? ce.scrollWidth : cw ), height = ($.ui.hasScroll(ce) ? ce.scrollHeight : ch);
@@ -654,7 +620,7 @@
 		stop: function(e, ui) {
 			var o = ui.options, self = ui.instance;
 
-			var pr = o.proportionallyResize, ista = pr && /textarea/i.test(pr.get(0).nodeName), 
+			var pr = o.proportionallyResize, ista = pr && (/textarea/i).test(pr.get(0).nodeName), 
 							soffseth = ista && $.ui.hasScroll(pr.get(0), 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
 								soffsetw = ista ? 0 : self.sizeDiff.width;
 			
