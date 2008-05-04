@@ -479,7 +479,7 @@ $.extend(Datepicker.prototype, {
 		var numMonths = inst._getNumberOfMonths(); // fix width for dynamic number of date pickers
 		inst._datepickerDiv.width(numMonths[1] * $('.datepicker', inst._datepickerDiv[0])[0].offsetWidth);
 		if ($.browser.msie && parseInt($.browser.version) < 7) { // fix IE < 7 select problems
-			$('#datepicker_cover').css({width: inst._datepickerDiv.width() + 4,
+			$('iframe.datepicker_cover').css({width: inst._datepickerDiv.width() + 4,
 				height: inst._datepickerDiv.height() + 4});
 		}
 		// re-position on screen if necessary
