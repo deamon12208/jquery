@@ -13,88 +13,34 @@
  * Revision: $Id$
  */
 ;(function($) {
-
-	// tabs API methods
-	$.fn.tabs = function() {
-		var method = typeof arguments[0] == 'string' && arguments[0];
-		var args = method && Array.prototype.slice.call(arguments, 1) || arguments;
-
-		return method == 'length' ?
-			$.data(this[0], 'tabs').$tabs.length :
-			this.each(function() {
-				if (method) {
-					var tabs = $.data(this, 'tabs');
-					if (tabs) tabs[method].apply(tabs, args);
-				} else
-					new $.ui.tabs(this, args[0] || {});
-			});
-	};
-
-	// tabs class
-	$.ui.tabs = function(el, options) {
-		var self = this;
-		
-		this.options = $.extend({}, $.ui.tabs.defaults, options);
-		this.element = el;
-
-		// doesn't extend with null
-		if (options.selected === null)
-			this.options.selected = null;
-
-		this.options.event += '.tabs'; // namespace event
-
-		$(el).bind('setData.tabs', function(event, key, value) {
-			if ((/^selected/).test(key))
-				self.select(value);
-			else {
-				self.options[key] = value;
-				self.tabify();
-			}
-		}).bind('getData.tabs', function(event, key) {
-			return self.options[key];
-		});
-
-		// save instance for later
-		$.data(el, 'tabs', this);
-
-		// create tabs
-		this.tabify(true);
-	};
 	
-	$.ui.tabs.defaults = {
-		// basic setup
-		selected: 0,
-		unselect: false,
-		event: 'click',
-		disabled: [],
-		cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
-		// TODO history: false,
-
-		// Ajax
-		spinner: 'Loading&#8230;',
-		cache: false,
-		idPrefix: 'ui-tabs-',
-		ajaxOptions: {},
-
-		// animations
-		fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
-
-		// templates
-		tabTemplate: '<li><a href="#{href}"><span>#{label}</span></a></li>',
-		panelTemplate: '<div></div>',
-
-		// CSS classes
-		navClass: 'ui-tabs-nav',
-		selectedClass: 'ui-tabs-selected',
-		unselectClass: 'ui-tabs-unselect',
-		disabledClass: 'ui-tabs-disabled',
-		panelClass: 'ui-tabs-panel',
-		hideClass: 'ui-tabs-hide',
-		loadingClass: 'ui-tabs-loading'
-	};
-
-	// instance methods
-	$.extend($.ui.tabs.prototype, {
+	$.widget("ui", "tabs", {
+		init: function() {
+			var self = this;
+		
+			// doesn't extend with null
+			if (this.options.selected === null)
+				this.options.selected = null;
+	
+			this.options.event += '.tabs'; // namespace event
+	
+			$(this.element).bind('setData.tabs', function(event, key, value) {
+				if ((/^selected/).test(key))
+					self.select(value);
+				else {
+					self.options[key] = value;
+					self.tabify();
+				}
+			}).bind('getData.tabs', function(event, key) {
+				return self.options[key];
+			});
+	
+			// create tabs
+			this.tabify(true);
+		},
+		length: function() {
+			return this.$tabs.length;
+		},
 		tabId: function(a) {
 			return a.title && a.title.replace(/\s/g, '_').replace(/[^A-Za-z0-9\-_:\.]/g, '')
 				|| this.options.idPrefix + $.data(a);
@@ -386,7 +332,7 @@
 			}
 			if (index >= this.$lis.length) {
 				$li.appendTo(this.element);
-				$panel.appendTo(this.element.parentNode);
+				$panel.appendTo(this.element[0].parentNode);
 			} else {
 				$li.insertBefore(this.$lis[index]);
 				$panel.insertBefore(this.$panels[index]);
@@ -554,6 +500,40 @@
 			});
 		}
 	});
+	
+	$.ui.tabs.defaults = {
+		// basic setup
+		selected: 0,
+		unselect: false,
+		event: 'click',
+		disabled: [],
+		cookie: null, // e.g. { expires: 7, path: '/', domain: 'jquery.com', secure: true }
+		// TODO history: false,
+
+		// Ajax
+		spinner: 'Loading&#8230;',
+		cache: false,
+		idPrefix: 'ui-tabs-',
+		ajaxOptions: {},
+
+		// animations
+		fx: null, // e.g. { height: 'toggle', opacity: 'toggle', duration: 200 }
+
+		// templates
+		tabTemplate: '<li><a href="#{href}"><span>#{label}</span></a></li>',
+		panelTemplate: '<div></div>',
+
+		// CSS classes
+		navClass: 'ui-tabs-nav',
+		selectedClass: 'ui-tabs-selected',
+		unselectClass: 'ui-tabs-unselect',
+		disabledClass: 'ui-tabs-disabled',
+		panelClass: 'ui-tabs-panel',
+		hideClass: 'ui-tabs-hide',
+		loadingClass: 'ui-tabs-loading'
+	};
+	
+	$.ui.tabs.getter = "length";
 
 /*
  * Tabs Extensions
