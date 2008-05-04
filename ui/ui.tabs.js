@@ -129,12 +129,21 @@
 				if (o.selected !== null) {
 					this.$panels.eq(o.selected).show().removeClass(o.hideClass); // use show and remove class to show in any case no matter how it has been hidden before
 					this.$lis.eq(o.selected).addClass(o.selectedClass);
-				}
+					
+					// seems to be expected behavior that the show callback is fired
+					var onShow = function() {
+					    $(self.element).triggerHandler('tabsshow',
+					        [self.ui(self.$tabs[o.selected], self.$panels[o.selected])], o.show);
+					}; 
 
-				// load if remote tab
-				var href = o.selected !== null && $.data(this.$tabs[o.selected], 'load.tabs');
-				if (href)
-					this.load(o.selected);
+                    // load if remote tab
+    				if ($.data(this.$tabs[o.selected], 'load.tabs'))
+    					this.load(o.selected, onShow);
+    				// just trigger show event
+    				else
+    				    onShow();
+    					
+				}
 
 				// Take disabling tabs via class attribute from HTML
 				// into account and update option properly...
@@ -194,7 +203,8 @@
 						$show[0].style.filter = '';
 
 					// callback
-					$(self.element).triggerHandler('tabsshow', [self.ui(clicked, $show[0])], o.show);
+					$(self.element).triggerHandler('tabsshow',
+					    [self.ui(clicked, $show[0])], o.show);
 
 				});
 			}
@@ -445,19 +455,19 @@
 					$(a.hash).html(r);
 					finish();
 					
-					// This callback is required because the switch has to take
-					// place after loading has completed.
-					callback();
-
 					if (o.cache)
 						$.data(a, 'cache.tabs', true); // if loaded once do not load them again
 
-					// callback
+					// callbacks
 					$(self.element).triggerHandler('tabsload',
 						[self.ui(self.$tabs[index], self.$panels[index])], o.load
 					);
-
 					o.ajaxOptions.success && o.ajaxOptions.success(r, s);
+					
+					// This callback is required because the switch has to take
+					// place after loading has completed. Call last in order to 
+					// fire load before show callback...
+					callback();
 				}
 			});
 			if (this.xhr) {
