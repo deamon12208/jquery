@@ -22,7 +22,7 @@
 
 			this.element.bind("setData.slider", function(event, key, value) {
 				self.options[key] = value;
-				if (/min|max/.test(key))
+				if (/min|max|steps/.test(key))
 					self.initBoundaries();
 			}).bind("getData.slider", function(event, key){
 				return self.options[key];
@@ -105,8 +105,8 @@
 			};
 			//Calculate stepping based on steps
 			o.stepping = {
-				x: o.stepping && o.stepping.x || parseInt(o.stepping, 10) || (o.steps && o.steps.x ? o.realMax.x/o.steps.x : 0),
-				y: o.stepping && o.stepping.y || parseInt(o.stepping, 10) || (o.steps && o.steps.y ? o.realMax.y/o.steps.y : 0)
+				x: o.stepping && o.stepping.x || parseInt(o.stepping, 10) || (o.steps ? o.realMax.x/(o.steps.x || parseInt(o.steps, 10) || o.realMax.x) : 0),
+				y: o.stepping && o.stepping.y || parseInt(o.stepping, 10) || (o.steps ? o.realMax.y/(o.steps.y || parseInt(o.steps, 10) || o.realMax.y) : 0)
 			};
 		},
 		plugins: {},
@@ -188,7 +188,7 @@
 		},
 		handleSize: function(handle,axis) {
 			if(!axis) axis = this.options.axis == "vertical" ? 2 : 1;
-			return $(handle != undefined && handle !== null ? this.handle[handle] : this.currentHandle)[axis == 1 ? "outerWidth" : "outerHeight"]();	
+			return $(handle != undefined && handle !== null ? this.handle[handle] : this.currentHandle)[0][axis == 1 ? "offsetWidth" : "offsetHeight"];	
 		},
 		click: function(e) {
 		
