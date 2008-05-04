@@ -19,7 +19,7 @@
 		init: function() {
 			
 			//Initialize needed constants
-			var self = this, o = this.options;
+			var o = this.options;
 
 			//Initialize mouse events for interaction
 			this.element.mouseInteraction({
