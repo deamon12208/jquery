@@ -8,7 +8,7 @@
  * http://docs.jquery.com/UI/Tabs
  *
  * Depends:
- *	ui.base.js
+ *	ui.core.js
  *
  * Revision: $Id$
  */

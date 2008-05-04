@@ -8,7 +8,7 @@
  * http://docs.jquery.com/UI/Slider
  *
  * Depends:
- *	ui.base.js
+ *	ui.core.js
  *
  * Revision: $Id$
  */

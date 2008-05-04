@@ -8,7 +8,7 @@
  * http://docs.jquery.com/UI/Dialog
  *
  * Depends:
- *	ui.base.js
+ *	ui.core.js
  *	ui.draggable.js
  *	ui.resizable.js
  *

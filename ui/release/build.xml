@@ -29,7 +29,7 @@
 		<property name="js.packed.sufix.name" value="packed" />
 		<property name="js.packed.folder.name" value="packed-javascript" />
 		<property name="js.concatenated.name" value="jquery.ui-all-${release.version}" />
-		<property name="js.core.files" value="ui.base.js, ui.draggable.js, ui.droppable.js, ui.resizable.js, ui.selectable.js, ui.sortable.js" />
+		<property name="js.core.files" value="ui.core.js, ui.draggable.js, ui.droppable.js, ui.resizable.js, ui.selectable.js, ui.sortable.js" />
 	</target>
 
 	<target description="JavaScript concatenation" name="js.concatenate" depends="load.properties.release">

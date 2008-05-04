@@ -8,7 +8,7 @@
  * http://docs.jquery.com/UI/Resizables
  *
  * Depends:
- *	ui.base.js
+ *	ui.core.js
  *
  * Revision: $Id$
  */
