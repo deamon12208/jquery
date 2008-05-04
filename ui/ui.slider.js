@@ -67,7 +67,7 @@
 			// Bind the click to the slider itself
 			this.element.bind('mousedown.slider', function(e) {
 				self.click.apply(self, [e]);
-				self.currentHandle.data("ui-mouse").trigger(e);
+				self.currentHandle.data("mouse").trigger(e);
 				self.firstValue = self.firstValue + 1; //This is for always triggering the change event
 			});
 			
