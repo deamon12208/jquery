@@ -212,10 +212,12 @@
 			
 			// Move focussed handle to the clicked position
 			this.offset = this.element.offset();
+			
+			// propagate only for distance > 0, otherwise propagation is done my drag
 			this.moveTo({
 				y: this.convertValue(e.pageY - this.offset.top - this.currentHandle.outerHeight()/2),
 				x: this.convertValue(e.pageX - this.offset.left - this.currentHandle.outerWidth()/2)
-			}, null, true);
+			}, null, !this.options.distance);
 		},
 		start: function(e, handle) {
 		
