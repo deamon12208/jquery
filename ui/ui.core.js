@@ -12,11 +12,7 @@
  */
 ;(function($) {
 	
-	$.ui = $.ui || {};
-	
-	// Add methods that are vital for all mouse interaction stuff
-	// (plugin registering)
-	$.extend($.ui, {
+	$.ui = {
 		plugin: {
 			add: function(module, option, set) {
 				var proto = $.ui[module].prototype;
@@ -69,7 +65,7 @@
 			has = e[scroll] > 0 ? true : false; e[scroll] = 0;
 			return has;
 		}
-	});
+	};
 	
 	
 	/** jQuery core modifications and additions **/
