@@ -279,7 +279,7 @@
 			_destroy(el);
 			
 			if (el.is('.ui-wrapper') && wrapped) {
-				El.parent().append(
+				el.parent().append(
 					$(wrapped).css({
 						position: el.css('position'),
 						width: el.outerWidth(),
