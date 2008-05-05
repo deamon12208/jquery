@@ -1,4 +1,4 @@
-(function($) {
+;(function($) {
   
   $.effects.drop = function(o) {
 

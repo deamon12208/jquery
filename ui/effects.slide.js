@@ -1,4 +1,4 @@
-(function($) {
+;(function($) {
   
   $.effects.slide = function(o) {
 
