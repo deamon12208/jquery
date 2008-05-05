@@ -21,7 +21,7 @@
 	</target>
 
 	<target name="load.properties.release" depends="load.properties">
-		<property description="The release version to be built" name="release.version" value="1.5b2" />
+		<property description="The release version to be built" name="release.version" value="1.5b4" />
 		<property name="js.src.dir" value="../" />
 		<property name="js.build.dir" value="build/${release.version}" />
 		<property name="js.min.sufix.name" value="min" />
@@ -35,7 +35,7 @@
 	<target description="JavaScript concatenation" name="js.concatenate" depends="load.properties.release">
 		<concat destfile="${js.build.dir}/${js.concatenated.name}.js">
 			<filelist dir="${js.src.dir}/" files="${js.core.files}" />
-			<fileset dir="${js.src.dir}/" includes="ui.*.js" excludes="${js.core.files}" />
+			<fileset dir="${js.src.dir}/" includes="*.js" excludes="${js.core.files}" />
 			<fileset dir="${js.src.dir}/datepicker/core/" includes="ui.*.js" excludes="${js.core.files}" />
 		</concat>
 	</target>
@@ -44,7 +44,7 @@
 		<mkdir dir="${js.build.dir}/${js.min.folder.name}/" />
 		<apply executable="java" parallel="false">
 			<filelist dir="${js.build.dir}/" files="${js.concatenated.name}.js" />
-			<fileset dir="${js.src.dir}/" includes="ui.*.js" excludes="*.min.js" />
+			<fileset dir="${js.src.dir}/" includes="*.js" excludes="*.min.js" />
 			<fileset dir="${js.src.dir}/datepicker/core/" includes="ui.*.js" excludes="*.min.js" />
 			<arg line="-jar" />
 			<arg path="lib/yuicompressor-last.jar" />
@@ -65,7 +65,7 @@
 		<mkdir dir="${js.build.dir}/${js.packed.folder.name}/" />
 			<apply executable="cmd" parallel="false">
 				<filelist dir="${js.build.dir}/${js.min.folder.name}/" files="${js.concatenated.name}.min.js" />
-				<fileset dir="${js.build.dir}/${js.min.folder.name}/" includes="ui.*.min.js" excludes="*.packed.js" />
+				<fileset dir="${js.build.dir}/${js.min.folder.name}/" includes="*.min.js" excludes="*.packed.js" />
 				<arg line="/c CScript /nologo lib/pack.wsf" />
 				<srcfile />
 				<arg line=">>" />
@@ -76,7 +76,7 @@
 	
 	<target description="Copy JavaScript files to build path" name="copy.files" depends="load.properties.release">
 		<copy overwrite="true" todir="${js.build.dir}/">
-			<fileset dir="${js.src.dir}/" includes="ui.*.js" />
+			<fileset dir="${js.src.dir}/" includes="*.js" />
 			<fileset dir="${js.src.dir}/" includes="*-LICENSE.txt" />
 		</copy>
 		
