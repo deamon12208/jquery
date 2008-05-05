@@ -171,7 +171,7 @@
 			}
 		},
 		destroy: function() {
-			this.element.unbind('.mouse');
+			this.element.unbind('.mouse').removeData("mouse");
 			($.browser.msie && this.element.attr('unselectable', this.unselectable));
 		},
 		trigger: function() { return this.click.apply(this, arguments); },
