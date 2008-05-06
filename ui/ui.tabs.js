@@ -16,23 +16,18 @@
 	
 	$.widget("ui.tabs", {
 		init: function() {
-			var self = this;
-	
 			this.options.event += '.tabs'; // namespace event
-	
-			$(this.element).bind('setData.tabs', function(event, key, value) {
-				if ((/^selected/).test(key))
-					self.select(value);
-				else {
-					self.options[key] = value;
-					self.tabify();
-				}
-			}).bind('getData.tabs', function(event, key) {
-				return self.options[key];
-			});
-	
+			
 			// create tabs
 			this.tabify(true);
+		},
+		setData: function(event, key, value) {
+			if ((/^selected/).test(key))
+				this.select(value);
+			else {
+				this.options[key] = value;
+				this.tabify();
+			}
 		},
 		length: function() {
 			return this.$tabs.length;
