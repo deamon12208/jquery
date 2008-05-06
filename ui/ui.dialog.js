@@ -177,7 +177,7 @@
 		},
 		
 		position: function(pos) {
-			var wnd = $(window), doc = $(document), minTop = top = doc.scrollTop(), left = doc.scrollLeft();
+			var wnd = $(window), doc = $(document), top = doc.scrollTop(), left = doc.scrollLeft(), minTop = top;
 			if ($.inArray(pos, ['center','top','right','bottom','left']) >= 0) {
 				pos = [pos == 'right' || pos == 'left' ? pos : 'center', pos == 'top' || pos == 'bottom' ? pos : 'middle'];
 			}
