@@ -270,9 +270,12 @@
 		destroy: function() {
 			this.overlay && this.overlay.destroy();
 			this.uiDialog.hide();
-			$(this.element).unbind('.dialog').removeClass('ui-dialog-content').hide().appendTo('body');
+			this.element
+				.unbind('.dialog')
+				.removeData('dialog')
+				.removeClass('ui-dialog-content')
+				.hide().appendTo('body');
 			this.uiDialog.remove();
-			$.removeData(this.element, "dialog");
 		}
 	});
 	
