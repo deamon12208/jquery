@@ -34,7 +34,7 @@
 			var self = this;
 			var options = this.options;
 			
-			var uiDialogContent = $(this.element).addClass('ui-dialog-content');
+			var uiDialogContent = this.element.addClass('ui-dialog-content');
 			
 			if (!uiDialogContent.parent().length) {
 				uiDialogContent.appendTo('body');
@@ -232,7 +232,7 @@
 				options: this.options
 			};
 			this.uiDialogTitlebarClose.focus();
-			$(this.element).triggerHandler("dialogopen", [openEV, openUI], this.options.open);
+			this.element.triggerHandler("dialogopen", [openEV, openUI], this.options.open);
 		},
 	
 		activate: function() {
@@ -263,7 +263,7 @@
 			var closeUI = {
 				options: this.options
 			};
-			$(this.element).triggerHandler("dialogclose", [closeEV, closeUI], this.options.close);
+			this.element.triggerHandler("dialogclose", [closeEV, closeUI], this.options.close);
 			$.ui.dialog.overlay.resize();
 		},
 		
