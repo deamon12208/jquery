@@ -51,7 +51,7 @@
 			createHelper(settings);
 			return this.each(function() {
 					this.tSettings = settings;
-					this.tOpacity = helper.parent.css("opacity")
+					this.tOpacity = helper.parent.css("opacity");
 					// copy tooltip into its own expando and remove the title
 					this.tooltipText = this.title;
 					$(this).removeAttr("title");
