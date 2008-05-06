@@ -219,7 +219,7 @@
 		},
 			
 		open: function() {
-			this.overlay = this.options.modal ? new $.ui.dialog.overlay(self) : null;
+			this.overlay = this.options.modal ? new $.ui.dialog.overlay(this) : null;
 			this.uiDialog.appendTo('body');
 			this.position(this.options.position);
 			this.uiDialog.show();
