@@ -78,7 +78,7 @@
 			if (init) {
 
 				// attach necessary classes for styling if not present
-				$(this.element).hasClass(o.navClass) || $(this.element).addClass(o.navClass);
+				this.element.hasClass(o.navClass) || this.element.addClass(o.navClass);
 				this.$panels.each(function() {
 					var $this = $(this);
 					$this.hasClass(o.panelClass) || $this.addClass(o.panelClass);
@@ -353,7 +353,7 @@
 			}
 
 			// callback
-			$(this.element).triggerHandler('tabsadd',
+			this.element.triggerHandler('tabsadd',
 				[this.ui(this.$tabs[index], this.$panels[index])], o.add
 			);
 		},
@@ -372,7 +372,7 @@
 			this.tabify();
 
 			// callback
-			$(this.element).triggerHandler('tabsremove',
+			this.element.triggerHandler('tabsremove',
 				[this.ui($li.find('a')[0], $panel[0])], o.remove
 			);
 		},
@@ -392,7 +392,7 @@
 			o.disabled = $.grep(o.disabled, function(n, i) { return n != index; });
 
 			// callback
-			$(this.element).triggerHandler('tabsenable',
+			this.element.triggerHandler('tabsenable',
 				[this.ui(this.$tabs[index], this.$panels[index])], o.enable
 			);
 
@@ -406,7 +406,7 @@
 				o.disabled.sort();
 
 				// callback
-				$(this.element).triggerHandler('tabsdisable',
+				this.element.triggerHandler('tabsdisable',
 					[this.ui(this.$tabs[index], this.$panels[index])], o.disable
 				);
 			}
@@ -481,7 +481,7 @@
 		},
 		destroy: function() {
 			var o = this.options;
-			$(this.element).unbind('.tabs')
+			this.element.unbind('.tabs')
 				.removeClass(o.navClass).removeData('tabs');
 			this.$tabs.each(function() {
 				var href = $.data(this, 'href.tabs');
