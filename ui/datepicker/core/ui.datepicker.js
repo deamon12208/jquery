@@ -570,7 +570,8 @@ $.extend(Datepicker.prototype, {
 			return;
 		var $target = $(event.target);
 		if (($target.parents("#datepicker_div").length == 0) &&
-				($target.attr('class') != 'datepicker_trigger') &&
+				!$target.hasClass('hasDatepicker') &&
+				!$target.hasClass('datepicker_trigger') &&
 				$.datepicker._datepickerShowing && !($.datepicker._inDialog && $.blockUI)) {
 			$.datepicker._hideDatepicker(null, '');
 		}
