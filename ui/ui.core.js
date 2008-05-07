@@ -87,7 +87,9 @@
 	
 	var widgetPrototype = {
 		init: function() {},
-		destroy: function() {},
+		destroy: function() {
+			this.element.removeData(this.widgetName);
+		},
 		
 		getData: function(key) {
 			return this.options[key];
@@ -130,6 +132,8 @@
 		// create widget constructor
 		$[namespace][name] = function(element, options) {
 			var self = this;
+			
+			this.widgetName = name;
 			
 			this.options = $.extend({}, $[namespace][name].defaults, options);
 			this.element = $(element)
