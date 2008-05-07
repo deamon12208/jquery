@@ -312,7 +312,9 @@ function nationalDays(date) {
 						<select class="languageSelect">
 							<option value="zh-CN">&#31616;&#20307;&#20013;&#25991; (Chinese Simplified)</option>
 							<option value="zh-TW">&#31777;&#39636;&#20013;&#25991; (Chinese Traditional)</option>
-							<option value="bg">&#1073;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; &#1077;&#1079;&#1080;&#1082; (Bulgarian)</option>
+							<option value="hy">&#1344;&#1377;&#1397;&#1381;&#1408;&#1381;&#1398; (Armenian)</option>
+							<option value="id">Bahasa Indonesia (Indonesian)</option>
+							<option value="bg">&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; (Bulgarian)</option>
 							<option value="ca">Catal&agrave; (Catalan)</option>
 							<option value="cs">&#268;e&#353;tina (Czech)</option>
 							<option value="da">Dansk (Danish)</option>
@@ -322,6 +324,8 @@ function nationalDays(date) {
 							<option value="ko">&#54620;&#44397;&#50612; (Korean)</option>
 							<option value="is">&Iacute;slenska (Icelandic)</option>
 							<option value="it">Italiano (Italian)</option>
+							<option value="lv">Latvie&#353;u Valoda (Latvian)</option>
+							<option value="lt">Lietuvi&#371; Kalba (Lithuanian)</option>
 							<option value="hu">Magyar (Hungarian)</option>
 							<option value="nl">Nederlands (Dutch)</option>
 							<option value="ja">&#26085;&#26412;&#35486; (Japanese)</option>
@@ -336,11 +340,13 @@ function nationalDays(date) {
 							<option value="fi">suomi (Finnish)</option>
 							<option value="sv">Svenska (Swedish)</option>
 							<option value="tr">T&uuml;rk&ccedil;e (Turkish)</option>
+							<option value="uk">&#1091;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; &#1084;&#1086;&#1074;&#1072; (Ukranian)</option>
 						</select>:</span>
 						<input type="text" size="10" id="l10nDatepicker"/></p>
 					<p>The presentation is slightly different for right-to-left languages.</p>
 					<p><span class="demoLabel">
 						<select class="languageSelect">
+							<option value="ar" selected="selected">&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577; (Arabic)</option>
 							<option value="he" selected="selected">&#1506;&#1489;&#1512;&#1497;&#1514; (Hebrew)</option>
 						</select>:</span>
 						<input type="text" size="10" id="rtlDatepicker"/></p>
@@ -890,6 +896,9 @@ $('input selector').datepicker({defaultDate: +7});</code></pre>
 					<p><strong>Localisation packages:</strong></p>
 					<ul style="float:left;width:220px;margin-top:0">
 						<li><a href="i18n/ui.datepicker-ca.js" target="_blank">Bulgarian</a></li>
+						<li><a href="i18n/ui.datepicker-ar.js" target="_blank">Arabic</a></li>
+						<li><a href="i18n/ui.datepicker-hy.js" target="_blank">Armenian</a></li>
+						<li><a href="i18n/ui.datepicker-bg.js" target="_blank">Bulgarian</a></li>
 						<li><a href="i18n/ui.datepicker-ca.js" target="_blank">Catalan of Spain</a></li>
 						<li><a href="i18n/ui.datepicker-zh-CN.js" target="_blank">Chinese Simplified</a></li>
 						<li><a href="i18n/ui.datepicker-zh-TW.js" target="_blank">Chinese Traditional</a></li>
@@ -902,11 +911,13 @@ $('input selector').datepicker({defaultDate: +7});</code></pre>
 						<li><a href="i18n/ui.datepicker-he.js" target="_blank">Hebrew</a></li>
 						<li><a href="i18n/ui.datepicker-hu.js" target="_blank">Hungarian</a></li>
 						<li><a href="i18n/ui.datepicker-is.js" target="_blank">Icelandic</a></li>
+						<li><a href="i18n/ui.datepicker-id.js" target="_blank">Indonesian</a></li>
 						<li><a href="i18n/ui.datepicker-it.js" target="_blank">Italian</a></li>
 					</ul>
 					<ul>
 						<li><a href="i18n/ui.datepicker-ja.js" target="_blank">Japanese</a></li>
 						<li><a href="i18n/ui.datepicker-ko.js" target="_blank">Korean</a></li>
+						<li><a href="i18n/ui.datepicker-lv.js" target="_blank">Latvian</a></li>
 						<li><a href="i18n/ui.datepicker-lt.js" target="_blank">Lithuanian</a></li>
 						<li><a href="i18n/ui.datepicker-no.js" target="_blank">Norwegian</a></li>
 						<li><a href="i18n/ui.datepicker-pl.js" target="_blank">Polish</a></li>
@@ -918,6 +929,7 @@ $('input selector').datepicker({defaultDate: +7});</code></pre>
 						<li><a href="i18n/ui.datepicker-sv.js" target="_blank">Swedish</a></li>
 						<li><a href="i18n/ui.datepicker-th.js" target="_blank">Thai</a></li>
 						<li><a href="i18n/ui.datepicker-tr.js" target="_blank">Turkish</a></li>
+						<li><a href="i18n/ui.datepicker-uk.js" target="_blank">Ukranian</a></li>
 					</ul>
 					<p style="clear:left">Refer to the <a href="http://docs.jquery.com/UI/Datepicker/Localization#Localization">Localisation Documentation</a> to create a new localisation package.</p>
 					<p><strong>Change Log:</strong> Recent updates can be found on the <a href="http://docs.jquery.com/UI/Datepicker/ChangeLog" target="_blank">jQuery UI Datepicker ChangeLog</a>.</p>
