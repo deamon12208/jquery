@@ -57,7 +57,6 @@ img.datepicker_trigger {
 .datepicker_control, .datepicker_links {
 	font-weight: bold;
 	font-size: 80%;
-	letter-spacing: 1px;
 }
 .datepicker_links label { /* disabled links */
 	padding: 2px 5px;
