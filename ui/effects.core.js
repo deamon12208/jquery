@@ -38,7 +38,7 @@
       if (el.parent().attr('id') == 'fxWrapper')
         return el;
       var props = {width: el.outerWidth({margin:true}), height: el.outerHeight({margin:true}), 'float': el.css('float')};
-      el.wrap('<div id="fxWrapper"></div>');
+      el.wrap('<div id="fxWrapper" style="font-size:100%;background:transparent;border:none;margin:0;padding:0"></div>');
       var wrapper = el.parent();
       if (el.css('position') == 'static'){
         wrapper.css({position: 'relative'});
