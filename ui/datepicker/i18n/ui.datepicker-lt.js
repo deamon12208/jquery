@@ -1,8 +1,5 @@
-/**
- * Lithuanian (UTF-8) initialisation for the jQuery UI date picker plugin.
- *
- * @author Arturas Paleicikas <arturas@avalon.lt>
- */
+/* Lithuanian (UTF-8) initialisation for the jQuery UI date picker plugin. */
+/* Written by Arturas Paleicikas <arturas@avalon.lt> */
 jQuery(function($){
 	$.datepicker.regional['lt'] = {clearText: 'Išvalyti', clearStatus: '',
 		closeText: 'Uždaryti', closeStatus: '',

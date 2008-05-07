@@ -1,9 +1,7 @@
-/**
- * @author Arturas Paleicikas <arturas.paleicikas@metasite.net>
- */
+/* Latvian (UTF-8) initialisation for the jQuery UI date picker plugin. */
+/* Written by Arturas Paleicikas <arturas.paleicikas@metasite.net> */
 jQuery(function($){
-	$.datepicker.regional['lv'] = {
-		clearText: 'Notīrīt', clearStatus: '',
+	$.datepicker.regional['lv'] = {clearText: 'Notīrīt', clearStatus: '',
 		closeText: 'Aizvērt', closeStatus: '',
 		prevText: 'Iepr',  prevStatus: '',
 		nextText: 'Nāka', nextStatus: '',
