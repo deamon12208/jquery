@@ -99,10 +99,10 @@
 		},
 		
 		enable: function() {
-			this.setData(null, 'disabled', false);
+			this.setData('disabled', false);
 		},
 		disable: function() {
-			this.setData(null, 'disabled', true);
+			this.setData('disabled', true);
 		}
 	};
 	
