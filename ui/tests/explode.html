@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../../jquery/src/offset.js"></script>
 <script type="text/javascript" src="../../plugins/dimensions/jquery.dimensions.js"></script>
 
-<script type="text/javascript" src="../effects.js"></script>
+<script type="text/javascript" src="../effects.core.js"></script>
 <script type="text/javascript" src="../effects.explode.js"></script>
 
 
@@ -45,9 +45,9 @@ body {
 
 <div class="controls">
   <div>
-    <a href="#" onClick="$('#fx').hide('explode', { pieces: 100 }, 2000);return false;">Explode</a>
-    <a href="#" onClick="$('#fx').show('explode', { }, 2000);return false;">Implode</a>
-    <a href="#" onClick="$('#fx').toggle('explode', { pieces: 36 });return false;">Toggle explode</a>
+    <a href="#" onClick="$('#fx').hide('explode');return false;">Explode</a>
+    <a href="#" onClick="$('#fx').show('explode');return false;">Implode</a>
+    <a href="#" onClick="$('#fx').toggle('explode');return false;">Toggle explode</a>
   </div>
   <div style="clear:both;padding-bottom:5px;"></div>
 </div>
