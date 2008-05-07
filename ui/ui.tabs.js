@@ -21,7 +21,7 @@
 			// create tabs
 			this.tabify(true);
 		},
-		setData: function(event, key, value) {
+		setData: function(key, value) {
 			if ((/^selected/).test(key))
 				this.select(value);
 			else {

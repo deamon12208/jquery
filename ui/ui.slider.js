@@ -82,7 +82,7 @@
 			if(this.handle.length == 2 && this.options.range) this.createRange();
 		},
 		
-		setData: function(event, key, value) {
+		setData: function(key, value) {
 			this.options[key] = value;
 			if (/min|max|steps/.test(key)) {
 				this.initBoundaries();

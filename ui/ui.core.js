@@ -89,10 +89,10 @@
 		init: function() {},
 		destroy: function() {},
 		
-		getData: function(e, key) {
+		getData: function(key) {
 			return this.options[key];
 		},
-		setData: function(e, key, value) {
+		setData: function(key, value) {
 			this.options[key] = value;
 		},
 		
@@ -134,10 +134,10 @@
 			this.options = $.extend({}, $[namespace][name].defaults, options);
 			this.element = $(element)
 				.bind('setData.' + name, function(e, key, value) {
-					return self.setData(e, key, value);
+					return self.setData(key, value);
 				})
 				.bind('getData.' + name, function(e, key) {
-					return self.getData(e, key);
+					return self.getData(key);
 				})
 				.bind('remove', function() {
 					return self.destroy();

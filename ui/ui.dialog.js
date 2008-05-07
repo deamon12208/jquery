@@ -151,7 +151,7 @@
 			};
 		},
 		
-		setData: function(event, key, value){
+		setData: function(key, value){
 			setDataSwitch[key] && this.uiDialog.data(setDataSwitch[key], value);
 			switch (key) {
 				case "draggable":
