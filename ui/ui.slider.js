@@ -330,7 +330,7 @@
 				var x = value, y = value;
 			}
 
-			if(x && x.constructor != Number) {
+			if(x !== undefined && x.constructor != Number) {
 				var me = /^\-\=/.test(x), pe = /^\+\=/.test(x);
 				if (me) {
 					x = this.value(null,1) - parseInt(x.replace('-=', ''), 10);
@@ -339,7 +339,7 @@
 				}
 			}
 			
-			if(y && y.constructor != Number) {
+			if(y !== undefined && y.constructor != Number) {
 				var me = /^\-\=/.test(y), pe = /^\+\=/.test(y);
 				if (me) {
 					y = this.value(null,2) - parseInt(y.replace('-=', ''), 10);
@@ -348,7 +348,7 @@
 				}
 			}
 
-			if(o.axis != "vertical" && x) {
+			if(o.axis != "vertical" && x !== undefined) {
 				if(o.stepping.x) x = Math.round(x / o.stepping.x) * o.stepping.x;
 				x = this.translateValue(x, 1);
 				x = this.translateLimits(x, 1);
@@ -356,7 +356,7 @@
 				this.currentHandle.css({ left: x });
 			}
 
-			if(o.axis != "horizontal" && y) {
+			if(o.axis != "horizontal" && y !== undefined) {
 				if(o.stepping.y) y = Math.round(y / o.stepping.y) * o.stepping.y;
 				y = this.translateValue(y, 2);
 				y = this.translateLimits(y, 2);
