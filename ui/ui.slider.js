@@ -61,9 +61,6 @@
 					})
 			;
 			
-			// Prepare dynamic properties for later use
-			this.actualSize = { width: this.element.outerWidth() , height: this.element.outerHeight() };
-			
 			// Bind the click to the slider itself
 			this.element.bind('mousedown.slider', function(e) {
 				self.click.apply(self, [e]);
@@ -205,6 +202,9 @@
 			});
 			if (clickedHandle || this.disabled || !(this.currentHandle || this.previousHandle))
 				return;
+				
+			// Prepare the outer size
+			this.actualSize = { width: this.element.outerWidth() , height: this.element.outerHeight() };
 
 			// If a previous handle was focussed, focus it again
 			if (!this.currentHandle && this.previousHandle)
@@ -222,7 +222,10 @@
 		start: function(e, handle) {
 		
 			var o = this.options;
-			
+
+			// Prepare the outer size
+			this.actualSize = { width: this.element.outerWidth() , height: this.element.outerHeight() };
+		
 			// This is a especially ugly fix for strange blur events happening on mousemove events
 			if (!this.currentHandle)
 				this.focus(this.previousHandle, true); 
