@@ -43,7 +43,7 @@
 		<mkdir dir="${tempdir}" />
     	<mkdir dir="${zipdir}" />
     	<copy todir="${zipdir}">
-    		<fileset dir="${SRC_DIR}${plugin}" excludes="*.zip" />
+    		<fileset dir="${SRC_DIR}${plugin}" excludes="*.zip,test/" />
     	</copy>
         <zip destfile="${SRC_DIR}${plugin}/jquery.${plugin}.zip">
             <zipfileset dir="${tempdir}" excludes="*.zip" />
