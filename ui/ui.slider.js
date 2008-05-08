@@ -210,9 +210,6 @@
 			});
 			if (clickedHandle || this.disabled || !(this.currentHandle || this.previousHandle))
 				return;
-				
-			// Prepare the outer size
-			this.actualSize = { width: this.element.outerWidth() , height: this.element.outerHeight() };
 
 			// If a previous handle was focussed, focus it again
 			if (!this.currentHandle && this.previousHandle)
@@ -324,7 +321,12 @@
 		},
 		
 		moveTo: function(value, handle, noPropagation) {
+
 			var o = this.options;
+
+			// Prepare the outer size
+			this.actualSize = { width: this.element.outerWidth() , height: this.element.outerHeight() };
+
 			if (handle == undefined && !this.currentHandle && this.handle.length != 1)
 				return false; //If no handle has been passed, no current handle is available and we have multiple handles, return false
 			if (handle == undefined && !this.currentHandle)
