@@ -58,12 +58,7 @@
 					.bind('focus', function(e) { self.focus(this.firstChild); })
 					.bind('blur', function(e) { self.blur(this.firstChild); })
 					.bind('keydown', function(e) {
-						if(/(37|38|39|40)/.test(e.keyCode)) {
-							self.moveTo({
-								x: /(37|39)/.test(e.keyCode) ? (e.keyCode == 37 ? '-' : '+') + '=' + self.oneStep(1) : null,
-								y: /(38|40)/.test(e.keyCode) ? (e.keyCode == 38 ? '-' : '+') + '=' + self.oneStep(2) : null
-							}, this.firstChild);
-						}
+						self.keydown(e.keyCode, this.firstChild)
 					})
 			;
 			
@@ -83,6 +78,15 @@
 
 			this.previousHandle = $(this.handle[0]); //set the previous handle to the first to allow clicking before selecting the handle
 			if(this.handle.length == 2 && this.options.range) this.createRange();
+		},
+		
+		keydown: function(keyCode, handle) {
+			if(/(37|38|39|40)/.test(keyCode)) {
+				this.moveTo({
+					x: /(37|39)/.test(keyCode) ? (keyCode == 37 ? '-' : '+') + '=' + this.oneStep(1) : 0,
+					y: /(38|40)/.test(keyCode) ? (keyCode == 38 ? '-' : '+') + '=' + this.oneStep(2) : 0
+				}, handle);
+			}
 		},
 		
 		setData: function(key, value) {
