@@ -74,7 +74,7 @@
 		this.offset = this.element.offset();
 
 		//Initialize mouse events for interaction
-		this.element.mouseInteraction({
+		this.element.mouse({
 			executor: this,
 			delay: o.delay,
 			distance: o.distance || 1,
