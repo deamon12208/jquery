@@ -248,13 +248,17 @@
 			this.propagate('stop', e);
 			if (this.firstValue != this.value())
 				this.propagate('change', e);
-			this.focus(this.currentHandle, true); //This is a especially ugly fix for strange blur events happening on mousemove events
+			// This is a especially ugly fix for strange blur events happening on mousemove events
+			this.focus(this.currentHandle, true);
 			return false;
 		},
 		
 		oneStep: function(axis) {
-			if(!axis) axis = this.options.axis == "vertical" ? 2 : 1;
-			return this.options.stepping[axis == 1 ? "x" : "y"] ? this.options.stepping[axis == 1 ? "x" : "y"] : (this.options.realMax[axis == 1 ? "x" : "y"] / this.actualSize[axis == 1 ? "width" : "height"]) * 5;
+			if (!axis)
+				axis = this.options.axis == "vertical" ? 2 : 1;
+			return this.options.stepping[axis == 1 ? "x" : "y"]
+				? this.options.stepping[axis == 1 ? "x" : "y"]
+				: (this.options.realMax[axis == 1 ? "x" : "y"] / this.actualSize[axis == 1 ? "width" : "height"]) * 5;
 		},
 		
 		translateRange: function(value,axis) {
