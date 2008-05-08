@@ -14,6 +14,12 @@
  */
 ;(function($) {
 
+	$.fn.unwrap = $.fn.unwrap || function(expr) {
+	  return this.each(function(){
+	     $(this).parents(expr).eq(0).after(this).remove();
+	  });
+	};
+
 	$.widget("ui.slider", {
 		init: function() {
 			var self = this;
@@ -143,7 +149,9 @@
 				.removeClass("ui-slider ui-slider-disabled")
 				.removeData("slider")
 				.unbind(".slider");
-			this.handle.mouse("destroy");
+			this.handle
+				.unwrap("a")
+				.mouse("destroy");
 			this.generated && this.generated.remove();
 		},
 		enable: function() {
@@ -271,7 +279,7 @@
 		},
 		
 		handleIndex: function() {
-			return this.handle.index(this.currentHandle[0])
+			return this.handle.index(this.currentHandle[0]);
 		},
 		
 		translateLimits: function(value,axis) {
