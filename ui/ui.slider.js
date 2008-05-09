@@ -183,6 +183,7 @@
 			
 			// propagate only for distance > 0, otherwise propagation is done my drag
 			this.offset = this.element.offset();
+
 			this.moveTo({
 				y: this.convertValue(e.pageY - this.offset.top - this.currentHandle[0].offsetHeight/2, "y"),
 				x: this.convertValue(e.pageX - this.offset.left - this.currentHandle[0].offsetWidth/2, "x")
@@ -205,7 +206,7 @@
 				this.rangeElement.css(size, parseInt($(this.handle[1]).css(prop),10) - parseInt($(this.handle[0]).css(prop),10));
 		},
 		getRange: function() {
-			return this.rangeElement ? this.convertValue(parseInt(this.rangeElement.css(this.options.axis == "vertical" ? "height" : "width"),10)) : null;
+			return this.rangeElement ? this.convertValue(parseInt(this.rangeElement.css(this.options.axis == "vertical" ? "height" : "width"),10), this.options.axis == "vertical" ? "y" : "x") : null;
 		},
 
 		handleIndex: function() {
@@ -214,14 +215,15 @@
 		value: function(handle, axis) {
 			if(this.handle.length == 1) this.currentHandle = this.handle;
 			if(!axis) axis = this.options.axis == "vertical" ? "y" : "x";
+
+			var curHandle = $(handle != undefined && handle !== null ? this.handle[handle] || handle : this.currentHandle);
 			
-			var value = ((parseInt($(handle != undefined && handle !== null ? this.handle[handle] || handle : this.currentHandle).css(axis == "x" ? "left" : "top"),10) / (this.actualSize[axis == "x" ? "width" : "height"] - this.handleSize(handle,axis))) * this.options.realMax[axis]) + this.options.min[axis];
-			
-			var o = this.options;
-			if (o.stepping[axis]) {
-				value = Math.round(value / o.stepping[axis]) * o.stepping[axis];
+			if(curHandle.data("mouse").sliderValue) {
+				return parseInt(curHandle.data("mouse").sliderValue[axis],10);
+			} else {
+				return parseInt(((parseInt(curHandle.css(axis == "x" ? "left" : "top"),10) / (this.actualSize[axis == "x" ? "width" : "height"] - this.handleSize(handle,axis))) * this.options.realMax[axis]) + this.options.min[axis],10);
 			}
-			return value;
+
 		},
 		convertValue: function(value,axis) {
 			return this.options.min[axis] + (value / (this.actualSize[axis == "x" ? "width" : "height"] - this.handleSize(null,axis))) * this.options.realMax[axis];
@@ -260,10 +262,6 @@
 		oneStep: function(axis) {
 			return this.options.stepping[axis] || 1;
 		},
-
-
-
-
 
 
 		start: function(e, handle) {
@@ -320,6 +318,12 @@
 			if(o.axis != "vertical") this.currentHandle.css({ left: position.left });
 			if(o.axis != "horizontal") this.currentHandle.css({ top: position.top });
 			
+			//Store the slider's value
+			this.currentHandle.data("mouse").sliderValue = {
+				x: this.convertValue(position.left, "x"),
+				y: this.convertValue(position.top, "y")
+			};
+			
 			if (this.rangeElement)
 				this.updateRange();
 			this.propagate('slide', e);
@@ -353,12 +357,20 @@
 
 			if(x !== undefined && x.constructor != Number) {
 				var me = /^\-\=/.test(x), pe = /^\+\=/.test(x);
-				x = this.value(null, "x") + parseInt(x.replace(me ? '=' : '+=', ''), 10);
+				if(me || pe) {
+					x = this.value(null, "x") + parseInt(x.replace(me ? '=' : '+=', ''), 10);
+				} else {
+					x = isNaN(parseInt(x, 10)) ? undefined : parseInt(x, 10);
+				}
 			}
 			
 			if(y !== undefined && y.constructor != Number) {
 				var me = /^\-\=/.test(y), pe = /^\+\=/.test(y);
-				y = this.value(null, "y") + parseInt(y.replace(me ? '=' : '+=', ''), 10);
+				if(me || pe) {
+					y = this.value(null, "y") + parseInt(y.replace(me ? '=' : '+=', ''), 10);
+				} else {
+					y = isNaN(parseInt(y, 10)) ? undefined : parseInt(y, 10);
+				}
 			}
 
 			if(o.axis != "vertical" && x !== undefined) {
@@ -379,6 +391,12 @@
 			
 			if (this.rangeElement)
 				this.updateRange();
+				
+			//Store the slider's value
+			this.currentHandle.data("mouse").sliderValue = {
+				x: this.convertValue(x, "x"),
+				y: this.convertValue(y, "y")
+			};
 			
 			if (!noPropagation) {
 				this.propagate('start', null);

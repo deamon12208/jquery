@@ -8,6 +8,8 @@ function assertChange(stepping, start, result, action) {
 		var slider = $("#slider3").slider({
 			stepping: stepping,
 			startValue: start,
+			min: 0,
+			max: 1000,
 			change: function(e, ui) {
 				equals(ui.value, result, "changed to " + ui.value);
 			}
@@ -44,8 +46,8 @@ test("moveTo, relative positive value", assertChange(1, 1, 11, function() {
 	this.slider("moveTo", "+=10");
 }))
 
-test("moveTo, relative positive value, above max", assertChange(1, 10, 100, function() {
-	this.slider("moveTo", "+=200");
+test("moveTo, relative positive value, above max", assertChange(1, 10, 1000, function() {
+	this.slider("moveTo", "+=2000");
 }))
 
 test("moveTo, relative negative value", assertChange(1, 20, 10, function() {
