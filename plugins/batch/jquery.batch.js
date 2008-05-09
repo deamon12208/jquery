@@ -5,20 +5,20 @@
  * $LastChangedDate$
  * $Rev$
  *
- * Version: 1.0
+ * Version: 1.0.1
  */
 (function($){
 
 $.fn.batch = function(method) {
-	var args = $.makeArray(arguments).slice(1);
-	return this.map(function() {
-		var $this = $(this);
-		return $this[method].apply($this, args);
+	var args = $.makeArray(arguments).slice(1), results = [];
+	this.each(function() {
+		results.push( $(this)[method].apply($(this), args) );
 	});
+	return results;
 };
 
 $.batch = {
-	version: "1.0",
+	version: "1.0.1",
 	registerPlugin: function() {
 		$.each( arguments, function( index, plugin ) {
 			var method = plugin.constructor == Array && plugin[0] || plugin,
