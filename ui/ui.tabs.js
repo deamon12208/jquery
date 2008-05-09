@@ -84,40 +84,49 @@
 					$this.hasClass(o.panelClass) || $this.addClass(o.panelClass);
 				});
 
-				// Try to retrieve selected tab:
-				// 1. from fragment identifier in url if present
+				// Selected tab
+				// use "selected" option or try to retrieve:
+				// 1. from fragment identifier in url
 				// 2. from cookie
 				// 3. from selected class attribute on <li>
-				// 4. otherwise use given "selected" option
-				// 5. check if tab is disabled
-				this.$tabs.each(function(i, a) {
+				if (o.selected === undefined) {
 					if (location.hash) {
-						if (a.hash == location.hash) {
-							o.selected = i;
-							// prevent page scroll to fragment
-							//if (($.browser.msie || $.browser.opera) && !o.remote) {
-							if ($.browser.msie || $.browser.opera) {
-								var $toShow = $(location.hash), toShowId = $toShow.attr('id');
-								$toShow.attr('id', '');
-								setTimeout(function() {
-									$toShow.attr('id', toShowId); // restore id
-								}, 500);
+						this.$tabs.each(function(i, a) {
+							if (a.hash == location.hash) {
+								o.selected = i;
+								// prevent page scroll to fragment
+								if ($.browser.msie || $.browser.opera) { // && !o.remote
+									var $toShow = $(location.hash), toShowId = $toShow.attr('id');
+									$toShow.attr('id', '');
+									setTimeout(function() {
+										$toShow.attr('id', toShowId); // restore id
+									}, 500);
+								}
+								scrollTo(0, 0);
+								return false; // break
 							}
-							scrollTo(0, 0);
-							return false; // break
-						}
-					} else if (o.cookie) {
-						var index = parseInt($.cookie('ui-tabs' + $.data(self.element)),10);
-						if (index && self.$tabs[index]) {
-							o.selected = index;
-							return false; // break
-						}
-					} else if ( self.$lis.eq(i).hasClass(o.selectedClass) ) {
-						o.selected = i;
-						return false; // break
+						});
 					}
-				});
+					else if (o.cookie) {
+						var index = parseInt($.cookie('ui-tabs' + $.data(self.element)),10);
+						if (index && self.$tabs[index])
+							o.selected = index;
+					}
+					else if (self.$lis.filter('.' + o.selectedClass).length)
+						o.selected = self.$lis.index( self.$lis.filter('.' + o.selectedClass)[0] );
+				}
+				o.selected = o.selected === null || o.selected !== undefined ? o.selected : 0; // first tab selected by default
 
+				// Take disabling tabs via class attribute from HTML
+				// into account and update option properly.
+				// A selected tab cannot become disabled.
+				o.disabled = $.unique(o.disabled.concat(
+					$.map(this.$lis.filter('.' + o.disabledClass),
+						function(n, i) { return self.$lis.index(n); } )
+				)).sort();
+				if ($.inArray(o.selected, o.disabled) != -1)
+					o.disabled.splice($.inArray(o.selected, o.disabled), 1);
+				
 				// highlight selected tab
 				this.$panels.addClass(o.hideClass);
 				this.$lis.removeClass(o.selectedClass);
@@ -127,25 +136,18 @@
 					
 					// seems to be expected behavior that the show callback is fired
 					var onShow = function() {
-					    $(self.element).triggerHandler('tabsshow',
-					        [self.ui(self.$tabs[o.selected], self.$panels[o.selected])], o.show);
+						$(self.element).triggerHandler('tabsshow',
+							[self.ui(self.$tabs[o.selected], self.$panels[o.selected])], o.show);
 					}; 
 
-                    // load if remote tab
-    				if ($.data(this.$tabs[o.selected], 'load.tabs'))
-    					this.load(o.selected, onShow);
-    				// just trigger show event
-    				else
-    				    onShow();
-    					
+					// load if remote tab
+					if ($.data(this.$tabs[o.selected], 'load.tabs'))
+						this.load(o.selected, onShow);
+					// just trigger show event
+					else
+						onShow();
+					
 				}
-
-				// Take disabling tabs via class attribute from HTML
-				// into account and update option properly...
-				o.disabled = $.unique(o.disabled.concat(
-					$.map(this.$lis.filter('.' + o.disabledClass),
-						function(n, i) { return self.$lis.index(n); } )
-				)).sort();
 				
 				// clean up to avoid memory leaks in certain versions of IE 6
 				$(window).bind('unload', function() {
@@ -199,7 +201,7 @@
 
 					// callback
 					$(self.element).triggerHandler('tabsshow',
-					    [self.ui(clicked, $show[0])], o.show);
+						[self.ui(clicked, $show[0])], o.show);
 
 				});
 			}
@@ -504,7 +506,6 @@
 	
 	$.ui.tabs.defaults = {
 		// basic setup
-		selected: 0,
 		unselect: false,
 		event: 'click',
 		disabled: [],
@@ -555,7 +556,7 @@
 				self.rotation = setInterval(function() {
 					t = ++t < self.$tabs.length ? t : 0;
 					self.select(t);
-				}, ms);	
+				}, ms); 
 			}
 			
 			function stop(e) {
