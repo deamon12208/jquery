@@ -513,7 +513,7 @@
 			aspectRatio: false,
 			disableSelection: true,
 			preserveCursor: true,
-			autohide: false,
+			autoHide: false,
 			knobHandles: false
 		}
 	});

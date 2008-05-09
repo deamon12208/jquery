@@ -42,7 +42,7 @@
 	<div id='autoHideAllHandles' class="ui-wrapper example" style="height:100px; width: 350px; position:relative;">
 		<div style='position: absolute; top: 20px; left: 20px; bottom: 20px; right: 20px;'>
 			Resize me<br/>
-			I was made resizable with this code only:<br/> $('div').resizable({ handles: 'all', autohide: true, minHeight: 100, minWidth: 350 });
+			I was made resizable with this code only:<br/> $('div').resizable({ handles: 'all', autoHide: true, minHeight: 100, minWidth: 350 });
 		</div>
 	</div>
 </div>
@@ -59,10 +59,10 @@ $('#simpleTextarea').resizable({ minHeight: 50, minWidth: 150 });</textarea>
 
 <br />
 
-<textarea id='autohideTextarea' style='margin: 0px; padding: 0px; height:100px; width: 350px;' class="example">Resize me
+<textarea id='autoHideTextarea' style='margin: 0px; padding: 0px; height:100px; width: 350px;' class="example">Resize me
 	
 I was made resizable with this code only:
-$('#autohideTextarea').resizable({ autohide: true, minHeight: 50, minWidth: 150 });</textarea>
+$('#autoHideTextarea').resizable({ autoHide: true, minHeight: 50, minWidth: 150 });</textarea>
 
 <br />
 
@@ -120,9 +120,9 @@ $('#allHandlesTextarea').resizable({ handles: 'all', proxy:'proxy', minHeight: 5
 $(window).bind("load",function(){
 
 	$('#simpleResize').resizable({ minHeight: 100, minWidth: 350 });
-	$('#autoHideAllHandles').resizable({ handles: 'all', autohide: true, minHeight: 100, minWidth: 350 });
+	$('#autoHideAllHandles').resizable({ handles: 'all', autoHide: true, minHeight: 100, minWidth: 350 });
 	$('#simpleTextarea').resizable({ minHeight: 50, minWidth: 150 });
-	$('#autohideTextarea').resizable({ autohide: true, minHeight: 50, minWidth: 150 });
+	$('#autoHideTextarea').resizable({ autoHide: true, minHeight: 50, minWidth: 150 });
 	$('#transparentTextarea').resizable({ transparent: true, handles: 'all', minHeight: 50, minWidth: 150 });
 	$('#allHandlesTextarea').resizable({ handles: 'all', proxy:'proxy', minHeight: 50, minWidth: 150 });
 	$('#simpleInputText').resizable();
