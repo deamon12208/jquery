@@ -426,31 +426,35 @@
 			callback = callback || function() {};
 			
 			// no remote or from cache - just finish with callback
-			if (!url || ($.data(a, 'cache.tabs') && !bypassCache)) {
+			if (!url || !bypassCache && $.data(a, 'cache.tabs')) {
 				callback();
 				return;
 			}
 
+			var inner = function(parent) {
+				var $parent = $(parent), $inner = $parent.find('*:last');
+				return $inner.length && $inner || $parent;
+			};
+			
 			// load remote from here on
 			if (o.spinner) {
-				var $span = $('span', a);
-				$span.data('label.tabs', $span.html()).html('<em>' + o.spinner + '</em>');
+				var label = inner(a).html();
+				inner(a).wrapInner('<em></em>')
+					.find('em').data('label.tabs', label).html(o.spinner);
 			}
-			var finish = function() {
-				self.$tabs.filter('.' + o.loadingClass).each(function() {
-					$(this).removeClass(o.loadingClass);
-					if (o.spinner) {
-						var $span = $('span', this);
-						$span.html($span.data('label.tabs')).removeData('label.tabs');
-					}
-				});
+			var cleanup = function() {
+				self.$tabs.filter('.' + o.loadingClass).removeClass(o.loadingClass)
+							.each(function() {
+								if (o.spinner)
+									inner(this).parent().html(inner(this).data('label.tabs'));
+							});
 				self.xhr = null;
 			};
 			var ajaxOptions = $.extend({}, o.ajaxOptions, {
 				url: url,
 				success: function(r, s) {
 					$(a.hash).html(r);
-					finish();
+					cleanup();
 					
 					if (o.cache)
 						$.data(a, 'cache.tabs', true); // if loaded once do not load them again
@@ -470,7 +474,7 @@
 			if (this.xhr) {
 				// terminate pending requests from other tabs and restore tab label
 				this.xhr.abort();
-				finish();
+				cleanup();
 			}
 			$a.addClass(o.loadingClass);
 			setTimeout(function() { // timeout is again required in IE, "wait" for id being restored
