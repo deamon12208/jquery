@@ -431,17 +431,12 @@
 				return;
 			}
 
+			// load remote from here on
+			
 			var inner = function(parent) {
 				var $parent = $(parent), $inner = $parent.find('*:last');
 				return $inner.length && $inner || $parent;
 			};
-			
-			// load remote from here on
-			if (o.spinner) {
-				var label = inner(a).html();
-				inner(a).wrapInner('<em></em>')
-					.find('em').data('label.tabs', label).html(o.spinner);
-			}
 			var cleanup = function() {
 				self.$tabs.filter('.' + o.loadingClass).removeClass(o.loadingClass)
 							.each(function() {
@@ -450,6 +445,13 @@
 							});
 				self.xhr = null;
 			};
+			
+			if (o.spinner) {
+				var label = inner(a).html();
+				inner(a).wrapInner('<em></em>')
+					.find('em').data('label.tabs', label).html(o.spinner);
+			}
+
 			var ajaxOptions = $.extend({}, o.ajaxOptions, {
 				url: url,
 				success: function(r, s) {
