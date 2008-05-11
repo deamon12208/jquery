@@ -50,7 +50,7 @@
 			//Create and append the visible helper
 			this.helper = $.isFunction(o.helper) ? $(o.helper.apply(this.element[0], [e])) : (o.helper == 'clone' ? this.element.clone() : this.element);
 			if(!this.helper.parents('body').length) this.helper.appendTo((o.appendTo == 'parent' ? this.element[0].parentNode : o.appendTo));
-			if(!this.helper.css("position") || this.helper.css("position") == "static") this.helper.css("position", "absolute");
+			if(this.helper[0] != this.element[0] && !(/(fixed|absolute)/).test(this.helper.css("position"))) this.helper.css("position", "absolute");
 
 			/*
 			 * - Position generation -
@@ -519,7 +519,7 @@
 	$.ui.plugin.add("draggable", "stack", {
 		start: function(e,ui) {
 			var group = $.makeArray($(ui.options.stack.group)).sort(function(a,b) {
-				return (parseInt($(a).css("zIndex")) || ui.options.stack.min) - (parseInt($(b).css("zIndex")) || ui.options.stack.min);
+				return (parseInt($(a).css("zIndex"),10) || ui.options.stack.min) - (parseInt($(b).css("zIndex"),10) || ui.options.stack.min);
 			});
 			
 			$(group).each(function(i) {
