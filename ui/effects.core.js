@@ -70,7 +70,7 @@
       var cb = (typeof easing == "function" ? easing : (callback ? callback : null));
       var ea = (typeof easing == "object" ? easing : null);
 
-      this.each(function() {
+      return this.each(function() {
 
         var offset = {}; var that = $(this); var oldStyleAttr = that.attr("style") || '';
         if(typeof oldStyleAttr == 'object') oldStyleAttr = oldStyleAttr["cssText"]; /* Stupidly in IE, style is a object.. */
@@ -153,7 +153,7 @@
       return $.effects.animateClass.apply(this, [{ add: add, remove: remove },speed,easing,callback]);
     },
     switchClass: function() {
-      this.morph.apply(this, arguments);
+      return this.morph.apply(this, arguments);
     },
     // helper functions
     cssUnit: function(key) {
