@@ -86,7 +86,7 @@
       var isActive = false, closeOnDelay = 0;
 
       // create the cluetip divs
-      if (!$cluetip) {
+      if (!$('#cluetip').length) {
         $cluetipInner = $('<div id="cluetip-inner"></div>');
         $cluetipTitle = $('<h3 id="cluetip-title"></h3>');        
         $cluetipOuter = $('<div id="cluetip-outer"></div>').append($cluetipInner).prepend($cluetipTitle);
@@ -230,8 +230,8 @@
           };
           ajaxSettings.complete = function() {
           	imgCount = $('#cluetip-inner img').length;
-        		if (imgCount) {
-        		  $('#cluetip-inner img').load( function(){
+        		if (imgCount && !$.browser.opera) {
+        		  $('#cluetip-inner img').load(function() {
           			imgCount--;
           			if (imgCount<1) {
           				$('#cluetip-waitimage').hide();
@@ -361,7 +361,7 @@ clearTimeout(closeOnDelay);
       .parent().hide().removeClass().end()
       .children().empty();
       if (tipTitle) {
-        $this.attr('title', tipTitle);
+        $this.attr(opts.titleAttribute, tipTitle);
       }
       $this.css('cursor','');
       if (opts.arrows) $cluetipArrows.css({top: ''});
