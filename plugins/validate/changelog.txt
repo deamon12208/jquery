@@ -12,6 +12,7 @@
 * Fixed url and email validation to not use trimmed values
 * Fixed creditcard validation to accept only digits and dashes ("asdf" is not a valid creditcard number)
 * Allow both button and input elements for cancel buttons (via class="cancel")
+* Fixed #2215: Fixed message display to call unhighlight as part of showing and hiding messages, no more visual side-effects while checking an element and extracted validator.checkForm to validate a form without UI sideeffects
 
 1.2.1
 -----

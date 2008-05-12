@@ -297,8 +297,8 @@ test("option: (un)highlight, nothing", function() {
 });
 
 test("option: (un)highlight, custom", function() {
-	expect(6);
-	$("#testForm1").validate({
+	expect(5);
+	$("#testForm1clean").validate({
 		highlight: function(element, errorClass) {
 			equals( "invalid", errorClass );
 			$(element).hide();
@@ -307,9 +307,12 @@ test("option: (un)highlight, custom", function() {
 			equals( "invalid", errorClass )
 			$(element).show();
 		},
-		errorClass: "invalid"
+		errorClass: "invalid",
+		rules: {
+			firstname: "required"
+		}
 	});
-	var e = $("#firstname")
+	var e = $("#firstnamec")
 	ok( e.is(":visible") );
 	e.valid()
 	ok( !e.is(":visible") );

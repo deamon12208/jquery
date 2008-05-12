@@ -296,17 +296,21 @@ jQuery.extend(jQuery.validator, {
 
 		// http://docs.jquery.com/Plugins/Validation/Validator/form
 		form: function() {
-			this.prepareForm();
-			var elements = this.elements();
-			for ( var i = 0; elements[i]; i++ ) {
-				this.check( elements[i] );
-			}
+			this.checkForm();
 			jQuery.extend(this.submitted, this.errorMap);
 			this.invalid = jQuery.extend({}, this.errorMap);
 			if (!this.valid())
 				jQuery(this.currentForm).triggerHandler("invalid-form.validate", [this]);
 			this.showErrors();
 			return this.valid();
+		},
+		
+		checkForm: function() {
+			this.prepareForm();
+			for ( var i = 0, elements = this.elements(); elements[i]; i++ ) {
+				this.check( elements[i] );
+			}
+			return this.valid(); 
 		},
 		
 		// http://docs.jquery.com/Plugins/Validation/Validator/element
@@ -448,7 +452,6 @@ jQuery.extend(jQuery.validator, {
 	
 		check: function( element ) {
 			element = this.clean( element );
-			this.settings.unhighlight && this.settings.unhighlight.call( this, element, this.settings.errorClass );
 			
 			// if radio/checkbox, validate first element in group instead
 			if (this.checkable(element)) {
@@ -551,9 +554,24 @@ jQuery.extend(jQuery.validator, {
 					this.showLabel( this.successList[i] );
 				}
 			}
+			if (this.settings.unhighlight) {
+				for ( var i = 0, elements = this.validElements(); elements[i]; i++ ) {
+					this.settings.unhighlight.call( this, elements[i], this.settings.errorClass );
+				}
+			}
 			this.toHide = this.toHide.not( this.toShow );
 			this.hideErrors();
 			this.addWrapper( this.toShow ).show();
+		},
+		
+		validElements: function() {
+			return this.elements().not(this.invalidElements());
+		},
+		
+		invalidElements: function() {
+			return jQuery(this.errorList).map(function() {
+				return this.element;
+			});
 		},
 		
 		showLabel: function(element, message) {
