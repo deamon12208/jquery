@@ -332,10 +332,6 @@
       if (opts.delayedClose > 0) {
         closeOnDelay = setTimeout(cluetipClose, opts.delayedClose);
       }
-      if (opts.debug) {
-        var positions = 'posY: ' + posY + ', tipHeight: ' + tipHeight + ', baseline: ' + baseline + ' (sTop: ' + sTop + ', wHeight: ' + wHeight + ')';
-        if (window.console && console.log) { console.log(positions); }
-      }
       opts.onShow($cluetip, $cluetipInner);
       
     };
