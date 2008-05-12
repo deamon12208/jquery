@@ -1,7 +1,7 @@
 1.2.2 / 1.3
 ---
 * Fixed invalid-form event, now only triggered when form is invalid
-* Added spanish (es), russian (ru), portuguese brazilian (ptbr) and polish (pl) localization
+* Added spanish (es), russian (ru), portuguese brazilian (ptbr), turkish (tr), and polish (pl) localization
 * Added removeAttrs plugin to facilate adding and removing multiple attributes
 * Added groups option to display a single message for multiple elements, via groups: { arbitraryGroupName: "fieldName1 fieldName2[, fieldNameN" }
 * Enhanced rules() for adding and removing (static) rules: rules("add", "method1[, methodN]"/{method1:param[, method_n:param]}) and rules("remove"[, "method1[, method_n]") 
