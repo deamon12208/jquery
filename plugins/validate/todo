@@ -3,21 +3,9 @@
 
 - checkout datejs.com for a proper date implementation -> complete but very heavy parser, currently overkill
 
-- provide method to validate form/field without UI side-effects
-jQuery.fn.validForm = function() {
-	var validator = this.validate();
-	validator.prepareForm();
-	var elements = validator.elements();
-	for ( var i = 0; elements[i]; i++ ) {
-		this.check( elements[i] );
-	}
-	return validator.valid();
-};
-
 - rewrite required-method to use jQuery's extended val() on selects[/radios/checkboxes]
 - consider a field-validator object that encapsulates a single element and all methods working on it
 - export API browser
-- gather list of sites using the plugin (eg. newsweek.com)
 - add example/support for other URL schemes like svn://....
 - document min/max/range methods for checkboxes/selects
 
