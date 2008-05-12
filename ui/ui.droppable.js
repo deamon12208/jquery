@@ -147,16 +147,8 @@
 		
 		switch (toleranceMode) {
 			case 'fit':
-				
-				if(!((y2-(draggable.helperProportions.height/2) > t && y1 < t) || (y1 < b && y2 > b) || (x2 > l && x1 < l) || (x1 < r && x2 > r))) return false;
-				
-				if(y2-(draggable.helperProportions.height/2) > t && y1 < t) return 1; //Crosses top edge
-				if(y1 < b && y2 > b) return 2; //Crosses bottom edge
-				if(x2 > l && x1 < l) return 1; //Crosses left edge
-				if(x1 < r && x2 > r) return 2; //Crosses right edge
-				
-				//return (l < x1 && x2 < r
-				//	&& t < y1 && y2 < b);
+				return (l < x1 && x2 < r
+					&& t < y1 && y2 < b);
 				break;
 			case 'intersect':
 				return (l < x1 + (draggable.helperProportions.width / 2) // Right Half
