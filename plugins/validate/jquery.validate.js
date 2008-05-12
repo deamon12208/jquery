@@ -149,12 +149,13 @@ jQuery.extend(jQuery.fn, {
 // Custom selectors
 jQuery.extend(jQuery.expr[":"], {
 	// http://docs.jquery.com/Plugins/Validation/blank
-	blank: "!jQuery.trim(a.value)",
+	blank: function(a) {return !jQuery.trim(a.value);},
 	// http://docs.jquery.com/Plugins/Validation/filled
-	filled: "!!jQuery.trim(a.value)",
+	filled: function(a) {return !!jQuery.trim(a.value);},
 	// http://docs.jquery.com/Plugins/Validation/unchecked
-	unchecked: "!a.checked"
+	unchecked: function(a) {return !a.checked;}
 });
+
 
 jQuery.format = function(source, params) {
 	if ( arguments.length == 1 ) 

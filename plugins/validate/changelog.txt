@@ -1,4 +1,4 @@
-1.2.2 / 1.3
+1.3
 ---
 * Fixed invalid-form event, now only triggered when form is invalid
 * Added spanish (es), russian (ru), portuguese brazilian (ptbr), turkish (tr), and polish (pl) localization
@@ -13,6 +13,7 @@
 * Fixed creditcard validation to accept only digits and dashes ("asdf" is not a valid creditcard number)
 * Allow both button and input elements for cancel buttons (via class="cancel")
 * Fixed #2215: Fixed message display to call unhighlight as part of showing and hiding messages, no more visual side-effects while checking an element and extracted validator.checkForm to validate a form without UI sideeffects
+* Rewrote custom selectors (:blank, :filled, :unchecked) with functions for compability with AIR
 
 1.2.1
 -----

@@ -1,12 +1,8 @@
 1.3
 ---
 
-re-write custom selectors as functions
+- checkout datejs.com for a proper date implementation -> complete but very heavy parser, currently overkill
 
-- figure out how to deal with array like structures
-	- http://www.janepatrick.co.uk/admin/test/associative.php
-	- http://www.janepatrick.co.uk/admin/test/associative-select.php
-- checkout datejs.com for a proper date implementation
 - provide method to validate form/field without UI side-effects
 jQuery.fn.validForm = function() {
 	var validator = this.validate();
