@@ -7,8 +7,7 @@
  *
  * http://docs.jquery.com/UI
  *
- * $Date: 2008-05-04 16:52:15 +0200 (So, 04 Mai 2008) $
- * $Rev: 5419 $
+ * $Id$
  */
 ;(function($) {
 	
