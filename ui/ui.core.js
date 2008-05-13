@@ -162,7 +162,7 @@
 			
 			this.element
 				.bind('mousedown.mouse', function() { return self.click.apply(self, arguments); })
-				.bind('mouseup.mouse', function() { (self.timer && clearInterval(self.timer)); })
+				.bind('mouseup.mouse', function() { (self.timer && clearTimeout(self.timer)); })
 				.bind('click.mouse', function() { if(self.initialized) { self.initialized = false; return false; } });
 			//Prevent text selection in IE
 			if ($.browser.msie) {
@@ -197,7 +197,7 @@
 			};
 
 			if(this.options.delay) {
-				if(this.timer) { clearInterval(this.timer); }
+				if(this.timer) { clearTimeout(this.timer); }
 				this.timer = setTimeout(initialize, this.options.delay);
 			} else {
 				initialize();
