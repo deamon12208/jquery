@@ -20,12 +20,6 @@
 			
 			this.element.addClass("ui-selectable");
 			
-			this.element.bind("setData.selectable", function(event, key, value){
-				instance.options[key] = value;
-			}).bind("getData.selectable", function(event, key){
-				return instance.options[key];
-			});
-			
 			this.dragged = false;
 	
 			// cache selectee children based on filter
