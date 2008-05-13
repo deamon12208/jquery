@@ -110,12 +110,13 @@
 		name = name.split(".")[1];
 		// create plugin method
 		$.fn[name] = function(options, data) {
-			var isMethodCall = (typeof options == 'string'),
-				args = arguments;
+			var isMethodCall = (typeof options == 'string');
+			[].shift.call(arguments);
 			
 			if (isMethodCall && getter(namespace, name, options)) {
 				var instance = $.data(this[0], name);
-				return (instance ? instance[options](data) : undefined); 
+				return (instance ? instance[options].apply(instance, arguments)
+					: undefined);
 			}
 			
 			return this.each(function() {
@@ -123,7 +124,7 @@
 				if (!instance) {
 					$.data(this, name, new $[namespace][name](this, options));
 				} else if (isMethodCall) {
-					instance[options].apply(instance, $.makeArray(args).slice(1));
+					instance[options].apply(instance, arguments);
 				}
 			});
 		};
