@@ -177,47 +177,56 @@
 		},
 		
 		position: function(pos) {
-			var wnd = $(window), doc = $(document), top = doc.scrollTop(), left = doc.scrollLeft(), minTop = top;
+			var wnd = $(window), doc = $(document),
+				pTop = doc.scrollTop(), pLeft = doc.scrollLeft(),
+				minTop = pTop;
+			
 			if ($.inArray(pos, ['center','top','right','bottom','left']) >= 0) {
-				pos = [pos == 'right' || pos == 'left' ? pos : 'center', pos == 'top' || pos == 'bottom' ? pos : 'middle'];
+				pos = [
+					pos == 'right' || pos == 'left' ? pos : 'center',
+					pos == 'top' || pos == 'bottom' ? pos : 'middle'
+				];
 			}
 			if (pos.constructor != Array) {
 				pos == ['center', 'middle']
 			}
 			if (pos[0].constructor == Number) {
-				left += pos[0];
+				pLeft += pos[0];
 			} else {
 				switch (pos[0]) {
 					case 'left':
-						left += 0;
+						pLeft += 0;
 						break;
 					case 'right':
-						left += (wnd.width()) - (this.uiDialog.width());
+						pLeft += (wnd.width()) - (this.uiDialog.width());
 						break;
 					case 'center':
 					default:
-						left += (wnd.width() / 2) - (this.uiDialog.width() / 2);
+						pLeft += (wnd.width() / 2) - (this.uiDialog.width() / 2);
 				}
 			}
 			if (pos[1].constructor == Number) {
-				top += pos[1];
+				pTop += pos[1];
 			} else {
 				switch (pos[1]) {
 					case 'top':
-						top += 0;
+						pTop += 0;
 						break;
 					case 'bottom':
-						top += (wnd.height()) - (this.uiDialog.height());
+						pTop += (wnd.height()) - (this.uiDialog.height());
 						break;
 					case 'middle':
 					default:
-						top += (wnd.height() / 2) - (this.uiDialog.height() / 2);
+						pTop += (wnd.height() / 2) - (this.uiDialog.height() / 2);
 				}
 			}
-			top = top < minTop ? minTop : top;
-			this.uiDialog.css({top: top, left: left});
-		},
 			
+			// prevent the dialog from being too high (make sure the titlebar
+			// is accessible)
+			pTop = Math.max(pTop, minTop);
+			this.uiDialog.css({top: pTop, left: pLeft});
+		},
+		
 		open: function() {
 			this.overlay = this.options.modal ? new $.ui.dialog.overlay(this) : null;
 			this.uiDialog.appendTo('body');
