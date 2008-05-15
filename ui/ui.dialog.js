@@ -43,7 +43,7 @@
 				.wrap(document.createElement('div'))
 				.wrap(document.createElement('div'));
 			var uiDialogContainer = uiDialogContent.parent().addClass('ui-dialog-container').css({position: 'relative'});
-			var uiDialog = this.uiDialog = uiDialogContainer.parent().hide()
+			var uiDialog = (this.uiDialog = uiDialogContainer.parent()).hide()
 				.addClass('ui-dialog')
 				.css({position: 'absolute', width: options.width, height: options.height, overflow: 'hidden'}); 
 	
@@ -51,8 +51,8 @@
 	
 			// Add content classes to dialog, to inherit theme at top level of element
 			$.each(classNames, function(i, className) {
-				if (className != 'ui-dialog-content')
-					uiDialog.addClass(className);
+				((className != 'ui-dialog-content')
+					&& uiDialog.addClass(className));
 			});
 	
 			if ($.fn.resizable) {
@@ -72,12 +72,11 @@
 					start: options.resizeStart,
 					resize: options.resize,
 					stop: function(e, ui) {
-						options.resizeStop && options.resizeStop.apply(this, arguments);
+						(options.resizeStop && options.resizeStop.apply(this, arguments));
 						$.ui.dialog.overlay.resize();
 					}
 				});
-				if (!options.resizable)
-					uiDialog.resizable('disable');
+				(!options.resizable && uiDialog.resizable('disable'));
 			}
 	
 			uiDialogContainer.prepend('<div class="ui-dialog-titlebar"></div>');
@@ -103,7 +102,7 @@
 			uiDialog.attr('tabindex', -1).css('outline', 0).keydown(function(ev) {
 				if (options.closeOnEscape) {
 					var ESC = 27;
-					ev.keyCode && ev.keyCode == ESC && self.close();
+					(ev.keyCode && ev.keyCode == ESC && self.close());
 				}
 			});
 			
@@ -115,7 +114,7 @@
 				$.each(options.buttons, function(name, fn) {
 					$(document.createElement('button'))
 						.text(name)
-						.click(function() { fn.apply(self.element, arguments) })
+						.click(function() { fn.apply(self.element, arguments); })
 						.appendTo(uiDialogButtonPane);
 				});
 			}
@@ -125,16 +124,15 @@
 					handle: '.ui-dialog-titlebar',
 					start: function(e, ui) {
 						self.activate();
-						options.dragStart && options.dragStart.apply(this, arguments);
+						(options.dragStart && options.dragStart.apply(this, arguments));
 					},
 					drag: options.drag,
 					stop: function(e, ui) {
-						options.dragStop && options.dragStop.apply(this, arguments);
+						(options.dragStop && options.dragStop.apply(this, arguments));
 						$.ui.dialog.overlay.resize();
 					}
 				});
-				if (!options.draggable)
-					uiDialog.draggable('disable')
+				(!options.draggable && uiDialog.draggable('disable'));
 			}
 		
 			uiDialog.mousedown(function() {
@@ -144,15 +142,13 @@
 				self.activate();
 			});
 			
-			options.bgiframe && $.fn.bgiframe && uiDialog.bgiframe();
+			(options.bgiframe && $.fn.bgiframe && uiDialog.bgiframe());
 			
-			if (options.autoOpen) {
-				this.open();
-			};
+			(options.autoOpen && this.open());
 		},
 		
 		setData: function(key, value){
-			setDataSwitch[key] && this.uiDialog.data(setDataSwitch[key], value);
+			(setDataSwitch[key] && this.uiDialog.data(setDataSwitch[key], value));
 			switch (key) {
 				case "draggable":
 					this.uiDialog.draggable(value ? 'enable' : 'disable');
@@ -188,7 +184,7 @@
 				];
 			}
 			if (pos.constructor != Array) {
-				pos == ['center', 'middle']
+				pos = ['center', 'middle'];
 			}
 			if (pos[0].constructor == Number) {
 				pLeft += pos[0];
@@ -200,8 +196,8 @@
 					case 'right':
 						pLeft += (wnd.width()) - (this.uiDialog.width());
 						break;
-					case 'center':
 					default:
+					case 'center':
 						pLeft += (wnd.width() / 2) - (this.uiDialog.width() / 2);
 				}
 			}
@@ -215,8 +211,8 @@
 					case 'bottom':
 						pTop += (wnd.height()) - (this.uiDialog.height());
 						break;
-					case 'middle':
 					default:
+					case 'middle':
 						pTop += (wnd.height() / 2) - (this.uiDialog.height() / 2);
 				}
 			}
@@ -251,7 +247,7 @@
 			// dialog. Modal dialogs don't get moved to the top because that
 			// would make any modeless dialogs that it spawned unusable until
 			// the modal dialog is closed.
-			!this.options.modal && this.moveToTop();
+			(!this.options.modal && this.moveToTop());
 		},
 			
 		moveToTop: function() {
@@ -259,12 +255,12 @@
 			$('.ui-dialog:visible').each(function() {
 				maxZ = Math.max(maxZ, parseInt($(this).css('z-index'), 10) || options.zIndex);
 			});
-			this.overlay && this.overlay.$el.css('z-index', ++maxZ);
+			(this.overlay && this.overlay.$el.css('z-index', ++maxZ));
 			this.uiDialog.css('z-index', ++maxZ);
 		},
 			
 		close: function() {
-			this.overlay && this.overlay.destroy();
+			(this.overlay && this.overlay.destroy());
 			this.uiDialog.hide();
 
 			// CALLBACK: close
@@ -277,7 +273,7 @@
 		},
 		
 		destroy: function() {
-			this.overlay && this.overlay.destroy();
+			(this.overlay && this.overlay.destroy());
 			this.uiDialog.hide();
 			this.element
 				.unbind('.dialog')
@@ -346,7 +342,7 @@
 				// allow closing by pressing the escape key
 				$(document).bind('keydown.dialog-overlay', function(e) {
 					var ESC = 27;
-					e.keyCode && e.keyCode == ESC && dialog.close(); 
+					(e.keyCode && e.keyCode == ESC && dialog.close()); 
 				});
 				
 				// handle window resize
@@ -361,7 +357,7 @@
 					height: this.height()
 				}, dialog.options.overlay));
 			
-			dialog.options.bgiframe && $.fn.bgiframe && $el.bgiframe();
+			(dialog.options.bgiframe && $.fn.bgiframe && $el.bgiframe());
 			
 			this.instances.push($el);
 			return $el;
