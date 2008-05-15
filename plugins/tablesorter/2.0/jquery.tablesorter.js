@@ -1,7 +1,7 @@
 /*
  * 
  * TableSorter 2.0 - Client-side table sorting with ease!
- * Version 2.0.4
+ * Version 2.0.5
  * @requires jQuery v1.2.3
  * 
  * Copyright (c) 2007 Christian Bach
@@ -112,6 +112,7 @@
 				dateFormat: "us",
 				decimal: '.',
 				onRenderHeader: null,
+				selectorHeaders: 'thead th',
 				debug: false
 			};
 			
@@ -299,13 +300,11 @@
 				
 				if(table.config.debug) { var time = new Date(); }
 				
-				var meta = ($.metadata) ? true : false, tableHeadersRows = [];
+				var meta = ($.metadata) ? true : false; //, tableHeadersRows = [];
 			
-				for(var i = 0; i < table.tHead.rows.length; i++) { tableHeadersRows[i]=0; };
+				//for(var i = 0; i < table.tHead.rows.length; i++) { tableHeadersRows[i]=0; };
 				
-				$tableHeaders = $("thead th",table);
-		
-				$tableHeaders.each(function(index) {
+				$tableHeaders = $(table.config.selectorHeaders,table).each(function(index) {
 							
 					this.count = 0;
 					this.column = index;
