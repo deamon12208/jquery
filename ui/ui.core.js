@@ -82,7 +82,7 @@
 		var methods = $[namespace][plugin].getter || [];
 		methods = (typeof methods == "string" ? methods.split(/,?\s+/) : methods);
 		return ($.inArray(method, methods) != -1);
-	};
+	}
 	
 	var widgetPrototype = {
 		init: function() {},
