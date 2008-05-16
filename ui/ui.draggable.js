@@ -251,12 +251,6 @@
 		destroy: function() {
 			if(!this.element.data('draggable')) return;
 			this.element.removeData("draggable").unbind(".draggable").mouse("destroy");
-		},
-		enable: function() {
-			this.options.disabled = false;
-		},
-		disable: function() {
-			this.options.disabled = true;
 		}
 	});
 	
