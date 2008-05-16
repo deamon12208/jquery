@@ -78,10 +78,10 @@
 			if (init) {
 
 				// attach necessary classes for styling if not present
-				this.element.hasClass(o.navClass) || this.element.addClass(o.navClass);
+				this.element.addClass(o.navClass);
 				this.$panels.each(function() {
 					var $this = $(this);
-					$this.hasClass(o.panelClass) || $this.addClass(o.panelClass);
+					$this.addClass(o.panelClass);
 				});
 
 				// Selected tab
