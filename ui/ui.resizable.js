@@ -19,8 +19,9 @@
 
 			var self = this, o = this.options;
 			
+			var elpos = this.element.css('position');
 			
-			var elpos = this.element.css('position'); // simulate .ui-resizable { position: relative; }
+			// simulate .ui-resizable { position: relative; }
 			this.element.addClass("ui-resizable").css({ position: /static/.test(elpos) ? 'relative' : elpos });
 			
 			$.extend(o, {
@@ -102,11 +103,11 @@
 			if(!o.handles) o.handles = !$('.ui-resizable-handle', this.element).length ? "e,s,se" : { n: '.ui-resizable-n', e: '.ui-resizable-e', s: '.ui-resizable-s', w: '.ui-resizable-w', se: '.ui-resizable-se', sw: '.ui-resizable-sw', ne: '.ui-resizable-ne', nw: '.ui-resizable-nw' };
 			if(o.handles.constructor == String) {
 		
+				o.zIndex = o.zIndex || 1000;
+				
 				if(o.handles == 'all') o.handles = 'n,e,s,w,se,sw,ne,nw';
 		
 				var n = o.handles.split(","); o.handles = {};
-		
-				o.zIndex = o.zIndex || 1000;
 				
 				// insertions are applied when don't have theme loaded
 				var insertionsDefault = {
@@ -234,35 +235,6 @@
 				axis: this.options.axis,
 				options: this.options
 			};
-		},
-		_renderProxy: function() {
-			var el = this.element, o = this.options;
-			this.elementOffset = el.offset();
-	
-			if(o.proxy) {
-				this.helper = this.helper || $('<div style="overflow:hidden;"></div>');
-	
-				// fix ie6 offset
-				var ie6 = $.browser.msie && $.browser.version < 7, ie6offset = (ie6 ? 1 : 0),
-				pxyoffset = ( ie6 ? 2 : -1 );
-	
-				this.helper.addClass(o.proxy).css({
-					width: el.outerWidth() + pxyoffset,
-					height: el.outerHeight() + pxyoffset,
-					position: 'absolute',
-					left: this.elementOffset.left - ie6offset +'px',
-					top: this.elementOffset.top - ie6offset +'px',
-					zIndex: ++o.zIndex
-				});
-				
-				this.helper.appendTo("body");
-	
-				if (o.disableSelection)
-					$.ui.disableSelection(this.helper.get(0));
-	
-			} else {
-				this.helper = el; 
-			}
 		},
 		propagate: function(n,e) {
 			$.ui.plugin.call(this, n, [e, this.ui()]);
@@ -399,7 +371,6 @@
 			
 			return false;
 		},
-		
 		_updateCache: function(data) {
 			var o = this.options;
 			this.offset = this.helper.offset();
@@ -408,7 +379,6 @@
 			if (data.height) this.size.height = data.height;
 			if (data.width) this.size.width = data.width;
 		},
-		
 		_updateRatio: function(data, e) {
 			var o = this.options, cpos = this.position, csize = this.size, a = this.axis;
 			
@@ -426,7 +396,6 @@
 			
 			return data;
 		},
-		
 		_respectSize: function(data, e) {
 			
 			var el = this.helper, o = this.options, pRatio = o._aspectRatio || e.shiftKey, a = this.axis, 
@@ -453,7 +422,6 @@
 			
 			return data;
 		},
-		
 		_proportionallyResize: function() {
 			var o = this.options;
 			if (!o.proportionallyResize) return;
@@ -473,7 +441,35 @@
 				width: (el.width() - o.borderDif[1] - o.borderDif[3]) + "px"
 			});
 		},
-		
+		_renderProxy: function() {
+			var el = this.element, o = this.options;
+			this.elementOffset = el.offset();
+	
+			if(o.proxy) {
+				this.helper = this.helper || $('<div style="overflow:hidden;"></div>');
+	
+				// fix ie6 offset
+				var ie6 = $.browser.msie && $.browser.version < 7, ie6offset = (ie6 ? 1 : 0),
+				pxyoffset = ( ie6 ? 2 : -1 );
+	
+				this.helper.addClass(o.proxy).css({
+					width: el.outerWidth() + pxyoffset,
+					height: el.outerHeight() + pxyoffset,
+					position: 'absolute',
+					left: this.elementOffset.left - ie6offset +'px',
+					top: this.elementOffset.top - ie6offset +'px',
+					zIndex: ++o.zIndex
+				});
+				
+				this.helper.appendTo("body");
+	
+				if (o.disableSelection)
+					$.ui.disableSelection(this.helper.get(0));
+	
+			} else {
+				this.helper = el; 
+			}
+		},
 		_change: {
 			e: function(e, dx, dy) {
 				return { width: this.originalSize.width + dx };
