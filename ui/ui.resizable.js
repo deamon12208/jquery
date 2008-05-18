@@ -351,12 +351,12 @@
 							soffseth = ista && $.ui.hasScroll(pr.get(0), 'left') /* TODO - jump height */ ? 0 : self.sizeDiff.height,
 								soffsetw = ista ? 0 : self.sizeDiff.width;
 			
-				var style = { width: (self.size.width - soffsetw), height: (self.size.height - soffseth) },
-						left = parseInt(self.element.css('left'), 10) + (self.position.left - self.originalPosition.left), 
-							top = parseInt(self.element.css('top'), 10) + (self.position.top - self.originalPosition.top);
+				var s = { width: (self.size.width - soffsetw), height: (self.size.height - soffseth) },
+					left = (parseInt(self.element.css('left'), 10) + (self.position.left - self.originalPosition.left)) || null, 
+					top = (parseInt(self.element.css('top'), 10) + (self.position.top - self.originalPosition.top)) || null;
 				
 				if (!o.animate)
-					this.element.css($.extend(style, { top: top, left: left }));
+					this.element.css($.extend(s, { top: top, left: left }));
 				
 				if (o.proxy && !o.animate) this._proportionallyResize();
 				this.helper.remove();
@@ -374,7 +374,7 @@
 				self = this, smp = this.originalMousePosition, a = this.axis;
 
 			var dx = (e.pageX-smp.left)||0, dy = (e.pageY-smp.top)||0;
-			var trigger = this.change[a];
+			var trigger = this._change[a];
 			if (!trigger) return false;
 			
 			// Calculate the attrs that will be change
@@ -412,8 +412,8 @@
 		_updateRatio: function(data, e) {
 			var o = this.options, cpos = this.position, csize = this.size, a = this.axis;
 			
-			if (data.height) data.width = Math.round(csize.height / o.aspectRatio);
-			else if (data.width) data.height = Math.round(csize.width * o.aspectRatio);
+			if (data.height) data.width = (csize.height / o.aspectRatio);
+			else if (data.width) data.height = (csize.width * o.aspectRatio);
 			
 			if (a == 'sw') {
 				data.left = cpos.left + (csize.width - data.width);
@@ -474,7 +474,7 @@
 			});
 		},
 		
-		change: {
+		_change: {
 			e: function(e, dx, dy) {
 				return { width: this.originalSize.width + dx };
 			},
@@ -490,16 +490,16 @@
 				return { height: this.originalSize.height + dy };
 			},
 			se: function(e, dx, dy) {
-				return $.extend(this.change.s.apply(this, arguments), this.change.e.apply(this, [e, dx, dy]));
+				return $.extend(this._change.s.apply(this, arguments), this._change.e.apply(this, [e, dx, dy]));
 			},
 			sw: function(e, dx, dy) {
-				return $.extend(this.change.s.apply(this, arguments), this.change.w.apply(this, [e, dx, dy]));
+				return $.extend(this._change.s.apply(this, arguments), this._change.w.apply(this, [e, dx, dy]));
 			},
 			ne: function(e, dx, dy) {
-				return $.extend(this.change.n.apply(this, arguments), this.change.e.apply(this, [e, dx, dy]));
+				return $.extend(this._change.n.apply(this, arguments), this._change.e.apply(this, [e, dx, dy]));
 			},
 			nw: function(e, dx, dy) {
-				return $.extend(this.change.n.apply(this, arguments), this.change.w.apply(this, [e, dx, dy]));
+				return $.extend(this._change.n.apply(this, arguments), this._change.w.apply(this, [e, dx, dy]));
 			}
 		}
 	});
@@ -625,16 +625,27 @@
 								soffsetw = ista ? 0 : self.sizeDiff.width;
 			
 			var style = { width: (self.size.width - soffsetw), height: (self.size.height - soffseth) },
-						left = parseInt(self.element.css('left'), 10) + (self.position.left - self.originalPosition.left), 
-							top = parseInt(self.element.css('top'), 10) + (self.position.top - self.originalPosition.top); 
+						left = (parseInt(self.element.css('left'), 10) + (self.position.left - self.originalPosition.left)) || null, 
+							top = (parseInt(self.element.css('top'), 10) + (self.position.top - self.originalPosition.top)) || null; 
 			
 			self.element.animate(
-				$.extend(style, { top: top, left: left }),
-				{ 
-					duration: o.animateDuration || "slow", 
-					easing: o.animateEasing || "swing", 
+				$.extend(style, top && left ? { top: top, left: left } : {}), { 
+					duration: o.animateDuration || "slow", easing: o.animateEasing || "swing", 
 					step: function() {
-						if (pr) pr.css({ width: self.element.css('width'), height: self.element.css('height') });
+						
+						var data = {
+							width: parseInt(self.element.css('width'), 10),
+							height: parseInt(self.element.css('height'), 10),
+							top: parseInt(self.element.css('top'), 10),
+							left: parseInt(self.element.css('left'), 10)
+						};
+						
+						if (pr) pr.css({ width: data.width, height: data.height });
+						
+						// propagating resize, and updating values for each animation step
+						self._updateCache(data);
+						self.propagate("animate", e);
+						
 					}
 				}
 			);
