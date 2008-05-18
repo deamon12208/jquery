@@ -679,5 +679,45 @@
 		}
 		
 	});
+	
+	$.ui.plugin.add("resizable", "alsoResize", {
+		
+		start: function(e, ui) {
+			var o = ui.options, self = ui.instance;
+			
+			$(o.alsoResize).each(function() {
+				$(this).data("resizable-alsoresize-start", {
+					width: parseInt($(this).css('width'), 10), height: parseInt($(this).css('height'), 10),
+					left: parseInt($(this).css('left'), 10), top: parseInt($(this).css('top'), 10)
+				});
+			});
+		},
+		
+		resize: function(e, ui){
+			var o = ui.options, self = ui.instance;
+			
+			var delta = {
+				height: (self.size.height - self.originalSize.height) || 0,
+				width: (self.size.width - self.originalSize.width) || 0,
+				top: (self.position.top - self.originalPosition.top) || 0,
+				left: (self.position.left - self.originalPosition.left) || 0
+			};
+			
+			$(o.alsoResize, self.element).each(function() {
+				var start = $(this).data("resizable-alsoresize-start"), style = {};
+				
+				$.each(o.alsoResizeCss || ['width', 'height', 'top', 'left'], function(i, prop) {
+					style[prop] = (start[prop] + delta[prop]) || null
+				});
+				
+				$(this).css(style);
+			});
+		},
+		
+		stop: function(e, ui){
+			$(this).removeData("resizable-alsoresize-start");
+		}
+		
+	});
 
 })(jQuery);
