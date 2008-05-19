@@ -49,7 +49,7 @@
 			settings = $.extend({}, $.tooltip.defaults, settings);
 			createHelper(settings);
 			return this.each(function() {
-					this.tSettings = settings;
+					$.data(this, "tooltip", settings)
 					this.tOpacity = helper.parent.css("opacity");
 					// copy tooltip into its own expando and remove the title
 					this.tooltipText = this.title;
@@ -57,7 +57,8 @@
 					// also remove alt attribute to prevent default tooltip in IE
 					this.alt = "";
 				})
-				.hover(save, hide)
+				.mouseover(save)
+				.mouseout(hide)
 				.click(hide);
 		},
 		fixPNG: IE ? function() {
@@ -113,7 +114,7 @@
 	}
 	
 	function settings(element) {
-		return element.tSettings;
+		return $.data(element, "tooltip");
 	}
 	
 	// main event handler to start showing tooltips
