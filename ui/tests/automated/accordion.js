@@ -1,3 +1,5 @@
+module("accordion");
+
 jQuery.ui.accordion.defaults.animated = false;
 
 function state(accordion) {

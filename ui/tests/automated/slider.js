@@ -18,7 +18,7 @@ function assertChange(stepping, start, result, action) {
 	}
 }
 
-module("single handle")
+module("slider: single handle")
 
 test("change one step via keydown", assertChange(1, undefined, 1, function() {
 	this.find("a").triggerKeydown("39");
@@ -67,7 +67,7 @@ test("options update min/max", function() {
 	equals(slider.slider("value"), -10);
 })
 
-module("setup and teardown");
+module("slider: setup and teardown");
 
 test("destroy and recreate", function() {
 	expect(3)
