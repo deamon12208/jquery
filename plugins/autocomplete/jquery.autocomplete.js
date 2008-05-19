@@ -632,7 +632,9 @@ $.Autocompleter.Select = function (options, input, select, config) {
 			listItems.slice(0, 1).addClass(CLASSES.ACTIVE);
 			active = 0;
 		}
-		list.bgiframe();
+		// apply bgiframe if available
+		if ( $.fn.bgiframe )
+			list.bgiframe();
 	}
 	
 	return {
