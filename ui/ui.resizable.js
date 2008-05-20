@@ -683,41 +683,54 @@
 	$.ui.plugin.add("resizable", "alsoResize", {
 		
 		start: function(e, ui) {
-			var o = ui.options, self = ui.instance;
+			var o = ui.options, self = ui.instance, 
 			
-			$(o.alsoResize).each(function() {
-				$(this).data("resizable-alsoresize-start", {
-					width: parseInt($(this).css('width'), 10), height: parseInt($(this).css('height'), 10),
-					left: parseInt($(this).css('left'), 10), top: parseInt($(this).css('top'), 10)
+			_store = function(exp) {
+				$(exp).each(function() {
+					$(this).data("resizable-alsoresize-start", {
+						width: parseInt($(this).css('width'), 10), height: parseInt($(this).css('height'), 10),
+						left: parseInt($(this).css('left'), 10), top: parseInt($(this).css('top'), 10)
+					});
 				});
-			});
+			};
+			
+			if (typeof(o.alsoResize) == 'object') {
+				$.each(o.alsoResize, function(exp, c) { _store(exp); });
+			}else{
+				_store(o.alsoResize);
+			} 
 		},
 		
 		resize: function(e, ui){
-			var o = ui.options, self = ui.instance;
+			var o = ui.options, self = ui.instance, os = self.originalSize, op = self.originalPosition;
 			
-			var delta = {
-				height: (self.size.height - self.originalSize.height) || 0,
-				width: (self.size.width - self.originalSize.width) || 0,
-				top: (self.position.top - self.originalPosition.top) || 0,
-				left: (self.position.left - self.originalPosition.left) || 0
+			var delta = { 
+				height: (self.size.height - os.height) || 0, width: (self.size.width - os.width) || 0,
+				top: (self.position.top - op.top) || 0, left: (self.position.left - op.left) || 0
+			},
+			
+			_alsoResize = function(exp, c) {
+				$(exp).each(function() {
+					var start = $(this).data("resizable-alsoresize-start"), style = {}, css = c && c.length ? c : ['width', 'height', 'top', 'left'];
+					
+					$.each(css || ['width', 'height', 'top', 'left'], function(i, prop) {
+						style[prop] = (start[prop] + delta[prop]) || null
+					});
+					
+					$(this).css(style);
+				});
 			};
 			
-			$(o.alsoResize, self.element).each(function() {
-				var start = $(this).data("resizable-alsoresize-start"), style = {};
-				
-				$.each(o.alsoResizeCss || ['width', 'height', 'top', 'left'], function(i, prop) {
-					style[prop] = (start[prop] + delta[prop]) || null
-				});
-				
-				$(this).css(style);
-			});
+			if (typeof(o.alsoResize) == 'object') {
+				$.each(o.alsoResize, function(exp, c) { _alsoResize(exp, c); });
+			}else{
+				_alsoResize(o.alsoResize);
+			}
 		},
 		
 		stop: function(e, ui){
 			$(this).removeData("resizable-alsoresize-start");
 		}
-		
 	});
 
 })(jQuery);
