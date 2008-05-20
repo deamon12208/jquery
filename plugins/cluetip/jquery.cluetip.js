@@ -59,8 +59,11 @@
  */
 
   var $cluetip, $cluetipInner, $cluetipOuter, $cluetipTitle, $cluetipArrows, $dropShadow, imgCount;
-  $.fn.cluetip = function(options) {
-
+  $.fn.cluetip = function(js, options) {
+    if (typeof js == 'object') {
+      options = js;
+      js = null;
+    }
     return this.each(function(index) {
       // support metadata plugin (v1.0 and 2.0)
       var opts = $.extend({}, $.fn.cluetip.defaults, options || {}, $.metadata ? $cont.metadata() : $.meta ? $cont.data() : {});
@@ -79,7 +82,6 @@
         $.extend(opts.fx, options.fx);
         delete options.fx;
       }
-
       // start out with no contents (for ajax activation)
       var cluetipContents = false;
       var cluezIndex = parseInt(opts.cluezIndex, 10)-1;
@@ -107,10 +109,10 @@
         $dropShadow.css({position: 'absolute', backgroundColor: '#000'})
         .prependTo($cluetip);
       }
-      var $this = $(this);
+      var $this = $(this);      
       var tipAttribute = $this.attr(opts.attribute), ctClass = opts.cluetipClass;
-      if (!tipAttribute && !opts.splitTitle) return true;
-      // if hideLocal is set to true, on DOM ready hide the local content that will be displayed in the clueTip
+      if (!tipAttribute && !opts.splitTitle && !js) return true;
+      // if hideLocal is set to true, on DOM ready hide the local content that will be displayed in the clueTip      
       if (opts.local && opts.hideLocal) { $(tipAttribute + ':first').hide(); }
       var tOffset = parseInt(opts.topOffset, 10), lOffset = parseInt(opts.leftOffset, 10);
       // vertical measurement variables
@@ -132,7 +134,6 @@
         tipTitle = tipParts.shift();
       }
       var localContent;
-      
 
 /***************************************      
 * ACTIVATION
@@ -183,11 +184,19 @@
         wHeight = $(window).height();
 
 /***************************************
+* load a string from cluetip method's first argument
+***************************************/
+      if (js) {
+        $cluetipInner.html(js);
+        cluetipShow(pY);
+      }
+/***************************************
 * load the title attribute only (or user-selected attribute). 
 * clueTip title is the string before the first delimiter
 * subsequent delimiters place clueTip body text on separate lines
 ***************************************/
-      if (tipParts) {
+
+      else if (tipParts) {
         var tpl = tipParts.length;
         for (var i=0; i < tpl; i++){
           if (i == 0) {
@@ -201,6 +210,7 @@
 /***************************************
 * load external file via ajax          
 ***************************************/
+
       else if (!opts.local && tipAttribute.indexOf('#') != 0) {
         if (cluetipContents && opts.ajaxCache) {
           $cluetipInner.html(cluetipContents);
