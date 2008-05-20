@@ -49,7 +49,7 @@
 			settings = $.extend({}, $.tooltip.defaults, settings);
 			createHelper(settings);
 			return this.each(function() {
-					$.data(this, "tooltip", settings)
+					$.data(this, "tooltip", settings);
 					this.tOpacity = helper.parent.css("opacity");
 					// copy tooltip into its own expando and remove the title
 					this.tooltipText = this.title;
