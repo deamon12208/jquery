@@ -330,9 +330,10 @@
 			var $panel = $('#' + id);
 			if (!$panel.length) {
 				$panel = $(o.panelTemplate).attr('id', id)
-					.addClass(o.panelClass).addClass(o.hideClass);
-				$panel.data('destroy.tabs', true);
+					.addClass(o.hideClass)
+					.data('destroy.tabs', true);
 			}
+			$panel.addClass(o.panelClass);
 			if (index >= this.$lis.length) {
 				$li.appendTo(this.element);
 				$panel.appendTo(this.element[0].parentNode);
