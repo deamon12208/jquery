@@ -59,9 +59,9 @@
 			};
 			
 			o._nodeName = this.element[0].nodeName;
-		
+			
 			//Wrap the element if it cannot hold child nodes
-			if(o._nodeName.match(/textarea|input|select|button|img/i)) {
+			if(o._nodeName.match(/canvas|textarea|input|select|button|img/i)) {
 				var el = this.element;
 				
 				//Opera fixing relative position
