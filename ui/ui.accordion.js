@@ -205,9 +205,6 @@
 			clicked.parent().andSelf().addClass(options.selectedClass);
 		}
 		
-		//options.active.parent().andSelf().css('zoom', '1');
-		//clicked.parent().andSelf().css('zoom', '1');
-		
 		// find elements to show and hide
 		var toShow = clicked.next(),
 			toHide = options.active.next(),
