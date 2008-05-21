@@ -26,7 +26,7 @@
 			
 			$.extend(o, {
 				_aspectRatio: !!(o.aspectRatio),
-				proxy: o.proxy || o.ghost || o.animate ? 'proxy' : null,
+				proxy: o.proxy || o.ghost || o.animate ? o.proxy || 'proxy' : null,
 				knobHandles: o.knobHandles === true ? 'ui-resizable-knob-handle' : o.knobHandles
 			});
 
