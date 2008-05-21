@@ -30,14 +30,14 @@
 					"10px" : "$('#foo').resizable({ minWidth: 10 });"
 				},
 				"proxy" : {
-					".bar" : "$('#foo').resizable({ proxy: '#bar' });"
+					".bar" : "$('#foo').resizable({ proxy: 'bar' });"
 				},
 				"destructive" : {
 					"true" : "$('#foo').resizable({ destructive: true });",
 					"false" : "$('#foo').resizable({ destructive: false });"
 				},
 				"proportionallyResize" : {
-					"bar" : "$('#foo').resizable({ proportionallyResize: [$('#bar')] });"
+					"bar" : "$('#foo').resizable({ alsoResize: { '#test-container': ['width', 'height'] } });"
 				},
 			},
 			"callbacks": {
