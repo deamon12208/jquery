@@ -35,6 +35,11 @@
 			options.headers = this.element.find(options.header);
 			options.active = findActive(options.headers, options.active);
 			
+			// IE7-/Win - Extra vertical space in Lists fixed
+			if ($.browser.msie) {
+				this.element.find('a').css('zoom', '1');
+			}
+			
 			if (!this.element.hasClass("ui-accordion")) {
 				this.element.addClass("ui-accordion");
 				$("<span class='ui-accordion-left'/>").insertBefore(options.headers);
@@ -199,6 +204,9 @@
 		if ( !clickedActive ) {
 			clicked.parent().andSelf().addClass(options.selectedClass);
 		}
+		
+		//options.active.parent().andSelf().css('zoom', '1');
+		//clicked.parent().andSelf().css('zoom', '1');
 		
 		// find elements to show and hide
 		var toShow = clicked.next(),
