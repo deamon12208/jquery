@@ -48,14 +48,14 @@
 			
 			o.knobTheme = {
 				'ui-resizable-handle': { background: '#F2F2F2', border: '1px solid #808080', height: '8px', width: '8px' },
-				'ui-resizable-n': { cursor: 'n-resize', top: '-4px', left: '45%' },
-				'ui-resizable-s': { cursor: 's-resize', bottom: '-4px', left: '45%' },
-				'ui-resizable-e': { cursor: 'e-resize', right: '-4px', top: '45%' },
-				'ui-resizable-w': { cursor: 'w-resize', left: '-4px', top: '45%' },
-				'ui-resizable-se': { cursor: 'se-resize', right: '-4px', bottom: '-4px' },
-				'ui-resizable-sw': { cursor: 'sw-resize', left: '-4px', bottom: '-4px' },
-				'ui-resizable-nw': { cursor: 'nw-resize', left: '-4px', top: '-4px' },
-				'ui-resizable-ne': { cursor: 'ne-resize', right: '-4px', top: '-4px' }
+				'ui-resizable-n': { cursor: 'n-resize', top: '0px', left: '45%' },
+				'ui-resizable-s': { cursor: 's-resize', bottom: '0px', left: '45%' },
+				'ui-resizable-e': { cursor: 'e-resize', right: '0px', top: '45%' },
+				'ui-resizable-w': { cursor: 'w-resize', left: '0px', top: '45%' },
+				'ui-resizable-se': { cursor: 'se-resize', right: '0px', bottom: '0px' },
+				'ui-resizable-sw': { cursor: 'sw-resize', left: '0px', bottom: '0px' },
+				'ui-resizable-nw': { cursor: 'nw-resize', left: '0px', top: '0px' },
+				'ui-resizable-ne': { cursor: 'ne-resize', right: '0px', top: '0px' }
 			};
 			
 			o._nodeName = this.element[0].nodeName;
