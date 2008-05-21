@@ -195,7 +195,7 @@
 			});
 					
 			//If we want to auto hide the elements
-			if (o.autoHide) {
+			if (o.autohide) {
 				o._handles.hide();
 				$(self.element).addClass("ui-resizable-autohide").hover(function() {
 					$(this).removeClass("ui-resizable-autohide");
@@ -509,7 +509,7 @@
 			aspectRatio: false,
 			disableSelection: true,
 			preserveCursor: true,
-			autoHide: false,
+			autohide: false,
 			knobHandles: false
 		}
 	});
