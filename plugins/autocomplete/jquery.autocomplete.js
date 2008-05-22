@@ -305,7 +305,7 @@ $.Autocompleter = function(input, options) {
 				}
 			);
 		}
-		if (wasVisible && hasFocus)
+		if (wasVisible)
 			// position cursor at end of input field
 			$.Autocompleter.Selection(input, input.value.length, input.value.length);
 	};
