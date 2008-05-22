@@ -3,6 +3,7 @@
 * Fixed element creation (<ul> to <ul/> and <li> to </li>)
 * Fixed ac_even class (was ac_event)
 * Fixed bgiframe usage: now its really optional
+* Removed the blur-on-return workaround, added a less obtrusive one only for Opera
 
 1.0
 ---

@@ -78,6 +78,16 @@ $.Autocompleter = function(input, options) {
 	};
 	var select = $.Autocompleter.Select(options, input, selectCurrent, config);
 	
+	var blockSubmit;
+	
+	// prevent form submit in opera when selecting with return key
+	$.browser.opera && $(input.form).bind("submit.autocomplete", function() {
+		if (blockSubmit) {
+			blockSubmit = false;
+			return false;
+		}
+	});
+	
 	$input.keydown(function(event) {
 		// track last key pressed
 		lastKeyPressCode = event.keyCode;
@@ -123,11 +133,12 @@ $.Autocompleter = function(input, options) {
 			case options.multiple && $.trim(options.multipleSeparator) == "," && KEY.COMMA:
 			case KEY.TAB:
 			case KEY.RETURN:
-				if( selectCurrent() ){
-					// make sure to blur off the current field
-					if( !options.multiple )
-						$input.blur();
-					event.preventDefault();
+				if( selectCurrent() ) {
+					// stop default to prevent a form submit, Opera needs special handling
+					if (!$.browser.opera)
+						event.preventDefault();
+					else
+						blockSubmit = true;
 				}
 				break;
 				
@@ -185,6 +196,7 @@ $.Autocompleter = function(input, options) {
 	}).bind("unautocomplete", function() {
 		select.unbind();
 		$input.unbind();
+		$(input.form).unbind(".autocomplete");
 	});
 	
 	
