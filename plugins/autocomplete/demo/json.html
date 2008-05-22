@@ -33,7 +33,7 @@ $(function() {
 			return format(item);
 		}
 	}).result(function(e, item) {
-		$("#content").append("<p>selected " + item.name + " &lt;" + item.to + "&gt;</p>");
+		$("#content").append("<p>selected " + format(item) + "</p>");
 	});
 });
 </script>
