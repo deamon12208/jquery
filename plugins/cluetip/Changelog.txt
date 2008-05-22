@@ -1,6 +1,12 @@
 
 == New and Noteworthy ==
 
+== 0.9.8 ==
+
+* fixed problem with metadata plugin compatibility; 
+* fixed problem with non-iterating nested options by using recursive $.extend
+* added optional first argument that allows loading cluetip contents from provided string
+
 == 0.9.7 ==
 
 * added support for metadata plugin
