@@ -4,6 +4,7 @@
 * Fixed ac_even class (was ac_event)
 * Fixed bgiframe usage: now its really optional
 * Removed the blur-on-return workaround, added a less obtrusive one only for Opera
+* Fixed hold cursor keys: Opera needs keypress, everyone else keydown to scroll through result list when holding cursor key
 
 1.0
 ---
