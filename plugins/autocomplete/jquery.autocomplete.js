@@ -136,10 +136,9 @@ $.Autocompleter = function(input, options) {
 			case KEY.RETURN:
 				if( selectCurrent() ) {
 					// stop default to prevent a form submit, Opera needs special handling
-					if (!$.browser.opera)
-						event.preventDefault();
-					else
-						blockSubmit = true;
+					event.preventDefault();
+					blockSubmit = true;
+					return false;
 				}
 				break;
 				
@@ -152,8 +151,6 @@ $.Autocompleter = function(input, options) {
 				timeout = setTimeout(onChange, options.delay);
 				break;
 		}
-	}).keypress(function() {
-		// having fun with opera - remove this binding and Opera submits the form when we select an entry via return
 	}).focus(function(){
 		// track whether the field has focus, we shouldn't process any
 		// results if the field no longer has focus
@@ -288,6 +285,7 @@ $.Autocompleter = function(input, options) {
 	};
 
 	function hideResultsNow() {
+		var wasVisible = select.visible();
 		select.hide();
 		clearTimeout(timeout);
 		stopLoading();
@@ -296,10 +294,20 @@ $.Autocompleter = function(input, options) {
 			$input.search(
 				function (result){
 					// if no value found, clear the input box
-					if( !result ) $input.val("");
+					if( !result ) {
+						if (options.multiple) {
+							var words = trimWords($input.val()).slice(0, -1);
+							$input.val( words.join(options.multipleSeparator) + (words.length ? options.multipleSeparator : "") );
+						}
+						else
+							$input.val( "" );
+					}
 				}
 			);
 		}
+		if (wasVisible && hasFocus)
+			// position cursor at end of input field
+			$.Autocompleter.Selection(input, input.value.length, input.value.length);
 	};
 
 	function receiveData(q, data) {
@@ -679,6 +687,7 @@ $.Autocompleter.Select = function (options, input, select, config) {
 		},
 		hide: function() {
 			element && element.hide();
+			listItems && listItems.removeClass(CLASSES.ACTIVE)
 			active = -1;
 		},
 		visible : function() {

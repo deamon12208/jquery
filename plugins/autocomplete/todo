@@ -1,7 +1,3 @@
-- multiple + mustMatch: incorrect value deletes more then just the incorrect value -> delete only the last value
-- multiple without mustMatch: incorrect value + seperator inserts last match -> don't
-
-
 TODO
 
 - test formatItem implementation that returns (clickable) anchors
