@@ -1,8 +1,8 @@
 /*
  * jQuery clueTip plugin
- * Version 0.9.7  (05/11/2008)
- * @requires jQuery v1.1.1+
- * @requires Dimensions plugin 
+ * Version 0.9.8  (05/22/2008)
+ * @requires jQuery v1.1.4+
+ * @requires Dimensions plugin (for jQuery versions < 1.2.5)
  *
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
@@ -65,23 +65,11 @@
       js = null;
     }
     return this.each(function(index) {
+      var $this = $(this);      
+      
       // support metadata plugin (v1.0 and 2.0)
-      var opts = $.extend({}, $.fn.cluetip.defaults, options || {}, $.metadata ? $cont.metadata() : $.meta ? $cont.data() : {});
+      var opts = $.extend(false, {}, $.fn.cluetip.defaults, options || {}, $.metadata ? $this.metadata() : $.meta ? $this.data() : {});
 
-      if (options && options.ajaxSettings) {
-        $.extend(opts.ajaxSettings, options.ajaxSettings);
-        delete options.ajaxSettings;
-      }
-
-      if (options && options.hoverIntent) {
-        $.extend(opts.hoverIntent, options.hoverIntent);
-        delete options.hoverIntent;
-      }    
-
-      if (options && options.fx) {
-        $.extend(opts.fx, options.fx);
-        delete options.fx;
-      }
       // start out with no contents (for ajax activation)
       var cluetipContents = false;
       var cluezIndex = parseInt(opts.cluezIndex, 10)-1;
@@ -109,7 +97,6 @@
         $dropShadow.css({position: 'absolute', backgroundColor: '#000'})
         .prependTo($cluetip);
       }
-      var $this = $(this);      
       var tipAttribute = $this.attr(opts.attribute), ctClass = opts.cluetipClass;
       if (!tipAttribute && !opts.splitTitle && !js) return true;
       // if hideLocal is set to true, on DOM ready hide the local content that will be displayed in the clueTip      
