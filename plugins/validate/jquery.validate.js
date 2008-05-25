@@ -13,6 +13,8 @@
  *   http://www.gnu.org/licenses/gpl.html
  */
 
+(function($)) {
+
 jQuery.extend(jQuery.fn, {
 	// http://docs.jquery.com/Plugins/Validation/validate
 	validate: function( options ) {
@@ -1065,6 +1067,8 @@ jQuery.extend(jQuery.validator, {
 	}
 	
 });
+
+})(jQuery);
 
 // ajax mode: abort
 // usage: $.ajax({ mode: "abort"[, port: "uniqueport"]});
