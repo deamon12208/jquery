@@ -1,6 +1,7 @@
 1.4
 ---
 * Fixed #2931, validate elements in document order and ignore type=image inputs
+* Implemented #2908, enabling custom messages via metadata ala class="{required:true,messages:{required:'required field'}}"
 
 1.3
 ---

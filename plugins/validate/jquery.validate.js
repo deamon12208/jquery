@@ -498,6 +498,19 @@ jQuery.extend(jQuery.validator, {
 			return true;
 		},
 		
+		// return the custom message for the given element and validation method
+		// specified in the element's "messages" metadata
+		customMetaMessage: function(element, method) {
+			if (!jQuery.metadata)
+				return;
+			
+			var meta = this.settings.meta
+				? jQuery(element).metadata()[this.settings.meta]
+				: jQuery(element).metadata();
+			
+			return meta.messages && meta.messages[method];
+		},
+		
 		// return the custom message for the given element name and validation method
 		customMessage: function( name, method ) {
 			var m = this.settings.messages[name];
@@ -518,6 +531,7 @@ jQuery.extend(jQuery.validator, {
 		defaultMessage: function( element, method) {
 			return this.findDefined(
 				this.customMessage( element.name, method ),
+				this.customMetaMessage( element, method ),
 				// title is never undefined, so handle empty string as undefined
 				element.title || undefined,
 				jQuery.validator.messages[method],
@@ -831,6 +845,11 @@ jQuery.extend(jQuery.validator, {
 				delete rules.minlength;
 				delete rules.maxlength;
 			}
+		}
+		
+		// To support custom messages in metadata ignore rule methods titled "messages"
+		if (rules.messages) {
+			delete rules.messages
 		}
 		
 		return rules;
