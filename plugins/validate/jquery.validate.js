@@ -409,8 +409,8 @@ jQuery.extend(jQuery.validator, {
 			// select all valid inputs inside the form (no submit or reset buttons)
 			// workaround with jQuery([]).add until http://dev.jquery.com/ticket/2114 is solved
 			return jQuery([]).add(this.currentForm.elements)
-			.filter("input, select, textarea")
-			.not(":submit, :reset, [disabled]")
+			.filter(":input")
+			.not(":submit, :reset, :image, [disabled]")
 			.not( this.settings.ignore )
 			.filter(function() {
 				!this.name && validator.settings.debug && window.console && console.error( "%o has no name assigned", this);
