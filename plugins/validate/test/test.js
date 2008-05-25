@@ -353,7 +353,7 @@ test("defaultMessage(), empty title is ignored", function() {
 test("formatAndAdd", function() {
 	expect(4);
 	var v = $("#form").validate();
-	var fakeElement = { form: { id: "foo" }, name: "bar" };
+	var fakeElement = { form: $("#form")[0], name: "bar" };
 	v.formatAndAdd(fakeElement, {method: "maxLength", parameters: 2})
 	equals( "Please enter no more than 2 characters.", v.errorList[0].message );
 	equals( "bar", v.errorList[0].element.name );
@@ -368,7 +368,7 @@ test("formatAndAdd", function() {
 test("formatAndAdd2", function() {
 	expect(3);
 	var v = $("#form").validate();
-	var fakeElement = { form: { id: "foo" }, name: "bar" };
+	var fakeElement = { form: $("#form")[0], name: "bar" };
 	jQuery.validator.messages.test1 = function(param, element) {
 		equals( v, this );
 		equals( 0, param );

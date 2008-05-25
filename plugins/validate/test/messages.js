@@ -29,3 +29,13 @@ test("group error messages", function() {
 	ok( form.valid() );
 	ok( form.find(".errorContainer label.error").is(":hidden") );
 });
+
+test("read messages from metadata", function() {
+	var form = $("#testForm9")
+	form.validate();
+	var e = $("#testEmail9")
+	e.valid();
+	equals( form.find("label").text(), "required" );
+	e.val("bla").valid();
+	equals( form.find("label").text(), "email" );
+});
