@@ -1,6 +1,6 @@
 /*
  * jQuery Form Plugin
- * version: 2.10 (05/08/2008)
+ * version: 2.11 (05/26/2008)
  * @requires jQuery v1.2.2 or later
  *
  * Examples and documentation at: http://malsup.com/jquery/form/
@@ -144,6 +144,12 @@ $.fn.ajaxSubmit = function(options) {
     // private function for handling file uploads (hat tip to YAHOO!)
     function fileUpload() {
         var form = $form[0];
+        
+        if ($(':input[@name=submit]', form).length) {
+            alert('Error: Form elements must not be named "submit".');
+            return;
+        }
+        
         var opts = $.extend({}, $.ajaxSettings, options);
 
         var id = 'jqFormIO' + (new Date().getTime());
