@@ -1,4 +1,4 @@
-.ac_results {
+.ui-autocomplete-results {
 	padding: 0px;
 	border: 1px solid black;
 	background-color: white;
@@ -6,7 +6,7 @@
 	z-index: 99999;
 }
 
-.ac_results ul {
+.ui-autocomplete-results ul {
 	width: 100%;
 	list-style-position: outside;
 	list-style: none;
@@ -14,7 +14,7 @@
 	margin: 0;
 }
 
-.ac_results li {
+.ui-autocomplete-results li {
 	margin: 0px;
 	padding: 2px 5px;
 	cursor: default;
@@ -34,15 +34,15 @@
 	overflow: hidden;
 }
 
-.ac_loading {
+.ui-autocomplete-loading {
 	background: white url('indicator.gif') right center no-repeat;
 }
 
-.ac_odd {
+.ui-autocomplete-odd {
 	background-color: #eee;
 }
 
-.ac_over {
+.ui-autocomplete-over {
 	background-color: #0A246A;
 	color: white;
 }
