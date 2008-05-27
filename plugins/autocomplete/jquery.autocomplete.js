@@ -12,41 +12,43 @@
  */
 
 ;(function($) {
-
-
-$.widget("ui.autocomplete", {
 	
-	init: function() {
-
-		$.extend(this.options, {
-			delay: this.options.url ? $.Autocompleter.defaults.delay : 10,
-			max: !this.options.scroll ? 10 : 150,
-			highlight: this.options.highlight || function(value) { return value; }, // if highlight is set to false, replace it with a do-nothing function
-			formatMatch: this.options.formatMatch || this.options.formatItem // if the formatMatch option is not specified, then use formatItem for backwards compatibility
+$.fn.extend({
+	autocomplete: function(urlOrData, options) {
+		var isUrl = typeof urlOrData == "string";
+		options = $.extend({}, $.Autocompleter.defaults, {
+			url: isUrl ? urlOrData : null,
+			data: isUrl ? null : urlOrData,
+			delay: isUrl ? $.Autocompleter.defaults.delay : 10,
+			max: options && !options.scroll ? 10 : 150
+		}, options);
+		
+		// if highlight is set to false, replace it with a do-nothing function
+		options.highlight = options.highlight || function(value) { return value; };
+		
+		// if the formatMatch option is not specified, then use formatItem for backwards compatibility
+		options.formatMatch = options.formatMatch || options.formatItem;
+		
+		return this.each(function() {
+			new $.Autocompleter(this, options);
 		});
-		
-		new $.Autocompleter(this.element[0], this.options);
-		
 	},
-	
 	result: function(handler) {
-		return this.element.bind("result", handler);
+		return this.bind("result", handler);
 	},
 	search: function(handler) {
-		return this.element.trigger("search", [handler]);
+		return this.trigger("search", [handler]);
 	},
 	flushCache: function() {
-		return this.element.trigger("flushCache");
+		return this.trigger("flushCache");
 	},
-	setData: function(key, value){
-		return this.element.trigger("setOptions", [{ key: value }]);
+	setOptions: function(options){
+		return this.trigger("setOptions", [options]);
 	},
-	destroy: function() {
-		return this.element.trigger("unautocomplete");
+	unautocomplete: function() {
+		return this.trigger("unautocomplete");
 	}
-	
 });
-
 
 $.Autocompleter = function(input, options) {
 
@@ -289,7 +291,8 @@ $.Autocompleter = function(input, options) {
 		stopLoading();
 		if (options.mustMatch) {
 			// call search and run callback
-			$input.autocomplete("search", function (result){
+			$input.search(
+				function (result){
 					// if no value found, clear the input box
 					if( !result ) {
 						if (options.multiple) {
@@ -383,9 +386,9 @@ $.Autocompleter = function(input, options) {
 };
 
 $.Autocompleter.defaults = {
-	inputClass: "ui-autocomplete-input",
-	resultsClass: "ui-autocomplete-results",
-	loadingClass: "ui-autocomplete-loading",
+	inputClass: "ac_input",
+	resultsClass: "ac_results",
+	loadingClass: "ac_loading",
 	minChars: 1,
 	delay: 400,
 	matchCase: false,
@@ -408,10 +411,6 @@ $.Autocompleter.defaults = {
     scroll: true,
     scrollHeight: 180
 };
-
-$.extend($.ui.autocomplete, {
-	defaults: $.Autocompleter.defaults
-});
 
 $.Autocompleter.Cache = function(options) {
 
@@ -551,7 +550,7 @@ $.Autocompleter.Cache = function(options) {
 
 $.Autocompleter.Select = function (options, input, select, config) {
 	var CLASSES = {
-		ACTIVE: "ui-autocomplete-over"
+		ACTIVE: "ac_over"
 	};
 	
 	var listItems,
@@ -646,8 +645,8 @@ $.Autocompleter.Select = function (options, input, select, config) {
 			var formatted = options.formatItem(data[i].data, i+1, max, data[i].value, term);
 			if ( formatted === false )
 				continue;
-			var li = $("<li/>").html( options.highlight(formatted, term) ).addClass(i%2 == 0 ? "ui-autocomplete-even" : "ui-autocomplete-odd").appendTo(list)[0];
-			$.data(li, "ui-autocomplete-data", data[i]);
+			var li = $("<li/>").html( options.highlight(formatted, term) ).addClass(i%2 == 0 ? "ac_even" : "ac_odd").appendTo(list)[0];
+			$.data(li, "ac_data", data[i]);
 		}
 		listItems = list.find("li");
 		if ( options.selectFirst ) {
@@ -728,7 +727,7 @@ $.Autocompleter.Select = function (options, input, select, config) {
 		},
 		selected: function() {
 			var selected = listItems && listItems.filter("." + CLASSES.ACTIVE).removeClass(CLASSES.ACTIVE);
-			return selected && selected.length && $.data(selected[0], "ui-autocomplete-data");
+			return selected && selected.length && $.data(selected[0], "ac_data");
 		},
 		emptyList: function (){
 			list && list.empty();
