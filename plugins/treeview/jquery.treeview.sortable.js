@@ -20,100 +20,30 @@
 		};
 	}
 
-	$.fn.extend({
-		sortable: function(options) {
+
+	$.widget("ui.sortableTree", $.extend($.ui.mouse, {
+		init: function() {
+
+			//Initialize needed constants
+			var self = this, o = this.options;
+			this.containerCache = {};
+			this.element.addClass("ui-sortableTree");
 			
-			var args = Array.prototype.slice.call(arguments, 1);
+			//Get the items
+			this.refresh();
 			
-			if (options == "serialize" || options == "toArray")
-				return $.data(this[0], "sortable")[options](arguments[1]);
+			//Let's determine the parent's offset
+			if(!(/(relative|absolute|fixed)/).test(this.element.css('position'))) this.element.css('position', 'relative');
+			this.offset = this.element.offset();
+	
+			//Initialize mouse events for interaction
+			this.mouseInit();
 			
-			return this.each(function() {
-				if (typeof options == "string") {
-					var sort = $.data(this, "sortable");
-					if (sort) sort[options].apply(sort, args);
+			//Prepare cursorAt
+			if(o.cursorAt && o.cursorAt.constructor == Array)
+				o.cursorAt = { left: o.cursorAt[0], top: o.cursorAt[1] };
 
-				} else if(!$.data(this, "sortable"))
-					new $.ui.sortable(this, options);
-			});
-		}
-	});
-	
-	$.ui.sortable = function(element, options) {
-		//Initialize needed constants
-		var self = this;
-	
-		this.element = $(element);
-		this.containerCache = {};
-		
-		$.data(element, "sortable", this);
-		this.element.addClass("ui-sortable");
-
-		//Prepare the passed options
-		this.options = $.extend({}, options);
-		var o = this.options;
-		$.extend(o, {
-			items: this.options.items || '> *',
-			zIndex: this.options.zIndex || 1000,
-			startCondition: function() {
-				return !self.options.disabled;
-			}
-		});
-		
-		$(element).bind("setData.sortable", function(event, key, value){
-			self.options[key] = value;
-		}).bind("getData.sortable", function(event, key){
-			return self.options[key];
-		});
-		
-		//Get the items
-		this.refresh();
-		
-		//Let's determine the parent's offset
-		if(!(/(relative|absolute|fixed)/).test(this.element.css('position'))) this.element.css('position', 'relative');
-		this.offset = this.element.offset();
-
-		//Initialize mouse events for interaction
-		this.element.mouse({
-			executor: this,
-			delay: o.delay,
-			distance: o.distance || 1,
-			dragPrevention: o.prevention ? o.prevention.toLowerCase().split(',') : ['input','textarea','button','select','option'],
-			start: this.start,
-			stop: this.stop,
-			drag: this.drag,
-			condition: function(e) {
-
-				if(this.options.disabled || this.options.type == 'static') return false;
-
-				//Find out if the clicked node (or one of its parents) is a actual item in this.items
-				var currentItem = null, nodes = $(e.target).parents().each(function() {	
-					if($.data(this, 'sortable-item')) {
-						currentItem = $(this);
-						return false;
-					}
-				});
-				if($.data(e.target, 'sortable-item')) currentItem = $(e.target);
-				
-				if(!currentItem) return false;	
-				if(this.options.handle) {
-					var validHandle = false;
-					$(this.options.handle, currentItem).each(function() { if(this == e.target) validHandle = true; });
-					if(!validHandle) return false;
-				}
-					
-				this.currentItem = currentItem;
-				return true;
-
-			}
-		});
-		
-		//Prepare cursorAt
-		if(o.cursorAt && o.cursorAt.constructor == Array)
-			o.cursorAt = { left: o.cursorAt[0], top: o.cursorAt[1] };
-	};
-	
-	$.extend($.ui.sortable.prototype, {
+		},
 		plugins: {},
 		ui: function(inst) {
 			return {
@@ -133,7 +63,7 @@
 		},
 		serialize: function(o) {
 			
-			var items = $(this.options.items, this.element).not('.ui-sortable-helper'); //Only the items of the sortable itself
+			var items = $(this.options.items, this.element).not('.ui-sortableTree-helper'); //Only the items of the sortable itself
 			var str = []; o = o || {};
 			
 			items.each(function() {
@@ -145,18 +75,18 @@
 			
 		},
 		toArray: function(attr) {
-			var items = $(this.options.items, this.element).not('.ui-sortable-helper'); //Only the items of the sortable itself
+			var items = $(this.options.items, this.element).not('.ui-sortableTree-helper'); //Only the items of the sortable itself
 			var ret = [];
 
 			items.each(function() { ret.push($(this).attr(attr || 'id')); });
 			return ret;
 		},
 		enable: function() {
-			this.element.removeClass("ui-sortable-disabled");
+			this.element.removeClass("ui-sortableTree-disabled");
 			this.options.disabled = false;
 		},
 		disable: function() {
-			this.element.addClass("ui-sortable-disabled");
+			this.element.addClass("ui-sortableTree-disabled");
 			this.options.disabled = true;
 		},
 		/* Be careful with the following core functions */
@@ -177,7 +107,7 @@
 			var y1 = this.position.absolute.top - 10, y2 = y1 + 10;
 			var t = item.top,  b = t + item.height;
 
-			if(!this.intersectsWith(item.item.parents(".ui-sortable").data("sortable").containerCache)) return false;
+			if(!this.intersectsWith(item.item.parents(".ui-sortableTree").data("sortableTree").containerCache)) return false;
 
 			if (!( t < y1 + (this.helperProportions.height / 2)        // Bottom Half
 				&&     y2 - (this.helperProportions.height / 2) < b )) return false; // Top Half
@@ -203,7 +133,7 @@
 				for (var i = this.options.connectWith.length - 1; i >= 0; i--){
 					var cur = $(this.options.connectWith[i]);
 					for (var j = cur.length - 1; j >= 0; j--){
-						var inst = $.data(cur[j], 'sortable');
+						var inst = $.data(cur[j], 'sortableTree');
 						if(inst && !inst.options.disabled) {
 							queries.push($(inst.options.items, inst.element));
 							this.containers.push(inst);
@@ -214,7 +144,7 @@
 
 			for (var i = queries.length - 1; i >= 0; i--){
 				queries[i].each(function() {
-					$.data(this, 'sortable-item', true); // Data for target checking (mouse manager)
+					$.data(this, 'sortableTree-item', true); // Data for target checking (mouse manager)
 					items.push({
 						item: $(this),
 						width: 0, height: 0,
@@ -238,14 +168,16 @@
 			};
 		},
 		destroy: function() {
+
 			this.element
-				.removeClass("ui-sortable ui-sortable-disabled")
-				.removeData("sortable")
-				.unbind(".sortable")
-				.removeMouseInteraction();
+				.removeClass("ui-sortableTree ui-sortableTree-disabled")
+				.removeData("sortableTree")
+				.unbind(".sortableTree");
+			this.mouseDestroy();
 			
 			for ( var i = this.items.length - 1; i >= 0; i-- )
-				this.items[i].item.removeData("sortable-item");
+				this.items[i].item.removeData("sortableTree-item");
+				
 		},
 		contactContainers: function(e) {
 			for (var i = this.containers.length - 1; i >= 0; i--){
@@ -284,7 +216,27 @@
 				
 			};			
 		},
-		start: function(e,el) {
+		mouseStart: function(e,el) {
+
+			if(this.options.disabled || this.options.type == 'static') return false;
+
+			//Find out if the clicked node (or one of its parents) is a actual item in this.items
+			var currentItem = null, nodes = $(e.target).parents().each(function() {	
+				if($.data(this, 'sortableTree-item')) {
+					currentItem = $(this);
+					return false;
+				}
+			});
+			if($.data(e.target, 'sortableTree-item')) currentItem = $(e.target);
+			
+			if(!currentItem) return false;	
+			if(this.options.handle) {
+				var validHandle = false;
+				$(this.options.handle, currentItem).each(function() { if(this == e.target) validHandle = true; });
+				if(!validHandle) return false;
+			}
+				
+			this.currentItem = currentItem;
 			
 			var o = this.options;
 			this.currentContainer = this;
@@ -293,7 +245,7 @@
 			//Create and append the visible helper
 			this.helper = typeof o.helper == 'function' ? $(o.helper.apply(this.element[0], [e, this.currentItem])) : this.currentItem.clone();
 			if(!this.helper.parents('body').length) this.helper.appendTo("body"); //Add the helper to the DOM if that didn't happen already
-			this.helper.css({ position: 'absolute', clear: 'both' }).addClass('ui-sortable-helper'); //Position it absolutely and add a helper class
+			this.helper.css({ position: 'absolute', clear: 'both' }).addClass('ui-sortableTree-helper'); //Position it absolutely and add a helper class
 			
 			//Prepare variables for position generation
 			$.extend(this, {
@@ -323,10 +275,10 @@
 			if ($.ui.ddmanager && !o.dropBehaviour) $.ui.ddmanager.prepareOffsets(this, e);
 
 			this.dragging = true;
-			return false;
+			return true;
 			
 		},
-		stop: function(e) {
+		mouseStop: function(e) {
 
 			if(this.newPositionAt) this.options.sortIndication.remove.call(this.currentItem, this.newPositionAt); //remove sort indicator
 			this.propagate("stop", e); //Call plugins and trigger callbacks
@@ -362,7 +314,7 @@
 			return false;
 			
 		},
-		drag: function(e) {
+		mouseDrag: function(e) {
 
 			//Compute the helpers position
 			this.position.current = { top: e.pageY + 5, left: e.pageX + 5 };
@@ -410,6 +362,15 @@
 				//Append
 			}
 		}
+	}));
+	
+	$.extend($.ui.sortableTree, {
+		defaults: {
+			items: '> *',
+			zIndex: 1000,
+			distance: 1
+		},
+		getter: "serialize toArray"
 	});
 
 
