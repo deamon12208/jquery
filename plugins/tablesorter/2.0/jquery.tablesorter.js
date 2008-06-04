@@ -437,18 +437,20 @@
 				if(table.config.debug) { var sortTime = new Date(); }
 				
 				var dynamicExp = "var sortWrapper = function(a,b) {", l = sortList.length;
-					
+				
+				// TODO: inline functions.	
 				for(var i=0; i < l; i++) {
 					
 					var c = sortList[i][0];
 					var order = sortList[i][1];
-					var s = (getCachedSortType(table.config.parsers,c) == "text") ? ((order == 0) ? "sortText" : "sortTextDesc") : ((order == 0) ? "sortNumeric" : "sortNumericDesc");
-					
+					//var s = (getCachedSortType(table.config.parsers,c) == "text") ? ((order == 0) ? "sortText" : "sortTextDesc") : ((order == 0) ? "sortNumeric" : "sortNumericDesc");
+					var s = (table.config.parsers[c].type == "text") ? ((order == 0) ? makeSortText(c) : makeSortTextDesc(c)) : ((order == 0) ? makeSortNumeric(c) : makeSortNumericDesc(c));
 					var e = "e" + i;
 					
-					dynamicExp += "var " + e + " = " + s + "(a[" + c + "],b[" + c + "]); ";
+					dynamicExp += "var " + e + " = " + s; // + "(a[" + c + "],b[" + c + "]); ";
 					dynamicExp += "if(" + e + ") { return " + e + "; } ";
 					dynamicExp += "else { ";
+				
 				}
 				
 				// if value is the same keep orignal order	
@@ -462,6 +464,8 @@
 				dynamicExp += "return 0; ";	
 				dynamicExp += "}; ";	
 				
+				if(table.config.debug) { benchmark("Evaling expression:" + dynamicExp, new Date()); }
+				
 				eval(dynamicExp);
 				
 				cache.normalized.sort(sortWrapper);
@@ -470,6 +474,23 @@
 				
 				return cache;
 			};
+			
+			function makeSortText(i) {
+				return "((a[" + i + "] < b[" + i + "]) ? -1 : ((a[" + i + "] > b[" + i + "]) ? 1 : 0));";
+			};
+			
+			function makeSortTextDesc(i) {
+				return "((b[" + i + "] < a[" + i + "]) ? -1 : ((b[" + i + "] > a[" + i + "]) ? 1 : 0));";
+			};	
+			
+			function makeSortNumeric(i) {
+				return "a[" + i + "]-b[" + i + "];";
+			};
+			
+			function makeSortNumericDesc(i) {
+				return "b[" + i + "]-a[" + i + "];";
+			};
+			
 			
 			function sortText(a,b) {
 				return ((a < b) ? -1 : ((a > b) ? 1 : 0));
