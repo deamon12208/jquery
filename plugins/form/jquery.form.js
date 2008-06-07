@@ -1,6 +1,6 @@
 /*
  * jQuery Form Plugin
- * version: 2.11 (05/26/2008)
+ * version: 2.12 (06/07/2008)
  * @requires jQuery v1.2.2 or later
  *
  * Examples and documentation at: http://malsup.com/jquery/form/
@@ -178,6 +178,20 @@ $.fn.ajaxSubmit = function(options) {
         var cbInvoked = 0;
         var timedOut = 0;
 
+        // add submitting element to data if we know it
+        var sub = form.clk;
+        if (sub) {
+            var n = sub.name;
+            if (n && !sub.disabled) {
+                options.extraData = options.extraData || {};
+                options.extraData[n] = sub.value;
+                if (sub.type == "image") {
+                    options.extraData[name+'.x'] = form.clk_x;
+                    options.extraData[name+'.y'] = form.clk_y;
+                }
+            }
+        }
+        
         // take a breath so that pending repaints get some cpu time before the upload starts
         setTimeout(function() {
             // make sure form attrs are set
