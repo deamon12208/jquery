@@ -249,16 +249,10 @@ $.extend($.validator, {
 		equalTo: "Please enter the same value again.",
 		accept: "Please enter a value with a valid extension.",
 		maxlength: $.format("Please enter no more than {0} characters."),
-		maxLength: $.format("Please enter no more than {0} characters."),
 		minlength: $.format("Please enter at least {0} characters."),
-		minLength: $.format("Please enter at least {0} characters."),
 		rangelength: $.format("Please enter a value between {0} and {1} characters long."),
-		rangeLength: $.format("Please enter a value between {0} and {1} characters long."),
-		rangeValue: $.format("Please enter a value between {0} and {1}."),
 		range: $.format("Please enter a value between {0} and {1}."),
-		maxValue: $.format("Please enter a value less than or equal to {0}."),
 		max: $.format("Please enter a value less than or equal to {0}."),
-		minValue: $.format("Please enter a value greater than or equal to {0}."),
 		min: $.format("Please enter a value greater than or equal to {0}.")
 	},
 	
@@ -310,7 +304,7 @@ $.extend($.validator, {
 		
 		checkForm: function() {
 			this.prepareForm();
-			for ( var i = 0, elements = this.elements(); elements[i]; i++ ) {
+			for ( var i = 0, elements = (this.currentElements = this.elements()); elements[i]; i++ ) {
 				this.check( elements[i] );
 			}
 			return this.valid(); 
@@ -321,6 +315,7 @@ $.extend($.validator, {
 			element = this.clean( element );
 			this.lastElement = element;
 			this.prepareElement( element );
+			this.currentElements = $(element);
 			var result = this.check( element );
 			if ( result ) {
 				delete this.invalid[element.name];
@@ -438,9 +433,10 @@ $.extend($.validator, {
 			this.successList = [];
 			this.errorList = [];
 			this.errorMap = {};
-			this.toShow = $( [] );
-			this.toHide = $( [] );
+			this.toShow = $([]);
+			this.toHide = $([]);
 			this.formSubmitted = false;
+			this.currentElements = $([]);
 		},
 		
 		prepareForm: function() {
@@ -582,7 +578,7 @@ $.extend($.validator, {
 		},
 		
 		validElements: function() {
-			return this.elements().not(this.invalidElements());
+			return this.currentElements.not(this.invalidElements());
 		},
 		
 		invalidElements: function() {
@@ -748,10 +744,8 @@ $.extend($.validator, {
 		}
 		
 		// maxlength may be returned as -1, 2147483647 (IE) and 524288 (safari) for text inputs
-		if (rules.maxlength && /-1|2147483647|524288/.test(rules.maxlength)) {
+		if (rules.maxlength && /-1|2147483647|524288/.test(rules.maxlength) || ($.browser.msie && rules.maxlength === 0)) {
 			delete rules.maxlength;
-			// deprecated
-			delete rules.maxLength;
 		}
 		
 		return rules;
@@ -776,21 +770,6 @@ $.extend($.validator, {
 	},
 	
 	normalizeRules: function(rules, element) {
-		// convert deprecated rules
-		$.each({
-			minLength: 'minlength',
-			maxLength: 'maxlength',
-			rangeLength: 'rangelength',
-			minValue: 'min',
-			maxValue: 'max',
-			rangeValue: 'range'
-		}, function(dep, curr) {
-			if (rules[dep]) {
-				rules[curr] = rules[dep];
-				delete rules[dep];
-			}
-		});
-		
 		// handle dependency check
 		$.each(rules, function(prop, val) {
 			// ignore rule when param is explicitly false, eg. required:false
@@ -946,19 +925,9 @@ $.extend($.validator, {
 			return this.optional(element) || this.getLength(value, element) >= param;
 		},
 		
-		// deprecated, to be removed in 1.3
-		minLength: function(value, element, param) {
-			return $.validator.methods.minlength.apply(this, arguments);
-		},
-	
 		// http://docs.jquery.com/Plugins/Validation/Methods/maxlength
 		maxlength: function(value, element, param) {
 			return this.optional(element) || this.getLength(value, element) <= param;
-		},
-		
-		// deprecated, to be removed in 1.3
-		maxLength: function(value, element, param) {
-			return $.validator.methods.maxlength.apply(this, arguments);
 		},
 		
 		// http://docs.jquery.com/Plugins/Validation/Methods/rangelength
@@ -967,19 +936,9 @@ $.extend($.validator, {
 			return this.optional(element) || ( length >= param[0] && length <= param[1] );
 		},
 		
-		// deprecated, to be removed in 1.3
-		rangeLength: function(value, element, param) {
-			return $.validator.methods.rangelength.apply(this, arguments);
-		},
-	
 		// http://docs.jquery.com/Plugins/Validation/Methods/min
 		min: function( value, element, param ) {
 			return this.optional(element) || value >= param;
-		},
-		
-		// deprecated, to be removed in 1.3
-		minValue: function() {
-			return $.validator.methods.min.apply(this, arguments);
 		},
 		
 		// http://docs.jquery.com/Plugins/Validation/Methods/max
@@ -987,19 +946,9 @@ $.extend($.validator, {
 			return this.optional(element) || value <= param;
 		},
 		
-		// deprecated, to be removed in 1.3
-		maxValue: function() {
-			return $.validator.methods.max.apply(this, arguments);
-		},
-		
 		// http://docs.jquery.com/Plugins/Validation/Methods/range
 		range: function( value, element, param ) {
 			return this.optional(element) || ( value >= param[0] && value <= param[1] );
-		},
-		
-		// deprecated, to be removed in 1.3
-		rangeValue: function() {
-			return $.validator.methods.range.apply(this, arguments);
 		},
 		
 		// http://docs.jquery.com/Plugins/Validation/Methods/email

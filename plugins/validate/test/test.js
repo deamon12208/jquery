@@ -6,7 +6,7 @@ test("Constructor", function() {
 	var v1 = $("#testForm1").validate();
 	var v2 = $("#testForm1").validate();
 	equals( v1, v2, "Calling validate() multiple times must return the same validator instance" );
-	equals( 2, v1.elements().length, "validator must have two elements" );
+	equals( v1.elements().length, 3, "validator elements" );
 });
 
 test("validate() without elements, with non-form elements", function() {
@@ -354,14 +354,14 @@ test("formatAndAdd", function() {
 	expect(4);
 	var v = $("#form").validate();
 	var fakeElement = { form: $("#form")[0], name: "bar" };
-	v.formatAndAdd(fakeElement, {method: "maxLength", parameters: 2})
+	v.formatAndAdd(fakeElement, {method: "maxlength", parameters: 2})
 	equals( "Please enter no more than 2 characters.", v.errorList[0].message );
 	equals( "bar", v.errorList[0].element.name );
 	
-	v.formatAndAdd(fakeElement, {method: "rangeValue", parameters:[2,4]})
+	v.formatAndAdd(fakeElement, {method: "range", parameters:[2,4]})
 	equals( "Please enter a value between 2 and 4.", v.errorList[1].message );
 	
-	v.formatAndAdd(fakeElement, {method: "rangeValue", parameters:[0,4]})
+	v.formatAndAdd(fakeElement, {method: "range", parameters:[0,4]})
 	equals( "Please enter a value between 0 and 4.", v.errorList[2].message );
 });
 
@@ -648,7 +648,7 @@ test("success option3", function() {
 	$("#firstname").val("hi");
 	v.form();
 	var labels = $("#testForm1 label");
-	equals( 2, labels.size() );
+	equals( 3, labels.size() );
 	ok( labels.eq(0).is(".valid") );
 	ok( !labels.eq(1).is(".valid") );
 });
@@ -662,6 +662,7 @@ test("successlist", function() {
 test("success isn't called for optional elements", function() {
 	expect(4);
 	equals( "", $("#firstname").removeClass().val() );
+	$("#something").remove();
 	$("#lastname").remove();
 	$("#errorFirstname").remove();
 	var v = $("#testForm1").validate({
@@ -705,12 +706,12 @@ test("all rules are evaluated even if one returns a dependency-mistmatch", funct
 
 test("messages", function() {
 	var m = jQuery.validator.messages;
-	equals( "Please enter no more than 0 characters.", m.maxLength(0) );
-	equals( "Please enter at least 1 characters.", m.minLength(1) );
-	equals( "Please enter a value between 1 and 2 characters long.", m.rangeLength([1, 2]) );
-	equals( "Please enter a value less than or equal to 1.", m.maxValue(1) );
-	equals( "Please enter a value greater than or equal to 0.", m.minValue(0) );
-	equals( "Please enter a value between 1 and 2.", m.rangeValue([1, 2]) );
+	equals( "Please enter no more than 0 characters.", m.maxlength(0) );
+	equals( "Please enter at least 1 characters.", m.minlength(1) );
+	equals( "Please enter a value between 1 and 2 characters long.", m.rangelength([1, 2]) );
+	equals( "Please enter a value less than or equal to 1.", m.max(1) );
+	equals( "Please enter a value greater than or equal to 0.", m.min(0) );
+	equals( "Please enter a value between 1 and 2.", m.range([1, 2]) );
 });
 
 test("jQuery.format", function() {
@@ -784,31 +785,43 @@ module("events");
 
 test("validate on blur", function() {
 	function errors(expected, message) {
-		equals(expected, v.size(), message );
+		equals(v.size(), expected, message );
+	}
+	function labels(expected) {
+		equals(v.errors().filter(":visible").size(), expected);
 	}
 	function blur(target) {
 		$("#testForm1").triggerEvent("focusout", target[0]);
 	}
 	var e = $("#firstname");
 	var v = $("#testForm1").validate();
+	$("#something").val("");
 	blur(e);
 	errors(0, "No value yet, required is skipped on blur");
+	labels(0);
 	e.val("h");
 	blur(e);
-	errors(1, "Required was ignored, but as something was entered, check other rules, minLength isn't met");
+	errors(1, "Required was ignored, but as something was entered, check other rules, minlength isn't met");
+	labels(1);
 	e.val("hh");
-	e.blur(0, "All is fine");
+	blur(e);
+	errors(0, "All is fine");
+	labels(0);
 	e.val("");
 	v.form();
-	errors(2, "Submit checks all rules, both fields invalid");
+	errors(3, "Submit checks all rules, both fields invalid");
+	labels(3);
 	blur(e);
 	errors(1, "Blurring the field results in emptying the error list first, then checking the invalid field: its still invalid, don't remove the error" );
+	labels(3);
 	e.val("h");
 	blur(e);
-	errors(1, "Entering a single character fulfills required, but not minLength: 2, still invalid");
+	errors(1, "Entering a single character fulfills required, but not minlength: 2, still invalid");
+	labels(3);
 	e.val("hh");
 	blur(e);
-	errors(0, "Both required and minLength are met, no errors left");
+	errors(0, "Both required and minlength are met, no errors left");
+	labels(2);
 });
 
 test("validate on keyup", function() {
@@ -927,7 +940,7 @@ test("validate multiple checkbox on click", function() {
 		rules: {
 			check: {
 				required: true,
-				minLength: 2
+				minlength: 2
 			}
 		}
 	});

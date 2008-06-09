@@ -192,7 +192,6 @@ test("rules(), add and remove", function() {
 		return false;
 	}, "");
 	$("#v2").validate();
-	//var removedRules = $("#v2-i5").rules("remove", "required minlength maxlength");
 	var removedAttrs = $("#v2-i5").removeClass("required").removeAttrs("minlength maxlength");
 	compare2( $("#v2-i5").rules(), { customMethod1: "123" });
 	compare2( removedAttrs, { minlength: 2, maxlength: 5});

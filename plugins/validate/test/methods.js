@@ -229,9 +229,9 @@ test("required with dependencies", function() {
 	ok(!method.call( v, e[4].value, e[4], "input"), "Invalid checkbox" );
 });
 
-test("minLength", function() {
+test("minlength", function() {
 	var v = jQuery("#form").validate(),
-		method = $.validator.methods.minLength,
+		method = $.validator.methods.minlength,
 		param = 2,
 		e = $('#text1, #text2, #text3');
 	ok( method.call( v, e[0].value, e[0], param), "Valid text input" );
@@ -251,9 +251,9 @@ test("minLength", function() {
 	ok( method.call( v, e[3].value, e[3], param), "Valid select" );
 });
 
-test("maxLength", function() {
+test("maxlength", function() {
 	var v = jQuery("#form").validate();
-	var method = $.validator.methods.maxLength,
+	var method = $.validator.methods.maxlength,
 		param = 4,
 		e = $('#text1, #text2, #text3');
 	ok( method.call( v, e[0].value, e[0], param), "Valid text input" );
@@ -272,9 +272,9 @@ test("maxLength", function() {
 	ok(!method.call( v, e[3].value, e[3], param), "Invalid select" );
 });
 
-test("rangeLength", function() {
+test("rangelength", function() {
 	var v = jQuery("#form").validate();
-	var method = $.validator.methods.rangeLength,
+	var method = $.validator.methods.rangelength,
 		param = [2, 4],
 		e = $('#text1, #text2, #text3');
 	ok( method.call( v, e[0].value, e[0], param), "Valid text input" );
@@ -282,9 +282,9 @@ test("rangeLength", function() {
 	ok(!method.call( v, e[2].value, e[2], param), "Invalid text input" );
 });
 
-test("minValue", function() {
+test("min", function() {
 	var v = jQuery("#form").validate();
-	var method = $.validator.methods.minValue,
+	var method = $.validator.methods.min,
 		param = 8,
 		e = $('#value1, #value2, #value3');
 	ok(!method.call( v, e[0].value, e[0], param), "Invalid text input" );
@@ -292,9 +292,9 @@ test("minValue", function() {
 	ok( method.call( v, e[2].value, e[2], param), "Valid text input" );
 });
 
-test("maxValue", function() {
+test("max", function() {
 	var v = jQuery("#form").validate();
-	var method = $.validator.methods.maxValue,
+	var method = $.validator.methods.max,
 		param = 12,
 		e = $('#value1, #value2, #value3');
 	ok( method.call( v, e[0].value, e[0], param), "Valid text input" );
@@ -302,9 +302,9 @@ test("maxValue", function() {
 	ok(!method.call( v, e[2].value, e[2], param), "Invalid text input" );
 });
 
-test("rangeValue", function() {
+test("range", function() {
 	var v = jQuery("#form").validate();
-	var method = $.validator.methods.rangeValue,
+	var method = $.validator.methods.range,
 		param = [4,12],
 		e = $('#value1, #value2, #value3');
 	ok(!method.call( v, e[0].value, e[0], param), "Invalid text input" );

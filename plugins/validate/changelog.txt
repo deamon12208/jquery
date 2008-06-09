@@ -1,7 +1,11 @@
 1.4
 ---
 * Fixed #2931, validate elements in document order and ignore type=image inputs
+* Fixed usage of $ and jQuery variables, now fully comptible with all variations of noConflict usage
 * Implemented #2908, enabling custom messages via metadata ala class="{required:true,messages:{required:'required field'}}"
+* Removed deprecated methods minValue (min), maxValue (max), rangeValue (rangevalue), minLength (minlength), maxLength (maxlength), rangeLength (rangelength)
+* Fixed #2215 regression: Call unhighlight only for current elements, not everything
+* Fixed issue where IE incorrectly validates against maxlength=0
 
 1.3
 ---
