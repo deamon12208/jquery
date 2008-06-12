@@ -2,7 +2,7 @@
  * searchField - jQuery plugin to display and remove
  * a default value in a searchvalue on blur/focus
  *
- * Copyright (c) 2007 Jörn Zaefferer, Paul McLanahan
+ * Copyright (c) 2007 Jï¿½Ã¶rn Zaefferer, Paul McLanahan
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
@@ -23,23 +23,54 @@
  * @type jQuery
  * @cat Plugins/SearchField
  */
-jQuery.fn.searchField = function(){
-	return this.each(function(){
-		var $this = jQuery(this);
-		// setup initial value from title if no initial value
-		if(this.title && this.title.length && !this.value.length){
-			$this.val(this.title);
-			$this.removeAttr('title');
+jQuery.fn.searchField = function(mark){
+	return this.each(function() {
+		var mark = mark || this.title;
+		
+		if (!mark)
+			return;
+			
+		var target = this;
+		var original = $(this);
+		if (this.type == "password") {
+			target = $("<input />")
+				.insertBefore(this)
+				.css("display", $(this).css("display"))
+				.attr("size", this.size)
+				.attr("title", this.title)
+				.attr("class", this.className)
+				.addClass("watermark")[0];
+			$(this).hide();
 		}
-		// attach listeners if there is a value
-		if(this.value.length){
-			this.defaultValue = this.value;
-			$this.focus(function(){
-				if(this.value==this.defaultValue) this.value='';
-			})
-			.blur(function(){
-				if(!this.value.length)this.value=this.defaultValue;
-			});
+		
+		if(!target.value || mark == this.value) {
+			$(target).addClass("watermark");
 		}
+		
+		// setup initial value
+		if (!this.value) {
+			target.value = mark;
+		}
+		
+		$(target).focus(function() {
+			if (target != original[0]) {
+				$(this).hide();
+				original.show().focus();
+			} else if (this.value == mark) {
+				this.value='';
+				$(this).removeClass("watermark");
+			}
+		});
+		$(this).blur(function() {
+			if (!this.value.length) {
+				if (target != original[0]) {
+					$(target).show();
+					original.hide();
+				} else {
+					this.value = mark;
+					$(this).addClass("watermark")
+				} 
+			}
+		});
 	});
 };
