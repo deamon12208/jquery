@@ -1,10 +1,10 @@
 /*
  *
- * Copyright (c) 2006/2007 Sam Collett (http://www.texotela.co.uk)
- * Licensed under the MIT License:
- * http://www.opensource.org/licenses/mit-license.php
+ * Copyright (c) 2006-2008 Sam Collett (http://www.texotela.co.uk)
+ * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
+ * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
  *
- * Version 2.2.1
+ * Version 2.2.2
  * Demo: http://www.texotela.co.uk/code/jquery/select/
  *
  * $LastChangedDate$
@@ -12,7 +12,7 @@
  *
  */
  
-(function($) {
+;(function($) {
  
 /**
  * Adds (single/multiple) options to a select box (or series of select boxes)
@@ -423,7 +423,7 @@ $.fn.containsOption = function(value, fn)
 					if (o[i].value.match(v))
 					{
 						found = true;
-						if(fT == "function") fn.call(o[i]);
+						if(fT == "function") fn.call(o[i], i);
 					}
 				}
 				else
@@ -431,7 +431,7 @@ $.fn.containsOption = function(value, fn)
 					if (o[i].value == v)
 					{
 						found = true;
-						if(fT == "function") fn.call(o[i]);
+						if(fT == "function") fn.call(o[i], i);
 					}
 				}
 			}
