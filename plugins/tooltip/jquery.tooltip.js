@@ -186,7 +186,7 @@
 	// delete timeout and show helper
 	function show() {
 		tID = null;
-		if (settings(current).fade) {
+		if ((!IE || !$.fn.bgiframe) && settings(current).fade) {
 			if (helper.parent.is(":animated"))
 				helper.parent.stop().show().fadeTo(settings(current).fade, current.tOpacity);
 			else
@@ -279,7 +279,7 @@
 		function complete() {
 			helper.parent.removeClass( tsettings.extraClass ).hide().css("opacity", "");
 		}
-		if (tsettings.fade) {
+		if ((!IE || !$.fn.bgiframe) && tsettings.fade) {
 			if (helper.parent.is(':animated'))
 				helper.parent.stop().fadeTo(tsettings.fade, 0, complete);
 			else
@@ -290,7 +290,5 @@
 		if( settings(this).fixPNG )
 			helper.parent.unfixPNG();
 	}
-	
-	$.fn.Tooltip = $.fn.tooltip;
 	
 })(jQuery);
