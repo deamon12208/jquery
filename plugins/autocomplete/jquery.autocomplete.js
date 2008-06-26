@@ -1,5 +1,5 @@
 /*
- * Autocomplete - jQuery plugin 1.0.1
+ * Autocomplete - jQuery plugin 1.0.2
  *
  * Copyright (c) 2007 Dylan Verheul, Dan G. Switzer, Anjesh Tuladhar, Jörn Zaefferer
  *
@@ -687,7 +687,7 @@ $.Autocompleter.Select = function (options, input, select, config) {
 		},
 		hide: function() {
 			element && element.hide();
-			listItems && listItems.removeClass(CLASSES.ACTIVE)
+			listItems && listItems.removeClass(CLASSES.ACTIVE);
 			active = -1;
 		},
 		visible : function() {
