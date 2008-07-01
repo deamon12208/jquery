@@ -171,7 +171,7 @@
 				branches.each(function(i, e) {
 					data[i] = $(e).is(":has(>ul:visible)") ? 1 : 0;
 				});
-				$.cookie(settings.cookieId, data.join("") );
+				$.cookie(settings.cookieId, data.join(""), settings.cookieOptions );
 			}
 			
 			function deserialize() {
