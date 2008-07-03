@@ -6,6 +6,7 @@
 * Removed deprecated methods minValue (min), maxValue (max), rangeValue (rangevalue), minLength (minlength), maxLength (maxlength), rangeLength (rangelength)
 * Fixed #2215 regression: Call unhighlight only for current elements, not everything
 * Fixed issue where IE incorrectly validates against maxlength=0
+* Added czech (cs) localization
 
 1.3
 ---
