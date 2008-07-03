@@ -37,7 +37,7 @@ $.extend($.fn, {
 		if ( validator.settings.onsubmit ) {
 		
 			// allow suppresing validation by adding a cancel class to the submit button
-			this.find(".cancel:submit").click(function() {
+			this.find("input, button").filter(".cancel").click(function() {
 				validator.cancelSubmit = true;
 			});
 		

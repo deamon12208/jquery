@@ -5,6 +5,7 @@
 * Implemented #2908, enabling custom messages via metadata ala class="{required:true,messages:{required:'required field'}}"
 * Removed deprecated methods minValue (min), maxValue (max), rangeValue (rangevalue), minLength (minlength), maxLength (maxlength), rangeLength (rangelength)
 * Fixed #2215 regression: Call unhighlight only for current elements, not everything
+* Implemented #2989, enabling image button to cancel validation
 * Fixed issue where IE incorrectly validates against maxlength=0
 * Added czech (cs) localization
 
