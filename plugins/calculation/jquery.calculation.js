@@ -7,10 +7,14 @@
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
  *
- * Revision: 5
+ * Revision: 6
  * Version: 0.4
  *
  * Revision History
+ * v0.4a
+ * - Fixed bug in aggregate functions so that a string is passed to jQuery's
+ *   text() method (since numeric zero is interpetted as false)
+ * 
  * v0.4
  * - Added support for -$.99 values
  * - Fixed regex so that decimal values without leading zeros are correctly
@@ -57,7 +61,7 @@
 	
 	// set default options
 	$.Calculation = {
-		version: "0.4",
+		version: "0.4a",
 		setDefaults: function(options){
 			$.extend(defaults, options);
 		}
@@ -279,7 +283,7 @@
 						// determine how to set the value for the selector
 						sMethod = (opt.selector.is(":input") ? (defaults.useFieldPlugin ? "setValue" : "val") : "text");
 						// update the value
-						opt.selector[sMethod](value);
+						opt.selector[sMethod](value.toString());
 					}
 					// if there's a callback, run it now
 					if( jQuery.isFunction(opt.oncalc) ) opt.oncalc.apply(self, [value, opt]);
