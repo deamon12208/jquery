@@ -99,7 +99,8 @@
       }
       var tipAttribute = $this.attr(opts.attribute), ctClass = opts.cluetipClass;
       if (!tipAttribute && !opts.splitTitle && !js) return true;
-      // if hideLocal is set to true, on DOM ready hide the local content that will be displayed in the clueTip      
+      // if hideLocal is set to true, on DOM ready hide the local content that will be displayed in the clueTip
+      if (opts.local && opts.localPrefix) {tipAttribute = opts.localPrefix + tipAttribute;}
       if (opts.local && opts.hideLocal) { $(tipAttribute + ':first').hide(); }
       var tOffset = parseInt(opts.topOffset, 10), lOffset = parseInt(opts.leftOffset, 10);
       // vertical measurement variables
@@ -351,8 +352,8 @@ clearTimeout(closeOnDelay);
 // close cluetip and reset some things
     var cluetipClose = function() {
       $cluetipOuter 
-      .parent().hide().removeClass().end()
-      .children().empty();
+      .parent().hide().removeClass();
+      opts.onHide($cluetip, $cluetipInner);
       if (tipTitle) {
         $this.attr(opts.titleAttribute, tipTitle);
       }
@@ -450,6 +451,7 @@ clearTimeout(closeOnDelay);
     topOffset:        15,       // Number of px to offset clueTip from top of invoking element
     leftOffset:       15,       // Number of px to offset clueTip from left of invoking element
     local:            false,    // Whether to use content from the same page for the clueTip's body
+    localPrefix:    null,       // string to be prepended to the tip attribute if local is true
     hideLocal:        true,     // If local option is set to true, this determines whether local content
                                 // to be shown in clueTip should be hidden at its original location
     attribute:        'rel',    // the attribute to be used for fetching the clueTip's body content
@@ -494,7 +496,8 @@ clearTimeout(closeOnDelay);
 
     // function to run just after clueTip is shown.
     onShow:           function(ct, c){},
-    
+    // function to run just after clueTip is hidden.
+    onHide:           function(ct, c){},
     // whether to cache results of ajax request to avoid unnecessary hits to server    
     ajaxCache:        true,  
 

@@ -19,7 +19,7 @@ $(document).ready(function() {
     closeText: '<img src="cross.png" alt="close" width="16" height="16" />',
     truncate: 60
   });
-  $('a.load-local').cluetip({local:true, hideLocal: false, arrows: true, cursor: 'pointer'});
+  $('a.load-local').cluetip({local:true, arrows: true, cursor: 'pointer'});
   $('#clickme').cluetip({activation: 'click', width: 650});
 
 // jTip theme
@@ -44,7 +44,7 @@ $(document).ready(function() {
     positionBy: 'bottomTop'    
   });
 
-  $('a.jt:eq(3)').cluetip({local: true, hideLocal: false});
+  $('a.jt:eq(3)').cluetip({local: true, localPrefix: 'p.', hideLocal: false, cluetipClass: 'jtip'});
   
   $('a.jt:eq(4)').cluetip({
     cluetipClass: 'jtip', arrows: true, 
