@@ -620,9 +620,10 @@
 					
 					// apply easy methods that trigger binded events
 					$this.bind("update",function() {
+						var me = this;
 						setTimeout(function() {				
 							// rebuild parsers.
-							this.config.parsers = buildParserCache(this,$headers);
+							me.config.parsers = buildParserCache(this,$headers);
 							// rebuild the cache map
 							cache = buildCache(this);
 						},1);
