@@ -430,6 +430,7 @@ $.extend($.validator, {
 		},
 		
 		reset: function() {
+			this.submitted = {};
 			this.successList = [];
 			this.errorList = [];
 			this.errorMap = {};
@@ -927,7 +928,8 @@ $.extend($.validator, {
 		
 		// http://docs.jquery.com/Plugins/Validation/Methods/maxlength
 		maxlength: function(value, element, param) {
-			return this.optional(element) || this.getLength(value, element) <= param;
+			// opera reads maxlength=0 from undefined attributes, pass as valid
+			return this.optional(element) || param == 0 || this.getLength(value, element) <= param;
 		},
 		
 		// http://docs.jquery.com/Plugins/Validation/Methods/rangelength

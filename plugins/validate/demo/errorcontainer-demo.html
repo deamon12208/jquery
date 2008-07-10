@@ -40,7 +40,7 @@ form.cmxform label.error {
 // only for demo purposes
 $.validator.setDefaults({
 	submitHandler: function() {
-		alert("submitted!");
+		alert("submitted! (skipping validation for cancel button)");
 	}
 });
 
@@ -51,11 +51,15 @@ $().ready(function() {
 	
 	var container = $('div.container');
 	// validate the form when it is submitted
-	$("#form2").validate({
+	var validator = $("#form2").validate({
 		errorContainer: container,
 		errorLabelContainer: $("ol", container),
 		wrapper: 'li',
 		meta: "validate"
+	});
+	
+	$(".cancel").click(function() {
+		validator.resetForm();
 	});
 });
 </script>

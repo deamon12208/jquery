@@ -8,6 +8,7 @@
 * Implemented #2989, enabling image button to cancel validation
 * Fixed issue where IE incorrectly validates against maxlength=0
 * Added czech (cs) localization
+* Reset validator.submitted on validator.resetForm() and before validating, enabling a full reset when necessary
 
 1.3
 ---
