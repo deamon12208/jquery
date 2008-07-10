@@ -623,9 +623,9 @@
 						var me = this;
 						setTimeout(function() {				
 							// rebuild parsers.
-							me.config.parsers = buildParserCache(this,$headers);
+							me.config.parsers = buildParserCache(me,$headers);
 							// rebuild the cache map
-							cache = buildCache(this);
+							cache = buildCache(me);
 						},1);
 					}).bind("updateCell",function(e,cell) {
 						var config = this.config;		
