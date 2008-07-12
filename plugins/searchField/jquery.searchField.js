@@ -2,7 +2,9 @@
  * searchField - jQuery plugin to display and remove
  * a default value in a searchvalue on blur/focus
  *
- * Copyright (c) 2007 J�örn Zaefferer, Paul McLanahan
+ * Copyright (c) 2008 J�örn Zaefferer
+ * 
+ * $Id$
  *
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
