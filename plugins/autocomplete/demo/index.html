@@ -45,7 +45,7 @@ $().ready(function() {
 	$("#suggest13").autocomplete(emails, {
 		minChars: 0,
 		width: 310,
-		matchContains: true,
+		matchContains: "word",
 		autoFill: false,
 		formatItem: function(row, i, max) {
 			return i + "/" + max + ": \"" + row.name + "\" [" + row.to + "]";

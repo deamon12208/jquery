@@ -421,6 +421,9 @@ $.Autocompleter.Cache = function(options) {
 		if (!options.matchCase) 
 			s = s.toLowerCase();
 		var i = s.indexOf(sub);
+		if (options.matchContains == "word"){
+			i = s.toLowerCase().search("\\b" + sub.toLowerCase());
+		}
 		if (i == -1) return false;
 		return i == 0 || options.matchContains;
 	};
