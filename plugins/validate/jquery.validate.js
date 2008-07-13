@@ -738,14 +738,13 @@ $.extend($.validator, {
 		
 		for (method in $.validator.methods) {
 			var value = $element.attr(method);
-			// allow 0 but neither undefined nor empty string
-			if (value !== undefined && value !== '') {
+			if (value) {
 				rules[method] = value;
 			}
 		}
 		
 		// maxlength may be returned as -1, 2147483647 (IE) and 524288 (safari) for text inputs
-		if (rules.maxlength && /-1|2147483647|524288/.test(rules.maxlength) || ($.browser.msie && rules.maxlength === 0)) {
+		if (rules.maxlength && /-1|2147483647|524288/.test(rules.maxlength)) {
 			delete rules.maxlength;
 		}
 		
@@ -928,8 +927,7 @@ $.extend($.validator, {
 		
 		// http://docs.jquery.com/Plugins/Validation/Methods/maxlength
 		maxlength: function(value, element, param) {
-			// opera reads maxlength=0 from undefined attributes, pass as valid
-			return this.optional(element) || param == 0 || this.getLength(value, element) <= param;
+			return this.optional(element) || this.getLength(value, element) <= param;
 		},
 		
 		// http://docs.jquery.com/Plugins/Validation/Methods/rangelength

@@ -9,6 +9,7 @@
 * Fixed issue where IE incorrectly validates against maxlength=0
 * Added czech (cs) localization
 * Reset validator.submitted on validator.resetForm(), enabling a full reset when necessary
+* Fixed #3035, skipping all falsy attributes when reading rules (0, undefined, empty string), removed part of the maxlength workaround (for 0)
 
 1.3
 ---
