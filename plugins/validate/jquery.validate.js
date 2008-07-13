@@ -356,6 +356,7 @@ $.extend($.validator, {
 		resetForm: function() {
 			if ( $.fn.resetForm )
 				$( this.currentForm ).resetForm();
+			this.submitted = {};
 			this.prepareForm();
 			this.hideErrors();
 			this.elements().removeClass( this.settings.errorClass );
@@ -430,7 +431,6 @@ $.extend($.validator, {
 		},
 		
 		reset: function() {
-			this.submitted = {};
 			this.successList = [];
 			this.errorList = [];
 			this.errorMap = {};
