@@ -21,7 +21,7 @@
  * @example $('table').tablesorter({ sortList:[[0,0],[1,0]] });
  * @desc Create a tablesorter interface and sort on the first and secound column in ascending order.
  * 
- * @example $('table').tablesorter({ headers: { 0: { sorter: false}, 1: {sorter: false} } });
+ * @example $('table').tablesorter({ headers: { 0: { sorter: false}, 1: {sorter: false} } } });
  * @desc Create a tablesorter interface and disableing the first and secound column headers.
  * 
  * @example $('table').tablesorter({ headers: { 0: {sorter: "digit"}, 1: {sorter: "currency"} } });
@@ -442,7 +442,8 @@
 					var c = sortList[i][0];
 					var order = sortList[i][1];
 					//var s = (getCachedSortType(table.config.parsers,c) == "text") ? ((order == 0) ? "sortText" : "sortTextDesc") : ((order == 0) ? "sortNumeric" : "sortNumericDesc");
-					var s = (table.config.parsers[c].type == "text") ? ((order == 0) ? makeSortText(c) : makeSortTextDesc(c)) : ((order == 0) ? makeSortNumeric(c) : makeSortNumericDesc(c));
+					//var s = (table.config.parsers[c].type == "text") ? ((order == 0) ? makeSortText(c) : makeSortTextDesc(c)) : ((order == 0) ? makeSortNumeric(c) : makeSortNumericDesc(c));
+					var s = (table.config.parsers[c].type == "text") ? ((order == 0) ? makeSortFunction("text", "asc", c) : makeSortFunction("text", "desc", c)) : ((order == 0) ? makeSortFunction("numeric", "asc", c) : makeSortFunction("numeric", "desc", c));
 					var e = "e" + i;
 					
 					dynamicExp += "var " + e + " = " + s; // + "(a[" + c + "],b[" + c + "]); ";
@@ -463,7 +464,7 @@
 				dynamicExp += "}; ";	
 				
 				if(table.config.debug) { benchmark("Evaling expression:" + dynamicExp, new Date()); }
-				
+
 				eval(dynamicExp);
 				
 				cache.normalized.sort(sortWrapper);
@@ -471,6 +472,19 @@
 				if(table.config.debug) { benchmark("Sorting on " + sortList.toString() + " and dir " + order+ " time:", sortTime); }
 				
 				return cache;
+			};
+			
+			function makeSortFunction(type, direction, index) {
+				var a = "a[" + index + "]", b = "b[" + index + "]";
+				if (type == 'text' && direction == 'asc') {
+					return "(" + a + " == " + b + " ? 0 : (" + a + " === null ? Number.POSITIVE_INFINITY : (" + b + " === null ? Number.NEGATIVE_INFINITY : (" + a + " < " + b + ") ? -1 : 1 )));";
+				} else if (type == 'text' && direction == 'desc') {
+					return "(" + a + " == " + b + " ? 0 : (" + a + " === null ? Number.POSITIVE_INFINITY : (" + b + " === null ? Number.NEGATIVE_INFINITY : (" + b + " < " + a + ") ? -1 : 1 )));";
+				} else if (type == 'numeric' && direction == 'asc') {
+					return  "(" + a + " === null && " + b + " === null) ? 0 :(" + a + " === null ? Number.POSITIVE_INFINITY : (" + b + " === null ? Number.NEGATIVE_INFINITY : " + a + " - " + b + "));";
+				} else if (type == 'numeric' && direction == 'desc') {
+					return  "(" + a + " === null && " + b + " === null) ? 0 :(" + a + " === null ? Number.POSITIVE_INFINITY : (" + b + " === null ? Number.NEGATIVE_INFINITY : " + b + " - " + a + "));";
+				}	
 			};
 			
 			function makeSortText(i) {
@@ -755,7 +769,7 @@
 	ts.addParser({
 		id: "currency",
 		is: function(s) {
-			return /^[Â£$â‚¬?.]/.test(s);
+			return /^[£$€?.]/.test(s);
 		},
 		format: function(s) {
 			return $.tablesorter.formatFloat(s.replace(new RegExp(/[^0-9.]/g),""));
