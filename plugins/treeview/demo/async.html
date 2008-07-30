@@ -16,13 +16,21 @@
 	<script src="../jquery.treeview.async.js" type="text/javascript"></script>
 	
 	<script type="text/javascript">
-	$(document).ready(function(){
+	function initTrees() {
 		$("#black").treeview({
 			url: "source.php"
 		})
 		
 		$("#mixed").treeview({
 			url: "source.php"
+		});
+	}
+	$(document).ready(function(){
+		initTrees();
+		$("#refresh").click(function() {
+			$("#black").empty();
+			$("#mixed").empty();
+			initTrees();
 		});
 	});
 	</script>
@@ -67,6 +75,7 @@
 		</li>
 	</ul>
 	
+	<button id="refresh">Refresh both Trees</button>
 		
 </div>
  
