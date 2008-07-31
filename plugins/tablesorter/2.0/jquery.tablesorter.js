@@ -306,9 +306,9 @@
 				
 				$tableHeaders = $(table.config.selectorHeaders,table).each(function(index) {
 							
-					this.count = 0;
 					this.column = index;
 					this.order = formatSortingOrder(table.config.sortInitialOrder);
+					this.count = this.order;
 					
 					if(checkHeaderMetadata(this) || checkHeaderOptions(table,index)) this.sortDisabled = true;
 					
