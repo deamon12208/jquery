@@ -10,15 +10,16 @@
  * Creates an instance of a SpellChecker for each matched element.
  * The SpellChecker has several configurable options.
  *  - lang: the 2 letter language code, defaults to en for english
- *  - autocheck: number of milliseconds to check spelling after a keypress, 
- *        default is 750. set it to false to turn keypress checking off.
+ *  - events: a space seperated string of events to use, default is 'keypress blur paste'
+ *  - autocheck: number of milliseconds to check spelling after a key event, default is 750.
  *  - url: url of the spellcheck service on your server, default is spellcheck.php
  *  - ignorecaps: 1 to ignore words with all caps, 0 to check them
  *  - ignoredigits: 1 to ignore digits, 0 to check them
  */
 $.fn.spellcheck = function(options) {
-	return this.each(function() { 
-		if ( !$(this).data('spellchecker') )
+	return this.each(function() {
+		var $this = $(this);
+		if ( !$this.is('[type=password]') && !$(this).data('spellchecker') )
 			$(this).data('spellchecker', new $.SpellChecker(this, options));
 	});
 };
@@ -39,6 +40,7 @@ $.SpellChecker = function(element, options) {
 	this.options = $.extend({
 		lang: 'en',
 		autocheck: 750,
+		events: 'keypress blur paste',
 		url: 'spellcheck.php',
 		ignorecaps: 1,
 		ignoredigits: 1
@@ -48,10 +50,10 @@ $.SpellChecker = function(element, options) {
 
 $.SpellChecker.prototype = {
 	bindEvents: function() {
-		var self = this, timeout, keypress = this.options.autocheck > 0 ? 'keypress ' : '';
-	
-		this.$element.bind(keypress + 'blur paste', function(event) {
-			if ( event.type == 'keypress' ) {
+		if ( !this.options.events ) return;
+		var self = this, timeout;
+		this.$element.bind(this.options.events, function(event) {
+			if ( /^key[press|up|down]/.test(event.type) ) {
 				if ( timeout ) clearTimeout(timeout);
 				timeout = setTimeout(function() { self.checkSpelling(); }, self.options.autocheck);
 			} else

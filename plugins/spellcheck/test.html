@@ -9,7 +9,9 @@
 		<script type="text/javascript" charset="utf-8">
 			jQuery(document).ready(function($) {
 				// $.get("test.php", { lang: 'en', text: "testng spelcheckr testng"}, function(r) { console.log(r); });
-				$(':text, textarea').spellcheck();
+				$('#test1').spellcheck({ events: null });
+				$('#test2, #test3').spellcheck();
+				$('#test4').spellcheck({ events: 'keyup' });
 				$('a.checkspelling').bind('click', function(event) {
 					$(this.hash).checkspelling();
 					this.blur();
