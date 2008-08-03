@@ -9,22 +9,32 @@
 		<script type="text/javascript" charset="utf-8">
 			jQuery(document).ready(function($) {
 				// $.get("test.php", { lang: 'en', text: "testng spelcheckr testng"}, function(r) { console.log(r); });
-				$(':input:not(:password)').spellcheck();
+				$(':text, textarea').spellcheck();
+				$('a.checkspelling').bind('click', function(event) {
+					$(this.hash).checkspelling();
+					this.blur();
+					return false;
+				});
 			});
 		</script>
 		<style type="text/css" media="screen">
+			input, textarea { width: 250px; }
+			textarea { height: 100px; }
 			#spellcheckresults { position: absolute; background: #fff; margin: 0; border: 1px solid #000; padding: 5px; }
 				#spellcheckresults dl { margin: 0; padding: 0; }
 					#spellcheckresults dl dt { float: left; clear: left; margin: 3px 0; padding: 0; font-weight: bold; }
 					#spellcheckresults dl dd { float: left; margin: 3px 10px; padding: 0; cursor: pointer; color: green; }
 					#spellcheckresults dl dd.ignore { color: red; font-style: italic; }
+			
+			a.checkspelling {  }
+				a.checkspelling img { margin: 0 5px; border: 0; }
 		</style>
 	</head>
 	<body>
 		<form action="#" method="get">
 			<fieldset>	
 				<legend>Testing Spellchecker</legend>
-					<label for="test1">Test: </label><input type="text" name="test1" id="test1"><br>
+					<label for="test1">Test: </label><input type="text" name="test1" id="test1" value="Testng ths spelcheckr out."><a href="#test1" class="checkspelling"><img src="spellcheck.png"></a><br>
 					<label for="test2">Test: </label><input type="text" name="test2" id="test2"><br>
 					<label for="test3">Test: </label><input type="password" name="test3" id="test3"><br>
 					<label for="test4">Test: </label><br>
