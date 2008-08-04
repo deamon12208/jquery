@@ -80,11 +80,12 @@ $.SpellChecker.prototype = {
 				suggestions: $this.text().split(/\s/)
 			});
 		});
-		if ( this.results.length ) this.displayResults();
+		this.displayResults();
 	},
 	
 	displayResults: function() {
 		$('#spellcheckresults').remove();
+		if ( !this.results.length ) return;
 		var $container = $('<div id="spellcheckresults"></div>').appendTo('body'),
 			dl = [], self = this, offset = this.$element.offset(), height = this.$element[0].offsetHeight, i, k;
 		for ( i=0; i<this.results.length; i++ ) {
