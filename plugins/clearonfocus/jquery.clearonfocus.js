@@ -5,7 +5,7 @@
  * $LastChangedDate$
  * $Rev$
  *
- * Version 0.1
+ * Version 0.2
  *
  * Usage: 
  *   $("input[name=q]")
