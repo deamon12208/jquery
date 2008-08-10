@@ -14,7 +14,7 @@
  */
 
 jQuery.fn.clearonfocus = function() {
-	jQuery(this)
+	return this
 		.bind('focus', function() {
 			// Set the default value if it isn't set
 			if ( !this.defaultValue ) this.defaultValue = this.value;
