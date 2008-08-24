@@ -119,8 +119,12 @@ $("#block").click($.tooltip.block);
 		<legend>An image with a tooltip</legend>
 		<img id="tonus" src="image.png" height="80" title="No delay. The src value is displayed below the title" />
 		<h3>Code</h3>
-	<pre><code class="mix">$('img').tooltip({
-	delay: 0
+	<pre><code class="mix">$('#tonus').tooltip({
+	delay: 0,
+	showURL: false,
+	bodyHandler: function() {
+		return $("&lt;img/&gt;").attr("src", this.src);
+	}
 });</code></pre>
 	</fieldset>
 	

@@ -1,5 +1,5 @@
 /*
- * jQuery Tooltip plugin 1.3pre
+ * jQuery Tooltip plugin 1.3
  *
  * http://bassistance.de/jquery-plugins/jquery-plugin-tooltip/
  * http://docs.jquery.com/Plugins/Tooltip
