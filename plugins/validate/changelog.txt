@@ -1,3 +1,7 @@
+1.5
+---
+* Improved basic demo, validating confirm-password field after password changed
+
 1.4
 ---
 * Fixed #2931, validate elements in document order and ignore type=image inputs
