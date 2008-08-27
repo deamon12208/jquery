@@ -183,11 +183,13 @@ test("dateDE", function() {
 test("required", function() {
 	var v = jQuery("#form").validate(),
 		method = $.validator.methods.required,
-		e = $('#text1, #hidden2, #select1, #select2');
+		e = $('#text1, #text1b, #hidden2, #select1, #select2');
 	ok( method.call( v, e[0].value, e[0]), "Valid text input" );
 	ok(!method.call( v, e[1].value, e[1]), "Invalid text input" );
-	ok(!method.call( v, e[2].value, e[2]), "Invalid select" );
-	ok( method.call( v, e[3].value, e[3]), "Valid select" );
+	ok(!method.call( v, e[1].value, e[2]), "Invalid text input" );
+	
+	ok(!method.call( v, e[2].value, e[3]), "Invalid select" );
+	ok( method.call( v, e[3].value, e[4]), "Valid select" );
 	
 	e = $('#area1, #area2, #pw1, #pw2');
 	ok( method.call( v, e[0].value, e[0]), "Valid textarea" );
