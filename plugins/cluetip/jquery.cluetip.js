@@ -121,7 +121,7 @@
         tipParts = tipTitle.split(opts.splitTitle);
         tipTitle = tipParts.shift();
       }
-      var localContent;
+      var localContent, wrapped = false;
 
 /***************************************      
 * ACTIVATION
@@ -249,8 +249,16 @@
 ***************************************/
       } else if (opts.local){
         var $localContent = $(tipAttribute + ':first');
-        var localCluetip = $.fn.wrapInner ? $localContent.wrapInner('<div></div>').children().clone(true) : $localContent.html();
-        $.fn.wrapInner ? $cluetipInner.empty().append(localCluetip) : $cluetipInner.html(localCluetip);
+        if (typeof $.fn.wrapInner  != 'undefined') {
+          if (wrapped === false) {
+            $localContent.wrapInner('<div></div>');
+          }
+          wrapped = true;
+          var $localCluetip = $localContent.children().clone(true);
+          $cluetipInner.empty().append($localCluetip);
+        } else {
+          $cluetipInner.html($localContent.html());
+        }
         cluetipShow(pY);
       }
     };
@@ -259,7 +267,7 @@
     var cluetipShow = function(bpY) {
       $cluetip.addClass('cluetip-' + ctClass);
       
-      if (opts.truncate) { 
+      if (opts.truncate && (+opts.truncate < $cluetipInner.text().length)) { 
         var $truncloaded = $cluetipInner.text().slice(0,opts.truncate) + '...';
         $cluetipInner.html($truncloaded);
       }
@@ -331,7 +339,6 @@
         closeOnDelay = setTimeout(cluetipClose, opts.delayedClose);
       }
       opts.onShow($cluetip, $cluetipInner);
-      
     };
 
 /***************************************
