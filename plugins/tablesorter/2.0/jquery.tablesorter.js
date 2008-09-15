@@ -772,7 +772,7 @@
 			return /^[£$€?.]/.test(s);
 		},
 		format: function(s) {
-			return $.tablesorter.formatFloat(s.replace(new RegExp(/[^£$€]/g),""));
+			return $.tablesorter.formatFloat(s.replace(new RegExp(/[£$€]/g),""));
 		},
 		type: "numeric"
 	});
