@@ -3,6 +3,17 @@ test("module without setup/teardown (default)", function() {
 	ok(true);
 });
 
+module("setup test", {
+	setup: function() {
+		ok(true);
+	}
+});
+
+test("module with setup", function() {
+	expect(2);
+	ok(true);
+})
+
 module("setup/teardown test", {
 	setup: function() {
 		ok(true);
