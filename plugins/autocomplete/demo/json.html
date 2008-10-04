@@ -20,8 +20,9 @@ $(function() {
 	}
 	$("#email").autocomplete('emails.php', {
 		multiple: true,
+		dataType: "json",
 		parse: function(data) {
-			return $.map(eval(data), function(row) {
+			return $.map(data, function(row) {
 				return {
 					data: row,
 					value: row.name,

@@ -14,10 +14,14 @@ $items = array(
 	"Dr. Write"=>"write@writable.com"
 );
 
-echo "[";
+$result = array();
 foreach ($items as $key=>$value) {
 	if (strpos(strtolower($key), $q) !== false) {
-		echo "{ name: \"$key\", to: \"$value\" }, ";
+		array_push($result, array(
+			"name" => $key,
+			"to" => $value
+		));
 	}
 }
-echo "]";
+echo json_encode($result);
+?>
