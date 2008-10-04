@@ -44,37 +44,40 @@ $.sound = {
 	tracks: {},
 	enabled: true,
 	template: function(src) {
+		// todo: move bgsound element and browser sniffing in here
+		// todo: test wmv on windows: Builder.node('embed', {type:'application/x-mplayer2', pluginspage:'http://microsoft.com/windows/mediaplayer/en/download/',        id:'mediaPlayer', name:'mediaPlayer', displaysize:'4', autosize:'-1', bgcolor:'darkblue', showcontrols:'false', showtracker:'-1', showdisplay:'0', showstatusbar:'-1', videoborder3d:'-1', width:'0', height:'0', src:audioFile, autostart:'true', designtimesp:'5311', loop:'false'});
+		// is_win = (agt.indexOf("windows") != -1);
 		return '<embed style="height:0" loop="false" src="' + src + '" autostart="true" hidden="true"/>';
 	},
 	play: function(url, options){
 		if (!this.enabled)
 			return;
-		var settings = $.extend({
+		options = $.extend({
 			url: url,
 			timeout: 2000
 		}, options);
 		
-		if (settings.track) {
-			if (this.tracks[settings.track]) {
-				var current = this.tracks[settings.track];
+		if (options.track) {
+			if (this.tracks[options.track]) {
+				var current = this.tracks[options.track];
 				// TODO check when Stop is avaiable, certainly not on a jQuery object
-				current.Stop && current.Stop();
+				current[0].Stop && current[0].Stop();
 				current.remove();  
 			}
 		}
 		
 		var element = $.browser.msie
 		  	? $('<bgsound/>').attr({
-		        src: settings.url,
+		        src: options.url,
 				loop: 1,
 				autostart: true
 		      })
-		  	: $(this.template(settings.url));
+		  	: $(this.template(options.url));
 			
 		element.appendTo("body");
 		
-		if (settings.track) {
-			this.tracks[settings.track] = element;
+		if (options.track) {
+			this.tracks[options.track] = element;
 		}
 		
 		setTimeout(function() {
