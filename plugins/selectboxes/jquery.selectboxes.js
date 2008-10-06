@@ -4,7 +4,7 @@
  * Dual licensed under the MIT (http://www.opensource.org/licenses/mit-license.php)
  * and GPL (http://www.opensource.org/licenses/gpl-license.php) licenses.
  *
- * Version 2.2.2
+ * Version 2.2.3
  * Demo: http://www.texotela.co.uk/code/jquery/select/
  *
  * $LastChangedDate$
@@ -109,7 +109,7 @@ $.fn.addOption = function()
  * @param    Array args      (optional) Array with params to pass to the function afterwards
  * @example  $("#myselect").ajaxAddOption("myoptions.php");
  * @example  $("#myselect").ajaxAddOption("myoptions.php", {"code" : "007"});
- * @example  $("#myselect").ajaxAddOption("myoptions.php", {"code" : "007"}, false, sortoptions, {"dir": "desc"});
+ * @example  $("#myselect").ajaxAddOption("myoptions.php", {"code" : "007"}, false, sortoptions, [{"dir": "desc"}]);
  *
  */
 $.fn.ajaxAddOption = function(url, params, select, fn, args)
@@ -157,6 +157,7 @@ $.fn.ajaxAddOption = function(url, params, select, fn, args)
  * @example  $("#myselect").removeOption(/./); // remove all options
  * @example  $("#myselect").removeOption(/./, true); // remove all options that have been selected
  * @example  $("#myselect").removeOption(0); // remove by index
+ * @example  $("#myselect").removeOption(["myselect_1","myselect_2"]); // values contained in passed array
  *
  */
 $.fn.removeOption = function()
@@ -166,7 +167,20 @@ $.fn.removeOption = function()
 	var ta = typeof(a[0]);
 	var v, index;
 	// has to be a string or regular expression (object in IE, function in Firefox)
-	if(ta == "string" || ta == "object" || ta == "function" ) v = a[0];
+	if(ta == "string" || ta == "object" || ta == "function" )
+	{
+		v = a[0];
+		// if an array, remove items
+		if(v.constructor == Array)
+		{
+			var l = v.length;
+			for(var i = 0; i<l; i++)
+			{
+				this.removeOption(v[i], a[1]); 
+			}
+			return this;
+		}
+	}
 	else if(ta == "number") index = a[0];
 	else return this;
 	this.each(
@@ -459,6 +473,20 @@ $.fn.selectedValues = function()
 		}
 	);
 	return v;
+};
+
+/**
+ * Returns options which have been selected
+ *
+ * @name     selectedOptions
+ * @author   Sam Collett (http://www.texotela.co.uk)
+ * @type     jQuery
+ * @example  $("#myselect").selectedOptions();
+ *
+ */
+$.fn.selectedOptions = function()
+{
+	return this.find("option:selected");
 };
 
 })(jQuery);

@@ -1,5 +1,9 @@
 Select box manipulation ChangeLog
 
+6 October 2008
+  ajaxAddOption documentation (in source) update. removeOption can take an array. new selectedOptions
+  minified version
+
 17 June 2008
   available under a MIT/GPL dual license. Callback function for containsOption is passed on the index of the found option
 
