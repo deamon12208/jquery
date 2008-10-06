@@ -1,0 +1,8 @@
+<project name="OpenAjax Metadata" default="transform" basedir=".">
+	
+	<target name="transform">
+		<delete file="result/index.xml" />
+		<xslt includes="index.xml" excludes="build.xml" destdir="./result" style="style.xsl" extension=".xml" />
+	</target>
+
+</project>

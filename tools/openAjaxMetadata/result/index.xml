@@ -1,0 +1,1836 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api>
+<class name="jQuery">
+<constructors>
+<constructor scope="instance">
+<description>This function accepts a string containing a CSS selector which is then used to match a set of elements.</description>
+<parameters>
+<parameter name="expression" datatype="String" required="true">
+<description>An expression to search with.</description>
+</parameter>
+<parameter name="context" datatype="Element, jQuery" required="false">
+<description>A DOM Element, Document or jQuery to use as context</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</constructor>
+<constructor scope="instance">
+<description>Create DOM elements on-the-fly from the provided String of raw HTML.</description>
+<parameters>
+<parameter name="html" datatype="String" required="true">
+<description>A string of HTML to create on the fly.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</constructor>
+<constructor scope="instance">
+<description>Wrap jQuery functionality around a single or multiple DOM Element(s).</description>
+<parameters>
+<parameter name="elements" datatype="Element, Array&lt;Element&gt;" required="true">
+<description>DOM element(s) to be encapsulated by a jQuery object.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</constructor>
+<constructor scope="instance">
+<description>A shorthand for $(document).ready().</description>
+<parameters>
+<parameter name="callback" datatype="Function" required="true">
+<description>The function to execute when the DOM is ready.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</constructor>
+</constructors>
+<properties>
+<property name="jQuery.boxModel" readonly="true" datatype="Boolean" scope="static">
+<description>States if the current page, in the user's browser, is being rendered using the [http://www.w3.org/TR/REC-CSS2/box.html W3C CSS Box Model].</description>
+</property>
+<property name="jQuery.browser" readonly="true" datatype="Map" scope="static">
+<description>Contains flags for the useragent, read from navigator.userAgent.</description>
+</property>
+<property name="jQuery.browser.version" readonly="true" datatype="String" scope="static">
+<description>The version number of the rendering engine for the user's browser.</description>
+</property>
+<property name="length" readonly="true" datatype="Number" scope="instance">
+<description>The number of elements in the jQuery object.</description>
+</property>
+</properties>
+<methods>
+<method name="add" scope="instance">
+<description>Adds more elements, matched by the given expression, to the set of matched elements.</description>
+<parameters>
+<parameter name="expr" datatype="String, DOMElement, Array&lt;DOMElement&gt;" required="true">
+<description>An expression whose matched elements are added for String, a string of HTML to create on the fly for DOMElement or one or more Elements to add if an Array.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="addClass" scope="instance">
+<description>Adds the specified class(es) to each of the set of matched elements.</description>
+<parameters>
+<parameter name="class" datatype="String" required="true">
+<description>One or more CSS classes to add to the elements, these are separated by spaces.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="after" scope="instance">
+<description>Insert content after each of the matched elements.</description>
+<parameters>
+<parameter name="content" datatype="String, Element, jQuery" required="true">
+<description>Content to insert after each target.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="ajaxComplete" scope="instance">
+<description>Attach a function to be executed whenever an AJAX request completes. This is an &lt;a href='Ajax_Events'&gt;Ajax Event&lt;/a&gt;.</description>
+<parameters>
+<parameter name="callback" datatype="Function" required="true">
+<description>The function to execute.
+
+&lt;pre&gt;function (event, XMLHttpRequest, ajaxOptions) {
+  this; // dom element listening
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="ajaxError" scope="instance">
+<description>Attach a function to be executed whenever an AJAX request fails. This is an &lt;a href='Ajax_Events'&gt;Ajax Event&lt;/a&gt;.</description>
+<parameters>
+<parameter name="callback" datatype="Function" required="true">
+<description>The function to execute.
+
+&lt;pre&gt;function (event, XMLHttpRequest, ajaxOptions, thrownError) {
+  // thrownError only passed if an error was caught
+  this; // dom element listening
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="ajaxSend" scope="instance">
+<description>Attach a function to be executed before an AJAX request is sent. This is an &lt;a href='Ajax_Events'&gt;Ajax Event&lt;/a&gt;.</description>
+<parameters>
+<parameter name="callback" datatype="Function" required="true">
+<description>The function to execute.
+
+&lt;pre&gt;function (event, XMLHttpRequest, ajaxOptions) {
+  this; // dom element listening
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="ajaxStart" scope="instance">
+<description>Attach a function to be executed whenever an AJAX request begins and there is none already active. This is an &lt;a href='Ajax_Events'&gt;Ajax Event&lt;/a&gt;.</description>
+<parameters>
+<parameter name="callback" datatype="Function" required="true">
+<description>The function to execute.
+
+&lt;pre&gt;function () {
+  this; // dom element listening
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="ajaxStop" scope="instance">
+<description>Attach a function to be executed whenever all AJAX requests have ended. This is an &lt;a href='Ajax_Events'&gt;Ajax Event&lt;/a&gt;.</description>
+<parameters>
+<parameter name="callback" datatype="Function" required="true">
+<description>The function to execute.
+&lt;pre&gt;function () {
+  this; // dom element listening
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="ajaxSuccess" scope="instance">
+<description>Attach a function to be executed whenever an AJAX request completes successfully. This is an &lt;a href='Ajax_Events'&gt;Ajax Event&lt;/a&gt;.</description>
+<parameters>
+<parameter name="callback" datatype="Function" required="true">
+<description>The function to execute.
+
+&lt;pre&gt;function (event, XMLHttpRequest, ajaxOptions) {
+  this; // dom element listening
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="andSelf" scope="instance">
+<description>Add the previous selection to the current selection.</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="animate" scope="instance">
+<description>A function for making your own, custom animations.</description>
+<parameters>
+<parameter name="params" datatype="Options" required="true">
+<description>A set of style attributes that you wish to animate, and to what end.</description>
+</parameter>
+<parameter name="options" datatype="Options " required="true">
+<description>A set of options with which to configure the animation.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="animate" scope="instance">
+<description>A function for making your own, custom animations.</description>
+<parameters>
+<parameter name="params" datatype="Options" required="true">
+<description>A set of style attributes that you wish to animate, and to what end.</description>
+</parameter>
+<parameter name="duration" datatype="String, Number " required="false">
+<description>A string representing one of the three predefined speeds ("slow", "normal", or "fast") or the number of milliseconds to run the animation (e.g. 1000).</description>
+</parameter>
+<parameter name="easing" datatype="String " required="false">
+<description>The name of the easing effect that you want to use (Plugin Required). There are two built-in values, "linear" and "swing".</description>
+</parameter>
+<parameter name="callback" datatype="Function" required="false">
+<description>A function to be executed whenever the animation completes, executes once for each element animated against.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="append" scope="instance">
+<description>Append content to the inside of every matched element.</description>
+<parameters>
+<parameter name="content" datatype="String, Element, jQuery" required="true">
+<description>Content to append to the target.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="appendTo" scope="instance">
+<description>Append all of the matched elements to another, specified, set of elements.</description>
+<parameters>
+<parameter name="content" datatype="String" required="true">
+<description>target to which the content will be appended.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="attr" scope="instance">
+<description>Access a property on the first matched element. This method makes it easy to retrieve a property value from the first matched element. If the element does not have an attribute with such a name, undefined is returned.</description>
+<parameters>
+<parameter name="name" datatype="String" required="true">
+<description>The name of the property to access.</description>
+</parameter>
+</parameters>
+<returnType datatype="Object"/>
+</method>
+<method name="attr" scope="instance">
+<description>Set a key/value object as properties to all matched elements.</description>
+<parameters>
+<parameter name="properties" datatype="Map" required="true">
+<description>Key/value pairs to set as object properties.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="attr" scope="instance">
+<description>Set a single property to a value, on all matched elements.</description>
+<parameters>
+<parameter name="key" datatype="String" required="true">
+<description>The name of the property to set.</description>
+</parameter>
+<parameter name="value" datatype="Object" required="true">
+<description>The value to set the property to.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="attr" scope="instance">
+<description>Set a single property to a computed value, on all matched elements.</description>
+<parameters>
+<parameter name="key" datatype="String" required="true">
+<description>The name of the property to set.</description>
+</parameter>
+<parameter name="fn" datatype="Function" required="true">
+<description>A function returning the value to set. Scope: Current element, argument: Index of current element
+&lt;pre&gt;function callback(indexArray) {
+  // indexArray[0] == position in the jQuery object
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="before" scope="instance">
+<description>Insert content before each of the matched elements.</description>
+<parameters>
+<parameter name="content" datatype="String, Element, jQuery" required="true">
+<description>Content to insert before each target.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="bind" scope="instance">
+<description>Binds a handler to a particular event (like click) for each matched element.  Can also bind custom events.</description>
+<parameters>
+<parameter name="type" datatype="String" required="true">
+<description>An event type</description>
+</parameter>
+<parameter name="data" datatype="Object" required="false">
+<description>Additional data passed to the event handler as event.data</description>
+</parameter>
+<parameter name="fn" datatype="Function" required="true">
+<description>A function to bind to the event on each of the set of matched elements
+
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="blur" scope="instance">
+<description>Triggers the blur event of each matched element.</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="blur" scope="instance">
+<description>Bind a function to the blur event of each matched element.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>A function to bind to the blur event on each of the matched elements.
+
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="change" scope="instance">
+<description>Triggers the change event of each matched element.</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="change" scope="instance">
+<description>Binds a function to the change event of each matched element.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>A function to bind to the change event on each of the matched elements.
+
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="children" scope="instance">
+<description>Get a set of elements containing all of the unique immediate children of each of the matched set of elements.</description>
+<parameters>
+<parameter name="expr" datatype="String" required="false">
+<description>An expression to filter the child Elements with.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="click" scope="instance">
+<description>Triggers the click event of each matched element.</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="click" scope="instance">
+<description>Binds a function to the click event of each matched element.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>A function to bind to the click event on each of the matched elements.
+
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="clone" scope="instance">
+<description>Clone matched DOM Elements and select the clones.</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="clone" scope="instance">
+<description>Clone matched DOM Elements, and all their event handlers, and select the clones.</description>
+<parameters>
+<parameter name="true" datatype="Boolean" required="true">
+<description>Set to true to enable cloning of event handlers.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="contents" scope="instance">
+<description>Find all the child nodes inside the matched elements (including text nodes), or the content document, if the element is an iframe.</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="css" scope="instance">
+<description>Return a style property on the first matched element.</description>
+<parameters>
+<parameter name="name" datatype="String" required="true">
+<description>The name of the property to access.</description>
+</parameter>
+</parameters>
+<returnType datatype="String"/>
+</method>
+<method name="css" scope="instance">
+<description>Set a key/value object as style properties to all matched elements.</description>
+<parameters>
+<parameter name="properties" datatype="Map" required="true">
+<description>Key/value pairs to set as style properties.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="css" scope="instance">
+<description>Set a single style property to a value on all matched elements.</description>
+<parameters>
+<parameter name="name" datatype="String" required="true">
+<description>The name of the property to set.</description>
+</parameter>
+<parameter name="value" datatype="String or Number" required="true">
+<description>The value to set the property to.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="dblclick" scope="instance">
+<description>Triggers the dblclick event of each matched element.</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="dblclick" scope="instance">
+<description>Binds a function to the dblclick event of each matched element.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>The function to bind to the dblclick event on each of the matched elements.
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="dequeue" scope="instance">
+<description>Removes a queued function from the front of the queue and executes it.</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="each" scope="instance">
+<description>Execute a function within the context of every matched element.</description>
+<parameters>
+<parameter name="callback" datatype="Function" required="true">
+<description>The callback to execute for each matched element.
+
+&lt;pre&gt;function callback(index, domElement) {
+  this; // this == domElement
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="empty" scope="instance">
+<description>Remove all child nodes from the set of matched elements.</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="end" scope="instance">
+<description>Revert the most recent 'destructive' operation, changing the set of matched elements to its previous state (right before the destructive operation).</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="eq" scope="instance">
+<description>Reduce the set of matched elements to a single element.</description>
+<parameters>
+<parameter name="position" datatype="Number" required="true">
+<description>The index of the element to select.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="eq" scope="instance">
+<description>Reduce the set of matched elements to a single element. </description>
+<parameters>
+<parameter name="index" datatype="Integer" required="true">
+<description>The index of the element in the jQuery object.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="error" scope="instance">
+<description>Triggers the error event of each matched element.</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="error" scope="instance">
+<description>Binds a function to the error event of each matched element.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>An event handler function to bind to the error event.
+
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="fadeIn" scope="instance">
+<description>Fade in all matched elements by adjusting their opacity and firing an optional callback after completion.</description>
+<parameters>
+<parameter name="speed" datatype="String, Number " required="true">
+<description>A string representing one of the three predefined speeds ("slow", "normal", or "fast") or the number of milliseconds to run the animation (e.g. 1000).</description>
+</parameter>
+<parameter name="callback" datatype="Function" required="false">
+<description>A function to be executed whenever the animation completes, executes once for each element animated against.
+
+&lt;pre&gt;function callback() {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="fadeOut" scope="instance">
+<description>Fade out all matched elements by adjusting their opacity and firing an optional callback after completion.</description>
+<parameters>
+<parameter name="speed" datatype="String, Number " required="true">
+<description>A string representing one of the three predefined speeds ("slow", "normal", or "fast") or the number of milliseconds to run the animation (e.g. 1000).</description>
+</parameter>
+<parameter name="callback" datatype="Function" required="false">
+<description>A function to be executed whenever the animation completes, executes once for each element animated against.
+&lt;pre&gt;function callback() {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="fadeTo" scope="instance">
+<description>Fade the opacity of all matched elements to a specified opacity and firing an optional callback after completion.</description>
+<parameters>
+<parameter name="speed" datatype="String, Number " required="true">
+<description>A string representing one of the three predefined speeds ("slow", "normal", or "fast") or the number of milliseconds to run the animation (e.g. 1000).</description>
+</parameter>
+<parameter name="opacity" datatype="Number " required="true">
+<description>The opacity to fade to (a number from 0 to 1).</description>
+</parameter>
+<parameter name="callback" datatype="Function" required="false">
+<description>A function to be executed whenever the animation completes, executed once for each element animated against.
+
+&lt;pre&gt;function callback() {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="filter" scope="instance">
+<description>Removes all elements from the set of matched elements that do not match the specified expression(s). </description>
+<parameters>
+<parameter name="expr" datatype="Expression" required="true">
+<description>An expression to pass into the filter</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="filter" scope="instance">
+<description>Removes all elements from the set of matched elements that does not match the specified function. </description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>A function to pass into the filter
+
+&lt;pre&gt;function callback(indexInJQueryObject) {
+  var keepItBoolean = true;
+
+  this; // dom element
+
+  return keepItBoolean;
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="find" scope="instance">
+<description>Searches for all elements that match the specified &lt;a href='Selectors'&gt;expression&lt;/a&gt;. This method is a good way to find additional descendant elements with which to process.</description>
+<parameters>
+<parameter name="expr" datatype="String" required="true">
+<description>An expression to search with.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="focus" scope="instance">
+<description>Triggers the focus event of each matched element. </description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="focus" scope="instance">
+<description>Binds a function to the focus event of each matched element.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>A function to bind to the focus event on each of the matched elements.
+
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="get" scope="instance">
+<description>Access all matched DOM elements.</description>
+<parameters/>
+<returnType datatype="Array&lt;Element&gt;"/>
+</method>
+<method name="get" scope="instance">
+<description>Access a single matched DOM element at a specified index in the matched set.</description>
+<parameters>
+<parameter name="index" datatype="Number" required="true">
+<description>Access the element in the Nth position.</description>
+</parameter>
+</parameters>
+<returnType datatype="Element"/>
+</method>
+<method name="hasClass" scope="instance">
+<description>Checks the current selection against a class and returns true, if at least one element of the selection has the given class.</description>
+<parameters>
+<parameter name="class" datatype="String" required="true">
+<description>The class to match.</description>
+</parameter>
+</parameters>
+<returnType datatype="Boolean"/>
+</method>
+<method name="height" scope="instance">
+<description>Get the current computed, pixel, height of the first matched element.</description>
+<parameters/>
+<returnType datatype="Integer"/>
+</method>
+<method name="height" scope="instance">
+<description>Set the CSS height of every matched element.</description>
+<parameters>
+<parameter name="val" datatype="String or Number" required="true">
+<description>Set the CSS 'height' property to the specified value.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="hide" scope="instance">
+<description>Hides each of the set of matched elements if they are shown.</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="hide" scope="instance">
+<description>Hide all matched elements using a graceful animation and firing an optional callback after completion.</description>
+<parameters>
+<parameter name="speed" datatype="String, Number " required="true">
+<description>A string representing one of the three predefined speeds ("slow", "normal", or "fast") or the number of milliseconds to run the animation (e.g. 1000).</description>
+</parameter>
+<parameter name="callback" datatype="Function" required="false">
+<description>A function to be executed whenever the animation completes, executes once for each element animated against.
+
+&lt;pre&gt;function callback() {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="hover" scope="instance">
+<description>Simulates hovering (moving the mouse on, and off, an object). This is a custom method which provides an 'in' to a frequent task.</description>
+<parameters>
+<parameter name="over" datatype="Function" required="true">
+<description>The function to fire when the mouse is moved over a matched element.
+
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+<parameter name="out" datatype="Function" required="true">
+<description>The function to fire when the mouse is moved off of a matched element.
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="html" scope="instance">
+<description>Get the html contents (innerHTML) of the first matched element. This property is not available on XML documents (although it will work for XHTML documents).</description>
+<parameters/>
+<returnType datatype="String"/>
+</method>
+<method name="html" scope="instance">
+<description>Get the html contents (innerHTML) of the first matched element. This property is not available on XML documents (although it will work for XHTML documents).</description>
+<parameters/>
+<returnType datatype="String"/>
+</method>
+<method name="html" scope="instance">
+<description>Set the html contents of every matched element. This property is not available on XML documents (although it will work for XHTML documents).</description>
+<parameters>
+<parameter name="val" datatype="string" required="true">
+<description>Set the html contents to the specified value.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="html" scope="instance">
+<description>Set the html contents of every matched element. This property is not available on XML documents (although it will work for XHTML documents).</description>
+<parameters>
+<parameter name="val" datatype="string" required="true">
+<description>Set the html contents to the specified value.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="index" scope="instance">
+<description>Searches every matched element for the object and returns the index of the element, if found, starting with zero.</description>
+<parameters>
+<parameter name="subject" datatype="Element " required="true">
+<description>Object to search for.</description>
+</parameter>
+</parameters>
+<returnType datatype="Number"/>
+</method>
+<method name="insertAfter" scope="instance">
+<description>Insert all of the matched elements after another, specified, set of elements.</description>
+<parameters>
+<parameter name="content" datatype="String" required="true">
+<description>Content after which the selected element(s) is inserted.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="insertBefore" scope="instance">
+<description>Insert all of the matched elements before another, specified, set of elements.</description>
+<parameters>
+<parameter name="content" datatype="String" required="true">
+<description>Content after which the selected element(s) is inserted.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="is" scope="instance">
+<description>Checks the current selection against an expression and returns true, if at least one element of the selection fits the given expression.</description>
+<parameters>
+<parameter name="expr" datatype="String" required="true">
+<description>The expression with which to filter</description>
+</parameter>
+</parameters>
+<returnType datatype="Boolean"/>
+</method>
+<method name="jQuery.ajax" scope="static">
+<description>Load a remote page using an HTTP request.</description>
+<parameters>
+<parameter name="options" datatype="Options" required="true">
+<description>A set of key/value pairs that configure the Ajax request. All options are optional. A default can be set for any option with &lt;a href='Ajax/jQuery.ajaxSetup'&gt;$.ajaxSetup&lt;/a&gt;().</description>
+</parameter>
+</parameters>
+<returnType datatype="XMLHttpRequest"/>
+</method>
+<method name="jQuery.ajaxSetup" scope="static">
+<description>Setup global settings for AJAX requests.</description>
+<parameters>
+<parameter name="options" datatype="Options" required="true">
+<description>A set of key/value pairs that configure the default Ajax request. All options are optional.</description>
+</parameter>
+</parameters>
+<returnType datatype=""/>
+</method>
+<method name="jQuery.data" scope="static">
+<description>Returns a unique ID for the element.</description>
+<parameters>
+<parameter name="elem" datatype="Element" required="true">
+<description>DOM element of interest.</description>
+</parameter>
+</parameters>
+<returnType datatype="Number"/>
+</method>
+<method name="jQuery.data" scope="static">
+<description>Returns value at named data store for the element.</description>
+<parameters>
+<parameter name="elem" datatype="Element" required="true">
+<description>DOM element of interest.</description>
+</parameter>
+<parameter name="name" datatype="String" required="true">
+<description>Name of the data stored.</description>
+</parameter>
+</parameters>
+<returnType datatype="Any"/>
+</method>
+<method name="jQuery.data" scope="static">
+<description>Stores the value in the named spot and also returns the value.</description>
+<parameters>
+<parameter name="elem" datatype="Element" required="true">
+<description>DOM element of interest.</description>
+</parameter>
+<parameter name="name" datatype="String" required="true">
+<description>Name of the data to store.</description>
+</parameter>
+<parameter name="value" datatype="Any" required="true">
+<description>Value to be stored.</description>
+</parameter>
+</parameters>
+<returnType datatype="Any"/>
+</method>
+<method name="jQuery.each" scope="static">
+<description>A generic iterator function, which can be used to seamlessly iterate over both objects and arrays.</description>
+<parameters>
+<parameter name="object" datatype="Object" required="true">
+<description>The object, or array, to iterate over.</description>
+</parameter>
+<parameter name="callback" datatype="Function" required="true">
+<description>The function that will be executed on every object.
+&lt;pre&gt;function callback(indexInArray, valueOfElement) {
+  var booleanKeepGoing;
+
+  this; // == valueOfElement
+
+  return booleanKeepGoing; // optional, unless false 
+                           // and want to stop looping
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="Object"/>
+</method>
+<method name="jQuery.extend" scope="static">
+<description>Extends the jQuery object itself.</description>
+<parameters>
+<parameter name="object" datatype="Object" required="true">
+<description>The object that will be merged into the jQuery object.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="jQuery.extend" scope="static">
+<description>Extend one object with one or more others, returning the original, modified, object.</description>
+<parameters>
+<parameter name="target" datatype="Object" required="true">
+<description>The object to extend.</description>
+</parameter>
+<parameter name="object1" datatype="Object" required="true">
+<description>The object that will be merged into the first.</description>
+</parameter>
+<parameter name="objectN" datatype="Object" required="false">
+<description>More objects to merge into the first.</description>
+</parameter>
+</parameters>
+<returnType datatype="Object"/>
+</method>
+<method name="jQuery.fn.extend" scope="static">
+<description>Extends the jQuery element set to provide new methods (used to make a typical jQuery plugin).</description>
+<parameters>
+<parameter name="object" datatype="Object" required="true">
+<description>The object that will be merged into the jQuery object.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="jQuery.get" scope="static">
+<description>Load a remote page using an HTTP GET request.</description>
+<parameters>
+<parameter name="url" datatype="String" required="true">
+<description>The URL of the page to load.</description>
+</parameter>
+<parameter name="data" datatype="Map" required="false">
+<description>Key/value pairs that will be sent to the server.</description>
+</parameter>
+<parameter name="callback" datatype="Function" required="false">
+<description>A function to be executed whenever the data is loaded successfully.
+
+&lt;pre&gt;function (data, textStatus) {
+  // data could be xmlDoc, jsonObj, html, text, etc...
+  this; // the options for this ajax request
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="XMLHttpRequest"/>
+</method>
+<method name="jQuery.getJSON" scope="static">
+<description>Load JSON data using an HTTP GET request.</description>
+<parameters>
+<parameter name="url" datatype="String" required="true">
+<description>The URL of the page to load.</description>
+</parameter>
+<parameter name="data" datatype="Map" required="false">
+<description>Key/value pairs that will be sent to the server.</description>
+</parameter>
+<parameter name="callback" datatype="Function" required="false">
+<description>A function to be executed whenever the data is loaded successfully.
+
+&lt;pre&gt;function (data, textStatus) {
+  // data will be a jsonObj
+  this; // the options for this ajax request
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="XMLHttpRequest"/>
+</method>
+<method name="jQuery.getScript" scope="static">
+<description>Loads, and executes, a local JavaScript file using an HTTP GET request.</description>
+<parameters>
+<parameter name="url" datatype="String" required="true">
+<description>The URL of the page to load.</description>
+</parameter>
+<parameter name="callback" datatype="Function" required="false">
+<description>A function to be executed whenever the data is loaded successfully.
+&lt;pre&gt;function (data, textStatus) {
+  // data should be javascript
+  this; // the options for this ajax request
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="XMLHttpRequest"/>
+</method>
+<method name="jQuery.grep" scope="static">
+<description>Filter items out of an array, by using a filter function.</description>
+<parameters>
+<parameter name="array" datatype="Array" required="true">
+<description>The Array to find items in.</description>
+</parameter>
+<parameter name="callback" datatype="Function" required="true">
+<description>The function to process each item against.  The first argument to the function is the list item, and the second argument is the list index.  The function should return a Boolean value.  Optionally, this argument may be a string rather than a function.  If the argument is a string, it is treated as a short "lambda-form" function, with "a" representing the list item and "i" representing the index.  For example, "a &gt; 0" may be passed instead of "function(a){ return a &gt; 0; }".
+
+&lt;pre&gt;function callback(elementOfArray, indexInArray) {
+  var shouldKeepIt;
+
+  this; // unmapped
+
+  return shouldKeepIt;
+}
+&lt;/pre&gt;</description>
+</parameter>
+<parameter name="invert" datatype="Boolean" required="false">
+<description>If "invert" is false, or not provided, then the function returns an array consisting of all elements for which "callback" returns true.  If "invert" is true, then the function returns an array consisting of all elements for which "callback" returns false.</description>
+</parameter>
+</parameters>
+<returnType datatype="Array"/>
+</method>
+<method name="jQuery.inArray" scope="static">
+<description>Determine the index of the first parameter in the Array (-1 if not found).</description>
+<parameters>
+<parameter name="value" datatype="Any" required="true">
+<description>Value to see if it exists in the array.</description>
+</parameter>
+<parameter name="array" datatype="Array" required="true">
+<description>Array to look through for the value.</description>
+</parameter>
+</parameters>
+<returnType datatype="Number"/>
+</method>
+<method name="jQuery.isFunction" scope="static">
+<description>Determine if the parameter passed is a function.</description>
+<parameters>
+<parameter name="obj" datatype="Object" required="true">
+<description>Object to test whether or not it is a function.</description>
+</parameter>
+</parameters>
+<returnType datatype="boolean"/>
+</method>
+<method name="jQuery.makeArray" scope="static">
+<description>Turns an array-like object into a true array.</description>
+<parameters>
+<parameter name="obj" datatype="Object" required="true">
+<description>Array-like object to turn in to an actual Array.</description>
+</parameter>
+</parameters>
+<returnType datatype="Array"/>
+</method>
+<method name="jQuery.map" scope="static">
+<description>Translate all items in an array to another array of items.</description>
+<parameters>
+<parameter name="array" datatype="Array" required="true">
+<description>The Array to translate.</description>
+</parameter>
+<parameter name="callback" datatype="Function" required="true">
+<description>The function to process each item against.  The argument to the function is the list item. The function can return any value.  Optionally, this argument may be a string rather than a function. If the argument is a string, it is treated as a short "lambda-form" function, with "a" representing the list item. For example, "a * a" may be passed instead of "function(a){ return a * a; }". 
+
+&lt;pre&gt;function callback(elementOfArray, indexInArray) {
+  var replacementValue;
+
+  this; // unmapped
+
+  return replacementValue;
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="Array"/>
+</method>
+<method name="jQuery.noConflict" scope="static">
+<description>Run this function to give control of the $ variable back to whichever library first implemented it.</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="jQuery.noConflict" scope="static">
+<description>Revert control of both the $ and jQuery variables to their original owners. '''Use with discretion.'''</description>
+<parameters>
+<parameter name="extreme" datatype="Boolean" required="true">
+<description>Set to true to enable the extreme rollback of jQuery and it's variables.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="jQuery.param" scope="static">
+<description>Serializes an array of form elements or an object (core of &lt;a href='Ajax/serialize'&gt;.serialize()&lt;/a&gt; method).</description>
+<parameters>
+<parameter name="obj" datatype="Array&lt;Elements&gt;, jQuery, Object" required="true">
+<description>An Array or jQuery object is serialized by name/value pairs.  An object by key/value pairs.</description>
+</parameter>
+</parameters>
+<returnType datatype="String"/>
+</method>
+<method name="jQuery.post" scope="static">
+<description>Load a remote page using an HTTP POST request.</description>
+<parameters>
+<parameter name="url" datatype="String" required="true">
+<description>The URL of the page to load.</description>
+</parameter>
+<parameter name="data" datatype="Map" required="false">
+<description>Key/value pairs that will be sent to the server.</description>
+</parameter>
+<parameter name="callback" datatype="Function" required="false">
+<description>A function to be executed whenever the data is loaded successfully.
+
+&lt;pre&gt;function (data, textStatus) {
+  // data could be xmlDoc, jsonObj, html, text, etc...
+  this; // the options for this ajax request
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="XMLHttpRequest"/>
+</method>
+<method name="jQuery.removeData" scope="static">
+<description>Remove the expando attribute that allows data storage on an element.</description>
+<parameters>
+<parameter name="elem" datatype="Element" required="true">
+<description>Element to delete the data store from.</description>
+</parameter>
+</parameters>
+<returnType datatype=""/>
+</method>
+<method name="jQuery.removeData" scope="static">
+<description>Removes just this one named data store.</description>
+<parameters>
+<parameter name="elem" datatype="Element" required="true">
+<description>Element to delete the named data store property from.</description>
+</parameter>
+<parameter name="name" datatype="String" required="true">
+<description>The name of the data store property to remove.</description>
+</parameter>
+</parameters>
+<returnType datatype=""/>
+</method>
+<method name="jQuery.trim" scope="static">
+<description>Remove the whitespace from the beginning and end of a string.</description>
+<parameters>
+<parameter name="str" datatype="String" required="true">
+<description>The string to trim.</description>
+</parameter>
+</parameters>
+<returnType datatype="String"/>
+</method>
+<method name="jQuery.unique" scope="static">
+<description>Remove all duplicate elements from an array of elements.</description>
+<parameters>
+<parameter name="array" datatype="Array" required="true">
+<description>The Array to translate.</description>
+</parameter>
+</parameters>
+<returnType datatype="Array"/>
+</method>
+<method name="keydown" scope="instance">
+<description>Triggers the keydown event of each matched element.</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="keydown" scope="instance">
+<description>Bind a function to the keydown event of each matched element.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>A function to bind to the keydown event on each of the matched elements.
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="keypress" scope="instance">
+<description>Triggers the keypress event of each matched element.</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="keypress" scope="instance">
+<description>Binds a function to the keypress event of each matched element.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>A function to bind to the keypress event on each of the matched elements.
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="keyup" scope="instance">
+<description>Triggers the keyup event of each matched element.</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="keyup" scope="instance">
+<description>Bind a function to the keyup event of each matched element.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>A function to bind to the keyup event on each of the matched elements.
+
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="load" scope="instance">
+<description>Load HTML from a remote file and inject it into the DOM.</description>
+<parameters>
+<parameter name="url" datatype="String" required="true">
+<description>The URL of the HTML page to load.</description>
+</parameter>
+<parameter name="data" datatype="Map" required="false">
+<description>Key/value pairs that will be sent to the server.</description>
+</parameter>
+<parameter name="callback" datatype="Callback" required="true">
+<description>The function called when the ajax request is complete (not necessarily success).
+
+&lt;pre&gt;function (responseText, textStatus, XMLHttpRequest) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="load " scope="instance">
+<description>Binds a function to the load event of each matched element.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>A function to bind to the load event on each of the matched elements.
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="map" scope="instance">
+<description>Translate a set of elements in the jQuery object into another set of values in an array (which may, or may not, be elements).</description>
+<parameters>
+<parameter name="callback" datatype="Function" required="true">
+<description>The function to execute on each element in the set.
+&lt;pre&gt;function callback(index, domElement) {
+  var replacement;
+
+  this; // also dom element
+
+  // replacement == null : delete spot
+  // replacement == array : insert the elements of the array
+  // else replace the spot with replacement
+  return replacement;
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="mousedown " scope="instance">
+<description>Binds a function to the mousedown event of each matched element.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>A function to bind to the mousedown event on each of the matched elements.
+
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="mousemove" scope="instance">
+<description>Bind a function to the mousemove event of each matched element.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>A function to bind to the mousmove event on each of the matched elements.
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="mouseout" scope="instance">
+<description>Bind a function to the mouseout event of each matched element.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>A function to bind to the mouseout event on each of the matched elements.
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="mouseover" scope="instance">
+<description>Bind a function to the mouseover event of each matched element.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>A function to bind to the mouseover event on each of the matched elements.
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="mouseup" scope="instance">
+<description>Bind a function to the mouseup event of each matched element.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>A function to bind to the mouseup event on each of the matched elements.
+
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="next" scope="instance">
+<description>Get a set of elements containing the unique next siblings of each of the given set of elements.</description>
+<parameters>
+<parameter name="expr" datatype="String" required="false">
+<description>An expression with which to filter the returned set.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="nextAll" scope="instance">
+<description>Find all sibling elements after the current element.</description>
+<parameters>
+<parameter name="expr" datatype="String" required="false">
+<description>An expression to filter the next Elements with.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="not" scope="instance">
+<description>Removes elements matching the specified expression from the set of matched elements.</description>
+<parameters>
+<parameter name="expr" datatype="String, DOMElement, Array&lt;DOMElement&gt;" required="true">
+<description>An expression with which to remove matching elements, an element to remove from the set or a set of elements to remove from the jQuery set of matched elements.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="offset" scope="instance">
+<description>Get the current offset of the first matched element relative to the viewport.</description>
+<parameters/>
+<returnType datatype="Object{top,left}"/>
+</method>
+<method name="one" scope="instance">
+<description>Binds a handler to a particular event to be executed &lt;i&gt;once&lt;/i&gt; for each matched element.</description>
+<parameters>
+<parameter name="type" datatype="String" required="true">
+<description>An event type</description>
+</parameter>
+<parameter name="data" datatype="Object" required="false">
+<description>Additional data passed to the event handler as event.data</description>
+</parameter>
+<parameter name="fn" datatype="Function" required="true">
+<description>A function to bind to the specified event on each of the matched elements.
+
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="parent" scope="instance">
+<description>Get a set of elements containing the unique parents of the matched set of elements.</description>
+<parameters>
+<parameter name="expr" datatype="String" required="false">
+<description>An expression to filter the parents with.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="parents" scope="instance">
+<description>Get a set of elements containing the unique ancestors of the matched set of elements (except for the root element).
+
+The matched elements can be filtered with an optional expression. </description>
+<parameters>
+<parameter name="expr" datatype="String" required="false">
+<description>An expression to filter the ancestors with</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="prepend" scope="instance">
+<description>Prepend content to the inside of every matched element.</description>
+<parameters>
+<parameter name="content" datatype="String, Element, jQuery" required="true">
+<description>Content to prepend to the target.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="prependTo" scope="instance">
+<description>Prepend all of the matched elements to another, specified, set of elements.</description>
+<parameters>
+<parameter name="content" datatype="String" required="true">
+<description>target to which the content will be prepended.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="prev" scope="instance">
+<description>Get a set of elements containing the unique previous siblings of each of the matched set of elements.</description>
+<parameters>
+<parameter name="expr" datatype="String" required="false">
+<description>An expression to filter the previous Elements with.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="prevAll" scope="instance">
+<description>Find all sibling elements before the current element.</description>
+<parameters>
+<parameter name="expr" datatype="String" required="false">
+<description>An expression to filter the previous Elements with.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="queue" scope="instance">
+<description>Returns a reference to the first element's queue (which is an array of functions).</description>
+<parameters/>
+<returnType datatype="Array&lt;Function&gt;"/>
+</method>
+<method name="queue" scope="instance">
+<description>Adds a new function, to be executed, onto the end of the queue of all matched elements.</description>
+<parameters>
+<parameter name="callback" datatype="Function" required="true">
+<description>The function to add to the queue.
+
+&lt;pre&gt;function callback() {
+  this; // dom element
+  // to continue the queue you must call
+  jQuery(this).dequeue();
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="queue" scope="instance">
+<description>Replaces the queue of all matched element with this new queue (the array of functions).</description>
+<parameters>
+<parameter name="queue" datatype="Array&lt;Function&gt;" required="true">
+<description>The queue to replace all the queues with.  The functions have the same parameters and this value as queue(callback).</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="ready" scope="instance">
+<description>Binds a function to be executed whenever the DOM is ready to be traversed and manipulated.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>The function to be executed when the DOM is ready.
+
+&lt;pre&gt;function callback(jQueryReference) {
+  this; // document
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="remove" scope="instance">
+<description>Removes all matched elements from the DOM. </description>
+<parameters>
+<parameter name="expr" datatype="String" required="false">
+<description>A jQuery expression to filter the set of elements to be removed.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="removeAttr" scope="instance">
+<description>Remove an attribute from each of the matched elements.</description>
+<parameters>
+<parameter name="name" datatype="String" required="true">
+<description>The name of the property to remove.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="removeClass" scope="instance">
+<description>Removes all or the specified class(es) from the set of matched elements.</description>
+<parameters>
+<parameter name="class" datatype="String ''(optional)''" required="true">
+<description>One or more CSS classes to remove from the elements, these are separated by spaces.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="replaceAll" scope="instance">
+<description>Replaces the elements matched by the specified selector with the matched elements.</description>
+<parameters>
+<parameter name="selector" datatype="Selector" required="true">
+<description>The elements to find and replace the matched elements with.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="replaceWith" scope="instance">
+<description>Replaces all matched elements with the specified HTML or DOM elements.</description>
+<parameters>
+<parameter name="content" datatype="String, Element, jQuery" required="true">
+<description>Content to replace the matched elements with.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="resize" scope="instance">
+<description>Bind a function to the resize event of each matched element.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>A function to bind to the resize event on each of the matched elements.
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="scroll" scope="instance">
+<description>Bind a function to the scroll event of each matched element.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>A function to bind to the scroll event on each of the matched elements.
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="select" scope="instance">
+<description>Trigger the select event of each matched element.</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="select" scope="instance">
+<description>Bind a function to the select event of each matched element.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>A function to bind to the select event on each of the matched elements.
+
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="serialize" scope="instance">
+<description>Serializes a set of input elements into a string of data. This will serialize all given elements.</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="serializeArray" scope="instance">
+<description>Serializes all forms and form elements (like the &lt;a href='Ajax/serialize'&gt;.serialize()&lt;/a&gt; method) but returns a JSON data structure for you to work with.</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="show" scope="instance">
+<description>Displays each of the set of matched elements if they are hidden.</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="show" scope="instance">
+<description>Show all matched elements using a graceful animation and firing an optional callback after completion.</description>
+<parameters>
+<parameter name="speed" datatype="String, Number " required="true">
+<description>A string representing one of the three predefined speeds ("slow", "normal", or "fast") or the number of milliseconds to run the animation (e.g. 1000).</description>
+</parameter>
+<parameter name="callback" datatype="Function" required="false">
+<description>A function to be executed whenever the animation completes, executes once for each element animated against.
+
+&lt;pre&gt;function callback() {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="siblings" scope="instance">
+<description>Get a set of elements containing all of the unique siblings of each of the matched set of elements.
+
+Can be filtered with an optional expressions. </description>
+<parameters>
+<parameter name="expr" datatype="String" required="false">
+<description>An expression to filter the sibling Elements with</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="size" scope="instance">
+<description>The number of elements in the jQuery object.</description>
+<parameters/>
+<returnType datatype="Number"/>
+</method>
+<method name="slice" scope="instance">
+<description>Selects a subset of the matched elements.</description>
+<parameters>
+<parameter name="start" datatype="Integer" required="true">
+<description>Where to start the subset. The first element is at zero. Can be negative to start from the end of the selection.</description>
+</parameter>
+<parameter name="end" datatype="Integer" required="false">
+<description>Where to end the subset. If unspecified, ends at the end of the selection.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="slideDown" scope="instance">
+<description>Reveal all matched elements by adjusting their height and firing an optional callback after completion.</description>
+<parameters>
+<parameter name="speed" datatype="String, Number " required="true">
+<description>A string representing one of the three predefined speeds ("slow", "normal", or "fast") or the number of milliseconds to run the animation (e.g. 1000).</description>
+</parameter>
+<parameter name="callback" datatype="Function" required="false">
+<description>A function to be executed whenever the animation completes, executes once for each element animated against.
+
+&lt;pre&gt;function callback() {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="slideToggle" scope="instance">
+<description>Toggle the visibility of all matched elements by adjusting their height and firing an optional callback after completion.</description>
+<parameters>
+<parameter name="speed" datatype="String, Number " required="true">
+<description>A string representing one of the three predefined speeds ("slow", "normal", or "fast") or the number of milliseconds to run the animation (e.g. 1000).</description>
+</parameter>
+<parameter name="callback" datatype="Function" required="false">
+<description>A function to be executed whenever the animation completes, executes once for each element animated against.
+
+&lt;pre&gt;function callback() {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="slideUp" scope="instance">
+<description>Hide all matched elements by adjusting their height and firing an optional callback after completion.</description>
+<parameters>
+<parameter name="speed" datatype="String, Number " required="true">
+<description>A string representing one of the three predefined speeds ("slow", "normal", or "fast") or the number of milliseconds to run the animation (e.g. 1000).</description>
+</parameter>
+<parameter name="callback" datatype="Function" required="false">
+<description>A function to be executed whenever the animation completes, executes once for each element animated against.
+
+&lt;pre&gt;function callback() {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="stop" scope="instance">
+<description>Stops all the currently running animations on all the specified elements. </description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="submit" scope="instance">
+<description>Trigger the submit event of each matched element.</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="submit" scope="instance">
+<description>Bind a function to the submit event of each matched element.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>A function to bind to the submit event on each of the matched elements.
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="text" scope="instance">
+<description>Get the combined text contents of all matched elements.</description>
+<parameters/>
+<returnType datatype="String"/>
+</method>
+<method name="text" scope="instance">
+<description>Get the combined text contents of all matched elements.</description>
+<parameters/>
+<returnType datatype="String"/>
+</method>
+<method name="text" scope="instance">
+<description>Set the text contents of all matched elements.</description>
+<parameters>
+<parameter name="val" datatype="String" required="true">
+<description>The text value to set the contents of the element to.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="text" scope="instance">
+<description>Set the text contents of all matched elements.</description>
+<parameters>
+<parameter name="val" datatype="String" required="true">
+<description>The text value to set the contents of the element to.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="toggle" scope="instance">
+<description>Toggles each of the set of matched elements.</description>
+<parameters/>
+<returnType datatype="jQuery"/>
+</method>
+<method name="toggle" scope="instance">
+<description>Toggle between two function calls every other click.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>The function to execute on every even click.
+
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+<parameter name="fn" datatype="Function" required="true">
+<description>The function to execute on every odd click.
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="toggleClass" scope="instance">
+<description>Adds the specified class if it is not present, removes the specified class if it is present.</description>
+<parameters>
+<parameter name="class" datatype="String" required="true">
+<description>A CSS class to toggle on the elements.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="trigger" scope="instance">
+<description>Trigger a type of event on every matched element.</description>
+<parameters>
+<parameter name="type " datatype="String" required="true">
+<description>An event type to trigger.</description>
+</parameter>
+<parameter name="data " datatype="Array" required="false">
+<description>Additional data to pass as arguments (after the event object) to the event handler.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="triggerHandler" scope="instance">
+<description>This particular method triggers all bound event handlers on an element (for a specific event type) WITHOUT executing the browsers default actions.</description>
+<parameters>
+<parameter name="type " datatype="String" required="true">
+<description>An event type to trigger.</description>
+</parameter>
+<parameter name="data " datatype="Array" required="false">
+<description>Additional data to pass as arguments (after the event object) to the event handler.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="unbind" scope="instance">
+<description>This does the opposite of bind, it removes bound events from each of the matched elements.</description>
+<parameters>
+<parameter name="type " datatype="String" required="false">
+<description>An event type to unbind.</description>
+</parameter>
+<parameter name="data " datatype="Function" required="false">
+<description>A function to unbind from the event on each of the set of matched elements.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="unload" scope="instance">
+<description>Binds a function to the unload event of each matched element.</description>
+<parameters>
+<parameter name="fn" datatype="Function" required="true">
+<description>function to bind to the unload event on each of the matched elements.
+
+&lt;pre&gt;function callback(eventObject) {
+  this; // dom element
+}
+&lt;/pre&gt;</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="val" scope="instance">
+<description>Get the content of the value attribute of the first matched element.</description>
+<parameters/>
+<returnType datatype="String, Array"/>
+</method>
+<method name="val" scope="instance">
+<description>Set the value attribute of every matched element.</description>
+<parameters>
+<parameter name="val" datatype="String" required="true">
+<description>The value to set on the matched element.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="val" scope="instance">
+<description>Checks, or selects, all the radio buttons, checkboxes, and select options that match the set of values.</description>
+<parameters>
+<parameter name="val" datatype="Array&lt;String&gt;" required="true">
+<description>The set of values to check/select.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="width" scope="instance">
+<description>Get the current computed, pixel, width of the first matched element.</description>
+<parameters/>
+<returnType datatype="Integer"/>
+</method>
+<method name="width" scope="instance">
+<description>Set the CSS width of every matched element.</description>
+<parameters>
+<parameter name="val" datatype="String, Number" required="true">
+<description>Set the CSS 'width' property to the specified value.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="wrap" scope="instance">
+<description>Wrap all matched elements with a structure of other elements.</description>
+<parameters>
+<parameter name="html" datatype="String" required="true">
+<description>A string of HTML that will be created on the fly and wrapped around the target.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="wrap" scope="instance">
+<description>Wrap all matched elements with a structure of other elements.</description>
+<parameters>
+<parameter name="elem" datatype="Element" required="true">
+<description>A DOM element that will be wrapped around the target.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="wrapAll" scope="instance">
+<description>Wrap all the elements in the matched set into a single wrapper element.</description>
+<parameters>
+<parameter name="html" datatype="String" required="true">
+<description>A string of HTML that will be created on the fly and wrapped around the target.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="wrapAll" scope="instance">
+<description>Wrap all the elements in the matched set into a single wrapper element.</description>
+<parameters>
+<parameter name="elem" datatype="Element" required="true">
+<description>A DOM element that will be wrapped around the target.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="wrapInner" scope="instance">
+<description>Wrap the inner child contents of each matched element (including text nodes) with an HTML structure.</description>
+<parameters>
+<parameter name="html" datatype="String" required="true">
+<description>A string of HTML that will be created on the fly and wrapped around the target.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+<method name="wrapInner" scope="instance">
+<description>Wrap the inner child contents of each matched element (including text nodes) with a DOM element.</description>
+<parameters>
+<parameter name="elem" datatype="Element" required="true">
+<description>A DOM element that will be wrapped around the target.</description>
+</parameter>
+</parameters>
+<returnType datatype="jQuery"/>
+</method>
+</methods>
+</class>
+</api>
