@@ -313,14 +313,14 @@ $.fn.remote = function(output, settings, callback) {
  */
 $.fn.history = function(callback) {
     return this.click(function(e) {        
-        // die if already active
-		if (this.hash == location.hash) {
-			return false;
-		}
-
-		// add to history only if true click occured, not a triggered click...
+		// add to history only if true click occured,
+		// not a triggered click...
         if (e.clientX) {
-            $.ajaxHistory.update(this.hash);
+	        // ...and die if already active
+			if (this.hash == location.hash) {
+				return false;
+			} 
+           	$.ajaxHistory.update(this.hash);
         }
 		if (typeof callback == 'function') {
 			callback.call(this);
