@@ -2,6 +2,7 @@
 ---
 * Improved basic demo, validating confirm-password field after password changed
 * Fixed basic validation to pass the untrimmed input value as the first parameter to validation methods, changed required accordingly; breaks existing custom method that rely on the trimming
+* Added italian (it) and romanian (ro) localization 
 
 1.4
 ---
