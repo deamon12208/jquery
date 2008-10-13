@@ -1,47 +1,47 @@
-module("same");
+module("equiv");
 
 test("Basics.", function() {
     var f1 = function () {};
     var f2 = function () {var i = 0};
 
     // 2 arguments
-    equals(same(function() {var b = 6;}, function() {var a = 5;}), true);
-    equals(same(true, function() {}), false);
-    equals(same(f1, f2), true);
-    equals(same(), true);
-    equals(same(undefined), true);
-    equals(same(null), true);
-    equals(same(0), true);
-    equals(same(1), true);
-    equals(same({}, {}), true);
-    equals(same(0, 0), true);
-    equals(same(0, 1), false);
-    equals(same('', ''), true);
-    equals(same([], []), true);
-    equals(same(null, null), true);
-    equals(same(null, {}), false);
-    equals(same(undefined, undefined), true);
-    equals(same(undefined, null), false);
-    equals(same(null, undefined), false);
-    equals(same(0, undefined), false);
-    equals(same(0, null), false);
-    equals(same(0, ''), false);
-    equals(same(1, '1'), false);
-    equals(same(true, true), true);
-    equals(same(true, false), false);
-    equals(same(0, false), false);
-    equals(same("foobar", "foobar"), true);
-    equals(same("foobar", "foobar", "foobar", "foobar"), true);
-    equals(same("foobar", "foobax"), false);
-    equals(same("foobar", "foobar", "foobax", "foobax"), false);
+    equals(QUnit.equiv(function() {var b = 6;}, function() {var a = 5;}), true);
+    equals(QUnit.equiv(true, function() {}), false);
+    equals(QUnit.equiv(f1, f2), true);
+    equals(QUnit.equiv(), true);
+    equals(QUnit.equiv(undefined), true);
+    equals(QUnit.equiv(null), true);
+    equals(QUnit.equiv(0), true);
+    equals(QUnit.equiv(1), true);
+    equals(QUnit.equiv({}, {}), true);
+    equals(QUnit.equiv(0, 0), true);
+    equals(QUnit.equiv(0, 1), false);
+    equals(QUnit.equiv('', ''), true);
+    equals(QUnit.equiv([], []), true);
+    equals(QUnit.equiv(null, null), true);
+    equals(QUnit.equiv(null, {}), false);
+    equals(QUnit.equiv(undefined, undefined), true);
+    equals(QUnit.equiv(undefined, null), false);
+    equals(QUnit.equiv(null, undefined), false);
+    equals(QUnit.equiv(0, undefined), false);
+    equals(QUnit.equiv(0, null), false);
+    equals(QUnit.equiv(0, ''), false);
+    equals(QUnit.equiv(1, '1'), false);
+    equals(QUnit.equiv(true, true), true);
+    equals(QUnit.equiv(true, false), false);
+    equals(QUnit.equiv(0, false), false);
+    equals(QUnit.equiv("foobar", "foobar"), true);
+    equals(QUnit.equiv("foobar", "foobar", "foobar", "foobar"), true);
+    equals(QUnit.equiv("foobar", "foobax"), false);
+    equals(QUnit.equiv("foobar", "foobar", "foobax", "foobax"), false);
 
     // 3 arguments
-    equals(same(0, 0, 0, 0, 0), true);
-    equals(same(0, 0, 0, 1, 0), false);
-    equals(same(0, 0, 0, 1, 0), false);
-    equals(same(0, 0, 0, {}, 0), false);
-    equals(same(0, 0, 0, 0, function() {}), false);
-    equals(same(true, false, true), false);
+    equals(QUnit.equiv(0, 0, 0, 0, 0), true);
+    equals(QUnit.equiv(0, 0, 0, 1, 0), false);
+    equals(QUnit.equiv(0, 0, 0, 1, 0), false);
+    equals(QUnit.equiv(0, 0, 0, {}, 0), false);
+    equals(QUnit.equiv(0, 0, 0, 0, function() {}), false);
+    equals(QUnit.equiv(true, false, true), false);
 });
 
 test("Arrays.", function() {
@@ -67,17 +67,17 @@ test("Arrays.", function() {
         },
         5,6,7
     ], "foo"];
-    equals(same(a,a), true);
-    equals(same([0],[0]), true);
-    equals(same([0,1,2,3,4],[0,1,2,3,4]), true);
-    equals(same([0,1,2,3,4],[0,1,2,3]), false);
-    equals(same([0,1,2,3,[4]],[0,1,2,3,[4]]), true);
-    equals(same([0,1,2,3,[4]],[0,1,2,3,[]]), false);
-    equals(same([0,1,2,3,[4]],[0,1,2,3,[]]), false);
-    equals(same(same1,same1), true);
-    equals(same(same1,same2), true);
-    equals(same(diff,same2), false);
-    equals(same(same1,same1,same2,diff,diff), false);
+    equals(QUnit.equiv(a,a), true);
+    equals(QUnit.equiv([0],[0]), true);
+    equals(QUnit.equiv([0,1,2,3,4],[0,1,2,3,4]), true);
+    equals(QUnit.equiv([0,1,2,3,4],[0,1,2,3]), false);
+    equals(QUnit.equiv([0,1,2,3,[4]],[0,1,2,3,[4]]), true);
+    equals(QUnit.equiv([0,1,2,3,[4]],[0,1,2,3,[]]), false);
+    equals(QUnit.equiv([0,1,2,3,[4]],[0,1,2,3,[]]), false);
+    equals(QUnit.equiv(same1,same1), true);
+    equals(QUnit.equiv(same1,same2), true);
+    equals(QUnit.equiv(diff,same2), false);
+    equals(QUnit.equiv(same1,same1,same2,diff,diff), false);
 });
 
 test("Complex Nested Objects.", function() {
@@ -183,16 +183,16 @@ test("Complex Nested Objects.", function() {
 
     // a, b and c are identical independant object
     // diff is slightly different
-    equals(same(a,a,a), true);
-    equals(same(a,a,a,a,a,a,a,a,a,diff,a,a,a), false);
-    equals(same(a,a,a,a,a,a,a,a,a,b,a,a,a), true);
-    equals(same(a,b), true);
-    equals(same(a,diff), false);
-    equals(same(a,b,c), true);
-    equals(same(a,b,c,a,b,c,diff), false);
-    equals(same(a,diff,c,a,b,c,a), false);
-    equals(same(a,b,diff), false);
-    equals(same(diff,a,b), false);
+    equals(QUnit.equiv(a,a,a), true);
+    equals(QUnit.equiv(a,a,a,a,a,a,a,a,a,diff,a,a,a), false);
+    equals(QUnit.equiv(a,a,a,a,a,a,a,a,a,b,a,a,a), true);
+    equals(QUnit.equiv(a,b), true);
+    equals(QUnit.equiv(a,diff), false);
+    equals(QUnit.equiv(a,b,c), true);
+    equals(QUnit.equiv(a,b,c,a,b,c,diff), false);
+    equals(QUnit.equiv(a,diff,c,a,b,c,a), false);
+    equals(QUnit.equiv(a,b,diff), false);
+    equals(QUnit.equiv(diff,a,b), false);
 });
 
 test("OO: Private and public properties", function() {
@@ -224,10 +224,10 @@ test("OO: Private and public properties", function() {
         isOld: function () {}
     };
 
-    equals(same(car, car), true);
-    equals(same(car, human), true);
-    equals(same(car, human, car, human), true);
-    equals(same(car, diff, car, car), false);
-    equals(same(car, car, match, car), true);
+    equals(QUnit.equiv(car, car), true);
+    equals(QUnit.equiv(car, human), true);
+    equals(QUnit.equiv(car, human, car, human), true);
+    equals(QUnit.equiv(car, diff, car, car), false);
+    equals(QUnit.equiv(car, car, match, car), true);
 
 });
