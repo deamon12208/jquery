@@ -353,7 +353,7 @@ test("elements() order", function() {
 	});
 	isSet( v.elements().get(), q("order1", "order2", "order3", "order4", "order5", "order6"), "elements must be in document order" );
 	v.form();
-	compare( container.children().map(function() {
+	same( container.children().map(function() {
 		return $(this).attr("for");
 	}).get(), ["order1", "order2", "order3", "order4", "order5", "order6"], "labels in error container must be in document order" );
 });
