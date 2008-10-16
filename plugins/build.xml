@@ -133,54 +133,6 @@
         </antcall>
     </target>
 
-    <target name="bgiframe" description="Build bgiframe plugin.">
-        <antcall target="minandpack">
-            <param name="name" value="bgiframe" />
-        </antcall>
-    </target>
-
-	<target name="copyEvents" description="Build copyEvents plugin.">
-        <antcall target="minandpack">
-            <param name="name" value="copyEvents" />
-        </antcall>
-    </target>
-
-	<target name="dimensions" description="Build dimensions plugin.">
-        <antcall target="minandpack">
-            <param name="name" value="dimensions" />
-        </antcall>
-    </target>
-
-	<target name="mousewheel" description="Build mousewheel plugin.">
-        <antcall target="minandpack">
-            <param name="name" value="mousewheel" />
-        </antcall>
-    </target>
-
-	<target name="fxqueue" description="Build fxqueue plugin.">
-        <antcall target="minandpack">
-            <param name="name" value="fxqueue" />
-        </antcall>
-    </target>
-
-	<target name="multiple_events" description="Build multiple_events plugin.">
-        <antcall target="minandpack">
-            <param name="name" value="multiple_events" />
-        </antcall>
-    </target>
-
-	<target name="gradient" description="Build gradient plugin.">
-        <antcall target="minandpack">
-            <param name="name" value="gradient" />
-        </antcall>
-    </target>
-
-	<target name="livequery" description="Build Live Query plugin.">
-        <antcall target="minandpack">
-            <param name="name" value="livequery" />
-        </antcall>
-    </target>
-
 	<target name="metadata" description="Build metadata plugin.">
         <antcall target="minandpack">
             <param name="name" value="metadata" />
