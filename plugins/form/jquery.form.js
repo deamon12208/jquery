@@ -1,6 +1,6 @@
 /*
  * jQuery Form Plugin
- * version: 2.14 (17-OCT-2008)
+ * version: 2.15 (17-OCT-2008)
  * @requires jQuery v1.2.2 or later
  *
  * Examples and documentation at: http://malsup.com/jquery/form/
@@ -157,6 +157,7 @@ $.fn.ajaxSubmit = function(options) {
         }
         
         var opts = $.extend({}, $.ajaxSettings, options);
+		var s = jQuery.extend(true, {}, $.extend(true, {}, $.ajaxSettings), opts);
 
         var id = 'jqFormIO' + (new Date().getTime());
         var $io = $('<iframe id="' + id + '" name="' + id + '" />');
@@ -167,13 +168,18 @@ $.fn.ajaxSubmit = function(options) {
         $io.css({ position: 'absolute', top: '-1000px', left: '-1000px' });
 
         var xhr = { // mock object
+            aborted: 0,
             responseText: null,
             responseXML: null,
             status: 0,
             statusText: 'n/a',
             getAllResponseHeaders: function() {},
             getResponseHeader: function() {},
-            setRequestHeader: function() {}
+            setRequestHeader: function() {},
+            abort: function() { 
+                this.aborted = 1; 
+                $io.attr('src','about:blank'); // abort op in progress
+            }
         };
 
         var g = opts.global;
@@ -181,6 +187,13 @@ $.fn.ajaxSubmit = function(options) {
         if (g && ! $.active++) $.event.trigger("ajaxStart");
         if (g) $.event.trigger("ajaxSend", [xhr, opts]);
 
+		if (s.beforeSend && s.beforeSend(xhr, s) === false) {
+			s.global && jQuery.active--;
+			return;
+        }
+        if (xhr.aborted)
+            return;
+        
         var cbInvoked = 0;
         var timedOut = 0;
 
@@ -197,7 +210,7 @@ $.fn.ajaxSubmit = function(options) {
                 }
             }
         }
-        
+
         // take a breath so that pending repaints get some cpu time before the upload starts
         setTimeout(function() {
             // make sure form attrs are set
