@@ -1,6 +1,6 @@
 /*
  * jQuery Form Plugin
- * version: 2.12 (06/07/2008)
+ * version: 2.14 (17-OCT-2008)
  * @requires jQuery v1.2.2 or later
  *
  * Examples and documentation at: http://malsup.com/jquery/form/
@@ -10,7 +10,7 @@
  *
  * Revision: $Id$
  */
-(function($) {
+;(function($) {
 
 /*
     Usage Note:  
@@ -72,8 +72,14 @@ $.fn.ajaxSubmit = function(options) {
     var a = this.formToArray(options.semantic);
     if (options.data) {
         options.extraData = options.data;
-        for (var n in options.data)
-            a.push( { name: n, value: options.data[n] } );
+        for (var n in options.data) {
+          if(options.data[n] instanceof Array) {
+            for (var k in options.data[n])
+              a.push( { name: n, value: options.data[n][k] } )
+          }  
+          else
+             a.push( { name: n, value: options.data[n] } );
+        }
     }
 
     // give pre-submit callback an opportunity to abort the submit
@@ -114,7 +120,7 @@ $.fn.ajaxSubmit = function(options) {
 
     options.success = function(data, status) {
         for (var i=0, max=callbacks.length; i < max; i++)
-            callbacks[i](data, status, $form);
+            callbacks[i].apply(options, [data, status, $form]);
     };
 
     // are there files to upload?
@@ -198,11 +204,17 @@ $.fn.ajaxSubmit = function(options) {
             var t = $form.attr('target'), a = $form.attr('action');
             $form.attr({
                 target:   id,
-                encoding: 'multipart/form-data',
-                enctype:  'multipart/form-data',
                 method:   'POST',
                 action:   opts.url
             });
+            
+            // ie borks in some cases when setting encoding
+            if (! options.skipEncodingOverride) {
+                $form.attr({
+                    encoding: 'multipart/form-data',
+                    enctype:  'multipart/form-data',
+                });
+            }
 
             // support timout
             if (opts.timeout)
@@ -325,23 +337,23 @@ $.fn.ajaxForm = function(options) {
     }).each(function() {
         // store options in hash
         $(":submit,input:image", this).bind('click.form-plugin',function(e) {
-            var $form = this.form;
-            $form.clk = this;
+            var form = this.form;
+            form.clk = this;
             if (this.type == 'image') {
                 if (e.offsetX != undefined) {
-                    $form.clk_x = e.offsetX;
-                    $form.clk_y = e.offsetY;
+                    form.clk_x = e.offsetX;
+                    form.clk_y = e.offsetY;
                 } else if (typeof $.fn.offset == 'function') { // try to use dimensions plugin
                     var offset = $(this).offset();
-                    $form.clk_x = e.pageX - offset.left;
-                    $form.clk_y = e.pageY - offset.top;
+                    form.clk_x = e.pageX - offset.left;
+                    form.clk_y = e.pageY - offset.top;
                 } else {
-                    $form.clk_x = e.pageX - this.offsetLeft;
-                    $form.clk_y = e.pageY - this.offsetTop;
+                    form.clk_x = e.pageX - this.offsetLeft;
+                    form.clk_y = e.pageY - this.offsetTop;
                 }
             }
             // clear form vars
-            setTimeout(function() { $form.clk = $form.clk_x = $form.clk_y = null; }, 10);
+            setTimeout(function() { form.clk = form.clk_x = form.clk_y = null; }, 10);
         });
     });
 };
@@ -574,7 +586,7 @@ $.fn.enable = function(b) {
  * Checks/unchecks any matching checkboxes or radio buttons and
  * selects/deselects and matching option elements.
  */
-$.fn.select = function(select) {
+$.fn.selected = function(select) {
     if (select == undefined) select = true;
     return this.each(function() { 
         var t = this.type;
@@ -584,7 +596,7 @@ $.fn.select = function(select) {
             var $sel = $(this).parent('select');
             if (select && $sel[0] && $sel[0].type == 'select-one') {
                 // deselect all other options
-                $sel.find('option').select(false);
+                $sel.find('option').selected(false);
             }
             this.selected = select;
         }
