@@ -1,6 +1,6 @@
 /*
  * jQuery Form Plugin
- * version: 2.15 (17-OCT-2008)
+ * version: 2.16 (17-OCT-2008)
  * @requires jQuery v1.2.2 or later
  *
  * Examples and documentation at: http://malsup.com/jquery/form/
@@ -225,7 +225,7 @@ $.fn.ajaxSubmit = function(options) {
             if (! options.skipEncodingOverride) {
                 $form.attr({
                     encoding: 'multipart/form-data',
-                    enctype:  'multipart/form-data',
+                    enctype:  'multipart/form-data'
                 });
             }
 
