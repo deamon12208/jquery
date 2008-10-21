@@ -39,3 +39,15 @@ test("read messages from metadata", function() {
 	e.val("bla").valid();
 	equals( form.find("label").text(), "email" );
 });
+
+
+test("read messages from metadata, with meta option specified, but no metadata in there", function() {
+	var form = $("#testForm1clean")
+	form.validate({
+		meta: "validate",
+		rules: {
+			firstname: "required"
+		}
+	});
+	ok(!form.valid(), "not valid");
+});

@@ -508,7 +508,7 @@ $.extend($.validator, {
 				? $(element).metadata()[this.settings.meta]
 				: $(element).metadata();
 			
-			return meta.messages && meta.messages[method];
+			return meta && meta.messages && meta.messages[method];
 		},
 		
 		// return the custom message for the given element name and validation method

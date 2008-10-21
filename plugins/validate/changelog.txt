@@ -5,6 +5,7 @@
 * Added italian (it), hungarian (hu) and romanian (ro) localization
 * Fixed #3195: Two flaws in swedish localization
 * Fixed #3503: Extended rules("add") to accept messages propery: use to specify add custom messages to an element via rules("add", { messages: { required: "Required! " } }); 
+* Fixed #3356: Regression from #2908 when using meta-option
 
 1.4
 ---
