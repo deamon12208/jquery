@@ -1,13 +1,14 @@
 module("equiv");
 
-test("Basics.", function() {
+test("Basics: 2 arguments", function () {
+
     var f1 = function () {};
     var f2 = function () {var i = 0};
 
-    // 2 arguments
     equals(QUnit.equiv(function() {var b = 6;}, function() {var a = 5;}), true);
     equals(QUnit.equiv(true, function() {}), false);
     equals(QUnit.equiv(f1, f2), true);
+    equals(QUnit.equiv({a:f1}, {}), false, "Missing property with function's value can fool function bypass");
     equals(QUnit.equiv(), true);
     equals(QUnit.equiv(undefined), true);
     equals(QUnit.equiv(null), true);
@@ -16,8 +17,14 @@ test("Basics.", function() {
     equals(QUnit.equiv({}, {}), true);
     equals(QUnit.equiv(0, 0), true);
     equals(QUnit.equiv(0, 1), false);
+
+    equals(QUnit.equiv(0/0, 0/0), true, "NaN === NaN"); // Nan VS NaN
+    equals(QUnit.equiv(1/0, 2/0), true, "Infinity === Infinity"); // Infinity VS Infinity
+    equals(QUnit.equiv(0/0, 1/0), false, "NaN === Infinity"); // Nan VS Infinity
+
     equals(QUnit.equiv('', ''), true);
     equals(QUnit.equiv([], []), true);
+    equals(QUnit.equiv([], {}), false);
     equals(QUnit.equiv(null, null), true);
     equals(QUnit.equiv(null, {}), false);
     equals(QUnit.equiv(undefined, undefined), true);
@@ -27,20 +34,53 @@ test("Basics.", function() {
     equals(QUnit.equiv(0, null), false);
     equals(QUnit.equiv(0, ''), false);
     equals(QUnit.equiv(1, '1'), false);
+    equals(QUnit.equiv(0, false), false);
     equals(QUnit.equiv(true, true), true);
     equals(QUnit.equiv(true, false), false);
-    equals(QUnit.equiv(0, false), false);
     equals(QUnit.equiv("foobar", "foobar"), true);
+});
+
+test("Basics: multiple arguments.", function() {
+
+    function genPowerZero(from, to) {
+        var results = [];
+        for (var i = to; i >= from; i--) {
+            results.push(Math.pow(i, 0));
+        }
+        return results;
+    }
+
+    function genDivisionByZero(from, to) {
+        var results = [];
+        for (var i = to; i >= from; i--) {
+            results.push((i / 0));
+        }
+        return results;
+    }
+
+    function genNaN(from, to) {
+        var results = [];
+        for (var i = to; i >= from; i--) {
+            results.push((i / "foo"));
+        }
+        return results;
+    }
+
+    equals(QUnit.equiv.apply(this, genPowerZero(1,100)), true, "All number from 1 to 100 power 0 equals 1");
+    equals(QUnit.equiv.apply(this, genDivisionByZero(1,10)), true, "All number from 1 to 10 divided by 0 equals infinity");
+    equals(QUnit.equiv.apply(this, genDivisionByZero(0,10)), false, "All number from 0 to 10 divided by 0 equals infinity"); // false for 0/0 (NaN)
+    equals(QUnit.equiv.apply(this, genNaN(0,10)), true, "All number from 0 to 10 divided by a string is NaN");
+
     equals(QUnit.equiv("foobar", "foobar", "foobar", "foobar"), true);
     equals(QUnit.equiv("foobar", "foobax"), false);
     equals(QUnit.equiv("foobar", "foobar", "foobax", "foobax"), false);
 
-    // 3 arguments
     equals(QUnit.equiv(0, 0, 0, 0, 0), true);
     equals(QUnit.equiv(0, 0, 0, 1, 0), false);
     equals(QUnit.equiv(0, 0, 0, 1, 0), false);
     equals(QUnit.equiv(0, 0, 0, {}, 0), false);
     equals(QUnit.equiv(0, 0, 0, 0, function() {}), false);
+
     equals(QUnit.equiv(true, false, true), false);
 });
 
@@ -67,6 +107,9 @@ test("Arrays.", function() {
         },
         5,6,7
     ], "foo"];
+
+    equals(QUnit.equiv([undefined],[]), false);
+    equals(QUnit.equiv([null],[]), false);
     equals(QUnit.equiv(a,a), true);
     equals(QUnit.equiv([0],[0]), true);
     equals(QUnit.equiv([0,1,2,3,4],[0,1,2,3,4]), true);
@@ -195,7 +238,8 @@ test("Complex Nested Objects.", function() {
     equals(QUnit.equiv(diff,a,b), false);
 });
 
-test("OO: Private and public properties", function() {
+// Test that private properties are ignored
+test("Private and public properties", function() {
     function Car(year) {
         var privateVar = 0;
         this.year = year;
@@ -219,7 +263,7 @@ test("OO: Private and public properties", function() {
         year: 30
     };
 
-    var match = {
+    var same = {
         year: 30,
         isOld: function () {}
     };
@@ -228,6 +272,23 @@ test("OO: Private and public properties", function() {
     equals(QUnit.equiv(car, human), true);
     equals(QUnit.equiv(car, human, car, human), true);
     equals(QUnit.equiv(car, diff, car, car), false);
-    equals(QUnit.equiv(car, car, match, car), true);
+    equals(QUnit.equiv(car, car, same, car), true);
+});
 
+// Test that it doesn't chains through prototypal chain inheritance
+test("Prototypal inheritance", function() {
+    function Gizmo(id) {
+        this.id = id;
+    }
+
+    function Hoozit(id) {
+        this.id = id;
+    }
+    Hoozit.prototype = new Gizmo();
+    Hoozit.prototype.me = true; // not a function to make sure it isn't skip
+
+    var gizmo = new Gizmo("ok");
+    var hoozit = new Hoozit("ok");
+
+    equals(QUnit.equiv(hoozit, gizmo), true, "a's prototype is inherit from b's prototype and augmented, but the chain is not traversed and not compared");
 });
