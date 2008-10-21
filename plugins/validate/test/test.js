@@ -596,6 +596,18 @@ test("resetForm()", function() {
 	equals("", $("#firstname").val(), "form plugin is included, therefor resetForm must also reset inputs, not only errors");
 });
 
+test("message from title", function() {
+	var v = $("#withTitle").validate();
+    v.checkForm();
+	equals(v.errorList[0].message, "fromtitle", "title not used");
+});
+
+test("ignoreTitle", function() {
+	var v = $("#withTitle").validate({ignoreTitle:true});
+    v.checkForm();
+	equals(v.errorList[0].message, $.validator.messages["required"], "title used when it should have been ignored");
+});
+
 test("ajaxSubmit", function() {
 	expect(1);
 	stop();
