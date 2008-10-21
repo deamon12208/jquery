@@ -252,8 +252,9 @@ test("rules(), add messages", function() {
 			firstname: "required"
 		}
 	});
+	$("#testForm1clean").valid();
 	$("#firstnamec").valid();
-	same( v.errorList[0] && v.errorList[0].message, $.validator.messages.required );
+	same( v.settings.messages.firstname, undefined );
 	
 	$("#firstnamec").rules("add", {
 		messages: {
