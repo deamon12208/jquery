@@ -4,10 +4,10 @@
  */
 jQuery.extend(jQuery.validator.messages, {
        required: "Detta f&auml;lt &auml;r obligatoriskt.",
-       maxlength: jQuery.format("Du kan ange max {0} tecken."),
+       maxlength: jQuery.format("Du får ange högst {0} tecken."),
        minlength: jQuery.format("Du m&aring;ste ange minst {0} tecken."),
        rangelength: jQuery.format("Ange minst {0} och max {1} tecken."),
-       email: "Ange en korrekt epostaddress.",
+       email: "Ange en korrekt e-postadress.",
        url: "Ange en korrekt URL.",
        date: "Ange ett korrekt datum.",
        dateISO: "Ange ett korrekt datum (&ARING;&ARING;&ARING;&ARING;-MM-DD).",
