@@ -103,12 +103,15 @@ $.extend($.fn, {
 		var element = this[0];
 		
 		if (command) {
-			var staticRules = $.data(element.form, 'validator').settings.rules;
+			var settings = $.data(element.form, 'validator').settings;
+			var staticRules = settings.rules;
 			var existingRules = $.validator.staticRules(element);
 			switch(command) {
 			case "add":
 				$.extend(existingRules, $.validator.normalizeRule(argument));
 				staticRules[element.name] = existingRules;
+				if (argument.messages)
+					settings.messages[element.name] = $.extend( settings.messages[element.name], argument.messages );
 				break;
 			case "remove":
 				if (!argument) {

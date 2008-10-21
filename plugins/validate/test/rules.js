@@ -244,3 +244,23 @@ test("rules(), add and remove static rules", function() {
 	$("#lastnamec").rules("add", removedRules);
 	same( $("#lastnamec").rules(), { required: true, minlength: 2 } );
 });
+
+test("rules(), add messages", function() {
+	$("#firstnamec").attr("title", null);
+	var v = $("#testForm1clean").validate({
+		rules: {
+			firstname: "required"
+		}
+	});
+	$("#firstnamec").valid();
+	same( v.errorList[0] && v.errorList[0].message, $.validator.messages.required );
+	
+	$("#firstnamec").rules("add", {
+		messages: {
+			required: "required"
+		}
+	});
+	
+	$("#firstnamec").valid();
+	same( v.errorList[0] && v.errorList[0].message, "required" );
+});
